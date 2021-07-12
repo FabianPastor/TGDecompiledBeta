@@ -407,6 +407,7 @@
     <public type="drawable" name="files_internal" id="NUM" />
     <public type="drawable" name="files_music" id="NUM" />
     <public type="drawable" name="files_storage" id="NUM" />
+    <public type="drawable" name="fingerprint" id="NUM" />
     <public type="drawable" name="fingerprint_dialog_error_to_fp" id="NUM" />
     <public type="drawable" name="fingerprint_dialog_fp_to_error" id="NUM" />
     <public type="drawable" name="flame_small" id="NUM" />
@@ -903,7 +904,6 @@
     <public type="drawable" name="paint_radial_brush" id="NUM" />
     <public type="drawable" name="passcode_check" id="NUM" />
     <public type="drawable" name="passcode_delete" id="NUM" />
-    <public type="drawable" name="passcode_logo" id="NUM" />
     <public type="drawable" name="payment_address" id="NUM" />
     <public type="drawable" name="payment_card" id="NUM" />
     <public type="drawable" name="payment_delivery" id="NUM" />
@@ -1331,6 +1331,7 @@
     <public type="id" name="passcode_btn_9" id="NUM" />
     <public type="id" name="passcode_btn_backspace" id="NUM" />
     <public type="id" name="passcode_btn_done" id="NUM" />
+    <public type="id" name="passcode_btn_fingerprint" id="NUM" />
     <public type="id" name="photo" id="NUM" />
     <public type="id" name="plain" id="NUM" />
     <public type="id" name="player_album_art" id="NUM" />
@@ -1497,7 +1498,6 @@
     <public type="raw" name="linkbroken" id="NUM" />
     <public type="raw" name="mapstyle_night" id="NUM" />
     <public type="raw" name="passcode_lock_close" id="NUM" />
-    <public type="raw" name="passcode_lock_open" id="NUM" />
     <public type="raw" name="payment_success" id="NUM" />
     <public type="raw" name="permission_map" id="NUM" />
     <public type="raw" name="permission_map_dark" id="NUM" />
@@ -1611,6 +1611,7 @@
     <public type="string" name="AccDescrEditing" id="NUM" />
     <public type="string" name="AccDescrEmojiButton" id="NUM" />
     <public type="string" name="AccDescrExpandPanel" id="NUM" />
+    <public type="string" name="AccDescrFingerprint" id="NUM" />
     <public type="string" name="AccDescrForwarding" id="NUM" />
     <public type="string" name="AccDescrGIFs" id="NUM" />
     <public type="string" name="AccDescrGoBack" id="NUM" />
@@ -2993,7 +2994,7 @@
     <public type="string" name="EnterNewPasscode" id="NUM" />
     <public type="string" name="EnterThemeName" id="NUM" />
     <public type="string" name="EnterThemeNameEdit" id="NUM" />
-    <public type="string" name="EnterYourPasscode" id="NUM" />
+    <public type="string" name="EnterYourTelegramPasscode" id="NUM" />
     <public type="string" name="ErrorOccurred" id="NUM" />
     <public type="string" name="ErrorSendRestrictedMedia" id="NUM" />
     <public type="string" name="ErrorSendRestrictedMediaAll" id="NUM" />

@@ -2149,7 +2149,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r2 = r11.getParentActivity()
             r1.<init>((android.content.Context) r2)
-            r2 = 2131626567(0x7f0e0a47, float:1.8880374E38)
+            r2 = 2131626569(0x7f0e0a49, float:1.8880378E38)
             java.lang.String r3 = "OK"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$33dkM9ERAcoFYxh54jNySwqE6qc r3 = new org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$33dkM9ERAcoFYxh54jNySwqE6qc
@@ -2160,18 +2160,18 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r2 == 0) goto L_0x00b8
             boolean r2 = r2.has_password
             if (r2 == 0) goto L_0x00b8
-            r2 = 2131628358(0x7f0e1146, float:1.8884006E38)
+            r2 = 2131628360(0x7f0e1148, float:1.888401E38)
             java.lang.String r3 = "YourEmailSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
             goto L_0x00c4
         L_0x00b8:
-            r2 = 2131628363(0x7f0e114b, float:1.8884017E38)
+            r2 = 2131628365(0x7f0e114d, float:1.888402E38)
             java.lang.String r3 = "YourPasswordChangedSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
         L_0x00c4:
-            r2 = 2131628368(0x7f0e1150, float:1.8884027E38)
+            r2 = 2131628370(0x7f0e1152, float:1.888403E38)
             java.lang.String r3 = "YourPasswordSuccess"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setTitle(r2)
@@ -2255,11 +2255,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r2 = r1.text
             java.lang.String r3 = "EMAIL_INVALID"
             boolean r2 = r3.equals(r2)
-            r3 = 2131624284(0x7f0e015c, float:1.8875743E38)
+            r3 = 2131624285(0x7f0e015d, float:1.8875745E38)
             java.lang.String r4 = "AppName"
             if (r2 == 0) goto L_0x018a
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r2 = 2131626836(0x7f0e0b54, float:1.888092E38)
+            r2 = 2131626838(0x7f0e0b56, float:1.8880923E38)
             java.lang.String r3 = "PasswordEmailInvalid"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r11.showAlertWithText(r1, r2)
@@ -2283,7 +2283,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
         L_0x01b0:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r3 = 2131625594(0x7f0e067a, float:1.88784E38)
+            r3 = 2131625596(0x7f0e067c, float:1.8878404E38)
             java.lang.Object[] r4 = new java.lang.Object[r7]
             r4[r8] = r1
             java.lang.String r1 = "FloodWaitTime"

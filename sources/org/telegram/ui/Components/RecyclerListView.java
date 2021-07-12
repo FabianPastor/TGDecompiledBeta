@@ -2261,7 +2261,7 @@ public class RecyclerListView extends RecyclerView {
             if (!this.useRelativePositions) {
                 View childAt = getChildAt(i);
                 RectF rectF = AndroidUtilities.rectTmp;
-                rectF.set(childAt.getX(), childAt.getY(), childAt.getX() + ((float) childAt.getMeasuredWidth()), childAt.getY() + ((float) childAt.getMeasuredHeight()));
+                rectF.set((float) childAt.getLeft(), (float) childAt.getTop(), (float) (childAt.getLeft() + childAt.getMeasuredWidth()), (float) (childAt.getTop() + childAt.getMeasuredHeight()));
                 if (rectF.contains(f, f2)) {
                     int childLayoutPosition = getChildLayoutPosition(childAt);
                     int i2 = this.currentSelectedPosition;

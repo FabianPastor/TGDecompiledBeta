@@ -38,6 +38,7 @@
     <string name="AccDescrEditing">Editing</string>
     <string name="AccDescrEmojiButton">Emoji, stickers, and GIFs</string>
     <string name="AccDescrExpandPanel">Expand panel</string>
+    <string name="AccDescrFingerprint">Fingerprint</string>
     <string name="AccDescrForwarding">Forwarding from</string>
     <string name="AccDescrGIFs">GIFs</string>
     <string name="AccDescrGoBack">Go back</string>
@@ -1420,7 +1421,7 @@
     <string name="EnterNewPasscode">Enter your new passcode</string>
     <string name="EnterThemeName">Enter theme name</string>
     <string name="EnterThemeNameEdit">Tap **Create** if you want to share your theme with others or customize each color manually.\10\10Please enter theme name:</string>
-    <string name="EnterYourPasscode">Enter your passcode</string>
+    <string name="EnterYourTelegramPasscode">Enter your Telegram passcode</string>
     <string name="ErrorOccurred">An error occurred.</string>
     <string name="ErrorSendRestrictedMedia">Sorry, the admins of this group have restricted you from sending media.</string>
     <string name="ErrorSendRestrictedMediaAll">Sorry, sending media is not allowed in this group.</string>

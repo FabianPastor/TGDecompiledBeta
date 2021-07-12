@@ -9291,7 +9291,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (r3 != 0) goto L_0x006b
             org.telegram.ui.Components.CrossOutDrawable r3 = new org.telegram.ui.Components.CrossOutDrawable
             android.content.Context r4 = r13.getContext()
-            r5 = 2131165537(0x7var_, float:1.7945294E38)
+            r5 = 2131165538(0x7var_, float:1.7945296E38)
             java.lang.String r6 = "chat_messagePanelIcons"
             r3.<init>(r4, r5, r6)
             r13.notifySilentDrawable = r3
@@ -10626,28 +10626,28 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (r11 != 0) goto L_0x0095
             android.widget.ImageView[] r5 = r10.emojiButton
             r5 = r5[r12]
-            r7 = 2131165533(0x7var_d, float:1.7945286E38)
+            r7 = 2131165534(0x7var_e, float:1.7945288E38)
             r5.setImageResource(r7)
             goto L_0x00bb
         L_0x0095:
             if (r11 != r2) goto L_0x00a2
             android.widget.ImageView[] r5 = r10.emojiButton
             r5 = r5[r12]
-            r7 = 2131165540(0x7var_, float:1.79453E38)
+            r7 = 2131165541(0x7var_, float:1.7945302E38)
             r5.setImageResource(r7)
             goto L_0x00bb
         L_0x00a2:
             if (r11 != r4) goto L_0x00af
             android.widget.ImageView[] r5 = r10.emojiButton
             r5 = r5[r12]
-            r7 = 2131165541(0x7var_, float:1.7945302E38)
+            r7 = 2131165542(0x7var_, float:1.7945304E38)
             r5.setImageResource(r7)
             goto L_0x00bb
         L_0x00af:
             if (r11 != r0) goto L_0x00bb
             android.widget.ImageView[] r5 = r10.emojiButton
             r5 = r5[r12]
-            r7 = 2131165532(0x7var_c, float:1.7945284E38)
+            r7 = 2131165533(0x7var_d, float:1.7945286E38)
             r5.setImageResource(r7)
         L_0x00bb:
             android.widget.ImageView[] r5 = r10.emojiButton

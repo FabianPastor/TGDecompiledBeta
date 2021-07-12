@@ -1402,7 +1402,6 @@
     <string name="EnterNewPasscode">Insira sua nova senha</string>
     <string name="EnterThemeName">Insira o nome do tema</string>
     <string name="EnterThemeNameEdit">Toque em **Criar** se você deseja compartilhar o seu tema com outras pessoas ou personalizar cada cor manualmente.\10\10Por favor, digite o nome do tema:</string>
-    <string name="EnterYourPasscode">Digite a sua senha.</string>
     <string name="ErrorOccurred">Ocorreu um erro.</string>
     <string name="ErrorSendRestrictedMedia">Desculpe, os admins do grupo te restringiram do envio de mídias.</string>
     <string name="ErrorSendRestrictedMediaAll">Desculpe, o envio de mídia não é permitido neste grupo.</string>

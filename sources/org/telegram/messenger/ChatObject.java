@@ -1271,8 +1271,8 @@ public class ChatObject {
         }
 
         public static boolean videoIsActive(TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, boolean z, Call call2) {
-            VoIPService sharedInstance = VoIPService.getSharedInstance();
-            if (sharedInstance == null) {
+            VoIPService sharedInstance;
+            if (tLRPC$TL_groupCallParticipant == null || (sharedInstance = VoIPService.getSharedInstance()) == null) {
                 return false;
             }
             if (!tLRPC$TL_groupCallParticipant.self) {

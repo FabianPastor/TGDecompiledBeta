@@ -388,6 +388,7 @@ public final class R {
         public static final int files_internal = NUM;
         public static final int files_music = NUM;
         public static final int files_storage = NUM;
+        public static final int fingerprint = NUM;
         public static final int fingerprint_dialog_error_to_fp = NUM;
         public static final int fingerprint_dialog_fp_to_error = NUM;
         public static final int flame_small = NUM;
@@ -884,7 +885,6 @@ public final class R {
         public static final int paint_radial_brush = NUM;
         public static final int passcode_check = NUM;
         public static final int passcode_delete = NUM;
-        public static final int passcode_logo = NUM;
         public static final int payment_address = NUM;
         public static final int payment_card = NUM;
         public static final int payment_delivery = NUM;
@@ -1434,6 +1434,7 @@ public final class R {
         public static final int passcode_btn_9 = NUM;
         public static final int passcode_btn_backspace = NUM;
         public static final int passcode_btn_done = NUM;
+        public static final int passcode_btn_fingerprint = NUM;
         public static final int photo = NUM;
         public static final int plain = NUM;
         public static final int player_album_art = NUM;
@@ -1630,7 +1631,6 @@ public final class R {
         public static final int linkbroken = NUM;
         public static final int mapstyle_night = NUM;
         public static final int passcode_lock_close = NUM;
-        public static final int passcode_lock_open = NUM;
         public static final int payment_success = NUM;
         public static final int permission_map = NUM;
         public static final int permission_map_dark = NUM;
@@ -1750,6 +1750,7 @@ public final class R {
         public static final int AccDescrEditing = NUM;
         public static final int AccDescrEmojiButton = NUM;
         public static final int AccDescrExpandPanel = NUM;
+        public static final int AccDescrFingerprint = NUM;
         public static final int AccDescrForwarding = NUM;
         public static final int AccDescrGIFs = NUM;
         public static final int AccDescrGoBack = NUM;
@@ -3132,7 +3133,7 @@ public final class R {
         public static final int EnterNewPasscode = NUM;
         public static final int EnterThemeName = NUM;
         public static final int EnterThemeNameEdit = NUM;
-        public static final int EnterYourPasscode = NUM;
+        public static final int EnterYourTelegramPasscode = NUM;
         public static final int ErrorOccurred = NUM;
         public static final int ErrorSendRestrictedMedia = NUM;
         public static final int ErrorSendRestrictedMediaAll = NUM;

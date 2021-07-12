@@ -1402,7 +1402,6 @@
     <string name="EnterNewPasscode">Nieuwe toegangscode invoeren</string>
     <string name="EnterThemeName">Geef een naam aan je thema</string>
     <string name="EnterThemeNameEdit">Tik **Maken** als je je thema met anderen wilt delen of handmatig kleuren aan wilt passen.\10\10Geef een naam voor je thema:</string>
-    <string name="EnterYourPasscode">Toegangscode invoeren</string>
     <string name="ErrorOccurred">Er is een fout opgetreden.</string>
     <string name="ErrorSendRestrictedMedia">De beheerders van deze groep hebben je beperkt in het sturen van media.</string>
     <string name="ErrorSendRestrictedMediaAll">Media sturen naar deze groep is niet toegestaan.</string>

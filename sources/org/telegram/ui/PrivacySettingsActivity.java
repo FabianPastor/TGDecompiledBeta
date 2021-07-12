@@ -339,16 +339,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         }
                         TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
                         if (tLRPC$TL_account_password2.has_password) {
-                            AnonymousClass3 r1 = new TwoStepVerificationActivity() {
-                                /* access modifiers changed from: protected */
-                                public void onPasswordReset() {
-                                    TLRPC$TL_account_password unused = PrivacySettingsActivity.this.currentPassword = null;
-                                    PrivacySettingsActivity.this.loadPasswordSettings();
-                                    PrivacySettingsActivity.this.updateRows();
-                                }
-                            };
-                            r1.setPassword(this.currentPassword);
-                            presentFragment(r1);
+                            TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
+                            twoStepVerificationActivity.setPassword(this.currentPassword);
+                            presentFragment(twoStepVerificationActivity);
                             return;
                         }
                         if (!TextUtils.isEmpty(tLRPC$TL_account_password2.email_unconfirmed_pattern)) {
@@ -725,12 +718,13 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 }
                 return;
             }
+            this.currentPassword = null;
             loadPasswordSettings();
+            updateRows();
         }
     }
 
-    /* access modifiers changed from: private */
-    public void updateRows() {
+    private void updateRows() {
         this.rowCount = 0;
         int i = 0 + 1;
         this.rowCount = i;
@@ -849,8 +843,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
     }
 
-    /* access modifiers changed from: private */
-    public void loadPasswordSettings() {
+    private void loadPasswordSettings() {
         getConnectionsManager().sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                 PrivacySettingsActivity.this.lambda$loadPasswordSettings$17$PrivacySettingsActivity(tLObject, tLRPC$TL_error);

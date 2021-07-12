@@ -59,6 +59,7 @@ public class EditTextBoldCursor extends EditText {
     public int cursorSize;
     /* access modifiers changed from: private */
     public float cursorWidth = 2.0f;
+    boolean drawInMaim;
     private Object editor;
     private int errorLineColor;
     private TextPaint errorPaint;
@@ -90,6 +91,7 @@ public class EditTextBoldCursor extends EditText {
     };
     int lastOffset = -1;
     private int lastSize;
+    CharSequence lastText;
     private long lastUpdateTime;
     private int lineColor;
     private Paint linePaint;
@@ -172,7 +174,7 @@ public class EditTextBoldCursor extends EditText {
                 boolean unused = EditTextBoldCursor.this.cursorDrawn = true;
             }
         };
-        r0.getPaint().setColor(-16777216);
+        r0.getPaint().setColor(0);
         return r0;
     }
 
@@ -689,11 +691,12 @@ public class EditTextBoldCursor extends EditText {
         canvas.save();
         canvas2.translate(0.0f, (float) extendedPaddingTop);
         try {
+            this.drawInMaim = true;
             super.onDraw(canvas);
+            this.drawInMaim = false;
         } catch (Exception e2) {
-            Exception exc = e2;
             if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                throw new RuntimeException(exc);
+                throw new RuntimeException(e2);
             }
         }
         Field field2 = mScrollYField;
@@ -916,10 +919,11 @@ public class EditTextBoldCursor extends EditText {
     private boolean updateCursorPosition() {
         Layout layout = getLayout();
         int selectionStart = getSelectionStart();
-        if (!(selectionStart == this.lastOffset && getTransformationMethod() == null)) {
+        if (!(selectionStart == this.lastOffset && this.lastText == layout.getText())) {
             int lineForOffset = layout.getLineForOffset(selectionStart);
             updateCursorPosition(layout.getLineTop(lineForOffset), layout.getLineTop(lineForOffset + 1), layout.getPrimaryHorizontal(selectionStart));
         }
+        this.lastText = layout.getText();
         this.lastOffset = selectionStart;
         return true;
     }

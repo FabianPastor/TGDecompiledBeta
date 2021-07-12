@@ -1402,7 +1402,6 @@
     <string name="EnterNewPasscode">Neuen Pincode eingeben</string>
     <string name="EnterThemeName">Einen Namen festlegen</string>
     <string name="EnterThemeNameEdit">Wenn du dein Thema mit anderen teilen oder Farben einzeln anpassen möchtest, tippe auf **Erstellen**.\10\10Wähle den Namen für dein Thema:</string>
-    <string name="EnterYourPasscode">Deinen Pincode eingeben</string>
     <string name="ErrorOccurred">Es ist ein Fehler aufgetreten.</string>
     <string name="ErrorSendRestrictedMedia">Die Admins dieser Gruppe haben dir die Berechtigung entzogen, Medien zu senden.</string>
     <string name="ErrorSendRestrictedMediaAll">Versand von Medien ist hier leider nicht erlaubt.</string>
