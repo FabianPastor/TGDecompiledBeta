@@ -77,7 +77,6 @@ public class RecyclerListView extends RecyclerView {
     private boolean isChildViewEnabled;
     private boolean isHidden;
     private long lastAlphaAnimationTime;
-    float lastScrollY;
     float lastX = Float.MAX_VALUE;
     float lastY = Float.MAX_VALUE;
     int[] listPaddings;
@@ -2247,22 +2246,21 @@ public class RecyclerListView extends RecyclerView {
 
     /* access modifiers changed from: private */
     public boolean chekMultiselect(float f, float f2) {
-        this.lastScrollY = (float) getScrollY();
+        int measuredHeight = getMeasuredHeight();
+        int[] iArr = this.listPaddings;
+        float min = Math.min((float) (measuredHeight - iArr[1]), Math.max(f2, (float) iArr[0]));
+        float min2 = Math.min((float) getMeasuredWidth(), Math.max(f, 0.0f));
         int i = 0;
         while (true) {
             if (i >= getChildCount()) {
                 break;
             }
             this.multiSelectionListener.getPaddings(this.listPaddings);
-            int measuredHeight = getMeasuredHeight();
-            int[] iArr = this.listPaddings;
-            f2 = Math.min((float) (measuredHeight - iArr[1]), Math.max(f2, (float) iArr[0]));
-            f = Math.min((float) getMeasuredWidth(), Math.max(f, 0.0f));
             if (!this.useRelativePositions) {
                 View childAt = getChildAt(i);
                 RectF rectF = AndroidUtilities.rectTmp;
                 rectF.set((float) childAt.getLeft(), (float) childAt.getTop(), (float) (childAt.getLeft() + childAt.getMeasuredWidth()), (float) (childAt.getTop() + childAt.getMeasuredHeight()));
-                if (rectF.contains(f, f2)) {
+                if (rectF.contains(min2, min)) {
                     int childLayoutPosition = getChildLayoutPosition(childAt);
                     int i2 = this.currentSelectedPosition;
                     if (i2 != childLayoutPosition) {
@@ -2274,14 +2272,14 @@ public class RecyclerListView extends RecyclerView {
                             if (childLayoutPosition <= i4) {
                                 while (i4 > childLayoutPosition) {
                                     if (i4 != this.startSelectionFrom && this.multiSelectionListener.canSelect(i4)) {
-                                        this.multiSelectionListener.onSelectionChanged(i4, false, f, f2);
+                                        this.multiSelectionListener.onSelectionChanged(i4, false, min2, min);
                                     }
                                     i4--;
                                 }
                             } else if (!this.multiSelectionListener.limitReached()) {
                                 for (int i5 = this.currentSelectedPosition + 1; i5 <= childLayoutPosition; i5++) {
                                     if (i5 != this.startSelectionFrom && this.multiSelectionListener.canSelect(i5)) {
-                                        this.multiSelectionListener.onSelectionChanged(i5, true, f, f2);
+                                        this.multiSelectionListener.onSelectionChanged(i5, true, min2, min);
                                     }
                                 }
                             }
@@ -2290,14 +2288,14 @@ public class RecyclerListView extends RecyclerView {
                             if (childLayoutPosition > i6) {
                                 while (i6 < childLayoutPosition) {
                                     if (i6 != this.startSelectionFrom && this.multiSelectionListener.canSelect(i6)) {
-                                        this.multiSelectionListener.onSelectionChanged(i6, false, f, f2);
+                                        this.multiSelectionListener.onSelectionChanged(i6, false, min2, min);
                                     }
                                     i6++;
                                 }
                             } else if (!this.multiSelectionListener.limitReached()) {
                                 for (int i7 = this.currentSelectedPosition - 1; i7 >= childLayoutPosition; i7--) {
                                     if (i7 != this.startSelectionFrom && this.multiSelectionListener.canSelect(i7)) {
-                                        this.multiSelectionListener.onSelectionChanged(i7, true, f, f2);
+                                        this.multiSelectionListener.onSelectionChanged(i7, true, min2, min);
                                     }
                                 }
                             }

@@ -260,11 +260,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public FragmentContextView fragmentLocationContextView;
     /* access modifiers changed from: private */
     public ArrayList<TLRPC$Dialog> frozenDialogsList;
-    Runnable hapticLockRunnable = new Runnable() {
-        public void run() {
-            DialogsActivity.this.passcodeItem.getIconView().performHapticFeedback(3, 2);
-        }
-    };
     private boolean hasInvoice;
     private int hasPoll;
     /* access modifiers changed from: private */
@@ -8984,7 +8979,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: private */
     public void updatePasscodeButton() {
         if (this.passcodeItem != null) {
-            AndroidUtilities.cancelRunOnUIThread(this.hapticLockRunnable);
             if (SharedConfig.passcodeHash.length() == 0 || this.searching) {
                 this.passcodeItem.setVisibility(8);
                 this.passcodeItemVisible = false;

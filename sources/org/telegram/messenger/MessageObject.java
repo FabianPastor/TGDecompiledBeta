@@ -7350,16 +7350,22 @@ public class MessageObject {
                                 if (tLRPC$PhotoSize3 != null) {
                                     int i5 = 0;
                                     while (true) {
-                                        if (i5 < tLRPC$Photo2.sizes.size()) {
-                                            TLRPC$PhotoSize tLRPC$PhotoSize4 = tLRPC$Photo2.sizes.get(i5);
-                                            if (tLRPC$PhotoSize4 != null && !(tLRPC$PhotoSize4 instanceof TLRPC$TL_photoSizeEmpty) && tLRPC$PhotoSize4.type.equals(tLRPC$PhotoSize3.type)) {
+                                        if (i5 >= tLRPC$Photo2.sizes.size()) {
+                                            break;
+                                        }
+                                        TLRPC$PhotoSize tLRPC$PhotoSize4 = tLRPC$Photo2.sizes.get(i5);
+                                        if (tLRPC$PhotoSize4 != null && !(tLRPC$PhotoSize4 instanceof TLRPC$TL_photoSizeEmpty)) {
+                                            if (!tLRPC$PhotoSize4.type.equals(tLRPC$PhotoSize3.type)) {
+                                                if ("s".equals(tLRPC$PhotoSize3.type) && (tLRPC$PhotoSize4 instanceof TLRPC$TL_photoStrippedSize)) {
+                                                    this.photoThumbs.set(i4, tLRPC$PhotoSize4);
+                                                    break;
+                                                }
+                                            } else {
                                                 tLRPC$PhotoSize3.location = tLRPC$PhotoSize4.location;
                                                 break;
                                             }
-                                            i5++;
-                                        } else {
-                                            break;
                                         }
+                                        i5++;
                                     }
                                 }
                             }

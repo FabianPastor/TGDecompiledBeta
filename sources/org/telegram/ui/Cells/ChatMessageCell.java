@@ -21963,7 +21963,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     this.radialProgress.setIcon(getIconForCurrentState(), false, z3);
                     invalidate();
                 }
-            } else if (!this.currentMessageObject.isOut() || (!this.currentMessageObject.isSending() && !this.currentMessageObject.isEditing())) {
+            } else if (!this.currentMessageObject.isOut() || this.drawVideoImageButton || (!this.currentMessageObject.isSending() && !this.currentMessageObject.isEditing())) {
                 MessageObject messageObject7 = this.currentMessageObject;
                 messageObject7.loadingCancelled = true;
                 int i8 = this.documentAttachType;

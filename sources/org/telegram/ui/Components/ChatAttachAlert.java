@@ -1671,6 +1671,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             this.calcMandatoryInsets = ((ChatActivity) baseFragment2).isKeyboardVisible();
         }
         this.openTransitionFinished = false;
+        if (Build.VERSION.SDK_INT >= 30) {
+            int color = Theme.getColor("windowBackgroundGray");
+            if (((double) AndroidUtilities.computePerceivedBrightness(color)) < 0.721d) {
+                getWindow().setNavigationBarColor(color);
+            }
+        }
     }
 
     public void setEditingMessageObject(MessageObject messageObject) {

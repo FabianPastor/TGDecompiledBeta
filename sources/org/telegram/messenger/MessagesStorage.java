@@ -13547,7 +13547,7 @@ public class MessagesStorage extends BaseController {
             r15 = 1
             if (r14 != r15) goto L_0x068c
             org.telegram.SQLite.SQLiteDatabase r7 = r13.database     // Catch:{ Exception -> 0x0688 }
-            java.lang.String r9 = "SELECT start, end FROM messages_holes WHERE uid = %d AND start >= %d AND start != 1 AND end != 1 OR start < %d AND end > %d ORDER BY start ASC LIMIT 1"
+            java.lang.String r9 = "SELECT start, end FROM messages_holes WHERE uid = %d AND (start >= %d AND start != 1 AND end != 1 OR start < %d AND end > %d) ORDER BY start ASC LIMIT 1"
             r12 = 4
             java.lang.Object[] r15 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x0688 }
             java.lang.Long r12 = java.lang.Long.valueOf(r49)     // Catch:{ Exception -> 0x0688 }

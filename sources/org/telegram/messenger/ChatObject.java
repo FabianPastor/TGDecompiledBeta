@@ -1318,13 +1318,8 @@ public class ChatObject {
                 boolean videoIsActive = videoIsActive(tLRPC$TL_groupCallParticipant3, false, this);
                 boolean videoIsActive2 = videoIsActive(tLRPC$TL_groupCallParticipant3, true, this);
                 boolean z2 = tLRPC$TL_groupCallParticipant3.self;
-                if (!z2) {
-                    if (videoIsActive) {
-                        this.activeVideos++;
-                    }
-                    if (videoIsActive2) {
-                        this.activeVideos++;
-                    }
+                if (!z2 && (videoIsActive || videoIsActive2)) {
+                    this.activeVideos++;
                 }
                 if (videoIsActive || videoIsActive2) {
                     if (!this.canStreamVideo) {
@@ -1393,13 +1388,8 @@ public class ChatObject {
             if ((videoIsActive(tLRPC$TL_groupCallParticipant, false, this) || videoIsActive(tLRPC$TL_groupCallParticipant, true, this)) && (i = this.call.unmuted_video_count) > this.activeVideos) {
                 this.activeVideos = i;
                 VoIPService sharedInstance = VoIPService.getSharedInstance();
-                if (sharedInstance != null && sharedInstance.groupCall == this) {
-                    if (sharedInstance.getVideoState(false) == 2) {
-                        this.activeVideos--;
-                    }
-                    if (sharedInstance.getVideoState(true) == 2) {
-                        this.activeVideos--;
-                    }
+                if (sharedInstance != null && sharedInstance.groupCall == this && (sharedInstance.getVideoState(false) == 2 || sharedInstance.getVideoState(true) == 2)) {
+                    this.activeVideos--;
                 }
             }
             if (this.sortedParticipants.size() > 5000 && (!ChatObject.canManageCalls(chat) || tLRPC$TL_groupCallParticipant.raise_hand_rating == 0)) {
@@ -1541,20 +1531,11 @@ public class ChatObject {
             if (!this.canStreamVideo) {
                 return false;
             }
-            int i = this.activeVideos;
             VoIPService sharedInstance = VoIPService.getSharedInstance();
-            if (sharedInstance != null && sharedInstance.groupCall == this) {
-                if (sharedInstance.getVideoState(false) == 2) {
-                    i++;
-                }
-                if (sharedInstance.getVideoState(true) == 2) {
-                    i++;
-                }
+            if ((sharedInstance == null || sharedInstance.groupCall != this || (sharedInstance.getVideoState(false) != 2 && sharedInstance.getVideoState(true) != 2)) && this.activeVideos >= this.call.unmuted_video_limit) {
+                return false;
             }
-            if (i < this.call.unmuted_video_limit) {
-                return true;
-            }
-            return false;
+            return true;
         }
 
         public void saveActiveDates() {

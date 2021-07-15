@@ -99,7 +99,7 @@ public class ChangeBioActivity extends BaseFragment {
         this.firstNameField.setImeOptions(6);
         this.firstNameField.setFilters(new InputFilter[]{new CodepointsLengthInputFilter(70) {
             public CharSequence filter(CharSequence charSequence, int i, int i2, Spanned spanned, int i3, int i4) {
-                if (charSequence == null || TextUtils.indexOf(charSequence, 10) == -1) {
+                if (charSequence == null || charSequence.length() <= 0 || TextUtils.indexOf(charSequence, 10) != charSequence.length() - 1) {
                     CharSequence filter = super.filter(charSequence, i, i2, spanned, i3, i4);
                     if (!(filter == null || charSequence == null || filter.length() == charSequence.length())) {
                         Vibrator vibrator = (Vibrator) ChangeBioActivity.this.getParentActivity().getSystemService("vibrator");

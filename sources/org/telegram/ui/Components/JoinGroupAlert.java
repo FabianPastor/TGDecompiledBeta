@@ -120,7 +120,7 @@ public class JoinGroupAlert extends BottomSheet {
         L_0x00bc:
             android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17)
             r4.addView(r6, r7)
-            if (r10 <= 0) goto L_0x00fb
+            if (r10 <= 0) goto L_0x0118
             android.widget.TextView r6 = new android.widget.TextView
             r6.<init>(r1)
             r7 = 1096810496(0x41600000, float:14.0)
@@ -131,9 +131,25 @@ public class JoinGroupAlert extends BottomSheet {
             r6.setSingleLine(r5)
             android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END
             r6.setEllipsize(r5)
+            boolean r5 = r2.channel
+            if (r5 != 0) goto L_0x00fd
+            org.telegram.tgnet.TLRPC$Chat r5 = r2.chat
+            boolean r5 = org.telegram.messenger.ChatObject.isChannel(r5)
+            if (r5 == 0) goto L_0x00f3
+            org.telegram.tgnet.TLRPC$Chat r5 = r2.chat
+            boolean r5 = r5.megagroup
+            if (r5 != 0) goto L_0x00f3
+            goto L_0x00fd
+        L_0x00f3:
             java.lang.String r5 = "Members"
             java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r5, r10)
             r6.setText(r5)
+            goto L_0x0106
+        L_0x00fd:
+            java.lang.String r5 = "Subscribers"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r5, r10)
+            r6.setText(r5)
+        L_0x0106:
             r7 = -2
             r8 = -2
             r9 = 49
@@ -143,10 +159,10 @@ public class JoinGroupAlert extends BottomSheet {
             r13 = 20
             android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13)
             r4.addView(r6, r5)
-        L_0x00fb:
+        L_0x0118:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r5 = r2.participants
             boolean r5 = r5.isEmpty()
-            if (r5 != 0) goto L_0x014a
+            if (r5 != 0) goto L_0x0167
             org.telegram.ui.Components.RecyclerListView r5 = new org.telegram.ui.Components.RecyclerListView
             r5.<init>(r1)
             r6 = 1090519040(0x41000000, float:8.0)
@@ -175,7 +191,7 @@ public class JoinGroupAlert extends BottomSheet {
             r13 = 7
             android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13)
             r4.addView(r5, r6)
-        L_0x014a:
+        L_0x0167:
             android.view.View r5 = new android.view.View
             r5.<init>(r1)
             java.lang.String r6 = "dialogShadowLine"
@@ -224,31 +240,31 @@ public class JoinGroupAlert extends BottomSheet {
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r1.setTextColor(r3)
             boolean r1 = r2.channel
-            if (r1 == 0) goto L_0x01d5
+            if (r1 == 0) goto L_0x01f2
             boolean r1 = r2.megagroup
-            if (r1 == 0) goto L_0x01e3
-        L_0x01d5:
+            if (r1 == 0) goto L_0x0200
+        L_0x01f2:
             org.telegram.tgnet.TLRPC$Chat r1 = r2.chat
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r1)
-            if (r1 == 0) goto L_0x01f6
+            if (r1 == 0) goto L_0x0213
             org.telegram.tgnet.TLRPC$Chat r1 = r2.chat
             boolean r1 = r1.megagroup
-            if (r1 != 0) goto L_0x01f6
-        L_0x01e3:
+            if (r1 != 0) goto L_0x0213
+        L_0x0200:
             android.widget.TextView r1 = r5.doneButtonTextView
             r2 = 2131627107(0x7f0e0CLASSNAME, float:1.888147E38)
             java.lang.String r3 = "ProfileJoinChannel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
             r1.setText(r2)
-            goto L_0x0204
-        L_0x01f6:
+            goto L_0x0221
+        L_0x0213:
             android.widget.TextView r1 = r5.doneButtonTextView
             r2 = 2131625941(0x7f0e07d5, float:1.8879104E38)
             java.lang.String r3 = "JoinGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
-        L_0x0204:
+        L_0x0221:
             android.widget.LinearLayout r1 = r5.doneButton
             org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$lV5gzJCFdYlzirjF_v5fq8Kw-ug r2 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$lV5gzJCFdYlzirjF_v5fq8Kw-ug
             r2.<init>()

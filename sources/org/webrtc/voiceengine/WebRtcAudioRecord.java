@@ -7,7 +7,6 @@ import android.media.projection.MediaProjection;
 import android.os.Build;
 import android.os.Process;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.Arrays;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.voip.VideoCapturerDevice;
@@ -201,9 +200,7 @@ public class WebRtcAudioRecord {
             return -1;
         }
         int i3 = i / 100;
-        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(i2 * 2 * i3);
-        this.byteBuffer = allocateDirect;
-        allocateDirect.order(ByteOrder.nativeOrder());
+        this.byteBuffer = ByteBuffer.allocateDirect(i2 * 2 * i3);
         Logging.d("WebRtcAudioRecord", "byteBuffer.capacity: " + this.byteBuffer.capacity());
         this.emptyBytes = new byte[this.byteBuffer.capacity()];
         nativeCacheDirectBufferAddress(this.byteBuffer, this.nativeAudioRecord);
@@ -233,6 +230,7 @@ public class WebRtcAudioRecord {
                 AudioPlaybackCaptureConfiguration.Builder builder = new AudioPlaybackCaptureConfiguration.Builder(mediaProjection);
                 builder.addMatchingUsage(1);
                 builder.addMatchingUsage(14);
+                builder.addMatchingUsage(0);
                 AudioRecord.Builder builder2 = new AudioRecord.Builder();
                 builder2.setAudioPlaybackCaptureConfig(builder.build());
                 builder2.setAudioFormat(new AudioFormat.Builder().setChannelMask(channelCountToConfiguration).setSampleRate(i).setEncoding(2).build());

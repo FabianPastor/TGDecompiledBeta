@@ -690,7 +690,7 @@ public class PasscodeView extends FrameLayout {
         this.passwordEditText2.eraseAllCharacters(true);
         Drawable drawable = this.backgroundDrawable;
         if (drawable instanceof MotionBackgroundDrawable) {
-            ((MotionBackgroundDrawable) drawable).switchToPrevPosition();
+            ((MotionBackgroundDrawable) drawable).switchToPrevPosition(true);
         }
         return true;
     }
@@ -742,15 +742,17 @@ public class PasscodeView extends FrameLayout {
         if (this.passwordEditText2.length() == 4) {
             processDone(false);
         }
-        if (intValue != 10) {
-            Drawable drawable = this.backgroundDrawable;
-            if (drawable instanceof MotionBackgroundDrawable) {
-                ((MotionBackgroundDrawable) drawable).switchToNextPosition();
-            }
-        } else if (z) {
-            Drawable drawable2 = this.backgroundDrawable;
-            if (drawable2 instanceof MotionBackgroundDrawable) {
-                ((MotionBackgroundDrawable) drawable2).switchToPrevPosition();
+        if (intValue != 11) {
+            if (intValue != 10) {
+                Drawable drawable = this.backgroundDrawable;
+                if (drawable instanceof MotionBackgroundDrawable) {
+                    ((MotionBackgroundDrawable) drawable).switchToNextPosition(true);
+                }
+            } else if (z) {
+                Drawable drawable2 = this.backgroundDrawable;
+                if (drawable2 instanceof MotionBackgroundDrawable) {
+                    ((MotionBackgroundDrawable) drawable2).switchToPrevPosition(true);
+                }
             }
         }
     }
@@ -790,6 +792,11 @@ public class PasscodeView extends FrameLayout {
                     this.passwordEditText.setText("");
                     this.passwordEditText2.eraseAllCharacters(true);
                     onPasscodeError();
+                    Drawable drawable = this.backgroundDrawable;
+                    if (drawable instanceof MotionBackgroundDrawable) {
+                        ((MotionBackgroundDrawable) drawable).rotatePreview(true);
+                        return;
+                    }
                     return;
                 }
             } else {
@@ -954,7 +961,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     private void checkFingerprint() {
-        if (Build.VERSION.SDK_INT >= 23 && ((Activity) getContext()) != null && this.fingerprintView.getVisibility() == 0) {
+        if (Build.VERSION.SDK_INT >= 23 && ((Activity) getContext()) != null && this.fingerprintView.getVisibility() == 0 && !ApplicationLoader.mainInterfacePaused) {
             try {
                 AlertDialog alertDialog = this.fingerprintDialog;
                 if (alertDialog != null && alertDialog.isShowing()) {
@@ -1080,7 +1087,7 @@ public class PasscodeView extends FrameLayout {
 
     private void checkFingerprintButton() {
         Activity activity = (Activity) getContext();
-        if (Build.VERSION.SDK_INT >= 23 && activity != null && SharedConfig.useFingerprint && !ApplicationLoader.mainInterfacePaused) {
+        if (Build.VERSION.SDK_INT >= 23 && activity != null && SharedConfig.useFingerprint) {
             try {
                 AlertDialog alertDialog = this.fingerprintDialog;
                 if (alertDialog != null && alertDialog.isShowing()) {
@@ -1100,9 +1107,10 @@ public class PasscodeView extends FrameLayout {
         }
     }
 
-    public void onShow(boolean z, boolean z2, final int i, final int i2, final Runnable runnable, Runnable runnable2) {
+    public void onShow(boolean z, boolean z2, int i, int i2, Runnable runnable, Runnable runnable2) {
         View currentFocus;
         EditTextBoldCursor editTextBoldCursor;
+        final Runnable runnable3 = runnable;
         checkFingerprintButton();
         checkRetryTextView();
         Activity activity = (Activity) getContext();
@@ -1120,22 +1128,44 @@ public class PasscodeView extends FrameLayout {
         }
         if (getVisibility() != 0) {
             setTranslationY(0.0f);
-            if (Theme.isCustomTheme() || (Theme.getCachedWallpaper() instanceof MotionBackgroundDrawable)) {
+            this.backgroundDrawable = null;
+            if (Theme.getCachedWallpaper() instanceof MotionBackgroundDrawable) {
                 this.backgroundDrawable = Theme.getCachedWallpaper();
                 this.backgroundFrameLayout.setBackgroundColor(-NUM);
-            } else if ("d".equals(Theme.getSelectedBackgroundSlug())) {
+            } else if (Theme.isCustomTheme() && !"CJz3BZ6YGEYBAAAABboWp6SAv04".equals(Theme.getSelectedBackgroundSlug()) && !"qeZWES8rGVIEAAAARfWlK1lnfiI".equals(Theme.getSelectedBackgroundSlug())) {
+                BackgroundGradientDrawable currentGradientWallpaper = Theme.getCurrentGradientWallpaper();
+                this.backgroundDrawable = currentGradientWallpaper;
+                if (currentGradientWallpaper == null) {
+                    this.backgroundDrawable = Theme.getCachedWallpaper();
+                }
+                if (this.backgroundDrawable instanceof BackgroundGradientDrawable) {
+                    this.backgroundFrameLayout.setBackgroundColor(NUM);
+                } else {
+                    this.backgroundFrameLayout.setBackgroundColor(-NUM);
+                }
+            } else if ("d".equals(Theme.getSelectedBackgroundSlug()) || Theme.isPatternWallpaper()) {
                 this.backgroundFrameLayout.setBackgroundColor(-11436898);
             } else {
                 Drawable cachedWallpaper = Theme.getCachedWallpaper();
                 this.backgroundDrawable = cachedWallpaper;
-                if (cachedWallpaper != null) {
+                if (cachedWallpaper instanceof BackgroundGradientDrawable) {
+                    this.backgroundFrameLayout.setBackgroundColor(NUM);
+                } else if (cachedWallpaper != null) {
                     this.backgroundFrameLayout.setBackgroundColor(-NUM);
                 } else {
                     this.backgroundFrameLayout.setBackgroundColor(-11436898);
                 }
             }
-            if (this.backgroundDrawable instanceof MotionBackgroundDrawable) {
-                this.backgroundFrameLayout.setBackgroundColor(NUM);
+            Drawable drawable = this.backgroundDrawable;
+            if (drawable instanceof MotionBackgroundDrawable) {
+                MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
+                int[] colors = motionBackgroundDrawable.getColors();
+                this.backgroundDrawable = new MotionBackgroundDrawable(colors[0], colors[1], colors[2], colors[3], false);
+                if (!motionBackgroundDrawable.hasPattern() || motionBackgroundDrawable.getIntensity() >= 0) {
+                    this.backgroundFrameLayout.setBackgroundColor(NUM);
+                } else {
+                    this.backgroundFrameLayout.setBackgroundColor(NUM);
+                }
                 ((MotionBackgroundDrawable) this.backgroundDrawable).setParentView(this.backgroundFrameLayout);
             }
             this.passcodeTextView.setText(LocaleController.getString("EnterYourTelegramPasscode", NUM));
@@ -1163,6 +1193,8 @@ public class PasscodeView extends FrameLayout {
             this.passwordEditText2.eraseAllCharacters(false);
             if (z2) {
                 setAlpha(0.0f);
+                final int i4 = i;
+                final int i5 = i2;
                 getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     public void onGlobalLayout() {
                         int i;
@@ -1171,70 +1203,80 @@ public class PasscodeView extends FrameLayout {
                         View view;
                         int i4;
                         final AnimatorSet animatorSet;
+                        char c;
+                        float f = 1.0f;
                         PasscodeView.this.setAlpha(1.0f);
                         PasscodeView.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        float f2 = 0.0f;
                         PasscodeView.this.imageView.setProgress(0.0f);
                         PasscodeView.this.imageView.playAnimation();
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public final void run() {
+                                PasscodeView.AnonymousClass9.this.lambda$onGlobalLayout$0$PasscodeView$9();
+                            }
+                        }, 350);
                         AnimatorSet animatorSet2 = new AnimatorSet();
                         ArrayList arrayList = new ArrayList();
                         Point point = AndroidUtilities.displaySize;
                         int i5 = point.x;
                         int i6 = point.y;
                         int i7 = Build.VERSION.SDK_INT;
-                        char c = 0;
+                        char c2 = 0;
                         int i8 = i6 + (i7 >= 21 ? AndroidUtilities.statusBarHeight : 0);
-                        int i9 = 2;
                         if (i7 >= 21) {
-                            int i10 = i;
-                            int i11 = (i5 - i10) * (i5 - i10);
-                            int i12 = i2;
-                            double sqrt = Math.sqrt((double) (i11 + ((i8 - i12) * (i8 - i12))));
-                            int i13 = i;
-                            int i14 = i2;
-                            double sqrt2 = Math.sqrt((double) ((i13 * i13) + ((i8 - i14) * (i8 - i14))));
-                            int i15 = i;
-                            int i16 = i2;
-                            double sqrt3 = Math.sqrt((double) ((i15 * i15) + (i16 * i16)));
-                            int i17 = i;
-                            int i18 = (i5 - i17) * (i5 - i17);
-                            int i19 = i2;
-                            double max = Math.max(Math.max(Math.max(sqrt, sqrt2), sqrt3), Math.sqrt((double) (i18 + (i19 * i19))));
+                            int i9 = i4;
+                            int i10 = (i5 - i9) * (i5 - i9);
+                            int i11 = i5;
+                            double sqrt = Math.sqrt((double) (i10 + ((i8 - i11) * (i8 - i11))));
+                            int i12 = i4;
+                            int i13 = i5;
+                            double sqrt2 = Math.sqrt((double) ((i12 * i12) + ((i8 - i13) * (i8 - i13))));
+                            int i14 = i4;
+                            int i15 = i5;
+                            double sqrt3 = Math.sqrt((double) ((i14 * i14) + (i15 * i15)));
+                            int i16 = i4;
+                            int i17 = (i5 - i16) * (i5 - i16);
+                            int i18 = i5;
+                            double max = Math.max(Math.max(Math.max(sqrt, sqrt2), sqrt3), Math.sqrt((double) (i17 + (i18 * i18))));
                             PasscodeView.this.innerAnimators.clear();
                             int childCount = PasscodeView.this.numbersFrameLayout.getChildCount();
+                            int i19 = -1;
                             int i20 = -1;
-                            int i21 = -1;
-                            while (i21 < childCount) {
-                                if (i21 == i20) {
+                            while (i20 < childCount) {
+                                if (i20 == i19) {
                                     view = PasscodeView.this.passcodeTextView;
                                 } else {
-                                    view = PasscodeView.this.numbersFrameLayout.getChildAt(i21);
+                                    view = PasscodeView.this.numbersFrameLayout.getChildAt(i20);
                                 }
                                 if ((view instanceof TextView) || (view instanceof ImageView)) {
                                     view.setScaleX(0.7f);
                                     view.setScaleY(0.7f);
-                                    view.setAlpha(0.0f);
+                                    view.setAlpha(f2);
                                     InnerAnimator innerAnimator = new InnerAnimator();
                                     view.getLocationInWindow(PasscodeView.this.pos);
-                                    int measuredWidth = PasscodeView.this.pos[c] + (view.getMeasuredWidth() / 2);
+                                    int measuredWidth = PasscodeView.this.pos[c2] + (view.getMeasuredWidth() / 2);
                                     int measuredHeight = PasscodeView.this.pos[1] + (view.getMeasuredHeight() / 2);
-                                    int i22 = i;
-                                    int i23 = i2;
-                                    float unused = innerAnimator.startRadius = ((float) Math.sqrt((double) (((i22 - measuredWidth) * (i22 - measuredWidth)) + ((i23 - measuredHeight) * (i23 - measuredHeight))))) - ((float) AndroidUtilities.dp(40.0f));
-                                    if (i21 != i20) {
+                                    int i21 = i4;
+                                    int i22 = (i21 - measuredWidth) * (i21 - measuredWidth);
+                                    int i23 = i5;
+                                    float unused = innerAnimator.startRadius = ((float) Math.sqrt((double) (i22 + ((i23 - measuredHeight) * (i23 - measuredHeight))))) - ((float) AndroidUtilities.dp(40.0f));
+                                    if (i20 != i19) {
                                         animatorSet = new AnimatorSet();
-                                        Animator[] animatorArr = new Animator[i9];
+                                        Animator[] animatorArr = new Animator[2];
                                         Property property = View.SCALE_X;
+                                        i4 = childCount;
                                         float[] fArr = new float[1];
-                                        fArr[c] = 1.0f;
-                                        animatorArr[c] = ObjectAnimator.ofFloat(view, property, fArr);
+                                        fArr[c2] = f;
+                                        animatorArr[c2] = ObjectAnimator.ofFloat(view, property, fArr);
                                         Property property2 = View.SCALE_Y;
                                         float[] fArr2 = new float[1];
-                                        fArr2[c] = 1.0f;
+                                        fArr2[c2] = f;
                                         animatorArr[1] = ObjectAnimator.ofFloat(view, property2, fArr2);
                                         animatorSet.playTogether(animatorArr);
                                         animatorSet.setDuration(140);
                                         animatorSet.setInterpolator(new DecelerateInterpolator());
                                     } else {
+                                        i4 = childCount;
                                         animatorSet = null;
                                     }
                                     AnimatorSet unused2 = innerAnimator.animatorSet = new AnimatorSet();
@@ -1242,23 +1284,25 @@ public class PasscodeView extends FrameLayout {
                                     Animator[] animatorArr2 = new Animator[3];
                                     Property property3 = View.SCALE_X;
                                     float[] fArr3 = new float[2];
-                                    float f = 0.6f;
-                                    fArr3[0] = i21 == -1 ? 0.9f : 0.6f;
-                                    float f2 = 1.04f;
-                                    fArr3[1] = i21 == -1 ? 1.0f : 1.04f;
-                                    animatorArr2[0] = ObjectAnimator.ofFloat(view, property3, fArr3);
+                                    float f3 = 0.6f;
+                                    fArr3[c2] = i20 == -1 ? 0.9f : 0.6f;
+                                    float f4 = 1.04f;
+                                    fArr3[1] = i20 == -1 ? 1.0f : 1.04f;
+                                    animatorArr2[c2] = ObjectAnimator.ofFloat(view, property3, fArr3);
                                     Property property4 = View.SCALE_Y;
-                                    i4 = childCount;
                                     float[] fArr4 = new float[2];
-                                    if (i21 == -1) {
-                                        f = 0.9f;
+                                    if (i20 == -1) {
+                                        f3 = 0.9f;
                                     }
-                                    fArr4[0] = f;
-                                    if (i21 == -1) {
-                                        f2 = 1.0f;
+                                    fArr4[0] = f3;
+                                    if (i20 == -1) {
+                                        c = 1;
+                                        f4 = 1.0f;
+                                    } else {
+                                        c = 1;
                                     }
-                                    fArr4[1] = f2;
-                                    animatorArr2[1] = ObjectAnimator.ofFloat(view, property4, fArr4);
+                                    fArr4[c] = f4;
+                                    animatorArr2[c] = ObjectAnimator.ofFloat(view, property4, fArr4);
                                     animatorArr2[2] = ObjectAnimator.ofFloat(view, View.ALPHA, new float[]{0.0f, 1.0f});
                                     access$2200.playTogether(animatorArr2);
                                     innerAnimator.animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -1269,19 +1313,20 @@ public class PasscodeView extends FrameLayout {
                                             }
                                         }
                                     });
-                                    i20 = -1;
-                                    innerAnimator.animatorSet.setDuration(i21 == -1 ? 232 : 200);
+                                    innerAnimator.animatorSet.setDuration(i20 == -1 ? 232 : 200);
                                     innerAnimator.animatorSet.setInterpolator(new DecelerateInterpolator());
                                     PasscodeView.this.innerAnimators.add(innerAnimator);
                                 } else {
                                     i4 = childCount;
                                 }
-                                i21++;
+                                i20++;
                                 childCount = i4;
-                                c = 0;
-                                i9 = 2;
+                                f = 1.0f;
+                                f2 = 0.0f;
+                                i19 = -1;
+                                c2 = 0;
                             }
-                            arrayList.add(ViewAnimationUtils.createCircularReveal(PasscodeView.this.backgroundFrameLayout, i, i2, 0.0f, (float) max));
+                            arrayList.add(ViewAnimationUtils.createCircularReveal(PasscodeView.this.backgroundFrameLayout, i4, i5, 0.0f, (float) max));
                             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                             arrayList.add(ofFloat);
                             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(max) {
@@ -1292,18 +1337,22 @@ public class PasscodeView extends FrameLayout {
                                 }
 
                                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    PasscodeView.AnonymousClass9.this.lambda$onGlobalLayout$0$PasscodeView$9(this.f$1, valueAnimator);
+                                    PasscodeView.AnonymousClass9.this.lambda$onGlobalLayout$1$PasscodeView$9(this.f$1, valueAnimator);
                                 }
                             });
+                            animatorSet2.setInterpolator(Easings.easeInOutQuad);
+                            animatorSet2.setDuration(498);
                         } else {
                             arrayList.add(ObjectAnimator.ofFloat(PasscodeView.this.backgroundFrameLayout, View.ALPHA, new float[]{0.0f, 1.0f}));
+                            animatorSet2.setDuration(350);
                         }
                         animatorSet2.playTogether(arrayList);
-                        animatorSet2.setInterpolator(Easings.easeInOutQuad);
-                        animatorSet2.setDuration(498);
                         animatorSet2.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
-                                runnable.run();
+                                Runnable runnable = runnable3;
+                                if (runnable != null) {
+                                    runnable.run();
+                                }
                             }
                         });
                         animatorSet2.start();
@@ -1317,13 +1366,13 @@ public class PasscodeView extends FrameLayout {
                                 }
                                 i = i5 / 2;
                                 i3 = AndroidUtilities.dp(30.0f);
-                                float f3 = (float) (i - i3);
+                                float f5 = (float) (i - i3);
                                 RLottieImageView access$1500 = PasscodeView.this.imageView;
                                 Property property5 = View.TRANSLATION_X;
                                 float[] fArr5 = new float[i2];
-                                fArr5[0] = (float) (i - AndroidUtilities.dp(29.0f));
-                                fArr5[1] = f3;
-                                animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(access$1500, property5, fArr5), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.TRANSLATION_Y, new float[]{(float) (i2 - AndroidUtilities.dp(29.0f)), (float) PasscodeView.this.imageY}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_X, new float[]{0.5f, 1.0f}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_Y, new float[]{0.5f, 1.0f})});
+                                fArr5[0] = (float) (i4 - AndroidUtilities.dp(29.0f));
+                                fArr5[1] = f5;
+                                animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(access$1500, property5, fArr5), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.TRANSLATION_Y, new float[]{(float) (i5 - AndroidUtilities.dp(29.0f)), (float) PasscodeView.this.imageY}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_X, new float[]{0.5f, 1.0f}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_Y, new float[]{0.5f, 1.0f})});
                                 animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_OUT);
                                 animatorSet3.start();
                             }
@@ -1336,16 +1385,22 @@ public class PasscodeView extends FrameLayout {
                         RLottieImageView access$15002 = PasscodeView.this.imageView;
                         Property property52 = View.TRANSLATION_X;
                         float[] fArr52 = new float[i2];
-                        fArr52[0] = (float) (i - AndroidUtilities.dp(29.0f));
+                        fArr52[0] = (float) (i4 - AndroidUtilities.dp(29.0f));
                         fArr52[1] = var_;
-                        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(access$15002, property52, fArr52), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.TRANSLATION_Y, new float[]{(float) (i2 - AndroidUtilities.dp(29.0f)), (float) PasscodeView.this.imageY}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_X, new float[]{0.5f, 1.0f}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_Y, new float[]{0.5f, 1.0f})});
+                        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(access$15002, property52, fArr52), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.TRANSLATION_Y, new float[]{(float) (i5 - AndroidUtilities.dp(29.0f)), (float) PasscodeView.this.imageY}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_X, new float[]{0.5f, 1.0f}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_Y, new float[]{0.5f, 1.0f})});
                         animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_OUT);
                         animatorSet3.start();
                     }
 
                     /* access modifiers changed from: private */
                     /* renamed from: lambda$onGlobalLayout$0 */
-                    public /* synthetic */ void lambda$onGlobalLayout$0$PasscodeView$9(double d, ValueAnimator valueAnimator) {
+                    public /* synthetic */ void lambda$onGlobalLayout$0$PasscodeView$9() {
+                        PasscodeView.this.imageView.performHapticFeedback(3, 2);
+                    }
+
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$onGlobalLayout$1 */
+                    public /* synthetic */ void lambda$onGlobalLayout$1$PasscodeView$9(double d, ValueAnimator valueAnimator) {
                         double animatedFraction = (double) valueAnimator.getAnimatedFraction();
                         Double.isNaN(animatedFraction);
                         double d2 = d * animatedFraction;
@@ -1368,7 +1423,9 @@ public class PasscodeView extends FrameLayout {
                 this.imageView.setScaleY(1.0f);
                 this.imageView.stopAnimation();
                 this.imageView.getAnimatedDrawable().setCurrentFrame(38, false);
-                runnable.run();
+                if (runnable3 != null) {
+                    runnable.run();
+                }
             }
             setOnTouchListener($$Lambda$PasscodeView$dT3s4JDk7Xu3mtbn1nXIBvpik8M.INSTANCE);
         }

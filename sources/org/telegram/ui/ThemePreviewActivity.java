@@ -4713,7 +4713,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 motionBackgroundDrawable = new MotionBackgroundDrawable();
                 motionBackgroundDrawable.setParentView(this.backgroundImage);
                 if (this.rotatePreview) {
-                    motionBackgroundDrawable.rotatePreview();
+                    motionBackgroundDrawable.rotatePreview(false);
                 }
             }
             motionBackgroundDrawable.setColors(this.backgroundColor, this.backgroundGradientColor1, this.backgroundGradientColor2, this.backgroundGradientColor3);
@@ -5055,7 +5055,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r10.setParentView(r11)
             boolean r11 = r0.rotatePreview
             if (r11 == 0) goto L_0x01fd
-            r10.rotatePreview()
+            r10.rotatePreview(r2)
         L_0x01fd:
             r10.setColors(r1, r7, r8, r9)
             goto L_0x022e

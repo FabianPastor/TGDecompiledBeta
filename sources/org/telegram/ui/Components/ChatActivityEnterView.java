@@ -3190,231 +3190,252 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
         });
         this.messageEditText.addTextChangedListener(new TextWatcher() {
+            private boolean ignorePrevTextChange;
             private boolean nextChangeIsSend;
+            private CharSequence prevText;
             private boolean processChange;
 
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                if (!this.ignorePrevTextChange && ChatActivityEnterView.this.recordingAudioVideo) {
+                    this.prevText = charSequence.toString();
+                }
             }
 
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                if (ChatActivityEnterView.this.lineCount != ChatActivityEnterView.this.messageEditText.getLineCount()) {
-                    if (!ChatActivityEnterView.this.isInitLineCount && ChatActivityEnterView.this.messageEditText.getMeasuredWidth() > 0) {
-                        ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
-                        chatActivityEnterView.onLineCountChanged(chatActivityEnterView.lineCount, ChatActivityEnterView.this.messageEditText.getLineCount());
-                    }
-                    ChatActivityEnterView chatActivityEnterView2 = ChatActivityEnterView.this;
-                    int unused = chatActivityEnterView2.lineCount = chatActivityEnterView2.messageEditText.getLineCount();
-                }
-                if (ChatActivityEnterView.this.innerTextChange != 1) {
-                    if (ChatActivityEnterView.this.sendByEnter && !ChatActivityEnterView.this.isPaste && ChatActivityEnterView.this.editingMessageObject == null && i3 > i2 && charSequence.length() > 0 && charSequence.length() == i + i3 && charSequence.charAt(charSequence.length() - 1) == 10) {
-                        this.nextChangeIsSend = true;
-                    }
-                    boolean z = false;
-                    boolean unused2 = ChatActivityEnterView.this.isPaste = false;
-                    ChatActivityEnterView.this.checkSendButton(true);
-                    CharSequence trimmedString = AndroidUtilities.getTrimmedString(charSequence.toString());
-                    if (ChatActivityEnterView.this.delegate != null && !ChatActivityEnterView.this.ignoreTextChange) {
-                        if (i3 > 2 || TextUtils.isEmpty(charSequence)) {
-                            boolean unused3 = ChatActivityEnterView.this.messageWebPageSearch = true;
+                if (!this.ignorePrevTextChange) {
+                    if (ChatActivityEnterView.this.lineCount != ChatActivityEnterView.this.messageEditText.getLineCount()) {
+                        if (!ChatActivityEnterView.this.isInitLineCount && ChatActivityEnterView.this.messageEditText.getMeasuredWidth() > 0) {
+                            ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
+                            chatActivityEnterView.onLineCountChanged(chatActivityEnterView.lineCount, ChatActivityEnterView.this.messageEditText.getLineCount());
                         }
-                        ChatActivityEnterViewDelegate access$1300 = ChatActivityEnterView.this.delegate;
-                        if (i2 > i3 + 1 || i3 - i2 > 2) {
-                            z = true;
+                        ChatActivityEnterView chatActivityEnterView2 = ChatActivityEnterView.this;
+                        int unused = chatActivityEnterView2.lineCount = chatActivityEnterView2.messageEditText.getLineCount();
+                    }
+                    if (ChatActivityEnterView.this.innerTextChange != 1) {
+                        if (ChatActivityEnterView.this.sendByEnter && !ChatActivityEnterView.this.isPaste && ChatActivityEnterView.this.editingMessageObject == null && i3 > i2 && charSequence.length() > 0 && charSequence.length() == i + i3 && charSequence.charAt(charSequence.length() - 1) == 10) {
+                            this.nextChangeIsSend = true;
                         }
-                        access$1300.onTextChanged(charSequence, z);
-                    }
-                    if (ChatActivityEnterView.this.innerTextChange != 2 && i3 - i2 > 1) {
-                        this.processChange = true;
-                    }
-                    if (ChatActivityEnterView.this.editingMessageObject == null && !ChatActivityEnterView.this.canWriteToChannel && trimmedString.length() != 0 && ChatActivityEnterView.this.lastTypingTimeSend < System.currentTimeMillis() - 5000 && !ChatActivityEnterView.this.ignoreTextChange) {
-                        long unused4 = ChatActivityEnterView.this.lastTypingTimeSend = System.currentTimeMillis();
-                        if (ChatActivityEnterView.this.delegate != null) {
-                            ChatActivityEnterView.this.delegate.needSendTyping();
+                        boolean z = false;
+                        boolean unused2 = ChatActivityEnterView.this.isPaste = false;
+                        ChatActivityEnterView.this.checkSendButton(true);
+                        CharSequence trimmedString = AndroidUtilities.getTrimmedString(charSequence.toString());
+                        if (ChatActivityEnterView.this.delegate != null && !ChatActivityEnterView.this.ignoreTextChange) {
+                            if (i3 > 2 || TextUtils.isEmpty(charSequence)) {
+                                boolean unused3 = ChatActivityEnterView.this.messageWebPageSearch = true;
+                            }
+                            ChatActivityEnterViewDelegate access$1300 = ChatActivityEnterView.this.delegate;
+                            if (i2 > i3 + 1 || i3 - i2 > 2) {
+                                z = true;
+                            }
+                            access$1300.onTextChanged(charSequence, z);
+                        }
+                        if (ChatActivityEnterView.this.innerTextChange != 2 && i3 - i2 > 1) {
+                            this.processChange = true;
+                        }
+                        if (ChatActivityEnterView.this.editingMessageObject == null && !ChatActivityEnterView.this.canWriteToChannel && trimmedString.length() != 0 && ChatActivityEnterView.this.lastTypingTimeSend < System.currentTimeMillis() - 5000 && !ChatActivityEnterView.this.ignoreTextChange) {
+                            long unused4 = ChatActivityEnterView.this.lastTypingTimeSend = System.currentTimeMillis();
+                            if (ChatActivityEnterView.this.delegate != null) {
+                                ChatActivityEnterView.this.delegate.needSendTyping();
+                            }
                         }
                     }
                 }
             }
 
-            /* JADX WARNING: Removed duplicated region for block: B:34:0x013e  */
-            /* JADX WARNING: Removed duplicated region for block: B:47:0x018e  */
+            /* JADX WARNING: Removed duplicated region for block: B:41:0x0157  */
+            /* JADX WARNING: Removed duplicated region for block: B:54:0x01a7  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
-            public void afterTextChanged(android.text.Editable r10) {
+            public void afterTextChanged(android.text.Editable r11) {
                 /*
-                    r9 = this;
+                    r10 = this;
+                    boolean r0 = r10.ignorePrevTextChange
+                    if (r0 == 0) goto L_0x0005
+                    return
+                L_0x0005:
+                    java.lang.CharSequence r0 = r10.prevText
+                    r1 = 0
+                    r2 = 1
+                    r3 = 0
+                    if (r0 == 0) goto L_0x001c
+                    r10.ignorePrevTextChange = r2
+                    int r0 = r11.length()
+                    java.lang.CharSequence r2 = r10.prevText
+                    r11.replace(r3, r0, r2)
+                    r10.prevText = r1
+                    r10.ignorePrevTextChange = r3
+                    return
+                L_0x001c:
                     org.telegram.ui.Components.ChatActivityEnterView r0 = org.telegram.ui.Components.ChatActivityEnterView.this
                     int r0 = r0.innerTextChange
-                    r1 = 0
-                    if (r0 != 0) goto L_0x0047
-                    boolean r0 = r9.nextChangeIsSend
-                    if (r0 == 0) goto L_0x0014
+                    if (r0 != 0) goto L_0x0062
+                    boolean r0 = r10.nextChangeIsSend
+                    if (r0 == 0) goto L_0x002f
                     org.telegram.ui.Components.ChatActivityEnterView r0 = org.telegram.ui.Components.ChatActivityEnterView.this
                     r0.sendMessage()
-                    r9.nextChangeIsSend = r1
-                L_0x0014:
-                    boolean r0 = r9.processChange
-                    if (r0 == 0) goto L_0x0047
-                    int r0 = r10.length()
-                    java.lang.Class<android.text.style.ImageSpan> r2 = android.text.style.ImageSpan.class
-                    java.lang.Object[] r0 = r10.getSpans(r1, r0, r2)
+                    r10.nextChangeIsSend = r3
+                L_0x002f:
+                    boolean r0 = r10.processChange
+                    if (r0 == 0) goto L_0x0062
+                    int r0 = r11.length()
+                    java.lang.Class<android.text.style.ImageSpan> r4 = android.text.style.ImageSpan.class
+                    java.lang.Object[] r0 = r11.getSpans(r3, r0, r4)
                     android.text.style.ImageSpan[] r0 = (android.text.style.ImageSpan[]) r0
-                    r2 = 0
-                L_0x0025:
-                    int r3 = r0.length
-                    if (r2 >= r3) goto L_0x0030
-                    r3 = r0[r2]
-                    r10.removeSpan(r3)
-                    int r2 = r2 + 1
-                    goto L_0x0025
-                L_0x0030:
+                    r4 = 0
+                L_0x0040:
+                    int r5 = r0.length
+                    if (r4 >= r5) goto L_0x004b
+                    r5 = r0[r4]
+                    r11.removeSpan(r5)
+                    int r4 = r4 + 1
+                    goto L_0x0040
+                L_0x004b:
                     org.telegram.ui.Components.ChatActivityEnterView r0 = org.telegram.ui.Components.ChatActivityEnterView.this
                     org.telegram.ui.Components.EditTextCaption r0 = r0.messageEditText
                     android.text.TextPaint r0 = r0.getPaint()
                     android.graphics.Paint$FontMetricsInt r0 = r0.getFontMetricsInt()
-                    r2 = 1101004800(0x41a00000, float:20.0)
-                    int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-                    org.telegram.messenger.Emoji.replaceEmoji(r10, r0, r2, r1)
-                    r9.processChange = r1
-                L_0x0047:
+                    r4 = 1101004800(0x41a00000, float:20.0)
+                    int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                    org.telegram.messenger.Emoji.replaceEmoji(r11, r0, r4, r3)
+                    r10.processChange = r3
+                L_0x0062:
                     org.telegram.ui.Components.ChatActivityEnterView r0 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    int r2 = r10.length()
-                    int r10 = java.lang.Character.codePointCount(r10, r1, r2)
-                    int unused = r0.codePointCount = r10
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    int r10 = r10.currentLimit
-                    r2 = 100
+                    int r4 = r11.length()
+                    int r11 = java.lang.Character.codePointCount(r11, r3, r4)
+                    int unused = r0.codePointCount = r11
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    int r11 = r11.currentLimit
+                    r4 = 100
                     r0 = 1056964608(0x3var_, float:0.5)
-                    r4 = 0
-                    r5 = 1
-                    r6 = 1065353216(0x3var_, float:1.0)
-                    if (r10 <= 0) goto L_0x0115
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    int r10 = r10.currentLimit
-                    org.telegram.ui.Components.ChatActivityEnterView r7 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    int r7 = r7.codePointCount
-                    int r10 = r10 - r7
-                    r7 = 100
-                    if (r10 > r7) goto L_0x0115
-                    r7 = -9999(0xffffffffffffd8f1, float:NaN)
-                    if (r10 >= r7) goto L_0x007b
-                    r10 = -9999(0xffffffffffffd8f1, float:NaN)
-                L_0x007b:
-                    org.telegram.ui.Components.ChatActivityEnterView r7 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.NumberTextView r7 = r7.captionLimitView
+                    r6 = 0
+                    r7 = 1065353216(0x3var_, float:1.0)
+                    if (r11 <= 0) goto L_0x012e
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    int r11 = r11.currentLimit
+                    org.telegram.ui.Components.ChatActivityEnterView r8 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    int r8 = r8.codePointCount
+                    int r11 = r11 - r8
+                    r8 = 100
+                    if (r11 > r8) goto L_0x012e
+                    r8 = -9999(0xffffffffffffd8f1, float:NaN)
+                    if (r11 >= r8) goto L_0x0095
+                    r11 = -9999(0xffffffffffffd8f1, float:NaN)
+                L_0x0095:
+                    org.telegram.ui.Components.ChatActivityEnterView r8 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    org.telegram.ui.Components.ChatActivityEnterView r9 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.NumberTextView r9 = r9.captionLimitView
+                    int r9 = r9.getVisibility()
+                    if (r9 != 0) goto L_0x00a9
+                    r9 = 1
+                    goto L_0x00aa
+                L_0x00a9:
+                    r9 = 0
+                L_0x00aa:
+                    r8.setNumber(r11, r9)
                     org.telegram.ui.Components.ChatActivityEnterView r8 = org.telegram.ui.Components.ChatActivityEnterView.this
                     org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
                     int r8 = r8.getVisibility()
-                    if (r8 != 0) goto L_0x008f
-                    r8 = 1
-                    goto L_0x0090
-                L_0x008f:
-                    r8 = 0
-                L_0x0090:
-                    r7.setNumber(r10, r8)
-                    org.telegram.ui.Components.ChatActivityEnterView r7 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.NumberTextView r7 = r7.captionLimitView
-                    int r7 = r7.getVisibility()
-                    if (r7 == 0) goto L_0x00c3
-                    org.telegram.ui.Components.ChatActivityEnterView r7 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.NumberTextView r7 = r7.captionLimitView
-                    r7.setVisibility(r1)
-                    org.telegram.ui.Components.ChatActivityEnterView r7 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.NumberTextView r7 = r7.captionLimitView
-                    r7.setAlpha(r4)
-                    org.telegram.ui.Components.ChatActivityEnterView r7 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.NumberTextView r7 = r7.captionLimitView
-                    r7.setScaleX(r0)
-                    org.telegram.ui.Components.ChatActivityEnterView r7 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.NumberTextView r7 = r7.captionLimitView
-                    r7.setScaleY(r0)
-                L_0x00c3:
+                    if (r8 == 0) goto L_0x00dd
+                    org.telegram.ui.Components.ChatActivityEnterView r8 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    r8.setVisibility(r3)
+                    org.telegram.ui.Components.ChatActivityEnterView r8 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    r8.setAlpha(r6)
+                    org.telegram.ui.Components.ChatActivityEnterView r8 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    r8.setScaleX(r0)
+                    org.telegram.ui.Components.ChatActivityEnterView r8 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    r8.setScaleY(r0)
+                L_0x00dd:
                     org.telegram.ui.Components.ChatActivityEnterView r0 = org.telegram.ui.Components.ChatActivityEnterView.this
                     org.telegram.ui.Components.NumberTextView r0 = r0.captionLimitView
                     android.view.ViewPropertyAnimator r0 = r0.animate()
-                    r7 = 0
-                    android.view.ViewPropertyAnimator r0 = r0.setListener(r7)
+                    android.view.ViewPropertyAnimator r0 = r0.setListener(r1)
                     r0.cancel()
                     org.telegram.ui.Components.ChatActivityEnterView r0 = org.telegram.ui.Components.ChatActivityEnterView.this
                     org.telegram.ui.Components.NumberTextView r0 = r0.captionLimitView
                     android.view.ViewPropertyAnimator r0 = r0.animate()
-                    android.view.ViewPropertyAnimator r0 = r0.alpha(r6)
-                    android.view.ViewPropertyAnimator r0 = r0.scaleX(r6)
-                    android.view.ViewPropertyAnimator r0 = r0.scaleY(r6)
-                    android.view.ViewPropertyAnimator r0 = r0.setDuration(r2)
+                    android.view.ViewPropertyAnimator r0 = r0.alpha(r7)
+                    android.view.ViewPropertyAnimator r0 = r0.scaleX(r7)
+                    android.view.ViewPropertyAnimator r0 = r0.scaleY(r7)
+                    android.view.ViewPropertyAnimator r0 = r0.setDuration(r4)
                     r0.start()
-                    if (r10 >= 0) goto L_0x0105
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.NumberTextView r10 = r10.captionLimitView
+                    if (r11 >= 0) goto L_0x011e
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.NumberTextView r11 = r11.captionLimitView
                     java.lang.String r0 = "windowBackgroundWhiteRedText"
                     int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                    r10.setTextColor(r0)
-                    r10 = 0
-                    goto L_0x0138
-                L_0x0105:
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.NumberTextView r10 = r10.captionLimitView
+                    r11.setTextColor(r0)
+                    r11 = 0
+                    goto L_0x0151
+                L_0x011e:
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.NumberTextView r11 = r11.captionLimitView
                     java.lang.String r0 = "windowBackgroundWhiteGrayText"
                     int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                    r10.setTextColor(r0)
-                    goto L_0x0137
-                L_0x0115:
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.NumberTextView r10 = r10.captionLimitView
-                    android.view.ViewPropertyAnimator r10 = r10.animate()
-                    android.view.ViewPropertyAnimator r10 = r10.alpha(r4)
-                    android.view.ViewPropertyAnimator r10 = r10.scaleX(r0)
-                    android.view.ViewPropertyAnimator r10 = r10.scaleY(r0)
-                    android.view.ViewPropertyAnimator r10 = r10.setDuration(r2)
+                    r11.setTextColor(r0)
+                    goto L_0x0150
+                L_0x012e:
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.NumberTextView r11 = r11.captionLimitView
+                    android.view.ViewPropertyAnimator r11 = r11.animate()
+                    android.view.ViewPropertyAnimator r11 = r11.alpha(r6)
+                    android.view.ViewPropertyAnimator r11 = r11.scaleX(r0)
+                    android.view.ViewPropertyAnimator r11 = r11.scaleY(r0)
+                    android.view.ViewPropertyAnimator r11 = r11.setDuration(r4)
                     org.telegram.ui.Components.ChatActivityEnterView$13$1 r0 = new org.telegram.ui.Components.ChatActivityEnterView$13$1
                     r0.<init>()
-                    r10.setListener(r0)
-                L_0x0137:
-                    r10 = 1
-                L_0x0138:
+                    r11.setListener(r0)
+                L_0x0150:
+                    r11 = 1
+                L_0x0151:
                     org.telegram.ui.Components.ChatActivityEnterView r0 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    boolean r2 = r0.doneButtonEnabled
-                    if (r2 == r10) goto L_0x0188
-                    r0.doneButtonEnabled = r10
-                    android.animation.ValueAnimator r10 = r0.doneButtonColorAnimator
-                    if (r10 == 0) goto L_0x014f
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    android.animation.ValueAnimator r10 = r10.doneButtonColorAnimator
-                    r10.cancel()
-                L_0x014f:
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    boolean r1 = r0.doneButtonEnabled
+                    if (r1 == r11) goto L_0x01a1
+                    r0.doneButtonEnabled = r11
+                    android.animation.ValueAnimator r11 = r0.doneButtonColorAnimator
+                    if (r11 == 0) goto L_0x0168
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    android.animation.ValueAnimator r11 = r11.doneButtonColorAnimator
+                    r11.cancel()
+                L_0x0168:
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
                     r0 = 2
                     float[] r0 = new float[r0]
-                    boolean r2 = r10.doneButtonEnabled
-                    if (r2 == 0) goto L_0x015a
-                    r3 = 0
-                    goto L_0x015c
-                L_0x015a:
-                    r3 = 1065353216(0x3var_, float:1.0)
-                L_0x015c:
-                    r0[r1] = r3
-                    if (r2 == 0) goto L_0x0162
+                    boolean r1 = r11.doneButtonEnabled
+                    if (r1 == 0) goto L_0x0173
+                    r4 = 0
+                    goto L_0x0175
+                L_0x0173:
                     r4 = 1065353216(0x3var_, float:1.0)
-                L_0x0162:
-                    r0[r5] = r4
+                L_0x0175:
+                    r0[r3] = r4
+                    if (r1 == 0) goto L_0x017b
+                    r6 = 1065353216(0x3var_, float:1.0)
+                L_0x017b:
+                    r0[r2] = r6
                     android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
-                    android.animation.ValueAnimator unused = r10.doneButtonColorAnimator = r0
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    android.animation.ValueAnimator r10 = r10.doneButtonColorAnimator
+                    android.animation.ValueAnimator unused = r11.doneButtonColorAnimator = r0
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    android.animation.ValueAnimator r11 = r11.doneButtonColorAnimator
                     org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$13$-C7Tyk3vBJ7UonOL7rDHDAaCQrM r0 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$13$-C7Tyk3vBJ7UonOL7rDHDAaCQrM
                     r0.<init>()
-                    r10.addUpdateListener(r0)
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    android.animation.ValueAnimator r10 = r10.doneButtonColorAnimator
+                    r11.addUpdateListener(r0)
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    android.animation.ValueAnimator r11 = r11.doneButtonColorAnimator
                     r0 = 150(0x96, double:7.4E-322)
-                    android.animation.ValueAnimator r10 = r10.setDuration(r0)
-                    r10.start()
-                L_0x0188:
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    org.telegram.ui.Components.BotCommandsMenuContainer r10 = r10.botCommandsMenuContainer
-                    if (r10 == 0) goto L_0x0191
-                    r10.dismiss()
-                L_0x0191:
-                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
-                    r10.checkBotMenu()
+                    android.animation.ValueAnimator r11 = r11.setDuration(r0)
+                    r11.start()
+                L_0x01a1:
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.BotCommandsMenuContainer r11 = r11.botCommandsMenuContainer
+                    if (r11 == 0) goto L_0x01aa
+                    r11.dismiss()
+                L_0x01aa:
+                    org.telegram.ui.Components.ChatActivityEnterView r11 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    r11.checkBotMenu()
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.AnonymousClass13.afterTextChanged(android.text.Editable):void");
@@ -3535,7 +3556,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             });
             this.botCommandsMenuContainer.setClipToPadding(false);
-            this.sizeNotifierLayout.addView(this.botCommandsMenuContainer, 14, LayoutHelper.createFrame(-1, -1.0f, 80, 0.0f, 0.0f, 0.0f, 47.0f));
+            this.sizeNotifierLayout.addView(this.botCommandsMenuContainer, 14, LayoutHelper.createFrame(-1, -1, 80));
             this.botCommandsMenuContainer.setVisibility(8);
             ImageView imageView2 = new ImageView(activity2);
             this.botButton = imageView2;
@@ -12100,7 +12121,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (r0 <= r2) goto L_0x0091
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r5.sizeNotifierLayout
             int r0 = r0.getMeasuredHeight()
-            r2 = 1129630925(0x4354cccd, float:212.8)
+            r2 = 1126354125(0x4322cccd, float:162.8)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r2
             int r0 = java.lang.Math.max(r1, r0)
@@ -12114,7 +12135,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r3 = 1
             int r2 = java.lang.Math.max(r3, r2)
             int r2 = r2 * 36
-            int r2 = r2 + 58
+            int r2 = r2 + 8
             float r2 = (float) r2
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r2

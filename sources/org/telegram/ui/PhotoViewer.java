@@ -5043,6 +5043,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     public void setParentActivity(Activity activity) {
         String str;
         Activity activity2 = activity;
+        Theme.createChatResources(activity2, false);
         int i = UserConfig.selectedAccount;
         this.currentAccount = i;
         this.centerImage.setCurrentAccount(i);
@@ -5057,7 +5058,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 progressDrawables = new Drawable[]{ContextCompat.getDrawable(this.parentActivity, NUM), ContextCompat.getDrawable(this.parentActivity, NUM), ContextCompat.getDrawable(this.parentActivity, NUM)};
             }
             this.scroller = new Scroller(activity2);
-            AnonymousClass9 r2 = new FrameLayout(activity2) {
+            AnonymousClass9 r3 = new FrameLayout(activity2) {
                 public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                     return PhotoViewer.this.isVisible && super.onInterceptTouchEvent(motionEvent);
                 }
@@ -5265,8 +5266,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                 }
             };
-            this.windowView = r2;
-            r2.setBackgroundDrawable(this.backgroundDrawable);
+            this.windowView = r3;
+            r3.setBackgroundDrawable(this.backgroundDrawable);
             this.windowView.setClipChildren(true);
             this.windowView.setFocusable(false);
             ClippingImageView clippingImageView = new ClippingImageView(activity2);
@@ -5305,14 +5306,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             PaintingOverlay paintingOverlay2 = new PaintingOverlay(this.parentActivity);
             this.paintingOverlay = paintingOverlay2;
             this.containerView.addView(paintingOverlay2, LayoutHelper.createFrame(-2, -2.0f));
-            AnonymousClass10 r22 = new ActionBar(activity2) {
+            AnonymousClass10 r32 = new ActionBar(activity2) {
                 public void setAlpha(float f) {
                     super.setAlpha(f);
                     PhotoViewer.this.containerView.invalidate();
                 }
             };
-            this.actionBar = r22;
-            r22.setOverlayTitleAnimation(true);
+            this.actionBar = r32;
+            r32.setOverlayTitleAnimation(true);
             this.actionBar.setTitleColor(-1);
             this.actionBar.setSubtitleColor(-1);
             this.actionBar.setBackgroundColor(NUM);
@@ -6690,7 +6691,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                 }
             });
-            AnonymousClass13 r23 = new FrameLayout(this.activityContext) {
+            AnonymousClass13 r33 = new FrameLayout(this.activityContext) {
                 /* access modifiers changed from: protected */
                 public void measureChildWithMargins(View view, int i, int i2, int i3, int i4) {
                     if (view == PhotoViewer.this.nameTextView || view == PhotoViewer.this.dateTextView) {
@@ -6699,8 +6700,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     super.measureChildWithMargins(view, i, i2, i3, i4);
                 }
             };
-            this.bottomLayout = r23;
-            r23.setBackgroundColor(NUM);
+            this.bottomLayout = r33;
+            r33.setBackgroundColor(NUM);
             this.containerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
             this.pressedDrawable[0] = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{NUM, 0});
             this.pressedDrawable[0].setShape(0);
@@ -6821,7 +6822,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 };
                 this.photoProgressViews[i4].setBackgroundState(0, false, true);
             }
-            AnonymousClass16 r24 = new RadialProgressView(this.activityContext) {
+            AnonymousClass16 r34 = new RadialProgressView(this.activityContext) {
                 public void setAlpha(float f) {
                     super.setAlpha(f);
                     if (PhotoViewer.this.containerView != null) {
@@ -6836,8 +6837,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                 }
             };
-            this.miniProgressView = r24;
-            r24.setUseSelfAlpha(true);
+            this.miniProgressView = r34;
+            r34.setUseSelfAlpha(true);
             this.miniProgressView.setProgressColor(-1);
             this.miniProgressView.setSize(AndroidUtilities.dp(54.0f));
             this.miniProgressView.setBackgroundResource(NUM);
@@ -6872,7 +6873,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
             });
             this.shareButton.setContentDescription(LocaleController.getString("ShareFile", NUM));
-            AnonymousClass17 r25 = new FadingTextViewLayout(this.containerView.getContext()) {
+            AnonymousClass17 r35 = new FadingTextViewLayout(this.containerView.getContext()) {
                 /* access modifiers changed from: protected */
                 public void onTextViewCreated(TextView textView) {
                     super.onTextViewCreated(textView);
@@ -6883,9 +6884,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     textView.setGravity(3);
                 }
             };
-            this.nameTextView = r25;
-            this.bottomLayout.addView(r25, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 5.0f, 8.0f, 0.0f));
-            AnonymousClass18 r26 = new FadingTextViewLayout(this.containerView.getContext(), true) {
+            this.nameTextView = r35;
+            this.bottomLayout.addView(r35, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 5.0f, 8.0f, 0.0f));
+            AnonymousClass18 r36 = new FadingTextViewLayout(this.containerView.getContext(), true) {
                 private LocaleController.LocaleInfo lastLocaleInfo = null;
                 private int staticCharsCount = 0;
 
@@ -6922,8 +6923,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     setText(charSequence, false, false);
                 }
             };
-            this.dateTextView = r26;
-            this.bottomLayout.addView(r26, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 25.0f, 8.0f, 0.0f));
+            this.dateTextView = r36;
+            this.bottomLayout.addView(r36, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 25.0f, 8.0f, 0.0f));
             createVideoControlsInterface();
             RadialProgressView radialProgressView = new RadialProgressView(this.parentActivity);
             this.progressView = radialProgressView;
@@ -6965,7 +6966,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.qualityChooseView.setVisibility(4);
             this.qualityChooseView.setBackgroundColor(NUM);
             this.containerView.addView(this.qualityChooseView, LayoutHelper.createFrame(-1, 70.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
-            AnonymousClass20 r27 = new FrameLayout(this.activityContext) {
+            AnonymousClass20 r37 = new FrameLayout(this.activityContext) {
                 public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                     return PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(motionEvent);
                 }
@@ -7012,8 +7013,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                 }
             };
-            this.pickerView = r27;
-            r27.setBackgroundColor(NUM);
+            this.pickerView = r37;
+            r37.setBackgroundColor(NUM);
             this.containerView.addView(this.pickerView, LayoutHelper.createFrame(-1, -2, 83));
             TextView textView = new TextView(this.containerView.getContext());
             this.docNameTextView = textView;
@@ -7186,7 +7187,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.videoAvatarTooltip.setTextSize(1, 14.0f);
             this.videoAvatarTooltip.setTextColor(-7566196);
             this.containerView.addView(this.videoAvatarTooltip, LayoutHelper.createFrame(-1, -2.0f, 83, 0.0f, 8.0f, 0.0f, 0.0f));
-            AnonymousClass22 r28 = new ImageView(this.parentActivity) {
+            AnonymousClass22 r38 = new ImageView(this.parentActivity) {
                 public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                     return PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(motionEvent);
                 }
@@ -7214,8 +7215,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     PhotoViewer.this.captionLimitView.setAlpha(f);
                 }
             };
-            this.pickerViewSendButton = r28;
-            r28.setScaleType(ImageView.ScaleType.CENTER);
+            this.pickerViewSendButton = r38;
+            r38.setScaleType(ImageView.ScaleType.CENTER);
             int dp = AndroidUtilities.dp(56.0f);
             int color = Theme.getColor("dialogFloatingButton");
             int i5 = Build.VERSION.SDK_INT;
@@ -7249,7 +7250,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.captionLimitView.setGravity(17);
             this.captionLimitView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.containerView.addView(this.captionLimitView, LayoutHelper.createFrame(56, 20.0f, 85, 3.0f, 0.0f, 14.0f, 78.0f));
-            AnonymousClass23 r29 = new LinearLayout(this.parentActivity) {
+            AnonymousClass23 r39 = new LinearLayout(this.parentActivity) {
                 boolean ignoreLayout;
 
                 /* access modifiers changed from: protected */
@@ -7283,8 +7284,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     setMeasuredDimension(size, size2);
                 }
             };
-            this.itemsLayout = r29;
-            r29.setOrientation(0);
+            this.itemsLayout = r39;
+            r39.setOrientation(0);
             this.pickerView.addView(this.itemsLayout, LayoutHelper.createFrame(-2, 48.0f, 81, 0.0f, 0.0f, 70.0f, 0.0f));
             ImageView imageView3 = new ImageView(this.parentActivity);
             this.cropItem = imageView3;
@@ -7466,13 +7467,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.rightImage.setInvalidateAll(true);
             this.rightImage.setDelegate(r1);
             int rotation = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
-            AnonymousClass25 r210 = new CheckBox(this.containerView.getContext(), NUM) {
+            AnonymousClass25 r310 = new CheckBox(this.containerView.getContext(), NUM) {
                 public boolean onTouchEvent(MotionEvent motionEvent) {
                     return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(motionEvent);
                 }
             };
-            this.checkImageView = r210;
-            r210.setDrawBackground(true);
+            this.checkImageView = r310;
+            r310.setDrawBackground(true);
             this.checkImageView.setHasBorder(true);
             this.checkImageView.setSize(34);
             this.checkImageView.setCheckOffset(AndroidUtilities.dp(1.0f));
@@ -9392,6 +9393,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (!this.windowView.isFocusable()) {
                     makeFocusable();
                 }
+                this.keyboardAnimationEnabled = true;
                 this.selectedPhotosListView.setEnabled(false);
                 this.photosCounterView.setRotationX(0.0f);
                 this.isPhotosListViewVisible = false;

@@ -617,8 +617,8 @@ public class LinkActionView extends LinearLayout {
                 } else {
                     this.avatarsContainer.avatarsImageView.setObject(i2, UserConfig.selectedAccount, (TLObject) null);
                 }
-                this.avatarsContainer.avatarsImageView.commitTransition(false);
             }
+            this.avatarsContainer.avatarsImageView.commitTransition(false);
         }
     }
 
