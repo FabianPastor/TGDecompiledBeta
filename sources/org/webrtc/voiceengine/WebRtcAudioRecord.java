@@ -1,10 +1,15 @@
 package org.webrtc.voiceengine;
 
+import android.media.AudioFormat;
+import android.media.AudioPlaybackCaptureConfiguration;
 import android.media.AudioRecord;
+import android.media.projection.MediaProjection;
 import android.os.Build;
 import android.os.Process;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.webrtc.Logging;
 import org.webrtc.ThreadUtils;
 
@@ -14,7 +19,6 @@ public class WebRtcAudioRecord {
     private static final int BUFFERS_PER_SECOND = 100;
     private static final int BUFFER_SIZE_FACTOR = 2;
     private static final int CALLBACK_BUFFER_SIZE_MS = 10;
-    private static final boolean DEBUG = false;
     private static final int DEFAULT_AUDIO_SOURCE;
     private static final String TAG = "WebRtcAudioRecord";
     /* access modifiers changed from: private */
@@ -31,6 +35,7 @@ public class WebRtcAudioRecord {
     private WebRtcAudioEffects effects = WebRtcAudioEffects.create();
     /* access modifiers changed from: private */
     public byte[] emptyBytes;
+    private boolean isScreenCapture;
     /* access modifiers changed from: private */
     public final long nativeAudioRecord;
 
@@ -119,7 +124,6 @@ public class WebRtcAudioRecord {
         public void run() {
             Process.setThreadPriority(-19);
             Logging.d("WebRtcAudioRecord", "AudioRecordThread" + WebRtcAudioUtils.getThreadInfo());
-            WebRtcAudioRecord.assertTrue(WebRtcAudioRecord.this.audioRecord.getRecordingState() == 3);
             System.nanoTime();
             while (this.keepAlive) {
                 int read = WebRtcAudioRecord.this.audioRecord.read(WebRtcAudioRecord.this.byteBuffer, WebRtcAudioRecord.this.byteBuffer.capacity());
@@ -159,9 +163,10 @@ public class WebRtcAudioRecord {
         }
     }
 
-    WebRtcAudioRecord(long j) {
+    WebRtcAudioRecord(long j, boolean z) {
         Logging.d("WebRtcAudioRecord", "ctor" + WebRtcAudioUtils.getThreadInfo());
         this.nativeAudioRecord = j;
+        this.isScreenCapture = z;
     }
 
     private boolean enableBuiltInAEC(boolean z) {
@@ -185,6 +190,10 @@ public class WebRtcAudioRecord {
     }
 
     private int initRecording(int i, int i2) {
+        WebRtcAudioEffects webRtcAudioEffects;
+        if (this.isScreenCapture && Build.VERSION.SDK_INT < 29) {
+            return -1;
+        }
         Logging.d("WebRtcAudioRecord", "initRecording(sampleRate=" + i + ", channels=" + i2 + ")");
         if (this.audioRecord != null) {
             reportWebRtcAudioRecordInitError("InitRecording called twice without StopRecording.");
@@ -204,26 +213,47 @@ public class WebRtcAudioRecord {
         Logging.d("WebRtcAudioRecord", "AudioRecord.getMinBufferSize: " + minBufferSize);
         int max = Math.max(minBufferSize * 2, this.byteBuffer.capacity());
         Logging.d("WebRtcAudioRecord", "bufferSizeInBytes: " + max);
-        try {
-            AudioRecord audioRecord2 = new AudioRecord(audioSource, i, channelCountToConfiguration, 2, max);
-            this.audioRecord = audioRecord2;
-            if (audioRecord2.getState() != 1) {
-                reportWebRtcAudioRecordInitError("Failed to create a new AudioRecord instance");
+        if (!this.isScreenCapture) {
+            try {
+                this.audioRecord = new AudioRecord(audioSource, i, channelCountToConfiguration, 2, max);
+            } catch (IllegalArgumentException e) {
+                reportWebRtcAudioRecordInitError("AudioRecord ctor error: " + e.getMessage());
                 releaseAudioResources();
                 return -1;
             }
-            WebRtcAudioEffects webRtcAudioEffects = this.effects;
-            if (webRtcAudioEffects != null) {
-                webRtcAudioEffects.enable(this.audioRecord.getAudioSessionId());
+        } else if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                MediaProjection mediaProjection = VideoCapturerDevice.getMediaProjection();
+                if (mediaProjection == null) {
+                    return -1;
+                }
+                AudioPlaybackCaptureConfiguration.Builder builder = new AudioPlaybackCaptureConfiguration.Builder(mediaProjection);
+                builder.addMatchingUsage(1);
+                builder.addMatchingUsage(14);
+                builder.addMatchingUsage(0);
+                AudioRecord.Builder builder2 = new AudioRecord.Builder();
+                builder2.setAudioPlaybackCaptureConfig(builder.build());
+                builder2.setAudioFormat(new AudioFormat.Builder().setChannelMask(channelCountToConfiguration).setSampleRate(i).setEncoding(2).build());
+                builder2.setBufferSizeInBytes(max);
+                this.audioRecord = builder2.build();
+            } catch (Throwable th) {
+                reportWebRtcAudioRecordInitError("AudioRecord ctor error: " + th.getMessage());
+                releaseAudioResources();
+                return -1;
             }
-            logMainParameters();
-            logMainParametersExtended();
-            return i3;
-        } catch (IllegalArgumentException e) {
-            reportWebRtcAudioRecordInitError("AudioRecord ctor error: " + e.getMessage());
+        }
+        AudioRecord audioRecord2 = this.audioRecord;
+        if (audioRecord2 == null || audioRecord2.getState() != 1) {
+            reportWebRtcAudioRecordInitError("Failed to create a new AudioRecord instance");
             releaseAudioResources();
             return -1;
         }
+        if (!this.isScreenCapture && (webRtcAudioEffects = this.effects) != null) {
+            webRtcAudioEffects.enable(this.audioRecord.getAudioSessionId());
+        }
+        logMainParameters();
+        logMainParametersExtended();
+        return i3;
     }
 
     private boolean startRecording() {
@@ -261,6 +291,11 @@ public class WebRtcAudioRecord {
         if (webRtcAudioEffects != null) {
             webRtcAudioEffects.release();
         }
+        try {
+            this.audioRecord.stop();
+        } catch (Throwable th) {
+            FileLog.e(th);
+        }
         releaseAudioResources();
         return true;
     }
@@ -275,8 +310,7 @@ public class WebRtcAudioRecord {
         }
     }
 
-    /* access modifiers changed from: private */
-    public static void assertTrue(boolean z) {
+    private static void assertTrue(boolean z) {
         if (!z) {
             throw new AssertionError("Expected condition to be true");
         }

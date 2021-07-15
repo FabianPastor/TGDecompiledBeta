@@ -1402,7 +1402,6 @@
     <string name="EnterNewPasscode">Inserisci il nuovo codice</string>
     <string name="EnterThemeName">Inserisci il nome del tema</string>
     <string name="EnterThemeNameEdit">Tocca **Crea** se vuoi condividere il tema con gli altri o personalizzare manualmente ogni colore.\10\10Per favore inserisci il nome del tema:</string>
-    <string name="EnterYourPasscode">Inserisci il tuo codice</string>
     <string name="ErrorOccurred">Si è verificato un errore.</string>
     <string name="ErrorSendRestrictedMedia">Spiacenti, gli amministratori di questo gruppo ti hanno vietato di inviare media.</string>
     <string name="ErrorSendRestrictedMediaAll">Spiacenti, non è permesso inviare media in questo gruppo.</string>

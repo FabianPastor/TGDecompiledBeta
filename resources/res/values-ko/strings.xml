@@ -1402,7 +1402,6 @@
     <string name="EnterNewPasscode">새 암호를 입력하세요</string>
     <string name="EnterThemeName">테마명을 입력하세요</string>
     <string name="EnterThemeNameEdit">다른 사람과 테마를 공유하거나 각 색을 직접 맞춤하시고 싶다면 **만들기**를 누르세요.\10\10테마명을 입력해 주세요:\10</string>
-    <string name="EnterYourPasscode">암호를 입력하세요</string>
     <string name="ErrorOccurred">오류가 발생했습니다.</string>
     <string name="ErrorSendRestrictedMedia">죄송합니다. 그룹 관리자의 제한으로 미디어를 보내실 수 없습니다.</string>
     <string name="ErrorSendRestrictedMediaAll">죄송합니다. 이 그룹에서는 미디어를 보내실 수 없습니다.</string>

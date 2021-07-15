@@ -13547,7 +13547,7 @@ public class MessagesStorage extends BaseController {
             r15 = 1
             if (r14 != r15) goto L_0x068c
             org.telegram.SQLite.SQLiteDatabase r7 = r13.database     // Catch:{ Exception -> 0x0688 }
-            java.lang.String r9 = "SELECT start, end FROM messages_holes WHERE uid = %d AND start >= %d AND start != 1 AND end != 1 OR start < %d AND end > %d ORDER BY start ASC LIMIT 1"
+            java.lang.String r9 = "SELECT start, end FROM messages_holes WHERE uid = %d AND (start >= %d AND start != 1 AND end != 1 OR start < %d AND end > %d) ORDER BY start ASC LIMIT 1"
             r12 = 4
             java.lang.Object[] r15 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x0688 }
             java.lang.Long r12 = java.lang.Long.valueOf(r49)     // Catch:{ Exception -> 0x0688 }
@@ -22159,12 +22159,12 @@ public class MessagesStorage extends BaseController {
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported_old) {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
-                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(130);
+                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(131);
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(130);
+                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(131);
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -25987,7 +25987,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r6 = "SavedMessages"
-            r7 = 2131627298(0x7f0e0d22, float:1.8881856E38)
+            r7 = 2131627331(0x7f0e0d43, float:1.8881923E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)     // Catch:{ Exception -> 0x063e }
             java.lang.String r6 = r6.toLowerCase()     // Catch:{ Exception -> 0x063e }
             java.lang.String r7 = "saved messages"

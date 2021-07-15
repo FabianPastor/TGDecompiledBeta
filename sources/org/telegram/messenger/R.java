@@ -104,10 +104,12 @@ public final class R {
         public static final int maskedWalletDetailsLogoImageType = NUM;
         public static final int maskedWalletDetailsLogoTextColor = NUM;
         public static final int maskedWalletDetailsTextAppearance = NUM;
+        public static final int nestedScrollViewStyle = NUM;
         public static final int noIndex = NUM;
         public static final int paramName = NUM;
         public static final int paramValue = NUM;
         public static final int perAccountTemplate = NUM;
+        public static final int queryPatterns = NUM;
         public static final int schemaOrgProperty = NUM;
         public static final int schemaOrgType = NUM;
         public static final int scopeUris = NUM;
@@ -120,6 +122,7 @@ public final class R {
         public static final int sectionWeight = NUM;
         public static final int semanticallySearchable = NUM;
         public static final int settingsDescription = NUM;
+        public static final int shortcutMatchRequired = NUM;
         public static final int sourceClass = NUM;
         public static final int statusBarBackground = NUM;
         public static final int subsectionSeparator = NUM;
@@ -385,6 +388,7 @@ public final class R {
         public static final int files_internal = NUM;
         public static final int files_music = NUM;
         public static final int files_storage = NUM;
+        public static final int fingerprint = NUM;
         public static final int fingerprint_dialog_error_to_fp = NUM;
         public static final int fingerprint_dialog_fp_to_error = NUM;
         public static final int flame_small = NUM;
@@ -881,7 +885,6 @@ public final class R {
         public static final int paint_radial_brush = NUM;
         public static final int passcode_check = NUM;
         public static final int passcode_delete = NUM;
-        public static final int passcode_logo = NUM;
         public static final int payment_address = NUM;
         public static final int payment_card = NUM;
         public static final int payment_delivery = NUM;
@@ -1431,6 +1434,7 @@ public final class R {
         public static final int passcode_btn_9 = NUM;
         public static final int passcode_btn_backspace = NUM;
         public static final int passcode_btn_done = NUM;
+        public static final int passcode_btn_fingerprint = NUM;
         public static final int photo = NUM;
         public static final int plain = NUM;
         public static final int player_album_art = NUM;
@@ -1627,7 +1631,6 @@ public final class R {
         public static final int linkbroken = NUM;
         public static final int mapstyle_night = NUM;
         public static final int passcode_lock_close = NUM;
-        public static final int passcode_lock_open = NUM;
         public static final int payment_success = NUM;
         public static final int permission_map = NUM;
         public static final int permission_map_dark = NUM;
@@ -1699,6 +1702,7 @@ public final class R {
         public static final int voip_unmuted = NUM;
         public static final int wallet_allset = NUM;
         public static final int wallet_congrats = NUM;
+        public static final int wallet_perfect = NUM;
         public static final int wallet_science = NUM;
         public static final int write_contacts_fab_icon = NUM;
         public static final int write_contacts_fab_icon_reverse = NUM;
@@ -1746,6 +1750,7 @@ public final class R {
         public static final int AccDescrEditing = NUM;
         public static final int AccDescrEmojiButton = NUM;
         public static final int AccDescrExpandPanel = NUM;
+        public static final int AccDescrFingerprint = NUM;
         public static final int AccDescrForwarding = NUM;
         public static final int AccDescrGIFs = NUM;
         public static final int AccDescrGoBack = NUM;
@@ -1892,6 +1897,8 @@ public final class R {
         public static final int ActionEditedInviteLinkClickable = NUM;
         public static final int ActionEditedInviteLinkToSameClickable = NUM;
         public static final int ActionGroupCallEnded = NUM;
+        public static final int ActionGroupCallEndedBy = NUM;
+        public static final int ActionGroupCallEndedByYou = NUM;
         public static final int ActionGroupCallInvited = NUM;
         public static final int ActionGroupCallInvitedYou = NUM;
         public static final int ActionGroupCallJustStarted = NUM;
@@ -2437,9 +2444,13 @@ public final class R {
         public static final int CancelLinkExpired = NUM;
         public static final int CancelLinkSuccess = NUM;
         public static final int CancelPasswordQuestion = NUM;
+        public static final int CancelPasswordReset = NUM;
+        public static final int CancelPasswordResetNo = NUM;
+        public static final int CancelPasswordResetYes = NUM;
         public static final int CancelPollAlertText = NUM;
         public static final int CancelPollAlertTitle = NUM;
         public static final int CancelRegistration = NUM;
+        public static final int CancelReset = NUM;
         public static final int CancelSending = NUM;
         public static final int CantAddBotAsAdmin = NUM;
         public static final int CantPlayVideo = NUM;
@@ -2657,6 +2668,17 @@ public final class R {
         public static final int Chats_other = NUM;
         public static final int Chats_two = NUM;
         public static final int Chats_zero = NUM;
+        public static final int CheckPassword = NUM;
+        public static final int CheckPasswordBackToSettings = NUM;
+        public static final int CheckPasswordInfo = NUM;
+        public static final int CheckPasswordPerfect = NUM;
+        public static final int CheckPasswordPerfectInfo = NUM;
+        public static final int CheckPasswordWrong = NUM;
+        public static final int CheckPhoneNumber = NUM;
+        public static final int CheckPhoneNumberInfo = NUM;
+        public static final int CheckPhoneNumberLearnMoreUrl = NUM;
+        public static final int CheckPhoneNumberNo = NUM;
+        public static final int CheckPhoneNumberYes = NUM;
         public static final int Checking = NUM;
         public static final int ChooseCountry = NUM;
         public static final int ChooseCover = NUM;
@@ -2857,6 +2879,7 @@ public final class R {
         public static final int DebugClearLogs = NUM;
         public static final int DebugMenu = NUM;
         public static final int DebugMenuCallSettings = NUM;
+        public static final int DebugMenuCheckAppUpdate = NUM;
         public static final int DebugMenuClearMediaCache = NUM;
         public static final int DebugMenuDisableCamera = NUM;
         public static final int DebugMenuDisableLogs = NUM;
@@ -3110,7 +3133,7 @@ public final class R {
         public static final int EnterNewPasscode = NUM;
         public static final int EnterThemeName = NUM;
         public static final int EnterThemeNameEdit = NUM;
-        public static final int EnterYourPasscode = NUM;
+        public static final int EnterYourTelegramPasscode = NUM;
         public static final int ErrorOccurred = NUM;
         public static final int ErrorSendRestrictedMedia = NUM;
         public static final int ErrorSendRestrictedMediaAll = NUM;
@@ -4054,6 +4077,7 @@ public final class R {
         public static final int NewMessages_other = NUM;
         public static final int NewMessages_two = NUM;
         public static final int NewMessages_zero = NUM;
+        public static final int NewPassword = NUM;
         public static final int NewPoll = NUM;
         public static final int NewQuiz = NUM;
         public static final int NewSecretChat = NUM;
@@ -4593,6 +4617,7 @@ public final class R {
         public static final int PasswordHint = NUM;
         public static final int PasswordHintPlaceholder = NUM;
         public static final int PasswordHintText = NUM;
+        public static final int PasswordHintTextLogin = NUM;
         public static final int PasswordOff = NUM;
         public static final int PasswordOn = NUM;
         public static final int PasswordRecovery = NUM;
@@ -4777,6 +4802,9 @@ public final class R {
         public static final int PleaseEnterCurrentPasswordTransfer = NUM;
         public static final int PleaseEnterFirstPassword = NUM;
         public static final int PleaseEnterNewFirstPassword = NUM;
+        public static final int PleaseEnterNewFirstPasswordHint = NUM;
+        public static final int PleaseEnterNewFirstPasswordLogin = NUM;
+        public static final int PleaseEnterNewSecondPasswordHint = NUM;
         public static final int PleaseEnterPassword = NUM;
         public static final int PleaseLoginPassport = NUM;
         public static final int PleaseReEnterPassword = NUM;
@@ -5026,6 +5054,8 @@ public final class R {
         public static final int ResetNotificationsAlert = NUM;
         public static final int ResetNotificationsAlertTitle = NUM;
         public static final int ResetNotificationsText = NUM;
+        public static final int ResetPassword = NUM;
+        public static final int ResetPasswordWait = NUM;
         public static final int ResetStatistics = NUM;
         public static final int ResetStatisticsAlert = NUM;
         public static final int ResetStatisticsAlertTitle = NUM;
@@ -5035,9 +5065,15 @@ public final class R {
         public static final int RestoreEmailTrouble = NUM;
         public static final int RestoreEmailTroubleNoEmail = NUM;
         public static final int RestoreEmailTroubleText = NUM;
+        public static final int RestoreEmailTroubleText2 = NUM;
         public static final int RestorePasswordNoEmailText = NUM;
+        public static final int RestorePasswordNoEmailText2 = NUM;
         public static final int RestorePasswordNoEmailTitle = NUM;
         public static final int RestorePasswordResetAccount = NUM;
+        public static final int RestorePasswordResetIn = NUM;
+        public static final int RestorePasswordResetPassword = NUM;
+        public static final int RestorePasswordResetPasswordOk = NUM;
+        public static final int RestorePasswordResetPasswordText = NUM;
         public static final int Restrictions_few = NUM;
         public static final int Restrictions_many = NUM;
         public static final int Restrictions_one = NUM;
@@ -6105,6 +6141,10 @@ public final class R {
         public static final int YourNameChanged = NUM;
         public static final int YourPassword = NUM;
         public static final int YourPasswordChangedSuccessText = NUM;
+        public static final int YourPasswordHeader = NUM;
+        public static final int YourPasswordRemember = NUM;
+        public static final int YourPasswordRememberNo = NUM;
+        public static final int YourPasswordRememberYes = NUM;
         public static final int YourPasswordSuccess = NUM;
         public static final int YourPasswordSuccessText = NUM;
         public static final int YourPhone = NUM;
@@ -6219,6 +6259,9 @@ public final class R {
 
     public static final class styleable {
         public static final int[] AppDataSearch = new int[0];
+        public static final int[] Capability = {NUM, NUM};
+        public static final int Capability_queryPatterns = 0;
+        public static final int Capability_shortcutMatchRequired = 1;
         public static final int[] ColorStateListItem = {16843173, 16843551, NUM};
         public static final int ColorStateListItem_alpha = 2;
         public static final int ColorStateListItem_android_alpha = 1;

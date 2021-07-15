@@ -1402,7 +1402,6 @@
     <string name="EnterNewPasscode">Pon tu nuevo código</string>
     <string name="EnterThemeName">Pon el nombre del tema</string>
     <string name="EnterThemeNameEdit">Pulsa **Crear** si quieres compartir tu tema con otras personas o personalizar cada color manualmente.\10\10Pon el nombre del tema:</string>
-    <string name="EnterYourPasscode">Pon tu código</string>
     <string name="ErrorOccurred">Ocurrió un error.</string>
     <string name="ErrorSendRestrictedMedia">Lo sentimos, los administradores del grupo han restringido que envíes multimedia.</string>
     <string name="ErrorSendRestrictedMediaAll">No está permitido enviar multimedia en este grupo.</string>

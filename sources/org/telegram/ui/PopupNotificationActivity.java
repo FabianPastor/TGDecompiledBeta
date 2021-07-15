@@ -360,6 +360,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             public void didPressAttachButton() {
             }
 
+            public /* synthetic */ boolean hasForwardingMessages() {
+                return ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$hasForwardingMessages(this);
+            }
+
             public /* synthetic */ boolean hasScheduledMessages() {
                 return ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$hasScheduledMessages(this);
             }

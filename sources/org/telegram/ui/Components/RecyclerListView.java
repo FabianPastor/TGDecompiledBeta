@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -52,6 +53,7 @@ public class RecyclerListView extends RecyclerView {
     public View currentChildView;
     /* access modifiers changed from: private */
     public int currentFirst = -1;
+    int currentSelectedPosition;
     private int currentVisible = -1;
     private boolean disableHighlightState;
     private boolean disallowInterceptTouchEvents;
@@ -75,8 +77,16 @@ public class RecyclerListView extends RecyclerView {
     private boolean isChildViewEnabled;
     private boolean isHidden;
     private long lastAlphaAnimationTime;
+    float lastX = Float.MAX_VALUE;
+    float lastY = Float.MAX_VALUE;
+    int[] listPaddings;
     /* access modifiers changed from: private */
     public boolean longPressCalled;
+    boolean multiSelectionGesture;
+    boolean multiSelectionGestureStarted;
+    onMultiSelectionChanged multiSelectionListener;
+    boolean multiselectScrollRunning;
+    boolean multiselectScrollToTop;
     private RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
         public void onChanged() {
             RecyclerListView.this.checkIfEmpty(true);
@@ -121,6 +131,27 @@ public class RecyclerListView extends RecyclerView {
     /* access modifiers changed from: private */
     public Runnable removeHighlighSelectionRunnable;
     private boolean scrollEnabled = true;
+    Runnable scroller = new Runnable() {
+        public void run() {
+            int i;
+            RecyclerListView recyclerListView = RecyclerListView.this;
+            recyclerListView.multiSelectionListener.getPaddings(recyclerListView.listPaddings);
+            if (RecyclerListView.this.multiselectScrollToTop) {
+                i = -AndroidUtilities.dp(12.0f);
+                RecyclerListView recyclerListView2 = RecyclerListView.this;
+                boolean unused = recyclerListView2.chekMultiselect(0.0f, (float) recyclerListView2.listPaddings[0]);
+            } else {
+                i = AndroidUtilities.dp(12.0f);
+                RecyclerListView recyclerListView3 = RecyclerListView.this;
+                boolean unused2 = recyclerListView3.chekMultiselect(0.0f, (float) (recyclerListView3.getMeasuredHeight() - RecyclerListView.this.listPaddings[1]));
+            }
+            RecyclerListView.this.multiSelectionListener.scrollBy(i);
+            RecyclerListView recyclerListView4 = RecyclerListView.this;
+            if (recyclerListView4.multiselectScrollRunning) {
+                AndroidUtilities.runOnUIThread(recyclerListView4.scroller);
+            }
+        }
+    };
     /* access modifiers changed from: private */
     public boolean scrollingByUser;
     /* access modifiers changed from: private */
@@ -130,6 +161,7 @@ public class RecyclerListView extends RecyclerView {
     private int sectionsType;
     /* access modifiers changed from: private */
     public Runnable selectChildRunnable;
+    HashSet<Integer> selectedPositions;
     protected Drawable selectorDrawable;
     protected int selectorPosition;
     private int selectorRadius;
@@ -138,7 +170,10 @@ public class RecyclerListView extends RecyclerView {
     /* access modifiers changed from: private */
     public boolean selfOnLayout;
     private int startSection;
+    int startSelectionFrom;
     private int topBottomSelectorRadius;
+    private int touchSlop;
+    boolean useRelativePositions;
 
     public static abstract class FastScrollAdapter extends SelectionAdapter {
         public abstract String getLetter(int i);
@@ -180,6 +215,20 @@ public class RecyclerListView extends RecyclerView {
         }
 
         public abstract boolean isEnabled(RecyclerView.ViewHolder viewHolder);
+    }
+
+    public interface onMultiSelectionChanged {
+        boolean canSelect(int i);
+
+        int checkPosition(int i, boolean z);
+
+        void getPaddings(int[] iArr);
+
+        boolean limitReached();
+
+        void onSelectionChanged(int i, boolean z, float f, float f2);
+
+        void scrollBy(int i);
     }
 
     /* access modifiers changed from: protected */
@@ -1224,6 +1273,7 @@ public class RecyclerListView extends RecyclerView {
             this.fastScroll.getLayoutParams().height = measuredHeight;
             this.fastScroll.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(132.0f), NUM), View.MeasureSpec.makeMeasureSpec(measuredHeight, NUM));
         }
+        this.touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     }
 
     /* access modifiers changed from: protected */
@@ -2146,6 +2196,132 @@ public class RecyclerListView extends RecyclerView {
         FastScroll fastScroll2 = this.fastScroll;
         if (fastScroll2 != null) {
             fastScroll2.setTranslationY(f);
+        }
+    }
+
+    public void startMultiselect(int i, boolean z, onMultiSelectionChanged onmultiselectionchanged) {
+        if (!this.multiSelectionGesture) {
+            this.listPaddings = new int[2];
+            this.selectedPositions = new HashSet<>();
+            getParent().requestDisallowInterceptTouchEvent(true);
+            this.multiSelectionListener = onmultiselectionchanged;
+            this.multiSelectionGesture = true;
+            this.currentSelectedPosition = i;
+            this.startSelectionFrom = i;
+        }
+        this.useRelativePositions = z;
+    }
+
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        if (!this.multiSelectionGesture || motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+            this.lastX = Float.MAX_VALUE;
+            this.lastY = Float.MAX_VALUE;
+            this.multiSelectionGesture = false;
+            this.multiSelectionGestureStarted = false;
+            getParent().requestDisallowInterceptTouchEvent(false);
+            cancelMultiselectScroll();
+            return super.onTouchEvent(motionEvent);
+        }
+        if (this.lastX == Float.MAX_VALUE && this.lastY == Float.MAX_VALUE) {
+            this.lastX = motionEvent.getX();
+            this.lastY = motionEvent.getY();
+        }
+        if (!this.multiSelectionGestureStarted && Math.abs(motionEvent.getY() - this.lastY) > ((float) this.touchSlop)) {
+            this.multiSelectionGestureStarted = true;
+            getParent().requestDisallowInterceptTouchEvent(true);
+        }
+        if (this.multiSelectionGestureStarted) {
+            chekMultiselect(motionEvent.getX(), motionEvent.getY());
+            this.multiSelectionListener.getPaddings(this.listPaddings);
+            if (motionEvent.getY() > ((float) ((getMeasuredHeight() - AndroidUtilities.dp(56.0f)) - this.listPaddings[1])) && (this.currentSelectedPosition >= this.startSelectionFrom || !this.multiSelectionListener.limitReached())) {
+                startMultiselectScroll(false);
+            } else if (motionEvent.getY() >= ((float) (AndroidUtilities.dp(56.0f) + this.listPaddings[0])) || (this.currentSelectedPosition > this.startSelectionFrom && this.multiSelectionListener.limitReached())) {
+                cancelMultiselectScroll();
+            } else {
+                startMultiselectScroll(true);
+            }
+        }
+        return true;
+    }
+
+    /* access modifiers changed from: private */
+    public boolean chekMultiselect(float f, float f2) {
+        int measuredHeight = getMeasuredHeight();
+        int[] iArr = this.listPaddings;
+        float min = Math.min((float) (measuredHeight - iArr[1]), Math.max(f2, (float) iArr[0]));
+        float min2 = Math.min((float) getMeasuredWidth(), Math.max(f, 0.0f));
+        int i = 0;
+        while (true) {
+            if (i >= getChildCount()) {
+                break;
+            }
+            this.multiSelectionListener.getPaddings(this.listPaddings);
+            if (!this.useRelativePositions) {
+                View childAt = getChildAt(i);
+                RectF rectF = AndroidUtilities.rectTmp;
+                rectF.set((float) childAt.getLeft(), (float) childAt.getTop(), (float) (childAt.getLeft() + childAt.getMeasuredWidth()), (float) (childAt.getTop() + childAt.getMeasuredHeight()));
+                if (rectF.contains(min2, min)) {
+                    int childLayoutPosition = getChildLayoutPosition(childAt);
+                    int i2 = this.currentSelectedPosition;
+                    if (i2 != childLayoutPosition) {
+                        int i3 = this.startSelectionFrom;
+                        boolean z = i2 > i3 || childLayoutPosition > i3;
+                        childLayoutPosition = this.multiSelectionListener.checkPosition(childLayoutPosition, z);
+                        if (z) {
+                            int i4 = this.currentSelectedPosition;
+                            if (childLayoutPosition <= i4) {
+                                while (i4 > childLayoutPosition) {
+                                    if (i4 != this.startSelectionFrom && this.multiSelectionListener.canSelect(i4)) {
+                                        this.multiSelectionListener.onSelectionChanged(i4, false, min2, min);
+                                    }
+                                    i4--;
+                                }
+                            } else if (!this.multiSelectionListener.limitReached()) {
+                                for (int i5 = this.currentSelectedPosition + 1; i5 <= childLayoutPosition; i5++) {
+                                    if (i5 != this.startSelectionFrom && this.multiSelectionListener.canSelect(i5)) {
+                                        this.multiSelectionListener.onSelectionChanged(i5, true, min2, min);
+                                    }
+                                }
+                            }
+                        } else {
+                            int i6 = this.currentSelectedPosition;
+                            if (childLayoutPosition > i6) {
+                                while (i6 < childLayoutPosition) {
+                                    if (i6 != this.startSelectionFrom && this.multiSelectionListener.canSelect(i6)) {
+                                        this.multiSelectionListener.onSelectionChanged(i6, false, min2, min);
+                                    }
+                                    i6++;
+                                }
+                            } else if (!this.multiSelectionListener.limitReached()) {
+                                for (int i7 = this.currentSelectedPosition - 1; i7 >= childLayoutPosition; i7--) {
+                                    if (i7 != this.startSelectionFrom && this.multiSelectionListener.canSelect(i7)) {
+                                        this.multiSelectionListener.onSelectionChanged(i7, true, min2, min);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (!this.multiSelectionListener.limitReached()) {
+                        this.currentSelectedPosition = childLayoutPosition;
+                    }
+                }
+            }
+            i++;
+        }
+        return true;
+    }
+
+    private void cancelMultiselectScroll() {
+        this.multiselectScrollRunning = false;
+        AndroidUtilities.cancelRunOnUIThread(this.scroller);
+    }
+
+    private void startMultiselectScroll(boolean z) {
+        this.multiselectScrollToTop = z;
+        if (!this.multiselectScrollRunning) {
+            this.multiselectScrollRunning = true;
+            AndroidUtilities.cancelRunOnUIThread(this.scroller);
+            AndroidUtilities.runOnUIThread(this.scroller);
         }
     }
 }

@@ -327,6 +327,14 @@ public class VideoCapturerDevice {
         }, str);
     }
 
+    public static MediaProjection getMediaProjection() {
+        VideoCapturerDevice[] videoCapturerDeviceArr = instance;
+        if (videoCapturerDeviceArr[1] == null) {
+            return null;
+        }
+        return ((ScreenCapturerAndroid) videoCapturerDeviceArr[1].videoCapturer).getMediaProjection();
+    }
+
     private void onStateChanged(long j, int i) {
         if (Build.VERSION.SDK_INT >= 18) {
             AndroidUtilities.runOnUIThread(new Runnable(j, i) {

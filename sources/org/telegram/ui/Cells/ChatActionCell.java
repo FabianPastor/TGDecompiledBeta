@@ -136,7 +136,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
 
     public void setCustomDate(int i, boolean z, boolean z2) {
         String str;
-        if (this.customDate != i) {
+        int i2 = this.customDate;
+        if (i2 != i && i2 / 3600 != i / 3600) {
             if (!z) {
                 str = LocaleController.formatDateChat((long) i);
             } else if (i == NUM) {

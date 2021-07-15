@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
+import org.telegram.SQLite.SQLiteException;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.support.SparseLongArray;
@@ -143,6 +144,7 @@ import org.telegram.tgnet.TLRPC$TL_topPeer;
 import org.telegram.tgnet.TLRPC$TL_topPeerCategoryBotsInline;
 import org.telegram.tgnet.TLRPC$TL_topPeerCategoryCorrespondents;
 import org.telegram.tgnet.TLRPC$TL_topPeerCategoryPeers;
+import org.telegram.tgnet.TLRPC$TL_updateBotCommands;
 import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$Vector;
@@ -178,7 +180,7 @@ public class MediaDataController extends BaseController {
     private HashMap<String, ArrayList<TLRPC$Document>> allStickers = new HashMap<>();
     private HashMap<String, ArrayList<TLRPC$Document>> allStickersFeatured = new HashMap<>();
     private int[] archivedStickersCount = new int[2];
-    private SparseArray<TLRPC$BotInfo> botInfos = new SparseArray<>();
+    private HashMap<String, TLRPC$BotInfo> botInfos = new HashMap<>();
     private LongSparseArray<TLRPC$Message> botKeyboards = new LongSparseArray<>();
     private SparseLongArray botKeyboardsByMids = new SparseLongArray();
     private HashMap<String, Boolean> currentFetchingEmoji = new HashMap<>();
@@ -5718,7 +5720,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e7 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02e7 }
-            r10 = 2131626270(0x7f0e091e, float:1.8879771E38)
+            r10 = 2131626290(0x7f0e0932, float:1.8879812E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e7 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02e7 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e7 }
@@ -6579,7 +6581,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
+            r9 = 2131627212(0x7f0e0ccc, float:1.8881682E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
         L_0x0067:
             r9 = r4
@@ -6589,7 +6591,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627298(0x7f0e0d22, float:1.8881856E38)
+            r9 = 2131627331(0x7f0e0d43, float:1.8881923E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
             goto L_0x0067
         L_0x007a:
@@ -9578,43 +9580,53 @@ public class MediaDataController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.botKeyboardDidLoad, tLRPC$Message, Long.valueOf(j));
     }
 
-    public void loadBotInfo(int i, long j, boolean z, int i2) {
+    private TLRPC$BotInfo loadBotInfoInternal(int i, long j) throws SQLiteException {
         TLRPC$BotInfo tLRPC$BotInfo;
-        if (!z || (tLRPC$BotInfo = this.botInfos.get(i)) == null) {
-            getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, j, i2) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ long f$2;
-                public final /* synthetic */ int f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r5;
-                }
-
-                public final void run() {
-                    MediaDataController.this.lambda$loadBotInfo$133$MediaDataController(this.f$1, this.f$2, this.f$3);
-                }
-            });
-            return;
+        NativeByteBuffer byteBufferValue;
+        SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info_v2 WHERE uid = %d AND dialogId = %d", new Object[]{Integer.valueOf(i), Long.valueOf(j)}), new Object[0]);
+        if (!queryFinalized.next() || queryFinalized.isNull(0) || (byteBufferValue = queryFinalized.byteBufferValue(0)) == null) {
+            tLRPC$BotInfo = null;
+        } else {
+            tLRPC$BotInfo = TLRPC$BotInfo.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+            byteBufferValue.reuse();
         }
-        getNotificationCenter().postNotificationName(NotificationCenter.botInfoDidLoad, tLRPC$BotInfo, Integer.valueOf(i2));
+        queryFinalized.dispose();
+        return tLRPC$BotInfo;
+    }
+
+    public void loadBotInfo(int i, long j, boolean z, int i2) {
+        if (z) {
+            HashMap<String, TLRPC$BotInfo> hashMap = this.botInfos;
+            TLRPC$BotInfo tLRPC$BotInfo = hashMap.get(i + "_" + j);
+            if (tLRPC$BotInfo != null) {
+                getNotificationCenter().postNotificationName(NotificationCenter.botInfoDidLoad, tLRPC$BotInfo, Integer.valueOf(i2));
+                return;
+            }
+        }
+        getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, j, i2) {
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ long f$2;
+            public final /* synthetic */ int f$3;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r5;
+            }
+
+            public final void run() {
+                MediaDataController.this.lambda$loadBotInfo$133$MediaDataController(this.f$1, this.f$2, this.f$3);
+            }
+        });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$loadBotInfo$133 */
     public /* synthetic */ void lambda$loadBotInfo$133$MediaDataController(int i, long j, int i2) {
-        NativeByteBuffer byteBufferValue;
-        TLRPC$BotInfo tLRPC$BotInfo = null;
         try {
-            SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info_v2 WHERE uid = %d AND dialogId = %d", new Object[]{Integer.valueOf(i), Long.valueOf(j)}), new Object[0]);
-            if (queryFinalized.next() && !queryFinalized.isNull(0) && (byteBufferValue = queryFinalized.byteBufferValue(0)) != null) {
-                tLRPC$BotInfo = TLRPC$BotInfo.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                byteBufferValue.reuse();
-            }
-            queryFinalized.dispose();
-            if (tLRPC$BotInfo != null) {
-                AndroidUtilities.runOnUIThread(new Runnable(tLRPC$BotInfo, i2) {
+            TLRPC$BotInfo loadBotInfoInternal = loadBotInfoInternal(i, j);
+            if (loadBotInfoInternal != null) {
+                AndroidUtilities.runOnUIThread(new Runnable(loadBotInfoInternal, i2) {
                     public final /* synthetic */ TLRPC$BotInfo f$1;
                     public final /* synthetic */ int f$2;
 
@@ -9693,7 +9705,8 @@ public class MediaDataController extends BaseController {
 
     public void putBotInfo(long j, TLRPC$BotInfo tLRPC$BotInfo) {
         if (tLRPC$BotInfo != null) {
-            this.botInfos.put(tLRPC$BotInfo.user_id, tLRPC$BotInfo);
+            HashMap<String, TLRPC$BotInfo> hashMap = this.botInfos;
+            hashMap.put(tLRPC$BotInfo.user_id + "_" + j, tLRPC$BotInfo);
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$BotInfo, j) {
                 public final /* synthetic */ TLRPC$BotInfo f$1;
                 public final /* synthetic */ long f$2;
@@ -9729,6 +9742,51 @@ public class MediaDataController extends BaseController {
         }
     }
 
+    public void updateBotInfo(long j, TLRPC$TL_updateBotCommands tLRPC$TL_updateBotCommands) {
+        HashMap<String, TLRPC$BotInfo> hashMap = this.botInfos;
+        TLRPC$BotInfo tLRPC$BotInfo = hashMap.get(tLRPC$TL_updateBotCommands.bot_id + "_" + j);
+        if (tLRPC$BotInfo != null) {
+            tLRPC$BotInfo.commands = tLRPC$TL_updateBotCommands.commands;
+            getNotificationCenter().postNotificationName(NotificationCenter.botInfoDidLoad, tLRPC$BotInfo, 0);
+        }
+        getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$TL_updateBotCommands, j) {
+            public final /* synthetic */ TLRPC$TL_updateBotCommands f$1;
+            public final /* synthetic */ long f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                MediaDataController.this.lambda$updateBotInfo$136$MediaDataController(this.f$1, this.f$2);
+            }
+        });
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$updateBotInfo$136 */
+    public /* synthetic */ void lambda$updateBotInfo$136$MediaDataController(TLRPC$TL_updateBotCommands tLRPC$TL_updateBotCommands, long j) {
+        try {
+            TLRPC$BotInfo loadBotInfoInternal = loadBotInfoInternal(tLRPC$TL_updateBotCommands.bot_id, j);
+            if (loadBotInfoInternal != null) {
+                loadBotInfoInternal.commands = tLRPC$TL_updateBotCommands.commands;
+            }
+            SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO bot_info_v2 VALUES(?, ?, ?)");
+            executeFast.requery();
+            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(loadBotInfoInternal.getObjectSize());
+            loadBotInfoInternal.serializeToStream(nativeByteBuffer);
+            executeFast.bindInteger(1, loadBotInfoInternal.user_id);
+            executeFast.bindLong(2, j);
+            executeFast.bindByteBuffer(3, nativeByteBuffer);
+            executeFast.step();
+            nativeByteBuffer.reuse();
+            executeFast.dispose();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
     public void fetchNewEmojiKeywords(String[] strArr) {
         if (strArr != null) {
             int i = 0;
@@ -9744,7 +9802,7 @@ public class MediaDataController extends BaseController {
                         }
 
                         public final void run() {
-                            MediaDataController.this.lambda$fetchNewEmojiKeywords$141$MediaDataController(this.f$1);
+                            MediaDataController.this.lambda$fetchNewEmojiKeywords$142$MediaDataController(this.f$1);
                         }
                     });
                     i++;
@@ -9763,9 +9821,9 @@ public class MediaDataController extends BaseController {
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:18:0x004c  */
     /* JADX WARNING: Removed duplicated region for block: B:20:0x0055  */
-    /* renamed from: lambda$fetchNewEmojiKeywords$141 */
+    /* renamed from: lambda$fetchNewEmojiKeywords$142 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$fetchNewEmojiKeywords$141$MediaDataController(java.lang.String r10) {
+    public /* synthetic */ void lambda$fetchNewEmojiKeywords$142$MediaDataController(java.lang.String r10) {
         /*
             r9 = this;
             r0 = -1
@@ -9808,7 +9866,7 @@ public class MediaDataController extends BaseController {
             r6 = 3600000(0x36ee80, double:1.7786363E-317)
             int r4 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
             if (r4 >= 0) goto L_0x0055
-            org.telegram.messenger.-$$Lambda$MediaDataController$3adOzqfDlbW4awPkxUStSLycOTg r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$3adOzqfDlbW4awPkxUStSLycOTg
+            org.telegram.messenger.-$$Lambda$MediaDataController$kp45CpC3eEgolzBHGDl8ZHx0SDU r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$kp45CpC3eEgolzBHGDl8ZHx0SDU
             r0.<init>(r10)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
@@ -9825,23 +9883,23 @@ public class MediaDataController extends BaseController {
             r0.from_version = r5
         L_0x0068:
             org.telegram.tgnet.ConnectionsManager r2 = r9.getConnectionsManager()
-            org.telegram.messenger.-$$Lambda$MediaDataController$Rfh9VLO-cllI-F9WdVSgxDpGqd0 r3 = new org.telegram.messenger.-$$Lambda$MediaDataController$Rfh9VLO-cllI-F9WdVSgxDpGqd0
+            org.telegram.messenger.-$$Lambda$MediaDataController$E1PnFZWCjrfIt_CYceXZ8rQy82I r3 = new org.telegram.messenger.-$$Lambda$MediaDataController$E1PnFZWCjrfIt_CYceXZ8rQy82I
             r3.<init>(r5, r1, r10)
             r2.sendRequest(r0, r3)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$fetchNewEmojiKeywords$141$MediaDataController(java.lang.String):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$fetchNewEmojiKeywords$142$MediaDataController(java.lang.String):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$136 */
-    public /* synthetic */ void lambda$null$136$MediaDataController(String str) {
+    /* renamed from: lambda$null$137 */
+    public /* synthetic */ void lambda$null$137$MediaDataController(String str) {
         Boolean remove = this.currentFetchingEmoji.remove(str);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$140 */
-    public /* synthetic */ void lambda$null$140$MediaDataController(int i, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$null$141 */
+    public /* synthetic */ void lambda$null$141$MediaDataController(int i, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$TL_emojiKeywordsDifference tLRPC$TL_emojiKeywordsDifference = (TLRPC$TL_emojiKeywordsDifference) tLObject;
             if (i == -1 || tLRPC$TL_emojiKeywordsDifference.lang_code.equals(str)) {
@@ -9855,7 +9913,7 @@ public class MediaDataController extends BaseController {
                     }
 
                     public final void run() {
-                        MediaDataController.this.lambda$null$138$MediaDataController(this.f$1);
+                        MediaDataController.this.lambda$null$139$MediaDataController(this.f$1);
                     }
                 });
             }
@@ -9868,15 +9926,15 @@ public class MediaDataController extends BaseController {
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$null$139$MediaDataController(this.f$1);
+                    MediaDataController.this.lambda$null$140$MediaDataController(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$138 */
-    public /* synthetic */ void lambda$null$138$MediaDataController(String str) {
+    /* renamed from: lambda$null$139 */
+    public /* synthetic */ void lambda$null$139$MediaDataController(String str) {
         try {
             SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("DELETE FROM emoji_keywords_info_v2 WHERE lang = ?");
             executeFast.bindString(1, str);
@@ -9890,7 +9948,7 @@ public class MediaDataController extends BaseController {
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$null$137$MediaDataController(this.f$1);
+                    MediaDataController.this.lambda$null$138$MediaDataController(this.f$1);
                 }
             });
         } catch (Exception e) {
@@ -9899,15 +9957,15 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$137 */
-    public /* synthetic */ void lambda$null$137$MediaDataController(String str) {
+    /* renamed from: lambda$null$138 */
+    public /* synthetic */ void lambda$null$138$MediaDataController(String str) {
         this.currentFetchingEmoji.remove(str);
         fetchNewEmojiKeywords(new String[]{str});
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$139 */
-    public /* synthetic */ void lambda$null$139$MediaDataController(String str) {
+    /* renamed from: lambda$null$140 */
+    public /* synthetic */ void lambda$null$140$MediaDataController(String str) {
         Boolean remove = this.currentFetchingEmoji.remove(str);
     }
 
@@ -9923,15 +9981,15 @@ public class MediaDataController extends BaseController {
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$putEmojiKeywords$143$MediaDataController(this.f$1, this.f$2);
+                    MediaDataController.this.lambda$putEmojiKeywords$144$MediaDataController(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$putEmojiKeywords$143 */
-    public /* synthetic */ void lambda$putEmojiKeywords$143$MediaDataController(TLRPC$TL_emojiKeywordsDifference tLRPC$TL_emojiKeywordsDifference, String str) {
+    /* renamed from: lambda$putEmojiKeywords$144 */
+    public /* synthetic */ void lambda$putEmojiKeywords$144$MediaDataController(TLRPC$TL_emojiKeywordsDifference tLRPC$TL_emojiKeywordsDifference, String str) {
         try {
             if (!tLRPC$TL_emojiKeywordsDifference.keywords.isEmpty()) {
                 SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO emoji_keywords_v2 VALUES(?, ?, ?)");
@@ -9983,7 +10041,7 @@ public class MediaDataController extends BaseController {
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$null$142$MediaDataController(this.f$1);
+                    MediaDataController.this.lambda$null$143$MediaDataController(this.f$1);
                 }
             });
         } catch (Exception e) {
@@ -9992,8 +10050,8 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$142 */
-    public /* synthetic */ void lambda$null$142$MediaDataController(String str) {
+    /* renamed from: lambda$null$143 */
+    public /* synthetic */ void lambda$null$143$MediaDataController(String str) {
         this.currentFetchingEmoji.remove(str);
         getNotificationCenter().postNotificationName(NotificationCenter.newEmojiSuggestionsAvailable, str);
     }
@@ -10026,7 +10084,7 @@ public class MediaDataController extends BaseController {
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$getEmojiSuggestions$147$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+                    MediaDataController.this.lambda$getEmojiSuggestions$148$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
                 }
             });
             if (countDownLatch != null) {
@@ -10041,9 +10099,9 @@ public class MediaDataController extends BaseController {
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:50:0x011c  */
     /* JADX WARNING: Removed duplicated region for block: B:51:0x0123  */
-    /* renamed from: lambda$getEmojiSuggestions$147 */
+    /* renamed from: lambda$getEmojiSuggestions$148 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getEmojiSuggestions$147$MediaDataController(java.lang.String[] r15, org.telegram.messenger.MediaDataController.KeywordResultCallback r16, java.lang.String r17, boolean r18, java.util.ArrayList r19, java.util.concurrent.CountDownLatch r20) {
+    public /* synthetic */ void lambda$getEmojiSuggestions$148$MediaDataController(java.lang.String[] r15, org.telegram.messenger.MediaDataController.KeywordResultCallback r16, java.lang.String r17, boolean r18, java.util.ArrayList r19, java.util.concurrent.CountDownLatch r20) {
         /*
             r14 = this;
             r0 = r15
@@ -10080,7 +10138,7 @@ public class MediaDataController extends BaseController {
             goto L_0x0012
         L_0x003d:
             if (r7 != 0) goto L_0x0049
-            org.telegram.messenger.-$$Lambda$MediaDataController$YtANaUwtoaVGoeTCuazWhW9thzU r3 = new org.telegram.messenger.-$$Lambda$MediaDataController$YtANaUwtoaVGoeTCuazWhW9thzU     // Catch:{ Exception -> 0x010b }
+            org.telegram.messenger.-$$Lambda$MediaDataController$OSMIOoS-U69EMtwKGXidlUeQwL0 r3 = new org.telegram.messenger.-$$Lambda$MediaDataController$OSMIOoS-U69EMtwKGXidlUeQwL0     // Catch:{ Exception -> 0x010b }
             r6 = r14
             r3.<init>(r15, r1, r2)     // Catch:{ Exception -> 0x0109 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)     // Catch:{ Exception -> 0x0109 }
@@ -10182,7 +10240,7 @@ public class MediaDataController extends BaseController {
         L_0x010d:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x0110:
-            org.telegram.messenger.-$$Lambda$MediaDataController$MlS0hPX_SzeQs0Bczr0iCuqoHzQ r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$MlS0hPX_SzeQs0Bczr0iCuqoHzQ
+            org.telegram.messenger.-$$Lambda$MediaDataController$ZrPhYYKmTe9uWr4S90KpzTfsYjA r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$ZrPhYYKmTe9uWr4S90KpzTfsYjA
             r3 = r19
             r0.<init>(r3)
             java.util.Collections.sort(r2, r0)
@@ -10191,18 +10249,18 @@ public class MediaDataController extends BaseController {
             r20.countDown()
             goto L_0x012b
         L_0x0123:
-            org.telegram.messenger.-$$Lambda$MediaDataController$hCtZfSS1WXXZmK2iivkMATgtZdM r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$hCtZfSS1WXXZmK2iivkMATgtZdM
+            org.telegram.messenger.-$$Lambda$MediaDataController$ZRIzm-fu_a4G4gNXHNg9zWwiILA r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$ZRIzm-fu_a4G4gNXHNg9zWwiILA
             r0.<init>(r2, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
         L_0x012b:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$getEmojiSuggestions$147$MediaDataController(java.lang.String[], org.telegram.messenger.MediaDataController$KeywordResultCallback, java.lang.String, boolean, java.util.ArrayList, java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$getEmojiSuggestions$148$MediaDataController(java.lang.String[], org.telegram.messenger.MediaDataController$KeywordResultCallback, java.lang.String, boolean, java.util.ArrayList, java.util.concurrent.CountDownLatch):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$144 */
-    public /* synthetic */ void lambda$null$144$MediaDataController(String[] strArr, KeywordResultCallback keywordResultCallback, ArrayList arrayList) {
+    /* renamed from: lambda$null$145 */
+    public /* synthetic */ void lambda$null$145$MediaDataController(String[] strArr, KeywordResultCallback keywordResultCallback, ArrayList arrayList) {
         int i = 0;
         while (i < strArr.length) {
             if (this.currentFetchingEmoji.get(strArr[i]) == null) {
@@ -10214,7 +10272,7 @@ public class MediaDataController extends BaseController {
         keywordResultCallback.run(arrayList, (String) null);
     }
 
-    static /* synthetic */ int lambda$null$145(ArrayList arrayList, KeywordResult keywordResult, KeywordResult keywordResult2) {
+    static /* synthetic */ int lambda$null$146(ArrayList arrayList, KeywordResult keywordResult, KeywordResult keywordResult2) {
         int indexOf = arrayList.indexOf(keywordResult.emoji);
         int i = Integer.MAX_VALUE;
         if (indexOf < 0) {

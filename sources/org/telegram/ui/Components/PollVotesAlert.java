@@ -43,7 +43,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -51,15 +50,11 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$MessageUserVote;
 import org.telegram.tgnet.TLRPC$Poll;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_inputPeerChannel;
-import org.telegram.tgnet.TLRPC$TL_inputPeerChat;
-import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC$TL_messageMediaPoll;
 import org.telegram.tgnet.TLRPC$TL_messageUserVoteInputOption;
 import org.telegram.tgnet.TLRPC$TL_messages_getPollVotes;
@@ -557,23 +552,7 @@ public class PollVotesAlert extends BottomSheet {
         TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll = (TLRPC$TL_messageMediaPoll) messageObject3.messageOwner.media;
         this.poll = tLRPC$TL_messageMediaPoll.poll;
         Activity parentActivity = chatActivity2.getParentActivity();
-        TLRPC$Chat currentChat = chatActivity2.getCurrentChat();
-        TLRPC$User currentUser = chatActivity2.getCurrentUser();
-        if (ChatObject.isChannel(currentChat)) {
-            TLRPC$TL_inputPeerChannel tLRPC$TL_inputPeerChannel = new TLRPC$TL_inputPeerChannel();
-            this.peer = tLRPC$TL_inputPeerChannel;
-            tLRPC$TL_inputPeerChannel.channel_id = currentChat.id;
-            tLRPC$TL_inputPeerChannel.access_hash = currentChat.access_hash;
-        } else if (currentChat != null) {
-            TLRPC$TL_inputPeerChat tLRPC$TL_inputPeerChat = new TLRPC$TL_inputPeerChat();
-            this.peer = tLRPC$TL_inputPeerChat;
-            tLRPC$TL_inputPeerChat.chat_id = currentChat.id;
-        } else {
-            TLRPC$TL_inputPeerUser tLRPC$TL_inputPeerUser = new TLRPC$TL_inputPeerUser();
-            this.peer = tLRPC$TL_inputPeerUser;
-            tLRPC$TL_inputPeerUser.user_id = currentUser.id;
-            tLRPC$TL_inputPeerUser.access_hash = currentUser.access_hash;
-        }
+        this.peer = chatActivity2.getMessagesController().getInputPeer((int) messageObject2.getDialogId());
         ArrayList arrayList = new ArrayList();
         int size = tLRPC$TL_messageMediaPoll.results.results.size();
         Integer[] numArr = new Integer[size];

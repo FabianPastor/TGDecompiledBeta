@@ -1787,6 +1787,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             iArr[2] = i2;
             this.additionCloseCameraY = 0.0f;
             this.cameraExpanded = true;
+            this.cameraView.setFpsLimit(-1);
             if (z) {
                 setCameraOpenProgress(0.0f);
                 this.cameraAnimationInProgress = true;
@@ -1895,6 +1896,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         } else {
                             AndroidUtilities.rectTmp.set(ChatAttachAlertPhotoLayout.this.cameraViewOffsetX, ChatAttachAlertPhotoLayout.this.cameraViewOffsetY, (float) getMeasuredWidth(), (float) getMeasuredHeight());
                         }
+                        canvas.save();
                         canvas.clipRect(AndroidUtilities.rectTmp);
                         super.dispatchDraw(canvas);
                         canvas.restore();
@@ -1904,6 +1906,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 BaseFragment baseFragment = this.parentAlert.baseFragment;
                 r1.setRecordFile(AndroidUtilities.generateVideoPath((baseFragment instanceof ChatActivity) && ((ChatActivity) baseFragment).isSecretChat()));
                 this.cameraView.setFocusable(true);
+                this.cameraView.setFpsLimit(30);
                 if (Build.VERSION.SDK_INT >= 21) {
                     new Path();
                     this.cameraView.setOutlineProvider(new ViewOutlineProvider() {
@@ -2431,8 +2434,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         if (ChatAttachAlertPhotoLayout.this.cameraPhotoRecyclerView != null) {
                             ChatAttachAlertPhotoLayout.this.cameraPhotoRecyclerView.setVisibility(8);
                         }
-                        if (i >= 21 && ChatAttachAlertPhotoLayout.this.cameraView != null) {
-                            ChatAttachAlertPhotoLayout.this.cameraView.setSystemUiVisibility(1024);
+                        if (ChatAttachAlertPhotoLayout.this.cameraView != null) {
+                            ChatAttachAlertPhotoLayout.this.cameraView.setFpsLimit(30);
+                            if (i >= 21) {
+                                ChatAttachAlertPhotoLayout.this.cameraView.setSystemUiVisibility(1024);
+                            }
                         }
                     }
                 });
@@ -2462,6 +2468,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     }
                 }
                 this.cameraOpened = false;
+                this.cameraView.setFpsLimit(30);
                 if (Build.VERSION.SDK_INT >= 21) {
                     this.cameraView.setSystemUiVisibility(1024);
                 }

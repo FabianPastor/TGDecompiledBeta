@@ -1402,7 +1402,6 @@
     <string name="EnterNewPasscode">قم بإدخال رمز قفلك الجديد</string>
     <string name="EnterThemeName">أدخل اسم النمط</string>
     <string name="EnterThemeNameEdit">اضغط على **إنشاء** إذا كنت ترغب في مشاركة نمطك مع الآخرين أو تخصيص كل لون يدويًّا.\10\10يرجى إدخال اسم النمط:</string>
-    <string name="EnterYourPasscode">أدخل رمز قفلك</string>
     <string name="ErrorOccurred">حدث خطأ ما.</string>
     <string name="ErrorSendRestrictedMedia">المعذرة، قام مشرفو هذه المجموعة بتقييدك من إرسال الوسائط.</string>
     <string name="ErrorSendRestrictedMediaAll">المعذرة، لا يُسمح بإرسال الوسائط في هذه المجموعة.</string>

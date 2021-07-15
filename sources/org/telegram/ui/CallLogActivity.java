@@ -376,6 +376,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         /* access modifiers changed from: private */
         public ProgressButton button;
         /* access modifiers changed from: private */
+        public TLRPC$Chat currentChat;
+        /* access modifiers changed from: private */
         public ProfileSearchCell profileSearchCell;
 
         public GroupCallCell(Context context) {
@@ -423,6 +425,10 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             CallLogActivity.this.getMessagesController().loadFullChat(num.intValue(), 0, true);
             this.button.setDrawProgress(true, true);
             ProgressButton unused3 = CallLogActivity.this.waitingForLoadButton = this.button;
+        }
+
+        public void setChat(TLRPC$Chat tLRPC$Chat) {
+            this.currentChat = tLRPC$Chat;
         }
     }
 
@@ -704,7 +710,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             presentFragment(new ChatActivity(bundle), true);
         } else if (view instanceof GroupCallCell) {
             Bundle bundle2 = new Bundle();
-            bundle2.putInt("chat_id", this.activeGroupCalls.get(i - this.listViewAdapter.activeStartRow).intValue());
+            bundle2.putInt("chat_id", ((GroupCallCell) view).currentChat.id);
             getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
             presentFragment(new ChatActivity(bundle2), true);
         }
@@ -1112,8 +1118,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         private int activeEndRow;
         /* access modifiers changed from: private */
         public int activeHeaderRow;
-        /* access modifiers changed from: private */
-        public int activeStartRow;
+        private int activeStartRow;
         private int callsEndRow;
         private int callsHeaderRow;
         /* access modifiers changed from: private */
@@ -1310,6 +1315,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 int i5 = i2 - this.activeStartRow;
                 TLRPC$Chat chat = CallLogActivity.this.getMessagesController().getChat((Integer) CallLogActivity.this.activeGroupCalls.get(i5));
                 GroupCallCell groupCallCell = (GroupCallCell) viewHolder2.itemView;
+                groupCallCell.setChat(chat);
                 groupCallCell.button.setTag(Integer.valueOf(chat.id));
                 if (!ChatObject.isChannel(chat) || chat.megagroup) {
                     if (chat.has_geo) {

@@ -10,26 +10,34 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 
 public class CellFlickerDrawable {
-    public boolean drawFrame = true;
+    public boolean drawFrame;
     private final Shader gradientShader;
     private final Shader gradientShader2;
     long lastUpdateTime;
-    Matrix matrix = new Matrix();
+    Matrix matrix;
     private final Paint paint;
     private final Paint paintOutline;
     int parentWidth;
     float progress;
-    public float repeatProgress = 1.2f;
-    int size = AndroidUtilities.dp(160.0f);
+    public float repeatProgress;
+    int size;
 
     public CellFlickerDrawable() {
+        this(64, 204);
+    }
+
+    public CellFlickerDrawable(int i, int i2) {
         Paint paint2 = new Paint(1);
         this.paint = paint2;
         Paint paint3 = new Paint(1);
         this.paintOutline = paint3;
-        LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, new int[]{0, ColorUtils.setAlphaComponent(-1, 64), 0}, (float[]) null, Shader.TileMode.CLAMP);
+        this.matrix = new Matrix();
+        this.drawFrame = true;
+        this.repeatProgress = 1.2f;
+        this.size = AndroidUtilities.dp(160.0f);
+        LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, new int[]{0, ColorUtils.setAlphaComponent(-1, i), 0}, (float[]) null, Shader.TileMode.CLAMP);
         this.gradientShader = linearGradient;
-        int[] iArr = {0, ColorUtils.setAlphaComponent(-1, 204), 0};
+        int[] iArr = {0, ColorUtils.setAlphaComponent(-1, i2), 0};
         LinearGradient linearGradient2 = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, iArr, (float[]) null, Shader.TileMode.CLAMP);
         this.gradientShader2 = linearGradient2;
         paint2.setShader(linearGradient);

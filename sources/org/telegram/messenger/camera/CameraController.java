@@ -822,7 +822,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 camera = open;
             }
             camera.getParameters();
-            cameraSession.configureRoundCamera();
+            cameraSession.configureRoundCamera(true);
             if (runnable != null) {
                 runnable.run();
             }
@@ -932,7 +932,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                     }
 
                     public final void run() {
-                        CameraController.this.lambda$recordVideo$13$CameraController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                        CameraController.this.lambda$recordVideo$12$CameraController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                     }
                 });
                 return;
@@ -957,20 +957,21 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 }
 
                 public final void run() {
-                    CameraController.this.lambda$recordVideo$14$CameraController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+                    CameraController.this.lambda$recordVideo$13$CameraController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$recordVideo$13 */
-    public /* synthetic */ void lambda$recordVideo$13$CameraController(Camera camera, CameraSession cameraSession, CameraView cameraView, File file, Runnable runnable) {
+    /* renamed from: lambda$recordVideo$12 */
+    public /* synthetic */ void lambda$recordVideo$12$CameraController(Camera camera, CameraSession cameraSession, CameraView cameraView, File file, Runnable runnable) {
         if (camera != null) {
             try {
                 Camera.Parameters parameters = camera.getParameters();
                 parameters.setFlashMode(cameraSession.getCurrentFlashMode().equals("on") ? "torch" : "off");
                 camera.setParameters(parameters);
+                cameraSession.onStartRecord();
             } catch (Exception e) {
                 try {
                     FileLog.e((Throwable) e);
@@ -991,18 +992,18 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 }
 
                 public final void run() {
-                    CameraController.this.lambda$null$12$CameraController(this.f$1, this.f$2, this.f$3);
+                    CameraController.this.lambda$null$11$CameraController(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$CameraController(CameraView cameraView, File file, Runnable runnable) {
+    /* renamed from: lambda$null$11 */
+    public /* synthetic */ void lambda$null$11$CameraController(CameraView cameraView, File file, Runnable runnable) {
         cameraView.startRecording(file, new Runnable() {
             public final void run() {
-                CameraController.this.lambda$null$11$CameraController();
+                CameraController.this.finishRecordingVideo();
             }
         });
         if (runnable != null) {
@@ -1011,8 +1012,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$recordVideo$14 */
-    public /* synthetic */ void lambda$recordVideo$14$CameraController(Camera camera, CameraSession cameraSession, boolean z, File file, CameraInfo cameraInfo, VideoTakeCallback videoTakeCallback, Runnable runnable) {
+    /* renamed from: lambda$recordVideo$13 */
+    public /* synthetic */ void lambda$recordVideo$13$CameraController(Camera camera, CameraSession cameraSession, boolean z, File file, CameraInfo cameraInfo, VideoTakeCallback videoTakeCallback, Runnable runnable) {
         if (camera != null) {
             try {
                 Camera.Parameters parameters = camera.getParameters();
@@ -1063,9 +1064,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     /* JADX WARNING: Removed duplicated region for block: B:25:0x004c  */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x007d  */
     /* JADX WARNING: Removed duplicated region for block: B:36:0x00c4 A[SYNTHETIC, Splitter:B:36:0x00c4] */
-    /* renamed from: finishRecordingVideo */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void lambda$null$11() {
+    public void finishRecordingVideo() {
         /*
             r10 = this;
             r0 = 0
@@ -1165,7 +1165,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x00b3:
             org.telegram.messenger.SharedConfig.saveConfig()
-            org.telegram.messenger.camera.-$$Lambda$CameraController$slW3dxdoaR-kkcvar__SO3G77e68 r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$slW3dxdoaR-kkcvar__SO3G77e68
+            org.telegram.messenger.camera.-$$Lambda$CameraController$doz_knh50b291tZiz6MlJ_xVB0g r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$doz_knh50b291tZiz6MlJ_xVB0g
             r4 = r0
             r5 = r10
             r4.<init>(r6, r7, r8)
@@ -1183,12 +1183,12 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         L_0x00cc:
             throw r0
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.lambda$null$11():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.finishRecordingVideo():void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$finishRecordingVideo$15 */
-    public /* synthetic */ void lambda$finishRecordingVideo$15$CameraController(File file, Bitmap bitmap, long j) {
+    /* renamed from: lambda$finishRecordingVideo$14 */
+    public /* synthetic */ void lambda$finishRecordingVideo$14$CameraController(File file, Bitmap bitmap, long j) {
         if (this.onVideoTakeCallback != null) {
             String absolutePath = file.getAbsolutePath();
             if (bitmap != null) {
@@ -1208,7 +1208,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 mediaRecorder2.release();
             }
             if (this.onVideoTakeCallback != null) {
-                lambda$null$11();
+                finishRecordingVideo();
             }
         }
     }
@@ -1230,14 +1230,14 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             }
 
             public final void run() {
-                CameraController.this.lambda$stopVideoRecording$17$CameraController(this.f$1, this.f$2);
+                CameraController.this.lambda$stopVideoRecording$16$CameraController(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$stopVideoRecording$17 */
-    public /* synthetic */ void lambda$stopVideoRecording$17$CameraController(CameraSession cameraSession, boolean z) {
+    /* renamed from: lambda$stopVideoRecording$16 */
+    public /* synthetic */ void lambda$stopVideoRecording$16$CameraController(CameraSession cameraSession, boolean z) {
         MediaRecorder mediaRecorder;
         try {
             Camera camera = cameraSession.cameraInfo.camera;
@@ -1282,19 +1282,19 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 }
 
                 public final void run() {
-                    CameraController.lambda$null$16(this.f$0, this.f$1);
+                    CameraController.lambda$null$15(this.f$0, this.f$1);
                 }
             });
             if (z || this.onVideoTakeCallback == null) {
                 this.onVideoTakeCallback = null;
             } else {
-                lambda$null$11();
+                finishRecordingVideo();
             }
         } catch (Exception unused) {
         }
     }
 
-    static /* synthetic */ void lambda$null$16(Camera camera, CameraSession cameraSession) {
+    static /* synthetic */ void lambda$null$15(Camera camera, CameraSession cameraSession) {
         try {
             Camera.Parameters parameters = camera.getParameters();
             parameters.setFlashMode(cameraSession.getCurrentFlashMode());
@@ -1306,16 +1306,22 @@ public class CameraController implements MediaRecorder.OnInfoListener {
 
     public static Size chooseOptimalSize(List<Size> list, int i, int i2, Size size) {
         ArrayList arrayList = new ArrayList();
+        ArrayList arrayList2 = new ArrayList();
         int width = size.getWidth();
         int height = size.getHeight();
         for (int i3 = 0; i3 < list.size(); i3++) {
             Size size2 = list.get(i3);
             if (size2.getHeight() == (size2.getWidth() * height) / width && size2.getWidth() >= i && size2.getHeight() >= i2) {
                 arrayList.add(size2);
+            } else if (size2.getHeight() * size2.getWidth() <= i * i2 * 4) {
+                arrayList2.add(size2);
             }
         }
         if (arrayList.size() > 0) {
             return (Size) Collections.min(arrayList, new CompareSizesByArea());
+        }
+        if (arrayList2.size() > 0) {
+            return (Size) Collections.min(arrayList2, new CompareSizesByArea());
         }
         return (Size) Collections.max(list, new CompareSizesByArea());
     }

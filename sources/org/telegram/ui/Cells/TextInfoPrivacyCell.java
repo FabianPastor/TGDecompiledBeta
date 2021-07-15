@@ -27,6 +27,10 @@ public class TextInfoPrivacyCell extends FrameLayout {
     private int topPadding;
 
     /* access modifiers changed from: protected */
+    public void afterTextDraw() {
+    }
+
+    /* access modifiers changed from: protected */
     public void onTextDraw() {
     }
 
@@ -44,6 +48,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
             public void onDraw(Canvas canvas) {
                 TextInfoPrivacyCell.this.onTextDraw();
                 super.onDraw(canvas);
+                TextInfoPrivacyCell.this.afterTextDraw();
             }
         };
         this.textView = r0;

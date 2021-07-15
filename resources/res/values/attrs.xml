@@ -221,6 +221,8 @@
     </attr>
     <attr name="maskedWalletDetailsTextAppearance" format="reference">
     </attr>
+    <attr name="nestedScrollViewStyle" format="reference">
+    </attr>
     <attr name="noIndex" format="boolean">
     </attr>
     <attr name="paramName" format="string">
@@ -228,6 +230,8 @@
     <attr name="paramValue" format="string">
     </attr>
     <attr name="perAccountTemplate" format="boolean">
+    </attr>
+    <attr name="queryPatterns" format="reference">
     </attr>
     <attr name="schemaOrgProperty" format="string">
     </attr>
@@ -267,6 +271,8 @@
     <attr name="semanticallySearchable" format="boolean">
     </attr>
     <attr name="settingsDescription" format="string">
+    </attr>
+    <attr name="shortcutMatchRequired" format="boolean">
     </attr>
     <attr name="sourceClass">
         <enum name="email" value="0" />

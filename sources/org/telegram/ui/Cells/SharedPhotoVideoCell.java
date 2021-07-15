@@ -59,7 +59,11 @@ public class SharedPhotoVideoCell extends FrameLayout {
         boolean didLongClickItem(SharedPhotoVideoCell sharedPhotoVideoCell, int i, MessageObject messageObject, int i2);
     }
 
-    private class PhotoVideoView extends FrameLayout {
+    public SharedPhotoVideoCellDelegate getDelegate() {
+        return this.delegate;
+    }
+
+    public class PhotoVideoView extends FrameLayout {
         /* access modifiers changed from: private */
         public AnimatorSet animator;
         /* access modifiers changed from: private */

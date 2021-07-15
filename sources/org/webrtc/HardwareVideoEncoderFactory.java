@@ -149,11 +149,11 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     }
 
     private boolean isHardwareSupportedInCurrentSdk(MediaCodecInfo mediaCodecInfo, VideoCodecMimeType videoCodecMimeType) {
-        Instance.ServerConfig globalServerConfig = Instance.getGlobalServerConfig();
-        if (!globalServerConfig.enable_h264_encoder && !globalServerConfig.enable_h265_encoder && !globalServerConfig.enable_vp8_encoder && !globalServerConfig.enable_vp9_encoder) {
+        if (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().groupCall != null) {
             return false;
         }
-        if (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().groupCall != null) {
+        Instance.ServerConfig globalServerConfig = Instance.getGlobalServerConfig();
+        if (!globalServerConfig.enable_h264_encoder && !globalServerConfig.enable_h265_encoder && !globalServerConfig.enable_vp8_encoder && !globalServerConfig.enable_vp9_encoder) {
             return false;
         }
         int i = AnonymousClass1.$SwitchMap$org$webrtc$VideoCodecMimeType[videoCodecMimeType.ordinal()];

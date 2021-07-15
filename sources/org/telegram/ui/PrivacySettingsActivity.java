@@ -718,7 +718,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 }
                 return;
             }
+            this.currentPassword = null;
             loadPasswordSettings();
+            updateRows();
         }
     }
 

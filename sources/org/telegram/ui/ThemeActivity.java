@@ -848,7 +848,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             if (themeInfo == this.sharingTheme && themeAccent == this.sharingAccent) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("https://");
-                sb.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
+                sb.append(getMessagesController().linkPrefix);
                 sb.append("/addtheme/");
                 sb.append((themeAccent != null ? themeAccent.info : themeInfo.info).slug);
                 String sb2 = sb.toString();
@@ -928,11 +928,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 } else if (i == 2) {
                     Theme.ThemeAccent accent = Theme.getCurrentTheme().getAccent(false);
                     if (accent.info == null) {
-                        MessagesController.getInstance(ThemeActivity.this.currentAccount).saveThemeToServer(accent.parentTheme, accent);
+                        ThemeActivity.this.getMessagesController().saveThemeToServer(accent.parentTheme, accent);
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShareTheme, accent.parentTheme, accent);
                         return;
                     }
-                    String str = "https://" + MessagesController.getInstance(ThemeActivity.this.currentAccount).linkPrefix + "/addtheme/" + accent.info.slug;
+                    String str = "https://" + ThemeActivity.this.getMessagesController().linkPrefix + "/addtheme/" + accent.info.slug;
                     ThemeActivity.this.showDialog(new ShareAlert(ThemeActivity.this.getParentActivity(), (ArrayList<MessageObject>) null, str, false, str, false));
                 } else if (i == 3) {
                     Theme.ThemeInfo currentTheme = Theme.getCurrentTheme();
@@ -1737,12 +1737,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
         /* access modifiers changed from: private */
         /* JADX WARNING: Can't wrap try/catch for region: R(4:59|60|61|62) */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:61:0x0156 */
-        /* JADX WARNING: Removed duplicated region for block: B:34:0x00dc A[SYNTHETIC, Splitter:B:34:0x00dc] */
-        /* JADX WARNING: Removed duplicated region for block: B:39:0x00e7 A[SYNTHETIC, Splitter:B:39:0x00e7] */
-        /* JADX WARNING: Removed duplicated region for block: B:50:0x010a  */
-        /* JADX WARNING: Removed duplicated region for block: B:55:0x012d A[Catch:{ Exception -> 0x017b }, RETURN] */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x012e A[Catch:{ Exception -> 0x017b }] */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:61:0x0152 */
+        /* JADX WARNING: Removed duplicated region for block: B:34:0x00d8 A[SYNTHETIC, Splitter:B:34:0x00d8] */
+        /* JADX WARNING: Removed duplicated region for block: B:39:0x00e3 A[SYNTHETIC, Splitter:B:39:0x00e3] */
+        /* JADX WARNING: Removed duplicated region for block: B:50:0x0106  */
+        /* JADX WARNING: Removed duplicated region for block: B:55:0x0129 A[Catch:{ Exception -> 0x0177 }, RETURN] */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x012a A[Catch:{ Exception -> 0x0177 }] */
         /* renamed from: lambda$showOptionsForTheme$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public /* synthetic */ void lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(org.telegram.ui.ActionBar.Theme.ThemeInfo r8, android.content.DialogInterface r9, int r10) {
@@ -1757,11 +1757,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r0 = 2
                 r1 = 0
                 r2 = 1
-                if (r10 != 0) goto L_0x006d
+                if (r10 != 0) goto L_0x0069
                 org.telegram.tgnet.TLRPC$TL_theme r10 = r8.info
                 if (r10 != 0) goto L_0x002d
-                int r10 = r8.account
-                org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
+                org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
+                org.telegram.messenger.MessagesController r10 = r10.getMessagesController()
                 r10.saveThemeToServer(r8, r1)
                 org.telegram.messenger.NotificationCenter r10 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
                 int r3 = org.telegram.messenger.NotificationCenter.needShareTheme
@@ -1769,15 +1769,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r0[r9] = r8
                 r0[r2] = r1
                 r10.postNotificationName(r3, r0)
-                goto L_0x0218
+                goto L_0x0214
             L_0x002d:
                 java.lang.StringBuilder r9 = new java.lang.StringBuilder
                 r9.<init>()
                 java.lang.String r10 = "https://"
                 r9.append(r10)
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
-                int r10 = r10.currentAccount
-                org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
+                org.telegram.messenger.MessagesController r10 = r10.getMessagesController()
                 java.lang.String r10 = r10.linkPrefix
                 r9.append(r10)
                 java.lang.String r10 = "/addtheme/"
@@ -1797,21 +1796,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r3 = r5
                 r0.<init>(r1, r2, r3, r4, r5, r6)
                 r8.showDialog(r9)
-                goto L_0x0218
-            L_0x006d:
-                if (r10 != r2) goto L_0x0181
+                goto L_0x0214
+            L_0x0069:
+                if (r10 != r2) goto L_0x017d
                 java.lang.String r9 = r8.pathToFile
-                if (r9 != 0) goto L_0x00f0
+                if (r9 != 0) goto L_0x00ec
                 java.lang.String r9 = r8.assetName
-                if (r9 != 0) goto L_0x00f0
+                if (r9 != 0) goto L_0x00ec
                 java.lang.StringBuilder r9 = new java.lang.StringBuilder
                 r9.<init>()
                 java.util.HashMap r10 = org.telegram.ui.ActionBar.Theme.getDefaultColors()
                 java.util.Set r10 = r10.entrySet()
                 java.util.Iterator r10 = r10.iterator()
-            L_0x0088:
+            L_0x0084:
                 boolean r0 = r10.hasNext()
-                if (r0 == 0) goto L_0x00af
+                if (r0 == 0) goto L_0x00ab
                 java.lang.Object r0 = r10.next()
                 java.util.Map$Entry r0 = (java.util.Map.Entry) r0
                 java.lang.Object r3 = r0.getKey()
@@ -1823,120 +1822,120 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r9.append(r0)
                 java.lang.String r0 = "\n"
                 r9.append(r0)
-                goto L_0x0088
-            L_0x00af:
+                goto L_0x0084
+            L_0x00ab:
                 java.io.File r10 = new java.io.File
                 java.io.File r0 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()
                 java.lang.String r3 = "default_theme.attheme"
                 r10.<init>(r0, r3)
-                java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x00d6 }
-                r0.<init>(r10)     // Catch:{ Exception -> 0x00d6 }
-                java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x00d1, all -> 0x00ce }
-                byte[] r9 = org.telegram.messenger.AndroidUtilities.getStringBytes(r9)     // Catch:{ Exception -> 0x00d1, all -> 0x00ce }
-                r0.write(r9)     // Catch:{ Exception -> 0x00d1, all -> 0x00ce }
-                r0.close()     // Catch:{ Exception -> 0x00e0 }
-                goto L_0x0100
-            L_0x00ce:
+                java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x00d2 }
+                r0.<init>(r10)     // Catch:{ Exception -> 0x00d2 }
+                java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x00cd, all -> 0x00ca }
+                byte[] r9 = org.telegram.messenger.AndroidUtilities.getStringBytes(r9)     // Catch:{ Exception -> 0x00cd, all -> 0x00ca }
+                r0.write(r9)     // Catch:{ Exception -> 0x00cd, all -> 0x00ca }
+                r0.close()     // Catch:{ Exception -> 0x00dc }
+                goto L_0x00fc
+            L_0x00ca:
                 r8 = move-exception
                 r1 = r0
-                goto L_0x00e5
-            L_0x00d1:
+                goto L_0x00e1
+            L_0x00cd:
                 r9 = move-exception
                 r1 = r0
-                goto L_0x00d7
-            L_0x00d4:
+                goto L_0x00d3
+            L_0x00d0:
                 r8 = move-exception
-                goto L_0x00e5
-            L_0x00d6:
+                goto L_0x00e1
+            L_0x00d2:
                 r9 = move-exception
-            L_0x00d7:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)     // Catch:{ all -> 0x00d4 }
-                if (r1 == 0) goto L_0x0100
-                r1.close()     // Catch:{ Exception -> 0x00e0 }
-                goto L_0x0100
-            L_0x00e0:
+            L_0x00d3:
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)     // Catch:{ all -> 0x00d0 }
+                if (r1 == 0) goto L_0x00fc
+                r1.close()     // Catch:{ Exception -> 0x00dc }
+                goto L_0x00fc
+            L_0x00dc:
                 r9 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
-                goto L_0x0100
-            L_0x00e5:
-                if (r1 == 0) goto L_0x00ef
-                r1.close()     // Catch:{ Exception -> 0x00eb }
-                goto L_0x00ef
+                goto L_0x00fc
+            L_0x00e1:
+                if (r1 == 0) goto L_0x00eb
+                r1.close()     // Catch:{ Exception -> 0x00e7 }
+                goto L_0x00eb
+            L_0x00e7:
+                r9 = move-exception
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
             L_0x00eb:
-                r9 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
-            L_0x00ef:
                 throw r8
-            L_0x00f0:
+            L_0x00ec:
                 java.lang.String r9 = r8.assetName
-                if (r9 == 0) goto L_0x00f9
+                if (r9 == 0) goto L_0x00f5
                 java.io.File r10 = org.telegram.ui.ActionBar.Theme.getAssetFile(r9)
-                goto L_0x0100
-            L_0x00f9:
+                goto L_0x00fc
+            L_0x00f5:
                 java.io.File r10 = new java.io.File
                 java.lang.String r9 = r8.pathToFile
                 r10.<init>(r9)
-            L_0x0100:
+            L_0x00fc:
                 java.lang.String r8 = r8.name
                 java.lang.String r9 = ".attheme"
                 boolean r0 = r8.endsWith(r9)
-                if (r0 != 0) goto L_0x0119
+                if (r0 != 0) goto L_0x0115
                 java.lang.StringBuilder r0 = new java.lang.StringBuilder
                 r0.<init>()
                 r0.append(r8)
                 r0.append(r9)
                 java.lang.String r8 = r0.toString()
-            L_0x0119:
+            L_0x0115:
                 java.io.File r9 = new java.io.File
                 r0 = 4
                 java.io.File r0 = org.telegram.messenger.FileLoader.getDirectory(r0)
                 java.lang.String r8 = org.telegram.messenger.FileLoader.fixFileName(r8)
                 r9.<init>(r0, r8)
-                boolean r8 = org.telegram.messenger.AndroidUtilities.copyFile((java.io.File) r10, (java.io.File) r9)     // Catch:{ Exception -> 0x017b }
-                if (r8 != 0) goto L_0x012e
+                boolean r8 = org.telegram.messenger.AndroidUtilities.copyFile((java.io.File) r10, (java.io.File) r9)     // Catch:{ Exception -> 0x0177 }
+                if (r8 != 0) goto L_0x012a
                 return
-            L_0x012e:
-                android.content.Intent r8 = new android.content.Intent     // Catch:{ Exception -> 0x017b }
+            L_0x012a:
+                android.content.Intent r8 = new android.content.Intent     // Catch:{ Exception -> 0x0177 }
                 java.lang.String r10 = "android.intent.action.SEND"
-                r8.<init>(r10)     // Catch:{ Exception -> 0x017b }
+                r8.<init>(r10)     // Catch:{ Exception -> 0x0177 }
                 java.lang.String r10 = "text/xml"
-                r8.setType(r10)     // Catch:{ Exception -> 0x017b }
-                int r10 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x017b }
+                r8.setType(r10)     // Catch:{ Exception -> 0x0177 }
+                int r10 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0177 }
                 r0 = 24
                 java.lang.String r1 = "android.intent.extra.STREAM"
-                if (r10 < r0) goto L_0x015e
-                org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0156 }
-                android.app.Activity r10 = r10.getParentActivity()     // Catch:{ Exception -> 0x0156 }
+                if (r10 < r0) goto L_0x015a
+                org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0152 }
+                android.app.Activity r10 = r10.getParentActivity()     // Catch:{ Exception -> 0x0152 }
                 java.lang.String r0 = "org.telegram.messenger.web.provider"
-                android.net.Uri r10 = androidx.core.content.FileProvider.getUriForFile(r10, r0, r9)     // Catch:{ Exception -> 0x0156 }
-                r8.putExtra(r1, r10)     // Catch:{ Exception -> 0x0156 }
-                r8.setFlags(r2)     // Catch:{ Exception -> 0x0156 }
-                goto L_0x0165
-            L_0x0156:
-                android.net.Uri r9 = android.net.Uri.fromFile(r9)     // Catch:{ Exception -> 0x017b }
-                r8.putExtra(r1, r9)     // Catch:{ Exception -> 0x017b }
-                goto L_0x0165
-            L_0x015e:
-                android.net.Uri r9 = android.net.Uri.fromFile(r9)     // Catch:{ Exception -> 0x017b }
-                r8.putExtra(r1, r9)     // Catch:{ Exception -> 0x017b }
-            L_0x0165:
-                org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x017b }
+                android.net.Uri r10 = androidx.core.content.FileProvider.getUriForFile(r10, r0, r9)     // Catch:{ Exception -> 0x0152 }
+                r8.putExtra(r1, r10)     // Catch:{ Exception -> 0x0152 }
+                r8.setFlags(r2)     // Catch:{ Exception -> 0x0152 }
+                goto L_0x0161
+            L_0x0152:
+                android.net.Uri r9 = android.net.Uri.fromFile(r9)     // Catch:{ Exception -> 0x0177 }
+                r8.putExtra(r1, r9)     // Catch:{ Exception -> 0x0177 }
+                goto L_0x0161
+            L_0x015a:
+                android.net.Uri r9 = android.net.Uri.fromFile(r9)     // Catch:{ Exception -> 0x0177 }
+                r8.putExtra(r1, r9)     // Catch:{ Exception -> 0x0177 }
+            L_0x0161:
+                org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0177 }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627473(0x7f0e0dd1, float:1.8882211E38)
-                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x017b }
-                android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x017b }
+                r0 = 2131627506(0x7f0e0df2, float:1.8882278E38)
+                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x0177 }
+                android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x0177 }
                 r10 = 500(0x1f4, float:7.0E-43)
-                r9.startActivityForResult(r8, r10)     // Catch:{ Exception -> 0x017b }
-                goto L_0x0218
-            L_0x017b:
+                r9.startActivityForResult(r8, r10)     // Catch:{ Exception -> 0x0177 }
+                goto L_0x0214
+            L_0x0177:
                 r8 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-                goto L_0x0218
-            L_0x0181:
-                if (r10 != r0) goto L_0x01a6
+                goto L_0x0214
+            L_0x017d:
+                if (r10 != r0) goto L_0x01a2
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this
                 org.telegram.ui.ActionBar.ActionBarLayout r9 = r9.parentLayout
-                if (r9 == 0) goto L_0x0218
+                if (r9 == 0) goto L_0x0214
                 org.telegram.ui.ActionBar.Theme.applyTheme(r8)
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this
                 org.telegram.ui.ActionBar.ActionBarLayout r9 = r9.parentLayout
@@ -1946,40 +1945,40 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.show(r10, r8)
-                goto L_0x0218
-            L_0x01a6:
+                goto L_0x0214
+            L_0x01a2:
                 r0 = 3
-                if (r10 != r0) goto L_0x01b4
+                if (r10 != r0) goto L_0x01b0
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 org.telegram.ui.ThemeSetUrlActivity r0 = new org.telegram.ui.ThemeSetUrlActivity
                 r0.<init>(r8, r1, r9)
                 r10.presentFragment(r0)
-                goto L_0x0218
-            L_0x01b4:
+                goto L_0x0214
+            L_0x01b0:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r9 = r9.getParentActivity()
-                if (r9 != 0) goto L_0x01bd
+                if (r9 != 0) goto L_0x01b9
                 return
-            L_0x01bd:
+            L_0x01b9:
                 org.telegram.ui.ActionBar.AlertDialog$Builder r9 = new org.telegram.ui.ActionBar.AlertDialog$Builder
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625166(0x7f0e04ce, float:1.8877532E38)
+                r10 = 2131625185(0x7f0e04e1, float:1.887757E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625165(0x7f0e04cd, float:1.887753E38)
+                r10 = 2131625184(0x7f0e04e0, float:1.8877569E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131625107(0x7f0e0493, float:1.8877413E38)
+                r10 = 2131625126(0x7f0e04a6, float:1.8877451E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$gl_JCjakwPx0TsvL6FtpACBSXUc r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$gl_JCjakwPx0TsvL6FtpACBSXUc
                 r0.<init>(r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+                r8 = 2131624657(0x7f0e02d1, float:1.88765E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)
@@ -1989,11 +1988,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r9 = -1
                 android.view.View r8 = r8.getButton(r9)
                 android.widget.TextView r8 = (android.widget.TextView) r8
-                if (r8 == 0) goto L_0x0218
+                if (r8 == 0) goto L_0x0214
                 java.lang.String r9 = "dialogTextRed2"
                 int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
                 r8.setTextColor(r9)
-            L_0x0218:
+            L_0x0214:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeActivity.ListAdapter.lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(org.telegram.ui.ActionBar.Theme$ThemeInfo, android.content.DialogInterface, int):void");
@@ -2106,11 +2105,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     AlertsCreator.createThemeCreateDialog(themeActivity, i2, themeAccent.parentTheme, themeAccent);
                 } else if (i == 1) {
                     if (themeAccent.info == null) {
-                        MessagesController.getInstance(ThemeActivity.this.currentAccount).saveThemeToServer(themeAccent.parentTheme, themeAccent);
+                        ThemeActivity.this.getMessagesController().saveThemeToServer(themeAccent.parentTheme, themeAccent);
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShareTheme, themeAccent.parentTheme, themeAccent);
                         return;
                     }
-                    String str = "https://" + MessagesController.getInstance(ThemeActivity.this.currentAccount).linkPrefix + "/addtheme/" + themeAccent.info.slug;
+                    String str = "https://" + ThemeActivity.this.getMessagesController().linkPrefix + "/addtheme/" + themeAccent.info.slug;
                     ThemeActivity.this.showDialog(new ShareAlert(ThemeActivity.this.getParentActivity(), (ArrayList<MessageObject>) null, str, false, str, false));
                 } else if (i == 2) {
                     ThemeActivity.this.presentFragment(new ThemeSetUrlActivity(themeAccent.parentTheme, themeAccent, false));
@@ -2522,12 +2521,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     RecyclerListView recyclerListView = (RecyclerListView) viewHolder2.itemView;
                     ThemeAccentsListAdapter themeAccentsListAdapter = (ThemeAccentsListAdapter) recyclerListView.getAdapter();
                     themeAccentsListAdapter.notifyDataSetChanged();
-                    int access$6400 = themeAccentsListAdapter.findCurrentAccent();
-                    if (access$6400 == -1) {
-                        access$6400 = themeAccentsListAdapter.getItemCount() - 1;
+                    int access$6200 = themeAccentsListAdapter.findCurrentAccent();
+                    if (access$6200 == -1) {
+                        access$6200 = themeAccentsListAdapter.getItemCount() - 1;
                     }
-                    if (access$6400 != -1) {
-                        ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(access$6400, (ThemeActivity.this.listView.getMeasuredWidth() / 2) - AndroidUtilities.dp(42.0f));
+                    if (access$6200 != -1) {
+                        ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(access$6200, (ThemeActivity.this.listView.getMeasuredWidth() / 2) - AndroidUtilities.dp(42.0f));
                         return;
                     }
                     return;

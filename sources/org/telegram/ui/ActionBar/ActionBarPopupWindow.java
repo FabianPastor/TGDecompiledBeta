@@ -131,6 +131,9 @@ public class ActionBarPopupWindow extends PopupWindow {
                             if (childAt.getVisibility() != 8) {
                                 Object tag = childAt.getTag(NUM);
                                 Object tag2 = childAt.getTag(NUM);
+                                if (tag != null) {
+                                    childAt.getLayoutParams().width = -2;
+                                }
                                 measureChildWithMargins(childAt, i, 0, i2, 0);
                                 boolean z = tag instanceof Integer;
                                 if (z || tag2 != null) {
@@ -406,16 +409,15 @@ public class ActionBarPopupWindow extends PopupWindow {
                     view2 = childAt;
                 }
             }
+            boolean z = false;
             for (int i2 = 0; i2 < childCount; i2++) {
                 View childAt2 = this.linearLayout.getChildAt(i2);
-                if (childAt2.getVisibility() == 0 && (childAt2 instanceof ActionBarMenuSubItem)) {
-                    ActionBarMenuSubItem actionBarMenuSubItem = (ActionBarMenuSubItem) childAt2;
-                    boolean z = true;
-                    boolean z2 = childAt2 == view;
-                    if (childAt2 != view2) {
-                        z = false;
+                if (childAt2.getVisibility() == 0) {
+                    Object tag = childAt2.getTag(NUM);
+                    if (childAt2 instanceof ActionBarMenuSubItem) {
+                        ((ActionBarMenuSubItem) childAt2).updateSelectorBackground(childAt2 == view || z, childAt2 == view2);
                     }
-                    actionBarMenuSubItem.updateSelectorBackground(z2, z);
+                    z = tag != null;
                 }
             }
         }

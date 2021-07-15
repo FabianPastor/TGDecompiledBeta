@@ -89,10 +89,12 @@
     <public type="attr" name="maskedWalletDetailsLogoImageType" id="NUM" />
     <public type="attr" name="maskedWalletDetailsLogoTextColor" id="NUM" />
     <public type="attr" name="maskedWalletDetailsTextAppearance" id="NUM" />
+    <public type="attr" name="nestedScrollViewStyle" id="NUM" />
     <public type="attr" name="noIndex" id="NUM" />
     <public type="attr" name="paramName" id="NUM" />
     <public type="attr" name="paramValue" id="NUM" />
     <public type="attr" name="perAccountTemplate" id="NUM" />
+    <public type="attr" name="queryPatterns" id="NUM" />
     <public type="attr" name="schemaOrgProperty" id="NUM" />
     <public type="attr" name="schemaOrgType" id="NUM" />
     <public type="attr" name="scopeUris" id="NUM" />
@@ -105,6 +107,7 @@
     <public type="attr" name="sectionWeight" id="NUM" />
     <public type="attr" name="semanticallySearchable" id="NUM" />
     <public type="attr" name="settingsDescription" id="NUM" />
+    <public type="attr" name="shortcutMatchRequired" id="NUM" />
     <public type="attr" name="sourceClass" id="NUM" />
     <public type="attr" name="statusBarBackground" id="NUM" />
     <public type="attr" name="subsectionSeparator" id="NUM" />
@@ -404,6 +407,7 @@
     <public type="drawable" name="files_internal" id="NUM" />
     <public type="drawable" name="files_music" id="NUM" />
     <public type="drawable" name="files_storage" id="NUM" />
+    <public type="drawable" name="fingerprint" id="NUM" />
     <public type="drawable" name="fingerprint_dialog_error_to_fp" id="NUM" />
     <public type="drawable" name="fingerprint_dialog_fp_to_error" id="NUM" />
     <public type="drawable" name="flame_small" id="NUM" />
@@ -900,7 +904,6 @@
     <public type="drawable" name="paint_radial_brush" id="NUM" />
     <public type="drawable" name="passcode_check" id="NUM" />
     <public type="drawable" name="passcode_delete" id="NUM" />
-    <public type="drawable" name="passcode_logo" id="NUM" />
     <public type="drawable" name="payment_address" id="NUM" />
     <public type="drawable" name="payment_card" id="NUM" />
     <public type="drawable" name="payment_delivery" id="NUM" />
@@ -1328,6 +1331,7 @@
     <public type="id" name="passcode_btn_9" id="NUM" />
     <public type="id" name="passcode_btn_backspace" id="NUM" />
     <public type="id" name="passcode_btn_done" id="NUM" />
+    <public type="id" name="passcode_btn_fingerprint" id="NUM" />
     <public type="id" name="photo" id="NUM" />
     <public type="id" name="plain" id="NUM" />
     <public type="id" name="player_album_art" id="NUM" />
@@ -1494,7 +1498,6 @@
     <public type="raw" name="linkbroken" id="NUM" />
     <public type="raw" name="mapstyle_night" id="NUM" />
     <public type="raw" name="passcode_lock_close" id="NUM" />
-    <public type="raw" name="passcode_lock_open" id="NUM" />
     <public type="raw" name="payment_success" id="NUM" />
     <public type="raw" name="permission_map" id="NUM" />
     <public type="raw" name="permission_map_dark" id="NUM" />
@@ -1566,6 +1569,7 @@
     <public type="raw" name="voip_unmuted" id="NUM" />
     <public type="raw" name="wallet_allset" id="NUM" />
     <public type="raw" name="wallet_congrats" id="NUM" />
+    <public type="raw" name="wallet_perfect" id="NUM" />
     <public type="raw" name="wallet_science" id="NUM" />
     <public type="raw" name="write_contacts_fab_icon" id="NUM" />
     <public type="raw" name="write_contacts_fab_icon_reverse" id="NUM" />
@@ -1607,6 +1611,7 @@
     <public type="string" name="AccDescrEditing" id="NUM" />
     <public type="string" name="AccDescrEmojiButton" id="NUM" />
     <public type="string" name="AccDescrExpandPanel" id="NUM" />
+    <public type="string" name="AccDescrFingerprint" id="NUM" />
     <public type="string" name="AccDescrForwarding" id="NUM" />
     <public type="string" name="AccDescrGIFs" id="NUM" />
     <public type="string" name="AccDescrGoBack" id="NUM" />
@@ -1753,6 +1758,8 @@
     <public type="string" name="ActionEditedInviteLinkClickable" id="NUM" />
     <public type="string" name="ActionEditedInviteLinkToSameClickable" id="NUM" />
     <public type="string" name="ActionGroupCallEnded" id="NUM" />
+    <public type="string" name="ActionGroupCallEndedBy" id="NUM" />
+    <public type="string" name="ActionGroupCallEndedByYou" id="NUM" />
     <public type="string" name="ActionGroupCallInvited" id="NUM" />
     <public type="string" name="ActionGroupCallInvitedYou" id="NUM" />
     <public type="string" name="ActionGroupCallJustStarted" id="NUM" />
@@ -2298,9 +2305,13 @@
     <public type="string" name="CancelLinkExpired" id="NUM" />
     <public type="string" name="CancelLinkSuccess" id="NUM" />
     <public type="string" name="CancelPasswordQuestion" id="NUM" />
+    <public type="string" name="CancelPasswordReset" id="NUM" />
+    <public type="string" name="CancelPasswordResetNo" id="NUM" />
+    <public type="string" name="CancelPasswordResetYes" id="NUM" />
     <public type="string" name="CancelPollAlertText" id="NUM" />
     <public type="string" name="CancelPollAlertTitle" id="NUM" />
     <public type="string" name="CancelRegistration" id="NUM" />
+    <public type="string" name="CancelReset" id="NUM" />
     <public type="string" name="CancelSending" id="NUM" />
     <public type="string" name="CantAddBotAsAdmin" id="NUM" />
     <public type="string" name="CantPlayVideo" id="NUM" />
@@ -2518,6 +2529,17 @@
     <public type="string" name="Chats_other" id="NUM" />
     <public type="string" name="Chats_two" id="NUM" />
     <public type="string" name="Chats_zero" id="NUM" />
+    <public type="string" name="CheckPassword" id="NUM" />
+    <public type="string" name="CheckPasswordBackToSettings" id="NUM" />
+    <public type="string" name="CheckPasswordInfo" id="NUM" />
+    <public type="string" name="CheckPasswordPerfect" id="NUM" />
+    <public type="string" name="CheckPasswordPerfectInfo" id="NUM" />
+    <public type="string" name="CheckPasswordWrong" id="NUM" />
+    <public type="string" name="CheckPhoneNumber" id="NUM" />
+    <public type="string" name="CheckPhoneNumberInfo" id="NUM" />
+    <public type="string" name="CheckPhoneNumberLearnMoreUrl" id="NUM" />
+    <public type="string" name="CheckPhoneNumberNo" id="NUM" />
+    <public type="string" name="CheckPhoneNumberYes" id="NUM" />
     <public type="string" name="Checking" id="NUM" />
     <public type="string" name="ChooseCountry" id="NUM" />
     <public type="string" name="ChooseCover" id="NUM" />
@@ -2718,6 +2740,7 @@
     <public type="string" name="DebugClearLogs" id="NUM" />
     <public type="string" name="DebugMenu" id="NUM" />
     <public type="string" name="DebugMenuCallSettings" id="NUM" />
+    <public type="string" name="DebugMenuCheckAppUpdate" id="NUM" />
     <public type="string" name="DebugMenuClearMediaCache" id="NUM" />
     <public type="string" name="DebugMenuDisableCamera" id="NUM" />
     <public type="string" name="DebugMenuDisableLogs" id="NUM" />
@@ -2971,7 +2994,7 @@
     <public type="string" name="EnterNewPasscode" id="NUM" />
     <public type="string" name="EnterThemeName" id="NUM" />
     <public type="string" name="EnterThemeNameEdit" id="NUM" />
-    <public type="string" name="EnterYourPasscode" id="NUM" />
+    <public type="string" name="EnterYourTelegramPasscode" id="NUM" />
     <public type="string" name="ErrorOccurred" id="NUM" />
     <public type="string" name="ErrorSendRestrictedMedia" id="NUM" />
     <public type="string" name="ErrorSendRestrictedMediaAll" id="NUM" />
@@ -3915,6 +3938,7 @@
     <public type="string" name="NewMessages_other" id="NUM" />
     <public type="string" name="NewMessages_two" id="NUM" />
     <public type="string" name="NewMessages_zero" id="NUM" />
+    <public type="string" name="NewPassword" id="NUM" />
     <public type="string" name="NewPoll" id="NUM" />
     <public type="string" name="NewQuiz" id="NUM" />
     <public type="string" name="NewSecretChat" id="NUM" />
@@ -4454,6 +4478,7 @@
     <public type="string" name="PasswordHint" id="NUM" />
     <public type="string" name="PasswordHintPlaceholder" id="NUM" />
     <public type="string" name="PasswordHintText" id="NUM" />
+    <public type="string" name="PasswordHintTextLogin" id="NUM" />
     <public type="string" name="PasswordOff" id="NUM" />
     <public type="string" name="PasswordOn" id="NUM" />
     <public type="string" name="PasswordRecovery" id="NUM" />
@@ -4638,6 +4663,9 @@
     <public type="string" name="PleaseEnterCurrentPasswordTransfer" id="NUM" />
     <public type="string" name="PleaseEnterFirstPassword" id="NUM" />
     <public type="string" name="PleaseEnterNewFirstPassword" id="NUM" />
+    <public type="string" name="PleaseEnterNewFirstPasswordHint" id="NUM" />
+    <public type="string" name="PleaseEnterNewFirstPasswordLogin" id="NUM" />
+    <public type="string" name="PleaseEnterNewSecondPasswordHint" id="NUM" />
     <public type="string" name="PleaseEnterPassword" id="NUM" />
     <public type="string" name="PleaseLoginPassport" id="NUM" />
     <public type="string" name="PleaseReEnterPassword" id="NUM" />
@@ -4887,6 +4915,8 @@
     <public type="string" name="ResetNotificationsAlert" id="NUM" />
     <public type="string" name="ResetNotificationsAlertTitle" id="NUM" />
     <public type="string" name="ResetNotificationsText" id="NUM" />
+    <public type="string" name="ResetPassword" id="NUM" />
+    <public type="string" name="ResetPasswordWait" id="NUM" />
     <public type="string" name="ResetStatistics" id="NUM" />
     <public type="string" name="ResetStatisticsAlert" id="NUM" />
     <public type="string" name="ResetStatisticsAlertTitle" id="NUM" />
@@ -4896,9 +4926,15 @@
     <public type="string" name="RestoreEmailTrouble" id="NUM" />
     <public type="string" name="RestoreEmailTroubleNoEmail" id="NUM" />
     <public type="string" name="RestoreEmailTroubleText" id="NUM" />
+    <public type="string" name="RestoreEmailTroubleText2" id="NUM" />
     <public type="string" name="RestorePasswordNoEmailText" id="NUM" />
+    <public type="string" name="RestorePasswordNoEmailText2" id="NUM" />
     <public type="string" name="RestorePasswordNoEmailTitle" id="NUM" />
     <public type="string" name="RestorePasswordResetAccount" id="NUM" />
+    <public type="string" name="RestorePasswordResetIn" id="NUM" />
+    <public type="string" name="RestorePasswordResetPassword" id="NUM" />
+    <public type="string" name="RestorePasswordResetPasswordOk" id="NUM" />
+    <public type="string" name="RestorePasswordResetPasswordText" id="NUM" />
     <public type="string" name="Restrictions_few" id="NUM" />
     <public type="string" name="Restrictions_many" id="NUM" />
     <public type="string" name="Restrictions_one" id="NUM" />
@@ -5966,6 +6002,10 @@
     <public type="string" name="YourNameChanged" id="NUM" />
     <public type="string" name="YourPassword" id="NUM" />
     <public type="string" name="YourPasswordChangedSuccessText" id="NUM" />
+    <public type="string" name="YourPasswordHeader" id="NUM" />
+    <public type="string" name="YourPasswordRemember" id="NUM" />
+    <public type="string" name="YourPasswordRememberNo" id="NUM" />
+    <public type="string" name="YourPasswordRememberYes" id="NUM" />
     <public type="string" name="YourPasswordSuccess" id="NUM" />
     <public type="string" name="YourPasswordSuccessText" id="NUM" />
     <public type="string" name="YourPhone" id="NUM" />

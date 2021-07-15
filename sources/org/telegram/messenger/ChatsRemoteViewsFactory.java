@@ -90,8 +90,8 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             java.lang.String r2 = r2.getPackageName()
             r3 = 2131427352(0x7f0b0018, float:1.8476318E38)
             r0.<init>(r2, r3)
-            r2 = 2131230940(0x7var_dc, float:1.8077947E38)
-            r3 = 2131628288(0x7f0e1100, float:1.8883864E38)
+            r2 = 2131230941(0x7var_dd, float:1.8077949E38)
+            r3 = 2131628321(0x7f0e1121, float:1.8883931E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -107,8 +107,8 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             java.lang.String r2 = r2.getPackageName()
             r5 = 2131427353(0x7f0b0019, float:1.847632E38)
             r0.<init>(r2, r5)
-            r2 = 2131230942(0x7var_de, float:1.807795E38)
-            r5 = 2131627696(0x7f0e0eb0, float:1.8882664E38)
+            r2 = 2131230943(0x7var_df, float:1.8077953E38)
+            r5 = 2131627729(0x7f0e0ed1, float:1.888273E38)
             java.lang.String r6 = "TapToEditWidget"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)
@@ -125,7 +125,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             android.content.Intent r3 = new android.content.Intent
             r3.<init>()
             r3.putExtras(r2)
-            r2 = 2131230941(0x7var_dd, float:1.8077949E38)
+            r2 = 2131230942(0x7var_de, float:1.807795E38)
             r0.setOnClickFillInIntent(r2, r3)
             return r0
         L_0x0077:
@@ -148,21 +148,21 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r0 == 0) goto L_0x00fe
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r0)
             if (r6 == 0) goto L_0x00b2
-            r6 = 2131627298(0x7f0e0d22, float:1.8881856E38)
+            r6 = 2131627331(0x7f0e0d43, float:1.8881923E38)
             java.lang.String r7 = "SavedMessages"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
         L_0x00b2:
             boolean r6 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
             if (r6 == 0) goto L_0x00c2
-            r6 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
+            r6 = 2131627212(0x7f0e0ccc, float:1.8881682E38)
             java.lang.String r7 = "RepliesTitle"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
         L_0x00c2:
             boolean r6 = org.telegram.messenger.UserObject.isDeleted(r0)
             if (r6 == 0) goto L_0x00d2
-            r6 = 2131625759(0x7f0e071f, float:1.8878735E38)
+            r6 = 2131625779(0x7f0e0733, float:1.8878776E38)
             java.lang.String r7 = "HiddenName"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
@@ -238,7 +238,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             java.lang.String r14 = r14.getPackageName()
             r15 = 2131427346(0x7f0b0012, float:1.8476306E38)
             r13.<init>(r14, r15)
-            r14 = 2131230907(0x7var_bb, float:1.807788E38)
+            r14 = 2131230908(0x7var_bc, float:1.8077882E38)
             r13.setTextViewText(r14, r7)
             r7 = 1
             if (r12 == 0) goto L_0x015e
@@ -316,7 +316,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r8.restore()     // Catch:{ all -> 0x01f8 }
         L_0x01ee:
             r8.setBitmap(r11)     // Catch:{ all -> 0x01f8 }
-            r0 = 2131230903(0x7var_b7, float:1.8077872E38)
+            r0 = 2131230904(0x7var_b8, float:1.8077874E38)
             r13.setImageViewBitmap(r0, r15)     // Catch:{ all -> 0x01f8 }
             goto L_0x01fc
         L_0x01f8:
@@ -392,7 +392,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         L_0x0299:
             boolean r6 = r4.isOutOwner()
             if (r6 == 0) goto L_0x02aa
-            r0 = 2131625669(0x7f0e06c5, float:1.8878552E38)
+            r0 = 2131625689(0x7f0e06d9, float:1.8878593E38)
             java.lang.String r6 = "FromYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
         L_0x02a8:
@@ -632,7 +632,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r6 == 0) goto L_0x047e
             int r6 = r0.ttl_seconds
             if (r6 == 0) goto L_0x047e
-            r0 = 2131624400(0x7f0e01d0, float:1.8875979E38)
+            r0 = 2131624403(0x7f0e01d3, float:1.8875985E38)
             java.lang.String r6 = "AttachPhotoExpired"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r6, r0)
             goto L_0x054d
@@ -644,7 +644,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r6 == 0) goto L_0x0497
             int r6 = r0.ttl_seconds
             if (r6 == 0) goto L_0x0497
-            r0 = 2131624406(0x7f0e01d6, float:1.887599E38)
+            r0 = 2131624409(0x7f0e01d9, float:1.8875997E38)
             java.lang.String r6 = "AttachVideoExpired"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r6, r0)
             goto L_0x054d
@@ -741,15 +741,15 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             int r0 = r0.date
             long r8 = (long) r0
             java.lang.String r0 = org.telegram.messenger.LocaleController.stringForMessageListDate(r8)
-            r4 = 2131230908(0x7var_bc, float:1.8077882E38)
+            r4 = 2131230909(0x7var_bd, float:1.8077884E38)
             r13.setTextViewText(r4, r0)
             java.lang.String r0 = r10.toString()
-            r4 = 2131230906(0x7var_ba, float:1.8077878E38)
+            r4 = 2131230907(0x7var_bb, float:1.807788E38)
             r13.setTextViewText(r4, r0)
             r13.setTextColor(r4, r12)
             goto L_0x0585
         L_0x056a:
-            r4 = 2131230908(0x7var_bc, float:1.8077882E38)
+            r4 = 2131230909(0x7var_bd, float:1.8077884E38)
             if (r7 == 0) goto L_0x057c
             int r0 = r7.last_message_date
             if (r0 == 0) goto L_0x057c
@@ -760,11 +760,11 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         L_0x057c:
             r13.setTextViewText(r4, r10)
         L_0x057f:
-            r4 = 2131230906(0x7var_ba, float:1.8077878E38)
+            r4 = 2131230907(0x7var_bb, float:1.807788E38)
             r13.setTextViewText(r4, r10)
         L_0x0585:
             r0 = 8
-            r4 = 2131230904(0x7var_b8, float:1.8077874E38)
+            r4 = 2131230905(0x7var_b9, float:1.8077876E38)
             if (r7 == 0) goto L_0x05c4
             int r6 = r7.unread_count
             if (r6 <= 0) goto L_0x05c4
@@ -818,9 +818,9 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             android.content.Intent r3 = new android.content.Intent
             r3.<init>()
             r3.putExtras(r4)
-            r4 = 2131230902(0x7var_b6, float:1.807787E38)
+            r4 = 2131230903(0x7var_b7, float:1.8077872E38)
             r13.setOnClickFillInIntent(r4, r3)
-            r3 = 2131230905(0x7var_b9, float:1.8077876E38)
+            r3 = 2131230906(0x7var_ba, float:1.8077878E38)
             int r4 = r19.getCount()
             if (r2 != r4) goto L_0x0611
             r4 = 8

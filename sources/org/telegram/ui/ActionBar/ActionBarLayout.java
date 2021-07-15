@@ -369,9 +369,12 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void drawHeaderShadow(Canvas canvas, int i, int i2) {
-        Drawable drawable = headerShadowDrawable;
-        if (drawable != null) {
-            drawable.setAlpha(i);
+        if (headerShadowDrawable != null) {
+            if (Build.VERSION.SDK_INT < 19) {
+                headerShadowDrawable.setAlpha(i);
+            } else if (headerShadowDrawable.getAlpha() != i) {
+                headerShadowDrawable.setAlpha(i);
+            }
             headerShadowDrawable.setBounds(0, i2, getMeasuredWidth(), headerShadowDrawable.getIntrinsicHeight() + i2);
             headerShadowDrawable.draw(canvas);
         }
@@ -381,7 +384,7 @@ public class ActionBarLayout extends FrameLayout {
     public void setInnerTranslationX(float f) {
         this.innerTranslationX = f;
         invalidate();
-        if (this.fragmentsStack.size() >= 2) {
+        if (this.fragmentsStack.size() >= 2 && this.containerView.getMeasuredWidth() > 0) {
             ArrayList<BaseFragment> arrayList = this.fragmentsStack;
             arrayList.get(arrayList.size() - 2).onSlideProgress(false, f / ((float) this.containerView.getMeasuredWidth()));
         }

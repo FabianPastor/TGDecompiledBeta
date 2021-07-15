@@ -14,6 +14,7 @@ public class RenderState {
     public double remainder;
     public float scale;
     public float spacing;
+    public float viewportScale;
 
     public int getCount() {
         return this.count;
