@@ -1117,7 +1117,9 @@ public class PasscodeView extends FrameLayout {
 
     private void checkFingerprintButton() {
         Activity activity = (Activity) getContext();
-        if (Build.VERSION.SDK_INT >= 23 && activity != null && SharedConfig.useFingerprint) {
+        if (Build.VERSION.SDK_INT < 23 || activity == null || !SharedConfig.useFingerprint) {
+            this.fingerprintView.setVisibility(8);
+        } else {
             try {
                 AlertDialog alertDialog = this.fingerprintDialog;
                 if (alertDialog != null && alertDialog.isShowing()) {
@@ -1128,15 +1130,20 @@ public class PasscodeView extends FrameLayout {
             }
             try {
                 FingerprintManagerCompat from = FingerprintManagerCompat.from(ApplicationLoader.applicationContext);
-                if (from.isHardwareDetected() && from.hasEnrolledFingerprints()) {
+                if (!from.isHardwareDetected() || !from.hasEnrolledFingerprints()) {
+                    this.fingerprintView.setVisibility(8);
+                } else {
                     this.fingerprintView.setVisibility(0);
                 }
             } catch (Throwable th) {
                 FileLog.e(th);
+                this.fingerprintView.setVisibility(8);
             }
         }
         if (SharedConfig.passcodeType == 1) {
             this.fingerprintImage.setVisibility(this.fingerprintView.getVisibility());
+        }
+        if (this.numberFrameLayouts.size() >= 11) {
             this.numberFrameLayouts.get(11).setVisibility(this.fingerprintView.getVisibility());
         }
     }
