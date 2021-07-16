@@ -142,6 +142,12 @@ public final class R {
         public static final int userInputSection = NUM;
         public static final int userInputTag = NUM;
         public static final int userInputValue = NUM;
+        public static final int widgetBackgroundCornerRadius = NUM;
+        public static final int widgetPreviewContent = NUM;
+        public static final int widgetPreviewDot = NUM;
+        public static final int widgetPreviewImage = NUM;
+        public static final int widgetPreviewTime = NUM;
+        public static final int widgetPreviewTitle = NUM;
         public static final int windowTransitionStyle = NUM;
         public static final int zOrderOnTop = NUM;
 
@@ -200,6 +206,7 @@ public final class R {
     }
 
     public static final class dimen {
+        public static final int app_widget_background_corner_radius = NUM;
         public static final int compat_button_inset_horizontal_material = NUM;
         public static final int compat_button_inset_vertical_material = NUM;
         public static final int compat_button_padding_horizontal_material = NUM;
@@ -1129,6 +1136,16 @@ public final class R {
         public static final int wallet_qr = NUM;
         public static final int wallet_receive = NUM;
         public static final int wallet_send = NUM;
+        public static final int widget_avatar_1 = NUM;
+        public static final int widget_avatar_2 = NUM;
+        public static final int widget_avatar_3 = NUM;
+        public static final int widget_avatar_4 = NUM;
+        public static final int widget_avatar_5 = NUM;
+        public static final int widget_avatar_6 = NUM;
+        public static final int widget_avatar_7 = NUM;
+        public static final int widget_background = NUM;
+        public static final int widget_badge_background = NUM;
+        public static final int widget_badge_muted_background = NUM;
         public static final int widget_bg = NUM;
         public static final int widget_check = NUM;
         public static final int widget_clock = NUM;
@@ -1524,10 +1541,13 @@ public final class R {
         public static final int call_notification = NUM;
         public static final int call_notification_rtl = NUM;
         public static final int contacts_widget_item = NUM;
+        public static final int contacts_widget_item_1 = NUM;
+        public static final int contacts_widget_item_2 = NUM;
         public static final int contacts_widget_layout_1 = NUM;
         public static final int contacts_widget_layout_2 = NUM;
         public static final int contacts_widget_layout_3 = NUM;
         public static final int contacts_widget_layout_4 = NUM;
+        public static final int contacts_widget_layout_preview = NUM;
         public static final int custom_dialog = NUM;
         public static final int feed_widget_item = NUM;
         public static final int feed_widget_layout = NUM;
@@ -1544,6 +1564,7 @@ public final class R {
         public static final int shortcut_widget_layout_2 = NUM;
         public static final int shortcut_widget_layout_3 = NUM;
         public static final int shortcut_widget_layout_4 = NUM;
+        public static final int shortcut_widget_layout_preview = NUM;
         public static final int wallet_test_layout = NUM;
         public static final int widget_deleted = NUM;
         public static final int widget_edititem = NUM;
@@ -6242,17 +6263,30 @@ public final class R {
     public static final class style {
         public static final int ActionBar_Transparent_TMessages_Item = NUM;
         public static final int ActionBar_Transparent_TMessages_Start = NUM;
+        public static final int Base_TMessages_AppWidget_Background = NUM;
+        public static final int Base_TMessages_AppWidget_Badge = NUM;
+        public static final int Base_Theme_TMessages_AppWidget = NUM;
         public static final int DialogNoAnimation = NUM;
         public static final int MyTextViewStyle = NUM;
         public static final int PopupAnimation = NUM;
         public static final int PopupContextAnimation = NUM;
         public static final int PopupContextAnimation2 = NUM;
+        public static final int TMessages_AppWidget_Background = NUM;
+        public static final int TMessages_AppWidget_Badge = NUM;
         public static final int TextAppearance_Compat_Notification = NUM;
         public static final int TextAppearance_Compat_Notification_Info = NUM;
         public static final int TextAppearance_Compat_Notification_Line2 = NUM;
         public static final int TextAppearance_Compat_Notification_Time = NUM;
         public static final int TextAppearance_Compat_Notification_Title = NUM;
         public static final int Theme_TMessages = NUM;
+        public static final int Theme_TMessages_AppWidget = NUM;
+        public static final int Theme_TMessages_AppWidget_Preview = NUM;
+        public static final int Theme_TMessages_AppWidget_Preview2 = NUM;
+        public static final int Theme_TMessages_AppWidget_Preview3 = NUM;
+        public static final int Theme_TMessages_AppWidget_Preview4 = NUM;
+        public static final int Theme_TMessages_AppWidget_Preview5 = NUM;
+        public static final int Theme_TMessages_AppWidget_Preview6 = NUM;
+        public static final int Theme_TMessages_AppWidget_Preview7 = NUM;
         public static final int Theme_TMessages_BorderLessButton = NUM;
         public static final int Theme_TMessages_CalendarView = NUM;
         public static final int Theme_TMessages_DatePicker = NUM;

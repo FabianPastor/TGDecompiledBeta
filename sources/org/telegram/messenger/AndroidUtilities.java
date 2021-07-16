@@ -2199,15 +2199,19 @@ public class AndroidUtilities {
     }
 
     public static void runOnUIThread(Runnable runnable, long j) {
-        if (j == 0) {
-            ApplicationLoader.applicationHandler.post(runnable);
-        } else {
-            ApplicationLoader.applicationHandler.postDelayed(runnable, j);
+        if (ApplicationLoader.applicationHandler != null) {
+            if (j == 0) {
+                ApplicationLoader.applicationHandler.post(runnable);
+            } else {
+                ApplicationLoader.applicationHandler.postDelayed(runnable, j);
+            }
         }
     }
 
     public static void cancelRunOnUIThread(Runnable runnable) {
-        ApplicationLoader.applicationHandler.removeCallbacks(runnable);
+        if (ApplicationLoader.applicationHandler != null) {
+            ApplicationLoader.applicationHandler.removeCallbacks(runnable);
+        }
     }
 
     public static boolean isTablet() {

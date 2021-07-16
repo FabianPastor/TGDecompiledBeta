@@ -43,7 +43,7 @@ public class VoIPPermissionActivity extends Activity {
             r1.add(r2)
         L_0x0032:
             boolean r2 = r1.isEmpty()
-            if (r2 == 0) goto L_0x004f
+            if (r2 != 0) goto L_0x004f
             java.lang.String[] r0 = new java.lang.String[r0]     // Catch:{ Exception -> 0x004b }
             java.lang.Object[] r0 = r1.toArray(r0)     // Catch:{ Exception -> 0x004b }
             java.lang.String[] r0 = (java.lang.String[]) r0     // Catch:{ Exception -> 0x004b }

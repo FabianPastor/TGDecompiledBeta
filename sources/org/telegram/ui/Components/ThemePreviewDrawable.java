@@ -15,7 +15,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v43, resolved type: android.graphics.drawable.BitmapDrawable} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v53, resolved type: org.telegram.ui.Components.MotionBackgroundDrawable} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v1, resolved type: org.telegram.ui.Components.MotionBackgroundDrawable} */
-    /* JADX WARNING: type inference failed for: r11v9, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r11v9, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r11v10 */
     /* JADX WARNING: type inference failed for: r11v11 */
     /* JADX WARNING: type inference failed for: r3v38 */

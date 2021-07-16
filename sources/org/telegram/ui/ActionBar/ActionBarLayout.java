@@ -690,9 +690,11 @@ public class ActionBarLayout extends FrameLayout {
             return false;
         }
         if (this.fragmentsStack.size() > 1) {
-            if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
+            if (motionEvent != null && motionEvent.getAction() == 0) {
                 ArrayList<BaseFragment> arrayList = this.fragmentsStack;
                 if (!arrayList.get(arrayList.size() - 1).isSwipeBackEnabled(motionEvent)) {
+                    this.maybeStartTracking = false;
+                    this.startedTracking = false;
                     return false;
                 }
                 this.startedTrackingPointerId = motionEvent.getPointerId(0);

@@ -301,7 +301,7 @@ public class SearchCounterView extends View {
         updateX((float) this.countWidth);
         if (this.countLayout != null) {
             canvas.save();
-            canvas.translate(this.countLeft, measuredHeight + ((float) AndroidUtilities.dp(4.0f)));
+            canvas.translate(this.countLeft, measuredHeight + ((float) AndroidUtilities.dp(2.0f)));
             this.countLayout.draw(canvas);
             canvas.restore();
         }

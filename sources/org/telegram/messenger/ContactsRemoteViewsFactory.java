@@ -94,7 +94,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             android.widget.RemoteViews r0 = new android.widget.RemoteViews
             android.content.Context r2 = r1.mContext
             java.lang.String r2 = r2.getPackageName()
-            r3 = 2131427352(0x7f0b0018, float:1.8476318E38)
+            r3 = 2131427356(0x7f0b001c, float:1.8476326E38)
             r0.<init>(r2, r3)
             r2 = 2131230941(0x7var_dd, float:1.8077949E38)
             r3 = 2131628321(0x7f0e1121, float:1.8883931E38)
@@ -111,7 +111,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             android.widget.RemoteViews r0 = new android.widget.RemoteViews
             android.content.Context r2 = r1.mContext
             java.lang.String r2 = r2.getPackageName()
-            r5 = 2131427353(0x7f0b0019, float:1.847632E38)
+            r5 = 2131427357(0x7f0b001d, float:1.8476328E38)
             r0.<init>(r2, r5)
             r2 = 2131230943(0x7var_df, float:1.8077953E38)
             r5 = 2131627730(0x7f0e0ed2, float:1.8882733E38)

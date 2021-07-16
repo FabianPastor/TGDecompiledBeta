@@ -292,21 +292,23 @@ public class MotionBackgroundDrawable extends Drawable {
     public void setBounds(int i, int i2, int i3, int i4) {
         super.setBounds(i, i2, i3, i4);
         this.patternBounds.set(i, i2, i3, i4);
-        int i5 = i3 - i;
-        int i6 = i4 - i2;
-        Bitmap bitmap = this.legacyBitmap;
-        if (bitmap == null || bitmap.getWidth() != i5 || this.legacyBitmap.getHeight() != i6) {
-            Bitmap bitmap2 = this.legacyBitmap;
-            if (bitmap2 != null) {
-                bitmap2.recycle();
+        if (Build.VERSION.SDK_INT < 28 && this.intensity < 0) {
+            int i5 = i3 - i;
+            int i6 = i4 - i2;
+            Bitmap bitmap = this.legacyBitmap;
+            if (bitmap == null || bitmap.getWidth() != i5 || this.legacyBitmap.getHeight() != i6) {
+                Bitmap bitmap2 = this.legacyBitmap;
+                if (bitmap2 != null) {
+                    bitmap2.recycle();
+                }
+                this.legacyBitmap = Bitmap.createBitmap(i5, i6, Bitmap.Config.ARGB_8888);
+                this.legacyCanvas = new Canvas(this.legacyBitmap);
             }
-            this.legacyBitmap = Bitmap.createBitmap(i5, i6, Bitmap.Config.ARGB_8888);
-            this.legacyCanvas = new Canvas(this.legacyBitmap);
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x02f1  */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x0311  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x0304  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void draw(android.graphics.Canvas r24) {
         /*
@@ -416,7 +418,7 @@ public class MotionBackgroundDrawable extends Drawable {
             android.graphics.RectF r3 = r0.rect
             android.graphics.Paint r4 = r0.paint
             r1.drawBitmap(r2, r12, r3, r4)
-            goto L_0x0202
+            goto L_0x01f5
         L_0x00d1:
             android.graphics.Matrix r4 = r0.matrix
             r4.reset()
@@ -483,7 +485,7 @@ public class MotionBackgroundDrawable extends Drawable {
             float r3 = (float) r3
             android.graphics.Paint r5 = r0.paint2
             r1.drawRoundRect(r2, r4, r3, r5)
-            goto L_0x0202
+            goto L_0x01f5
         L_0x015b:
             int r11 = r0.roundRadius
             if (r11 == 0) goto L_0x01b2
@@ -563,171 +565,164 @@ public class MotionBackgroundDrawable extends Drawable {
             android.graphics.Paint r4 = r0.paint2
             r1.drawBitmap(r2, r12, r3, r4)
         L_0x01f5:
-            android.graphics.Canvas r2 = r0.legacyCanvas
-            if (r1 != r2) goto L_0x0202
-            android.graphics.Bitmap r2 = r0.legacyBitmap
-            android.graphics.RectF r3 = r0.rect
-            android.graphics.Paint r4 = r0.paint
-            r1.drawBitmap(r2, r12, r3, r4)
-        L_0x0202:
             r24.restore()
             long r1 = android.os.SystemClock.elapsedRealtime()
             long r3 = r0.lastUpdateTime
             long r3 = r1 - r3
             r5 = 20
             int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r7 <= 0) goto L_0x0215
+            if (r7 <= 0) goto L_0x0208
             r3 = 17
-        L_0x0215:
+        L_0x0208:
             r0.lastUpdateTime = r1
             float r1 = r0.posAnimationProgress
             int r2 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r2 >= 0) goto L_0x035b
+            if (r2 >= 0) goto L_0x034e
             boolean r2 = r0.rotatingPreview
             r5 = 2
             r6 = 7
             r7 = 0
             r8 = 1
-            if (r2 == 0) goto L_0x02b7
+            if (r2 == 0) goto L_0x02aa
             org.telegram.ui.Components.CubicBezierInterpolator r2 = r0.interpolator
             float r1 = r2.getInterpolation(r1)
             r2 = 1061158912(0x3var_, float:0.75)
             r9 = 1056964608(0x3var_, float:0.5)
             r10 = 1048576000(0x3e800000, float:0.25)
             int r11 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r11 > 0) goto L_0x0237
+            if (r11 > 0) goto L_0x022a
             r1 = 0
-            goto L_0x0244
-        L_0x0237:
+            goto L_0x0237
+        L_0x022a:
             int r11 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
-            if (r11 > 0) goto L_0x023d
+            if (r11 > 0) goto L_0x0230
             r1 = 1
-            goto L_0x0244
-        L_0x023d:
+            goto L_0x0237
+        L_0x0230:
             int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 > 0) goto L_0x0243
+            if (r1 > 0) goto L_0x0236
             r1 = 2
-            goto L_0x0244
-        L_0x0243:
+            goto L_0x0237
+        L_0x0236:
             r1 = 3
-        L_0x0244:
+        L_0x0237:
             float r11 = r0.posAnimationProgress
             float r3 = (float) r3
             boolean r4 = r0.rotationBack
-            if (r4 == 0) goto L_0x024e
+            if (r4 == 0) goto L_0x0241
             r4 = 1148846080(0x447a0000, float:1000.0)
-            goto L_0x0250
-        L_0x024e:
+            goto L_0x0243
+        L_0x0241:
             r4 = 1157234688(0x44fa0000, float:2000.0)
-        L_0x0250:
+        L_0x0243:
             float r3 = r3 / r4
             float r11 = r11 + r3
             r0.posAnimationProgress = r11
             int r3 = (r11 > r14 ? 1 : (r11 == r14 ? 0 : -1))
-            if (r3 <= 0) goto L_0x025a
+            if (r3 <= 0) goto L_0x024d
             r0.posAnimationProgress = r14
-        L_0x025a:
+        L_0x024d:
             org.telegram.ui.Components.CubicBezierInterpolator r3 = r0.interpolator
             float r4 = r0.posAnimationProgress
             float r3 = r3.getInterpolation(r4)
-            if (r1 != 0) goto L_0x0268
+            if (r1 != 0) goto L_0x025b
             int r4 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-            if (r4 > 0) goto L_0x0274
-        L_0x0268:
-            if (r1 != r8) goto L_0x026e
+            if (r4 > 0) goto L_0x0267
+        L_0x025b:
+            if (r1 != r8) goto L_0x0261
             int r4 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r4 > 0) goto L_0x0274
-        L_0x026e:
-            if (r1 != r5) goto L_0x028b
+            if (r4 > 0) goto L_0x0267
+        L_0x0261:
+            if (r1 != r5) goto L_0x027e
             int r1 = (r3 > r2 ? 1 : (r3 == r2 ? 0 : -1))
-            if (r1 <= 0) goto L_0x028b
-        L_0x0274:
+            if (r1 <= 0) goto L_0x027e
+        L_0x0267:
             boolean r1 = r0.rotationBack
-            if (r1 == 0) goto L_0x0282
+            if (r1 == 0) goto L_0x0275
             int r1 = r0.phase
             int r1 = r1 + r8
             r0.phase = r1
-            if (r1 <= r6) goto L_0x028b
+            if (r1 <= r6) goto L_0x027e
             r0.phase = r7
-            goto L_0x028b
-        L_0x0282:
+            goto L_0x027e
+        L_0x0275:
             int r1 = r0.phase
             int r1 = r1 - r8
             r0.phase = r1
-            if (r1 >= 0) goto L_0x028b
+            if (r1 >= 0) goto L_0x027e
             r0.phase = r6
-        L_0x028b:
+        L_0x027e:
             int r1 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-            if (r1 > 0) goto L_0x0291
-        L_0x028f:
+            if (r1 > 0) goto L_0x0284
+        L_0x0282:
             float r3 = r3 / r10
-            goto L_0x029f
-        L_0x0291:
+            goto L_0x0292
+        L_0x0284:
             int r1 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r1 > 0) goto L_0x0297
+            if (r1 > 0) goto L_0x028a
             float r3 = r3 - r10
-            goto L_0x028f
-        L_0x0297:
+            goto L_0x0282
+        L_0x028a:
             int r1 = (r3 > r2 ? 1 : (r3 == r2 ? 0 : -1))
-            if (r1 > 0) goto L_0x029d
+            if (r1 > 0) goto L_0x0290
             float r3 = r3 - r9
-            goto L_0x028f
-        L_0x029d:
+            goto L_0x0282
+        L_0x0290:
             float r3 = r3 - r2
-            goto L_0x028f
-        L_0x029f:
+            goto L_0x0282
+        L_0x0292:
             boolean r1 = r0.rotationBack
-            if (r1 == 0) goto L_0x02eb
+            if (r1 == 0) goto L_0x02de
             float r3 = r14 - r3
             float r1 = r0.posAnimationProgress
             int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r1 < 0) goto L_0x02eb
+            if (r1 < 0) goto L_0x02de
             int r1 = r0.phase
             int r1 = r1 + r8
             r0.phase = r1
-            if (r1 <= r6) goto L_0x02b4
+            if (r1 <= r6) goto L_0x02a7
             r0.phase = r7
-        L_0x02b4:
+        L_0x02a7:
             r3 = 1065353216(0x3var_, float:1.0)
-            goto L_0x02eb
-        L_0x02b7:
+            goto L_0x02de
+        L_0x02aa:
             float r2 = (float) r3
             boolean r3 = r0.fastAnimation
-            if (r3 == 0) goto L_0x02bf
+            if (r3 == 0) goto L_0x02b2
             r3 = 1133903872(0x43960000, float:300.0)
-            goto L_0x02c1
-        L_0x02bf:
+            goto L_0x02b4
+        L_0x02b2:
             r3 = 1140457472(0x43fa0000, float:500.0)
-        L_0x02c1:
+        L_0x02b4:
             float r2 = r2 / r3
             float r1 = r1 + r2
             r0.posAnimationProgress = r1
             int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r1 <= 0) goto L_0x02cb
+            if (r1 <= 0) goto L_0x02be
             r0.posAnimationProgress = r14
-        L_0x02cb:
+        L_0x02be:
             org.telegram.ui.Components.CubicBezierInterpolator r1 = r0.interpolator
             float r2 = r0.posAnimationProgress
             float r3 = r1.getInterpolation(r2)
             boolean r1 = r0.rotationBack
-            if (r1 == 0) goto L_0x02eb
+            if (r1 == 0) goto L_0x02de
             float r3 = r14 - r3
             float r1 = r0.posAnimationProgress
             int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r1 < 0) goto L_0x02eb
+            if (r1 < 0) goto L_0x02de
             int r1 = r0.phase
             int r1 = r1 + r8
             r0.phase = r1
-            if (r1 <= r6) goto L_0x02e8
+            if (r1 <= r6) goto L_0x02db
             r0.phase = r7
-        L_0x02e8:
+        L_0x02db:
             r18 = 1065353216(0x3var_, float:1.0)
-            goto L_0x02ed
-        L_0x02eb:
+            goto L_0x02e0
+        L_0x02de:
             r18 = r3
-        L_0x02ed:
+        L_0x02e0:
             boolean r1 = r0.rotatingPreview
-            if (r1 == 0) goto L_0x0311
+            if (r1 == 0) goto L_0x0304
             android.graphics.Bitmap r15 = r0.currentBitmap
             r16 = 1
             int r1 = r0.phase
@@ -740,25 +735,25 @@ public class MotionBackgroundDrawable extends Drawable {
             r17 = r1
             r22 = r2
             org.telegram.messenger.Utilities.generateGradient(r15, r16, r17, r18, r19, r20, r21, r22)
-            goto L_0x0358
-        L_0x0311:
+            goto L_0x034b
+        L_0x0304:
             int r1 = (r18 > r14 ? 1 : (r18 == r14 ? 0 : -1))
-            if (r1 == 0) goto L_0x034d
+            if (r1 == 0) goto L_0x0340
             r1 = 1051372203(0x3eaaaaab, float:0.33333334)
             float r2 = r18 / r1
             int r2 = (int) r2
-            if (r2 != 0) goto L_0x0325
+            if (r2 != 0) goto L_0x0318
             android.graphics.Canvas r3 = r0.gradientCanvas
             android.graphics.Bitmap r4 = r0.gradientFromBitmap
             r3.drawBitmap(r4, r13, r13, r12)
-            goto L_0x0330
-        L_0x0325:
+            goto L_0x0323
+        L_0x0318:
             android.graphics.Canvas r3 = r0.gradientCanvas
             android.graphics.Bitmap[] r4 = r0.gradientToBitmap
             int r5 = r2 + -1
             r4 = r4[r5]
             r3.drawBitmap(r4, r13, r13, r12)
-        L_0x0330:
+        L_0x0323:
             float r3 = (float) r2
             float r3 = r3 * r1
             float r18 = r18 - r3
@@ -773,16 +768,16 @@ public class MotionBackgroundDrawable extends Drawable {
             r2 = r3[r2]
             android.graphics.Paint r3 = r0.paint3
             r1.drawBitmap(r2, r13, r13, r3)
-            goto L_0x0358
-        L_0x034d:
+            goto L_0x034b
+        L_0x0340:
             android.graphics.Canvas r1 = r0.gradientCanvas
             android.graphics.Bitmap[] r2 = r0.gradientToBitmap
             r2 = r2[r5]
             android.graphics.Paint r3 = r0.paint3
             r1.drawBitmap(r2, r13, r13, r3)
-        L_0x0358:
+        L_0x034b:
             r23.invalidateParent()
-        L_0x035b:
+        L_0x034e:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MotionBackgroundDrawable.draw(android.graphics.Canvas):void");

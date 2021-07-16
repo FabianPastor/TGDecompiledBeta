@@ -234,6 +234,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                 float f;
                 float f2;
                 float f3;
+                float f4;
                 Canvas canvas2 = canvas;
                 if (!this.renderer.isFirstFrameRendered() || (!(this.renderer.getAlpha() == 1.0f || this.blurRenderer.getAlpha() == 1.0f) || this.this$0.videoIsPaused)) {
                     if (this.this$0.progressToBackground != 1.0f) {
@@ -247,8 +248,8 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                     GroupCallMiniTextureView groupCallMiniTextureView = this.this$0;
                     if (groupCallMiniTextureView.thumb != null) {
                         canvas.save();
-                        float f4 = this.currentThumbScale;
-                        canvas2.scale(f4, f4, ((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f);
+                        float f5 = this.currentThumbScale;
+                        canvas2.scale(f5, f5, ((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f);
                         GroupCallMiniTextureView groupCallMiniTextureView2 = this.this$0;
                         if (groupCallMiniTextureView2.thumbPaint == null) {
                             groupCallMiniTextureView2.thumbPaint = new Paint(1);
@@ -287,7 +288,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                             this.this$0.stopSharingTextView.setScaleX(1.0f);
                             this.this$0.stopSharingTextView.setScaleY(1.0f);
                         }
-                        float f5 = this.this$0.drawFirst ? 0.0f : groupCallRenderersContainer2.progressToFullscreenMode;
+                        float f6 = this.this$0.drawFirst ? 0.0f : groupCallRenderersContainer2.progressToFullscreenMode;
                         int dp2 = AndroidUtilities.dp(33.0f);
                         GroupCallMiniTextureView groupCallMiniTextureView5 = this.this$0;
                         if (groupCallMiniTextureView5.animateToFullscreen || groupCallMiniTextureView5.showingInFullscreen) {
@@ -295,28 +296,35 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                             f2 = ((float) AndroidUtilities.dp(10.0f)) + (((float) AndroidUtilities.dp(39.0f)) * groupCallRenderersContainer2.progressToFullscreenMode);
                         } else {
                             f3 = (float) dp2;
-                            f2 = ((float) AndroidUtilities.dp(10.0f)) * (1.0f - groupCallRenderersContainer2.progressToFullscreenMode);
+                            f2 = ((float) AndroidUtilities.dp(10.0f)) * Math.max(1.0f - groupCallRenderersContainer2.progressToFullscreenMode, (this.this$0.showingAsScrimView || this.this$0.animateToScrimView) ? groupCallRenderersContainer2.progressToScrimView : 0.0f);
                         }
                         int i = (int) (f3 + f2);
                         int measuredWidth = (getMeasuredWidth() - i) / 2;
-                        float f6 = (this.this$0.showingAsScrimView || this.this$0.animateToScrimView) ? groupCallRenderersContainer2.progressToScrimView : 0.0f;
+                        float f7 = (this.this$0.showingAsScrimView || this.this$0.animateToScrimView) ? groupCallRenderersContainer2.progressToScrimView : 0.0f;
                         GroupCallMiniTextureView groupCallMiniTextureView6 = this.this$0;
-                        if (!groupCallMiniTextureView6.showingInFullscreen) {
-                            f5 = groupCallMiniTextureView6.animateToFullscreen ? groupCallRenderersContainer2.progressToFullscreenMode : f6;
+                        if (groupCallMiniTextureView6.showingInFullscreen) {
+                            f4 = f6;
+                        } else {
+                            f6 = groupCallMiniTextureView6.animateToFullscreen ? groupCallRenderersContainer2.progressToFullscreenMode : f7;
+                            f4 = (groupCallMiniTextureView6.showingAsScrimView || this.this$0.animateToScrimView) ? groupCallRenderersContainer2.progressToScrimView : groupCallRenderersContainer2.progressToFullscreenMode;
                         }
-                        int measuredHeight = (int) (((float) (((getMeasuredHeight() - i) / 2) - AndroidUtilities.dp(11.0f))) - ((((float) AndroidUtilities.dp(17.0f)) + (((float) AndroidUtilities.dp(74.0f)) * groupCallRenderersContainer2.progressToFullscreenMode)) * f5));
-                        int i2 = measuredHeight + i;
-                        this.this$0.castingScreenDrawable.setBounds(measuredWidth, measuredHeight, measuredWidth + i, i2);
+                        float measuredHeight = (float) (((getMeasuredHeight() - i) / 2) - AndroidUtilities.dp(28.0f));
+                        float dp3 = (float) AndroidUtilities.dp(17.0f);
+                        float dp4 = (float) AndroidUtilities.dp(74.0f);
+                        GroupCallMiniTextureView groupCallMiniTextureView7 = this.this$0;
+                        int dp5 = (int) ((measuredHeight - ((dp3 + (dp4 * ((groupCallMiniTextureView7.showingInFullscreen || groupCallMiniTextureView7.animateToFullscreen) ? groupCallRenderersContainer2.progressToFullscreenMode : 0.0f))) * f6)) + (((float) AndroidUtilities.dp(17.0f)) * f4));
+                        int i2 = dp5 + i;
+                        this.this$0.castingScreenDrawable.setBounds(measuredWidth, dp5, measuredWidth + i, i2);
                         this.this$0.castingScreenDrawable.draw(canvas2);
-                        float f7 = groupCallRenderersContainer2.progressToFullscreenMode;
-                        if (f7 > 0.0f || f6 > 0.0f) {
-                            float max = Math.max(f7, f6) * f5;
+                        float f8 = groupCallRenderersContainer2.progressToFullscreenMode;
+                        if (f8 > 0.0f || f7 > 0.0f) {
+                            float max = Math.max(f8, f7) * f6;
                             textPaint3.setAlpha((int) (max * 255.0f));
-                            GroupCallMiniTextureView groupCallMiniTextureView7 = this.this$0;
-                            if (groupCallMiniTextureView7.animateToFullscreen || groupCallMiniTextureView7.showingInFullscreen) {
-                                groupCallMiniTextureView7.stopSharingTextView.setAlpha(max * (1.0f - f6));
+                            GroupCallMiniTextureView groupCallMiniTextureView8 = this.this$0;
+                            if (groupCallMiniTextureView8.animateToFullscreen || groupCallMiniTextureView8.showingInFullscreen) {
+                                groupCallMiniTextureView8.stopSharingTextView.setAlpha(max * (1.0f - f7));
                             } else {
-                                groupCallMiniTextureView7.stopSharingTextView.setAlpha(0.0f);
+                                groupCallMiniTextureView8.stopSharingTextView.setAlpha(0.0f);
                             }
                             canvas2.drawText(str4, (((float) measuredWidth) - (measureText2 / 2.0f)) + (((float) i) / 2.0f), (float) (AndroidUtilities.dp(32.0f) + i2), textPaint3);
                         } else {
@@ -324,10 +332,10 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                         }
                         this.this$0.stopSharingTextView.setTranslationY((((float) (AndroidUtilities.dp(72.0f) + i2)) + this.this$0.swipeToBackDy) - this.currentClipVertical);
                         this.this$0.stopSharingTextView.setTranslationX(((float) ((getMeasuredWidth() - this.this$0.stopSharingTextView.getMeasuredWidth()) / 2)) - this.currentClipHorizontal);
-                        float f8 = groupCallRenderersContainer2.progressToFullscreenMode;
-                        if (f8 < 1.0f && f6 < 1.0f) {
+                        float f9 = groupCallRenderersContainer2.progressToFullscreenMode;
+                        if (f9 < 1.0f && f7 < 1.0f) {
                             TextPaint textPaint = textPaint;
-                            double max2 = (double) Math.max(f8, f6);
+                            double max2 = (double) Math.max(f9, f7);
                             Double.isNaN(max2);
                             textPaint.setAlpha((int) ((1.0d - max2) * 255.0d));
                             canvas.save();
@@ -340,17 +348,17 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                 }
                 ImageView imageView = this.this$0.blurredFlippingStub;
                 if (!(imageView == null || imageView.getParent() == null)) {
-                    GroupCallMiniTextureView groupCallMiniTextureView8 = this.this$0;
-                    groupCallMiniTextureView8.blurredFlippingStub.setScaleX(groupCallMiniTextureView8.textureView.renderer.getScaleX());
                     GroupCallMiniTextureView groupCallMiniTextureView9 = this.this$0;
-                    groupCallMiniTextureView9.blurredFlippingStub.setScaleY(groupCallMiniTextureView9.textureView.renderer.getScaleY());
+                    groupCallMiniTextureView9.blurredFlippingStub.setScaleX(groupCallMiniTextureView9.textureView.renderer.getScaleX());
+                    GroupCallMiniTextureView groupCallMiniTextureView10 = this.this$0;
+                    groupCallMiniTextureView10.blurredFlippingStub.setScaleY(groupCallMiniTextureView10.textureView.renderer.getScaleY());
                 }
                 super.dispatchDraw(canvas);
                 float measuredHeight2 = (((float) getMeasuredHeight()) - this.currentClipVertical) - ((float) AndroidUtilities.dp(80.0f));
                 if (this.this$0.participant != call4.videoNotAvailableParticipant) {
                     canvas.save();
-                    GroupCallMiniTextureView groupCallMiniTextureView10 = this.this$0;
-                    if ((groupCallMiniTextureView10.showingInFullscreen || groupCallMiniTextureView10.animateToFullscreen) && !GroupCallActivity.isLandscapeMode && !GroupCallActivity.isTabletMode) {
+                    GroupCallMiniTextureView groupCallMiniTextureView11 = this.this$0;
+                    if ((groupCallMiniTextureView11.showingInFullscreen || groupCallMiniTextureView11.animateToFullscreen) && !GroupCallActivity.isLandscapeMode && !GroupCallActivity.isTabletMode) {
                         GroupCallRenderersContainer groupCallRenderersContainer = groupCallRenderersContainer2;
                         measuredHeight2 -= (((float) AndroidUtilities.dp(90.0f)) * groupCallRenderersContainer.progressToFullscreenMode) * (1.0f - groupCallRenderersContainer.progressToHideUi);
                     }
@@ -376,23 +384,23 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                     }
                     float access$600 = this.this$0.videoIsPausedProgress;
                     if (isInAnimation()) {
-                        float f9 = this.overlayIconAlphaFrom;
+                        float var_ = this.overlayIconAlphaFrom;
                         float var_ = this.animationProgress;
-                        f = (f9 * (1.0f - var_)) + (this.this$0.overlayIconAlpha * var_);
+                        f = (var_ * (1.0f - var_)) + (this.this$0.overlayIconAlpha * var_);
                     } else {
                         f = this.this$0.overlayIconAlpha;
                     }
                     float var_ = access$600 * f;
                     if (var_ > 0.0f) {
-                        float dp3 = (float) AndroidUtilities.dp(48.0f);
-                        float measuredWidth2 = (((float) getMeasuredWidth()) - dp3) / 2.0f;
-                        float measuredHeight3 = (((float) getMeasuredHeight()) - dp3) / 2.0f;
+                        float dp6 = (float) AndroidUtilities.dp(48.0f);
+                        float measuredWidth2 = (((float) getMeasuredWidth()) - dp6) / 2.0f;
+                        float measuredHeight3 = (((float) getMeasuredHeight()) - dp6) / 2.0f;
                         if (this.this$0.participant == call4.videoNotAvailableParticipant) {
-                            measuredHeight3 -= dp3 / 2.5f;
+                            measuredHeight3 -= dp6 / 2.5f;
                         }
                         RectF rectF = AndroidUtilities.rectTmp;
-                        float var_ = measuredHeight3 + dp3;
-                        rectF.set((float) ((int) measuredWidth2), (float) ((int) measuredHeight3), (float) ((int) (measuredWidth2 + dp3)), (float) ((int) var_));
+                        float var_ = measuredHeight3 + dp6;
+                        rectF.set((float) ((int) measuredWidth2), (float) ((int) measuredHeight3), (float) ((int) (measuredWidth2 + dp6)), (float) ((int) var_));
                         if (var_ != 1.0f) {
                             canvas2.saveLayerAlpha(rectF, (int) (var_ * 255.0f), 31);
                         } else {
@@ -404,7 +412,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                         float var_ = var_ * groupCallRenderersContainer2.progressToFullscreenMode;
                         if (var_ > 0.0f && this.this$0.participant != call4.videoNotAvailableParticipant) {
                             textPaint.setAlpha((int) (var_ * 255.0f));
-                            canvas2.drawText(str, (measuredWidth2 - (measureText / 2.0f)) + (dp3 / 2.0f), var_ + ((float) AndroidUtilities.dp(16.0f)), textPaint);
+                            canvas2.drawText(str, (measuredWidth2 - (measureText / 2.0f)) + (dp6 / 2.0f), var_ + ((float) AndroidUtilities.dp(16.0f)), textPaint);
                         }
                     }
                 }
@@ -1043,10 +1051,10 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v54, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v60, resolved type: org.telegram.tgnet.TLRPC$User} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v94, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v55, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v61, resolved type: org.telegram.tgnet.TLRPC$User} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v95, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v96, resolved type: org.telegram.tgnet.TLRPC$Chat} */
     /* JADX WARNING: Code restructure failed: missing block: B:100:0x0174, code lost:
         if (r1 != r11.videoNotAvailableParticipant) goto L_0x016a;
      */
@@ -1092,9 +1100,9 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     /* JADX WARNING: Removed duplicated region for block: B:272:0x0518  */
     /* JADX WARNING: Removed duplicated region for block: B:283:0x053d  */
     /* JADX WARNING: Removed duplicated region for block: B:291:0x0570  */
-    /* JADX WARNING: Removed duplicated region for block: B:299:0x0586  */
-    /* JADX WARNING: Removed duplicated region for block: B:307:0x05b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x0605  */
+    /* JADX WARNING: Removed duplicated region for block: B:305:0x0595  */
+    /* JADX WARNING: Removed duplicated region for block: B:313:0x05bf  */
+    /* JADX WARNING: Removed duplicated region for block: B:324:0x0614  */
     /* JADX WARNING: Removed duplicated region for block: B:55:0x00c3  */
     /* JADX WARNING: Removed duplicated region for block: B:56:0x00cc  */
     /* JADX WARNING: Removed duplicated region for block: B:60:0x00df  */
@@ -1453,7 +1461,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r10.setVisibility(r9)
         L_0x02c1:
             boolean r10 = r0.attached
-            if (r10 == 0) goto L_0x0668
+            if (r10 == 0) goto L_0x0677
             boolean r10 = org.telegram.ui.GroupCallActivity.isTabletMode
             if (r10 == 0) goto L_0x02d9
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r10 = r0.parentContainer
@@ -1823,65 +1831,68 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r1.updateMuteButtonState(r8)
         L_0x0575:
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
+            boolean r2 = r1.presentation
+            if (r2 == 0) goto L_0x0586
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r1 = r1.presentation
+            if (r1 == 0) goto L_0x0591
+            boolean r1 = r1.paused
+            if (r1 == 0) goto L_0x0591
+            goto L_0x0590
+        L_0x0586:
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r1 = r1.video
-            if (r1 == 0) goto L_0x0582
+            if (r1 == 0) goto L_0x0591
             boolean r1 = r1.paused
-            if (r1 == 0) goto L_0x0582
+            if (r1 == 0) goto L_0x0591
+        L_0x0590:
             r9 = 1
-        L_0x0582:
+        L_0x0591:
             boolean r1 = r0.videoIsPaused
-            if (r1 == r9) goto L_0x05a7
+            if (r1 == r9) goto L_0x05b6
             r0.videoIsPaused = r9
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             org.webrtc.TextureViewRenderer r1 = r1.renderer
             android.view.ViewPropertyAnimator r1 = r1.animate()
             boolean r2 = r0.videoIsPaused
-            if (r2 == 0) goto L_0x0595
+            if (r2 == 0) goto L_0x05a4
             r7 = 0
-        L_0x0595:
+        L_0x05a4:
             android.view.ViewPropertyAnimator r1 = r1.alpha(r7)
             r2 = 250(0xfa, double:1.235E-321)
             android.view.ViewPropertyAnimator r1 = r1.setDuration(r2)
             r1.start()
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             r1.invalidate()
-        L_0x05a7:
+        L_0x05b6:
             boolean r1 = org.telegram.ui.GroupCallActivity.paused
-            if (r1 != 0) goto L_0x0605
+            if (r1 != 0) goto L_0x0614
             boolean r1 = r0.hasVideo
-            if (r1 != 0) goto L_0x05b0
-            goto L_0x0605
-        L_0x05b0:
+            if (r1 != 0) goto L_0x05bf
+            goto L_0x0614
+        L_0x05bf:
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             org.webrtc.TextureViewRenderer r1 = r1.renderer
             boolean r1 = r1.isFirstFrameRendered()
-            if (r1 != 0) goto L_0x05bd
+            if (r1 != 0) goto L_0x05cc
             r23.loadThumb()
-        L_0x05bd:
+        L_0x05cc:
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
             boolean r1 = r1.self
-            if (r1 == 0) goto L_0x05dc
+            if (r1 == 0) goto L_0x05eb
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x0665
+            if (r1 == 0) goto L_0x0674
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
             org.webrtc.TextureViewRenderer r2 = r2.renderer
             org.telegram.messenger.ChatObject$VideoParticipant r3 = r0.participant
             boolean r3 = r3.presentation
             r1.setLocalSink(r2, r3)
-            goto L_0x0665
-        L_0x05dc:
+            goto L_0x0674
+        L_0x05eb:
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x0665
-            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
-            boolean r2 = r2.presentation
-            org.telegram.ui.Components.voip.VoIPTextureView r4 = r0.textureView
-            org.webrtc.TextureViewRenderer r4 = r4.renderer
-            r1.addRemoteSink(r3, r2, r4, r5)
+            if (r1 == 0) goto L_0x0674
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
@@ -1889,39 +1900,46 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             org.telegram.ui.Components.voip.VoIPTextureView r4 = r0.textureView
             org.webrtc.TextureViewRenderer r4 = r4.renderer
             r1.addRemoteSink(r3, r2, r4, r5)
-            goto L_0x0665
-        L_0x0605:
+            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
+            boolean r2 = r2.presentation
+            org.telegram.ui.Components.voip.VoIPTextureView r4 = r0.textureView
+            org.webrtc.TextureViewRenderer r4 = r4.renderer
+            r1.addRemoteSink(r3, r2, r4, r5)
+            goto L_0x0674
+        L_0x0614:
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
             boolean r1 = r1.self
-            if (r1 == 0) goto L_0x061f
+            if (r1 == 0) goto L_0x062e
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x063f
+            if (r1 == 0) goto L_0x064e
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
             boolean r2 = r2.presentation
             r1.setLocalSink(r5, r2)
-            goto L_0x063f
-        L_0x061f:
+            goto L_0x064e
+        L_0x062e:
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x063f
-            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
-            boolean r2 = r2.presentation
-            r1.removeRemoteSink(r3, r2)
+            if (r1 == 0) goto L_0x064e
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
             boolean r2 = r2.presentation
             r1.removeRemoteSink(r3, r2)
-        L_0x063f:
+            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
+            boolean r2 = r2.presentation
+            r1.removeRemoteSink(r3, r2)
+        L_0x064e:
             boolean r1 = org.telegram.ui.GroupCallActivity.paused
-            if (r1 == 0) goto L_0x0665
+            if (r1 == 0) goto L_0x0674
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             org.webrtc.TextureViewRenderer r1 = r1.renderer
             boolean r1 = r1.isFirstFrameRendered()
-            if (r1 == 0) goto L_0x0665
+            if (r1 == 0) goto L_0x0674
             r23.saveThumb()
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             org.webrtc.TextureViewRenderer r1 = r1.renderer
@@ -1932,9 +1950,9 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             android.view.TextureView r1 = r1.blurRenderer
             r1.setAlpha(r6)
-        L_0x0665:
+        L_0x0674:
             r0.updateIconColor(r8)
-        L_0x0668:
+        L_0x0677:
             r23.updateInfo()
             return
         */

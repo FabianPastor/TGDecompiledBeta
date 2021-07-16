@@ -1692,7 +1692,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     PhotoViewer.CaptionLinkMovementMethod.this.lambda$onLongClick$0$PhotoViewer$CaptionLinkMovementMethod(this.f$1, dialogInterface, i);
                 }
             });
-            builder.create().show();
+            BottomSheet create = builder.create();
+            create.show();
+            create.setItemColor(0, -1, -1);
+            create.setItemColor(1, -1, -1);
+            create.setBackgroundColor(-14933463);
+            create.setTitleColor(-7697782);
         }
 
         /* access modifiers changed from: private */
@@ -8107,7 +8112,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.sendPopupWindow = r2
             r2.setAnimationEnabled(r3)
             org.telegram.ui.ActionBar.ActionBarPopupWindow r2 = r0.sendPopupWindow
-            r4 = 2131689478(0x7f0var_, float:1.9007973E38)
+            r4 = 2131689481(0x7f0var_, float:1.9007979E38)
             r2.setAnimationStyle(r4)
             org.telegram.ui.ActionBar.ActionBarPopupWindow r2 = r0.sendPopupWindow
             r2.setOutsideTouchable(r5)

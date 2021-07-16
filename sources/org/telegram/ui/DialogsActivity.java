@@ -2232,7 +2232,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return r0;
     }
 
-    /* JADX WARNING: type inference failed for: r12v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r12v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r12v7 */
     /* JADX WARNING: type inference failed for: r12v8 */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x07b1  */
@@ -6525,7 +6525,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v17, resolved type: boolean} */
     /* JADX WARNING: type inference failed for: r15v0 */
-    /* JADX WARNING: type inference failed for: r15v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r15v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r15v11 */
     /* JADX WARNING: type inference failed for: r15v18 */
     /* access modifiers changed from: private */

@@ -532,6 +532,8 @@ public class Theme {
         private Drawable[] shadowDrawable = new Drawable[4];
         private int[] shadowDrawableColor = {-1, -1, -1, -1};
         private int topY;
+        Drawable transitionDrawable;
+        int transitionDrawableColor;
 
         public int getOpacity() {
             return -2;
@@ -855,6 +857,25 @@ public class Theme {
                 return r1
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.MessageDrawable.getBackgroundDrawable():android.graphics.drawable.Drawable");
+        }
+
+        public Drawable getTransitionDrawable(int i) {
+            if (this.transitionDrawable == null) {
+                Bitmap createBitmap = Bitmap.createBitmap(dp(50.0f), dp(40.0f), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(createBitmap);
+                this.backupRect.set(getBounds());
+                Paint paint2 = new Paint(1);
+                paint2.setColor(-1);
+                setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
+                draw(canvas, paint2);
+                this.transitionDrawable = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), (String) null);
+                setBounds(this.backupRect);
+            }
+            if (this.transitionDrawableColor != i) {
+                this.transitionDrawableColor = i;
+                this.transitionDrawable.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+            }
+            return this.transitionDrawable;
         }
 
         public Drawable getShadowDrawable() {
@@ -13497,7 +13518,7 @@ public class Theme {
         }
     }
 
-    public static void createCommonChatResources(Context context) {
+    public static void createCommonChatResources() {
         synchronized (sync) {
             if (chat_msgTextPaint == null) {
                 chat_msgTextPaint = new TextPaint(1);
@@ -13618,7 +13639,7 @@ public class Theme {
     public static void createChatResources(android.content.Context r17, boolean r18) {
         /*
             r0 = r18
-            createCommonChatResources(r17)
+            createCommonChatResources()
             r1 = 1077936128(0x40400000, float:3.0)
             r2 = 1096810496(0x41600000, float:14.0)
             r3 = 2
@@ -15923,6 +15944,7 @@ public class Theme {
 
     static /* synthetic */ void lambda$loadWallpaper$7(Drawable drawable) {
         wallpaperLoadTask = null;
+        createCommonChatResources();
         applyChatServiceMessageColor((int[]) null, (Drawable) null, drawable);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewWallpapper, new Object[0]);
     }

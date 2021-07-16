@@ -317,6 +317,18 @@
     </attr>
     <attr name="userInputValue" format="string">
     </attr>
+    <attr name="widgetBackgroundCornerRadius" format="dimension">
+    </attr>
+    <attr name="widgetPreviewContent" format="string">
+    </attr>
+    <attr name="widgetPreviewDot" format="integer">
+    </attr>
+    <attr name="widgetPreviewImage" format="reference">
+    </attr>
+    <attr name="widgetPreviewTime" format="string">
+    </attr>
+    <attr name="widgetPreviewTitle" format="string">
+    </attr>
     <attr name="windowTransitionStyle">
         <enum name="slide" value="1" />
         <enum name="none" value="2" />

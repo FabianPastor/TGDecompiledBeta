@@ -66,7 +66,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPService;
@@ -2043,164 +2042,407 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
+    /* JADX WARNING: Code restructure failed: missing block: B:27:0x0070, code lost:
+        if (android.text.TextUtils.isEmpty(r0.username) == false) goto L_0x0079;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0243  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x0249  */
+    /* JADX WARNING: Removed duplicated region for block: B:123:0x0284  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x028a  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x02a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x02d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x02f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00b4  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:47:0x00c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x00ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x00f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x01a7  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateItems() {
-        boolean z;
-        String str;
-        int i;
-        TLObject tLObject;
-        ChatObject.Call call2 = this.call;
-        if (call2 == null || call2.isScheduled()) {
-            this.pipItem.setVisibility(4);
-            this.screenShareItem.setVisibility(8);
-            if (this.call == null) {
-                this.otherItem.setVisibility(8);
-                return;
-            }
-        }
-        if (!this.changingPermissions) {
-            TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Integer.valueOf(this.currentChat.id));
-            if (chat != null) {
-                this.currentChat = chat;
-            }
-            boolean z2 = true;
-            if (ChatObject.canUserDoAdminAction(this.currentChat, 3)) {
-                this.inviteItem.setVisibility(0);
-                z = true;
-            } else {
-                this.inviteItem.setVisibility(8);
-                z = false;
-            }
-            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.call.participants.get(MessageObject.getPeerId(this.selfPeer));
-            ChatObject.Call call3 = this.call;
-            if (call3 == null || call3.isScheduled() || (tLRPC$TL_groupCallParticipant != null && !tLRPC$TL_groupCallParticipant.can_self_unmute && tLRPC$TL_groupCallParticipant.muted)) {
-                this.noiseItem.setVisibility(8);
-            } else {
-                this.noiseItem.setVisibility(0);
-                z = true;
-            }
-            this.noiseItem.setIcon(SharedConfig.noiseSupression ? NUM : NUM);
-            ActionBarMenuSubItem actionBarMenuSubItem = this.noiseItem;
-            if (SharedConfig.noiseSupression) {
-                i = NUM;
-                str = "VoipNoiseCancellationEnabled";
-            } else {
-                i = NUM;
-                str = "VoipNoiseCancellationDisabled";
-            }
-            actionBarMenuSubItem.setSubtext(LocaleController.getString(str, i));
-            if (ChatObject.canManageCalls(this.currentChat)) {
-                this.leaveItem.setVisibility(0);
-                this.editTitleItem.setVisibility(0);
-                if (this.call.isScheduled()) {
-                    this.recordItem.setVisibility(8);
-                    this.screenItem.setVisibility(8);
-                } else {
-                    this.recordItem.setVisibility(0);
-                }
-                if (!this.call.canRecordVideo() || this.call.isScheduled() || Build.VERSION.SDK_INT < 21) {
-                    this.screenItem.setVisibility(8);
-                } else {
-                    this.screenItem.setVisibility(0);
-                }
-                this.screenShareItem.setVisibility(8);
-                this.recordCallDrawable.setRecording(this.call.recording);
-                if (this.call.recording) {
-                    if (this.updateCallRecordRunnable == null) {
-                        $$Lambda$GroupCallActivity$SYpmSznsPaUV6Yu8SzC3tSphwmQ r0 = new Runnable() {
-                            public final void run() {
-                                GroupCallActivity.this.lambda$updateItems$4$GroupCallActivity();
-                            }
-                        };
-                        this.updateCallRecordRunnable = r0;
-                        AndroidUtilities.runOnUIThread(r0, 1000);
-                    }
-                    this.recordItem.setText(LocaleController.getString("VoipGroupStopRecordCall", NUM));
-                } else {
-                    Runnable runnable = this.updateCallRecordRunnable;
-                    if (runnable != null) {
-                        AndroidUtilities.cancelRunOnUIThread(runnable);
-                        this.updateCallRecordRunnable = null;
-                    }
-                    this.recordItem.setText(LocaleController.getString("VoipGroupRecordCall", NUM));
-                }
-                if (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getVideoState(true) != 2) {
-                    this.screenItem.setTextAndIcon(LocaleController.getString("VoipChatStartScreenCapture", NUM), NUM);
-                } else {
-                    this.screenItem.setTextAndIcon(LocaleController.getString("VoipChatStopScreenCapture", NUM), NUM);
-                }
-                updateRecordCallText();
-                z = true;
-            } else {
-                boolean z3 = tLRPC$TL_groupCallParticipant != null && !tLRPC$TL_groupCallParticipant.can_self_unmute && tLRPC$TL_groupCallParticipant.muted && !ChatObject.canManageCalls(this.currentChat);
-                boolean z4 = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().getVideoState(true) == 2;
-                if (Build.VERSION.SDK_INT < 21 || z3 || (!this.call.canRecordVideo() && !z4)) {
-                    this.screenShareItem.setVisibility(8);
-                    this.screenItem.setVisibility(8);
-                } else {
-                    if (z4) {
-                        this.screenShareItem.setVisibility(8);
-                        this.screenItem.setVisibility(0);
-                        this.screenItem.setTextAndIcon(LocaleController.getString("VoipChatStopScreenCapture", NUM), NUM);
-                        this.screenItem.setContentDescription(LocaleController.getString("VoipChatStopScreenCapture", NUM));
-                    } else {
-                        this.screenItem.setTextAndIcon(LocaleController.getString("VoipChatStartScreenCapture", NUM), NUM);
-                        this.screenItem.setContentDescription(LocaleController.getString("VoipChatStartScreenCapture", NUM));
-                        this.screenShareItem.setVisibility(8);
-                        this.screenItem.setVisibility(0);
-                    }
-                    z = true;
-                }
-                this.leaveItem.setVisibility(8);
-                this.editTitleItem.setVisibility(8);
-                this.recordItem.setVisibility(8);
-            }
-            if (!ChatObject.canManageCalls(this.currentChat) || !this.call.call.can_change_join_muted) {
-                this.permissionItem.setVisibility(8);
-            } else {
-                this.permissionItem.setVisibility(0);
-                z = true;
-            }
-            if (this.soundButton.getVisibility() != 0) {
-                this.soundItem.setVisibility(0);
-                this.soundItemDivider.setVisibility(0);
-                z = true;
-            } else {
-                this.soundItem.setVisibility(8);
-                this.soundItemDivider.setVisibility(8);
-            }
-            if ((VoIPService.getSharedInstance() == null || !VoIPService.getSharedInstance().hasFewPeers) && !this.scheduleHasFewPeers) {
-                this.accountSelectCell.setVisibility(8);
-                this.accountGap.setVisibility(8);
-                z2 = z;
-            } else {
-                this.accountSelectCell.setVisibility(0);
-                if (z) {
-                    this.accountGap.setVisibility(0);
-                } else {
-                    this.accountGap.setVisibility(8);
-                }
-                int peerId = MessageObject.getPeerId(this.selfPeer);
-                if (peerId > 0) {
-                    tLObject = this.accountInstance.getMessagesController().getUser(Integer.valueOf(peerId));
-                } else {
-                    tLObject = this.accountInstance.getMessagesController().getChat(Integer.valueOf(-peerId));
-                }
-                this.accountSelectCell.setObject(tLObject);
-            }
-            if (z2) {
-                this.otherItem.setVisibility(0);
-            } else {
-                this.otherItem.setVisibility(8);
-            }
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.titleTextView.getLayoutParams();
-            float f = (float) 96;
-            if (layoutParams.rightMargin != AndroidUtilities.dp(f)) {
-                layoutParams.rightMargin = AndroidUtilities.dp(f);
-                this.titleTextView.requestLayout();
-            }
-            ((FrameLayout.LayoutParams) this.menuItemsContainer.getLayoutParams()).rightMargin = 0;
-            this.actionBar.setTitleRightMargin(AndroidUtilities.dp(48.0f) * 2);
-        }
+        /*
+            r15 = this;
+            org.telegram.messenger.ChatObject$Call r0 = r15.call
+            r1 = 8
+            if (r0 == 0) goto L_0x000c
+            boolean r0 = r0.isScheduled()
+            if (r0 == 0) goto L_0x0021
+        L_0x000c:
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r15.pipItem
+            r2 = 4
+            r0.setVisibility(r2)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r15.screenShareItem
+            r0.setVisibility(r1)
+            org.telegram.messenger.ChatObject$Call r0 = r15.call
+            if (r0 != 0) goto L_0x0021
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r15.otherItem
+            r0.setVisibility(r1)
+            return
+        L_0x0021:
+            boolean r0 = r15.changingPermissions
+            if (r0 == 0) goto L_0x0026
+            return
+        L_0x0026:
+            org.telegram.messenger.AccountInstance r0 = r15.accountInstance
+            org.telegram.messenger.MessagesController r0 = r0.getMessagesController()
+            org.telegram.tgnet.TLRPC$Chat r2 = r15.currentChat
+            int r2 = r2.id
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r2)
+            if (r0 == 0) goto L_0x003c
+            r15.currentChat = r0
+        L_0x003c:
+            org.telegram.tgnet.TLRPC$Chat r0 = r15.currentChat
+            r2 = 3
+            boolean r0 = org.telegram.messenger.ChatObject.canUserDoAdminAction(r0, r2)
+            r2 = 0
+            if (r0 != 0) goto L_0x0079
+            org.telegram.tgnet.TLRPC$Chat r0 = r15.currentChat
+            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r0)
+            if (r0 == 0) goto L_0x0054
+            org.telegram.tgnet.TLRPC$Chat r0 = r15.currentChat
+            boolean r0 = r0.megagroup
+            if (r0 == 0) goto L_0x005c
+        L_0x0054:
+            org.telegram.tgnet.TLRPC$Chat r0 = r15.currentChat
+            boolean r0 = org.telegram.messenger.ChatObject.canWriteToChat(r0)
+            if (r0 != 0) goto L_0x0079
+        L_0x005c:
+            org.telegram.tgnet.TLRPC$Chat r0 = r15.currentChat
+            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r0)
+            if (r0 == 0) goto L_0x0073
+            org.telegram.tgnet.TLRPC$Chat r0 = r15.currentChat
+            boolean r3 = r0.megagroup
+            if (r3 != 0) goto L_0x0073
+            java.lang.String r0 = r0.username
+            boolean r0 = android.text.TextUtils.isEmpty(r0)
+            if (r0 != 0) goto L_0x0073
+            goto L_0x0079
+        L_0x0073:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.inviteItem
+            r0.setVisibility(r1)
+            goto L_0x007e
+        L_0x0079:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.inviteItem
+            r0.setVisibility(r2)
+        L_0x007e:
+            org.telegram.messenger.ChatObject$Call r0 = r15.call
+            android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r0 = r0.participants
+            org.telegram.tgnet.TLRPC$Peer r3 = r15.selfPeer
+            int r3 = org.telegram.messenger.MessageObject.getPeerId(r3)
+            java.lang.Object r0 = r0.get(r3)
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r0 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r0
+            org.telegram.messenger.ChatObject$Call r3 = r15.call
+            if (r3 == 0) goto L_0x00a9
+            boolean r3 = r3.isScheduled()
+            if (r3 != 0) goto L_0x00a9
+            if (r0 == 0) goto L_0x00a3
+            boolean r3 = r0.can_self_unmute
+            if (r3 != 0) goto L_0x00a3
+            boolean r3 = r0.muted
+            if (r3 == 0) goto L_0x00a3
+            goto L_0x00a9
+        L_0x00a3:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r15.noiseItem
+            r3.setVisibility(r2)
+            goto L_0x00ae
+        L_0x00a9:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r15.noiseItem
+            r3.setVisibility(r1)
+        L_0x00ae:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r15.noiseItem
+            boolean r4 = org.telegram.messenger.SharedConfig.noiseSupression
+            if (r4 == 0) goto L_0x00b8
+            r4 = 2131165776(0x7var_, float:1.7945779E38)
+            goto L_0x00bb
+        L_0x00b8:
+            r4 = 2131165775(0x7var_f, float:1.7945777E38)
+        L_0x00bb:
+            r3.setIcon(r4)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r15.noiseItem
+            boolean r4 = org.telegram.messenger.SharedConfig.noiseSupression
+            if (r4 == 0) goto L_0x00ca
+            r4 = 2131628244(0x7f0e10d4, float:1.8883775E38)
+            java.lang.String r5 = "VoipNoiseCancellationEnabled"
+            goto L_0x00cf
+        L_0x00ca:
+            r4 = 2131628243(0x7f0e10d3, float:1.8883773E38)
+            java.lang.String r5 = "VoipNoiseCancellationDisabled"
+        L_0x00cf:
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r3.setSubtext(r4)
+            org.telegram.tgnet.TLRPC$Chat r3 = r15.currentChat
+            boolean r3 = org.telegram.messenger.ChatObject.canManageCalls(r3)
+            r4 = 2131165815(0x7var_, float:1.7945858E38)
+            r5 = 2131165814(0x7var_, float:1.7945856E38)
+            r6 = 21
+            r7 = 2131628110(0x7f0e104e, float:1.8883503E38)
+            java.lang.String r8 = "VoipChatStopScreenCapture"
+            r9 = 2131628108(0x7f0e104c, float:1.88835E38)
+            java.lang.String r10 = "VoipChatStartScreenCapture"
+            r11 = 2
+            r12 = 1
+            if (r3 == 0) goto L_0x01a7
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.leaveItem
+            r0.setVisibility(r2)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.editTitleItem
+            r0.setVisibility(r2)
+            org.telegram.messenger.ChatObject$Call r0 = r15.call
+            boolean r0 = r0.isScheduled()
+            if (r0 == 0) goto L_0x010f
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.recordItem
+            r0.setVisibility(r1)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            r0.setVisibility(r1)
+            goto L_0x0114
+        L_0x010f:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.recordItem
+            r0.setVisibility(r2)
+        L_0x0114:
+            org.telegram.messenger.ChatObject$Call r0 = r15.call
+            boolean r0 = r0.canRecordVideo()
+            if (r0 == 0) goto L_0x012f
+            org.telegram.messenger.ChatObject$Call r0 = r15.call
+            boolean r0 = r0.isScheduled()
+            if (r0 != 0) goto L_0x012f
+            int r0 = android.os.Build.VERSION.SDK_INT
+            if (r0 >= r6) goto L_0x0129
+            goto L_0x012f
+        L_0x0129:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            r0.setVisibility(r2)
+            goto L_0x0134
+        L_0x012f:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            r0.setVisibility(r1)
+        L_0x0134:
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r15.screenShareItem
+            r0.setVisibility(r1)
+            org.telegram.ui.GroupCallActivity$RecordCallDrawable r0 = r15.recordCallDrawable
+            org.telegram.messenger.ChatObject$Call r3 = r15.call
+            boolean r3 = r3.recording
+            r0.setRecording(r3)
+            org.telegram.messenger.ChatObject$Call r0 = r15.call
+            boolean r0 = r0.recording
+            if (r0 == 0) goto L_0x0167
+            java.lang.Runnable r0 = r15.updateCallRecordRunnable
+            if (r0 != 0) goto L_0x0158
+            org.telegram.ui.-$$Lambda$GroupCallActivity$SYpmSznsPaUV6Yu8SzC3tSphwmQ r0 = new org.telegram.ui.-$$Lambda$GroupCallActivity$SYpmSznsPaUV6Yu8SzC3tSphwmQ
+            r0.<init>()
+            r15.updateCallRecordRunnable = r0
+            r13 = 1000(0x3e8, double:4.94E-321)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r13)
+        L_0x0158:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.recordItem
+            r3 = 2131628207(0x7f0e10af, float:1.88837E38)
+            java.lang.String r6 = "VoipGroupStopRecordCall"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
+            r0.setText(r3)
+            goto L_0x017f
+        L_0x0167:
+            java.lang.Runnable r0 = r15.updateCallRecordRunnable
+            if (r0 == 0) goto L_0x0171
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
+            r0 = 0
+            r15.updateCallRecordRunnable = r0
+        L_0x0171:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.recordItem
+            r3 = 2131628184(0x7f0e1098, float:1.8883654E38)
+            java.lang.String r6 = "VoipGroupRecordCall"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
+            r0.setText(r3)
+        L_0x017f:
+            org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            if (r0 == 0) goto L_0x0199
+            org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            int r0 = r0.getVideoState(r12)
+            if (r0 != r11) goto L_0x0199
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r0.setTextAndIcon(r3, r4)
+            goto L_0x01a2
+        L_0x0199:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r0.setTextAndIcon(r3, r5)
+        L_0x01a2:
+            r15.updateRecordCallText()
+            goto L_0x0233
+        L_0x01a7:
+            if (r0 == 0) goto L_0x01bb
+            boolean r3 = r0.can_self_unmute
+            if (r3 != 0) goto L_0x01bb
+            boolean r0 = r0.muted
+            if (r0 == 0) goto L_0x01bb
+            org.telegram.tgnet.TLRPC$Chat r0 = r15.currentChat
+            boolean r0 = org.telegram.messenger.ChatObject.canManageCalls(r0)
+            if (r0 != 0) goto L_0x01bb
+            r0 = 1
+            goto L_0x01bc
+        L_0x01bb:
+            r0 = 0
+        L_0x01bc:
+            org.telegram.messenger.voip.VoIPService r3 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            if (r3 == 0) goto L_0x01cd
+            org.telegram.messenger.voip.VoIPService r3 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            int r3 = r3.getVideoState(r12)
+            if (r3 != r11) goto L_0x01cd
+            goto L_0x01ce
+        L_0x01cd:
+            r12 = 0
+        L_0x01ce:
+            int r3 = android.os.Build.VERSION.SDK_INT
+            if (r3 < r6) goto L_0x021a
+            if (r0 != 0) goto L_0x021a
+            org.telegram.messenger.ChatObject$Call r0 = r15.call
+            boolean r0 = r0.canRecordVideo()
+            if (r0 != 0) goto L_0x01de
+            if (r12 == 0) goto L_0x021a
+        L_0x01de:
+            if (r12 == 0) goto L_0x01fd
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r15.screenShareItem
+            r0.setVisibility(r1)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            r0.setVisibility(r2)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r0.setTextAndIcon(r3, r4)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r0.setContentDescription(r3)
+            goto L_0x0224
+        L_0x01fd:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r0.setTextAndIcon(r3, r5)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r0.setContentDescription(r3)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r15.screenShareItem
+            r0.setVisibility(r1)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            r0.setVisibility(r2)
+            goto L_0x0224
+        L_0x021a:
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r15.screenShareItem
+            r0.setVisibility(r1)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            r0.setVisibility(r1)
+        L_0x0224:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.leaveItem
+            r0.setVisibility(r1)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.editTitleItem
+            r0.setVisibility(r1)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.recordItem
+            r0.setVisibility(r1)
+        L_0x0233:
+            org.telegram.tgnet.TLRPC$Chat r0 = r15.currentChat
+            boolean r0 = org.telegram.messenger.ChatObject.canManageCalls(r0)
+            if (r0 == 0) goto L_0x0249
+            org.telegram.messenger.ChatObject$Call r0 = r15.call
+            org.telegram.tgnet.TLRPC$GroupCall r0 = r0.call
+            boolean r0 = r0.can_change_join_muted
+            if (r0 == 0) goto L_0x0249
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.permissionItem
+            r0.setVisibility(r2)
+            goto L_0x024e
+        L_0x0249:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.permissionItem
+            r0.setVisibility(r1)
+        L_0x024e:
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.soundItem
+            r0.setVisibility(r2)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.editTitleItem
+            int r0 = r0.getVisibility()
+            if (r0 == 0) goto L_0x028a
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.permissionItem
+            int r0 = r0.getVisibility()
+            if (r0 == 0) goto L_0x028a
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.inviteItem
+            int r0 = r0.getVisibility()
+            if (r0 == 0) goto L_0x028a
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.screenItem
+            int r0 = r0.getVisibility()
+            if (r0 == 0) goto L_0x028a
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.recordItem
+            int r0 = r0.getVisibility()
+            if (r0 == 0) goto L_0x028a
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.leaveItem
+            int r0 = r0.getVisibility()
+            if (r0 != 0) goto L_0x0284
+            goto L_0x028a
+        L_0x0284:
+            android.view.View r0 = r15.soundItemDivider
+            r0.setVisibility(r1)
+            goto L_0x028f
+        L_0x028a:
+            android.view.View r0 = r15.soundItemDivider
+            r0.setVisibility(r2)
+        L_0x028f:
+            org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            if (r0 == 0) goto L_0x029d
+            org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            boolean r0 = r0.hasFewPeers
+            if (r0 != 0) goto L_0x02a1
+        L_0x029d:
+            boolean r0 = r15.scheduleHasFewPeers
+            if (r0 == 0) goto L_0x02d7
+        L_0x02a1:
+            org.telegram.ui.Cells.AccountSelectCell r0 = r15.accountSelectCell
+            r0.setVisibility(r2)
+            android.view.View r0 = r15.accountGap
+            r0.setVisibility(r2)
+            org.telegram.tgnet.TLRPC$Peer r0 = r15.selfPeer
+            int r0 = org.telegram.messenger.MessageObject.getPeerId(r0)
+            if (r0 <= 0) goto L_0x02c2
+            org.telegram.messenger.AccountInstance r1 = r15.accountInstance
+            org.telegram.messenger.MessagesController r1 = r1.getMessagesController()
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+            org.telegram.tgnet.TLRPC$User r0 = r1.getUser(r0)
+            goto L_0x02d1
+        L_0x02c2:
+            org.telegram.messenger.AccountInstance r1 = r15.accountInstance
+            org.telegram.messenger.MessagesController r1 = r1.getMessagesController()
+            int r0 = -r0
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+            org.telegram.tgnet.TLRPC$Chat r0 = r1.getChat(r0)
+        L_0x02d1:
+            org.telegram.ui.Cells.AccountSelectCell r1 = r15.accountSelectCell
+            r1.setObject(r0)
+            goto L_0x02e1
+        L_0x02d7:
+            org.telegram.ui.Cells.AccountSelectCell r0 = r15.accountSelectCell
+            r0.setVisibility(r1)
+            android.view.View r0 = r15.accountGap
+            r0.setVisibility(r1)
+        L_0x02e1:
+            r0 = 96
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r15.otherItem
+            r1.setVisibility(r2)
+            org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r1 = r15.titleTextView
+            android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
+            int r3 = r1.rightMargin
+            float r0 = (float) r0
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            if (r3 == r4) goto L_0x0304
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            r1.rightMargin = r0
+            org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r0 = r15.titleTextView
+            r0.requestLayout()
+        L_0x0304:
+            android.widget.LinearLayout r0 = r15.menuItemsContainer
+            android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r0 = (android.widget.FrameLayout.LayoutParams) r0
+            r0.rightMargin = r2
+            org.telegram.ui.ActionBar.ActionBar r0 = r15.actionBar
+            r1 = 1111490560(0x42400000, float:48.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = r1 * 2
+            r0.setTitleRightMargin(r1)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCallActivity.updateItems():void");
     }
 
     /* access modifiers changed from: private */
@@ -4219,10 +4461,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             this.changingPermissions = false;
             this.otherItem.hideSubItem(1);
             this.otherItem.hideSubItem(2);
-            if (VoIPService.getSharedInstance() == null || this.soundButton.getVisibility() == 0 || (!VoIPService.getSharedInstance().hasEarpiece() && !VoIPService.getSharedInstance().isBluetoothHeadsetConnected())) {
-                this.soundItem.setVisibility(8);
-            } else {
-                this.soundItem.setVisibility(0);
+            if (VoIPService.getSharedInstance() != null && (VoIPService.getSharedInstance().hasEarpiece() || VoIPService.getSharedInstance().isBluetoothHeadsetConnected())) {
                 int currentAudioRoute = VoIPService.getSharedInstance().getCurrentAudioRoute();
                 if (currentAudioRoute == 2) {
                     this.soundItem.setIcon(NUM);
@@ -7390,7 +7629,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             android.content.Context r2 = r27.getContext()
             r3 = 0
             r4 = 0
-            r5 = 2131689504(0x7f0var_, float:1.9008025E38)
+            r5 = 2131689517(0x7f0var_d, float:1.9008052E38)
             r0 = r17
             r1 = r27
             r6 = r15
@@ -7929,7 +8168,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBarPopupWindow r4 = r7.scrimPopupWindow
             r4.setClippingEnabled(r3)
             org.telegram.ui.ActionBar.ActionBarPopupWindow r4 = r7.scrimPopupWindow
-            r6 = 2131689477(0x7f0var_, float:1.900797E38)
+            r6 = 2131689480(0x7f0var_, float:1.9007977E38)
             r4.setAnimationStyle(r6)
             org.telegram.ui.ActionBar.ActionBarPopupWindow r4 = r7.scrimPopupWindow
             r4.setFocusable(r3)

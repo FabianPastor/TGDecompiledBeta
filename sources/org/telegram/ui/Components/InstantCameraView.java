@@ -132,6 +132,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public float[] mMVPMatrix;
     /* access modifiers changed from: private */
     public float[] mSTMatrix;
+    boolean maybePinchToZoomTouchMode;
     /* access modifiers changed from: private */
     public float[] moldSTMatrix;
     /* access modifiers changed from: private */
@@ -3273,19 +3274,19 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.muteAnimation.start();
             }
             if (motionEvent.getActionMasked() == 0 || motionEvent.getActionMasked() == 5) {
-                if (!this.isInPinchToZoomTouchMode && motionEvent.getPointerCount() == 2 && this.finishZoomTransition == null && this.recording) {
+                if (this.maybePinchToZoomTouchMode && !this.isInPinchToZoomTouchMode && motionEvent.getPointerCount() == 2 && this.finishZoomTransition == null && this.recording) {
                     this.pinchStartDistance = (float) Math.hypot((double) (motionEvent.getX(1) - motionEvent.getX(0)), (double) (motionEvent.getY(1) - motionEvent.getY(0)));
                     this.pinchScale = 1.0f;
                     this.pointerId1 = motionEvent.getPointerId(0);
                     this.pointerId2 = motionEvent.getPointerId(1);
                     this.isInPinchToZoomTouchMode = true;
                 }
-                if (motionEvent.getActionMasked() != 0) {
-                    return true;
+                if (motionEvent.getActionMasked() == 0) {
+                    RectF rectF = AndroidUtilities.rectTmp;
+                    rectF.set(this.cameraContainer.getX(), this.cameraContainer.getY(), this.cameraContainer.getX() + ((float) this.cameraContainer.getMeasuredWidth()), this.cameraContainer.getY() + ((float) this.cameraContainer.getMeasuredHeight()));
+                    this.maybePinchToZoomTouchMode = rectF.contains(motionEvent.getX(), motionEvent.getY());
                 }
-                RectF rectF = AndroidUtilities.rectTmp;
-                rectF.set(this.cameraContainer.getX(), this.cameraContainer.getY(), this.cameraContainer.getX() + ((float) this.cameraContainer.getMeasuredWidth()), this.cameraContainer.getY() + ((float) this.cameraContainer.getMeasuredHeight()));
-                return rectF.contains(motionEvent.getX(), motionEvent.getY());
+                return true;
             }
             if (motionEvent.getActionMasked() == 2 && this.isInPinchToZoomTouchMode) {
                 int i = -1;
@@ -3310,7 +3311,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.isInPinchToZoomTouchMode = false;
                 finishZoom();
             }
-            return this.isInPinchToZoomTouchMode;
+            return true;
         }
 
         public void finishZoom() {

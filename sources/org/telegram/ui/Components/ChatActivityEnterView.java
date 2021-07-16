@@ -66,6 +66,7 @@ import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.customview.widget.ExploreByTouchHelper;
+import androidx.recyclerview.widget.ChatListItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -5143,8 +5144,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                 NotificationCenter.getInstance(ChatActivityEnterView.this.currentAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
                             }
                         });
-                        this.currentTopViewAnimation.setDuration(250);
-                        this.currentTopViewAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                        this.currentTopViewAnimation.setDuration(270);
+                        this.currentTopViewAnimation.setInterpolator(ChatListItemAnimator.DEFAULT_INTERPOLATOR);
                         this.currentTopViewAnimation.start();
                         this.notificationsIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
                     } else {
@@ -5286,9 +5287,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             }
                         }
                     });
-                    this.currentTopViewAnimation.setDuration(220);
-                    this.currentTopViewAnimation.setStartDelay(50);
-                    this.currentTopViewAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                    this.currentTopViewAnimation.setDuration(250);
+                    this.currentTopViewAnimation.setInterpolator(ChatListItemAnimator.DEFAULT_INTERPOLATOR);
                     this.currentTopViewAnimation.start();
                     return;
                 }
@@ -5863,7 +5863,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
                 if (processSendingText(text, z3, i3)) {
-                    if (this.delegate.hasForwardingMessages()) {
+                    if (this.delegate.hasForwardingMessages() || ((i3 != 0 && !isInScheduleMode()) || isInScheduleMode())) {
                         this.messageEditText.setText("");
                         ChatActivityEnterViewDelegate chatActivityEnterViewDelegate3 = this.delegate;
                         if (chatActivityEnterViewDelegate3 != null) {
@@ -5906,6 +5906,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* renamed from: lambda$sendMessageInternal$28 */
     public /* synthetic */ void lambda$sendMessageInternal$28$ChatActivityEnterView(CharSequence charSequence, boolean z, int i) {
         this.moveToSendStateRunnable = null;
+        hideTopView(true);
         this.messageEditText.setText("");
         ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
         if (chatActivityEnterViewDelegate != null) {

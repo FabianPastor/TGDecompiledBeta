@@ -338,7 +338,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             return
         L_0x00ef:
             r14.requestWindowFeature(r2)
-            r1 = 2131689484(0x7f0var_c, float:1.9007985E38)
+            r1 = 2131689489(0x7f0var_, float:1.9007995E38)
             r14.setTheme(r1)
             int r1 = android.os.Build.VERSION.SDK_INT
             r4 = 0
@@ -380,7 +380,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             boolean r7 = r14.isInMultiWindowMode()
             org.telegram.messenger.AndroidUtilities.isInMultiwindow = r7
         L_0x014c:
-            org.telegram.ui.ActionBar.Theme.createCommonChatResources(r14)
+            org.telegram.ui.ActionBar.Theme.createCommonChatResources()
             org.telegram.ui.ActionBar.Theme.createDialogsResources(r14)
             java.lang.String r7 = org.telegram.messenger.SharedConfig.passcodeHash
             int r7 = r7.length()
@@ -2546,7 +2546,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v72, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v149, resolved type: java.lang.String} */
     /* JADX WARNING: type inference failed for: r3v1, types: [android.os.Bundle, java.lang.String] */
-    /* JADX WARNING: type inference failed for: r2v6, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r2v6, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r3v5 */
     /* JADX WARNING: type inference failed for: r2v19 */
     /* JADX WARNING: type inference failed for: r2v21 */
@@ -6336,7 +6336,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1 = 6
             if (r8 != r1) goto L_0x1CLASSNAME
             org.telegram.ui.EditWidgetActivity r3 = new org.telegram.ui.EditWidgetActivity
-            r3.<init>(r4, r0, r2)
+            r3.<init>(r4, r0)
             r13 = r3
             r0 = 0
             goto L_0x1CLASSNAME

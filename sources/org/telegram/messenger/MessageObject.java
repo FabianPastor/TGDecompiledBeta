@@ -1,6 +1,5 @@
 package org.telegram.messenger;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -1704,9 +1703,9 @@ public class MessageObject {
     }
 
     public MessageObject(int i, TLRPC$Message tLRPC$Message, MessageObject messageObject, AbstractMap<Integer, TLRPC$User> abstractMap, AbstractMap<Integer, TLRPC$Chat> abstractMap2, SparseArray<TLRPC$User> sparseArray, SparseArray<TLRPC$Chat> sparseArray2, boolean z, boolean z2, long j) {
-        TLRPC$User tLRPC$User;
         SparseArray<TLRPC$Chat> sparseArray3;
         AbstractMap<Integer, TLRPC$Chat> abstractMap3;
+        TLRPC$User tLRPC$User;
         TextPaint textPaint;
         int i2;
         TLRPC$Message tLRPC$Message2 = tLRPC$Message;
@@ -1715,7 +1714,7 @@ public class MessageObject {
         boolean z3 = z;
         this.type = 1000;
         this.forceSeekTo = -1.0f;
-        Theme.createCommonChatResources((Context) null);
+        Theme.createCommonChatResources();
         this.currentAccount = i;
         this.messageOwner = tLRPC$Message2;
         this.replyMessageObject = messageObject;
@@ -5196,7 +5195,7 @@ public class MessageObject {
             this.wantedBotKeyboardWidth = 0;
             TLRPC$Message tLRPC$Message = this.messageOwner;
             if ((tLRPC$Message.reply_markup instanceof TLRPC$TL_replyInlineMarkup) || ((tLRPC$TL_messageReactions = tLRPC$Message.reactions) != null && !tLRPC$TL_messageReactions.results.isEmpty())) {
-                Theme.createCommonChatResources((Context) null);
+                Theme.createCommonChatResources();
                 StringBuilder sb = this.botButtonsLayout;
                 if (sb == null) {
                     this.botButtonsLayout = new StringBuilder();

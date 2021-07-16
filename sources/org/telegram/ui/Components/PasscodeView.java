@@ -72,6 +72,7 @@ public class PasscodeView extends FrameLayout {
     private ImageView eraseView;
     /* access modifiers changed from: private */
     public AlertDialog fingerprintDialog;
+    private ImageView fingerprintImage;
     private ImageView fingerprintImageView;
     private TextView fingerprintStatusTextView;
     private ImageView fingerprintView;
@@ -98,7 +99,8 @@ public class PasscodeView extends FrameLayout {
     /* access modifiers changed from: private */
     public int[] pos = new int[2];
     private Rect rect = new Rect();
-    private TextView retryTextView;
+    /* access modifiers changed from: private */
+    public TextView retryTextView;
     /* access modifiers changed from: private */
     public boolean selfCancelled;
 
@@ -106,7 +108,7 @@ public class PasscodeView extends FrameLayout {
         void didAcceptedPassword();
     }
 
-    static /* synthetic */ boolean lambda$onShow$7(View view, MotionEvent motionEvent) {
+    static /* synthetic */ boolean lambda$onShow$8(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -483,6 +485,7 @@ public class PasscodeView extends FrameLayout {
         this.passwordFrameLayout.addView(animatingTextView, LayoutHelper.createFrame(-1, -2.0f, 81, 70.0f, 0.0f, 70.0f, 6.0f));
         EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
         this.passwordEditText = editTextBoldCursor;
+        float f = 36.0f;
         editTextBoldCursor.setTextSize(1, 36.0f);
         this.passwordEditText.setTextColor(-1);
         this.passwordEditText.setMaxLines(1);
@@ -501,10 +504,18 @@ public class PasscodeView extends FrameLayout {
             }
         });
         this.passwordEditText.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
 
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                if (!(PasscodeView.this.backgroundDrawable instanceof MotionBackgroundDrawable)) {
+                    return;
+                }
+                if (i2 == 0 && i3 == 1) {
+                    ((MotionBackgroundDrawable) PasscodeView.this.backgroundDrawable).switchToNextPosition(true);
+                } else if (i2 == 1 && i3 == 0) {
+                    ((MotionBackgroundDrawable) PasscodeView.this.backgroundDrawable).switchToPrevPosition(true);
+                }
             }
 
             public void afterTextChanged(Editable editable) {
@@ -541,6 +552,18 @@ public class PasscodeView extends FrameLayout {
                 PasscodeView.this.lambda$new$1$PasscodeView(view);
             }
         });
+        ImageView imageView3 = new ImageView(context2);
+        this.fingerprintImage = imageView3;
+        imageView3.setImageResource(NUM);
+        this.fingerprintImage.setScaleType(ImageView.ScaleType.CENTER);
+        this.fingerprintImage.setBackgroundResource(NUM);
+        this.passwordFrameLayout.addView(this.fingerprintImage, LayoutHelper.createFrame(60, 60.0f, 83, 10.0f, 0.0f, 0.0f, 4.0f));
+        this.fingerprintImage.setContentDescription(LocaleController.getString("AccDescrFingerprint", NUM));
+        this.fingerprintImage.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                PasscodeView.this.lambda$new$2$PasscodeView(view);
+            }
+        });
         FrameLayout frameLayout2 = new FrameLayout(context2);
         frameLayout2.setBackgroundColor(NUM);
         this.passwordFrameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, 1.0f, 83, 20.0f, 0.0f, 20.0f, 0.0f));
@@ -551,10 +574,10 @@ public class PasscodeView extends FrameLayout {
         this.numberTextViews = new ArrayList<>(10);
         this.numberFrameLayouts = new ArrayList<>(10);
         int i2 = 0;
-        while (i2 < 10) {
+        for (int i3 = 10; i2 < i3; i3 = 10) {
             TextView textView3 = new TextView(context2);
             textView3.setTextColor(i);
-            textView3.setTextSize(1, 36.0f);
+            textView3.setTextSize(1, f);
             textView3.setGravity(17);
             Locale locale = Locale.US;
             Object[] objArr = new Object[1];
@@ -603,22 +626,23 @@ public class PasscodeView extends FrameLayout {
             i2++;
             c = 0;
             i = -1;
+            f = 36.0f;
         }
-        ImageView imageView3 = new ImageView(context2);
-        this.eraseView = imageView3;
-        imageView3.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView4 = new ImageView(context2);
+        this.eraseView = imageView4;
+        imageView4.setScaleType(ImageView.ScaleType.CENTER);
         this.eraseView.setImageResource(NUM);
         this.numbersFrameLayout.addView(this.eraseView, LayoutHelper.createFrame(50, 50, 51));
-        ImageView imageView4 = new ImageView(context2);
-        this.fingerprintView = imageView4;
-        imageView4.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView5 = new ImageView(context2);
+        this.fingerprintView = imageView5;
+        imageView5.setScaleType(ImageView.ScaleType.CENTER);
         this.fingerprintView.setImageResource(NUM);
         this.fingerprintView.setVisibility(8);
         this.numbersFrameLayout.addView(this.fingerprintView, LayoutHelper.createFrame(50, 50, 51));
         checkFingerprintButton();
-        int i3 = 0;
+        int i4 = 0;
         while (true) {
-            if (i3 < 12) {
+            if (i4 < 12) {
                 AnonymousClass4 r3 = new FrameLayout(context2) {
                     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
@@ -626,41 +650,41 @@ public class PasscodeView extends FrameLayout {
                     }
                 };
                 r3.setBackgroundResource(NUM);
-                r3.setTag(Integer.valueOf(i3));
-                if (i3 == 11) {
+                r3.setTag(Integer.valueOf(i4));
+                if (i4 == 11) {
                     r3.setContentDescription(LocaleController.getString("AccDescrFingerprint", NUM));
                     setNextFocus(r3, NUM);
-                } else if (i3 == 10) {
+                } else if (i4 == 10) {
                     r3.setOnLongClickListener(new View.OnLongClickListener() {
                         public final boolean onLongClick(View view) {
-                            return PasscodeView.this.lambda$new$2$PasscodeView(view);
+                            return PasscodeView.this.lambda$new$3$PasscodeView(view);
                         }
                     });
                     r3.setContentDescription(LocaleController.getString("AccDescrBackspace", NUM));
                     setNextFocus(r3, NUM);
                 } else {
-                    r3.setContentDescription(i3 + "");
-                    if (i3 == 0) {
+                    r3.setContentDescription(i4 + "");
+                    if (i4 == 0) {
                         setNextFocus(r3, NUM);
-                    } else if (i3 != 9) {
-                        setNextFocus(r3, ids[i3 + 1]);
+                    } else if (i4 != 9) {
+                        setNextFocus(r3, ids[i4 + 1]);
                     } else if (this.fingerprintView.getVisibility() == 0) {
                         setNextFocus(r3, NUM);
                     } else {
                         setNextFocus(r3, NUM);
                     }
                 }
-                r3.setId(ids[i3]);
+                r3.setId(ids[i4]);
                 r3.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
-                        PasscodeView.this.lambda$new$3$PasscodeView(view);
+                        PasscodeView.this.lambda$new$4$PasscodeView(view);
                     }
                 });
                 this.numberFrameLayouts.add(r3);
-                i3++;
+                i4++;
             } else {
-                for (int i4 = 11; i4 >= 0; i4--) {
-                    this.numbersFrameLayout.addView(this.numberFrameLayouts.get(i4), LayoutHelper.createFrame(100, 100, 51));
+                for (int i5 = 11; i5 >= 0; i5--) {
+                    this.numbersFrameLayout.addView(this.numberFrameLayouts.get(i5), LayoutHelper.createFrame(100, 100, 51));
                 }
                 return;
             }
@@ -685,7 +709,13 @@ public class PasscodeView extends FrameLayout {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$2 */
-    public /* synthetic */ boolean lambda$new$2$PasscodeView(View view) {
+    public /* synthetic */ void lambda$new$2$PasscodeView(View view) {
+        checkFingerprint();
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$3 */
+    public /* synthetic */ boolean lambda$new$3$PasscodeView(View view) {
         this.passwordEditText.setText("");
         this.passwordEditText2.eraseAllCharacters(true);
         Drawable drawable = this.backgroundDrawable;
@@ -696,8 +726,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$PasscodeView(View view) {
+    /* renamed from: lambda$new$4 */
+    public /* synthetic */ void lambda$new$4$PasscodeView(View view) {
         boolean z;
         int intValue = ((Integer) view.getTag()).intValue();
         switch (intValue) {
@@ -816,14 +846,14 @@ public class PasscodeView extends FrameLayout {
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                PasscodeView.this.lambda$processDone$4$PasscodeView();
+                PasscodeView.this.lambda$processDone$5$PasscodeView();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processDone$4 */
-    public /* synthetic */ void lambda$processDone$4$PasscodeView() {
+    /* renamed from: lambda$processDone$5 */
+    public /* synthetic */ void lambda$processDone$5$PasscodeView() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setDuration(200);
         animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(20.0f)}), ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{(float) AndroidUtilities.dp(0.0f)})});
@@ -918,7 +948,7 @@ public class PasscodeView extends FrameLayout {
                 }
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        PasscodeView.this.lambda$onResume$5$PasscodeView();
+                        PasscodeView.this.lambda$onResume$6$PasscodeView();
                     }
                 }, 200);
             }
@@ -927,8 +957,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onResume$5 */
-    public /* synthetic */ void lambda$onResume$5$PasscodeView() {
+    /* renamed from: lambda$onResume$6 */
+    public /* synthetic */ void lambda$onResume$6$PasscodeView() {
         EditTextBoldCursor editTextBoldCursor;
         if (this.retryTextView.getVisibility() != 0 && (editTextBoldCursor = this.passwordEditText) != null) {
             editTextBoldCursor.requestFocus();
@@ -1009,7 +1039,7 @@ public class PasscodeView extends FrameLayout {
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         public final void onDismiss(DialogInterface dialogInterface) {
-                            PasscodeView.this.lambda$checkFingerprint$6$PasscodeView(dialogInterface);
+                            PasscodeView.this.lambda$checkFingerprint$7$PasscodeView(dialogInterface);
                         }
                     });
                     AlertDialog alertDialog2 = this.fingerprintDialog;
@@ -1067,8 +1097,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkFingerprint$6 */
-    public /* synthetic */ void lambda$checkFingerprint$6$PasscodeView(DialogInterface dialogInterface) {
+    /* renamed from: lambda$checkFingerprint$7 */
+    public /* synthetic */ void lambda$checkFingerprint$7$PasscodeView(DialogInterface dialogInterface) {
         CancellationSignal cancellationSignal2 = this.cancellationSignal;
         if (cancellationSignal2 != null) {
             this.selfCancelled = true;
@@ -1105,6 +1135,10 @@ public class PasscodeView extends FrameLayout {
                 FileLog.e(th);
             }
         }
+        if (SharedConfig.passcodeType == 1) {
+            this.fingerprintImage.setVisibility(this.fingerprintView.getVisibility());
+            this.numberFrameLayouts.get(11).setVisibility(this.fingerprintView.getVisibility());
+        }
     }
 
     public void onShow(boolean z, boolean z2, int i, int i2, Runnable runnable, Runnable runnable2) {
@@ -1115,7 +1149,7 @@ public class PasscodeView extends FrameLayout {
         checkRetryTextView();
         Activity activity = (Activity) getContext();
         if (SharedConfig.passcodeType == 1) {
-            if (!(this.retryTextView.getVisibility() == 0 || (editTextBoldCursor = this.passwordEditText) == null)) {
+            if (!(z2 || this.retryTextView.getVisibility() == 0 || (editTextBoldCursor = this.passwordEditText) == null)) {
                 editTextBoldCursor.requestFocus();
                 AndroidUtilities.showKeyboard(this.passwordEditText);
             }
@@ -1177,6 +1211,7 @@ public class PasscodeView extends FrameLayout {
                 this.passwordEditText.setVisibility(8);
                 this.passwordEditText2.setVisibility(0);
                 this.checkImage.setVisibility(8);
+                this.fingerprintImage.setVisibility(8);
             } else if (i3 == 1) {
                 this.passwordEditText.setFilters(new InputFilter[0]);
                 this.passwordEditText.setInputType(129);
@@ -1186,6 +1221,7 @@ public class PasscodeView extends FrameLayout {
                 this.passwordEditText.setVisibility(0);
                 this.passwordEditText2.setVisibility(8);
                 this.checkImage.setVisibility(0);
+                this.fingerprintImage.setVisibility(this.fingerprintView.getVisibility());
             }
             setVisibility(0);
             this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -1353,6 +1389,10 @@ public class PasscodeView extends FrameLayout {
                                 if (runnable != null) {
                                     runnable.run();
                                 }
+                                if (SharedConfig.passcodeType == 1 && PasscodeView.this.retryTextView.getVisibility() != 0 && PasscodeView.this.passwordEditText != null) {
+                                    PasscodeView.this.passwordEditText.requestFocus();
+                                    AndroidUtilities.showKeyboard(PasscodeView.this.passwordEditText);
+                                }
                             }
                         });
                         animatorSet2.start();
@@ -1427,7 +1467,7 @@ public class PasscodeView extends FrameLayout {
                     runnable.run();
                 }
             }
-            setOnTouchListener($$Lambda$PasscodeView$dT3s4JDk7Xu3mtbn1nXIBvpik8M.INSTANCE);
+            setOnTouchListener($$Lambda$PasscodeView$X1HtHZ47tI94bgr3OCF_XwV9BBM.INSTANCE);
         }
     }
 
@@ -1443,8 +1483,8 @@ public class PasscodeView extends FrameLayout {
         AndroidUtilities.shakeView(this.fingerprintStatusTextView, 2.0f, 0);
     }
 
-    /* JADX WARNING: type inference failed for: r6v5, types: [android.view.ViewGroup$LayoutParams] */
-    /* JADX WARNING: type inference failed for: r6v12, types: [android.view.ViewGroup$LayoutParams] */
+    /* JADX WARNING: type inference failed for: r5v7, types: [android.view.ViewGroup$LayoutParams] */
+    /* JADX WARNING: type inference failed for: r5v14, types: [android.view.ViewGroup$LayoutParams] */
     /* access modifiers changed from: protected */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -1455,302 +1495,308 @@ public class PasscodeView extends FrameLayout {
             android.graphics.Point r1 = org.telegram.messenger.AndroidUtilities.displaySize
             int r1 = r1.y
             int r2 = android.os.Build.VERSION.SDK_INT
-            r3 = 0
-            r4 = 21
-            if (r2 < r4) goto L_0x0011
-            r2 = 0
+            r3 = 21
+            r4 = 0
+            if (r2 < r3) goto L_0x0011
+            r5 = 0
             goto L_0x0013
         L_0x0011:
-            int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            int r5 = org.telegram.messenger.AndroidUtilities.statusBarHeight
         L_0x0013:
-            int r1 = r1 - r2
-            boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            r4 = 1105723392(0x41e80000, float:29.0)
-            r5 = 1109393408(0x42200000, float:40.0)
-            r6 = 2
-            if (r2 != 0) goto L_0x008f
-            android.content.Context r2 = r13.getContext()
-            android.content.res.Resources r2 = r2.getResources()
-            android.content.res.Configuration r2 = r2.getConfiguration()
-            int r2 = r2.orientation
-            if (r2 != r6) goto L_0x008f
-            org.telegram.ui.Components.RLottieImageView r2 = r13.imageView
-            int r7 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r7 != 0) goto L_0x0038
-            int r7 = r0 / 2
+            int r1 = r1 - r5
+            boolean r5 = org.telegram.messenger.AndroidUtilities.isTablet()
+            r6 = 1105723392(0x41e80000, float:29.0)
+            r7 = 1109393408(0x42200000, float:40.0)
+            r8 = 2
+            if (r5 != 0) goto L_0x0096
+            android.content.Context r5 = r13.getContext()
+            android.content.res.Resources r5 = r5.getResources()
+            android.content.res.Configuration r5 = r5.getConfiguration()
+            int r5 = r5.orientation
+            if (r5 != r8) goto L_0x0096
+            org.telegram.ui.Components.RLottieImageView r5 = r13.imageView
+            int r9 = org.telegram.messenger.SharedConfig.passcodeType
+            if (r9 != 0) goto L_0x0038
+            int r9 = r0 / 2
             goto L_0x0039
         L_0x0038:
-            r7 = r0
+            r9 = r0
         L_0x0039:
-            int r7 = r7 / r6
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r7 = r7 - r4
-            float r4 = (float) r7
-            r2.setTranslationX(r4)
-            android.widget.FrameLayout r2 = r13.passwordFrameLayout
-            android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-            int r4 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r4 != 0) goto L_0x0052
-            int r4 = r0 / 2
+            int r9 = r9 / r8
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r9 = r9 - r6
+            float r6 = (float) r9
+            r5.setTranslationX(r6)
+            android.widget.FrameLayout r5 = r13.passwordFrameLayout
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            int r6 = org.telegram.messenger.SharedConfig.passcodeType
+            if (r6 != 0) goto L_0x0052
+            int r6 = r0 / 2
             goto L_0x0053
         L_0x0052:
-            r4 = r0
+            r6 = r0
         L_0x0053:
-            r2.width = r4
-            r4 = 1124859904(0x430CLASSNAME, float:140.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r2.height = r7
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r4 = r1 - r4
-            int r4 = r4 / r6
-            int r7 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r7 != 0) goto L_0x006d
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            r5.width = r6
+            r6 = 1124859904(0x430CLASSNAME, float:140.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r5.height = r9
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r6 = r1 - r6
+            int r6 = r6 / r8
+            int r9 = org.telegram.messenger.SharedConfig.passcodeType
+            if (r9 != 0) goto L_0x006d
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
             goto L_0x006e
         L_0x006d:
-            r7 = 0
+            r9 = 0
         L_0x006e:
-            int r4 = r4 + r7
-            r2.topMargin = r4
-            android.widget.FrameLayout r4 = r13.passwordFrameLayout
-            r4.setLayoutParams(r2)
-            android.widget.FrameLayout r2 = r13.numbersFrameLayout
-            android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-            r2.height = r1
-            int r0 = r0 / r6
-            r2.leftMargin = r0
+            int r6 = r6 + r9
+            r5.topMargin = r6
+            android.widget.FrameLayout r6 = r13.passwordFrameLayout
+            r6.setLayoutParams(r5)
+            android.widget.FrameLayout r5 = r13.numbersFrameLayout
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            r5.height = r1
+            int r0 = r0 / r8
+            r5.leftMargin = r0
             int r1 = r1 - r1
-            r2.topMargin = r1
-            r2.width = r0
+            if (r2 < r3) goto L_0x0089
+            int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            goto L_0x008a
+        L_0x0089:
+            r2 = 0
+        L_0x008a:
+            int r1 = r1 + r2
+            r5.topMargin = r1
+            r5.width = r0
             android.widget.FrameLayout r0 = r13.numbersFrameLayout
-            r0.setLayoutParams(r2)
-            goto L_0x013b
-        L_0x008f:
+            r0.setLayoutParams(r5)
+            goto L_0x0141
+        L_0x0096:
             org.telegram.ui.Components.RLottieImageView r2 = r13.imageView
-            int r7 = r0 / 2
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r7 = r7 - r4
-            float r4 = (float) r7
-            r2.setTranslationX(r4)
+            int r3 = r0 / 2
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r3 = r3 - r5
+            float r3 = (float) r3
+            r2.setTranslationX(r3)
             boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r2 == 0) goto L_0x00d3
+            if (r2 == 0) goto L_0x00da
             r2 = 1140391936(0x43var_, float:498.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            if (r0 <= r4) goto L_0x00b8
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r0 = r0 - r4
-            int r0 = r0 / r6
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            if (r0 <= r3) goto L_0x00bf
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r0 = r0 - r3
+            int r0 = r0 / r8
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r12 = r2
             r2 = r0
             r0 = r12
-            goto L_0x00b9
-        L_0x00b8:
+            goto L_0x00c0
+        L_0x00bf:
             r2 = 0
-        L_0x00b9:
-            r4 = 1141112832(0x44040000, float:528.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            if (r1 <= r7) goto L_0x00d0
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r1 = r1 - r7
-            int r1 = r1 / r6
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+        L_0x00c0:
+            r3 = 1141112832(0x44040000, float:528.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            if (r1 <= r5) goto L_0x00d7
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r1 = r1 - r5
+            int r1 = r1 / r8
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r12 = r2
             r2 = r1
-            r1 = r4
-            r4 = r12
-            goto L_0x00d5
-        L_0x00d0:
-            r4 = r2
+            r1 = r3
+            r3 = r12
+            goto L_0x00dc
+        L_0x00d7:
+            r3 = r2
             r2 = 0
-            goto L_0x00d5
-        L_0x00d3:
+            goto L_0x00dc
+        L_0x00da:
             r2 = 0
-            r4 = 0
-        L_0x00d5:
-            android.widget.FrameLayout r7 = r13.passwordFrameLayout
-            android.view.ViewGroup$LayoutParams r7 = r7.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r7 = (android.widget.FrameLayout.LayoutParams) r7
-            int r8 = r1 / 3
+            r3 = 0
+        L_0x00dc:
+            android.widget.FrameLayout r5 = r13.passwordFrameLayout
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            int r6 = r1 / 3
             int r9 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r9 != 0) goto L_0x00e8
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            goto L_0x00e9
-        L_0x00e8:
+            if (r9 != 0) goto L_0x00ef
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            goto L_0x00f0
+        L_0x00ef:
             r9 = 0
-        L_0x00e9:
-            int r9 = r9 + r8
-            r7.height = r9
-            r7.width = r0
-            r7.topMargin = r2
-            r7.leftMargin = r4
+        L_0x00f0:
+            int r9 = r9 + r6
+            r5.height = r9
+            r5.width = r0
+            r5.topMargin = r2
+            r5.leftMargin = r3
             android.widget.FrameLayout r9 = r13.passwordFrameLayout
             java.lang.Integer r10 = java.lang.Integer.valueOf(r2)
             r9.setTag(r10)
             android.widget.FrameLayout r9 = r13.passwordFrameLayout
-            r9.setLayoutParams(r7)
-            android.widget.FrameLayout r7 = r13.numbersFrameLayout
-            android.view.ViewGroup$LayoutParams r7 = r7.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r7 = (android.widget.FrameLayout.LayoutParams) r7
-            int r8 = r8 * 2
-            r6 = 1101004800(0x41a00000, float:20.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r8 = r8 + r6
-            r7.height = r8
-            r7.leftMargin = r4
-            boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 == 0) goto L_0x0122
-            int r4 = r7.height
-            int r1 = r1 - r4
+            r9.setLayoutParams(r5)
+            android.widget.FrameLayout r5 = r13.numbersFrameLayout
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            int r6 = r6 * 2
+            r5.height = r6
+            r5.leftMargin = r3
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r3 == 0) goto L_0x0129
+            int r3 = r5.height
+            int r1 = r1 - r3
             int r1 = r1 + r2
-            r7.topMargin = r1
-            goto L_0x0133
-        L_0x0122:
-            int r4 = r7.height
-            int r1 = r1 - r4
+            r2 = 1101004800(0x41a00000, float:20.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r1 = r1 + r2
+            r5.topMargin = r1
+            goto L_0x013a
+        L_0x0129:
+            int r3 = r5.height
+            int r1 = r1 - r3
             int r1 = r1 + r2
             int r2 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r2 != 0) goto L_0x012f
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            goto L_0x0130
-        L_0x012f:
+            if (r2 != 0) goto L_0x0136
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            goto L_0x0137
+        L_0x0136:
             r2 = 0
-        L_0x0130:
+        L_0x0137:
             int r1 = r1 + r2
-            r7.topMargin = r1
-        L_0x0133:
-            r7.width = r0
+            r5.topMargin = r1
+        L_0x013a:
+            r5.width = r0
             android.widget.FrameLayout r0 = r13.numbersFrameLayout
-            r0.setLayoutParams(r7)
-            r2 = r7
-        L_0x013b:
-            int r0 = r2.width
+            r0.setLayoutParams(r5)
+        L_0x0141:
+            int r0 = r5.width
             r1 = 1112014848(0x42480000, float:50.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r4 = r4 * 3
-            int r0 = r0 - r4
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r2 = r2 * 3
+            int r0 = r0 - r2
             int r0 = r0 / 4
-            int r2 = r2.height
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r4 = r4 * 4
-            int r2 = r2 - r4
+            int r2 = r5.height
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r3 = r3 * 4
+            int r2 = r2 - r3
             int r2 = r2 / 5
-        L_0x0153:
-            r4 = 12
-            if (r3 >= r4) goto L_0x023c
-            r4 = 11
-            r6 = 10
-            if (r3 != 0) goto L_0x0160
-            r4 = 10
-            goto L_0x016a
-        L_0x0160:
-            if (r3 != r6) goto L_0x0163
-            goto L_0x016a
-        L_0x0163:
-            if (r3 != r4) goto L_0x0168
-            r4 = 9
-            goto L_0x016a
-        L_0x0168:
-            int r4 = r3 + -1
-        L_0x016a:
-            int r7 = r4 / 3
-            int r4 = r4 % 3
-            if (r3 >= r6) goto L_0x01b4
-            java.util.ArrayList<android.widget.TextView> r6 = r13.numberTextViews
-            java.lang.Object r6 = r6.get(r3)
-            android.widget.TextView r6 = (android.widget.TextView) r6
+        L_0x0159:
+            r3 = 12
+            if (r4 >= r3) goto L_0x0242
+            r3 = 11
+            r5 = 10
+            if (r4 != 0) goto L_0x0166
+            r3 = 10
+            goto L_0x0170
+        L_0x0166:
+            if (r4 != r5) goto L_0x0169
+            goto L_0x0170
+        L_0x0169:
+            if (r4 != r3) goto L_0x016e
+            r3 = 9
+            goto L_0x0170
+        L_0x016e:
+            int r3 = r4 + -1
+        L_0x0170:
+            int r6 = r3 / 3
+            int r3 = r3 % 3
+            if (r4 >= r5) goto L_0x01ba
+            java.util.ArrayList<android.widget.TextView> r5 = r13.numberTextViews
+            java.lang.Object r5 = r5.get(r4)
+            android.widget.TextView r5 = (android.widget.TextView) r5
             java.util.ArrayList<android.widget.TextView> r8 = r13.lettersTextViews
-            java.lang.Object r8 = r8.get(r3)
+            java.lang.Object r8 = r8.get(r4)
             android.widget.TextView r8 = (android.widget.TextView) r8
-            android.view.ViewGroup$LayoutParams r9 = r6.getLayoutParams()
+            android.view.ViewGroup$LayoutParams r9 = r5.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r9 = (android.widget.FrameLayout.LayoutParams) r9
             android.view.ViewGroup$LayoutParams r10 = r8.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r10 = (android.widget.FrameLayout.LayoutParams) r10
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r11 = r11 + r2
-            int r11 = r11 * r7
+            int r11 = r11 * r6
             int r11 = r11 + r2
             r9.topMargin = r11
             r10.topMargin = r11
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r7 = r7 + r0
-            int r7 = r7 * r4
-            int r7 = r7 + r0
-            r9.leftMargin = r7
-            r10.leftMargin = r7
-            int r4 = r10.topMargin
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r4 = r4 + r7
-            r10.topMargin = r4
-            r6.setLayoutParams(r9)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r6 = r6 + r0
+            int r6 = r6 * r3
+            int r6 = r6 + r0
+            r9.leftMargin = r6
+            r10.leftMargin = r6
+            int r3 = r10.topMargin
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r3 = r3 + r6
+            r10.topMargin = r3
+            r5.setLayoutParams(r9)
             r8.setLayoutParams(r10)
-            goto L_0x0213
-        L_0x01b4:
+            goto L_0x0219
+        L_0x01ba:
             r8 = 1090519040(0x41000000, float:8.0)
-            if (r3 != r6) goto L_0x01e6
-            android.widget.ImageView r6 = r13.eraseView
-            android.view.ViewGroup$LayoutParams r6 = r6.getLayoutParams()
-            r9 = r6
+            if (r4 != r5) goto L_0x01ec
+            android.widget.ImageView r5 = r13.eraseView
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            r9 = r5
             android.widget.FrameLayout$LayoutParams r9 = (android.widget.FrameLayout.LayoutParams) r9
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r5 = r5 + r2
+            int r5 = r5 * r6
+            int r5 = r5 + r2
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r5 = r5 + r6
+            r9.topMargin = r5
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r6 = r6 + r2
-            int r6 = r6 * r7
-            int r6 = r6 + r2
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r6 = r6 + r7
-            r9.topMargin = r6
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r7 = r7 + r0
-            int r7 = r7 * r4
-            int r7 = r7 + r0
-            r9.leftMargin = r7
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r11 = r6 - r4
-            android.widget.ImageView r4 = r13.eraseView
-            r4.setLayoutParams(r9)
-            goto L_0x0213
-        L_0x01e6:
-            android.widget.ImageView r6 = r13.fingerprintView
-            android.view.ViewGroup$LayoutParams r6 = r6.getLayoutParams()
-            r9 = r6
+            int r6 = r6 + r0
+            int r6 = r6 * r3
+            int r6 = r6 + r0
+            r9.leftMargin = r6
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r11 = r5 - r3
+            android.widget.ImageView r3 = r13.eraseView
+            r3.setLayoutParams(r9)
+            goto L_0x0219
+        L_0x01ec:
+            android.widget.ImageView r5 = r13.fingerprintView
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            r9 = r5
             android.widget.FrameLayout$LayoutParams r9 = (android.widget.FrameLayout.LayoutParams) r9
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r5 = r5 + r2
+            int r5 = r5 * r6
+            int r5 = r5 + r2
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r5 = r5 + r6
+            r9.topMargin = r5
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r6 = r6 + r2
-            int r6 = r6 * r7
-            int r6 = r6 + r2
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r6 = r6 + r7
-            r9.topMargin = r6
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r7 = r7 + r0
-            int r7 = r7 * r4
-            int r7 = r7 + r0
-            r9.leftMargin = r7
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r11 = r6 - r4
-            android.widget.ImageView r4 = r13.fingerprintView
-            r4.setLayoutParams(r9)
-        L_0x0213:
-            java.util.ArrayList<android.widget.FrameLayout> r4 = r13.numberFrameLayouts
-            java.lang.Object r4 = r4.get(r3)
-            android.widget.FrameLayout r4 = (android.widget.FrameLayout) r4
-            android.view.ViewGroup$LayoutParams r6 = r4.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r6 = (android.widget.FrameLayout.LayoutParams) r6
-            r7 = 1099431936(0x41880000, float:17.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r11 = r11 - r7
-            r6.topMargin = r11
-            int r7 = r9.leftMargin
+            int r6 = r6 + r0
+            int r6 = r6 * r3
+            int r6 = r6 + r0
+            r9.leftMargin = r6
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r11 = r5 - r3
+            android.widget.ImageView r3 = r13.fingerprintView
+            r3.setLayoutParams(r9)
+        L_0x0219:
+            java.util.ArrayList<android.widget.FrameLayout> r3 = r13.numberFrameLayouts
+            java.lang.Object r3 = r3.get(r4)
+            android.widget.FrameLayout r3 = (android.widget.FrameLayout) r3
+            android.view.ViewGroup$LayoutParams r5 = r3.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            r6 = 1099431936(0x41880000, float:17.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r11 = r11 - r6
+            r5.topMargin = r11
+            int r6 = r9.leftMargin
             r8 = 1103626240(0x41CLASSNAME, float:25.0)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r7 = r7 - r8
-            r6.leftMargin = r7
-            r4.setLayoutParams(r6)
-            int r3 = r3 + 1
-            goto L_0x0153
-        L_0x023c:
+            int r6 = r6 - r8
+            r5.leftMargin = r6
+            r3.setLayoutParams(r5)
+            int r4 = r4 + 1
+            goto L_0x0159
+        L_0x0242:
             super.onMeasure(r14, r15)
             return
         */

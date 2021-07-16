@@ -8176,145 +8176,161 @@ public class NotificationsController extends BaseController {
         return Build.VERSION.SDK_INT < 29 || !SharedConfig.chatBubbles;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x00a9 A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x00af A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x00cf A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x00d0 A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x00e2 A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x00ea A[Catch:{ Exception -> 0x0115 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x00d9 A[Catch:{ Exception -> 0x013a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x00dd A[Catch:{ Exception -> 0x013a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x00ea A[Catch:{ Exception -> 0x013a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x00ef A[Catch:{ Exception -> 0x013a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x0121 A[Catch:{ Exception -> 0x013a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0122 A[Catch:{ Exception -> 0x013a }] */
     @android.annotation.SuppressLint({"RestrictedApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private java.lang.String createNotificationShortcut(androidx.core.app.NotificationCompat.Builder r9, int r10, java.lang.String r11, org.telegram.tgnet.TLRPC$User r12, org.telegram.tgnet.TLRPC$Chat r13, androidx.core.app.Person r14) {
+    private java.lang.String createNotificationShortcut(androidx.core.app.NotificationCompat.Builder r10, int r11, java.lang.String r12, org.telegram.tgnet.TLRPC$User r13, org.telegram.tgnet.TLRPC$Chat r14, androidx.core.app.Person r15) {
         /*
-            r8 = this;
-            boolean r0 = r8.unsupportedNotificationShortcut()
-            r1 = 0
-            if (r0 != 0) goto L_0x0119
-            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r13)
-            if (r0 == 0) goto L_0x0013
-            boolean r0 = r13.megagroup
-            if (r0 != 0) goto L_0x0013
-            goto L_0x0119
-        L_0x0013:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0115 }
-            r0.<init>()     // Catch:{ Exception -> 0x0115 }
-            java.lang.String r2 = "ndid_"
-            r0.append(r2)     // Catch:{ Exception -> 0x0115 }
-            r0.append(r10)     // Catch:{ Exception -> 0x0115 }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0115 }
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r2 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ Exception -> 0x0115 }
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0115 }
-            r2.<init>((android.content.Context) r3, (java.lang.String) r0)     // Catch:{ Exception -> 0x0115 }
-            if (r13 == 0) goto L_0x002f
-            r13 = r11
-            goto L_0x0033
-        L_0x002f:
-            java.lang.String r13 = org.telegram.messenger.UserObject.getFirstName(r12)     // Catch:{ Exception -> 0x0115 }
-        L_0x0033:
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r13 = r2.setShortLabel(r13)     // Catch:{ Exception -> 0x0115 }
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r11 = r13.setLongLabel(r11)     // Catch:{ Exception -> 0x0115 }
-            android.content.Intent r13 = new android.content.Intent     // Catch:{ Exception -> 0x0115 }
-            java.lang.String r2 = "android.intent.action.VIEW"
-            r13.<init>(r2)     // Catch:{ Exception -> 0x0115 }
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r11 = r11.setIntent(r13)     // Catch:{ Exception -> 0x0115 }
-            r13 = 1
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r11 = r11.setLongLived(r13)     // Catch:{ Exception -> 0x0115 }
-            if (r14 == 0) goto L_0x0066
-            r11.setPerson(r14)     // Catch:{ Exception -> 0x0115 }
-            androidx.core.graphics.drawable.IconCompat r2 = r14.getIcon()     // Catch:{ Exception -> 0x0115 }
-            r11.setIcon(r2)     // Catch:{ Exception -> 0x0115 }
-            androidx.core.graphics.drawable.IconCompat r2 = r14.getIcon()     // Catch:{ Exception -> 0x0115 }
-            if (r2 == 0) goto L_0x0066
-            androidx.core.graphics.drawable.IconCompat r14 = r14.getIcon()     // Catch:{ Exception -> 0x0115 }
-            android.graphics.Bitmap r14 = r14.getBitmap()     // Catch:{ Exception -> 0x0115 }
-            goto L_0x0067
-        L_0x0066:
-            r14 = r1
-        L_0x0067:
-            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x0115 }
-            r2.<init>(r13)     // Catch:{ Exception -> 0x0115 }
-            androidx.core.content.pm.ShortcutInfoCompat r11 = r11.build()     // Catch:{ Exception -> 0x0115 }
-            r2.add(r11)     // Catch:{ Exception -> 0x0115 }
-            android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0115 }
-            androidx.core.content.pm.ShortcutManagerCompat.addDynamicShortcuts(r11, r2)     // Catch:{ Exception -> 0x0115 }
-            r9.setShortcutId(r0)     // Catch:{ Exception -> 0x0115 }
-            androidx.core.app.NotificationCompat$BubbleMetadata$Builder r11 = new androidx.core.app.NotificationCompat$BubbleMetadata$Builder     // Catch:{ Exception -> 0x0115 }
-            r11.<init>()     // Catch:{ Exception -> 0x0115 }
-            android.content.Intent r2 = new android.content.Intent     // Catch:{ Exception -> 0x0115 }
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0115 }
-            java.lang.Class<org.telegram.ui.BubbleActivity> r4 = org.telegram.ui.BubbleActivity.class
-            r2.<init>(r3, r4)     // Catch:{ Exception -> 0x0115 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0115 }
-            r3.<init>()     // Catch:{ Exception -> 0x0115 }
-            java.lang.String r4 = "com.tmessages.openchat"
-            r3.append(r4)     // Catch:{ Exception -> 0x0115 }
-            double r4 = java.lang.Math.random()     // Catch:{ Exception -> 0x0115 }
-            r3.append(r4)     // Catch:{ Exception -> 0x0115 }
-            r4 = 2147483647(0x7fffffff, float:NaN)
-            r3.append(r4)     // Catch:{ Exception -> 0x0115 }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0115 }
-            r2.setAction(r3)     // Catch:{ Exception -> 0x0115 }
-            if (r10 <= 0) goto L_0x00af
-            java.lang.String r3 = "userId"
-            r2.putExtra(r3, r10)     // Catch:{ Exception -> 0x0115 }
-            goto L_0x00b5
-        L_0x00af:
-            java.lang.String r3 = "chatId"
-            int r4 = -r10
-            r2.putExtra(r3, r4)     // Catch:{ Exception -> 0x0115 }
-        L_0x00b5:
-            java.lang.String r3 = "currentAccount"
-            int r4 = r8.currentAccount     // Catch:{ Exception -> 0x0115 }
-            r2.putExtra(r3, r4)     // Catch:{ Exception -> 0x0115 }
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0115 }
-            r4 = 134217728(0x8000000, float:3.85186E-34)
-            r5 = 0
-            android.app.PendingIntent r2 = android.app.PendingIntent.getActivity(r3, r5, r2, r4)     // Catch:{ Exception -> 0x0115 }
-            r11.setIntent(r2)     // Catch:{ Exception -> 0x0115 }
-            long r2 = r8.opened_dialog_id     // Catch:{ Exception -> 0x0115 }
-            long r6 = (long) r10     // Catch:{ Exception -> 0x0115 }
-            int r10 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r10 != 0) goto L_0x00d0
-            goto L_0x00d1
-        L_0x00d0:
-            r13 = 0
-        L_0x00d1:
-            r11.setSuppressNotification(r13)     // Catch:{ Exception -> 0x0115 }
-            r11.setAutoExpandBubble(r5)     // Catch:{ Exception -> 0x0115 }
-            r10 = 1142947840(0x44200000, float:640.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)     // Catch:{ Exception -> 0x0115 }
-            r11.setDesiredHeight(r10)     // Catch:{ Exception -> 0x0115 }
-            if (r14 == 0) goto L_0x00ea
-            androidx.core.graphics.drawable.IconCompat r10 = androidx.core.graphics.drawable.IconCompat.createWithAdaptiveBitmap(r14)     // Catch:{ Exception -> 0x0115 }
-            r11.setIcon(r10)     // Catch:{ Exception -> 0x0115 }
-            goto L_0x010d
-        L_0x00ea:
-            if (r12 == 0) goto L_0x0101
-            android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0115 }
-            boolean r12 = r12.bot     // Catch:{ Exception -> 0x0115 }
-            if (r12 == 0) goto L_0x00f6
-            r12 = 2131165288(0x7var_, float:1.7944789E38)
-            goto L_0x00f9
-        L_0x00f6:
-            r12 = 2131165292(0x7var_c, float:1.7944797E38)
-        L_0x00f9:
-            androidx.core.graphics.drawable.IconCompat r10 = androidx.core.graphics.drawable.IconCompat.createWithResource(r10, r12)     // Catch:{ Exception -> 0x0115 }
-            r11.setIcon(r10)     // Catch:{ Exception -> 0x0115 }
-            goto L_0x010d
-        L_0x0101:
-            android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0115 }
-            r12 = 2131165290(0x7var_a, float:1.7944793E38)
-            androidx.core.graphics.drawable.IconCompat r10 = androidx.core.graphics.drawable.IconCompat.createWithResource(r10, r12)     // Catch:{ Exception -> 0x0115 }
-            r11.setIcon(r10)     // Catch:{ Exception -> 0x0115 }
-        L_0x010d:
-            androidx.core.app.NotificationCompat$BubbleMetadata r10 = r11.build()     // Catch:{ Exception -> 0x0115 }
-            r9.setBubbleMetadata(r10)     // Catch:{ Exception -> 0x0115 }
-            return r0
-        L_0x0115:
-            r9 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
-        L_0x0119:
+            r9 = this;
+            java.lang.String r0 = "com.tmessages.openchat"
+            boolean r1 = r9.unsupportedNotificationShortcut()
+            r2 = 0
+            if (r1 != 0) goto L_0x013e
+            boolean r1 = org.telegram.messenger.ChatObject.isChannel(r14)
+            if (r1 == 0) goto L_0x0015
+            boolean r1 = r14.megagroup
+            if (r1 != 0) goto L_0x0015
+            goto L_0x013e
+        L_0x0015:
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013a }
+            r1.<init>()     // Catch:{ Exception -> 0x013a }
+            java.lang.String r3 = "ndid_"
+            r1.append(r3)     // Catch:{ Exception -> 0x013a }
+            r1.append(r11)     // Catch:{ Exception -> 0x013a }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x013a }
+            android.content.Intent r3 = new android.content.Intent     // Catch:{ Exception -> 0x013a }
+            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013a }
+            java.lang.Class<org.telegram.messenger.OpenChatReceiver> r5 = org.telegram.messenger.OpenChatReceiver.class
+            r3.<init>(r4, r5)     // Catch:{ Exception -> 0x013a }
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013a }
+            r4.<init>()     // Catch:{ Exception -> 0x013a }
+            r4.append(r0)     // Catch:{ Exception -> 0x013a }
+            double r5 = java.lang.Math.random()     // Catch:{ Exception -> 0x013a }
+            r4.append(r5)     // Catch:{ Exception -> 0x013a }
+            r5 = 2147483647(0x7fffffff, float:NaN)
+            r4.append(r5)     // Catch:{ Exception -> 0x013a }
+            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x013a }
+            r3.setAction(r4)     // Catch:{ Exception -> 0x013a }
+            java.lang.String r4 = "userId"
+            java.lang.String r6 = "chatId"
+            if (r11 <= 0) goto L_0x0055
+            r3.putExtra(r4, r11)     // Catch:{ Exception -> 0x013a }
+            goto L_0x0059
+        L_0x0055:
+            int r7 = -r11
+            r3.putExtra(r6, r7)     // Catch:{ Exception -> 0x013a }
+        L_0x0059:
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r7 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ Exception -> 0x013a }
+            android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013a }
+            r7.<init>((android.content.Context) r8, (java.lang.String) r1)     // Catch:{ Exception -> 0x013a }
+            if (r14 == 0) goto L_0x0064
+            r14 = r12
+            goto L_0x0068
+        L_0x0064:
+            java.lang.String r14 = org.telegram.messenger.UserObject.getFirstName(r13)     // Catch:{ Exception -> 0x013a }
+        L_0x0068:
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r14 = r7.setShortLabel(r14)     // Catch:{ Exception -> 0x013a }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r14.setLongLabel(r12)     // Catch:{ Exception -> 0x013a }
+            android.content.Intent r14 = new android.content.Intent     // Catch:{ Exception -> 0x013a }
+            java.lang.String r7 = "android.intent.action.VIEW"
+            r14.<init>(r7)     // Catch:{ Exception -> 0x013a }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r12.setIntent(r14)     // Catch:{ Exception -> 0x013a }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r12.setIntent(r3)     // Catch:{ Exception -> 0x013a }
+            r14 = 1
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r12.setLongLived(r14)     // Catch:{ Exception -> 0x013a }
+            androidx.core.content.LocusIdCompat r3 = new androidx.core.content.LocusIdCompat     // Catch:{ Exception -> 0x013a }
+            r3.<init>(r1)     // Catch:{ Exception -> 0x013a }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r12.setLocusId(r3)     // Catch:{ Exception -> 0x013a }
+            if (r15 == 0) goto L_0x00a8
+            r12.setPerson(r15)     // Catch:{ Exception -> 0x013a }
+            androidx.core.graphics.drawable.IconCompat r3 = r15.getIcon()     // Catch:{ Exception -> 0x013a }
+            r12.setIcon(r3)     // Catch:{ Exception -> 0x013a }
+            androidx.core.graphics.drawable.IconCompat r3 = r15.getIcon()     // Catch:{ Exception -> 0x013a }
+            if (r3 == 0) goto L_0x00a8
+            androidx.core.graphics.drawable.IconCompat r15 = r15.getIcon()     // Catch:{ Exception -> 0x013a }
+            android.graphics.Bitmap r15 = r15.getBitmap()     // Catch:{ Exception -> 0x013a }
+            goto L_0x00a9
+        L_0x00a8:
+            r15 = r2
+        L_0x00a9:
+            androidx.core.content.pm.ShortcutInfoCompat r12 = r12.build()     // Catch:{ Exception -> 0x013a }
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013a }
+            androidx.core.content.pm.ShortcutManagerCompat.pushDynamicShortcut(r3, r12)     // Catch:{ Exception -> 0x013a }
+            r10.setShortcutInfo(r12)     // Catch:{ Exception -> 0x013a }
+            android.content.Intent r12 = new android.content.Intent     // Catch:{ Exception -> 0x013a }
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013a }
+            java.lang.Class<org.telegram.ui.BubbleActivity> r7 = org.telegram.ui.BubbleActivity.class
+            r12.<init>(r3, r7)     // Catch:{ Exception -> 0x013a }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013a }
+            r3.<init>()     // Catch:{ Exception -> 0x013a }
+            r3.append(r0)     // Catch:{ Exception -> 0x013a }
+            double r7 = java.lang.Math.random()     // Catch:{ Exception -> 0x013a }
+            r3.append(r7)     // Catch:{ Exception -> 0x013a }
+            r3.append(r5)     // Catch:{ Exception -> 0x013a }
+            java.lang.String r0 = r3.toString()     // Catch:{ Exception -> 0x013a }
+            r12.setAction(r0)     // Catch:{ Exception -> 0x013a }
+            if (r11 <= 0) goto L_0x00dd
+            r12.putExtra(r4, r11)     // Catch:{ Exception -> 0x013a }
+            goto L_0x00e1
+        L_0x00dd:
+            int r0 = -r11
+            r12.putExtra(r6, r0)     // Catch:{ Exception -> 0x013a }
+        L_0x00e1:
+            java.lang.String r0 = "currentAccount"
+            int r3 = r9.currentAccount     // Catch:{ Exception -> 0x013a }
+            r12.putExtra(r0, r3)     // Catch:{ Exception -> 0x013a }
+            if (r15 == 0) goto L_0x00ef
+            androidx.core.graphics.drawable.IconCompat r13 = androidx.core.graphics.drawable.IconCompat.createWithAdaptiveBitmap(r15)     // Catch:{ Exception -> 0x013a }
+            goto L_0x010c
+        L_0x00ef:
+            if (r13 == 0) goto L_0x0103
+            android.content.Context r15 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013a }
+            boolean r13 = r13.bot     // Catch:{ Exception -> 0x013a }
+            if (r13 == 0) goto L_0x00fb
+            r13 = 2131165288(0x7var_, float:1.7944789E38)
+            goto L_0x00fe
+        L_0x00fb:
+            r13 = 2131165292(0x7var_c, float:1.7944797E38)
+        L_0x00fe:
+            androidx.core.graphics.drawable.IconCompat r13 = androidx.core.graphics.drawable.IconCompat.createWithResource(r15, r13)     // Catch:{ Exception -> 0x013a }
+            goto L_0x010c
+        L_0x0103:
+            android.content.Context r13 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013a }
+            r15 = 2131165290(0x7var_a, float:1.7944793E38)
+            androidx.core.graphics.drawable.IconCompat r13 = androidx.core.graphics.drawable.IconCompat.createWithResource(r13, r15)     // Catch:{ Exception -> 0x013a }
+        L_0x010c:
+            androidx.core.app.NotificationCompat$BubbleMetadata$Builder r15 = new androidx.core.app.NotificationCompat$BubbleMetadata$Builder     // Catch:{ Exception -> 0x013a }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013a }
+            r3 = 134217728(0x8000000, float:3.85186E-34)
+            r4 = 0
+            android.app.PendingIntent r12 = android.app.PendingIntent.getActivity(r0, r4, r12, r3)     // Catch:{ Exception -> 0x013a }
+            r15.<init>(r12, r13)     // Catch:{ Exception -> 0x013a }
+            long r12 = r9.opened_dialog_id     // Catch:{ Exception -> 0x013a }
+            long r5 = (long) r11     // Catch:{ Exception -> 0x013a }
+            int r11 = (r12 > r5 ? 1 : (r12 == r5 ? 0 : -1))
+            if (r11 != 0) goto L_0x0122
+            goto L_0x0123
+        L_0x0122:
+            r14 = 0
+        L_0x0123:
+            r15.setSuppressNotification(r14)     // Catch:{ Exception -> 0x013a }
+            r15.setAutoExpandBubble(r4)     // Catch:{ Exception -> 0x013a }
+            r11 = 1142947840(0x44200000, float:640.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)     // Catch:{ Exception -> 0x013a }
+            r15.setDesiredHeight(r11)     // Catch:{ Exception -> 0x013a }
+            androidx.core.app.NotificationCompat$BubbleMetadata r11 = r15.build()     // Catch:{ Exception -> 0x013a }
+            r10.setBubbleMetadata(r11)     // Catch:{ Exception -> 0x013a }
             return r1
+        L_0x013a:
+            r10 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
+        L_0x013e:
+            return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationsController.createNotificationShortcut(androidx.core.app.NotificationCompat$Builder, int, java.lang.String, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, androidx.core.app.Person):java.lang.String");
     }
