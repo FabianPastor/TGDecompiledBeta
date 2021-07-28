@@ -1391,7 +1391,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x0007:
             org.telegram.messenger.ChatObject$Call r2 = r10.groupCall
             r3 = 0
-            if (r2 != 0) goto L_0x001e
+            if (r2 != 0) goto L_0x0022
             boolean r2 = r10.isPrivateScreencast
             if (r2 != 0) goto L_0x0015
             if (r11 == 0) goto L_0x0015
@@ -1399,20 +1399,22 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x0015:
             r10.isPrivateScreencast = r11
             org.telegram.messenger.voip.NativeInstance[] r2 = r10.tgVoip
+            r4 = r2[r3]
+            if (r4 == 0) goto L_0x0022
             r2 = r2[r3]
             r2.clearVideoCapturer()
-        L_0x001e:
+        L_0x0022:
             r4 = 0
             r2 = 1
-            if (r11 != r2) goto L_0x0066
+            if (r11 != r2) goto L_0x006a
             org.telegram.messenger.ChatObject$Call r6 = r10.groupCall
-            if (r6 == 0) goto L_0x0052
+            if (r6 == 0) goto L_0x0056
             long[] r6 = r10.captureDevice
             r7 = r6[r11]
             int r9 = (r7 > r4 ? 1 : (r7 == r4 ? 0 : -1))
-            if (r9 == 0) goto L_0x0030
+            if (r9 == 0) goto L_0x0034
             return
-        L_0x0030:
+        L_0x0034:
             org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r4 = r10.localSink
             r4 = r4[r11]
             long r4 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r4, r1)
@@ -1425,42 +1427,42 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r0 = org.telegram.messenger.NotificationCenter.groupCallScreencastStateChanged
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r11.postNotificationName(r0, r1)
-            goto L_0x007f
-        L_0x0052:
+            goto L_0x0083
+        L_0x0056:
             r10.requestVideoCall(r2)
             r10.setVideoState(r2, r0)
             org.telegram.ui.VoIPFragment r11 = org.telegram.ui.VoIPFragment.getInstance()
-            if (r11 == 0) goto L_0x007f
+            if (r11 == 0) goto L_0x0083
             org.telegram.ui.VoIPFragment r11 = org.telegram.ui.VoIPFragment.getInstance()
             r11.onScreenCastStart()
-            goto L_0x007f
-        L_0x0066:
+            goto L_0x0083
+        L_0x006a:
             long[] r0 = r10.captureDevice
             r2 = r0[r11]
             int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r6 != 0) goto L_0x0080
+            if (r6 != 0) goto L_0x0084
             org.telegram.messenger.voip.NativeInstance[] r2 = r10.tgVoip
             r2 = r2[r11]
-            if (r2 != 0) goto L_0x0075
-            goto L_0x0080
-        L_0x0075:
+            if (r2 != 0) goto L_0x0079
+            goto L_0x0084
+        L_0x0079:
             org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r2 = r10.localSink
             r2 = r2[r11]
             long r1 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r2, r1)
             r0[r11] = r1
-        L_0x007f:
+        L_0x0083:
             return
-        L_0x0080:
+        L_0x0084:
             org.telegram.messenger.voip.NativeInstance[] r1 = r10.tgVoip
             r2 = r1[r11]
-            if (r2 == 0) goto L_0x0093
+            if (r2 == 0) goto L_0x0097
             r2 = r0[r11]
             int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r6 == 0) goto L_0x0093
+            if (r6 == 0) goto L_0x0097
             r1 = r1[r11]
             r2 = r0[r11]
             r1.activateVideoCapturer(r2)
-        L_0x0093:
+        L_0x0097:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.createCaptureDevice(boolean):void");
@@ -1531,7 +1533,10 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
     }
 
     public void clearCamera() {
-        this.tgVoip[0].clearVideoCapturer();
+        NativeInstance[] nativeInstanceArr = this.tgVoip;
+        if (nativeInstanceArr[0] != null) {
+            nativeInstanceArr[0].clearVideoCapturer();
+        }
     }
 
     /* JADX WARNING: type inference failed for: r10v0, types: [boolean] */
