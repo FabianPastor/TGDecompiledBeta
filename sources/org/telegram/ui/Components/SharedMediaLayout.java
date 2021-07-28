@@ -338,8 +338,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     private NumberTextView selectedMessagesCountTextView;
     private View shadowLine;
     SharedLinkCell.SharedLinkCellDelegate sharedLinkCellDelegate = new SharedLinkCell.SharedLinkCellDelegate() {
-        public void needOpenWebView(TLRPC$WebPage tLRPC$WebPage) {
-            SharedMediaLayout.this.openWebView(tLRPC$WebPage);
+        public void needOpenWebView(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject) {
+            SharedMediaLayout.this.openWebView(tLRPC$WebPage, messageObject);
         }
 
         public boolean canPerformActions() {
@@ -3650,7 +3650,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r4)
             if (r0 != 0) goto L_0x0122
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131625749(0x7f0e0715, float:1.8878715E38)
+            r3 = 2131625750(0x7f0e0716, float:1.8878717E38)
             java.lang.String r10 = "GroupMembers"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r3)
             r0.addTextTab(r4, r3, r13)
@@ -3678,14 +3678,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
             if (r0 != 0) goto L_0x0161
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131627536(0x7f0e0e10, float:1.888234E38)
+            r3 = 2131627538(0x7f0e0e12, float:1.8882343E38)
             java.lang.String r4 = "SharedMediaTabFull2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r13)
             goto L_0x016f
         L_0x0161:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131627535(0x7f0e0e0f, float:1.8882337E38)
+            r3 = 2131627537(0x7f0e0e11, float:1.8882341E38)
             java.lang.String r4 = "SharedMediaTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r13)
@@ -3697,14 +3697,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x018b
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131627529(0x7f0e0e09, float:1.8882325E38)
+            r3 = 2131627531(0x7f0e0e0b, float:1.888233E38)
             java.lang.String r4 = "SharedFilesTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r2, r3, r13)
         L_0x018b:
             long r2 = r12.dialog_id
             int r0 = (int) r2
-            r2 = 2131627537(0x7f0e0e11, float:1.8882341E38)
+            r2 = 2131627539(0x7f0e0e13, float:1.8882345E38)
             java.lang.String r3 = "SharedMusicTab2"
             if (r0 == 0) goto L_0x01c9
             int[] r0 = r12.hasMedia
@@ -3714,7 +3714,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r5)
             if (r0 != 0) goto L_0x01b1
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r4 = 2131627533(0x7f0e0e0d, float:1.8882333E38)
+            r4 = 2131627535(0x7f0e0e0f, float:1.8882337E38)
             java.lang.String r10 = "SharedLinksTab2"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r10, r4)
             r0.addTextTab(r5, r4, r13)
@@ -3747,7 +3747,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x01fc
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131627541(0x7f0e0e15, float:1.888235E38)
+            r2 = 2131627543(0x7f0e0e17, float:1.8882353E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r7, r2, r13)
@@ -3759,7 +3759,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r8)
             if (r0 != 0) goto L_0x0218
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131627530(0x7f0e0e0a, float:1.8882327E38)
+            r2 = 2131627532(0x7f0e0e0c, float:1.8882331E38)
             java.lang.String r3 = "SharedGIFsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r8, r2, r13)
@@ -3771,7 +3771,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r9)
             if (r0 != 0) goto L_0x0234
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131627531(0x7f0e0e0b, float:1.888233E38)
+            r2 = 2131627533(0x7f0e0e0d, float:1.8882333E38)
             java.lang.String r3 = "SharedGroupsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r9, r2, r13)
@@ -4492,7 +4492,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         if (str2 == null || str2.length() == 0) {
                             str = tLRPC$WebPage.url;
                         } else {
-                            openWebView(tLRPC$WebPage);
+                            openWebView(tLRPC$WebPage, messageObject2);
                             return;
                         }
                     }
@@ -4519,8 +4519,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    public void openWebView(TLRPC$WebPage tLRPC$WebPage) {
-        EmbedBottomSheet.show(this.profileActivity.getParentActivity(), tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
+    public void openWebView(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject) {
+        EmbedBottomSheet.show(this.profileActivity.getParentActivity(), messageObject, this.provider, tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
     }
 
     private void recycleAdapter(RecyclerView.Adapter adapter) {

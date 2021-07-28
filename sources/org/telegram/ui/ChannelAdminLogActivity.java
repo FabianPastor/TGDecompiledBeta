@@ -528,169 +528,170 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:16:0x0044, code lost:
-        r8 = (org.telegram.ui.Cells.ChatMessageCell) r8;
+    /* JADX WARNING: Code restructure failed: missing block: B:16:0x0045, code lost:
+        r9 = (org.telegram.ui.Cells.ChatMessageCell) r9;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:43:0x00a6, code lost:
-        r8 = (org.telegram.ui.Cells.ChatMessageCell) r8;
+    /* JADX WARNING: Code restructure failed: missing block: B:43:0x00a7, code lost:
+        r9 = (org.telegram.ui.Cells.ChatMessageCell) r9;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:65:0x0112, code lost:
-        r8 = (org.telegram.ui.Cells.ChatMessageCell) r8;
+    /* JADX WARNING: Code restructure failed: missing block: B:65:0x0113, code lost:
+        r9 = (org.telegram.ui.Cells.ChatMessageCell) r9;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void didReceivedNotification(int r6, int r7, java.lang.Object... r8) {
+    public void didReceivedNotification(int r7, int r8, java.lang.Object... r9) {
         /*
-            r5 = this;
-            int r7 = org.telegram.messenger.NotificationCenter.emojiLoaded
-            if (r6 != r7) goto L_0x000d
-            org.telegram.ui.Components.RecyclerListView r6 = r5.chatListView
-            if (r6 == 0) goto L_0x0141
-            r6.invalidateViews()
-            goto L_0x0141
+            r6 = this;
+            int r8 = org.telegram.messenger.NotificationCenter.emojiLoaded
+            if (r7 != r8) goto L_0x000d
+            org.telegram.ui.Components.RecyclerListView r7 = r6.chatListView
+            if (r7 == 0) goto L_0x0142
+            r7.invalidateViews()
+            goto L_0x0142
         L_0x000d:
-            int r7 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart
-            r0 = 1
-            r1 = 0
-            if (r6 != r7) goto L_0x0080
-            r6 = r8[r1]
-            org.telegram.messenger.MessageObject r6 = (org.telegram.messenger.MessageObject) r6
-            boolean r6 = r6.isRoundVideo()
-            if (r6 == 0) goto L_0x002f
-            org.telegram.messenger.MediaController r6 = org.telegram.messenger.MediaController.getInstance()
-            android.view.TextureView r7 = r5.createTextureView(r0)
-            com.google.android.exoplayer2.ui.AspectRatioFrameLayout r8 = r5.aspectRatioFrameLayout
-            android.widget.FrameLayout r2 = r5.roundVideoContainer
-            r6.setTextureView(r7, r8, r2, r0)
-            r5.updateTextureViewPosition()
-        L_0x002f:
-            org.telegram.ui.Components.RecyclerListView r6 = r5.chatListView
-            if (r6 == 0) goto L_0x0141
-            int r6 = r6.getChildCount()
-            r7 = 0
-        L_0x0038:
-            if (r7 >= r6) goto L_0x0141
-            org.telegram.ui.Components.RecyclerListView r8 = r5.chatListView
-            android.view.View r8 = r8.getChildAt(r7)
-            boolean r2 = r8 instanceof org.telegram.ui.Cells.ChatMessageCell
-            if (r2 == 0) goto L_0x007d
-            org.telegram.ui.Cells.ChatMessageCell r8 = (org.telegram.ui.Cells.ChatMessageCell) r8
-            org.telegram.messenger.MessageObject r2 = r8.getMessageObject()
-            if (r2 == 0) goto L_0x007d
-            boolean r3 = r2.isVoice()
-            if (r3 != 0) goto L_0x007a
-            boolean r3 = r2.isMusic()
-            if (r3 == 0) goto L_0x0059
-            goto L_0x007a
-        L_0x0059:
-            boolean r3 = r2.isRoundVideo()
-            if (r3 == 0) goto L_0x007d
-            r8.checkVideoPlayback(r1)
-            org.telegram.messenger.MediaController r3 = org.telegram.messenger.MediaController.getInstance()
-            boolean r3 = r3.isPlayingMessage(r2)
-            if (r3 != 0) goto L_0x007d
-            float r3 = r2.audioProgress
-            r4 = 0
-            int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 == 0) goto L_0x007d
-            r2.resetPlayingProgress()
-            r8.invalidate()
-            goto L_0x007d
-        L_0x007a:
-            r8.updateButtonState(r1, r0, r1)
-        L_0x007d:
-            int r7 = r7 + 1
-            goto L_0x0038
-        L_0x0080:
-            int r7 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
-            if (r6 == r7) goto L_0x00fd
-            int r7 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged
-            if (r6 != r7) goto L_0x008a
-            goto L_0x00fd
-        L_0x008a:
-            int r7 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged
-            if (r6 != r7) goto L_0x00d6
-            r6 = r8[r1]
-            java.lang.Integer r6 = (java.lang.Integer) r6
-            org.telegram.ui.Components.RecyclerListView r7 = r5.chatListView
-            if (r7 == 0) goto L_0x0141
+            int r8 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart
+            r0 = 0
+            r1 = 1
+            r2 = 0
+            if (r7 != r8) goto L_0x0081
+            r7 = r9[r2]
+            org.telegram.messenger.MessageObject r7 = (org.telegram.messenger.MessageObject) r7
+            boolean r7 = r7.isRoundVideo()
+            if (r7 == 0) goto L_0x0030
+            org.telegram.messenger.MediaController r7 = org.telegram.messenger.MediaController.getInstance()
+            android.view.TextureView r8 = r6.createTextureView(r1)
+            com.google.android.exoplayer2.ui.AspectRatioFrameLayout r9 = r6.aspectRatioFrameLayout
+            android.widget.FrameLayout r3 = r6.roundVideoContainer
+            r7.setTextureView(r8, r9, r3, r1)
+            r6.updateTextureViewPosition()
+        L_0x0030:
+            org.telegram.ui.Components.RecyclerListView r7 = r6.chatListView
+            if (r7 == 0) goto L_0x0142
             int r7 = r7.getChildCount()
-        L_0x009a:
-            if (r1 >= r7) goto L_0x0141
-            org.telegram.ui.Components.RecyclerListView r8 = r5.chatListView
-            android.view.View r8 = r8.getChildAt(r1)
-            boolean r0 = r8 instanceof org.telegram.ui.Cells.ChatMessageCell
-            if (r0 == 0) goto L_0x00d3
-            org.telegram.ui.Cells.ChatMessageCell r8 = (org.telegram.ui.Cells.ChatMessageCell) r8
-            org.telegram.messenger.MessageObject r0 = r8.getMessageObject()
-            if (r0 == 0) goto L_0x00d3
-            int r2 = r0.getId()
-            int r3 = r6.intValue()
-            if (r2 != r3) goto L_0x00d3
-            org.telegram.messenger.MediaController r6 = org.telegram.messenger.MediaController.getInstance()
-            org.telegram.messenger.MessageObject r6 = r6.getPlayingMessageObject()
-            if (r6 == 0) goto L_0x0141
-            float r7 = r6.audioProgress
-            r0.audioProgress = r7
-            int r7 = r6.audioProgressSec
-            r0.audioProgressSec = r7
-            int r6 = r6.audioPlayerDuration
-            r0.audioPlayerDuration = r6
-            r8.updatePlayingMessageProgress()
-            goto L_0x0141
-        L_0x00d3:
-            int r1 = r1 + 1
-            goto L_0x009a
-        L_0x00d6:
-            int r7 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
-            if (r6 != r7) goto L_0x0141
-            android.view.View r6 = r5.fragmentView
-            if (r6 == 0) goto L_0x0141
-            org.telegram.ui.Components.SizeNotifierFrameLayout r6 = r5.contentView
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper()
-            boolean r8 = org.telegram.ui.ActionBar.Theme.isWallpaperMotion()
-            r6.setBackgroundImage(r7, r8)
-            android.view.View r6 = r5.progressView2
-            r6.invalidate()
-            android.widget.TextView r6 = r5.emptyView
-            if (r6 == 0) goto L_0x00f7
-            r6.invalidate()
-        L_0x00f7:
-            org.telegram.ui.Components.RecyclerListView r6 = r5.chatListView
-            r6.invalidateViews()
-            goto L_0x0141
-        L_0x00fd:
-            org.telegram.ui.Components.RecyclerListView r6 = r5.chatListView
-            if (r6 == 0) goto L_0x0141
-            int r6 = r6.getChildCount()
-            r7 = 0
-        L_0x0106:
-            if (r7 >= r6) goto L_0x0141
-            org.telegram.ui.Components.RecyclerListView r8 = r5.chatListView
-            android.view.View r8 = r8.getChildAt(r7)
-            boolean r2 = r8 instanceof org.telegram.ui.Cells.ChatMessageCell
-            if (r2 == 0) goto L_0x013e
-            org.telegram.ui.Cells.ChatMessageCell r8 = (org.telegram.ui.Cells.ChatMessageCell) r8
-            org.telegram.messenger.MessageObject r2 = r8.getMessageObject()
-            if (r2 == 0) goto L_0x013e
-            boolean r3 = r2.isVoice()
-            if (r3 != 0) goto L_0x013b
-            boolean r3 = r2.isMusic()
-            if (r3 == 0) goto L_0x0127
-            goto L_0x013b
-        L_0x0127:
-            boolean r3 = r2.isRoundVideo()
-            if (r3 == 0) goto L_0x013e
-            org.telegram.messenger.MediaController r3 = org.telegram.messenger.MediaController.getInstance()
-            boolean r2 = r3.isPlayingMessage(r2)
-            if (r2 != 0) goto L_0x013e
-            r8.checkVideoPlayback(r0)
-            goto L_0x013e
-        L_0x013b:
-            r8.updateButtonState(r1, r0, r1)
-        L_0x013e:
-            int r7 = r7 + 1
-            goto L_0x0106
-        L_0x0141:
+            r8 = 0
+        L_0x0039:
+            if (r8 >= r7) goto L_0x0142
+            org.telegram.ui.Components.RecyclerListView r9 = r6.chatListView
+            android.view.View r9 = r9.getChildAt(r8)
+            boolean r3 = r9 instanceof org.telegram.ui.Cells.ChatMessageCell
+            if (r3 == 0) goto L_0x007e
+            org.telegram.ui.Cells.ChatMessageCell r9 = (org.telegram.ui.Cells.ChatMessageCell) r9
+            org.telegram.messenger.MessageObject r3 = r9.getMessageObject()
+            if (r3 == 0) goto L_0x007e
+            boolean r4 = r3.isVoice()
+            if (r4 != 0) goto L_0x007b
+            boolean r4 = r3.isMusic()
+            if (r4 == 0) goto L_0x005a
+            goto L_0x007b
+        L_0x005a:
+            boolean r4 = r3.isRoundVideo()
+            if (r4 == 0) goto L_0x007e
+            r9.checkVideoPlayback(r2, r0)
+            org.telegram.messenger.MediaController r4 = org.telegram.messenger.MediaController.getInstance()
+            boolean r4 = r4.isPlayingMessage(r3)
+            if (r4 != 0) goto L_0x007e
+            float r4 = r3.audioProgress
+            r5 = 0
+            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
+            if (r4 == 0) goto L_0x007e
+            r3.resetPlayingProgress()
+            r9.invalidate()
+            goto L_0x007e
+        L_0x007b:
+            r9.updateButtonState(r2, r1, r2)
+        L_0x007e:
+            int r8 = r8 + 1
+            goto L_0x0039
+        L_0x0081:
+            int r8 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
+            if (r7 == r8) goto L_0x00fe
+            int r8 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged
+            if (r7 != r8) goto L_0x008b
+            goto L_0x00fe
+        L_0x008b:
+            int r8 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged
+            if (r7 != r8) goto L_0x00d7
+            r7 = r9[r2]
+            java.lang.Integer r7 = (java.lang.Integer) r7
+            org.telegram.ui.Components.RecyclerListView r8 = r6.chatListView
+            if (r8 == 0) goto L_0x0142
+            int r8 = r8.getChildCount()
+        L_0x009b:
+            if (r2 >= r8) goto L_0x0142
+            org.telegram.ui.Components.RecyclerListView r9 = r6.chatListView
+            android.view.View r9 = r9.getChildAt(r2)
+            boolean r0 = r9 instanceof org.telegram.ui.Cells.ChatMessageCell
+            if (r0 == 0) goto L_0x00d4
+            org.telegram.ui.Cells.ChatMessageCell r9 = (org.telegram.ui.Cells.ChatMessageCell) r9
+            org.telegram.messenger.MessageObject r0 = r9.getMessageObject()
+            if (r0 == 0) goto L_0x00d4
+            int r1 = r0.getId()
+            int r3 = r7.intValue()
+            if (r1 != r3) goto L_0x00d4
+            org.telegram.messenger.MediaController r7 = org.telegram.messenger.MediaController.getInstance()
+            org.telegram.messenger.MessageObject r7 = r7.getPlayingMessageObject()
+            if (r7 == 0) goto L_0x0142
+            float r8 = r7.audioProgress
+            r0.audioProgress = r8
+            int r8 = r7.audioProgressSec
+            r0.audioProgressSec = r8
+            int r7 = r7.audioPlayerDuration
+            r0.audioPlayerDuration = r7
+            r9.updatePlayingMessageProgress()
+            goto L_0x0142
+        L_0x00d4:
+            int r2 = r2 + 1
+            goto L_0x009b
+        L_0x00d7:
+            int r8 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
+            if (r7 != r8) goto L_0x0142
+            android.view.View r7 = r6.fragmentView
+            if (r7 == 0) goto L_0x0142
+            org.telegram.ui.Components.SizeNotifierFrameLayout r7 = r6.contentView
+            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper()
+            boolean r9 = org.telegram.ui.ActionBar.Theme.isWallpaperMotion()
+            r7.setBackgroundImage(r8, r9)
+            android.view.View r7 = r6.progressView2
+            r7.invalidate()
+            android.widget.TextView r7 = r6.emptyView
+            if (r7 == 0) goto L_0x00f8
+            r7.invalidate()
+        L_0x00f8:
+            org.telegram.ui.Components.RecyclerListView r7 = r6.chatListView
+            r7.invalidateViews()
+            goto L_0x0142
+        L_0x00fe:
+            org.telegram.ui.Components.RecyclerListView r7 = r6.chatListView
+            if (r7 == 0) goto L_0x0142
+            int r7 = r7.getChildCount()
+            r8 = 0
+        L_0x0107:
+            if (r8 >= r7) goto L_0x0142
+            org.telegram.ui.Components.RecyclerListView r9 = r6.chatListView
+            android.view.View r9 = r9.getChildAt(r8)
+            boolean r3 = r9 instanceof org.telegram.ui.Cells.ChatMessageCell
+            if (r3 == 0) goto L_0x013f
+            org.telegram.ui.Cells.ChatMessageCell r9 = (org.telegram.ui.Cells.ChatMessageCell) r9
+            org.telegram.messenger.MessageObject r3 = r9.getMessageObject()
+            if (r3 == 0) goto L_0x013f
+            boolean r4 = r3.isVoice()
+            if (r4 != 0) goto L_0x013c
+            boolean r4 = r3.isMusic()
+            if (r4 == 0) goto L_0x0128
+            goto L_0x013c
+        L_0x0128:
+            boolean r4 = r3.isRoundVideo()
+            if (r4 == 0) goto L_0x013f
+            org.telegram.messenger.MediaController r4 = org.telegram.messenger.MediaController.getInstance()
+            boolean r3 = r4.isPlayingMessage(r3)
+            if (r3 != 0) goto L_0x013f
+            r9.checkVideoPlayback(r1, r0)
+            goto L_0x013f
+        L_0x013c:
+            r9.updateButtonState(r2, r1, r2)
+        L_0x013f:
+            int r8 = r8 + 1
+            goto L_0x0107
+        L_0x0142:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -1937,7 +1938,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x0209:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131627506(0x7f0e0df2, float:1.8882278E38)
+            r3 = 2131627508(0x7f0e0df4, float:1.8882282E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -1973,7 +1974,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131626569(0x7f0e0a49, float:1.8880378E38)
+            r2 = 2131626570(0x7f0e0a4a, float:1.888038E38)
             java.lang.String r3 = "OK"
             r4 = 2131624285(0x7f0e015d, float:1.8875745E38)
             java.lang.String r5 = "AppName"
@@ -2023,7 +2024,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625872(0x7f0e0790, float:1.8878964E38)
+            r1 = 2131625873(0x7f0e0791, float:1.8878966E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2052,7 +2053,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625871(0x7f0e078f, float:1.8878962E38)
+            r1 = 2131625872(0x7f0e0790, float:1.8878964E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2715,6 +2716,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$hasSelectedMessages(this);
                     }
 
+                    public /* synthetic */ boolean isLandscape() {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$isLandscape(this);
+                    }
+
+                    public /* synthetic */ boolean keyboardIsOpened() {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$keyboardIsOpened(this);
+                    }
+
                     public /* synthetic */ void needReloadPolls() {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$needReloadPolls(this);
                     }
@@ -3187,7 +3196,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 android.app.Activity r5 = r5.getParentActivity()
-                                                r6 = 2131627767(0x7f0e0ef7, float:1.8882808E38)
+                                                r6 = 2131627775(0x7f0e0eff, float:1.8882824E38)
                                                 java.lang.String r7 = "TextCopied"
                                                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                                                 android.widget.Toast r5 = android.widget.Toast.makeText(r5, r6, r1)
@@ -3268,11 +3277,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 r5.setTitle(r0)
                                                 r6 = 2
                                                 java.lang.CharSequence[] r6 = new java.lang.CharSequence[r6]
-                                                r7 = 2131626584(0x7f0e0a58, float:1.8880408E38)
+                                                r7 = 2131626585(0x7f0e0a59, float:1.888041E38)
                                                 java.lang.String r2 = "Open"
                                                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r2, r7)
                                                 r6[r1] = r7
-                                                r7 = 2131625029(0x7f0e0445, float:1.8877254E38)
+                                                r7 = 2131625030(0x7f0e0446, float:1.8877256E38)
                                                 java.lang.String r1 = "Copy"
                                                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r7)
                                                 r6[r3] = r7
@@ -3355,8 +3364,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                             }
                                         }
 
-                                        public void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2) {
-                                            EmbedBottomSheet.show(ChatActivityAdapter.this.mContext, str2, str3, str4, str, i, i2, false);
+                                        public void needOpenWebView(MessageObject messageObject, String str, String str2, String str3, String str4, int i, int i2) {
+                                            EmbedBottomSheet.show(ChannelAdminLogActivity.this.getParentActivity(), messageObject, ChannelAdminLogActivity.this.provider, str2, str3, str4, str, i, i2, false);
                                         }
 
                                         /* JADX WARNING: Code restructure failed: missing block: B:49:0x0101, code lost:
@@ -3869,7 +3878,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                         org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
                                                         org.telegram.ui.Components.BulletinFactory r6 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r6)
                                                         r0 = 2131558460(0x7f0d003c, float:1.8742236E38)
-                                                        r1 = 2131626007(0x7f0e0817, float:1.8879238E38)
+                                                        r1 = 2131626008(0x7f0e0818, float:1.887924E38)
                                                         java.lang.String r2 = "LinkHashExpired"
                                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                                         org.telegram.ui.Components.Bulletin r6 = r6.createSimpleBulletin(r0, r1)

@@ -1082,8 +1082,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                             i2 = 4;
                         }
                     }
-                    AndroidUtilities.hideKeyboard(chatAttachAlert2.baseFragment.getFragmentView().findFocus());
-                    AndroidUtilities.hideKeyboard(this.parentAlert.getContainer().findFocus());
+                    if (!chatAttachAlert2.delegate.needEnterComment()) {
+                        AndroidUtilities.hideKeyboard(this.parentAlert.baseFragment.getFragmentView().findFocus());
+                        AndroidUtilities.hideKeyboard(this.parentAlert.getContainer().findFocus());
+                    }
                     PhotoViewer.getInstance().openPhotoForSelect(allPhotosArray, i3, i2, false, this.photoViewerProvider, chatActivity);
                 }
             } else if (SharedConfig.inappCamera) {
@@ -1441,116 +1443,116 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         }
     }
 
-    /* JADX WARNING: type inference failed for: r13v8, types: [org.telegram.ui.ActionBar.BaseFragment] */
+    /* JADX WARNING: type inference failed for: r14v10, types: [org.telegram.ui.ActionBar.BaseFragment] */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void openPhotoViewer(org.telegram.messenger.MediaController.PhotoEntry r11, boolean r12, boolean r13) {
+    public void openPhotoViewer(org.telegram.messenger.MediaController.PhotoEntry r12, final boolean r13, boolean r14) {
         /*
-            r10 = this;
-            r12 = 0
-            if (r11 == 0) goto L_0x002d
-            java.util.ArrayList<java.lang.Object> r0 = cameraPhotos
-            r0.add(r11)
-            java.util.HashMap<java.lang.Object, java.lang.Object> r0 = selectedPhotos
-            int r1 = r11.imageId
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-            r0.put(r1, r11)
-            java.util.ArrayList<java.lang.Object> r0 = selectedPhotosOrder
-            int r1 = r11.imageId
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-            r0.add(r1)
-            org.telegram.ui.Components.ChatAttachAlert r0 = r10.parentAlert
-            r0.updateCountButton(r12)
-            org.telegram.ui.Components.ChatAttachAlertPhotoLayout$PhotoAttachAdapter r0 = r10.adapter
-            r0.notifyDataSetChanged()
-            org.telegram.ui.Components.ChatAttachAlertPhotoLayout$PhotoAttachAdapter r0 = r10.cameraAttachAdapter
-            r0.notifyDataSetChanged()
+            r11 = this;
+            r0 = 0
+            if (r12 == 0) goto L_0x002d
+            java.util.ArrayList<java.lang.Object> r1 = cameraPhotos
+            r1.add(r12)
+            java.util.HashMap<java.lang.Object, java.lang.Object> r1 = selectedPhotos
+            int r2 = r12.imageId
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            r1.put(r2, r12)
+            java.util.ArrayList<java.lang.Object> r1 = selectedPhotosOrder
+            int r2 = r12.imageId
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            r1.add(r2)
+            org.telegram.ui.Components.ChatAttachAlert r1 = r11.parentAlert
+            r1.updateCountButton(r0)
+            org.telegram.ui.Components.ChatAttachAlertPhotoLayout$PhotoAttachAdapter r1 = r11.adapter
+            r1.notifyDataSetChanged()
+            org.telegram.ui.Components.ChatAttachAlertPhotoLayout$PhotoAttachAdapter r1 = r11.cameraAttachAdapter
+            r1.notifyDataSetChanged()
         L_0x002d:
-            r0 = 1
-            if (r11 == 0) goto L_0x005c
-            if (r13 != 0) goto L_0x005c
-            java.util.ArrayList<java.lang.Object> r13 = cameraPhotos
-            int r13 = r13.size()
-            if (r13 <= r0) goto L_0x005c
-            r10.updatePhotosCounter(r12)
-            org.telegram.messenger.camera.CameraView r11 = r10.cameraView
-            if (r11 == 0) goto L_0x005b
-            org.telegram.ui.Components.ZoomControlView r11 = r10.zoomControlView
+            r1 = 1
+            if (r12 == 0) goto L_0x005c
+            if (r14 != 0) goto L_0x005c
+            java.util.ArrayList<java.lang.Object> r14 = cameraPhotos
+            int r14 = r14.size()
+            if (r14 <= r1) goto L_0x005c
+            r11.updatePhotosCounter(r0)
+            org.telegram.messenger.camera.CameraView r12 = r11.cameraView
+            if (r12 == 0) goto L_0x005b
+            org.telegram.ui.Components.ZoomControlView r12 = r11.zoomControlView
             r13 = 0
-            r11.setZoom(r13, r12)
-            r10.cameraZoom = r13
-            org.telegram.messenger.camera.CameraView r11 = r10.cameraView
-            r11.setZoom(r13)
-            org.telegram.messenger.camera.CameraController r11 = org.telegram.messenger.camera.CameraController.getInstance()
-            org.telegram.messenger.camera.CameraView r12 = r10.cameraView
-            org.telegram.messenger.camera.CameraSession r12 = r12.getCameraSession()
-            r11.startPreview(r12)
+            r12.setZoom(r13, r0)
+            r11.cameraZoom = r13
+            org.telegram.messenger.camera.CameraView r12 = r11.cameraView
+            r12.setZoom(r13)
+            org.telegram.messenger.camera.CameraController r12 = org.telegram.messenger.camera.CameraController.getInstance()
+            org.telegram.messenger.camera.CameraView r13 = r11.cameraView
+            org.telegram.messenger.camera.CameraSession r13 = r13.getCameraSession()
+            r12.startPreview(r13)
         L_0x005b:
             return
         L_0x005c:
-            java.util.ArrayList<java.lang.Object> r13 = cameraPhotos
-            boolean r13 = r13.isEmpty()
-            if (r13 == 0) goto L_0x0065
+            java.util.ArrayList<java.lang.Object> r14 = cameraPhotos
+            boolean r14 = r14.isEmpty()
+            if (r14 == 0) goto L_0x0065
             return
         L_0x0065:
-            r10.cancelTakingPhotos = r0
-            org.telegram.ui.PhotoViewer r13 = org.telegram.ui.PhotoViewer.getInstance()
-            org.telegram.ui.Components.ChatAttachAlert r1 = r10.parentAlert
-            org.telegram.ui.ActionBar.BaseFragment r1 = r1.baseFragment
-            android.app.Activity r1 = r1.getParentActivity()
-            r13.setParentActivity(r1)
-            org.telegram.ui.PhotoViewer r13 = org.telegram.ui.PhotoViewer.getInstance()
-            org.telegram.ui.Components.ChatAttachAlert r1 = r10.parentAlert
-            r13.setParentAlert(r1)
-            org.telegram.ui.PhotoViewer r13 = org.telegram.ui.PhotoViewer.getInstance()
-            org.telegram.ui.Components.ChatAttachAlert r1 = r10.parentAlert
-            int r2 = r1.maxSelectedPhotos
-            boolean r1 = r1.allowOrder
-            r13.setMaxSelectedPhotos(r2, r1)
-            org.telegram.ui.Components.ChatAttachAlert r13 = r10.parentAlert
-            int r1 = r13.avatarPicker
-            r2 = 0
-            if (r1 == 0) goto L_0x0096
-            r9 = r2
-            r6 = 1
+            r11.cancelTakingPhotos = r1
+            org.telegram.ui.PhotoViewer r14 = org.telegram.ui.PhotoViewer.getInstance()
+            org.telegram.ui.Components.ChatAttachAlert r2 = r11.parentAlert
+            org.telegram.ui.ActionBar.BaseFragment r2 = r2.baseFragment
+            android.app.Activity r2 = r2.getParentActivity()
+            r14.setParentActivity(r2)
+            org.telegram.ui.PhotoViewer r14 = org.telegram.ui.PhotoViewer.getInstance()
+            org.telegram.ui.Components.ChatAttachAlert r2 = r11.parentAlert
+            r14.setParentAlert(r2)
+            org.telegram.ui.PhotoViewer r14 = org.telegram.ui.PhotoViewer.getInstance()
+            org.telegram.ui.Components.ChatAttachAlert r2 = r11.parentAlert
+            int r3 = r2.maxSelectedPhotos
+            boolean r2 = r2.allowOrder
+            r14.setMaxSelectedPhotos(r3, r2)
+            org.telegram.ui.Components.ChatAttachAlert r14 = r11.parentAlert
+            int r2 = r14.avatarPicker
+            r3 = 0
+            if (r2 == 0) goto L_0x0096
+            r10 = r3
+            r7 = 1
             goto L_0x00a6
         L_0x0096:
-            org.telegram.ui.ActionBar.BaseFragment r13 = r13.baseFragment
-            boolean r3 = r13 instanceof org.telegram.ui.ChatActivity
-            if (r3 == 0) goto L_0x00a3
-            r2 = r13
-            org.telegram.ui.ChatActivity r2 = (org.telegram.ui.ChatActivity) r2
-            r13 = 2
-            r9 = r2
-            r6 = 2
+            org.telegram.ui.ActionBar.BaseFragment r14 = r14.baseFragment
+            boolean r4 = r14 instanceof org.telegram.ui.ChatActivity
+            if (r4 == 0) goto L_0x00a3
+            r3 = r14
+            org.telegram.ui.ChatActivity r3 = (org.telegram.ui.ChatActivity) r3
+            r14 = 2
+            r10 = r3
+            r7 = 2
             goto L_0x00a6
         L_0x00a3:
-            r13 = 5
-            r9 = r2
-            r6 = 5
+            r14 = 5
+            r10 = r3
+            r7 = 5
         L_0x00a6:
-            if (r1 == 0) goto L_0x00b3
-            java.util.ArrayList r13 = new java.util.ArrayList
-            r13.<init>()
-            r13.add(r11)
-            r4 = r13
-            r5 = 0
-            goto L_0x00c0
+            if (r2 == 0) goto L_0x00b3
+            java.util.ArrayList r14 = new java.util.ArrayList
+            r14.<init>()
+            r14.add(r12)
+            r5 = r14
+            r6 = 0
+            goto L_0x00c1
         L_0x00b3:
-            java.util.ArrayList r11 = r10.getAllPhotosArray()
-            java.util.ArrayList<java.lang.Object> r12 = cameraPhotos
-            int r12 = r12.size()
-            int r12 = r12 - r0
-            r4 = r11
+            java.util.ArrayList r12 = r11.getAllPhotosArray()
+            java.util.ArrayList<java.lang.Object> r14 = cameraPhotos
+            int r14 = r14.size()
+            int r0 = r14 + -1
             r5 = r12
-        L_0x00c0:
-            org.telegram.ui.PhotoViewer r3 = org.telegram.ui.PhotoViewer.getInstance()
-            r7 = 0
-            org.telegram.ui.Components.ChatAttachAlertPhotoLayout$15 r8 = new org.telegram.ui.Components.ChatAttachAlertPhotoLayout$15
-            r8.<init>()
-            r3.openPhotoForSelect(r4, r5, r6, r7, r8, r9)
+            r6 = r0
+        L_0x00c1:
+            org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.getInstance()
+            r8 = 0
+            org.telegram.ui.Components.ChatAttachAlertPhotoLayout$15 r9 = new org.telegram.ui.Components.ChatAttachAlertPhotoLayout$15
+            r9.<init>(r13)
+            r4.openPhotoForSelect(r5, r6, r7, r8, r9, r10)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertPhotoLayout.openPhotoViewer(org.telegram.messenger.MediaController$PhotoEntry, boolean, boolean):void");

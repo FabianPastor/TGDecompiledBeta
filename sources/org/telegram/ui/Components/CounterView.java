@@ -76,7 +76,8 @@ public class CounterView extends View {
             if (i2 > 0) {
                 setVisibility(0);
             }
-            if (!z) {
+            boolean z3 = Math.abs(i2 - this.currentCount) > 99 ? false : z;
+            if (!z3) {
                 this.currentCount = i2;
                 if (i2 == 0) {
                     setVisibility(8);
@@ -88,7 +89,7 @@ public class CounterView extends View {
                 invalidate();
             }
             String valueOf2 = String.valueOf(i);
-            if (z) {
+            if (z3) {
                 ValueAnimator valueAnimator2 = this.countAnimator;
                 if (valueAnimator2 != null) {
                     valueAnimator2.cancel();
@@ -148,7 +149,7 @@ public class CounterView extends View {
                         int i5 = max;
                         this.countOldLayout = new StaticLayout(spannableStringBuilder, this.textPaint, i5, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                         this.countAnimationStableLayout = new StaticLayout(spannableStringBuilder3, this.textPaint, i5, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-                        this.countAnimationInLayout = new StaticLayout(spannableStringBuilder2, this.textPaint, i5, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                        this.countAnimationInLayout = new StaticLayout(spannableStringBuilder2, this.textPaint, max, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                     } else {
                         this.countOldLayout = this.countLayout;
                     }

@@ -27,13 +27,11 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
-import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.GroupCallActivity;
 import org.webrtc.RendererCommon;
 
 public abstract class VideoPreviewDialog extends FrameLayout {
     private final ActionBar actionBar;
-    Paint backgroundPaint = new Paint(1);
     private final LinearLayout buttonsLayout;
     FrameLayout container;
     CellFlickerDrawable drawable = new CellFlickerDrawable();
@@ -58,10 +56,9 @@ public abstract class VideoPreviewDialog extends FrameLayout {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public VideoPreviewDialog(Context context, RecyclerListView recyclerListView, RecyclerListView recyclerListView2) {
+    public VideoPreviewDialog(Context context) {
         super(context);
         Context context2 = context;
-        this.backgroundPaint.setColor(Theme.getColor("voipgroup_dialogBackground"));
         ActionBar actionBar2 = new ActionBar(context2);
         this.actionBar = actionBar2;
         actionBar2.setBackButtonDrawable(new BackDrawable(false));
@@ -126,7 +123,7 @@ public abstract class VideoPreviewDialog extends FrameLayout {
         r10.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("voipgroup_listViewBackground"), ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_nameText"), 76)));
         r10.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f));
         this.negativeButton = r10;
-        AnonymousClass3 r8 = new TextView(getContext()) {
+        AnonymousClass3 r7 = new TextView(getContext()) {
             Paint gradientPaint = new Paint(1);
 
             /* access modifiers changed from: protected */
@@ -143,20 +140,20 @@ public abstract class VideoPreviewDialog extends FrameLayout {
                 super.onDraw(canvas);
             }
         };
-        r8.setMinWidth(AndroidUtilities.dp(64.0f));
-        r8.setTag(-1);
-        r8.setTextSize(1, 14.0f);
-        r8.setTextColor(Theme.getColor("voipgroup_nameText"));
-        r8.setGravity(17);
-        r8.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        r8.setText(LocaleController.getString("ShareVideo", NUM));
+        r7.setMinWidth(AndroidUtilities.dp(64.0f));
+        r7.setTag(-1);
+        r7.setTextSize(1, 14.0f);
+        r7.setTextColor(Theme.getColor("voipgroup_nameText"));
+        r7.setGravity(17);
+        r7.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        r7.setText(LocaleController.getString("ShareVideo", NUM));
         if (Build.VERSION.SDK_INT >= 23) {
-            r8.setForeground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_nameText"), 76)));
+            r7.setForeground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_nameText"), 76)));
         }
-        r8.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f));
-        this.positiveButton = r8;
+        r7.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f));
+        this.positiveButton = r7;
         linearLayout.addView(r10, LayoutHelper.createLinear(-1, 48, 1.0f, 0, 4, 0, 4, 0));
-        linearLayout.addView(r8, LayoutHelper.createLinear(-1, 48, 1.0f, 0, 4, 0, 4, 0));
+        linearLayout.addView(r7, LayoutHelper.createLinear(-1, 48, 1.0f, 0, 4, 0, 4, 0));
         addView(this.textureView, LayoutHelper.createFrame(-1, -1.0f));
         this.container.addView(linearLayout, LayoutHelper.createFrame(-1, -2, 80));
         if (VoIPService.getSharedInstance() != null) {
@@ -175,7 +172,7 @@ public abstract class VideoPreviewDialog extends FrameLayout {
                 VideoPreviewDialog.this.lambda$new$0$VideoPreviewDialog(view);
             }
         });
-        r8.setOnClickListener(new View.OnClickListener() {
+        r7.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 VideoPreviewDialog.this.lambda$new$1$VideoPreviewDialog(view);
             }

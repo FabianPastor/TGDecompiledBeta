@@ -120,6 +120,10 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
     public void onAudioSettingsChanged() {
     }
 
+    public /* synthetic */ void onCameraFirstFrameAvailable() {
+        VoIPService.StateListener.CC.$default$onCameraFirstFrameAvailable(this);
+    }
+
     public void onSignalBarsCountChanged(int i) {
     }
 
@@ -288,6 +292,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
         VoIPTextureView voIPTextureView2 = new VoIPTextureView(context, false, true);
         this.currentUserTextureView = voIPTextureView2;
         voIPTextureView2.renderer.setMirror(true);
+        voIPTextureView2.setScreenshareMiniProgress(1.0f, false);
         this.floatingView.addView(voIPTextureView);
         this.floatingView.addView(voIPTextureView2);
         this.floatingView.setBackgroundColor(-7829368);
@@ -416,6 +421,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
             this.callingUserIsVideo = sharedInstance.getRemoteVideoState() == 2;
             this.currentUserIsVideo = sharedInstance.getVideoState(false) == 2 || sharedInstance.getVideoState(false) == 1;
             this.currentUserTextureView.renderer.setMirror(sharedInstance.isFrontFaceCamera());
+            this.currentUserTextureView.setIsScreencast(sharedInstance.isScreencast());
         }
         float f = 1.0f;
         if (!z) {

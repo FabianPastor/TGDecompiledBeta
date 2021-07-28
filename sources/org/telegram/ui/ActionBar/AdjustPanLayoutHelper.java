@@ -1,33 +1,37 @@
 package org.telegram.ui.ActionBar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
+import androidx.recyclerview.widget.ChatListItemAnimator;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserConfig;
-import org.telegram.ui.Components.CubicBezierInterpolator;
 
 public class AdjustPanLayoutHelper {
-    public static final Interpolator keyboardInterpolator = CubicBezierInterpolator.DEFAULT;
+    public static final Interpolator keyboardInterpolator = ChatListItemAnimator.DEFAULT_INTERPOLATOR;
     /* access modifiers changed from: private */
     public boolean animationInProgress;
     ValueAnimator animator;
     boolean checkHierarchyHeight;
     /* access modifiers changed from: private */
     public ViewGroup contentView;
+    private Runnable delayedAnimationRunnable = new Runnable() {
+        public void run() {
+            ValueAnimator valueAnimator = AdjustPanLayoutHelper.this.animator;
+            if (valueAnimator != null && !valueAnimator.isRunning()) {
+                AdjustPanLayoutHelper.this.animator.start();
+            }
+        }
+    };
     protected float keyboardSize;
+    private boolean needDelay;
     int notificationsIndex;
     ViewTreeObserver.OnPreDrawListener onPreDrawListener = new ViewTreeObserver.OnPreDrawListener() {
         public boolean onPreDraw() {
@@ -113,76 +117,114 @@ public class AdjustPanLayoutHelper {
     }
 
     /* access modifiers changed from: private */
-    public void animateHeight(int i, int i2, final boolean z) {
-        ValueAnimator valueAnimator = this.animator;
-        if (valueAnimator != null) {
-            valueAnimator.cancel();
-        }
-        int startOffset = startOffset();
-        getViewsToSetHeight(this.parent);
-        int i3 = 0;
-        if (this.checkHierarchyHeight) {
-            ViewParent parent2 = this.parent.getParent();
-            if (parent2 instanceof View) {
-                i3 = ((View) parent2).getHeight() - i2;
-            }
-        }
-        setViewHeight(Math.max(i, i3 + i2));
-        this.resizableView.requestLayout();
-        onTransitionStart(z, i2);
-        float f = (float) (i2 - i);
-        this.keyboardSize = Math.abs(f);
-        float f2 = 0.0f;
-        if (i2 > i) {
-            float f3 = f - ((float) startOffset);
-            float f4 = -f3;
-            this.parent.setTranslationY(f4);
-            onPanTranslationUpdate(f3, 1.0f, z);
-            this.animator = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
-            f = f4;
-        } else {
-            this.parent.setTranslationY((float) this.previousStartOffset);
-            onPanTranslationUpdate((float) (-this.previousStartOffset), 0.0f, z);
-            f2 = (float) (-this.previousStartOffset);
-            this.animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        }
-        this.animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(f, f2, z) {
-            public final /* synthetic */ float f$1;
-            public final /* synthetic */ float f$2;
-            public final /* synthetic */ boolean f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                AdjustPanLayoutHelper.this.lambda$animateHeight$0$AdjustPanLayoutHelper(this.f$1, this.f$2, this.f$3, valueAnimator);
-            }
-        });
-        this.animationInProgress = true;
-        final int i4 = UserConfig.selectedAccount;
-        this.animator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                boolean unused = AdjustPanLayoutHelper.this.animationInProgress = false;
-                NotificationCenter.getInstance(i4).onAnimationFinish(AdjustPanLayoutHelper.this.notificationsIndex);
-                AdjustPanLayoutHelper adjustPanLayoutHelper = AdjustPanLayoutHelper.this;
-                adjustPanLayoutHelper.animator = null;
-                adjustPanLayoutHelper.setViewHeight(-1);
-                AdjustPanLayoutHelper.this.viewsToHeightSet.clear();
-                AdjustPanLayoutHelper.this.resizableView.requestLayout();
-                AdjustPanLayoutHelper adjustPanLayoutHelper2 = AdjustPanLayoutHelper.this;
-                boolean z = z;
-                adjustPanLayoutHelper2.onPanTranslationUpdate(0.0f, z ? 1.0f : 0.0f, z);
-                AdjustPanLayoutHelper.this.parent.setTranslationY(0.0f);
-                AdjustPanLayoutHelper.this.onTransitionEnd();
-            }
-        });
-        this.animator.setDuration(220);
-        this.animator.setInterpolator(CubicBezierInterpolator.DEFAULT);
-        this.notificationsIndex = NotificationCenter.getInstance(i4).setAnimationInProgress(this.notificationsIndex, (int[]) null);
-        this.animator.start();
+    /* JADX WARNING: Removed duplicated region for block: B:11:0x0045  */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x005f  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x00b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x00bf  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void animateHeight(int r6, int r7, final boolean r8) {
+        /*
+            r5 = this;
+            android.animation.ValueAnimator r0 = r5.animator
+            if (r0 == 0) goto L_0x0007
+            r0.cancel()
+        L_0x0007:
+            int r0 = r5.startOffset()
+            android.view.View r1 = r5.parent
+            r5.getViewsToSetHeight(r1)
+            boolean r1 = r5.checkHierarchyHeight
+            r2 = 0
+            if (r1 == 0) goto L_0x0027
+            android.view.View r1 = r5.parent
+            android.view.ViewParent r1 = r1.getParent()
+            boolean r3 = r1 instanceof android.view.View
+            if (r3 == 0) goto L_0x0027
+            android.view.View r1 = (android.view.View) r1
+            int r1 = r1.getHeight()
+            int r1 = r1 - r7
+            goto L_0x0028
+        L_0x0027:
+            r1 = 0
+        L_0x0028:
+            int r1 = r1 + r7
+            int r1 = java.lang.Math.max(r6, r1)
+            r5.setViewHeight(r1)
+            android.view.View r1 = r5.resizableView
+            r1.requestLayout()
+            r5.onTransitionStart(r8, r7)
+            int r1 = r7 - r6
+            float r1 = (float) r1
+            float r3 = java.lang.Math.abs(r1)
+            r5.keyboardSize = r3
+            r3 = 2
+            r4 = 0
+            if (r7 <= r6) goto L_0x005f
+            float r6 = (float) r0
+            float r1 = r1 - r6
+            android.view.View r6 = r5.parent
+            float r7 = -r1
+            r6.setTranslationY(r7)
+            r6 = 1065353216(0x3var_, float:1.0)
+            r5.onPanTranslationUpdate(r1, r6, r8)
+            float[] r6 = new float[r3]
+            r6 = {NUM, 0} // fill-array
+            android.animation.ValueAnimator r6 = android.animation.ValueAnimator.ofFloat(r6)
+            r5.animator = r6
+            r1 = r7
+            goto L_0x007d
+        L_0x005f:
+            android.view.View r6 = r5.parent
+            int r7 = r5.previousStartOffset
+            float r7 = (float) r7
+            r6.setTranslationY(r7)
+            int r6 = r5.previousStartOffset
+            int r6 = -r6
+            float r6 = (float) r6
+            r5.onPanTranslationUpdate(r6, r4, r8)
+            int r6 = r5.previousStartOffset
+            int r6 = -r6
+            float r4 = (float) r6
+            float[] r6 = new float[r3]
+            r6 = {0, NUM} // fill-array
+            android.animation.ValueAnimator r6 = android.animation.ValueAnimator.ofFloat(r6)
+            r5.animator = r6
+        L_0x007d:
+            android.animation.ValueAnimator r6 = r5.animator
+            org.telegram.ui.ActionBar.-$$Lambda$AdjustPanLayoutHelper$Wo8IIsq8vn0vmvYciiO9hV_i5D4 r7 = new org.telegram.ui.ActionBar.-$$Lambda$AdjustPanLayoutHelper$Wo8IIsq8vn0vmvYciiO9hV_i5D4
+            r7.<init>(r1, r4, r8)
+            r6.addUpdateListener(r7)
+            r6 = 1
+            r5.animationInProgress = r6
+            int r6 = org.telegram.messenger.UserConfig.selectedAccount
+            android.animation.ValueAnimator r7 = r5.animator
+            org.telegram.ui.ActionBar.AdjustPanLayoutHelper$3 r0 = new org.telegram.ui.ActionBar.AdjustPanLayoutHelper$3
+            r0.<init>(r6, r8)
+            r7.addListener(r0)
+            android.animation.ValueAnimator r7 = r5.animator
+            r0 = 250(0xfa, double:1.235E-321)
+            r7.setDuration(r0)
+            android.animation.ValueAnimator r7 = r5.animator
+            android.view.animation.Interpolator r8 = keyboardInterpolator
+            r7.setInterpolator(r8)
+            org.telegram.messenger.NotificationCenter r6 = org.telegram.messenger.NotificationCenter.getInstance(r6)
+            int r7 = r5.notificationsIndex
+            r8 = 0
+            int r6 = r6.setAnimationInProgress(r7, r8)
+            r5.notificationsIndex = r6
+            boolean r6 = r5.needDelay
+            if (r6 == 0) goto L_0x00bf
+            r5.needDelay = r2
+            java.lang.Runnable r6 = r5.delayedAnimationRunnable
+            r7 = 100
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6, r7)
+            goto L_0x00c4
+        L_0x00bf:
+            android.animation.ValueAnimator r6 = r5.animator
+            r6.start()
+        L_0x00c4:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.AdjustPanLayoutHelper.animateHeight(int, int, boolean):void");
     }
 
     /* access modifiers changed from: private */
@@ -285,5 +327,14 @@ public class AdjustPanLayoutHelper {
 
     public void setCheckHierarchyHeight(boolean z) {
         this.checkHierarchyHeight = z;
+    }
+
+    public void delayAnimation() {
+        this.needDelay = true;
+    }
+
+    public void runDelayedAnimation() {
+        AndroidUtilities.cancelRunOnUIThread(this.delayedAnimationRunnable);
+        this.delayedAnimationRunnable.run();
     }
 }

@@ -1393,6 +1393,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
+    public VideoPlayer getVideoPlayer() {
+        return this.videoPlayer;
+    }
+
     private void startProgressTimer(final MessageObject messageObject) {
         synchronized (this.progressTimerSync) {
             Timer timer = this.progressTimer;
@@ -5672,7 +5676,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r5 = 2
             r4.<init>(r14, r5)     // Catch:{ Exception -> 0x0066 }
             java.lang.String r1 = "Loading"
-            r5 = 2131626038(0x7f0e0836, float:1.88793E38)
+            r5 = 2131626039(0x7f0e0837, float:1.8879303E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ Exception -> 0x0066 }
             r4.setMessage(r1)     // Catch:{ Exception -> 0x0066 }
             r4.setCanceledOnTouchOutside(r2)     // Catch:{ Exception -> 0x0066 }

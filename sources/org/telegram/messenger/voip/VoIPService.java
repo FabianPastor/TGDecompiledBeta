@@ -298,6 +298,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
     /* access modifiers changed from: private */
     public boolean isHeadsetPlugged;
     private boolean isOutgoing;
+    private boolean isPrivateScreencast;
     /* access modifiers changed from: private */
     public boolean isProximityNear;
     private boolean isVideoAvailable;
@@ -495,6 +496,9 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             public static void $default$onAudioSettingsChanged(StateListener stateListener) {
             }
 
+            public static void $default$onCameraFirstFrameAvailable(StateListener stateListener) {
+            }
+
             public static void $default$onCameraSwitch(StateListener stateListener, boolean z) {
             }
 
@@ -515,6 +519,8 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         }
 
         void onAudioSettingsChanged();
+
+        void onCameraFirstFrameAvailable();
 
         void onCameraSwitch(boolean z);
 
@@ -547,6 +553,10 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 
     public boolean isFrontFaceCamera() {
         return this.isFrontFaceCamera;
+    }
+
+    public boolean isScreencast() {
+        return this.isPrivateScreencast;
     }
 
     public void setMicMute(boolean z, boolean z2, boolean z3) {
@@ -1328,10 +1338,27 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         return (i == 1 || i == 6) ? false : true;
     }
 
-    public void requestVideoCall() {
+    public void requestVideoCall(boolean z) {
         NativeInstance[] nativeInstanceArr = this.tgVoip;
+        int i = 0;
         if (nativeInstanceArr[0] != null) {
-            nativeInstanceArr[0].setupOutgoingVideo(this.localSink[0], this.isFrontFaceCamera);
+            if (!z) {
+                long[] jArr = this.captureDevice;
+                if (jArr[0] != 0) {
+                    nativeInstanceArr[0].setupOutgoingVideoCreated(jArr[0]);
+                    this.destroyCaptureDevice[0] = false;
+                    this.isPrivateScreencast = z;
+                }
+            }
+            NativeInstance nativeInstance = nativeInstanceArr[0];
+            ProxyVideoSink proxyVideoSink = this.localSink[0];
+            if (z) {
+                i = 2;
+            } else if (this.isFrontFaceCamera) {
+                i = 1;
+            }
+            nativeInstance.setupOutgoingVideo(proxyVideoSink, i);
+            this.isPrivateScreencast = z;
         }
     }
 
@@ -1349,69 +1376,91 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         this.tgVoip[0].switchCamera(!this.isFrontFaceCamera);
     }
 
-    /* JADX WARNING: type inference failed for: r10v0, types: [boolean] */
+    /* JADX WARNING: type inference failed for: r11v0, types: [boolean] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void createCaptureDevice(boolean r10) {
+    public void createCaptureDevice(boolean r11) {
         /*
-            r9 = this;
+            r10 = this;
             r0 = 2
-            if (r10 == 0) goto L_0x0005
+            if (r11 == 0) goto L_0x0005
             r1 = 2
             goto L_0x0007
         L_0x0005:
-            boolean r1 = r9.isFrontFaceCamera
+            boolean r1 = r10.isFrontFaceCamera
         L_0x0007:
-            r2 = 0
-            r4 = 1
-            if (r10 != r4) goto L_0x0038
-            long[] r5 = r9.captureDevice
-            r6 = r5[r10]
-            int r8 = (r6 > r2 ? 1 : (r6 == r2 ? 0 : -1))
-            if (r8 == 0) goto L_0x0015
-            return
+            org.telegram.messenger.ChatObject$Call r2 = r10.groupCall
+            r3 = 0
+            if (r2 != 0) goto L_0x001e
+            boolean r2 = r10.isPrivateScreencast
+            if (r2 != 0) goto L_0x0015
+            if (r11 == 0) goto L_0x0015
+            r10.setVideoState(r3, r3)
         L_0x0015:
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r2 = r9.localSink
-            r2 = r2[r10]
-            long r1 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r2, r1)
-            r5[r10] = r1
-            r10 = 0
-            r9.createGroupInstance(r4, r10)
-            r9.setVideoState(r4, r0)
-            int r0 = r9.currentAccount
-            org.telegram.messenger.AccountInstance r0 = org.telegram.messenger.AccountInstance.getInstance(r0)
-            org.telegram.messenger.NotificationCenter r0 = r0.getNotificationCenter()
-            int r1 = org.telegram.messenger.NotificationCenter.groupCallScreencastStateChanged
-            java.lang.Object[] r10 = new java.lang.Object[r10]
-            r0.postNotificationName(r1, r10)
-            goto L_0x0051
-        L_0x0038:
-            long[] r0 = r9.captureDevice
-            r4 = r0[r10]
-            int r6 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r6 != 0) goto L_0x0052
-            org.telegram.messenger.voip.NativeInstance[] r4 = r9.tgVoip
-            r4 = r4[r10]
-            if (r4 != 0) goto L_0x0047
-            goto L_0x0052
-        L_0x0047:
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r2 = r9.localSink
-            r2 = r2[r10]
-            long r1 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r2, r1)
-            r0[r10] = r1
-        L_0x0051:
+            r10.isPrivateScreencast = r11
+            org.telegram.messenger.voip.NativeInstance[] r2 = r10.tgVoip
+            r2 = r2[r3]
+            r2.clearVideoCapturer()
+        L_0x001e:
+            r4 = 0
+            r2 = 1
+            if (r11 != r2) goto L_0x0066
+            org.telegram.messenger.ChatObject$Call r6 = r10.groupCall
+            if (r6 == 0) goto L_0x0052
+            long[] r6 = r10.captureDevice
+            r7 = r6[r11]
+            int r9 = (r7 > r4 ? 1 : (r7 == r4 ? 0 : -1))
+            if (r9 == 0) goto L_0x0030
             return
+        L_0x0030:
+            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r4 = r10.localSink
+            r4 = r4[r11]
+            long r4 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r4, r1)
+            r6[r11] = r4
+            r10.createGroupInstance(r2, r3)
+            r10.setVideoState(r2, r0)
+            int r11 = r10.currentAccount
+            org.telegram.messenger.AccountInstance r11 = org.telegram.messenger.AccountInstance.getInstance(r11)
+            org.telegram.messenger.NotificationCenter r11 = r11.getNotificationCenter()
+            int r0 = org.telegram.messenger.NotificationCenter.groupCallScreencastStateChanged
+            java.lang.Object[] r1 = new java.lang.Object[r3]
+            r11.postNotificationName(r0, r1)
+            goto L_0x007f
         L_0x0052:
-            org.telegram.messenger.voip.NativeInstance[] r1 = r9.tgVoip
-            r4 = r1[r10]
-            if (r4 == 0) goto L_0x0065
-            r4 = r0[r10]
-            int r6 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r6 == 0) goto L_0x0065
-            r1 = r1[r10]
-            r2 = r0[r10]
+            r10.requestVideoCall(r2)
+            r10.setVideoState(r2, r0)
+            org.telegram.ui.VoIPFragment r11 = org.telegram.ui.VoIPFragment.getInstance()
+            if (r11 == 0) goto L_0x007f
+            org.telegram.ui.VoIPFragment r11 = org.telegram.ui.VoIPFragment.getInstance()
+            r11.onScreenCastStart()
+            goto L_0x007f
+        L_0x0066:
+            long[] r0 = r10.captureDevice
+            r2 = r0[r11]
+            int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r6 != 0) goto L_0x0080
+            org.telegram.messenger.voip.NativeInstance[] r2 = r10.tgVoip
+            r2 = r2[r11]
+            if (r2 != 0) goto L_0x0075
+            goto L_0x0080
+        L_0x0075:
+            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r2 = r10.localSink
+            r2 = r2[r11]
+            long r1 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r2, r1)
+            r0[r11] = r1
+        L_0x007f:
+            return
+        L_0x0080:
+            org.telegram.messenger.voip.NativeInstance[] r1 = r10.tgVoip
+            r2 = r1[r11]
+            if (r2 == 0) goto L_0x0093
+            r2 = r0[r11]
+            int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r6 == 0) goto L_0x0093
+            r1 = r1[r11]
+            r2 = r0[r11]
             r1.activateVideoCapturer(r2)
-        L_0x0065:
+        L_0x0093:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.createCaptureDevice(boolean):void");
@@ -1481,81 +1530,96 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         this.micSwitching = false;
     }
 
-    /* JADX WARNING: type inference failed for: r13v0, types: [boolean] */
+    public void clearCamera() {
+        this.tgVoip[0].clearVideoCapturer();
+    }
+
+    /* JADX WARNING: type inference failed for: r10v0, types: [boolean] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setVideoState(boolean r13, int r14) {
+    public void setVideoState(boolean r10, int r11) {
         /*
-            r12 = this;
-            org.telegram.messenger.voip.NativeInstance[] r0 = r12.tgVoip
-            r1 = r0[r13]
+            r9 = this;
+            org.telegram.messenger.ChatObject$Call r1 = r9.groupCall
             r2 = 0
-            r4 = 2
-            if (r1 != 0) goto L_0x003a
-            long[] r0 = r12.captureDevice
-            r5 = r0[r13]
-            int r1 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-            if (r1 == 0) goto L_0x001d
-            int[] r1 = r12.videoState
-            r1[r13] = r14
-            r2 = r0[r13]
-            r13 = r1[r13]
-            org.telegram.messenger.voip.NativeInstance.setVideoStateCapturer(r2, r13)
-            goto L_0x0039
-        L_0x001d:
-            if (r14 != r4) goto L_0x0039
-            int r14 = r12.currentState
-            r1 = 17
-            if (r14 == r1) goto L_0x0039
-            r1 = 11
-            if (r14 == r1) goto L_0x0039
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r14 = r12.localSink
-            r14 = r14[r13]
-            boolean r1 = r12.isFrontFaceCamera
-            long r1 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r14, r1)
-            r0[r13] = r1
-            int[] r14 = r12.videoState
-            r14[r13] = r4
-        L_0x0039:
+            if (r1 == 0) goto L_0x0007
+            r1 = r10
+            goto L_0x0008
+        L_0x0007:
+            r1 = 0
+        L_0x0008:
+            org.telegram.messenger.voip.NativeInstance[] r3 = r9.tgVoip
+            r4 = r3[r1]
+            r5 = 0
+            r7 = 2
+            if (r4 != 0) goto L_0x0042
+            long[] r2 = r9.captureDevice
+            r3 = r2[r10]
+            int r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r8 == 0) goto L_0x0025
+            int[] r3 = r9.videoState
+            r3[r1] = r11
+            r4 = r2[r10]
+            r0 = r3[r1]
+            org.telegram.messenger.voip.NativeInstance.setVideoStateCapturer(r4, r0)
+            goto L_0x0041
+        L_0x0025:
+            if (r11 != r7) goto L_0x0041
+            int r0 = r9.currentState
+            r3 = 17
+            if (r0 == r3) goto L_0x0041
+            r3 = 11
+            if (r0 == r3) goto L_0x0041
+            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r0 = r9.localSink
+            r0 = r0[r1]
+            boolean r3 = r9.isFrontFaceCamera
+            long r3 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r0, r3)
+            r2[r10] = r3
+            int[] r0 = r9.videoState
+            r0[r1] = r7
+        L_0x0041:
             return
-        L_0x003a:
-            int[] r1 = r12.videoState
-            r1[r13] = r14
-            r14 = r0[r13]
-            r0 = r1[r13]
-            r14.setVideoState(r0)
-            long[] r14 = r12.captureDevice
-            r0 = r14[r13]
-            int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r5 == 0) goto L_0x0056
-            r0 = r14[r13]
-            int[] r14 = r12.videoState
-            r14 = r14[r13]
-            org.telegram.messenger.voip.NativeInstance.setVideoStateCapturer(r0, r14)
-        L_0x0056:
-            if (r13 != 0) goto L_0x007a
-            org.telegram.messenger.ChatObject$Call r14 = r12.groupCall
-            if (r14 == 0) goto L_0x007a
-            int r14 = r12.currentAccount
-            org.telegram.messenger.UserConfig r14 = org.telegram.messenger.UserConfig.getInstance(r14)
-            org.telegram.tgnet.TLRPC$User r6 = r14.getCurrentUser()
+        L_0x0042:
+            int[] r4 = r9.videoState
+            r4[r1] = r11
+            r0 = r3[r1]
+            r3 = r4[r1]
+            r0.setVideoState(r3)
+            long[] r0 = r9.captureDevice
+            r3 = r0[r10]
+            int r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r8 == 0) goto L_0x005e
+            r3 = r0[r10]
+            int[] r0 = r9.videoState
+            r0 = r0[r1]
+            org.telegram.messenger.voip.NativeInstance.setVideoStateCapturer(r3, r0)
+        L_0x005e:
+            if (r10 != 0) goto L_0x0089
+            org.telegram.messenger.ChatObject$Call r0 = r9.groupCall
+            if (r0 == 0) goto L_0x0086
+            int r0 = r9.currentAccount
+            org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
+            org.telegram.tgnet.TLRPC$User r1 = r0.getCurrentUser()
+            r3 = 0
+            int[] r0 = r9.videoState
+            r0 = r0[r2]
+            if (r0 == r7) goto L_0x0076
+            r2 = 1
+        L_0x0076:
+            java.lang.Boolean r4 = java.lang.Boolean.valueOf(r2)
+            r5 = 0
+            r6 = 0
             r7 = 0
-            int[] r14 = r12.videoState
-            r0 = 0
-            r14 = r14[r0]
-            if (r14 == r4) goto L_0x006f
-            r0 = 1
-        L_0x006f:
-            java.lang.Boolean r8 = java.lang.Boolean.valueOf(r0)
-            r9 = 0
-            r10 = 0
-            r11 = 0
-            r5 = r12
-            r5.editCallMember(r6, r7, r8, r9, r10, r11)
-        L_0x007a:
-            if (r13 != 0) goto L_0x007f
-            r12.checkIsNear()
-        L_0x007f:
+            r0 = r9
+            r2 = r3
+            r3 = r4
+            r4 = r5
+            r5 = r6
+            r6 = r7
+            r0.editCallMember(r1, r2, r3, r4, r5, r6)
+        L_0x0086:
+            r9.checkIsNear()
+        L_0x0089:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.setVideoState(boolean, int):void");
@@ -4000,6 +4064,13 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         }
     }
 
+    /* access modifiers changed from: protected */
+    public void onCameraFirstFrameAvailable() {
+        for (int i = 0; i < this.stateListeners.size(); i++) {
+            this.stateListeners.get(i).onCameraFirstFrameAvailable();
+        }
+    }
+
     public void registerStateListener(StateListener stateListener) {
         if (!this.stateListeners.contains(stateListener)) {
             this.stateListeners.add(stateListener);
@@ -5596,9 +5667,9 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131628229(0x7f0e10c5, float:1.8883745E38)
+            r6 = 2131628239(0x7f0e10cf, float:1.8883765E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131628227(0x7f0e10c3, float:1.888374E38)
+            r8 = 2131628237(0x7f0e10cd, float:1.888376E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002a
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -5608,7 +5679,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x002e:
             android.app.Notification$Builder r5 = r5.setContentTitle(r10)
             android.app.Notification$Builder r5 = r5.setContentText(r0)
-            r10 = 2131165868(0x7var_ac, float:1.7945965E38)
+            r10 = 2131165879(0x7var_b7, float:1.7945988E38)
             android.app.Notification$Builder r5 = r5.setSmallIcon(r10)
             android.app.Notification$Builder r5 = r5.setSubText(r2)
             r10 = 0
@@ -5692,7 +5763,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r10.append(r15)
             r10.append(r14)
             java.lang.String r10 = r10.toString()
-            r13 = 2131625870(0x7f0e078e, float:1.887896E38)
+            r13 = 2131625871(0x7f0e078f, float:1.8878962E38)
             r17 = r7
             java.lang.String r7 = "IncomingCalls"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r13)
@@ -5744,7 +5815,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131628113(0x7f0e1051, float:1.888351E38)
+            r7 = 2131628122(0x7f0e105a, float:1.8883528E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a7
@@ -5763,7 +5834,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x01a8:
             r11 = 268435456(0x10000000, float:2.5243549E-29)
             android.app.PendingIntent r2 = android.app.PendingIntent.getBroadcast(r1, r14, r2, r11)
-            r13 = 2131165483(0x7var_b, float:1.7945184E38)
+            r13 = 2131165484(0x7var_c, float:1.7945186E38)
             r5.addAction(r13, r9, r2)
             android.content.Intent r9 = new android.content.Intent
             java.lang.Class<org.telegram.messenger.voip.VoIPActionsReceiver> r13 = org.telegram.messenger.voip.VoIPActionsReceiver.class
@@ -5779,7 +5850,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131628088(0x7f0e1038, float:1.8883459E38)
+            r13 = 2131628096(0x7f0e1040, float:1.8883475E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01fc
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -5796,7 +5867,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r7 = 0
         L_0x01fd:
             android.app.PendingIntent r9 = android.app.PendingIntent.getBroadcast(r1, r7, r9, r11)
-            r10 = 2131165482(0x7var_a, float:1.7945182E38)
+            r10 = 2131165483(0x7var_b, float:1.7945184E38)
             r5.addAction(r10, r14, r9)
             r10 = 2
             r5.setPriority(r10)
@@ -5859,7 +5930,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02af
-            r12 = 2131628230(0x7f0e10c6, float:1.8883747E38)
+            r12 = 2131628240(0x7f0e10d0, float:1.8883767E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5871,7 +5942,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             goto L_0x02c5
         L_0x02af:
             r14 = 0
-            r12 = 2131628228(0x7f0e10c4, float:1.8883743E38)
+            r12 = 2131628238(0x7f0e10ce, float:1.8883763E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5885,11 +5956,11 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x02c9:
             if (r22 == 0) goto L_0x02d1
             r10 = r17
-            r0 = 2131628229(0x7f0e10c5, float:1.8883745E38)
+            r0 = 2131628239(0x7f0e10cf, float:1.8883765E38)
             goto L_0x02d6
         L_0x02d1:
             r10 = r16
-            r0 = 2131628227(0x7f0e10c3, float:1.888374E38)
+            r0 = 2131628237(0x7f0e10cd, float:1.888376E38)
         L_0x02d6:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -5901,7 +5972,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131628089(0x7f0e1039, float:1.888346E38)
+            r10 = 2131628097(0x7f0e1041, float:1.8883477E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5923,7 +5994,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230803(0x7var_, float:1.807767E38)
-            r8 = 2131628113(0x7f0e1051, float:1.888351E38)
+            r8 = 2131628122(0x7f0e105a, float:1.8883528E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
             r3 = 2131230883(0x7var_a3, float:1.8077831E38)

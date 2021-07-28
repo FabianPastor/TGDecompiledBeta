@@ -118,6 +118,7 @@ import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.ForegroundColorSpanThemable;
 import org.telegram.ui.Components.ForegroundDetector;
+import org.telegram.ui.Components.HideViewAfterAnimation;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.PickerBottomLayout;
@@ -127,6 +128,7 @@ import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.WallpapersListActivity;
 
 public class AndroidUtilities {
+    public static Pattern BAD_CHARS_MESSAGE_LONG_PATTERN = null;
     public static Pattern BAD_CHARS_MESSAGE_PATTERN = null;
     public static Pattern BAD_CHARS_PATTERN = null;
     public static final int FLAG_TAG_ALL = 11;
@@ -167,6 +169,7 @@ public class AndroidUtilities {
     public static int roundMessageInset;
     public static int roundMessageSize;
     private static Paint roundPaint;
+    public static int roundPlayingMessageSize;
     public static final Linkify.MatchFilter sUrlMatchFilter = $$Lambda$AndroidUtilities$7u2C_VzyCOR_g29g_gFE94u3hQ.INSTANCE;
     public static float screenRefreshRate = 60.0f;
     private static final Object smsLock = new Object();
@@ -220,9 +223,11 @@ public class AndroidUtilities {
         WEB_URL = null;
         BAD_CHARS_PATTERN = null;
         BAD_CHARS_MESSAGE_PATTERN = null;
+        BAD_CHARS_MESSAGE_LONG_PATTERN = null;
         try {
             BAD_CHARS_PATTERN = Pattern.compile("[─-◿]");
-            BAD_CHARS_MESSAGE_PATTERN = Pattern.compile("[̀-ͯ]+");
+            BAD_CHARS_MESSAGE_LONG_PATTERN = Pattern.compile("[̀-ͯ⁦-⁧]+");
+            BAD_CHARS_MESSAGE_PATTERN = Pattern.compile("[⁦-⁧]+");
             Pattern compile = Pattern.compile("((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9]))");
             Pattern compile2 = Pattern.compile("(([a-zA-Z0-9 -퟿豈-﷏ﷰ-￯]([a-zA-Z0-9 -퟿豈-﷏ﷰ-￯\\-]{0,61}[a-zA-Z0-9 -퟿豈-﷏ﷰ-￯]){0,1}\\.)+[a-zA-Z -퟿豈-﷏ﷰ-￯]{2,63}|" + compile + ")");
             WEB_URL = Pattern.compile("((?:(http|https|Http|Https|ton|tg):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?(?:" + compile2 + ")(?:\\:\\d{1,5})?)(\\/(?:(?:[" + "a-zA-Z0-9 -퟿豈-﷏ﷰ-￯" + "\\;\\/\\?\\:\\@\\&\\=\\#\\~\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?(?:\\b|$)");
@@ -243,6 +248,14 @@ public class AndroidUtilities {
             return false;
         } catch (Throwable unused) {
             return true;
+        }
+    }
+
+    public static String getSafeString(String str) {
+        try {
+            return BAD_CHARS_MESSAGE_PATTERN.matcher(str).replaceAll("‌");
+        } catch (Throwable unused) {
+            return str;
         }
     }
 
@@ -1040,7 +1053,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625003(0x7f0e042b, float:1.8877202E38)
+                r0 = 2131625004(0x7f0e042c, float:1.8877204E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1052,12 +1065,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625004(0x7f0e042c, float:1.8877204E38)
+                r0 = 2131625005(0x7f0e042d, float:1.8877206E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625005(0x7f0e042d, float:1.8877206E38)
+                r0 = 2131625006(0x7f0e042e, float:1.8877208E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1175,27 +1188,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131626966(0x7f0e0bd6, float:1.8881183E38)
+                r0 = 2131626967(0x7f0e0bd7, float:1.8881185E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131626967(0x7f0e0bd7, float:1.8881185E38)
+                r0 = 2131626968(0x7f0e0bd8, float:1.8881187E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131626958(0x7f0e0bce, float:1.8881167E38)
+                r0 = 2131626959(0x7f0e0bcf, float:1.8881169E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131626957(0x7f0e0bcd, float:1.8881165E38)
+                r0 = 2131626958(0x7f0e0bce, float:1.8881167E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131626959(0x7f0e0bcf, float:1.8881169E38)
+                r0 = 2131626960(0x7f0e0bd0, float:1.888117E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -2132,9 +2145,12 @@ public class AndroidUtilities {
             if (roundMessageSize == 0) {
                 if (isTablet()) {
                     roundMessageSize = (int) (((float) getMinTabletSide()) * 0.6f);
+                    roundPlayingMessageSize = getMinTabletSide() - dp(28.0f);
                 } else {
                     Point point = displaySize;
                     roundMessageSize = (int) (((float) Math.min(point.x, point.y)) * 0.6f);
+                    Point point2 = displaySize;
+                    roundPlayingMessageSize = Math.min(point2.x, point2.y) - dp(28.0f);
                 }
                 roundMessageInset = dp(2.0f);
             }
@@ -3272,7 +3288,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626569(0x7f0e0a49, float:1.8880378E38)
+            r7 = 2131626570(0x7f0e0a4a, float:1.888038E38)
             java.lang.String r8 = "OK"
             r9 = 2131624285(0x7f0e015d, float:1.8875745E38)
             java.lang.String r10 = "AppName"
@@ -3295,7 +3311,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625872(0x7f0e0790, float:1.8878964E38)
+            r1 = 2131625873(0x7f0e0791, float:1.8878966E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3379,7 +3395,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626340(0x7f0e0964, float:1.8879913E38)
+            r1 = 2131626341(0x7f0e0965, float:1.8879915E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3461,13 +3477,13 @@ public class AndroidUtilities {
             java.lang.String r8 = "ApkRestricted"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setMessage(r7)
-            r7 = 2131626951(0x7f0e0bc7, float:1.8881153E38)
+            r7 = 2131626952(0x7f0e0bc8, float:1.8881155E38)
             java.lang.String r8 = "PermissionOpenSettings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r8 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY
             r8.<init>(r9)
             r6.setPositiveButton(r7, r8)
-            r7 = 2131624657(0x7f0e02d1, float:1.88765E38)
+            r7 = 2131624658(0x7f0e02d2, float:1.8876502E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setNegativeButton(r7, r5)
@@ -4541,7 +4557,7 @@ public class AndroidUtilities {
         updateViewVisibilityAnimated(view, z, 1.0f, true);
     }
 
-    public static void updateViewVisibilityAnimated(final View view, boolean z, float f, boolean z2) {
+    public static void updateViewVisibilityAnimated(View view, boolean z, float f, boolean z2) {
         int i = 0;
         if (view.getParent() == null) {
             z2 = false;
@@ -4567,11 +4583,7 @@ public class AndroidUtilities {
         } else if (!z && view.getTag() != null) {
             view.animate().setListener((Animator.AnimatorListener) null).cancel();
             if (z2) {
-                view.animate().alpha(0.0f).scaleY(f).scaleX(f).setListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        view.setVisibility(8);
-                    }
-                }).setDuration(150).start();
+                view.animate().alpha(0.0f).scaleY(f).scaleX(f).setListener(new HideViewAfterAnimation(view)).setDuration(150).start();
             } else {
                 view.setVisibility(8);
             }

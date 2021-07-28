@@ -70,6 +70,8 @@ public class NativeInstance {
 
     public native long addIncomingVideoOutput(int i, String str, SsrcGroup[] ssrcGroupArr, VideoSink videoSink);
 
+    public native void clearVideoCapturer();
+
     public native String getDebugInfo();
 
     public native String getLastError();
@@ -122,7 +124,7 @@ public class NativeInstance {
 
     public native void setVolume(int i, double d);
 
-    public native void setupOutgoingVideo(VideoSink videoSink, boolean z);
+    public native void setupOutgoingVideo(VideoSink videoSink, int i);
 
     public native void setupOutgoingVideoCreated(long j);
 

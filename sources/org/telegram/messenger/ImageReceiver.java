@@ -3091,4 +3091,15 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             }
         }
     }
+
+    public void startCrossfadeFromStaticThumb(Bitmap bitmap) {
+        this.currentThumbKey = null;
+        this.currentThumbDrawable = null;
+        this.thumbShader = null;
+        BitmapDrawable bitmapDrawable = new BitmapDrawable((Resources) null, bitmap);
+        this.staticThumbDrawable = bitmapDrawable;
+        this.crossfadeWithThumb = true;
+        this.currentAlpha = 0.0f;
+        updateDrawableRadius(bitmapDrawable);
+    }
 }

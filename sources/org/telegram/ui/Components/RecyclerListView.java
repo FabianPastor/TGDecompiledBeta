@@ -2213,7 +2213,7 @@ public class RecyclerListView extends RecyclerView {
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (!this.multiSelectionGesture || motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+        if (!this.multiSelectionGesture || motionEvent.getAction() == 0 || motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
             this.lastX = Float.MAX_VALUE;
             this.lastY = Float.MAX_VALUE;
             this.multiSelectionGesture = false;

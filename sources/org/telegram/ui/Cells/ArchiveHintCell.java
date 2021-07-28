@@ -9,7 +9,6 @@ import android.widget.FrameLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BottomPagesView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -42,16 +41,14 @@ public class ArchiveHintCell extends FrameLayout {
         this.viewPager.setOffscreenPageLimit(1);
         addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
         this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            public void onPageScrolled(int i, float f, int i2) {
-                ArchiveHintCell.this.bottomPages.setPageOffset(i, f);
+            public void onPageScrollStateChanged(int i) {
             }
 
             public void onPageSelected(int i) {
-                FileLog.d("test1");
             }
 
-            public void onPageScrollStateChanged(int i) {
-                FileLog.d("test1");
+            public void onPageScrolled(int i, float f, int i2) {
+                ArchiveHintCell.this.bottomPages.setPageOffset(i, f);
             }
         });
         BottomPagesView bottomPagesView = new BottomPagesView(context, this.viewPager, 3);

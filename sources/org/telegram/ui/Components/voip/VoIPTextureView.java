@@ -16,13 +16,17 @@ import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.webrtc.RendererCommon;
 import org.webrtc.TextureViewRenderer;
 
@@ -67,6 +71,10 @@ public class VoIPTextureView extends FrameLayout {
     /* access modifiers changed from: private */
     public float scaleThumb;
     public int scaleType;
+    private boolean screencast;
+    private ImageView screencastImage;
+    private TextView screencastText;
+    private FrameLayout screencastView;
     public float stubVisibleProgress;
     private Bitmap thumb;
 
@@ -74,60 +82,83 @@ public class VoIPTextureView extends FrameLayout {
         this(context, z, z2, true, false);
     }
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public VoIPTextureView(Context context, boolean z, boolean z2, boolean z3, boolean z4) {
         super(context);
+        Context context2 = context;
+        boolean z5 = z;
+        boolean z6 = z2;
         this.stubVisibleProgress = 1.0f;
         this.animateOnNextLayoutAnimations = new ArrayList<>();
         this.aninateFromScale = 1.0f;
         this.aninateFromScaleBlur = 1.0f;
         this.animateFromThumbScale = 1.0f;
-        this.isCamera = z;
-        this.applyRotation = z2;
-        ImageView imageView2 = new ImageView(context);
+        this.isCamera = z5;
+        this.applyRotation = z6;
+        ImageView imageView2 = new ImageView(context2);
         this.imageView = imageView2;
-        AnonymousClass1 r1 = new TextureViewRenderer(context) {
+        AnonymousClass1 r6 = new TextureViewRenderer(context2) {
             public void onFirstFrameRendered() {
                 super.onFirstFrameRendered();
                 VoIPTextureView.this.onFirstFrameRendered();
             }
         };
-        this.renderer = r1;
-        r1.setFpsReduction(30.0f);
-        r1.setOpaque(false);
-        r1.setEnableHardwareScaler(true);
-        r1.setIsCamera(!z2);
-        if (!z && z2) {
-            View view = new View(context);
+        this.renderer = r6;
+        r6.setFpsReduction(30.0f);
+        r6.setOpaque(false);
+        r6.setEnableHardwareScaler(true);
+        r6.setIsCamera(!z6);
+        if (!z5 && z6) {
+            View view = new View(context2);
             this.backgroundView = view;
             view.setBackgroundColor(-14999773);
             addView(this.backgroundView, LayoutHelper.createFrame(-1, -1.0f));
             if (z4) {
-                TextureView textureView = new TextureView(context);
+                TextureView textureView = new TextureView(context2);
                 this.blurRenderer = textureView;
                 addView(textureView, LayoutHelper.createFrame(-1, -2, 17));
             }
-            r1.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
-            addView(r1, LayoutHelper.createFrame(-1, -2, 17));
-        } else if (!z) {
+            r6.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
+            addView(r6, LayoutHelper.createFrame(-1, -2, 17));
+        } else if (!z5) {
             if (z4) {
-                TextureView textureView2 = new TextureView(context);
+                TextureView textureView2 = new TextureView(context2);
                 this.blurRenderer = textureView2;
                 addView(textureView2, LayoutHelper.createFrame(-1, -2, 17));
             }
-            addView(r1, LayoutHelper.createFrame(-1, -2, 17));
+            addView(r6, LayoutHelper.createFrame(-1, -2, 17));
         } else {
             if (z4) {
-                TextureView textureView3 = new TextureView(context);
+                TextureView textureView3 = new TextureView(context2);
                 this.blurRenderer = textureView3;
                 addView(textureView3, LayoutHelper.createFrame(-1, -2, 17));
             }
-            addView(r1);
+            addView(r6);
         }
         addView(imageView2);
         TextureView textureView4 = this.blurRenderer;
         if (textureView4 != null) {
             textureView4.setOpaque(false);
         }
+        FrameLayout frameLayout = new FrameLayout(getContext());
+        this.screencastView = frameLayout;
+        frameLayout.setBackground(new MotionBackgroundDrawable(-14602694, -13935795, -14395293, -14203560, true));
+        addView(this.screencastView, LayoutHelper.createFrame(-1, -1.0f));
+        this.screencastView.setVisibility(8);
+        ImageView imageView3 = new ImageView(getContext());
+        this.screencastImage = imageView3;
+        imageView3.setScaleType(ImageView.ScaleType.CENTER);
+        this.screencastImage.setImageResource(NUM);
+        this.screencastView.addView(this.screencastImage, LayoutHelper.createFrame(82, 82.0f, 17, 0.0f, 0.0f, 0.0f, 60.0f));
+        TextView textView = new TextView(getContext());
+        this.screencastText = textView;
+        textView.setText(LocaleController.getString("VoipVideoScreenSharing", NUM));
+        this.screencastText.setGravity(17);
+        this.screencastText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+        this.screencastText.setTextColor(-1);
+        this.screencastText.setTextSize(1, 15.0f);
+        this.screencastText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.screencastView.addView(this.screencastText, LayoutHelper.createFrame(-1, -2.0f, 17, 21.0f, 28.0f, 21.0f, 0.0f));
         if (z3 && Build.VERSION.SDK_INT >= 21) {
             setOutlineProvider(new ViewOutlineProvider() {
                 @TargetApi(21)
@@ -146,7 +177,7 @@ public class VoIPTextureView extends FrameLayout {
             });
             setClipToOutline(true);
         }
-        if (z && this.cameraLastBitmap == null) {
+        if (z5 && this.cameraLastBitmap == null) {
             try {
                 Bitmap decodeFile = BitmapFactory.decodeFile(new File(ApplicationLoader.getFilesDirFixed(), "voip_icthumb.jpg").getAbsolutePath());
                 this.cameraLastBitmap = decodeFile;
@@ -158,8 +189,46 @@ public class VoIPTextureView extends FrameLayout {
             } catch (Throwable unused) {
             }
         }
-        if (!z2) {
+        if (!z6) {
             this.renderer.setScreenRotation(((WindowManager) getContext().getSystemService("window")).getDefaultDisplay().getRotation());
+        }
+    }
+
+    public void setScreenshareMiniProgress(float f, boolean z) {
+        float f2;
+        if (this.screencast) {
+            float scaleX = ((View) getParent()).getScaleX();
+            float f3 = 1.0f;
+            this.screencastText.setAlpha(1.0f - f);
+            if (!z) {
+                f3 = 1.0f / scaleX;
+                f2 = (0.4f / scaleX) * f;
+            } else {
+                f2 = 0.4f * f;
+            }
+            float f4 = f3 - f2;
+            this.screencastImage.setScaleX(f4);
+            this.screencastImage.setScaleY(f4);
+            this.screencastImage.setTranslationY(((float) AndroidUtilities.dp(60.0f)) * f);
+        }
+    }
+
+    public void setIsScreencast(boolean z) {
+        this.screencast = z;
+        this.screencastView.setVisibility(z ? 0 : 8);
+        if (this.screencast) {
+            this.renderer.setVisibility(8);
+            TextureView textureView = this.blurRenderer;
+            if (textureView != null) {
+                textureView.setVisibility(8);
+            }
+            this.imageView.setVisibility(8);
+            return;
+        }
+        this.renderer.setVisibility(0);
+        TextureView textureView2 = this.blurRenderer;
+        if (textureView2 != null) {
+            textureView2.setVisibility(0);
         }
     }
 
@@ -216,16 +285,18 @@ public class VoIPTextureView extends FrameLayout {
     }
 
     public void setStub(VoIPTextureView voIPTextureView) {
-        Bitmap bitmap = voIPTextureView.renderer.getBitmap();
-        if (bitmap == null || bitmap.getPixel(0, 0) == 0) {
-            this.imageView.setImageDrawable(voIPTextureView.imageView.getDrawable());
-        } else {
-            this.imageView.setImageBitmap(bitmap);
-            this.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        if (!this.screencast) {
+            Bitmap bitmap = voIPTextureView.renderer.getBitmap();
+            if (bitmap == null || bitmap.getPixel(0, 0) == 0) {
+                this.imageView.setImageDrawable(voIPTextureView.imageView.getDrawable());
+            } else {
+                this.imageView.setImageBitmap(bitmap);
+                this.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
+            this.stubVisibleProgress = 1.0f;
+            this.imageView.setVisibility(0);
+            this.imageView.setAlpha(1.0f);
         }
-        this.stubVisibleProgress = 1.0f;
-        this.imageView.setVisibility(0);
-        this.imageView.setAlpha(1.0f);
     }
 
     public void animateToLayout() {

@@ -64,7 +64,7 @@ public class SharedLinkCell extends FrameLayout {
     public interface SharedLinkCellDelegate {
         boolean canPerformActions();
 
-        void needOpenWebView(TLRPC$WebPage tLRPC$WebPage);
+        void needOpenWebView(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject);
 
         void onLinkPress(String str, boolean z);
     }
@@ -1004,10 +1004,10 @@ public class SharedLinkCell extends FrameLayout {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:65:0x00fd, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:65:0x00ff, code lost:
         r3 = false;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x0111 A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x0113 A[ORIG_RETURN, RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:79:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r12) {
@@ -1016,14 +1016,14 @@ public class SharedLinkCell extends FrameLayout {
             org.telegram.messenger.MessageObject r0 = r11.message
             r1 = 1
             r2 = 0
-            if (r0 == 0) goto L_0x0104
+            if (r0 == 0) goto L_0x0106
             java.util.ArrayList<android.text.StaticLayout> r0 = r11.linkLayout
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x0104
+            if (r0 != 0) goto L_0x0106
             org.telegram.ui.Cells.SharedLinkCell$SharedLinkCellDelegate r0 = r11.delegate
-            if (r0 == 0) goto L_0x0104
+            if (r0 == 0) goto L_0x0106
             boolean r0 = r0.canPerformActions()
-            if (r0 == 0) goto L_0x0104
+            if (r0 == 0) goto L_0x0106
             int r0 = r12.getAction()
             if (r0 == 0) goto L_0x0035
             boolean r0 = r11.linkPreviewPressed
@@ -1034,9 +1034,9 @@ public class SharedLinkCell extends FrameLayout {
         L_0x0029:
             int r0 = r12.getAction()
             r3 = 3
-            if (r0 != r3) goto L_0x0107
+            if (r0 != r3) goto L_0x0109
             r11.resetPressedLink()
-            goto L_0x0107
+            goto L_0x0109
         L_0x0035:
             float r0 = r12.getX()
             int r0 = (int) r0
@@ -1047,12 +1047,12 @@ public class SharedLinkCell extends FrameLayout {
         L_0x0041:
             java.util.ArrayList<android.text.StaticLayout> r6 = r11.linkLayout
             int r6 = r6.size()
-            if (r4 >= r6) goto L_0x00fc
+            if (r4 >= r6) goto L_0x00fe
             java.util.ArrayList<android.text.StaticLayout> r6 = r11.linkLayout
             java.lang.Object r6 = r6.get(r4)
             android.text.StaticLayout r6 = (android.text.StaticLayout) r6
             int r7 = r6.getLineCount()
-            if (r7 <= 0) goto L_0x00f8
+            if (r7 <= 0) goto L_0x00fa
             int r7 = r6.getLineCount()
             int r7 = r7 - r1
             int r7 = r6.getLineBottom(r7)
@@ -1070,17 +1070,17 @@ public class SharedLinkCell extends FrameLayout {
             float r10 = r6.getLineLeft(r2)
             float r10 = r10 + r8
             int r10 = (r9 > r10 ? 1 : (r9 == r10 ? 0 : -1))
-            if (r10 < 0) goto L_0x00f7
+            if (r10 < 0) goto L_0x00f9
             float r10 = r6.getLineWidth(r2)
             float r8 = r8 + r10
             int r8 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1))
-            if (r8 > 0) goto L_0x00f7
+            if (r8 > 0) goto L_0x00f9
             int r8 = r11.linkY
             int r9 = r8 + r5
-            if (r3 < r9) goto L_0x00f7
+            if (r3 < r9) goto L_0x00f9
             int r8 = r8 + r5
             int r8 = r8 + r7
-            if (r3 > r8) goto L_0x00f7
+            if (r3 > r8) goto L_0x00f9
             int r0 = r12.getAction()
             if (r0 != 0) goto L_0x00b5
             r11.resetPressedLink()
@@ -1094,78 +1094,79 @@ public class SharedLinkCell extends FrameLayout {
             int r0 = r0.length()     // Catch:{ Exception -> 0x00b0 }
             org.telegram.ui.Components.LinkPath r3 = r11.urlPath     // Catch:{ Exception -> 0x00b0 }
             r6.getSelectionPath(r2, r0, r3)     // Catch:{ Exception -> 0x00b0 }
-            goto L_0x00f2
+            goto L_0x00f4
         L_0x00b0:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x00f2
+            goto L_0x00f4
         L_0x00b5:
             boolean r0 = r11.linkPreviewPressed
-            if (r0 == 0) goto L_0x00f5
-            int r0 = r11.pressedLink     // Catch:{ Exception -> 0x00eb }
+            if (r0 == 0) goto L_0x00f7
+            int r0 = r11.pressedLink     // Catch:{ Exception -> 0x00ed }
             if (r0 != 0) goto L_0x00c8
-            org.telegram.messenger.MessageObject r0 = r11.message     // Catch:{ Exception -> 0x00eb }
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner     // Catch:{ Exception -> 0x00eb }
-            org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media     // Catch:{ Exception -> 0x00eb }
+            org.telegram.messenger.MessageObject r0 = r11.message     // Catch:{ Exception -> 0x00ed }
+            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner     // Catch:{ Exception -> 0x00ed }
+            org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media     // Catch:{ Exception -> 0x00ed }
             if (r0 == 0) goto L_0x00c8
-            org.telegram.tgnet.TLRPC$WebPage r0 = r0.webpage     // Catch:{ Exception -> 0x00eb }
+            org.telegram.tgnet.TLRPC$WebPage r0 = r0.webpage     // Catch:{ Exception -> 0x00ed }
             goto L_0x00c9
         L_0x00c8:
             r0 = 0
         L_0x00c9:
-            if (r0 == 0) goto L_0x00db
-            java.lang.String r3 = r0.embed_url     // Catch:{ Exception -> 0x00eb }
-            if (r3 == 0) goto L_0x00db
-            int r3 = r3.length()     // Catch:{ Exception -> 0x00eb }
-            if (r3 == 0) goto L_0x00db
-            org.telegram.ui.Cells.SharedLinkCell$SharedLinkCellDelegate r3 = r11.delegate     // Catch:{ Exception -> 0x00eb }
-            r3.needOpenWebView(r0)     // Catch:{ Exception -> 0x00eb }
-            goto L_0x00ef
-        L_0x00db:
-            org.telegram.ui.Cells.SharedLinkCell$SharedLinkCellDelegate r0 = r11.delegate     // Catch:{ Exception -> 0x00eb }
-            java.util.ArrayList<java.lang.String> r3 = r11.links     // Catch:{ Exception -> 0x00eb }
-            int r4 = r11.pressedLink     // Catch:{ Exception -> 0x00eb }
-            java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x00eb }
-            java.lang.String r3 = (java.lang.String) r3     // Catch:{ Exception -> 0x00eb }
-            r0.onLinkPress(r3, r2)     // Catch:{ Exception -> 0x00eb }
-            goto L_0x00ef
-        L_0x00eb:
+            if (r0 == 0) goto L_0x00dd
+            java.lang.String r3 = r0.embed_url     // Catch:{ Exception -> 0x00ed }
+            if (r3 == 0) goto L_0x00dd
+            int r3 = r3.length()     // Catch:{ Exception -> 0x00ed }
+            if (r3 == 0) goto L_0x00dd
+            org.telegram.ui.Cells.SharedLinkCell$SharedLinkCellDelegate r3 = r11.delegate     // Catch:{ Exception -> 0x00ed }
+            org.telegram.messenger.MessageObject r4 = r11.message     // Catch:{ Exception -> 0x00ed }
+            r3.needOpenWebView(r0, r4)     // Catch:{ Exception -> 0x00ed }
+            goto L_0x00f1
+        L_0x00dd:
+            org.telegram.ui.Cells.SharedLinkCell$SharedLinkCellDelegate r0 = r11.delegate     // Catch:{ Exception -> 0x00ed }
+            java.util.ArrayList<java.lang.String> r3 = r11.links     // Catch:{ Exception -> 0x00ed }
+            int r4 = r11.pressedLink     // Catch:{ Exception -> 0x00ed }
+            java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x00ed }
+            java.lang.String r3 = (java.lang.String) r3     // Catch:{ Exception -> 0x00ed }
+            r0.onLinkPress(r3, r2)     // Catch:{ Exception -> 0x00ed }
+            goto L_0x00f1
+        L_0x00ed:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00ef:
+        L_0x00f1:
             r11.resetPressedLink()
-        L_0x00f2:
+        L_0x00f4:
             r0 = 1
             r3 = 1
-            goto L_0x00fe
-        L_0x00f5:
-            r0 = 1
-            goto L_0x00fd
+            goto L_0x0100
         L_0x00f7:
+            r0 = 1
+            goto L_0x00ff
+        L_0x00f9:
             int r5 = r5 + r7
-        L_0x00f8:
+        L_0x00fa:
             int r4 = r4 + 1
             goto L_0x0041
-        L_0x00fc:
-            r0 = 0
-        L_0x00fd:
-            r3 = 0
         L_0x00fe:
-            if (r0 != 0) goto L_0x0108
-            r11.resetPressedLink()
-            goto L_0x0108
-        L_0x0104:
-            r11.resetPressedLink()
-        L_0x0107:
+            r0 = 0
+        L_0x00ff:
             r3 = 0
-        L_0x0108:
-            if (r3 != 0) goto L_0x0112
+        L_0x0100:
+            if (r0 != 0) goto L_0x010a
+            r11.resetPressedLink()
+            goto L_0x010a
+        L_0x0106:
+            r11.resetPressedLink()
+        L_0x0109:
+            r3 = 0
+        L_0x010a:
+            if (r3 != 0) goto L_0x0114
             boolean r12 = super.onTouchEvent(r12)
-            if (r12 == 0) goto L_0x0111
-            goto L_0x0112
-        L_0x0111:
+            if (r12 == 0) goto L_0x0113
+            goto L_0x0114
+        L_0x0113:
             r1 = 0
-        L_0x0112:
+        L_0x0114:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.SharedLinkCell.onTouchEvent(android.view.MotionEvent):boolean");

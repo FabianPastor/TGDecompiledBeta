@@ -104,9 +104,10 @@ public class ActionBarMenuSubItem extends FrameLayout {
         this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(43.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(43.0f) : 0, 0);
     }
 
-    public void setColors(int i, int i2) {
+    public ActionBarMenuSubItem setColors(int i, int i2) {
         setTextColor(i);
         setIconColor(i2);
+        return this;
     }
 
     public void setTextColor(int i) {

@@ -223,7 +223,32 @@ public class VideoCapturerDevice {
                 if (i != -1) {
                     String str2 = deviceNames[i];
                     if (this.videoCapturer == null) {
-                        this.videoCapturer = camera2Enumerator.createCapturer(str2, (CameraVideoCapturer.CameraEventsHandler) null);
+                        this.videoCapturer = camera2Enumerator.createCapturer(str2, new CameraVideoCapturer.CameraEventsHandler() {
+                            public void onCameraClosed() {
+                            }
+
+                            public void onCameraDisconnected() {
+                            }
+
+                            public void onCameraError(String str) {
+                            }
+
+                            public void onCameraFreezed(String str) {
+                            }
+
+                            public void onCameraOpening(String str) {
+                            }
+
+                            public void onFirstFrameAvailable() {
+                                AndroidUtilities.runOnUIThread($$Lambda$VideoCapturerDevice$2$gGum1UL86zhpmQ75hwsQ00gpU.INSTANCE);
+                            }
+
+                            static /* synthetic */ void lambda$onFirstFrameAvailable$0() {
+                                if (VoIPService.getSharedInstance() != null) {
+                                    VoIPService.getSharedInstance().onCameraFirstFrameAvailable();
+                                }
+                            }
+                        });
                         this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.getEglBaseContext());
                         this.handler.post(new Runnable() {
                             public final void run() {
@@ -314,7 +339,7 @@ public class VideoCapturerDevice {
                     }
 
                     public final void run() {
-                        VideoCapturerDevice.AnonymousClass2.lambda$onCameraSwitchDone$0(this.f$0);
+                        VideoCapturerDevice.AnonymousClass3.lambda$onCameraSwitchDone$0(this.f$0);
                     }
                 });
             }

@@ -130,7 +130,11 @@ public class AboutLinkCell extends FrameLayout {
 
     public void setTextAndValue(String str, String str2, boolean z) {
         if (!TextUtils.isEmpty(str) && !TextUtils.equals(str, this.oldText)) {
-            this.oldText = str;
+            try {
+                this.oldText = AndroidUtilities.getSafeString(str);
+            } catch (Throwable unused) {
+                this.oldText = str;
+            }
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.oldText);
             this.stringBuilder = spannableStringBuilder;
             MessageObject.addLinks(false, spannableStringBuilder, false, false, !z);

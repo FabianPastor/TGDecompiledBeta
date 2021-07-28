@@ -264,7 +264,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         int i3;
         int i4;
         if (!(this.previewSize == null || (cameraSession2 = this.cameraSession) == null)) {
-            if (cameraSession2.getWorldAngle() == 90 || this.cameraSession.getWorldAngle() == 270) {
+            cameraSession2.updateRotation();
+            if (this.cameraSession.getWorldAngle() == 90 || this.cameraSession.getWorldAngle() == 270) {
                 i4 = this.previewSize.getWidth();
                 i3 = this.previewSize.getHeight();
             } else {
@@ -284,6 +285,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             layoutParams2.height = i6;
         }
         super.onMeasure(i, i2);
+        checkPreviewMatrix();
     }
 
     public float getTextureHeight(float f, float f2) {
@@ -981,18 +983,16 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                     FileLog.d("CameraView set gl rednderer session");
                 }
                 CameraSession cameraSession = (CameraSession) message.obj;
-                CameraSession cameraSession2 = this.currentSession;
-                if (cameraSession2 == cameraSession) {
-                    int worldAngle = cameraSession2.getWorldAngle();
-                    android.opengl.Matrix.setIdentityM(CameraView.this.mMVPMatrix, 0);
-                    if (worldAngle != 0) {
-                        android.opengl.Matrix.rotateM(CameraView.this.mMVPMatrix, 0, (float) worldAngle, 0.0f, 0.0f, 1.0f);
-                        return;
-                    }
-                    return;
+                if (this.currentSession != cameraSession) {
+                    this.currentSession = cameraSession;
+                    this.cameraId = Integer.valueOf(cameraSession.cameraInfo.cameraId);
                 }
-                this.currentSession = cameraSession;
-                this.cameraId = Integer.valueOf(cameraSession.cameraInfo.cameraId);
+                this.currentSession.updateRotation();
+                int worldAngle = this.currentSession.getWorldAngle();
+                android.opengl.Matrix.setIdentityM(CameraView.this.mMVPMatrix, 0);
+                if (worldAngle != 0) {
+                    android.opengl.Matrix.rotateM(CameraView.this.mMVPMatrix, 0, (float) worldAngle, 0.0f, 0.0f, 1.0f);
+                }
             } else if (i != 4) {
                 if (i == 5) {
                     if (CameraView.this.videoEncoder != null) {
@@ -1129,6 +1129,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 FileLog.d("CameraView camera initied");
             }
             this.cameraSession.setInitied();
+            requestLayout();
         }
     }
 

@@ -260,11 +260,13 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     }
 
     /* access modifiers changed from: protected */
-    public void onLongPress() {
+    public boolean onLongPress() {
         ChatActionCellDelegate chatActionCellDelegate = this.delegate;
-        if (chatActionCellDelegate != null) {
-            chatActionCellDelegate.didLongPress(this, this.lastTouchX, this.lastTouchY);
+        if (chatActionCellDelegate == null) {
+            return true;
         }
+        chatActionCellDelegate.didLongPress(this, this.lastTouchX, this.lastTouchY);
+        return true;
     }
 
     /* access modifiers changed from: protected */

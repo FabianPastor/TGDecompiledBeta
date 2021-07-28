@@ -20,7 +20,8 @@ public abstract class BaseCell extends ViewGroup {
     }
 
     /* access modifiers changed from: protected */
-    public void onLongPress() {
+    public boolean onLongPress() {
+        return true;
     }
 
     static /* synthetic */ int access$104(BaseCell baseCell) {
@@ -54,10 +55,11 @@ public abstract class BaseCell extends ViewGroup {
             if (BaseCell.this.checkingForLongPress && BaseCell.this.getParent() != null && this.currentPressCount == BaseCell.this.pressCount) {
                 boolean unused = BaseCell.this.checkingForLongPress = false;
                 BaseCell.this.performHapticFeedback(0);
-                BaseCell.this.onLongPress();
-                MotionEvent obtain = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
-                BaseCell.this.onTouchEvent(obtain);
-                obtain.recycle();
+                if (BaseCell.this.onLongPress()) {
+                    MotionEvent obtain = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
+                    BaseCell.this.onTouchEvent(obtain);
+                    obtain.recycle();
+                }
             }
         }
     }

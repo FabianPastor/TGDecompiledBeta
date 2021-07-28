@@ -53,6 +53,10 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     private boolean stub;
     float wavesEnter = 0.0f;
 
+    public /* synthetic */ void onCameraFirstFrameAvailable() {
+        VoIPService.StateListener.CC.$default$onCameraFirstFrameAvailable(this);
+    }
+
     public /* synthetic */ void onCameraSwitch(boolean z) {
         VoIPService.StateListener.CC.$default$onCameraSwitch(this, z);
     }

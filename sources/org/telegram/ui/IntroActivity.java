@@ -238,13 +238,6 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 IntroActivity.this.lambda$onCreate$0$IntroActivity(view);
             }
         });
-        if (BuildVars.DEBUG_PRIVATE_VERSION) {
-            this.startMessagingButton.setOnLongClickListener(new View.OnLongClickListener() {
-                public final boolean onLongClick(View view) {
-                    return IntroActivity.this.lambda$onCreate$1$IntroActivity(view);
-                }
-            });
-        }
         BottomPagesView bottomPagesView = new BottomPagesView(this, this.viewPager, 6);
         this.bottomPages = bottomPagesView;
         r4.addView(bottomPagesView, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
@@ -256,7 +249,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         r4.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
         this.textView.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                IntroActivity.this.lambda$onCreate$2$IntroActivity(view);
+                IntroActivity.this.lambda$onCreate$1$IntroActivity(view);
             }
         });
         if (AndroidUtilities.isTablet()) {
@@ -302,14 +295,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$onCreate$1 */
-    public /* synthetic */ boolean lambda$onCreate$1$IntroActivity(View view) {
-        ConnectionsManager.getInstance(this.currentAccount).switchBackend();
-        return true;
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$2 */
-    public /* synthetic */ void lambda$onCreate$2$IntroActivity(View view) {
+    public /* synthetic */ void lambda$onCreate$1$IntroActivity(View view) {
         if (!this.startPressed && this.localeInfo != null) {
             LocaleController.getInstance().applyLanguage(this.localeInfo, true, false, this.currentAccount);
             this.startPressed = true;
@@ -388,15 +374,15 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 }
 
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    IntroActivity.this.lambda$checkContinueText$4$IntroActivity(this.f$1, tLObject, tLRPC$TL_error);
+                    IntroActivity.this.lambda$checkContinueText$3$IntroActivity(this.f$1, tLObject, tLRPC$TL_error);
                 }
             }, 8);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkContinueText$4 */
-    public /* synthetic */ void lambda$checkContinueText$4$IntroActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$checkContinueText$3 */
+    public /* synthetic */ void lambda$checkContinueText$3$IntroActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
             if (!tLRPC$Vector.objects.isEmpty()) {
@@ -412,7 +398,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                         }
 
                         public final void run() {
-                            IntroActivity.this.lambda$checkContinueText$3$IntroActivity(this.f$1, this.f$2);
+                            IntroActivity.this.lambda$checkContinueText$2$IntroActivity(this.f$1, this.f$2);
                         }
                     });
                 }
@@ -421,8 +407,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkContinueText$3 */
-    public /* synthetic */ void lambda$checkContinueText$3$IntroActivity(TLRPC$LangPackString tLRPC$LangPackString, String str) {
+    /* renamed from: lambda$checkContinueText$2 */
+    public /* synthetic */ void lambda$checkContinueText$2$IntroActivity(TLRPC$LangPackString tLRPC$LangPackString, String str) {
         if (!this.destroyed) {
             this.textView.setText(tLRPC$LangPackString.value);
             MessagesController.getGlobalMainSettings().edit().putString("language_showed2", str.toLowerCase()).commit();

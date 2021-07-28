@@ -228,7 +228,7 @@ public class SearchCounterView extends View {
             if (this.countAnimationInLayout != null) {
                 canvas.save();
                 float f4 = this.countLeft;
-                float dp = ((float) AndroidUtilities.dp(4.0f)) + measuredHeight;
+                float dp = ((float) AndroidUtilities.dp(2.0f)) + measuredHeight;
                 int dp2 = AndroidUtilities.dp(13.0f);
                 if (!z) {
                     dp2 = -dp2;
@@ -240,7 +240,7 @@ public class SearchCounterView extends View {
             } else if (this.countLayout != null) {
                 canvas.save();
                 float f5 = this.countLeft;
-                float dp3 = ((float) AndroidUtilities.dp(4.0f)) + measuredHeight;
+                float dp3 = ((float) AndroidUtilities.dp(2.0f)) + measuredHeight;
                 int dp4 = AndroidUtilities.dp(13.0f);
                 if (!z) {
                     dp4 = -dp4;
@@ -252,21 +252,21 @@ public class SearchCounterView extends View {
             }
             if (this.countOldLayout != null) {
                 canvas.save();
-                canvas.translate(this.countLeft, ((float) AndroidUtilities.dp(4.0f)) + measuredHeight + (((float) (z ? -AndroidUtilities.dp(13.0f) : AndroidUtilities.dp(13.0f))) * this.countChangeProgress));
+                canvas.translate(this.countLeft, ((float) AndroidUtilities.dp(2.0f)) + measuredHeight + (((float) (z ? -AndroidUtilities.dp(13.0f) : AndroidUtilities.dp(13.0f))) * this.countChangeProgress));
                 this.textPaint.setAlpha((int) ((1.0f - this.countChangeProgress) * 255.0f));
                 this.countOldLayout.draw(canvas);
                 canvas.restore();
             }
             if (this.countAnimationStableLayout != null) {
                 canvas.save();
-                canvas.translate(this.countLeft + (this.dx * (1.0f - this.countChangeProgress)), ((float) AndroidUtilities.dp(4.0f)) + measuredHeight);
+                canvas.translate(this.countLeft + (this.dx * (1.0f - this.countChangeProgress)), ((float) AndroidUtilities.dp(2.0f)) + measuredHeight);
                 this.textPaint.setAlpha(255);
                 this.countAnimationStableLayout.draw(canvas);
                 canvas.restore();
             }
             if (this.countAnimationStableLayout2 != null) {
                 canvas.save();
-                canvas.translate(this.countLeft, measuredHeight + ((float) AndroidUtilities.dp(4.0f)));
+                canvas.translate(this.countLeft, measuredHeight + ((float) AndroidUtilities.dp(2.0f)));
                 this.textPaint.setAlpha(255);
                 this.countAnimationStableLayout2.draw(canvas);
                 canvas.restore();

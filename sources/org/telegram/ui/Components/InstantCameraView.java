@@ -42,6 +42,7 @@ import android.view.ViewOutlineProvider;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import androidx.core.graphics.ColorUtils;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -86,6 +87,7 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.InstantCameraView;
 import org.telegram.ui.Components.VideoPlayer;
+import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 @TargetApi(18)
 public class InstantCameraView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -121,6 +123,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     /* access modifiers changed from: private */
     public boolean isFrontface = true;
     boolean isInPinchToZoomTouchMode;
+    private boolean isMessageTransition;
     /* access modifiers changed from: private */
     public boolean isSecretChat;
     /* access modifiers changed from: private */
@@ -139,6 +142,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public AnimatorSet muteAnimation;
     /* access modifiers changed from: private */
     public ImageView muteImageView;
+    /* access modifiers changed from: private */
+    public boolean needDrawFlickerStub;
     /* access modifiers changed from: private */
     public int[] oldCameraTexture = new int[1];
     public boolean opened;
@@ -181,13 +186,15 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     /* access modifiers changed from: private */
     public TextureView textureView;
     /* access modifiers changed from: private */
+    public int textureViewSize;
+    /* access modifiers changed from: private */
     public FloatBuffer vertexBuffer;
     /* access modifiers changed from: private */
     public VideoEditedInfo videoEditedInfo;
     /* access modifiers changed from: private */
     public VideoPlayer videoPlayer;
 
-    static /* synthetic */ float access$2016(InstantCameraView instantCameraView, float f) {
+    static /* synthetic */ float access$2216(InstantCameraView instantCameraView, float f) {
         float f2 = instantCameraView.cameraTextureAlpha + f;
         instantCameraView.cameraTextureAlpha = f2;
         return f2;
@@ -205,20 +212,20 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.baseFragment = chatActivity;
         this.recordingGuid = chatActivity.getClassGuid();
         this.isSecretChat = this.baseFragment.getCurrentEncryptedChat() != null;
-        AnonymousClass1 r14 = new Paint(1) {
+        AnonymousClass1 r15 = new Paint(1) {
             public void setAlpha(int i) {
                 super.setAlpha(i);
                 InstantCameraView.this.invalidate();
             }
         };
-        this.paint = r14;
-        r14.setStyle(Paint.Style.STROKE);
+        this.paint = r15;
+        r15.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeCap(Paint.Cap.ROUND);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         this.paint.setColor(-1);
         this.rect = new RectF();
         if (Build.VERSION.SDK_INT >= 21) {
-            AnonymousClass2 r142 = new InstantViewCameraContainer(context) {
+            AnonymousClass2 r152 = new InstantViewCameraContainer(context) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     InstantCameraView.this.invalidate();
@@ -229,12 +236,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     InstantCameraView.this.invalidate();
                 }
             };
-            this.cameraContainer = r142;
-            r142.setOutlineProvider(new ViewOutlineProvider() {
+            this.cameraContainer = r152;
+            r152.setOutlineProvider(new ViewOutlineProvider() {
                 @TargetApi(21)
                 public void getOutline(View view, Outline outline) {
-                    int i = AndroidUtilities.roundMessageSize;
-                    outline.setOval(0, 0, i, i);
+                    outline.setOval(0, 0, InstantCameraView.this.textureViewSize, InstantCameraView.this.textureViewSize);
                 }
             });
             this.cameraContainer.setClipToOutline(true);
@@ -244,7 +250,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             final Paint paint2 = new Paint(1);
             paint2.setColor(-16777216);
             paint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-            AnonymousClass4 r0 = new InstantViewCameraContainer(context) {
+            AnonymousClass4 r6 = new InstantViewCameraContainer(context) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     InstantCameraView.this.invalidate();
@@ -268,12 +274,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
                 }
             };
-            this.cameraContainer = r0;
-            r0.setWillNotDraw(false);
+            this.cameraContainer = r6;
+            r6.setWillNotDraw(false);
             this.cameraContainer.setLayerType(2, (Paint) null);
         }
         InstantViewCameraContainer instantViewCameraContainer = this.cameraContainer;
-        int i = AndroidUtilities.roundMessageSize;
+        int i = AndroidUtilities.roundPlayingMessageSize;
         addView(instantViewCameraContainer, new FrameLayout.LayoutParams(i, i, 17));
         ImageView imageView = new ImageView(context);
         this.switchCameraButton = imageView;
@@ -291,13 +297,29 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.muteImageView.setImageResource(NUM);
         this.muteImageView.setAlpha(0.0f);
         addView(this.muteImageView, LayoutHelper.createFrame(48, 48, 17));
-        ((FrameLayout.LayoutParams) this.muteImageView.getLayoutParams()).topMargin = (AndroidUtilities.roundMessageSize / 2) - AndroidUtilities.dp(24.0f);
-        BackupImageView backupImageView = new BackupImageView(getContext());
-        this.textureOverlayView = backupImageView;
-        backupImageView.setRoundRadius(AndroidUtilities.roundMessageSize / 2);
-        BackupImageView backupImageView2 = this.textureOverlayView;
-        int i2 = AndroidUtilities.roundMessageSize;
-        addView(backupImageView2, new FrameLayout.LayoutParams(i2, i2, 17));
+        final Paint paint3 = new Paint(1);
+        paint3.setColor(ColorUtils.setAlphaComponent(-16777216, 40));
+        AnonymousClass6 r153 = new BackupImageView(getContext()) {
+            CellFlickerDrawable flickerDrawable = new CellFlickerDrawable();
+
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                if (InstantCameraView.this.needDrawFlickerStub) {
+                    this.flickerDrawable.setParentWidth(InstantCameraView.this.textureViewSize);
+                    RectF rectF = AndroidUtilities.rectTmp;
+                    rectF.set(0.0f, 0.0f, (float) InstantCameraView.this.textureViewSize, (float) InstantCameraView.this.textureViewSize);
+                    float width = rectF.width() / 2.0f;
+                    canvas.drawRoundRect(rectF, width, width, paint3);
+                    rectF.inset((float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f));
+                    this.flickerDrawable.draw(canvas, rectF, width);
+                    invalidate();
+                }
+            }
+        };
+        this.textureOverlayView = r153;
+        int i2 = AndroidUtilities.roundPlayingMessageSize;
+        addView(r153, new FrameLayout.LayoutParams(i2, i2, 17));
         setVisibility(4);
         this.blurBehindDrawable = new BlurBehindDrawable(this.parentView, this);
     }
@@ -317,6 +339,35 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             });
             duration.start();
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onMeasure(int i, int i2) {
+        int i3;
+        if (View.MeasureSpec.getSize(i2) > View.MeasureSpec.getSize(i)) {
+            i3 = AndroidUtilities.roundPlayingMessageSize;
+        } else {
+            i3 = AndroidUtilities.roundMessageSize;
+        }
+        if (i3 != this.textureViewSize) {
+            this.textureViewSize = i3;
+            ViewGroup.LayoutParams layoutParams = this.textureOverlayView.getLayoutParams();
+            ViewGroup.LayoutParams layoutParams2 = this.textureOverlayView.getLayoutParams();
+            int i4 = this.textureViewSize;
+            layoutParams2.height = i4;
+            layoutParams.width = i4;
+            ViewGroup.LayoutParams layoutParams3 = this.cameraContainer.getLayoutParams();
+            ViewGroup.LayoutParams layoutParams4 = this.cameraContainer.getLayoutParams();
+            int i5 = this.textureViewSize;
+            layoutParams4.height = i5;
+            layoutParams3.width = i5;
+            ((FrameLayout.LayoutParams) this.muteImageView.getLayoutParams()).topMargin = (this.textureViewSize / 2) - AndroidUtilities.dp(24.0f);
+            this.textureOverlayView.setRoundRadius(this.textureViewSize / 2);
+            if (Build.VERSION.SDK_INT >= 21) {
+                this.cameraContainer.invalidateOutline();
+            }
+        }
+        super.onMeasure(i, i2);
     }
 
     private boolean checkPointerIds(MotionEvent motionEvent) {
@@ -405,9 +456,16 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             int dp = ((int) x) - AndroidUtilities.dp(3.0f);
             int dp2 = ((int) y) - AndroidUtilities.dp(2.0f);
             canvas.save();
-            canvas.scale(this.cameraContainer.getScaleX(), this.cameraContainer.getScaleY(), (float) ((AndroidUtilities.roundMessageSize / 2) + dp + AndroidUtilities.dp(3.0f)), (float) ((AndroidUtilities.roundMessageSize / 2) + dp2 + AndroidUtilities.dp(3.0f)));
+            if (this.isMessageTransition) {
+                canvas.scale(this.cameraContainer.getScaleX(), this.cameraContainer.getScaleY(), x, y);
+            } else {
+                float scaleX2 = this.cameraContainer.getScaleX();
+                float scaleY2 = this.cameraContainer.getScaleY();
+                int i = this.textureViewSize;
+                canvas.scale(scaleX2, scaleY2, x + (((float) i) / 2.0f), y + (((float) i) / 2.0f));
+            }
             Theme.chat_roundVideoShadow.setAlpha((int) (this.cameraContainer.getAlpha() * 255.0f));
-            Theme.chat_roundVideoShadow.setBounds(dp, dp2, AndroidUtilities.roundMessageSize + dp + AndroidUtilities.dp(6.0f), AndroidUtilities.roundMessageSize + dp2 + AndroidUtilities.dp(6.0f));
+            Theme.chat_roundVideoShadow.setBounds(dp, dp2, this.textureViewSize + dp + AndroidUtilities.dp(6.0f), this.textureViewSize + dp2 + AndroidUtilities.dp(6.0f));
             Theme.chat_roundVideoShadow.draw(canvas);
             canvas.restore();
         }
@@ -454,6 +512,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         if (this.textureView == null) {
             this.switchCameraButton.setImageResource(NUM);
             this.textureOverlayView.setAlpha(1.0f);
+            this.textureOverlayView.invalidate();
             if (this.lastBitmap == null) {
                 try {
                     this.lastBitmap = BitmapFactory.decodeFile(new File(ApplicationLoader.getFilesDirFixed(), "icthumb.jpg").getAbsolutePath());
@@ -476,6 +535,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.encryptedFile = null;
             this.key = null;
             this.iv = null;
+            this.needDrawFlickerStub = true;
             if (initCamera()) {
                 MediaController.getInstance().lambda$startAudioAgain$7(MediaController.getInstance().getPlayingMessageObject());
                 File directory = FileLoader.getDirectory(4);
@@ -699,7 +759,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     Double.isNaN(d2);
                     videoEditedInfo2.estimatedSize = Math.max(1, (long) (d2 * (d3 / d)));
                     VideoEditedInfo videoEditedInfo3 = this.videoEditedInfo;
-                    videoEditedInfo3.bitrate = 400000;
+                    videoEditedInfo3.bitrate = 1000000;
                     long j5 = videoEditedInfo3.startTime;
                     if (j5 > 0) {
                         videoEditedInfo3.startTime = j5 * 1000;
@@ -748,7 +808,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private void saveLastCameraBitmap() {
         Bitmap bitmap = this.textureView.getBitmap();
         if (bitmap != null && bitmap.getPixel(0, 0) != 0) {
-            Bitmap createScaledBitmap = Bitmap.createScaledBitmap(this.textureView.getBitmap(), 80, 80, true);
+            Bitmap createScaledBitmap = Bitmap.createScaledBitmap(this.textureView.getBitmap(), 50, 50, true);
             this.lastBitmap = createScaledBitmap;
             if (createScaledBitmap != null) {
                 Utilities.blurBitmap(createScaledBitmap, 7, 1, createScaledBitmap.getWidth(), this.lastBitmap.getHeight(), this.lastBitmap.getRowBytes());
@@ -827,6 +887,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         saveLastCameraBitmap();
         Bitmap bitmap = this.lastBitmap;
         if (bitmap != null) {
+            this.needDrawFlickerStub = false;
             this.textureOverlayView.setImageBitmap(bitmap);
             this.textureOverlayView.setAlpha(1.0f);
         }
@@ -912,7 +973,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         }
                         Size size10 = pictureSizes.get(size9);
                         int i5 = size8.mWidth;
-                        if (i5 >= 240 && (i = size8.mHeight) >= 240 && i5 == size10.mWidth && i == size10.mHeight) {
+                        if (i5 >= 360 && (i = size8.mHeight) >= 360 && i5 == size10.mWidth && i == size10.mHeight) {
                             this.previewSize = size8;
                             this.pictureSize = size10;
                             z = true;
@@ -1021,23 +1082,23 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             public void run() {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        InstantCameraView.AnonymousClass8.this.lambda$run$0$InstantCameraView$8();
+                        InstantCameraView.AnonymousClass9.this.lambda$run$0$InstantCameraView$9();
                     }
                 });
             }
 
             /* access modifiers changed from: private */
             /* renamed from: lambda$run$0 */
-            public /* synthetic */ void lambda$run$0$InstantCameraView$8() {
+            public /* synthetic */ void lambda$run$0$InstantCameraView$9() {
                 try {
                     if (InstantCameraView.this.videoPlayer != null && InstantCameraView.this.videoEditedInfo != null) {
                         long j = 0;
                         if (InstantCameraView.this.videoEditedInfo.endTime > 0 && InstantCameraView.this.videoPlayer.getCurrentPosition() >= InstantCameraView.this.videoEditedInfo.endTime) {
-                            VideoPlayer access$400 = InstantCameraView.this.videoPlayer;
+                            VideoPlayer access$600 = InstantCameraView.this.videoPlayer;
                             if (InstantCameraView.this.videoEditedInfo.startTime > 0) {
                                 j = InstantCameraView.this.videoEditedInfo.startTime;
                             }
-                            access$400.seekTo(j);
+                            access$600.seekTo(j);
                         }
                     }
                 } catch (Exception e) {
@@ -1084,6 +1145,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     public TextureView getTextureView() {
         return this.textureView;
+    }
+
+    public void setIsMessageTransition(boolean z) {
+        this.isMessageTransition = z;
     }
 
     public class CameraGLThread extends DispatchQueue {
@@ -1185,21 +1250,21 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         return false;
                     } else {
                         this.eglContext.getGL();
-                        float access$700 = (1.0f / InstantCameraView.this.scaleX) / 2.0f;
-                        float access$800 = (1.0f / InstantCameraView.this.scaleY) / 2.0f;
-                        float f = 0.5f - access$700;
-                        float f2 = 0.5f - access$800;
-                        float f3 = access$700 + 0.5f;
-                        float f4 = access$800 + 0.5f;
+                        float access$900 = (1.0f / InstantCameraView.this.scaleX) / 2.0f;
+                        float access$1000 = (1.0f / InstantCameraView.this.scaleY) / 2.0f;
+                        float f = 0.5f - access$900;
+                        float f2 = 0.5f - access$1000;
+                        float f3 = access$900 + 0.5f;
+                        float f4 = access$1000 + 0.5f;
                         this.videoEncoder = new VideoRecorder();
                         FloatBuffer unused = InstantCameraView.this.vertexBuffer = ByteBuffer.allocateDirect(48).order(ByteOrder.nativeOrder()).asFloatBuffer();
                         InstantCameraView.this.vertexBuffer.put(new float[]{-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f}).position(0);
                         FloatBuffer unused2 = InstantCameraView.this.textureBuffer = ByteBuffer.allocateDirect(32).order(ByteOrder.nativeOrder()).asFloatBuffer();
                         InstantCameraView.this.textureBuffer.put(new float[]{f, f2, f3, f2, f, f4, f3, f4}).position(0);
                         Matrix.setIdentityM(InstantCameraView.this.mSTMatrix, 0);
-                        int access$1300 = InstantCameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
-                        int access$13002 = InstantCameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision lowp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n");
-                        if (access$1300 == 0 || access$13002 == 0) {
+                        int access$1500 = InstantCameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
+                        int access$15002 = InstantCameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision lowp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n");
+                        if (access$1500 == 0 || access$15002 == 0) {
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.e("failed creating shader");
                             }
@@ -1208,8 +1273,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         }
                         int glCreateProgram = GLES20.glCreateProgram();
                         this.drawProgram = glCreateProgram;
-                        GLES20.glAttachShader(glCreateProgram, access$1300);
-                        GLES20.glAttachShader(this.drawProgram, access$13002);
+                        GLES20.glAttachShader(glCreateProgram, access$1500);
+                        GLES20.glAttachShader(this.drawProgram, access$15002);
                         GLES20.glLinkProgram(this.drawProgram);
                         int[] iArr2 = new int[1];
                         GLES20.glGetProgramiv(this.drawProgram, 35714, iArr2, 0);
@@ -1319,10 +1384,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     this.recording = true;
                     int currentOrientation = this.currentSession.getCurrentOrientation();
                     if (currentOrientation == 90 || currentOrientation == 270) {
-                        float access$700 = InstantCameraView.this.scaleX;
+                        float access$900 = InstantCameraView.this.scaleX;
                         InstantCameraView instantCameraView = InstantCameraView.this;
                         float unused = instantCameraView.scaleX = instantCameraView.scaleY;
-                        float unused2 = InstantCameraView.this.scaleY = access$700;
+                        float unused2 = InstantCameraView.this.scaleY = access$900;
                     }
                 }
                 this.videoEncoder.frameAvailable(this.cameraSurface, num, System.nanoTime());
@@ -1573,7 +1638,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.keyframeThumbs = new ArrayList<>();
             this.recorderRunnable = new Runnable() {
                 /* JADX WARNING: Code restructure failed: missing block: B:12:0x002f, code lost:
-                    if (org.telegram.ui.Components.InstantCameraView.VideoRecorder.access$2800(r1.this$1) == 0) goto L_0x011c;
+                    if (org.telegram.ui.Components.InstantCameraView.VideoRecorder.access$3000(r1.this$1) == 0) goto L_0x011c;
                  */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
                 public void run() {
@@ -1792,8 +1857,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 if (r0 == 0) goto L_0x0017
                 goto L_0x001d
             L_0x0017:
-                r0 = 240(0xf0, float:3.36E-43)
-                r1 = 400000(0x61a80, float:5.6052E-40)
+                r0 = 360(0x168, float:5.04E-43)
+                r1 = 1000000(0xvar_, float:1.401298E-39)
                 goto L_0x0022
             L_0x001d:
                 r0 = 320(0x140, float:4.48E-43)
@@ -2452,7 +2517,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 float r3 = (float) r8
                 r6 = 1295957024(0x4d3ebCLASSNAME, float:2.0E8)
                 float r3 = r3 / r6
-                org.telegram.ui.Components.InstantCameraView.access$2016(r0, r3)
+                org.telegram.ui.Components.InstantCameraView.access$2216(r0, r3)
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 float r0 = r0.cameraTextureAlpha
                 int r0 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1))
@@ -2514,15 +2579,15 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
 
             public void run() {
-                TextureView access$3400 = InstantCameraView.this.textureView;
-                if (access$3400 != null) {
+                TextureView access$3600 = InstantCameraView.this.textureView;
+                if (access$3600 != null) {
                     AndroidUtilities.runOnUIThread(
                     /*  JADX ERROR: Method code generation error
                         jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x001d: INVOKE  
                           (wrap: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA : 0x001a: CONSTRUCTOR  (r1v2 org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA) = 
                           (r3v0 'this' org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask A[THIS])
                           (wrap: android.graphics.Bitmap : 0x0014: INVOKE  (r0v3 android.graphics.Bitmap) = 
-                          (r0v2 'access$3400' android.view.TextureView)
+                          (r0v2 'access$3600' android.view.TextureView)
                           (wrap: int : 0x000c: INVOKE  (r2v0 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                           (wrap: int : 0x0010: INVOKE  (r1v1 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                          android.view.TextureView.getBitmap(int, int):android.graphics.Bitmap type: VIRTUAL)
@@ -2598,7 +2663,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x001a: CONSTRUCTOR  (r1v2 org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA) = 
                           (r3v0 'this' org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask A[THIS])
                           (wrap: android.graphics.Bitmap : 0x0014: INVOKE  (r0v3 android.graphics.Bitmap) = 
-                          (r0v2 'access$3400' android.view.TextureView)
+                          (r0v2 'access$3600' android.view.TextureView)
                           (wrap: int : 0x000c: INVOKE  (r2v0 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                           (wrap: int : 0x0010: INVOKE  (r1v1 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                          android.view.TextureView.getBitmap(int, int):android.graphics.Bitmap type: VIRTUAL)
@@ -2744,12 +2809,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 InstantCameraView.this.videoEditedInfo.iv = InstantCameraView.this.iv;
                 InstantCameraView.this.videoEditedInfo.estimatedSize = Math.max(1, InstantCameraView.this.size);
                 InstantCameraView.this.videoEditedInfo.framerate = 25;
-                VideoEditedInfo access$500 = InstantCameraView.this.videoEditedInfo;
-                InstantCameraView.this.videoEditedInfo.originalWidth = 240;
-                access$500.resultWidth = 240;
-                VideoEditedInfo access$5002 = InstantCameraView.this.videoEditedInfo;
-                InstantCameraView.this.videoEditedInfo.originalHeight = 240;
-                access$5002.resultHeight = 240;
+                VideoEditedInfo access$700 = InstantCameraView.this.videoEditedInfo;
+                InstantCameraView.this.videoEditedInfo.originalWidth = 360;
+                access$700.resultWidth = 360;
+                VideoEditedInfo access$7002 = InstantCameraView.this.videoEditedInfo;
+                InstantCameraView.this.videoEditedInfo.originalHeight = 360;
+                access$7002.resultHeight = 360;
                 InstantCameraView.this.videoEditedInfo.originalPath = this.videoFile.getAbsolutePath();
                 if (i != 1) {
                     VideoPlayer unused2 = InstantCameraView.this.videoPlayer = new VideoPlayer();
@@ -2781,12 +2846,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
                         public void onStateChanged(boolean z, int i) {
                             if (InstantCameraView.this.videoPlayer != null && InstantCameraView.this.videoPlayer.isPlaying() && i == 4) {
-                                VideoPlayer access$400 = InstantCameraView.this.videoPlayer;
+                                VideoPlayer access$600 = InstantCameraView.this.videoPlayer;
                                 long j = 0;
                                 if (InstantCameraView.this.videoEditedInfo.startTime > 0) {
                                     j = InstantCameraView.this.videoEditedInfo.startTime;
                                 }
-                                access$400.seekTo(j);
+                                access$600.seekTo(j);
                             }
                         }
 
@@ -2920,13 +2985,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                         throw new RuntimeException("eglMakeCurrent failed");
                                     } else {
                                         GLES20.glBlendFunc(770, 771);
-                                        int access$1300 = InstantCameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
-                                        int access$13002 = InstantCameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n");
-                                        if (access$1300 != 0 && access$13002 != 0) {
+                                        int access$1500 = InstantCameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
+                                        int access$15002 = InstantCameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n");
+                                        if (access$1500 != 0 && access$15002 != 0) {
                                             int glCreateProgram = GLES20.glCreateProgram();
                                             this.drawProgram = glCreateProgram;
-                                            GLES20.glAttachShader(glCreateProgram, access$1300);
-                                            GLES20.glAttachShader(this.drawProgram, access$13002);
+                                            GLES20.glAttachShader(glCreateProgram, access$1500);
+                                            GLES20.glAttachShader(this.drawProgram, access$15002);
                                             GLES20.glLinkProgram(this.drawProgram);
                                             int[] iArr2 = new int[1];
                                             GLES20.glGetProgramiv(this.drawProgram, 35714, iArr2, 0);
@@ -2986,22 +3051,22 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     if (z) {
                         FileLoader instance = FileLoader.getInstance(InstantCameraView.this.currentAccount);
                         String file2 = file.toString();
-                        boolean access$3600 = InstantCameraView.this.isSecretChat;
+                        boolean access$3800 = InstantCameraView.this.isSecretChat;
                         if (z) {
                             j2 = file.length();
                         }
-                        instance.checkUploadNewDataAvailable(file2, access$3600, j, j2);
+                        instance.checkUploadNewDataAvailable(file2, access$3800, j, j2);
                         return;
                     }
                     return;
                 }
                 FileLoader instance2 = FileLoader.getInstance(InstantCameraView.this.currentAccount);
                 String file3 = file.toString();
-                boolean access$36002 = InstantCameraView.this.isSecretChat;
+                boolean access$38002 = InstantCameraView.this.isSecretChat;
                 if (z) {
                     j2 = file.length();
                 }
-                instance2.checkUploadNewDataAvailable(file3, access$36002, j, j2);
+                instance2.checkUploadNewDataAvailable(file3, access$38002, j, j2);
             }
 
             public void drainEncoder(boolean z) throws Exception {
@@ -3220,6 +3285,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 if (this.imageReceiver != null) {
                     canvas.save();
+                    if (this.imageReceiver.getImageWidth() != ((float) InstantCameraView.this.textureViewSize)) {
+                        float access$000 = ((float) InstantCameraView.this.textureViewSize) / this.imageReceiver.getImageWidth();
+                        canvas.scale(access$000, access$000);
+                    }
                     canvas.translate(-this.imageReceiver.getImageX(), -this.imageReceiver.getImageY());
                     float alpha = this.imageReceiver.getAlpha();
                     this.imageReceiver.setAlpha(this.imageProgress);

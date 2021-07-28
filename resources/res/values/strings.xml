@@ -498,8 +498,9 @@
     <string name="AuthAnotherClientScan">Scan QR Code</string>
     <string name="AuthAnotherClientTokenError">Token invalid or already expired.</string>
     <string name="AuthAnotherClientUrl">This code can be used to allow someone to log in to your Telegram account.\10\10To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and scan the code.</string>
+    <string name="AutoDelete1Month">1 month</string>
     <string name="AutoDelete24Hours">24 hours</string>
-    <string name="AutoDelete7Days">7 days</string>
+    <string name="AutoDelete7Days">1 week</string>
     <string name="AutoDeleteAlertChannelInfo">Automatically delete new messages after a certain period of time for subscribers of this channel.</string>
     <string name="AutoDeleteAlertGroupInfo">Automatically delete new messages after a certain period of time for members of this group.</string>
     <string name="AutoDeleteAlertTitle">Auto-delete messages</string>
@@ -3462,6 +3463,7 @@
     <string name="SecretChatTimerDays">d</string>
     <string name="SecretChatTimerHours">h</string>
     <string name="SecretChatTimerMinutes">m</string>
+    <string name="SecretChatTimerMonths">m</string>
     <string name="SecretChatTimerSeconds">s</string>
     <string name="SecretChatTimerWeeks">w</string>
     <string name="SecretLinkPreviewAlert">Would you like to enable extended link previews in Secret Chats? Note that link previews are generated on Telegram servers.</string>
@@ -3673,6 +3675,12 @@
     <string name="SoundMuted">Sound muted</string>
     <string name="Speaking">speaking</string>
     <string name="SpeakingWithVolume">%1$d%% speaking</string>
+    <string name="Speed">Speed</string>
+    <string name="SpeedFast">Fast</string>
+    <string name="SpeedNormal">Normal</string>
+    <string name="SpeedSlow">Slow</string>
+    <string name="SpeedVeryFast">Vert fast</string>
+    <string name="SpeedVerySlow">Very slow</string>
     <string name="Start">Start</string>
     <string name="StartDayAt">\'Start on\' MMM d \'at\' HH:mm</string>
     <string name="StartDayYearAt">\'Start on\' MMM d yyyy \'at\' HH:mm</string>
@@ -4158,6 +4166,7 @@
     <string name="VoipAudioRoutingHeadset">Headset</string>
     <string name="VoipAudioRoutingPhone">Phone</string>
     <string name="VoipAudioRoutingSpeaker">Speaker</string>
+    <string name="VoipBackCamera">BACK CAMERA</string>
     <string name="VoipBusy">Line busy</string>
     <string name="VoipCallEnded">Call ended</string>
     <string name="VoipCamera">Camera</string>
@@ -4188,6 +4197,7 @@
     <string name="VoipFailed">Failed to connect</string>
     <string name="VoipFeedbackCommentHint">Add an optional comment</string>
     <string name="VoipFlip">Flip</string>
+    <string name="VoipFrontCamera">FRONT CAMERA</string>
     <string name="VoipGroupAdd">Add</string>
     <string name="VoipGroupAddMemberText">Do you want to add **%1$s** to **%2$s**?</string>
     <string name="VoipGroupAddMemberTitle">Add Member</string>
@@ -4326,6 +4336,7 @@
     <string name="VoipPeerOutdated">**%1$s**\'s app does not support calls. They need to update their app before you can call them.</string>
     <string name="VoipPeerVideoOutdated">Sorry, **%1$s** is using an old version of Telegram that doesn\'t support video calls.</string>
     <string name="VoipPeerVideoOutdatedMakeVoice">Make a voice call</string>
+    <string name="VoipPhoneScreen">PHONE SCREEN</string>
     <string name="VoipQuickReplies">Respond with Text</string>
     <string name="VoipQuickRepliesExplain">These quick responses will be available when you respond to an incoming call with a Telegram message. Change them to say anything you like.</string>
     <string name="VoipRateCallAlert">Please rate the quality of your Telegram call</string>
@@ -4336,6 +4347,7 @@
     <string name="VoipSelectAudioOutput">Select audio output</string>
     <string name="VoipSetNewPhoto">Set New Photo</string>
     <string name="VoipSettingsRingtone">Ringtone</string>
+    <string name="VoipShareVideo">Share Video</string>
     <string name="VoipSpeaker">Speaker</string>
     <string name="VoipStartVideo">Start Video</string>
     <string name="VoipStopVideo">Stop Video</string>
@@ -4348,7 +4360,9 @@
     <string name="VoipUserCameraIsOff">%s\'s camera is off</string>
     <string name="VoipUserMicrophoneIsOff">%s\'s microphone is off</string>
     <string name="VoipVideoNotAvailable">Video is only available\10for the first %1$s</string>
+    <string name="VoipVideoNotAvailableAdmin">The voice chat is over %1$s.\10New participants only have access to audio stream.</string>
     <string name="VoipVideoOnPause">Video on Pause</string>
+    <string name="VoipVideoPrivateScreenSharing">Everything on your screen, including notifications, will be shared.</string>
     <string name="VoipVideoScreenSharing">You are sharing your screen</string>
     <string name="VoipVideoScreenSharingTwoLines">You are sharing\10your screen</string>
     <string name="VoipVideoScreenStopSharing">STOP SHARING</string>

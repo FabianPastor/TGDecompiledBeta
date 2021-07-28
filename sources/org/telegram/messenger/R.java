@@ -323,6 +323,7 @@ public final class R {
         public static final int calls_mute = NUM;
         public static final int calls_mute_mini = NUM;
         public static final int calls_pip_outershadow = NUM;
+        public static final int calls_sharescreen = NUM;
         public static final int calls_speaker = NUM;
         public static final int calls_topshadow = NUM;
         public static final int calls_unmute = NUM;
@@ -765,6 +766,10 @@ public final class R {
         public static final int msg_mention = NUM;
         public static final int msg_message = NUM;
         public static final int msg_minvideo = NUM;
+        public static final int msg_more_0_2 = NUM;
+        public static final int msg_more_0_5 = NUM;
+        public static final int msg_more_1_5 = NUM;
+        public static final int msg_more_2 = NUM;
         public static final int msg_msgbubble = NUM;
         public static final int msg_msgbubble2 = NUM;
         public static final int msg_msgbubble3 = NUM;
@@ -816,6 +821,12 @@ public final class R {
         public static final int msg_share = NUM;
         public static final int msg_share_filled = NUM;
         public static final int msg_shareout = NUM;
+        public static final int msg_speed = NUM;
+        public static final int msg_speed_0_2 = NUM;
+        public static final int msg_speed_0_5 = NUM;
+        public static final int msg_speed_1 = NUM;
+        public static final int msg_speed_1_5 = NUM;
+        public static final int msg_speed_2 = NUM;
         public static final int msg_start_secret = NUM;
         public static final int msg_stats = NUM;
         public static final int msg_sticker = NUM;
@@ -934,6 +945,7 @@ public final class R {
         public static final int places_btn = NUM;
         public static final int play_big = NUM;
         public static final int play_mini_video = NUM;
+        public static final int play_roundvideo = NUM;
         public static final int player = NUM;
         public static final int player_new_next = NUM;
         public static final int player_new_order = NUM;
@@ -2231,6 +2243,7 @@ public final class R {
         public static final int AuthAnotherClientScan = NUM;
         public static final int AuthAnotherClientTokenError = NUM;
         public static final int AuthAnotherClientUrl = NUM;
+        public static final int AutoDelete1Month = NUM;
         public static final int AutoDelete24Hours = NUM;
         public static final int AutoDelete7Days = NUM;
         public static final int AutoDeleteAlertChannelInfo = NUM;
@@ -5195,6 +5208,7 @@ public final class R {
         public static final int SecretChatTimerDays = NUM;
         public static final int SecretChatTimerHours = NUM;
         public static final int SecretChatTimerMinutes = NUM;
+        public static final int SecretChatTimerMonths = NUM;
         public static final int SecretChatTimerSeconds = NUM;
         public static final int SecretChatTimerWeeks = NUM;
         public static final int SecretLinkPreviewAlert = NUM;
@@ -5406,6 +5420,12 @@ public final class R {
         public static final int SoundMuted = NUM;
         public static final int Speaking = NUM;
         public static final int SpeakingWithVolume = NUM;
+        public static final int Speed = NUM;
+        public static final int SpeedFast = NUM;
+        public static final int SpeedNormal = NUM;
+        public static final int SpeedSlow = NUM;
+        public static final int SpeedVeryFast = NUM;
+        public static final int SpeedVerySlow = NUM;
         public static final int Start = NUM;
         public static final int StartDayAt = NUM;
         public static final int StartDayYearAt = NUM;
@@ -5891,6 +5911,7 @@ public final class R {
         public static final int VoipAudioRoutingHeadset = NUM;
         public static final int VoipAudioRoutingPhone = NUM;
         public static final int VoipAudioRoutingSpeaker = NUM;
+        public static final int VoipBackCamera = NUM;
         public static final int VoipBusy = NUM;
         public static final int VoipCallEnded = NUM;
         public static final int VoipCamera = NUM;
@@ -5921,6 +5942,7 @@ public final class R {
         public static final int VoipFailed = NUM;
         public static final int VoipFeedbackCommentHint = NUM;
         public static final int VoipFlip = NUM;
+        public static final int VoipFrontCamera = NUM;
         public static final int VoipGroupAdd = NUM;
         public static final int VoipGroupAddMemberText = NUM;
         public static final int VoipGroupAddMemberTitle = NUM;
@@ -6059,6 +6081,7 @@ public final class R {
         public static final int VoipPeerOutdated = NUM;
         public static final int VoipPeerVideoOutdated = NUM;
         public static final int VoipPeerVideoOutdatedMakeVoice = NUM;
+        public static final int VoipPhoneScreen = NUM;
         public static final int VoipQuickReplies = NUM;
         public static final int VoipQuickRepliesExplain = NUM;
         public static final int VoipRateCallAlert = NUM;
@@ -6069,6 +6092,7 @@ public final class R {
         public static final int VoipSelectAudioOutput = NUM;
         public static final int VoipSetNewPhoto = NUM;
         public static final int VoipSettingsRingtone = NUM;
+        public static final int VoipShareVideo = NUM;
         public static final int VoipSpeaker = NUM;
         public static final int VoipStartVideo = NUM;
         public static final int VoipStopVideo = NUM;
@@ -6081,7 +6105,9 @@ public final class R {
         public static final int VoipUserCameraIsOff = NUM;
         public static final int VoipUserMicrophoneIsOff = NUM;
         public static final int VoipVideoNotAvailable = NUM;
+        public static final int VoipVideoNotAvailableAdmin = NUM;
         public static final int VoipVideoOnPause = NUM;
+        public static final int VoipVideoPrivateScreenSharing = NUM;
         public static final int VoipVideoScreenSharing = NUM;
         public static final int VoipVideoScreenSharingTwoLines = NUM;
         public static final int VoipVideoScreenStopSharing = NUM;

@@ -91,7 +91,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r3 = 2131427356(0x7f0b001c, float:1.8476326E38)
             r0.<init>(r2, r3)
             r2 = 2131230941(0x7var_dd, float:1.8077949E38)
-            r3 = 2131628321(0x7f0e1121, float:1.8883931E38)
+            r3 = 2131628335(0x7f0e112f, float:1.888396E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -108,7 +108,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r5 = 2131427357(0x7f0b001d, float:1.8476328E38)
             r0.<init>(r2, r5)
             r2 = 2131230943(0x7var_df, float:1.8077953E38)
-            r5 = 2131627729(0x7f0e0ed1, float:1.888273E38)
+            r5 = 2131627737(0x7f0e0ed9, float:1.8882747E38)
             java.lang.String r6 = "TapToEditWidget"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)
@@ -148,21 +148,21 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r0 == 0) goto L_0x00fe
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r0)
             if (r6 == 0) goto L_0x00b2
-            r6 = 2131627331(0x7f0e0d43, float:1.8881923E38)
+            r6 = 2131627332(0x7f0e0d44, float:1.8881925E38)
             java.lang.String r7 = "SavedMessages"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
         L_0x00b2:
             boolean r6 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
             if (r6 == 0) goto L_0x00c2
-            r6 = 2131627212(0x7f0e0ccc, float:1.8881682E38)
+            r6 = 2131627213(0x7f0e0ccd, float:1.8881684E38)
             java.lang.String r7 = "RepliesTitle"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
         L_0x00c2:
             boolean r6 = org.telegram.messenger.UserObject.isDeleted(r0)
             if (r6 == 0) goto L_0x00d2
-            r6 = 2131625779(0x7f0e0733, float:1.8878776E38)
+            r6 = 2131625780(0x7f0e0734, float:1.8878778E38)
             java.lang.String r7 = "HiddenName"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
@@ -391,7 +391,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         L_0x0293:
             boolean r6 = r4.isOutOwner()
             if (r6 == 0) goto L_0x02a4
-            r0 = 2131625689(0x7f0e06d9, float:1.8878593E38)
+            r0 = 2131625690(0x7f0e06da, float:1.8878595E38)
             java.lang.String r6 = "FromYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
         L_0x02a2:
@@ -785,13 +785,13 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             java.lang.String r9 = "setEnabled"
             if (r6 == 0) goto L_0x05b4
             r13.setBoolean(r4, r9, r8)
-            r6 = 2131166151(0x7var_c7, float:1.794654E38)
+            r6 = 2131166163(0x7var_d3, float:1.7946564E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05c3
         L_0x05b4:
             r6 = 1
             r13.setBoolean(r4, r9, r6)
-            r6 = 2131166150(0x7var_c6, float:1.7946537E38)
+            r6 = 2131166162(0x7var_d2, float:1.7946562E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05c3
         L_0x05bf:
