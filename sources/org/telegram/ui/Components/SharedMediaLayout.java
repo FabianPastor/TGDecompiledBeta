@@ -1940,7 +1940,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         sharedMediaDataArr[i].messages.addAll(sharedMediaData2[i].messages);
         this.sharedMediaData[i].sections.addAll(sharedMediaData2[i].sections);
         for (Map.Entry next : sharedMediaData2[i].sectionArrays.entrySet()) {
-            this.sharedMediaData[i].sectionArrays.put(next.getKey(), new ArrayList((Collection) next.getValue()));
+            this.sharedMediaData[i].sectionArrays.put((String) next.getKey(), new ArrayList((Collection) next.getValue()));
         }
         for (int i2 = 0; i2 < 2; i2++) {
             this.sharedMediaData[i].messagesDict[i2] = sharedMediaData2[i].messagesDict[i2].clone();
@@ -5225,14 +5225,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
 
                 public final void run() {
-                    SharedMediaLayout.MediaSearchAdapter.this.lambda$null$0$SharedMediaLayout$MediaSearchAdapter(this.f$1, this.f$2);
+                    SharedMediaLayout.MediaSearchAdapter.this.lambda$queryServerSearch$0$SharedMediaLayout$MediaSearchAdapter(this.f$1, this.f$2);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$SharedMediaLayout$MediaSearchAdapter(int i, ArrayList arrayList) {
+        /* renamed from: lambda$queryServerSearch$0 */
+        public /* synthetic */ void lambda$queryServerSearch$0$SharedMediaLayout$MediaSearchAdapter(int i, ArrayList arrayList) {
             if (this.reqId != 0) {
                 if (i == this.lastReqId) {
                     int itemCount = getItemCount();
@@ -5323,15 +5323,15 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     }
 
                     public final void run() {
-                        SharedMediaLayout.MediaSearchAdapter.this.lambda$null$2$SharedMediaLayout$MediaSearchAdapter(this.f$1, this.f$2);
+                        SharedMediaLayout.MediaSearchAdapter.this.lambda$search$2$SharedMediaLayout$MediaSearchAdapter(this.f$1, this.f$2);
                     }
                 });
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$SharedMediaLayout$MediaSearchAdapter(String str, ArrayList arrayList) {
+        /* renamed from: lambda$search$2 */
+        public /* synthetic */ void lambda$search$2$SharedMediaLayout$MediaSearchAdapter(String str, ArrayList arrayList) {
             TLRPC$Document tLRPC$Document;
             boolean z;
             String str2;
@@ -5661,14 +5661,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
 
                 public final void run() {
-                    SharedMediaLayout.CommonGroupsAdapter.this.lambda$null$0$SharedMediaLayout$CommonGroupsAdapter(this.f$1, this.f$2, this.f$3);
+                    SharedMediaLayout.CommonGroupsAdapter.this.lambda$getChats$0$SharedMediaLayout$CommonGroupsAdapter(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$SharedMediaLayout$CommonGroupsAdapter(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
+        /* renamed from: lambda$getChats$0 */
+        public /* synthetic */ void lambda$getChats$0$SharedMediaLayout$CommonGroupsAdapter(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
             int itemCount = getItemCount();
             if (tLRPC$TL_error == null) {
                 TLRPC$messages_Chats tLRPC$messages_Chats = (TLRPC$messages_Chats) tLObject;
@@ -5997,7 +5997,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     }
 
                     public final void run() {
-                        SharedMediaLayout.GroupUsersSearchAdapter.this.lambda$null$2$SharedMediaLayout$GroupUsersSearchAdapter(this.f$1, this.f$2);
+                        SharedMediaLayout.GroupUsersSearchAdapter.this.lambda$processSearch$2$SharedMediaLayout$GroupUsersSearchAdapter(this.f$1, this.f$2);
                     }
                 });
             } else {
@@ -6018,9 +6018,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         /* JADX WARNING: Removed duplicated region for block: B:53:0x0145 A[LOOP:1: B:30:0x00b3->B:53:0x0145, LOOP_END] */
         /* JADX WARNING: Removed duplicated region for block: B:61:0x0106 A[SYNTHETIC] */
         /* JADX WARNING: Unknown variable types count: 1 */
-        /* renamed from: lambda$null$2 */
+        /* renamed from: lambda$processSearch$2 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$2$SharedMediaLayout$GroupUsersSearchAdapter(java.lang.String r19, java.util.ArrayList r20) {
+        public /* synthetic */ void lambda$processSearch$2$SharedMediaLayout$GroupUsersSearchAdapter(java.lang.String r19, java.util.ArrayList r20) {
             /*
                 r18 = this;
                 r0 = r18
@@ -6190,7 +6190,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 r0.updateSearchResults(r1, r2)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SharedMediaLayout.GroupUsersSearchAdapter.lambda$null$2$SharedMediaLayout$GroupUsersSearchAdapter(java.lang.String, java.util.ArrayList):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SharedMediaLayout.GroupUsersSearchAdapter.lambda$processSearch$2$SharedMediaLayout$GroupUsersSearchAdapter(java.lang.String, java.util.ArrayList):void");
         }
 
         private void updateSearchResults(ArrayList<CharSequence> arrayList, ArrayList<TLObject> arrayList2) {

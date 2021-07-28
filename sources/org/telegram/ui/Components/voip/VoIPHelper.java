@@ -338,7 +338,7 @@ public class VoIPHelper {
                 }
 
                 public final void run() {
-                    VoIPHelper.lambda$null$2(TLRPC$User.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+                    VoIPHelper.lambda$initiateCall$2(TLRPC$User.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
                 }
             });
         } else {
@@ -346,7 +346,7 @@ public class VoIPHelper {
         }
     }
 
-    static /* synthetic */ void lambda$null$2(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, String str, boolean z, boolean z2, boolean z3, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance) {
+    static /* synthetic */ void lambda$initiateCall$2(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, String str, boolean z, boolean z2, boolean z3, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance) {
         lastCallTime = 0;
         doInitiateCall(tLRPC$User, tLRPC$Chat, str, (TLRPC$InputPeer) null, false, z, z2, z3, activity, baseFragment, accountInstance, true, true);
     }
@@ -956,7 +956,7 @@ public class VoIPHelper {
                 }
 
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    VoIPHelper.lambda$null$15(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLObject, tLRPC$TL_error);
+                    VoIPHelper.lambda$showRateAlert$15(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLObject, tLRPC$TL_error);
                 }
             });
             alertDialog.dismiss();
@@ -976,7 +976,7 @@ public class VoIPHelper {
         ((TextView) view).setText(LocaleController.getString("Send", NUM).toUpperCase());
     }
 
-    static /* synthetic */ void lambda$null$15(int i, boolean[] zArr, File file, TLRPC$TL_phone_setCallRating tLRPC$TL_phone_setCallRating, ArrayList arrayList, Context context, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$showRateAlert$15(int i, boolean[] zArr, File file, TLRPC$TL_phone_setCallRating tLRPC$TL_phone_setCallRating, ArrayList arrayList, Context context, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         TLObject tLObject2 = tLObject;
         if (tLObject2 instanceof TLRPC$TL_updates) {
             MessagesController.getInstance(i).processUpdates((TLRPC$TL_updates) tLObject2, false);

@@ -2864,7 +2864,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         AnonymousClass10 r5 = new EditTextCaption(activity2) {
             /* access modifiers changed from: private */
             /* renamed from: send */
-            public void lambda$null$0(InputContentInfoCompat inputContentInfoCompat, boolean z, int i) {
+            public void lambda$onCreateInputConnection$0(InputContentInfoCompat inputContentInfoCompat, boolean z, int i) {
                 if (inputContentInfoCompat.getDescription().hasMimeType("image/gif")) {
                     SendMessagesHelper.prepareSendingDocument(ChatActivityEnterView.this.accountInstance, (String) null, (String) null, inputContentInfoCompat.getContentUri(), (String) null, "image/gif", ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), inputContentInfoCompat, (MessageObject) null, z, 0);
                 } else {
@@ -2909,11 +2909,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
 
                         public final void didSelectDate(boolean z, int i) {
-                            ChatActivityEnterView.AnonymousClass10.this.lambda$null$0$ChatActivityEnterView$10(this.f$1, z, i);
+                            ChatActivityEnterView.AnonymousClass10.this.lambda$onCreateInputConnection$0$ChatActivityEnterView$10(this.f$1, z, i);
                         }
                     });
                 } else {
-                    lambda$null$0(inputContentInfoCompat, true, 0);
+                    lambda$onCreateInputConnection$0(inputContentInfoCompat, true, 0);
                 }
                 return true;
             }
@@ -3049,7 +3049,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                 }
 
                                 public final void run() {
-                                    ChatActivityEnterView.AnonymousClass10.this.lambda$null$3$ChatActivityEnterView$10(this.f$1, this.f$2, this.f$3);
+                                    ChatActivityEnterView.AnonymousClass10.this.lambda$onTextContextMenuItem$3$ChatActivityEnterView$10(this.f$1, this.f$2, this.f$3);
                                 }
                             });
                             return;
@@ -3061,8 +3061,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$null$3 */
-            public /* synthetic */ void lambda$null$3$ChatActivityEnterView$10(ArrayList arrayList, final MediaController.PhotoEntry photoEntry, final File file) {
+            /* renamed from: lambda$onTextContextMenuItem$3 */
+            public /* synthetic */ void lambda$onTextContextMenuItem$3$ChatActivityEnterView$10(ArrayList arrayList, final MediaController.PhotoEntry photoEntry, final File file) {
                 PhotoViewer.getInstance().setParentActivity(ChatActivityEnterView.this.parentActivity);
                 PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, 2, false, new PhotoViewer.EmptyPhotoViewerProvider() {
                     boolean sending;
@@ -4074,7 +4074,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.waitingForKeyboardOpenAfterAnimation = true;
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        ChatActivityEnterView.this.lambda$null$0$ChatActivityEnterView();
+                        ChatActivityEnterView.this.lambda$new$0$ChatActivityEnterView();
                     }
                 }, 200);
                 return;
@@ -4084,8 +4084,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ChatActivityEnterView() {
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$ChatActivityEnterView() {
         this.waitingForKeyboardOpenAfterAnimation = false;
         openKeyboardInternal();
     }
@@ -4252,7 +4252,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.startedDraggingX = -1.0f;
                         if (!z2 || this.videoSendButton.getTag() == null) {
                             if (this.recordingAudioVideo && isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) $$Lambda$ChatActivityEnterView$qbB8wUW2E4LuhJNciJXvdKjcX0.INSTANCE, (Runnable) $$Lambda$ChatActivityEnterView$xKyuMKVyqNN_UNa_TeNOZCo1tYw.INSTANCE);
+                                AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) $$Lambda$ChatActivityEnterView$2qMbG7RhYFjf5DGZry30sFnt1D8.INSTANCE, (Runnable) $$Lambda$ChatActivityEnterView$A_nC1eD4I1yfzYCneX_xvHnwg8.INSTANCE);
                             }
                             this.delegate.needStartRecordAudio(0);
                             MediaController instance = MediaController.getInstance();
@@ -4266,9 +4266,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                         this.recordingAudioVideo = false;
                         this.messageTransitionIsRunning = false;
-                        $$Lambda$ChatActivityEnterView$VQrGneuyAYpkGibXFfIVlVnVzc r0 = new Runnable() {
+                        $$Lambda$ChatActivityEnterView$W151PjnI1oawgMqW3qnpqIlxVr4 r0 = new Runnable() {
                             public final void run() {
-                                ChatActivityEnterView.this.lambda$null$15$ChatActivityEnterView();
+                                ChatActivityEnterView.this.lambda$new$15$ChatActivityEnterView();
                             }
                         };
                         this.moveToSendStateRunnable = r0;
@@ -4325,7 +4325,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.startedDraggingX = -1.0f;
                 if (!z3 || this.videoSendButton.getTag() == null) {
                     if (this.recordingAudioVideo && isInScheduleMode()) {
-                        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) $$Lambda$ChatActivityEnterView$9RcTRqk04AW_Wg3NMne8eUjZ7I.INSTANCE, (Runnable) $$Lambda$ChatActivityEnterView$olkhiLMJ2HOU7snQnD4XDsvUnIc.INSTANCE);
+                        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) $$Lambda$ChatActivityEnterView$D9M_Co8T87H5Pehr6gNXX9I6Cdk.INSTANCE, (Runnable) $$Lambda$ChatActivityEnterView$1_S0vOQvkoPajvvL58TRMSrmPU.INSTANCE);
                     }
                     MediaController instance2 = MediaController.getInstance();
                     if (!isInScheduleMode()) {
@@ -4338,9 +4338,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 this.recordingAudioVideo = false;
                 this.messageTransitionIsRunning = false;
-                $$Lambda$ChatActivityEnterView$y7FGoo6V260cdJ1YtQs0HKlBc4 r13 = new Runnable() {
+                $$Lambda$ChatActivityEnterView$qNji1T63RTeQFMMaEGtyzpD5ocY r13 = new Runnable() {
                     public final void run() {
-                        ChatActivityEnterView.this.lambda$null$12$ChatActivityEnterView();
+                        ChatActivityEnterView.this.lambda$new$12$ChatActivityEnterView();
                     }
                 };
                 this.moveToSendStateRunnable = r13;
@@ -4365,15 +4365,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$ChatActivityEnterView() {
+    /* renamed from: lambda$new$12 */
+    public /* synthetic */ void lambda$new$12$ChatActivityEnterView() {
         this.moveToSendStateRunnable = null;
         updateRecordIntefrace(1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$15 */
-    public /* synthetic */ void lambda$null$15$ChatActivityEnterView() {
+    /* renamed from: lambda$new$15 */
+    public /* synthetic */ void lambda$new$15$ChatActivityEnterView() {
         this.moveToSendStateRunnable = null;
         updateRecordIntefrace(1);
     }
@@ -5863,7 +5863,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
                 if (processSendingText(text, z3, i3)) {
-                    if (this.delegate.hasForwardingMessages()) {
+                    if (this.delegate.hasForwardingMessages() || ((i3 != 0 && !isInScheduleMode()) || isInScheduleMode())) {
                         this.messageEditText.setText("");
                         ChatActivityEnterViewDelegate chatActivityEnterViewDelegate3 = this.delegate;
                         if (chatActivityEnterViewDelegate3 != null) {

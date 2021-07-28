@@ -123,7 +123,7 @@ public class TermsOfServiceView extends FrameLayout {
         builder.setTitle(LocaleController.getString("TermsOfService", NUM));
         builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                TermsOfServiceView.this.lambda$null$3$TermsOfServiceView(dialogInterface, i);
+                TermsOfServiceView.this.lambda$new$3$TermsOfServiceView(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Back", NUM), (DialogInterface.OnClickListener) null);
@@ -132,14 +132,14 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$TermsOfServiceView(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$3 */
+    public /* synthetic */ void lambda$new$3$TermsOfServiceView(DialogInterface dialogInterface, int i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", NUM));
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setPositiveButton(LocaleController.getString("Deactivate", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                TermsOfServiceView.this.lambda$null$2$TermsOfServiceView(dialogInterface, i);
+                TermsOfServiceView.this.lambda$new$2$TermsOfServiceView(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -147,8 +147,8 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$TermsOfServiceView(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$2 */
+    public /* synthetic */ void lambda$new$2$TermsOfServiceView(DialogInterface dialogInterface, int i) {
         AlertDialog alertDialog = new AlertDialog(getContext(), 3);
         alertDialog.setCanCacnel(false);
         TLRPC$TL_account_deleteAccount tLRPC$TL_account_deleteAccount = new TLRPC$TL_account_deleteAccount();
@@ -161,15 +161,15 @@ public class TermsOfServiceView extends FrameLayout {
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                TermsOfServiceView.this.lambda$null$1$TermsOfServiceView(this.f$1, tLObject, tLRPC$TL_error);
+                TermsOfServiceView.this.lambda$new$1$TermsOfServiceView(this.f$1, tLObject, tLRPC$TL_error);
             }
         });
         alertDialog.show();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$TermsOfServiceView(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$new$1 */
+    public /* synthetic */ void lambda$new$1$TermsOfServiceView(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$TL_error) {
             public final /* synthetic */ AlertDialog f$1;
             public final /* synthetic */ TLObject f$2;
@@ -182,14 +182,14 @@ public class TermsOfServiceView extends FrameLayout {
             }
 
             public final void run() {
-                TermsOfServiceView.this.lambda$null$0$TermsOfServiceView(this.f$1, this.f$2, this.f$3);
+                TermsOfServiceView.this.lambda$new$0$TermsOfServiceView(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$TermsOfServiceView(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$TermsOfServiceView(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -218,7 +218,7 @@ public class TermsOfServiceView extends FrameLayout {
             builder.setTitle(LocaleController.getString("TosAgeTitle", NUM));
             builder.setPositiveButton(LocaleController.getString("Agree", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    TermsOfServiceView.this.lambda$null$5$TermsOfServiceView(dialogInterface, i);
+                    TermsOfServiceView.this.lambda$new$5$TermsOfServiceView(dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -230,8 +230,8 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$TermsOfServiceView(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$5 */
+    public /* synthetic */ void lambda$new$5$TermsOfServiceView(DialogInterface dialogInterface, int i) {
         accept();
     }
 

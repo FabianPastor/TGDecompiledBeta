@@ -1074,10 +1074,10 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                     /*  JADX ERROR: Method code generation error
                         jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0007: INVOKE  
                           (wrap: org.telegram.messenger.DispatchQueue : 0x0000: SGET  (r0v0 org.telegram.messenger.DispatchQueue) =  org.telegram.messenger.Utilities.searchQueue org.telegram.messenger.DispatchQueue)
-                          (wrap: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$BqQzOdVCPe8AJjpGffpAVMjUeaw : 0x0004: CONSTRUCTOR  (r1v0 org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$BqQzOdVCPe8AJjpGffpAVMjUeaw) = 
+                          (wrap: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0 : 0x0004: CONSTRUCTOR  (r1v0 org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0) = 
                           (r2v0 'this' org.telegram.ui.InviteContactsActivity$InviteAdapter$1 A[THIS])
                           (r3v0 'str' java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$BqQzOdVCPe8AJjpGffpAVMjUeaw.<init>(org.telegram.ui.InviteContactsActivity$InviteAdapter$1, java.lang.String):void type: CONSTRUCTOR)
+                         call: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0.<init>(org.telegram.ui.InviteContactsActivity$InviteAdapter$1, java.lang.String):void type: CONSTRUCTOR)
                          org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable):boolean type: VIRTUAL in method: org.telegram.ui.InviteContactsActivity.InviteAdapter.1.lambda$run$1(java.lang.String):void, dex: classes.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -1160,10 +1160,10 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0004: CONSTRUCTOR  (r1v0 org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$BqQzOdVCPe8AJjpGffpAVMjUeaw) = 
+                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0004: CONSTRUCTOR  (r1v0 org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0) = 
                           (r2v0 'this' org.telegram.ui.InviteContactsActivity$InviteAdapter$1 A[THIS])
                           (r3v0 'str' java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$BqQzOdVCPe8AJjpGffpAVMjUeaw.<init>(org.telegram.ui.InviteContactsActivity$InviteAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.InviteContactsActivity.InviteAdapter.1.lambda$run$1(java.lang.String):void, dex: classes.dex
+                         call: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0.<init>(org.telegram.ui.InviteContactsActivity$InviteAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.InviteContactsActivity.InviteAdapter.1.lambda$run$1(java.lang.String):void, dex: classes.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1172,7 +1172,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                         	... 80 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$BqQzOdVCPe8AJjpGffpAVMjUeaw, state: NOT_LOADED
+                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0, state: NOT_LOADED
                         	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                         	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -1182,7 +1182,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                     /*
                         this = this;
                         org.telegram.messenger.DispatchQueue r0 = org.telegram.messenger.Utilities.searchQueue
-                        org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$BqQzOdVCPe8AJjpGffpAVMjUeaw r1 = new org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$BqQzOdVCPe8AJjpGffpAVMjUeaw
+                        org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0 r1 = new org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0
                         r1.<init>(r2, r3)
                         r0.postRunnable(r1)
                         return
@@ -1196,9 +1196,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                  */
                 /* JADX WARNING: Removed duplicated region for block: B:36:0x00da A[LOOP:1: B:23:0x008a->B:36:0x00da, LOOP_END] */
                 /* JADX WARNING: Removed duplicated region for block: B:43:0x00cb A[SYNTHETIC] */
-                /* renamed from: lambda$null$0 */
+                /* renamed from: lambda$run$0 */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
-                public /* synthetic */ void lambda$null$0$InviteContactsActivity$InviteAdapter$1(java.lang.String r17) {
+                public /* synthetic */ void lambda$run$0$InviteContactsActivity$InviteAdapter$1(java.lang.String r17) {
                     /*
                         r16 = this;
                         r0 = r16
@@ -1312,7 +1312,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                         r3.updateSearchResults(r1, r2)
                         return
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.InviteAdapter.AnonymousClass1.lambda$null$0$InviteContactsActivity$InviteAdapter$1(java.lang.String):void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.InviteAdapter.AnonymousClass1.lambda$run$0$InviteContactsActivity$InviteAdapter$1(java.lang.String):void");
                 }
             }, 200, 300);
         }

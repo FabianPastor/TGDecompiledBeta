@@ -375,14 +375,14 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
 
             public final void run() {
-                DialogsSearchAdapter.this.lambda$null$0$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+                DialogsSearchAdapter.this.lambda$searchMessagesInternal$0$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$DialogsSearchAdapter(int i, int i2, TLRPC$TL_error tLRPC$TL_error, String str, TLObject tLObject, TLRPC$TL_messages_searchGlobal tLRPC$TL_messages_searchGlobal, ArrayList arrayList) {
+    /* renamed from: lambda$searchMessagesInternal$0 */
+    public /* synthetic */ void lambda$searchMessagesInternal$0$DialogsSearchAdapter(int i, int i2, TLRPC$TL_error tLRPC$TL_error, String str, TLObject tLObject, TLRPC$TL_messages_searchGlobal tLRPC$TL_messages_searchGlobal, ArrayList arrayList) {
         if (i == this.lastReqId && (i2 <= 0 || i2 == this.lastSearchId)) {
             this.waitingResponseCount--;
             if (tLRPC$TL_error == null) {
@@ -399,7 +399,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                     TLRPC$Message tLRPC$Message = tLRPC$messages_Messages.messages.get(i3);
                     Integer num = MessagesController.getInstance(this.currentAccount).deletedHistory.get(MessageObject.getDialogId(tLRPC$Message));
                     if (num == null || tLRPC$Message.id > num.intValue()) {
-                        this.searchResultMessages.add(arrayList.get(i3));
+                        this.searchResultMessages.add((MessageObject) arrayList.get(i3));
                         long dialogId = MessageObject.getDialogId(tLRPC$Message);
                         ConcurrentHashMap<Long, Integer> concurrentHashMap = tLRPC$Message.out ? MessagesController.getInstance(this.currentAccount).dialogs_read_outbox_max : MessagesController.getInstance(this.currentAccount).dialogs_read_inbox_max;
                         Integer num2 = (Integer) concurrentHashMap.get(Long.valueOf(dialogId));
@@ -652,9 +652,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r2 = r2 + 1
             goto L_0x0141
         L_0x015d:
-            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$BDNKeGoejMNaaPye_aAMgiN99g0 r0 = org.telegram.ui.Adapters.$$Lambda$DialogsSearchAdapter$BDNKeGoejMNaaPye_aAMgiN99g0.INSTANCE     // Catch:{ Exception -> 0x016b }
+            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$KZCwPlFSVFfb6qnYhw41i-SJ33Y r0 = org.telegram.ui.Adapters.$$Lambda$DialogsSearchAdapter$KZCwPlFSVFfb6qnYhw41iSJ33Y.INSTANCE     // Catch:{ Exception -> 0x016b }
             java.util.Collections.sort(r5, r0)     // Catch:{ Exception -> 0x016b }
-            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$136baVssL6dp6QC4k1zrI9YjX9A r0 = new org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$136baVssL6dp6QC4k1zrI9YjX9A     // Catch:{ Exception -> 0x016b }
+            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$1h1ktwdqY4KtlZjilzfKb-hvBwo r0 = new org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$1h1ktwdqY4KtlZjilzfKb-hvBwo     // Catch:{ Exception -> 0x016b }
             r0.<init>(r5, r6)     // Catch:{ Exception -> 0x016b }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x016b }
             goto L_0x016f
@@ -667,7 +667,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsSearchAdapter.lambda$loadRecentSearch$4$DialogsSearchAdapter():void");
     }
 
-    static /* synthetic */ int lambda$null$2(RecentSearchObject recentSearchObject, RecentSearchObject recentSearchObject2) {
+    static /* synthetic */ int lambda$loadRecentSearch$2(RecentSearchObject recentSearchObject, RecentSearchObject recentSearchObject2) {
         int i = recentSearchObject.date;
         int i2 = recentSearchObject2.date;
         if (i < i2) {
@@ -775,7 +775,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
 
     /* access modifiers changed from: private */
     /* renamed from: setRecentSearch */
-    public void lambda$null$3(ArrayList<RecentSearchObject> arrayList, LongSparseArray<RecentSearchObject> longSparseArray) {
+    public void lambda$loadRecentSearch$3(ArrayList<RecentSearchObject> arrayList, LongSparseArray<RecentSearchObject> longSparseArray) {
         this.recentSearchObjects = arrayList;
         this.recentSearchObjectsById = longSparseArray;
         for (int i = 0; i < this.recentSearchObjects.size(); i++) {
@@ -833,14 +833,14 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                DialogsSearchAdapter.this.lambda$null$8$DialogsSearchAdapter();
+                DialogsSearchAdapter.this.lambda$searchDialogsInternal$8$DialogsSearchAdapter();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$DialogsSearchAdapter() {
+    /* renamed from: lambda$searchDialogsInternal$8 */
+    public /* synthetic */ void lambda$searchDialogsInternal$8$DialogsSearchAdapter() {
         FilteredSearchView.Delegate delegate2 = this.filtersDelegate;
         if (delegate2 != null) {
             delegate2.updateFiltersView(false, (ArrayList<Object>) null, this.localTipDates, this.localTipArchive);
@@ -911,7 +911,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                             }
 
                             public final void run(int i) {
-                                DialogsSearchAdapter.this.lambda$null$10$DialogsSearchAdapter(this.f$1, this.f$2, i);
+                                DialogsSearchAdapter.this.lambda$updateSearchResults$10$DialogsSearchAdapter(this.f$1, this.f$2, i);
                             }
                         });
                     }
@@ -934,8 +934,8 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$DialogsSearchAdapter(int i, Object obj, int i2) {
+    /* renamed from: lambda$updateSearchResults$10 */
+    public /* synthetic */ void lambda$updateSearchResults$10$DialogsSearchAdapter(int i, Object obj, int i2) {
         if (i2 != -1) {
             TLRPC$TL_dialog tLRPC$TL_dialog = new TLRPC$TL_dialog();
             long j = (long) i;
@@ -1058,7 +1058,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     public /* synthetic */ void lambda$searchDialogs$13$DialogsSearchAdapter(String str, int i, String str2) {
         this.searchRunnable = null;
         searchDialogsInternal(str, i);
-        $$Lambda$DialogsSearchAdapter$q74FYYtylks_TGicwGZg8s2c9Qw r0 = new Runnable(i, str, str2) {
+        $$Lambda$DialogsSearchAdapter$5yi246j9nGiFRvjBscwwMVaLlP0 r0 = new Runnable(i, str, str2) {
             public final /* synthetic */ int f$1;
             public final /* synthetic */ String f$2;
             public final /* synthetic */ String f$3;
@@ -1070,7 +1070,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
 
             public final void run() {
-                DialogsSearchAdapter.this.lambda$null$12$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3);
+                DialogsSearchAdapter.this.lambda$searchDialogs$12$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3);
             }
         };
         this.searchRunnable2 = r0;
@@ -1078,8 +1078,8 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$DialogsSearchAdapter(int i, String str, String str2) {
+    /* renamed from: lambda$searchDialogs$12 */
+    public /* synthetic */ void lambda$searchDialogs$12$DialogsSearchAdapter(int i, String str, String str2) {
         int i2 = i;
         this.searchRunnable2 = null;
         if (i2 == this.lastSearchId) {

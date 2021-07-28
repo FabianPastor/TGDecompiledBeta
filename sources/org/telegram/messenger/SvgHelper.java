@@ -262,22 +262,13 @@ public class SvgHelper {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:11:0x003b, code lost:
-        r9 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:12:0x003c, code lost:
-        if (r8 != null) goto L_0x003e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:14:?, code lost:
-        r8.close();
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x0041 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:12:0x003f */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static android.graphics.Bitmap getBitmap(int r8, int r9, int r10, int r11) {
         /*
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0042 }
-            android.content.res.Resources r0 = r0.getResources()     // Catch:{ Exception -> 0x0042 }
-            java.io.InputStream r8 = r0.openRawResource(r8)     // Catch:{ Exception -> 0x0042 }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0040 }
+            android.content.res.Resources r0 = r0.getResources()     // Catch:{ Exception -> 0x0040 }
+            java.io.InputStream r8 = r0.openRawResource(r8)     // Catch:{ Exception -> 0x0040 }
             javax.xml.parsers.SAXParserFactory r0 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x0039 }
             javax.xml.parsers.SAXParser r0 = r0.newSAXParser()     // Catch:{ all -> 0x0039 }
             org.xml.sax.XMLReader r0 = r0.getXMLReader()     // Catch:{ all -> 0x0039 }
@@ -295,19 +286,16 @@ public class SvgHelper {
             r0.parse(r9)     // Catch:{ all -> 0x0039 }
             android.graphics.Bitmap r9 = r7.getBitmap()     // Catch:{ all -> 0x0039 }
             if (r8 == 0) goto L_0x0038
-            r8.close()     // Catch:{ Exception -> 0x0042 }
+            r8.close()     // Catch:{ Exception -> 0x0040 }
         L_0x0038:
             return r9
         L_0x0039:
             r9 = move-exception
-            throw r9     // Catch:{ all -> 0x003b }
-        L_0x003b:
-            r9 = move-exception
-            if (r8 == 0) goto L_0x0041
-            r8.close()     // Catch:{ all -> 0x0041 }
-        L_0x0041:
-            throw r9     // Catch:{ Exception -> 0x0042 }
-        L_0x0042:
+            if (r8 == 0) goto L_0x003f
+            r8.close()     // Catch:{ all -> 0x003f }
+        L_0x003f:
+            throw r9     // Catch:{ Exception -> 0x0040 }
+        L_0x0040:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
             r8 = 0
@@ -316,19 +304,13 @@ public class SvgHelper {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.getBitmap(int, int, int, int):android.graphics.Bitmap");
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:15:0x003b, code lost:
-        r9 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:17:?, code lost:
-        r1.close();
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:18:0x003f */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x003d */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static android.graphics.Bitmap getBitmap(java.io.File r9, int r10, int r11, boolean r12) {
         /*
             r0 = 0
-            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0040 }
-            r1.<init>(r9)     // Catch:{ Exception -> 0x0040 }
+            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ Exception -> 0x003e }
+            r1.<init>(r9)     // Catch:{ Exception -> 0x003e }
             javax.xml.parsers.SAXParserFactory r9 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x0039 }
             javax.xml.parsers.SAXParser r9 = r9.newSAXParser()     // Catch:{ all -> 0x0039 }
             org.xml.sax.XMLReader r9 = r9.getXMLReader()     // Catch:{ all -> 0x0039 }
@@ -352,17 +334,14 @@ public class SvgHelper {
             r10.<init>(r1)     // Catch:{ all -> 0x0039 }
             r9.parse(r10)     // Catch:{ all -> 0x0039 }
             android.graphics.Bitmap r9 = r8.getBitmap()     // Catch:{ all -> 0x0039 }
-            r1.close()     // Catch:{ Exception -> 0x0040 }
+            r1.close()     // Catch:{ Exception -> 0x003e }
             return r9
         L_0x0039:
             r9 = move-exception
-            throw r9     // Catch:{ all -> 0x003b }
-        L_0x003b:
-            r9 = move-exception
-            r1.close()     // Catch:{ all -> 0x003f }
-        L_0x003f:
-            throw r9     // Catch:{ Exception -> 0x0040 }
-        L_0x0040:
+            r1.close()     // Catch:{ all -> 0x003d }
+        L_0x003d:
+            throw r9     // Catch:{ Exception -> 0x003e }
+        L_0x003e:
             r9 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
             return r0

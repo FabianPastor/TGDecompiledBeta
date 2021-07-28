@@ -764,14 +764,14 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             }
 
             public final void run() {
-                MessageStatisticActivity.this.lambda$null$2$MessageStatisticActivity(this.f$1, this.f$2);
+                MessageStatisticActivity.this.lambda$loadChats$2$MessageStatisticActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$loadChats$2 */
+    public /* synthetic */ void lambda$loadChats$2$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             if ((tLRPC$messages_Messages.flags & 1) != 0) {
@@ -828,14 +828,14 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             }
 
             public final void run() {
-                MessageStatisticActivity.this.lambda$null$7$MessageStatisticActivity(this.f$1, this.f$2);
+                MessageStatisticActivity.this.lambda$loadStat$7$MessageStatisticActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$loadStat$7 */
+    public /* synthetic */ void lambda$loadStat$7$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.statsLoaded = true;
         if (tLRPC$TL_error != null) {
             updateRows();
@@ -864,14 +864,14 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                MessageStatisticActivity.this.lambda$null$6$MessageStatisticActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                MessageStatisticActivity.this.lambda$loadStat$6$MessageStatisticActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
             }
         }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true), this.classGuid);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$MessageStatisticActivity(String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$loadStat$6 */
+    public /* synthetic */ void lambda$loadStat$6$MessageStatisticActivity(String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ChartData chartData = null;
         if (tLObject instanceof TLRPC$TL_statsGraph) {
             try {
@@ -888,7 +888,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 }
 
                 public final void run() {
-                    MessageStatisticActivity.this.lambda$null$4$MessageStatisticActivity(this.f$1);
+                    MessageStatisticActivity.this.lambda$loadStat$4$MessageStatisticActivity(this.f$1);
                 }
             });
         }
@@ -906,22 +906,22 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             }
 
             public final void run() {
-                MessageStatisticActivity.this.lambda$null$5$MessageStatisticActivity(this.f$1, this.f$2, this.f$3, this.f$4);
+                MessageStatisticActivity.this.lambda$loadStat$5$MessageStatisticActivity(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$MessageStatisticActivity(TLObject tLObject) {
+    /* renamed from: lambda$loadStat$4 */
+    public /* synthetic */ void lambda$loadStat$4$MessageStatisticActivity(TLObject tLObject) {
         if (getParentActivity() != null) {
             Toast.makeText(getParentActivity(), ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, ChartData chartData, String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph) {
+    /* renamed from: lambda$loadStat$5 */
+    public /* synthetic */ void lambda$loadStat$5$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, ChartData chartData, String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph) {
         this.statsLoaded = true;
         if (tLRPC$TL_error != null || chartData == null) {
             updateRows();

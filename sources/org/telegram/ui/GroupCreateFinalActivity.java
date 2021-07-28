@@ -665,11 +665,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public /* synthetic */ void lambda$createView$4$GroupCreateFinalActivity(View view) {
         this.imageUpdater.openMenu(this.avatar != null, new Runnable() {
             public final void run() {
-                GroupCreateFinalActivity.this.lambda$null$2$GroupCreateFinalActivity();
+                GroupCreateFinalActivity.this.lambda$createView$2$GroupCreateFinalActivity();
             }
         }, new DialogInterface.OnDismissListener() {
             public final void onDismiss(DialogInterface dialogInterface) {
-                GroupCreateFinalActivity.this.lambda$null$3$GroupCreateFinalActivity(dialogInterface);
+                GroupCreateFinalActivity.this.lambda$createView$3$GroupCreateFinalActivity(dialogInterface);
             }
         });
         this.cameraDrawable.setCurrentFrame(0);
@@ -678,8 +678,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$GroupCreateFinalActivity() {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$GroupCreateFinalActivity() {
         this.avatar = null;
         this.avatarBig = null;
         this.inputPhoto = null;
@@ -693,8 +693,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$GroupCreateFinalActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$GroupCreateFinalActivity(DialogInterface dialogInterface) {
         this.cameraDrawable.setCustomEndFrame(86);
         this.avatarEditor.playAnimation();
     }
@@ -707,7 +707,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             locationActivity.setDialogId(0);
             locationActivity.setDelegate(new LocationActivity.LocationActivityDelegate() {
                 public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-                    GroupCreateFinalActivity.this.lambda$null$5$GroupCreateFinalActivity(tLRPC$MessageMedia, i, z, i2);
+                    GroupCreateFinalActivity.this.lambda$createView$5$GroupCreateFinalActivity(tLRPC$MessageMedia, i, z, i2);
                 }
             });
             presentFragment(locationActivity);
@@ -715,8 +715,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$GroupCreateFinalActivity(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$GroupCreateFinalActivity(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
         this.currentGroupCreateLocation.setLatitude(tLRPC$MessageMedia.geo.lat);
         this.currentGroupCreateLocation.setLongitude(tLRPC$MessageMedia.geo._long);
         this.currentGroupCreateAddress = tLRPC$MessageMedia.address;

@@ -241,14 +241,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         }
 
                         public final void run() {
-                            SessionsActivity.AnonymousClass2.this.lambda$null$0$SessionsActivity$2(this.f$1, this.f$2);
+                            SessionsActivity.AnonymousClass2.this.lambda$hide$0$SessionsActivity$2(this.f$1, this.f$2);
                         }
                     });
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$null$0 */
-                public /* synthetic */ void lambda$null$0$SessionsActivity$2(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_authorization tLRPC$TL_authorization) {
+                /* renamed from: lambda$hide$0 */
+                public /* synthetic */ void lambda$hide$0$SessionsActivity$2(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_authorization tLRPC$TL_authorization) {
                     if (tLRPC$TL_error == null) {
                         SessionsActivity.this.sessions.remove(tLRPC$TL_authorization);
                         SessionsActivity.this.passwordSessions.remove(tLRPC$TL_authorization);
@@ -277,7 +277,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             ActionIntroActivity actionIntroActivity = new ActionIntroActivity(5);
             actionIntroActivity.setQrLoginDelegate(new ActionIntroActivity.ActionIntroQRLoginDelegate() {
                 public final void didFindQRCode(String str) {
-                    SessionsActivity.this.lambda$null$3$SessionsActivity(str);
+                    SessionsActivity.this.lambda$createView$3$SessionsActivity(str);
                 }
             });
             presentFragment(actionIntroActivity);
@@ -295,7 +295,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
                 builder.setPositiveButton(str3, new DialogInterface.OnClickListener() {
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        SessionsActivity.this.lambda$null$8$SessionsActivity(dialogInterface, i);
+                        SessionsActivity.this.lambda$createView$8$SessionsActivity(dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -338,7 +338,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void onClick(View view) {
-                        SessionsActivity.lambda$null$9(this.f$0, view);
+                        SessionsActivity.lambda$createView$9(this.f$0, view);
                     }
                 });
                 builder2.setCustomViewOffset(16);
@@ -355,7 +355,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    SessionsActivity.this.lambda$null$14$SessionsActivity(this.f$1, this.f$2, dialogInterface, i);
+                    SessionsActivity.this.lambda$createView$14$SessionsActivity(this.f$1, this.f$2, dialogInterface, i);
                 }
             });
             builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -369,8 +369,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$SessionsActivity(String str) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$SessionsActivity(String str) {
         AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
         alertDialog.setCanCacnel(false);
         alertDialog.show();
@@ -385,14 +385,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                SessionsActivity.this.lambda$null$2$SessionsActivity(this.f$1, tLObject, tLRPC$TL_error);
+                SessionsActivity.this.lambda$createView$2$SessionsActivity(this.f$1, tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$SessionsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$SessionsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$TL_error) {
             public final /* synthetic */ AlertDialog f$1;
             public final /* synthetic */ TLObject f$2;
@@ -405,14 +405,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                SessionsActivity.this.lambda$null$1$SessionsActivity(this.f$1, this.f$2, this.f$3);
+                SessionsActivity.this.lambda$createView$1$SessionsActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$SessionsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$SessionsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         try {
             alertDialog.dismiss();
         } catch (Exception unused) {
@@ -432,14 +432,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                SessionsActivity.this.lambda$null$0$SessionsActivity(this.f$1);
+                SessionsActivity.this.lambda$createView$0$SessionsActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$SessionsActivity(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$SessionsActivity(TLRPC$TL_error tLRPC$TL_error) {
         String str;
         if (tLRPC$TL_error.text.equals("AUTH_TOKEN_EXCEPTION")) {
             str = LocaleController.getString("AccountAlreadyLoggedIn", NUM);
@@ -450,26 +450,26 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$SessionsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$8 */
+    public /* synthetic */ void lambda$createView$8$SessionsActivity(DialogInterface dialogInterface, int i) {
         if (this.currentType == 0) {
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_auth_resetAuthorizations(), new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    SessionsActivity.this.lambda$null$5$SessionsActivity(tLObject, tLRPC$TL_error);
+                    SessionsActivity.this.lambda$createView$5$SessionsActivity(tLObject, tLRPC$TL_error);
                 }
             });
             return;
         }
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_resetWebAuthorizations(), new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                SessionsActivity.this.lambda$null$7$SessionsActivity(tLObject, tLRPC$TL_error);
+                SessionsActivity.this.lambda$createView$7$SessionsActivity(tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -480,7 +480,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                SessionsActivity.this.lambda$null$4$SessionsActivity(this.f$1, this.f$2);
+                SessionsActivity.this.lambda$createView$4$SessionsActivity(this.f$1, this.f$2);
             }
         });
         for (int i = 0; i < 3; i++) {
@@ -495,8 +495,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (getParentActivity() != null && tLRPC$TL_error == null && (tLObject instanceof TLRPC$TL_boolTrue)) {
             Toast.makeText(getParentActivity(), LocaleController.getString("TerminateAllSessions", NUM), 0).show();
             finishFragment();
@@ -504,8 +504,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$7 */
+    public /* synthetic */ void lambda$createView$7$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -516,14 +516,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                SessionsActivity.this.lambda$null$6$SessionsActivity(this.f$1, this.f$2);
+                SessionsActivity.this.lambda$createView$6$SessionsActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$createView$6 */
+    public /* synthetic */ void lambda$createView$6$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (getParentActivity() != null) {
             if (tLRPC$TL_error != null || !(tLObject instanceof TLRPC$TL_boolTrue)) {
                 Toast.makeText(getParentActivity(), LocaleController.getString("UnknownError", NUM), 0).show();
@@ -534,7 +534,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    static /* synthetic */ void lambda$null$9(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$createView$9(boolean[] zArr, View view) {
         if (view.isEnabled()) {
             zArr[0] = !zArr[0];
             ((CheckBoxCell) view).setChecked(zArr[0], true);
@@ -542,8 +542,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$14 */
-    public /* synthetic */ void lambda$null$14$SessionsActivity(int i, boolean[] zArr, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$createView$14 */
+    public /* synthetic */ void lambda$createView$14$SessionsActivity(int i, boolean[] zArr, DialogInterface dialogInterface, int i2) {
         TLRPC$TL_authorization tLRPC$TL_authorization;
         if (getParentActivity() != null) {
             AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
@@ -568,7 +568,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        SessionsActivity.this.lambda$null$11$SessionsActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                        SessionsActivity.this.lambda$createView$11$SessionsActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                     }
                 });
                 return;
@@ -586,7 +586,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    SessionsActivity.this.lambda$null$13$SessionsActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                    SessionsActivity.this.lambda$createView$13$SessionsActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                 }
             });
             if (zArr[0]) {
@@ -596,8 +596,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_authorization tLRPC$TL_authorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$11 */
+    public /* synthetic */ void lambda$createView$11$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_authorization tLRPC$TL_authorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_authorization) {
             public final /* synthetic */ AlertDialog f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
@@ -610,14 +610,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                SessionsActivity.this.lambda$null$10$SessionsActivity(this.f$1, this.f$2, this.f$3);
+                SessionsActivity.this.lambda$createView$10$SessionsActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_authorization tLRPC$TL_authorization) {
+    /* renamed from: lambda$createView$10 */
+    public /* synthetic */ void lambda$createView$10$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_authorization tLRPC$TL_authorization) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -635,8 +635,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$13 */
-    public /* synthetic */ void lambda$null$13$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$13 */
+    public /* synthetic */ void lambda$createView$13$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_webAuthorization) {
             public final /* synthetic */ AlertDialog f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
@@ -649,14 +649,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                SessionsActivity.this.lambda$null$12$SessionsActivity(this.f$1, this.f$2, this.f$3);
+                SessionsActivity.this.lambda$createView$12$SessionsActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization) {
+    /* renamed from: lambda$createView$12 */
+    public /* synthetic */ void lambda$createView$12$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -737,14 +737,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                SessionsActivity.this.lambda$null$16$SessionsActivity(this.f$1, this.f$2);
+                SessionsActivity.this.lambda$loadSessions$16$SessionsActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$16 */
-    public /* synthetic */ void lambda$null$16$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$loadSessions$16 */
+    public /* synthetic */ void lambda$loadSessions$16$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         if (tLRPC$TL_error == null) {
             this.sessions.clear();
@@ -782,14 +782,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                SessionsActivity.this.lambda$null$18$SessionsActivity(this.f$1, this.f$2);
+                SessionsActivity.this.lambda$loadSessions$18$SessionsActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$18 */
-    public /* synthetic */ void lambda$null$18$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$loadSessions$18 */
+    public /* synthetic */ void lambda$loadSessions$18$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         if (tLRPC$TL_error == null) {
             this.sessions.clear();

@@ -1330,7 +1330,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             builder.setMessage(LocaleController.getString("ClearSearchAlert", NUM));
             builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PhotoPickerActivity.this.lambda$null$0$PhotoPickerActivity(dialogInterface, i);
+                    PhotoPickerActivity.this.lambda$createView$0$PhotoPickerActivity(dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -1344,8 +1344,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$PhotoPickerActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$PhotoPickerActivity(DialogInterface dialogInterface, int i) {
         PhotoPickerActivitySearchDelegate photoPickerActivitySearchDelegate = this.searchDelegate;
         if (photoPickerActivitySearchDelegate != null) {
             photoPickerActivitySearchDelegate.shouldClearRecentSearch();
@@ -1414,7 +1414,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 });
                 this.sendPopupLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
                     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        PhotoPickerActivity.this.lambda$null$5$PhotoPickerActivity(keyEvent);
+                        PhotoPickerActivity.this.lambda$createView$5$PhotoPickerActivity(keyEvent);
                     }
                 });
                 this.sendPopupLayout.setShownFromBotton(false);
@@ -1442,7 +1442,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             }
 
                             public final void onClick(View view) {
-                                PhotoPickerActivity.this.lambda$null$6$PhotoPickerActivity(this.f$1, view);
+                                PhotoPickerActivity.this.lambda$createView$6$PhotoPickerActivity(this.f$1, view);
                             }
                         });
                     }
@@ -1471,8 +1471,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$PhotoPickerActivity(KeyEvent keyEvent) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$PhotoPickerActivity(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -1480,8 +1480,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$PhotoPickerActivity(int i, View view) {
+    /* renamed from: lambda$createView$6 */
+    public /* synthetic */ void lambda$createView$6$PhotoPickerActivity(int i, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -1985,15 +1985,15 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    PhotoPickerActivity.this.lambda$null$8$PhotoPickerActivity(this.f$1, this.f$2);
+                    PhotoPickerActivity.this.lambda$searchBotUser$8$PhotoPickerActivity(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$PhotoPickerActivity(TLObject tLObject, boolean z) {
+    /* renamed from: lambda$searchBotUser$8 */
+    public /* synthetic */ void lambda$searchBotUser$8$PhotoPickerActivity(TLObject tLObject, boolean z) {
         TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer = (TLRPC$TL_contacts_resolvedPeer) tLObject;
         MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_contacts_resolvedPeer.users, false);
         MessagesController.getInstance(this.currentAccount).putChats(tLRPC$TL_contacts_resolvedPeer.chats, false);
@@ -2077,14 +2077,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run() {
-                PhotoPickerActivity.this.lambda$null$10$PhotoPickerActivity(this.f$1, this.f$2, this.f$3, this.f$4);
+                PhotoPickerActivity.this.lambda$searchImages$10$PhotoPickerActivity(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$PhotoPickerActivity(int i, TLObject tLObject, boolean z, TLRPC$User tLRPC$User) {
+    /* renamed from: lambda$searchImages$10 */
+    public /* synthetic */ void lambda$searchImages$10$PhotoPickerActivity(int i, TLObject tLObject, boolean z, TLRPC$User tLRPC$User) {
         int i2;
         int i3;
         TLRPC$Photo tLRPC$Photo;

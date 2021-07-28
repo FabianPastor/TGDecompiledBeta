@@ -30,12 +30,12 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
         super.onUpdate(context, appWidgetManager, iArr);
         for (int updateWidget : iArr) {
-            updateWidget(context, appWidgetManager, updateWidget, false);
+            updateWidget(context, appWidgetManager, updateWidget);
         }
     }
 
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int i, Bundle bundle) {
-        updateWidget(context, appWidgetManager, i, true);
+        updateWidget(context, appWidgetManager, i);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, i, bundle);
     }
 
@@ -56,7 +56,7 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
         edit.commit();
     }
 
-    public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int i, boolean z) {
+    public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int i) {
         Context context2 = context;
         AppWidgetManager appWidgetManager2 = appWidgetManager;
         int i2 = i;
@@ -69,6 +69,11 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
         int i3 = NUM;
         if (!sharedPreferences.getBoolean("deleted" + i2, false)) {
             int i4 = sharedPreferences.getInt("account" + i2, -1);
+            if (i4 == -1) {
+                SharedPreferences.Editor edit = sharedPreferences.edit();
+                edit.putInt("account" + i2, UserConfig.selectedAccount);
+                edit.putInt("type" + i2, 0).commit();
+            }
             ArrayList arrayList = new ArrayList();
             if (i4 >= 0) {
                 AccountInstance.getInstance(i4).getMessagesStorage().getWidgetDialogIds(i, 0, arrayList, (ArrayList<TLRPC$User>) null, (ArrayList<TLRPC$Chat>) null, false);
@@ -86,8 +91,6 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
         intent2.addCategory("android.intent.category.LAUNCHER");
         remoteViews.setPendingIntentTemplate(NUM, PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, NUM));
         appWidgetManager2.updateAppWidget(i2, remoteViews);
-        if (z) {
-            appWidgetManager2.notifyAppWidgetViewDataChanged(i2, NUM);
-        }
+        appWidgetManager2.notifyAppWidgetViewDataChanged(i2, NUM);
     }
 }

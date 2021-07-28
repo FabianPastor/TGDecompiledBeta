@@ -523,26 +523,9 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:20:0x015e, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:25:0x0163, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0164, code lost:
-        r3 = r0;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:27:0x0165, code lost:
-        if (r2 != null) goto L_0x0167;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:29:?, code lost:
-        r2.close();
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:31:?, code lost:
-        throw r3;
-     */
-    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:18:0x015a, B:23:0x0162, B:30:0x016a] */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:30:0x016a */
+    /* JADX WARNING: Can't wrap try/catch for region: R(4:16|(2:23|24)|25|26) */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:25:0x0165 */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0162 A[SYNTHETIC, Splitter:B:23:0x0162] */
     /* renamed from: lambda$loadAudio$4 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$loadAudio$4$ChatAttachAlertAudioLayout() {
@@ -571,78 +554,78 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
             r4[r13] = r0
             java.util.ArrayList r14 = new java.util.ArrayList
             r14.<init>()
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x016b }
-            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x016b }
-            android.net.Uri r3 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI     // Catch:{ Exception -> 0x016b }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0168 }
+            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0168 }
+            android.net.Uri r3 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI     // Catch:{ Exception -> 0x0168 }
             java.lang.String r5 = "is_music != 0"
             r6 = 0
             java.lang.String r7 = "title"
-            android.database.Cursor r2 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x016b }
+            android.database.Cursor r2 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0168 }
             r0 = -2000000000(0xfffffffvar_ca6CLASSNAME, float:-1.2182823E-33)
         L_0x003c:
-            boolean r3 = r2.moveToNext()     // Catch:{ all -> 0x0160 }
+            boolean r3 = r2.moveToNext()     // Catch:{ all -> 0x015e }
             if (r3 == 0) goto L_0x0159
-            org.telegram.messenger.MediaController$AudioEntry r3 = new org.telegram.messenger.MediaController$AudioEntry     // Catch:{ all -> 0x0160 }
-            r3.<init>()     // Catch:{ all -> 0x0160 }
-            int r4 = r2.getInt(r8)     // Catch:{ all -> 0x0160 }
-            long r4 = (long) r4     // Catch:{ all -> 0x0160 }
-            r3.id = r4     // Catch:{ all -> 0x0160 }
-            java.lang.String r4 = r2.getString(r9)     // Catch:{ all -> 0x0160 }
-            r3.author = r4     // Catch:{ all -> 0x0160 }
-            java.lang.String r4 = r2.getString(r10)     // Catch:{ all -> 0x0160 }
-            r3.title = r4     // Catch:{ all -> 0x0160 }
-            java.lang.String r4 = r2.getString(r11)     // Catch:{ all -> 0x0160 }
-            r3.path = r4     // Catch:{ all -> 0x0160 }
-            long r4 = r2.getLong(r12)     // Catch:{ all -> 0x0160 }
+            org.telegram.messenger.MediaController$AudioEntry r3 = new org.telegram.messenger.MediaController$AudioEntry     // Catch:{ all -> 0x015e }
+            r3.<init>()     // Catch:{ all -> 0x015e }
+            int r4 = r2.getInt(r8)     // Catch:{ all -> 0x015e }
+            long r4 = (long) r4     // Catch:{ all -> 0x015e }
+            r3.id = r4     // Catch:{ all -> 0x015e }
+            java.lang.String r4 = r2.getString(r9)     // Catch:{ all -> 0x015e }
+            r3.author = r4     // Catch:{ all -> 0x015e }
+            java.lang.String r4 = r2.getString(r10)     // Catch:{ all -> 0x015e }
+            r3.title = r4     // Catch:{ all -> 0x015e }
+            java.lang.String r4 = r2.getString(r11)     // Catch:{ all -> 0x015e }
+            r3.path = r4     // Catch:{ all -> 0x015e }
+            long r4 = r2.getLong(r12)     // Catch:{ all -> 0x015e }
             r6 = 1000(0x3e8, double:4.94E-321)
             long r4 = r4 / r6
-            int r5 = (int) r4     // Catch:{ all -> 0x0160 }
-            r3.duration = r5     // Catch:{ all -> 0x0160 }
-            java.lang.String r4 = r2.getString(r13)     // Catch:{ all -> 0x0160 }
-            r3.genre = r4     // Catch:{ all -> 0x0160 }
-            java.io.File r4 = new java.io.File     // Catch:{ all -> 0x0160 }
-            java.lang.String r5 = r3.path     // Catch:{ all -> 0x0160 }
-            r4.<init>(r5)     // Catch:{ all -> 0x0160 }
-            org.telegram.tgnet.TLRPC$TL_message r5 = new org.telegram.tgnet.TLRPC$TL_message     // Catch:{ all -> 0x0160 }
-            r5.<init>()     // Catch:{ all -> 0x0160 }
-            r5.out = r9     // Catch:{ all -> 0x0160 }
-            r5.id = r0     // Catch:{ all -> 0x0160 }
-            org.telegram.tgnet.TLRPC$TL_peerUser r15 = new org.telegram.tgnet.TLRPC$TL_peerUser     // Catch:{ all -> 0x0160 }
-            r15.<init>()     // Catch:{ all -> 0x0160 }
-            r5.peer_id = r15     // Catch:{ all -> 0x0160 }
-            org.telegram.tgnet.TLRPC$TL_peerUser r15 = new org.telegram.tgnet.TLRPC$TL_peerUser     // Catch:{ all -> 0x0160 }
-            r15.<init>()     // Catch:{ all -> 0x0160 }
-            r5.from_id = r15     // Catch:{ all -> 0x0160 }
-            org.telegram.tgnet.TLRPC$Peer r10 = r5.peer_id     // Catch:{ all -> 0x0160 }
-            org.telegram.ui.Components.ChatAttachAlert r12 = r1.parentAlert     // Catch:{ all -> 0x0160 }
-            int r12 = r12.currentAccount     // Catch:{ all -> 0x0160 }
-            org.telegram.messenger.UserConfig r12 = org.telegram.messenger.UserConfig.getInstance(r12)     // Catch:{ all -> 0x0160 }
-            int r12 = r12.getClientUserId()     // Catch:{ all -> 0x0160 }
-            r15.user_id = r12     // Catch:{ all -> 0x0160 }
-            r10.user_id = r12     // Catch:{ all -> 0x0160 }
-            long r16 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0160 }
+            int r5 = (int) r4     // Catch:{ all -> 0x015e }
+            r3.duration = r5     // Catch:{ all -> 0x015e }
+            java.lang.String r4 = r2.getString(r13)     // Catch:{ all -> 0x015e }
+            r3.genre = r4     // Catch:{ all -> 0x015e }
+            java.io.File r4 = new java.io.File     // Catch:{ all -> 0x015e }
+            java.lang.String r5 = r3.path     // Catch:{ all -> 0x015e }
+            r4.<init>(r5)     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_message r5 = new org.telegram.tgnet.TLRPC$TL_message     // Catch:{ all -> 0x015e }
+            r5.<init>()     // Catch:{ all -> 0x015e }
+            r5.out = r9     // Catch:{ all -> 0x015e }
+            r5.id = r0     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_peerUser r15 = new org.telegram.tgnet.TLRPC$TL_peerUser     // Catch:{ all -> 0x015e }
+            r15.<init>()     // Catch:{ all -> 0x015e }
+            r5.peer_id = r15     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_peerUser r15 = new org.telegram.tgnet.TLRPC$TL_peerUser     // Catch:{ all -> 0x015e }
+            r15.<init>()     // Catch:{ all -> 0x015e }
+            r5.from_id = r15     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Peer r10 = r5.peer_id     // Catch:{ all -> 0x015e }
+            org.telegram.ui.Components.ChatAttachAlert r12 = r1.parentAlert     // Catch:{ all -> 0x015e }
+            int r12 = r12.currentAccount     // Catch:{ all -> 0x015e }
+            org.telegram.messenger.UserConfig r12 = org.telegram.messenger.UserConfig.getInstance(r12)     // Catch:{ all -> 0x015e }
+            int r12 = r12.getClientUserId()     // Catch:{ all -> 0x015e }
+            r15.user_id = r12     // Catch:{ all -> 0x015e }
+            r10.user_id = r12     // Catch:{ all -> 0x015e }
+            long r16 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x015e }
             long r6 = r16 / r6
-            int r7 = (int) r6     // Catch:{ all -> 0x0160 }
-            r5.date = r7     // Catch:{ all -> 0x0160 }
+            int r7 = (int) r6     // Catch:{ all -> 0x015e }
+            r5.date = r7     // Catch:{ all -> 0x015e }
             java.lang.String r6 = ""
-            r5.message = r6     // Catch:{ all -> 0x0160 }
-            java.lang.String r6 = r3.path     // Catch:{ all -> 0x0160 }
-            r5.attachPath = r6     // Catch:{ all -> 0x0160 }
-            org.telegram.tgnet.TLRPC$TL_messageMediaDocument r6 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument     // Catch:{ all -> 0x0160 }
-            r6.<init>()     // Catch:{ all -> 0x0160 }
-            r5.media = r6     // Catch:{ all -> 0x0160 }
-            int r7 = r6.flags     // Catch:{ all -> 0x0160 }
+            r5.message = r6     // Catch:{ all -> 0x015e }
+            java.lang.String r6 = r3.path     // Catch:{ all -> 0x015e }
+            r5.attachPath = r6     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_messageMediaDocument r6 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument     // Catch:{ all -> 0x015e }
+            r6.<init>()     // Catch:{ all -> 0x015e }
+            r5.media = r6     // Catch:{ all -> 0x015e }
+            int r7 = r6.flags     // Catch:{ all -> 0x015e }
             r7 = r7 | r11
-            r6.flags = r7     // Catch:{ all -> 0x0160 }
-            org.telegram.tgnet.TLRPC$TL_document r7 = new org.telegram.tgnet.TLRPC$TL_document     // Catch:{ all -> 0x0160 }
-            r7.<init>()     // Catch:{ all -> 0x0160 }
-            r6.document = r7     // Catch:{ all -> 0x0160 }
-            int r6 = r5.flags     // Catch:{ all -> 0x0160 }
+            r6.flags = r7     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_document r7 = new org.telegram.tgnet.TLRPC$TL_document     // Catch:{ all -> 0x015e }
+            r7.<init>()     // Catch:{ all -> 0x015e }
+            r6.document = r7     // Catch:{ all -> 0x015e }
+            int r6 = r5.flags     // Catch:{ all -> 0x015e }
             r6 = r6 | 768(0x300, float:1.076E-42)
-            r5.flags = r6     // Catch:{ all -> 0x0160 }
-            java.lang.String r6 = org.telegram.messenger.FileLoader.getFileExtension(r4)     // Catch:{ all -> 0x0160 }
-            org.telegram.tgnet.TLRPC$MessageMedia r7 = r5.media     // Catch:{ all -> 0x0160 }
-            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x0160 }
+            r5.flags = r6     // Catch:{ all -> 0x015e }
+            java.lang.String r6 = org.telegram.messenger.FileLoader.getFileExtension(r4)     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x015e }
             r12 = r14
             r13 = 0
             r7.id = r13     // Catch:{ all -> 0x0157 }
@@ -709,33 +692,29 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
             goto L_0x003c
         L_0x0157:
             r0 = move-exception
-            goto L_0x0162
+            goto L_0x0160
         L_0x0159:
             r12 = r14
-            r2.close()     // Catch:{ Exception -> 0x015e }
-            goto L_0x0170
+            r2.close()     // Catch:{ Exception -> 0x0166 }
+            goto L_0x016d
         L_0x015e:
             r0 = move-exception
-            goto L_0x016d
+            r12 = r14
         L_0x0160:
+            if (r2 == 0) goto L_0x0165
+            r2.close()     // Catch:{ all -> 0x0165 }
+        L_0x0165:
+            throw r0     // Catch:{ Exception -> 0x0166 }
+        L_0x0166:
+            r0 = move-exception
+            goto L_0x016a
+        L_0x0168:
             r0 = move-exception
             r12 = r14
-        L_0x0162:
-            throw r0     // Catch:{ all -> 0x0163 }
-        L_0x0163:
-            r0 = move-exception
-            r3 = r0
-            if (r2 == 0) goto L_0x016a
-            r2.close()     // Catch:{ all -> 0x016a }
         L_0x016a:
-            throw r3     // Catch:{ Exception -> 0x015e }
-        L_0x016b:
-            r0 = move-exception
-            r12 = r14
-        L_0x016d:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0170:
-            org.telegram.ui.Components.-$$Lambda$ChatAttachAlertAudioLayout$_Goeq4mCm9tRnDk_-9VR721oPVI r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertAudioLayout$_Goeq4mCm9tRnDk_-9VR721oPVI
+        L_0x016d:
+            org.telegram.ui.Components.-$$Lambda$ChatAttachAlertAudioLayout$2tkwzVv4Lf8Cn1d7_KL7Mcx8xWM r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertAudioLayout$2tkwzVv4Lf8Cn1d7_KL7Mcx8xWM
             r0.<init>(r12)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
@@ -744,8 +723,8 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$ChatAttachAlertAudioLayout(ArrayList arrayList) {
+    /* renamed from: lambda$loadAudio$3 */
+    public /* synthetic */ void lambda$loadAudio$3$ChatAttachAlertAudioLayout(ArrayList arrayList) {
         this.loadingAudio = false;
         this.audioEntries = arrayList;
         this.listAdapter.notifyDataSetChanged();
@@ -885,14 +864,14 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
                 }
 
                 public final void run() {
-                    ChatAttachAlertAudioLayout.SearchAdapter.this.lambda$null$0$ChatAttachAlertAudioLayout$SearchAdapter(this.f$1, this.f$2, this.f$3);
+                    ChatAttachAlertAudioLayout.SearchAdapter.this.lambda$search$0$ChatAttachAlertAudioLayout$SearchAdapter(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$ChatAttachAlertAudioLayout$SearchAdapter(String str, ArrayList arrayList, int i) {
+        /* renamed from: lambda$search$0 */
+        public /* synthetic */ void lambda$search$0$ChatAttachAlertAudioLayout$SearchAdapter(String str, ArrayList arrayList, int i) {
             String str2;
             String lowerCase = str.trim().toLowerCase();
             if (lowerCase.length() == 0) {

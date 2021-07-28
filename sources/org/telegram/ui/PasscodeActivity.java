@@ -360,7 +360,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     } else if (i3 == 18000) {
                         numberPicker.setValue(4);
                     }
-                    numberPicker.setFormatter($$Lambda$PasscodeActivity$zImr4FCdZoN5QJd52go50sgn8Y.INSTANCE);
+                    numberPicker.setFormatter($$Lambda$PasscodeActivity$RmeDUwQaD0qWwj5uTjtR_ocrqs.INSTANCE);
                     builder.setView(numberPicker);
                     builder.setNegativeButton(LocaleController.getString("Done", NUM), new DialogInterface.OnClickListener(numberPicker, i) {
                         public final /* synthetic */ NumberPicker f$1;
@@ -372,7 +372,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            PasscodeActivity.this.lambda$null$3$PasscodeActivity(this.f$1, this.f$2, dialogInterface, i);
+                            PasscodeActivity.this.lambda$createView$3$PasscodeActivity(this.f$1, this.f$2, dialogInterface, i);
                         }
                     });
                     showDialog(builder.create());
@@ -393,7 +393,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    static /* synthetic */ String lambda$null$2(int i) {
+    static /* synthetic */ String lambda$createView$2(int i) {
         if (i == 0) {
             return LocaleController.getString("AutoLockDisabled", NUM);
         }
@@ -411,8 +411,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$PasscodeActivity(NumberPicker numberPicker, int i, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$PasscodeActivity(NumberPicker numberPicker, int i, DialogInterface dialogInterface, int i2) {
         int value = numberPicker.getValue();
         if (value == 0) {
             SharedConfig.autoLockIn = 0;

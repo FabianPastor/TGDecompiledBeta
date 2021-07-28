@@ -415,14 +415,14 @@ public class ChatObject {
                 }
 
                 public final void run() {
-                    ChatObject.Call.this.lambda$null$1$ChatObject$Call(this.f$1, this.f$2, this.f$3);
+                    ChatObject.Call.this.lambda$loadMembers$1$ChatObject$Call(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$ChatObject$Call(boolean z, TLObject tLObject, TLRPC$TL_phone_getGroupParticipants tLRPC$TL_phone_getGroupParticipants) {
+        /* renamed from: lambda$loadMembers$1 */
+        public /* synthetic */ void lambda$loadMembers$1$ChatObject$Call(boolean z, TLObject tLObject, TLRPC$TL_phone_getGroupParticipants tLRPC$TL_phone_getGroupParticipants) {
             this.loadingMembers = false;
             if (z) {
                 this.reloadingMembers = false;
@@ -582,14 +582,14 @@ public class ChatObject {
                 }
 
                 public final void run() {
-                    ChatObject.Call.this.lambda$null$4$ChatObject$Call(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    ChatObject.Call.this.lambda$loadUnknownParticipants$4$ChatObject$Call(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$4 */
-        public /* synthetic */ void lambda$null$4$ChatObject$Call(int i, TLObject tLObject, OnParticipantsLoad onParticipantsLoad, ArrayList arrayList, HashSet hashSet) {
+        /* renamed from: lambda$loadUnknownParticipants$4 */
+        public /* synthetic */ void lambda$loadUnknownParticipants$4$ChatObject$Call(int i, TLObject tLObject, OnParticipantsLoad onParticipantsLoad, ArrayList arrayList, HashSet hashSet) {
             if (this.loadingGuids.remove(Integer.valueOf(i))) {
                 if (tLObject != null) {
                     TLRPC$TL_phone_groupParticipants tLRPC$TL_phone_groupParticipants = (TLRPC$TL_phone_groupParticipants) tLObject;
@@ -909,14 +909,14 @@ public class ChatObject {
                 }
 
                 public final void run() {
-                    ChatObject.Call.this.lambda$null$7$ChatObject$Call(this.f$1);
+                    ChatObject.Call.this.lambda$reloadGroupCall$7$ChatObject$Call(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$7 */
-        public /* synthetic */ void lambda$null$7$ChatObject$Call(TLObject tLObject) {
+        /* renamed from: lambda$reloadGroupCall$7 */
+        public /* synthetic */ void lambda$reloadGroupCall$7$ChatObject$Call(TLObject tLObject) {
             if (tLObject instanceof TLRPC$TL_phone_groupCall) {
                 TLRPC$TL_phone_groupCall tLRPC$TL_phone_groupCall = (TLRPC$TL_phone_groupCall) tLObject;
                 this.call = tLRPC$TL_phone_groupCall.call;
@@ -955,14 +955,14 @@ public class ChatObject {
                 }
 
                 public final void run() {
-                    ChatObject.Call.this.lambda$null$9$ChatObject$Call(this.f$1);
+                    ChatObject.Call.this.lambda$loadGroupCall$9$ChatObject$Call(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$9 */
-        public /* synthetic */ void lambda$null$9$ChatObject$Call(TLObject tLObject) {
+        /* renamed from: lambda$loadGroupCall$9 */
+        public /* synthetic */ void lambda$loadGroupCall$9$ChatObject$Call(TLObject tLObject) {
             this.lastGroupCallReloadTime = SystemClock.elapsedRealtime();
             this.loadingGroupCall = false;
             if (tLObject != null) {

@@ -462,15 +462,15 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
 
                 public final void run() {
-                    ChannelAdminLogActivity.this.lambda$null$0$ChannelAdminLogActivity(this.f$1);
+                    ChannelAdminLogActivity.this.lambda$loadMessages$0$ChannelAdminLogActivity(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ChannelAdminLogActivity(TLRPC$TL_channels_adminLogResults tLRPC$TL_channels_adminLogResults) {
+    /* renamed from: lambda$loadMessages$0 */
+    public /* synthetic */ void lambda$loadMessages$0$ChannelAdminLogActivity(TLRPC$TL_channels_adminLogResults tLRPC$TL_channels_adminLogResults) {
         int i;
         int i2 = 0;
         this.chatListItemAnimator.setShouldAnimateEnterFromBottom(false);
@@ -1357,7 +1357,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             adminLogFilterAlert.setCurrentAdmins(this.admins);
             adminLogFilterAlert.setAdminLogFilterAlertDelegate(new AdminLogFilterAlert.AdminLogFilterAlertDelegate() {
                 public final void didSelectRights(TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, SparseArray sparseArray) {
-                    ChannelAdminLogActivity.this.lambda$null$4$ChannelAdminLogActivity(tLRPC$TL_channelAdminLogEventsFilter, sparseArray);
+                    ChannelAdminLogActivity.this.lambda$createView$4$ChannelAdminLogActivity(tLRPC$TL_channelAdminLogEventsFilter, sparseArray);
                 }
             });
             showDialog(adminLogFilterAlert);
@@ -1365,8 +1365,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$ChannelAdminLogActivity(TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, SparseArray sparseArray) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$ChannelAdminLogActivity(TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, SparseArray sparseArray) {
         this.currentFilter = tLRPC$TL_channelAdminLogEventsFilter;
         this.selectedAdmins = sparseArray;
         if (tLRPC$TL_channelAdminLogEventsFilter == null && sparseArray == null) {
@@ -1398,15 +1398,15 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             AndroidUtilities.hideKeyboard(this.searchItem.getSearchField());
             showDialog(AlertsCreator.createCalendarPickerDialog(getParentActivity(), 1375315200000L, new MessagesStorage.IntCallback() {
                 public final void run(int i) {
-                    ChannelAdminLogActivity.this.lambda$null$7$ChannelAdminLogActivity(i);
+                    ChannelAdminLogActivity.this.lambda$createView$7$ChannelAdminLogActivity(i);
                 }
             }).create());
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$ChannelAdminLogActivity(int i) {
+    /* renamed from: lambda$createView$7 */
+    public /* synthetic */ void lambda$createView$7$ChannelAdminLogActivity(int i) {
         loadMessages(true);
     }
 
@@ -2205,14 +2205,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
 
             public final void run() {
-                ChannelAdminLogActivity.this.lambda$null$10$ChannelAdminLogActivity(this.f$1, this.f$2);
+                ChannelAdminLogActivity.this.lambda$loadAdmins$10$ChannelAdminLogActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$ChannelAdminLogActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$loadAdmins$10 */
+    public /* synthetic */ void lambda$loadAdmins$10$ChannelAdminLogActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
             getMessagesController().putUsers(tLRPC$TL_channels_channelParticipants.users, false);
@@ -3906,13 +3906,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                     AndroidUtilities.runOnUIThread(
                                                     /*  JADX ERROR: Method code generation error
                                                         jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x004b: INVOKE  
-                                                          (wrap: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$LoClDZd7GseODYIpOBakbbaD0lE : 0x0048: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$LoClDZd7GseODYIpOBakbbaD0lE) = 
+                                                          (wrap: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$A3twlhT7fMP93yrLGxy-nbzFivo : 0x0048: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$A3twlhT7fMP93yrLGxy-nbzFivo) = 
                                                           (r6v0 'this' org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3 A[THIS])
                                                           (r7v0 'tLRPC$TL_chatInviteExported' org.telegram.tgnet.TLRPC$TL_chatInviteExported)
                                                           (r10v1 'tLRPC$TL_messages_exportedChatInvite' org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvite)
                                                           (r8v0 'zArr' boolean[])
                                                           (r9v0 'alertDialog' org.telegram.ui.ActionBar.AlertDialog)
-                                                         call: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$LoClDZd7GseODYIpOBakbbaD0lE.<init>(org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3, org.telegram.tgnet.TLRPC$TL_chatInviteExported, org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvite, boolean[], org.telegram.ui.ActionBar.AlertDialog):void type: CONSTRUCTOR)
+                                                         call: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$A3twlhT7fMP93yrLGxy-nbzFivo.<init>(org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3, org.telegram.tgnet.TLRPC$TL_chatInviteExported, org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvite, boolean[], org.telegram.ui.ActionBar.AlertDialog):void type: CONSTRUCTOR)
                                                          org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.3.lambda$needOpenInviteLink$2(org.telegram.tgnet.TLRPC$TL_chatInviteExported, boolean[], org.telegram.ui.ActionBar.AlertDialog, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
                                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -3998,13 +3998,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0048: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$LoClDZd7GseODYIpOBakbbaD0lE) = 
+                                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0048: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$A3twlhT7fMP93yrLGxy-nbzFivo) = 
                                                           (r6v0 'this' org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3 A[THIS])
                                                           (r7v0 'tLRPC$TL_chatInviteExported' org.telegram.tgnet.TLRPC$TL_chatInviteExported)
                                                           (r10v1 'tLRPC$TL_messages_exportedChatInvite' org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvite)
                                                           (r8v0 'zArr' boolean[])
                                                           (r9v0 'alertDialog' org.telegram.ui.ActionBar.AlertDialog)
-                                                         call: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$LoClDZd7GseODYIpOBakbbaD0lE.<init>(org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3, org.telegram.tgnet.TLRPC$TL_chatInviteExported, org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvite, boolean[], org.telegram.ui.ActionBar.AlertDialog):void type: CONSTRUCTOR in method: org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.3.lambda$needOpenInviteLink$2(org.telegram.tgnet.TLRPC$TL_chatInviteExported, boolean[], org.telegram.ui.ActionBar.AlertDialog, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                                         call: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$A3twlhT7fMP93yrLGxy-nbzFivo.<init>(org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3, org.telegram.tgnet.TLRPC$TL_chatInviteExported, org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvite, boolean[], org.telegram.ui.ActionBar.AlertDialog):void type: CONSTRUCTOR in method: org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.3.lambda$needOpenInviteLink$2(org.telegram.tgnet.TLRPC$TL_chatInviteExported, boolean[], org.telegram.ui.ActionBar.AlertDialog, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
                                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -4013,7 +4013,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                                         	... 83 more
-                                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$LoClDZd7GseODYIpOBakbbaD0lE, state: NOT_LOADED
+                                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$A3twlhT7fMP93yrLGxy-nbzFivo, state: NOT_LOADED
                                                         	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                                         	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -4054,7 +4054,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                         r10 = 0
                                                     L_0x0040:
                                                         r3 = r10
-                                                        org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$LoClDZd7GseODYIpOBakbbaD0lE r10 = new org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$LoClDZd7GseODYIpOBakbbaD0lE
+                                                        org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$A3twlhT7fMP93yrLGxy-nbzFivo r10 = new org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$3$A3twlhT7fMP93yrLGxy-nbzFivo
                                                         r0 = r10
                                                         r1 = r6
                                                         r2 = r7
@@ -4068,8 +4068,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 }
 
                                                 /* access modifiers changed from: private */
-                                                /* renamed from: lambda$null$1 */
-                                                public /* synthetic */ void lambda$null$1$ChannelAdminLogActivity$ChatActivityAdapter$3(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLRPC$TL_messages_exportedChatInvite tLRPC$TL_messages_exportedChatInvite, boolean[] zArr, AlertDialog alertDialog) {
+                                                /* renamed from: lambda$needOpenInviteLink$1 */
+                                                public /* synthetic */ void lambda$needOpenInviteLink$1$ChannelAdminLogActivity$ChatActivityAdapter$3(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLRPC$TL_messages_exportedChatInvite tLRPC$TL_messages_exportedChatInvite, boolean[] zArr, AlertDialog alertDialog) {
                                                     boolean unused = ChannelAdminLogActivity.this.linviteLoading = false;
                                                     ChannelAdminLogActivity.this.invitesCache.put(tLRPC$TL_chatInviteExported.link, tLRPC$TL_messages_exportedChatInvite == null ? 0 : tLRPC$TL_messages_exportedChatInvite);
                                                     if (!zArr[0]) {

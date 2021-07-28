@@ -1477,59 +1477,59 @@ public class FilterShaders {
             }
 
             public float getSoftenSkinValue() {
-                return savedFilterState.softenSkinValue / 100.0f;
+                return MediaController.SavedFilterState.this.softenSkinValue / 100.0f;
             }
 
             public float getShadowsValue() {
-                return ((savedFilterState.shadowsValue * 0.55f) + 100.0f) / 100.0f;
+                return ((MediaController.SavedFilterState.this.shadowsValue * 0.55f) + 100.0f) / 100.0f;
             }
 
             public float getHighlightsValue() {
-                return ((savedFilterState.highlightsValue * 0.75f) + 100.0f) / 100.0f;
+                return ((MediaController.SavedFilterState.this.highlightsValue * 0.75f) + 100.0f) / 100.0f;
             }
 
             public float getEnhanceValue() {
-                return savedFilterState.enhanceValue / 100.0f;
+                return MediaController.SavedFilterState.this.enhanceValue / 100.0f;
             }
 
             public float getExposureValue() {
-                return savedFilterState.exposureValue / 100.0f;
+                return MediaController.SavedFilterState.this.exposureValue / 100.0f;
             }
 
             public float getContrastValue() {
-                return ((savedFilterState.contrastValue / 100.0f) * 0.3f) + 1.0f;
+                return ((MediaController.SavedFilterState.this.contrastValue / 100.0f) * 0.3f) + 1.0f;
             }
 
             public float getWarmthValue() {
-                return savedFilterState.warmthValue / 100.0f;
+                return MediaController.SavedFilterState.this.warmthValue / 100.0f;
             }
 
             public float getVignetteValue() {
-                return savedFilterState.vignetteValue / 100.0f;
+                return MediaController.SavedFilterState.this.vignetteValue / 100.0f;
             }
 
             public float getSharpenValue() {
-                return ((savedFilterState.sharpenValue / 100.0f) * 0.6f) + 0.11f;
+                return ((MediaController.SavedFilterState.this.sharpenValue / 100.0f) * 0.6f) + 0.11f;
             }
 
             public float getGrainValue() {
-                return (savedFilterState.grainValue / 100.0f) * 0.04f;
+                return (MediaController.SavedFilterState.this.grainValue / 100.0f) * 0.04f;
             }
 
             public float getFadeValue() {
-                return savedFilterState.fadeValue / 100.0f;
+                return MediaController.SavedFilterState.this.fadeValue / 100.0f;
             }
 
             public float getTintHighlightsIntensityValue() {
-                return savedFilterState.tintHighlightsColor == 0 ? 0.0f : 0.5f;
+                return MediaController.SavedFilterState.this.tintHighlightsColor == 0 ? 0.0f : 0.5f;
             }
 
             public float getTintShadowsIntensityValue() {
-                return savedFilterState.tintShadowsColor == 0 ? 0.0f : 0.5f;
+                return MediaController.SavedFilterState.this.tintShadowsColor == 0 ? 0.0f : 0.5f;
             }
 
             public float getSaturationValue() {
-                float f = savedFilterState.saturationValue / 100.0f;
+                float f = MediaController.SavedFilterState.this.saturationValue / 100.0f;
                 if (f > 0.0f) {
                     f *= 1.05f;
                 }
@@ -1537,40 +1537,40 @@ public class FilterShaders {
             }
 
             public int getTintHighlightsColor() {
-                return savedFilterState.tintHighlightsColor;
+                return MediaController.SavedFilterState.this.tintHighlightsColor;
             }
 
             public int getTintShadowsColor() {
-                return savedFilterState.tintShadowsColor;
+                return MediaController.SavedFilterState.this.tintShadowsColor;
             }
 
             public int getBlurType() {
-                return savedFilterState.blurType;
+                return MediaController.SavedFilterState.this.blurType;
             }
 
             public float getBlurExcludeSize() {
-                return savedFilterState.blurExcludeSize;
+                return MediaController.SavedFilterState.this.blurExcludeSize;
             }
 
             public float getBlurExcludeBlurSize() {
-                return savedFilterState.blurExcludeBlurSize;
+                return MediaController.SavedFilterState.this.blurExcludeBlurSize;
             }
 
             public float getBlurAngle() {
-                return savedFilterState.blurAngle;
+                return MediaController.SavedFilterState.this.blurAngle;
             }
 
             public Point getBlurExcludePoint() {
-                return savedFilterState.blurExcludePoint;
+                return MediaController.SavedFilterState.this.blurExcludePoint;
             }
 
             public boolean shouldDrawCurvesPass() {
-                return !savedFilterState.curvesToolValue.shouldBeSkipped();
+                return !MediaController.SavedFilterState.this.curvesToolValue.shouldBeSkipped();
             }
 
             public ByteBuffer fillAndGetCurveBuffer() {
-                savedFilterState.curvesToolValue.fillBuffer();
-                return savedFilterState.curvesToolValue.curveBuffer;
+                MediaController.SavedFilterState.this.curvesToolValue.fillBuffer();
+                return MediaController.SavedFilterState.this.curvesToolValue.curveBuffer;
             }
         };
     }

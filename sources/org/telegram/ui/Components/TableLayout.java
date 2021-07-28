@@ -180,6 +180,12 @@ public class TableLayout extends View {
         public int x;
         public int y;
 
+        static /* synthetic */ int access$1520(Child child, int i) {
+            int i2 = child.measuredHeight - i;
+            child.measuredHeight = i2;
+            return i2;
+        }
+
         public Child(int i) {
             this.index = i;
         }
@@ -737,8 +743,13 @@ public class TableLayout extends View {
 
     /* access modifiers changed from: package-private */
     public int getMargin1(Child child, boolean z, boolean z2) {
+        int i;
         LayoutParams layoutParams = child.getLayoutParams();
-        int i = z ? z2 ? layoutParams.leftMargin : layoutParams.rightMargin : z2 ? layoutParams.topMargin : layoutParams.bottomMargin;
+        if (z) {
+            i = z2 ? layoutParams.leftMargin : layoutParams.rightMargin;
+        } else {
+            i = z2 ? layoutParams.topMargin : layoutParams.bottomMargin;
+        }
         return i == Integer.MIN_VALUE ? getDefaultMargin(child, layoutParams, z, z2) : i;
     }
 
@@ -1098,7 +1109,7 @@ public class TableLayout extends View {
                                 }
                                 size2--;
                             }
-                            int unused = child5.measuredHeight = child5.measuredHeight - access$1500;
+                            Child.access$1520(child5, access$1500);
                             child5.measure(child5.measuredWidth, child5.measuredHeight, true);
                         } else if (child2.layoutParams.rowSpec.span.min < child5.layoutParams.rowSpec.span.min) {
                             child5.y -= access$1500;
@@ -2108,11 +2119,11 @@ public class TableLayout extends View {
         return new Alignment() {
             /* access modifiers changed from: package-private */
             public int getGravityOffset(Child child, int i) {
-                return alignment.getGravityOffset(child, i);
+                return Alignment.this.getGravityOffset(child, i);
             }
 
             public int getAlignmentValue(Child child, int i) {
-                return alignment.getAlignmentValue(child, i);
+                return Alignment.this.getAlignmentValue(child, i);
             }
         };
     }

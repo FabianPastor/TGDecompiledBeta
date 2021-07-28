@@ -224,7 +224,7 @@ public class ApplicationLoader extends Application {
             } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("GCM Registration not found.");
             }
-            Utilities.globalQueue.postRunnable($$Lambda$ApplicationLoader$dbTUy49tKRSqRXfy82kI6aAf9FY.INSTANCE);
+            Utilities.globalQueue.postRunnable($$Lambda$ApplicationLoader$L1Kxv3czXMk_jNWLP2gmgiHCrPM.INSTANCE);
             return;
         }
         if (BuildVars.LOGS_ENABLED) {
@@ -234,15 +234,15 @@ public class ApplicationLoader extends Application {
         GcmPushListenerService.sendRegistrationToServer((String) null);
     }
 
-    static /* synthetic */ void lambda$null$1() {
+    static /* synthetic */ void lambda$initPlayServices$1() {
         try {
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener($$Lambda$ApplicationLoader$v99OGWADdqAMce5sv4qrr65oZVo.INSTANCE);
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener($$Lambda$ApplicationLoader$uH1noiBBUj9vNZJEae0KZQ4oQc.INSTANCE);
         } catch (Throwable th) {
             FileLog.e(th);
         }
     }
 
-    static /* synthetic */ void lambda$null$0(Task task) {
+    static /* synthetic */ void lambda$initPlayServices$0(Task task) {
         if (!task.isSuccessful()) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("Failed to get regid");

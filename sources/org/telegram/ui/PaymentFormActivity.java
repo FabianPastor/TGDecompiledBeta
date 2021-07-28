@@ -283,10 +283,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         return true;
     }
 
-    static /* synthetic */ void lambda$null$25(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$createView$25(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
-    static /* synthetic */ void lambda$null$46(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$sendForm$46(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     private class TelegramWebviewProxy {
@@ -505,7 +505,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v0, resolved type: org.telegram.ui.PaymentFormActivity} */
-    /* JADX WARNING: type inference failed for: r9v5, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r9v5, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r9v6 */
     /* JADX WARNING: type inference failed for: r9v25 */
     /* JADX WARNING: Can't wrap try/catch for region: R(22:287|288|289|290|291|292|293|294|295|296|297|298|299|300|301|302|303|304|(1:306)(5:307|308|309|310|311)|312|(1:314)(1:315)|316) */
@@ -3930,7 +3930,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
             countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
                 public final void didSelectCountry(String str, String str2) {
-                    PaymentFormActivity.this.lambda$null$0$PaymentFormActivity(str, str2);
+                    PaymentFormActivity.this.lambda$createView$0$PaymentFormActivity(str, str2);
                 }
             });
             presentFragment(countrySelectActivity);
@@ -3939,8 +3939,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$PaymentFormActivity(String str, String str2) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$PaymentFormActivity(String str, String str2) {
         this.inputFields[4].setText(str);
         this.countryName = str2;
     }
@@ -3997,7 +3997,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
             countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
                 public final void didSelectCountry(String str, String str2) {
-                    PaymentFormActivity.this.lambda$null$5$PaymentFormActivity(str, str2);
+                    PaymentFormActivity.this.lambda$createView$5$PaymentFormActivity(str, str2);
                 }
             });
             presentFragment(countrySelectActivity);
@@ -4006,8 +4006,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$PaymentFormActivity(String str, String str2) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$PaymentFormActivity(String str, String str2) {
         this.inputFields[4].setText(str);
     }
 
@@ -4122,7 +4122,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             builder.setTitle(LocaleController.getString("PaymentCheckoutMethod", NUM), true);
             builder.setItems(new CharSequence[]{this.cardName, LocaleController.getString("PaymentCheckoutMethodNewCard", NUM)}, new int[]{NUM, NUM}, new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PaymentFormActivity.this.lambda$null$16$PaymentFormActivity(dialogInterface, i);
+                    PaymentFormActivity.this.lambda$createView$16$PaymentFormActivity(dialogInterface, i);
                 }
             });
             showDialog(builder.create());
@@ -4130,8 +4130,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$16 */
-    public /* synthetic */ void lambda$null$16$PaymentFormActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$16 */
+    public /* synthetic */ void lambda$createView$16$PaymentFormActivity(DialogInterface dialogInterface, int i) {
         if (i == 1) {
             PaymentFormActivity paymentFormActivity = new PaymentFormActivity(this.paymentForm, this.messageObject, 2, this.requestedInfo, this.shippingOption, this.tipAmount, (String) null, this.cardName, this.validateRequest, this.saveCardInfo, (TLRPC$TL_inputPaymentCredentialsGooglePay) null, this.parentFragment);
             paymentFormActivity.setDelegate(new PaymentFormActivityDelegate() {
@@ -4278,7 +4278,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             builder.setMessage(LocaleController.formatString("PaymentWarningText", NUM, this.currentBotName, str));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PaymentFormActivity.this.lambda$null$22$PaymentFormActivity(dialogInterface, i);
+                    PaymentFormActivity.this.lambda$createView$22$PaymentFormActivity(dialogInterface, i);
                 }
             });
             showDialog(builder.create());
@@ -4288,8 +4288,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$22 */
-    public /* synthetic */ void lambda$null$22$PaymentFormActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$22 */
+    public /* synthetic */ void lambda$createView$22$PaymentFormActivity(DialogInterface dialogInterface, int i) {
         showPayAlert(this.totalPrice[0]);
     }
 
@@ -4306,7 +4306,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     /* access modifiers changed from: private */
     /* renamed from: lambda$createView$26 */
     public /* synthetic */ void lambda$createView$26$PaymentFormActivity(View view) {
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_resendPasswordEmail(), $$Lambda$PaymentFormActivity$poTgkqBk1ggBgg4eMBwPeVlKkFQ.INSTANCE);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_resendPasswordEmail(), $$Lambda$PaymentFormActivity$QXo69tyXDqus2aG4Jgxnv6uoTo.INSTANCE);
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setMessage(LocaleController.getString("ResendCodeInfo", NUM));
         builder.setTitle(LocaleController.getString("AppName", NUM));
@@ -4326,7 +4326,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         builder.setTitle(LocaleController.getString("TurnPasswordOffQuestionTitle", NUM));
         builder.setPositiveButton(LocaleController.getString("Disable", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                PaymentFormActivity.this.lambda$null$27$PaymentFormActivity(dialogInterface, i);
+                PaymentFormActivity.this.lambda$createView$27$PaymentFormActivity(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -4339,8 +4339,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$27 */
-    public /* synthetic */ void lambda$null$27$PaymentFormActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$27 */
+    public /* synthetic */ void lambda$createView$27$PaymentFormActivity(DialogInterface dialogInterface, int i) {
         sendSavePassword(true);
     }
 
@@ -4640,14 +4640,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run() {
-                PaymentFormActivity.this.lambda$null$32$PaymentFormActivity(this.f$1, this.f$2);
+                PaymentFormActivity.this.lambda$loadPasswordInfo$32$PaymentFormActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$32 */
-    public /* synthetic */ void lambda$null$32$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$loadPasswordInfo$32 */
+    public /* synthetic */ void lambda$loadPasswordInfo$32$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loadingPasswordInfo = false;
         if (tLRPC$TL_error == null) {
             TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
@@ -4668,9 +4668,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 paymentFormActivity.setCurrentPassword(this.currentPassword);
             }
             if (!this.currentPassword.has_password && this.shortPollRunnable == null) {
-                $$Lambda$PaymentFormActivity$XcaIIUGLIeJLjkSCttMDEDcBUOI r3 = new Runnable() {
+                $$Lambda$PaymentFormActivity$lQ1ldyyjP2GM2PBBIl0I86KOtQ r3 = new Runnable() {
                     public final void run() {
-                        PaymentFormActivity.this.lambda$null$31$PaymentFormActivity();
+                        PaymentFormActivity.this.lambda$loadPasswordInfo$31$PaymentFormActivity();
                     }
                 };
                 this.shortPollRunnable = r3;
@@ -4680,8 +4680,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$31 */
-    public /* synthetic */ void lambda$null$31$PaymentFormActivity() {
+    /* renamed from: lambda$loadPasswordInfo$31 */
+    public /* synthetic */ void lambda$loadPasswordInfo$31$PaymentFormActivity() {
         if (this.shortPollRunnable != null) {
             loadPasswordInfo();
             this.shortPollRunnable = null;
@@ -5283,14 +5283,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run() {
-                PaymentFormActivity.this.lambda$null$38$PaymentFormActivity(this.f$1);
+                PaymentFormActivity.this.lambda$sendSavePassword$38$PaymentFormActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$38 */
-    public /* synthetic */ void lambda$null$38$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$sendSavePassword$38 */
+    public /* synthetic */ void lambda$sendSavePassword$38$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error) {
         String str;
         showEditDoneProgress(true, false);
         if (tLRPC$TL_error == null) {
@@ -5319,8 +5319,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$44 */
-    public /* synthetic */ void lambda$null$44$PaymentFormActivity(boolean z, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$sendSavePassword$44 */
+    public /* synthetic */ void lambda$sendSavePassword$44$PaymentFormActivity(boolean z, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, z, tLObject, str) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ boolean f$2;
@@ -5335,7 +5335,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run() {
-                PaymentFormActivity.this.lambda$null$43$PaymentFormActivity(this.f$1, this.f$2, this.f$3, this.f$4);
+                PaymentFormActivity.this.lambda$sendSavePassword$43$PaymentFormActivity(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
@@ -5343,7 +5343,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     /* access modifiers changed from: private */
     /* renamed from: lambda$sendSavePassword$45 */
     public /* synthetic */ void lambda$sendSavePassword$45$PaymentFormActivity(boolean z, String str, String str2, TLRPC$TL_account_updatePasswordSettings tLRPC$TL_account_updatePasswordSettings) {
-        $$Lambda$PaymentFormActivity$rFCPA4RMSs03qP_6VyerbPVl4hw r0 = new RequestDelegate(z, str) {
+        $$Lambda$PaymentFormActivity$7mNUMeUEdxZmHoHTkOVwRrHijA r0 = new RequestDelegate(z, str) {
             public final /* synthetic */ boolean f$1;
             public final /* synthetic */ String f$2;
 
@@ -5353,7 +5353,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PaymentFormActivity.this.lambda$null$44$PaymentFormActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                PaymentFormActivity.this.lambda$sendSavePassword$44$PaymentFormActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
             }
         };
         if (!z) {
@@ -5378,8 +5378,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$43 */
-    public /* synthetic */ void lambda$null$43$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, boolean z, TLObject tLObject, String str) {
+    /* renamed from: lambda$sendSavePassword$43 */
+    public /* synthetic */ void lambda$sendSavePassword$43$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, boolean z, TLObject tLObject, String str) {
         String str2;
         if (tLRPC$TL_error == null || !"SRP_ID_INVALID".equals(tLRPC$TL_error.text)) {
             showEditDoneProgress(true, false);
@@ -5404,7 +5404,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            PaymentFormActivity.this.lambda$null$42$PaymentFormActivity(this.f$1, dialogInterface, i);
+                            PaymentFormActivity.this.lambda$sendSavePassword$42$PaymentFormActivity(this.f$1, dialogInterface, i);
                         }
                     });
                     builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", NUM));
@@ -5439,15 +5439,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    PaymentFormActivity.this.lambda$null$41$PaymentFormActivity(this.f$1, tLObject, tLRPC$TL_error);
+                    PaymentFormActivity.this.lambda$sendSavePassword$41$PaymentFormActivity(this.f$1, tLObject, tLRPC$TL_error);
                 }
             }, 8);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$41 */
-    public /* synthetic */ void lambda$null$41$PaymentFormActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$sendSavePassword$41 */
+    public /* synthetic */ void lambda$sendSavePassword$41$PaymentFormActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, z) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -5460,14 +5460,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run() {
-                PaymentFormActivity.this.lambda$null$40$PaymentFormActivity(this.f$1, this.f$2, this.f$3);
+                PaymentFormActivity.this.lambda$sendSavePassword$40$PaymentFormActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$40 */
-    public /* synthetic */ void lambda$null$40$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
+    /* renamed from: lambda$sendSavePassword$40 */
+    public /* synthetic */ void lambda$sendSavePassword$40$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
             this.currentPassword = tLRPC$TL_account_password;
@@ -5477,8 +5477,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$42 */
-    public /* synthetic */ void lambda$null$42$PaymentFormActivity(String str, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$sendSavePassword$42 */
+    public /* synthetic */ void lambda$sendSavePassword$42$PaymentFormActivity(String str, DialogInterface dialogInterface, int i) {
         this.waitingForEmail = true;
         this.currentPassword.email_unconfirmed_pattern = str;
         updatePasswordFields();
@@ -5556,21 +5556,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 } else {
                     new AsyncTask<Object, Object, String>() {
                         /* access modifiers changed from: protected */
-                        /* JADX WARNING: Code restructure failed: missing block: B:27:0x0124, code lost:
-                            r13 = move-exception;
+                        /* JADX WARNING: Code restructure failed: missing block: B:36:0x0132, code lost:
+                            if (r4 == null) goto L_0x0137;
                          */
-                        /* JADX WARNING: Code restructure failed: missing block: B:28:0x0125, code lost:
-                            if (r5 != null) goto L_0x0127;
-                         */
-                        /* JADX WARNING: Code restructure failed: missing block: B:30:?, code lost:
-                            r5.close();
-                         */
-                        /* JADX WARNING: Code restructure failed: missing block: B:39:0x0134, code lost:
-                            if (r4 == null) goto L_0x0139;
-                         */
-                        /* JADX WARNING: Missing exception handler attribute for start block: B:31:0x012a */
-                        /* JADX WARNING: Removed duplicated region for block: B:45:0x013e  */
-                        /* JADX WARNING: Unknown top exception splitter block from list: {B:20:0x0103=Splitter:B:20:0x0103, B:31:0x012a=Splitter:B:31:0x012a} */
+                        /* JADX WARNING: Missing exception handler attribute for start block: B:28:0x0128 */
+                        /* JADX WARNING: Removed duplicated region for block: B:42:0x013c  */
+                        /* JADX WARNING: Unknown top exception splitter block from list: {B:20:0x0103=Splitter:B:20:0x0103, B:28:0x0128=Splitter:B:28:0x0128} */
                         /* Code decompiled incorrectly, please refer to instructions dump. */
                         public java.lang.String doInBackground(java.lang.Object... r13) {
                             /*
@@ -5579,145 +5570,142 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 java.lang.String r0 = "card"
                                 java.lang.String r1 = ""
                                 r2 = 0
-                                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r3.<init>()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                org.json.JSONObject r4 = new org.json.JSONObject     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r4.<init>()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r3.<init>()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                org.json.JSONObject r4 = new org.json.JSONObject     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r4.<init>()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 java.lang.String r5 = "number"
-                                com.stripe.android.model.Card r6 = r7     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                java.lang.String r6 = r6.getNumber()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r4.put(r5, r6)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                com.stripe.android.model.Card r6 = r7     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                java.lang.String r6 = r6.getNumber()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r4.put(r5, r6)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 java.lang.String r5 = "expiration_month"
-                                java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 java.lang.String r7 = "%02d"
                                 r8 = 1
-                                java.lang.Object[] r9 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                com.stripe.android.model.Card r10 = r7     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                java.lang.Integer r10 = r10.getExpMonth()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                java.lang.Object[] r9 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                com.stripe.android.model.Card r10 = r7     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                java.lang.Integer r10 = r10.getExpMonth()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 r11 = 0
-                                r9[r11] = r10     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                java.lang.String r6 = java.lang.String.format(r6, r7, r9)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r4.put(r5, r6)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                r9[r11] = r10     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                java.lang.String r6 = java.lang.String.format(r6, r7, r9)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r4.put(r5, r6)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 java.lang.String r5 = "expiration_year"
-                                java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r6.<init>()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r6.append(r1)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                com.stripe.android.model.Card r7 = r7     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                java.lang.Integer r7 = r7.getExpYear()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r6.append(r7)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r4.put(r5, r6)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r6.<init>()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r6.append(r1)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                com.stripe.android.model.Card r7 = r7     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                java.lang.Integer r7 = r7.getExpYear()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r6.append(r7)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r4.put(r5, r6)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 java.lang.String r5 = "security_code"
-                                java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r6.<init>()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r6.append(r1)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                com.stripe.android.model.Card r7 = r7     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                java.lang.String r7 = r7.getCVC()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r6.append(r7)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r4.put(r5, r6)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                r3.put(r0, r4)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                org.telegram.ui.PaymentFormActivity r4 = org.telegram.ui.PaymentFormActivity.this     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r4.paymentForm     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                org.telegram.tgnet.TLRPC$TL_invoice r4 = r4.invoice     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                boolean r4 = r4.test     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r6.<init>()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r6.append(r1)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                com.stripe.android.model.Card r7 = r7     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                java.lang.String r7 = r7.getCVC()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r6.append(r7)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r4.put(r5, r6)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                r3.put(r0, r4)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                org.telegram.ui.PaymentFormActivity r4 = org.telegram.ui.PaymentFormActivity.this     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r4.paymentForm     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                org.telegram.tgnet.TLRPC$TL_invoice r4 = r4.invoice     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                boolean r4 = r4.test     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 if (r4 == 0) goto L_0x0081
-                                java.net.URL r4 = new java.net.URL     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                java.net.URL r4 = new java.net.URL     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 java.lang.String r5 = "https://tgb-playground.smart-glocal.com/cds/v1/tokenize/card"
-                                r4.<init>(r5)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                r4.<init>(r5)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 goto L_0x0088
                             L_0x0081:
-                                java.net.URL r4 = new java.net.URL     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                java.net.URL r4 = new java.net.URL     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 java.lang.String r5 = "https://tgb.smart-glocal.com/cds/v1/tokenize/card"
-                                r4.<init>(r5)     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                r4.<init>(r5)     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                             L_0x0088:
-                                java.net.URLConnection r4 = r4.openConnection()     // Catch:{ Exception -> 0x012f, all -> 0x012d }
-                                java.net.HttpURLConnection r4 = (java.net.HttpURLConnection) r4     // Catch:{ Exception -> 0x012f, all -> 0x012d }
+                                java.net.URLConnection r4 = r4.openConnection()     // Catch:{ Exception -> 0x012d, all -> 0x012b }
+                                java.net.HttpURLConnection r4 = (java.net.HttpURLConnection) r4     // Catch:{ Exception -> 0x012d, all -> 0x012b }
                                 r5 = 30000(0x7530, float:4.2039E-41)
-                                r4.setConnectTimeout(r5)     // Catch:{ Exception -> 0x012b }
+                                r4.setConnectTimeout(r5)     // Catch:{ Exception -> 0x0129 }
                                 r5 = 80000(0x13880, float:1.12104E-40)
-                                r4.setReadTimeout(r5)     // Catch:{ Exception -> 0x012b }
-                                r4.setUseCaches(r11)     // Catch:{ Exception -> 0x012b }
-                                r4.setDoOutput(r8)     // Catch:{ Exception -> 0x012b }
+                                r4.setReadTimeout(r5)     // Catch:{ Exception -> 0x0129 }
+                                r4.setUseCaches(r11)     // Catch:{ Exception -> 0x0129 }
+                                r4.setDoOutput(r8)     // Catch:{ Exception -> 0x0129 }
                                 java.lang.String r5 = "POST"
-                                r4.setRequestMethod(r5)     // Catch:{ Exception -> 0x012b }
+                                r4.setRequestMethod(r5)     // Catch:{ Exception -> 0x0129 }
                                 java.lang.String r5 = "Content-Type"
                                 java.lang.String r6 = "application/json"
-                                r4.setRequestProperty(r5, r6)     // Catch:{ Exception -> 0x012b }
+                                r4.setRequestProperty(r5, r6)     // Catch:{ Exception -> 0x0129 }
                                 java.lang.String r5 = "X-PUBLIC-TOKEN"
-                                org.telegram.ui.PaymentFormActivity r6 = org.telegram.ui.PaymentFormActivity.this     // Catch:{ Exception -> 0x012b }
-                                java.lang.String r6 = r6.providerApiKey     // Catch:{ Exception -> 0x012b }
-                                r4.setRequestProperty(r5, r6)     // Catch:{ Exception -> 0x012b }
-                                java.io.OutputStream r5 = r4.getOutputStream()     // Catch:{ Exception -> 0x012b }
+                                org.telegram.ui.PaymentFormActivity r6 = org.telegram.ui.PaymentFormActivity.this     // Catch:{ Exception -> 0x0129 }
+                                java.lang.String r6 = r6.providerApiKey     // Catch:{ Exception -> 0x0129 }
+                                r4.setRequestProperty(r5, r6)     // Catch:{ Exception -> 0x0129 }
+                                java.io.OutputStream r5 = r4.getOutputStream()     // Catch:{ Exception -> 0x0129 }
                                 java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x0122 }
                                 java.lang.String r6 = "UTF-8"
                                 byte[] r3 = r3.getBytes(r6)     // Catch:{ all -> 0x0122 }
                                 r5.write(r3)     // Catch:{ all -> 0x0122 }
-                                r5.close()     // Catch:{ Exception -> 0x012b }
-                                int r3 = r4.getResponseCode()     // Catch:{ Exception -> 0x012b }
+                                r5.close()     // Catch:{ Exception -> 0x0129 }
+                                int r3 = r4.getResponseCode()     // Catch:{ Exception -> 0x0129 }
                                 r5 = 200(0xc8, float:2.8E-43)
                                 if (r3 < r5) goto L_0x0103
                                 r5 = 300(0x12c, float:4.2E-43)
                                 if (r3 >= r5) goto L_0x0103
-                                org.json.JSONObject r1 = new org.json.JSONObject     // Catch:{ Exception -> 0x012b }
-                                r1.<init>()     // Catch:{ Exception -> 0x012b }
-                                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ Exception -> 0x012b }
-                                java.io.InputStream r5 = r4.getInputStream()     // Catch:{ Exception -> 0x012b }
-                                java.lang.String r5 = org.telegram.ui.PaymentFormActivity.getResponseBody(r5)     // Catch:{ Exception -> 0x012b }
-                                r3.<init>(r5)     // Catch:{ Exception -> 0x012b }
+                                org.json.JSONObject r1 = new org.json.JSONObject     // Catch:{ Exception -> 0x0129 }
+                                r1.<init>()     // Catch:{ Exception -> 0x0129 }
+                                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ Exception -> 0x0129 }
+                                java.io.InputStream r5 = r4.getInputStream()     // Catch:{ Exception -> 0x0129 }
+                                java.lang.String r5 = org.telegram.ui.PaymentFormActivity.getResponseBody(r5)     // Catch:{ Exception -> 0x0129 }
+                                r3.<init>(r5)     // Catch:{ Exception -> 0x0129 }
                                 java.lang.String r5 = "data"
-                                org.json.JSONObject r3 = r3.getJSONObject(r5)     // Catch:{ Exception -> 0x012b }
-                                java.lang.String r3 = r3.getString(r13)     // Catch:{ Exception -> 0x012b }
-                                r1.put(r13, r3)     // Catch:{ Exception -> 0x012b }
+                                org.json.JSONObject r3 = r3.getJSONObject(r5)     // Catch:{ Exception -> 0x0129 }
+                                java.lang.String r3 = r3.getString(r13)     // Catch:{ Exception -> 0x0129 }
+                                r1.put(r13, r3)     // Catch:{ Exception -> 0x0129 }
                                 java.lang.String r13 = "type"
-                                r1.put(r13, r0)     // Catch:{ Exception -> 0x012b }
-                                java.lang.String r13 = r1.toString()     // Catch:{ Exception -> 0x012b }
+                                r1.put(r13, r0)     // Catch:{ Exception -> 0x0129 }
+                                java.lang.String r13 = r1.toString()     // Catch:{ Exception -> 0x0129 }
                                 r4.disconnect()
                                 return r13
                             L_0x0103:
-                                boolean r13 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ Exception -> 0x012b }
-                                if (r13 == 0) goto L_0x0136
-                                java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x012b }
-                                r13.<init>()     // Catch:{ Exception -> 0x012b }
-                                r13.append(r1)     // Catch:{ Exception -> 0x012b }
-                                java.io.InputStream r0 = r4.getErrorStream()     // Catch:{ Exception -> 0x012b }
-                                java.lang.String r0 = org.telegram.ui.PaymentFormActivity.getResponseBody(r0)     // Catch:{ Exception -> 0x012b }
-                                r13.append(r0)     // Catch:{ Exception -> 0x012b }
-                                java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x012b }
-                                org.telegram.messenger.FileLog.e((java.lang.String) r13)     // Catch:{ Exception -> 0x012b }
-                                goto L_0x0136
+                                boolean r13 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ Exception -> 0x0129 }
+                                if (r13 == 0) goto L_0x0134
+                                java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0129 }
+                                r13.<init>()     // Catch:{ Exception -> 0x0129 }
+                                r13.append(r1)     // Catch:{ Exception -> 0x0129 }
+                                java.io.InputStream r0 = r4.getErrorStream()     // Catch:{ Exception -> 0x0129 }
+                                java.lang.String r0 = org.telegram.ui.PaymentFormActivity.getResponseBody(r0)     // Catch:{ Exception -> 0x0129 }
+                                r13.append(r0)     // Catch:{ Exception -> 0x0129 }
+                                java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0129 }
+                                org.telegram.messenger.FileLog.e((java.lang.String) r13)     // Catch:{ Exception -> 0x0129 }
+                                goto L_0x0134
                             L_0x0122:
                                 r13 = move-exception
-                                throw r13     // Catch:{ all -> 0x0124 }
-                            L_0x0124:
+                                if (r5 == 0) goto L_0x0128
+                                r5.close()     // Catch:{ all -> 0x0128 }
+                            L_0x0128:
+                                throw r13     // Catch:{ Exception -> 0x0129 }
+                            L_0x0129:
                                 r13 = move-exception
-                                if (r5 == 0) goto L_0x012a
-                                r5.close()     // Catch:{ all -> 0x012a }
-                            L_0x012a:
-                                throw r13     // Catch:{ Exception -> 0x012b }
+                                goto L_0x012f
                             L_0x012b:
                                 r13 = move-exception
-                                goto L_0x0131
+                                goto L_0x013a
                             L_0x012d:
                                 r13 = move-exception
-                                goto L_0x013c
-                            L_0x012f:
-                                r13 = move-exception
                                 r4 = r2
-                            L_0x0131:
-                                org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)     // Catch:{ all -> 0x013a }
-                                if (r4 == 0) goto L_0x0139
-                            L_0x0136:
+                            L_0x012f:
+                                org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)     // Catch:{ all -> 0x0138 }
+                                if (r4 == 0) goto L_0x0137
+                            L_0x0134:
                                 r4.disconnect()
-                            L_0x0139:
+                            L_0x0137:
                                 return r2
-                            L_0x013a:
+                            L_0x0138:
                                 r13 = move-exception
                                 r2 = r4
-                            L_0x013c:
-                                if (r2 == 0) goto L_0x0141
+                            L_0x013a:
+                                if (r2 == 0) goto L_0x013f
                                 r2.disconnect()
-                            L_0x0141:
+                            L_0x013f:
                                 throw r13
                             */
                             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PaymentFormActivity.AnonymousClass26.doInBackground(java.lang.Object[]):java.lang.String");
@@ -5821,7 +5809,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    PaymentFormActivity.this.lambda$null$47$PaymentFormActivity(this.f$1);
+                    PaymentFormActivity.this.lambda$sendForm$47$PaymentFormActivity(this.f$1);
                 }
             });
         } else {
@@ -5835,20 +5823,20 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    PaymentFormActivity.this.lambda$null$48$PaymentFormActivity(this.f$1, this.f$2);
+                    PaymentFormActivity.this.lambda$sendForm$48$PaymentFormActivity(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$47 */
-    public /* synthetic */ void lambda$null$47$PaymentFormActivity(TLObject tLObject) {
+    /* renamed from: lambda$sendForm$47 */
+    public /* synthetic */ void lambda$sendForm$47$PaymentFormActivity(TLObject tLObject) {
         this.requestedInfo = (TLRPC$TL_payments_validatedRequestedInfo) tLObject;
         if (this.paymentForm.saved_info != null && !this.saveShippingInfo) {
             TLRPC$TL_payments_clearSavedInfo tLRPC$TL_payments_clearSavedInfo = new TLRPC$TL_payments_clearSavedInfo();
             tLRPC$TL_payments_clearSavedInfo.info = true;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_payments_clearSavedInfo, $$Lambda$PaymentFormActivity$DBqmkWKacn67FzoQgiKBtsrHC5I.INSTANCE);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_payments_clearSavedInfo, $$Lambda$PaymentFormActivity$xvFYdkNGXcXnX60Q2a878DGgPc.INSTANCE);
         }
         goToNextStep();
         setDonePressed(false);
@@ -5856,8 +5844,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$48 */
-    public /* synthetic */ void lambda$null$48$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$sendForm$48 */
+    public /* synthetic */ void lambda$sendForm$48$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         setDonePressed(false);
         showEditDoneProgress(true, false);
         if (tLRPC$TL_error != null) {
@@ -6023,7 +6011,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    PaymentFormActivity.this.lambda$null$52$PaymentFormActivity(this.f$1, this.f$2);
+                    PaymentFormActivity.this.lambda$sendData$52$PaymentFormActivity(this.f$1, this.f$2);
                 }
             });
         } else if (tLObject instanceof TLRPC$TL_payments_paymentResult) {
@@ -6055,7 +6043,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    PaymentFormActivity.this.lambda$null$50$PaymentFormActivity(this.f$1);
+                    PaymentFormActivity.this.lambda$sendData$50$PaymentFormActivity(this.f$1);
                 }
             });
         } else if (tLObject instanceof TLRPC$TL_payments_paymentVerificationNeeded) {
@@ -6067,15 +6055,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    PaymentFormActivity.this.lambda$null$51$PaymentFormActivity(this.f$1);
+                    PaymentFormActivity.this.lambda$sendData$51$PaymentFormActivity(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$50 */
-    public /* synthetic */ void lambda$null$50$PaymentFormActivity(TLRPC$Message[] tLRPC$MessageArr) {
+    /* renamed from: lambda$sendData$50 */
+    public /* synthetic */ void lambda$sendData$50$PaymentFormActivity(TLRPC$Message[] tLRPC$MessageArr) {
         goToNextStep();
         if (this.parentFragment instanceof ChatActivity) {
             ((ChatActivity) this.parentFragment).getUndoView().showWithAction(0, 77, AndroidUtilities.replaceTags(LocaleController.formatString("PaymentInfoHint", NUM, this.totalPrice[0], this.currentItemName)), tLRPC$MessageArr[0], (Runnable) null, (Runnable) null);
@@ -6083,8 +6071,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$51 */
-    public /* synthetic */ void lambda$null$51$PaymentFormActivity(TLObject tLObject) {
+    /* renamed from: lambda$sendData$51 */
+    public /* synthetic */ void lambda$sendData$51$PaymentFormActivity(TLObject tLObject) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.paymentFinished, new Object[0]);
         setDonePressed(false);
         this.webviewLoading = true;
@@ -6109,8 +6097,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$52 */
-    public /* synthetic */ void lambda$null$52$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_payments_sendPaymentForm tLRPC$TL_payments_sendPaymentForm) {
+    /* renamed from: lambda$sendData$52 */
+    public /* synthetic */ void lambda$sendData$52$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_payments_sendPaymentForm tLRPC$TL_payments_sendPaymentForm) {
         AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this, tLRPC$TL_payments_sendPaymentForm, new Object[0]);
         setDonePressed(false);
         showEditDoneProgress(false, false);
@@ -6198,14 +6186,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run() {
-                PaymentFormActivity.this.lambda$null$57$PaymentFormActivity(this.f$1, this.f$2, this.f$3, this.f$4);
+                PaymentFormActivity.this.lambda$checkPassword$57$PaymentFormActivity(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$57 */
-    public /* synthetic */ void lambda$null$57$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, TLRPC$TL_account_getPassword tLRPC$TL_account_getPassword) {
+    /* renamed from: lambda$checkPassword$57 */
+    public /* synthetic */ void lambda$checkPassword$57$PaymentFormActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, TLRPC$TL_account_getPassword tLRPC$TL_account_getPassword) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
             if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$TL_account_password, false)) {
@@ -6224,7 +6212,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     }
 
                     public final void run() {
-                        PaymentFormActivity.this.lambda$null$56$PaymentFormActivity(this.f$1, this.f$2);
+                        PaymentFormActivity.this.lambda$checkPassword$56$PaymentFormActivity(this.f$1, this.f$2);
                     }
                 });
             }
@@ -6236,13 +6224,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$56 */
-    public /* synthetic */ void lambda$null$56$PaymentFormActivity(TLRPC$TL_account_password tLRPC$TL_account_password, byte[] bArr) {
+    /* renamed from: lambda$checkPassword$56 */
+    public /* synthetic */ void lambda$checkPassword$56$PaymentFormActivity(TLRPC$TL_account_password tLRPC$TL_account_password, byte[] bArr) {
         TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = tLRPC$TL_account_password.current_algo;
         byte[] x = tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow ? SRPHelper.getX(bArr, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo) : null;
         TLRPC$TL_account_getTmpPassword tLRPC$TL_account_getTmpPassword = new TLRPC$TL_account_getTmpPassword();
         tLRPC$TL_account_getTmpPassword.period = 1800;
-        $$Lambda$PaymentFormActivity$AQjblEKqVZP3YbTiTBeEcEBTwtk r1 = new RequestDelegate(tLRPC$TL_account_getTmpPassword) {
+        $$Lambda$PaymentFormActivity$F0joIv89L40t5j7MhMWgA8nbow r1 = new RequestDelegate(tLRPC$TL_account_getTmpPassword) {
             public final /* synthetic */ TLRPC$TL_account_getTmpPassword f$1;
 
             {
@@ -6250,7 +6238,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PaymentFormActivity.this.lambda$null$55$PaymentFormActivity(this.f$1, tLObject, tLRPC$TL_error);
+                PaymentFormActivity.this.lambda$checkPassword$55$PaymentFormActivity(this.f$1, tLObject, tLRPC$TL_error);
             }
         };
         TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo2 = tLRPC$TL_account_password.current_algo;
@@ -6272,8 +6260,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$55 */
-    public /* synthetic */ void lambda$null$55$PaymentFormActivity(TLRPC$TL_account_getTmpPassword tLRPC$TL_account_getTmpPassword, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$checkPassword$55 */
+    public /* synthetic */ void lambda$checkPassword$55$PaymentFormActivity(TLRPC$TL_account_getTmpPassword tLRPC$TL_account_getTmpPassword, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, tLRPC$TL_error, tLRPC$TL_account_getTmpPassword) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
@@ -6286,14 +6274,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run() {
-                PaymentFormActivity.this.lambda$null$54$PaymentFormActivity(this.f$1, this.f$2, this.f$3);
+                PaymentFormActivity.this.lambda$checkPassword$54$PaymentFormActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$54 */
-    public /* synthetic */ void lambda$null$54$PaymentFormActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_getTmpPassword tLRPC$TL_account_getTmpPassword) {
+    /* renamed from: lambda$checkPassword$54 */
+    public /* synthetic */ void lambda$checkPassword$54$PaymentFormActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_getTmpPassword tLRPC$TL_account_getTmpPassword) {
         showEditDoneProgress(true, false);
         setDonePressed(false);
         if (tLObject != null) {

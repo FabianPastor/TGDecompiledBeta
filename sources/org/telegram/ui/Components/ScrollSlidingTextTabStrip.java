@@ -41,18 +41,17 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
                 if (elapsedRealtime > 17) {
                     elapsedRealtime = 17;
                 }
+                ScrollSlidingTextTabStrip.access$216(ScrollSlidingTextTabStrip.this, ((float) elapsedRealtime) / 200.0f);
                 ScrollSlidingTextTabStrip scrollSlidingTextTabStrip = ScrollSlidingTextTabStrip.this;
-                float unused = scrollSlidingTextTabStrip.animationTime = scrollSlidingTextTabStrip.animationTime + (((float) elapsedRealtime) / 200.0f);
-                ScrollSlidingTextTabStrip scrollSlidingTextTabStrip2 = ScrollSlidingTextTabStrip.this;
-                scrollSlidingTextTabStrip2.setAnimationIdicatorProgress(scrollSlidingTextTabStrip2.interpolator.getInterpolation(ScrollSlidingTextTabStrip.this.animationTime));
+                scrollSlidingTextTabStrip.setAnimationIdicatorProgress(scrollSlidingTextTabStrip.interpolator.getInterpolation(ScrollSlidingTextTabStrip.this.animationTime));
                 if (ScrollSlidingTextTabStrip.this.animationTime > 1.0f) {
-                    float unused2 = ScrollSlidingTextTabStrip.this.animationTime = 1.0f;
+                    float unused = ScrollSlidingTextTabStrip.this.animationTime = 1.0f;
                 }
                 if (ScrollSlidingTextTabStrip.this.animationTime < 1.0f) {
                     AndroidUtilities.runOnUIThread(ScrollSlidingTextTabStrip.this.animationRunnable);
                     return;
                 }
-                boolean unused3 = ScrollSlidingTextTabStrip.this.animatingIndicator = false;
+                boolean unused2 = ScrollSlidingTextTabStrip.this.animatingIndicator = false;
                 ScrollSlidingTextTabStrip.this.setEnabled(true);
                 if (ScrollSlidingTextTabStrip.this.delegate != null) {
                     ScrollSlidingTextTabStrip.this.delegate.onPageScrolled(1.0f);
@@ -102,6 +101,12 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         void onPageSelected(int i, boolean z);
 
         void onSamePageSelected();
+    }
+
+    static /* synthetic */ float access$216(ScrollSlidingTextTabStrip scrollSlidingTextTabStrip, float f) {
+        float f2 = scrollSlidingTextTabStrip.animationTime + f;
+        scrollSlidingTextTabStrip.animationTime = f2;
+        return f2;
     }
 
     public ScrollSlidingTextTabStrip(Context context) {

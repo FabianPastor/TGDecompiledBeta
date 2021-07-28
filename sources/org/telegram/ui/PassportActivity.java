@@ -1139,7 +1139,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    static /* synthetic */ void lambda$null$0(TLObject tLObject) {
+    static /* synthetic */ void lambda$new$0(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_help_passportConfig) {
             TLRPC$TL_help_passportConfig tLRPC$TL_help_passportConfig = (TLRPC$TL_help_passportConfig) tLObject;
             SharedConfig.setPassportConfig(tLRPC$TL_help_passportConfig.countries_langs.data, tLRPC$TL_help_passportConfig.hash);
@@ -2101,14 +2101,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void run() {
-                        PassportActivity.AnonymousClass3.this.lambda$null$5$PassportActivity$3(this.f$1, this.f$2, this.f$3, this.f$4);
+                        PassportActivity.AnonymousClass3.this.lambda$onItemClick$5$PassportActivity$3(this.f$1, this.f$2, this.f$3, this.f$4);
                     }
                 });
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$null$5 */
-            public /* synthetic */ void lambda$null$5$PassportActivity$3(TLRPC$TL_error tLRPC$TL_error, Runnable runnable, ErrorRunnable errorRunnable, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail) {
+            /* renamed from: lambda$onItemClick$5 */
+            public /* synthetic */ void lambda$onItemClick$5$PassportActivity$3(TLRPC$TL_error tLRPC$TL_error, Runnable runnable, ErrorRunnable errorRunnable, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail) {
                 TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
                 if (tLRPC$TL_error2 == null) {
                     PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, (String) PassportActivity.this.currentValues.get("email"), (String) null, (TLRPC$TL_secureRequiredType) null, (String) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (SecureDocument) null, runnable, errorRunnable);
@@ -2420,14 +2420,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$3$PassportActivity(this.f$1);
+                PassportActivity.this.lambda$loadPasswordInfo$3$PassportActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$PassportActivity(TLObject tLObject) {
+    /* renamed from: lambda$loadPasswordInfo$3 */
+    public /* synthetic */ void lambda$loadPasswordInfo$3$PassportActivity(TLObject tLObject) {
         if (tLObject != null) {
             TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
             this.currentPassword = tLRPC$TL_account_password;
@@ -2677,7 +2677,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             needShowProgress();
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_auth_requestPasswordRecovery(), new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    PassportActivity.this.lambda$null$10$PassportActivity(tLObject, tLRPC$TL_error);
+                    PassportActivity.this.lambda$createPasswordInterface$10$PassportActivity(tLObject, tLRPC$TL_error);
                 }
             }, 10), this.classGuid);
         } else if (getParentActivity() != null) {
@@ -2685,7 +2685,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$null$11$PassportActivity(dialogInterface, i);
+                    PassportActivity.this.lambda$createPasswordInterface$11$PassportActivity(dialogInterface, i);
                 }
             });
             builder.setTitle(LocaleController.getString("RestorePasswordNoEmailTitle", NUM));
@@ -2695,8 +2695,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createPasswordInterface$10 */
+    public /* synthetic */ void lambda$createPasswordInterface$10$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -2707,14 +2707,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$9$PassportActivity(this.f$1, this.f$2);
+                PassportActivity.this.lambda$createPasswordInterface$9$PassportActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$PassportActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$createPasswordInterface$9 */
+    public /* synthetic */ void lambda$createPasswordInterface$9$PassportActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         String str;
         needHideProgress();
         if (tLRPC$TL_error == null) {
@@ -2730,7 +2730,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$null$8$PassportActivity(this.f$1, dialogInterface, i);
+                    PassportActivity.this.lambda$createPasswordInterface$8$PassportActivity(this.f$1, dialogInterface, i);
                 }
             });
             Dialog showDialog = showDialog(builder.create());
@@ -2752,16 +2752,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$PassportActivity(TLRPC$TL_auth_passwordRecovery tLRPC$TL_auth_passwordRecovery, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createPasswordInterface$8 */
+    public /* synthetic */ void lambda$createPasswordInterface$8$PassportActivity(TLRPC$TL_auth_passwordRecovery tLRPC$TL_auth_passwordRecovery, DialogInterface dialogInterface, int i) {
         TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
         tLRPC$TL_account_password.email_unconfirmed_pattern = tLRPC$TL_auth_passwordRecovery.email_pattern;
         presentFragment(new TwoStepVerificationSetupActivity(this.currentAccount, 4, tLRPC$TL_account_password));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$PassportActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createPasswordInterface$11 */
+    public /* synthetic */ void lambda$createPasswordInterface$11$PassportActivity(DialogInterface dialogInterface, int i) {
         Activity parentActivity = getParentActivity();
         Browser.openUrl((Context) parentActivity, "https://telegram.org/deactivate?phone=" + UserConfig.getInstance(this.currentAccount).getClientPhone());
     }
@@ -3391,14 +3391,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_acceptAuthorization, new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PassportActivity.this.lambda$null$15$PassportActivity(tLObject, tLRPC$TL_error);
+                PassportActivity.this.lambda$createRequestInterface$15$PassportActivity(tLObject, tLRPC$TL_error);
             }
         }), this.classGuid);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$15 */
-    public /* synthetic */ void lambda$null$15$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createRequestInterface$15 */
+    public /* synthetic */ void lambda$createRequestInterface$15$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
             public final /* synthetic */ TLRPC$TL_error f$1;
 
@@ -3407,14 +3407,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$14$PassportActivity(this.f$1);
+                PassportActivity.this.lambda$createRequestInterface$14$PassportActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$14 */
-    public /* synthetic */ void lambda$null$14$PassportActivity(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createRequestInterface$14 */
+    public /* synthetic */ void lambda$createRequestInterface$14$PassportActivity(TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             this.ignoreOnFailure = true;
             callCallback(true);
@@ -3760,7 +3760,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         builder.setMessage(LocaleController.getString("TelegramPassportDeleteAlert", NUM));
         builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                PassportActivity.this.lambda$null$20$PassportActivity(dialogInterface, i);
+                PassportActivity.this.lambda$createManageInterface$20$PassportActivity(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -3773,8 +3773,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$20 */
-    public /* synthetic */ void lambda$null$20$PassportActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createManageInterface$20 */
+    public /* synthetic */ void lambda$createManageInterface$20$PassportActivity(DialogInterface dialogInterface, int i) {
         TLRPC$TL_account_deleteSecureValue tLRPC$TL_account_deleteSecureValue = new TLRPC$TL_account_deleteSecureValue();
         for (int i2 = 0; i2 < this.currentForm.values.size(); i2++) {
             tLRPC$TL_account_deleteSecureValue.types.add(this.currentForm.values.get(i2).type);
@@ -3782,24 +3782,24 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         needShowProgress();
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteSecureValue, new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PassportActivity.this.lambda$null$19$PassportActivity(tLObject, tLRPC$TL_error);
+                PassportActivity.this.lambda$createManageInterface$19$PassportActivity(tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$19 */
-    public /* synthetic */ void lambda$null$19$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createManageInterface$19 */
+    public /* synthetic */ void lambda$createManageInterface$19$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                PassportActivity.this.lambda$null$18$PassportActivity();
+                PassportActivity.this.lambda$createManageInterface$18$PassportActivity();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$18 */
-    public /* synthetic */ void lambda$null$18$PassportActivity() {
+    /* renamed from: lambda$createManageInterface$18 */
+    public /* synthetic */ void lambda$createManageInterface$18$PassportActivity() {
         int i = 0;
         while (i < this.linearLayout2.getChildCount()) {
             View childAt = this.linearLayout2.getChildAt(i);
@@ -4586,7 +4586,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
             countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
                 public final void didSelectCountry(String str, String str2) {
-                    PassportActivity.this.lambda$null$28$PassportActivity(str, str2);
+                    PassportActivity.this.lambda$createPhoneInterface$28$PassportActivity(str, str2);
                 }
             });
             presentFragment(countrySelectActivity);
@@ -4595,8 +4595,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$28 */
-    public /* synthetic */ void lambda$null$28$PassportActivity(String str, String str2) {
+    /* renamed from: lambda$createPhoneInterface$28 */
+    public /* synthetic */ void lambda$createPhoneInterface$28$PassportActivity(String str, String str2) {
         this.inputFields[0].setText(str);
         if (this.countriesArray.indexOf(str) != -1) {
             this.ignoreOnTextChange = true;
@@ -4608,7 +4608,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                PassportActivity.this.lambda$null$27$PassportActivity();
+                PassportActivity.this.lambda$createPhoneInterface$27$PassportActivity();
             }
         }, 300);
         this.inputFields[2].requestFocus();
@@ -4617,8 +4617,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$27 */
-    public /* synthetic */ void lambda$null$27$PassportActivity() {
+    /* renamed from: lambda$createPhoneInterface$27 */
+    public /* synthetic */ void lambda$createPhoneInterface$27$PassportActivity() {
         AndroidUtilities.showKeyboard(this.inputFields[2]);
     }
 
@@ -5060,7 +5060,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
             countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
                 public final void didSelectCountry(String str, String str2) {
-                    PassportActivity.this.lambda$null$34$PassportActivity(str, str2);
+                    PassportActivity.this.lambda$createAddressInterface$34$PassportActivity(str, str2);
                 }
             });
             presentFragment(countrySelectActivity);
@@ -5069,8 +5069,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$34 */
-    public /* synthetic */ void lambda$null$34$PassportActivity(String str, String str2) {
+    /* renamed from: lambda$createAddressInterface$34 */
+    public /* synthetic */ void lambda$createAddressInterface$34$PassportActivity(String str, String str2) {
         this.inputFields[5].setText(str);
         this.currentCitizeship = str2;
     }
@@ -6365,7 +6365,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void didSelectCountry(String str, String str2) {
-                    PassportActivity.this.lambda$null$45$PassportActivity(this.f$1, str, str2);
+                    PassportActivity.this.lambda$createIdentityInterface$45$PassportActivity(this.f$1, str, str2);
                 }
             });
             presentFragment(countrySelectActivity);
@@ -6374,8 +6374,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$45 */
-    public /* synthetic */ void lambda$null$45$PassportActivity(View view, String str, String str2) {
+    /* renamed from: lambda$createIdentityInterface$45 */
+    public /* synthetic */ void lambda$createIdentityInterface$45$PassportActivity(View view, String str, String str2) {
         int intValue = ((Integer) view.getTag()).intValue();
         EditTextBoldCursor editTextBoldCursor = this.inputFields[intValue];
         if (intValue == 5) {
@@ -6440,7 +6440,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void didSelectDate(int i, int i2, int i3) {
-                        PassportActivity.this.lambda$null$47$PassportActivity(this.f$1, this.f$2, i, i2, i3);
+                        PassportActivity.this.lambda$createIdentityInterface$47$PassportActivity(this.f$1, this.f$2, i, i2, i3);
                     }
                 });
                 if (intValue == 8) {
@@ -6452,7 +6452,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            PassportActivity.this.lambda$null$48$PassportActivity(this.f$1, dialogInterface, i);
+                            PassportActivity.this.lambda$createIdentityInterface$48$PassportActivity(this.f$1, dialogInterface, i);
                         }
                     });
                 }
@@ -6465,8 +6465,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$47 */
-    public /* synthetic */ void lambda$null$47$PassportActivity(int i, EditTextBoldCursor editTextBoldCursor, int i2, int i3, int i4) {
+    /* renamed from: lambda$createIdentityInterface$47 */
+    public /* synthetic */ void lambda$createIdentityInterface$47$PassportActivity(int i, EditTextBoldCursor editTextBoldCursor, int i2, int i3, int i4) {
         if (i == 8) {
             int[] iArr = this.currentExpireDate;
             iArr[0] = i2;
@@ -6477,8 +6477,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$48 */
-    public /* synthetic */ void lambda$null$48$PassportActivity(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createIdentityInterface$48 */
+    public /* synthetic */ void lambda$createIdentityInterface$48$PassportActivity(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i) {
         int[] iArr = this.currentExpireDate;
         iArr[2] = 0;
         iArr[1] = 0;
@@ -6497,7 +6497,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             builder.setTitle(LocaleController.getString("PassportSelectGender", NUM));
             builder.setItems(new CharSequence[]{LocaleController.getString("PassportMale", NUM), LocaleController.getString("PassportFemale", NUM)}, new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$null$50$PassportActivity(dialogInterface, i);
+                    PassportActivity.this.lambda$createIdentityInterface$50$PassportActivity(dialogInterface, i);
                 }
             });
             builder.setPositiveButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -6507,8 +6507,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$50 */
-    public /* synthetic */ void lambda$null$50$PassportActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createIdentityInterface$50 */
+    public /* synthetic */ void lambda$createIdentityInterface$50$PassportActivity(DialogInterface dialogInterface, int i) {
         if (i == 0) {
             this.currentGender = "male";
             this.inputFields[4].setText(LocaleController.getString("PassportMale", NUM));
@@ -7121,7 +7121,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                PassportActivity.this.lambda$null$56$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
+                PassportActivity.this.lambda$addDocumentView$56$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
             }
         });
         showDialog(builder.create());
@@ -7129,8 +7129,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$56 */
-    public /* synthetic */ void lambda$null$56$PassportActivity(SecureDocument secureDocument, int i, SecureDocumentCell secureDocumentCell, String str, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$addDocumentView$56 */
+    public /* synthetic */ void lambda$addDocumentView$56$PassportActivity(SecureDocument secureDocument, int i, SecureDocumentCell secureDocumentCell, String str, DialogInterface dialogInterface, int i2) {
         this.documentsCells.remove(secureDocument);
         if (i == 1) {
             this.selfieDocument = null;
@@ -8638,14 +8638,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$59$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+                PassportActivity.this.lambda$deleteValueInternal$59$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$59 */
-    public /* synthetic */ void lambda$null$59$PassportActivity(TLRPC$TL_error tLRPC$TL_error, ErrorRunnable errorRunnable, boolean z, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable) {
+    /* renamed from: lambda$deleteValueInternal$59 */
+    public /* synthetic */ void lambda$deleteValueInternal$59$PassportActivity(TLRPC$TL_error tLRPC$TL_error, ErrorRunnable errorRunnable, boolean z, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable) {
         String str;
         TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType3;
         TLRPC$TL_secureData tLRPC$TL_secureData;
@@ -9024,7 +9024,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        PassportActivity.this.lambda$null$63$PassportActivity(this.f$1, this.f$2, dialogInterface, i);
+                        PassportActivity.this.lambda$addField$63$PassportActivity(this.f$1, this.f$2, dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -9085,7 +9085,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$null$61$PassportActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+                    PassportActivity.this.lambda$addField$61$PassportActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
                 }
             });
             showDialog(builder2.create());
@@ -9095,14 +9095,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$61 */
-    public /* synthetic */ void lambda$null$61$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$addField$61 */
+    public /* synthetic */ void lambda$addField$61$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
         openTypeActivity(tLRPC$TL_secureRequiredType, (TLRPC$TL_secureRequiredType) arrayList.get(i), arrayList, z);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$63 */
-    public /* synthetic */ void lambda$null$63$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, boolean z, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$addField$63 */
+    public /* synthetic */ void lambda$addField$63$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, boolean z, DialogInterface dialogInterface, int i) {
         needShowProgress();
         deleteValueInternal(tLRPC$TL_secureRequiredType, (TLRPC$TL_secureRequiredType) null, (ArrayList<TLRPC$TL_secureRequiredType>) null, true, new Runnable() {
             public final void run() {
@@ -9110,14 +9110,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
         }, new ErrorRunnable() {
             public final void onError(String str, String str2) {
-                PassportActivity.this.lambda$null$62$PassportActivity(str, str2);
+                PassportActivity.this.lambda$addField$62$PassportActivity(str, str2);
             }
         }, z);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$62 */
-    public /* synthetic */ void lambda$null$62$PassportActivity(String str, String str2) {
+    /* renamed from: lambda$addField$62 */
+    public /* synthetic */ void lambda$addField$62$PassportActivity(String str, String str2) {
         needHideProgress();
     }
 
@@ -9439,14 +9439,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$65$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                PassportActivity.this.lambda$startPhoneVerification$65$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$65 */
-    public /* synthetic */ void lambda$null$65$PassportActivity(TLRPC$TL_error tLRPC$TL_error, String str, PassportActivityDelegate passportActivityDelegate, TLObject tLObject, TLRPC$TL_account_sendVerifyPhoneCode tLRPC$TL_account_sendVerifyPhoneCode) {
+    /* renamed from: lambda$startPhoneVerification$65 */
+    public /* synthetic */ void lambda$startPhoneVerification$65$PassportActivity(TLRPC$TL_error tLRPC$TL_error, String str, PassportActivityDelegate passportActivityDelegate, TLObject tLObject, TLRPC$TL_account_sendVerifyPhoneCode tLRPC$TL_account_sendVerifyPhoneCode) {
         String str2 = str;
         if (tLRPC$TL_error == null) {
             HashMap hashMap = new HashMap();
@@ -10207,7 +10207,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void run() {
-                        PassportActivity.this.lambda$null$70$PassportActivity(this.f$1, this.f$2);
+                        PassportActivity.this.lambda$processSelectedFiles$70$PassportActivity(this.f$1, this.f$2);
                     }
                 });
                 if (z && !z2) {
@@ -10223,7 +10223,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     }
 
                                     public final void run() {
-                                        PassportActivity.this.lambda$null$71$PassportActivity(this.f$1);
+                                        PassportActivity.this.lambda$processSelectedFiles$71$PassportActivity(this.f$1);
                                     }
                                 });
                                 z2 = true;
@@ -10244,8 +10244,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$70 */
-    public /* synthetic */ void lambda$null$70$PassportActivity(SecureDocument secureDocument, int i) {
+    /* renamed from: lambda$processSelectedFiles$70 */
+    public /* synthetic */ void lambda$processSelectedFiles$70$PassportActivity(SecureDocument secureDocument, int i) {
         int i2 = this.uploadingFileType;
         if (i2 == 1) {
             SecureDocument secureDocument2 = this.selfieDocument;
@@ -10290,8 +10290,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$71 */
-    public /* synthetic */ void lambda$null$71$PassportActivity(MrzRecognizer.Result result) {
+    /* renamed from: lambda$processSelectedFiles$71 */
+    public /* synthetic */ void lambda$processSelectedFiles$71$PassportActivity(MrzRecognizer.Result result) {
         int i;
         int i2;
         int i3 = result.type;
@@ -10502,6 +10502,22 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
         public boolean needBackButton() {
             return true;
+        }
+
+        static /* synthetic */ int access$10026(PhoneConfirmationView phoneConfirmationView, double d) {
+            double d2 = (double) phoneConfirmationView.codeTime;
+            Double.isNaN(d2);
+            int i = (int) (d2 - d);
+            phoneConfirmationView.codeTime = i;
+            return i;
+        }
+
+        static /* synthetic */ int access$10626(PhoneConfirmationView phoneConfirmationView, double d) {
+            double d2 = (double) phoneConfirmationView.time;
+            Double.isNaN(d2);
+            int i = (int) (d2 - d);
+            phoneConfirmationView.time = i;
+            return i;
         }
 
         /* JADX WARNING: Illegal instructions before constructor call */
@@ -10980,14 +10996,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void run() {
-                    PassportActivity.PhoneConfirmationView.this.lambda$null$2$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2, this.f$3, this.f$4);
+                    PassportActivity.PhoneConfirmationView.this.lambda$resendCode$2$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
+        /* renamed from: lambda$resendCode$2 */
+        public /* synthetic */ void lambda$resendCode$2$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
             this.nextPressed = false;
             if (tLRPC$TL_error == null) {
                 this.this$0.fillNextCodeParams(bundle, (TLRPC$TL_auth_sentCode) tLObject, true);
@@ -10996,7 +11012,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 if (alertDialog != null && tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
                     alertDialog.setPositiveButtonListener(new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            PassportActivity.PhoneConfirmationView.this.lambda$null$1$PassportActivity$PhoneConfirmationView(dialogInterface, i);
+                            PassportActivity.PhoneConfirmationView.this.lambda$resendCode$1$PassportActivity$PhoneConfirmationView(dialogInterface, i);
                         }
                     });
                 }
@@ -11005,8 +11021,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$PassportActivity$PhoneConfirmationView(DialogInterface dialogInterface, int i) {
+        /* renamed from: lambda$resendCode$1 */
+        public /* synthetic */ void lambda$resendCode$1$PassportActivity$PhoneConfirmationView(DialogInterface dialogInterface, int i) {
             onBackPressed(true);
             this.this$0.finishFragment();
         }
@@ -11352,12 +11368,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         double currentTimeMillis = (double) System.currentTimeMillis();
                         double access$9900 = PhoneConfirmationView.this.lastCodeTime;
                         Double.isNaN(currentTimeMillis);
-                        double d = currentTimeMillis - access$9900;
                         double unused = PhoneConfirmationView.this.lastCodeTime = currentTimeMillis;
-                        PhoneConfirmationView phoneConfirmationView = PhoneConfirmationView.this;
-                        double access$10000 = (double) phoneConfirmationView.codeTime;
-                        Double.isNaN(access$10000);
-                        int unused2 = phoneConfirmationView.codeTime = (int) (access$10000 - d);
+                        PhoneConfirmationView.access$10026(PhoneConfirmationView.this, currentTimeMillis - access$9900);
                         if (PhoneConfirmationView.this.codeTime <= 1000) {
                             PhoneConfirmationView.this.problemText.setVisibility(0);
                             PhoneConfirmationView.this.timeText.setVisibility(8);
@@ -11393,16 +11405,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             double currentTimeMillis = (double) System.currentTimeMillis();
                             double access$10500 = PhoneConfirmationView.this.lastCurrentTime;
                             Double.isNaN(currentTimeMillis);
-                            PhoneConfirmationView phoneConfirmationView = PhoneConfirmationView.this;
-                            double access$10600 = (double) phoneConfirmationView.time;
-                            Double.isNaN(access$10600);
-                            int unused = phoneConfirmationView.time = (int) (access$10600 - (currentTimeMillis - access$10500));
-                            double unused2 = PhoneConfirmationView.this.lastCurrentTime = currentTimeMillis;
+                            PhoneConfirmationView.access$10626(PhoneConfirmationView.this, currentTimeMillis - access$10500);
+                            double unused = PhoneConfirmationView.this.lastCurrentTime = currentTimeMillis;
                             AndroidUtilities.runOnUIThread(
                             /*  JADX ERROR: Method code generation error
-                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0032: INVOKE  
-                                  (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk : 0x002f: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
-                                  (r7v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
+                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0028: INVOKE  
+                                  (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk : 0x0025: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
+                                  (r5v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
                                  call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR)
                                  org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.run():void, dex: classes.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
@@ -11496,8 +11505,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                 	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                 	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002f: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
-                                  (r7v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
+                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0025: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
+                                  (r5v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
                                  call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.run():void, dex: classes.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
@@ -11528,16 +11537,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 java.lang.Double.isNaN(r0)
                                 double r2 = r0 - r2
                                 org.telegram.ui.PassportActivity$PhoneConfirmationView r4 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                int r5 = r4.time
-                                double r5 = (double) r5
-                                java.lang.Double.isNaN(r5)
-                                double r5 = r5 - r2
-                                int r2 = (int) r5
-                                int unused = r4.time = r2
+                                org.telegram.ui.PassportActivity.PhoneConfirmationView.access$10626(r4, r2)
                                 org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                 double unused = r2.lastCurrentTime = r0
                                 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk r0 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk
-                                r0.<init>(r7)
+                                r0.<init>(r5)
                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
                                 return
                             */
@@ -11596,9 +11600,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                          org.telegram.ui.PassportActivity.access$11700(org.telegram.ui.PassportActivity):int type: STATIC)
                                          org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
                                           (r0v14 'tLRPC$TL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
-                                          (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc : 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc) = 
+                                          (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c : 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c) = 
                                           (r9v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR)
+                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR)
                                           (2 int)
                                          org.telegram.tgnet.ConnectionsManager.sendRequest(org.telegram.tgnet.TLObject, org.telegram.tgnet.RequestDelegate, int):int type: VIRTUAL in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$2():void, dex: classes.dex
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
@@ -11701,9 +11705,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc) = 
+                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c) = 
                                           (r9v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$2():void, dex: classes.dex
+                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$2():void, dex: classes.dex
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -11712,7 +11716,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                         	... 99 more
-                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc, state: NOT_LOADED
+                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c, state: NOT_LOADED
                                         	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                         	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -11880,7 +11884,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         org.telegram.ui.PassportActivity r1 = r1.this$0
                                         int r1 = r1.currentAccount
                                         org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
-                                        org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc r2 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc
+                                        org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c r2 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c
                                         r2.<init>(r9)
                                         r1.sendRequest(r0, r2, r6)
                                     L_0x0180:
@@ -11890,17 +11894,17 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 }
 
                                 /* access modifiers changed from: private */
-                                /* renamed from: lambda$null$1 */
-                                public /* synthetic */ void lambda$null$1$PassportActivity$PhoneConfirmationView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                                /* renamed from: lambda$run$1 */
+                                public /* synthetic */ void lambda$run$1$PassportActivity$PhoneConfirmationView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                                     if (tLRPC$TL_error != null && tLRPC$TL_error.text != null) {
                                         AndroidUtilities.runOnUIThread(
                                         /*  JADX ERROR: Method code generation error
                                             jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                                              (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss) = 
+                                              (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI) = 
                                               (r0v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
                                               (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
-                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$null$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
+                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -11992,10 +11996,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                             	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss) = 
+                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI) = 
                                               (r0v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
                                               (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$null$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -12004,7 +12008,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                             	... 90 more
-                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss, state: NOT_LOADED
+                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI, state: NOT_LOADED
                                             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -12016,18 +12020,18 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                             if (r2 == 0) goto L_0x000e
                                             java.lang.String r1 = r2.text
                                             if (r1 == 0) goto L_0x000e
-                                            org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss r1 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss
+                                            org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI r1 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI
                                             r1.<init>(r0, r2)
                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
                                         L_0x000e:
                                             return
                                         */
-                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.PhoneConfirmationView.AnonymousClass5.lambda$null$1$PassportActivity$PhoneConfirmationView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.PhoneConfirmationView.AnonymousClass5.lambda$run$1$PassportActivity$PhoneConfirmationView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
                                     }
 
                                     /* access modifiers changed from: private */
-                                    /* renamed from: lambda$null$0 */
-                                    public /* synthetic */ void lambda$null$0$PassportActivity$PhoneConfirmationView$5(TLRPC$TL_error tLRPC$TL_error) {
+                                    /* renamed from: lambda$run$0 */
+                                    public /* synthetic */ void lambda$run$0$PassportActivity$PhoneConfirmationView$5(TLRPC$TL_error tLRPC$TL_error) {
                                         String unused = PhoneConfirmationView.this.lastError = tLRPC$TL_error.text;
                                     }
                                 }, 0, 1000);
@@ -12117,14 +12121,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 }
 
                                 public final void run() {
-                                    PassportActivity.PhoneConfirmationView.this.lambda$null$6$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2);
+                                    PassportActivity.PhoneConfirmationView.this.lambda$onNextPressed$6$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2);
                                 }
                             });
                         }
 
                         /* access modifiers changed from: private */
-                        /* renamed from: lambda$null$6 */
-                        public /* synthetic */ void lambda$null$6$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone) {
+                        /* renamed from: lambda$onNextPressed$6 */
+                        public /* synthetic */ void lambda$onNextPressed$6$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone) {
                             int i;
                             int i2;
                             this.this$0.needHideProgress();

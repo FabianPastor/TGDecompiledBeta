@@ -3584,7 +3584,7 @@ public class FileLoadOperation {
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        FileLoadOperation.this.lambda$null$12$FileLoadOperation(this.f$1, tLObject, tLRPC$TL_error);
+                        FileLoadOperation.this.lambda$startDownloadRequest$12$FileLoadOperation(this.f$1, tLObject, tLRPC$TL_error);
                     }
                 }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.datacenterId, 1, true);
             }
@@ -3592,8 +3592,8 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$FileLoadOperation(RequestInfo requestInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$startDownloadRequest$12 */
+    public /* synthetic */ void lambda$startDownloadRequest$12$FileLoadOperation(RequestInfo requestInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         this.reuploadingCdn = false;
         if (tLRPC$TL_error == null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;

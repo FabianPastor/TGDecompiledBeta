@@ -383,14 +383,14 @@ public class DownloadController extends BaseController implements NotificationCe
             }
 
             public final void run() {
-                DownloadController.this.lambda$null$1$DownloadController(this.f$1);
+                DownloadController.this.lambda$loadAutoDownloadConfig$1$DownloadController(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$DownloadController(TLObject tLObject) {
+    /* renamed from: lambda$loadAutoDownloadConfig$1 */
+    public /* synthetic */ void lambda$loadAutoDownloadConfig$1$DownloadController(TLObject tLObject) {
         Preset preset;
         this.loadingAutoDownloadConfig = false;
         getUserConfig().autoDownloadConfigLoadTime = System.currentTimeMillis();

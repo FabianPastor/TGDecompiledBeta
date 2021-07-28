@@ -147,8 +147,8 @@ public class VideoSource extends MediaSource {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$VideoSource(VideoFrame videoFrame) {
+    /* renamed from: lambda$setVideoProcessor$0 */
+    public /* synthetic */ void lambda$setVideoProcessor$0$VideoSource(VideoFrame videoFrame) {
         this.nativeAndroidVideoTrackSource.onFrameCaptured(videoFrame);
     }
 
@@ -163,7 +163,7 @@ public class VideoSource extends MediaSource {
             }
 
             public final void run() {
-                VideoSource.this.lambda$null$0$VideoSource(this.f$1);
+                VideoSource.this.lambda$setVideoProcessor$0$VideoSource(this.f$1);
             }
         });
     }

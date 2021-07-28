@@ -11,6 +11,6 @@ public final /* synthetic */ class $$Lambda$NotificationsController$VHgcplzGmBaK
     }
 
     public final void onHeaderDecoded(ImageDecoder imageDecoder, ImageDecoder.ImageInfo imageInfo, ImageDecoder.Source source) {
-        imageDecoder.setPostProcessor($$Lambda$NotificationsController$ZEerbecqXOslj75wKfZ4bWRpnF0.INSTANCE);
+        imageDecoder.setPostProcessor($$Lambda$NotificationsController$bOcMw6YYRkNjHFQ_wD7NQ0vsF0.INSTANCE);
     }
 }

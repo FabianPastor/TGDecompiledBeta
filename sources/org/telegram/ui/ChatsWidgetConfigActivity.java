@@ -23,7 +23,7 @@ public class ChatsWidgetConfigActivity extends ExternalActionActivity {
             bundle.putBoolean("onlySelect", true);
             bundle.putInt("dialogsType", 10);
             bundle.putBoolean("allowSwitchAccount", true);
-            EditWidgetActivity editWidgetActivity = new EditWidgetActivity(0, this.creatingAppWidgetId, false);
+            EditWidgetActivity editWidgetActivity = new EditWidgetActivity(0, this.creatingAppWidgetId);
             editWidgetActivity.setDelegate(new EditWidgetActivity.EditWidgetActivityDelegate() {
                 public final void didSelectDialogs(ArrayList arrayList) {
                     ChatsWidgetConfigActivity.this.lambda$handleIntent$0$ChatsWidgetConfigActivity(arrayList);

@@ -210,6 +210,12 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         return 1;
     }
 
+    static /* synthetic */ float access$2816(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout, float f) {
+        float f2 = chatAttachAlertLocationLayout.yOffset + f;
+        chatAttachAlertLocationLayout.yOffset = f2;
+        return f2;
+    }
+
     private static class SearchButton extends TextView {
         private float additionanTranslationY;
         private float currentTranslationY;
@@ -351,7 +357,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     }
 
                     public final void didSelectDate(boolean z, int i) {
-                        ChatAttachAlertLocationLayout.MapOverlayView.this.lambda$null$0$ChatAttachAlertLocationLayout$MapOverlayView(this.f$1, z, i);
+                        ChatAttachAlertLocationLayout.MapOverlayView.this.lambda$addInfoView$0$ChatAttachAlertLocationLayout$MapOverlayView(this.f$1, z, i);
                     }
                 });
                 return;
@@ -361,8 +367,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$ChatAttachAlertLocationLayout$MapOverlayView(VenueLocation venueLocation, boolean z, int i) {
+        /* renamed from: lambda$addInfoView$0 */
+        public /* synthetic */ void lambda$addInfoView$0$ChatAttachAlertLocationLayout$MapOverlayView(VenueLocation venueLocation, boolean z, int i) {
             ChatAttachAlertLocationLayout.this.delegate.didSelectLocation(venueLocation.venue, ChatAttachAlertLocationLayout.this.locationType, z, i);
             ChatAttachAlertLocationLayout.this.parentAlert.dismiss();
         }
@@ -728,11 +734,10 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 ChatAttachAlertLocationLayout.this.updateClipView();
                 if (ChatAttachAlertLocationLayout.this.forceUpdate != null) {
-                    ChatAttachAlertLocationLayout chatAttachAlertLocationLayout = ChatAttachAlertLocationLayout.this;
-                    float unused = chatAttachAlertLocationLayout.yOffset = chatAttachAlertLocationLayout.yOffset + ((float) i2);
+                    ChatAttachAlertLocationLayout.access$2816(ChatAttachAlertLocationLayout.this, (float) i2);
                 }
-                ChatAttachAlertLocationLayout chatAttachAlertLocationLayout2 = ChatAttachAlertLocationLayout.this;
-                chatAttachAlertLocationLayout2.parentAlert.updateLayout(chatAttachAlertLocationLayout2, true, i2);
+                ChatAttachAlertLocationLayout chatAttachAlertLocationLayout = ChatAttachAlertLocationLayout.this;
+                chatAttachAlertLocationLayout.parentAlert.updateLayout(chatAttachAlertLocationLayout, true, i2);
             }
         });
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
@@ -946,7 +951,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                         }
 
                         public final void didSelectDate(boolean z, int i) {
-                            ChatAttachAlertLocationLayout.this.lambda$null$5$ChatAttachAlertLocationLayout(this.f$1, z, i);
+                            ChatAttachAlertLocationLayout.this.lambda$new$5$ChatAttachAlertLocationLayout(this.f$1, z, i);
                         }
                     });
                     return;
@@ -966,7 +971,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                         }
 
                         public final void didSelectDate(boolean z, int i) {
-                            ChatAttachAlertLocationLayout.this.lambda$null$6$ChatAttachAlertLocationLayout(this.f$1, z, i);
+                            ChatAttachAlertLocationLayout.this.lambda$new$6$ChatAttachAlertLocationLayout(this.f$1, z, i);
                         }
                     });
                     return;
@@ -985,15 +990,15 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$ChatAttachAlertLocationLayout(TLRPC$TL_messageMediaGeo tLRPC$TL_messageMediaGeo, boolean z, int i) {
+    /* renamed from: lambda$new$5 */
+    public /* synthetic */ void lambda$new$5$ChatAttachAlertLocationLayout(TLRPC$TL_messageMediaGeo tLRPC$TL_messageMediaGeo, boolean z, int i) {
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaGeo, this.locationType, z, i);
         this.parentAlert.dismiss();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$ChatAttachAlertLocationLayout(Object obj, boolean z, int i) {
+    /* renamed from: lambda$new$6 */
+    public /* synthetic */ void lambda$new$6$ChatAttachAlertLocationLayout(Object obj, boolean z, int i) {
         this.delegate.didSelectLocation((TLRPC$TL_messageMediaVenue) obj, this.locationType, z, i);
         this.parentAlert.dismiss();
     }
@@ -1013,21 +1018,21 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             }
 
             public final void run() {
-                ChatAttachAlertLocationLayout.this.lambda$null$11$ChatAttachAlertLocationLayout(this.f$1);
+                ChatAttachAlertLocationLayout.this.lambda$new$11$ChatAttachAlertLocationLayout(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$ChatAttachAlertLocationLayout(MapView mapView2) {
+    /* renamed from: lambda$new$11 */
+    public /* synthetic */ void lambda$new$11$ChatAttachAlertLocationLayout(MapView mapView2) {
         if (this.mapView != null && getParentActivity() != null) {
             try {
                 mapView2.onCreate((Bundle) null);
                 MapsInitializer.initialize(ApplicationLoader.applicationContext);
                 this.mapView.getMapAsync(new OnMapReadyCallback() {
                     public final void onMapReady(GoogleMap googleMap) {
-                        ChatAttachAlertLocationLayout.this.lambda$null$10$ChatAttachAlertLocationLayout(googleMap);
+                        ChatAttachAlertLocationLayout.this.lambda$new$10$ChatAttachAlertLocationLayout(googleMap);
                     }
                 });
                 this.mapsInitialized = true;
@@ -1041,12 +1046,12 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$ChatAttachAlertLocationLayout(GoogleMap googleMap2) {
+    /* renamed from: lambda$new$10 */
+    public /* synthetic */ void lambda$new$10$ChatAttachAlertLocationLayout(GoogleMap googleMap2) {
         this.googleMap = googleMap2;
         googleMap2.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             public final void onMapLoaded() {
-                ChatAttachAlertLocationLayout.this.lambda$null$9$ChatAttachAlertLocationLayout();
+                ChatAttachAlertLocationLayout.this.lambda$new$9$ChatAttachAlertLocationLayout();
             }
         });
         if (isActiveThemeDark()) {
@@ -1057,18 +1062,18 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$ChatAttachAlertLocationLayout() {
+    /* renamed from: lambda$new$9 */
+    public /* synthetic */ void lambda$new$9$ChatAttachAlertLocationLayout() {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                ChatAttachAlertLocationLayout.this.lambda$null$8$ChatAttachAlertLocationLayout();
+                ChatAttachAlertLocationLayout.this.lambda$new$8$ChatAttachAlertLocationLayout();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$ChatAttachAlertLocationLayout() {
+    /* renamed from: lambda$new$8 */
+    public /* synthetic */ void lambda$new$8$ChatAttachAlertLocationLayout() {
         this.loadingMapView.setTag(1);
         this.loadingMapView.animate().alpha(0.0f).setDuration(180).start();
     }
@@ -1094,7 +1099,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     }
 
                     public final void didSelectDate(boolean z, int i) {
-                        ChatAttachAlertLocationLayout.this.lambda$null$14$ChatAttachAlertLocationLayout(this.f$1, z, i);
+                        ChatAttachAlertLocationLayout.this.lambda$new$14$ChatAttachAlertLocationLayout(this.f$1, z, i);
                     }
                 });
                 return;
@@ -1105,8 +1110,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$14 */
-    public /* synthetic */ void lambda$null$14$ChatAttachAlertLocationLayout(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, boolean z, int i) {
+    /* renamed from: lambda$new$14 */
+    public /* synthetic */ void lambda$new$14$ChatAttachAlertLocationLayout(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, boolean z, int i) {
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaVenue, this.locationType, z, i);
         this.parentAlert.dismiss();
     }

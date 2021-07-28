@@ -127,6 +127,12 @@
     <public type="attr" name="userInputSection" id="NUM" />
     <public type="attr" name="userInputTag" id="NUM" />
     <public type="attr" name="userInputValue" id="NUM" />
+    <public type="attr" name="widgetBackgroundCornerRadius" id="NUM" />
+    <public type="attr" name="widgetPreviewContent" id="NUM" />
+    <public type="attr" name="widgetPreviewDot" id="NUM" />
+    <public type="attr" name="widgetPreviewImage" id="NUM" />
+    <public type="attr" name="widgetPreviewTime" id="NUM" />
+    <public type="attr" name="widgetPreviewTitle" id="NUM" />
     <public type="attr" name="windowTransitionStyle" id="NUM" />
     <public type="attr" name="zOrderOnTop" id="NUM" />
     <public type="bool" name="isTablet" id="NUM" />
@@ -167,6 +173,7 @@
     <public type="color" name="widget_name" id="NUM" />
     <public type="color" name="widget_text" id="NUM" />
     <public type="color" name="widget_time" id="NUM" />
+    <public type="dimen" name="app_widget_background_corner_radius" id="NUM" />
     <public type="dimen" name="compat_button_inset_horizontal_material" id="NUM" />
     <public type="dimen" name="compat_button_inset_vertical_material" id="NUM" />
     <public type="dimen" name="compat_button_padding_horizontal_material" id="NUM" />
@@ -1148,6 +1155,16 @@
     <public type="drawable" name="wallet_qr" id="NUM" />
     <public type="drawable" name="wallet_receive" id="NUM" />
     <public type="drawable" name="wallet_send" id="NUM" />
+    <public type="drawable" name="widget_avatar_1" id="NUM" />
+    <public type="drawable" name="widget_avatar_2" id="NUM" />
+    <public type="drawable" name="widget_avatar_3" id="NUM" />
+    <public type="drawable" name="widget_avatar_4" id="NUM" />
+    <public type="drawable" name="widget_avatar_5" id="NUM" />
+    <public type="drawable" name="widget_avatar_6" id="NUM" />
+    <public type="drawable" name="widget_avatar_7" id="NUM" />
+    <public type="drawable" name="widget_background" id="NUM" />
+    <public type="drawable" name="widget_badge_background" id="NUM" />
+    <public type="drawable" name="widget_badge_muted_background" id="NUM" />
     <public type="drawable" name="widget_bg" id="NUM" />
     <public type="drawable" name="widget_check" id="NUM" />
     <public type="drawable" name="widget_clock" id="NUM" />
@@ -1403,10 +1420,13 @@
     <public type="layout" name="call_notification" id="NUM" />
     <public type="layout" name="call_notification_rtl" id="NUM" />
     <public type="layout" name="contacts_widget_item" id="NUM" />
+    <public type="layout" name="contacts_widget_item_1" id="NUM" />
+    <public type="layout" name="contacts_widget_item_2" id="NUM" />
     <public type="layout" name="contacts_widget_layout_1" id="NUM" />
     <public type="layout" name="contacts_widget_layout_2" id="NUM" />
     <public type="layout" name="contacts_widget_layout_3" id="NUM" />
     <public type="layout" name="contacts_widget_layout_4" id="NUM" />
+    <public type="layout" name="contacts_widget_layout_preview" id="NUM" />
     <public type="layout" name="custom_dialog" id="NUM" />
     <public type="layout" name="feed_widget_item" id="NUM" />
     <public type="layout" name="feed_widget_layout" id="NUM" />
@@ -1423,6 +1443,7 @@
     <public type="layout" name="shortcut_widget_layout_2" id="NUM" />
     <public type="layout" name="shortcut_widget_layout_3" id="NUM" />
     <public type="layout" name="shortcut_widget_layout_4" id="NUM" />
+    <public type="layout" name="shortcut_widget_layout_preview" id="NUM" />
     <public type="layout" name="wallet_test_layout" id="NUM" />
     <public type="layout" name="widget_deleted" id="NUM" />
     <public type="layout" name="widget_edititem" id="NUM" />
@@ -6076,17 +6097,30 @@
     <public type="string" name="wallet_buy_button_place_holder" id="NUM" />
     <public type="style" name="ActionBar.Transparent.TMessages.Item" id="NUM" />
     <public type="style" name="ActionBar.Transparent.TMessages.Start" id="NUM" />
+    <public type="style" name="Base.TMessages.AppWidget.Background" id="NUM" />
+    <public type="style" name="Base.TMessages.AppWidget.Badge" id="NUM" />
+    <public type="style" name="Base.Theme.TMessages.AppWidget" id="NUM" />
     <public type="style" name="DialogNoAnimation" id="NUM" />
     <public type="style" name="MyTextViewStyle" id="NUM" />
     <public type="style" name="PopupAnimation" id="NUM" />
     <public type="style" name="PopupContextAnimation" id="NUM" />
     <public type="style" name="PopupContextAnimation2" id="NUM" />
+    <public type="style" name="TMessages.AppWidget.Background" id="NUM" />
+    <public type="style" name="TMessages.AppWidget.Badge" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification.Info" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification.Line2" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification.Time" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification.Title" id="NUM" />
     <public type="style" name="Theme.TMessages" id="NUM" />
+    <public type="style" name="Theme.TMessages.AppWidget" id="NUM" />
+    <public type="style" name="Theme.TMessages.AppWidget.Preview" id="NUM" />
+    <public type="style" name="Theme.TMessages.AppWidget.Preview2" id="NUM" />
+    <public type="style" name="Theme.TMessages.AppWidget.Preview3" id="NUM" />
+    <public type="style" name="Theme.TMessages.AppWidget.Preview4" id="NUM" />
+    <public type="style" name="Theme.TMessages.AppWidget.Preview5" id="NUM" />
+    <public type="style" name="Theme.TMessages.AppWidget.Preview6" id="NUM" />
+    <public type="style" name="Theme.TMessages.AppWidget.Preview7" id="NUM" />
     <public type="style" name="Theme.TMessages.BorderLessButton" id="NUM" />
     <public type="style" name="Theme.TMessages.CalendarView" id="NUM" />
     <public type="style" name="Theme.TMessages.DatePicker" id="NUM" />

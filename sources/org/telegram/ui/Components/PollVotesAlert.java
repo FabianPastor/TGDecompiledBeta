@@ -133,6 +133,18 @@ public class PollVotesAlert extends BottomSheet {
         return false;
     }
 
+    static /* synthetic */ float access$3016(PollVotesAlert pollVotesAlert, float f) {
+        float f2 = pollVotesAlert.totalTranslation + f;
+        pollVotesAlert.totalTranslation = f2;
+        return f2;
+    }
+
+    static /* synthetic */ float access$3024(PollVotesAlert pollVotesAlert, float f) {
+        float f2 = pollVotesAlert.totalTranslation - f;
+        pollVotesAlert.totalTranslation = f2;
+        return f2;
+    }
+
     private static class VotesList {
         public boolean collapsed;
         public int collapsedCount = 10;
@@ -537,6 +549,18 @@ public class PollVotesAlert extends BottomSheet {
 
         private Button() {
         }
+
+        static /* synthetic */ float access$3924(Button button, float f) {
+            float f2 = button.decimal - f;
+            button.decimal = f2;
+            return f2;
+        }
+
+        static /* synthetic */ int access$4012(Button button, int i) {
+            int i2 = button.percent + i;
+            button.percent = i2;
+            return i2;
+        }
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -797,10 +821,10 @@ public class PollVotesAlert extends BottomSheet {
                     }
                     this.lastUpdateTime = elapsedRealtime;
                     PollVotesAlert pollVotesAlert = PollVotesAlert.this;
-                    float unused = pollVotesAlert.totalTranslation = pollVotesAlert.totalTranslation + ((((float) abs) * PollVotesAlert.this.gradientWidth) / 1800.0f);
+                    PollVotesAlert.access$3016(pollVotesAlert, (((float) abs) * pollVotesAlert.gradientWidth) / 1800.0f);
                     while (PollVotesAlert.this.totalTranslation >= PollVotesAlert.this.gradientWidth * 2.0f) {
                         PollVotesAlert pollVotesAlert2 = PollVotesAlert.this;
-                        float unused2 = pollVotesAlert2.totalTranslation = pollVotesAlert2.totalTranslation - (PollVotesAlert.this.gradientWidth * 2.0f);
+                        PollVotesAlert.access$3024(pollVotesAlert2, pollVotesAlert2.gradientWidth * 2.0f);
                     }
                     PollVotesAlert.this.placeholderMatrix.setTranslate(PollVotesAlert.this.totalTranslation, 0.0f);
                     PollVotesAlert.this.placeholderGradient.setLocalMatrix(PollVotesAlert.this.placeholderMatrix);
@@ -918,14 +942,14 @@ public class PollVotesAlert extends BottomSheet {
             }
 
             public final void run() {
-                PollVotesAlert.this.lambda$null$0$PollVotesAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+                PollVotesAlert.this.lambda$new$0$PollVotesAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$PollVotesAlert(Integer[] numArr, int i, TLObject tLObject, ChatActivity chatActivity2, ArrayList arrayList, TLRPC$TL_pollAnswerVoters tLRPC$TL_pollAnswerVoters) {
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$PollVotesAlert(Integer[] numArr, int i, TLObject tLObject, ChatActivity chatActivity2, ArrayList arrayList, TLRPC$TL_pollAnswerVoters tLRPC$TL_pollAnswerVoters) {
         RecyclerView.ViewHolder findContainingViewHolder;
         this.queries.remove(numArr[i]);
         if (tLObject != null) {
@@ -1031,7 +1055,7 @@ public class PollVotesAlert extends BottomSheet {
                                     }
 
                                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                        PollVotesAlert.this.lambda$null$3$PollVotesAlert(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                                        PollVotesAlert.this.lambda$new$3$PollVotesAlert(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                                     }
                                 });
                                 return;
@@ -1064,8 +1088,8 @@ public class PollVotesAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$PollVotesAlert(VotesList votesList, ChatActivity chatActivity2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$new$3 */
+    public /* synthetic */ void lambda$new$3$PollVotesAlert(VotesList votesList, ChatActivity chatActivity2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(votesList, tLObject, chatActivity2) {
             public final /* synthetic */ PollVotesAlert.VotesList f$1;
             public final /* synthetic */ TLObject f$2;
@@ -1078,14 +1102,14 @@ public class PollVotesAlert extends BottomSheet {
             }
 
             public final void run() {
-                PollVotesAlert.this.lambda$null$2$PollVotesAlert(this.f$1, this.f$2, this.f$3);
+                PollVotesAlert.this.lambda$new$2$PollVotesAlert(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$PollVotesAlert(VotesList votesList, TLObject tLObject, ChatActivity chatActivity2) {
+    /* renamed from: lambda$new$2 */
+    public /* synthetic */ void lambda$new$2$PollVotesAlert(VotesList votesList, TLObject tLObject, ChatActivity chatActivity2) {
         if (isShowing()) {
             this.loadingMore.remove(votesList);
             if (tLObject != null) {
@@ -1124,7 +1148,7 @@ public class PollVotesAlert extends BottomSheet {
                         int unused = button.votesCount = tLRPC$TL_pollAnswerVoters.voters;
                         float unused2 = button.decimal = (((float) tLRPC$TL_pollAnswerVoters.voters) / ((float) tLRPC$TL_messageMediaPoll.results.total_voters)) * 100.0f;
                         int unused3 = button.percent = (int) button.decimal;
-                        float unused4 = button.decimal = button.decimal - ((float) button.percent);
+                        Button.access$3924(button, (float) button.percent);
                         if (i2 == 0) {
                             i2 = button.percent;
                         } else if (!(button.percent == 0 || i2 == button.percent)) {
@@ -1142,8 +1166,7 @@ public class PollVotesAlert extends BottomSheet {
             Collections.sort(arrayList, $$Lambda$PollVotesAlert$JlbsBgirEz4oQSTYz_nZssUAgSk.INSTANCE);
             int min = Math.min(i, arrayList.size());
             for (int i6 = 0; i6 < min; i6++) {
-                Button button2 = (Button) arrayList.get(i6);
-                int unused5 = button2.percent = button2.percent + 1;
+                Button.access$4012((Button) arrayList.get(i6), 1);
             }
         }
     }

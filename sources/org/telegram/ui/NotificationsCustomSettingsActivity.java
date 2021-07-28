@@ -309,7 +309,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                         }
 
                         public final void run(int i) {
-                            NotificationsCustomSettingsActivity.this.lambda$null$0$NotificationsCustomSettingsActivity(this.f$1, this.f$2, this.f$3, this.f$4, i);
+                            NotificationsCustomSettingsActivity.this.lambda$createView$0$NotificationsCustomSettingsActivity(this.f$1, this.f$2, this.f$3, this.f$4, i);
                         }
                     });
                     return;
@@ -331,7 +331,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 DialogsActivity dialogsActivity = new DialogsActivity(bundle);
                 dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate() {
                     public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-                        NotificationsCustomSettingsActivity.this.lambda$null$2$NotificationsCustomSettingsActivity(dialogsActivity, arrayList, charSequence, z);
+                        NotificationsCustomSettingsActivity.this.lambda$createView$2$NotificationsCustomSettingsActivity(dialogsActivity, arrayList, charSequence, z);
                     }
                 });
                 presentFragment(dialogsActivity);
@@ -343,7 +343,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     builder.setMessage(LocaleController.getString("NotificationsDeleteAllExceptionAlert", NUM));
                     builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            NotificationsCustomSettingsActivity.this.lambda$null$3$NotificationsCustomSettingsActivity(dialogInterface, i);
+                            NotificationsCustomSettingsActivity.this.lambda$createView$3$NotificationsCustomSettingsActivity(dialogInterface, i);
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -377,7 +377,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                             }
 
                             public final void run(int i) {
-                                NotificationsCustomSettingsActivity.this.lambda$null$4$NotificationsCustomSettingsActivity(this.f$1, this.f$2, this.f$3, i);
+                                NotificationsCustomSettingsActivity.this.lambda$createView$4$NotificationsCustomSettingsActivity(this.f$1, this.f$2, this.f$3, i);
                             }
                         });
                     }
@@ -443,7 +443,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                             }
 
                             public final void run() {
-                                NotificationsCustomSettingsActivity.this.lambda$null$5$NotificationsCustomSettingsActivity(this.f$1);
+                                NotificationsCustomSettingsActivity.this.lambda$createView$5$NotificationsCustomSettingsActivity(this.f$1);
                             }
                         }));
                     } else {
@@ -459,7 +459,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                             }
 
                             public final void run() {
-                                NotificationsCustomSettingsActivity.this.lambda$null$6$NotificationsCustomSettingsActivity(this.f$1);
+                                NotificationsCustomSettingsActivity.this.lambda$createView$6$NotificationsCustomSettingsActivity(this.f$1);
                             }
                         }));
                     } else {
@@ -476,7 +476,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                             }
 
                             public final void run() {
-                                NotificationsCustomSettingsActivity.this.lambda$null$7$NotificationsCustomSettingsActivity(this.f$1);
+                                NotificationsCustomSettingsActivity.this.lambda$createView$7$NotificationsCustomSettingsActivity(this.f$1);
                             }
                         }));
                     } else {
@@ -492,7 +492,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                             }
 
                             public final void run() {
-                                NotificationsCustomSettingsActivity.this.lambda$null$8$NotificationsCustomSettingsActivity(this.f$1);
+                                NotificationsCustomSettingsActivity.this.lambda$createView$8$NotificationsCustomSettingsActivity(this.f$1);
                             }
                         }));
                     } else {
@@ -507,8 +507,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$NotificationsCustomSettingsActivity(boolean z, ArrayList arrayList, NotificationsSettingsActivity.NotificationException notificationException, int i, int i2) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$NotificationsCustomSettingsActivity(boolean z, ArrayList arrayList, NotificationsSettingsActivity.NotificationException notificationException, int i, int i2) {
         int indexOf;
         if (i2 != 0) {
             SharedPreferences notificationsSettings = getNotificationsSettings();
@@ -554,30 +554,30 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$NotificationsCustomSettingsActivity(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$NotificationsCustomSettingsActivity(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
         Bundle bundle = new Bundle();
         bundle.putLong("dialog_id", ((Long) arrayList.get(0)).longValue());
         bundle.putBoolean("exception", true);
         ProfileNotificationsActivity profileNotificationsActivity = new ProfileNotificationsActivity(bundle);
         profileNotificationsActivity.setDelegate(new ProfileNotificationsActivity.ProfileNotificationsActivityDelegate() {
             public final void didCreateNewException(NotificationsSettingsActivity.NotificationException notificationException) {
-                NotificationsCustomSettingsActivity.this.lambda$null$1$NotificationsCustomSettingsActivity(notificationException);
+                NotificationsCustomSettingsActivity.this.lambda$createView$1$NotificationsCustomSettingsActivity(notificationException);
             }
         });
         presentFragment(profileNotificationsActivity, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$NotificationsCustomSettingsActivity(NotificationsSettingsActivity.NotificationException notificationException) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$NotificationsCustomSettingsActivity(NotificationsSettingsActivity.NotificationException notificationException) {
         this.exceptions.add(0, notificationException);
         updateRows(true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$NotificationsCustomSettingsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$NotificationsCustomSettingsActivity(DialogInterface dialogInterface, int i) {
         SharedPreferences.Editor edit = getNotificationsSettings().edit();
         int size = this.exceptions.size();
         for (int i2 = 0; i2 < size; i2++) {
@@ -602,8 +602,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$NotificationsCustomSettingsActivity(NotificationsCheckCell notificationsCheckCell, RecyclerView.ViewHolder viewHolder, int i, int i2) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$NotificationsCustomSettingsActivity(NotificationsCheckCell notificationsCheckCell, RecyclerView.ViewHolder viewHolder, int i, int i2) {
         int i3;
         SharedPreferences notificationsSettings = getNotificationsSettings();
         int i4 = this.currentType;
@@ -627,8 +627,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$NotificationsCustomSettingsActivity(int i) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$NotificationsCustomSettingsActivity(int i) {
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i);
         if (findViewHolderForAdapterPosition != null) {
             this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i);
@@ -636,8 +636,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$NotificationsCustomSettingsActivity(int i) {
+    /* renamed from: lambda$createView$6 */
+    public /* synthetic */ void lambda$createView$6$NotificationsCustomSettingsActivity(int i) {
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i);
         if (findViewHolderForAdapterPosition != null) {
             this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i);
@@ -645,8 +645,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$NotificationsCustomSettingsActivity(int i) {
+    /* renamed from: lambda$createView$7 */
+    public /* synthetic */ void lambda$createView$7$NotificationsCustomSettingsActivity(int i) {
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i);
         if (findViewHolderForAdapterPosition != null) {
             this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i);
@@ -654,8 +654,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$NotificationsCustomSettingsActivity(int i) {
+    /* renamed from: lambda$createView$8 */
+    public /* synthetic */ void lambda$createView$8$NotificationsCustomSettingsActivity(int i) {
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i);
         if (findViewHolderForAdapterPosition != null) {
             this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i);
@@ -1088,7 +1088,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             r4 = r17
             r5 = r18
         L_0x02bd:
-            org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$K64KuNwjcB-bKy0b6spOQTqmxZA r0 = new org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$K64KuNwjcB-bKy0b6spOQTqmxZA
+            org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$cUkvVuZl4hZFa8i4o3bnOROtDRE r0 = new org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$cUkvVuZl4hZFa8i4o3bnOROtDRE
             r1 = r0
             r2 = r21
             r3 = r5
@@ -1103,8 +1103,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$NotificationsCustomSettingsActivity(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5, ArrayList arrayList6) {
+    /* renamed from: lambda$loadExceptions$10 */
+    public /* synthetic */ void lambda$loadExceptions$10$NotificationsCustomSettingsActivity(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5, ArrayList arrayList6) {
         getMessagesController().putUsers(arrayList, true);
         getMessagesController().putChats(arrayList2, true);
         getMessagesController().putEncryptedChats(arrayList3, true);
@@ -1378,7 +1378,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    NotificationsCustomSettingsActivity.SearchAdapter.this.lambda$null$2$NotificationsCustomSettingsActivity$SearchAdapter(this.f$1, this.f$2);
+                    NotificationsCustomSettingsActivity.SearchAdapter.this.lambda$processSearch$2$NotificationsCustomSettingsActivity$SearchAdapter(this.f$1, this.f$2);
                 }
             });
         }
@@ -1403,9 +1403,9 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         /* JADX WARNING: Removed duplicated region for block: B:74:0x01bd A[LOOP:1: B:47:0x011b->B:74:0x01bd, LOOP_END] */
         /* JADX WARNING: Removed duplicated region for block: B:82:0x00be A[EDGE_INSN: B:82:0x00be->B:34:0x00be ?: BREAK  , SYNTHETIC] */
         /* JADX WARNING: Removed duplicated region for block: B:83:0x017e A[SYNTHETIC] */
-        /* renamed from: lambda$null$2 */
+        /* renamed from: lambda$processSearch$2 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$2$NotificationsCustomSettingsActivity$SearchAdapter(java.lang.String r21, java.util.ArrayList r22) {
+        public /* synthetic */ void lambda$processSearch$2$NotificationsCustomSettingsActivity$SearchAdapter(java.lang.String r21, java.util.ArrayList r22) {
             /*
                 r20 = this;
                 r0 = r20
@@ -1643,7 +1643,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r0.updateSearchResults(r1, r2, r8)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.SearchAdapter.lambda$null$2$NotificationsCustomSettingsActivity$SearchAdapter(java.lang.String, java.util.ArrayList):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.SearchAdapter.lambda$processSearch$2$NotificationsCustomSettingsActivity$SearchAdapter(java.lang.String, java.util.ArrayList):void");
         }
 
         private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<NotificationsSettingsActivity.NotificationException> arrayList2, ArrayList<CharSequence> arrayList3) {

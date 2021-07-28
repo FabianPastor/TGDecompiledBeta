@@ -451,7 +451,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     if (mediaController.writeFrame(mediaController.fileBuffer, !z ? MediaController.this.fileBuffer.limit() : byteBuffer.position()) != 0) {
                         MediaController.this.fileBuffer.rewind();
                         MediaController mediaController2 = MediaController.this;
-                        long unused = mediaController2.recordTimeCount = mediaController2.recordTimeCount + ((long) ((MediaController.this.fileBuffer.limit() / 2) / (MediaController.this.sampleRate / 1000)));
+                        MediaController.access$1614(mediaController2, (long) ((mediaController2.fileBuffer.limit() / 2) / (MediaController.this.sampleRate / 1000)));
                     }
                 }
                 if (i != -1) {
@@ -466,14 +466,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
 
                 public final void run() {
-                    MediaController.AnonymousClass2.this.lambda$null$0$MediaController$2(this.f$1);
+                    MediaController.AnonymousClass2.this.lambda$run$0$MediaController$2(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$MediaController$2(ByteBuffer byteBuffer) {
+        /* renamed from: lambda$run$0 */
+        public /* synthetic */ void lambda$run$0$MediaController$2(ByteBuffer byteBuffer) {
             MediaController.this.recordBuffers.add(byteBuffer);
         }
 
@@ -488,8 +488,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     /* access modifiers changed from: private */
     public Runnable recordStartRunnable;
     private long recordStartTime;
-    /* access modifiers changed from: private */
-    public long recordTimeCount;
+    private long recordTimeCount;
     /* access modifiers changed from: private */
     public TLRPC$TL_document recordingAudio;
     private File recordingAudioFile;
@@ -629,6 +628,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     public native byte[] getWaveform2(short[] sArr, int i);
 
     public void onAccuracyChanged(Sensor sensor, int i) {
+    }
+
+    static /* synthetic */ long access$1614(MediaController mediaController, long j) {
+        long j2 = mediaController.recordTimeCount + j;
+        mediaController.recordTimeCount = j2;
+        return j2;
     }
 
     public boolean isBuffering() {
@@ -2566,7 +2571,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             int size = arrayList.size();
             for (int i = 0; i < size; i++) {
                 int nextInt = Utilities.random.nextInt(arrayList.size());
-                this.shuffledPlaylist.add(arrayList.get(nextInt));
+                this.shuffledPlaylist.add((MessageObject) arrayList.get(nextInt));
                 arrayList.remove(nextInt);
             }
             this.shuffledPlaylist.add(messageObject);
@@ -2785,14 +2790,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
 
             public final void run() {
-                MediaController.this.lambda$null$11$MediaController(this.f$1, this.f$2, this.f$3, this.f$4);
+                MediaController.this.lambda$loadMoreMusic$11$MediaController(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$MediaController(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i2) {
+    /* renamed from: lambda$loadMoreMusic$11 */
+    public /* synthetic */ void lambda$loadMoreMusic$11$MediaController(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i2) {
         PlaylistGlobalSearchParams playlistGlobalSearchParams2;
         if (this.playlistClassGuid == i && (playlistGlobalSearchParams2 = this.playlistGlobalSearchParams) != null && this.playingMessageObject != null && tLRPC$TL_error == null) {
             this.loadingPlaylist = false;
@@ -3608,15 +3613,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
 
                 public final void run() {
-                    MediaController.this.lambda$null$16$MediaController(this.f$1);
+                    MediaController.this.lambda$playEmojiSound$16$MediaController(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$16 */
-    public /* synthetic */ void lambda$null$16$MediaController(File file) {
+    /* renamed from: lambda$playEmojiSound$16 */
+    public /* synthetic */ void lambda$playEmojiSound$16$MediaController(File file) {
         try {
             final int i = this.emojiSoundPlayerNum + 1;
             this.emojiSoundPlayerNum = i;
@@ -4741,7 +4746,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
 
                 public final void run() {
-                    MediaController.this.lambda$null$22$MediaController(this.f$1, this.f$2);
+                    MediaController.this.lambda$startRecording$22$MediaController(this.f$1, this.f$2);
                 }
             });
             return;
@@ -4772,7 +4777,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     }
 
                     public final void run() {
-                        MediaController.this.lambda$null$23$MediaController(this.f$1, this.f$2);
+                        MediaController.this.lambda$startRecording$23$MediaController(this.f$1, this.f$2);
                     }
                 });
                 return;
@@ -4798,7 +4803,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
 
                 public final void run() {
-                    MediaController.this.lambda$null$25$MediaController(this.f$1, this.f$2);
+                    MediaController.this.lambda$startRecording$25$MediaController(this.f$1, this.f$2);
                 }
             });
         } catch (Exception e) {
@@ -4823,36 +4828,36 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
 
                 public final void run() {
-                    MediaController.this.lambda$null$24$MediaController(this.f$1, this.f$2);
+                    MediaController.this.lambda$startRecording$24$MediaController(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$22 */
-    public /* synthetic */ void lambda$null$22$MediaController(int i, int i2) {
+    /* renamed from: lambda$startRecording$22 */
+    public /* synthetic */ void lambda$startRecording$22$MediaController(int i, int i2) {
         this.recordStartRunnable = null;
         NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.recordStartError, Integer.valueOf(i2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$23 */
-    public /* synthetic */ void lambda$null$23$MediaController(int i, int i2) {
+    /* renamed from: lambda$startRecording$23 */
+    public /* synthetic */ void lambda$startRecording$23$MediaController(int i, int i2) {
         this.recordStartRunnable = null;
         NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.recordStartError, Integer.valueOf(i2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$24 */
-    public /* synthetic */ void lambda$null$24$MediaController(int i, int i2) {
+    /* renamed from: lambda$startRecording$24 */
+    public /* synthetic */ void lambda$startRecording$24$MediaController(int i, int i2) {
         this.recordStartRunnable = null;
         NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.recordStartError, Integer.valueOf(i2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$25 */
-    public /* synthetic */ void lambda$null$25$MediaController(int i, int i2) {
+    /* renamed from: lambda$startRecording$25 */
+    public /* synthetic */ void lambda$startRecording$25$MediaController(int i, int i2) {
         this.recordStartRunnable = null;
         NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.recordStarted, Integer.valueOf(i2), Boolean.TRUE);
     }
@@ -4895,14 +4900,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
 
             public final void run() {
-                MediaController.this.lambda$null$27$MediaController(this.f$1, this.f$2, this.f$3);
+                MediaController.this.lambda$generateWaveform$27$MediaController(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$27 */
-    public /* synthetic */ void lambda$null$27$MediaController(String str, byte[] bArr, MessageObject messageObject) {
+    /* renamed from: lambda$generateWaveform$27 */
+    public /* synthetic */ void lambda$generateWaveform$27$MediaController(String str, byte[] bArr, MessageObject messageObject) {
         MessageObject remove = this.generatingWaveform.remove(str);
         if (remove != null && bArr != null && remove.getDocument() != null) {
             int i = 0;
@@ -4989,14 +4994,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
 
             public final void run() {
-                MediaController.this.lambda$null$29$MediaController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                MediaController.this.lambda$stopRecordingInternal$29$MediaController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$29 */
-    public /* synthetic */ void lambda$null$29$MediaController(TLRPC$TL_document tLRPC$TL_document, File file, int i, boolean z, int i2) {
+    /* renamed from: lambda$stopRecordingInternal$29 */
+    public /* synthetic */ void lambda$stopRecordingInternal$29$MediaController(TLRPC$TL_document tLRPC$TL_document, File file, int i, boolean z, int i2) {
         boolean z2;
         char c;
         TLRPC$TL_document tLRPC$TL_document2 = tLRPC$TL_document;
@@ -5102,15 +5107,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
 
                 public final void run() {
-                    MediaController.this.lambda$null$31$MediaController(this.f$1);
+                    MediaController.this.lambda$stopRecording$31$MediaController(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$31 */
-    public /* synthetic */ void lambda$null$31$MediaController(int i) {
+    /* renamed from: lambda$stopRecording$31 */
+    public /* synthetic */ void lambda$stopRecording$31$MediaController(int i) {
         NotificationCenter instance = NotificationCenter.getInstance(this.recordingCurrentAccount);
         int i2 = NotificationCenter.recordStopped;
         Object[] objArr = new Object[2];
@@ -5268,7 +5273,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 if (this.onFinishRunnable != null) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public final void run() {
-                            MediaController.MediaLoader.this.lambda$null$3$MediaController$MediaLoader();
+                            MediaController.MediaLoader.this.lambda$checkIfFinished$3$MediaController$MediaLoader();
                         }
                     });
                 }
@@ -5281,8 +5286,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$3 */
-        public /* synthetic */ void lambda$null$3$MediaController$MediaLoader() {
+        /* renamed from: lambda$checkIfFinished$3 */
+        public /* synthetic */ void lambda$checkIfFinished$3$MediaController$MediaLoader() {
             this.onFinishRunnable.run(this.copiedFiles);
         }
 
@@ -5310,64 +5315,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:101:0x0175, code lost:
-            r0 = move-exception;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:102:0x0176, code lost:
-            r2 = r0;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:103:0x0177, code lost:
-            if (r10 != null) goto L_0x0179;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:105:?, code lost:
-            r10.close();
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:107:?, code lost:
-            throw r2;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:108:0x017d, code lost:
-            r0 = th;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:114:0x0185, code lost:
-            r0 = move-exception;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:115:0x0186, code lost:
-            r2 = r0;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:117:?, code lost:
-            r21.close();
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:119:?, code lost:
-            throw r2;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:120:0x018b, code lost:
-            r0 = e;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:87:0x0163, code lost:
-            r0 = move-exception;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:88:0x0164, code lost:
-            r2 = r0;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:89:0x0165, code lost:
-            if (r12 != null) goto L_0x0167;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:91:?, code lost:
-            r12.close();
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:93:?, code lost:
-            throw r2;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:94:0x016b, code lost:
-            r0 = th;
-         */
-        /* JADX WARNING: Exception block dominator not found, dom blocks: [B:26:0x005c, B:112:0x0184, B:118:0x018a] */
-        /* JADX WARNING: Exception block dominator not found, dom blocks: [B:68:0x0147, B:85:0x0162, B:92:0x016a] */
-        /* JADX WARNING: Exception block dominator not found, dom blocks: [B:70:0x014a, B:99:0x0174, B:106:0x017c] */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:106:0x017c */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:118:0x018a */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:92:0x016a */
-        /* JADX WARNING: Unknown top exception splitter block from list: {B:78:0x0156=Splitter:B:78:0x0156, B:70:0x014a=Splitter:B:70:0x014a, B:106:0x017c=Splitter:B:106:0x017c} */
+        /* JADX WARNING: Can't wrap try/catch for region: R(5:83|84|(2:86|87)|88|89) */
+        /* JADX WARNING: Can't wrap try/catch for region: R(5:91|94|(2:96|97)|98|99) */
+        /* JADX WARNING: Can't wrap try/catch for region: R(6:29|103|104|105|106|107) */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:106:0x0181 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:88:0x0167 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:98:0x0176 */
+        /* JADX WARNING: Removed duplicated region for block: B:86:0x0164 A[SYNTHETIC, Splitter:B:86:0x0164] */
+        /* JADX WARNING: Removed duplicated region for block: B:96:0x0173 A[SYNTHETIC, Splitter:B:96:0x0173] */
+        /* JADX WARNING: Unknown top exception splitter block from list: {B:78:0x0156=Splitter:B:78:0x0156, B:98:0x0176=Splitter:B:98:0x0176, B:70:0x014a=Splitter:B:70:0x014a} */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         private boolean copyFile(java.io.File r32, java.io.File r33, java.lang.String r34) {
             /*
@@ -5379,14 +5335,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 if (r0 == 0) goto L_0x000e
                 return r2
             L_0x000e:
-                java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ Exception -> 0x018d }
+                java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0184 }
                 r0 = r32
-                r3.<init>(r0)     // Catch:{ Exception -> 0x018d }
-                java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x017f }
-                java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x016f }
+                r3.<init>(r0)     // Catch:{ Exception -> 0x0184 }
+                java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x0179 }
+                java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x016c }
                 r11 = r33
-                r0.<init>(r11)     // Catch:{ all -> 0x016d }
-                java.nio.channels.FileChannel r12 = r0.getChannel()     // Catch:{ all -> 0x016d }
+                r0.<init>(r11)     // Catch:{ all -> 0x016a }
+                java.nio.channels.FileChannel r12 = r0.getChannel()     // Catch:{ all -> 0x016a }
                 long r13 = r10.size()     // Catch:{ all -> 0x015f }
                 java.lang.Class<java.io.FileDescriptor> r0 = java.io.FileDescriptor.class
                 java.lang.String r4 = "getInt$"
@@ -5406,14 +5362,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x0063 }
             L_0x0054:
                 if (r12 == 0) goto L_0x0059
-                r12.close()     // Catch:{ all -> 0x016d }
+                r12.close()     // Catch:{ all -> 0x016a }
             L_0x0059:
                 r10.close()     // Catch:{ all -> 0x0060 }
-                r3.close()     // Catch:{ Exception -> 0x018b }
+                r3.close()     // Catch:{ Exception -> 0x0182 }
                 return r2
             L_0x0060:
                 r0 = move-exception
-                goto L_0x0182
+                goto L_0x017c
             L_0x0063:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x015f }
@@ -5533,18 +5489,18 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 int r0 = r0 + r3
                 r1.copiedFiles = r0     // Catch:{ all -> 0x015d }
                 if (r12 == 0) goto L_0x014a
-                r12.close()     // Catch:{ all -> 0x016b }
+                r12.close()     // Catch:{ all -> 0x0168 }
             L_0x014a:
-                r10.close()     // Catch:{ all -> 0x017d }
-                r21.close()     // Catch:{ Exception -> 0x018b }
+                r10.close()     // Catch:{ all -> 0x0177 }
+                r21.close()     // Catch:{ Exception -> 0x0182 }
                 return r3
             L_0x0151:
                 if (r12 == 0) goto L_0x0156
-                r12.close()     // Catch:{ all -> 0x016b }
+                r12.close()     // Catch:{ all -> 0x0168 }
             L_0x0156:
-                r10.close()     // Catch:{ all -> 0x017d }
-                r21.close()     // Catch:{ Exception -> 0x018b }
-                goto L_0x0193
+                r10.close()     // Catch:{ all -> 0x0177 }
+                r21.close()     // Catch:{ Exception -> 0x0182 }
+                goto L_0x018a
             L_0x015d:
                 r0 = move-exception
                 goto L_0x0162
@@ -5552,59 +5508,47 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 r0 = move-exception
                 r21 = r3
             L_0x0162:
-                throw r0     // Catch:{ all -> 0x0163 }
-            L_0x0163:
+                if (r12 == 0) goto L_0x0167
+                r12.close()     // Catch:{ all -> 0x0167 }
+            L_0x0167:
+                throw r0     // Catch:{ all -> 0x0168 }
+            L_0x0168:
                 r0 = move-exception
-                r2 = r0
-                if (r12 == 0) goto L_0x016a
-                r12.close()     // Catch:{ all -> 0x016a }
+                goto L_0x0171
             L_0x016a:
-                throw r2     // Catch:{ all -> 0x016b }
-            L_0x016b:
                 r0 = move-exception
-                goto L_0x0174
-            L_0x016d:
+                goto L_0x016f
+            L_0x016c:
                 r0 = move-exception
-                goto L_0x0172
+                r11 = r33
             L_0x016f:
+                r21 = r3
+            L_0x0171:
+                if (r10 == 0) goto L_0x0176
+                r10.close()     // Catch:{ all -> 0x0176 }
+            L_0x0176:
+                throw r0     // Catch:{ all -> 0x0177 }
+            L_0x0177:
+                r0 = move-exception
+                goto L_0x017e
+            L_0x0179:
                 r0 = move-exception
                 r11 = r33
-            L_0x0172:
-                r21 = r3
-            L_0x0174:
-                throw r0     // Catch:{ all -> 0x0175 }
-            L_0x0175:
-                r0 = move-exception
-                r2 = r0
-                if (r10 == 0) goto L_0x017c
-                r10.close()     // Catch:{ all -> 0x017c }
             L_0x017c:
-                throw r2     // Catch:{ all -> 0x017d }
-            L_0x017d:
-                r0 = move-exception
-                goto L_0x0184
-            L_0x017f:
-                r0 = move-exception
-                r11 = r33
-            L_0x0182:
                 r21 = r3
+            L_0x017e:
+                r21.close()     // Catch:{ all -> 0x0181 }
+            L_0x0181:
+                throw r0     // Catch:{ Exception -> 0x0182 }
+            L_0x0182:
+                r0 = move-exception
+                goto L_0x0187
             L_0x0184:
-                throw r0     // Catch:{ all -> 0x0185 }
-            L_0x0185:
-                r0 = move-exception
-                r2 = r0
-                r21.close()     // Catch:{ all -> 0x018a }
-            L_0x018a:
-                throw r2     // Catch:{ Exception -> 0x018b }
-            L_0x018b:
-                r0 = move-exception
-                goto L_0x0190
-            L_0x018d:
                 r0 = move-exception
                 r11 = r33
-            L_0x0190:
+            L_0x0187:
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0193:
+            L_0x018a:
                 r33.delete()
                 r2 = 0
                 return r2
@@ -5774,57 +5718,23 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:100:?, code lost:
-        r18.close();
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:102:?, code lost:
-        throw r3;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:103:0x0170, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:84:0x015a, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:85:0x015b, code lost:
-        r3 = r0;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:86:0x015c, code lost:
-        if (r19 != null) goto L_0x015e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:88:?, code lost:
-        r19.close();
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:90:?, code lost:
-        throw r3;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:91:0x0162, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:96:0x0168, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:97:0x0169, code lost:
-        r3 = r0;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:98:0x016a, code lost:
-        if (r18 != null) goto L_0x016c;
-     */
-    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:73:0x014a, B:82:0x0159, B:89:0x0161] */
-    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:75:0x014d, B:94:0x0167, B:101:0x016f] */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:101:0x016f */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:112:0x017b */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:89:0x0161 */
-    /* JADX WARNING: Removed duplicated region for block: B:119:0x0186 A[Catch:{ Exception -> 0x0014 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:120:0x018b A[Catch:{ Exception -> 0x0014 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x018e A[Catch:{ Exception -> 0x0014 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:130:0x01c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Can't wrap try/catch for region: R(5:80|81|(0)|85|86) */
+    /* JADX WARNING: Can't wrap try/catch for region: R(5:88|89|(2:91|92)|93|94) */
+    /* JADX WARNING: Can't wrap try/catch for region: R(6:96|97|98|99|100|101) */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:100:0x0172 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:85:0x015e */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:93:0x0169 */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x017d A[Catch:{ Exception -> 0x0014 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x0182 A[Catch:{ Exception -> 0x0014 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x0185 A[Catch:{ Exception -> 0x0014 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x01be  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:29:0x00a0 A[Catch:{ Exception -> 0x0014 }] */
     /* JADX WARNING: Removed duplicated region for block: B:44:0x00e2 A[Catch:{ all -> 0x00f8, all -> 0x0156 }] */
     /* JADX WARNING: Removed duplicated region for block: B:62:0x0107  */
     /* JADX WARNING: Removed duplicated region for block: B:73:0x014a A[SYNTHETIC, Splitter:B:73:0x014a] */
-    /* JADX WARNING: Unknown top exception splitter block from list: {B:75:0x014d=Splitter:B:75:0x014d, B:101:0x016f=Splitter:B:101:0x016f} */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x015b A[SYNTHETIC, Splitter:B:83:0x015b] */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:93:0x0169=Splitter:B:93:0x0169, B:75:0x014d=Splitter:B:75:0x014d} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     static /* synthetic */ void lambda$saveFile$38(int r20, java.io.File r21, java.lang.String r22, org.telegram.ui.ActionBar.AlertDialog r23, boolean[] r24, java.lang.String r25, java.lang.Runnable r26, boolean[] r27) {
         /*
@@ -5840,7 +5750,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             goto L_0x001d
         L_0x0014:
             r0 = move-exception
-            goto L_0x01c2
+            goto L_0x01b9
         L_0x0017:
             if (r1 != r4) goto L_0x0020
             java.io.File r0 = org.telegram.messenger.AndroidUtilities.generateVideoPath()     // Catch:{ Exception -> 0x0014 }
@@ -5911,13 +5821,13 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             long r8 = java.lang.System.currentTimeMillis()     // Catch:{ Exception -> 0x0014 }
             r10 = 500(0x1f4, double:2.47E-321)
             long r8 = r8 - r10
-            java.io.FileInputStream r6 = new java.io.FileInputStream     // Catch:{ Exception -> 0x017c }
+            java.io.FileInputStream r6 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0173 }
             r0 = r21
-            r6.<init>(r0)     // Catch:{ Exception -> 0x017c }
-            java.nio.channels.FileChannel r18 = r6.getChannel()     // Catch:{ all -> 0x0172 }
-            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x0164 }
-            r0.<init>(r7)     // Catch:{ all -> 0x0164 }
-            java.nio.channels.FileChannel r19 = r0.getChannel()     // Catch:{ all -> 0x0164 }
+            r6.<init>(r0)     // Catch:{ Exception -> 0x0173 }
+            java.nio.channels.FileChannel r18 = r6.getChannel()     // Catch:{ all -> 0x016c }
+            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x0161 }
+            r0.<init>(r7)     // Catch:{ all -> 0x0161 }
+            java.nio.channels.FileChannel r19 = r0.getChannel()     // Catch:{ all -> 0x0161 }
             long r14 = r18.size()     // Catch:{ all -> 0x0156 }
             java.lang.Class<java.io.FileDescriptor> r0 = java.io.FileDescriptor.class
             java.lang.String r12 = "getInt$"
@@ -5931,15 +5841,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             boolean r0 = org.telegram.messenger.AndroidUtilities.isInternalUri((int) r0)     // Catch:{ all -> 0x00f8 }
             if (r0 == 0) goto L_0x00fc
             if (r2 == 0) goto L_0x00ec
-            org.telegram.messenger.-$$Lambda$MediaController$Nnzv67BfVXhlLWmZKv1aRMvdq_M r0 = new org.telegram.messenger.-$$Lambda$MediaController$Nnzv67BfVXhlLWmZKv1aRMvdq_M     // Catch:{ all -> 0x00f8 }
+            org.telegram.messenger.-$$Lambda$MediaController$qu7ibXt4lwBXsLhaMKbMhZnf7yM r0 = new org.telegram.messenger.-$$Lambda$MediaController$qu7ibXt4lwBXsLhaMKbMhZnf7yM     // Catch:{ all -> 0x00f8 }
             r0.<init>()     // Catch:{ all -> 0x00f8 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x00f8 }
         L_0x00ec:
             if (r19 == 0) goto L_0x00f1
-            r19.close()     // Catch:{ all -> 0x0164 }
+            r19.close()     // Catch:{ all -> 0x0161 }
         L_0x00f1:
-            r18.close()     // Catch:{ all -> 0x0172 }
-            r6.close()     // Catch:{ Exception -> 0x017c }
+            r18.close()     // Catch:{ all -> 0x016c }
+            r6.close()     // Catch:{ Exception -> 0x0173 }
             return
         L_0x00f8:
             r0 = move-exception
@@ -5975,7 +5885,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r12 = 1120403456(0x42CLASSNAME, float:100.0)
             float r0 = r0 * r12
             int r0 = (int) r0     // Catch:{ all -> 0x0144 }
-            org.telegram.messenger.-$$Lambda$MediaController$ajb4ultJdUDtupAuVv042t0yNC8 r12 = new org.telegram.messenger.-$$Lambda$MediaController$ajb4ultJdUDtupAuVv042t0yNC8     // Catch:{ all -> 0x0144 }
+            org.telegram.messenger.-$$Lambda$MediaController$u2NzEIP3dBYyiByUs790UfQuAPw r12 = new org.telegram.messenger.-$$Lambda$MediaController$u2NzEIP3dBYyiByUs790UfQuAPw     // Catch:{ all -> 0x0144 }
             r12.<init>(r0)     // Catch:{ all -> 0x0144 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r12)     // Catch:{ all -> 0x0144 }
         L_0x013a:
@@ -5993,71 +5903,59 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         L_0x0146:
             r22 = r6
             if (r19 == 0) goto L_0x014d
-            r19.close()     // Catch:{ all -> 0x0162 }
+            r19.close()     // Catch:{ all -> 0x015f }
         L_0x014d:
-            r18.close()     // Catch:{ all -> 0x0170 }
-            r22.close()     // Catch:{ Exception -> 0x017c }
+            r18.close()     // Catch:{ all -> 0x016a }
+            r22.close()     // Catch:{ Exception -> 0x0173 }
             r3 = 0
             r4 = 1
-            goto L_0x0182
+            goto L_0x0179
         L_0x0156:
             r0 = move-exception
             r22 = r6
         L_0x0159:
-            throw r0     // Catch:{ all -> 0x015a }
-        L_0x015a:
+            if (r19 == 0) goto L_0x015e
+            r19.close()     // Catch:{ all -> 0x015e }
+        L_0x015e:
+            throw r0     // Catch:{ all -> 0x015f }
+        L_0x015f:
             r0 = move-exception
-            r3 = r0
-            if (r19 == 0) goto L_0x0161
-            r19.close()     // Catch:{ all -> 0x0161 }
+            goto L_0x0164
         L_0x0161:
-            throw r3     // Catch:{ all -> 0x0162 }
-        L_0x0162:
             r0 = move-exception
-            goto L_0x0167
+            r22 = r6
         L_0x0164:
+            if (r18 == 0) goto L_0x0169
+            r18.close()     // Catch:{ all -> 0x0169 }
+        L_0x0169:
+            throw r0     // Catch:{ all -> 0x016a }
+        L_0x016a:
+            r0 = move-exception
+            goto L_0x016f
+        L_0x016c:
             r0 = move-exception
             r22 = r6
-        L_0x0167:
-            throw r0     // Catch:{ all -> 0x0168 }
-        L_0x0168:
-            r0 = move-exception
-            r3 = r0
-            if (r18 == 0) goto L_0x016f
-            r18.close()     // Catch:{ all -> 0x016f }
         L_0x016f:
-            throw r3     // Catch:{ all -> 0x0170 }
-        L_0x0170:
-            r0 = move-exception
-            goto L_0x0175
+            r22.close()     // Catch:{ all -> 0x0172 }
         L_0x0172:
-            r0 = move-exception
-            r22 = r6
-        L_0x0175:
-            throw r0     // Catch:{ all -> 0x0176 }
-        L_0x0176:
-            r0 = move-exception
-            r3 = r0
-            r22.close()     // Catch:{ all -> 0x017b }
-        L_0x017b:
-            throw r3     // Catch:{ Exception -> 0x017c }
-        L_0x017c:
+            throw r0     // Catch:{ Exception -> 0x0173 }
+        L_0x0173:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0014 }
             r3 = 0
             r4 = 0
-        L_0x0182:
+        L_0x0179:
             boolean r0 = r24[r3]     // Catch:{ Exception -> 0x0014 }
-            if (r0 == 0) goto L_0x018b
+            if (r0 == 0) goto L_0x0182
             r7.delete()     // Catch:{ Exception -> 0x0014 }
             r5 = 0
-            goto L_0x018c
-        L_0x018b:
+            goto L_0x0183
+        L_0x0182:
             r5 = r4
-        L_0x018c:
-            if (r5 == 0) goto L_0x01c5
+        L_0x0183:
+            if (r5 == 0) goto L_0x01bc
             r3 = 2
-            if (r1 != r3) goto L_0x01b5
+            if (r1 != r3) goto L_0x01ac
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0014 }
             java.lang.String r1 = "download"
             java.lang.Object r0 = r0.getSystemService(r1)     // Catch:{ Exception -> 0x0014 }
@@ -6071,29 +5969,29 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r16 = 1
             r12 = r25
             r8.addCompletedDownload(r9, r10, r11, r12, r13, r14, r16)     // Catch:{ Exception -> 0x0014 }
-            goto L_0x01bc
-        L_0x01b5:
+            goto L_0x01b3
+        L_0x01ac:
             android.net.Uri r0 = android.net.Uri.fromFile(r7)     // Catch:{ Exception -> 0x0014 }
             org.telegram.messenger.AndroidUtilities.addMediaToGallery((android.net.Uri) r0)     // Catch:{ Exception -> 0x0014 }
-        L_0x01bc:
-            if (r26 == 0) goto L_0x01c5
+        L_0x01b3:
+            if (r26 == 0) goto L_0x01bc
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r26)     // Catch:{ Exception -> 0x0014 }
-            goto L_0x01c5
-        L_0x01c2:
+            goto L_0x01bc
+        L_0x01b9:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x01c5:
-            if (r2 == 0) goto L_0x01d1
-            org.telegram.messenger.-$$Lambda$MediaController$XQyblpNQGfsp8JlZDOUs7YDcFcw r0 = new org.telegram.messenger.-$$Lambda$MediaController$XQyblpNQGfsp8JlZDOUs7YDcFcw
+        L_0x01bc:
+            if (r2 == 0) goto L_0x01c8
+            org.telegram.messenger.-$$Lambda$MediaController$EWmQTLRv_Ld_mboC2cSdbtEZH6o r0 = new org.telegram.messenger.-$$Lambda$MediaController$EWmQTLRv_Ld_mboC2cSdbtEZH6o
             r1 = r27
             r0.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-        L_0x01d1:
+        L_0x01c8:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.lambda$saveFile$38(int, java.io.File, java.lang.String, org.telegram.ui.ActionBar.AlertDialog, boolean[], java.lang.String, java.lang.Runnable, boolean[]):void");
     }
 
-    static /* synthetic */ void lambda$null$35(AlertDialog alertDialog) {
+    static /* synthetic */ void lambda$saveFile$35(AlertDialog alertDialog) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -6101,7 +5999,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    static /* synthetic */ void lambda$null$36(AlertDialog alertDialog, int i) {
+    static /* synthetic */ void lambda$saveFile$36(AlertDialog alertDialog, int i) {
         try {
             alertDialog.setProgress(i);
         } catch (Exception e) {
@@ -6109,7 +6007,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    static /* synthetic */ void lambda$null$37(AlertDialog alertDialog, boolean[] zArr) {
+    static /* synthetic */ void lambda$saveFile$37(AlertDialog alertDialog, boolean[] zArr) {
         try {
             if (alertDialog.isShowing()) {
                 alertDialog.dismiss();
@@ -6318,17 +6216,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:20:0x003d, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:21:0x003e, code lost:
-        if (r3 != null) goto L_0x0040;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:23:?, code lost:
-        r3.close();
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0043 */
-    /* JADX WARNING: Unknown top exception splitter block from list: {B:24:0x0043=Splitter:B:24:0x0043, B:15:0x0037=Splitter:B:15:0x0037} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:21:0x0041 */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:21:0x0041=Splitter:B:21:0x0041, B:15:0x0037=Splitter:B:15:0x0037} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String getFileName(android.net.Uri r11) {
         /*
@@ -6338,53 +6227,50 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             return r1
         L_0x0007:
             r2 = 0
-            java.lang.String r3 = r11.getScheme()     // Catch:{ Exception -> 0x005d }
+            java.lang.String r3 = r11.getScheme()     // Catch:{ Exception -> 0x005b }
             java.lang.String r4 = "content"
-            boolean r3 = r3.equals(r4)     // Catch:{ Exception -> 0x005d }
+            boolean r3 = r3.equals(r4)     // Catch:{ Exception -> 0x005b }
             r4 = 1
-            if (r3 == 0) goto L_0x0048
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0044 }
-            android.content.ContentResolver r5 = r3.getContentResolver()     // Catch:{ Exception -> 0x0044 }
-            java.lang.String[] r7 = new java.lang.String[r4]     // Catch:{ Exception -> 0x0044 }
+            if (r3 == 0) goto L_0x0046
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0042 }
+            android.content.ContentResolver r5 = r3.getContentResolver()     // Catch:{ Exception -> 0x0042 }
+            java.lang.String[] r7 = new java.lang.String[r4]     // Catch:{ Exception -> 0x0042 }
             r3 = 0
-            r7[r3] = r0     // Catch:{ Exception -> 0x0044 }
+            r7[r3] = r0     // Catch:{ Exception -> 0x0042 }
             r8 = 0
             r9 = 0
             r10 = 0
             r6 = r11
-            android.database.Cursor r3 = r5.query(r6, r7, r8, r9, r10)     // Catch:{ Exception -> 0x0044 }
+            android.database.Cursor r3 = r5.query(r6, r7, r8, r9, r10)     // Catch:{ Exception -> 0x0042 }
             boolean r5 = r3.moveToFirst()     // Catch:{ all -> 0x003b }
             if (r5 == 0) goto L_0x0037
             int r0 = r3.getColumnIndex(r0)     // Catch:{ all -> 0x003b }
             java.lang.String r0 = r3.getString(r0)     // Catch:{ all -> 0x003b }
             r2 = r0
         L_0x0037:
-            r3.close()     // Catch:{ Exception -> 0x0044 }
-            goto L_0x0048
+            r3.close()     // Catch:{ Exception -> 0x0042 }
+            goto L_0x0046
         L_0x003b:
             r0 = move-exception
-            throw r0     // Catch:{ all -> 0x003d }
-        L_0x003d:
+            if (r3 == 0) goto L_0x0041
+            r3.close()     // Catch:{ all -> 0x0041 }
+        L_0x0041:
+            throw r0     // Catch:{ Exception -> 0x0042 }
+        L_0x0042:
             r0 = move-exception
-            if (r3 == 0) goto L_0x0043
-            r3.close()     // Catch:{ all -> 0x0043 }
-        L_0x0043:
-            throw r0     // Catch:{ Exception -> 0x0044 }
-        L_0x0044:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x005d }
-        L_0x0048:
-            if (r2 != 0) goto L_0x005c
-            java.lang.String r2 = r11.getPath()     // Catch:{ Exception -> 0x005d }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x005b }
+        L_0x0046:
+            if (r2 != 0) goto L_0x005a
+            java.lang.String r2 = r11.getPath()     // Catch:{ Exception -> 0x005b }
             r11 = 47
-            int r11 = r2.lastIndexOf(r11)     // Catch:{ Exception -> 0x005d }
+            int r11 = r2.lastIndexOf(r11)     // Catch:{ Exception -> 0x005b }
             r0 = -1
-            if (r11 == r0) goto L_0x005c
+            if (r11 == r0) goto L_0x005a
             int r11 = r11 + r4
-            java.lang.String r2 = r2.substring(r11)     // Catch:{ Exception -> 0x005d }
-        L_0x005c:
+            java.lang.String r2 = r2.substring(r11)     // Catch:{ Exception -> 0x005b }
+        L_0x005a:
             return r2
-        L_0x005d:
+        L_0x005b:
             r11 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
             return r1
@@ -7321,7 +7207,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             java.lang.Object r0 = r14.get(r11)
             org.telegram.messenger.MediaController$AlbumEntry r0 = (org.telegram.messenger.MediaController.AlbumEntry) r0
             java.util.ArrayList<org.telegram.messenger.MediaController$PhotoEntry> r0 = r0.photos
-            org.telegram.messenger.-$$Lambda$MediaController$F6SXaphXXYjgd_pcwAjMPqQu_nI r1 = org.telegram.messenger.$$Lambda$MediaController$F6SXaphXXYjgd_pcwAjMPqQu_nI.INSTANCE
+            org.telegram.messenger.-$$Lambda$MediaController$RrHB19q01mzLJ7HI8chqpim_zFc r1 = org.telegram.messenger.$$Lambda$MediaController$RrHB19q01mzLJ7HI8chqpim_zFc.INSTANCE
             java.util.Collections.sort(r0, r1)
             int r11 = r11 + 1
             goto L_0x0448
@@ -7362,7 +7248,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.lambda$loadGalleryPhotosAlbums$40(int):void");
     }
 
-    static /* synthetic */ int lambda$null$39(PhotoEntry photoEntry, PhotoEntry photoEntry2) {
+    static /* synthetic */ int lambda$loadGalleryPhotosAlbums$39(PhotoEntry photoEntry, PhotoEntry photoEntry2) {
         long j = photoEntry.dateTaken;
         long j2 = photoEntry2.dateTaken;
         if (j < j2) {

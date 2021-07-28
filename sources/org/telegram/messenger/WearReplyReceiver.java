@@ -98,14 +98,14 @@ public class WearReplyReceiver extends BroadcastReceiver {
             }
 
             public final void run() {
-                WearReplyReceiver.this.lambda$null$0$WearReplyReceiver(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                WearReplyReceiver.this.lambda$onReceive$0$WearReplyReceiver(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$WearReplyReceiver(AccountInstance accountInstance, TLRPC$User tLRPC$User, CharSequence charSequence, long j, int i) {
+    /* renamed from: lambda$onReceive$0 */
+    public /* synthetic */ void lambda$onReceive$0$WearReplyReceiver(AccountInstance accountInstance, TLRPC$User tLRPC$User, CharSequence charSequence, long j, int i) {
         accountInstance.getMessagesController().putUser(tLRPC$User, true);
         sendMessage(accountInstance, charSequence, j, i);
     }
@@ -129,14 +129,14 @@ public class WearReplyReceiver extends BroadcastReceiver {
             }
 
             public final void run() {
-                WearReplyReceiver.this.lambda$null$2$WearReplyReceiver(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                WearReplyReceiver.this.lambda$onReceive$2$WearReplyReceiver(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$WearReplyReceiver(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, CharSequence charSequence, long j, int i) {
+    /* renamed from: lambda$onReceive$2 */
+    public /* synthetic */ void lambda$onReceive$2$WearReplyReceiver(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, CharSequence charSequence, long j, int i) {
         accountInstance.getMessagesController().putChat(tLRPC$Chat, true);
         sendMessage(accountInstance, charSequence, j, i);
     }

@@ -494,7 +494,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(this.parentAlert.baseFragment, contact, (TLRPC$User) null, (Uri) null, (File) null, str2, str);
             phonebookShareAlert.setDelegate(new PhonebookShareAlertDelegate() {
                 public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-                    ChatAttachAlertContactsLayout.this.lambda$null$0$ChatAttachAlertContactsLayout(tLRPC$User, z, i);
+                    ChatAttachAlertContactsLayout.this.lambda$new$0$ChatAttachAlertContactsLayout(tLRPC$User, z, i);
                 }
             });
             phonebookShareAlert.show();
@@ -502,8 +502,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ChatAttachAlertContactsLayout(TLRPC$User tLRPC$User, boolean z, int i) {
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$ChatAttachAlertContactsLayout(TLRPC$User tLRPC$User, boolean z, int i) {
         this.parentAlert.dismiss();
         this.delegate.didSelectContact(tLRPC$User, z, i);
     }
@@ -878,7 +878,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 }
 
                 public final void run() {
-                    ChatAttachAlertContactsLayout.ShareSearchAdapter.this.lambda$null$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    ChatAttachAlertContactsLayout.ShareSearchAdapter.this.lambda$processSearch$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
         }
@@ -907,9 +907,9 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         /* JADX WARNING: Removed duplicated region for block: B:116:0x0234 A[SYNTHETIC] */
         /* JADX WARNING: Removed duplicated region for block: B:70:0x018c A[LOOP:1: B:27:0x00a5->B:70:0x018c, LOOP_END] */
         /* JADX WARNING: Unknown variable types count: 1 */
-        /* renamed from: lambda$null$1 */
+        /* renamed from: lambda$processSearch$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String r19, java.util.ArrayList r20, java.util.ArrayList r21, int r22, int r23) {
+        public /* synthetic */ void lambda$processSearch$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String r19, java.util.ArrayList r20, java.util.ArrayList r21, int r22, int r23) {
             /*
                 r18 = this;
                 r0 = r18
@@ -1217,7 +1217,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r0.updateSearchResults(r4, r2, r3, r5)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertContactsLayout.ShareSearchAdapter.lambda$null$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList, int, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertContactsLayout.ShareSearchAdapter.lambda$processSearch$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList, int, int):void");
         }
 
         private void updateSearchResults(String str, ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2, int i) {

@@ -596,7 +596,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             }
             builder.setPositiveButton(LocaleController.getString("Add", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    InviteMembersBottomSheet.this.lambda$null$1$InviteMembersBottomSheet(dialogInterface, i);
+                    InviteMembersBottomSheet.this.lambda$new$1$InviteMembersBottomSheet(dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -606,8 +606,8 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$InviteMembersBottomSheet(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$1 */
+    public /* synthetic */ void lambda$new$1$InviteMembersBottomSheet(DialogInterface dialogInterface, int i) {
         onAddToGroupDone(0);
     }
 
@@ -1465,17 +1465,17 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 }
 
                 public final void run() {
-                    InviteMembersBottomSheet.SearchAdapter.this.lambda$null$3$InviteMembersBottomSheet$SearchAdapter(this.f$1);
+                    InviteMembersBottomSheet.SearchAdapter.this.lambda$searchDialogs$3$InviteMembersBottomSheet$SearchAdapter(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$3 */
-        public /* synthetic */ void lambda$null$3$InviteMembersBottomSheet$SearchAdapter(String str) {
+        /* renamed from: lambda$searchDialogs$3 */
+        public /* synthetic */ void lambda$searchDialogs$3$InviteMembersBottomSheet$SearchAdapter(String str) {
             this.searchAdapterHelper.queryServerSearch(str, true, InviteMembersBottomSheet.this.dialogsDelegate != null, true, InviteMembersBottomSheet.this.dialogsDelegate != null, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$InviteMembersBottomSheet$SearchAdapter$J0xCKy5rx53ueVrTHbdAvlFzi64 r1 = new Runnable(str) {
+            $$Lambda$InviteMembersBottomSheet$SearchAdapter$DtNcYZC_najqt4zHP7wplZfIWLM r1 = new Runnable(str) {
                 public final /* synthetic */ String f$1;
 
                 {
@@ -1483,7 +1483,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 }
 
                 public final void run() {
-                    InviteMembersBottomSheet.SearchAdapter.this.lambda$null$2$InviteMembersBottomSheet$SearchAdapter(this.f$1);
+                    InviteMembersBottomSheet.SearchAdapter.this.lambda$searchDialogs$2$InviteMembersBottomSheet$SearchAdapter(this.f$1);
                 }
             };
             this.searchRunnable = r1;
@@ -1496,9 +1496,9 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
          */
         /* JADX WARNING: Removed duplicated region for block: B:51:0x0130 A[LOOP:1: B:27:0x0094->B:51:0x0130, LOOP_END] */
         /* JADX WARNING: Removed duplicated region for block: B:60:0x00e0 A[SYNTHETIC] */
-        /* renamed from: lambda$null$2 */
+        /* renamed from: lambda$searchDialogs$2 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$2$InviteMembersBottomSheet$SearchAdapter(java.lang.String r18) {
+        public /* synthetic */ void lambda$searchDialogs$2$InviteMembersBottomSheet$SearchAdapter(java.lang.String r18) {
             /*
                 r17 = this;
                 r0 = r17
@@ -1666,7 +1666,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 r0.updateSearchResults(r1, r2)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteMembersBottomSheet.SearchAdapter.lambda$null$2$InviteMembersBottomSheet$SearchAdapter(java.lang.String):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteMembersBottomSheet.SearchAdapter.lambda$searchDialogs$2$InviteMembersBottomSheet$SearchAdapter(java.lang.String):void");
         }
     }
 
@@ -2074,14 +2074,14 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             }
 
             public final void run() {
-                InviteMembersBottomSheet.this.lambda$null$7$InviteMembersBottomSheet(this.f$1, this.f$2);
+                InviteMembersBottomSheet.this.lambda$generateLink$7$InviteMembersBottomSheet(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$InviteMembersBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$generateLink$7 */
+    public /* synthetic */ void lambda$generateLink$7$InviteMembersBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             this.invite = (TLRPC$TL_chatInviteExported) tLObject;
             TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(this.chatId);

@@ -294,14 +294,14 @@ public class JoinGroupAlert extends BottomSheet {
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                JoinGroupAlert.this.lambda$null$2$JoinGroupAlert(this.f$1, tLObject, tLRPC$TL_error);
+                JoinGroupAlert.this.lambda$new$2$JoinGroupAlert(this.f$1, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$JoinGroupAlert(TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$new$2 */
+    public /* synthetic */ void lambda$new$2$JoinGroupAlert(TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$Updates) tLObject, false);
         }
@@ -317,14 +317,14 @@ public class JoinGroupAlert extends BottomSheet {
             }
 
             public final void run() {
-                JoinGroupAlert.this.lambda$null$1$JoinGroupAlert(this.f$1, this.f$2, this.f$3);
+                JoinGroupAlert.this.lambda$new$1$JoinGroupAlert(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$JoinGroupAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
+    /* renamed from: lambda$new$1 */
+    public /* synthetic */ void lambda$new$1$JoinGroupAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             if (tLRPC$TL_error == null) {

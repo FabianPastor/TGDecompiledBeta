@@ -713,7 +713,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                 }
 
                                 public final void onClick(DialogInterface dialogInterface, int i) {
-                                    ContactsActivity.this.lambda$null$0$ContactsActivity(this.f$1, dialogInterface, i);
+                                    ContactsActivity.this.lambda$createView$0$ContactsActivity(this.f$1, dialogInterface, i);
                                 }
                             });
                             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -781,8 +781,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ContactsActivity(String str, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$ContactsActivity(String str, DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", str, (String) null));
             intent.putExtra("sms_body", ContactsController.getInstance(this.currentAccount).getInviteText(1));

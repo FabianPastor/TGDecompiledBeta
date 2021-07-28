@@ -1901,7 +1901,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0 = 2131626569(0x7f0e0a49, float:1.8880378E38)
             java.lang.String r1 = "OK"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            org.telegram.ui.-$$Lambda$ChatUsersActivity$GDkHXwoamCn6kq8XE81r3lcS8vE r15 = new org.telegram.ui.-$$Lambda$ChatUsersActivity$GDkHXwoamCn6kq8XE81r3lcS8vE
+            org.telegram.ui.-$$Lambda$ChatUsersActivity$XYtD5iSplTvQMT5b-tXP1We-YPI r15 = new org.telegram.ui.-$$Lambda$ChatUsersActivity$XYtD5iSplTvQMT5b-tXP1We-YPI
             r0 = r15
             r1 = r22
             r3 = r7
@@ -2054,8 +2054,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ChatUsersActivity(TLRPC$User tLRPC$User, TLObject tLObject, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, String str, boolean z, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$ChatUsersActivity(TLRPC$User tLRPC$User, TLObject tLObject, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, String str, boolean z, DialogInterface dialogInterface, int i) {
         openRightsEdit(tLRPC$User.id, tLObject, tLRPC$TL_chatAdminRights, tLRPC$TL_chatBannedRights, str, z, this.selectType == 1 ? 0 : 1, false);
     }
 
@@ -3045,7 +3045,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                ChatUsersActivity.this.lambda$null$5$ChatUsersActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, dialogInterface, i);
+                ChatUsersActivity.this.lambda$createMenuForParticipant$5$ChatUsersActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -3053,8 +3053,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$ChatUsersActivity(int i, int i2, TLObject tLObject, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, String str, boolean z, ArrayList arrayList, int i3, DialogInterface dialogInterface, int i4) {
+    /* renamed from: lambda$createMenuForParticipant$5 */
+    public /* synthetic */ void lambda$createMenuForParticipant$5$ChatUsersActivity(int i, int i2, TLObject tLObject, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, String str, boolean z, ArrayList arrayList, int i3, DialogInterface dialogInterface, int i4) {
         openRightsEdit2(i, i2, tLObject, tLRPC$TL_chatAdminRights, tLRPC$TL_chatBannedRights, str, z, ((Integer) arrayList.get(i3)).intValue(), false);
     }
 
@@ -3130,7 +3130,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     tLRPC$TL_channels_editBanned.banned_rights = new TLRPC$TL_chatBannedRights();
                     getConnectionsManager().sendRequest(tLRPC$TL_channels_editBanned, new RequestDelegate() {
                         public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            ChatUsersActivity.this.lambda$null$8$ChatUsersActivity(tLObject, tLRPC$TL_error);
+                            ChatUsersActivity.this.lambda$createMenuForParticipant$8$ChatUsersActivity(tLObject, tLRPC$TL_error);
                         }
                     });
                 }
@@ -3151,8 +3151,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$ChatUsersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createMenuForParticipant$8 */
+    public /* synthetic */ void lambda$createMenuForParticipant$8$ChatUsersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
             getMessagesController().processUpdates(tLRPC$Updates, false);
@@ -3165,7 +3165,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     }
 
                     public final void run() {
-                        ChatUsersActivity.this.lambda$null$7$ChatUsersActivity(this.f$1);
+                        ChatUsersActivity.this.lambda$createMenuForParticipant$7$ChatUsersActivity(this.f$1);
                     }
                 }, 1000);
             }
@@ -3173,8 +3173,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$ChatUsersActivity(TLRPC$Updates tLRPC$Updates) {
+    /* renamed from: lambda$createMenuForParticipant$7 */
+    public /* synthetic */ void lambda$createMenuForParticipant$7$ChatUsersActivity(TLRPC$Updates tLRPC$Updates) {
         getMessagesController().loadFullChat(tLRPC$Updates.chats.get(0).id, 0, true);
     }
 
@@ -3578,7 +3578,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             }
 
             public final void run() {
-                ChatUsersActivity.this.lambda$null$14$ChatUsersActivity(this.f$1, this.f$2, this.f$3);
+                ChatUsersActivity.this.lambda$loadChatParticipants$14$ChatUsersActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
@@ -3587,9 +3587,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     /* JADX WARNING: Code restructure failed: missing block: B:44:0x00f7, code lost:
         r4 = r7.ignoredUsers;
      */
-    /* renamed from: lambda$null$14 */
+    /* renamed from: lambda$loadChatParticipants$14 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$null$14$ChatUsersActivity(org.telegram.tgnet.TLRPC$TL_error r8, org.telegram.tgnet.TLObject r9, org.telegram.tgnet.TLRPC$TL_channels_getParticipants r10) {
+    public /* synthetic */ void lambda$loadChatParticipants$14$ChatUsersActivity(org.telegram.tgnet.TLRPC$TL_error r8, org.telegram.tgnet.TLObject r9, org.telegram.tgnet.TLRPC$TL_channels_getParticipants r10) {
         /*
             r7 = this;
             r0 = 2
@@ -3799,7 +3799,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r7.resumeDelayedFragmentAnimation()
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.lambda$null$14$ChatUsersActivity(org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_channels_getParticipants):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.lambda$loadChatParticipants$14$ChatUsersActivity(org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_channels_getParticipants):void");
     }
 
     /* access modifiers changed from: private */
@@ -4070,7 +4070,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     }
 
                     public final void run() {
-                        ChatUsersActivity.SearchAdapter.this.lambda$null$2$ChatUsersActivity$SearchAdapter(this.f$1, this.f$2, this.f$3);
+                        ChatUsersActivity.SearchAdapter.this.lambda$processSearch$2$ChatUsersActivity$SearchAdapter(this.f$1, this.f$2, this.f$3);
                     }
                 });
             }
@@ -4094,9 +4094,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         /* JADX WARNING: Removed duplicated region for block: B:59:0x018d A[LOOP:1: B:35:0x0105->B:59:0x018d, LOOP_END] */
         /* JADX WARNING: Removed duplicated region for block: B:98:0x02a4 A[LOOP:3: B:76:0x0210->B:98:0x02a4, LOOP_END] */
         /* JADX WARNING: Unknown variable types count: 1 */
-        /* renamed from: lambda$null$2 */
+        /* renamed from: lambda$processSearch$2 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$2$ChatUsersActivity$SearchAdapter(java.lang.String r25, java.util.ArrayList r26, java.util.ArrayList r27) {
+        public /* synthetic */ void lambda$processSearch$2$ChatUsersActivity$SearchAdapter(java.lang.String r25, java.util.ArrayList r26, java.util.ArrayList r27) {
             /*
                 r24 = this;
                 r0 = r24
@@ -4440,7 +4440,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r0.updateSearchResults(r15, r9, r10, r11)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.SearchAdapter.lambda$null$2$ChatUsersActivity$SearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.SearchAdapter.lambda$processSearch$2$ChatUsersActivity$SearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList):void");
         }
 
         private void updateSearchResults(ArrayList<Object> arrayList, SparseArray<TLObject> sparseArray, ArrayList<CharSequence> arrayList2, ArrayList<TLObject> arrayList3) {

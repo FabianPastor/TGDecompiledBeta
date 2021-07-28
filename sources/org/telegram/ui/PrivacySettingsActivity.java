@@ -148,7 +148,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     /* access modifiers changed from: private */
     public int webSessionsRow;
 
-    static /* synthetic */ void lambda$null$12(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$createView$12(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     static /* synthetic */ void lambda$onFragmentDestroy$0(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -311,7 +311,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                                 }
 
                                 public final void onClick(View view) {
-                                    PrivacySettingsActivity.this.lambda$null$4$PrivacySettingsActivity(this.f$1, view);
+                                    PrivacySettingsActivity.this.lambda$createView$4$PrivacySettingsActivity(this.f$1, view);
                                 }
                             });
                             i5++;
@@ -377,7 +377,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                         builder2.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
                             public final void onClick(DialogInterface dialogInterface, int i) {
-                                PrivacySettingsActivity.this.lambda$null$6$PrivacySettingsActivity(dialogInterface, i);
+                                PrivacySettingsActivity.this.lambda$createView$6$PrivacySettingsActivity(dialogInterface, i);
                             }
                         });
                         AlertDialog create = builder2.create();
@@ -402,7 +402,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                             }
 
                             public final void onClick(DialogInterface dialogInterface, int i) {
-                                PrivacySettingsActivity.this.lambda$null$9$PrivacySettingsActivity(this.f$1, dialogInterface, i);
+                                PrivacySettingsActivity.this.lambda$createView$9$PrivacySettingsActivity(this.f$1, dialogInterface, i);
                             }
                         });
                         builder3.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -431,7 +431,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 } else if (i2 == this.secretMapRow) {
                     AlertsCreator.showSecretLocationAlert(getParentActivity(), this.currentAccount, new Runnable() {
                         public final void run() {
-                            PrivacySettingsActivity.this.lambda$null$10$PrivacySettingsActivity();
+                            PrivacySettingsActivity.this.lambda$createView$10$PrivacySettingsActivity();
                         }
                     }, false);
                 } else if (i2 == this.paymentsClearRow) {
@@ -458,14 +458,14 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         checkBoxCell.setTextColor(Theme.getColor("dialogTextBlack"));
                         checkBoxCell.setOnClickListener(new View.OnClickListener() {
                             public final void onClick(View view) {
-                                PrivacySettingsActivity.this.lambda$null$11$PrivacySettingsActivity(view);
+                                PrivacySettingsActivity.this.lambda$createView$11$PrivacySettingsActivity(view);
                             }
                         });
                         i6++;
                     }
                     builder4.setPositiveButton(LocaleController.getString("ClearButton", NUM), new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            PrivacySettingsActivity.this.lambda$null$14$PrivacySettingsActivity(dialogInterface, i);
+                            PrivacySettingsActivity.this.lambda$createView$14$PrivacySettingsActivity(dialogInterface, i);
                         }
                     });
                     builder4.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -484,8 +484,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$PrivacySettingsActivity(AlertDialog.Builder builder, View view) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$PrivacySettingsActivity(AlertDialog.Builder builder, View view) {
         int i;
         builder.getDismissRunnable().run();
         Integer num = (Integer) view.getTag();
@@ -515,14 +515,14 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PrivacySettingsActivity.this.lambda$null$3$PrivacySettingsActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                PrivacySettingsActivity.this.lambda$createView$3$PrivacySettingsActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$PrivacySettingsActivity(AlertDialog alertDialog, TLRPC$TL_account_setAccountTTL tLRPC$TL_account_setAccountTTL, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$PrivacySettingsActivity(AlertDialog alertDialog, TLRPC$TL_account_setAccountTTL tLRPC$TL_account_setAccountTTL, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$TL_account_setAccountTTL) {
             public final /* synthetic */ AlertDialog f$1;
             public final /* synthetic */ TLObject f$2;
@@ -535,14 +535,14 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             }
 
             public final void run() {
-                PrivacySettingsActivity.this.lambda$null$2$PrivacySettingsActivity(this.f$1, this.f$2, this.f$3);
+                PrivacySettingsActivity.this.lambda$createView$2$PrivacySettingsActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$PrivacySettingsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_account_setAccountTTL tLRPC$TL_account_setAccountTTL) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$PrivacySettingsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_account_setAccountTTL tLRPC$TL_account_setAccountTTL) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -555,8 +555,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$6 */
+    public /* synthetic */ void lambda$createView$6$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
         AlertDialog show = new AlertDialog.Builder(getParentActivity(), 3).show();
         this.progressDialog = show;
         show.setCanCacnel(false);
@@ -569,20 +569,20 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
         getContactsController().deleteAllContacts(new Runnable() {
             public final void run() {
-                PrivacySettingsActivity.this.lambda$null$5$PrivacySettingsActivity();
+                PrivacySettingsActivity.this.lambda$createView$5$PrivacySettingsActivity();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$PrivacySettingsActivity() {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$PrivacySettingsActivity() {
         this.progressDialog.dismiss();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$PrivacySettingsActivity(TextCheckCell textCheckCell, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$9 */
+    public /* synthetic */ void lambda$createView$9$PrivacySettingsActivity(TextCheckCell textCheckCell, DialogInterface dialogInterface, int i) {
         TLRPC$TL_payments_clearSavedInfo tLRPC$TL_payments_clearSavedInfo = new TLRPC$TL_payments_clearSavedInfo();
         boolean[] zArr = this.clear;
         tLRPC$TL_payments_clearSavedInfo.credentials = zArr[1];
@@ -597,14 +597,14 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PrivacySettingsActivity.this.lambda$null$8$PrivacySettingsActivity(this.f$1, tLObject, tLRPC$TL_error);
+                PrivacySettingsActivity.this.lambda$createView$8$PrivacySettingsActivity(this.f$1, tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$PrivacySettingsActivity(TextCheckCell textCheckCell, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$8 */
+    public /* synthetic */ void lambda$createView$8$PrivacySettingsActivity(TextCheckCell textCheckCell, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(textCheckCell) {
             public final /* synthetic */ TextCheckCell f$1;
 
@@ -613,28 +613,28 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             }
 
             public final void run() {
-                PrivacySettingsActivity.this.lambda$null$7$PrivacySettingsActivity(this.f$1);
+                PrivacySettingsActivity.this.lambda$createView$7$PrivacySettingsActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$PrivacySettingsActivity(TextCheckCell textCheckCell) {
+    /* renamed from: lambda$createView$7 */
+    public /* synthetic */ void lambda$createView$7$PrivacySettingsActivity(TextCheckCell textCheckCell) {
         boolean z = !this.newSuggest;
         this.newSuggest = z;
         textCheckCell.setChecked(z);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$PrivacySettingsActivity() {
+    /* renamed from: lambda$createView$10 */
+    public /* synthetic */ void lambda$createView$10$PrivacySettingsActivity() {
         this.listAdapter.notifyDataSetChanged();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$PrivacySettingsActivity(View view) {
+    /* renamed from: lambda$createView$11 */
+    public /* synthetic */ void lambda$createView$11$PrivacySettingsActivity(View view) {
         CheckBoxCell checkBoxCell = (CheckBoxCell) view;
         int intValue = ((Integer) checkBoxCell.getTag()).intValue();
         boolean[] zArr = this.clear;
@@ -643,8 +643,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$14 */
-    public /* synthetic */ void lambda$null$14$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$14 */
+    public /* synthetic */ void lambda$createView$14$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
         try {
             Dialog dialog = this.visibleDialog;
             if (dialog != null) {
@@ -658,7 +658,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         builder.setMessage(LocaleController.getString("PrivacyPaymentsClearAlert", NUM));
         builder.setPositiveButton(LocaleController.getString("ClearButton", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                PrivacySettingsActivity.this.lambda$null$13$PrivacySettingsActivity(dialogInterface, i);
+                PrivacySettingsActivity.this.lambda$createView$13$PrivacySettingsActivity(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -672,8 +672,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$13 */
-    public /* synthetic */ void lambda$null$13$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$13 */
+    public /* synthetic */ void lambda$createView$13$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
         String str;
         TLRPC$TL_payments_clearSavedInfo tLRPC$TL_payments_clearSavedInfo = new TLRPC$TL_payments_clearSavedInfo();
         boolean[] zArr = this.clear;
@@ -681,7 +681,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         tLRPC$TL_payments_clearSavedInfo.info = zArr[0];
         getUserConfig().tmpPassword = null;
         getUserConfig().saveConfig(false);
-        getConnectionsManager().sendRequest(tLRPC$TL_payments_clearSavedInfo, $$Lambda$PrivacySettingsActivity$gmaPPhB4Qzdj4V7Y5cSfwbF5SZI.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_payments_clearSavedInfo, $$Lambda$PrivacySettingsActivity$VoCFnz7obFsdamd0LFBp6x0tQ7g.INSTANCE);
         boolean[] zArr2 = this.clear;
         if (zArr2[0] && zArr2[1]) {
             str = LocaleController.getString("PrivacyPaymentsPaymentShippingCleared", NUM);
@@ -863,15 +863,15 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 }
 
                 public final void run() {
-                    PrivacySettingsActivity.this.lambda$null$16$PrivacySettingsActivity(this.f$1);
+                    PrivacySettingsActivity.this.lambda$loadPasswordSettings$16$PrivacySettingsActivity(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$16 */
-    public /* synthetic */ void lambda$null$16$PrivacySettingsActivity(TLRPC$TL_account_password tLRPC$TL_account_password) {
+    /* renamed from: lambda$loadPasswordSettings$16 */
+    public /* synthetic */ void lambda$loadPasswordSettings$16$PrivacySettingsActivity(TLRPC$TL_account_password tLRPC$TL_account_password) {
         this.currentPassword = tLRPC$TL_account_password;
         TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$TL_account_password);
         if (getUserConfig().hasSecureData || !tLRPC$TL_account_password.has_secure_values) {

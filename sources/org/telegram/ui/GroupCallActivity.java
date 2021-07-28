@@ -584,6 +584,42 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         VoIPService.StateListener.CC.$default$onVideoAvailableChange(this, z);
     }
 
+    static /* synthetic */ float access$10216(GroupCallActivity groupCallActivity, float f) {
+        float f2 = groupCallActivity.amplitude + f;
+        groupCallActivity.amplitude = f2;
+        return f2;
+    }
+
+    static /* synthetic */ float access$12916(GroupCallActivity groupCallActivity, float f) {
+        float f2 = groupCallActivity.switchProgress + f;
+        groupCallActivity.switchProgress = f2;
+        return f2;
+    }
+
+    static /* synthetic */ float access$13516(GroupCallActivity groupCallActivity, float f) {
+        float f2 = groupCallActivity.showWavesProgress + f;
+        groupCallActivity.showWavesProgress = f2;
+        return f2;
+    }
+
+    static /* synthetic */ float access$13524(GroupCallActivity groupCallActivity, float f) {
+        float f2 = groupCallActivity.showWavesProgress - f;
+        groupCallActivity.showWavesProgress = f2;
+        return f2;
+    }
+
+    static /* synthetic */ float access$13616(GroupCallActivity groupCallActivity, float f) {
+        float f2 = groupCallActivity.showLightingProgress + f;
+        groupCallActivity.showLightingProgress = f2;
+        return f2;
+    }
+
+    static /* synthetic */ float access$13624(GroupCallActivity groupCallActivity, float f) {
+        float f2 = groupCallActivity.showLightingProgress - f;
+        groupCallActivity.showLightingProgress = f2;
+        return f2;
+    }
+
     static /* synthetic */ void lambda$new$0() {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().setMicMute(false, true, false);
@@ -4283,7 +4319,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 this.groupVoipInviteAlert = groupVoipInviteAlert2;
                 groupVoipInviteAlert2.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     public final void onDismiss(DialogInterface dialogInterface) {
-                        GroupCallActivity.this.lambda$null$11$GroupCallActivity(dialogInterface);
+                        GroupCallActivity.this.lambda$new$11$GroupCallActivity(dialogInterface);
                     }
                 });
                 this.groupVoipInviteAlert.setDelegate(new GroupVoipInviteAlert.GroupVoipInviteAlertDelegate() {
@@ -4314,8 +4350,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$GroupCallActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$new$11 */
+    public /* synthetic */ void lambda$new$11$GroupCallActivity(DialogInterface dialogInterface) {
         this.groupVoipInviteAlert = null;
     }
 
@@ -4516,7 +4552,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         ofFloat.setDuration(600);
         this.scheduleAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                GroupCallActivity.this.lambda$null$25$GroupCallActivity(valueAnimator);
+                GroupCallActivity.this.lambda$new$25$GroupCallActivity(valueAnimator);
             }
         });
         this.scheduleAnimator.addListener(new AnimatorListenerAdapter() {
@@ -4552,14 +4588,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                GroupCallActivity.this.lambda$null$28$GroupCallActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                GroupCallActivity.this.lambda$new$28$GroupCallActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$25 */
-    public /* synthetic */ void lambda$null$25$GroupCallActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$new$25 */
+    public /* synthetic */ void lambda$new$25$GroupCallActivity(ValueAnimator valueAnimator) {
         this.switchToButtonProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         updateScheduleUI(true);
         this.buttonsContainer.invalidate();
@@ -4567,8 +4603,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$28 */
-    public /* synthetic */ void lambda$null$28$GroupCallActivity(TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$new$28 */
+    public /* synthetic */ void lambda$new$28$GroupCallActivity(TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
             int i = 0;
@@ -4590,7 +4626,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         }
 
                         public final void run() {
-                            GroupCallActivity.this.lambda$null$26$GroupCallActivity(this.f$1, this.f$2, this.f$3);
+                            GroupCallActivity.this.lambda$new$26$GroupCallActivity(this.f$1, this.f$2, this.f$3);
                         }
                     });
                     break;
@@ -4608,14 +4644,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             }
 
             public final void run() {
-                GroupCallActivity.this.lambda$null$27$GroupCallActivity(this.f$1);
+                GroupCallActivity.this.lambda$new$27$GroupCallActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$26 */
-    public /* synthetic */ void lambda$null$26$GroupCallActivity(TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, TLRPC$TL_updateGroupCall tLRPC$TL_updateGroupCall) {
+    /* renamed from: lambda$new$26 */
+    public /* synthetic */ void lambda$new$26$GroupCallActivity(TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, TLRPC$TL_updateGroupCall tLRPC$TL_updateGroupCall) {
         ChatObject.Call call2 = new ChatObject.Call();
         this.call = call2;
         call2.call = new TLRPC$TL_groupCall();
@@ -4645,8 +4681,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$27 */
-    public /* synthetic */ void lambda$null$27$GroupCallActivity(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$new$27 */
+    public /* synthetic */ void lambda$new$27$GroupCallActivity(TLRPC$TL_error tLRPC$TL_error) {
         this.accountInstance.getNotificationCenter().postNotificationName(NotificationCenter.needShowAlert, 6, tLRPC$TL_error.text);
         dismiss();
     }
@@ -5392,14 +5428,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             }
 
             public final void run() {
-                GroupCallActivity.this.lambda$null$38$GroupCallActivity(this.f$1, this.f$2, this.f$3);
+                GroupCallActivity.this.lambda$getLink$38$GroupCallActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$38 */
-    public /* synthetic */ void lambda$null$38$GroupCallActivity(TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull, boolean z) {
+    /* renamed from: lambda$getLink$38 */
+    public /* synthetic */ void lambda$getLink$38$GroupCallActivity(TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull, boolean z) {
         if (tLObject instanceof TLRPC$TL_chatInviteExported) {
             TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = (TLRPC$TL_chatInviteExported) tLObject;
             if (tLRPC$ChatFull != null) {
@@ -5425,14 +5461,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             }
 
             public final void run() {
-                GroupCallActivity.this.lambda$null$40$GroupCallActivity(this.f$1, this.f$2, this.f$3);
+                GroupCallActivity.this.lambda$getLink$40$GroupCallActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$40 */
-    public /* synthetic */ void lambda$null$40$GroupCallActivity(TLObject tLObject, int i, boolean z) {
+    /* renamed from: lambda$getLink$40 */
+    public /* synthetic */ void lambda$getLink$40$GroupCallActivity(TLObject tLObject, int i, boolean z) {
         if (tLObject instanceof TLRPC$TL_phone_exportedGroupCallInvite) {
             this.invites[i] = ((TLRPC$TL_phone_exportedGroupCallInvite) tLObject).link;
         } else {
@@ -5647,7 +5683,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 }
 
                 public final void run() {
-                    GroupCallActivity.this.lambda$null$44$GroupCallActivity(this.f$1, this.f$2, this.f$3);
+                    GroupCallActivity.this.lambda$inviteUserToCall$44$GroupCallActivity(this.f$1, this.f$2, this.f$3);
                 }
             });
             return;
@@ -5668,14 +5704,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             }
 
             public final void run() {
-                GroupCallActivity.this.lambda$null$45$GroupCallActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                GroupCallActivity.this.lambda$inviteUserToCall$45$GroupCallActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$44 */
-    public /* synthetic */ void lambda$null$44$GroupCallActivity(int i, AlertDialog[] alertDialogArr, TLRPC$User tLRPC$User) {
+    /* renamed from: lambda$inviteUserToCall$44 */
+    public /* synthetic */ void lambda$inviteUserToCall$44$GroupCallActivity(int i, AlertDialog[] alertDialogArr, TLRPC$User tLRPC$User) {
         ChatObject.Call call2 = this.call;
         if (call2 != null && !this.delayedGroupCallUpdated) {
             call2.addInvitedUser(i);
@@ -5694,8 +5730,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$45 */
-    public /* synthetic */ void lambda$null$45$GroupCallActivity(AlertDialog[] alertDialogArr, boolean z, TLRPC$TL_error tLRPC$TL_error, int i, TLRPC$TL_phone_inviteToGroupCall tLRPC$TL_phone_inviteToGroupCall) {
+    /* renamed from: lambda$inviteUserToCall$45 */
+    public /* synthetic */ void lambda$inviteUserToCall$45$GroupCallActivity(AlertDialog[] alertDialogArr, boolean z, TLRPC$TL_error tLRPC$TL_error, int i, TLRPC$TL_phone_inviteToGroupCall tLRPC$TL_phone_inviteToGroupCall) {
         try {
             alertDialogArr[0].dismiss();
         } catch (Throwable unused) {
@@ -5720,7 +5756,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 }
 
                 public final void onCancel(DialogInterface dialogInterface) {
-                    GroupCallActivity.this.lambda$null$47$GroupCallActivity(this.f$1, dialogInterface);
+                    GroupCallActivity.this.lambda$inviteUserToCall$47$GroupCallActivity(this.f$1, dialogInterface);
                 }
             });
             alertDialogArr[0].show();
@@ -5728,8 +5764,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$47 */
-    public /* synthetic */ void lambda$null$47$GroupCallActivity(int i, DialogInterface dialogInterface) {
+    /* renamed from: lambda$inviteUserToCall$47 */
+    public /* synthetic */ void lambda$inviteUserToCall$47$GroupCallActivity(int i, DialogInterface dialogInterface) {
         this.accountInstance.getConnectionsManager().cancelRequest(i, true);
     }
 
@@ -7306,14 +7342,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             }
 
             public final void run() {
-                GroupCallActivity.this.lambda$null$53$GroupCallActivity(this.f$1);
+                GroupCallActivity.this.lambda$processSelectedOption$53$GroupCallActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$53 */
-    public /* synthetic */ void lambda$null$53$GroupCallActivity(int i) {
+    /* renamed from: lambda$processSelectedOption$53 */
+    public /* synthetic */ void lambda$processSelectedOption$53$GroupCallActivity(int i) {
         inviteUserToCall(i, false);
     }
 
@@ -7593,7 +7629,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             android.content.Context r2 = r27.getContext()
             r3 = 0
             r4 = 0
-            r5 = 2131689504(0x7f0var_, float:1.9008025E38)
+            r5 = 2131689517(0x7f0var_d, float:1.9008052E38)
             r0 = r17
             r1 = r27
             r6 = r15
@@ -8132,7 +8168,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBarPopupWindow r4 = r7.scrimPopupWindow
             r4.setClippingEnabled(r3)
             org.telegram.ui.ActionBar.ActionBarPopupWindow r4 = r7.scrimPopupWindow
-            r6 = 2131689477(0x7f0var_, float:1.900797E38)
+            r6 = 2131689480(0x7f0var_, float:1.9007977E38)
             r4.setAnimationStyle(r6)
             org.telegram.ui.ActionBar.ActionBarPopupWindow r4 = r7.scrimPopupWindow
             r4.setFocusable(r3)
@@ -9315,8 +9351,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$GroupCallActivity$AvatarUpdaterDelegate(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        /* renamed from: lambda$didUploadPhoto$1 */
+        public /* synthetic */ void lambda$didUploadPhoto$1$GroupCallActivity$AvatarUpdaterDelegate(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, str) {
                 public final /* synthetic */ TLRPC$TL_error f$1;
                 public final /* synthetic */ TLObject f$2;
@@ -9329,14 +9365,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 }
 
                 public final void run() {
-                    GroupCallActivity.AvatarUpdaterDelegate.this.lambda$null$0$GroupCallActivity$AvatarUpdaterDelegate(this.f$1, this.f$2, this.f$3);
+                    GroupCallActivity.AvatarUpdaterDelegate.this.lambda$didUploadPhoto$0$GroupCallActivity$AvatarUpdaterDelegate(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$GroupCallActivity$AvatarUpdaterDelegate(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str) {
+        /* renamed from: lambda$didUploadPhoto$0 */
+        public /* synthetic */ void lambda$didUploadPhoto$0$GroupCallActivity$AvatarUpdaterDelegate(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str) {
             if (this.uploadingImageLocation != null) {
                 GroupCallActivity.this.avatarsViewPager.removeUploadingImage(this.uploadingImageLocation);
                 this.uploadingImageLocation = null;
@@ -9400,8 +9436,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$GroupCallActivity$AvatarUpdaterDelegate() {
+        /* renamed from: lambda$didUploadPhoto$2 */
+        public /* synthetic */ void lambda$didUploadPhoto$2$GroupCallActivity$AvatarUpdaterDelegate() {
             if (this.uploadingImageLocation != null) {
                 GroupCallActivity.this.avatarsViewPager.removeUploadingImage(this.uploadingImageLocation);
                 this.uploadingImageLocation = null;
@@ -9455,13 +9491,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        GroupCallActivity.AvatarUpdaterDelegate.this.lambda$null$1$GroupCallActivity$AvatarUpdaterDelegate(this.f$1, tLObject, tLRPC$TL_error);
+                        GroupCallActivity.AvatarUpdaterDelegate.this.lambda$didUploadPhoto$1$GroupCallActivity$AvatarUpdaterDelegate(this.f$1, tLObject, tLRPC$TL_error);
                     }
                 });
             } else {
                 GroupCallActivity.this.accountInstance.getMessagesController().changeChatAvatar(-this.peerId, (TLRPC$TL_inputChatPhoto) null, tLRPC$InputFile, tLRPC$InputFile2, d, str, tLRPC$PhotoSize3.location, tLRPC$PhotoSize4.location, new Runnable() {
                     public final void run() {
-                        GroupCallActivity.AvatarUpdaterDelegate.this.lambda$null$2$GroupCallActivity$AvatarUpdaterDelegate();
+                        GroupCallActivity.AvatarUpdaterDelegate.this.lambda$didUploadPhoto$2$GroupCallActivity$AvatarUpdaterDelegate();
                     }
                 });
             }

@@ -272,14 +272,14 @@ public class SearchAdapterHelper {
             }
 
             public final void run() {
-                SearchAdapterHelper.this.lambda$null$0$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+                SearchAdapterHelper.this.lambda$queryServerSearch$0$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$SearchAdapterHelper(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, boolean z, int i2) {
+    /* renamed from: lambda$queryServerSearch$0 */
+    public /* synthetic */ void lambda$queryServerSearch$0$SearchAdapterHelper(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, boolean z, int i2) {
         if (i == this.channelLastReqId) {
             this.channelReqId = 0;
             if (tLRPC$TL_error == null) {
@@ -338,14 +338,14 @@ public class SearchAdapterHelper {
             }
 
             public final void run() {
-                SearchAdapterHelper.this.lambda$null$2$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
+                SearchAdapterHelper.this.lambda$queryServerSearch$2$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$SearchAdapterHelper(int i, int i2, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, boolean z4, String str) {
+    /* renamed from: lambda$queryServerSearch$2 */
+    public /* synthetic */ void lambda$queryServerSearch$2$SearchAdapterHelper(int i, int i2, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, boolean z4, String str) {
         TLRPC$User tLRPC$User;
         TLRPC$Chat tLRPC$Chat;
         ArrayList<TLRPC$Peer> arrayList;
@@ -509,7 +509,7 @@ public class SearchAdapterHelper {
                 hashMap.put(hashtagObject.hashtag, hashtagObject);
             }
             queryFinalized.dispose();
-            Collections.sort(arrayList, $$Lambda$SearchAdapterHelper$733hu53wtvf8mK0zV5cqPQBmD58.INSTANCE);
+            Collections.sort(arrayList, $$Lambda$SearchAdapterHelper$atRj3vW_BV2wtUuARv3hdo2o9dw.INSTANCE);
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, hashMap) {
                 public final /* synthetic */ ArrayList f$1;
                 public final /* synthetic */ HashMap f$2;
@@ -520,7 +520,7 @@ public class SearchAdapterHelper {
                 }
 
                 public final void run() {
-                    SearchAdapterHelper.this.lambda$null$5$SearchAdapterHelper(this.f$1, this.f$2);
+                    SearchAdapterHelper.this.lambda$loadRecentHashtags$5$SearchAdapterHelper(this.f$1, this.f$2);
                 }
             });
         } catch (Exception e) {
@@ -528,7 +528,7 @@ public class SearchAdapterHelper {
         }
     }
 
-    static /* synthetic */ int lambda$null$4(HashtagObject hashtagObject, HashtagObject hashtagObject2) {
+    static /* synthetic */ int lambda$loadRecentHashtags$4(HashtagObject hashtagObject, HashtagObject hashtagObject2) {
         int i = hashtagObject.date;
         int i2 = hashtagObject2.date;
         if (i < i2) {
@@ -768,7 +768,7 @@ public class SearchAdapterHelper {
     }
 
     /* renamed from: setHashtags */
-    public void lambda$null$5(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+    public void lambda$loadRecentHashtags$5(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
         this.hashtags = arrayList;
         this.hashtagsByText = hashMap;
         this.hashtagsLoadedFromDb = true;

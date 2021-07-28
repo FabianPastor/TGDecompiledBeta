@@ -51,7 +51,7 @@ public final /* synthetic */ class $$Lambda$PassportActivity$9GjQRr0FlBpDXah4yw2
             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
             Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0005: INVOKE  
-              (wrap: org.telegram.ui.-$$Lambda$PassportActivity$A7SypaojXPlnnmarAV1ZlfwAybE : 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$PassportActivity$A7SypaojXPlnnmarAV1ZlfwAybE) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$PassportActivity$A7SypaojXPlnnmarAV1ZlfwAybE.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR)
+              (wrap: org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E : 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR)
              org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.-$$Lambda$PassportActivity$9GjQ-Rr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
             	at jadx.core.codegen.InsnGen.inlineMethod(InsnGen.java:924)
@@ -59,7 +59,7 @@ public final /* synthetic */ class $$Lambda$PassportActivity$9GjQRr0FlBpDXah4yw2
             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
             	... 29 more
-            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$PassportActivity$A7SypaojXPlnnmarAV1ZlfwAybE) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$PassportActivity$A7SypaojXPlnnmarAV1ZlfwAybE.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR in method: org.telegram.ui.-$$Lambda$PassportActivity$9GjQ-Rr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR in method: org.telegram.ui.-$$Lambda$PassportActivity$9GjQ-Rr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -68,7 +68,7 @@ public final /* synthetic */ class $$Lambda$PassportActivity$9GjQRr0FlBpDXah4yw2
             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
             	... 33 more
-            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$A7SypaojXPlnnmarAV1ZlfwAybE, state: NOT_LOADED
+            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E, state: NOT_LOADED
             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -77,7 +77,7 @@ public final /* synthetic */ class $$Lambda$PassportActivity$9GjQRr0FlBpDXah4yw2
             */
         /*
             this = this;
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.ui.$$Lambda$PassportActivity$A7SypaojXPlnnmarAV1ZlfwAybE(r1))
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.ui.$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_mE(r1))
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.$$Lambda$PassportActivity$9GjQRr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");

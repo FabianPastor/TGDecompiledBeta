@@ -3414,7 +3414,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (!this.cameraOpened) {
             return false;
         }
-        if (i != 24 && i != 25) {
+        if (i != 24 && i != 25 && i != 79 && i != 85) {
             return false;
         }
         this.shutterButton.getDelegate().shutterReleased();

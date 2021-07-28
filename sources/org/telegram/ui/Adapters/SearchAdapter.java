@@ -171,14 +171,14 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
             }
 
             public final void run() {
-                SearchAdapter.this.lambda$null$0$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4);
+                SearchAdapter.this.lambda$processSearch$0$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$SearchAdapter(String str, int i, ArrayList arrayList, int i2) {
+    /* renamed from: lambda$processSearch$0 */
+    public /* synthetic */ void lambda$processSearch$0$SearchAdapter(String str, int i, ArrayList arrayList, int i2) {
         int i3;
         String str2;
         SparseArray<TLRPC$User> sparseArray;

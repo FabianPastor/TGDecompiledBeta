@@ -1117,7 +1117,9 @@ public class PasscodeView extends FrameLayout {
 
     private void checkFingerprintButton() {
         Activity activity = (Activity) getContext();
-        if (Build.VERSION.SDK_INT >= 23 && activity != null && SharedConfig.useFingerprint) {
+        if (Build.VERSION.SDK_INT < 23 || activity == null || !SharedConfig.useFingerprint) {
+            this.fingerprintView.setVisibility(8);
+        } else {
             try {
                 AlertDialog alertDialog = this.fingerprintDialog;
                 if (alertDialog != null && alertDialog.isShowing()) {
@@ -1128,15 +1130,21 @@ public class PasscodeView extends FrameLayout {
             }
             try {
                 FingerprintManagerCompat from = FingerprintManagerCompat.from(ApplicationLoader.applicationContext);
-                if (from.isHardwareDetected() && from.hasEnrolledFingerprints()) {
+                if (!from.isHardwareDetected() || !from.hasEnrolledFingerprints()) {
+                    this.fingerprintView.setVisibility(8);
+                } else {
                     this.fingerprintView.setVisibility(0);
                 }
             } catch (Throwable th) {
                 FileLog.e(th);
+                this.fingerprintView.setVisibility(8);
             }
         }
         if (SharedConfig.passcodeType == 1) {
             this.fingerprintImage.setVisibility(this.fingerprintView.getVisibility());
+        }
+        if (this.numberFrameLayouts.size() >= 11) {
+            this.numberFrameLayouts.get(11).setVisibility(this.fingerprintView.getVisibility());
         }
     }
 
@@ -1482,8 +1490,8 @@ public class PasscodeView extends FrameLayout {
         AndroidUtilities.shakeView(this.fingerprintStatusTextView, 2.0f, 0);
     }
 
-    /* JADX WARNING: type inference failed for: r6v5, types: [android.view.ViewGroup$LayoutParams] */
-    /* JADX WARNING: type inference failed for: r6v12, types: [android.view.ViewGroup$LayoutParams] */
+    /* JADX WARNING: type inference failed for: r5v7, types: [android.view.ViewGroup$LayoutParams] */
+    /* JADX WARNING: type inference failed for: r5v14, types: [android.view.ViewGroup$LayoutParams] */
     /* access modifiers changed from: protected */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -1494,302 +1502,308 @@ public class PasscodeView extends FrameLayout {
             android.graphics.Point r1 = org.telegram.messenger.AndroidUtilities.displaySize
             int r1 = r1.y
             int r2 = android.os.Build.VERSION.SDK_INT
-            r3 = 0
-            r4 = 21
-            if (r2 < r4) goto L_0x0011
-            r2 = 0
+            r3 = 21
+            r4 = 0
+            if (r2 < r3) goto L_0x0011
+            r5 = 0
             goto L_0x0013
         L_0x0011:
-            int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            int r5 = org.telegram.messenger.AndroidUtilities.statusBarHeight
         L_0x0013:
-            int r1 = r1 - r2
-            boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            r4 = 1105723392(0x41e80000, float:29.0)
-            r5 = 1109393408(0x42200000, float:40.0)
-            r6 = 2
-            if (r2 != 0) goto L_0x008f
-            android.content.Context r2 = r13.getContext()
-            android.content.res.Resources r2 = r2.getResources()
-            android.content.res.Configuration r2 = r2.getConfiguration()
-            int r2 = r2.orientation
-            if (r2 != r6) goto L_0x008f
-            org.telegram.ui.Components.RLottieImageView r2 = r13.imageView
-            int r7 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r7 != 0) goto L_0x0038
-            int r7 = r0 / 2
+            int r1 = r1 - r5
+            boolean r5 = org.telegram.messenger.AndroidUtilities.isTablet()
+            r6 = 1105723392(0x41e80000, float:29.0)
+            r7 = 1109393408(0x42200000, float:40.0)
+            r8 = 2
+            if (r5 != 0) goto L_0x0096
+            android.content.Context r5 = r13.getContext()
+            android.content.res.Resources r5 = r5.getResources()
+            android.content.res.Configuration r5 = r5.getConfiguration()
+            int r5 = r5.orientation
+            if (r5 != r8) goto L_0x0096
+            org.telegram.ui.Components.RLottieImageView r5 = r13.imageView
+            int r9 = org.telegram.messenger.SharedConfig.passcodeType
+            if (r9 != 0) goto L_0x0038
+            int r9 = r0 / 2
             goto L_0x0039
         L_0x0038:
-            r7 = r0
+            r9 = r0
         L_0x0039:
-            int r7 = r7 / r6
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r7 = r7 - r4
-            float r4 = (float) r7
-            r2.setTranslationX(r4)
-            android.widget.FrameLayout r2 = r13.passwordFrameLayout
-            android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-            int r4 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r4 != 0) goto L_0x0052
-            int r4 = r0 / 2
+            int r9 = r9 / r8
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r9 = r9 - r6
+            float r6 = (float) r9
+            r5.setTranslationX(r6)
+            android.widget.FrameLayout r5 = r13.passwordFrameLayout
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            int r6 = org.telegram.messenger.SharedConfig.passcodeType
+            if (r6 != 0) goto L_0x0052
+            int r6 = r0 / 2
             goto L_0x0053
         L_0x0052:
-            r4 = r0
+            r6 = r0
         L_0x0053:
-            r2.width = r4
-            r4 = 1124859904(0x430CLASSNAME, float:140.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r2.height = r7
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r4 = r1 - r4
-            int r4 = r4 / r6
-            int r7 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r7 != 0) goto L_0x006d
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            r5.width = r6
+            r6 = 1124859904(0x430CLASSNAME, float:140.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r5.height = r9
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r6 = r1 - r6
+            int r6 = r6 / r8
+            int r9 = org.telegram.messenger.SharedConfig.passcodeType
+            if (r9 != 0) goto L_0x006d
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
             goto L_0x006e
         L_0x006d:
-            r7 = 0
+            r9 = 0
         L_0x006e:
-            int r4 = r4 + r7
-            r2.topMargin = r4
-            android.widget.FrameLayout r4 = r13.passwordFrameLayout
-            r4.setLayoutParams(r2)
-            android.widget.FrameLayout r2 = r13.numbersFrameLayout
-            android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-            r2.height = r1
-            int r0 = r0 / r6
-            r2.leftMargin = r0
+            int r6 = r6 + r9
+            r5.topMargin = r6
+            android.widget.FrameLayout r6 = r13.passwordFrameLayout
+            r6.setLayoutParams(r5)
+            android.widget.FrameLayout r5 = r13.numbersFrameLayout
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            r5.height = r1
+            int r0 = r0 / r8
+            r5.leftMargin = r0
             int r1 = r1 - r1
-            r2.topMargin = r1
-            r2.width = r0
+            if (r2 < r3) goto L_0x0089
+            int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            goto L_0x008a
+        L_0x0089:
+            r2 = 0
+        L_0x008a:
+            int r1 = r1 + r2
+            r5.topMargin = r1
+            r5.width = r0
             android.widget.FrameLayout r0 = r13.numbersFrameLayout
-            r0.setLayoutParams(r2)
-            goto L_0x013b
-        L_0x008f:
+            r0.setLayoutParams(r5)
+            goto L_0x0141
+        L_0x0096:
             org.telegram.ui.Components.RLottieImageView r2 = r13.imageView
-            int r7 = r0 / 2
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r7 = r7 - r4
-            float r4 = (float) r7
-            r2.setTranslationX(r4)
+            int r3 = r0 / 2
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r3 = r3 - r5
+            float r3 = (float) r3
+            r2.setTranslationX(r3)
             boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r2 == 0) goto L_0x00d3
+            if (r2 == 0) goto L_0x00da
             r2 = 1140391936(0x43var_, float:498.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            if (r0 <= r4) goto L_0x00b8
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r0 = r0 - r4
-            int r0 = r0 / r6
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            if (r0 <= r3) goto L_0x00bf
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r0 = r0 - r3
+            int r0 = r0 / r8
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r12 = r2
             r2 = r0
             r0 = r12
-            goto L_0x00b9
-        L_0x00b8:
+            goto L_0x00c0
+        L_0x00bf:
             r2 = 0
-        L_0x00b9:
-            r4 = 1141112832(0x44040000, float:528.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            if (r1 <= r7) goto L_0x00d0
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r1 = r1 - r7
-            int r1 = r1 / r6
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+        L_0x00c0:
+            r3 = 1141112832(0x44040000, float:528.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            if (r1 <= r5) goto L_0x00d7
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r1 = r1 - r5
+            int r1 = r1 / r8
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r12 = r2
             r2 = r1
-            r1 = r4
-            r4 = r12
-            goto L_0x00d5
-        L_0x00d0:
-            r4 = r2
+            r1 = r3
+            r3 = r12
+            goto L_0x00dc
+        L_0x00d7:
+            r3 = r2
             r2 = 0
-            goto L_0x00d5
-        L_0x00d3:
+            goto L_0x00dc
+        L_0x00da:
             r2 = 0
-            r4 = 0
-        L_0x00d5:
-            android.widget.FrameLayout r7 = r13.passwordFrameLayout
-            android.view.ViewGroup$LayoutParams r7 = r7.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r7 = (android.widget.FrameLayout.LayoutParams) r7
-            int r8 = r1 / 3
+            r3 = 0
+        L_0x00dc:
+            android.widget.FrameLayout r5 = r13.passwordFrameLayout
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            int r6 = r1 / 3
             int r9 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r9 != 0) goto L_0x00e8
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            goto L_0x00e9
-        L_0x00e8:
+            if (r9 != 0) goto L_0x00ef
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            goto L_0x00f0
+        L_0x00ef:
             r9 = 0
-        L_0x00e9:
-            int r9 = r9 + r8
-            r7.height = r9
-            r7.width = r0
-            r7.topMargin = r2
-            r7.leftMargin = r4
+        L_0x00f0:
+            int r9 = r9 + r6
+            r5.height = r9
+            r5.width = r0
+            r5.topMargin = r2
+            r5.leftMargin = r3
             android.widget.FrameLayout r9 = r13.passwordFrameLayout
             java.lang.Integer r10 = java.lang.Integer.valueOf(r2)
             r9.setTag(r10)
             android.widget.FrameLayout r9 = r13.passwordFrameLayout
-            r9.setLayoutParams(r7)
-            android.widget.FrameLayout r7 = r13.numbersFrameLayout
-            android.view.ViewGroup$LayoutParams r7 = r7.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r7 = (android.widget.FrameLayout.LayoutParams) r7
-            int r8 = r8 * 2
-            r6 = 1101004800(0x41a00000, float:20.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r8 = r8 + r6
-            r7.height = r8
-            r7.leftMargin = r4
-            boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 == 0) goto L_0x0122
-            int r4 = r7.height
-            int r1 = r1 - r4
+            r9.setLayoutParams(r5)
+            android.widget.FrameLayout r5 = r13.numbersFrameLayout
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            int r6 = r6 * 2
+            r5.height = r6
+            r5.leftMargin = r3
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r3 == 0) goto L_0x0129
+            int r3 = r5.height
+            int r1 = r1 - r3
             int r1 = r1 + r2
-            r7.topMargin = r1
-            goto L_0x0133
-        L_0x0122:
-            int r4 = r7.height
-            int r1 = r1 - r4
+            r2 = 1101004800(0x41a00000, float:20.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r1 = r1 + r2
+            r5.topMargin = r1
+            goto L_0x013a
+        L_0x0129:
+            int r3 = r5.height
+            int r1 = r1 - r3
             int r1 = r1 + r2
             int r2 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r2 != 0) goto L_0x012f
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            goto L_0x0130
-        L_0x012f:
+            if (r2 != 0) goto L_0x0136
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            goto L_0x0137
+        L_0x0136:
             r2 = 0
-        L_0x0130:
+        L_0x0137:
             int r1 = r1 + r2
-            r7.topMargin = r1
-        L_0x0133:
-            r7.width = r0
+            r5.topMargin = r1
+        L_0x013a:
+            r5.width = r0
             android.widget.FrameLayout r0 = r13.numbersFrameLayout
-            r0.setLayoutParams(r7)
-            r2 = r7
-        L_0x013b:
-            int r0 = r2.width
+            r0.setLayoutParams(r5)
+        L_0x0141:
+            int r0 = r5.width
             r1 = 1112014848(0x42480000, float:50.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r4 = r4 * 3
-            int r0 = r0 - r4
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r2 = r2 * 3
+            int r0 = r0 - r2
             int r0 = r0 / 4
-            int r2 = r2.height
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r4 = r4 * 4
-            int r2 = r2 - r4
+            int r2 = r5.height
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r3 = r3 * 4
+            int r2 = r2 - r3
             int r2 = r2 / 5
-        L_0x0153:
-            r4 = 12
-            if (r3 >= r4) goto L_0x023c
-            r4 = 11
-            r6 = 10
-            if (r3 != 0) goto L_0x0160
-            r4 = 10
-            goto L_0x016a
-        L_0x0160:
-            if (r3 != r6) goto L_0x0163
-            goto L_0x016a
-        L_0x0163:
-            if (r3 != r4) goto L_0x0168
-            r4 = 9
-            goto L_0x016a
-        L_0x0168:
-            int r4 = r3 + -1
-        L_0x016a:
-            int r7 = r4 / 3
-            int r4 = r4 % 3
-            if (r3 >= r6) goto L_0x01b4
-            java.util.ArrayList<android.widget.TextView> r6 = r13.numberTextViews
-            java.lang.Object r6 = r6.get(r3)
-            android.widget.TextView r6 = (android.widget.TextView) r6
+        L_0x0159:
+            r3 = 12
+            if (r4 >= r3) goto L_0x0242
+            r3 = 11
+            r5 = 10
+            if (r4 != 0) goto L_0x0166
+            r3 = 10
+            goto L_0x0170
+        L_0x0166:
+            if (r4 != r5) goto L_0x0169
+            goto L_0x0170
+        L_0x0169:
+            if (r4 != r3) goto L_0x016e
+            r3 = 9
+            goto L_0x0170
+        L_0x016e:
+            int r3 = r4 + -1
+        L_0x0170:
+            int r6 = r3 / 3
+            int r3 = r3 % 3
+            if (r4 >= r5) goto L_0x01ba
+            java.util.ArrayList<android.widget.TextView> r5 = r13.numberTextViews
+            java.lang.Object r5 = r5.get(r4)
+            android.widget.TextView r5 = (android.widget.TextView) r5
             java.util.ArrayList<android.widget.TextView> r8 = r13.lettersTextViews
-            java.lang.Object r8 = r8.get(r3)
+            java.lang.Object r8 = r8.get(r4)
             android.widget.TextView r8 = (android.widget.TextView) r8
-            android.view.ViewGroup$LayoutParams r9 = r6.getLayoutParams()
+            android.view.ViewGroup$LayoutParams r9 = r5.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r9 = (android.widget.FrameLayout.LayoutParams) r9
             android.view.ViewGroup$LayoutParams r10 = r8.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r10 = (android.widget.FrameLayout.LayoutParams) r10
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r11 = r11 + r2
-            int r11 = r11 * r7
+            int r11 = r11 * r6
             int r11 = r11 + r2
             r9.topMargin = r11
             r10.topMargin = r11
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r7 = r7 + r0
-            int r7 = r7 * r4
-            int r7 = r7 + r0
-            r9.leftMargin = r7
-            r10.leftMargin = r7
-            int r4 = r10.topMargin
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r4 = r4 + r7
-            r10.topMargin = r4
-            r6.setLayoutParams(r9)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r6 = r6 + r0
+            int r6 = r6 * r3
+            int r6 = r6 + r0
+            r9.leftMargin = r6
+            r10.leftMargin = r6
+            int r3 = r10.topMargin
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r3 = r3 + r6
+            r10.topMargin = r3
+            r5.setLayoutParams(r9)
             r8.setLayoutParams(r10)
-            goto L_0x0213
-        L_0x01b4:
+            goto L_0x0219
+        L_0x01ba:
             r8 = 1090519040(0x41000000, float:8.0)
-            if (r3 != r6) goto L_0x01e6
-            android.widget.ImageView r6 = r13.eraseView
-            android.view.ViewGroup$LayoutParams r6 = r6.getLayoutParams()
-            r9 = r6
+            if (r4 != r5) goto L_0x01ec
+            android.widget.ImageView r5 = r13.eraseView
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            r9 = r5
             android.widget.FrameLayout$LayoutParams r9 = (android.widget.FrameLayout.LayoutParams) r9
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r5 = r5 + r2
+            int r5 = r5 * r6
+            int r5 = r5 + r2
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r5 = r5 + r6
+            r9.topMargin = r5
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r6 = r6 + r2
-            int r6 = r6 * r7
-            int r6 = r6 + r2
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r6 = r6 + r7
-            r9.topMargin = r6
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r7 = r7 + r0
-            int r7 = r7 * r4
-            int r7 = r7 + r0
-            r9.leftMargin = r7
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r11 = r6 - r4
-            android.widget.ImageView r4 = r13.eraseView
-            r4.setLayoutParams(r9)
-            goto L_0x0213
-        L_0x01e6:
-            android.widget.ImageView r6 = r13.fingerprintView
-            android.view.ViewGroup$LayoutParams r6 = r6.getLayoutParams()
-            r9 = r6
+            int r6 = r6 + r0
+            int r6 = r6 * r3
+            int r6 = r6 + r0
+            r9.leftMargin = r6
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r11 = r5 - r3
+            android.widget.ImageView r3 = r13.eraseView
+            r3.setLayoutParams(r9)
+            goto L_0x0219
+        L_0x01ec:
+            android.widget.ImageView r5 = r13.fingerprintView
+            android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
+            r9 = r5
             android.widget.FrameLayout$LayoutParams r9 = (android.widget.FrameLayout.LayoutParams) r9
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r5 = r5 + r2
+            int r5 = r5 * r6
+            int r5 = r5 + r2
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r5 = r5 + r6
+            r9.topMargin = r5
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r6 = r6 + r2
-            int r6 = r6 * r7
-            int r6 = r6 + r2
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r6 = r6 + r7
-            r9.topMargin = r6
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r7 = r7 + r0
-            int r7 = r7 * r4
-            int r7 = r7 + r0
-            r9.leftMargin = r7
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r11 = r6 - r4
-            android.widget.ImageView r4 = r13.fingerprintView
-            r4.setLayoutParams(r9)
-        L_0x0213:
-            java.util.ArrayList<android.widget.FrameLayout> r4 = r13.numberFrameLayouts
-            java.lang.Object r4 = r4.get(r3)
-            android.widget.FrameLayout r4 = (android.widget.FrameLayout) r4
-            android.view.ViewGroup$LayoutParams r6 = r4.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r6 = (android.widget.FrameLayout.LayoutParams) r6
-            r7 = 1099431936(0x41880000, float:17.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r11 = r11 - r7
-            r6.topMargin = r11
-            int r7 = r9.leftMargin
+            int r6 = r6 + r0
+            int r6 = r6 * r3
+            int r6 = r6 + r0
+            r9.leftMargin = r6
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r11 = r5 - r3
+            android.widget.ImageView r3 = r13.fingerprintView
+            r3.setLayoutParams(r9)
+        L_0x0219:
+            java.util.ArrayList<android.widget.FrameLayout> r3 = r13.numberFrameLayouts
+            java.lang.Object r3 = r3.get(r4)
+            android.widget.FrameLayout r3 = (android.widget.FrameLayout) r3
+            android.view.ViewGroup$LayoutParams r5 = r3.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
+            r6 = 1099431936(0x41880000, float:17.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r11 = r11 - r6
+            r5.topMargin = r11
+            int r6 = r9.leftMargin
             r8 = 1103626240(0x41CLASSNAME, float:25.0)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r7 = r7 - r8
-            r6.leftMargin = r7
-            r4.setLayoutParams(r6)
-            int r3 = r3 + 1
-            goto L_0x0153
-        L_0x023c:
+            int r6 = r6 - r8
+            r5.leftMargin = r6
+            r3.setLayoutParams(r5)
+            int r4 = r4 + 1
+            goto L_0x0159
+        L_0x0242:
             super.onMeasure(r14, r15)
             return
         */

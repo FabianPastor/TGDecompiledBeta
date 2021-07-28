@@ -4168,14 +4168,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run() {
-                ArticleViewer.this.lambda$null$5$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
+                ArticleViewer.this.lambda$openWebpageUrl$5$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$ArticleViewer(int i, TLObject tLObject, String str, TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage) {
+    /* renamed from: lambda$openWebpageUrl$5 */
+    public /* synthetic */ void lambda$openWebpageUrl$5$ArticleViewer(int i, TLObject tLObject, String str, TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage) {
         if (this.openUrlReqId != 0 && i == this.lastReqId) {
             this.openUrlReqId = 0;
             showProgressView(true, false);
@@ -5175,7 +5175,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        ArticleViewer.this.lambda$null$10$ArticleViewer(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                        ArticleViewer.this.lambda$setParentActivity$10$ArticleViewer(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                     }
                 });
             }
@@ -5220,8 +5220,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$ArticleViewer(int i, long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$setParentActivity$10 */
+    public /* synthetic */ void lambda$setParentActivity$10$ArticleViewer(int i, long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, i, j) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ int f$2;
@@ -5234,14 +5234,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run() {
-                ArticleViewer.this.lambda$null$9$ArticleViewer(this.f$1, this.f$2, this.f$3);
+                ArticleViewer.this.lambda$setParentActivity$9$ArticleViewer(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$ArticleViewer(TLObject tLObject, int i, long j) {
+    /* renamed from: lambda$setParentActivity$9 */
+    public /* synthetic */ void lambda$setParentActivity$9$ArticleViewer(TLObject tLObject, int i, long j) {
         if (this.previewsReqId != 0) {
             this.previewsReqId = 0;
             showProgressView(true, false);
@@ -5355,7 +5355,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.fontCells[i2].setTag(Integer.valueOf(i2));
                     this.fontCells[i2].setOnClickListener(new View.OnClickListener() {
                         public final void onClick(View view) {
-                            ArticleViewer.this.lambda$null$18$ArticleViewer(view);
+                            ArticleViewer.this.lambda$setParentActivity$18$ArticleViewer(view);
                         }
                     });
                     linearLayout.addView(this.fontCells[i2], LayoutHelper.createLinear(-1, 50));
@@ -5370,8 +5370,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$18 */
-    public /* synthetic */ void lambda$null$18$ArticleViewer(View view) {
+    /* renamed from: lambda$setParentActivity$18 */
+    public /* synthetic */ void lambda$setParentActivity$18$ArticleViewer(View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         this.selectedFont = intValue;
         int i = 0;
@@ -5618,7 +5618,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run() {
-                ArticleViewer.this.lambda$null$25$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
+                ArticleViewer.this.lambda$processSearch$25$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
@@ -5635,9 +5635,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:12:0x005e  */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x0093 A[SYNTHETIC] */
-    /* renamed from: lambda$null$25 */
+    /* renamed from: lambda$processSearch$25 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$null$25$ArticleViewer(java.util.ArrayList r19, java.util.HashMap r20, java.lang.String r21, int r22) {
+    public /* synthetic */ void lambda$processSearch$25$ArticleViewer(java.util.ArrayList r19, java.util.HashMap r20, java.lang.String r21, int r22) {
         /*
             r18 = this;
             r7 = r18
@@ -5722,18 +5722,18 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r11 = 0
             goto L_0x000f
         L_0x0098:
-            org.telegram.ui.-$$Lambda$ArticleViewer$fJoNw0j89o5XH3A2YViTC_yZsqQ r0 = new org.telegram.ui.-$$Lambda$ArticleViewer$fJoNw0j89o5XH3A2YViTC_yZsqQ
+            org.telegram.ui.-$$Lambda$ArticleViewer$NIy3LK1emPSrg7YATwbNpfR0J_4 r0 = new org.telegram.ui.-$$Lambda$ArticleViewer$NIy3LK1emPSrg7YATwbNpfR0J_4
             r1 = r22
             r0.<init>(r1, r9, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.lambda$null$25$ArticleViewer(java.util.ArrayList, java.util.HashMap, java.lang.String, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.lambda$processSearch$25$ArticleViewer(java.util.ArrayList, java.util.HashMap, java.lang.String, int):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$24 */
-    public /* synthetic */ void lambda$null$24$ArticleViewer(int i, ArrayList arrayList, String str) {
+    /* renamed from: lambda$processSearch$24 */
+    public /* synthetic */ void lambda$processSearch$24$ArticleViewer(int i, ArrayList arrayList, String str) {
         if (i == this.lastSearchIndex) {
             this.searchPanel.setAlpha(1.0f);
             this.searchPanel.setVisibility(0);
@@ -6314,14 +6314,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run() {
-                ArticleViewer.this.lambda$null$28$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                ArticleViewer.this.lambda$open$28$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$28 */
-    public /* synthetic */ void lambda$null$28$ArticleViewer(TLObject tLObject, TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str) {
+    /* renamed from: lambda$open$28 */
+    public /* synthetic */ void lambda$open$28$ArticleViewer(TLObject tLObject, TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str) {
         TLRPC$Page tLRPC$Page;
         int i2;
         RecyclerView.ViewHolder findViewHolderForAdapterPosition;
@@ -6679,14 +6679,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run() {
-                ArticleViewer.this.lambda$null$36$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                ArticleViewer.this.lambda$loadChannel$36$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$36 */
-    public /* synthetic */ void lambda$null$36$ArticleViewer(WebpageAdapter webpageAdapter, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i, BlockChannelCell blockChannelCell) {
+    /* renamed from: lambda$loadChannel$36 */
+    public /* synthetic */ void lambda$loadChannel$36$ArticleViewer(WebpageAdapter webpageAdapter, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i, BlockChannelCell blockChannelCell) {
         this.loadingChannel = false;
         if (this.parentFragment != null && !webpageAdapter.blocks.isEmpty()) {
             if (tLRPC$TL_error == null) {
@@ -6754,7 +6754,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
 
                 public final void run() {
-                    ArticleViewer.this.lambda$null$38$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
+                    ArticleViewer.this.lambda$joinChannel$38$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
             return;
@@ -6799,8 +6799,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$38 */
-    public /* synthetic */ void lambda$null$38$ArticleViewer(BlockChannelCell blockChannelCell, int i, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel) {
+    /* renamed from: lambda$joinChannel$38 */
+    public /* synthetic */ void lambda$joinChannel$38$ArticleViewer(BlockChannelCell blockChannelCell, int i, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel) {
         blockChannelCell.setState(0, false);
         AlertsCreator.processError(i, tLRPC$TL_error, this.parentFragment, tLRPC$TL_channels_joinChannel, Boolean.TRUE);
     }

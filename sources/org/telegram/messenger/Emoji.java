@@ -842,7 +842,7 @@ public class Emoji {
     public static void sortEmoji() {
         recentEmoji.clear();
         for (Map.Entry<String, Integer> key : emojiUseHistory.entrySet()) {
-            recentEmoji.add(key.getKey());
+            recentEmoji.add((String) key.getKey());
         }
         Collections.sort(recentEmoji, $$Lambda$Emoji$fUgiiBcGKG7t1AnnkIzP_HEo4.INSTANCE);
         while (recentEmoji.size() > 48) {

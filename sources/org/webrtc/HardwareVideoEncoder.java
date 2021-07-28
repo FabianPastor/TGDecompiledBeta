@@ -411,6 +411,7 @@ class HardwareVideoEncoder implements VideoEncoder {
     /* access modifiers changed from: protected */
     public void deliverEncodedImage() {
         ByteBuffer byteBuffer;
+        EncodedImage.FrameType frameType;
         VideoCodecMimeType videoCodecMimeType;
         this.outputThreadChecker.checkIsOnValidThread();
         try {
@@ -451,7 +452,11 @@ class HardwareVideoEncoder implements VideoEncoder {
                     byteBuffer.put(byteBuffer2);
                     byteBuffer.rewind();
                 }
-                EncodedImage.FrameType frameType = z ? EncodedImage.FrameType.VideoFrameKey : EncodedImage.FrameType.VideoFrameDelta;
+                if (z) {
+                    frameType = EncodedImage.FrameType.VideoFrameKey;
+                } else {
+                    frameType = EncodedImage.FrameType.VideoFrameDelta;
+                }
                 this.outputBuffersBusyCount.increment();
                 EncodedImage createEncodedImage = this.outputBuilders.poll().setBuffer(byteBuffer, new Runnable(dequeueOutputBuffer) {
                     public final /* synthetic */ int f$1;

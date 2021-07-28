@@ -185,8 +185,20 @@ public class AlertsCreator {
         return true;
     }
 
+    static /* synthetic */ void lambda$createChangeBioAlert$20(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    }
+
+    static /* synthetic */ void lambda$createChangeNameAlert$24(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    }
+
     static /* synthetic */ boolean lambda$createDatePickerDialog$46(View view, MotionEvent motionEvent) {
         return true;
+    }
+
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$92(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    }
+
+    static /* synthetic */ void lambda$createReportAlert$60(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     static /* synthetic */ boolean lambda$createScheduleDatePickerDialog$37(View view, MotionEvent motionEvent) {
@@ -194,18 +206,6 @@ public class AlertsCreator {
     }
 
     static /* synthetic */ void lambda$createThemeCreateDialog$94(DialogInterface dialogInterface, int i) {
-    }
-
-    static /* synthetic */ void lambda$null$20(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-    }
-
-    static /* synthetic */ void lambda$null$24(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-    }
-
-    static /* synthetic */ void lambda$null$60(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-    }
-
-    static /* synthetic */ void lambda$null$92(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     static /* synthetic */ void lambda$sendReport$59(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -752,12 +752,12 @@ public class AlertsCreator {
         }
         accountInstance.getConnectionsManager().sendRequest(tLRPC$TL_contacts_blockFromReplies, new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                AlertsCreator.lambda$null$4(AccountInstance.this, tLObject, tLRPC$TL_error);
+                AlertsCreator.lambda$showBlockReportSpamReplyAlert$4(AccountInstance.this, tLObject, tLRPC$TL_error);
             }
         });
     }
 
-    static /* synthetic */ void lambda$null$4(AccountInstance accountInstance, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$showBlockReportSpamReplyAlert$4(AccountInstance accountInstance, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$Updates) {
             accountInstance.getMessagesController().processUpdates((TLRPC$Updates) tLObject, false);
         }
@@ -1027,7 +1027,6 @@ public class AlertsCreator {
     }
 
     public static void showCustomNotificationsDialog(BaseFragment baseFragment, long j, int i, ArrayList<NotificationsSettingsActivity.NotificationException> arrayList, int i2, MessagesStorage.IntCallback intCallback, MessagesStorage.IntCallback intCallback2) {
-        String str;
         String[] strArr;
         Drawable drawable;
         int[] iArr;
@@ -1045,12 +1044,7 @@ public class AlertsCreator {
             strArr2[1] = LocaleController.formatString("MuteFor", NUM, LocaleController.formatPluralString("Hours", 1));
             strArr2[2] = LocaleController.formatString("MuteFor", NUM, LocaleController.formatPluralString("Days", 2));
             Drawable drawable2 = null;
-            if (j2 != 0 || !(baseFragment2 instanceof NotificationsCustomSettingsActivity)) {
-                str = LocaleController.getString("NotificationsCustomize", NUM);
-            } else {
-                str = null;
-            }
-            strArr2[3] = str;
+            strArr2[3] = (j2 != 0 || !(baseFragment2 instanceof NotificationsCustomSettingsActivity)) ? LocaleController.getString("NotificationsCustomize", NUM) : null;
             int i5 = 4;
             strArr2[4] = LocaleController.getString("NotificationsTurnOff", NUM);
             int[] iArr2 = {NUM, NUM, NUM, NUM, NUM};
@@ -1680,19 +1674,19 @@ public class AlertsCreator {
                 }
 
                 public final void run() {
-                    AlertsCreator.lambda$null$12(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4);
+                    AlertsCreator.lambda$performAskAQuestion$12(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
             return;
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                AlertsCreator.lambda$null$13(AlertDialog.this);
+                AlertsCreator.lambda$performAskAQuestion$13(AlertDialog.this);
             }
         });
     }
 
-    static /* synthetic */ void lambda$null$12(SharedPreferences sharedPreferences, TLRPC$TL_help_support tLRPC$TL_help_support, AlertDialog alertDialog, int i, BaseFragment baseFragment) {
+    static /* synthetic */ void lambda$performAskAQuestion$12(SharedPreferences sharedPreferences, TLRPC$TL_help_support tLRPC$TL_help_support, AlertDialog alertDialog, int i, BaseFragment baseFragment) {
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.putInt("support_id", tLRPC$TL_help_support.user.id);
         SerializedData serializedData = new SerializedData();
@@ -1714,7 +1708,7 @@ public class AlertsCreator {
         baseFragment.presentFragment(new ChatActivity(bundle));
     }
 
-    static /* synthetic */ void lambda$null$13(AlertDialog alertDialog) {
+    static /* synthetic */ void lambda$performAskAQuestion$13(AlertDialog alertDialog) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -2545,7 +2539,7 @@ public class AlertsCreator {
                     }
 
                     public final void run(int i) {
-                        AlertsCreator.lambda$null$17(BaseFragment.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, i);
+                        AlertsCreator.lambda$createClearOrDeleteDialogAlert$17(BaseFragment.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, i);
                     }
                 });
                 return;
@@ -2559,7 +2553,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$null$17(BaseFragment baseFragment, boolean z, boolean z2, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, boolean z3, MessagesStorage.BooleanCallback booleanCallback, boolean[] zArr, int i) {
+    static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$17(BaseFragment baseFragment, boolean z, boolean z2, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, boolean z3, MessagesStorage.BooleanCallback booleanCallback, boolean[] zArr, int i) {
         MessagesStorage.BooleanCallback booleanCallback2 = booleanCallback;
         if (i >= 50) {
             createClearOrDeleteDialogAlert(baseFragment, z, z2, true, tLRPC$Chat, tLRPC$User, false, z3, booleanCallback);
@@ -2796,7 +2790,7 @@ public class AlertsCreator {
             tLRPC$TL_account_updateProfile.about = trim;
             tLRPC$TL_account_updateProfile.flags |= 4;
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 2, Integer.valueOf(i));
-            ConnectionsManager.getInstance(i2).sendRequest(tLRPC$TL_account_updateProfile, $$Lambda$AlertsCreator$EAORdugKZoWjiyFWu0oxP3Ja1YA.INSTANCE, 2);
+            ConnectionsManager.getInstance(i2).sendRequest(tLRPC$TL_account_updateProfile, $$Lambda$AlertsCreator$pWxJAj20y34fahDp1vZ_OeBSlEc.INSTANCE, 2);
         } else {
             int i4 = -i;
             TLRPC$ChatFull chatFull = MessagesController.getInstance(i2).getChatFull(i4);
@@ -2982,7 +2976,7 @@ public class AlertsCreator {
                     UserConfig.getInstance(i2).saveConfig(true);
                     NotificationCenter.getInstance(i2).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                     NotificationCenter.getInstance(i2).postNotificationName(NotificationCenter.updateInterfaces, 1);
-                    ConnectionsManager.getInstance(i2).sendRequest(tLRPC$TL_account_updateProfile, $$Lambda$AlertsCreator$OJKwriy0Ixkre9uNU5n4CwQvYmk.INSTANCE);
+                    ConnectionsManager.getInstance(i2).sendRequest(tLRPC$TL_account_updateProfile, $$Lambda$AlertsCreator$dGsOO18D0U0XA_2qRag6hbbyeJY.INSTANCE);
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 3, Integer.valueOf(i));
                 } else {
                     dialogInterface.dismiss();
@@ -4484,7 +4478,7 @@ public class AlertsCreator {
         L_0x00ce:
             int r0 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$RjsHo4zjnA4W3fY3pyISzr8QRMw r1 = org.telegram.ui.Components.$$Lambda$AlertsCreator$RjsHo4zjnA4W3fY3pyISzr8QRMw.INSTANCE
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$8Jcc3-Rzdbo5fNQAiho0Cfncx08 r1 = org.telegram.ui.Components.$$Lambda$AlertsCreator$8Jcc3Rzdbo5fNQAiho0Cfncx08.INSTANCE
             r0.sendRequest(r3, r1)
             boolean r0 = r7 instanceof org.telegram.ui.ChatActivity
             if (r0 == 0) goto L_0x00ed
@@ -6749,7 +6743,7 @@ public class AlertsCreator {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.createDeleteMessagesAlert(org.telegram.ui.ActionBar.BaseFragment, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$ChatFull, long, org.telegram.messenger.MessageObject, android.util.SparseArray[], org.telegram.messenger.MessageObject$GroupedMessages, boolean, int, java.lang.Runnable):void");
     }
 
-    static /* synthetic */ void lambda$null$85(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$85(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable) {
         int i;
         TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
         int i2 = 0;
@@ -6997,7 +6991,7 @@ public class AlertsCreator {
             r0.user_id = r1
             r0.id = r7
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r22)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$8WZLJ920LVCE0Q38GbXgVCtB_f0 r2 = org.telegram.ui.Components.$$Lambda$AlertsCreator$8WZLJ920LVCE0Q38GbXgVCtB_f0.INSTANCE
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$QdHaKVPAyq20GGAreVkCVXINw8U r2 = org.telegram.ui.Components.$$Lambda$AlertsCreator$QdHaKVPAyq20GGAreVkCVXINw8U.INSTANCE
             r1.sendRequest(r0, r2)
         L_0x0170:
             r0 = 2
@@ -7058,7 +7052,7 @@ public class AlertsCreator {
                 public final void onShow(DialogInterface dialogInterface) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public final void run() {
-                            AlertsCreator.lambda$null$96(EditTextBoldCursor.this);
+                            AlertsCreator.lambda$createThemeCreateDialog$96(EditTextBoldCursor.this);
                         }
                     });
                 }
@@ -7085,7 +7079,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$null$96(EditTextBoldCursor editTextBoldCursor) {
+    static /* synthetic */ void lambda$createThemeCreateDialog$96(EditTextBoldCursor editTextBoldCursor) {
         editTextBoldCursor.requestFocus();
         AndroidUtilities.showKeyboard(editTextBoldCursor);
     }

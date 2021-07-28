@@ -105,6 +105,12 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         void didSelectChats(ArrayList<Integer> arrayList, int i);
     }
 
+    static /* synthetic */ int access$1972(FilterUsersActivity filterUsersActivity, int i) {
+        int i2 = i & filterUsersActivity.filterFlags;
+        filterUsersActivity.filterFlags = i2;
+        return i2;
+    }
+
     static /* synthetic */ int access$508(FilterUsersActivity filterUsersActivity) {
         int i = filterUsersActivity.selectedCount;
         filterUsersActivity.selectedCount = i + 1;
@@ -549,29 +555,21 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                         GroupCreateSpan groupCreateSpan = (GroupCreateSpan) FilterUsersActivity.this.allSpans.get(FilterUsersActivity.this.allSpans.size() - 1);
                         FilterUsersActivity.this.spansContainer.removeSpan(groupCreateSpan);
                         if (groupCreateSpan.getUid() == Integer.MIN_VALUE) {
-                            FilterUsersActivity filterUsersActivity = FilterUsersActivity.this;
-                            int unused = filterUsersActivity.filterFlags = filterUsersActivity.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_CONTACTS ^ -1);
+                            FilterUsersActivity.access$1972(FilterUsersActivity.this, MessagesController.DIALOG_FILTER_FLAG_CONTACTS ^ -1);
                         } else if (groupCreateSpan.getUid() == -NUM) {
-                            FilterUsersActivity filterUsersActivity2 = FilterUsersActivity.this;
-                            int unused2 = filterUsersActivity2.filterFlags = filterUsersActivity2.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS ^ -1);
+                            FilterUsersActivity.access$1972(FilterUsersActivity.this, MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS ^ -1);
                         } else if (groupCreateSpan.getUid() == -NUM) {
-                            FilterUsersActivity filterUsersActivity3 = FilterUsersActivity.this;
-                            int unused3 = filterUsersActivity3.filterFlags = filterUsersActivity3.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_GROUPS ^ -1);
+                            FilterUsersActivity.access$1972(FilterUsersActivity.this, MessagesController.DIALOG_FILTER_FLAG_GROUPS ^ -1);
                         } else if (groupCreateSpan.getUid() == -NUM) {
-                            FilterUsersActivity filterUsersActivity4 = FilterUsersActivity.this;
-                            int unused4 = filterUsersActivity4.filterFlags = filterUsersActivity4.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_CHANNELS ^ -1);
+                            FilterUsersActivity.access$1972(FilterUsersActivity.this, MessagesController.DIALOG_FILTER_FLAG_CHANNELS ^ -1);
                         } else if (groupCreateSpan.getUid() == -NUM) {
-                            FilterUsersActivity filterUsersActivity5 = FilterUsersActivity.this;
-                            int unused5 = filterUsersActivity5.filterFlags = filterUsersActivity5.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_BOTS ^ -1);
+                            FilterUsersActivity.access$1972(FilterUsersActivity.this, MessagesController.DIALOG_FILTER_FLAG_BOTS ^ -1);
                         } else if (groupCreateSpan.getUid() == -NUM) {
-                            FilterUsersActivity filterUsersActivity6 = FilterUsersActivity.this;
-                            int unused6 = filterUsersActivity6.filterFlags = filterUsersActivity6.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED ^ -1);
+                            FilterUsersActivity.access$1972(FilterUsersActivity.this, MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED ^ -1);
                         } else if (groupCreateSpan.getUid() == -NUM) {
-                            FilterUsersActivity filterUsersActivity7 = FilterUsersActivity.this;
-                            int unused7 = filterUsersActivity7.filterFlags = filterUsersActivity7.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ ^ -1);
+                            FilterUsersActivity.access$1972(FilterUsersActivity.this, MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ ^ -1);
                         } else if (groupCreateSpan.getUid() == -NUM) {
-                            FilterUsersActivity filterUsersActivity8 = FilterUsersActivity.this;
-                            int unused8 = filterUsersActivity8.filterFlags = filterUsersActivity8.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED ^ -1);
+                            FilterUsersActivity.access$1972(FilterUsersActivity.this, MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED ^ -1);
                         }
                         FilterUsersActivity.this.updateHint();
                         FilterUsersActivity.this.checkVisibleRows();
@@ -1498,17 +1496,17 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    FilterUsersActivity.GroupCreateAdapter.this.lambda$null$2$FilterUsersActivity$GroupCreateAdapter(this.f$1);
+                    FilterUsersActivity.GroupCreateAdapter.this.lambda$searchDialogs$2$FilterUsersActivity$GroupCreateAdapter(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$FilterUsersActivity$GroupCreateAdapter(String str) {
+        /* renamed from: lambda$searchDialogs$2 */
+        public /* synthetic */ void lambda$searchDialogs$2$FilterUsersActivity$GroupCreateAdapter(String str) {
             this.searchAdapterHelper.queryServerSearch(str, true, true, true, true, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$FilterUsersActivity$GroupCreateAdapter$zZ_ABm2LzTBP5pXmZBLXJPBt0Pw r1 = new Runnable(str) {
+            $$Lambda$FilterUsersActivity$GroupCreateAdapter$OndldZf4zNeunzZGHDDinq5l7S4 r1 = new Runnable(str) {
                 public final /* synthetic */ String f$1;
 
                 {
@@ -1516,7 +1514,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    FilterUsersActivity.GroupCreateAdapter.this.lambda$null$1$FilterUsersActivity$GroupCreateAdapter(this.f$1);
+                    FilterUsersActivity.GroupCreateAdapter.this.lambda$searchDialogs$1$FilterUsersActivity$GroupCreateAdapter(this.f$1);
                 }
             };
             this.searchRunnable = r1;
@@ -1524,8 +1522,8 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$FilterUsersActivity$GroupCreateAdapter(String str) {
+        /* renamed from: lambda$searchDialogs$1 */
+        public /* synthetic */ void lambda$searchDialogs$1$FilterUsersActivity$GroupCreateAdapter(String str) {
             String str2;
             int i;
             String str3;

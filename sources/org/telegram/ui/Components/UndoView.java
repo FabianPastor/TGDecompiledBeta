@@ -2823,14 +2823,14 @@ public class UndoView extends FrameLayout {
         tLRPC$TL_payments_getPaymentReceipt.peer = this.parentFragment.getMessagesController().getInputPeer(tLRPC$Message.peer_id);
         this.parentFragment.getConnectionsManager().sendRequest(tLRPC$TL_payments_getPaymentReceipt, new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                UndoView.this.lambda$null$5$UndoView(tLObject, tLRPC$TL_error);
+                UndoView.this.lambda$showWithAction$5$UndoView(tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$UndoView(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$showWithAction$5 */
+    public /* synthetic */ void lambda$showWithAction$5$UndoView(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
 
@@ -2839,14 +2839,14 @@ public class UndoView extends FrameLayout {
             }
 
             public final void run() {
-                UndoView.this.lambda$null$4$UndoView(this.f$1);
+                UndoView.this.lambda$showWithAction$4$UndoView(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$UndoView(TLObject tLObject) {
+    /* renamed from: lambda$showWithAction$4 */
+    public /* synthetic */ void lambda$showWithAction$4$UndoView(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_payments_paymentReceipt) {
             this.parentFragment.presentFragment(new PaymentFormActivity((TLRPC$TL_payments_paymentReceipt) tLObject));
         }

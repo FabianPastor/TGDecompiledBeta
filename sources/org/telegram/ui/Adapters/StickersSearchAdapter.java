@@ -467,15 +467,15 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
                     }
 
                     public final void run() {
-                        StickersSearchAdapter.AnonymousClass1.this.lambda$null$1$StickersSearchAdapter$1(this.f$1, this.f$2);
+                        StickersSearchAdapter.AnonymousClass1.this.lambda$run$1$StickersSearchAdapter$1(this.f$1, this.f$2);
                     }
                 });
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$StickersSearchAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject) {
+        /* renamed from: lambda$run$1 */
+        public /* synthetic */ void lambda$run$1$StickersSearchAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject) {
             if (tLRPC$TL_messages_searchStickerSets.q.equals(StickersSearchAdapter.this.searchQuery)) {
                 clear();
                 StickersSearchAdapter.this.delegate.onSearchStop();
@@ -503,14 +503,14 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
                 }
 
                 public final void run() {
-                    StickersSearchAdapter.AnonymousClass1.this.lambda$null$3$StickersSearchAdapter$1(this.f$1, this.f$2, this.f$3, this.f$4);
+                    StickersSearchAdapter.AnonymousClass1.this.lambda$run$3$StickersSearchAdapter$1(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$3 */
-        public /* synthetic */ void lambda$null$3$StickersSearchAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
+        /* renamed from: lambda$run$3 */
+        public /* synthetic */ void lambda$run$3$StickersSearchAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
             if (tLRPC$TL_messages_getStickers.emoticon.equals(StickersSearchAdapter.this.searchQuery)) {
                 int unused = StickersSearchAdapter.this.reqId2 = 0;
                 if (tLObject instanceof TLRPC$TL_messages_stickers) {

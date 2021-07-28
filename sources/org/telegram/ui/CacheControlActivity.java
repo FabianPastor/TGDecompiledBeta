@@ -201,7 +201,7 @@ public class CacheControlActivity extends BaseFragment {
                                 }
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public final void run() {
-                                        CacheControlActivity.this.lambda$null$0$CacheControlActivity();
+                                        CacheControlActivity.this.lambda$onFragmentCreate$0$CacheControlActivity();
                                     }
                                 });
                             }
@@ -213,8 +213,8 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$CacheControlActivity() {
+    /* renamed from: lambda$onFragmentCreate$0 */
+    public /* synthetic */ void lambda$onFragmentCreate$0$CacheControlActivity() {
         this.calculating = false;
         updateStorageUsageRow();
     }
@@ -477,7 +477,7 @@ public class CacheControlActivity extends BaseFragment {
             r6.totalDeviceSize = r0
             long r9 = r9 * r7
             r6.totalDeviceFreeSize = r9
-            org.telegram.ui.-$$Lambda$CacheControlActivity$PihvShX3GD1hRhfBIqWIR5RSh38 r7 = new org.telegram.ui.-$$Lambda$CacheControlActivity$PihvShX3GD1hRhfBIqWIR5RSh38
+            org.telegram.ui.-$$Lambda$CacheControlActivity$LvBA0yhErbm1OTNaKy5NmmtgZks r7 = new org.telegram.ui.-$$Lambda$CacheControlActivity$LvBA0yhErbm1OTNaKy5NmmtgZks
             r0 = r7
             r1 = r16
             r3 = r17
@@ -489,8 +489,8 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$CacheControlActivity(boolean z, AlertDialog alertDialog, long j) {
+    /* renamed from: lambda$cleanupFolders$2 */
+    public /* synthetic */ void lambda$cleanupFolders$2$CacheControlActivity(boolean z, AlertDialog alertDialog, long j) {
         if (z) {
             ImageLoader.getInstance().clearMemory();
         }
@@ -626,7 +626,7 @@ public class CacheControlActivity extends BaseFragment {
                             checkBoxCell.setCheckBoxColor(str, "windowBackgroundWhiteGrayIcon", "checkboxCheck");
                             checkBoxCell.setOnClickListener(new View.OnClickListener() {
                                 public final void onClick(View view) {
-                                    CacheControlActivity.this.lambda$null$4$CacheControlActivity(view);
+                                    CacheControlActivity.this.lambda$createView$4$CacheControlActivity(view);
                                 }
                             });
                         } else {
@@ -644,7 +644,7 @@ public class CacheControlActivity extends BaseFragment {
                     this.actionTextView = bottomSheetCell.getTextView();
                     bottomSheetCell.getTextView().setOnClickListener(new View.OnClickListener() {
                         public final void onClick(View view) {
-                            CacheControlActivity.this.lambda$null$5$CacheControlActivity(view);
+                            CacheControlActivity.this.lambda$createView$5$CacheControlActivity(view);
                         }
                     });
                     linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50));
@@ -659,8 +659,8 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$CacheControlActivity(View view) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$CacheControlActivity(View view) {
         int i = 0;
         int i2 = 0;
         while (true) {
@@ -685,8 +685,8 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$CacheControlActivity(View view) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$CacheControlActivity(View view) {
         try {
             Dialog dialog = this.visibleDialog;
             if (dialog != null) {
@@ -732,7 +732,7 @@ public class CacheControlActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    CacheControlActivity.this.lambda$null$8$CacheControlActivity(this.f$1);
+                    CacheControlActivity.this.lambda$clearDatabase$8$CacheControlActivity(this.f$1);
                 }
             });
         }
@@ -748,9 +748,9 @@ public class CacheControlActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:43:0x01dd A[Catch:{ Exception -> 0x0238, all -> 0x0234 }] */
     /* JADX WARNING: Removed duplicated region for block: B:44:0x01e7 A[Catch:{ Exception -> 0x0238, all -> 0x0234 }] */
     /* JADX WARNING: Removed duplicated region for block: B:50:0x0234 A[ExcHandler: all (th java.lang.Throwable), Splitter:B:39:0x0112] */
-    /* renamed from: lambda$null$8 */
+    /* renamed from: lambda$clearDatabase$8 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$null$8$CacheControlActivity(org.telegram.ui.ActionBar.AlertDialog r19) {
+    public /* synthetic */ void lambda$clearDatabase$8$CacheControlActivity(org.telegram.ui.ActionBar.AlertDialog r19) {
         /*
             r18 = this;
             r1 = r18
@@ -980,7 +980,7 @@ public class CacheControlActivity extends BaseFragment {
             org.telegram.SQLite.SQLitePreparedStatement r0 = r4.executeFast(r0)     // Catch:{ Exception -> 0x0238, all -> 0x0234 }
             org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0238, all -> 0x0234 }
             r0.dispose()     // Catch:{ Exception -> 0x0238, all -> 0x0234 }
-            org.telegram.ui.-$$Lambda$CacheControlActivity$mlNUfuWbRTrIcFdtv0usqOMuRfs r0 = new org.telegram.ui.-$$Lambda$CacheControlActivity$mlNUfuWbRTrIcFdtv0usqOMuRfs
+            org.telegram.ui.-$$Lambda$CacheControlActivity$p4gAVl6WVCRn7qN96vmaOZkRkVA r0 = new org.telegram.ui.-$$Lambda$CacheControlActivity$p4gAVl6WVCRn7qN96vmaOZkRkVA
             r2 = r19
             r0.<init>(r2)
             goto L_0x0247
@@ -999,13 +999,13 @@ public class CacheControlActivity extends BaseFragment {
             r0 = move-exception
         L_0x023f:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x023c }
-            org.telegram.ui.-$$Lambda$CacheControlActivity$mlNUfuWbRTrIcFdtv0usqOMuRfs r0 = new org.telegram.ui.-$$Lambda$CacheControlActivity$mlNUfuWbRTrIcFdtv0usqOMuRfs
+            org.telegram.ui.-$$Lambda$CacheControlActivity$p4gAVl6WVCRn7qN96vmaOZkRkVA r0 = new org.telegram.ui.-$$Lambda$CacheControlActivity$p4gAVl6WVCRn7qN96vmaOZkRkVA
             r0.<init>(r2)
         L_0x0247:
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
         L_0x024b:
-            org.telegram.ui.-$$Lambda$CacheControlActivity$mlNUfuWbRTrIcFdtv0usqOMuRfs r3 = new org.telegram.ui.-$$Lambda$CacheControlActivity$mlNUfuWbRTrIcFdtv0usqOMuRfs
+            org.telegram.ui.-$$Lambda$CacheControlActivity$p4gAVl6WVCRn7qN96vmaOZkRkVA r3 = new org.telegram.ui.-$$Lambda$CacheControlActivity$p4gAVl6WVCRn7qN96vmaOZkRkVA
             r3.<init>(r2)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)
             goto L_0x0255
@@ -1014,12 +1014,12 @@ public class CacheControlActivity extends BaseFragment {
         L_0x0255:
             goto L_0x0254
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CacheControlActivity.lambda$null$8$CacheControlActivity(org.telegram.ui.ActionBar.AlertDialog):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CacheControlActivity.lambda$clearDatabase$8$CacheControlActivity(org.telegram.ui.ActionBar.AlertDialog):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$CacheControlActivity(AlertDialog alertDialog) {
+    /* renamed from: lambda$clearDatabase$7 */
+    public /* synthetic */ void lambda$clearDatabase$7$CacheControlActivity(AlertDialog alertDialog) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {

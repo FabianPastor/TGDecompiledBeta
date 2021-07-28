@@ -545,7 +545,7 @@ public class Browser {
     /* JADX WARNING: Removed duplicated region for block: B:13:0x0036  */
     /* JADX WARNING: Removed duplicated region for block: B:15:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$null$0(org.telegram.ui.ActionBar.AlertDialog[] r3, org.telegram.tgnet.TLObject r4, int r5, android.net.Uri r6, android.content.Context r7, boolean r8) {
+    static /* synthetic */ void lambda$openUrl$0(org.telegram.ui.ActionBar.AlertDialog[] r3, org.telegram.tgnet.TLObject r4, int r5, android.net.Uri r6, android.content.Context r7, boolean r8) {
         /*
             r0 = 0
             r1 = r3[r0]     // Catch:{ all -> 0x0007 }
@@ -582,7 +582,7 @@ public class Browser {
         L_0x0039:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.browser.Browser.lambda$null$0(org.telegram.ui.ActionBar.AlertDialog[], org.telegram.tgnet.TLObject, int, android.net.Uri, android.content.Context, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.browser.Browser.lambda$openUrl$0(org.telegram.ui.ActionBar.AlertDialog[], org.telegram.tgnet.TLObject, int, android.net.Uri, android.content.Context, boolean):void");
     }
 
     static /* synthetic */ void lambda$openUrl$3(AlertDialog[] alertDialogArr, int i) {

@@ -264,6 +264,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         return false;
     }
 
+    static /* synthetic */ float access$3316(LocationActivity locationActivity, float f) {
+        float f2 = locationActivity.yOffset + f;
+        locationActivity.yOffset = f2;
+        return f2;
+    }
+
     private static class SearchButton extends TextView {
         private float additionanTranslationY;
         private float currentTranslationY;
@@ -408,14 +414,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void didSelectDate(boolean z, int i) {
-                    LocationActivity.MapOverlayView.this.lambda$null$0$LocationActivity$MapOverlayView(this.f$1, z, i);
+                    LocationActivity.MapOverlayView.this.lambda$addInfoView$0$LocationActivity$MapOverlayView(this.f$1, z, i);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$LocationActivity$MapOverlayView(VenueLocation venueLocation, boolean z, int i) {
+        /* renamed from: lambda$addInfoView$0 */
+        public /* synthetic */ void lambda$addInfoView$0$LocationActivity$MapOverlayView(VenueLocation venueLocation, boolean z, int i) {
             LocationActivity.this.delegate.didSelectLocation(venueLocation.venue, LocationActivity.this.locationType, z, i);
             LocationActivity.this.finishFragment();
         }
@@ -976,8 +982,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 LocationActivity.this.updateClipView(false);
                 if (LocationActivity.this.forceUpdate != null) {
-                    LocationActivity locationActivity = LocationActivity.this;
-                    float unused = locationActivity.yOffset = locationActivity.yOffset + ((float) i2);
+                    LocationActivity.access$3316(LocationActivity.this, (float) i2);
                 }
             }
         });
@@ -1285,7 +1290,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.canUndo = true;
             getUndoView().showWithAction(0, 25, 0, (Object) null, new Runnable() {
                 public final void run() {
-                    LocationActivity.this.lambda$null$4$LocationActivity();
+                    LocationActivity.this.lambda$createView$4$LocationActivity();
                 }
             }, new Runnable(sharingLocationInfo) {
                 public final /* synthetic */ LocationController.SharingLocationInfo f$1;
@@ -1295,22 +1300,22 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void run() {
-                    LocationActivity.this.lambda$null$5$LocationActivity(this.f$1);
+                    LocationActivity.this.lambda$createView$5$LocationActivity(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$LocationActivity() {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$LocationActivity() {
         getLocationController().setProximityLocation(this.dialogId, 0, true);
         this.canUndo = false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$LocationActivity(LocationController.SharingLocationInfo sharingLocationInfo) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$LocationActivity(LocationController.SharingLocationInfo sharingLocationInfo) {
         this.proximityButton.setImageResource(NUM);
         createCircle(sharingLocationInfo.proximityMeters);
         this.canUndo = false;
@@ -1354,7 +1359,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        LocationActivity.this.lambda$null$10$LocationActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                        LocationActivity.this.lambda$createView$10$LocationActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                     }
                 })) {
                     public final /* synthetic */ int f$1;
@@ -1364,7 +1369,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void onCancel(DialogInterface dialogInterface) {
-                        LocationActivity.this.lambda$null$11$LocationActivity(this.f$1, dialogInterface);
+                        LocationActivity.this.lambda$createView$11$LocationActivity(this.f$1, dialogInterface);
                     }
                 });
                 showDialog(alertDialogArr[0]);
@@ -1399,7 +1404,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         }
 
                         public final void didSelectDate(boolean z, int i) {
-                            LocationActivity.this.lambda$null$13$LocationActivity(this.f$1, z, i);
+                            LocationActivity.this.lambda$createView$13$LocationActivity(this.f$1, z, i);
                         }
                     });
                 } else if (item instanceof LiveLocation) {
@@ -1436,15 +1441,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void didSelectDate(boolean z, int i) {
-                    LocationActivity.this.lambda$null$12$LocationActivity(this.f$1, z, i);
+                    LocationActivity.this.lambda$createView$12$LocationActivity(this.f$1, z, i);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$LocationActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$10 */
+    public /* synthetic */ void lambda$createView$10$LocationActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, tLRPC$TL_messageMediaVenue) {
             public final /* synthetic */ AlertDialog[] f$1;
             public final /* synthetic */ TLRPC$TL_messageMediaVenue f$2;
@@ -1455,14 +1460,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                LocationActivity.this.lambda$null$9$LocationActivity(this.f$1, this.f$2);
+                LocationActivity.this.lambda$createView$9$LocationActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$LocationActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue) {
+    /* renamed from: lambda$createView$9 */
+    public /* synthetic */ void lambda$createView$9$LocationActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue) {
         try {
             alertDialogArr[0].dismiss();
         } catch (Throwable unused) {
@@ -1473,21 +1478,21 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$LocationActivity(int i, DialogInterface dialogInterface) {
+    /* renamed from: lambda$createView$11 */
+    public /* synthetic */ void lambda$createView$11$LocationActivity(int i, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$LocationActivity(TLRPC$TL_messageMediaGeo tLRPC$TL_messageMediaGeo, boolean z, int i) {
+    /* renamed from: lambda$createView$12 */
+    public /* synthetic */ void lambda$createView$12$LocationActivity(TLRPC$TL_messageMediaGeo tLRPC$TL_messageMediaGeo, boolean z, int i) {
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaGeo, this.locationType, z, i);
         finishFragment();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$13 */
-    public /* synthetic */ void lambda$null$13$LocationActivity(Object obj, boolean z, int i) {
+    /* renamed from: lambda$createView$13 */
+    public /* synthetic */ void lambda$createView$13$LocationActivity(Object obj, boolean z, int i) {
         this.delegate.didSelectLocation((TLRPC$TL_messageMediaVenue) obj, this.locationType, z, i);
         finishFragment();
     }
@@ -1507,21 +1512,21 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                LocationActivity.this.lambda$null$16$LocationActivity(this.f$1);
+                LocationActivity.this.lambda$createView$16$LocationActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$16 */
-    public /* synthetic */ void lambda$null$16$LocationActivity(MapView mapView2) {
+    /* renamed from: lambda$createView$16 */
+    public /* synthetic */ void lambda$createView$16$LocationActivity(MapView mapView2) {
         if (this.mapView != null && getParentActivity() != null) {
             try {
                 mapView2.onCreate((Bundle) null);
                 MapsInitializer.initialize(ApplicationLoader.applicationContext);
                 this.mapView.getMapAsync(new OnMapReadyCallback() {
                     public final void onMapReady(GoogleMap googleMap) {
-                        LocationActivity.this.lambda$null$15$LocationActivity(googleMap);
+                        LocationActivity.this.lambda$createView$15$LocationActivity(googleMap);
                     }
                 });
                 this.mapsInitialized = true;
@@ -1535,8 +1540,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$15 */
-    public /* synthetic */ void lambda$null$15$LocationActivity(GoogleMap googleMap2) {
+    /* renamed from: lambda$createView$15 */
+    public /* synthetic */ void lambda$createView$15$LocationActivity(GoogleMap googleMap2) {
         this.googleMap = googleMap2;
         if (isActiveThemeDark()) {
             this.currentMapStyleDark = true;
@@ -1572,15 +1577,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void didSelectDate(boolean z, int i) {
-                    LocationActivity.this.lambda$null$19$LocationActivity(this.f$1, z, i);
+                    LocationActivity.this.lambda$createView$19$LocationActivity(this.f$1, z, i);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$19 */
-    public /* synthetic */ void lambda$null$19$LocationActivity(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, boolean z, int i) {
+    /* renamed from: lambda$createView$19 */
+    public /* synthetic */ void lambda$createView$19$LocationActivity(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, boolean z, int i) {
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaVenue, this.locationType, z, i);
         finishFragment();
     }
@@ -1851,7 +1856,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    LocationActivity.this.lambda$null$22$LocationActivity(this.f$1, this.f$2, dialogInterface, i);
+                    LocationActivity.this.lambda$openProximityAlert$22$LocationActivity(this.f$1, this.f$2, dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -1866,8 +1871,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$22 */
-    public /* synthetic */ void lambda$null$22$LocationActivity(TLRPC$User tLRPC$User, int i, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$openProximityAlert$22 */
+    public /* synthetic */ void lambda$openProximityAlert$22$LocationActivity(TLRPC$User tLRPC$User, int i, DialogInterface dialogInterface, int i2) {
         lambda$openShareLiveLocation$26(tLRPC$User, 900, i);
     }
 
@@ -2842,15 +2847,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void run() {
-                    LocationActivity.this.lambda$null$35$LocationActivity(this.f$1, this.f$2);
+                    LocationActivity.this.lambda$getRecentLocations$35$LocationActivity(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$35 */
-    public /* synthetic */ void lambda$null$35$LocationActivity(TLObject tLObject, long j) {
+    /* renamed from: lambda$getRecentLocations$35 */
+    public /* synthetic */ void lambda$getRecentLocations$35$LocationActivity(TLObject tLObject, long j) {
         if (this.googleMap != null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             int i = 0;
@@ -2869,9 +2874,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             fetchRecentLocations(tLRPC$messages_Messages.messages);
             getLocationController().markLiveLoactionsAsRead(this.dialogId);
             if (this.markAsReadRunnable == null) {
-                $$Lambda$LocationActivity$2ep522D_VQBQC8cxCTWH11gpBuQ r6 = new Runnable() {
+                $$Lambda$LocationActivity$hgmUjBZxeERtfJtc9Y6LjygZ1Us r6 = new Runnable() {
                     public final void run() {
-                        LocationActivity.this.lambda$null$34$LocationActivity();
+                        LocationActivity.this.lambda$getRecentLocations$34$LocationActivity();
                     }
                 };
                 this.markAsReadRunnable = r6;
@@ -2881,8 +2886,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$34 */
-    public /* synthetic */ void lambda$null$34$LocationActivity() {
+    /* renamed from: lambda$getRecentLocations$34 */
+    public /* synthetic */ void lambda$getRecentLocations$34$LocationActivity() {
         Runnable runnable;
         getLocationController().markLiveLoactionsAsRead(this.dialogId);
         if (!this.isPaused && (runnable = this.markAsReadRunnable) != null) {

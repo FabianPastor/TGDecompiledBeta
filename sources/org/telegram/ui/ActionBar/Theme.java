@@ -1924,7 +1924,7 @@ public class Theme {
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        Theme.PatternsLoader.this.lambda$null$0$Theme$PatternsLoader(this.f$1, tLObject, tLRPC$TL_error);
+                        Theme.PatternsLoader.this.lambda$new$0$Theme$PatternsLoader(this.f$1, tLObject, tLRPC$TL_error);
                     }
                 });
             }
@@ -1941,9 +1941,9 @@ public class Theme {
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v7, resolved type: android.graphics.Bitmap} */
         /* access modifiers changed from: private */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* renamed from: lambda$null$0 */
+        /* renamed from: lambda$new$0 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$0$Theme$PatternsLoader(java.util.ArrayList r17, org.telegram.tgnet.TLObject r18, org.telegram.tgnet.TLRPC$TL_error r19) {
+        public /* synthetic */ void lambda$new$0$Theme$PatternsLoader(java.util.ArrayList r17, org.telegram.tgnet.TLObject r18, org.telegram.tgnet.TLRPC$TL_error r19) {
             /*
                 r16 = this;
                 r0 = r16
@@ -2047,7 +2047,7 @@ public class Theme {
             L_0x00bb:
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.PatternsLoader.lambda$null$0$Theme$PatternsLoader(java.util.ArrayList, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.PatternsLoader.lambda$new$0$Theme$PatternsLoader(java.util.ArrayList, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
         }
 
         private void checkCurrentWallpaper(ArrayList<ThemeAccent> arrayList, boolean z) {
@@ -3672,14 +3672,14 @@ public class Theme {
                 }
 
                 public final void run() {
-                    Theme.ThemeInfo.this.lambda$null$1$Theme$ThemeInfo(this.f$1, this.f$2);
+                    Theme.ThemeInfo.this.lambda$didReceivedNotification$1$Theme$ThemeInfo(this.f$1, this.f$2);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$Theme$ThemeInfo(TLObject tLObject, ThemeInfo themeInfo) {
+        /* renamed from: lambda$didReceivedNotification$1 */
+        public /* synthetic */ void lambda$didReceivedNotification$1$Theme$ThemeInfo(TLObject tLObject, ThemeInfo themeInfo) {
             if (tLObject instanceof TLRPC$TL_wallPaper) {
                 TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) tLObject;
                 this.loadingThemeWallpaperName = FileLoader.getAttachFileName(tLRPC$TL_wallPaper.document);
@@ -11486,7 +11486,7 @@ public class Theme {
                                     }
 
                                     public final void run() {
-                                        Theme.lambda$null$3(TLObject.this, this.f$1, this.f$2, this.f$3);
+                                        Theme.lambda$checkCurrentRemoteTheme$3(TLObject.this, this.f$1, this.f$2, this.f$3);
                                     }
                                 });
                             }
@@ -11501,7 +11501,7 @@ public class Theme {
     /* JADX WARNING: Removed duplicated region for block: B:40:0x009a  */
     /* JADX WARNING: Removed duplicated region for block: B:42:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$null$3(org.telegram.tgnet.TLObject r7, org.telegram.ui.ActionBar.Theme.ThemeAccent r8, org.telegram.ui.ActionBar.Theme.ThemeInfo r9, org.telegram.tgnet.TLRPC$TL_theme r10) {
+    static /* synthetic */ void lambda$checkCurrentRemoteTheme$3(org.telegram.tgnet.TLObject r7, org.telegram.ui.ActionBar.Theme.ThemeAccent r8, org.telegram.ui.ActionBar.Theme.ThemeInfo r9, org.telegram.tgnet.TLRPC$TL_theme r10) {
         /*
             int r0 = loadingCurrentTheme
             r1 = 1
@@ -11603,7 +11603,7 @@ public class Theme {
         L_0x00a7:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$null$3(org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.Theme$ThemeAccent, org.telegram.ui.ActionBar.Theme$ThemeInfo, org.telegram.tgnet.TLRPC$TL_theme):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$checkCurrentRemoteTheme$3(org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.Theme$ThemeAccent, org.telegram.ui.ActionBar.Theme$ThemeInfo, org.telegram.tgnet.TLRPC$TL_theme):void");
     }
 
     public static void loadRemoteThemes(int i, boolean z) {
@@ -11633,7 +11633,7 @@ public class Theme {
                         }
 
                         public final void run() {
-                            Theme.lambda$null$5(this.f$0, this.f$1);
+                            Theme.lambda$loadRemoteThemes$5(this.f$0, this.f$1);
                         }
                     });
                 }
@@ -11643,7 +11643,7 @@ public class Theme {
 
     /* JADX WARNING: Removed duplicated region for block: B:84:0x01db  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$null$5(int r16, org.telegram.tgnet.TLObject r17) {
+    static /* synthetic */ void lambda$loadRemoteThemes$5(int r16, org.telegram.tgnet.TLObject r17) {
         /*
             r0 = r16
             r1 = r17
@@ -11950,7 +11950,7 @@ public class Theme {
         L_0x0244:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$null$5(int, org.telegram.tgnet.TLObject):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$loadRemoteThemes$5(int, org.telegram.tgnet.TLObject):void");
     }
 
     public static String getBaseThemeKey(TLRPC$TL_themeSettings tLRPC$TL_themeSettings) {
@@ -12101,16 +12101,7 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:21:0x004a, code lost:
-        r1 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:22:0x004b, code lost:
-        if (r6 != null) goto L_0x004d;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:24:?, code lost:
-        r6.close();
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:25:0x0050 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:22:0x004e */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.io.File getAssetFile(java.lang.String r6) {
         /*
@@ -12133,31 +12124,28 @@ public class Theme {
             boolean r3 = r0.exists()
             if (r3 == 0) goto L_0x0035
             int r3 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r3 == 0) goto L_0x0055
+            if (r3 == 0) goto L_0x0053
             long r1 = r0.length()
             int r3 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r3 == 0) goto L_0x0055
+            if (r3 == 0) goto L_0x0053
         L_0x0035:
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0051 }
-            android.content.res.AssetManager r1 = r1.getAssets()     // Catch:{ Exception -> 0x0051 }
-            java.io.InputStream r6 = r1.open(r6)     // Catch:{ Exception -> 0x0051 }
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x004f }
+            android.content.res.AssetManager r1 = r1.getAssets()     // Catch:{ Exception -> 0x004f }
+            java.io.InputStream r6 = r1.open(r6)     // Catch:{ Exception -> 0x004f }
             org.telegram.messenger.AndroidUtilities.copyFile((java.io.InputStream) r6, (java.io.File) r0)     // Catch:{ all -> 0x0048 }
-            if (r6 == 0) goto L_0x0055
-            r6.close()     // Catch:{ Exception -> 0x0051 }
-            goto L_0x0055
+            if (r6 == 0) goto L_0x0053
+            r6.close()     // Catch:{ Exception -> 0x004f }
+            goto L_0x0053
         L_0x0048:
             r1 = move-exception
-            throw r1     // Catch:{ all -> 0x004a }
-        L_0x004a:
-            r1 = move-exception
-            if (r6 == 0) goto L_0x0050
-            r6.close()     // Catch:{ all -> 0x0050 }
-        L_0x0050:
-            throw r1     // Catch:{ Exception -> 0x0051 }
-        L_0x0051:
+            if (r6 == 0) goto L_0x004e
+            r6.close()     // Catch:{ all -> 0x004e }
+        L_0x004e:
+            throw r1     // Catch:{ Exception -> 0x004f }
+        L_0x004f:
             r6 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
-        L_0x0055:
+        L_0x0053:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.getAssetFile(java.lang.String):java.io.File");
@@ -13530,7 +13518,7 @@ public class Theme {
         }
     }
 
-    public static void createCommonChatResources(Context context) {
+    public static void createCommonChatResources() {
         synchronized (sync) {
             if (chat_msgTextPaint == null) {
                 chat_msgTextPaint = new TextPaint(1);
@@ -13651,7 +13639,7 @@ public class Theme {
     public static void createChatResources(android.content.Context r17, boolean r18) {
         /*
             r0 = r18
-            createCommonChatResources(r17)
+            createCommonChatResources()
             r1 = 1077936128(0x40400000, float:3.0)
             r2 = 1096810496(0x41600000, float:14.0)
             r3 = 2
@@ -15946,7 +15934,7 @@ public class Theme {
             android.graphics.drawable.Drawable r0 = wallpaper
             calcBackgroundColor(r0, r3)
             android.graphics.drawable.Drawable r0 = wallpaper
-            org.telegram.ui.ActionBar.-$$Lambda$Theme$gKZ6U1sST9s3AI4JMsaDyvXlfZQ r1 = new org.telegram.ui.ActionBar.-$$Lambda$Theme$gKZ6U1sST9s3AI4JMsaDyvXlfZQ
+            org.telegram.ui.ActionBar.-$$Lambda$Theme$LVi9u-0EKqtwI7Hrzt8LJWe9yV4 r1 = new org.telegram.ui.ActionBar.-$$Lambda$Theme$LVi9u-0EKqtwI7Hrzt8LJWe9yV4
             r1.<init>(r0)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
             return
@@ -15954,8 +15942,9 @@ public class Theme {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$loadWallpaper$8(org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo, int, boolean, java.io.File, boolean):void");
     }
 
-    static /* synthetic */ void lambda$null$7(Drawable drawable) {
+    static /* synthetic */ void lambda$loadWallpaper$7(Drawable drawable) {
         wallpaperLoadTask = null;
+        createCommonChatResources();
         applyChatServiceMessageColor((int[]) null, (Drawable) null, drawable);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewWallpapper, new Object[0]);
     }

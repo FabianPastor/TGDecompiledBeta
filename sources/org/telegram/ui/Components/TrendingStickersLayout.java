@@ -1125,14 +1125,14 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 }
 
                 public final void run() {
-                    TrendingStickersLayout.TrendingStickersAdapter.this.lambda$null$2$TrendingStickersLayout$TrendingStickersAdapter(this.f$1, this.f$2);
+                    TrendingStickersLayout.TrendingStickersAdapter.this.lambda$loadMoreStickerSets$2$TrendingStickersLayout$TrendingStickersAdapter(this.f$1, this.f$2);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$TrendingStickersLayout$TrendingStickersAdapter(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+        /* renamed from: lambda$loadMoreStickerSets$2 */
+        public /* synthetic */ void lambda$loadMoreStickerSets$2$TrendingStickersLayout$TrendingStickersAdapter(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
             int i;
             int i2;
             this.loadingMore = false;

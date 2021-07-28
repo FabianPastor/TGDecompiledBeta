@@ -127,7 +127,7 @@ public class ThreadUtils {
             handler.post(new Runnable() {
                 public void run() {
                     try {
-                        r0.value = callable.call();
+                        AnonymousClass1Result.this.value = callable.call();
                     } catch (Exception e) {
                         r1.e = e;
                     }

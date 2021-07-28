@@ -442,7 +442,7 @@ public class ProxySettingsActivity extends BaseFragment {
                     editTextBoldCursorArr[0].setSelection(editTextBoldCursorArr[0].length());
                     setProxyType(this.pasteType, true, new Runnable() {
                         public final void run() {
-                            ProxySettingsActivity.this.lambda$null$2$ProxySettingsActivity();
+                            ProxySettingsActivity.this.lambda$createView$2$ProxySettingsActivity();
                         }
                     });
                     return;
@@ -452,8 +452,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$ProxySettingsActivity() {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$ProxySettingsActivity() {
         AndroidUtilities.hideKeyboard(this.inputFieldsContainer.findFocus());
         for (int i = 0; i < this.pasteFields.length; i++) {
             int i2 = this.pasteType;

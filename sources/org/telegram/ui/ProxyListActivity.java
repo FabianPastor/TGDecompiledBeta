@@ -400,7 +400,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                ProxyListActivity.this.lambda$null$1$ProxyListActivity(this.f$1, this.f$2, dialogInterface, i);
+                ProxyListActivity.this.lambda$createView$1$ProxyListActivity(this.f$1, this.f$2, dialogInterface, i);
             }
         });
         showDialog(builder.create());
@@ -408,8 +408,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$ProxyListActivity(SharedConfig.ProxyInfo proxyInfo, int i, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$ProxyListActivity(SharedConfig.ProxyInfo proxyInfo, int i, DialogInterface dialogInterface, int i2) {
         SharedConfig.deleteProxy(proxyInfo);
         if (SharedConfig.currentProxy == null) {
             this.useProxyForCalls = false;
@@ -507,7 +507,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                             }
 
                             public final void run() {
-                                ProxyListActivity.lambda$null$3(SharedConfig.ProxyInfo.this, this.f$1);
+                                ProxyListActivity.lambda$checkProxyList$3(SharedConfig.ProxyInfo.this, this.f$1);
                             }
                         });
                     }
@@ -516,7 +516,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    static /* synthetic */ void lambda$null$3(SharedConfig.ProxyInfo proxyInfo, long j) {
+    static /* synthetic */ void lambda$checkProxyList$3(SharedConfig.ProxyInfo proxyInfo, long j) {
         proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
         proxyInfo.checking = false;
         if (j == -1) {

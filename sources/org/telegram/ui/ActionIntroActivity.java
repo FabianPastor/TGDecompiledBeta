@@ -634,7 +634,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     builder.setMessage(LocaleController.getString("PhoneNumberAlert", NUM));
                     builder.setPositiveButton(LocaleController.getString("Change", NUM), new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ActionIntroActivity.this.lambda$null$1$ActionIntroActivity(dialogInterface, i);
+                            ActionIntroActivity.this.lambda$createView$1$ActionIntroActivity(dialogInterface, i);
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -667,8 +667,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$ActionIntroActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$ActionIntroActivity(DialogInterface dialogInterface, int i) {
         presentFragment(new ChangePhoneActivity(), true);
     }
 

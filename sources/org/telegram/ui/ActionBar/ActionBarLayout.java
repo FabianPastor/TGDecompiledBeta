@@ -144,6 +144,12 @@ public class ActionBarLayout extends FrameLayout {
         return false;
     }
 
+    static /* synthetic */ float access$1016(ActionBarLayout actionBarLayout, float f) {
+        float f2 = actionBarLayout.animationProgress + f;
+        actionBarLayout.animationProgress = f2;
+        return f2;
+    }
+
     public class LayoutContainer extends FrameLayout {
         private int backgroundColor;
         private Paint backgroundPaint = new Paint();
@@ -682,9 +688,11 @@ public class ActionBarLayout extends FrameLayout {
             return false;
         }
         if (this.fragmentsStack.size() > 1) {
-            if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
+            if (motionEvent != null && motionEvent.getAction() == 0) {
                 ArrayList<BaseFragment> arrayList = this.fragmentsStack;
                 if (!arrayList.get(arrayList.size() - 1).isSwipeBackEnabled(motionEvent)) {
+                    this.maybeStartTracking = false;
+                    this.startedTracking = false;
                     return false;
                 }
                 this.startedTrackingPointerId = motionEvent.getPointerId(0);
@@ -944,10 +952,9 @@ public class ActionBarLayout extends FrameLayout {
                         access$900 = 18;
                     }
                     long unused3 = ActionBarLayout.this.lastFrameTime = nanoTime;
-                    ActionBarLayout actionBarLayout = ActionBarLayout.this;
-                    float unused4 = actionBarLayout.animationProgress = actionBarLayout.animationProgress + (((float) access$900) / 150.0f);
+                    ActionBarLayout.access$1016(ActionBarLayout.this, ((float) access$900) / 150.0f);
                     if (ActionBarLayout.this.animationProgress > 1.0f) {
-                        float unused5 = ActionBarLayout.this.animationProgress = 1.0f;
+                        float unused4 = ActionBarLayout.this.animationProgress = 1.0f;
                     }
                     if (ActionBarLayout.this.newFragment != null) {
                         ActionBarLayout.this.newFragment.onTransitionAnimationProgress(true, ActionBarLayout.this.animationProgress);

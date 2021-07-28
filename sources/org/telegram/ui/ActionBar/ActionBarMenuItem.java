@@ -789,7 +789,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(frameLayout, View.ALPHA, new float[]{frameLayout.getAlpha(), 0.0f})});
                 for (int i2 = 0; i2 < arrayList.size(); i2++) {
                     ((View) arrayList.get(i2)).setAlpha(0.0f);
-                    this.searchContainerAnimator.playTogether(new Animator[]{ObjectAnimator.ofFloat(arrayList.get(i2), View.ALPHA, new float[]{((View) arrayList.get(i2)).getAlpha(), 1.0f})});
+                    this.searchContainerAnimator.playTogether(new Animator[]{ObjectAnimator.ofFloat((View) arrayList.get(i2), View.ALPHA, new float[]{((View) arrayList.get(i2)).getAlpha(), 1.0f})});
                 }
                 this.searchContainerAnimator.setDuration(150);
                 this.searchContainerAnimator.addListener(new AnimatorListenerAdapter() {
@@ -835,7 +835,7 @@ public class ActionBarMenuItem extends FrameLayout {
             FrameLayout frameLayout2 = this.searchContainer;
             animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(frameLayout2, View.ALPHA, new float[]{frameLayout2.getAlpha(), 1.0f})});
             for (int i4 = 0; i4 < arrayList.size(); i4++) {
-                this.searchContainerAnimator.playTogether(new Animator[]{ObjectAnimator.ofFloat(arrayList.get(i4), View.ALPHA, new float[]{((View) arrayList.get(i4)).getAlpha(), 0.0f})});
+                this.searchContainerAnimator.playTogether(new Animator[]{ObjectAnimator.ofFloat((View) arrayList.get(i4), View.ALPHA, new float[]{((View) arrayList.get(i4)).getAlpha(), 0.0f})});
             }
             this.searchContainerAnimator.setDuration(150);
             this.searchContainerAnimator.addListener(new AnimatorListenerAdapter() {

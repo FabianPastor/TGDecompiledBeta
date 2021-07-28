@@ -578,7 +578,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     }
 
                     public final void didSelectUsers(ArrayList arrayList) {
-                        PrivacyControlActivity.this.lambda$null$0$PrivacyControlActivity(this.f$1, arrayList);
+                        PrivacyControlActivity.this.lambda$createView$0$PrivacyControlActivity(this.f$1, arrayList);
                     }
                 });
                 presentFragment(groupCreateActivity);
@@ -597,7 +597,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 }
 
                 public final void didUpdateUserList(ArrayList arrayList, boolean z) {
-                    PrivacyControlActivity.this.lambda$null$1$PrivacyControlActivity(this.f$1, arrayList, z);
+                    PrivacyControlActivity.this.lambda$createView$1$PrivacyControlActivity(this.f$1, arrayList, z);
                 }
             });
             presentFragment(privacyUsersActivity);
@@ -607,8 +607,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$PrivacyControlActivity(int i, ArrayList arrayList) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$PrivacyControlActivity(int i, ArrayList arrayList) {
         int i2 = 0;
         if (i == this.neverShareRow) {
             this.currentMinus = arrayList;
@@ -628,8 +628,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$PrivacyControlActivity(int i, ArrayList arrayList, boolean z) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$PrivacyControlActivity(int i, ArrayList arrayList, boolean z) {
         int i2 = 0;
         if (i == this.neverShareRow) {
             this.currentMinus = arrayList;
@@ -782,14 +782,14 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             }
 
             public final void run() {
-                PrivacyControlActivity.this.lambda$null$3$PrivacyControlActivity(this.f$1, this.f$2);
+                PrivacyControlActivity.this.lambda$applyCurrentPrivacySettings$3$PrivacyControlActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$PrivacyControlActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$applyCurrentPrivacySettings$3 */
+    public /* synthetic */ void lambda$applyCurrentPrivacySettings$3$PrivacyControlActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             ContactsController.getInstance(this.currentAccount).setPrivacyRules(((TLRPC$TL_account_privacyRules) tLObject).rules, 7);
         }
@@ -810,14 +810,14 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             }
 
             public final void run() {
-                PrivacyControlActivity.this.lambda$null$5$PrivacyControlActivity(this.f$1, this.f$2, this.f$3);
+                PrivacyControlActivity.this.lambda$applyCurrentPrivacySettings$5$PrivacyControlActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$PrivacyControlActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$applyCurrentPrivacySettings$5 */
+    public /* synthetic */ void lambda$applyCurrentPrivacySettings$5$PrivacyControlActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (alertDialog != null) {
             try {
                 alertDialog.dismiss();

@@ -203,7 +203,7 @@ public class JoinCallAlert extends BottomSheet {
                         }
 
                         public final void run() {
-                            JoinCallAlert.lambda$null$0(AlertDialog.this, this.f$1, this.f$2, this.f$3, this.f$4);
+                            JoinCallAlert.lambda$checkFewUsers$0(AlertDialog.this, this.f$1, this.f$2, this.f$3, this.f$4);
                         }
                     });
                 }
@@ -231,7 +231,7 @@ public class JoinCallAlert extends BottomSheet {
         }
     }
 
-    static /* synthetic */ void lambda$null$0(AlertDialog alertDialog, TLObject tLObject, int i, AccountInstance accountInstance, MessagesStorage.BooleanCallback booleanCallback) {
+    static /* synthetic */ void lambda$checkFewUsers$0(AlertDialog alertDialog, TLObject tLObject, int i, AccountInstance accountInstance, MessagesStorage.BooleanCallback booleanCallback) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -314,7 +314,7 @@ public class JoinCallAlert extends BottomSheet {
                         }
 
                         public final void run() {
-                            JoinCallAlert.lambda$null$3(AlertDialog.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+                            JoinCallAlert.lambda$open$3(AlertDialog.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
                         }
                     });
                 }
@@ -336,7 +336,7 @@ public class JoinCallAlert extends BottomSheet {
         }
     }
 
-    static /* synthetic */ void lambda$null$3(AlertDialog alertDialog, TLObject tLObject, AccountInstance accountInstance, JoinCallAlertDelegate joinCallAlertDelegate, int i, Context context, BaseFragment baseFragment, int i2, TLRPC$Peer tLRPC$Peer) {
+    static /* synthetic */ void lambda$open$3(AlertDialog alertDialog, TLObject tLObject, AccountInstance accountInstance, JoinCallAlertDelegate joinCallAlertDelegate, int i, Context context, BaseFragment baseFragment, int i2, TLRPC$Peer tLRPC$Peer) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {

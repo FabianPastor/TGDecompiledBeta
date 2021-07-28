@@ -23,7 +23,7 @@ public class ContactsWidgetConfigActivity extends ExternalActionActivity {
             bundle.putBoolean("onlySelect", true);
             bundle.putInt("dialogsType", 10);
             bundle.putBoolean("allowSwitchAccount", true);
-            EditWidgetActivity editWidgetActivity = new EditWidgetActivity(1, this.creatingAppWidgetId, false);
+            EditWidgetActivity editWidgetActivity = new EditWidgetActivity(1, this.creatingAppWidgetId);
             editWidgetActivity.setDelegate(new EditWidgetActivity.EditWidgetActivityDelegate() {
                 public final void didSelectDialogs(ArrayList arrayList) {
                     ContactsWidgetConfigActivity.this.lambda$handleIntent$0$ContactsWidgetConfigActivity(arrayList);

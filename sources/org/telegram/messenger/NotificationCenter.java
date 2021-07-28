@@ -858,7 +858,7 @@ public class NotificationCenter {
                     if (arrayList == null) {
                         arrayList = new ArrayList();
                     }
-                    arrayList.add(next.getKey());
+                    arrayList.add((Integer) next.getKey());
                 } else {
                     j = Math.min(j2, j);
                 }
@@ -964,7 +964,7 @@ public class NotificationCenter {
                     if (arrayList == null) {
                         arrayList = new ArrayList();
                     }
-                    arrayList.add(next.getKey());
+                    arrayList.add((Integer) next.getKey());
                 }
                 int[] iArr = allowedNotifications2.allowedIds;
                 if (iArr == null) {

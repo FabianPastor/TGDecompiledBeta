@@ -280,14 +280,14 @@ class Camera1Session implements CameraSession {
                     }
 
                     public final void run() {
-                        Camera1Session.AnonymousClass2.this.lambda$null$0$Camera1Session$2(this.f$1);
+                        Camera1Session.AnonymousClass2.this.lambda$onPreviewFrame$0$Camera1Session$2(this.f$1);
                     }
                 });
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$null$0 */
-            public /* synthetic */ void lambda$null$0$Camera1Session$2(byte[] bArr) {
+            /* renamed from: lambda$onPreviewFrame$0 */
+            public /* synthetic */ void lambda$onPreviewFrame$0$Camera1Session$2(byte[] bArr) {
                 if (Camera1Session.this.state == SessionState.RUNNING) {
                     Camera1Session.this.camera.addCallbackBuffer(bArr);
                 }

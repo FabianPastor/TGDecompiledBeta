@@ -398,14 +398,14 @@ public class LinkEditActivity extends BaseFragment {
     public /* synthetic */ void lambda$createView$1$LinkEditActivity(Context context, View view) {
         AlertsCreator.createDatePickerDialog(context, -1, new AlertsCreator.ScheduleDatePickerDelegate() {
             public final void didSelectDate(boolean z, int i) {
-                LinkEditActivity.this.lambda$null$0$LinkEditActivity(z, i);
+                LinkEditActivity.this.lambda$createView$0$LinkEditActivity(z, i);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$LinkEditActivity(boolean z, int i) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$LinkEditActivity(boolean z, int i) {
         chooseDate(i);
     }
 
@@ -440,7 +440,7 @@ public class LinkEditActivity extends BaseFragment {
         builder.setTitle(LocaleController.getString("RevokeLink", NUM));
         builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                LinkEditActivity.this.lambda$null$4$LinkEditActivity(dialogInterface, i);
+                LinkEditActivity.this.lambda$createView$4$LinkEditActivity(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -448,8 +448,8 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$LinkEditActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$LinkEditActivity(DialogInterface dialogInterface, int i) {
         this.callback.revokeLink(this.inviteToEdit);
         finishFragment();
     }
@@ -553,7 +553,7 @@ public class LinkEditActivity extends BaseFragment {
             r6.usage_limit = r1
         L_0x00c1:
             org.telegram.tgnet.ConnectionsManager r7 = r5.getConnectionsManager()
-            org.telegram.ui.-$$Lambda$LinkEditActivity$e6mHs6Pk_fvDCFD4Da59Z-BSyXE r0 = new org.telegram.ui.-$$Lambda$LinkEditActivity$e6mHs6Pk_fvDCFD4Da59Z-BSyXE
+            org.telegram.ui.-$$Lambda$LinkEditActivity$LeKBmbU5RzyLob0O1xwaQ8dCkFE r0 = new org.telegram.ui.-$$Lambda$LinkEditActivity$LeKBmbU5RzyLob0O1xwaQ8dCkFE
             r0.<init>()
             r7.sendRequest(r6, r0)
             goto L_0x018e
@@ -646,7 +646,7 @@ public class LinkEditActivity extends BaseFragment {
         L_0x0180:
             if (r4 == 0) goto L_0x018e
             org.telegram.tgnet.ConnectionsManager r7 = r5.getConnectionsManager()
-            org.telegram.ui.-$$Lambda$LinkEditActivity$MT79i4ppBzsL-oe6ewA_DcDzklU r0 = new org.telegram.ui.-$$Lambda$LinkEditActivity$MT79i4ppBzsL-oe6ewA_DcDzklU
+            org.telegram.ui.-$$Lambda$LinkEditActivity$E4DW8ayNvaC2ijk5vHkt_SnenOI r0 = new org.telegram.ui.-$$Lambda$LinkEditActivity$E4DW8ayNvaC2ijk5vHkt_SnenOI
             r0.<init>()
             r7.sendRequest(r6, r0)
         L_0x018e:
@@ -656,8 +656,8 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$LinkEditActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$7 */
+    public /* synthetic */ void lambda$createView$7$LinkEditActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -668,14 +668,14 @@ public class LinkEditActivity extends BaseFragment {
             }
 
             public final void run() {
-                LinkEditActivity.this.lambda$null$6$LinkEditActivity(this.f$1, this.f$2);
+                LinkEditActivity.this.lambda$createView$6$LinkEditActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$LinkEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$createView$6 */
+    public /* synthetic */ void lambda$createView$6$LinkEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         AlertDialog alertDialog = this.progressDialog;
         if (alertDialog != null) {
@@ -693,8 +693,8 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$LinkEditActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$9 */
+    public /* synthetic */ void lambda$createView$9$LinkEditActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -705,14 +705,14 @@ public class LinkEditActivity extends BaseFragment {
             }
 
             public final void run() {
-                LinkEditActivity.this.lambda$null$8$LinkEditActivity(this.f$1, this.f$2);
+                LinkEditActivity.this.lambda$createView$8$LinkEditActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$LinkEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$createView$8 */
+    public /* synthetic */ void lambda$createView$8$LinkEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         AlertDialog alertDialog = this.progressDialog;
         if (alertDialog != null) {

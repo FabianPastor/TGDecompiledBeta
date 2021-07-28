@@ -2160,14 +2160,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 }
 
                 public final void run() {
-                    AudioPlayerAlert.ListAdapter.this.lambda$null$1$AudioPlayerAlert$ListAdapter(this.f$1, this.f$2);
+                    AudioPlayerAlert.ListAdapter.this.lambda$processSearch$1$AudioPlayerAlert$ListAdapter(this.f$1, this.f$2);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$AudioPlayerAlert$ListAdapter(String str, ArrayList arrayList) {
+        /* renamed from: lambda$processSearch$1 */
+        public /* synthetic */ void lambda$processSearch$1$AudioPlayerAlert$ListAdapter(String str, ArrayList arrayList) {
             TLRPC$Document tLRPC$Document;
             boolean z;
             String str2;

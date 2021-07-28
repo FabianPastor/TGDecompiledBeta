@@ -1389,7 +1389,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             attachAlertLayoutArr[5] = chatAttachAlertLocationLayout;
                             chatAttachAlertLocationLayout.setDelegate(new ChatAttachAlertLocationLayout.LocationActivityDelegate() {
                                 public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-                                    ChatAttachAlert.this.lambda$null$4$ChatAttachAlert(tLRPC$MessageMedia, i, z, i2);
+                                    ChatAttachAlert.this.lambda$new$4$ChatAttachAlert(tLRPC$MessageMedia, i, z, i2);
                                 }
                             });
                         }
@@ -1405,7 +1405,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         attachAlertLayoutArr2[1] = chatAttachAlertPollLayout;
                         chatAttachAlertPollLayout.setDelegate(new ChatAttachAlertPollLayout.PollCreateActivityDelegate() {
                             public final void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
-                                ChatAttachAlert.this.lambda$null$5$ChatAttachAlert(tLRPC$TL_messageMediaPoll, hashMap, z, i);
+                                ChatAttachAlert.this.lambda$new$5$ChatAttachAlert(tLRPC$TL_messageMediaPoll, hashMap, z, i);
                             }
                         });
                     }
@@ -1434,14 +1434,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$ChatAttachAlert(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
+    /* renamed from: lambda$new$4 */
+    public /* synthetic */ void lambda$new$4$ChatAttachAlert(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
         ((ChatActivity) this.baseFragment).didSelectLocation(tLRPC$MessageMedia, i, z, i2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$ChatAttachAlert(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
+    /* renamed from: lambda$new$5 */
+    public /* synthetic */ void lambda$new$5$ChatAttachAlert(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
         ((ChatActivity) this.baseFragment).sendPoll(tLRPC$TL_messageMediaPoll, hashMap, z, i);
     }
 
@@ -1462,7 +1462,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     }
 
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        ChatAttachAlert.this.lambda$null$7$ChatAttachAlert(this.f$1, dialogInterface, i);
+                        ChatAttachAlert.this.lambda$new$7$ChatAttachAlert(this.f$1, dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -1474,8 +1474,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$ChatAttachAlert(AttachBotButton attachBotButton, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$7 */
+    public /* synthetic */ void lambda$new$7$ChatAttachAlert(AttachBotButton attachBotButton, DialogInterface dialogInterface, int i) {
         MediaDataController.getInstance(this.currentAccount).removeInline(attachBotButton.currentUser.id);
     }
 
@@ -1496,7 +1496,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             if ((baseFragment2 instanceof ChatActivity) && ((ChatActivity) baseFragment2).isInScheduleMode()) {
                 AlertsCreator.createScheduleDatePickerDialog(getContext(), ((ChatActivity) this.baseFragment).getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
                     public final void didSelectDate(boolean z, int i) {
-                        ChatAttachAlert.this.lambda$null$10$ChatAttachAlert(z, i);
+                        ChatAttachAlert.this.lambda$new$10$ChatAttachAlert(z, i);
                     }
                 });
                 return;
@@ -1512,8 +1512,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$ChatAttachAlert(boolean z, int i) {
+    /* renamed from: lambda$new$10 */
+    public /* synthetic */ void lambda$new$10$ChatAttachAlert(boolean z, int i) {
         AttachAlertLayout attachAlertLayout = this.currentAttachLayout;
         if (attachAlertLayout == this.photoLayout) {
             sendPressed(z, i);
@@ -1554,7 +1554,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             });
             this.sendPopupLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
                 public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                    ChatAttachAlert.this.lambda$null$12$ChatAttachAlert(keyEvent);
+                    ChatAttachAlert.this.lambda$new$12$ChatAttachAlert(keyEvent);
                 }
             });
             this.sendPopupLayout.setShownFromBotton(false);
@@ -1592,7 +1592,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     }
 
                     public final void onClick(View view) {
-                        ChatAttachAlert.this.lambda$null$14$ChatAttachAlert(this.f$1, this.f$2, view);
+                        ChatAttachAlert.this.lambda$new$14$ChatAttachAlert(this.f$1, this.f$2, view);
                     }
                 });
                 i++;
@@ -1619,8 +1619,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$ChatAttachAlert(KeyEvent keyEvent) {
+    /* renamed from: lambda$new$12 */
+    public /* synthetic */ void lambda$new$12$ChatAttachAlert(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -1628,8 +1628,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$14 */
-    public /* synthetic */ void lambda$null$14$ChatAttachAlert(int i, ChatActivity chatActivity, View view) {
+    /* renamed from: lambda$new$14 */
+    public /* synthetic */ void lambda$new$14$ChatAttachAlert(int i, ChatActivity chatActivity, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -1637,7 +1637,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (i == 0) {
             AlertsCreator.createScheduleDatePickerDialog(getContext(), chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
                 public final void didSelectDate(boolean z, int i) {
-                    ChatAttachAlert.this.lambda$null$13$ChatAttachAlert(z, i);
+                    ChatAttachAlert.this.lambda$new$13$ChatAttachAlert(z, i);
                 }
             });
         } else if (i == 1) {
@@ -1652,8 +1652,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$13 */
-    public /* synthetic */ void lambda$null$13$ChatAttachAlert(boolean z, int i) {
+    /* renamed from: lambda$new$13 */
+    public /* synthetic */ void lambda$new$13$ChatAttachAlert(boolean z, int i) {
         AttachAlertLayout attachAlertLayout = this.currentAttachLayout;
         if (attachAlertLayout == this.photoLayout) {
             sendPressed(z, i);

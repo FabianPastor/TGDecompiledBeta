@@ -635,18 +635,17 @@ public class ViewPagerFixed extends FrameLayout {
                     if (elapsedRealtime > 17) {
                         elapsedRealtime = 17;
                     }
+                    TabsView.access$2816(TabsView.this, ((float) elapsedRealtime) / 200.0f);
                     TabsView tabsView = TabsView.this;
-                    float unused = tabsView.animationTime = tabsView.animationTime + (((float) elapsedRealtime) / 200.0f);
-                    TabsView tabsView2 = TabsView.this;
-                    tabsView2.setAnimationIdicatorProgress(tabsView2.interpolator.getInterpolation(TabsView.this.animationTime));
+                    tabsView.setAnimationIdicatorProgress(tabsView.interpolator.getInterpolation(TabsView.this.animationTime));
                     if (TabsView.this.animationTime > 1.0f) {
-                        float unused2 = TabsView.this.animationTime = 1.0f;
+                        float unused = TabsView.this.animationTime = 1.0f;
                     }
                     if (TabsView.this.animationTime < 1.0f) {
                         AndroidUtilities.runOnUIThread(TabsView.this.animationRunnable);
                         return;
                     }
-                    boolean unused3 = TabsView.this.animatingIndicator = false;
+                    boolean unused2 = TabsView.this.animatingIndicator = false;
                     TabsView.this.setEnabled(true);
                     if (TabsView.this.delegate != null) {
                         TabsView.this.delegate.onPageScrolled(1.0f);
@@ -726,6 +725,12 @@ public class ViewPagerFixed extends FrameLayout {
         }
 
         static /* synthetic */ void lambda$setIsEditing$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        }
+
+        static /* synthetic */ float access$2816(TabsView tabsView, float f) {
+            float f2 = tabsView.animationTime + f;
+            tabsView.animationTime = f2;
+            return f2;
         }
 
         private static class Tab {

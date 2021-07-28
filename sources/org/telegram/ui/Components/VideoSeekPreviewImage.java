@@ -142,14 +142,14 @@ public class VideoSeekPreviewImage extends View {
             }
 
             public final void run() {
-                VideoSeekPreviewImage.this.lambda$null$0$VideoSeekPreviewImage(this.f$1);
+                VideoSeekPreviewImage.this.lambda$setProgress$0$VideoSeekPreviewImage(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$VideoSeekPreviewImage(Bitmap bitmap) {
+    /* renamed from: lambda$setProgress$0 */
+    public /* synthetic */ void lambda$setProgress$0$VideoSeekPreviewImage(Bitmap bitmap) {
         int i;
         if (bitmap != null) {
             if (this.bitmapToDraw != null) {
@@ -243,14 +243,14 @@ public class VideoSeekPreviewImage extends View {
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                VideoSeekPreviewImage.this.lambda$null$2$VideoSeekPreviewImage();
+                VideoSeekPreviewImage.this.lambda$open$2$VideoSeekPreviewImage();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$VideoSeekPreviewImage() {
+    /* renamed from: lambda$open$2 */
+    public /* synthetic */ void lambda$open$2$VideoSeekPreviewImage() {
         this.loadRunnable = null;
         if (this.fileDrawable != null) {
             this.ready = true;

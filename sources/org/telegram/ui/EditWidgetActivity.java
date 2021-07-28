@@ -64,8 +64,6 @@ public class EditWidgetActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public int infoRow;
     /* access modifiers changed from: private */
-    public boolean isEdit;
-    /* access modifiers changed from: private */
     public ItemTouchHelper itemTouchHelper;
     /* access modifiers changed from: private */
     public ListAdapter listAdapter;
@@ -234,7 +232,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout r9 = new android.widget.LinearLayout
                 r9.<init>(r2)
                 r9.setOrientation(r4)
-                r10 = 2131166142(0x7var_be, float:1.794652E38)
+                r10 = 2131166152(0x7var_c8, float:1.7946541E38)
                 r9.setBackgroundResource(r10)
                 r14 = 10
                 r16 = 10
@@ -253,7 +251,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r4 = r0.cells
                 android.app.Activity r6 = r19.getParentActivity()
                 android.view.LayoutInflater r6 = r6.getLayoutInflater()
-                r12 = 2131427346(0x7f0b0012, float:1.8476306E38)
+                r12 = 2131427349(0x7f0b0015, float:1.8476312E38)
                 android.view.View r6 = r6.inflate(r12, r10)
                 android.view.ViewGroup r6 = (android.view.ViewGroup) r6
                 r4[r5] = r6
@@ -1058,14 +1056,14 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166146(0x7var_c2, float:1.794653E38)
+                r2 = 2131166156(0x7var_cc, float:1.794655E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x0610
             L_0x05f4:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166145(0x7var_c1, float:1.7946527E38)
+                r2 = 2131166155(0x7var_cb, float:1.7946547E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x0610
             L_0x0603:
@@ -1592,17 +1590,14 @@ public class EditWidgetActivity extends BaseFragment {
         }
     }
 
-    public EditWidgetActivity(int i, int i2, boolean z) {
+    public EditWidgetActivity(int i, int i2) {
         this.widgetType = i;
         this.currentWidgetId = i2;
-        this.isEdit = z;
-        if (z) {
-            ArrayList arrayList = new ArrayList();
-            ArrayList arrayList2 = new ArrayList();
-            getMessagesStorage().getWidgetDialogIds(this.currentWidgetId, this.widgetType, this.selectedDialogs, arrayList, arrayList2, true);
-            getMessagesController().putUsers(arrayList, true);
-            getMessagesController().putChats(arrayList2, true);
-        }
+        ArrayList arrayList = new ArrayList();
+        ArrayList arrayList2 = new ArrayList();
+        getMessagesStorage().getWidgetDialogIds(this.currentWidgetId, this.widgetType, this.selectedDialogs, arrayList, arrayList2, true);
+        getMessagesController().putUsers(arrayList, true);
+        getMessagesController().putChats(arrayList2, true);
         updateRows();
     }
 
@@ -1665,16 +1660,15 @@ public class EditWidgetActivity extends BaseFragment {
                     }
                 } else if (i == 1 && EditWidgetActivity.this.getParentActivity() != null) {
                     EditWidgetActivity.this.getMessagesStorage().putWidgetDialogs(EditWidgetActivity.this.currentWidgetId, EditWidgetActivity.this.selectedDialogs);
-                    SharedPreferences sharedPreferences = EditWidgetActivity.this.getParentActivity().getSharedPreferences("shortcut_widget", 0);
-                    SharedPreferences.Editor edit = sharedPreferences.edit();
-                    edit.putInt("account" + EditWidgetActivity.this.currentWidgetId, EditWidgetActivity.this.currentAccount).commit();
-                    SharedPreferences.Editor edit2 = sharedPreferences.edit();
-                    edit2.putInt("type" + EditWidgetActivity.this.currentWidgetId, EditWidgetActivity.this.widgetType).commit();
+                    SharedPreferences.Editor edit = EditWidgetActivity.this.getParentActivity().getSharedPreferences("shortcut_widget", 0).edit();
+                    edit.putInt("account" + EditWidgetActivity.this.currentWidgetId, EditWidgetActivity.this.currentAccount);
+                    edit.putInt("type" + EditWidgetActivity.this.currentWidgetId, EditWidgetActivity.this.widgetType);
+                    edit.commit();
                     AppWidgetManager instance = AppWidgetManager.getInstance(EditWidgetActivity.this.getParentActivity());
                     if (EditWidgetActivity.this.widgetType == 0) {
-                        ChatsWidgetProvider.updateWidget(EditWidgetActivity.this.getParentActivity(), instance, EditWidgetActivity.this.currentWidgetId, EditWidgetActivity.this.isEdit);
+                        ChatsWidgetProvider.updateWidget(EditWidgetActivity.this.getParentActivity(), instance, EditWidgetActivity.this.currentWidgetId);
                     } else {
-                        ContactsWidgetProvider.updateWidget(EditWidgetActivity.this.getParentActivity(), instance, EditWidgetActivity.this.currentWidgetId, EditWidgetActivity.this.isEdit);
+                        ContactsWidgetProvider.updateWidget(EditWidgetActivity.this.getParentActivity(), instance, EditWidgetActivity.this.currentWidgetId);
                     }
                     if (EditWidgetActivity.this.delegate != null) {
                         EditWidgetActivity.this.delegate.didSelectDialogs(EditWidgetActivity.this.selectedDialogs);
@@ -1763,7 +1757,7 @@ public class EditWidgetActivity extends BaseFragment {
             InviteMembersBottomSheet inviteMembersBottomSheet = new InviteMembersBottomSheet(context, this.currentAccount, (SparseArray<TLObject>) null, 0, this);
             inviteMembersBottomSheet.setDelegate(new InviteMembersBottomSheet.InviteMembersBottomSheetDelegate() {
                 public final void didSelectDialogs(ArrayList arrayList) {
-                    EditWidgetActivity.this.lambda$null$0$EditWidgetActivity(arrayList);
+                    EditWidgetActivity.this.lambda$createView$0$EditWidgetActivity(arrayList);
                 }
             }, this.selectedDialogs);
             inviteMembersBottomSheet.setSelectedContacts(this.selectedDialogs);
@@ -1772,8 +1766,8 @@ public class EditWidgetActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$EditWidgetActivity(ArrayList arrayList) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$EditWidgetActivity(ArrayList arrayList) {
         this.selectedDialogs.clear();
         this.selectedDialogs.addAll(arrayList);
         updateRows();
@@ -1925,14 +1919,14 @@ public class EditWidgetActivity extends BaseFragment {
         }
 
         public boolean swapElements(int i, int i2) {
-            int access$1400 = i - EditWidgetActivity.this.chatsStartRow;
-            int access$14002 = i2 - EditWidgetActivity.this.chatsStartRow;
+            int access$1300 = i - EditWidgetActivity.this.chatsStartRow;
+            int access$13002 = i2 - EditWidgetActivity.this.chatsStartRow;
             int access$100 = EditWidgetActivity.this.chatsEndRow - EditWidgetActivity.this.chatsStartRow;
-            if (access$1400 < 0 || access$14002 < 0 || access$1400 >= access$100 || access$14002 >= access$100) {
+            if (access$1300 < 0 || access$13002 < 0 || access$1300 >= access$100 || access$13002 >= access$100) {
                 return false;
             }
-            EditWidgetActivity.this.selectedDialogs.set(access$1400, (Long) EditWidgetActivity.this.selectedDialogs.get(access$14002));
-            EditWidgetActivity.this.selectedDialogs.set(access$14002, (Long) EditWidgetActivity.this.selectedDialogs.get(access$1400));
+            EditWidgetActivity.this.selectedDialogs.set(access$1300, (Long) EditWidgetActivity.this.selectedDialogs.get(access$13002));
+            EditWidgetActivity.this.selectedDialogs.set(access$13002, (Long) EditWidgetActivity.this.selectedDialogs.get(access$1300));
             notifyItemMoved(i, i2);
             return true;
         }

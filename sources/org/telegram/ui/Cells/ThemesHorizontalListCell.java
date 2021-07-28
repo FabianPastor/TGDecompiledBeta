@@ -212,6 +212,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         /* access modifiers changed from: private */
         /* JADX WARNING: Can't fix incorrect switch cases order */
         /* JADX WARNING: Can't wrap try/catch for region: R(2:92|93) */
+        /* JADX WARNING: Can't wrap try/catch for region: R(5:144|150|151|152|153) */
         /* JADX WARNING: Code restructure failed: missing block: B:116:0x023d, code lost:
             r4 = 65535;
          */
@@ -257,9 +258,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         /* JADX WARNING: Code restructure failed: missing block: B:93:?, code lost:
             r3 = org.telegram.messenger.Utilities.parseInt(r3).intValue();
          */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:156:0x02b3 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:152:0x02b0 */
         /* JADX WARNING: Missing exception handler attribute for start block: B:92:0x01f3 */
-        /* JADX WARNING: Unknown top exception splitter block from list: {B:156:0x02b3=Splitter:B:156:0x02b3, B:146:0x02a6=Splitter:B:146:0x02a6} */
+        /* JADX WARNING: Unknown top exception splitter block from list: {B:152:0x02b0=Splitter:B:152:0x02b0, B:146:0x02a6=Splitter:B:146:0x02a6} */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean parseTheme() {
             /*
@@ -267,18 +268,18 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 r1 = r20
                 java.lang.String r0 = "chat_inBubble"
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo
-                if (r2 == 0) goto L_0x0314
+                if (r2 == 0) goto L_0x0311
                 java.lang.String r2 = r2.pathToFile
                 if (r2 != 0) goto L_0x000e
-                goto L_0x0314
+                goto L_0x0311
             L_0x000e:
                 java.io.File r2 = new java.io.File
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo
                 java.lang.String r4 = r4.pathToFile
                 r2.<init>(r4)
                 r4 = 1
-                java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ all -> 0x02b4 }
-                r5.<init>(r2)     // Catch:{ all -> 0x02b4 }
+                java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ all -> 0x02b1 }
+                r5.<init>(r2)     // Catch:{ all -> 0x02b1 }
                 r2 = 0
                 r6 = 0
             L_0x001f:
@@ -608,39 +609,35 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             L_0x02a4:
                 r19 = r5
             L_0x02a6:
-                r19.close()     // Catch:{ all -> 0x02b4 }
-                goto L_0x02b8
+                r19.close()     // Catch:{ all -> 0x02b1 }
+                goto L_0x02b5
             L_0x02aa:
                 r0 = move-exception
                 r19 = r5
             L_0x02ad:
-                throw r0     // Catch:{ all -> 0x02ae }
-            L_0x02ae:
-                r0 = move-exception
-                r2 = r0
-                r19.close()     // Catch:{ all -> 0x02b3 }
-            L_0x02b3:
-                throw r2     // Catch:{ all -> 0x02b4 }
-            L_0x02b4:
+                r19.close()     // Catch:{ all -> 0x02b0 }
+            L_0x02b0:
+                throw r0     // Catch:{ all -> 0x02b1 }
+            L_0x02b1:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x02b8:
+            L_0x02b5:
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = r1.themeInfo
                 java.lang.String r2 = r0.pathToWallpaper
-                if (r2 == 0) goto L_0x030e
+                if (r2 == 0) goto L_0x030b
                 boolean r0 = r0.badWallpaper
-                if (r0 != 0) goto L_0x030e
+                if (r0 != 0) goto L_0x030b
                 java.io.File r0 = new java.io.File
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo
                 java.lang.String r2 = r2.pathToWallpaper
                 r0.<init>(r2)
                 boolean r0 = r0.exists()
-                if (r0 != 0) goto L_0x030e
+                if (r0 != 0) goto L_0x030b
                 org.telegram.ui.Cells.ThemesHorizontalListCell r0 = org.telegram.ui.Cells.ThemesHorizontalListCell.this
                 java.util.HashMap r0 = r0.loadingWallpapers
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo
                 boolean r0 = r0.containsKey(r2)
-                if (r0 != 0) goto L_0x030c
+                if (r0 != 0) goto L_0x0309
                 org.telegram.ui.Cells.ThemesHorizontalListCell r0 = org.telegram.ui.Cells.ThemesHorizontalListCell.this
                 java.util.HashMap r0 = r0.loadingWallpapers
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo
@@ -659,15 +656,15 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 org.telegram.ui.Cells.-$$Lambda$ThemesHorizontalListCell$InnerThemeView$fddPqOuVBiJytpNKVrusBtqrcbM r3 = new org.telegram.ui.Cells.-$$Lambda$ThemesHorizontalListCell$InnerThemeView$fddPqOuVBiJytpNKVrusBtqrcbM
                 r3.<init>()
                 r2.sendRequest(r0, r3)
-            L_0x030c:
+            L_0x0309:
                 r2 = 0
                 return r2
-            L_0x030e:
+            L_0x030b:
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = r1.themeInfo
                 r2 = 1
                 r0.previewParsed = r2
                 return r2
-            L_0x0314:
+            L_0x0311:
                 r2 = 0
                 return r2
             */
@@ -685,14 +682,14 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 }
 
                 public final void run() {
-                    ThemesHorizontalListCell.InnerThemeView.this.lambda$null$0$ThemesHorizontalListCell$InnerThemeView(this.f$1);
+                    ThemesHorizontalListCell.InnerThemeView.this.lambda$parseTheme$0$ThemesHorizontalListCell$InnerThemeView(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$ThemesHorizontalListCell$InnerThemeView(TLObject tLObject) {
+        /* renamed from: lambda$parseTheme$0 */
+        public /* synthetic */ void lambda$parseTheme$0$ThemesHorizontalListCell$InnerThemeView(TLObject tLObject) {
             if (tLObject instanceof TLRPC$TL_wallPaper) {
                 TLRPC$WallPaper tLRPC$WallPaper = (TLRPC$WallPaper) tLObject;
                 String attachFileName = FileLoader.getAttachFileName(tLRPC$WallPaper.document);
@@ -1323,7 +1320,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                         }
                     });
                 } else {
-                    lambda$null$2(themeInfo);
+                    lambda$didReceivedNotification$2(themeInfo);
                 }
             }
         } else if (i == NotificationCenter.fileLoadFailed) {
@@ -1343,14 +1340,14 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             }
 
             public final void run() {
-                ThemesHorizontalListCell.this.lambda$null$2$ThemesHorizontalListCell(this.f$1);
+                ThemesHorizontalListCell.this.lambda$didReceivedNotification$2$ThemesHorizontalListCell(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: checkVisibleTheme */
-    public void lambda$null$2(Theme.ThemeInfo themeInfo) {
+    public void lambda$didReceivedNotification$2(Theme.ThemeInfo themeInfo) {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View childAt = getChildAt(i);

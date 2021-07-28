@@ -2202,15 +2202,19 @@ public class AndroidUtilities {
     }
 
     public static void runOnUIThread(Runnable runnable, long j) {
-        if (j == 0) {
-            ApplicationLoader.applicationHandler.post(runnable);
-        } else {
-            ApplicationLoader.applicationHandler.postDelayed(runnable, j);
+        if (ApplicationLoader.applicationHandler != null) {
+            if (j == 0) {
+                ApplicationLoader.applicationHandler.post(runnable);
+            } else {
+                ApplicationLoader.applicationHandler.postDelayed(runnable, j);
+            }
         }
     }
 
     public static void cancelRunOnUIThread(Runnable runnable) {
-        ApplicationLoader.applicationHandler.removeCallbacks(runnable);
+        if (ApplicationLoader.applicationHandler != null) {
+            ApplicationLoader.applicationHandler.removeCallbacks(runnable);
+        }
     }
 
     public static boolean isTablet() {
@@ -2269,16 +2273,7 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:23:0x006c, code lost:
-        r10 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:24:0x006d, code lost:
-        if (r0 != null) goto L_0x006f;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:26:?, code lost:
-        r0.close();
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:27:0x0072 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0070 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String obtainLoginPhoneCall(java.lang.String r10) {
         /*
@@ -2287,21 +2282,21 @@ public class AndroidUtilities {
             if (r0 != 0) goto L_0x0006
             return r1
         L_0x0006:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0073 }
-            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0073 }
-            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0073 }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0071 }
+            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0071 }
+            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0071 }
             r0 = 2
-            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0073 }
+            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0071 }
             java.lang.String r0 = "number"
             r8 = 0
-            r4[r8] = r0     // Catch:{ Exception -> 0x0073 }
+            r4[r8] = r0     // Catch:{ Exception -> 0x0071 }
             java.lang.String r0 = "date"
             r9 = 1
-            r4[r9] = r0     // Catch:{ Exception -> 0x0073 }
+            r4[r9] = r0     // Catch:{ Exception -> 0x0071 }
             java.lang.String r5 = "type IN (3,1,5)"
             r6 = 0
             java.lang.String r7 = "date DESC LIMIT 5"
-            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0073 }
+            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0071 }
         L_0x0025:
             boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x006a }
             if (r2 == 0) goto L_0x0066
@@ -2327,24 +2322,21 @@ public class AndroidUtilities {
         L_0x005c:
             boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x006a }
             if (r3 == 0) goto L_0x0025
-            r0.close()     // Catch:{ Exception -> 0x0073 }
+            r0.close()     // Catch:{ Exception -> 0x0071 }
             return r2
         L_0x0066:
-            r0.close()     // Catch:{ Exception -> 0x0073 }
-            goto L_0x0077
+            r0.close()     // Catch:{ Exception -> 0x0071 }
+            goto L_0x0075
         L_0x006a:
             r10 = move-exception
-            throw r10     // Catch:{ all -> 0x006c }
-        L_0x006c:
-            r10 = move-exception
-            if (r0 == 0) goto L_0x0072
-            r0.close()     // Catch:{ all -> 0x0072 }
-        L_0x0072:
-            throw r10     // Catch:{ Exception -> 0x0073 }
-        L_0x0073:
+            if (r0 == 0) goto L_0x0070
+            r0.close()     // Catch:{ all -> 0x0070 }
+        L_0x0070:
+            throw r10     // Catch:{ Exception -> 0x0071 }
+        L_0x0071:
             r10 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
-        L_0x0077:
+        L_0x0075:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.obtainLoginPhoneCall(java.lang.String):java.lang.String");
@@ -2765,14 +2757,8 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:21:0x0048, code lost:
-        r9 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:23:?, code lost:
-        r8.close();
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x004c */
-    /* JADX WARNING: Unknown top exception splitter block from list: {B:24:0x004c=Splitter:B:24:0x004c, B:13:0x003e=Splitter:B:13:0x003e} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:21:0x004a */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:21:0x004a=Splitter:B:21:0x004a, B:13:0x003e=Splitter:B:13:0x003e} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String getDataColumn(android.content.Context r8, android.net.Uri r9, java.lang.String r10, java.lang.String[] r11) {
         /*
@@ -2782,15 +2768,15 @@ public class AndroidUtilities {
             java.lang.String r7 = "_data"
             r3[r0] = r7
             r0 = 0
-            android.content.ContentResolver r1 = r8.getContentResolver()     // Catch:{ Exception -> 0x0052 }
+            android.content.ContentResolver r1 = r8.getContentResolver()     // Catch:{ Exception -> 0x0050 }
             r6 = 0
             r2 = r9
             r4 = r10
             r5 = r11
-            android.database.Cursor r8 = r1.query(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0052 }
-            if (r8 == 0) goto L_0x004d
+            android.database.Cursor r8 = r1.query(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0050 }
+            if (r8 == 0) goto L_0x004b
             boolean r9 = r8.moveToFirst()     // Catch:{ all -> 0x0046 }
-            if (r9 == 0) goto L_0x004d
+            if (r9 == 0) goto L_0x004b
             int r9 = r8.getColumnIndexOrThrow(r7)     // Catch:{ all -> 0x0046 }
             java.lang.String r9 = r8.getString(r9)     // Catch:{ all -> 0x0046 }
             java.lang.String r10 = "content://"
@@ -2804,23 +2790,20 @@ public class AndroidUtilities {
             if (r10 != 0) goto L_0x003e
             goto L_0x0042
         L_0x003e:
-            r8.close()     // Catch:{ Exception -> 0x0052 }
+            r8.close()     // Catch:{ Exception -> 0x0050 }
             return r9
         L_0x0042:
-            r8.close()     // Catch:{ Exception -> 0x0052 }
+            r8.close()     // Catch:{ Exception -> 0x0050 }
             return r0
         L_0x0046:
             r9 = move-exception
-            throw r9     // Catch:{ all -> 0x0048 }
-        L_0x0048:
-            r9 = move-exception
-            r8.close()     // Catch:{ all -> 0x004c }
-        L_0x004c:
-            throw r9     // Catch:{ Exception -> 0x0052 }
-        L_0x004d:
-            if (r8 == 0) goto L_0x0052
-            r8.close()     // Catch:{ Exception -> 0x0052 }
-        L_0x0052:
+            r8.close()     // Catch:{ all -> 0x004a }
+        L_0x004a:
+            throw r9     // Catch:{ Exception -> 0x0050 }
+        L_0x004b:
+            if (r8 == 0) goto L_0x0050
+            r8.close()     // Catch:{ Exception -> 0x0050 }
+        L_0x0050:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getDataColumn(android.content.Context, android.net.Uri, java.lang.String, java.lang.String[]):java.lang.String");
@@ -3165,18 +3148,8 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Can't wrap try/catch for region: R(5:20|21|22|23|24) */
-    /* JADX WARNING: Code restructure failed: missing block: B:20:0x0039, code lost:
-        r9 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:22:?, code lost:
-        r8.close();
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:24:?, code lost:
-        throw r9;
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:23:0x003d */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:31:0x0044 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:20:0x003b */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:25:0x0040 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static boolean copyFile(java.io.File r8, java.io.File r9) throws java.io.IOException {
         /*
@@ -3189,36 +3162,30 @@ public class AndroidUtilities {
             if (r0 != 0) goto L_0x0011
             r9.createNewFile()
         L_0x0011:
-            java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0045 }
-            r0.<init>(r8)     // Catch:{ Exception -> 0x0045 }
-            java.io.FileOutputStream r8 = new java.io.FileOutputStream     // Catch:{ all -> 0x003e }
-            r8.<init>(r9)     // Catch:{ all -> 0x003e }
+            java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0041 }
+            r0.<init>(r8)     // Catch:{ Exception -> 0x0041 }
+            java.io.FileOutputStream r8 = new java.io.FileOutputStream     // Catch:{ all -> 0x003c }
+            r8.<init>(r9)     // Catch:{ all -> 0x003c }
             java.nio.channels.FileChannel r2 = r8.getChannel()     // Catch:{ all -> 0x0037 }
             java.nio.channels.FileChannel r3 = r0.getChannel()     // Catch:{ all -> 0x0037 }
             r4 = 0
             java.nio.channels.FileChannel r9 = r0.getChannel()     // Catch:{ all -> 0x0037 }
             long r6 = r9.size()     // Catch:{ all -> 0x0037 }
             r2.transferFrom(r3, r4, r6)     // Catch:{ all -> 0x0037 }
-            r8.close()     // Catch:{ all -> 0x003e }
-            r0.close()     // Catch:{ Exception -> 0x0045 }
+            r8.close()     // Catch:{ all -> 0x003c }
+            r0.close()     // Catch:{ Exception -> 0x0041 }
             return r1
         L_0x0037:
             r9 = move-exception
-            throw r9     // Catch:{ all -> 0x0039 }
-        L_0x0039:
-            r9 = move-exception
-            r8.close()     // Catch:{ all -> 0x003d }
-        L_0x003d:
-            throw r9     // Catch:{ all -> 0x003e }
-        L_0x003e:
+            r8.close()     // Catch:{ all -> 0x003b }
+        L_0x003b:
+            throw r9     // Catch:{ all -> 0x003c }
+        L_0x003c:
             r8 = move-exception
-            throw r8     // Catch:{ all -> 0x0040 }
+            r0.close()     // Catch:{ all -> 0x0040 }
         L_0x0040:
-            r8 = move-exception
-            r0.close()     // Catch:{ all -> 0x0044 }
-        L_0x0044:
-            throw r8     // Catch:{ Exception -> 0x0045 }
-        L_0x0045:
+            throw r8     // Catch:{ Exception -> 0x0041 }
+        L_0x0041:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
             r8 = 0

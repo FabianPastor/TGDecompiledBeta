@@ -1290,14 +1290,14 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             }
 
             public final void run() {
-                ShareAlert.this.lambda$null$0$ShareAlert(this.f$1, this.f$2);
+                ShareAlert.this.lambda$new$0$ShareAlert(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ShareAlert(TLObject tLObject, Context context) {
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$ShareAlert(TLObject tLObject, Context context) {
         if (tLObject != null) {
             this.exportedMessageLink = (TLRPC$TL_exportedMessageLink) tLObject;
             if (this.copyLinkOnEnd) {
@@ -2524,7 +2524,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 goto L_0x0310
             L_0x040b:
                 r3.dispose()     // Catch:{ Exception -> 0x0419 }
-                org.telegram.ui.Components.-$$Lambda$ShareAlert$ShareSearchAdapter$z0P0_YJlMs8jvZSXwOSVsxpRDcY r2 = org.telegram.ui.Components.$$Lambda$ShareAlert$ShareSearchAdapter$z0P0_YJlMs8jvZSXwOSVsxpRDcY.INSTANCE     // Catch:{ Exception -> 0x0419 }
+                org.telegram.ui.Components.-$$Lambda$ShareAlert$ShareSearchAdapter$Js7rkkKd8pGQQsV2FkNY8qyayIk r2 = org.telegram.ui.Components.$$Lambda$ShareAlert$ShareSearchAdapter$Js7rkkKd8pGQQsV2FkNY8qyayIk.INSTANCE     // Catch:{ Exception -> 0x0419 }
                 java.util.Collections.sort(r0, r2)     // Catch:{ Exception -> 0x0419 }
                 r2 = r22
                 r1.updateSearchResults(r0, r2)     // Catch:{ Exception -> 0x0419 }
@@ -2538,7 +2538,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ShareAlert.ShareSearchAdapter.lambda$searchDialogsInternal$1$ShareAlert$ShareSearchAdapter(java.lang.String, int):void");
         }
 
-        static /* synthetic */ int lambda$null$0(Object obj, Object obj2) {
+        static /* synthetic */ int lambda$searchDialogsInternal$0(Object obj, Object obj2) {
             int i = ((DialogSearchResult) obj).date;
             int i2 = ((DialogSearchResult) obj2).date;
             if (i < i2) {
@@ -2670,7 +2670,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         public /* synthetic */ void lambda$searchDialogs$4$ShareAlert$ShareSearchAdapter(String str, int i) {
             this.searchRunnable = null;
             searchDialogsInternal(str, i);
-            $$Lambda$ShareAlert$ShareSearchAdapter$5FxLqrSZIfAD6PCEolqvHX6rJwI r0 = new Runnable(i, str) {
+            $$Lambda$ShareAlert$ShareSearchAdapter$0sSDq1XOPQynxBeTtPg7n7ovAYk r0 = new Runnable(i, str) {
                 public final /* synthetic */ int f$1;
                 public final /* synthetic */ String f$2;
 
@@ -2680,7 +2680,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 }
 
                 public final void run() {
-                    ShareAlert.ShareSearchAdapter.this.lambda$null$3$ShareAlert$ShareSearchAdapter(this.f$1, this.f$2);
+                    ShareAlert.ShareSearchAdapter.this.lambda$searchDialogs$3$ShareAlert$ShareSearchAdapter(this.f$1, this.f$2);
                 }
             };
             this.searchRunnable2 = r0;
@@ -2688,8 +2688,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$3 */
-        public /* synthetic */ void lambda$null$3$ShareAlert$ShareSearchAdapter(int i, String str) {
+        /* renamed from: lambda$searchDialogs$3 */
+        public /* synthetic */ void lambda$searchDialogs$3$ShareAlert$ShareSearchAdapter(int i, String str) {
             this.searchRunnable2 = null;
             if (i == this.lastSearchId) {
                 this.searchAdapterHelper.queryServerSearch(str, true, true, true, true, false, 0, false, 0, i);

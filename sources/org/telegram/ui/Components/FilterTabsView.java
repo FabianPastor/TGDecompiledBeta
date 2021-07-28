@@ -86,18 +86,17 @@ public class FilterTabsView extends FrameLayout {
                 if (elapsedRealtime > 17) {
                     elapsedRealtime = 17;
                 }
+                FilterTabsView.access$2316(FilterTabsView.this, ((float) elapsedRealtime) / 200.0f);
                 FilterTabsView filterTabsView = FilterTabsView.this;
-                float unused = filterTabsView.animationTime = filterTabsView.animationTime + (((float) elapsedRealtime) / 200.0f);
-                FilterTabsView filterTabsView2 = FilterTabsView.this;
-                filterTabsView2.setAnimationIdicatorProgress(filterTabsView2.interpolator.getInterpolation(FilterTabsView.this.animationTime));
+                filterTabsView.setAnimationIdicatorProgress(filterTabsView.interpolator.getInterpolation(FilterTabsView.this.animationTime));
                 if (FilterTabsView.this.animationTime > 1.0f) {
-                    float unused2 = FilterTabsView.this.animationTime = 1.0f;
+                    float unused = FilterTabsView.this.animationTime = 1.0f;
                 }
                 if (FilterTabsView.this.animationTime < 1.0f) {
                     AndroidUtilities.runOnUIThread(FilterTabsView.this.animationRunnable);
                     return;
                 }
-                boolean unused3 = FilterTabsView.this.animatingIndicator = false;
+                boolean unused2 = FilterTabsView.this.animatingIndicator = false;
                 FilterTabsView.this.setEnabled(true);
                 if (FilterTabsView.this.delegate != null) {
                     FilterTabsView.this.delegate.onPageScrolled(1.0f);
@@ -193,6 +192,12 @@ public class FilterTabsView extends FrameLayout {
     }
 
     static /* synthetic */ void lambda$setIsEditing$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    }
+
+    static /* synthetic */ float access$2316(FilterTabsView filterTabsView, float f) {
+        float f2 = filterTabsView.animationTime + f;
+        filterTabsView.animationTime = f2;
+        return f2;
     }
 
     private class Tab {

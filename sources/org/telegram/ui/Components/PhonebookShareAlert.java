@@ -968,7 +968,7 @@ public class PhonebookShareAlert extends BottomSheet {
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            PhonebookShareAlert.this.lambda$null$1$PhonebookShareAlert(this.f$1, dialogInterface, i);
+                            PhonebookShareAlert.this.lambda$new$1$PhonebookShareAlert(this.f$1, dialogInterface, i);
                         }
                     });
                     builder.show();
@@ -1001,8 +1001,8 @@ public class PhonebookShareAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$PhonebookShareAlert(AndroidUtilities.VcardItem vcardItem, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$1 */
+    public /* synthetic */ void lambda$new$1$PhonebookShareAlert(AndroidUtilities.VcardItem vcardItem, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", vcardItem.getValue(false)));
@@ -1363,14 +1363,14 @@ public class PhonebookShareAlert extends BottomSheet {
         }
         AlertsCreator.createScheduleDatePickerDialog(getContext(), ((ChatActivity) this.parentFragment).getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
             public final void didSelectDate(boolean z, int i) {
-                PhonebookShareAlert.this.lambda$null$4$PhonebookShareAlert(z, i);
+                PhonebookShareAlert.this.lambda$new$4$PhonebookShareAlert(z, i);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$PhonebookShareAlert(boolean z, int i) {
+    /* renamed from: lambda$new$4 */
+    public /* synthetic */ void lambda$new$4$PhonebookShareAlert(boolean z, int i) {
         this.delegate.didSelectContact(this.currentUser, z, i);
         dismiss();
     }

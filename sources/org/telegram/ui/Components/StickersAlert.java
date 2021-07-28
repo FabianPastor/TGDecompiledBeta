@@ -346,14 +346,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$null$0$StickersAlert(this.f$1, this.f$2, this.f$3);
+                StickersAlert.this.lambda$new$0$StickersAlert(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_getAttachedStickers tLRPC$TL_messages_getAttachedStickers) {
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_getAttachedStickers tLRPC$TL_messages_getAttachedStickers) {
         this.reqId = 0;
         if (tLRPC$TL_error == null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
@@ -476,14 +476,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$null$3$StickersAlert(this.f$1, this.f$2);
+                StickersAlert.this.lambda$new$3$StickersAlert(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$StickersAlert(ArrayList arrayList, Boolean bool) {
+    /* renamed from: lambda$new$3 */
+    public /* synthetic */ void lambda$new$3$StickersAlert(ArrayList arrayList, Boolean bool) {
         this.importingStickersPaths = arrayList;
         if (arrayList.isEmpty()) {
             dismiss();
@@ -570,14 +570,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$null$5$StickersAlert(this.f$1, this.f$2, this.f$3);
+                StickersAlert.this.lambda$loadStickerSet$5$StickersAlert(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, MediaDataController mediaDataController) {
+    /* renamed from: lambda$loadStickerSet$5 */
+    public /* synthetic */ void lambda$loadStickerSet$5$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, MediaDataController mediaDataController) {
         this.reqId = 0;
         if (tLRPC$TL_error == null) {
             if (Build.VERSION.SDK_INT >= 19) {
@@ -1552,15 +1552,15 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             tLRPC$TL_messages_installStickerSet.stickerset = this.inputStickerSet;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_installStickerSet, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    StickersAlert.this.lambda$null$14$StickersAlert(tLObject, tLRPC$TL_error);
+                    StickersAlert.this.lambda$updateFields$14$StickersAlert(tLObject, tLRPC$TL_error);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$14 */
-    public /* synthetic */ void lambda$null$14$StickersAlert(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$updateFields$14 */
+    public /* synthetic */ void lambda$updateFields$14$StickersAlert(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -1571,14 +1571,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$null$13$StickersAlert(this.f$1, this.f$2);
+                StickersAlert.this.lambda$updateFields$13$StickersAlert(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$13 */
-    public /* synthetic */ void lambda$null$13$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$updateFields$13 */
+    public /* synthetic */ void lambda$updateFields$13$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         boolean z = this.stickerSet.set.masks;
         if (tLRPC$TL_error == null) {
             try {
@@ -1705,7 +1705,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             public final void onShow(DialogInterface dialogInterface) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        StickersAlert.lambda$null$23(EditTextBoldCursor.this);
+                        StickersAlert.lambda$showNameEnterAlert$23(EditTextBoldCursor.this);
                     }
                 });
             }
@@ -1741,7 +1741,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         return true;
     }
 
-    static /* synthetic */ void lambda$null$23(EditTextBoldCursor editTextBoldCursor) {
+    static /* synthetic */ void lambda$showNameEnterAlert$23(EditTextBoldCursor editTextBoldCursor) {
         editTextBoldCursor.requestFocus();
         AndroidUtilities.showKeyboard(editTextBoldCursor);
     }
@@ -1770,7 +1770,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        StickersAlert.this.lambda$null$26$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+                        StickersAlert.this.lambda$showNameEnterAlert$26$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
                     }
                 });
             } else if (iArr[0] == 2) {
@@ -1782,7 +1782,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 AndroidUtilities.hideKeyboard(editTextBoldCursor);
                 SendMessagesHelper.getInstance(this.currentAccount).prepareImportStickers(this.setTitle, this.lastCheckName, this.importingSoftware, this.importingStickersPaths, new MessagesStorage.StringCallback() {
                     public final void run(String str) {
-                        StickersAlert.this.lambda$null$27$StickersAlert(str);
+                        StickersAlert.this.lambda$showNameEnterAlert$27$StickersAlert(str);
                     }
                 });
                 builder.getDismissRunnable().run();
@@ -1792,8 +1792,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$26 */
-    public /* synthetic */ void lambda$null$26$StickersAlert(EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$showNameEnterAlert$26 */
+    public /* synthetic */ void lambda$showNameEnterAlert$26$StickersAlert(EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, editTextBoldCursor, textView, textView2, iArr) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ EditTextBoldCursor f$2;
@@ -1810,14 +1810,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$null$25$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                StickersAlert.this.lambda$showNameEnterAlert$25$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$25 */
-    public /* synthetic */ void lambda$null$25$StickersAlert(TLObject tLObject, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr) {
+    /* renamed from: lambda$showNameEnterAlert$25 */
+    public /* synthetic */ void lambda$showNameEnterAlert$25$StickersAlert(TLObject tLObject, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr) {
         String str;
         boolean z = true;
         if (!(tLObject instanceof TLRPC$TL_stickers_suggestedShortName) || (str = ((TLRPC$TL_stickers_suggestedShortName) tLObject).short_name) == null) {
@@ -1836,8 +1836,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$27 */
-    public /* synthetic */ void lambda$null$27$StickersAlert(String str) {
+    /* renamed from: lambda$showNameEnterAlert$27 */
+    public /* synthetic */ void lambda$showNameEnterAlert$27$StickersAlert(String str) {
         new ImportingAlert(getContext(), this.lastCheckName, (ChatActivity) null).show();
     }
 
@@ -1924,14 +1924,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                StickersAlert.this.lambda$null$30$StickersAlert(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                StickersAlert.this.lambda$checkUrlAvailable$30$StickersAlert(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$30 */
-    public /* synthetic */ void lambda$null$30$StickersAlert(String str, TextView textView, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$checkUrlAvailable$30 */
+    public /* synthetic */ void lambda$checkUrlAvailable$30$StickersAlert(String str, TextView textView, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject, textView) {
             public final /* synthetic */ String f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
@@ -1946,14 +1946,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$null$29$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4);
+                StickersAlert.this.lambda$checkUrlAvailable$29$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$29 */
-    public /* synthetic */ void lambda$null$29$StickersAlert(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TextView textView) {
+    /* renamed from: lambda$checkUrlAvailable$29 */
+    public /* synthetic */ void lambda$checkUrlAvailable$29$StickersAlert(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TextView textView) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 != null && str2.equals(str)) {

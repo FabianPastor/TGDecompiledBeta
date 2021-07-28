@@ -864,7 +864,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                         }
 
                                         public final void onClick(DialogInterface dialogInterface, int i) {
-                                            GroupCreateActivity.this.lambda$null$2$GroupCreateActivity(this.f$1, dialogInterface, i);
+                                            GroupCreateActivity.this.lambda$createView$2$GroupCreateActivity(this.f$1, dialogInterface, i);
                                         }
                                     });
                                     builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -898,8 +898,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$GroupCreateActivity(TLRPC$User tLRPC$User, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$GroupCreateActivity(TLRPC$User tLRPC$User, DialogInterface dialogInterface, int i) {
         this.delegate2.needAddBot(tLRPC$User);
         if (this.editText.length() > 0) {
             this.editText.setText((CharSequence) null);
@@ -1687,17 +1687,17 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    GroupCreateActivity.GroupCreateAdapter.this.lambda$null$2$GroupCreateActivity$GroupCreateAdapter(this.f$1);
+                    GroupCreateActivity.GroupCreateAdapter.this.lambda$searchDialogs$2$GroupCreateActivity$GroupCreateAdapter(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$GroupCreateActivity$GroupCreateAdapter(String str) {
+        /* renamed from: lambda$searchDialogs$2 */
+        public /* synthetic */ void lambda$searchDialogs$2$GroupCreateActivity$GroupCreateAdapter(String str) {
             this.searchAdapterHelper.queryServerSearch(str, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, true, false, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$GroupCreateActivity$GroupCreateAdapter$WqAj30o5z2evFPMaCAAWxrO45o8 r1 = new Runnable(str) {
+            $$Lambda$GroupCreateActivity$GroupCreateAdapter$8_1EGchWQPWersEYgzWxK1A659s r1 = new Runnable(str) {
                 public final /* synthetic */ String f$1;
 
                 {
@@ -1705,7 +1705,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 }
 
                 public final void run() {
-                    GroupCreateActivity.GroupCreateAdapter.this.lambda$null$1$GroupCreateActivity$GroupCreateAdapter(this.f$1);
+                    GroupCreateActivity.GroupCreateAdapter.this.lambda$searchDialogs$1$GroupCreateActivity$GroupCreateAdapter(this.f$1);
                 }
             };
             this.searchRunnable = r1;
@@ -1718,9 +1718,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
          */
         /* JADX WARNING: Removed duplicated region for block: B:51:0x0128 A[LOOP:1: B:27:0x008c->B:51:0x0128, LOOP_END] */
         /* JADX WARNING: Removed duplicated region for block: B:60:0x00d8 A[SYNTHETIC] */
-        /* renamed from: lambda$null$1 */
+        /* renamed from: lambda$searchDialogs$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$1$GroupCreateActivity$GroupCreateAdapter(java.lang.String r18) {
+        public /* synthetic */ void lambda$searchDialogs$1$GroupCreateActivity$GroupCreateAdapter(java.lang.String r18) {
             /*
                 r17 = this;
                 r0 = r17
@@ -1886,7 +1886,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r0.updateSearchResults(r1, r2)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.lambda$null$1$GroupCreateActivity$GroupCreateAdapter(java.lang.String):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.lambda$searchDialogs$1$GroupCreateActivity$GroupCreateAdapter(java.lang.String):void");
         }
 
         private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {

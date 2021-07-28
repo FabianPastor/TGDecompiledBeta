@@ -321,7 +321,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                             }
 
                             public final void onClick(View view) {
-                                StickersActivity.this.lambda$null$1$StickersActivity(this.f$1, view);
+                                StickersActivity.this.lambda$createView$1$StickersActivity(this.f$1, view);
                             }
                         });
                         i2++;
@@ -344,8 +344,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$StickersActivity(AlertDialog.Builder builder, View view) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$StickersActivity(AlertDialog.Builder builder, View view) {
         SharedConfig.setSuggestStickers(((Integer) view.getTag()).intValue());
         this.listAdapter.notifyItemChanged(this.suggestRow);
         builder.getDismissRunnable().run();
@@ -409,8 +409,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$StickersActivity() {
+    /* renamed from: lambda$sendReorder$4 */
+    public /* synthetic */ void lambda$sendReorder$4$StickersActivity() {
         this.activeReorderingRequests--;
     }
 
@@ -419,7 +419,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     public /* synthetic */ void lambda$sendReorder$5$StickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                StickersActivity.this.lambda$null$4$StickersActivity();
+                StickersActivity.this.lambda$sendReorder$4$StickersActivity();
             }
         });
     }
@@ -862,7 +862,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    StickersActivity.ListAdapter.this.lambda$null$2$StickersActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
+                    StickersActivity.ListAdapter.this.lambda$onCreateViewHolder$2$StickersActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
                 }
             });
             AlertDialog create = builder.create();
@@ -873,8 +873,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$StickersActivity$ListAdapter(int[] iArr, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, DialogInterface dialogInterface, int i) {
+        /* renamed from: lambda$onCreateViewHolder$2 */
+        public /* synthetic */ void lambda$onCreateViewHolder$2$StickersActivity$ListAdapter(int[] iArr, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, DialogInterface dialogInterface, int i) {
             processSelectionOption(iArr[i], tLRPC$TL_messages_stickerSet);
         }
 

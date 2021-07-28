@@ -116,7 +116,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             if (cameraController.cameraInfos == null) {
                 SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
                 String string = globalMainSettings.getString(str2, (String) null);
-                $$Lambda$CameraController$E3tDUXRg82Vus5hSAMEPVmSGY_I r4 = $$Lambda$CameraController$E3tDUXRg82Vus5hSAMEPVmSGY_I.INSTANCE;
+                $$Lambda$CameraController$UQHiOp_k_ixnHDWCsEPYvxHGU8 r4 = $$Lambda$CameraController$UQHiOp_k_ixnHDWCsEPYvxHGU8.INSTANCE;
                 ArrayList<CameraInfo> arrayList = new ArrayList<>();
                 if (string != null) {
                     SerializedData serializedData = new SerializedData(Base64.decode(string, 0));
@@ -226,7 +226,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                                 }
 
                                 public final void run() {
-                                    CameraController.this.lambda$null$3$CameraController(this.f$1, this.f$2, this.f$3);
+                                    CameraController.this.lambda$initCamera$3$CameraController(this.f$1, this.f$2, this.f$3);
                                 }
                             });
                         }
@@ -261,7 +261,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             }
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    CameraController.this.lambda$null$1$CameraController();
+                    CameraController.this.lambda$initCamera$1$CameraController();
                 }
             });
         } catch (Exception e2) {
@@ -278,13 +278,13 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 }
 
                 public final void run() {
-                    CameraController.this.lambda$null$3$CameraController(this.f$1, this.f$2, this.f$3);
+                    CameraController.this.lambda$initCamera$3$CameraController(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
     }
 
-    static /* synthetic */ int lambda$null$0(Size size, Size size2) {
+    static /* synthetic */ int lambda$initCamera$0(Size size, Size size2) {
         int i = size.mWidth;
         int i2 = size2.mWidth;
         if (i < i2) {
@@ -305,8 +305,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$CameraController() {
+    /* renamed from: lambda$initCamera$1 */
+    public /* synthetic */ void lambda$initCamera$1$CameraController() {
         this.loadingCameras = false;
         this.cameraInitied = true;
         if (!this.onFinishCameraInitRunnables.isEmpty()) {
@@ -319,8 +319,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$CameraController(boolean z, Exception exc, Runnable runnable) {
+    /* renamed from: lambda$initCamera$3 */
+    public /* synthetic */ void lambda$initCamera$3$CameraController(boolean z, Exception exc, Runnable runnable) {
         this.onFinishCameraInitRunnables.clear();
         this.loadingCameras = false;
         this.cameraInitied = false;
@@ -333,15 +333,15 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 }
 
                 public final void run() {
-                    CameraController.this.lambda$null$2$CameraController(this.f$1);
+                    CameraController.this.lambda$initCamera$2$CameraController(this.f$1);
                 }
             }, 1000);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$CameraController(Runnable runnable) {
+    /* renamed from: lambda$initCamera$2 */
+    public /* synthetic */ void lambda$initCamera$2$CameraController(Runnable runnable) {
         initCamera(runnable, true);
     }
 
@@ -992,15 +992,15 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 }
 
                 public final void run() {
-                    CameraController.this.lambda$null$11$CameraController(this.f$1, this.f$2, this.f$3);
+                    CameraController.this.lambda$recordVideo$11$CameraController(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$CameraController(CameraView cameraView, File file, Runnable runnable) {
+    /* renamed from: lambda$recordVideo$11 */
+    public /* synthetic */ void lambda$recordVideo$11$CameraController(CameraView cameraView, File file, Runnable runnable) {
         cameraView.startRecording(file, new Runnable() {
             public final void run() {
                 CameraController.this.finishRecordingVideo();
@@ -1282,7 +1282,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 }
 
                 public final void run() {
-                    CameraController.lambda$null$15(this.f$0, this.f$1);
+                    CameraController.lambda$stopVideoRecording$15(this.f$0, this.f$1);
                 }
             });
             if (z || this.onVideoTakeCallback == null) {
@@ -1294,7 +1294,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         }
     }
 
-    static /* synthetic */ void lambda$null$15(Camera camera, CameraSession cameraSession) {
+    static /* synthetic */ void lambda$stopVideoRecording$15(Camera camera, CameraSession cameraSession) {
         try {
             Camera.Parameters parameters = camera.getParameters();
             parameters.setFlashMode(cameraSession.getCurrentFlashMode());

@@ -569,7 +569,7 @@ public class DataUsageActivity extends BaseFragment {
                     }
 
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        DataUsageActivity.this.lambda$null$1$DataUsageActivity(this.f$1, dialogInterface, i);
+                        DataUsageActivity.this.lambda$createView$1$DataUsageActivity(this.f$1, dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -584,8 +584,8 @@ public class DataUsageActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$DataUsageActivity(ListAdapter listAdapter, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$DataUsageActivity(ListAdapter listAdapter, DialogInterface dialogInterface, int i) {
         StatsController.getInstance(this.currentAccount).resetStats(listAdapter.currentType);
         listAdapter.notifyDataSetChanged();
     }

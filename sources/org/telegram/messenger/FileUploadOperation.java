@@ -1104,14 +1104,14 @@ public class FileUploadOperation {
     public /* synthetic */ void lambda$startUploadRequest$6$FileUploadOperation() {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public final void run() {
-                FileUploadOperation.this.lambda$null$5$FileUploadOperation();
+                FileUploadOperation.this.lambda$startUploadRequest$5$FileUploadOperation();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$FileUploadOperation() {
+    /* renamed from: lambda$startUploadRequest$5 */
+    public /* synthetic */ void lambda$startUploadRequest$5$FileUploadOperation() {
         if (this.currentUploadRequetsCount < this.maxRequestsCount) {
             startUploadRequest();
         }

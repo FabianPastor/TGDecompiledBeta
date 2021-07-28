@@ -231,7 +231,7 @@ public class SlotsDrawable extends RLottieDrawable {
         if (this.destroyAfterLoading) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    SlotsDrawable.this.lambda$null$1$SlotsDrawable();
+                    SlotsDrawable.this.lambda$setBaseDice$1$SlotsDrawable();
                 }
             });
             return;
@@ -271,7 +271,7 @@ public class SlotsDrawable extends RLottieDrawable {
                         }
 
                         public final void run() {
-                            SlotsDrawable.lambda$null$2(TLRPC$Document.this, this.f$1, this.f$2, this.f$3, this.f$4);
+                            SlotsDrawable.lambda$setBaseDice$2(TLRPC$Document.this, this.f$1, this.f$2, this.f$3, this.f$4);
                         }
                     });
                     z = true;
@@ -285,7 +285,7 @@ public class SlotsDrawable extends RLottieDrawable {
         if (z) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    SlotsDrawable.this.lambda$null$3$SlotsDrawable();
+                    SlotsDrawable.this.lambda$setBaseDice$3$SlotsDrawable();
                 }
             });
         } else {
@@ -299,35 +299,35 @@ public class SlotsDrawable extends RLottieDrawable {
                 }
 
                 public final void run() {
-                    SlotsDrawable.this.lambda$null$4$SlotsDrawable(this.f$1, this.f$2);
+                    SlotsDrawable.this.lambda$setBaseDice$4$SlotsDrawable(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$SlotsDrawable() {
+    /* renamed from: lambda$setBaseDice$1 */
+    public /* synthetic */ void lambda$setBaseDice$1$SlotsDrawable() {
         this.loadingInBackground = false;
         if (!this.secondLoadingInBackground && this.destroyAfterLoading) {
             recycle();
         }
     }
 
-    static /* synthetic */ void lambda$null$2(TLRPC$Document tLRPC$Document, int i, MessageObject messageObject, ChatMessageCell chatMessageCell, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    static /* synthetic */ void lambda$setBaseDice$2(TLRPC$Document tLRPC$Document, int i, MessageObject messageObject, ChatMessageCell chatMessageCell, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
         DownloadController.getInstance(i).addLoadingFileObserver(FileLoader.getAttachFileName(tLRPC$Document), messageObject, chatMessageCell);
         FileLoader.getInstance(i).loadFile(tLRPC$Document, tLRPC$TL_messages_stickerSet, 1, 1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$SlotsDrawable() {
+    /* renamed from: lambda$setBaseDice$3 */
+    public /* synthetic */ void lambda$setBaseDice$3$SlotsDrawable() {
         this.loadingInBackground = false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$SlotsDrawable(int i, ChatMessageCell chatMessageCell) {
+    /* renamed from: lambda$setBaseDice$4 */
+    public /* synthetic */ void lambda$setBaseDice$4$SlotsDrawable(int i, ChatMessageCell chatMessageCell) {
         this.loadingInBackground = false;
         if (this.secondLoadingInBackground || !this.destroyAfterLoading) {
             this.nativePtr = this.nativePtrs[0];
@@ -380,7 +380,7 @@ public class SlotsDrawable extends RLottieDrawable {
             r0 = r17
             boolean r1 = r0.destroyAfterLoading
             if (r1 == 0) goto L_0x000f
-            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$gq69cMF1Y6qjtDuxPdgZuxYMPxo r1 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$gq69cMF1Y6qjtDuxPdgZuxYMPxo
+            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$bqf5Qeg-Zl-v1SK8e_n8by8HfhM r1 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$bqf5Qeg-Zl-v1SK8e_n8by8HfhM
             r1.<init>()
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
             return
@@ -506,7 +506,7 @@ public class SlotsDrawable extends RLottieDrawable {
             java.lang.String r4 = org.telegram.ui.Components.RLottieDrawable.readRes(r4, r1)
             boolean r8 = android.text.TextUtils.isEmpty(r4)
             if (r8 == 0) goto L_0x00d1
-            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$pT6dzj_U-_KT3r8DL3WDJHBqZ_o r3 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$pT6dzj_U-_KT3r8DL3WDJHBqZ_o
+            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$var_sGcRSekH2IrvR4dU-xTTEDd4 r3 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$var_sGcRSekH2IrvR4dU-xTTEDd4
             r11 = r3
             r13 = r19
             r14 = r20
@@ -552,12 +552,12 @@ public class SlotsDrawable extends RLottieDrawable {
             goto L_0x0012
         L_0x0107:
             if (r3 == 0) goto L_0x0112
-            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$cFDZgOtSbvCKArJlC_8IV3TfQ9A r1 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$cFDZgOtSbvCKArJlC_8IV3TfQ9A
+            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$c4ZUeEoyv32UM2Hf0du5mp9LiQ0 r1 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$c4ZUeEoyv32UM2Hf0du5mp9LiQ0
             r1.<init>()
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
             return
         L_0x0112:
-            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$HFIC0zPAkvUrljBr3nnb0WYVzPs r1 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$HFIC0zPAkvUrljBr3nnb0WYVzPs
+            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$ReXgvrSEBXnqzbP-Y3rnTvEii4Y r1 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$ReXgvrSEBXnqzbP-Y3rnTvEii4Y
             r2 = r19
             r3 = r21
             r4 = r22
@@ -569,28 +569,28 @@ public class SlotsDrawable extends RLottieDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$SlotsDrawable() {
+    /* renamed from: lambda$setDiceNumber$6 */
+    public /* synthetic */ void lambda$setDiceNumber$6$SlotsDrawable() {
         this.secondLoadingInBackground = false;
         if (!this.loadingInBackground && this.destroyAfterLoading) {
             recycle();
         }
     }
 
-    static /* synthetic */ void lambda$null$7(TLRPC$Document tLRPC$Document, int i, MessageObject messageObject, ChatMessageCell chatMessageCell, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    static /* synthetic */ void lambda$setDiceNumber$7(TLRPC$Document tLRPC$Document, int i, MessageObject messageObject, ChatMessageCell chatMessageCell, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
         DownloadController.getInstance(i).addLoadingFileObserver(FileLoader.getAttachFileName(tLRPC$Document), messageObject, chatMessageCell);
         FileLoader.getInstance(i).loadFile(tLRPC$Document, tLRPC$TL_messages_stickerSet, 1, 1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$SlotsDrawable() {
+    /* renamed from: lambda$setDiceNumber$8 */
+    public /* synthetic */ void lambda$setDiceNumber$8$SlotsDrawable() {
         this.secondLoadingInBackground = false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$SlotsDrawable(boolean z, int i, ChatMessageCell chatMessageCell) {
+    /* renamed from: lambda$setDiceNumber$9 */
+    public /* synthetic */ void lambda$setDiceNumber$9$SlotsDrawable(boolean z, int i, ChatMessageCell chatMessageCell) {
         if (z && this.nextRenderingBitmap == null && this.renderingBitmap == null && this.loadFrameTask == null) {
             this.isDice = 2;
             this.setLastFrame = true;

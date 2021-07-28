@@ -1110,11 +1110,11 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 requestLayout();
                 CameraController.getInstance().open(this.cameraSession, surfaceTexture, new Runnable() {
                     public final void run() {
-                        CameraView.this.lambda$null$1$CameraView();
+                        CameraView.this.lambda$createCamera$1$CameraView();
                     }
                 }, new Runnable() {
                     public final void run() {
-                        CameraView.this.lambda$null$2$CameraView();
+                        CameraView.this.lambda$createCamera$2$CameraView();
                     }
                 });
             }
@@ -1122,8 +1122,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$CameraView() {
+    /* renamed from: lambda$createCamera$1 */
+    public /* synthetic */ void lambda$createCamera$1$CameraView() {
         if (this.cameraSession != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("CameraView camera initied");
@@ -1133,8 +1133,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$CameraView() {
+    /* renamed from: lambda$createCamera$2 */
+    public /* synthetic */ void lambda$createCamera$2$CameraView() {
         this.cameraThread.setCurrentSession(this.cameraSession);
     }
 

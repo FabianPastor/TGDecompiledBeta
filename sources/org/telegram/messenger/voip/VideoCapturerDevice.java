@@ -227,7 +227,7 @@ public class VideoCapturerDevice {
                         this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.getEglBaseContext());
                         this.handler.post(new Runnable() {
                             public final void run() {
-                                VideoCapturerDevice.this.lambda$null$3$VideoCapturerDevice();
+                                VideoCapturerDevice.this.lambda$init$3$VideoCapturerDevice();
                             }
                         });
                         return;
@@ -240,7 +240,7 @@ public class VideoCapturerDevice {
                         }
 
                         public final void run() {
-                            VideoCapturerDevice.this.lambda$null$4$VideoCapturerDevice(this.f$1);
+                            VideoCapturerDevice.this.lambda$init$4$VideoCapturerDevice(this.f$1);
                         }
                     });
                 }
@@ -268,7 +268,7 @@ public class VideoCapturerDevice {
                     }
 
                     public final void run() {
-                        VideoCapturerDevice.this.lambda$null$2$VideoCapturerDevice(this.f$1);
+                        VideoCapturerDevice.this.lambda$init$2$VideoCapturerDevice(this.f$1);
                     }
                 });
             }
@@ -276,8 +276,8 @@ public class VideoCapturerDevice {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$VideoCapturerDevice(Point point) {
+    /* renamed from: lambda$init$2 */
+    public /* synthetic */ void lambda$init$2$VideoCapturerDevice(Point point) {
         if (this.videoCapturerSurfaceTextureHelper != null) {
             long j = this.nativePtr;
             if (j != 0) {
@@ -289,8 +289,8 @@ public class VideoCapturerDevice {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$VideoCapturerDevice() {
+    /* renamed from: lambda$init$3 */
+    public /* synthetic */ void lambda$init$3$VideoCapturerDevice() {
         if (this.videoCapturerSurfaceTextureHelper != null) {
             this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
             this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
@@ -299,8 +299,8 @@ public class VideoCapturerDevice {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$VideoCapturerDevice(String str) {
+    /* renamed from: lambda$init$4 */
+    public /* synthetic */ void lambda$init$4$VideoCapturerDevice(String str) {
         ((CameraVideoCapturer) this.videoCapturer).switchCamera(new CameraVideoCapturer.CameraSwitchHandler() {
             public void onCameraSwitchError(String str) {
             }
@@ -365,15 +365,15 @@ public class VideoCapturerDevice {
                 }
 
                 public final void run() {
-                    VideoCapturerDevice.this.lambda$null$6$VideoCapturerDevice(this.f$1);
+                    VideoCapturerDevice.this.lambda$onStateChanged$6$VideoCapturerDevice(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$VideoCapturerDevice(int i) {
+    /* renamed from: lambda$onStateChanged$6 */
+    public /* synthetic */ void lambda$onStateChanged$6$VideoCapturerDevice(int i) {
         VideoCapturer videoCapturer2 = this.videoCapturer;
         if (videoCapturer2 != null) {
             if (i == 2) {
@@ -416,7 +416,7 @@ public class VideoCapturerDevice {
         }
         this.handler.post(new Runnable() {
             public final void run() {
-                VideoCapturerDevice.this.lambda$null$8$VideoCapturerDevice();
+                VideoCapturerDevice.this.lambda$onDestroy$8$VideoCapturerDevice();
             }
         });
         try {
@@ -427,8 +427,8 @@ public class VideoCapturerDevice {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$VideoCapturerDevice() {
+    /* renamed from: lambda$onDestroy$8 */
+    public /* synthetic */ void lambda$onDestroy$8$VideoCapturerDevice() {
         VideoCapturer videoCapturer2 = this.videoCapturer;
         if (videoCapturer2 != null) {
             try {

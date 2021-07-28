@@ -1,6 +1,5 @@
 package org.telegram.messenger;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -1704,9 +1703,9 @@ public class MessageObject {
     }
 
     public MessageObject(int i, TLRPC$Message tLRPC$Message, MessageObject messageObject, AbstractMap<Integer, TLRPC$User> abstractMap, AbstractMap<Integer, TLRPC$Chat> abstractMap2, SparseArray<TLRPC$User> sparseArray, SparseArray<TLRPC$Chat> sparseArray2, boolean z, boolean z2, long j) {
-        TLRPC$User tLRPC$User;
         SparseArray<TLRPC$Chat> sparseArray3;
         AbstractMap<Integer, TLRPC$Chat> abstractMap3;
+        TLRPC$User tLRPC$User;
         TextPaint textPaint;
         int i2;
         TLRPC$Message tLRPC$Message2 = tLRPC$Message;
@@ -1715,7 +1714,7 @@ public class MessageObject {
         boolean z3 = z;
         this.type = 1000;
         this.forceSeekTo = -1.0f;
-        Theme.createCommonChatResources((Context) null);
+        Theme.createCommonChatResources();
         this.currentAccount = i;
         this.messageOwner = tLRPC$Message2;
         this.replyMessageObject = messageObject;
@@ -5196,7 +5195,7 @@ public class MessageObject {
             this.wantedBotKeyboardWidth = 0;
             TLRPC$Message tLRPC$Message = this.messageOwner;
             if ((tLRPC$Message.reply_markup instanceof TLRPC$TL_replyInlineMarkup) || ((tLRPC$TL_messageReactions = tLRPC$Message.reactions) != null && !tLRPC$TL_messageReactions.results.isEmpty())) {
-                Theme.createCommonChatResources((Context) null);
+                Theme.createCommonChatResources();
                 StringBuilder sb = this.botButtonsLayout;
                 if (sb == null) {
                     this.botButtonsLayout = new StringBuilder();
@@ -11939,28 +11938,28 @@ public class MessageObject {
             r1 = 0
         L_0x00d9:
             int r4 = r2.length
-            if (r1 >= r4) goto L_0x0151
+            if (r1 >= r4) goto L_0x0153
             r4 = r2[r1]
             int r5 = r4.length()
             r6 = 2
             if (r5 >= r6) goto L_0x00e6
-            goto L_0x014e
+            goto L_0x0150
         L_0x00e6:
             r5 = 0
         L_0x00e7:
             int r6 = r3.size()
-            if (r5 >= r6) goto L_0x014e
+            if (r5 >= r6) goto L_0x0150
             java.lang.Object r6 = r3.get(r5)
             boolean r6 = r0.contains(r6)
             if (r6 == 0) goto L_0x00f8
-            goto L_0x014b
+            goto L_0x014d
         L_0x00f8:
             java.lang.Object r6 = r3.get(r5)
             java.lang.String r6 = (java.lang.String) r6
             char r7 = r4.charAt(r14)
             int r7 = r6.indexOf(r7)
             if (r7 >= 0) goto L_0x0109
-            goto L_0x014b
+            goto L_0x014d
         L_0x0109:
             int r8 = r4.length()
             int r9 = r6.length()
@@ -11988,16 +11987,17 @@ public class MessageObject {
             double r6 = (double) r6
             r8 = 4602678819172646912(0x3feNUM, double:0.5)
             int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r10 < 0) goto L_0x014b
+            if (r10 < 0) goto L_0x014d
             java.lang.Object r6 = r3.get(r5)
+            java.lang.String r6 = (java.lang.String) r6
             r0.add(r6)
-        L_0x014b:
+        L_0x014d:
             int r5 = r5 + 1
             goto L_0x00e7
-        L_0x014e:
+        L_0x0150:
             int r1 = r1 + 1
             goto L_0x00d9
-        L_0x0151:
+        L_0x0153:
             r13.handleFoundWords(r0, r2)
             return
         */

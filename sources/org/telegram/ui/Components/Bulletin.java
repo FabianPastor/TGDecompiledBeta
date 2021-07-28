@@ -389,6 +389,12 @@ public final class Bulletin {
         /* access modifiers changed from: protected */
         public abstract void onPressedStateChanged(boolean z);
 
+        static /* synthetic */ float access$1424(ParentLayout parentLayout, float f) {
+            float f2 = parentLayout.translationX - f;
+            parentLayout.translationX = f2;
+            return f2;
+        }
+
         public ParentLayout(final Layout layout2) {
             super(layout2.getContext());
             this.layout = layout2;
@@ -403,9 +409,7 @@ public final class Bulletin {
                 }
 
                 public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                    Layout layout = layout2;
-                    ParentLayout parentLayout = ParentLayout.this;
-                    layout.setTranslationX(parentLayout.translationX = parentLayout.translationX - f);
+                    layout2.setTranslationX(ParentLayout.access$1424(ParentLayout.this, f));
                     if (ParentLayout.this.translationX != 0.0f && ((ParentLayout.this.translationX >= 0.0f || !ParentLayout.this.needLeftAlphaAnimation) && (ParentLayout.this.translationX <= 0.0f || !ParentLayout.this.needRightAlphaAnimation))) {
                         return true;
                     }

@@ -181,7 +181,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                LanguageSelectActivity.this.lambda$null$1$LanguageSelectActivity(this.f$1, dialogInterface, i);
+                LanguageSelectActivity.this.lambda$createView$1$LanguageSelectActivity(this.f$1, dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -195,8 +195,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$LanguageSelectActivity(LocaleController.LocaleInfo localeInfo, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$LanguageSelectActivity(LocaleController.LocaleInfo localeInfo, DialogInterface dialogInterface, int i) {
         if (LocaleController.getInstance().deleteLanguage(localeInfo, this.currentAccount)) {
             fillLanguages();
             ArrayList<LocaleController.LocaleInfo> arrayList = this.searchResult;

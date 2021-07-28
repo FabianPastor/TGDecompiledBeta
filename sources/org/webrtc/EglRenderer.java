@@ -427,14 +427,9 @@ public class EglRenderer implements VideoSink {
     }
 
     public void printStackTrace() {
-        Thread thread;
         synchronized (this.handlerLock) {
             Handler handler = this.renderThreadHandler;
-            if (handler == null) {
-                thread = null;
-            } else {
-                thread = handler.getLooper().getThread();
-            }
+            Thread thread = handler == null ? null : handler.getLooper().getThread();
             if (thread != null) {
                 StackTraceElement[] stackTrace = thread.getStackTrace();
                 if (stackTrace.length > 0) {

@@ -1512,7 +1512,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             }
 
             public final void onClick(View view) {
-                PhotoPaintView.this.lambda$null$10$PhotoPaintView(this.f$1, view);
+                PhotoPaintView.this.lambda$showMenuForEntity$10$PhotoPaintView(this.f$1, view);
             }
         });
         linearLayout.addView(textView, LayoutHelper.createLinear(-2, 48));
@@ -1527,7 +1527,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             textView2.setText(LocaleController.getString("PaintEdit", NUM));
             textView2.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    PhotoPaintView.this.lambda$null$11$PhotoPaintView(view);
+                    PhotoPaintView.this.lambda$showMenuForEntity$11$PhotoPaintView(view);
                 }
             });
             linearLayout.addView(textView2, LayoutHelper.createLinear(-2, 48));
@@ -1542,7 +1542,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         textView3.setText(LocaleController.getString("PaintDuplicate", NUM));
         textView3.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                PhotoPaintView.this.lambda$null$12$PhotoPaintView(view);
+                PhotoPaintView.this.lambda$showMenuForEntity$12$PhotoPaintView(view);
             }
         });
         linearLayout.addView(textView3, LayoutHelper.createLinear(-2, 48));
@@ -1554,8 +1554,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$PhotoPaintView(EntityView entityView, View view) {
+    /* renamed from: lambda$showMenuForEntity$10 */
+    public /* synthetic */ void lambda$showMenuForEntity$10$PhotoPaintView(EntityView entityView, View view) {
         lambda$registerRemovalUndo$9(entityView);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
@@ -1564,8 +1564,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$PhotoPaintView(View view) {
+    /* renamed from: lambda$showMenuForEntity$11 */
+    public /* synthetic */ void lambda$showMenuForEntity$11$PhotoPaintView(View view) {
         editSelectedTextEntity();
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
@@ -1574,8 +1574,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$PhotoPaintView(View view) {
+    /* renamed from: lambda$showMenuForEntity$12 */
+    public /* synthetic */ void lambda$showMenuForEntity$12$PhotoPaintView(View view) {
         duplicateSelectedEntity();
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {

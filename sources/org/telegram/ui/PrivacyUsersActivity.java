@@ -207,7 +207,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             GroupCreateActivity groupCreateActivity = new GroupCreateActivity(bundle);
             groupCreateActivity.setDelegate((GroupCreateActivity.GroupCreateActivityDelegate) new GroupCreateActivity.GroupCreateActivityDelegate() {
                 public final void didSelectUsers(ArrayList arrayList) {
-                    PrivacyUsersActivity.this.lambda$null$0$PrivacyUsersActivity(arrayList);
+                    PrivacyUsersActivity.this.lambda$createView$0$PrivacyUsersActivity(arrayList);
                 }
             });
             presentFragment(groupCreateActivity);
@@ -230,8 +230,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$PrivacyUsersActivity(ArrayList arrayList) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$PrivacyUsersActivity(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             Integer num = (Integer) it.next();

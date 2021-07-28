@@ -103,14 +103,14 @@ public class DispatchQueuePool {
             }
 
             public final void run() {
-                DispatchQueuePool.this.lambda$null$0$DispatchQueuePool(this.f$1);
+                DispatchQueuePool.this.lambda$execute$0$DispatchQueuePool(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$DispatchQueuePool(DispatchQueue dispatchQueue) {
+    /* renamed from: lambda$execute$0 */
+    public /* synthetic */ void lambda$execute$0$DispatchQueuePool(DispatchQueue dispatchQueue) {
         this.totalTasksCount--;
         int intValue = this.busyQueuesMap.get(dispatchQueue).intValue() - 1;
         if (intValue == 0) {

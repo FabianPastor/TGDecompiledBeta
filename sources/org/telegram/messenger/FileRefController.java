@@ -1420,7 +1420,7 @@ public class FileRefController extends BaseController {
 
     /* JADX WARNING: type inference failed for: r13v0 */
     /* JADX WARNING: type inference failed for: r13v2 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r13v1, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r13v1, types: [int, boolean] */
     /* JADX WARNING: Removed duplicated region for block: B:18:0x0035  */
     /* JADX WARNING: Removed duplicated region for block: B:198:0x041b  */
     /* JADX WARNING: Removed duplicated region for block: B:205:0x0430  */
@@ -2049,7 +2049,7 @@ public class FileRefController extends BaseController {
                     if (arrayList == null) {
                         arrayList = new ArrayList();
                     }
-                    arrayList.add(next.getKey());
+                    arrayList.add((String) next.getKey());
                 }
             }
             if (arrayList != null) {

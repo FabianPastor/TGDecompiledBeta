@@ -377,15 +377,15 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    TooManyCommunitiesActivity.this.lambda$null$4$TooManyCommunitiesActivity(this.f$1, this.f$2);
+                    TooManyCommunitiesActivity.this.lambda$loadInactiveChannels$4$TooManyCommunitiesActivity(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$TooManyCommunitiesActivity(ArrayList arrayList, TLRPC$TL_messages_inactiveChats tLRPC$TL_messages_inactiveChats) {
+    /* renamed from: lambda$loadInactiveChannels$4 */
+    public /* synthetic */ void lambda$loadInactiveChannels$4$TooManyCommunitiesActivity(ArrayList arrayList, TLRPC$TL_messages_inactiveChats tLRPC$TL_messages_inactiveChats) {
         this.inactiveChatsSignatures.clear();
         this.inactiveChats.clear();
         this.inactiveChatsSignatures.addAll(arrayList);
@@ -396,7 +396,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             this.enterAnimator = ofFloat;
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    TooManyCommunitiesActivity.this.lambda$null$3$TooManyCommunitiesActivity(valueAnimator);
+                    TooManyCommunitiesActivity.this.lambda$loadInactiveChannels$3$TooManyCommunitiesActivity(valueAnimator);
                 }
             });
             this.enterAnimator.setDuration(100);
@@ -415,8 +415,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$TooManyCommunitiesActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$loadInactiveChannels$3 */
+    public /* synthetic */ void lambda$loadInactiveChannels$3$TooManyCommunitiesActivity(ValueAnimator valueAnimator) {
         this.enterProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         int childCount = this.listView.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -771,7 +771,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                         z = true;
                         if (z) {
                             arrayList.add(tLRPC$Chat);
-                            arrayList2.add(TooManyCommunitiesActivity.this.inactiveChatsSignatures.get(i4));
+                            arrayList2.add((String) TooManyCommunitiesActivity.this.inactiveChatsSignatures.get(i4));
                             break;
                         }
                     }

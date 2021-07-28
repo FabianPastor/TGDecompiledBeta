@@ -508,14 +508,14 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                         }
 
                         public final void run() {
-                            MentionsAdapter.AnonymousClass4.this.lambda$null$0$MentionsAdapter$4(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                            MentionsAdapter.AnonymousClass4.this.lambda$run$0$MentionsAdapter$4(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                         }
                     });
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$null$0 */
-                public /* synthetic */ void lambda$null$0$MentionsAdapter$4(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, MessagesController messagesController, MessagesStorage messagesStorage) {
+                /* renamed from: lambda$run$0 */
+                public /* synthetic */ void lambda$run$0$MentionsAdapter$4(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, MessagesController messagesController, MessagesStorage messagesStorage) {
                     if (MentionsAdapter.this.searchingContextUsername != null && MentionsAdapter.this.searchingContextUsername.equals(str)) {
                         TLRPC$User tLRPC$User = null;
                         if (tLRPC$TL_error == null) {
@@ -766,14 +766,14 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
             }
 
             public final void run() {
-                MentionsAdapter.this.lambda$null$3$MentionsAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+                MentionsAdapter.this.lambda$searchForContextBotResults$3$MentionsAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$MentionsAdapter(String str, boolean z, TLObject tLObject, TLRPC$User tLRPC$User, String str2, MessagesStorage messagesStorage, String str3) {
+    /* renamed from: lambda$searchForContextBotResults$3 */
+    public /* synthetic */ void lambda$searchForContextBotResults$3$MentionsAdapter(String str, boolean z, TLObject tLObject, TLRPC$User tLRPC$User, String str2, MessagesStorage messagesStorage, String str3) {
         boolean z2;
         if (str.equals(this.searchingContextQuery)) {
             boolean z3 = false;

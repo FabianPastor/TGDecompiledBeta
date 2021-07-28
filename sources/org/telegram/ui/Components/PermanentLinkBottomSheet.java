@@ -199,14 +199,14 @@ public class PermanentLinkBottomSheet extends BottomSheet {
             }
 
             public final void run() {
-                PermanentLinkBottomSheet.this.lambda$null$2$PermanentLinkBottomSheet(this.f$1, this.f$2, this.f$3);
+                PermanentLinkBottomSheet.this.lambda$generateLink$2$PermanentLinkBottomSheet(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$PermanentLinkBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
+    /* renamed from: lambda$generateLink$2 */
+    public /* synthetic */ void lambda$generateLink$2$PermanentLinkBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         if (tLRPC$TL_error == null) {
             this.invite = (TLRPC$TL_chatInviteExported) tLObject;
             TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(this.chatId);

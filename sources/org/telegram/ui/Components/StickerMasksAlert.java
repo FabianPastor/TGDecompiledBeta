@@ -1887,13 +1887,13 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 AndroidUtilities.runOnUIThread(
                 /*  JADX ERROR: Method code generation error
                     jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                      (wrap: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$QXXcz0MVQspdonkFIqVSL4aRNTE : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$QXXcz0MVQspdonkFIqVSL4aRNTE) = 
+                      (wrap: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY) = 
                       (r6v0 'this' org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1 A[THIS])
                       (r7v0 'tLRPC$TL_messages_getStickers' org.telegram.tgnet.TLRPC$TL_messages_getStickers)
                       (r10v0 'tLObject' org.telegram.tgnet.TLObject)
                       (r8v0 'arrayList' java.util.ArrayList)
                       (r9v0 'longSparseArray' android.util.LongSparseArray)
-                     call: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$QXXcz0MVQspdonkFIqVSL4aRNTE.<init>(org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR)
+                     call: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY.<init>(org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR)
                      org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.1.lambda$run$2(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -1953,13 +1953,13 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                     	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                     	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$QXXcz0MVQspdonkFIqVSL4aRNTE) = 
+                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY) = 
                       (r6v0 'this' org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1 A[THIS])
                       (r7v0 'tLRPC$TL_messages_getStickers' org.telegram.tgnet.TLRPC$TL_messages_getStickers)
                       (r10v0 'tLObject' org.telegram.tgnet.TLObject)
                       (r8v0 'arrayList' java.util.ArrayList)
                       (r9v0 'longSparseArray' android.util.LongSparseArray)
-                     call: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$QXXcz0MVQspdonkFIqVSL4aRNTE.<init>(org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR in method: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.1.lambda$run$2(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
+                     call: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY.<init>(org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR in method: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.1.lambda$run$2(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                     	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                     	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1968,7 +1968,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                     	... 57 more
-                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$QXXcz0MVQspdonkFIqVSL4aRNTE, state: NOT_LOADED
+                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY, state: NOT_LOADED
                     	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                     	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                     	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -1977,7 +1977,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     */
                 /*
                     this = this;
-                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$QXXcz0MVQspdonkFIqVSL4aRNTE r11 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$QXXcz0MVQspdonkFIqVSL4aRNTE
+                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY r11 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY
                     r0 = r11
                     r1 = r6
                     r2 = r7
@@ -1992,8 +1992,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$null$1 */
-            public /* synthetic */ void lambda$null$1$StickerMasksAlert$StickersSearchGridAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
+            /* renamed from: lambda$run$1 */
+            public /* synthetic */ void lambda$run$1$StickerMasksAlert$StickersSearchGridAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
                 if (tLRPC$TL_messages_getStickers.emoticon.equals(StickersSearchGridAdapter.this.searchQuery)) {
                     StickerMasksAlert.this.stickersSearchField.progressDrawable.stopAnimation();
                     int unused = StickersSearchGridAdapter.this.reqId2 = 0;

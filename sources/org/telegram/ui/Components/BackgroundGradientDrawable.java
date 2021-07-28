@@ -301,7 +301,7 @@ public class BackgroundGradientDrawable extends GradientDrawable {
                 }
 
                 public final void run() {
-                    BackgroundGradientDrawable.this.lambda$null$1$BackgroundGradientDrawable(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    BackgroundGradientDrawable.this.lambda$startDitheringInternal$1$BackgroundGradientDrawable(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
         } catch (Throwable th) {
@@ -321,7 +321,7 @@ public class BackgroundGradientDrawable extends GradientDrawable {
                 }
 
                 public final void run() {
-                    BackgroundGradientDrawable.this.lambda$null$1$BackgroundGradientDrawable(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    BackgroundGradientDrawable.this.lambda$startDitheringInternal$1$BackgroundGradientDrawable(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
             throw th;
@@ -332,9 +332,9 @@ public class BackgroundGradientDrawable extends GradientDrawable {
     /* JADX WARNING: Removed duplicated region for block: B:17:0x0037  */
     /* JADX WARNING: Removed duplicated region for block: B:20:0x0040  */
     /* JADX WARNING: Removed duplicated region for block: B:28:? A[RETURN, SYNTHETIC] */
-    /* renamed from: lambda$null$1 */
+    /* renamed from: lambda$startDitheringInternal$1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$null$1$BackgroundGradientDrawable(java.lang.Runnable[] r4, android.graphics.Bitmap r5, org.telegram.ui.Components.IntSize r6, int r7, org.telegram.ui.Components.BackgroundGradientDrawable.Listener[] r8) {
+    public /* synthetic */ void lambda$startDitheringInternal$1$BackgroundGradientDrawable(java.lang.Runnable[] r4, android.graphics.Bitmap r5, org.telegram.ui.Components.IntSize r6, int r7, org.telegram.ui.Components.BackgroundGradientDrawable.Listener[] r8) {
         /*
             r3 = this;
             java.util.List<java.lang.Runnable[]> r0 = r3.ditheringRunnables
@@ -391,7 +391,7 @@ public class BackgroundGradientDrawable extends GradientDrawable {
         L_0x0052:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BackgroundGradientDrawable.lambda$null$1$BackgroundGradientDrawable(java.lang.Runnable[], android.graphics.Bitmap, org.telegram.ui.Components.IntSize, int, org.telegram.ui.Components.BackgroundGradientDrawable$Listener[]):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BackgroundGradientDrawable.lambda$startDitheringInternal$1$BackgroundGradientDrawable(java.lang.Runnable[], android.graphics.Bitmap, org.telegram.ui.Components.IntSize, int, org.telegram.ui.Components.BackgroundGradientDrawable$Listener[]):void");
     }
 
     /* access modifiers changed from: private */

@@ -1031,14 +1031,14 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             }
 
             public final void run() {
-                VoIPFragment.this.lambda$null$11$VoIPFragment(this.f$1);
+                VoIPFragment.this.lambda$startTransitionFromPiP$11$VoIPFragment(this.f$1);
             }
         }, 32);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$VoIPFragment(Animator animator) {
+    /* renamed from: lambda$startTransitionFromPiP$11 */
+    public /* synthetic */ void lambda$startTransitionFromPiP$11$VoIPFragment(Animator animator) {
         VoIPPiPView.switchingToPip = false;
         VoIPPiPView.finish();
         ViewPropertyAnimator duration = this.speakerPhoneIcon.animate().setDuration(150);
@@ -2679,7 +2679,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    VoIPFragment.this.lambda$null$22$VoIPFragment(this.f$1, dialogInterface, i);
+                    VoIPFragment.this.lambda$setVideoAction$22$VoIPFragment(this.f$1, dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -2690,8 +2690,8 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$22 */
-    public /* synthetic */ void lambda$null$22$VoIPFragment(VoIPService voIPService, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$setVideoAction$22 */
+    public /* synthetic */ void lambda$setVideoAction$22$VoIPFragment(VoIPService voIPService, DialogInterface dialogInterface, int i) {
         voIPService.sharedUIParams.cameraAlertWasShowed = true;
         toggleCameraInput();
     }

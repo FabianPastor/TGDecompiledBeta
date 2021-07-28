@@ -446,15 +446,15 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             tLRPC$TL_inputStickerSetShortName.short_name = str;
             this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickerSet, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    GroupStickersActivity.this.lambda$null$3$GroupStickersActivity(tLObject, tLRPC$TL_error);
+                    GroupStickersActivity.this.lambda$resolveStickerSet$3$GroupStickersActivity(tLObject, tLRPC$TL_error);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$GroupStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$resolveStickerSet$3 */
+    public /* synthetic */ void lambda$resolveStickerSet$3$GroupStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
 
@@ -463,14 +463,14 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             }
 
             public final void run() {
-                GroupStickersActivity.this.lambda$null$2$GroupStickersActivity(this.f$1);
+                GroupStickersActivity.this.lambda$resolveStickerSet$2$GroupStickersActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$GroupStickersActivity(TLObject tLObject) {
+    /* renamed from: lambda$resolveStickerSet$2 */
+    public /* synthetic */ void lambda$resolveStickerSet$2$GroupStickersActivity(TLObject tLObject) {
         this.searching = false;
         if (tLObject instanceof TLRPC$TL_messages_stickerSet) {
             this.selectedStickerSet = (TLRPC$TL_messages_stickerSet) tLObject;
@@ -561,14 +561,14 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             }
 
             public final void run() {
-                GroupStickersActivity.this.lambda$null$6$GroupStickersActivity(this.f$1);
+                GroupStickersActivity.this.lambda$saveStickerSet$6$GroupStickersActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$GroupStickersActivity(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$saveStickerSet$6 */
+    public /* synthetic */ void lambda$saveStickerSet$6$GroupStickersActivity(TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.selectedStickerSet;
             if (tLRPC$TL_messages_stickerSet == null) {

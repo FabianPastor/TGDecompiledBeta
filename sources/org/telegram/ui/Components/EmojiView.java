@@ -5136,12 +5136,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                     AndroidUtilities.runOnUIThread(
                                     /*  JADX ERROR: Method code generation error
                                         jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0005: INVOKE  
-                                          (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$Jd1KAO5fbgf1i1rr6Lo2FPiqZCM : 0x0002: CONSTRUCTOR  (r4v1 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$Jd1KAO5fbgf1i1rr6Lo2FPiqZCM) = 
+                                          (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$1JTNm3fWIiGXpkLvmPWTLhxJ9jw : 0x0002: CONSTRUCTOR  (r4v1 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$1JTNm3fWIiGXpkLvmPWTLhxJ9jw) = 
                                           (r0v0 'this' org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1 A[THIS])
                                           (r1v0 'alertDialogArr' org.telegram.ui.ActionBar.AlertDialog[])
                                           (r3v0 'tLObject' org.telegram.tgnet.TLObject)
                                           (r2v0 'builder' org.telegram.ui.ActionBar.BottomSheet$Builder)
-                                         call: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$Jd1KAO5fbgf1i1rr6Lo2FPiqZCM.<init>(org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1, org.telegram.ui.ActionBar.AlertDialog[], org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.BottomSheet$Builder):void type: CONSTRUCTOR)
+                                         call: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$1JTNm3fWIiGXpkLvmPWTLhxJ9jw.<init>(org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1, org.telegram.ui.ActionBar.AlertDialog[], org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.BottomSheet$Builder):void type: CONSTRUCTOR)
                                          org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.1.lambda$onClick$1(org.telegram.ui.ActionBar.AlertDialog[], org.telegram.ui.ActionBar.BottomSheet$Builder, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -5259,12 +5259,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r4v1 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$Jd1KAO5fbgf1i1rr6Lo2FPiqZCM) = 
+                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r4v1 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$1JTNm3fWIiGXpkLvmPWTLhxJ9jw) = 
                                           (r0v0 'this' org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1 A[THIS])
                                           (r1v0 'alertDialogArr' org.telegram.ui.ActionBar.AlertDialog[])
                                           (r3v0 'tLObject' org.telegram.tgnet.TLObject)
                                           (r2v0 'builder' org.telegram.ui.ActionBar.BottomSheet$Builder)
-                                         call: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$Jd1KAO5fbgf1i1rr6Lo2FPiqZCM.<init>(org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1, org.telegram.ui.ActionBar.AlertDialog[], org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.BottomSheet$Builder):void type: CONSTRUCTOR in method: org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.1.lambda$onClick$1(org.telegram.ui.ActionBar.AlertDialog[], org.telegram.ui.ActionBar.BottomSheet$Builder, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
+                                         call: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$1JTNm3fWIiGXpkLvmPWTLhxJ9jw.<init>(org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1, org.telegram.ui.ActionBar.AlertDialog[], org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.BottomSheet$Builder):void type: CONSTRUCTOR in method: org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.1.lambda$onClick$1(org.telegram.ui.ActionBar.AlertDialog[], org.telegram.ui.ActionBar.BottomSheet$Builder, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -5273,7 +5273,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                         	... 115 more
-                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$Jd1KAO5fbgf1i1rr6Lo2FPiqZCM, state: NOT_LOADED
+                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$1JTNm3fWIiGXpkLvmPWTLhxJ9jw, state: NOT_LOADED
                                         	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                         	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -5282,7 +5282,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         */
                                     /*
                                         this = this;
-                                        org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$Jd1KAO5fbgf1i1rr6Lo2FPiqZCM r4 = new org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$Jd1KAO5fbgf1i1rr6Lo2FPiqZCM
+                                        org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$1JTNm3fWIiGXpkLvmPWTLhxJ9jw r4 = new org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$1JTNm3fWIiGXpkLvmPWTLhxJ9jw
                                         r4.<init>(r0, r1, r3, r2)
                                         org.telegram.messenger.AndroidUtilities.runOnUIThread(r4)
                                         return
@@ -5291,8 +5291,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 }
 
                                 /* access modifiers changed from: private */
-                                /* renamed from: lambda$null$0 */
-                                public /* synthetic */ void lambda$null$0$EmojiView$EmojiSearchAdapter$2$1(AlertDialog[] alertDialogArr, TLObject tLObject, BottomSheet.Builder builder) {
+                                /* renamed from: lambda$onClick$0 */
+                                public /* synthetic */ void lambda$onClick$0$EmojiView$EmojiSearchAdapter$2$1(AlertDialog[] alertDialogArr, TLObject tLObject, BottomSheet.Builder builder) {
                                     try {
                                         alertDialogArr[0].dismiss();
                                     } catch (Throwable unused) {
@@ -5315,10 +5315,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                               (r4v0 'alertDialogArr' org.telegram.ui.ActionBar.AlertDialog[])
                                               (0 ?[int, short, byte, char])
                                             )
-                                              (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$E4i1lFzSGVQ6WmSiIcW90pH_kf8 : 0x000a: CONSTRUCTOR  (r2v0 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$E4i1lFzSGVQ6WmSiIcW90pH_kf8) = 
+                                              (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$qWmAAZ6nUbQerbp8UAiZ_2CDS8M : 0x000a: CONSTRUCTOR  (r2v0 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$qWmAAZ6nUbQerbp8UAiZ_2CDS8M) = 
                                               (r3v0 'this' org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1 A[THIS])
                                               (r5v0 'i' int)
-                                             call: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$E4i1lFzSGVQ6WmSiIcW90pH_kf8.<init>(org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1, int):void type: CONSTRUCTOR)
+                                             call: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$qWmAAZ6nUbQerbp8UAiZ_2CDS8M.<init>(org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1, int):void type: CONSTRUCTOR)
                                              org.telegram.ui.ActionBar.AlertDialog.setOnCancelListener(android.content.DialogInterface$OnCancelListener):void type: VIRTUAL in method: org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.1.lambda$onClick$3(org.telegram.ui.ActionBar.AlertDialog[], int):void, dex: classes3.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -5443,10 +5443,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                             	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000a: CONSTRUCTOR  (r2v0 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$E4i1lFzSGVQ6WmSiIcW90pH_kf8) = 
+                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000a: CONSTRUCTOR  (r2v0 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$qWmAAZ6nUbQerbp8UAiZ_2CDS8M) = 
                                               (r3v0 'this' org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1 A[THIS])
                                               (r5v0 'i' int)
-                                             call: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$E4i1lFzSGVQ6WmSiIcW90pH_kf8.<init>(org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1, int):void type: CONSTRUCTOR in method: org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.1.lambda$onClick$3(org.telegram.ui.ActionBar.AlertDialog[], int):void, dex: classes3.dex
+                                             call: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$qWmAAZ6nUbQerbp8UAiZ_2CDS8M.<init>(org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2$1, int):void type: CONSTRUCTOR in method: org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.1.lambda$onClick$3(org.telegram.ui.ActionBar.AlertDialog[], int):void, dex: classes3.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -5455,7 +5455,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                             	... 122 more
-                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$E4i1lFzSGVQ6WmSiIcW90pH_kf8, state: NOT_LOADED
+                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$qWmAAZ6nUbQerbp8UAiZ_2CDS8M, state: NOT_LOADED
                                             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -5470,7 +5470,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                             return
                                         L_0x0006:
                                             r1 = r4[r0]
-                                            org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$E4i1lFzSGVQ6WmSiIcW90pH_kf8 r2 = new org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$E4i1lFzSGVQ6WmSiIcW90pH_kf8
+                                            org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$qWmAAZ6nUbQerbp8UAiZ_2CDS8M r2 = new org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$qWmAAZ6nUbQerbp8UAiZ_2CDS8M
                                             r2.<init>(r3, r5)
                                             r1.setOnCancelListener(r2)
                                             r4 = r4[r0]
@@ -5481,8 +5481,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                     }
 
                                     /* access modifiers changed from: private */
-                                    /* renamed from: lambda$null$2 */
-                                    public /* synthetic */ void lambda$null$2$EmojiView$EmojiSearchAdapter$2$1(int i, DialogInterface dialogInterface) {
+                                    /* renamed from: lambda$onClick$2 */
+                                    public /* synthetic */ void lambda$onClick$2$EmojiView$EmojiSearchAdapter$2$1(int i, DialogInterface dialogInterface) {
                                         ConnectionsManager.getInstance(EmojiView.this.currentAccount).cancelRequest(i, true);
                                     }
                                 });
@@ -5838,15 +5838,15 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             }
 
                             public final void run() {
-                                EmojiView.GifAdapter.this.lambda$null$0$EmojiView$GifAdapter(this.f$1);
+                                EmojiView.GifAdapter.this.lambda$searchBotUser$0$EmojiView$GifAdapter(this.f$1);
                             }
                         });
                     }
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$null$0 */
-                public /* synthetic */ void lambda$null$0$EmojiView$GifAdapter(TLObject tLObject) {
+                /* renamed from: lambda$searchBotUser$0 */
+                public /* synthetic */ void lambda$searchBotUser$0$EmojiView$GifAdapter(TLObject tLObject) {
                     TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer = (TLRPC$TL_contacts_resolvedPeer) tLObject;
                     MessagesController.getInstance(EmojiView.this.currentAccount).putUsers(tLRPC$TL_contacts_resolvedPeer.users, false);
                     MessagesController.getInstance(EmojiView.this.currentAccount).putChats(tLRPC$TL_contacts_resolvedPeer.chats, false);
@@ -5968,7 +5968,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             EmojiView.this.scrollGifsToTop();
                         }
                         if (z3 && EmojiView.this.gifCache.containsKey(str3)) {
-                            lambda$null$2(str, str2, z, z2, true, str3, (TLObject) EmojiView.this.gifCache.get(str3));
+                            lambda$search$2(str, str2, z, z2, true, str3, (TLObject) EmojiView.this.gifCache.get(str3));
                         } else if (!EmojiView.this.gifSearchPreloader.isLoading(str3)) {
                             if (z3) {
                                 this.reqId = -1;
@@ -6016,14 +6016,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         }
 
                         public final void run() {
-                            EmojiView.GifAdapter.this.lambda$null$2$EmojiView$GifAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+                            EmojiView.GifAdapter.this.lambda$search$2$EmojiView$GifAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
                         }
                     });
                 }
 
                 /* access modifiers changed from: private */
                 /* renamed from: processResponse */
-                public void lambda$null$2(String str, String str2, boolean z, boolean z2, boolean z3, String str3, TLObject tLObject) {
+                public void lambda$search$2(String str, String str2, boolean z, boolean z2, boolean z3, String str3, TLObject tLObject) {
                     if (str != null && str.equals(this.lastSearchImageString)) {
                         boolean z4 = false;
                         this.reqId = 0;
@@ -6173,17 +6173,17 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         }
 
                         public final void run() {
-                            EmojiView.GifSearchPreloader.this.lambda$null$0$EmojiView$GifSearchPreloader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                            EmojiView.GifSearchPreloader.this.lambda$preload$0$EmojiView$GifSearchPreloader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                         }
                     });
                 }
 
                 /* access modifiers changed from: private */
                 /* renamed from: processResponse */
-                public void lambda$null$0(String str, String str2, boolean z, String str3, TLObject tLObject) {
+                public void lambda$preload$0(String str, String str2, boolean z, String str3, TLObject tLObject) {
                     this.loadingKeys.remove(str3);
                     if (EmojiView.this.gifSearchAdapter.lastSearchIsEmoji && EmojiView.this.gifSearchAdapter.lastSearchImageString.equals(str)) {
-                        EmojiView.this.gifSearchAdapter.lambda$null$2(str, str2, false, true, z, str3, tLObject);
+                        EmojiView.this.gifSearchAdapter.lambda$search$2(str, str2, false, true, z, str3, tLObject);
                     } else if (z && (!(tLObject instanceof TLRPC$messages_BotResults) || ((TLRPC$messages_BotResults) tLObject).results.isEmpty())) {
                         preload(str, str2, false);
                     } else if ((tLObject instanceof TLRPC$messages_BotResults) && !EmojiView.this.gifCache.containsKey(str3)) {
@@ -6820,11 +6820,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             AndroidUtilities.runOnUIThread(
                             /*  JADX ERROR: Method code generation error
                                 jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0009: INVOKE  
-                                  (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$c6Z8N1qxPPBLHxoWLkGKSnNXaDw : 0x0006: CONSTRUCTOR  (r3v2 org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$c6Z8N1qxPPBLHxoWLkGKSnNXaDw) = 
+                                  (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$0ev_j2Uw1h4UrqYRIzT9c4BU_NY : 0x0006: CONSTRUCTOR  (r3v2 org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$0ev_j2Uw1h4UrqYRIzT9c4BU_NY) = 
                                   (r0v0 'this' org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1 A[THIS])
                                   (r1v0 'tLRPC$TL_messages_searchStickerSets' org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets)
                                   (r2v0 'tLObject' org.telegram.tgnet.TLObject)
-                                 call: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$c6Z8N1qxPPBLHxoWLkGKSnNXaDw.<init>(org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets, org.telegram.tgnet.TLObject):void type: CONSTRUCTOR)
+                                 call: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$0ev_j2Uw1h4UrqYRIzT9c4BU_NY.<init>(org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets, org.telegram.tgnet.TLObject):void type: CONSTRUCTOR)
                                  org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.1.lambda$run$1(org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -6891,11 +6891,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                 	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                 	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0006: CONSTRUCTOR  (r3v2 org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$c6Z8N1qxPPBLHxoWLkGKSnNXaDw) = 
+                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0006: CONSTRUCTOR  (r3v2 org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$0ev_j2Uw1h4UrqYRIzT9c4BU_NY) = 
                                   (r0v0 'this' org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1 A[THIS])
                                   (r1v0 'tLRPC$TL_messages_searchStickerSets' org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets)
                                   (r2v0 'tLObject' org.telegram.tgnet.TLObject)
-                                 call: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$c6Z8N1qxPPBLHxoWLkGKSnNXaDw.<init>(org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets, org.telegram.tgnet.TLObject):void type: CONSTRUCTOR in method: org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.1.lambda$run$1(org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
+                                 call: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$0ev_j2Uw1h4UrqYRIzT9c4BU_NY.<init>(org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets, org.telegram.tgnet.TLObject):void type: CONSTRUCTOR in method: org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.1.lambda$run$1(org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                 	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -6904,7 +6904,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                 	... 64 more
-                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$c6Z8N1qxPPBLHxoWLkGKSnNXaDw, state: NOT_LOADED
+                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$0ev_j2Uw1h4UrqYRIzT9c4BU_NY, state: NOT_LOADED
                                 	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                 	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                 	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -6915,7 +6915,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 this = this;
                                 boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messages_foundStickerSets
                                 if (r3 == 0) goto L_0x000c
-                                org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$c6Z8N1qxPPBLHxoWLkGKSnNXaDw r3 = new org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$c6Z8N1qxPPBLHxoWLkGKSnNXaDw
+                                org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$0ev_j2Uw1h4UrqYRIzT9c4BU_NY r3 = new org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$0ev_j2Uw1h4UrqYRIzT9c4BU_NY
                                 r3.<init>(r0, r1, r2)
                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)
                             L_0x000c:
@@ -6925,8 +6925,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         }
 
                         /* access modifiers changed from: private */
-                        /* renamed from: lambda$null$0 */
-                        public /* synthetic */ void lambda$null$0$EmojiView$StickersSearchGridAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject) {
+                        /* renamed from: lambda$run$0 */
+                        public /* synthetic */ void lambda$run$0$EmojiView$StickersSearchGridAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject) {
                             if (tLRPC$TL_messages_searchStickerSets.q.equals(StickersSearchGridAdapter.this.searchQuery)) {
                                 clear();
                                 EmojiView.this.stickersSearchField.progressDrawable.stopAnimation();
@@ -6945,13 +6945,13 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             AndroidUtilities.runOnUIThread(
                             /*  JADX ERROR: Method code generation error
                                 jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                                  (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$LmNoa-hvflDo_sehq7RJbX343QU : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$LmNoa-hvflDo_sehq7RJbX343QU) = 
+                                  (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$TR9dwEwLUHKd8LZvqMpRA3Gtz-Y : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$TR9dwEwLUHKd8LZvqMpRA3Gtz-Y) = 
                                   (r6v0 'this' org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1 A[THIS])
                                   (r7v0 'tLRPC$TL_messages_getStickers' org.telegram.tgnet.TLRPC$TL_messages_getStickers)
                                   (r10v0 'tLObject' org.telegram.tgnet.TLObject)
                                   (r8v0 'arrayList' java.util.ArrayList)
                                   (r9v0 'longSparseArray' android.util.LongSparseArray)
-                                 call: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$LmNoa-hvflDo_sehq7RJbX343QU.<init>(org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR)
+                                 call: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$TR9dwEwLUHKd8LZvqMpRA3Gtz-Y.<init>(org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR)
                                  org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.1.lambda$run$3(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -7011,13 +7011,13 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                 	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                 	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$LmNoa-hvflDo_sehq7RJbX343QU) = 
+                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$TR9dwEwLUHKd8LZvqMpRA3Gtz-Y) = 
                                   (r6v0 'this' org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1 A[THIS])
                                   (r7v0 'tLRPC$TL_messages_getStickers' org.telegram.tgnet.TLRPC$TL_messages_getStickers)
                                   (r10v0 'tLObject' org.telegram.tgnet.TLObject)
                                   (r8v0 'arrayList' java.util.ArrayList)
                                   (r9v0 'longSparseArray' android.util.LongSparseArray)
-                                 call: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$LmNoa-hvflDo_sehq7RJbX343QU.<init>(org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR in method: org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.1.lambda$run$3(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
+                                 call: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$TR9dwEwLUHKd8LZvqMpRA3Gtz-Y.<init>(org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR in method: org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.1.lambda$run$3(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                 	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -7026,7 +7026,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                 	... 57 more
-                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$LmNoa-hvflDo_sehq7RJbX343QU, state: NOT_LOADED
+                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$TR9dwEwLUHKd8LZvqMpRA3Gtz-Y, state: NOT_LOADED
                                 	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                 	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                 	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -7035,7 +7035,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 */
                             /*
                                 this = this;
-                                org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$LmNoa-hvflDo_sehq7RJbX343QU r11 = new org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$LmNoa-hvflDo_sehq7RJbX343QU
+                                org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$TR9dwEwLUHKd8LZvqMpRA3Gtz-Y r11 = new org.telegram.ui.Components.-$$Lambda$EmojiView$StickersSearchGridAdapter$1$TR9dwEwLUHKd8LZvqMpRA3Gtz-Y
                                 r0 = r11
                                 r1 = r6
                                 r2 = r7
@@ -7050,8 +7050,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         }
 
                         /* access modifiers changed from: private */
-                        /* renamed from: lambda$null$2 */
-                        public /* synthetic */ void lambda$null$2$EmojiView$StickersSearchGridAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
+                        /* renamed from: lambda$run$2 */
+                        public /* synthetic */ void lambda$run$2$EmojiView$StickersSearchGridAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
                             if (tLRPC$TL_messages_getStickers.emoticon.equals(StickersSearchGridAdapter.this.searchQuery)) {
                                 int unused = StickersSearchGridAdapter.this.reqId2 = 0;
                                 if (tLObject instanceof TLRPC$TL_messages_stickers) {

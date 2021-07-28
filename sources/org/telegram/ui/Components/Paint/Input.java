@@ -214,8 +214,8 @@ public class Input {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$Input(Path path) {
+    /* renamed from: lambda$paintPath$0 */
+    public /* synthetic */ void lambda$paintPath$0$Input(Path path) {
         this.lastRemainder = path.remainder;
     }
 
@@ -230,7 +230,7 @@ public class Input {
             }
 
             public final void run() {
-                Input.this.lambda$null$0$Input(this.f$1);
+                Input.this.lambda$paintPath$0$Input(this.f$1);
             }
         });
     }

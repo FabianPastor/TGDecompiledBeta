@@ -285,7 +285,7 @@ public class GigagroupConvertAlert extends BottomSheet {
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("GigagroupConvertAlertText", NUM)));
         builder.setPositiveButton(LocaleController.getString("GigagroupConvertAlertConver", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                GigagroupConvertAlert.this.lambda$null$0$GigagroupConvertAlert(dialogInterface, i);
+                GigagroupConvertAlert.this.lambda$new$0$GigagroupConvertAlert(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -293,8 +293,8 @@ public class GigagroupConvertAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$GigagroupConvertAlert(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$GigagroupConvertAlert(DialogInterface dialogInterface, int i) {
         onCovert();
     }
 

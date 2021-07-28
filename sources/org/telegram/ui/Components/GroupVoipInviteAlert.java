@@ -457,14 +457,14 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             }
 
             public final void run() {
-                GroupVoipInviteAlert.this.lambda$null$3$GroupVoipInviteAlert(this.f$1, this.f$2, this.f$3);
+                GroupVoipInviteAlert.this.lambda$loadChatParticipants$3$GroupVoipInviteAlert(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$GroupVoipInviteAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants) {
+    /* renamed from: lambda$loadChatParticipants$3 */
+    public /* synthetic */ void lambda$loadChatParticipants$3$GroupVoipInviteAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants) {
         int i;
         SparseArray<TLObject> sparseArray;
         ArrayList<TLObject> arrayList;
@@ -532,7 +532,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                         }
 
                         public final int compare(Object obj, Object obj2) {
-                            return GroupVoipInviteAlert.this.lambda$null$2$GroupVoipInviteAlert(this.f$1, (TLObject) obj, (TLObject) obj2);
+                            return GroupVoipInviteAlert.this.lambda$loadChatParticipants$2$GroupVoipInviteAlert(this.f$1, (TLObject) obj, (TLObject) obj2);
                         }
 
                         public /* synthetic */ java.util.Comparator reversed() {
@@ -594,8 +594,8 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ int lambda$null$2$GroupVoipInviteAlert(int i, TLObject tLObject, TLObject tLObject2) {
+    /* renamed from: lambda$loadChatParticipants$2 */
+    public /* synthetic */ int lambda$loadChatParticipants$2$GroupVoipInviteAlert(int i, TLObject tLObject, TLObject tLObject2) {
         int i2;
         int i3;
         TLRPC$UserStatus tLRPC$UserStatus;
@@ -783,7 +783,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                     }
 
                     public final void run() {
-                        GroupVoipInviteAlert.SearchAdapter.this.lambda$null$1$GroupVoipInviteAlert$SearchAdapter(this.f$1, this.f$2, this.f$3);
+                        GroupVoipInviteAlert.SearchAdapter.this.lambda$processSearch$1$GroupVoipInviteAlert$SearchAdapter(this.f$1, this.f$2, this.f$3);
                     }
                 });
             } else {
@@ -800,9 +800,9 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
          */
         /* JADX WARNING: Removed duplicated region for block: B:50:0x00f5 A[LOOP:1: B:32:0x00a1->B:50:0x00f5, LOOP_END] */
         /* JADX WARNING: Removed duplicated region for block: B:59:0x00f1 A[SYNTHETIC] */
-        /* renamed from: lambda$null$1 */
+        /* renamed from: lambda$processSearch$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String r19, int r20, java.util.ArrayList r21) {
+        public /* synthetic */ void lambda$processSearch$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String r19, int r20, java.util.ArrayList r21) {
             /*
                 r18 = this;
                 r0 = r18
@@ -933,7 +933,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 r0.updateSearchResults(r3, r1)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.lambda$null$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String, int, java.util.ArrayList):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.lambda$processSearch$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String, int, java.util.ArrayList):void");
         }
 
         private void updateSearchResults(ArrayList<TLObject> arrayList, int i) {

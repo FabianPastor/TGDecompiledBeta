@@ -3616,14 +3616,14 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             }
 
             public final void run() {
-                ThemePreviewActivity.this.lambda$null$22$ThemePreviewActivity(this.f$1);
+                ThemePreviewActivity.this.lambda$didReceivedNotification$22$ThemePreviewActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$22 */
-    public /* synthetic */ void lambda$null$22$ThemePreviewActivity(TLObject tLObject) {
+    /* renamed from: lambda$didReceivedNotification$22 */
+    public /* synthetic */ void lambda$didReceivedNotification$22$ThemePreviewActivity(TLObject tLObject) {
         Theme.ThemeAccent themeAccent;
         TLRPC$TL_wallPaper tLRPC$TL_wallPaper;
         if (tLObject instanceof TLRPC$TL_account_wallPapers) {
@@ -3673,15 +3673,15 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             tLRPC$TL_account_getWallPaper.wallpaper = tLRPC$TL_inputWallPaperSlug;
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_account_getWallPaper, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ThemePreviewActivity.this.lambda$null$21$ThemePreviewActivity(tLObject, tLRPC$TL_error);
+                    ThemePreviewActivity.this.lambda$didReceivedNotification$21$ThemePreviewActivity(tLObject, tLRPC$TL_error);
                 }
             }), this.classGuid);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$21 */
-    public /* synthetic */ void lambda$null$21$ThemePreviewActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$didReceivedNotification$21 */
+    public /* synthetic */ void lambda$didReceivedNotification$21$ThemePreviewActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
 
@@ -3690,14 +3690,14 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             }
 
             public final void run() {
-                ThemePreviewActivity.this.lambda$null$20$ThemePreviewActivity(this.f$1);
+                ThemePreviewActivity.this.lambda$didReceivedNotification$20$ThemePreviewActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$20 */
-    public /* synthetic */ void lambda$null$20$ThemePreviewActivity(TLObject tLObject) {
+    /* renamed from: lambda$didReceivedNotification$20 */
+    public /* synthetic */ void lambda$didReceivedNotification$20$ThemePreviewActivity(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_wallPaper) {
             TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) tLObject;
             if (tLRPC$TL_wallPaper.pattern) {

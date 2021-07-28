@@ -920,14 +920,14 @@ public class InviteLinkBottomSheet extends BottomSheet {
             }
 
             public final void run() {
-                InviteLinkBottomSheet.this.lambda$null$1$InviteLinkBottomSheet(this.f$1, this.f$2);
+                InviteLinkBottomSheet.this.lambda$loadUsers$1$InviteLinkBottomSheet(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$InviteLinkBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$loadUsers$1 */
+    public /* synthetic */ void lambda$loadUsers$1$InviteLinkBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_chatInviteImporters tLRPC$TL_messages_chatInviteImporters = (TLRPC$TL_messages_chatInviteImporters) tLObject;
             this.invitedUsers.addAll(tLRPC$TL_messages_chatInviteImporters.importers);

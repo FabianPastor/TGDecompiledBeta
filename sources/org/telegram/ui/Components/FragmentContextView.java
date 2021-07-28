@@ -662,7 +662,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             builder.setPositiveButton(LocaleController.getString("Stop", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    FragmentContextView.this.lambda$null$5$FragmentContextView(dialogInterface, i);
+                    FragmentContextView.this.lambda$new$5$FragmentContextView(dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -679,8 +679,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$FragmentContextView(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$5 */
+    public /* synthetic */ void lambda$new$5$FragmentContextView(DialogInterface dialogInterface, int i) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment instanceof DialogsActivity) {
             for (int i2 = 0; i2 < 3; i2++) {
@@ -781,7 +781,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             ImportingAlert importingAlert = new ImportingAlert(getContext(), (String) null, (ChatActivity) this.fragment);
             importingAlert.setOnHideListener(new DialogInterface.OnDismissListener() {
                 public final void onDismiss(DialogInterface dialogInterface) {
-                    FragmentContextView.this.lambda$null$7$FragmentContextView(dialogInterface);
+                    FragmentContextView.this.lambda$new$7$FragmentContextView(dialogInterface);
                 }
             });
             this.fragment.showDialog(importingAlert);
@@ -790,8 +790,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$FragmentContextView(DialogInterface dialogInterface) {
+    /* renamed from: lambda$new$7 */
+    public /* synthetic */ void lambda$new$7$FragmentContextView(DialogInterface dialogInterface) {
         checkImport(false);
     }
 

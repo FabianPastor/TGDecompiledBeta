@@ -624,7 +624,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
             r0.setBackgroundDrawable(r10)
             r10 = r9[r14]
-            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$BFqskTDEJjTwDJpk_1BNurZ0hZQ r15 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$BFqskTDEJjTwDJpk_1BNurZ0hZQ
+            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$TATOZfFIhZjnKeWYDPb170Pyk4E r15 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$TATOZfFIhZjnKeWYDPb170Pyk4E
             r1 = r22
             r0 = r15
             r22 = r23
@@ -710,7 +710,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r3)
             r7.addView(r1, r3)
             r1 = r6[r0]
-            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$vQbOST-wJrvFBQIR5lVh_Mz_gn0 r0 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$vQbOST-wJrvFBQIR5lVh_Mz_gn0
+            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$EV-b22BuW_PQvp-wkdrK47840LY r0 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$EV-b22BuW_PQvp-wkdrK47840LY
             r0.<init>(r6)
             r1.setOnClickListener(r0)
             android.app.Activity r0 = r29.getParentActivity()
@@ -863,7 +863,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r13 = -2
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r11, r10)
             r0.addView(r1, r10)
-            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$Q9qMOO9dMHLR9cp8Q_1duUyTU5Y r10 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$Q9qMOO9dMHLR9cp8Q_1duUyTU5Y
+            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$R96XOf-rVS0YOv_R2I4PywLbCLASSNAME r10 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$R96XOf-rVS0YOv_R2I4PywLbCLASSNAME
             r13 = r25
             r10.<init>()
             r1.setOnClickListener(r10)
@@ -890,7 +890,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r2 = -2
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r11, r1)
             r0.addView(r14, r1)
-            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$JkdoPUlNvobnGrVc6Gbn-aGySfE r15 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$JkdoPUlNvobnGrVc6Gbn-aGySfE
+            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$Aaje1_7nDkNeMDeAP-0Si1Gc9-8 r15 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$Aaje1_7nDkNeMDeAP-0Si1Gc9-8
             r0 = r15
             r1 = r29
             r2 = r9
@@ -913,8 +913,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$DataAutoDownloadActivity(TextCheckBoxCell textCheckBoxCell, TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, TextCheckCell[] textCheckCellArr, final AnimatorSet[] animatorSetArr, View view) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$DataAutoDownloadActivity(TextCheckBoxCell textCheckBoxCell, TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, TextCheckCell[] textCheckCellArr, final AnimatorSet[] animatorSetArr, View view) {
         if (view.isEnabled()) {
             boolean z = true;
             textCheckBoxCell.setChecked(!textCheckBoxCell.isChecked());
@@ -955,8 +955,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$DataAutoDownloadActivity(TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, int i2, TextCheckCell[] textCheckCellArr, int i3, String str, String str2, BottomSheet.Builder builder, View view, View view2) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$DataAutoDownloadActivity(TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, int i2, TextCheckCell[] textCheckCellArr, int i3, String str, String str2, BottomSheet.Builder builder, View view, View view2) {
         int i4 = i3;
         int i5 = this.currentPresetNum;
         if (i5 != 3) {

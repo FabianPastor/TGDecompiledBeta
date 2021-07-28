@@ -292,14 +292,14 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             }
 
             public final void run() {
-                ChatEditActivity.this.lambda$null$0$ChatEditActivity(this.f$1, this.f$2);
+                ChatEditActivity.this.lambda$loadLinksCount$0$ChatEditActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ChatEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$loadLinksCount$0 */
+    public /* synthetic */ void lambda$loadLinksCount$0$ChatEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             this.info.invitesCount = ((TLRPC$TL_messages_exportedChatInvites) tLObject).count;
             getMessagesStorage().saveChatLinksCount(this.chatId, this.info.invitesCount);
@@ -1339,11 +1339,11 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     public /* synthetic */ void lambda$createView$6$ChatEditActivity(View view) {
         this.imageUpdater.openMenu(this.avatar != null, new Runnable() {
             public final void run() {
-                ChatEditActivity.this.lambda$null$4$ChatEditActivity();
+                ChatEditActivity.this.lambda$createView$4$ChatEditActivity();
             }
         }, new DialogInterface.OnDismissListener() {
             public final void onDismiss(DialogInterface dialogInterface) {
-                ChatEditActivity.this.lambda$null$5$ChatEditActivity(dialogInterface);
+                ChatEditActivity.this.lambda$createView$5$ChatEditActivity(dialogInterface);
             }
         });
         this.cameraDrawable.setCurrentFrame(0);
@@ -1352,8 +1352,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$ChatEditActivity() {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$ChatEditActivity() {
         this.avatar = null;
         MessagesController.getInstance(this.currentAccount).changeChatAvatar(this.chatId, (TLRPC$TL_inputChatPhoto) null, (TLRPC$InputFile) null, (TLRPC$InputFile) null, 0.0d, (String) null, (TLRPC$FileLocation) null, (TLRPC$FileLocation) null, (Runnable) null);
         showAvatarProgress(false, true);
@@ -1363,8 +1363,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$ChatEditActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$ChatEditActivity(DialogInterface dialogInterface) {
         this.cameraDrawable.setCustomEndFrame(86);
         this.setAvatarCell.imageView.playAnimation();
     }
@@ -1395,7 +1395,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             }
             locationActivity.setDelegate(new LocationActivity.LocationActivityDelegate() {
                 public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-                    ChatEditActivity.this.lambda$null$8$ChatEditActivity(tLRPC$MessageMedia, i, z, i2);
+                    ChatEditActivity.this.lambda$createView$8$ChatEditActivity(tLRPC$MessageMedia, i, z, i2);
                 }
             });
             presentFragment(locationActivity);
@@ -1403,8 +1403,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$ChatEditActivity(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
+    /* renamed from: lambda$createView$8 */
+    public /* synthetic */ void lambda$createView$8$ChatEditActivity(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
         TLRPC$TL_channelLocation tLRPC$TL_channelLocation = new TLRPC$TL_channelLocation();
         tLRPC$TL_channelLocation.address = tLRPC$MessageMedia.address;
         tLRPC$TL_channelLocation.geo_point = tLRPC$MessageMedia.geo;
@@ -1470,7 +1470,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 }
 
                 public final void onClick(View view) {
-                    ChatEditActivity.this.lambda$null$12$ChatEditActivity(this.f$1, this.f$2, view);
+                    ChatEditActivity.this.lambda$createView$12$ChatEditActivity(this.f$1, this.f$2, view);
                 }
             });
         }
@@ -1479,8 +1479,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$ChatEditActivity(RadioButtonCell[] radioButtonCellArr, BottomSheet.Builder builder, View view) {
+    /* renamed from: lambda$createView$12 */
+    public /* synthetic */ void lambda$createView$12$ChatEditActivity(RadioButtonCell[] radioButtonCellArr, BottomSheet.Builder builder, View view) {
         Integer num = (Integer) view.getTag();
         boolean z = false;
         radioButtonCellArr[0].setChecked(num.intValue() == 0, true);
@@ -1562,14 +1562,14 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     public /* synthetic */ void lambda$createView$22$ChatEditActivity(View view) {
         AlertsCreator.createClearOrDeleteDialogAlert(this, false, true, false, this.currentChat, (TLRPC$User) null, false, true, new MessagesStorage.BooleanCallback() {
             public final void run(boolean z) {
-                ChatEditActivity.this.lambda$null$21$ChatEditActivity(z);
+                ChatEditActivity.this.lambda$createView$21$ChatEditActivity(z);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$21 */
-    public /* synthetic */ void lambda$null$21$ChatEditActivity(boolean z) {
+    /* renamed from: lambda$createView$21 */
+    public /* synthetic */ void lambda$createView$21$ChatEditActivity(boolean z) {
         if (AndroidUtilities.isTablet()) {
             getNotificationCenter().postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) this.chatId)));
         } else {

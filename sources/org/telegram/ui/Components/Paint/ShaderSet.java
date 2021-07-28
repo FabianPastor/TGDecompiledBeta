@@ -64,7 +64,7 @@ public class ShaderSet {
         HashMap hashMap = new HashMap();
         for (Map.Entry next : AVAILBALBE_SHADERS.entrySet()) {
             Map map = (Map) next.getValue();
-            hashMap.put(next.getKey(), new Shader((String) map.get("vertex"), (String) map.get("fragment"), (String[]) map.get("attributes"), (String[]) map.get("uniforms")));
+            hashMap.put((String) next.getKey(), new Shader((String) map.get("vertex"), (String) map.get("fragment"), (String[]) map.get("attributes"), (String[]) map.get("uniforms")));
         }
         return Collections.unmodifiableMap(hashMap);
     }

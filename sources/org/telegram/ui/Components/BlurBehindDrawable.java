@@ -228,14 +228,14 @@ public class BlurBehindDrawable {
         this.skipDraw = false;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                BlurBehindDrawable.this.lambda$null$1$BlurBehindDrawable();
+                BlurBehindDrawable.this.lambda$clear$1$BlurBehindDrawable();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$BlurBehindDrawable() {
+    /* renamed from: lambda$clear$1 */
+    public /* synthetic */ void lambda$clear$1$BlurBehindDrawable() {
         DispatchQueue dispatchQueue = this.queue;
         if (dispatchQueue != null) {
             dispatchQueue.recycle();

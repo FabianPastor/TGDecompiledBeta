@@ -412,7 +412,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                         }
 
                         public final void run() {
-                            IntroActivity.this.lambda$null$3$IntroActivity(this.f$1, this.f$2);
+                            IntroActivity.this.lambda$checkContinueText$3$IntroActivity(this.f$1, this.f$2);
                         }
                     });
                 }
@@ -421,8 +421,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$IntroActivity(TLRPC$LangPackString tLRPC$LangPackString, String str) {
+    /* renamed from: lambda$checkContinueText$3 */
+    public /* synthetic */ void lambda$checkContinueText$3$IntroActivity(TLRPC$LangPackString tLRPC$LangPackString, String str) {
         if (!this.destroyed) {
             this.textView.setText(tLRPC$LangPackString.value);
             MessagesController.getGlobalMainSettings().edit().putString("language_showed2", str.toLowerCase()).commit();

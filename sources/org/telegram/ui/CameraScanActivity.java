@@ -479,7 +479,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             ObjectAnimator ofInt = ObjectAnimator.ofInt(shapeDrawable, property, iArr);
             ofInt.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    CameraScanActivity.this.lambda$null$3$CameraScanActivity(valueAnimator);
+                    CameraScanActivity.this.lambda$createView$3$CameraScanActivity(valueAnimator);
                 }
             });
             this.flashAnimator.playTogether(new Animator[]{ofInt});
@@ -502,8 +502,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$CameraScanActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$CameraScanActivity(ValueAnimator valueAnimator) {
         this.flashButton.invalidate();
     }
 
@@ -604,7 +604,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                             }
 
                             public final void run() {
-                                CameraScanActivity.this.lambda$null$6$CameraScanActivity(this.f$1);
+                                CameraScanActivity.this.lambda$onPreviewFrame$6$CameraScanActivity(this.f$1);
                             }
                         });
                         return;
@@ -627,7 +627,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     }
 
                     public final void run() {
-                        CameraScanActivity.this.lambda$null$7$CameraScanActivity(this.f$1);
+                        CameraScanActivity.this.lambda$onPreviewFrame$7$CameraScanActivity(this.f$1);
                     }
                 });
             }
@@ -637,8 +637,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$CameraScanActivity(MrzRecognizer.Result result) {
+    /* renamed from: lambda$onPreviewFrame$6 */
+    public /* synthetic */ void lambda$onPreviewFrame$6$CameraScanActivity(MrzRecognizer.Result result) {
         this.recognizedMrzView.setText(result.rawMRZ);
         this.recognizedMrzView.animate().setDuration(200).alpha(1.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
@@ -653,8 +653,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$CameraScanActivity(String str) {
+    /* renamed from: lambda$onPreviewFrame$7 */
+    public /* synthetic */ void lambda$onPreviewFrame$7$CameraScanActivity(String str) {
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
         if (cameraScanActivityDelegate != null) {
             cameraScanActivityDelegate.didFindQr(str);

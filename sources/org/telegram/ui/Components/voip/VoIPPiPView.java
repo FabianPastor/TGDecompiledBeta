@@ -1125,7 +1125,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
                         }
 
                         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            VoIPPiPView.FloatingView.lambda$null$0(this.f$0, this.f$1, this.f$2, valueAnimator);
+                            VoIPPiPView.FloatingView.lambda$expand$0(this.f$0, this.f$1, this.f$2, valueAnimator);
                         }
                     });
                     ofFloat.addListener(new AnimatorListenerAdapter() {
@@ -1140,7 +1140,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
                 }
             }
 
-            static /* synthetic */ void lambda$null$0(float f, float f2, VoIPPiPView voIPPiPView, ValueAnimator valueAnimator) {
+            static /* synthetic */ void lambda$expand$0(float f, float f2, VoIPPiPView voIPPiPView, ValueAnimator valueAnimator) {
                 float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
                 float f3 = (f * (1.0f - floatValue)) + (f2 * floatValue);
                 voIPPiPView.floatingView.setScaleX(f3);

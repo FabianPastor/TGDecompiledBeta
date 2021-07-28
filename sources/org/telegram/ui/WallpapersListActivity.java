@@ -475,7 +475,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                             }
 
                             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                WallpapersListActivity.AnonymousClass2.this.lambda$null$1$WallpapersListActivity$2(this.f$1, tLObject, tLRPC$TL_error);
+                                WallpapersListActivity.AnonymousClass2.this.lambda$onItemClick$1$WallpapersListActivity$2(this.f$1, tLObject, tLRPC$TL_error);
                             }
                         });
                     }
@@ -489,8 +489,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$null$1 */
-            public /* synthetic */ void lambda$null$1$WallpapersListActivity$2(int[] iArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            /* renamed from: lambda$onItemClick$1 */
+            public /* synthetic */ void lambda$onItemClick$1$WallpapersListActivity$2(int[] iArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                 AndroidUtilities.runOnUIThread(new Runnable(iArr) {
                     public final /* synthetic */ int[] f$1;
 
@@ -499,14 +499,14 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     }
 
                     public final void run() {
-                        WallpapersListActivity.AnonymousClass2.this.lambda$null$0$WallpapersListActivity$2(this.f$1);
+                        WallpapersListActivity.AnonymousClass2.this.lambda$onItemClick$0$WallpapersListActivity$2(this.f$1);
                     }
                 });
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$null$0 */
-            public /* synthetic */ void lambda$null$0$WallpapersListActivity$2(int[] iArr) {
+            /* renamed from: lambda$onItemClick$0 */
+            public /* synthetic */ void lambda$onItemClick$0$WallpapersListActivity$2(int[] iArr) {
                 iArr[0] = iArr[0] - 1;
                 if (iArr[0] == 0) {
                     WallpapersListActivity.this.loadWallpapers(true);
@@ -769,7 +769,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 builder.setMessage(LocaleController.getString("ResetChatBackgroundsAlert", NUM));
                 builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener() {
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        WallpapersListActivity.this.lambda$null$3$WallpapersListActivity(dialogInterface, i);
+                        WallpapersListActivity.this.lambda$createView$3$WallpapersListActivity(dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -784,8 +784,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$WallpapersListActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$WallpapersListActivity(DialogInterface dialogInterface, int i) {
         if (this.actionBar.isActionModeShowed()) {
             this.selectedWallPapers.clear();
             this.actionBar.hideActionMode();
@@ -797,23 +797,23 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         this.progressDialog.show();
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_resetWallPapers(), new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                WallpapersListActivity.this.lambda$null$2$WallpapersListActivity(tLObject, tLRPC$TL_error);
+                WallpapersListActivity.this.lambda$createView$2$WallpapersListActivity(tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$WallpapersListActivity() {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$WallpapersListActivity() {
         loadWallpapers(false);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$WallpapersListActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$WallpapersListActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                WallpapersListActivity.this.lambda$null$1$WallpapersListActivity();
+                WallpapersListActivity.this.lambda$createView$1$WallpapersListActivity();
             }
         });
     }
@@ -1178,14 +1178,14 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             }
 
             public final void run() {
-                WallpapersListActivity.this.lambda$null$5$WallpapersListActivity(this.f$1, this.f$2);
+                WallpapersListActivity.this.lambda$loadWallpapers$5$WallpapersListActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$WallpapersListActivity(TLObject tLObject, boolean z) {
+    /* renamed from: lambda$loadWallpapers$5 */
+    public /* synthetic */ void lambda$loadWallpapers$5$WallpapersListActivity(TLObject tLObject, boolean z) {
         ColorWallpaper colorWallpaper;
         int i;
         TLRPC$WallPaperSettings tLRPC$WallPaperSettings;
@@ -1974,15 +1974,15 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     }
 
                     public final void run() {
-                        WallpapersListActivity.SearchAdapter.this.lambda$null$1$WallpapersListActivity$SearchAdapter(this.f$1);
+                        WallpapersListActivity.SearchAdapter.this.lambda$searchBotUser$1$WallpapersListActivity$SearchAdapter(this.f$1);
                     }
                 });
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$WallpapersListActivity$SearchAdapter(TLObject tLObject) {
+        /* renamed from: lambda$searchBotUser$1 */
+        public /* synthetic */ void lambda$searchBotUser$1$WallpapersListActivity$SearchAdapter(TLObject tLObject) {
             TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer = (TLRPC$TL_contacts_resolvedPeer) tLObject;
             MessagesController.getInstance(WallpapersListActivity.this.currentAccount).putUsers(tLRPC$TL_contacts_resolvedPeer.users, false);
             MessagesController.getInstance(WallpapersListActivity.this.currentAccount).putChats(tLRPC$TL_contacts_resolvedPeer.chats, false);
@@ -2043,14 +2043,14 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 }
 
                 public final void run() {
-                    WallpapersListActivity.SearchAdapter.this.lambda$null$3$WallpapersListActivity$SearchAdapter(this.f$1, this.f$2);
+                    WallpapersListActivity.SearchAdapter.this.lambda$searchImages$3$WallpapersListActivity$SearchAdapter(this.f$1, this.f$2);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$3 */
-        public /* synthetic */ void lambda$null$3$WallpapersListActivity$SearchAdapter(int i, TLObject tLObject) {
+        /* renamed from: lambda$searchImages$3 */
+        public /* synthetic */ void lambda$searchImages$3$WallpapersListActivity$SearchAdapter(int i, TLObject tLObject) {
             if (i == this.lastSearchToken) {
                 boolean z = false;
                 this.imageReqId = 0;

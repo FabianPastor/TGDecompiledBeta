@@ -55,7 +55,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             }
 
             public final void run() {
-                GcmPushListenerService.this.lambda$null$3$GcmPushListenerService(this.f$1, this.f$2);
+                GcmPushListenerService.this.lambda$onMessageReceived$3$GcmPushListenerService(this.f$1, this.f$2);
             }
         });
     }
@@ -2855,7 +2855,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r15 = r30;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:965:?, code lost:
-        org.telegram.messenger.Utilities.stageQueue.postRunnable(new org.telegram.messenger.$$Lambda$GcmPushListenerService$bTzLYDDbdXvsKFD45HxhDHO38c(r15));
+        org.telegram.messenger.Utilities.stageQueue.postRunnable(new org.telegram.messenger.$$Lambda$GcmPushListenerService$jVvuwILdG7mFvHrODBdZ4swec(r15));
         r3.countDownLatch.countDown();
      */
     /* JADX WARNING: Code restructure failed: missing block: B:966:0x1c7a, code lost:
@@ -2869,7 +2869,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
      */
     /* JADX WARNING: Code restructure failed: missing block: B:969:0x1CLASSNAME, code lost:
         r29 = r7;
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.messenger.$$Lambda$GcmPushListenerService$RGrsR9FuVutCk9KN9DfF2lxxXic(r15));
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.messenger.$$Lambda$GcmPushListenerService$QuXd6CaqKEryz6R8VHHhEnJAw(r15));
         r1.countDownLatch.countDown();
      */
     /* JADX WARNING: Code restructure failed: missing block: B:970:0x1CLASSNAME, code lost:
@@ -2887,7 +2887,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r1.media = new org.telegram.tgnet.TLRPC$TL_messageMediaEmpty();
         r2 = new org.telegram.tgnet.TLRPC$TL_updates();
         r2.updates.add(r1);
-        org.telegram.messenger.Utilities.stageQueue.postRunnable(new org.telegram.messenger.$$Lambda$GcmPushListenerService$SOipFt3ZN2Z1O4ALoGyMsSsmBw(r15, r2));
+        org.telegram.messenger.Utilities.stageQueue.postRunnable(new org.telegram.messenger.$$Lambda$GcmPushListenerService$y7ADJS7XfMNFfehioCWcBUPm0lQ(r15, r2));
         org.telegram.tgnet.ConnectionsManager.getInstance(r15).resumeNetworkMaybe();
         r3.countDownLatch.countDown();
      */
@@ -2924,9 +2924,9 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     /* JADX WARNING: Removed duplicated region for block: B:992:0x1d40  */
     /* JADX WARNING: Removed duplicated region for block: B:993:0x1d50  */
     /* JADX WARNING: Removed duplicated region for block: B:996:0x1d57  */
-    /* renamed from: lambda$null$3 */
+    /* renamed from: lambda$onMessageReceived$3 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$null$3$GcmPushListenerService(java.util.Map r44, long r45) {
+    public /* synthetic */ void lambda$onMessageReceived$3$GcmPushListenerService(java.util.Map r44, long r45) {
         /*
             r43 = this;
             r1 = r43
@@ -6897,7 +6897,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             r29 = r7
             r30 = r15
             org.telegram.messenger.DispatchQueue r1 = org.telegram.messenger.Utilities.stageQueue     // Catch:{ all -> 0x1c7b }
-            org.telegram.messenger.-$$Lambda$GcmPushListenerService$bTzLYDDbdXvs-KFD45HxhDHO38c r2 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$bTzLYDDbdXvs-KFD45HxhDHO38c     // Catch:{ all -> 0x1c7b }
+            org.telegram.messenger.-$$Lambda$GcmPushListenerService$jVvuwI-LdG7mFvHrO-DBdZ4swec r2 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$jVvuwI-LdG7mFvHrO-DBdZ4swec     // Catch:{ all -> 0x1c7b }
             r15 = r30
             r2.<init>(r15)     // Catch:{ all -> 0x1d17 }
             r1.postRunnable(r2)     // Catch:{ all -> 0x1d17 }
@@ -6911,7 +6911,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         L_0x1CLASSNAME:
             r3 = r1
             r29 = r7
-            org.telegram.messenger.-$$Lambda$GcmPushListenerService$RGrsR9FuVutCk9KN9DfF2lxxXic r1 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$RGrsR9FuVutCk9KN9DfF2lxxXic     // Catch:{ all -> 0x1d17 }
+            org.telegram.messenger.-$$Lambda$GcmPushListenerService$-QuXd6CaqKEr-yz6R8VHHhEnJAw r1 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$-QuXd6CaqKEr-yz6R8VHHhEnJAw     // Catch:{ all -> 0x1d17 }
             r1.<init>(r15)     // Catch:{ all -> 0x1d17 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ all -> 0x1d17 }
             java.util.concurrent.CountDownLatch r1 = r3.countDownLatch     // Catch:{ all -> 0x1d17 }
@@ -6943,7 +6943,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Update> r4 = r2.updates     // Catch:{ all -> 0x1d17 }
             r4.add(r1)     // Catch:{ all -> 0x1d17 }
             org.telegram.messenger.DispatchQueue r1 = org.telegram.messenger.Utilities.stageQueue     // Catch:{ all -> 0x1d17 }
-            org.telegram.messenger.-$$Lambda$GcmPushListenerService$SOipFt3ZN2Z1O4A-LoGyMsSsmBw r4 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$SOipFt3ZN2Z1O4A-LoGyMsSsmBw     // Catch:{ all -> 0x1d17 }
+            org.telegram.messenger.-$$Lambda$GcmPushListenerService$y7ADJS7XfMNFfehioCWcBUPm0lQ r4 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$y7ADJS7XfMNFfehioCWcBUPm0lQ     // Catch:{ all -> 0x1d17 }
             r4.<init>(r15, r2)     // Catch:{ all -> 0x1d17 }
             r1.postRunnable(r4)     // Catch:{ all -> 0x1d17 }
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r15)     // Catch:{ all -> 0x1d17 }
@@ -7048,10 +7048,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         L_0x1d76:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.GcmPushListenerService.lambda$null$3$GcmPushListenerService(java.util.Map, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.GcmPushListenerService.lambda$onMessageReceived$3$GcmPushListenerService(java.util.Map, long):void");
     }
 
-    static /* synthetic */ void lambda$null$1(int i) {
+    static /* synthetic */ void lambda$onMessageReceived$1(int i) {
         if (UserConfig.getInstance(i).getClientUserId() != 0) {
             UserConfig.getInstance(i).clearConfig();
             MessagesController.getInstance(i).performLogout(0);

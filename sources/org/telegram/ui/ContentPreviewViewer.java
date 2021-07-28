@@ -345,7 +345,7 @@ public class ContentPreviewViewer {
                         }
 
                         public final void didSelectDate(boolean z, int i) {
-                            ContentPreviewViewer.AnonymousClass1.lambda$null$3(ContentPreviewViewer.ContentPreviewViewerDelegate.this, this.f$1, this.f$2, this.f$3, z, i);
+                            ContentPreviewViewer.AnonymousClass1.lambda$run$3(ContentPreviewViewer.ContentPreviewViewerDelegate.this, this.f$1, this.f$2, this.f$3, z, i);
                         }
                     });
                 }
@@ -355,7 +355,7 @@ public class ContentPreviewViewer {
         /* JADX WARNING: type inference failed for: r2v0, types: [org.telegram.tgnet.TLRPC$BotInlineResult] */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        static /* synthetic */ void lambda$null$3(org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r0, org.telegram.tgnet.TLRPC$Document r1, org.telegram.tgnet.TLRPC$BotInlineResult r2, java.lang.Object r3, boolean r4, int r5) {
+        static /* synthetic */ void lambda$run$3(org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r0, org.telegram.tgnet.TLRPC$Document r1, org.telegram.tgnet.TLRPC$BotInlineResult r2, java.lang.Object r3, boolean r4, int r5) {
             /*
                 if (r1 == 0) goto L_0x0003
                 goto L_0x0004
@@ -365,7 +365,7 @@ public class ContentPreviewViewer {
                 r0.sendGif(r1, r3, r4, r5)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.AnonymousClass1.lambda$null$3(org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate, org.telegram.tgnet.TLRPC$Document, org.telegram.tgnet.TLRPC$BotInlineResult, java.lang.Object, boolean, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.AnonymousClass1.lambda$run$3(org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate, org.telegram.tgnet.TLRPC$Document, org.telegram.tgnet.TLRPC$BotInlineResult, java.lang.Object, boolean, int):void");
         }
 
         /* access modifiers changed from: private */

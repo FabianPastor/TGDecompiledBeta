@@ -347,14 +347,14 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             }
 
             public final void run() {
-                BlockingUpdateView.this.lambda$null$3$BlockingUpdateView(this.f$1);
+                BlockingUpdateView.this.lambda$show$3$BlockingUpdateView(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$BlockingUpdateView(TLObject tLObject) {
+    /* renamed from: lambda$show$3 */
+    public /* synthetic */ void lambda$show$3$BlockingUpdateView(TLObject tLObject) {
         if ((tLObject instanceof TLRPC$TL_help_appUpdate) && !((TLRPC$TL_help_appUpdate) tLObject).can_not_skip) {
             setVisibility(8);
             SharedConfig.pendingAppUpdate = null;

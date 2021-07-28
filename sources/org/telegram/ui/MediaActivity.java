@@ -364,7 +364,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                     sharedMediaDataArr3[i2].messages.addAll(sharedMediaDataArr[i2].messages);
                     this.sharedMediaData[i2].sections.addAll(sharedMediaDataArr[i2].sections);
                     for (Map.Entry next : sharedMediaDataArr[i2].sectionArrays.entrySet()) {
-                        this.sharedMediaData[i2].sectionArrays.put(next.getKey(), new ArrayList((Collection) next.getValue()));
+                        this.sharedMediaData[i2].sectionArrays.put((String) next.getKey(), new ArrayList((Collection) next.getValue()));
                     }
                     for (int i3 = 0; i3 < 2; i3++) {
                         SharedMediaLayout.SharedMediaData[] sharedMediaDataArr4 = this.sharedMediaData;
@@ -3034,14 +3034,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 }
 
                 public final void run() {
-                    MediaActivity.MediaSearchAdapter.this.lambda$null$0$MediaActivity$MediaSearchAdapter(this.f$1, this.f$2);
+                    MediaActivity.MediaSearchAdapter.this.lambda$queryServerSearch$0$MediaActivity$MediaSearchAdapter(this.f$1, this.f$2);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$MediaActivity$MediaSearchAdapter(int i, ArrayList arrayList) {
+        /* renamed from: lambda$queryServerSearch$0 */
+        public /* synthetic */ void lambda$queryServerSearch$0$MediaActivity$MediaSearchAdapter(int i, ArrayList arrayList) {
             if (this.reqId != 0) {
                 if (i == this.lastReqId) {
                     this.globalSearch = arrayList;
@@ -3128,15 +3128,15 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                     }
 
                     public final void run() {
-                        MediaActivity.MediaSearchAdapter.this.lambda$null$2$MediaActivity$MediaSearchAdapter(this.f$1, this.f$2);
+                        MediaActivity.MediaSearchAdapter.this.lambda$search$2$MediaActivity$MediaSearchAdapter(this.f$1, this.f$2);
                     }
                 });
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$MediaActivity$MediaSearchAdapter(String str, ArrayList arrayList) {
+        /* renamed from: lambda$search$2 */
+        public /* synthetic */ void lambda$search$2$MediaActivity$MediaSearchAdapter(String str, ArrayList arrayList) {
             TLRPC$Document tLRPC$Document;
             boolean z;
             String str2;

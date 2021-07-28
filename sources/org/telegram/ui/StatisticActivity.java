@@ -301,7 +301,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.this.lambda$null$0$StatisticActivity(this.f$1);
+                    StatisticActivity.this.lambda$onFragmentCreate$0$StatisticActivity(this.f$1);
                 }
             });
         }
@@ -352,15 +352,15 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.this.lambda$null$1$StatisticActivity(this.f$1);
+                    StatisticActivity.this.lambda$onFragmentCreate$1$StatisticActivity(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$StatisticActivity(ChartViewData[] chartViewDataArr) {
+    /* renamed from: lambda$onFragmentCreate$0 */
+    public /* synthetic */ void lambda$onFragmentCreate$0$StatisticActivity(ChartViewData[] chartViewDataArr) {
         this.ivInteractionsData = chartViewDataArr[0];
         this.followersData = chartViewDataArr[1];
         this.topHoursData = chartViewDataArr[2];
@@ -374,8 +374,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$StatisticActivity(ChartViewData[] chartViewDataArr) {
+    /* renamed from: lambda$onFragmentCreate$1 */
+    public /* synthetic */ void lambda$onFragmentCreate$1$StatisticActivity(ChartViewData[] chartViewDataArr) {
         this.growthData = chartViewDataArr[0];
         this.groupMembersData = chartViewDataArr[1];
         this.newMembersBySourceData = chartViewDataArr[2];
@@ -654,7 +654,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    StatisticActivity.this.lambda$null$4$StatisticActivity(this.f$1, dialogInterface, i);
+                    StatisticActivity.this.lambda$createView$4$StatisticActivity(this.f$1, dialogInterface, i);
                 }
             });
             showDialog(builder.create());
@@ -663,8 +663,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$StatisticActivity(MessageObject messageObject, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$StatisticActivity(MessageObject messageObject, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             presentFragment(new MessageStatisticActivity(messageObject));
         } else if (i == 1) {
@@ -1490,14 +1490,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.ChartCell.this.lambda$null$0$StatisticActivity$ChartCell(this.f$1, this.f$2, this.f$3);
+                    StatisticActivity.ChartCell.this.lambda$onZoomed$0$StatisticActivity$ChartCell(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$StatisticActivity$ChartCell(ChartData chartData, String str, ZoomCancelable zoomCancelable) {
+        /* renamed from: lambda$onZoomed$0 */
+        public /* synthetic */ void lambda$onZoomed$0$StatisticActivity$ChartCell(ChartData chartData, String str, ZoomCancelable zoomCancelable) {
             if (chartData != null) {
                 StatisticActivity.this.childDataCache.put(str, chartData);
             }
@@ -2371,7 +2371,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r3 = r0
                 r4 = r3
             L_0x005e:
-                org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$gzyB7CyBA6jJQguigeT1JALKKR0 r11 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$gzyB7CyBA6jJQguigeT1JALKKR0
+                org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$NV2AIojOcHRSkIyCilelTPcF2mQ r11 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$NV2AIojOcHRSkIyCilelTPcF2mQ
                 r1 = r11
                 r2 = r8
                 r5 = r9
@@ -2384,8 +2384,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$StatisticActivity$ChartViewData(ChartData chartData2, String str, RecyclerListView recyclerListView, DiffUtilsCallback diffUtilsCallback) {
+        /* renamed from: lambda$load$0 */
+        public /* synthetic */ void lambda$load$0$StatisticActivity$ChartViewData(ChartData chartData2, String str, RecyclerListView recyclerListView, DiffUtilsCallback diffUtilsCallback) {
             boolean z = false;
             this.loading = false;
             this.chartData = chartData2;
@@ -2457,14 +2457,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             }
 
             public final void run() {
-                StatisticActivity.this.lambda$null$6$StatisticActivity(this.f$1);
+                StatisticActivity.this.lambda$loadMessages$6$StatisticActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$StatisticActivity(ArrayList arrayList) {
+    /* renamed from: lambda$loadMessages$6 */
+    public /* synthetic */ void lambda$loadMessages$6$StatisticActivity(ArrayList arrayList) {
         int i = 0;
         this.messagesIsLoading = false;
         if (!arrayList.isEmpty()) {
@@ -3633,14 +3633,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.MemberData.this.lambda$null$0$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    StatisticActivity.MemberData.this.lambda$onLongClick$0$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
+        /* renamed from: lambda$onLongClick$0 */
+        public /* synthetic */ void lambda$onLongClick$0$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
             if (!statisticActivity.isFinishing() && statisticActivity.getFragmentView() != null && alertDialogArr[0] != null) {
                 if (tLRPC$TL_error == null) {
                     TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant = new TLRPC$TL_chatChannelParticipant();
@@ -3673,14 +3673,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.MemberData.this.lambda$null$2$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    StatisticActivity.MemberData.this.lambda$onLongClick$2$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
+        /* renamed from: lambda$onLongClick$2 */
+        public /* synthetic */ void lambda$onLongClick$2$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
             if (!statisticActivity.isFinishing() && statisticActivity.getFragmentView() != null && alertDialogArr[0] != null) {
                 if (tLRPC$TL_error == null) {
                     TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant = new TLRPC$TL_chatChannelParticipant();

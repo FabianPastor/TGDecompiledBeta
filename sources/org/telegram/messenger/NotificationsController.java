@@ -437,15 +437,15 @@ public class NotificationsController extends BaseController {
                 }
 
                 public final void run() {
-                    NotificationsController.this.lambda$null$5$NotificationsController(this.f$1);
+                    NotificationsController.this.lambda$forceShowPopupForReply$5$NotificationsController(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$NotificationsController(ArrayList arrayList) {
+    /* renamed from: lambda$forceShowPopupForReply$5 */
+    public /* synthetic */ void lambda$forceShowPopupForReply$5$NotificationsController(ArrayList arrayList) {
         this.popupReplyMessages = arrayList;
         Intent intent = new Intent(ApplicationLoader.applicationContext, PopupNotificationActivity.class);
         intent.putExtra("force", true);
@@ -536,7 +536,7 @@ public class NotificationsController extends BaseController {
                 }
 
                 public final void run() {
-                    NotificationsController.this.lambda$null$7$NotificationsController(this.f$1);
+                    NotificationsController.this.lambda$removeDeletedMessagesFromNotifications$7$NotificationsController(this.f$1);
                 }
             });
         }
@@ -555,7 +555,7 @@ public class NotificationsController extends BaseController {
                 }
 
                 public final void run() {
-                    NotificationsController.this.lambda$null$8$NotificationsController(this.f$1);
+                    NotificationsController.this.lambda$removeDeletedMessagesFromNotifications$8$NotificationsController(this.f$1);
                 }
             });
         }
@@ -566,8 +566,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$NotificationsController(ArrayList arrayList) {
+    /* renamed from: lambda$removeDeletedMessagesFromNotifications$7 */
+    public /* synthetic */ void lambda$removeDeletedMessagesFromNotifications$7$NotificationsController(ArrayList arrayList) {
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             this.popupMessages.remove(arrayList.get(i));
@@ -576,8 +576,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$NotificationsController(int i) {
+    /* renamed from: lambda$removeDeletedMessagesFromNotifications$8 */
+    public /* synthetic */ void lambda$removeDeletedMessagesFromNotifications$8$NotificationsController(int i) {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.notificationsCountUpdated, Integer.valueOf(this.currentAccount));
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadCounterChanged, Integer.valueOf(i));
     }
@@ -669,7 +669,7 @@ public class NotificationsController extends BaseController {
                 }
 
                 public final void run() {
-                    NotificationsController.this.lambda$null$10$NotificationsController(this.f$1);
+                    NotificationsController.this.lambda$removeDeletedHisoryFromNotifications$10$NotificationsController(this.f$1);
                 }
             });
         }
@@ -691,7 +691,7 @@ public class NotificationsController extends BaseController {
                 }
 
                 public final void run() {
-                    NotificationsController.this.lambda$null$11$NotificationsController(this.f$1);
+                    NotificationsController.this.lambda$removeDeletedHisoryFromNotifications$11$NotificationsController(this.f$1);
                 }
             });
         }
@@ -702,8 +702,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$NotificationsController(ArrayList arrayList) {
+    /* renamed from: lambda$removeDeletedHisoryFromNotifications$10 */
+    public /* synthetic */ void lambda$removeDeletedHisoryFromNotifications$10$NotificationsController(ArrayList arrayList) {
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             this.popupMessages.remove(arrayList.get(i));
@@ -712,8 +712,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$NotificationsController(int i) {
+    /* renamed from: lambda$removeDeletedHisoryFromNotifications$11 */
+    public /* synthetic */ void lambda$removeDeletedHisoryFromNotifications$11$NotificationsController(int i) {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.notificationsCountUpdated, Integer.valueOf(this.currentAccount));
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadCounterChanged, Integer.valueOf(i));
     }
@@ -890,7 +890,7 @@ public class NotificationsController extends BaseController {
         L_0x00f7:
             boolean r1 = r20.isEmpty()
             if (r1 != 0) goto L_0x0105
-            org.telegram.messenger.-$$Lambda$NotificationsController$afI9WRnN1shYvqBgMroNL8RnLv8 r1 = new org.telegram.messenger.-$$Lambda$NotificationsController$afI9WRnN1shYvqBgMroNL8RnLv8
+            org.telegram.messenger.-$$Lambda$NotificationsController$sNUpqyeI1kQGj5KO5gIL84QUSwo r1 = new org.telegram.messenger.-$$Lambda$NotificationsController$sNUpqyeI1kQGj5KO5gIL84QUSwo
             r1.<init>(r2)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
         L_0x0105:
@@ -900,8 +900,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$13 */
-    public /* synthetic */ void lambda$null$13$NotificationsController(ArrayList arrayList) {
+    /* renamed from: lambda$processReadMessages$13 */
+    public /* synthetic */ void lambda$processReadMessages$13$NotificationsController(ArrayList arrayList) {
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             this.popupMessages.remove(arrayList.get(i));
@@ -1370,7 +1370,7 @@ public class NotificationsController extends BaseController {
             if (r1 != 0) goto L_0x0228
             boolean r1 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter
             if (r1 != 0) goto L_0x0228
-            org.telegram.messenger.-$$Lambda$NotificationsController$InuBhwQAikzB2YQhvIMFASK0kGU r1 = new org.telegram.messenger.-$$Lambda$NotificationsController$InuBhwQAikzB2YQhvIMFASK0kGU
+            org.telegram.messenger.-$$Lambda$NotificationsController$yF6g5YXBUMdZrUoJxRbBgzb3e_k r1 = new org.telegram.messenger.-$$Lambda$NotificationsController$yF6g5YXBUMdZrUoJxRbBgzb3e_k
             r2 = r33
             r1.<init>(r2, r0)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
@@ -1464,7 +1464,7 @@ public class NotificationsController extends BaseController {
             r8.showOrUpdateNotification(r0)
             android.util.LongSparseArray<java.lang.Integer> r0 = r8.pushDialogs
             int r0 = r0.size()
-            org.telegram.messenger.-$$Lambda$NotificationsController$6wLjKsushNgyWMV901nmzWOaP1g r1 = new org.telegram.messenger.-$$Lambda$NotificationsController$6wLjKsushNgyWMV901nmzWOaP1g
+            org.telegram.messenger.-$$Lambda$NotificationsController$oVc3fkFlYKUBNyRnq2Ku27g4Pa0 r1 = new org.telegram.messenger.-$$Lambda$NotificationsController$oVc3fkFlYKUBNyRnq2Ku27g4Pa0
             r1.<init>(r0)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
         L_0x02d9:
@@ -1484,8 +1484,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$16 */
-    public /* synthetic */ void lambda$null$16$NotificationsController(ArrayList arrayList, int i) {
+    /* renamed from: lambda$processNewMessages$16 */
+    public /* synthetic */ void lambda$processNewMessages$16$NotificationsController(ArrayList arrayList, int i) {
         this.popupMessages.addAll(0, arrayList);
         if (!ApplicationLoader.mainInterfacePaused && ApplicationLoader.isScreenOn) {
             return;
@@ -1501,8 +1501,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$17 */
-    public /* synthetic */ void lambda$null$17$NotificationsController(int i) {
+    /* renamed from: lambda$processNewMessages$17 */
+    public /* synthetic */ void lambda$processNewMessages$17$NotificationsController(int i) {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.notificationsCountUpdated, Integer.valueOf(this.currentAccount));
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadCounterChanged, Integer.valueOf(i));
     }
@@ -1607,7 +1607,7 @@ public class NotificationsController extends BaseController {
                 }
 
                 public final void run() {
-                    NotificationsController.this.lambda$null$19$NotificationsController(this.f$1);
+                    NotificationsController.this.lambda$processDialogsUpdateRead$19$NotificationsController(this.f$1);
                 }
             });
         }
@@ -1629,7 +1629,7 @@ public class NotificationsController extends BaseController {
                 }
 
                 public final void run() {
-                    NotificationsController.this.lambda$null$20$NotificationsController(this.f$1);
+                    NotificationsController.this.lambda$processDialogsUpdateRead$20$NotificationsController(this.f$1);
                 }
             });
         }
@@ -1640,8 +1640,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$19 */
-    public /* synthetic */ void lambda$null$19$NotificationsController(ArrayList arrayList) {
+    /* renamed from: lambda$processDialogsUpdateRead$19 */
+    public /* synthetic */ void lambda$processDialogsUpdateRead$19$NotificationsController(ArrayList arrayList) {
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             this.popupMessages.remove(arrayList.get(i));
@@ -1650,8 +1650,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$20 */
-    public /* synthetic */ void lambda$null$20$NotificationsController(int i) {
+    /* renamed from: lambda$processDialogsUpdateRead$20 */
+    public /* synthetic */ void lambda$processDialogsUpdateRead$20$NotificationsController(int i) {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.notificationsCountUpdated, Integer.valueOf(this.currentAccount));
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadCounterChanged, Integer.valueOf(i));
     }
@@ -2023,7 +2023,7 @@ public class NotificationsController extends BaseController {
             r16 = 1
             android.util.LongSparseArray<java.lang.Integer> r1 = r0.pushDialogs
             int r1 = r1.size()
-            org.telegram.messenger.-$$Lambda$NotificationsController$W3EyHOoU-PJy5kZh4eta-QmQIJE r2 = new org.telegram.messenger.-$$Lambda$NotificationsController$W3EyHOoU-PJy5kZh4eta-QmQIJE
+            org.telegram.messenger.-$$Lambda$NotificationsController$MG9YrXt3VbwNGy71Pm0cRncJC9I r2 = new org.telegram.messenger.-$$Lambda$NotificationsController$MG9YrXt3VbwNGy71Pm0cRncJC9I
             r2.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
             long r1 = android.os.SystemClock.elapsedRealtime()
@@ -2046,8 +2046,8 @@ public class NotificationsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$22 */
-    public /* synthetic */ void lambda$null$22$NotificationsController(int i) {
+    /* renamed from: lambda$processLoadedUnreadMessages$22 */
+    public /* synthetic */ void lambda$processLoadedUnreadMessages$22$NotificationsController(int i) {
         if (this.total_unread_count == 0) {
             this.popupMessages.clear();
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.pushMessagesUpdated, new Object[0]);
@@ -7925,7 +7925,7 @@ public class NotificationsController extends BaseController {
                 if (this.soundPool == null) {
                     SoundPool soundPool2 = new SoundPool(3, 1, 0);
                     this.soundPool = soundPool2;
-                    soundPool2.setOnLoadCompleteListener($$Lambda$NotificationsController$mG32NHZQzHHl8cpcTQeV7RB5MW8.INSTANCE);
+                    soundPool2.setOnLoadCompleteListener($$Lambda$NotificationsController$J6nnc6uZ1QNnZS3Uh8CBIIwU8rc.INSTANCE);
                 }
                 if (this.soundIn == 0 && !this.soundInLoaded) {
                     this.soundInLoaded = true;
@@ -7945,7 +7945,7 @@ public class NotificationsController extends BaseController {
         }
     }
 
-    static /* synthetic */ void lambda$null$28(SoundPool soundPool2, int i, int i2) {
+    static /* synthetic */ void lambda$playInChatSound$28(SoundPool soundPool2, int i, int i2) {
         if (i2 == 0) {
             try {
                 soundPool2.play(i, 1.0f, 1.0f, 1, 0, 1.0f);
@@ -8176,145 +8176,161 @@ public class NotificationsController extends BaseController {
         return Build.VERSION.SDK_INT < 29 || !SharedConfig.chatBubbles;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x00a9 A[Catch:{ Exception -> 0x0116 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x00b0 A[Catch:{ Exception -> 0x0116 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x00d0 A[Catch:{ Exception -> 0x0116 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x00d1 A[Catch:{ Exception -> 0x0116 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x00e3 A[Catch:{ Exception -> 0x0116 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x00eb A[Catch:{ Exception -> 0x0116 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x00da A[Catch:{ Exception -> 0x013b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x00de A[Catch:{ Exception -> 0x013b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x00eb A[Catch:{ Exception -> 0x013b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x00f0 A[Catch:{ Exception -> 0x013b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x0122 A[Catch:{ Exception -> 0x013b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0123 A[Catch:{ Exception -> 0x013b }] */
     @android.annotation.SuppressLint({"RestrictedApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private java.lang.String createNotificationShortcut(androidx.core.app.NotificationCompat.Builder r9, int r10, java.lang.String r11, org.telegram.tgnet.TLRPC$User r12, org.telegram.tgnet.TLRPC$Chat r13, androidx.core.app.Person r14) {
+    private java.lang.String createNotificationShortcut(androidx.core.app.NotificationCompat.Builder r10, int r11, java.lang.String r12, org.telegram.tgnet.TLRPC$User r13, org.telegram.tgnet.TLRPC$Chat r14, androidx.core.app.Person r15) {
         /*
-            r8 = this;
-            boolean r0 = r8.unsupportedNotificationShortcut()
-            r1 = 0
-            if (r0 != 0) goto L_0x011a
-            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r13)
-            if (r0 == 0) goto L_0x0013
-            boolean r0 = r13.megagroup
-            if (r0 != 0) goto L_0x0013
-            goto L_0x011a
-        L_0x0013:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0116 }
-            r0.<init>()     // Catch:{ Exception -> 0x0116 }
-            java.lang.String r2 = "ndid_"
-            r0.append(r2)     // Catch:{ Exception -> 0x0116 }
-            r0.append(r10)     // Catch:{ Exception -> 0x0116 }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0116 }
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r2 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ Exception -> 0x0116 }
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0116 }
-            r2.<init>((android.content.Context) r3, (java.lang.String) r0)     // Catch:{ Exception -> 0x0116 }
-            if (r13 == 0) goto L_0x002f
-            r13 = r11
-            goto L_0x0033
-        L_0x002f:
-            java.lang.String r13 = org.telegram.messenger.UserObject.getFirstName(r12)     // Catch:{ Exception -> 0x0116 }
-        L_0x0033:
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r13 = r2.setShortLabel(r13)     // Catch:{ Exception -> 0x0116 }
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r11 = r13.setLongLabel(r11)     // Catch:{ Exception -> 0x0116 }
-            android.content.Intent r13 = new android.content.Intent     // Catch:{ Exception -> 0x0116 }
-            java.lang.String r2 = "android.intent.action.VIEW"
-            r13.<init>(r2)     // Catch:{ Exception -> 0x0116 }
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r11 = r11.setIntent(r13)     // Catch:{ Exception -> 0x0116 }
-            r13 = 1
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r11 = r11.setLongLived(r13)     // Catch:{ Exception -> 0x0116 }
-            if (r14 == 0) goto L_0x0066
-            r11.setPerson(r14)     // Catch:{ Exception -> 0x0116 }
-            androidx.core.graphics.drawable.IconCompat r2 = r14.getIcon()     // Catch:{ Exception -> 0x0116 }
-            r11.setIcon(r2)     // Catch:{ Exception -> 0x0116 }
-            androidx.core.graphics.drawable.IconCompat r2 = r14.getIcon()     // Catch:{ Exception -> 0x0116 }
-            if (r2 == 0) goto L_0x0066
-            androidx.core.graphics.drawable.IconCompat r14 = r14.getIcon()     // Catch:{ Exception -> 0x0116 }
-            android.graphics.Bitmap r14 = r14.getBitmap()     // Catch:{ Exception -> 0x0116 }
-            goto L_0x0067
-        L_0x0066:
-            r14 = r1
-        L_0x0067:
-            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x0116 }
-            r2.<init>(r13)     // Catch:{ Exception -> 0x0116 }
-            androidx.core.content.pm.ShortcutInfoCompat r11 = r11.build()     // Catch:{ Exception -> 0x0116 }
-            r2.add(r11)     // Catch:{ Exception -> 0x0116 }
-            android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0116 }
-            androidx.core.content.pm.ShortcutManagerCompat.addDynamicShortcuts(r11, r2)     // Catch:{ Exception -> 0x0116 }
-            r9.setShortcutId(r0)     // Catch:{ Exception -> 0x0116 }
-            androidx.core.app.NotificationCompat$BubbleMetadata$Builder r11 = new androidx.core.app.NotificationCompat$BubbleMetadata$Builder     // Catch:{ Exception -> 0x0116 }
-            r11.<init>()     // Catch:{ Exception -> 0x0116 }
-            android.content.Intent r2 = new android.content.Intent     // Catch:{ Exception -> 0x0116 }
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0116 }
-            java.lang.Class<org.telegram.ui.BubbleActivity> r4 = org.telegram.ui.BubbleActivity.class
-            r2.<init>(r3, r4)     // Catch:{ Exception -> 0x0116 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0116 }
-            r3.<init>()     // Catch:{ Exception -> 0x0116 }
-            java.lang.String r4 = "com.tmessages.openchat"
-            r3.append(r4)     // Catch:{ Exception -> 0x0116 }
-            double r4 = java.lang.Math.random()     // Catch:{ Exception -> 0x0116 }
-            r3.append(r4)     // Catch:{ Exception -> 0x0116 }
-            r4 = 2147483647(0x7fffffff, float:NaN)
-            r3.append(r4)     // Catch:{ Exception -> 0x0116 }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0116 }
-            r2.setAction(r3)     // Catch:{ Exception -> 0x0116 }
-            if (r10 <= 0) goto L_0x00b0
-            java.lang.String r3 = "userId"
-            r2.putExtra(r3, r10)     // Catch:{ Exception -> 0x0116 }
-            goto L_0x00b6
-        L_0x00b0:
-            java.lang.String r3 = "chatId"
-            int r4 = -r10
-            r2.putExtra(r3, r4)     // Catch:{ Exception -> 0x0116 }
-        L_0x00b6:
-            java.lang.String r3 = "currentAccount"
-            int r4 = r8.currentAccount     // Catch:{ Exception -> 0x0116 }
-            r2.putExtra(r3, r4)     // Catch:{ Exception -> 0x0116 }
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0116 }
-            r4 = 134217728(0x8000000, float:3.85186E-34)
-            r5 = 0
-            android.app.PendingIntent r2 = android.app.PendingIntent.getActivity(r3, r5, r2, r4)     // Catch:{ Exception -> 0x0116 }
-            r11.setIntent(r2)     // Catch:{ Exception -> 0x0116 }
-            long r2 = r8.opened_dialog_id     // Catch:{ Exception -> 0x0116 }
-            long r6 = (long) r10     // Catch:{ Exception -> 0x0116 }
-            int r10 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r10 != 0) goto L_0x00d1
-            goto L_0x00d2
-        L_0x00d1:
-            r13 = 0
-        L_0x00d2:
-            r11.setSuppressNotification(r13)     // Catch:{ Exception -> 0x0116 }
-            r11.setAutoExpandBubble(r5)     // Catch:{ Exception -> 0x0116 }
-            r10 = 1142947840(0x44200000, float:640.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)     // Catch:{ Exception -> 0x0116 }
-            r11.setDesiredHeight(r10)     // Catch:{ Exception -> 0x0116 }
-            if (r14 == 0) goto L_0x00eb
-            androidx.core.graphics.drawable.IconCompat r10 = androidx.core.graphics.drawable.IconCompat.createWithAdaptiveBitmap(r14)     // Catch:{ Exception -> 0x0116 }
-            r11.setIcon(r10)     // Catch:{ Exception -> 0x0116 }
-            goto L_0x010e
-        L_0x00eb:
-            if (r12 == 0) goto L_0x0102
-            android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0116 }
-            boolean r12 = r12.bot     // Catch:{ Exception -> 0x0116 }
-            if (r12 == 0) goto L_0x00f7
-            r12 = 2131165288(0x7var_, float:1.7944789E38)
-            goto L_0x00fa
-        L_0x00f7:
-            r12 = 2131165292(0x7var_c, float:1.7944797E38)
-        L_0x00fa:
-            androidx.core.graphics.drawable.IconCompat r10 = androidx.core.graphics.drawable.IconCompat.createWithResource(r10, r12)     // Catch:{ Exception -> 0x0116 }
-            r11.setIcon(r10)     // Catch:{ Exception -> 0x0116 }
-            goto L_0x010e
-        L_0x0102:
-            android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0116 }
-            r12 = 2131165290(0x7var_a, float:1.7944793E38)
-            androidx.core.graphics.drawable.IconCompat r10 = androidx.core.graphics.drawable.IconCompat.createWithResource(r10, r12)     // Catch:{ Exception -> 0x0116 }
-            r11.setIcon(r10)     // Catch:{ Exception -> 0x0116 }
-        L_0x010e:
-            androidx.core.app.NotificationCompat$BubbleMetadata r10 = r11.build()     // Catch:{ Exception -> 0x0116 }
-            r9.setBubbleMetadata(r10)     // Catch:{ Exception -> 0x0116 }
-            return r0
-        L_0x0116:
-            r9 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
-        L_0x011a:
+            r9 = this;
+            java.lang.String r0 = "com.tmessages.openchat"
+            boolean r1 = r9.unsupportedNotificationShortcut()
+            r2 = 0
+            if (r1 != 0) goto L_0x013f
+            boolean r1 = org.telegram.messenger.ChatObject.isChannel(r14)
+            if (r1 == 0) goto L_0x0015
+            boolean r1 = r14.megagroup
+            if (r1 != 0) goto L_0x0015
+            goto L_0x013f
+        L_0x0015:
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013b }
+            r1.<init>()     // Catch:{ Exception -> 0x013b }
+            java.lang.String r3 = "ndid_"
+            r1.append(r3)     // Catch:{ Exception -> 0x013b }
+            r1.append(r11)     // Catch:{ Exception -> 0x013b }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x013b }
+            android.content.Intent r3 = new android.content.Intent     // Catch:{ Exception -> 0x013b }
+            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013b }
+            java.lang.Class<org.telegram.messenger.OpenChatReceiver> r5 = org.telegram.messenger.OpenChatReceiver.class
+            r3.<init>(r4, r5)     // Catch:{ Exception -> 0x013b }
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013b }
+            r4.<init>()     // Catch:{ Exception -> 0x013b }
+            r4.append(r0)     // Catch:{ Exception -> 0x013b }
+            double r5 = java.lang.Math.random()     // Catch:{ Exception -> 0x013b }
+            r4.append(r5)     // Catch:{ Exception -> 0x013b }
+            r5 = 2147483647(0x7fffffff, float:NaN)
+            r4.append(r5)     // Catch:{ Exception -> 0x013b }
+            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x013b }
+            r3.setAction(r4)     // Catch:{ Exception -> 0x013b }
+            java.lang.String r4 = "userId"
+            java.lang.String r6 = "chatId"
+            if (r11 <= 0) goto L_0x0056
+            r3.putExtra(r4, r11)     // Catch:{ Exception -> 0x013b }
+            goto L_0x005a
+        L_0x0056:
+            int r7 = -r11
+            r3.putExtra(r6, r7)     // Catch:{ Exception -> 0x013b }
+        L_0x005a:
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r7 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ Exception -> 0x013b }
+            android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013b }
+            r7.<init>((android.content.Context) r8, (java.lang.String) r1)     // Catch:{ Exception -> 0x013b }
+            if (r14 == 0) goto L_0x0065
+            r14 = r12
+            goto L_0x0069
+        L_0x0065:
+            java.lang.String r14 = org.telegram.messenger.UserObject.getFirstName(r13)     // Catch:{ Exception -> 0x013b }
+        L_0x0069:
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r14 = r7.setShortLabel(r14)     // Catch:{ Exception -> 0x013b }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r14.setLongLabel(r12)     // Catch:{ Exception -> 0x013b }
+            android.content.Intent r14 = new android.content.Intent     // Catch:{ Exception -> 0x013b }
+            java.lang.String r7 = "android.intent.action.VIEW"
+            r14.<init>(r7)     // Catch:{ Exception -> 0x013b }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r12.setIntent(r14)     // Catch:{ Exception -> 0x013b }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r12.setIntent(r3)     // Catch:{ Exception -> 0x013b }
+            r14 = 1
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r12.setLongLived(r14)     // Catch:{ Exception -> 0x013b }
+            androidx.core.content.LocusIdCompat r3 = new androidx.core.content.LocusIdCompat     // Catch:{ Exception -> 0x013b }
+            r3.<init>(r1)     // Catch:{ Exception -> 0x013b }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r12 = r12.setLocusId(r3)     // Catch:{ Exception -> 0x013b }
+            if (r15 == 0) goto L_0x00a9
+            r12.setPerson(r15)     // Catch:{ Exception -> 0x013b }
+            androidx.core.graphics.drawable.IconCompat r3 = r15.getIcon()     // Catch:{ Exception -> 0x013b }
+            r12.setIcon(r3)     // Catch:{ Exception -> 0x013b }
+            androidx.core.graphics.drawable.IconCompat r3 = r15.getIcon()     // Catch:{ Exception -> 0x013b }
+            if (r3 == 0) goto L_0x00a9
+            androidx.core.graphics.drawable.IconCompat r15 = r15.getIcon()     // Catch:{ Exception -> 0x013b }
+            android.graphics.Bitmap r15 = r15.getBitmap()     // Catch:{ Exception -> 0x013b }
+            goto L_0x00aa
+        L_0x00a9:
+            r15 = r2
+        L_0x00aa:
+            androidx.core.content.pm.ShortcutInfoCompat r12 = r12.build()     // Catch:{ Exception -> 0x013b }
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013b }
+            androidx.core.content.pm.ShortcutManagerCompat.pushDynamicShortcut(r3, r12)     // Catch:{ Exception -> 0x013b }
+            r10.setShortcutInfo(r12)     // Catch:{ Exception -> 0x013b }
+            android.content.Intent r12 = new android.content.Intent     // Catch:{ Exception -> 0x013b }
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013b }
+            java.lang.Class<org.telegram.ui.BubbleActivity> r7 = org.telegram.ui.BubbleActivity.class
+            r12.<init>(r3, r7)     // Catch:{ Exception -> 0x013b }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013b }
+            r3.<init>()     // Catch:{ Exception -> 0x013b }
+            r3.append(r0)     // Catch:{ Exception -> 0x013b }
+            double r7 = java.lang.Math.random()     // Catch:{ Exception -> 0x013b }
+            r3.append(r7)     // Catch:{ Exception -> 0x013b }
+            r3.append(r5)     // Catch:{ Exception -> 0x013b }
+            java.lang.String r0 = r3.toString()     // Catch:{ Exception -> 0x013b }
+            r12.setAction(r0)     // Catch:{ Exception -> 0x013b }
+            if (r11 <= 0) goto L_0x00de
+            r12.putExtra(r4, r11)     // Catch:{ Exception -> 0x013b }
+            goto L_0x00e2
+        L_0x00de:
+            int r0 = -r11
+            r12.putExtra(r6, r0)     // Catch:{ Exception -> 0x013b }
+        L_0x00e2:
+            java.lang.String r0 = "currentAccount"
+            int r3 = r9.currentAccount     // Catch:{ Exception -> 0x013b }
+            r12.putExtra(r0, r3)     // Catch:{ Exception -> 0x013b }
+            if (r15 == 0) goto L_0x00f0
+            androidx.core.graphics.drawable.IconCompat r13 = androidx.core.graphics.drawable.IconCompat.createWithAdaptiveBitmap(r15)     // Catch:{ Exception -> 0x013b }
+            goto L_0x010d
+        L_0x00f0:
+            if (r13 == 0) goto L_0x0104
+            android.content.Context r15 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013b }
+            boolean r13 = r13.bot     // Catch:{ Exception -> 0x013b }
+            if (r13 == 0) goto L_0x00fc
+            r13 = 2131165288(0x7var_, float:1.7944789E38)
+            goto L_0x00ff
+        L_0x00fc:
+            r13 = 2131165292(0x7var_c, float:1.7944797E38)
+        L_0x00ff:
+            androidx.core.graphics.drawable.IconCompat r13 = androidx.core.graphics.drawable.IconCompat.createWithResource(r15, r13)     // Catch:{ Exception -> 0x013b }
+            goto L_0x010d
+        L_0x0104:
+            android.content.Context r13 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013b }
+            r15 = 2131165290(0x7var_a, float:1.7944793E38)
+            androidx.core.graphics.drawable.IconCompat r13 = androidx.core.graphics.drawable.IconCompat.createWithResource(r13, r15)     // Catch:{ Exception -> 0x013b }
+        L_0x010d:
+            androidx.core.app.NotificationCompat$BubbleMetadata$Builder r15 = new androidx.core.app.NotificationCompat$BubbleMetadata$Builder     // Catch:{ Exception -> 0x013b }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x013b }
+            r3 = 134217728(0x8000000, float:3.85186E-34)
+            r4 = 0
+            android.app.PendingIntent r12 = android.app.PendingIntent.getActivity(r0, r4, r12, r3)     // Catch:{ Exception -> 0x013b }
+            r15.<init>(r12, r13)     // Catch:{ Exception -> 0x013b }
+            long r12 = r9.opened_dialog_id     // Catch:{ Exception -> 0x013b }
+            long r5 = (long) r11     // Catch:{ Exception -> 0x013b }
+            int r11 = (r12 > r5 ? 1 : (r12 == r5 ? 0 : -1))
+            if (r11 != 0) goto L_0x0123
+            goto L_0x0124
+        L_0x0123:
+            r14 = 0
+        L_0x0124:
+            r15.setSuppressNotification(r14)     // Catch:{ Exception -> 0x013b }
+            r15.setAutoExpandBubble(r4)     // Catch:{ Exception -> 0x013b }
+            r11 = 1142947840(0x44200000, float:640.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)     // Catch:{ Exception -> 0x013b }
+            r15.setDesiredHeight(r11)     // Catch:{ Exception -> 0x013b }
+            androidx.core.app.NotificationCompat$BubbleMetadata r11 = r15.build()     // Catch:{ Exception -> 0x013b }
+            r10.setBubbleMetadata(r11)     // Catch:{ Exception -> 0x013b }
             return r1
+        L_0x013b:
+            r10 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
+        L_0x013f:
+            return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationsController.createNotificationShortcut(androidx.core.app.NotificationCompat$Builder, int, java.lang.String, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, androidx.core.app.Person):java.lang.String");
     }
@@ -12666,7 +12682,7 @@ public class NotificationsController extends BaseController {
         }
     }
 
-    static /* synthetic */ int lambda$null$35(Canvas canvas) {
+    static /* synthetic */ int lambda$loadRoundAvatar$35(Canvas canvas) {
         Path path = new Path();
         path.setFillType(Path.FillType.INVERSE_EVEN_ODD);
         int width = canvas.getWidth();
@@ -12706,7 +12722,7 @@ public class NotificationsController extends BaseController {
                 if (this.soundPool == null) {
                     SoundPool soundPool2 = new SoundPool(3, 1, 0);
                     this.soundPool = soundPool2;
-                    soundPool2.setOnLoadCompleteListener($$Lambda$NotificationsController$frKlJPvntAi9DDB6EvA4ez9UpOE.INSTANCE);
+                    soundPool2.setOnLoadCompleteListener($$Lambda$NotificationsController$3kQAiZ9Bh16atkj_BNBB6fIwBz0.INSTANCE);
                 }
                 if (this.soundOut == 0 && !this.soundOutLoaded) {
                     this.soundOutLoaded = true;
@@ -12726,7 +12742,7 @@ public class NotificationsController extends BaseController {
         }
     }
 
-    static /* synthetic */ void lambda$null$37(SoundPool soundPool2, int i, int i2) {
+    static /* synthetic */ void lambda$playOutChatSound$37(SoundPool soundPool2, int i, int i2) {
         if (i2 == 0) {
             try {
                 soundPool2.play(i, 1.0f, 1.0f, 1, 0, 1.0f);

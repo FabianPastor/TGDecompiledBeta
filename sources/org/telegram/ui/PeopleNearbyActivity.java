@@ -458,7 +458,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                         this.loadingDialog = alertDialog;
                         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             public final void onCancel(DialogInterface dialogInterface) {
-                                PeopleNearbyActivity.this.lambda$null$0$PeopleNearbyActivity(dialogInterface);
+                                PeopleNearbyActivity.this.lambda$createView$0$PeopleNearbyActivity(dialogInterface);
                             }
                         });
                         this.loadingDialog.show();
@@ -484,7 +484,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                             }
 
                             public final void onClick(DialogInterface dialogInterface, int i) {
-                                PeopleNearbyActivity.this.lambda$null$1$PeopleNearbyActivity(this.f$1, dialogInterface, i);
+                                PeopleNearbyActivity.this.lambda$createView$1$PeopleNearbyActivity(this.f$1, dialogInterface, i);
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -512,14 +512,14 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$PeopleNearbyActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$PeopleNearbyActivity(DialogInterface dialogInterface) {
         this.loadingDialog = null;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$PeopleNearbyActivity(UserConfig userConfig, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$PeopleNearbyActivity(UserConfig userConfig, DialogInterface dialogInterface, int i) {
         userConfig.sharingMyLocationUntil = Integer.MAX_VALUE;
         userConfig.saveConfig(false);
         sendRequest(false, 1);
@@ -691,14 +691,14 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             }
 
             public final void run() {
-                PeopleNearbyActivity.this.lambda$null$3$PeopleNearbyActivity(this.f$1);
+                PeopleNearbyActivity.this.lambda$checkCanCreateGroup$3$PeopleNearbyActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$PeopleNearbyActivity(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$checkCanCreateGroup$3 */
+    public /* synthetic */ void lambda$checkCanCreateGroup$3$PeopleNearbyActivity(TLRPC$TL_error tLRPC$TL_error) {
         this.canCreateGroup = tLRPC$TL_error == null;
         this.checkingCanCreate = false;
         AlertDialog alertDialog = this.loadingDialog;
@@ -837,14 +837,14 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             }
 
             public final void run() {
-                PeopleNearbyActivity.this.lambda$null$6$PeopleNearbyActivity(this.f$1, this.f$2, this.f$3);
+                PeopleNearbyActivity.this.lambda$sendRequest$6$PeopleNearbyActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$PeopleNearbyActivity(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$sendRequest$6 */
+    public /* synthetic */ void lambda$sendRequest$6$PeopleNearbyActivity(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         boolean z;
         this.reqId = 0;
         Runnable runnable = this.showProgressRunnable;

@@ -353,14 +353,14 @@ public class WebviewActivity extends BaseFragment {
             }
 
             public final void run() {
-                WebviewActivity.this.lambda$null$0$WebviewActivity(this.f$1);
+                WebviewActivity.this.lambda$reloadStats$0$WebviewActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$WebviewActivity(TLObject tLObject) {
+    /* renamed from: lambda$reloadStats$0 */
+    public /* synthetic */ void lambda$reloadStats$0$WebviewActivity(TLObject tLObject) {
         this.loadStats = false;
         if (tLObject != null) {
             WebView webView2 = this.webView;

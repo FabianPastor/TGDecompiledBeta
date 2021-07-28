@@ -3027,13 +3027,13 @@ public class LocaleController {
         if (this.currentLocaleInfo != null) {
             String lowerCase = tLRPC$TL_langPackDifference.lang_code.replace('-', '_').toLowerCase();
             if (lowerCase.equals(this.currentLocaleInfo.shortName) || lowerCase.equals(this.currentLocaleInfo.baseLangCode)) {
-                lambda$null$9(this.currentLocaleInfo, tLRPC$TL_langPackDifference, i);
+                lambda$applyRemoteLanguage$9(this.currentLocaleInfo, tLRPC$TL_langPackDifference, i);
             }
         }
     }
 
     /* renamed from: saveRemoteLocaleStrings */
-    public void lambda$null$9(LocaleInfo localeInfo, TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference, int i) {
+    public void lambda$applyRemoteLanguage$9(LocaleInfo localeInfo, TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference, int i) {
         int i2;
         File file;
         HashMap<String, String> hashMap;
@@ -3214,15 +3214,15 @@ public class LocaleController {
                 }
 
                 public final void run() {
-                    LocaleController.this.lambda$null$5$LocaleController(this.f$1, this.f$2);
+                    LocaleController.this.lambda$loadRemoteLanguages$5$LocaleController(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$LocaleController(TLObject tLObject, int i) {
+    /* renamed from: lambda$loadRemoteLanguages$5 */
+    public /* synthetic */ void lambda$loadRemoteLanguages$5$LocaleController(TLObject tLObject, int i) {
         this.loadingRemoteLanguages = false;
         TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
         int size = this.remoteLanguages.size();
@@ -3389,7 +3389,7 @@ public class LocaleController {
                 }
 
                 public final void run() {
-                    LocaleController.this.lambda$null$7$LocaleController(this.f$1, this.f$2, this.f$3);
+                    LocaleController.this.lambda$applyRemoteLanguage$7$LocaleController(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
@@ -3411,7 +3411,7 @@ public class LocaleController {
                 }
 
                 public final void run() {
-                    LocaleController.this.lambda$null$9$LocaleController(this.f$1, this.f$2, this.f$3);
+                    LocaleController.this.lambda$applyRemoteLanguage$9$LocaleController(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
@@ -3433,7 +3433,7 @@ public class LocaleController {
                 }
 
                 public final void run() {
-                    LocaleController.this.lambda$null$11$LocaleController(this.f$1, this.f$2, this.f$3);
+                    LocaleController.this.lambda$applyRemoteLanguage$11$LocaleController(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
@@ -3455,7 +3455,7 @@ public class LocaleController {
                 }
 
                 public final void run() {
-                    LocaleController.this.lambda$null$13$LocaleController(this.f$1, this.f$2, this.f$3);
+                    LocaleController.this.lambda$applyRemoteLanguage$13$LocaleController(this.f$1, this.f$2, this.f$3);
                 }
             });
         }

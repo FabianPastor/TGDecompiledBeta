@@ -379,7 +379,7 @@ public class ConnectionsManager extends BaseController {
                     }
 
                     public final void run(long j, int i, String str, int i2, long j2) {
-                        ConnectionsManager.lambda$null$1(TLObject.this, this.f$1, this.f$2, j, i, str, i2, j2);
+                        ConnectionsManager.lambda$sendRequest$1(TLObject.this, this.f$1, this.f$2, j, i, str, i2, j2);
                     }
                 }, quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, i);
             } catch (Exception e) {
@@ -391,7 +391,7 @@ public class ConnectionsManager extends BaseController {
         }
     }
 
-    static /* synthetic */ void lambda$null$1(TLObject tLObject, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, long j, int i, String str, int i2, long j2) {
+    static /* synthetic */ void lambda$sendRequest$1(TLObject tLObject, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, long j, int i, String str, int i2, long j2) {
         TLRPC$TL_error tLRPC$TL_error;
         TLObject tLObject2;
         TLObject tLObject3 = tLObject;
@@ -439,12 +439,12 @@ public class ConnectionsManager extends BaseController {
             }
 
             public final void run() {
-                ConnectionsManager.lambda$null$0(RequestDelegate.this, this.f$1, this.f$2, this.f$3, this.f$4);
+                ConnectionsManager.lambda$sendRequest$0(RequestDelegate.this, this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
-    static /* synthetic */ void lambda$null$0(RequestDelegate requestDelegate, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, RequestDelegateTimestamp requestDelegateTimestamp, long j) {
+    static /* synthetic */ void lambda$sendRequest$0(RequestDelegate requestDelegate, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, RequestDelegateTimestamp requestDelegateTimestamp, long j) {
         if (requestDelegate != null) {
             requestDelegate.run(tLObject, tLRPC$TL_error);
         } else if (requestDelegateTimestamp != null) {
@@ -760,14 +760,14 @@ public class ConnectionsManager extends BaseController {
                     }
 
                     public final void run() {
-                        ConnectionsManager.lambda$null$8(this.f$0, this.f$1, this.f$2);
+                        ConnectionsManager.lambda$onRequestNewServerIpAndPort$8(this.f$0, this.f$1, this.f$2);
                     }
                 });
             }
         });
     }
 
-    static /* synthetic */ void lambda$null$8(int i, boolean z, int i2) {
+    static /* synthetic */ void lambda$onRequestNewServerIpAndPort$8(int i, boolean z, int i2) {
         if (currentTask == null && ((i != 0 || Math.abs(lastDnsRequestTime - System.currentTimeMillis()) >= 10000) && z)) {
             lastDnsRequestTime = System.currentTimeMillis();
             if (i == 3) {
@@ -1991,26 +1991,26 @@ public class ConnectionsManager extends BaseController {
                 }
 
                 public final void run() {
-                    ConnectionsManager.FirebaseTask.this.lambda$null$1$ConnectionsManager$FirebaseTask(this.f$1);
+                    ConnectionsManager.FirebaseTask.this.lambda$doInBackground$1$ConnectionsManager$FirebaseTask(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$ConnectionsManager$FirebaseTask(boolean z) {
+        /* renamed from: lambda$doInBackground$1 */
+        public /* synthetic */ void lambda$doInBackground$1$ConnectionsManager$FirebaseTask(boolean z) {
             if (z) {
                 this.firebaseRemoteConfig.activate().addOnCompleteListener(new OnCompleteListener() {
                     public final void onComplete(Task task) {
-                        ConnectionsManager.FirebaseTask.this.lambda$null$0$ConnectionsManager$FirebaseTask(task);
+                        ConnectionsManager.FirebaseTask.this.lambda$doInBackground$0$ConnectionsManager$FirebaseTask(task);
                     }
                 });
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$ConnectionsManager$FirebaseTask(Task task) {
+        /* renamed from: lambda$doInBackground$0 */
+        public /* synthetic */ void lambda$doInBackground$0$ConnectionsManager$FirebaseTask(Task task) {
             AsyncTask unused = ConnectionsManager.currentTask = null;
             String string = this.firebaseRemoteConfig.getString("ipconfigv3");
             if (!TextUtils.isEmpty(string)) {

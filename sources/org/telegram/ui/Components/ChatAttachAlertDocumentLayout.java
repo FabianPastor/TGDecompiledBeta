@@ -1647,14 +1647,14 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 }
 
                 public final void run() {
-                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$null$0$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3);
+                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$search$0$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$ChatAttachAlertDocumentLayout$SearchAdapter(String str, boolean z, ArrayList arrayList) {
+        /* renamed from: lambda$search$0 */
+        public /* synthetic */ void lambda$search$0$ChatAttachAlertDocumentLayout$SearchAdapter(String str, boolean z, ArrayList arrayList) {
             String lowerCase = str.trim().toLowerCase();
             if (lowerCase.length() == 0) {
                 updateSearchResults(new ArrayList(), str);
@@ -2233,7 +2233,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 java.lang.String r0 = r12.lastMessagesSearchString
                 org.telegram.ui.Adapters.FiltersView.fillTipDates(r0, r11)
                 org.telegram.tgnet.ConnectionsManager r14 = r24.getConnectionsManager()
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$MXMFnpQ_jgZh56m0V5TK0oYagxI r15 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$MXMFnpQ_jgZh56m0V5TK0oYagxI
+                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$obxFiEGr-eW7zt4KfvEib5HcL-A r15 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$obxFiEGr-eW7zt4KfvEib5HcL-A
                 r0 = r15
                 r1 = r20
                 r2 = r24
@@ -2250,8 +2250,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$3 */
-        public /* synthetic */ void lambda$null$3$ChatAttachAlertDocumentLayout$SearchAdapter(AccountInstance accountInstance, String str, int i, boolean z, long j, long j2, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        /* renamed from: lambda$searchGlobal$3 */
+        public /* synthetic */ void lambda$searchGlobal$3$ChatAttachAlertDocumentLayout$SearchAdapter(AccountInstance accountInstance, String str, int i, boolean z, long j, long j2, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             ArrayList arrayList3 = new ArrayList();
             if (tLRPC$TL_error == null) {
                 TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
@@ -2291,14 +2291,14 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 }
 
                 public final void run() {
-                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$null$2$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11);
+                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$searchGlobal$2$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$ChatAttachAlertDocumentLayout$SearchAdapter(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, AccountInstance accountInstance, boolean z, String str, ArrayList arrayList, long j, long j2, ArrayList arrayList2, ArrayList arrayList3) {
+        /* renamed from: lambda$searchGlobal$2 */
+        public /* synthetic */ void lambda$searchGlobal$2$ChatAttachAlertDocumentLayout$SearchAdapter(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, AccountInstance accountInstance, boolean z, String str, ArrayList arrayList, long j, long j2, ArrayList arrayList2, ArrayList arrayList3) {
             boolean z2;
             String str2 = str;
             ArrayList arrayList4 = arrayList2;

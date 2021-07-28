@@ -1982,7 +1982,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         }
 
                         public final void run() {
-                            DialogsActivity.SwipeController.this.lambda$null$0$DialogsActivity$SwipeController(this.f$1, this.f$2);
+                            DialogsActivity.SwipeController.this.lambda$onSwiped$0$DialogsActivity$SwipeController(this.f$1, this.f$2);
                         }
                     });
                 }
@@ -1994,8 +1994,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$DialogsActivity$SwipeController(TLRPC$Dialog tLRPC$Dialog, int i) {
+        /* renamed from: lambda$onSwiped$0 */
+        public /* synthetic */ void lambda$onSwiped$0$DialogsActivity$SwipeController(TLRPC$Dialog tLRPC$Dialog, int i) {
             boolean unused = DialogsActivity.this.dialogsListFrozen = true;
             DialogsActivity.this.getMessagesController().addDialogToFolder(tLRPC$Dialog.id, 0, i, 0);
             boolean unused2 = DialogsActivity.this.dialogsListFrozen = false;
@@ -2232,7 +2232,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return r0;
     }
 
-    /* JADX WARNING: type inference failed for: r12v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r12v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r12v7 */
     /* JADX WARNING: type inference failed for: r12v8 */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x07b1  */
@@ -6525,7 +6525,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v17, resolved type: boolean} */
     /* JADX WARNING: type inference failed for: r15v0 */
-    /* JADX WARNING: type inference failed for: r15v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r15v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r15v11 */
     /* JADX WARNING: type inference failed for: r15v18 */
     /* access modifiers changed from: private */
@@ -7635,9 +7635,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             i2 = -1;
             UndoView undoView2 = getUndoView();
             int i7 = i5 == 103 ? 0 : 1;
-            $$Lambda$DialogsActivity$Bcbbo7iE8mpRQ_XpdTagvzdImQE r15 = r0;
+            $$Lambda$DialogsActivity$0KcGvKMskCJmEt6B9B8gPdHMgg r15 = r0;
             int i8 = i2;
-            $$Lambda$DialogsActivity$Bcbbo7iE8mpRQ_XpdTagvzdImQE r0 = new Runnable(i, j, z2, tLRPC$Chat, z) {
+            $$Lambda$DialogsActivity$0KcGvKMskCJmEt6B9B8gPdHMgg r0 = new Runnable(i, j, z2, tLRPC$Chat, z) {
                 public final /* synthetic */ int f$1;
                 public final /* synthetic */ long f$2;
                 public final /* synthetic */ boolean f$3;
@@ -7653,7 +7653,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
 
                 public final void run() {
-                    DialogsActivity.this.lambda$null$28$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    DialogsActivity.this.lambda$perfromSelectedDialogsAction$28$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             };
             undoView2.showWithAction(j2, i7, (Runnable) r15);
@@ -7690,8 +7690,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$28 */
-    public /* synthetic */ void lambda$null$28$DialogsActivity(int i, long j, boolean z, TLRPC$Chat tLRPC$Chat, boolean z2) {
+    /* renamed from: lambda$perfromSelectedDialogsAction$28 */
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$28$DialogsActivity(int i, long j, boolean z, TLRPC$Chat tLRPC$Chat, boolean z2) {
         if (i == 103) {
             getMessagesController().deleteDialog(j, 1, z);
             return;
@@ -7718,7 +7718,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         hideActionMode(true);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x014b  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x014d  */
     /* JADX WARNING: Removed duplicated region for block: B:76:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void pinDialog(long r16, boolean r18, org.telegram.messenger.MessagesController.DialogFilter r19, int r20, boolean r21) {
@@ -7850,13 +7850,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r2 = r2 + 1
             goto L_0x00c3
         L_0x00da:
-            if (r14 != 0) goto L_0x014e
-            if (r13 < 0) goto L_0x0148
+            if (r14 != 0) goto L_0x0150
+            if (r13 < 0) goto L_0x014a
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r0.frozenDialogsList
-            if (r1 == 0) goto L_0x0139
-            if (r12 < 0) goto L_0x0139
-            if (r13 == r12) goto L_0x0139
+            if (r1 == 0) goto L_0x013b
+            if (r12 < 0) goto L_0x013b
+            if (r13 == r12) goto L_0x013b
             java.lang.Object r2 = r1.remove(r13)
+            org.telegram.tgnet.TLRPC$Dialog r2 = (org.telegram.tgnet.TLRPC$Dialog) r2
             r1.add(r12, r2)
             org.telegram.ui.DialogsActivity$ViewPage[] r1 = r0.viewPages
             r1 = r1[r10]
@@ -7879,33 +7880,33 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
             r2 = r2[r10]
             int r2 = r2.dialogsType
-            if (r2 != 0) goto L_0x012d
+            if (r2 != 0) goto L_0x012f
             boolean r2 = r15.hasHiddenArchive()
-            if (r2 == 0) goto L_0x012d
+            if (r2 == 0) goto L_0x012f
             r2 = 1
-            goto L_0x012e
-        L_0x012d:
+            goto L_0x0130
+        L_0x012f:
             r2 = 0
-        L_0x012e:
+        L_0x0130:
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             float r3 = r3.getTranslationY()
             int r3 = (int) r3
             r1.scrollToPositionWithOffset(r2, r3)
-            goto L_0x0149
-        L_0x0139:
-            if (r12 < 0) goto L_0x0148
-            if (r13 != r12) goto L_0x0148
+            goto L_0x014b
+        L_0x013b:
+            if (r12 < 0) goto L_0x014a
+            if (r13 != r12) goto L_0x014a
             org.telegram.ui.-$$Lambda$DialogsActivity$qLbCvby-0Xeo1VwfzvTwgAaGh_0 r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$qLbCvby-0Xeo1VwfzvTwgAaGh_0
             r1.<init>()
             r2 = 200(0xc8, double:9.9E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r2)
-            goto L_0x0149
-        L_0x0148:
+            goto L_0x014b
+        L_0x014a:
             r11 = 0
-        L_0x0149:
-            if (r11 != 0) goto L_0x014e
+        L_0x014b:
+            if (r11 != 0) goto L_0x0150
             r15.setDialogsListFrozen(r10)
-        L_0x014e:
+        L_0x0150:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.pinDialog(long, boolean, org.telegram.messenger.MessagesController$DialogFilter, int, boolean):void");
@@ -8889,8 +8890,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$37 */
-    public /* synthetic */ void lambda$null$37$DialogsActivity() {
+    /* renamed from: lambda$showFiltersHint$37 */
+    public /* synthetic */ void lambda$showFiltersHint$37$DialogsActivity() {
         presentFragment(new FiltersSetupActivity());
     }
 
@@ -8899,7 +8900,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public /* synthetic */ void lambda$showFiltersHint$38$DialogsActivity() {
         getUndoView().showWithAction(0, 15, (Runnable) null, new Runnable() {
             public final void run() {
-                DialogsActivity.this.lambda$null$37$DialogsActivity();
+                DialogsActivity.this.lambda$showFiltersHint$37$DialogsActivity();
             }
         });
     }
@@ -9347,14 +9348,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
 
             public final void run() {
-                DialogsActivity.this.lambda$null$41$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+                DialogsActivity.this.lambda$didSelectResult$41$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$41 */
-    public /* synthetic */ void lambda$null$41$DialogsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer) {
+    /* renamed from: lambda$didSelectResult$41 */
+    public /* synthetic */ void lambda$didSelectResult$41$DialogsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -9372,7 +9373,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
 
                 public final void run() {
-                    DialogsActivity.this.lambda$null$40$DialogsActivity(this.f$1, this.f$2);
+                    DialogsActivity.this.lambda$didSelectResult$40$DialogsActivity(this.f$1, this.f$2);
                 }
             });
             return;
@@ -9382,8 +9383,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$40 */
-    public /* synthetic */ void lambda$null$40$DialogsActivity(long j, boolean z) {
+    /* renamed from: lambda$didSelectResult$40 */
+    public /* synthetic */ void lambda$didSelectResult$40$DialogsActivity(long j, boolean z) {
         setDialogsListFrozen(true);
         ArrayList arrayList = new ArrayList();
         arrayList.add(Long.valueOf(j));

@@ -947,14 +947,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.nativePtr = createWithJson(str, "dice", this.metaData, (int[]) null);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                RLottieDrawable.this.lambda$null$0$RLottieDrawable();
+                RLottieDrawable.this.lambda$setBaseDice$0$RLottieDrawable();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$RLottieDrawable() {
+    /* renamed from: lambda$setBaseDice$0 */
+    public /* synthetic */ void lambda$setBaseDice$0$RLottieDrawable() {
         this.loadingInBackground = false;
         if (this.secondLoadingInBackground || !this.destroyAfterLoading) {
             this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) this.metaData[1])));
@@ -1001,7 +1001,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         if (this.destroyAfterLoading) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    RLottieDrawable.this.lambda$null$2$RLottieDrawable();
+                    RLottieDrawable.this.lambda$setDiceNumber$2$RLottieDrawable();
                 }
             });
             return;
@@ -1016,14 +1016,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             }
 
             public final void run() {
-                RLottieDrawable.this.lambda$null$3$RLottieDrawable(this.f$1);
+                RLottieDrawable.this.lambda$setDiceNumber$3$RLottieDrawable(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$RLottieDrawable() {
+    /* renamed from: lambda$setDiceNumber$2 */
+    public /* synthetic */ void lambda$setDiceNumber$2$RLottieDrawable() {
         this.secondLoadingInBackground = false;
         if (!this.loadingInBackground && this.destroyAfterLoading) {
             recycle();
@@ -1031,8 +1031,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$RLottieDrawable(int[] iArr) {
+    /* renamed from: lambda$setDiceNumber$3 */
+    public /* synthetic */ void lambda$setDiceNumber$3$RLottieDrawable(int[] iArr) {
         this.secondLoadingInBackground = false;
         if (this.destroyAfterLoading) {
             recycle();

@@ -436,7 +436,7 @@ public class FilterCreateActivity extends BaseFragment {
                         }
 
                         public final void didSelectChats(ArrayList arrayList, int i) {
-                            FilterCreateActivity.this.lambda$null$0$FilterCreateActivity(this.f$1, arrayList, i);
+                            FilterCreateActivity.this.lambda$createView$0$FilterCreateActivity(this.f$1, arrayList, i);
                         }
                     });
                     presentFragment(filterUsersActivity);
@@ -447,7 +447,7 @@ public class FilterCreateActivity extends BaseFragment {
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            FilterCreateActivity.this.lambda$null$3$FilterCreateActivity(dialogInterface, i);
+                            FilterCreateActivity.this.lambda$createView$3$FilterCreateActivity(dialogInterface, i);
                         }
                     });
                     AlertDialog create = builder.create();
@@ -474,8 +474,8 @@ public class FilterCreateActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$FilterCreateActivity(int i, ArrayList arrayList, int i2) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$FilterCreateActivity(int i, ArrayList arrayList, int i2) {
         this.newFilterFlags = i2;
         if (i == this.excludeAddRow) {
             this.newNeverShow = arrayList;
@@ -508,8 +508,8 @@ public class FilterCreateActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$FilterCreateActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$FilterCreateActivity(DialogInterface dialogInterface, int i) {
         AlertDialog alertDialog;
         if (getParentActivity() != null) {
             alertDialog = new AlertDialog(getParentActivity(), 3);
@@ -528,14 +528,14 @@ public class FilterCreateActivity extends BaseFragment {
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                FilterCreateActivity.this.lambda$null$2$FilterCreateActivity(this.f$1, tLObject, tLRPC$TL_error);
+                FilterCreateActivity.this.lambda$createView$2$FilterCreateActivity(this.f$1, tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$FilterCreateActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$FilterCreateActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog) {
             public final /* synthetic */ AlertDialog f$1;
 
@@ -544,14 +544,14 @@ public class FilterCreateActivity extends BaseFragment {
             }
 
             public final void run() {
-                FilterCreateActivity.this.lambda$null$1$FilterCreateActivity(this.f$1);
+                FilterCreateActivity.this.lambda$createView$1$FilterCreateActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$FilterCreateActivity(AlertDialog alertDialog) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$FilterCreateActivity(AlertDialog alertDialog) {
         if (alertDialog != null) {
             try {
                 alertDialog.dismiss();
@@ -1058,7 +1058,7 @@ public class FilterCreateActivity extends BaseFragment {
                         }
 
                         public final void run() {
-                            FilterCreateActivity.lambda$null$12(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
+                            FilterCreateActivity.lambda$saveFilterToServer$12(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
                         }
                     });
                 }
@@ -1079,7 +1079,7 @@ public class FilterCreateActivity extends BaseFragment {
         return intValue < intValue2 ? -1 : 0;
     }
 
-    static /* synthetic */ void lambda$null$12(boolean z, AlertDialog alertDialog, MessagesController.DialogFilter dialogFilter, int i, String str, ArrayList arrayList, ArrayList arrayList2, boolean z2, boolean z3, boolean z4, boolean z5, BaseFragment baseFragment, Runnable runnable) {
+    static /* synthetic */ void lambda$saveFilterToServer$12(boolean z, AlertDialog alertDialog, MessagesController.DialogFilter dialogFilter, int i, String str, ArrayList arrayList, ArrayList arrayList2, boolean z2, boolean z3, boolean z4, boolean z5, BaseFragment baseFragment, Runnable runnable) {
         if (z) {
             if (alertDialog != null) {
                 try {

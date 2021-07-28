@@ -295,14 +295,16 @@ public class MotionBackgroundDrawable extends Drawable {
         if (Build.VERSION.SDK_INT < 28 && this.intensity < 0) {
             int i5 = i3 - i;
             int i6 = i4 - i2;
-            Bitmap bitmap = this.legacyBitmap;
-            if (bitmap == null || bitmap.getWidth() != i5 || this.legacyBitmap.getHeight() != i6) {
-                Bitmap bitmap2 = this.legacyBitmap;
-                if (bitmap2 != null) {
-                    bitmap2.recycle();
+            if (i5 > 0 && i6 > 0) {
+                Bitmap bitmap = this.legacyBitmap;
+                if (bitmap == null || bitmap.getWidth() != i5 || this.legacyBitmap.getHeight() != i6) {
+                    Bitmap bitmap2 = this.legacyBitmap;
+                    if (bitmap2 != null) {
+                        bitmap2.recycle();
+                    }
+                    this.legacyBitmap = Bitmap.createBitmap(i5, i6, Bitmap.Config.ARGB_8888);
+                    this.legacyCanvas = new Canvas(this.legacyBitmap);
                 }
-                this.legacyBitmap = Bitmap.createBitmap(i5, i6, Bitmap.Config.ARGB_8888);
-                this.legacyCanvas = new Canvas(this.legacyBitmap);
             }
         }
     }

@@ -161,7 +161,7 @@ public class LogoutActivity extends BaseFragment {
             builder.setTitle(LocaleController.getString("LogOut", NUM));
             builder.setPositiveButton(LocaleController.getString("LogOut", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    LogoutActivity.this.lambda$null$0$LogoutActivity(dialogInterface, i);
+                    LogoutActivity.this.lambda$createView$0$LogoutActivity(dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -175,8 +175,8 @@ public class LogoutActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$LogoutActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$LogoutActivity(DialogInterface dialogInterface, int i) {
         MessagesController.getInstance(this.currentAccount).performLogout(1);
     }
 

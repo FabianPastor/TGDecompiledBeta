@@ -737,15 +737,15 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         ContactsActivity contactsActivity = new ContactsActivity(bundle);
         contactsActivity.setDelegate(new ContactsActivity.ContactsActivityDelegate() {
             public final void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
-                CallLogActivity.this.lambda$null$2$CallLogActivity(tLRPC$User, str, contactsActivity);
+                CallLogActivity.this.lambda$createView$2$CallLogActivity(tLRPC$User, str, contactsActivity);
             }
         });
         presentFragment(contactsActivity);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$CallLogActivity(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$CallLogActivity(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
         TLRPC$UserFull userFull = getMessagesController().getUserFull(tLRPC$User.id);
         this.lastCallUser = tLRPC$User;
         VoIPHelper.startCall(tLRPC$User, false, userFull != null && userFull.video_calls_available, getParentActivity(), (TLRPC$UserFull) null, getAccountInstance());
@@ -998,14 +998,14 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             }
 
             public final void run() {
-                CallLogActivity.this.lambda$null$8$CallLogActivity(this.f$1, this.f$2);
+                CallLogActivity.this.lambda$getCalls$8$CallLogActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$CallLogActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$getCalls$8 */
+    public /* synthetic */ void lambda$getCalls$8$CallLogActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         CallLogRow callLogRow;
         int i = 0;
         int max = Math.max(this.listViewAdapter.callsStartRow, 0) + this.calls.size();

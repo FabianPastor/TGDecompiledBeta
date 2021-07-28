@@ -552,14 +552,14 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
         AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
             public final void didSelectDate(boolean z, int i) {
-                PhotoAlbumPickerActivity.this.lambda$null$2$PhotoAlbumPickerActivity(z, i);
+                PhotoAlbumPickerActivity.this.lambda$createView$2$PhotoAlbumPickerActivity(z, i);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$PhotoAlbumPickerActivity(boolean z, int i) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$PhotoAlbumPickerActivity(boolean z, int i) {
         sendSelectedPhotos(this.selectedPhotos, this.selectedPhotosOrder, z, i);
         finishFragment();
     }
@@ -592,7 +592,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 });
                 this.sendPopupLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
                     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        PhotoAlbumPickerActivity.this.lambda$null$4$PhotoAlbumPickerActivity(keyEvent);
+                        PhotoAlbumPickerActivity.this.lambda$createView$4$PhotoAlbumPickerActivity(keyEvent);
                     }
                 });
                 this.sendPopupLayout.setShownFromBotton(false);
@@ -620,7 +620,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                             }
 
                             public final void onClick(View view) {
-                                PhotoAlbumPickerActivity.this.lambda$null$6$PhotoAlbumPickerActivity(this.f$1, view);
+                                PhotoAlbumPickerActivity.this.lambda$createView$6$PhotoAlbumPickerActivity(this.f$1, view);
                             }
                         });
                     }
@@ -649,8 +649,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$PhotoAlbumPickerActivity(KeyEvent keyEvent) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$PhotoAlbumPickerActivity(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -658,8 +658,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$PhotoAlbumPickerActivity(int i, View view) {
+    /* renamed from: lambda$createView$6 */
+    public /* synthetic */ void lambda$createView$6$PhotoAlbumPickerActivity(int i, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -667,7 +667,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         if (i == 0) {
             AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
                 public final void didSelectDate(boolean z, int i) {
-                    PhotoAlbumPickerActivity.this.lambda$null$5$PhotoAlbumPickerActivity(z, i);
+                    PhotoAlbumPickerActivity.this.lambda$createView$5$PhotoAlbumPickerActivity(z, i);
                 }
             });
         } else if (i == 1) {
@@ -677,8 +677,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$PhotoAlbumPickerActivity(boolean z, int i) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$PhotoAlbumPickerActivity(boolean z, int i) {
         sendSelectedPhotos(this.selectedPhotos, this.selectedPhotosOrder, z, i);
         finishFragment();
     }

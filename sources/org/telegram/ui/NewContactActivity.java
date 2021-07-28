@@ -679,15 +679,15 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         CountrySelectActivity countrySelectActivity = new CountrySelectActivity(true);
         countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
             public final void didSelectCountry(String str, String str2) {
-                NewContactActivity.this.lambda$null$3$NewContactActivity(str, str2);
+                NewContactActivity.this.lambda$createView$3$NewContactActivity(str, str2);
             }
         });
         presentFragment(countrySelectActivity);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$NewContactActivity(String str, String str2) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$NewContactActivity(String str, String str2) {
         selectCountry(str);
         this.phoneField.requestFocus();
         HintEditText hintEditText = this.phoneField;

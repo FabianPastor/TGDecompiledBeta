@@ -257,14 +257,14 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
             }
 
             public final void run(ArrayList arrayList, String str) {
-                StickersAdapter.this.lambda$null$0$StickersAdapter(this.f$1, arrayList, str);
+                StickersAdapter.this.lambda$searchEmojiByKeyword$0$StickersAdapter(this.f$1, arrayList, str);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$StickersAdapter(String str, ArrayList arrayList, String str2) {
+    /* renamed from: lambda$searchEmojiByKeyword$0 */
+    public /* synthetic */ void lambda$searchEmojiByKeyword$0$StickersAdapter(String str, ArrayList arrayList, String str2) {
         if (str.equals(this.lastSticker)) {
             if (!arrayList.isEmpty()) {
                 this.keywordResults = arrayList;
@@ -483,14 +483,14 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
             }
 
             public final void run() {
-                StickersAdapter.this.lambda$null$2$StickersAdapter(this.f$1, this.f$2);
+                StickersAdapter.this.lambda$searchServerStickers$2$StickersAdapter(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$StickersAdapter(String str, TLObject tLObject) {
+    /* renamed from: lambda$searchServerStickers$2 */
+    public /* synthetic */ void lambda$searchServerStickers$2$StickersAdapter(String str, TLObject tLObject) {
         ArrayList<StickerResult> arrayList;
         int i = 0;
         this.lastReqId = 0;

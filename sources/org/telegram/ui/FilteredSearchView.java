@@ -862,7 +862,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             java.lang.String r0 = r12.lastMessagesSearchString
             org.telegram.ui.Adapters.FiltersView.fillTipDates(r0, r11)
             org.telegram.tgnet.ConnectionsManager r14 = org.telegram.tgnet.ConnectionsManager.getInstance(r22)
-            org.telegram.ui.-$$Lambda$FilteredSearchView$Pvh05aBp-yWsFCpaPRh1Rb15fOg r15 = new org.telegram.ui.-$$Lambda$FilteredSearchView$Pvh05aBp-yWsFCpaPRh1Rb15fOg
+            org.telegram.ui.-$$Lambda$FilteredSearchView$bhW4Da5YRO9mwzaRWY5L9Wys32s r15 = new org.telegram.ui.-$$Lambda$FilteredSearchView$bhW4Da5YRO9mwzaRWY5L9Wys32s
             r0 = r15
             r1 = r18
             r2 = r22
@@ -880,8 +880,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$FilteredSearchView(int i, String str, int i2, boolean z, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$search$3 */
+    public /* synthetic */ void lambda$search$3$FilteredSearchView(int i, String str, int i2, boolean z, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ArrayList arrayList3 = new ArrayList();
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
@@ -924,14 +924,14 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             }
 
             public final void run() {
-                FilteredSearchView.this.lambda$null$2$FilteredSearchView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
+                FilteredSearchView.this.lambda$search$2$FilteredSearchView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$FilteredSearchView(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i2, boolean z, String str, ArrayList arrayList, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList2, ArrayList arrayList3) {
+    /* renamed from: lambda$search$2 */
+    public /* synthetic */ void lambda$search$2$FilteredSearchView(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i2, boolean z, String str, ArrayList arrayList, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList2, ArrayList arrayList3) {
         boolean z2;
         String str2;
         String str3 = str;

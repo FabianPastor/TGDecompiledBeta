@@ -589,7 +589,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    FiltersSetupActivity.ListAdapter.this.lambda$null$4$FiltersSetupActivity$ListAdapter(this.f$1, dialogInterface, i);
+                    FiltersSetupActivity.ListAdapter.this.lambda$onCreateViewHolder$4$FiltersSetupActivity$ListAdapter(this.f$1, dialogInterface, i);
                 }
             });
             AlertDialog create = builder.create();
@@ -598,8 +598,8 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$4 */
-        public /* synthetic */ void lambda$null$4$FiltersSetupActivity$ListAdapter(MessagesController.DialogFilter dialogFilter, DialogInterface dialogInterface, int i) {
+        /* renamed from: lambda$onCreateViewHolder$4 */
+        public /* synthetic */ void lambda$onCreateViewHolder$4$FiltersSetupActivity$ListAdapter(MessagesController.DialogFilter dialogFilter, DialogInterface dialogInterface, int i) {
             if (i == 0) {
                 FiltersSetupActivity.this.presentFragment(new FilterCreateActivity(dialogFilter));
             } else if (i == 1) {
@@ -615,7 +615,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                     }
 
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        FiltersSetupActivity.ListAdapter.this.lambda$null$3$FiltersSetupActivity$ListAdapter(this.f$1, dialogInterface, i);
+                        FiltersSetupActivity.ListAdapter.this.lambda$onCreateViewHolder$3$FiltersSetupActivity$ListAdapter(this.f$1, dialogInterface, i);
                     }
                 });
                 AlertDialog create = builder.create();
@@ -628,8 +628,8 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$3 */
-        public /* synthetic */ void lambda$null$3$FiltersSetupActivity$ListAdapter(MessagesController.DialogFilter dialogFilter, DialogInterface dialogInterface, int i) {
+        /* renamed from: lambda$onCreateViewHolder$3 */
+        public /* synthetic */ void lambda$onCreateViewHolder$3$FiltersSetupActivity$ListAdapter(MessagesController.DialogFilter dialogFilter, DialogInterface dialogInterface, int i) {
             AlertDialog alertDialog;
             if (FiltersSetupActivity.this.getParentActivity() != null) {
                 alertDialog = new AlertDialog(FiltersSetupActivity.this.getParentActivity(), 3);
@@ -650,14 +650,14 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 }
 
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    FiltersSetupActivity.ListAdapter.this.lambda$null$2$FiltersSetupActivity$ListAdapter(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                    FiltersSetupActivity.ListAdapter.this.lambda$onCreateViewHolder$2$FiltersSetupActivity$ListAdapter(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$FiltersSetupActivity$ListAdapter(AlertDialog alertDialog, MessagesController.DialogFilter dialogFilter, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        /* renamed from: lambda$onCreateViewHolder$2 */
+        public /* synthetic */ void lambda$onCreateViewHolder$2$FiltersSetupActivity$ListAdapter(AlertDialog alertDialog, MessagesController.DialogFilter dialogFilter, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(alertDialog, dialogFilter) {
                 public final /* synthetic */ AlertDialog f$1;
                 public final /* synthetic */ MessagesController.DialogFilter f$2;
@@ -668,14 +668,14 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 }
 
                 public final void run() {
-                    FiltersSetupActivity.ListAdapter.this.lambda$null$1$FiltersSetupActivity$ListAdapter(this.f$1, this.f$2);
+                    FiltersSetupActivity.ListAdapter.this.lambda$onCreateViewHolder$1$FiltersSetupActivity$ListAdapter(this.f$1, this.f$2);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$FiltersSetupActivity$ListAdapter(AlertDialog alertDialog, MessagesController.DialogFilter dialogFilter) {
+        /* renamed from: lambda$onCreateViewHolder$1 */
+        public /* synthetic */ void lambda$onCreateViewHolder$1$FiltersSetupActivity$ListAdapter(AlertDialog alertDialog, MessagesController.DialogFilter dialogFilter) {
             if (alertDialog != null) {
                 try {
                     alertDialog.dismiss();
@@ -836,14 +836,14 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 }
 
                 public final void run() {
-                    FiltersSetupActivity.ListAdapter.this.lambda$null$6$FiltersSetupActivity$ListAdapter(this.f$1);
+                    FiltersSetupActivity.ListAdapter.this.lambda$onCreateViewHolder$6$FiltersSetupActivity$ListAdapter(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$6 */
-        public /* synthetic */ void lambda$null$6$FiltersSetupActivity$ListAdapter(TLRPC$TL_dialogFilterSuggested tLRPC$TL_dialogFilterSuggested) {
+        /* renamed from: lambda$onCreateViewHolder$6 */
+        public /* synthetic */ void lambda$onCreateViewHolder$6$FiltersSetupActivity$ListAdapter(TLRPC$TL_dialogFilterSuggested tLRPC$TL_dialogFilterSuggested) {
             FiltersSetupActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated, new Object[0]);
             boolean unused = FiltersSetupActivity.this.ignoreUpdates = false;
             ArrayList<TLRPC$TL_dialogFilterSuggested> arrayList = FiltersSetupActivity.this.getMessagesController().suggestedFilters;
