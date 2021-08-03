@@ -4159,6 +4159,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:117:0x021e  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x022b  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00b3  */
     /* JADX WARNING: Removed duplicated region for block: B:82:0x0142  */
     /* JADX WARNING: Removed duplicated region for block: B:99:0x01bb  */
@@ -4427,9 +4429,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.messenger.AndroidUtilities.requestAdjustResize(r0, r1)
         L_0x0227:
             org.telegram.ui.DialogsActivity$ViewPage[] r0 = r11.viewPages
+            if (r0 == 0) goto L_0x0234
             r0 = r0[r3]
             org.telegram.ui.Adapters.DialogsAdapter r0 = r0.dialogsAdapter
             r0.notifyDataSetChanged()
+        L_0x0234:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onResume():void");

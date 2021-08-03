@@ -276,7 +276,7 @@ public class ActionBarMenuItem extends FrameLayout {
                         if (!this.rect.contains((int) f2, (int) f3)) {
                             itemAt.setPressed(false);
                             itemAt.setSelected(false);
-                            if (Build.VERSION.SDK_INT == 21) {
+                            if (Build.VERSION.SDK_INT == 21 && itemAt.getBackground() != null) {
                                 itemAt.getBackground().setVisible(false, false);
                             }
                         } else {
@@ -284,7 +284,7 @@ public class ActionBarMenuItem extends FrameLayout {
                             itemAt.setSelected(true);
                             int i2 = Build.VERSION.SDK_INT;
                             if (i2 >= 21) {
-                                if (i2 == 21) {
+                                if (i2 == 21 && itemAt.getBackground() != null) {
                                     itemAt.getBackground().setVisible(true, false);
                                 }
                                 itemAt.drawableHotspotChanged(f2, f3 - ((float) itemAt.getTop()));

@@ -139,7 +139,6 @@ public class AndroidUtilities {
     public static Pattern WEB_URL;
     public static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
     private static int adjustOwnerClassGuid = 0;
-    private static Boolean betaApp;
     private static RectF bitmapRect;
     private static final Object callLock = new Object();
     private static CallReceiver callReceiver;
@@ -173,7 +172,6 @@ public class AndroidUtilities {
     public static final Linkify.MatchFilter sUrlMatchFilter = $$Lambda$AndroidUtilities$7u2C_VzyCOR_g29g_gFE94u3hQ.INSTANCE;
     public static float screenRefreshRate = 60.0f;
     private static final Object smsLock = new Object();
-    private static Boolean standaloneApp;
     public static int statusBarHeight = 0;
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
     private static Runnable unregisterRunnable;
@@ -380,20 +378,6 @@ public class AndroidUtilities {
 
         private LinkSpec() {
         }
-    }
-
-    public static boolean isStandaloneApp() {
-        if (standaloneApp == null) {
-            standaloneApp = Boolean.valueOf("org.telegram.messenger.web".equals(ApplicationLoader.applicationContext.getPackageName()));
-        }
-        return standaloneApp.booleanValue();
-    }
-
-    public static boolean isBetaApp() {
-        if (betaApp == null) {
-            betaApp = Boolean.valueOf("org.telegram.messenger.beta".equals(ApplicationLoader.applicationContext.getPackageName()));
-        }
-        return betaApp.booleanValue();
     }
 
     private static String makeUrl(String str, String[] strArr, Matcher matcher) {
@@ -2232,7 +2216,7 @@ public class AndroidUtilities {
 
     public static boolean isTablet() {
         if (isTablet == null) {
-            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext.getResources().getBoolean(NUM));
+            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(NUM));
         }
         return isTablet.booleanValue();
     }

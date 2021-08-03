@@ -27,6 +27,7 @@ public class AvatarsImageView extends FrameLayout {
     boolean centered;
     DrawingState[] currentStates = new DrawingState[3];
     int currentStyle;
+    private boolean isInCall;
     private Paint paint = new Paint(1);
     Random random = new Random();
     float transitionProgress = 1.0f;
@@ -180,7 +181,7 @@ public class AvatarsImageView extends FrameLayout {
         }
     }
 
-    public AvatarsImageView(Context context) {
+    public AvatarsImageView(Context context, boolean z) {
         super(context);
         for (int i = 0; i < 3; i++) {
             this.currentStates[i] = new DrawingState();
@@ -194,6 +195,7 @@ public class AvatarsImageView extends FrameLayout {
             AvatarDrawable unused4 = this.animatingStates[i].avatarDrawable = new AvatarDrawable();
             this.animatingStates[i].avatarDrawable.setTextSize(AndroidUtilities.dp(9.0f));
         }
+        this.isInCall = z;
         setWillNotDraw(false);
         this.xRefP.setColor(0);
         this.xRefP.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
@@ -231,21 +233,23 @@ public class AvatarsImageView extends FrameLayout {
                 long unused3 = this.animatingStates[i].lastSpeakTime = (long) tLRPC$TL_groupCallParticipant.active_date;
             } else if (peerId == AccountInstance.getInstance(i2).getUserConfig().getClientUserId()) {
                 long unused4 = this.animatingStates[i].lastSpeakTime = 0;
-            } else {
+            } else if (this.isInCall) {
                 long unused5 = this.animatingStates[i].lastSpeakTime = tLRPC$TL_groupCallParticipant.lastActiveDate;
+            } else {
+                long unused6 = this.animatingStates[i].lastSpeakTime = (long) tLRPC$TL_groupCallParticipant.active_date;
             }
-            int unused6 = this.animatingStates[i].id = peerId;
+            int unused7 = this.animatingStates[i].id = peerId;
             tLRPC$Chat = tLRPC$Chat2;
         } else if (tLObject instanceof TLRPC$User) {
             TLRPC$User tLRPC$User3 = (TLRPC$User) tLObject;
             this.animatingStates[i].avatarDrawable.setInfo(tLRPC$User3);
-            int unused7 = this.animatingStates[i].id = tLRPC$User3.id;
+            int unused8 = this.animatingStates[i].id = tLRPC$User3.id;
             tLRPC$User = tLRPC$User3;
             tLRPC$Chat = null;
         } else {
             tLRPC$Chat = (TLRPC$Chat) tLObject;
             this.animatingStates[i].avatarDrawable.setInfo(tLRPC$Chat);
-            int unused8 = this.animatingStates[i].id = -tLRPC$Chat.id;
+            int unused9 = this.animatingStates[i].id = -tLRPC$Chat.id;
         }
         if (tLRPC$User != null) {
             this.animatingStates[i].imageReceiver.setForUserOrChat(tLRPC$User, this.animatingStates[i].avatarDrawable);

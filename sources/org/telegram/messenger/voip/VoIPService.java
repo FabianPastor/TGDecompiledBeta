@@ -3775,8 +3775,8 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x028c:
             r6 = 0
         L_0x028d:
-            long r10 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r4, r6)     // Catch:{ Exception -> 0x0335 }
-            r2[r5] = r10     // Catch:{ Exception -> 0x0335 }
+            long r8 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r4, r6)     // Catch:{ Exception -> 0x0335 }
+            r2[r5] = r8     // Catch:{ Exception -> 0x0335 }
             int[] r2 = r1.videoState     // Catch:{ Exception -> 0x0335 }
             r4 = 2
             r2[r5] = r4     // Catch:{ Exception -> 0x0335 }
@@ -3847,9 +3847,9 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r3 = r3 + 1
             goto L_0x030d
         L_0x0325:
-            long[] r0 = r1.captureDevice     // Catch:{ Exception -> 0x0335 }
+            boolean[] r0 = r1.destroyCaptureDevice     // Catch:{ Exception -> 0x0335 }
             r2 = 0
-            r0[r2] = r8     // Catch:{ Exception -> 0x0335 }
+            r0[r2] = r2     // Catch:{ Exception -> 0x0335 }
             org.telegram.messenger.voip.VoIPService$6 r0 = new org.telegram.messenger.voip.VoIPService$6     // Catch:{ Exception -> 0x0335 }
             r0.<init>()     // Catch:{ Exception -> 0x0335 }
             r2 = 5000(0x1388, double:2.4703E-320)

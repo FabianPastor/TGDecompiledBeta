@@ -2136,15 +2136,15 @@ public class LoginActivity extends BaseFragment {
                     this.this$0.onFieldError(this.phoneField);
                 } else {
                     String stripExceptNumbers = PhoneFormat.stripExceptNumbers("" + this.codeField.getText() + this.phoneField.getText());
-                    boolean isTestBackend = this.this$0.getConnectionsManager().isTestBackend();
-                    if (isTestBackend != this.this$0.testBackend) {
+                    boolean z6 = BuildVars.DEBUG_PRIVATE_VERSION && this.this$0.getConnectionsManager().isTestBackend();
+                    if (z6 != this.this$0.testBackend) {
                         this.this$0.getConnectionsManager().switchBackend(false);
-                        isTestBackend = this.this$0.testBackend;
+                        z6 = this.this$0.testBackend;
                     }
                     if (this.this$0.getParentActivity() instanceof LaunchActivity) {
                         for (int i3 = 0; i3 < 3; i3++) {
                             UserConfig instance = UserConfig.getInstance(i3);
-                            if (instance.isClientActivated() && PhoneNumberUtils.compare(stripExceptNumbers, instance.getCurrentUser().phone) && ConnectionsManager.getInstance(i3).isTestBackend() == isTestBackend) {
+                            if (instance.isClientActivated() && PhoneNumberUtils.compare(stripExceptNumbers, instance.getCurrentUser().phone) && ConnectionsManager.getInstance(i3).isTestBackend() == z6) {
                                 AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) this.this$0.getParentActivity());
                                 builder2.setTitle(LocaleController.getString("AppName", NUM));
                                 builder2.setMessage(LocaleController.getString("AccountAlreadyLoggedIn", NUM));

@@ -442,7 +442,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             });
             updatePlaybackButton();
         }
-        AvatarsImageView avatarsImageView = new AvatarsImageView(context2);
+        AvatarsImageView avatarsImageView = new AvatarsImageView(context2, false);
         this.avatars = avatarsImageView;
         avatarsImageView.setDelegate(new Runnable() {
             public final void run() {

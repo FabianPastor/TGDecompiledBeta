@@ -564,7 +564,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
         GroupCallPipButton groupCallPipButton = new GroupCallPipButton(context, this.currentAccount, false);
         this.button = groupCallPipButton;
         this.windowView.addView(groupCallPipButton, LayoutHelper.createFrame(-1, -1, 17));
-        AvatarsImageView avatarsImageView2 = new AvatarsImageView(context);
+        AvatarsImageView avatarsImageView2 = new AvatarsImageView(context, true);
         this.avatarsImageView = avatarsImageView2;
         avatarsImageView2.setStyle(5);
         this.avatarsImageView.setCentered(true);

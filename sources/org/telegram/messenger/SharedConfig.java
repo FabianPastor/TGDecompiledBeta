@@ -617,7 +617,7 @@ public class SharedConfig {
     public static boolean isAppUpdateAvailable() {
         int i;
         TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate = pendingAppUpdate;
-        if (tLRPC$TL_help_appUpdate == null || tLRPC$TL_help_appUpdate.document == null || !AndroidUtilities.isStandaloneApp()) {
+        if (tLRPC$TL_help_appUpdate == null || tLRPC$TL_help_appUpdate.document == null || !BuildVars.isStandaloneApp()) {
             return false;
         }
         try {

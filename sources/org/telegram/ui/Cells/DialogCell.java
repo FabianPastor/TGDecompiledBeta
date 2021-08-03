@@ -7732,7 +7732,7 @@ public class DialogCell extends BaseCell {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         PullForegroundDrawable pullForegroundDrawable;
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        if (!isFolderCell() || (pullForegroundDrawable = this.archivedChatsDrawable) == null || pullForegroundDrawable.pullProgress != 0.0f) {
+        if (!isFolderCell() || (pullForegroundDrawable = this.archivedChatsDrawable) == null || !SharedConfig.archiveHidden || pullForegroundDrawable.pullProgress != 0.0f) {
             accessibilityNodeInfo.addAction(16);
             accessibilityNodeInfo.addAction(32);
             return;

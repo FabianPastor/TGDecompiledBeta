@@ -1714,7 +1714,7 @@ public class MessageObject {
         boolean z3 = z;
         this.type = 1000;
         this.forceSeekTo = -1.0f;
-        Theme.createCommonChatResources();
+        Theme.createCommonMessageResources();
         this.currentAccount = i;
         this.messageOwner = tLRPC$Message2;
         this.replyMessageObject = messageObject;
@@ -5195,7 +5195,7 @@ public class MessageObject {
             this.wantedBotKeyboardWidth = 0;
             TLRPC$Message tLRPC$Message = this.messageOwner;
             if ((tLRPC$Message.reply_markup instanceof TLRPC$TL_replyInlineMarkup) || ((tLRPC$TL_messageReactions = tLRPC$Message.reactions) != null && !tLRPC$TL_messageReactions.results.isEmpty())) {
-                Theme.createCommonChatResources();
+                Theme.createCommonMessageResources();
                 StringBuilder sb = this.botButtonsLayout;
                 if (sb == null) {
                     this.botButtonsLayout = new StringBuilder();

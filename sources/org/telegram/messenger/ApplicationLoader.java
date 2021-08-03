@@ -107,7 +107,7 @@ public class ApplicationLoader extends Application {
                     FileLog.d("screen state = " + isScreenOn);
                 }
             } catch (Exception e4) {
-                FileLog.e((Throwable) e4);
+                e4.printStackTrace();
             }
             SharedConfig.loadConfig();
             for (int i = 0; i < 3; i++) {

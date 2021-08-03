@@ -66,10 +66,6 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         VoIPService.StateListener.CC.$default$onAudioSettingsChanged(this);
     }
 
-    public /* synthetic */ void onCameraSwitch(boolean z) {
-        VoIPService.StateListener.CC.$default$onCameraSwitch(this, z);
-    }
-
     /* access modifiers changed from: protected */
     public void onDismiss(boolean z, boolean z2) {
     }
@@ -613,6 +609,10 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         if (getParent() != null) {
             ((View) getParent()).invalidate();
         }
+    }
+
+    public void onCameraSwitch(boolean z) {
+        update();
     }
 
     public void update() {
