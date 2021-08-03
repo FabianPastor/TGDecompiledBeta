@@ -1936,7 +1936,7 @@ public class ActionBar extends FrameLayout {
                 }
 
                 public Animator createAnimator(ViewGroup viewGroup, final TransitionValues transitionValues, TransitionValues transitionValues2) {
-                    if (!(transitionValues.view instanceof SimpleTextView)) {
+                    if (transitionValues == null || !(transitionValues.view instanceof SimpleTextView)) {
                         return super.createAnimator(viewGroup, transitionValues, transitionValues2);
                     }
                     AnimatorSet animatorSet = new AnimatorSet();

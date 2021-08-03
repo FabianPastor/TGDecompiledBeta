@@ -48,7 +48,6 @@ import android.widget.Toast;
 import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DownloadController;
@@ -290,7 +289,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private boolean drawCommentButton;
     /* access modifiers changed from: private */
     public boolean drawCommentNumber;
-    private boolean drawForwardedName;
+    /* access modifiers changed from: private */
+    public boolean drawForwardedName;
     public boolean drawFromPinchToZoom;
     private boolean drawImageButton;
     /* access modifiers changed from: private */
@@ -328,7 +328,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private boolean forwardNamePressed;
     private float forwardNameX;
     private int forwardNameY;
-    private StaticLayout[] forwardedNameLayout;
+    /* access modifiers changed from: private */
+    public StaticLayout[] forwardedNameLayout;
     private int forwardedNameWidth;
     private boolean fullyDraw;
     private boolean gamePreviewPressed;
@@ -30148,8 +30149,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX WARNING: Removed duplicated region for block: B:887:0x173f  */
     /* JADX WARNING: Removed duplicated region for block: B:894:0x175e  */
     /* JADX WARNING: Removed duplicated region for block: B:897:0x17b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:917:0x0d8c A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:919:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:919:0x0d8c A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:921:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void drawOverlays(android.graphics.Canvas r28) {
         /*
@@ -33111,7 +33112,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x160e:
             int r1 = r0.documentAttachType
             r3 = 7
-            if (r1 != r3) goto L_0x185c
+            if (r1 != r3) goto L_0x1860
             org.telegram.messenger.MediaController r1 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r3 = r0.currentMessageObject
             boolean r1 = r1.isPlayingMessage(r3)
@@ -33409,6 +33410,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r1 = r1 - r2
             float r3 = (float) r1
         L_0x183d:
+            android.text.StaticLayout r1 = r0.durationLayout
+            if (r1 == 0) goto L_0x1860
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_timePaint
             float r2 = r0.timeAlpha
             float r2 = r2 * r19
@@ -33422,7 +33425,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_timePaint
             r2 = 255(0xff, float:3.57E-43)
             r1.setAlpha(r2)
-        L_0x185c:
+        L_0x1860:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.drawOverlays(android.graphics.Canvas):void");
@@ -33788,6 +33791,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         private final int BOT_BUTTONS_START;
         private final int COMMENT;
         private final int INSTANT_VIEW;
+        private final int LINK_CAPTION_IDS_START;
         private final int LINK_IDS_START;
         private final int POLL_BUTTONS_START;
         private final int POLL_HINT;
@@ -33799,6 +33803,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
         private MessageAccessibilityNodeProvider() {
             this.LINK_IDS_START = 2000;
+            this.LINK_CAPTION_IDS_START = 3000;
             this.BOT_BUTTONS_START = 1000;
             this.POLL_BUTTONS_START = 500;
             this.INSTANT_VIEW = 499;
@@ -33811,471 +33816,1456 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             this.rect = new Rect();
         }
 
-        public AccessibilityNodeInfo createAccessibilityNodeInfo(int i) {
-            int i2;
-            String str;
-            AccessibilityNodeInfo.CollectionItemInfo collectionItemInfo;
-            String str2;
-            int i3;
-            String str3;
-            int i4 = i;
-            int[] iArr = {0, 0};
-            ChatMessageCell.this.getLocationOnScreen(iArr);
-            int i5 = 0;
-            if (i4 == -1) {
-                AccessibilityNodeInfo obtain = AccessibilityNodeInfo.obtain(ChatMessageCell.this);
-                ChatMessageCell.this.onInitializeAccessibilityNodeInfo(obtain);
-                StringBuilder sb = new StringBuilder();
-                ChatMessageCell chatMessageCell = ChatMessageCell.this;
-                if (chatMessageCell.isChat && chatMessageCell.currentUser != null && !ChatMessageCell.this.currentMessageObject.isOut()) {
-                    sb.append(UserObject.getUserName(ChatMessageCell.this.currentUser));
-                    sb.append(10);
-                }
-                if (!TextUtils.isEmpty(ChatMessageCell.this.currentMessageObject.messageText)) {
-                    sb.append(ChatMessageCell.this.currentMessageObject.messageText);
-                }
-                if (ChatMessageCell.this.documentAttach != null && (ChatMessageCell.this.documentAttachType == 1 || ChatMessageCell.this.documentAttachType == 2 || ChatMessageCell.this.documentAttachType == 4)) {
-                    if (ChatMessageCell.this.buttonState == 1 && ChatMessageCell.this.loadingProgressLayout != null) {
-                        sb.append("\n");
-                        boolean isSending = ChatMessageCell.this.currentMessageObject.isSending();
-                        sb.append(LocaleController.formatString(isSending ? "AccDescrUploadProgress" : "AccDescrDownloadProgress", isSending ? NUM : NUM, AndroidUtilities.formatFileSize(ChatMessageCell.this.currentMessageObject.loadedFileSize), AndroidUtilities.formatFileSize(ChatMessageCell.this.lastLoadingSizeTotal)));
-                    } else if (ChatMessageCell.this.buttonState == 0 || ChatMessageCell.this.documentAttachType == 1) {
-                        sb.append(", ");
-                        sb.append(AndroidUtilities.formatFileSize((long) ChatMessageCell.this.documentAttach.size));
-                    }
-                }
-                if (ChatMessageCell.this.currentMessageObject.isMusic()) {
-                    sb.append("\n");
-                    sb.append(LocaleController.formatString("AccDescrMusicInfo", NUM, ChatMessageCell.this.currentMessageObject.getMusicAuthor(), ChatMessageCell.this.currentMessageObject.getMusicTitle()));
-                } else if (ChatMessageCell.this.currentMessageObject.isVoice() || ChatMessageCell.this.isRoundVideo) {
-                    sb.append(", ");
-                    sb.append(LocaleController.formatDuration(ChatMessageCell.this.currentMessageObject.getDuration()));
-                    if (ChatMessageCell.this.currentMessageObject.isContentUnread()) {
-                        sb.append(", ");
-                        sb.append(LocaleController.getString("AccDescrMsgNotPlayed", NUM));
-                    }
-                }
-                if (ChatMessageCell.this.lastPoll != null) {
-                    sb.append(", ");
-                    sb.append(ChatMessageCell.this.lastPoll.question);
-                    sb.append(", ");
-                    if (ChatMessageCell.this.pollClosed) {
-                        str3 = LocaleController.getString("FinalResults", NUM);
-                    } else if (ChatMessageCell.this.lastPoll.quiz) {
-                        if (ChatMessageCell.this.lastPoll.public_voters) {
-                            str3 = LocaleController.getString("QuizPoll", NUM);
-                        } else {
-                            str3 = LocaleController.getString("AnonymousQuizPoll", NUM);
-                        }
-                    } else if (ChatMessageCell.this.lastPoll.public_voters) {
-                        str3 = LocaleController.getString("PublicPoll", NUM);
-                    } else {
-                        str3 = LocaleController.getString("AnonymousPoll", NUM);
-                    }
-                    sb.append(str3);
-                }
-                if (ChatMessageCell.this.currentMessageObject.messageOwner.media != null && !TextUtils.isEmpty(ChatMessageCell.this.currentMessageObject.caption)) {
-                    sb.append("\n");
-                    sb.append(ChatMessageCell.this.currentMessageObject.caption);
-                }
-                if (!ChatMessageCell.this.currentMessageObject.isOut()) {
-                    sb.append("\n");
-                    sb.append(LocaleController.formatString("AccDescrReceivedDate", NUM, LocaleController.getString("TodayAt", NUM) + " " + ChatMessageCell.this.currentTimeString));
-                } else if (ChatMessageCell.this.currentMessageObject.isSent()) {
-                    sb.append("\n");
-                    if (ChatMessageCell.this.currentMessageObject.scheduled) {
-                        sb.append(LocaleController.formatString("AccDescrScheduledDate", NUM, ChatMessageCell.this.currentTimeString));
-                    } else {
-                        sb.append(LocaleController.formatString("AccDescrSentDate", NUM, LocaleController.getString("TodayAt", NUM) + " " + ChatMessageCell.this.currentTimeString));
-                        sb.append(", ");
-                        if (ChatMessageCell.this.currentMessageObject.isUnread()) {
-                            i3 = NUM;
-                            str2 = "AccDescrMsgUnread";
-                        } else {
-                            i3 = NUM;
-                            str2 = "AccDescrMsgRead";
-                        }
-                        sb.append(LocaleController.getString(str2, i3));
-                    }
-                } else if (ChatMessageCell.this.currentMessageObject.isSending()) {
-                    sb.append("\n");
-                    sb.append(LocaleController.getString("AccDescrMsgSending", NUM));
-                    float progress = ChatMessageCell.this.radialProgress.getProgress();
-                    if (progress > 0.0f) {
-                        sb.append(", ");
-                        sb.append(Math.round(progress * 100.0f));
-                        sb.append("%");
-                    }
-                } else if (ChatMessageCell.this.currentMessageObject.isSendError()) {
-                    sb.append("\n");
-                    sb.append(LocaleController.getString("AccDescrMsgSendingError", NUM));
-                }
-                if ((ChatMessageCell.this.currentMessageObject.messageOwner.flags & 1024) != 0) {
-                    sb.append("\n");
-                    sb.append(LocaleController.formatPluralString("AccDescrNumberOfViews", ChatMessageCell.this.currentMessageObject.messageOwner.views));
-                }
-                sb.append("\n");
-                obtain.setContentDescription(sb.toString());
-                obtain.setEnabled(true);
-                int i6 = Build.VERSION.SDK_INT;
-                if (i6 >= 19 && (collectionItemInfo = obtain.getCollectionItemInfo()) != null) {
-                    obtain.setCollectionItemInfo(AccessibilityNodeInfo.CollectionItemInfo.obtain(collectionItemInfo.getRowIndex(), 1, 0, 1, false));
-                }
-                if (i6 >= 21) {
-                    obtain.addAction(new AccessibilityNodeInfo.AccessibilityAction(NUM, LocaleController.getString("AccActionMessageOptions", NUM)));
-                    int access$8400 = ChatMessageCell.this.getIconForCurrentState();
-                    if (access$8400 == 0) {
-                        str = LocaleController.getString("AccActionPlay", NUM);
-                    } else if (access$8400 == 1) {
-                        str = LocaleController.getString("AccActionPause", NUM);
-                    } else if (access$8400 == 2) {
-                        str = LocaleController.getString("AccActionDownload", NUM);
-                    } else if (access$8400 == 3) {
-                        str = LocaleController.getString("AccActionCancelDownload", NUM);
-                    } else if (access$8400 != 5) {
-                        str = ChatMessageCell.this.currentMessageObject.type == 16 ? LocaleController.getString("CallAgain", NUM) : null;
-                    } else {
-                        str = LocaleController.getString("AccActionOpenFile", NUM);
-                    }
-                    obtain.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, str));
-                    obtain.addAction(new AccessibilityNodeInfo.AccessibilityAction(32, LocaleController.getString("AccActionEnterSelectionMode", NUM)));
-                    if (ChatMessageCell.this.getMiniIconForCurrentState() == 2) {
-                        obtain.addAction(new AccessibilityNodeInfo.AccessibilityAction(NUM, LocaleController.getString("AccActionDownload", NUM)));
-                    }
-                } else {
-                    obtain.addAction(16);
-                    obtain.addAction(32);
-                }
-                if (ChatMessageCell.this.currentMessageObject.isVoice() || (ChatMessageCell.this.currentMessageObject.isMusic() && MediaController.getInstance().isPlayingMessage(ChatMessageCell.this.currentMessageObject))) {
-                    ChatMessageCell.this.seekBarAccessibilityDelegate.onInitializeAccessibilityNodeInfoInternal(obtain);
-                }
-                if (ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable) {
-                    Spannable spannable = (Spannable) ChatMessageCell.this.currentMessageObject.messageText;
-                    int i7 = 0;
-                    for (CharacterStyle characterStyle : (CharacterStyle[]) spannable.getSpans(0, spannable.length(), ClickableSpan.class)) {
-                        obtain.addChild(ChatMessageCell.this, i7 + 2000);
-                        i7++;
-                    }
-                }
-                Iterator it = ChatMessageCell.this.botButtons.iterator();
-                int i8 = 0;
-                while (it.hasNext()) {
-                    BotButton botButton = (BotButton) it.next();
-                    obtain.addChild(ChatMessageCell.this, i8 + 1000);
-                    i8++;
-                }
-                if (ChatMessageCell.this.hintButtonVisible && ChatMessageCell.this.pollHintX != -1 && ChatMessageCell.this.currentMessageObject.isPoll()) {
-                    obtain.addChild(ChatMessageCell.this, 495);
-                }
-                Iterator it2 = ChatMessageCell.this.pollButtons.iterator();
-                while (it2.hasNext()) {
-                    PollButton pollButton = (PollButton) it2.next();
-                    obtain.addChild(ChatMessageCell.this, i5 + 500);
-                    i5++;
-                }
-                if (ChatMessageCell.this.drawInstantView && !ChatMessageCell.this.instantButtonRect.isEmpty()) {
-                    obtain.addChild(ChatMessageCell.this, 499);
-                }
-                if (ChatMessageCell.this.commentLayout != null) {
-                    obtain.addChild(ChatMessageCell.this, 496);
-                }
-                if (ChatMessageCell.this.drawSideButton == 1) {
-                    obtain.addChild(ChatMessageCell.this, 498);
-                }
-                ChatMessageCell chatMessageCell2 = ChatMessageCell.this;
-                if (chatMessageCell2.replyNameLayout != null) {
-                    obtain.addChild(chatMessageCell2, 497);
-                }
-                if (ChatMessageCell.this.drawSelectionBackground || ChatMessageCell.this.getBackground() != null) {
-                    obtain.setSelected(true);
-                }
-                return obtain;
-            }
-            AccessibilityNodeInfo obtain2 = AccessibilityNodeInfo.obtain();
-            obtain2.setSource(ChatMessageCell.this, i4);
-            obtain2.setParent(ChatMessageCell.this);
-            obtain2.setPackageName(ChatMessageCell.this.getContext().getPackageName());
-            if (i4 >= 2000) {
-                if (!(ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable)) {
-                    return null;
-                }
-                Spannable spannable2 = (Spannable) ChatMessageCell.this.currentMessageObject.messageText;
-                ClickableSpan linkById = getLinkById(i);
-                if (linkById == null) {
-                    return null;
-                }
-                int[] access$9600 = ChatMessageCell.this.getRealSpanStartAndEnd(spannable2, linkById);
-                obtain2.setText(spannable2.subSequence(access$9600[0], access$9600[1]).toString());
-                Iterator<MessageObject.TextLayoutBlock> it3 = ChatMessageCell.this.currentMessageObject.textLayoutBlocks.iterator();
-                while (true) {
-                    if (!it3.hasNext()) {
-                        break;
-                    }
-                    MessageObject.TextLayoutBlock next = it3.next();
-                    int length = next.textLayout.getText().length();
-                    int i9 = next.charactersOffset;
-                    if (i9 <= access$9600[0] && length + i9 >= access$9600[1]) {
-                        next.textLayout.getSelectionPath(access$9600[0] - i9, access$9600[1] - i9, this.linkPath);
-                        this.linkPath.computeBounds(this.rectF, true);
-                        Rect rect2 = this.rect;
-                        RectF rectF2 = this.rectF;
-                        rect2.set((int) rectF2.left, (int) rectF2.top, (int) rectF2.right, (int) rectF2.bottom);
-                        this.rect.offset(0, (int) next.textYOffset);
-                        this.rect.offset(ChatMessageCell.this.textX, ChatMessageCell.this.textY);
-                        obtain2.setBoundsInParent(this.rect);
-                        if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4) == null) {
-                            ChatMessageCell.this.accessibilityVirtualViewBounds.put(i4, new Rect(this.rect));
-                        }
-                        this.rect.offset(iArr[0], iArr[1]);
-                        obtain2.setBoundsInScreen(this.rect);
-                    }
-                }
-                obtain2.setClassName("android.widget.TextView");
-                obtain2.setEnabled(true);
-                obtain2.setClickable(true);
-                obtain2.setLongClickable(true);
-                obtain2.addAction(16);
-                obtain2.addAction(32);
-            } else if (i4 >= 1000) {
-                int i10 = i4 - 1000;
-                if (i10 >= ChatMessageCell.this.botButtons.size()) {
-                    return null;
-                }
-                BotButton botButton2 = (BotButton) ChatMessageCell.this.botButtons.get(i10);
-                obtain2.setText(botButton2.title.getText());
-                obtain2.setClassName("android.widget.Button");
-                obtain2.setEnabled(true);
-                obtain2.setClickable(true);
-                obtain2.addAction(16);
-                this.rect.set(botButton2.x, botButton2.y, botButton2.x + botButton2.width, botButton2.y + botButton2.height);
-                if (ChatMessageCell.this.currentMessageObject.isOutOwner()) {
-                    i2 = (ChatMessageCell.this.getMeasuredWidth() - ChatMessageCell.this.widthForButtons) - AndroidUtilities.dp(10.0f);
-                } else {
-                    i2 = ChatMessageCell.this.backgroundDrawableLeft + AndroidUtilities.dp(ChatMessageCell.this.mediaBackground ? 1.0f : 7.0f);
-                }
-                this.rect.offset(i2, ChatMessageCell.this.layoutHeight);
-                obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4) == null) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i4, new Rect(this.rect));
-                }
-                this.rect.offset(iArr[0], iArr[1]);
-                obtain2.setBoundsInScreen(this.rect);
-            } else if (i4 >= 500) {
-                int i11 = i4 - 500;
-                if (i11 >= ChatMessageCell.this.pollButtons.size()) {
-                    return null;
-                }
-                PollButton pollButton2 = (PollButton) ChatMessageCell.this.pollButtons.get(i11);
-                StringBuilder sb2 = new StringBuilder(pollButton2.title.getText());
-                if (!ChatMessageCell.this.pollVoted) {
-                    obtain2.setClassName("android.widget.Button");
-                } else {
-                    obtain2.setSelected(pollButton2.chosen);
-                    sb2.append(", ");
-                    sb2.append(pollButton2.percent);
-                    sb2.append("%");
-                    if (ChatMessageCell.this.lastPoll != null && ChatMessageCell.this.lastPoll.quiz && pollButton2.correct) {
-                        sb2.append(", ");
-                        sb2.append(LocaleController.getString("AccDescrQuizCorrectAnswer", NUM));
-                    }
-                }
-                obtain2.setText(sb2);
-                obtain2.setEnabled(true);
-                obtain2.addAction(16);
-                int access$10400 = pollButton2.y + ChatMessageCell.this.namesOffset;
-                int access$10500 = ChatMessageCell.this.backgroundWidth - AndroidUtilities.dp(76.0f);
-                Rect rect3 = this.rect;
-                int i12 = pollButton2.x;
-                rect3.set(i12, access$10400, access$10500 + i12, pollButton2.height + access$10400);
-                obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4) == null) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i4, new Rect(this.rect));
-                }
-                this.rect.offset(iArr[0], iArr[1]);
-                obtain2.setBoundsInScreen(this.rect);
-                obtain2.setClickable(true);
-            } else if (i4 == 495) {
-                obtain2.setClassName("android.widget.Button");
-                obtain2.setEnabled(true);
-                obtain2.setText(LocaleController.getString("AccDescrQuizExplanation", NUM));
-                obtain2.addAction(16);
-                this.rect.set(ChatMessageCell.this.pollHintX - AndroidUtilities.dp(8.0f), ChatMessageCell.this.pollHintY - AndroidUtilities.dp(8.0f), ChatMessageCell.this.pollHintX + AndroidUtilities.dp(32.0f), ChatMessageCell.this.pollHintY + AndroidUtilities.dp(32.0f));
-                obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i4, new Rect(this.rect));
-                }
-                this.rect.offset(iArr[0], iArr[1]);
-                obtain2.setBoundsInScreen(this.rect);
-                obtain2.setClickable(true);
-            } else if (i4 == 499) {
-                obtain2.setClassName("android.widget.Button");
-                obtain2.setEnabled(true);
-                if (ChatMessageCell.this.instantViewLayout != null) {
-                    obtain2.setText(ChatMessageCell.this.instantViewLayout.getText());
-                }
-                obtain2.addAction(16);
-                ChatMessageCell.this.instantButtonRect.round(this.rect);
-                obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i4, new Rect(this.rect));
-                }
-                this.rect.offset(iArr[0], iArr[1]);
-                obtain2.setBoundsInScreen(this.rect);
-                obtain2.setClickable(true);
-            } else if (i4 == 498) {
-                obtain2.setClassName("android.widget.ImageButton");
-                obtain2.setEnabled(true);
-                ChatMessageCell chatMessageCell3 = ChatMessageCell.this;
-                if (chatMessageCell3.isOpenChatByShare(chatMessageCell3.currentMessageObject)) {
-                    obtain2.setContentDescription(LocaleController.getString("AccDescrOpenChat", NUM));
-                } else {
-                    obtain2.setContentDescription(LocaleController.getString("ShareFile", NUM));
-                }
-                obtain2.addAction(16);
-                this.rect.set((int) ChatMessageCell.this.sideStartX, (int) ChatMessageCell.this.sideStartY, ((int) ChatMessageCell.this.sideStartX) + AndroidUtilities.dp(40.0f), ((int) ChatMessageCell.this.sideStartY) + AndroidUtilities.dp(32.0f));
-                obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i4, new Rect(this.rect));
-                }
-                this.rect.offset(iArr[0], iArr[1]);
-                obtain2.setBoundsInScreen(this.rect);
-                obtain2.setClickable(true);
-            } else if (i4 == 497) {
-                obtain2.setEnabled(true);
-                StringBuilder sb3 = new StringBuilder();
-                sb3.append(LocaleController.getString("Reply", NUM));
-                sb3.append(", ");
-                StaticLayout staticLayout = ChatMessageCell.this.replyNameLayout;
-                if (staticLayout != null) {
-                    sb3.append(staticLayout.getText());
-                    sb3.append(", ");
-                }
-                StaticLayout staticLayout2 = ChatMessageCell.this.replyTextLayout;
-                if (staticLayout2 != null) {
-                    sb3.append(staticLayout2.getText());
-                }
-                obtain2.setContentDescription(sb3.toString());
-                obtain2.addAction(16);
-                Rect rect4 = this.rect;
-                ChatMessageCell chatMessageCell4 = ChatMessageCell.this;
-                int i13 = chatMessageCell4.replyStartX;
-                rect4.set(i13, chatMessageCell4.replyStartY, Math.max(chatMessageCell4.replyNameWidth, ChatMessageCell.this.replyTextWidth) + i13, ChatMessageCell.this.replyStartY + AndroidUtilities.dp(35.0f));
-                obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i4, new Rect(this.rect));
-                }
-                this.rect.offset(iArr[0], iArr[1]);
-                obtain2.setBoundsInScreen(this.rect);
-                obtain2.setClickable(true);
-            } else if (i4 == 496) {
-                obtain2.setClassName("android.widget.Button");
-                obtain2.setEnabled(true);
-                if (ChatMessageCell.this.commentLayout != null) {
-                    obtain2.setText(ChatMessageCell.this.commentLayout.getText());
-                }
-                obtain2.addAction(16);
-                this.rect.set(ChatMessageCell.this.commentButtonRect);
-                obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i4)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i4, new Rect(this.rect));
-                }
-                this.rect.offset(iArr[0], iArr[1]);
-                obtain2.setBoundsInScreen(this.rect);
-                obtain2.setClickable(true);
-            }
-            obtain2.setFocusable(true);
-            obtain2.setVisibleToUser(true);
-            return obtain2;
+        /* JADX WARNING: Removed duplicated region for block: B:52:0x0148  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public android.view.accessibility.AccessibilityNodeInfo createAccessibilityNodeInfo(int r18) {
+            /*
+                r17 = this;
+                r0 = r17
+                r1 = r18
+                r2 = 2
+                int[] r3 = new int[r2]
+                r3 = {0, 0} // fill-array
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                r4.getLocationOnScreen(r3)
+                java.lang.String r4 = "%"
+                r8 = -1
+                r9 = 32
+                java.lang.String r12 = ", "
+                r13 = 0
+                r14 = 1
+                if (r1 != r8) goto L_0x05f1
+                org.telegram.ui.Cells.ChatMessageCell r1 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.view.accessibility.AccessibilityNodeInfo r1 = android.view.accessibility.AccessibilityNodeInfo.obtain(r1)
+                org.telegram.ui.Cells.ChatMessageCell r3 = org.telegram.ui.Cells.ChatMessageCell.this
+                r3.onInitializeAccessibilityNodeInfo(r1)
+                java.lang.StringBuilder r3 = new java.lang.StringBuilder
+                r3.<init>()
+                org.telegram.ui.Cells.ChatMessageCell r15 = org.telegram.ui.Cells.ChatMessageCell.this
+                boolean r10 = r15.isChat
+                if (r10 == 0) goto L_0x0054
+                org.telegram.tgnet.TLRPC$User r10 = r15.currentUser
+                if (r10 == 0) goto L_0x0054
+                org.telegram.ui.Cells.ChatMessageCell r10 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r10 = r10.currentMessageObject
+                boolean r10 = r10.isOut()
+                if (r10 != 0) goto L_0x0054
+                org.telegram.ui.Cells.ChatMessageCell r10 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$User r10 = r10.currentUser
+                java.lang.String r10 = org.telegram.messenger.UserObject.getUserName(r10)
+                r3.append(r10)
+                r10 = 10
+                r3.append(r10)
+            L_0x0054:
+                org.telegram.ui.Cells.ChatMessageCell r10 = org.telegram.ui.Cells.ChatMessageCell.this
+                boolean r10 = r10.drawForwardedName
+                java.lang.String r15 = " "
+                java.lang.String r5 = "\n"
+                if (r10 == 0) goto L_0x0087
+                r10 = 0
+            L_0x0061:
+                if (r10 >= r2) goto L_0x0087
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout[] r6 = r6.forwardedNameLayout
+                r6 = r6[r10]
+                if (r6 == 0) goto L_0x0084
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout[] r6 = r6.forwardedNameLayout
+                r6 = r6[r10]
+                java.lang.CharSequence r6 = r6.getText()
+                r3.append(r6)
+                if (r10 != 0) goto L_0x0080
+                r6 = r15
+                goto L_0x0081
+            L_0x0080:
+                r6 = r5
+            L_0x0081:
+                r3.append(r6)
+            L_0x0084:
+                int r10 = r10 + 1
+                goto L_0x0061
+            L_0x0087:
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
+                java.lang.CharSequence r6 = r6.messageText
+                boolean r6 = android.text.TextUtils.isEmpty(r6)
+                if (r6 != 0) goto L_0x00a0
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
+                java.lang.CharSequence r6 = r6.messageText
+                r3.append(r6)
+            L_0x00a0:
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$Document r6 = r6.documentAttach
+                if (r6 == 0) goto L_0x015d
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.documentAttachType
+                if (r6 == r14) goto L_0x00c1
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.documentAttachType
+                if (r6 == r2) goto L_0x00c1
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.documentAttachType
+                r10 = 4
+                if (r6 != r10) goto L_0x015d
+            L_0x00c1:
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.buttonState
+                if (r6 != r14) goto L_0x0114
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r6 = r6.loadingProgressLayout
+                if (r6 == 0) goto L_0x0114
+                r3.append(r5)
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
+                boolean r6 = r6.isSending()
+                if (r6 == 0) goto L_0x00e3
+                java.lang.String r10 = "AccDescrUploadProgress"
+                goto L_0x00e5
+            L_0x00e3:
+                java.lang.String r10 = "AccDescrDownloadProgress"
+            L_0x00e5:
+                if (r6 == 0) goto L_0x00eb
+                r6 = 2131624060(0x7f0e007c, float:1.887529E38)
+                goto L_0x00ee
+            L_0x00eb:
+                r6 = 2131623970(0x7f0e0022, float:1.8875107E38)
+            L_0x00ee:
+                java.lang.Object[] r7 = new java.lang.Object[r2]
+                org.telegram.ui.Cells.ChatMessageCell r8 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r8 = r8.currentMessageObject
+                r16 = r12
+                long r11 = r8.loadedFileSize
+                java.lang.String r8 = org.telegram.messenger.AndroidUtilities.formatFileSize(r11)
+                r7[r13] = r8
+                org.telegram.ui.Cells.ChatMessageCell r8 = org.telegram.ui.Cells.ChatMessageCell.this
+                long r11 = r8.lastLoadingSizeTotal
+                java.lang.String r8 = org.telegram.messenger.AndroidUtilities.formatFileSize(r11)
+                r7[r14] = r8
+                java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r10, r6, r7)
+                r3.append(r6)
+                goto L_0x0127
+            L_0x0114:
+                r16 = r12
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.buttonState
+                if (r6 == 0) goto L_0x012a
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.documentAttachType
+                if (r6 != r14) goto L_0x0127
+                goto L_0x012a
+            L_0x0127:
+                r6 = r16
+                goto L_0x013f
+            L_0x012a:
+                r6 = r16
+                r3.append(r6)
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$Document r7 = r7.documentAttach
+                int r7 = r7.size
+                long r7 = (long) r7
+                java.lang.String r7 = org.telegram.messenger.AndroidUtilities.formatFileSize(r7)
+                r3.append(r7)
+            L_0x013f:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r7 = r7.documentAttachType
+                r8 = 4
+                if (r7 != r8) goto L_0x015e
+                r3.append(r6)
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                int r7 = r7.getDuration()
+                java.lang.String r7 = org.telegram.messenger.LocaleController.formatDuration(r7)
+                r3.append(r7)
+                goto L_0x015e
+            L_0x015d:
+                r6 = r12
+            L_0x015e:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                boolean r7 = r7.isMusic()
+                if (r7 == 0) goto L_0x01a8
+                r3.append(r5)
+                r7 = 2131623993(0x7f0e0039, float:1.8875153E38)
+                java.lang.Object[] r8 = new java.lang.Object[r2]
+                org.telegram.ui.Cells.ChatMessageCell r10 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r10 = r10.currentMessageObject
+                java.lang.String r10 = r10.getMusicAuthor()
+                r8[r13] = r10
+                org.telegram.ui.Cells.ChatMessageCell r10 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r10 = r10.currentMessageObject
+                java.lang.String r10 = r10.getMusicTitle()
+                r8[r14] = r10
+                java.lang.String r10 = "AccDescrMusicInfo"
+                java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r10, r7, r8)
+                r3.append(r7)
+                r3.append(r6)
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                int r7 = r7.getDuration()
+                java.lang.String r7 = org.telegram.messenger.LocaleController.formatDuration(r7)
+                r3.append(r7)
+                goto L_0x01eb
+            L_0x01a8:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                boolean r7 = r7.isVoice()
+                if (r7 != 0) goto L_0x01bc
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                boolean r7 = r7.isRoundVideo
+                if (r7 == 0) goto L_0x01eb
+            L_0x01bc:
+                r3.append(r6)
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                int r7 = r7.getDuration()
+                java.lang.String r7 = org.telegram.messenger.LocaleController.formatDuration(r7)
+                r3.append(r7)
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                boolean r7 = r7.isContentUnread()
+                if (r7 == 0) goto L_0x01eb
+                r3.append(r6)
+                r7 = 2131623988(0x7f0e0034, float:1.8875143E38)
+                java.lang.String r8 = "AccDescrMsgNotPlayed"
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+                r3.append(r7)
+            L_0x01eb:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$Poll r7 = r7.lastPoll
+                if (r7 == 0) goto L_0x025e
+                r3.append(r6)
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$Poll r7 = r7.lastPoll
+                java.lang.String r7 = r7.question
+                r3.append(r7)
+                r3.append(r6)
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                boolean r7 = r7.pollClosed
+                if (r7 == 0) goto L_0x0216
+                r7 = 2131625591(0x7f0e0677, float:1.8878394E38)
+                java.lang.String r8 = "FinalResults"
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+                goto L_0x025b
+            L_0x0216:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$Poll r7 = r7.lastPoll
+                boolean r7 = r7.quiz
+                if (r7 == 0) goto L_0x023e
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$Poll r7 = r7.lastPoll
+                boolean r7 = r7.public_voters
+                if (r7 == 0) goto L_0x0234
+                r7 = 2131627156(0x7f0e0CLASSNAME, float:1.8881568E38)
+                java.lang.String r8 = "QuizPoll"
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+                goto L_0x025b
+            L_0x0234:
+                r7 = 2131624275(0x7f0e0153, float:1.8875725E38)
+                java.lang.String r8 = "AnonymousQuizPoll"
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+                goto L_0x025b
+            L_0x023e:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$Poll r7 = r7.lastPoll
+                boolean r7 = r7.public_voters
+                if (r7 == 0) goto L_0x0252
+                r7 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
+                java.lang.String r8 = "PublicPoll"
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+                goto L_0x025b
+            L_0x0252:
+                r7 = 2131624274(0x7f0e0152, float:1.8875723E38)
+                java.lang.String r8 = "AnonymousPoll"
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            L_0x025b:
+                r3.append(r7)
+            L_0x025e:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                org.telegram.tgnet.TLRPC$Message r7 = r7.messageOwner
+                org.telegram.tgnet.TLRPC$MessageMedia r7 = r7.media
+                if (r7 == 0) goto L_0x0286
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                java.lang.CharSequence r7 = r7.caption
+                boolean r7 = android.text.TextUtils.isEmpty(r7)
+                if (r7 != 0) goto L_0x0286
+                r3.append(r5)
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                java.lang.CharSequence r7 = r7.caption
+                r3.append(r7)
+            L_0x0286:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                boolean r7 = r7.isOut()
+                if (r7 == 0) goto L_0x036f
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                boolean r7 = r7.isSent()
+                if (r7 == 0) goto L_0x0317
+                r3.append(r5)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                boolean r4 = r4.scheduled
+                if (r4 == 0) goto L_0x02c3
+                r4 = 2131624024(0x7f0e0058, float:1.8875216E38)
+                java.lang.Object[] r6 = new java.lang.Object[r14]
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                java.lang.String r7 = r7.currentTimeString
+                r6[r13] = r7
+                java.lang.String r7 = "AccDescrScheduledDate"
+                java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r7, r4, r6)
+                r3.append(r4)
+                goto L_0x03a3
+            L_0x02c3:
+                r4 = 2131624044(0x7f0e006c, float:1.8875257E38)
+                java.lang.Object[] r7 = new java.lang.Object[r14]
+                java.lang.StringBuilder r8 = new java.lang.StringBuilder
+                r8.<init>()
+                r10 = 2131627843(0x7f0e0var_, float:1.8882962E38)
+                java.lang.String r11 = "TodayAt"
+                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+                r8.append(r10)
+                r8.append(r15)
+                org.telegram.ui.Cells.ChatMessageCell r10 = org.telegram.ui.Cells.ChatMessageCell.this
+                java.lang.String r10 = r10.currentTimeString
+                r8.append(r10)
+                java.lang.String r8 = r8.toString()
+                r7[r13] = r8
+                java.lang.String r8 = "AccDescrSentDate"
+                java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r8, r4, r7)
+                r3.append(r4)
+                r3.append(r6)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                boolean r4 = r4.isUnread()
+                if (r4 == 0) goto L_0x0309
+                r4 = 2131623992(0x7f0e0038, float:1.8875151E38)
+                java.lang.String r6 = "AccDescrMsgUnread"
+                goto L_0x030e
+            L_0x0309:
+                r4 = 2131623989(0x7f0e0035, float:1.8875145E38)
+                java.lang.String r6 = "AccDescrMsgRead"
+            L_0x030e:
+                java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
+                r3.append(r4)
+                goto L_0x03a3
+            L_0x0317:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r7 = r7.currentMessageObject
+                boolean r7 = r7.isSending()
+                if (r7 == 0) goto L_0x0353
+                r3.append(r5)
+                r7 = 2131623990(0x7f0e0036, float:1.8875147E38)
+                java.lang.String r8 = "AccDescrMsgSending"
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+                r3.append(r7)
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.ui.Components.RadialProgress2 r7 = r7.radialProgress
+                float r7 = r7.getProgress()
+                r8 = 0
+                int r8 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
+                if (r8 <= 0) goto L_0x03a3
+                r3.append(r6)
+                r6 = 1120403456(0x42CLASSNAME, float:100.0)
+                float r7 = r7 * r6
+                int r6 = java.lang.Math.round(r7)
+                r3.append(r6)
+                r3.append(r4)
+                goto L_0x03a3
+            L_0x0353:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                boolean r4 = r4.isSendError()
+                if (r4 == 0) goto L_0x03a3
+                r3.append(r5)
+                r4 = 2131623991(0x7f0e0037, float:1.887515E38)
+                java.lang.String r6 = "AccDescrMsgSendingError"
+                java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
+                r3.append(r4)
+                goto L_0x03a3
+            L_0x036f:
+                r3.append(r5)
+                r4 = 2131624018(0x7f0e0052, float:1.8875204E38)
+                java.lang.Object[] r6 = new java.lang.Object[r14]
+                java.lang.StringBuilder r7 = new java.lang.StringBuilder
+                r7.<init>()
+                r8 = 2131627843(0x7f0e0var_, float:1.8882962E38)
+                java.lang.String r10 = "TodayAt"
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
+                r7.append(r8)
+                r7.append(r15)
+                org.telegram.ui.Cells.ChatMessageCell r8 = org.telegram.ui.Cells.ChatMessageCell.this
+                java.lang.String r8 = r8.currentTimeString
+                r7.append(r8)
+                java.lang.String r7 = r7.toString()
+                r6[r13] = r7
+                java.lang.String r7 = "AccDescrReceivedDate"
+                java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r7, r4, r6)
+                r3.append(r4)
+            L_0x03a3:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                org.telegram.tgnet.TLRPC$Message r4 = r4.messageOwner
+                int r4 = r4.flags
+                r4 = r4 & 1024(0x400, float:1.435E-42)
+                if (r4 == 0) goto L_0x03c7
+                r3.append(r5)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                org.telegram.tgnet.TLRPC$Message r4 = r4.messageOwner
+                int r4 = r4.views
+                java.lang.String r6 = "AccDescrNumberOfViews"
+                java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r6, r4)
+                r3.append(r4)
+            L_0x03c7:
+                r3.append(r5)
+                java.lang.String r3 = r3.toString()
+                r1.setContentDescription(r3)
+                r1.setEnabled(r14)
+                int r3 = android.os.Build.VERSION.SDK_INT
+                r4 = 19
+                if (r3 < r4) goto L_0x03eb
+                android.view.accessibility.AccessibilityNodeInfo$CollectionItemInfo r4 = r1.getCollectionItemInfo()
+                if (r4 == 0) goto L_0x03eb
+                int r4 = r4.getRowIndex()
+                android.view.accessibility.AccessibilityNodeInfo$CollectionItemInfo r4 = android.view.accessibility.AccessibilityNodeInfo.CollectionItemInfo.obtain(r4, r14, r13, r14, r13)
+                r1.setCollectionItemInfo(r4)
+            L_0x03eb:
+                r4 = 21
+                if (r3 < r4) goto L_0x0495
+                android.view.accessibility.AccessibilityNodeInfo$AccessibilityAction r3 = new android.view.accessibility.AccessibilityNodeInfo$AccessibilityAction
+                r4 = 2131230720(0x7var_, float:1.80775E38)
+                r5 = 2131623944(0x7f0e0008, float:1.8875054E38)
+                java.lang.String r6 = "AccActionMessageOptions"
+                java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+                r3.<init>(r4, r5)
+                r1.addAction(r3)
+                org.telegram.ui.Cells.ChatMessageCell r3 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r3 = r3.getIconForCurrentState()
+                if (r3 == 0) goto L_0x0454
+                if (r3 == r14) goto L_0x044a
+                if (r3 == r2) goto L_0x0440
+                r4 = 3
+                if (r3 == r4) goto L_0x0436
+                r4 = 5
+                if (r3 == r4) goto L_0x042c
+                org.telegram.ui.Cells.ChatMessageCell r3 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r3 = r3.currentMessageObject
+                int r3 = r3.type
+                r4 = 16
+                if (r3 != r4) goto L_0x042a
+                r3 = 2131624620(0x7f0e02ac, float:1.8876425E38)
+                java.lang.String r4 = "CallAgain"
+                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r4, r3)
+                goto L_0x045d
+            L_0x042a:
+                r10 = 0
+                goto L_0x045d
+            L_0x042c:
+                r3 = 2131623945(0x7f0e0009, float:1.8875056E38)
+                java.lang.String r4 = "AccActionOpenFile"
+                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r4, r3)
+                goto L_0x045d
+            L_0x0436:
+                r3 = 2131623941(0x7f0e0005, float:1.8875048E38)
+                java.lang.String r4 = "AccActionCancelDownload"
+                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r4, r3)
+                goto L_0x045d
+            L_0x0440:
+                r3 = 2131623942(0x7f0e0006, float:1.887505E38)
+                java.lang.String r4 = "AccActionDownload"
+                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r4, r3)
+                goto L_0x045d
+            L_0x044a:
+                r3 = 2131623946(0x7f0e000a, float:1.8875058E38)
+                java.lang.String r4 = "AccActionPause"
+                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r4, r3)
+                goto L_0x045d
+            L_0x0454:
+                r3 = 2131623947(0x7f0e000b, float:1.887506E38)
+                java.lang.String r4 = "AccActionPlay"
+                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            L_0x045d:
+                android.view.accessibility.AccessibilityNodeInfo$AccessibilityAction r3 = new android.view.accessibility.AccessibilityNodeInfo$AccessibilityAction
+                r4 = 16
+                r3.<init>(r4, r10)
+                r1.addAction(r3)
+                android.view.accessibility.AccessibilityNodeInfo$AccessibilityAction r3 = new android.view.accessibility.AccessibilityNodeInfo$AccessibilityAction
+                r4 = 2131623943(0x7f0e0007, float:1.8875052E38)
+                java.lang.String r5 = "AccActionEnterSelectionMode"
+                java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+                r3.<init>(r9, r4)
+                r1.addAction(r3)
+                org.telegram.ui.Cells.ChatMessageCell r3 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r3 = r3.getMiniIconForCurrentState()
+                if (r3 != r2) goto L_0x049d
+                android.view.accessibility.AccessibilityNodeInfo$AccessibilityAction r2 = new android.view.accessibility.AccessibilityNodeInfo$AccessibilityAction
+                r3 = 2131230722(0x7var_, float:1.8077505E38)
+                r4 = 2131623942(0x7f0e0006, float:1.887505E38)
+                java.lang.String r5 = "AccActionDownload"
+                java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+                r2.<init>(r3, r4)
+                r1.addAction(r2)
+                goto L_0x049d
+            L_0x0495:
+                r2 = 16
+                r1.addAction(r2)
+                r1.addAction(r9)
+            L_0x049d:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r2 = r2.currentMessageObject
+                boolean r2 = r2.isVoice()
+                if (r2 != 0) goto L_0x04b5
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r2 = r2.currentMessageObject
+                boolean r2 = r2.isMusic()
+                if (r2 == 0) goto L_0x04ce
+            L_0x04b5:
+                org.telegram.messenger.MediaController r2 = org.telegram.messenger.MediaController.getInstance()
+                org.telegram.ui.Cells.ChatMessageCell r3 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r3 = r3.currentMessageObject
+                boolean r2 = r2.isPlayingMessage(r3)
+                if (r2 == 0) goto L_0x04ce
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.ui.Components.SeekBarAccessibilityDelegate r2 = r2.seekBarAccessibilityDelegate
+                r2.onInitializeAccessibilityNodeInfoInternal(r1)
+            L_0x04ce:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r2 = r2.currentMessageObject
+                java.lang.CharSequence r2 = r2.messageText
+                boolean r2 = r2 instanceof android.text.Spannable
+                if (r2 == 0) goto L_0x0502
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r2 = r2.currentMessageObject
+                java.lang.CharSequence r2 = r2.messageText
+                android.text.Spannable r2 = (android.text.Spannable) r2
+                int r3 = r2.length()
+                java.lang.Class<android.text.style.ClickableSpan> r4 = android.text.style.ClickableSpan.class
+                java.lang.Object[] r2 = r2.getSpans(r13, r3, r4)
+                android.text.style.CharacterStyle[] r2 = (android.text.style.CharacterStyle[]) r2
+                int r3 = r2.length
+                r4 = 0
+                r5 = 0
+            L_0x04f3:
+                if (r4 >= r3) goto L_0x0502
+                r6 = r2[r4]
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r7 = r5 + 2000
+                r1.addChild(r6, r7)
+                int r5 = r5 + r14
+                int r4 = r4 + 1
+                goto L_0x04f3
+            L_0x0502:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r2 = r2.currentMessageObject
+                java.lang.CharSequence r2 = r2.caption
+                boolean r2 = r2 instanceof android.text.Spannable
+                if (r2 == 0) goto L_0x0536
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r2 = r2.currentMessageObject
+                java.lang.CharSequence r2 = r2.caption
+                android.text.Spannable r2 = (android.text.Spannable) r2
+                int r3 = r2.length()
+                java.lang.Class<android.text.style.ClickableSpan> r4 = android.text.style.ClickableSpan.class
+                java.lang.Object[] r2 = r2.getSpans(r13, r3, r4)
+                android.text.style.CharacterStyle[] r2 = (android.text.style.CharacterStyle[]) r2
+                int r3 = r2.length
+                r4 = 0
+                r5 = 0
+            L_0x0527:
+                if (r4 >= r3) goto L_0x0536
+                r6 = r2[r4]
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r7 = r5 + 3000
+                r1.addChild(r6, r7)
+                int r5 = r5 + r14
+                int r4 = r4 + 1
+                goto L_0x0527
+            L_0x0536:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                java.util.ArrayList r2 = r2.botButtons
+                java.util.Iterator r2 = r2.iterator()
+                r3 = 0
+            L_0x0541:
+                boolean r4 = r2.hasNext()
+                if (r4 == 0) goto L_0x0556
+                java.lang.Object r4 = r2.next()
+                org.telegram.ui.Cells.ChatMessageCell$BotButton r4 = (org.telegram.ui.Cells.ChatMessageCell.BotButton) r4
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r5 = r3 + 1000
+                r1.addChild(r4, r5)
+                int r3 = r3 + r14
+                goto L_0x0541
+            L_0x0556:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                boolean r2 = r2.hintButtonVisible
+                if (r2 == 0) goto L_0x057a
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r2 = r2.pollHintX
+                r3 = -1
+                if (r2 == r3) goto L_0x057a
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r2 = r2.currentMessageObject
+                boolean r2 = r2.isPoll()
+                if (r2 == 0) goto L_0x057a
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                r3 = 495(0x1ef, float:6.94E-43)
+                r1.addChild(r2, r3)
+            L_0x057a:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                java.util.ArrayList r2 = r2.pollButtons
+                java.util.Iterator r2 = r2.iterator()
+            L_0x0584:
+                boolean r3 = r2.hasNext()
+                if (r3 == 0) goto L_0x0599
+                java.lang.Object r3 = r2.next()
+                org.telegram.ui.Cells.ChatMessageCell$PollButton r3 = (org.telegram.ui.Cells.ChatMessageCell.PollButton) r3
+                org.telegram.ui.Cells.ChatMessageCell r3 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r4 = r13 + 500
+                r1.addChild(r3, r4)
+                int r13 = r13 + r14
+                goto L_0x0584
+            L_0x0599:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                boolean r2 = r2.drawInstantView
+                if (r2 == 0) goto L_0x05b4
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.graphics.RectF r2 = r2.instantButtonRect
+                boolean r2 = r2.isEmpty()
+                if (r2 != 0) goto L_0x05b4
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                r3 = 499(0x1f3, float:6.99E-43)
+                r1.addChild(r2, r3)
+            L_0x05b4:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r2 = r2.commentLayout
+                if (r2 == 0) goto L_0x05c3
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                r3 = 496(0x1f0, float:6.95E-43)
+                r1.addChild(r2, r3)
+            L_0x05c3:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r2 = r2.drawSideButton
+                if (r2 != r14) goto L_0x05d2
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                r3 = 498(0x1f2, float:6.98E-43)
+                r1.addChild(r2, r3)
+            L_0x05d2:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r3 = r2.replyNameLayout
+                if (r3 == 0) goto L_0x05dd
+                r3 = 497(0x1f1, float:6.96E-43)
+                r1.addChild(r2, r3)
+            L_0x05dd:
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                boolean r2 = r2.drawSelectionBackground
+                if (r2 != 0) goto L_0x05ed
+                org.telegram.ui.Cells.ChatMessageCell r2 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.graphics.drawable.Drawable r2 = r2.getBackground()
+                if (r2 == 0) goto L_0x05f0
+            L_0x05ed:
+                r1.setSelected(r14)
+            L_0x05f0:
+                return r1
+            L_0x05f1:
+                r6 = r12
+                android.view.accessibility.AccessibilityNodeInfo r2 = android.view.accessibility.AccessibilityNodeInfo.obtain()
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                r2.setSource(r5, r1)
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                r2.setParent(r5)
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.content.Context r5 = r5.getContext()
+                java.lang.String r5 = r5.getPackageName()
+                r2.setPackageName(r5)
+                java.lang.String r5 = "android.widget.TextView"
+                r7 = 3000(0xbb8, float:4.204E-42)
+                if (r1 < r7) goto L_0x06e0
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                java.lang.CharSequence r4 = r4.caption
+                boolean r4 = r4 instanceof android.text.Spannable
+                if (r4 == 0) goto L_0x06de
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r4 = r4.captionLayout
+                if (r4 != 0) goto L_0x0629
+                goto L_0x06de
+            L_0x0629:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                java.lang.CharSequence r4 = r4.caption
+                android.text.Spannable r4 = (android.text.Spannable) r4
+                android.text.style.ClickableSpan r6 = r0.getLinkById(r1, r14)
+                if (r6 != 0) goto L_0x063b
+                r7 = 0
+                return r7
+            L_0x063b:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                int[] r6 = r7.getRealSpanStartAndEnd(r4, r6)
+                r7 = r6[r13]
+                r8 = r6[r14]
+                java.lang.CharSequence r4 = r4.subSequence(r7, r8)
+                java.lang.String r4 = r4.toString()
+                r2.setText(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r4 = r4.captionLayout
+                java.lang.CharSequence r4 = r4.getText()
+                r4.length()
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r4 = r4.captionLayout
+                r7 = r6[r13]
+                r6 = r6[r14]
+                android.graphics.Path r8 = r0.linkPath
+                r4.getSelectionPath(r7, r6, r8)
+                android.graphics.Path r4 = r0.linkPath
+                android.graphics.RectF r6 = r0.rectF
+                r4.computeBounds(r6, r14)
+                android.graphics.Rect r4 = r0.rect
+                android.graphics.RectF r6 = r0.rectF
+                float r7 = r6.left
+                int r7 = (int) r7
+                float r8 = r6.top
+                int r8 = (int) r8
+                float r10 = r6.right
+                int r10 = (int) r10
+                float r6 = r6.bottom
+                int r6 = (int) r6
+                r4.set(r7, r8, r10, r6)
+                android.graphics.Rect r4 = r0.rect
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                float r6 = r6.captionX
+                int r6 = (int) r6
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                float r7 = r7.captionY
+                int r7 = (int) r7
+                r4.offset(r6, r7)
+                android.graphics.Rect r4 = r0.rect
+                r2.setBoundsInParent(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                if (r4 != 0) goto L_0x06ba
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                android.graphics.Rect r6 = new android.graphics.Rect
+                android.graphics.Rect r7 = r0.rect
+                r6.<init>(r7)
+                r4.put(r1, r6)
+            L_0x06ba:
+                android.graphics.Rect r1 = r0.rect
+                r4 = r3[r13]
+                r3 = r3[r14]
+                r1.offset(r4, r3)
+                android.graphics.Rect r1 = r0.rect
+                r2.setBoundsInScreen(r1)
+                r2.setClassName(r5)
+                r2.setEnabled(r14)
+                r2.setClickable(r14)
+                r2.setLongClickable(r14)
+                r1 = 16
+                r2.addAction(r1)
+                r2.addAction(r9)
+                goto L_0x0c4c
+            L_0x06de:
+                r7 = 0
+                return r7
+            L_0x06e0:
+                r7 = 0
+                r8 = 2000(0x7d0, float:2.803E-42)
+                if (r1 < r8) goto L_0x07ca
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                java.lang.CharSequence r4 = r4.messageText
+                boolean r4 = r4 instanceof android.text.Spannable
+                if (r4 != 0) goto L_0x06f2
+                return r7
+            L_0x06f2:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                java.lang.CharSequence r4 = r4.messageText
+                android.text.Spannable r4 = (android.text.Spannable) r4
+                android.text.style.ClickableSpan r6 = r0.getLinkById(r1, r13)
+                if (r6 != 0) goto L_0x0703
+                return r7
+            L_0x0703:
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                int[] r6 = r7.getRealSpanStartAndEnd(r4, r6)
+                r7 = r6[r13]
+                r8 = r6[r14]
+                java.lang.CharSequence r4 = r4.subSequence(r7, r8)
+                java.lang.String r4 = r4.toString()
+                r2.setText(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                java.util.ArrayList<org.telegram.messenger.MessageObject$TextLayoutBlock> r4 = r4.textLayoutBlocks
+                java.util.Iterator r4 = r4.iterator()
+            L_0x0724:
+                boolean r7 = r4.hasNext()
+                if (r7 == 0) goto L_0x07b4
+                java.lang.Object r7 = r4.next()
+                org.telegram.messenger.MessageObject$TextLayoutBlock r7 = (org.telegram.messenger.MessageObject.TextLayoutBlock) r7
+                android.text.StaticLayout r8 = r7.textLayout
+                java.lang.CharSequence r8 = r8.getText()
+                int r8 = r8.length()
+                int r10 = r7.charactersOffset
+                r11 = r6[r13]
+                if (r10 > r11) goto L_0x0724
+                int r8 = r8 + r10
+                r11 = r6[r14]
+                if (r8 < r11) goto L_0x0724
+                android.text.StaticLayout r4 = r7.textLayout
+                r8 = r6[r13]
+                int r8 = r8 - r10
+                r6 = r6[r14]
+                int r6 = r6 - r10
+                android.graphics.Path r10 = r0.linkPath
+                r4.getSelectionPath(r8, r6, r10)
+                android.graphics.Path r4 = r0.linkPath
+                android.graphics.RectF r6 = r0.rectF
+                r4.computeBounds(r6, r14)
+                android.graphics.Rect r4 = r0.rect
+                android.graphics.RectF r6 = r0.rectF
+                float r8 = r6.left
+                int r8 = (int) r8
+                float r10 = r6.top
+                int r10 = (int) r10
+                float r11 = r6.right
+                int r11 = (int) r11
+                float r6 = r6.bottom
+                int r6 = (int) r6
+                r4.set(r8, r10, r11, r6)
+                android.graphics.Rect r4 = r0.rect
+                float r6 = r7.textYOffset
+                int r6 = (int) r6
+                r4.offset(r13, r6)
+                android.graphics.Rect r4 = r0.rect
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.textX
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r7 = r7.textY
+                r4.offset(r6, r7)
+                android.graphics.Rect r4 = r0.rect
+                r2.setBoundsInParent(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                if (r4 != 0) goto L_0x07a6
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                android.graphics.Rect r6 = new android.graphics.Rect
+                android.graphics.Rect r7 = r0.rect
+                r6.<init>(r7)
+                r4.put(r1, r6)
+            L_0x07a6:
+                android.graphics.Rect r1 = r0.rect
+                r4 = r3[r13]
+                r3 = r3[r14]
+                r1.offset(r4, r3)
+                android.graphics.Rect r1 = r0.rect
+                r2.setBoundsInScreen(r1)
+            L_0x07b4:
+                r2.setClassName(r5)
+                r2.setEnabled(r14)
+                r2.setClickable(r14)
+                r2.setLongClickable(r14)
+                r1 = 16
+                r2.addAction(r1)
+                r2.addAction(r9)
+                goto L_0x0c4c
+            L_0x07ca:
+                r5 = 1000(0x3e8, float:1.401E-42)
+                java.lang.String r7 = "android.widget.Button"
+                if (r1 < r5) goto L_0x0899
+                int r4 = r1 + -1000
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                java.util.ArrayList r5 = r5.botButtons
+                int r5 = r5.size()
+                if (r4 < r5) goto L_0x07e0
+                r5 = 0
+                return r5
+            L_0x07e0:
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                java.util.ArrayList r5 = r5.botButtons
+                java.lang.Object r4 = r5.get(r4)
+                org.telegram.ui.Cells.ChatMessageCell$BotButton r4 = (org.telegram.ui.Cells.ChatMessageCell.BotButton) r4
+                android.text.StaticLayout r5 = r4.title
+                java.lang.CharSequence r5 = r5.getText()
+                r2.setText(r5)
+                r2.setClassName(r7)
+                r2.setEnabled(r14)
+                r2.setClickable(r14)
+                r5 = 16
+                r2.addAction(r5)
+                android.graphics.Rect r5 = r0.rect
+                int r6 = r4.x
+                int r7 = r4.y
+                int r8 = r4.x
+                int r9 = r4.width
+                int r8 = r8 + r9
+                int r9 = r4.y
+                int r4 = r4.height
+                int r9 = r9 + r4
+                r5.set(r6, r7, r8, r9)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r4 = r4.currentMessageObject
+                boolean r4 = r4.isOutOwner()
+                if (r4 == 0) goto L_0x0845
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r4 = r4.getMeasuredWidth()
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r5 = r5.widthForButtons
+                int r4 = r4 - r5
+                r5 = 1092616192(0x41200000, float:10.0)
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                int r4 = r4 - r5
+                goto L_0x085d
+            L_0x0845:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r4 = r4.backgroundDrawableLeft
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                boolean r5 = r5.mediaBackground
+                if (r5 == 0) goto L_0x0856
+                r5 = 1065353216(0x3var_, float:1.0)
+                goto L_0x0858
+            L_0x0856:
+                r5 = 1088421888(0x40e00000, float:7.0)
+            L_0x0858:
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                int r4 = r4 + r5
+            L_0x085d:
+                android.graphics.Rect r5 = r0.rect
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.layoutHeight
+                r5.offset(r4, r6)
+                android.graphics.Rect r4 = r0.rect
+                r2.setBoundsInParent(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                if (r4 != 0) goto L_0x0889
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                android.graphics.Rect r5 = new android.graphics.Rect
+                android.graphics.Rect r6 = r0.rect
+                r5.<init>(r6)
+                r4.put(r1, r5)
+            L_0x0889:
+                android.graphics.Rect r1 = r0.rect
+                r4 = r3[r13]
+                r3 = r3[r14]
+                r1.offset(r4, r3)
+                android.graphics.Rect r1 = r0.rect
+                r2.setBoundsInScreen(r1)
+                goto L_0x0c4c
+            L_0x0899:
+                r5 = 500(0x1f4, float:7.0E-43)
+                if (r1 < r5) goto L_0x096d
+                int r5 = r1 + -500
+                org.telegram.ui.Cells.ChatMessageCell r8 = org.telegram.ui.Cells.ChatMessageCell.this
+                java.util.ArrayList r8 = r8.pollButtons
+                int r8 = r8.size()
+                if (r5 < r8) goto L_0x08ad
+                r8 = 0
+                return r8
+            L_0x08ad:
+                org.telegram.ui.Cells.ChatMessageCell r8 = org.telegram.ui.Cells.ChatMessageCell.this
+                java.util.ArrayList r8 = r8.pollButtons
+                java.lang.Object r5 = r8.get(r5)
+                org.telegram.ui.Cells.ChatMessageCell$PollButton r5 = (org.telegram.ui.Cells.ChatMessageCell.PollButton) r5
+                java.lang.StringBuilder r8 = new java.lang.StringBuilder
+                android.text.StaticLayout r9 = r5.title
+                java.lang.CharSequence r9 = r9.getText()
+                r8.<init>(r9)
+                org.telegram.ui.Cells.ChatMessageCell r9 = org.telegram.ui.Cells.ChatMessageCell.this
+                boolean r9 = r9.pollVoted
+                if (r9 != 0) goto L_0x08d2
+                r2.setClassName(r7)
+                goto L_0x090d
+            L_0x08d2:
+                boolean r7 = r5.chosen
+                r2.setSelected(r7)
+                r8.append(r6)
+                int r7 = r5.percent
+                r8.append(r7)
+                r8.append(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$Poll r4 = r4.lastPoll
+                if (r4 == 0) goto L_0x090d
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.tgnet.TLRPC$Poll r4 = r4.lastPoll
+                boolean r4 = r4.quiz
+                if (r4 == 0) goto L_0x090d
+                boolean r4 = r5.correct
+                if (r4 == 0) goto L_0x090d
+                r8.append(r6)
+                r4 = 2131624016(0x7f0e0050, float:1.88752E38)
+                java.lang.String r6 = "AccDescrQuizCorrectAnswer"
+                java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
+                r8.append(r4)
+            L_0x090d:
+                r2.setText(r8)
+                r2.setEnabled(r14)
+                r4 = 16
+                r2.addAction(r4)
+                int r4 = r5.y
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.namesOffset
+                int r4 = r4 + r6
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.backgroundWidth
+                r7 = 1117257728(0x42980000, float:76.0)
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r6 = r6 - r7
+                android.graphics.Rect r7 = r0.rect
+                int r8 = r5.x
+                int r6 = r6 + r8
+                int r5 = r5.height
+                int r5 = r5 + r4
+                r7.set(r8, r4, r6, r5)
+                android.graphics.Rect r4 = r0.rect
+                r2.setBoundsInParent(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                if (r4 != 0) goto L_0x095a
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                android.graphics.Rect r5 = new android.graphics.Rect
+                android.graphics.Rect r6 = r0.rect
+                r5.<init>(r6)
+                r4.put(r1, r5)
+            L_0x095a:
+                android.graphics.Rect r1 = r0.rect
+                r4 = r3[r13]
+                r3 = r3[r14]
+                r1.offset(r4, r3)
+                android.graphics.Rect r1 = r0.rect
+                r2.setBoundsInScreen(r1)
+                r2.setClickable(r14)
+                goto L_0x0c4c
+            L_0x096d:
+                r4 = 1107296256(0x42000000, float:32.0)
+                r5 = 495(0x1ef, float:6.94E-43)
+                if (r1 != r5) goto L_0x0a05
+                r2.setClassName(r7)
+                r2.setEnabled(r14)
+                r5 = 2131624017(0x7f0e0051, float:1.8875202E38)
+                java.lang.String r6 = "AccDescrQuizExplanation"
+                java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+                r2.setText(r5)
+                r5 = 16
+                r2.addAction(r5)
+                android.graphics.Rect r5 = r0.rect
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r6.pollHintX
+                r7 = 1090519040(0x41000000, float:8.0)
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r6 = r6 - r8
+                org.telegram.ui.Cells.ChatMessageCell r8 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r8 = r8.pollHintY
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r8 = r8 - r7
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r7 = r7.pollHintX
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                int r7 = r7 + r9
+                org.telegram.ui.Cells.ChatMessageCell r9 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r9 = r9.pollHintY
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                int r9 = r9 + r4
+                r5.set(r6, r8, r7, r9)
+                android.graphics.Rect r4 = r0.rect
+                r2.setBoundsInParent(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                if (r4 == 0) goto L_0x09e2
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                android.graphics.Rect r4 = (android.graphics.Rect) r4
+                android.graphics.Rect r5 = r0.rect
+                boolean r4 = r4.equals(r5)
+                if (r4 != 0) goto L_0x09f2
+            L_0x09e2:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                android.graphics.Rect r5 = new android.graphics.Rect
+                android.graphics.Rect r6 = r0.rect
+                r5.<init>(r6)
+                r4.put(r1, r5)
+            L_0x09f2:
+                android.graphics.Rect r1 = r0.rect
+                r4 = r3[r13]
+                r3 = r3[r14]
+                r1.offset(r4, r3)
+                android.graphics.Rect r1 = r0.rect
+                r2.setBoundsInScreen(r1)
+                r2.setClickable(r14)
+                goto L_0x0c4c
+            L_0x0a05:
+                r5 = 499(0x1f3, float:6.99E-43)
+                if (r1 != r5) goto L_0x0a7c
+                r2.setClassName(r7)
+                r2.setEnabled(r14)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r4 = r4.instantViewLayout
+                if (r4 == 0) goto L_0x0a24
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r4 = r4.instantViewLayout
+                java.lang.CharSequence r4 = r4.getText()
+                r2.setText(r4)
+            L_0x0a24:
+                r4 = 16
+                r2.addAction(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.graphics.RectF r4 = r4.instantButtonRect
+                android.graphics.Rect r5 = r0.rect
+                r4.round(r5)
+                android.graphics.Rect r4 = r0.rect
+                r2.setBoundsInParent(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                if (r4 == 0) goto L_0x0a59
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                android.graphics.Rect r4 = (android.graphics.Rect) r4
+                android.graphics.Rect r5 = r0.rect
+                boolean r4 = r4.equals(r5)
+                if (r4 != 0) goto L_0x0a69
+            L_0x0a59:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                android.graphics.Rect r5 = new android.graphics.Rect
+                android.graphics.Rect r6 = r0.rect
+                r5.<init>(r6)
+                r4.put(r1, r5)
+            L_0x0a69:
+                android.graphics.Rect r1 = r0.rect
+                r4 = r3[r13]
+                r3 = r3[r14]
+                r1.offset(r4, r3)
+                android.graphics.Rect r1 = r0.rect
+                r2.setBoundsInScreen(r1)
+                r2.setClickable(r14)
+                goto L_0x0c4c
+            L_0x0a7c:
+                r5 = 498(0x1f2, float:6.98E-43)
+                if (r1 != r5) goto L_0x0b27
+                java.lang.String r5 = "android.widget.ImageButton"
+                r2.setClassName(r5)
+                r2.setEnabled(r14)
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                org.telegram.messenger.MessageObject r6 = r5.currentMessageObject
+                boolean r5 = r5.isOpenChatByShare(r6)
+                if (r5 == 0) goto L_0x0aa1
+                r5 = 2131624001(0x7f0e0041, float:1.887517E38)
+                java.lang.String r6 = "AccDescrOpenChat"
+                java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+                r2.setContentDescription(r5)
+                goto L_0x0aad
+            L_0x0aa1:
+                r5 = 2131627508(0x7f0e0df4, float:1.8882282E38)
+                java.lang.String r6 = "ShareFile"
+                java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+                r2.setContentDescription(r5)
+            L_0x0aad:
+                r5 = 16
+                r2.addAction(r5)
+                android.graphics.Rect r5 = r0.rect
+                org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this
+                float r6 = r6.sideStartX
+                int r6 = (int) r6
+                org.telegram.ui.Cells.ChatMessageCell r7 = org.telegram.ui.Cells.ChatMessageCell.this
+                float r7 = r7.sideStartY
+                int r7 = (int) r7
+                org.telegram.ui.Cells.ChatMessageCell r8 = org.telegram.ui.Cells.ChatMessageCell.this
+                float r8 = r8.sideStartX
+                int r8 = (int) r8
+                r9 = 1109393408(0x42200000, float:40.0)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                int r8 = r8 + r9
+                org.telegram.ui.Cells.ChatMessageCell r9 = org.telegram.ui.Cells.ChatMessageCell.this
+                float r9 = r9.sideStartY
+                int r9 = (int) r9
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                int r9 = r9 + r4
+                r5.set(r6, r7, r8, r9)
+                android.graphics.Rect r4 = r0.rect
+                r2.setBoundsInParent(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                if (r4 == 0) goto L_0x0b04
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                android.graphics.Rect r4 = (android.graphics.Rect) r4
+                android.graphics.Rect r5 = r0.rect
+                boolean r4 = r4.equals(r5)
+                if (r4 != 0) goto L_0x0b14
+            L_0x0b04:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                android.graphics.Rect r5 = new android.graphics.Rect
+                android.graphics.Rect r6 = r0.rect
+                r5.<init>(r6)
+                r4.put(r1, r5)
+            L_0x0b14:
+                android.graphics.Rect r1 = r0.rect
+                r4 = r3[r13]
+                r3 = r3[r14]
+                r1.offset(r4, r3)
+                android.graphics.Rect r1 = r0.rect
+                r2.setBoundsInScreen(r1)
+                r2.setClickable(r14)
+                goto L_0x0c4c
+            L_0x0b27:
+                r4 = 497(0x1f1, float:6.96E-43)
+                if (r1 != r4) goto L_0x0bd7
+                r2.setEnabled(r14)
+                java.lang.StringBuilder r4 = new java.lang.StringBuilder
+                r4.<init>()
+                r5 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
+                java.lang.String r7 = "Reply"
+                java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
+                r4.append(r5)
+                r4.append(r6)
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r5 = r5.replyNameLayout
+                if (r5 == 0) goto L_0x0b52
+                java.lang.CharSequence r5 = r5.getText()
+                r4.append(r5)
+                r4.append(r6)
+            L_0x0b52:
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r5 = r5.replyTextLayout
+                if (r5 == 0) goto L_0x0b5f
+                java.lang.CharSequence r5 = r5.getText()
+                r4.append(r5)
+            L_0x0b5f:
+                java.lang.String r4 = r4.toString()
+                r2.setContentDescription(r4)
+                r4 = 16
+                r2.addAction(r4)
+                android.graphics.Rect r4 = r0.rect
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r6 = r5.replyStartX
+                int r7 = r5.replyStartY
+                int r5 = r5.replyNameWidth
+                org.telegram.ui.Cells.ChatMessageCell r8 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r8 = r8.replyTextWidth
+                int r5 = java.lang.Math.max(r5, r8)
+                int r5 = r5 + r6
+                org.telegram.ui.Cells.ChatMessageCell r8 = org.telegram.ui.Cells.ChatMessageCell.this
+                int r8 = r8.replyStartY
+                r9 = 1108082688(0x420CLASSNAME, float:35.0)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                int r8 = r8 + r9
+                r4.set(r6, r7, r5, r8)
+                android.graphics.Rect r4 = r0.rect
+                r2.setBoundsInParent(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                if (r4 == 0) goto L_0x0bb5
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                android.graphics.Rect r4 = (android.graphics.Rect) r4
+                android.graphics.Rect r5 = r0.rect
+                boolean r4 = r4.equals(r5)
+                if (r4 != 0) goto L_0x0bc5
+            L_0x0bb5:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                android.graphics.Rect r5 = new android.graphics.Rect
+                android.graphics.Rect r6 = r0.rect
+                r5.<init>(r6)
+                r4.put(r1, r5)
+            L_0x0bc5:
+                android.graphics.Rect r1 = r0.rect
+                r4 = r3[r13]
+                r3 = r3[r14]
+                r1.offset(r4, r3)
+                android.graphics.Rect r1 = r0.rect
+                r2.setBoundsInScreen(r1)
+                r2.setClickable(r14)
+                goto L_0x0c4c
+            L_0x0bd7:
+                r4 = 496(0x1f0, float:6.95E-43)
+                if (r1 != r4) goto L_0x0c4c
+                r2.setClassName(r7)
+                r2.setEnabled(r14)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r4 = r4.commentLayout
+                if (r4 == 0) goto L_0x0bf6
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.text.StaticLayout r4 = r4.commentLayout
+                java.lang.CharSequence r4 = r4.getText()
+                r2.setText(r4)
+            L_0x0bf6:
+                r4 = 16
+                r2.addAction(r4)
+                android.graphics.Rect r4 = r0.rect
+                org.telegram.ui.Cells.ChatMessageCell r5 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.graphics.Rect r5 = r5.commentButtonRect
+                r4.set(r5)
+                android.graphics.Rect r4 = r0.rect
+                r2.setBoundsInParent(r4)
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                if (r4 == 0) goto L_0x0c2b
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                java.lang.Object r4 = r4.get(r1)
+                android.graphics.Rect r4 = (android.graphics.Rect) r4
+                android.graphics.Rect r5 = r0.rect
+                boolean r4 = r4.equals(r5)
+                if (r4 != 0) goto L_0x0c3b
+            L_0x0c2b:
+                org.telegram.ui.Cells.ChatMessageCell r4 = org.telegram.ui.Cells.ChatMessageCell.this
+                android.util.SparseArray r4 = r4.accessibilityVirtualViewBounds
+                android.graphics.Rect r5 = new android.graphics.Rect
+                android.graphics.Rect r6 = r0.rect
+                r5.<init>(r6)
+                r4.put(r1, r5)
+            L_0x0c3b:
+                android.graphics.Rect r1 = r0.rect
+                r4 = r3[r13]
+                r3 = r3[r14]
+                r1.offset(r4, r3)
+                android.graphics.Rect r1 = r0.rect
+                r2.setBoundsInScreen(r1)
+                r2.setClickable(r14)
+            L_0x0c4c:
+                r2.setFocusable(r14)
+                r2.setVisibleToUser(r14)
+                return r2
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.MessageAccessibilityNodeProvider.createAccessibilityNodeInfo(int):android.view.accessibility.AccessibilityNodeInfo");
         }
 
         public boolean performAction(int i, int i2, Bundle bundle) {
-            ClickableSpan linkById;
             if (i == -1) {
                 ChatMessageCell.this.performAccessibilityAction(i2, bundle);
             } else if (i2 == 64) {
                 ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 32768);
-            } else if (i2 == 16) {
-                if (i >= 2000) {
-                    ClickableSpan linkById2 = getLinkById(i);
-                    if (linkById2 != null) {
-                        ChatMessageCell.this.delegate.didPressUrl(ChatMessageCell.this, linkById2, false);
+            } else {
+                boolean z = false;
+                if (i2 == 16) {
+                    if (i >= 3000) {
+                        ClickableSpan linkById = getLinkById(i, true);
+                        if (linkById != null) {
+                            ChatMessageCell.this.delegate.didPressUrl(ChatMessageCell.this, linkById, false);
+                            ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 1);
+                        }
+                    } else if (i >= 2000) {
+                        ClickableSpan linkById2 = getLinkById(i, false);
+                        if (linkById2 != null) {
+                            ChatMessageCell.this.delegate.didPressUrl(ChatMessageCell.this, linkById2, false);
+                            ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 1);
+                        }
+                    } else if (i >= 1000) {
+                        int i3 = i - 1000;
+                        if (i3 >= ChatMessageCell.this.botButtons.size()) {
+                            return false;
+                        }
+                        BotButton botButton = (BotButton) ChatMessageCell.this.botButtons.get(i3);
+                        if (ChatMessageCell.this.delegate != null) {
+                            if (botButton.button != null) {
+                                ChatMessageCell.this.delegate.didPressBotButton(ChatMessageCell.this, botButton.button);
+                            } else if (botButton.reaction != null) {
+                                ChatMessageCell.this.delegate.didPressReaction(ChatMessageCell.this, botButton.reaction);
+                            }
+                        }
                         ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 1);
-                    }
-                } else if (i >= 1000) {
-                    int i3 = i - 1000;
-                    if (i3 >= ChatMessageCell.this.botButtons.size()) {
-                        return false;
-                    }
-                    BotButton botButton = (BotButton) ChatMessageCell.this.botButtons.get(i3);
-                    if (ChatMessageCell.this.delegate != null) {
-                        if (botButton.button != null) {
-                            ChatMessageCell.this.delegate.didPressBotButton(ChatMessageCell.this, botButton.button);
-                        } else if (botButton.reaction != null) {
-                            ChatMessageCell.this.delegate.didPressReaction(ChatMessageCell.this, botButton.reaction);
+                    } else if (i >= 500) {
+                        int i4 = i - 500;
+                        if (i4 >= ChatMessageCell.this.pollButtons.size()) {
+                            return false;
+                        }
+                        PollButton pollButton = (PollButton) ChatMessageCell.this.pollButtons.get(i4);
+                        if (ChatMessageCell.this.delegate != null) {
+                            ArrayList arrayList = new ArrayList();
+                            arrayList.add(pollButton.answer);
+                            ChatMessageCell.this.delegate.didPressVoteButtons(ChatMessageCell.this, arrayList, -1, 0, 0);
+                        }
+                        ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 1);
+                    } else if (i == 495) {
+                        if (ChatMessageCell.this.delegate != null) {
+                            ChatMessageCell.this.delegate.didPressHint(ChatMessageCell.this, 0);
+                        }
+                    } else if (i == 499) {
+                        if (ChatMessageCell.this.delegate != null) {
+                            ChatMessageCellDelegate access$000 = ChatMessageCell.this.delegate;
+                            ChatMessageCell chatMessageCell = ChatMessageCell.this;
+                            access$000.didPressInstantButton(chatMessageCell, chatMessageCell.drawInstantViewType);
+                        }
+                    } else if (i == 498) {
+                        if (ChatMessageCell.this.delegate != null) {
+                            ChatMessageCell.this.delegate.didPressSideButton(ChatMessageCell.this);
+                        }
+                    } else if (i == 497) {
+                        if (ChatMessageCell.this.delegate != null) {
+                            ChatMessageCell chatMessageCell2 = ChatMessageCell.this;
+                            if ((!chatMessageCell2.isThreadChat || chatMessageCell2.currentMessageObject.getReplyTopMsgId() != 0) && ChatMessageCell.this.currentMessageObject.hasValidReplyMessageObject()) {
+                                ChatMessageCellDelegate access$0002 = ChatMessageCell.this.delegate;
+                                ChatMessageCell chatMessageCell3 = ChatMessageCell.this;
+                                access$0002.didPressReplyMessage(chatMessageCell3, chatMessageCell3.currentMessageObject.getReplyMsgId());
+                            }
+                        }
+                    } else if (i == 496 && ChatMessageCell.this.delegate != null) {
+                        ChatMessageCell chatMessageCell4 = ChatMessageCell.this;
+                        if (chatMessageCell4.isRepliesChat) {
+                            chatMessageCell4.delegate.didPressSideButton(ChatMessageCell.this);
+                        } else {
+                            chatMessageCell4.delegate.didPressCommentButton(ChatMessageCell.this);
                         }
                     }
-                    ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 1);
-                } else if (i >= 500) {
-                    int i4 = i - 500;
-                    if (i4 >= ChatMessageCell.this.pollButtons.size()) {
-                        return false;
+                } else if (i2 == 32) {
+                    if (i >= 3000) {
+                        z = true;
                     }
-                    PollButton pollButton = (PollButton) ChatMessageCell.this.pollButtons.get(i4);
-                    if (ChatMessageCell.this.delegate != null) {
-                        ArrayList arrayList = new ArrayList();
-                        arrayList.add(pollButton.answer);
-                        ChatMessageCell.this.delegate.didPressVoteButtons(ChatMessageCell.this, arrayList, -1, 0, 0);
-                    }
-                    ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 1);
-                } else if (i == 495) {
-                    if (ChatMessageCell.this.delegate != null) {
-                        ChatMessageCell.this.delegate.didPressHint(ChatMessageCell.this, 0);
-                    }
-                } else if (i == 499) {
-                    if (ChatMessageCell.this.delegate != null) {
-                        ChatMessageCellDelegate access$000 = ChatMessageCell.this.delegate;
-                        ChatMessageCell chatMessageCell = ChatMessageCell.this;
-                        access$000.didPressInstantButton(chatMessageCell, chatMessageCell.drawInstantViewType);
-                    }
-                } else if (i == 498) {
-                    if (ChatMessageCell.this.delegate != null) {
-                        ChatMessageCell.this.delegate.didPressSideButton(ChatMessageCell.this);
-                    }
-                } else if (i == 497) {
-                    if (ChatMessageCell.this.delegate != null) {
-                        ChatMessageCell chatMessageCell2 = ChatMessageCell.this;
-                        if ((!chatMessageCell2.isThreadChat || chatMessageCell2.currentMessageObject.getReplyTopMsgId() != 0) && ChatMessageCell.this.currentMessageObject.hasValidReplyMessageObject()) {
-                            ChatMessageCellDelegate access$0002 = ChatMessageCell.this.delegate;
-                            ChatMessageCell chatMessageCell3 = ChatMessageCell.this;
-                            access$0002.didPressReplyMessage(chatMessageCell3, chatMessageCell3.currentMessageObject.getReplyMsgId());
-                        }
-                    }
-                } else if (i == 496 && ChatMessageCell.this.delegate != null) {
-                    ChatMessageCell chatMessageCell4 = ChatMessageCell.this;
-                    if (chatMessageCell4.isRepliesChat) {
-                        chatMessageCell4.delegate.didPressSideButton(ChatMessageCell.this);
-                    } else {
-                        chatMessageCell4.delegate.didPressCommentButton(ChatMessageCell.this);
+                    ClickableSpan linkById3 = getLinkById(i, z);
+                    if (linkById3 != null) {
+                        ChatMessageCell.this.delegate.didPressUrl(ChatMessageCell.this, linkById3, true);
+                        ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 2);
                     }
                 }
-            } else if (i2 == 32 && (linkById = getLinkById(i)) != null) {
-                ChatMessageCell.this.delegate.didPressUrl(ChatMessageCell.this, linkById, true);
-                ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 2);
             }
             return true;
         }
 
-        private ClickableSpan getLinkById(int i) {
-            int i2 = i - 2000;
+        private ClickableSpan getLinkById(int i, boolean z) {
+            if (z) {
+                int i2 = i - 3000;
+                if (!(ChatMessageCell.this.currentMessageObject.caption instanceof Spannable)) {
+                    return null;
+                }
+                Spannable spannable = (Spannable) ChatMessageCell.this.currentMessageObject.caption;
+                ClickableSpan[] clickableSpanArr = (ClickableSpan[]) spannable.getSpans(0, spannable.length(), ClickableSpan.class);
+                if (clickableSpanArr.length <= i2) {
+                    return null;
+                }
+                return clickableSpanArr[i2];
+            }
+            int i3 = i - 2000;
             if (!(ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable)) {
                 return null;
             }
-            Spannable spannable = (Spannable) ChatMessageCell.this.currentMessageObject.messageText;
-            ClickableSpan[] clickableSpanArr = (ClickableSpan[]) spannable.getSpans(0, spannable.length(), ClickableSpan.class);
-            if (clickableSpanArr.length <= i2) {
+            Spannable spannable2 = (Spannable) ChatMessageCell.this.currentMessageObject.messageText;
+            ClickableSpan[] clickableSpanArr2 = (ClickableSpan[]) spannable2.getSpans(0, spannable2.length(), ClickableSpan.class);
+            if (clickableSpanArr2.length <= i3) {
                 return null;
             }
-            return clickableSpanArr[i2];
+            return clickableSpanArr2[i3];
         }
     }
 
