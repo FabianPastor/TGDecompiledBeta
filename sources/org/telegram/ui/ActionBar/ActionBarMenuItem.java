@@ -219,8 +219,9 @@ public class ActionBarMenuItem extends FrameLayout {
     public boolean onTouchEvent(MotionEvent motionEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         ActionBarPopupWindow actionBarPopupWindow2;
+        ActionBarPopupWindow actionBarPopupWindow3;
         if (motionEvent.getActionMasked() == 0) {
-            if (this.longClickEnabled && hasSubMenu() && ((actionBarPopupWindow2 = this.popupWindow) == null || !actionBarPopupWindow2.isShowing())) {
+            if (this.longClickEnabled && hasSubMenu() && ((actionBarPopupWindow3 = this.popupWindow) == null || !actionBarPopupWindow3.isShowing())) {
                 $$Lambda$ActionBarMenuItem$97ELGBMVBlZJv0MzTuldUHOShYc r0 = new Runnable() {
                     public final void run() {
                         ActionBarMenuItem.this.lambda$onTouchEvent$0$ActionBarMenuItem();
@@ -230,8 +231,8 @@ public class ActionBarMenuItem extends FrameLayout {
                 AndroidUtilities.runOnUIThread(r0, 200);
             }
         } else if (motionEvent.getActionMasked() != 2) {
-            ActionBarPopupWindow actionBarPopupWindow3 = this.popupWindow;
-            if (actionBarPopupWindow3 == null || !actionBarPopupWindow3.isShowing() || motionEvent.getActionMasked() != 1) {
+            ActionBarPopupWindow actionBarPopupWindow4 = this.popupWindow;
+            if (actionBarPopupWindow4 == null || !actionBarPopupWindow4.isShowing() || motionEvent.getActionMasked() != 1) {
                 View view = this.selectedMenuView;
                 if (view != null) {
                     view.setSelected(false);
@@ -255,9 +256,8 @@ public class ActionBarMenuItem extends FrameLayout {
                     this.popupWindow.dismiss();
                 }
             }
-        } else if (!this.showSubmenuByMove || !hasSubMenu() || ((actionBarPopupWindow = this.popupWindow) != null && actionBarPopupWindow.isShowing())) {
-            ActionBarPopupWindow actionBarPopupWindow4 = this.popupWindow;
-            if (actionBarPopupWindow4 != null && actionBarPopupWindow4.isShowing()) {
+        } else if (!this.showSubmenuByMove || !hasSubMenu() || ((actionBarPopupWindow2 = this.popupWindow) != null && actionBarPopupWindow2.isShowing())) {
+            if (this.showSubmenuByMove && (actionBarPopupWindow = this.popupWindow) != null && actionBarPopupWindow.isShowing()) {
                 getLocationOnScreen(this.location);
                 float x = motionEvent.getX() + ((float) this.location[0]);
                 float y = motionEvent.getY();

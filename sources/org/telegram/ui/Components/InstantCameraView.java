@@ -188,6 +188,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public TextureView textureView;
     /* access modifiers changed from: private */
     public int textureViewSize;
+    private boolean updateTextureViewSize;
     /* access modifiers changed from: private */
     public FloatBuffer vertexBuffer;
     /* access modifiers changed from: private */
@@ -345,28 +346,31 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         int i3;
-        if (View.MeasureSpec.getSize(i2) > View.MeasureSpec.getSize(i)) {
-            i3 = AndroidUtilities.roundPlayingMessageSize;
-        } else {
-            i3 = AndroidUtilities.roundMessageSize;
-        }
-        if (i3 != this.textureViewSize) {
-            this.textureViewSize = i3;
-            ViewGroup.LayoutParams layoutParams = this.textureOverlayView.getLayoutParams();
-            ViewGroup.LayoutParams layoutParams2 = this.textureOverlayView.getLayoutParams();
-            int i4 = this.textureViewSize;
-            layoutParams2.height = i4;
-            layoutParams.width = i4;
-            ViewGroup.LayoutParams layoutParams3 = this.cameraContainer.getLayoutParams();
-            ViewGroup.LayoutParams layoutParams4 = this.cameraContainer.getLayoutParams();
-            int i5 = this.textureViewSize;
-            layoutParams4.height = i5;
-            layoutParams3.width = i5;
-            ((FrameLayout.LayoutParams) this.muteImageView.getLayoutParams()).topMargin = (this.textureViewSize / 2) - AndroidUtilities.dp(24.0f);
-            this.textureOverlayView.setRoundRadius(this.textureViewSize / 2);
-            if (Build.VERSION.SDK_INT >= 21) {
-                this.cameraContainer.invalidateOutline();
+        if (this.updateTextureViewSize) {
+            if (((float) View.MeasureSpec.getSize(i2)) > ((float) View.MeasureSpec.getSize(i)) * 1.3f) {
+                i3 = AndroidUtilities.roundPlayingMessageSize;
+            } else {
+                i3 = AndroidUtilities.roundMessageSize;
             }
+            if (i3 != this.textureViewSize) {
+                this.textureViewSize = i3;
+                ViewGroup.LayoutParams layoutParams = this.textureOverlayView.getLayoutParams();
+                ViewGroup.LayoutParams layoutParams2 = this.textureOverlayView.getLayoutParams();
+                int i4 = this.textureViewSize;
+                layoutParams2.height = i4;
+                layoutParams.width = i4;
+                ViewGroup.LayoutParams layoutParams3 = this.cameraContainer.getLayoutParams();
+                ViewGroup.LayoutParams layoutParams4 = this.cameraContainer.getLayoutParams();
+                int i5 = this.textureViewSize;
+                layoutParams4.height = i5;
+                layoutParams3.width = i5;
+                ((FrameLayout.LayoutParams) this.muteImageView.getLayoutParams()).topMargin = (this.textureViewSize / 2) - AndroidUtilities.dp(24.0f);
+                this.textureOverlayView.setRoundRadius(this.textureViewSize / 2);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    this.cameraContainer.invalidateOutline();
+                }
+            }
+            this.updateTextureViewSize = false;
         }
         super.onMeasure(i, i2);
     }
@@ -579,6 +583,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
                 });
                 this.cameraContainer.addView(this.textureView, LayoutHelper.createFrame(-1, -1.0f));
+                this.updateTextureViewSize = true;
                 setVisibility(0);
                 startAnimation(true);
                 MediaController.getInstance().requestAudioFocus(true);

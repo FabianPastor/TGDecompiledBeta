@@ -7276,7 +7276,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 public void setVisibility(int i) {
                     super.setVisibility(i);
                     if (PhotoViewer.this.videoTimelineView != null && PhotoViewer.this.videoTimelineView.getVisibility() != 8) {
-                        PhotoViewer.this.showVideoTimeline(i == 0, false);
+                        PhotoViewer.this.videoTimelineView.setVisibility(i == 0 ? 0 : 4);
                     }
                 }
 
@@ -7313,8 +7313,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.pickerView.addView(this.docInfoTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 20.0f, 46.0f, 84.0f, 0.0f));
             AnonymousClass22 r38 = new VideoTimelinePlayView(this.parentActivity) {
                 public void setTranslationY(float f) {
-                    super.setTranslationY(f);
-                    PhotoViewer.this.containerView.invalidate();
+                    if (getTranslationY() != f) {
+                        super.setTranslationY(f);
+                        PhotoViewer.this.containerView.invalidate();
+                    }
                 }
             };
             this.videoTimelineView = r38;
@@ -9066,7 +9068,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                       (wrap: org.telegram.ui.PhotoViewer$34 : 0x000b: IGET  (r3v4 org.telegram.ui.PhotoViewer$34) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) org.telegram.ui.PhotoViewer.34.1.this$1 org.telegram.ui.PhotoViewer$34)
                                      org.telegram.ui.PhotoViewer.34.this$0 org.telegram.ui.PhotoViewer)
                                       (wrap: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc : 0x0011: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) call: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc.<init>(org.telegram.ui.PhotoViewer$34$1):void type: CONSTRUCTOR)
-                                     org.telegram.ui.PhotoViewer.access$18302(org.telegram.ui.PhotoViewer, java.lang.Runnable):java.lang.Runnable type: STATIC)
+                                     org.telegram.ui.PhotoViewer.access$18202(org.telegram.ui.PhotoViewer, java.lang.Runnable):java.lang.Runnable type: STATIC)
                                       (860 long)
                                      org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable, long):void type: STATIC in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
@@ -9188,7 +9190,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                       (wrap: org.telegram.ui.PhotoViewer$34 : 0x000b: IGET  (r3v4 org.telegram.ui.PhotoViewer$34) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) org.telegram.ui.PhotoViewer.34.1.this$1 org.telegram.ui.PhotoViewer$34)
                                      org.telegram.ui.PhotoViewer.34.this$0 org.telegram.ui.PhotoViewer)
                                       (wrap: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc : 0x0011: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) call: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc.<init>(org.telegram.ui.PhotoViewer$34$1):void type: CONSTRUCTOR)
-                                     org.telegram.ui.PhotoViewer.access$18302(org.telegram.ui.PhotoViewer, java.lang.Runnable):java.lang.Runnable type: STATIC in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
+                                     org.telegram.ui.PhotoViewer.access$18202(org.telegram.ui.PhotoViewer, java.lang.Runnable):java.lang.Runnable type: STATIC in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                     	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                     	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -10601,8 +10603,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                 boolean unused2 = PhotoViewer.this.switchingInlineMode = false;
                                 if (Build.VERSION.SDK_INT >= 21) {
                                     PhotoViewer.this.aspectRatioFrameLayout.getLocationInWindow(PhotoViewer.this.pipPosition);
-                                    int[] access$20400 = PhotoViewer.this.pipPosition;
-                                    access$20400[1] = (int) (((float) access$20400[1]) - PhotoViewer.this.containerView.getTranslationY());
+                                    int[] access$20300 = PhotoViewer.this.pipPosition;
+                                    access$20300[1] = (int) (((float) access$20300[1]) - PhotoViewer.this.containerView.getTranslationY());
                                     PhotoViewer.this.textureImageView.setTranslationX(PhotoViewer.this.textureImageView.getTranslationX() + ((float) PhotoViewer.this.getLeftInset()));
                                     PhotoViewer.this.videoTextureView.setTranslationX((PhotoViewer.this.videoTextureView.getTranslationX() + ((float) PhotoViewer.this.getLeftInset())) - PhotoViewer.this.aspectRatioFrameLayout.getX());
                                     AnimatorSet animatorSet = new AnimatorSet();
@@ -17236,8 +17238,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.setIsAboutToSwitchToIndex(int, boolean, boolean):void");
         }
 
-        /* access modifiers changed from: private */
-        public void showVideoTimeline(boolean z, boolean z2) {
+        private void showVideoTimeline(boolean z, boolean z2) {
             int i = null;
             int i2 = 0;
             if (!z2) {
@@ -17247,6 +17248,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     i2 = 8;
                 }
                 videoTimelinePlayView.setVisibility(i2);
+                this.videoTimelineView.setTranslationY(0.0f);
+                this.videoTimelineView.setAlpha(this.pickerView.getAlpha());
             } else if (z && this.videoTimelineView.getTag() == null) {
                 if (this.videoTimelineView.getVisibility() != 0) {
                     this.videoTimelineView.setVisibility(0);
@@ -24857,15 +24860,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (this.sharedMediaType != 1 || (messageObject = this.currentMessageObject) == null) {
                     PhotoProgressView[] photoProgressViewArr = this.photoProgressViews;
                     if (!(photoProgressViewArr[0] == null || this.containerView == null)) {
-                        int access$21000 = photoProgressViewArr[0].backgroundState;
+                        int access$20900 = photoProgressViewArr[0].backgroundState;
                         if (x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
                             if (!z) {
-                                if (access$21000 > 0 && access$21000 <= 3) {
+                                if (access$20900 > 0 && access$20900 <= 3) {
                                     onActionClick(true);
                                     checkProgress(0, false, true);
                                     return true;
                                 }
-                            } else if ((access$21000 == 3 || access$21000 == 4) && this.photoProgressViews[0].isVisible()) {
+                            } else if ((access$20900 == 3 || access$20900 == 4) && this.photoProgressViews[0].isVisible()) {
                                 this.manuallyPaused = true;
                                 toggleVideoPlayer();
                                 return true;
@@ -24885,8 +24888,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (i != 0 && i != 4) {
                     TLRPC$BotInlineResult tLRPC$BotInlineResult = this.currentBotInlineResult;
                     if (tLRPC$BotInlineResult != null && (tLRPC$BotInlineResult.type.equals("video") || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
-                        int access$210002 = this.photoProgressViews[0].backgroundState;
-                        if (access$210002 > 0 && access$210002 <= 3 && x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
+                        int access$209002 = this.photoProgressViews[0].backgroundState;
+                        if (access$209002 > 0 && access$209002 <= 3 && x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
                             onActionClick(true);
                             checkProgress(0, false, true);
                             return true;
@@ -25712,12 +25715,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         /* access modifiers changed from: private */
         public void updateAccessibilityOverlayVisibility() {
             if (this.playButtonAccessibilityOverlay != null) {
-                int access$21000 = this.photoProgressViews[0].backgroundState;
-                if (!this.photoProgressViews[0].isVisible() || !(access$21000 == 3 || access$21000 == 4)) {
+                int access$20900 = this.photoProgressViews[0].backgroundState;
+                if (!this.photoProgressViews[0].isVisible() || !(access$20900 == 3 || access$20900 == 4)) {
                     this.playButtonAccessibilityOverlay.setVisibility(4);
                     return;
                 }
-                if (access$21000 == 3) {
+                if (access$20900 == 3) {
                     this.playButtonAccessibilityOverlay.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
                 } else {
                     this.playButtonAccessibilityOverlay.setContentDescription(LocaleController.getString("AccActionPause", NUM));
