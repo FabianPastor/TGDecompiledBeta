@@ -48,6 +48,10 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPService.S
     TextView subtitleView;
     TextView titleView;
 
+    public /* synthetic */ void onCameraFirstFrameAvailable() {
+        VoIPService.StateListener.CC.$default$onCameraFirstFrameAvailable(this);
+    }
+
     public /* synthetic */ void onCameraSwitch(boolean z) {
         VoIPService.StateListener.CC.$default$onCameraSwitch(this, z);
     }

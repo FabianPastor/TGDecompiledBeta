@@ -63,6 +63,9 @@ import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$ReplyMarkup;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.ActionBar.ActionBarMenu;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -136,7 +139,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     public RLottieDrawable muteDrawable;
     private ImageView playButton;
     private PlayPauseDrawable playPauseDrawable;
-    private ImageView playbackSpeedButton;
+    private ActionBarMenuItem playbackSpeedButton;
     /* access modifiers changed from: private */
     public RectF rect;
     /* access modifiers changed from: private */
@@ -144,6 +147,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private View selector;
     private View shadow;
     float speakerAmplitude;
+    private ActionBarMenuSubItem[] speedItems;
     private AudioPlayerAlert.ClippingTextViewSwitcher subtitleTextView;
     private boolean supportsCalls;
     /* access modifiers changed from: private */
@@ -158,6 +162,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     public interface FragmentContextViewDelegate {
         void onAnimation(boolean z, boolean z2);
+    }
+
+    public /* synthetic */ void onCameraFirstFrameAvailable() {
+        VoIPService.StateListener.CC.$default$onCameraFirstFrameAvailable(this);
     }
 
     public /* synthetic */ void onCameraSwitch(boolean z) {
@@ -181,7 +189,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: protected */
-    public void playbackSpeedChanged(boolean z) {
+    public void playbackSpeedChanged(float f) {
     }
 
     public void onAudioSettingsChanged() {
@@ -211,6 +219,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         BaseFragment baseFragment2 = baseFragment;
         View view2 = view;
         boolean z2 = z;
+        this.speedItems = new ActionBarMenuSubItem[4];
         this.currentProgress = -1;
         this.currentStyle = -1;
         this.supportsCalls = true;
@@ -339,7 +348,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.importingImageView.setAnimation(NUM, 30, 30);
         this.importingImageView.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(22.0f), Theme.getColor("inappPlayerPlayPause")));
         addView(this.importingImageView, LayoutHelper.createFrame(22, 22.0f, 51, 7.0f, 7.0f, 0.0f, 0.0f));
-        AnonymousClass4 r8 = new AudioPlayerAlert.ClippingTextViewSwitcher(context2) {
+        AnonymousClass4 r6 = new AudioPlayerAlert.ClippingTextViewSwitcher(context2) {
             /* access modifiers changed from: protected */
             public TextView createTextView() {
                 TextView textView = new TextView(context2);
@@ -368,9 +377,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 return textView;
             }
         };
-        this.titleTextView = r8;
-        addView(r8, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
-        AnonymousClass5 r82 = new AudioPlayerAlert.ClippingTextViewSwitcher(context2) {
+        this.titleTextView = r6;
+        addView(r6, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
+        AnonymousClass5 r62 = new AudioPlayerAlert.ClippingTextViewSwitcher(context2) {
             /* access modifiers changed from: protected */
             public TextView createTextView() {
                 TextView textView = new TextView(context2);
@@ -384,8 +393,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 return textView;
             }
         };
-        this.subtitleTextView = r82;
-        addView(r82, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 10.0f, 36.0f, 0.0f));
+        this.subtitleTextView = r62;
+        addView(r62, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 10.0f, 36.0f, 0.0f));
         TextView textView = new TextView(context2);
         this.joinButton = textView;
         textView.setText(LocaleController.getString("VoipChatJoin", NUM));
@@ -402,18 +411,33 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
         });
         if (!z2) {
-            ImageView imageView3 = new ImageView(context2);
-            this.playbackSpeedButton = imageView3;
-            imageView3.setScaleType(ImageView.ScaleType.CENTER);
-            this.playbackSpeedButton.setImageResource(NUM);
+            ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context2, (ActionBarMenu) null, 0, Theme.getColor("dialogTextBlack"));
+            this.playbackSpeedButton = actionBarMenuItem;
+            actionBarMenuItem.setLongClickEnabled(false);
+            this.playbackSpeedButton.setShowSubmenuByMove(false);
             this.playbackSpeedButton.setContentDescription(LocaleController.getString("AccDescrPlayerSpeed", NUM));
+            this.playbackSpeedButton.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() {
+                public final void onItemClick(int i) {
+                    FragmentContextView.this.lambda$new$2$FragmentContextView(i);
+                }
+            });
+            this.speedItems[0] = this.playbackSpeedButton.addSubItem(1, NUM, LocaleController.getString("SpeedSlow", NUM));
+            this.speedItems[1] = this.playbackSpeedButton.addSubItem(2, NUM, LocaleController.getString("SpeedNormal", NUM));
+            this.speedItems[2] = this.playbackSpeedButton.addSubItem(3, NUM, LocaleController.getString("SpeedFast", NUM));
+            this.speedItems[3] = this.playbackSpeedButton.addSubItem(4, NUM, LocaleController.getString("SpeedVeryFast", NUM));
             if (AndroidUtilities.density >= 3.0f) {
                 this.playbackSpeedButton.setPadding(0, 1, 0, 0);
             }
+            this.playbackSpeedButton.setAdditionalXOffset(AndroidUtilities.dp(8.0f));
             addView(this.playbackSpeedButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, 0.0f, 36.0f, 0.0f));
             this.playbackSpeedButton.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    FragmentContextView.this.lambda$new$2$FragmentContextView(view);
+                    FragmentContextView.this.lambda$new$3$FragmentContextView(view);
+                }
+            });
+            this.playbackSpeedButton.setOnLongClickListener(new View.OnLongClickListener() {
+                public final boolean onLongClick(View view) {
+                    return FragmentContextView.this.lambda$new$4$FragmentContextView(view);
                 }
             });
             updatePlaybackButton();
@@ -422,7 +446,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.avatars = avatarsImageView;
         avatarsImageView.setDelegate(new Runnable() {
             public final void run() {
-                FragmentContextView.this.lambda$new$3$FragmentContextView();
+                FragmentContextView.this.lambda$new$5$FragmentContextView();
             }
         });
         this.avatars.setVisibility(8);
@@ -542,12 +566,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         addView(this.muteButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, 0.0f, 2.0f, 0.0f));
         this.muteButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$4$FragmentContextView(view);
+                FragmentContextView.this.lambda$new$6$FragmentContextView(view);
             }
         });
-        ImageView imageView4 = new ImageView(context2);
-        this.closeButton = imageView4;
-        imageView4.setImageResource(NUM);
+        ImageView imageView3 = new ImageView(context2);
+        this.closeButton = imageView3;
+        imageView3.setImageResource(NUM);
         this.closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerClose"), PorterDuff.Mode.MULTIPLY));
         if (i >= 21) {
             this.closeButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("inappPlayerClose") & NUM, 1, AndroidUtilities.dp(14.0f)));
@@ -556,7 +580,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         addView(this.closeButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, 0.0f, 2.0f, 0.0f));
         this.closeButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$6$FragmentContextView(view);
+                FragmentContextView.this.lambda$new$8$FragmentContextView(view);
             }
         });
         setOnClickListener(new View.OnClickListener(baseFragment2) {
@@ -567,7 +591,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
 
             public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$8$FragmentContextView(this.f$1, view);
+                FragmentContextView.this.lambda$new$10$FragmentContextView(this.f$1, view);
             }
         });
     }
@@ -593,25 +617,56 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$FragmentContextView(View view) {
+    public /* synthetic */ void lambda$new$2$FragmentContextView(int i) {
         float playbackSpeed = MediaController.getInstance().getPlaybackSpeed(this.isMusic);
-        if (playbackSpeed > 1.0f) {
+        if (i == 1) {
+            MediaController.getInstance().setPlaybackSpeed(this.isMusic, 0.5f);
+        } else if (i == 2) {
             MediaController.getInstance().setPlaybackSpeed(this.isMusic, 1.0f);
+        } else if (i == 3) {
+            MediaController.getInstance().setPlaybackSpeed(this.isMusic, 1.5f);
         } else {
             MediaController.getInstance().setPlaybackSpeed(this.isMusic, 1.8f);
         }
-        playbackSpeedChanged(playbackSpeed <= 1.0f);
+        float playbackSpeed2 = MediaController.getInstance().getPlaybackSpeed(this.isMusic);
+        if (playbackSpeed != playbackSpeed2) {
+            playbackSpeedChanged(playbackSpeed2);
+        }
+        updatePlaybackButton();
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$FragmentContextView() {
-        updateAvatars(true);
+    public /* synthetic */ void lambda$new$3$FragmentContextView(View view) {
+        float f = 1.0f;
+        if (Math.abs(MediaController.getInstance().getPlaybackSpeed(this.isMusic) - 1.0f) > 0.001f) {
+            MediaController.getInstance().setPlaybackSpeed(this.isMusic, 1.0f);
+        } else {
+            MediaController instance = MediaController.getInstance();
+            boolean z = this.isMusic;
+            float fastPlaybackSpeed = MediaController.getInstance().getFastPlaybackSpeed(this.isMusic);
+            instance.setPlaybackSpeed(z, fastPlaybackSpeed);
+            f = fastPlaybackSpeed;
+        }
+        playbackSpeedChanged(f);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$FragmentContextView(View view) {
+    public /* synthetic */ boolean lambda$new$4$FragmentContextView(View view) {
+        this.playbackSpeedButton.toggleSubMenu();
+        return true;
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$5 */
+    public /* synthetic */ void lambda$new$5$FragmentContextView() {
+        updateAvatars(true);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$6 */
+    public /* synthetic */ void lambda$new$6$FragmentContextView(View view) {
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             if (sharedInstance.groupCall != null) {
@@ -640,8 +695,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$6 */
-    public /* synthetic */ void lambda$new$6$FragmentContextView(View view) {
+    /* renamed from: lambda$new$8 */
+    public /* synthetic */ void lambda$new$8$FragmentContextView(View view) {
         if (this.currentStyle == 2) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
             builder.setTitle(LocaleController.getString("StopLiveLocationAlertToTitle", NUM));
@@ -662,7 +717,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             builder.setPositiveButton(LocaleController.getString("Stop", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    FragmentContextView.this.lambda$new$5$FragmentContextView(dialogInterface, i);
+                    FragmentContextView.this.lambda$new$7$FragmentContextView(dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -679,8 +734,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$5 */
-    public /* synthetic */ void lambda$new$5$FragmentContextView(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$7 */
+    public /* synthetic */ void lambda$new$7$FragmentContextView(DialogInterface dialogInterface, int i) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment instanceof DialogsActivity) {
             for (int i2 = 0; i2 < 3; i2++) {
@@ -692,8 +747,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$8 */
-    public /* synthetic */ void lambda$new$8$FragmentContextView(BaseFragment baseFragment, View view) {
+    /* renamed from: lambda$new$10 */
+    public /* synthetic */ void lambda$new$10$FragmentContextView(BaseFragment baseFragment, View view) {
         ChatActivity chatActivity;
         ChatObject.Call groupCall;
         long j;
@@ -781,7 +836,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             ImportingAlert importingAlert = new ImportingAlert(getContext(), (String) null, (ChatActivity) this.fragment);
             importingAlert.setOnHideListener(new DialogInterface.OnDismissListener() {
                 public final void onDismiss(DialogInterface dialogInterface) {
-                    FragmentContextView.this.lambda$new$7$FragmentContextView(dialogInterface);
+                    FragmentContextView.this.lambda$new$9$FragmentContextView(dialogInterface);
                 }
             });
             this.fragment.showDialog(importingAlert);
@@ -790,8 +845,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$7 */
-    public /* synthetic */ void lambda$new$7$FragmentContextView(DialogInterface dialogInterface) {
+    /* renamed from: lambda$new$9 */
+    public /* synthetic */ void lambda$new$9$FragmentContextView(DialogInterface dialogInterface) {
         checkImport(false);
     }
 
@@ -805,10 +860,27 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     private void updatePlaybackButton() {
         if (this.playbackSpeedButton != null) {
-            String str = MediaController.getInstance().getPlaybackSpeed(this.isMusic) > 1.0f ? "inappPlayerPlayPause" : "inappPlayerClose";
-            this.playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), PorterDuff.Mode.MULTIPLY));
+            float playbackSpeed = MediaController.getInstance().getPlaybackSpeed(this.isMusic);
+            float f = playbackSpeed - 1.0f;
+            String str = Math.abs(f) > 0.001f ? "inappPlayerPlayPause" : "inappPlayerClose";
+            float fastPlaybackSpeed = MediaController.getInstance().getFastPlaybackSpeed(this.isMusic);
+            if (Math.abs(fastPlaybackSpeed - 1.8f) < 0.001f) {
+                this.playbackSpeedButton.setIcon(NUM);
+            } else if (Math.abs(fastPlaybackSpeed - 1.5f) < 0.001f) {
+                this.playbackSpeedButton.setIcon(NUM);
+            } else {
+                this.playbackSpeedButton.setIcon(NUM);
+            }
+            this.playbackSpeedButton.setIconColor(Theme.getColor(str));
             if (Build.VERSION.SDK_INT >= 21) {
                 this.playbackSpeedButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(str) & NUM, 1, AndroidUtilities.dp(14.0f)));
+            }
+            for (int i = 0; i < this.speedItems.length; i++) {
+                if ((i != 0 || Math.abs(playbackSpeed - 0.5f) >= 0.001f) && ((i != 1 || Math.abs(f) >= 0.001f) && ((i != 2 || Math.abs(playbackSpeed - 1.5f) >= 0.001f) && (i != 3 || Math.abs(playbackSpeed - 1.8f) >= 0.001f)))) {
+                    this.speedItems[i].setColors(Theme.getColor("actionBarDefaultSubmenuItem"), Theme.getColor("actionBarDefaultSubmenuItemIcon"));
+                } else {
+                    this.speedItems[i].setColors(Theme.getColor("inappPlayerPlayPause"), Theme.getColor("inappPlayerPlayPause"));
+                }
             }
         }
     }
@@ -1007,9 +1079,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.importingImageView.setVisibility(0);
                 this.importingImageView.playAnimation();
                 this.closeButton.setContentDescription(LocaleController.getString("AccDescrClosePlayer", NUM));
-                ImageView imageView = this.playbackSpeedButton;
-                if (imageView != null) {
-                    imageView.setVisibility(8);
+                ActionBarMenuItem actionBarMenuItem = this.playbackSpeedButton;
+                if (actionBarMenuItem != null) {
+                    actionBarMenuItem.setVisibility(8);
                 }
                 this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
             } else if (i2 == 0 || i2 == 2) {
@@ -1040,9 +1112,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 if (i2 == 0) {
                     this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                     this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
-                    ImageView imageView2 = this.playbackSpeedButton;
-                    if (imageView2 != null) {
-                        imageView2.setVisibility(0);
+                    ActionBarMenuItem actionBarMenuItem2 = this.playbackSpeedButton;
+                    if (actionBarMenuItem2 != null) {
+                        actionBarMenuItem2.setVisibility(0);
                     }
                     this.closeButton.setContentDescription(LocaleController.getString("AccDescrClosePlayer", NUM));
                     return;
@@ -1076,9 +1148,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 updateAvatars(false);
                 this.closeButton.setVisibility(8);
                 this.playButton.setVisibility(8);
-                ImageView imageView3 = this.playbackSpeedButton;
-                if (imageView3 != null) {
-                    imageView3.setVisibility(8);
+                ActionBarMenuItem actionBarMenuItem3 = this.playbackSpeedButton;
+                if (actionBarMenuItem3 != null) {
+                    actionBarMenuItem3.setVisibility(8);
                 }
             } else if (i2 == 1 || i2 == 3) {
                 this.selector.setBackground((Drawable) null);
@@ -1119,9 +1191,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.joinButton.setVisibility(8);
                 this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 2.0f));
                 this.titleTextView.setPadding(AndroidUtilities.dp(112.0f), 0, AndroidUtilities.dp(112.0f), 0);
-                ImageView imageView4 = this.playbackSpeedButton;
-                if (imageView4 != null) {
-                    imageView4.setVisibility(8);
+                ActionBarMenuItem actionBarMenuItem4 = this.playbackSpeedButton;
+                if (actionBarMenuItem4 != null) {
+                    actionBarMenuItem4.setVisibility(8);
                 }
             }
         }
@@ -1684,9 +1756,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.lastMessageObject = playingMessageObject;
                     if (playingMessageObject.isVoice() || this.lastMessageObject.isRoundVideo()) {
                         this.isMusic = false;
-                        ImageView imageView = this.playbackSpeedButton;
-                        if (imageView != null) {
-                            imageView.setAlpha(1.0f);
+                        ActionBarMenuItem actionBarMenuItem = this.playbackSpeedButton;
+                        if (actionBarMenuItem != null) {
+                            actionBarMenuItem.setAlpha(1.0f);
                             this.playbackSpeedButton.setEnabled(true);
                         }
                         this.titleTextView.setPadding(0, 0, AndroidUtilities.dp(44.0f), 0);
@@ -2143,7 +2215,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             goto L_0x01fb
         L_0x01ed:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628192(0x7f0e10a0, float:1.888367E38)
+            r9 = 2131628202(0x7f0e10aa, float:1.888369E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2165,7 +2237,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             android.widget.TextView r6 = r0.joinButton
             r6.setVisibility(r5)
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628221(0x7f0e10bd, float:1.8883729E38)
+            r9 = 2131628231(0x7f0e10c7, float:1.8883749E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2173,7 +2245,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r4 = r4.participants_count
             if (r4 != 0) goto L_0x023f
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r4 = r0.subtitleTextView
-            r6 = 2131626162(0x7f0e08b2, float:1.8879552E38)
+            r6 = 2131626163(0x7f0e08b3, float:1.8879554E38)
             java.lang.String r9 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r4.setText(r6, r5)

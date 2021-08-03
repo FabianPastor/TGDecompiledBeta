@@ -19,6 +19,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
     private int iconColor;
     private ImageView imageView;
     private int itemHeight;
+    private ImageView rightIcon;
     private int selectorColor;
     private TextView subtextView;
     private int textColor;
@@ -84,6 +85,26 @@ public class ActionBarMenuSubItem extends FrameLayout {
         this.checkView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
     }
 
+    public void setRightIcon(int i) {
+        if (this.rightIcon == null) {
+            ImageView imageView2 = new ImageView(getContext());
+            this.rightIcon = imageView2;
+            imageView2.setScaleType(ImageView.ScaleType.CENTER);
+            this.rightIcon.setColorFilter(this.textColor, PorterDuff.Mode.MULTIPLY);
+            if (LocaleController.isRTL) {
+                this.rightIcon.setScaleX(-1.0f);
+            }
+            addView(this.rightIcon, LayoutHelper.createFrame(24, -1, (LocaleController.isRTL ? 3 : 5) | 16));
+        }
+        float f = 8.0f;
+        int dp = AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : 18.0f);
+        if (LocaleController.isRTL) {
+            f = 18.0f;
+        }
+        setPadding(dp, 0, AndroidUtilities.dp(f), 0);
+        this.rightIcon.setImageResource(i);
+    }
+
     public void setTextAndIcon(CharSequence charSequence, int i) {
         setTextAndIcon(charSequence, i, (Drawable) null);
     }
@@ -104,9 +125,10 @@ public class ActionBarMenuSubItem extends FrameLayout {
         this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(43.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(43.0f) : 0, 0);
     }
 
-    public void setColors(int i, int i2) {
+    public ActionBarMenuSubItem setColors(int i, int i2) {
         setTextColor(i);
         setIconColor(i2);
+        return this;
     }
 
     public void setTextColor(int i) {

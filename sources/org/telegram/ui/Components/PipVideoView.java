@@ -279,6 +279,10 @@ public class PipVideoView {
         return show(activity, (PhotoViewer) null, embedBottomSheet, view, f, i, webView);
     }
 
+    public TextureView show(Activity activity, PhotoViewer photoViewer2, float f, int i, WebView webView) {
+        return show(activity, photoViewer2, (EmbedBottomSheet) null, (View) null, f, i, webView);
+    }
+
     public TextureView show(Activity activity, PhotoViewer photoViewer2, float f, int i) {
         return show(activity, photoViewer2, (EmbedBottomSheet) null, (View) null, f, i, (WebView) null);
     }

@@ -152,7 +152,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_setUserId(int i, int i2);
 
-    public static native void native_switchBackend(int i);
+    public static native void native_switchBackend(int i, boolean z);
 
     public static native void native_updateDcSettings(int i);
 
@@ -557,9 +557,13 @@ public class ConnectionsManager extends BaseController {
         }
     }
 
-    public void switchBackend() {
+    public void switchBackend(boolean z) {
         MessagesController.getGlobalMainSettings().edit().remove("language_showed2").commit();
-        native_switchBackend(this.currentAccount);
+        native_switchBackend(this.currentAccount, z);
+    }
+
+    public boolean isTestBackend() {
+        return native_isTestBackend(this.currentAccount) != 0;
     }
 
     public void resumeNetworkMaybe() {

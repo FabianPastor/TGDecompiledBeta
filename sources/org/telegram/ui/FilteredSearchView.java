@@ -444,7 +444,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131165997(0x7var_d, float:1.7946227E38)
+            r3 = 2131166009(0x7var_, float:1.7946251E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -1394,7 +1394,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         if (str2 == null || str2.length() == 0) {
                             str = tLRPC$WebPage.url;
                         } else {
-                            openWebView(tLRPC$WebPage);
+                            openWebView(tLRPC$WebPage, messageObject);
                             return;
                         }
                     }
@@ -1414,8 +1414,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     private class SharedLinksAdapter extends RecyclerListView.SectionsAdapter {
         private Context mContext;
         private final SharedLinkCell.SharedLinkCellDelegate sharedLinkCellDelegate = new SharedLinkCell.SharedLinkCellDelegate() {
-            public void needOpenWebView(TLRPC$WebPage tLRPC$WebPage) {
-                FilteredSearchView.this.openWebView(tLRPC$WebPage);
+            public void needOpenWebView(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject) {
+                FilteredSearchView.this.openWebView(tLRPC$WebPage, messageObject);
             }
 
             public boolean canPerformActions() {
@@ -1535,12 +1535,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626584(0x7f0e0a58, float:1.8880408E38)
+                        r2 = 2131626585(0x7f0e0a59, float:1.888041E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
                         r1 = 1
-                        r2 = 2131625029(0x7f0e0445, float:1.8877254E38)
+                        r2 = 2131625030(0x7f0e0446, float:1.8877256E38)
                         java.lang.String r3 = "Copy"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
@@ -1934,8 +1934,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         }
 
         /* access modifiers changed from: private */
-        public void openWebView(TLRPC$WebPage tLRPC$WebPage) {
-            EmbedBottomSheet.show(this.parentActivity, tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
+        public void openWebView(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject) {
+            EmbedBottomSheet.show(this.parentActivity, messageObject, this.provider, tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
         }
 
         /* access modifiers changed from: protected */
@@ -2035,7 +2035,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r4 = r4.getContext()
                     r5.<init>(r4)
-                    r4 = 2131627368(0x7f0e0d68, float:1.8881998E38)
+                    r4 = 2131627369(0x7f0e0d69, float:1.8882E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                     r5.setText(r4)

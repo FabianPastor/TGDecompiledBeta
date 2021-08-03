@@ -1,8 +1,11 @@
 package org.telegram.ui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.ViewGroup;
@@ -12,16 +15,22 @@ import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.camera.CameraController;
 import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
+import org.telegram.ui.Components.ThemeEditorView;
 
 public class BubbleActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate {
     private ActionBarLayout actionBarLayout;
@@ -216,6 +225,109 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
             AccountInstance.getInstance(this.currentAccount).getConnectionsManager().setAppPaused(false, false);
         }
         onFinish();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onActivityResult(int i, int i2, Intent intent) {
+        super.onActivityResult(i, i2, intent);
+        ThemeEditorView instance = ThemeEditorView.getInstance();
+        if (instance != null) {
+            instance.onActivityResult(i, i2, intent);
+        }
+        if (this.actionBarLayout.fragmentsStack.size() != 0) {
+            ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
+            arrayList.get(arrayList.size() - 1).onActivityResultFragment(i, i2, intent);
+        }
+    }
+
+    public void onRequestPermissionsResult(int i, String[] strArr, int[] iArr) {
+        super.onRequestPermissionsResult(i, strArr, iArr);
+        if (iArr == null) {
+            iArr = new int[0];
+        }
+        if (strArr == null) {
+            strArr = new String[0];
+        }
+        boolean z = iArr.length > 0 && iArr[0] == 0;
+        if (i == 104) {
+            if (z) {
+                GroupCallActivity groupCallActivity = GroupCallActivity.groupCallInstance;
+                if (groupCallActivity != null) {
+                    groupCallActivity.enableCamera();
+                }
+            } else {
+                showPermissionErrorAlert(LocaleController.getString("VoipNeedCameraPermission", NUM));
+            }
+        } else if (i == 4) {
+            if (!z) {
+                showPermissionErrorAlert(LocaleController.getString("PermissionStorage", NUM));
+            } else {
+                ImageLoader.getInstance().checkMediaPaths();
+            }
+        } else if (i == 5) {
+            if (!z) {
+                showPermissionErrorAlert(LocaleController.getString("PermissionContacts", NUM));
+                return;
+            }
+            ContactsController.getInstance(this.currentAccount).forceImportContacts();
+        } else if (i == 3) {
+            int min = Math.min(strArr.length, iArr.length);
+            boolean z2 = true;
+            boolean z3 = true;
+            for (int i2 = 0; i2 < min; i2++) {
+                if ("android.permission.RECORD_AUDIO".equals(strArr[i2])) {
+                    z2 = iArr[i2] == 0;
+                } else if ("android.permission.CAMERA".equals(strArr[i2])) {
+                    z3 = iArr[i2] == 0;
+                }
+            }
+            if (!z2) {
+                showPermissionErrorAlert(LocaleController.getString("PermissionNoAudio", NUM));
+            } else if (!z3) {
+                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", NUM));
+            } else if (SharedConfig.inappCamera) {
+                CameraController.getInstance().initCamera((Runnable) null);
+                return;
+            } else {
+                return;
+            }
+        } else if (i == 18 || i == 19 || i == 20 || i == 22) {
+            if (!z) {
+                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", NUM));
+            }
+        } else if (i == 2 && z) {
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionGranted, new Object[0]);
+        }
+        if (this.actionBarLayout.fragmentsStack.size() != 0) {
+            ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
+            arrayList.get(arrayList.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
+        }
+        VoIPFragment.onRequestPermissionsResult(i, strArr, iArr);
+    }
+
+    private void showPermissionErrorAlert(String str) {
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
+        builder.setTitle(LocaleController.getString("AppName", NUM));
+        builder.setMessage(str);
+        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
+            public final void onClick(DialogInterface dialogInterface, int i) {
+                BubbleActivity.this.lambda$showPermissionErrorAlert$1$BubbleActivity(dialogInterface, i);
+            }
+        });
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+        builder.show();
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showPermissionErrorAlert$1 */
+    public /* synthetic */ void lambda$showPermissionErrorAlert$1$BubbleActivity(DialogInterface dialogInterface, int i) {
+        try {
+            Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+            intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
+            startActivity(intent);
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
     }
 
     /* access modifiers changed from: protected */

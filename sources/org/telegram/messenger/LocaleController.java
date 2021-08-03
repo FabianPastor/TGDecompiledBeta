@@ -1392,6 +1392,9 @@ public class LocaleController {
         if (i < 604800) {
             return formatPluralString("Days", ((i / 60) / 60) / 24);
         }
+        if (i >= 2592000 && i <= 2678400) {
+            return formatPluralString("Months", (((i / 60) / 60) / 24) / 30);
+        }
         int i2 = ((i / 60) / 60) / 24;
         if (i % 7 == 0) {
             return formatPluralString("Weeks", i2 / 7);
@@ -2546,61 +2549,61 @@ public class LocaleController {
             r7 = 1
         L_0x0076:
             nameDisplayOrder = r7
-            r7 = 2131628408(0x7f0e1178, float:1.8884108E38)
+            r7 = 2131628422(0x7f0e1186, float:1.8884136E38)
             java.lang.String r8 = "formatterMonthYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterMonthYear = r7
-            r7 = 2131628406(0x7f0e1176, float:1.8884104E38)
+            r7 = 2131628420(0x7f0e1184, float:1.8884132E38)
             java.lang.String r8 = "formatterMonth"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd MMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterDayMonth = r7
-            r7 = 2131628414(0x7f0e117e, float:1.888412E38)
+            r7 = 2131628428(0x7f0e118c, float:1.8884148E38)
             java.lang.String r8 = "formatterYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYear = r7
-            r7 = 2131628415(0x7f0e117f, float:1.8884122E38)
+            r7 = 2131628429(0x7f0e118d, float:1.888415E38)
             java.lang.String r8 = "formatterYearMax"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYearMax = r7
-            r7 = 2131628374(0x7f0e1156, float:1.8884039E38)
+            r7 = 2131628388(0x7f0e1164, float:1.8884067E38)
             java.lang.String r8 = "chatDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatDate = r7
-            r7 = 2131628375(0x7f0e1157, float:1.888404E38)
+            r7 = 2131628389(0x7f0e1165, float:1.888407E38)
             java.lang.String r8 = "chatFullDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatFullDate = r7
-            r7 = 2131628412(0x7f0e117c, float:1.8884116E38)
+            r7 = 2131628426(0x7f0e118a, float:1.8884144E38)
             java.lang.String r8 = "formatterWeek"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeek = r7
-            r7 = 2131628413(0x7f0e117d, float:1.8884118E38)
+            r7 = 2131628427(0x7f0e118b, float:1.8884146E38)
             java.lang.String r8 = "formatterWeekLong"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeekLong = r7
-            r7 = 2131628398(0x7f0e116e, float:1.8884088E38)
+            r7 = 2131628412(0x7f0e117c, float:1.8884116E38)
             java.lang.String r8 = "formatDateSchedule"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterScheduleDay = r7
-            r7 = 2131628399(0x7f0e116f, float:1.888409E38)
+            r7 = 2131628413(0x7f0e117d, float:1.8884118E38)
             java.lang.String r8 = "formatDateScheduleYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d yyyy"
@@ -2621,11 +2624,11 @@ public class LocaleController {
         L_0x013b:
             boolean r2 = is24HourFormat
             if (r2 == 0) goto L_0x0145
-            r2 = 2131628405(0x7f0e1175, float:1.8884102E38)
+            r2 = 2131628419(0x7f0e1183, float:1.888413E38)
             java.lang.String r4 = "formatterDay24H"
             goto L_0x014a
         L_0x0145:
-            r2 = 2131628404(0x7f0e1174, float:1.88841E38)
+            r2 = 2131628418(0x7f0e1182, float:1.8884128E38)
             java.lang.String r4 = "formatterDay12H"
         L_0x014a:
             java.lang.String r2 = r9.getStringInternal(r4, r2)
@@ -2640,11 +2643,11 @@ public class LocaleController {
             r9.formatterDay = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x0167
-            r1 = 2131628411(0x7f0e117b, float:1.8884114E38)
+            r1 = 2131628425(0x7f0e1189, float:1.8884142E38)
             java.lang.String r2 = "formatterStats24H"
             goto L_0x016c
         L_0x0167:
-            r1 = 2131628410(0x7f0e117a, float:1.8884112E38)
+            r1 = 2131628424(0x7f0e1188, float:1.888414E38)
             java.lang.String r2 = "formatterStats12H"
         L_0x016c:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2661,11 +2664,11 @@ public class LocaleController {
             r9.formatterStats = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x018b
-            r1 = 2131628401(0x7f0e1171, float:1.8884094E38)
+            r1 = 2131628415(0x7f0e117f, float:1.8884122E38)
             java.lang.String r2 = "formatterBannedUntil24H"
             goto L_0x0190
         L_0x018b:
-            r1 = 2131628400(0x7f0e1170, float:1.8884092E38)
+            r1 = 2131628414(0x7f0e117e, float:1.888412E38)
             java.lang.String r2 = "formatterBannedUntil12H"
         L_0x0190:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2679,11 +2682,11 @@ public class LocaleController {
             r9.formatterBannedUntil = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x01aa
-            r1 = 2131628403(0x7f0e1173, float:1.8884098E38)
+            r1 = 2131628417(0x7f0e1181, float:1.8884126E38)
             java.lang.String r2 = "formatterBannedUntilThisYear24H"
             goto L_0x01af
         L_0x01aa:
-            r1 = 2131628402(0x7f0e1172, float:1.8884096E38)
+            r1 = 2131628416(0x7f0e1180, float:1.8884124E38)
             java.lang.String r2 = "formatterBannedUntilThisYear12H"
         L_0x01af:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2697,21 +2700,21 @@ public class LocaleController {
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
             r9.formatterBannedUntilThisYear = r1
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627449(0x7f0e0db9, float:1.8882163E38)
+            r2 = 2131627451(0x7f0e0dbb, float:1.8882167E38)
             java.lang.String r4 = "SendTodayAt"
             java.lang.String r2 = r9.getStringInternal(r4, r2)
             java.lang.String r4 = "'Send today at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r4)
             r1[r3] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627424(0x7f0e0da0, float:1.8882112E38)
+            r2 = 2131627426(0x7f0e0da2, float:1.8882116E38)
             java.lang.String r3 = "SendDayAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d 'at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r3)
             r1[r5] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627425(0x7f0e0da1, float:1.8882114E38)
+            r2 = 2131627427(0x7f0e0da3, float:1.8882118E38)
             java.lang.String r3 = "SendDayYearAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d yyyy 'at' HH:mm"
@@ -2719,7 +2722,7 @@ public class LocaleController {
             r1[r6] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 3
-            r3 = 2131627193(0x7f0e0cb9, float:1.8881644E38)
+            r3 = 2131627194(0x7f0e0cba, float:1.8881646E38)
             java.lang.String r4 = "RemindTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind today at' HH:mm"
@@ -2727,7 +2730,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 4
-            r3 = 2131627191(0x7f0e0cb7, float:1.888164E38)
+            r3 = 2131627192(0x7f0e0cb8, float:1.8881641E38)
             java.lang.String r4 = "RemindDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d 'at' HH:mm"
@@ -2735,7 +2738,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 5
-            r3 = 2131627192(0x7f0e0cb8, float:1.8881641E38)
+            r3 = 2131627193(0x7f0e0cb9, float:1.8881644E38)
             java.lang.String r4 = "RemindDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d yyyy 'at' HH:mm"
@@ -2743,7 +2746,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 6
-            r3 = 2131627619(0x7f0e0e63, float:1.8882508E38)
+            r3 = 2131627627(0x7f0e0e6b, float:1.8882524E38)
             java.lang.String r4 = "StartTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Start today at' HH:mm"
@@ -2751,7 +2754,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 7
-            r3 = 2131627611(0x7f0e0e5b, float:1.8882491E38)
+            r3 = 2131627619(0x7f0e0e63, float:1.8882508E38)
             java.lang.String r4 = "StartDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Start on' MMM d 'at' HH:mm"
@@ -2759,7 +2762,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 8
-            r3 = 2131627612(0x7f0e0e5c, float:1.8882493E38)
+            r3 = 2131627620(0x7f0e0e64, float:1.888251E38)
             java.lang.String r4 = "StartDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Start on' MMM d yyyy 'at' HH:mm"
@@ -2767,7 +2770,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 9
-            r3 = 2131627617(0x7f0e0e61, float:1.8882503E38)
+            r3 = 2131627625(0x7f0e0e69, float:1.888252E38)
             java.lang.String r4 = "StartShortTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Today,' HH:mm"
@@ -2775,7 +2778,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 10
-            r3 = 2131627615(0x7f0e0e5f, float:1.88825E38)
+            r3 = 2131627623(0x7f0e0e67, float:1.8882516E38)
             java.lang.String r4 = "StartShortDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "MMM d',' HH:mm"
@@ -2783,7 +2786,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 11
-            r3 = 2131627616(0x7f0e0e60, float:1.8882501E38)
+            r3 = 2131627624(0x7f0e0e68, float:1.8882518E38)
             java.lang.String r4 = "StartShortDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "MMM d yyyy, HH:mm"
@@ -2791,7 +2794,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 12
-            r3 = 2131627627(0x7f0e0e6b, float:1.8882524E38)
+            r3 = 2131627635(0x7f0e0e73, float:1.888254E38)
             java.lang.String r4 = "StartsTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Starts today at' HH:mm"
@@ -2799,7 +2802,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 13
-            r3 = 2131627625(0x7f0e0e69, float:1.888252E38)
+            r3 = 2131627633(0x7f0e0e71, float:1.8882536E38)
             java.lang.String r4 = "StartsDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Starts on' MMM d 'at' HH:mm"
@@ -2807,7 +2810,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 14
-            r3 = 2131627626(0x7f0e0e6a, float:1.8882522E38)
+            r3 = 2131627634(0x7f0e0e72, float:1.8882538E38)
             java.lang.String r4 = "StartsDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Starts on' MMM d yyyy 'at' HH:mm"

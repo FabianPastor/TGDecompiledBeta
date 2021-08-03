@@ -9,6 +9,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RoundVideoPlayingDrawable extends Drawable {
+    int alpha = 255;
     private long lastUpdateTime = 0;
     private Paint paint = new Paint(1);
     private View parentView;
@@ -22,9 +23,6 @@ public class RoundVideoPlayingDrawable extends Drawable {
 
     public int getOpacity() {
         return -2;
-    }
-
-    public void setAlpha(int i) {
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
@@ -88,17 +86,26 @@ public class RoundVideoPlayingDrawable extends Drawable {
 
     public void draw(Canvas canvas) {
         this.paint.setColor(Theme.getColor("chat_serviceText"));
-        int i = getBounds().left;
-        int i2 = getBounds().top;
-        for (int i3 = 0; i3 < 3; i3++) {
-            canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + i), (float) (AndroidUtilities.dp((this.progress1 * 7.0f) + 2.0f) + i2), (float) (AndroidUtilities.dp(4.0f) + i), (float) (AndroidUtilities.dp(10.0f) + i2), this.paint);
+        int i = this.alpha;
+        if (i != 255) {
+            Paint paint2 = this.paint;
+            paint2.setAlpha((int) (((float) i) * (((float) paint2.getAlpha()) / 255.0f)));
+        }
+        int i2 = getBounds().left;
+        int i3 = getBounds().top;
+        for (int i4 = 0; i4 < 3; i4++) {
+            canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + i2), (float) (AndroidUtilities.dp((this.progress1 * 7.0f) + 2.0f) + i3), (float) (AndroidUtilities.dp(4.0f) + i2), (float) (AndroidUtilities.dp(10.0f) + i3), this.paint);
             Canvas canvas2 = canvas;
-            canvas2.drawRect((float) (AndroidUtilities.dp(5.0f) + i), (float) (AndroidUtilities.dp((this.progress2 * 7.0f) + 2.0f) + i2), (float) (AndroidUtilities.dp(7.0f) + i), (float) (AndroidUtilities.dp(10.0f) + i2), this.paint);
-            canvas2.drawRect((float) (AndroidUtilities.dp(8.0f) + i), (float) (AndroidUtilities.dp((this.progress3 * 7.0f) + 2.0f) + i2), (float) (AndroidUtilities.dp(10.0f) + i), (float) (AndroidUtilities.dp(10.0f) + i2), this.paint);
+            canvas2.drawRect((float) (AndroidUtilities.dp(5.0f) + i2), (float) (AndroidUtilities.dp((this.progress2 * 7.0f) + 2.0f) + i3), (float) (AndroidUtilities.dp(7.0f) + i2), (float) (AndroidUtilities.dp(10.0f) + i3), this.paint);
+            canvas2.drawRect((float) (AndroidUtilities.dp(8.0f) + i2), (float) (AndroidUtilities.dp((this.progress3 * 7.0f) + 2.0f) + i3), (float) (AndroidUtilities.dp(10.0f) + i2), (float) (AndroidUtilities.dp(10.0f) + i3), this.paint);
         }
         if (this.started) {
             update();
         }
+    }
+
+    public void setAlpha(int i) {
+        this.alpha = i;
     }
 
     public int getIntrinsicWidth() {

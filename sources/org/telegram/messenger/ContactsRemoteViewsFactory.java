@@ -97,7 +97,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r3 = 2131427356(0x7f0b001c, float:1.8476326E38)
             r0.<init>(r2, r3)
             r2 = 2131230941(0x7var_dd, float:1.8077949E38)
-            r3 = 2131628321(0x7f0e1121, float:1.8883931E38)
+            r3 = 2131628335(0x7f0e112f, float:1.888396E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -114,7 +114,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r5 = 2131427357(0x7f0b001d, float:1.8476328E38)
             r0.<init>(r2, r5)
             r2 = 2131230943(0x7var_df, float:1.8077953E38)
-            r5 = 2131627730(0x7f0e0ed2, float:1.8882733E38)
+            r5 = 2131627738(0x7f0e0eda, float:1.8882749E38)
             java.lang.String r6 = "TapToEditWidgetShort"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)
@@ -186,21 +186,21 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             org.telegram.tgnet.TLRPC$User r9 = r11.getUser(r9)
             boolean r10 = org.telegram.messenger.UserObject.isUserSelf(r9)
             if (r10 == 0) goto L_0x00e8
-            r10 = 2131627331(0x7f0e0d43, float:1.8881923E38)
+            r10 = 2131627332(0x7f0e0d44, float:1.8881925E38)
             java.lang.String r11 = "SavedMessages"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x010c
         L_0x00e8:
             boolean r10 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r9)
             if (r10 == 0) goto L_0x00f8
-            r10 = 2131627212(0x7f0e0ccc, float:1.8881682E38)
+            r10 = 2131627213(0x7f0e0ccd, float:1.8881684E38)
             java.lang.String r11 = "RepliesTitle"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x010c
         L_0x00f8:
             boolean r10 = org.telegram.messenger.UserObject.isDeleted(r9)
             if (r10 == 0) goto L_0x0108
-            r10 = 2131625779(0x7f0e0733, float:1.8878776E38)
+            r10 = 2131625780(0x7f0e0734, float:1.8878778E38)
             java.lang.String r11 = "HiddenName"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x010c

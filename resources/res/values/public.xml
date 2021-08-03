@@ -342,6 +342,7 @@
     <public type="drawable" name="calls_mute" id="NUM" />
     <public type="drawable" name="calls_mute_mini" id="NUM" />
     <public type="drawable" name="calls_pip_outershadow" id="NUM" />
+    <public type="drawable" name="calls_sharescreen" id="NUM" />
     <public type="drawable" name="calls_speaker" id="NUM" />
     <public type="drawable" name="calls_topshadow" id="NUM" />
     <public type="drawable" name="calls_unmute" id="NUM" />
@@ -784,6 +785,10 @@
     <public type="drawable" name="msg_mention" id="NUM" />
     <public type="drawable" name="msg_message" id="NUM" />
     <public type="drawable" name="msg_minvideo" id="NUM" />
+    <public type="drawable" name="msg_more_0_2" id="NUM" />
+    <public type="drawable" name="msg_more_0_5" id="NUM" />
+    <public type="drawable" name="msg_more_1_5" id="NUM" />
+    <public type="drawable" name="msg_more_2" id="NUM" />
     <public type="drawable" name="msg_msgbubble" id="NUM" />
     <public type="drawable" name="msg_msgbubble2" id="NUM" />
     <public type="drawable" name="msg_msgbubble3" id="NUM" />
@@ -835,6 +840,12 @@
     <public type="drawable" name="msg_share" id="NUM" />
     <public type="drawable" name="msg_share_filled" id="NUM" />
     <public type="drawable" name="msg_shareout" id="NUM" />
+    <public type="drawable" name="msg_speed" id="NUM" />
+    <public type="drawable" name="msg_speed_0_2" id="NUM" />
+    <public type="drawable" name="msg_speed_0_5" id="NUM" />
+    <public type="drawable" name="msg_speed_1" id="NUM" />
+    <public type="drawable" name="msg_speed_1_5" id="NUM" />
+    <public type="drawable" name="msg_speed_2" id="NUM" />
     <public type="drawable" name="msg_start_secret" id="NUM" />
     <public type="drawable" name="msg_stats" id="NUM" />
     <public type="drawable" name="msg_sticker" id="NUM" />
@@ -953,6 +964,7 @@
     <public type="drawable" name="places_btn" id="NUM" />
     <public type="drawable" name="play_big" id="NUM" />
     <public type="drawable" name="play_mini_video" id="NUM" />
+    <public type="drawable" name="play_roundvideo" id="NUM" />
     <public type="drawable" name="player" id="NUM" />
     <public type="drawable" name="player_new_next" id="NUM" />
     <public type="drawable" name="player_new_order" id="NUM" />
@@ -1138,7 +1150,9 @@
     <public type="drawable" name="video_send_mute" id="NUM" />
     <public type="drawable" name="video_send_unmute" id="NUM" />
     <public type="drawable" name="videopreview" id="NUM" />
-    <public type="drawable" name="voice2x" id="NUM" />
+    <public type="drawable" name="voice_mini_0_5" id="NUM" />
+    <public type="drawable" name="voice_mini_1_5" id="NUM" />
+    <public type="drawable" name="voice_mini_2_0" id="NUM" />
     <public type="drawable" name="voice_muted_large" id="NUM" />
     <public type="drawable" name="voice_unmuted_large" id="NUM" />
     <public type="drawable" name="voice_volume_mini" id="NUM" />
@@ -2092,6 +2106,7 @@
     <public type="string" name="AuthAnotherClientScan" id="NUM" />
     <public type="string" name="AuthAnotherClientTokenError" id="NUM" />
     <public type="string" name="AuthAnotherClientUrl" id="NUM" />
+    <public type="string" name="AutoDelete1Month" id="NUM" />
     <public type="string" name="AutoDelete24Hours" id="NUM" />
     <public type="string" name="AutoDelete7Days" id="NUM" />
     <public type="string" name="AutoDeleteAlertChannelInfo" id="NUM" />
@@ -5056,6 +5071,7 @@
     <public type="string" name="SecretChatTimerDays" id="NUM" />
     <public type="string" name="SecretChatTimerHours" id="NUM" />
     <public type="string" name="SecretChatTimerMinutes" id="NUM" />
+    <public type="string" name="SecretChatTimerMonths" id="NUM" />
     <public type="string" name="SecretChatTimerSeconds" id="NUM" />
     <public type="string" name="SecretChatTimerWeeks" id="NUM" />
     <public type="string" name="SecretLinkPreviewAlert" id="NUM" />
@@ -5267,6 +5283,12 @@
     <public type="string" name="SoundMuted" id="NUM" />
     <public type="string" name="Speaking" id="NUM" />
     <public type="string" name="SpeakingWithVolume" id="NUM" />
+    <public type="string" name="Speed" id="NUM" />
+    <public type="string" name="SpeedFast" id="NUM" />
+    <public type="string" name="SpeedNormal" id="NUM" />
+    <public type="string" name="SpeedSlow" id="NUM" />
+    <public type="string" name="SpeedVeryFast" id="NUM" />
+    <public type="string" name="SpeedVerySlow" id="NUM" />
     <public type="string" name="Start" id="NUM" />
     <public type="string" name="StartDayAt" id="NUM" />
     <public type="string" name="StartDayYearAt" id="NUM" />
@@ -5752,6 +5774,7 @@
     <public type="string" name="VoipAudioRoutingHeadset" id="NUM" />
     <public type="string" name="VoipAudioRoutingPhone" id="NUM" />
     <public type="string" name="VoipAudioRoutingSpeaker" id="NUM" />
+    <public type="string" name="VoipBackCamera" id="NUM" />
     <public type="string" name="VoipBusy" id="NUM" />
     <public type="string" name="VoipCallEnded" id="NUM" />
     <public type="string" name="VoipCamera" id="NUM" />
@@ -5782,6 +5805,7 @@
     <public type="string" name="VoipFailed" id="NUM" />
     <public type="string" name="VoipFeedbackCommentHint" id="NUM" />
     <public type="string" name="VoipFlip" id="NUM" />
+    <public type="string" name="VoipFrontCamera" id="NUM" />
     <public type="string" name="VoipGroupAdd" id="NUM" />
     <public type="string" name="VoipGroupAddMemberText" id="NUM" />
     <public type="string" name="VoipGroupAddMemberTitle" id="NUM" />
@@ -5920,6 +5944,7 @@
     <public type="string" name="VoipPeerOutdated" id="NUM" />
     <public type="string" name="VoipPeerVideoOutdated" id="NUM" />
     <public type="string" name="VoipPeerVideoOutdatedMakeVoice" id="NUM" />
+    <public type="string" name="VoipPhoneScreen" id="NUM" />
     <public type="string" name="VoipQuickReplies" id="NUM" />
     <public type="string" name="VoipQuickRepliesExplain" id="NUM" />
     <public type="string" name="VoipRateCallAlert" id="NUM" />
@@ -5930,6 +5955,7 @@
     <public type="string" name="VoipSelectAudioOutput" id="NUM" />
     <public type="string" name="VoipSetNewPhoto" id="NUM" />
     <public type="string" name="VoipSettingsRingtone" id="NUM" />
+    <public type="string" name="VoipShareVideo" id="NUM" />
     <public type="string" name="VoipSpeaker" id="NUM" />
     <public type="string" name="VoipStartVideo" id="NUM" />
     <public type="string" name="VoipStopVideo" id="NUM" />
@@ -5942,7 +5968,9 @@
     <public type="string" name="VoipUserCameraIsOff" id="NUM" />
     <public type="string" name="VoipUserMicrophoneIsOff" id="NUM" />
     <public type="string" name="VoipVideoNotAvailable" id="NUM" />
+    <public type="string" name="VoipVideoNotAvailableAdmin" id="NUM" />
     <public type="string" name="VoipVideoOnPause" id="NUM" />
+    <public type="string" name="VoipVideoPrivateScreenSharing" id="NUM" />
     <public type="string" name="VoipVideoScreenSharing" id="NUM" />
     <public type="string" name="VoipVideoScreenSharingTwoLines" id="NUM" />
     <public type="string" name="VoipVideoScreenStopSharing" id="NUM" />

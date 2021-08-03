@@ -265,8 +265,16 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$hasSelectedMessages(this);
                     }
 
-                    public /* synthetic */ void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$needOpenWebView(this, str, str2, str3, str4, i, i2);
+                    public /* synthetic */ boolean isLandscape() {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$isLandscape(this);
+                    }
+
+                    public /* synthetic */ boolean keyboardIsOpened() {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$keyboardIsOpened(this);
+                    }
+
+                    public /* synthetic */ void needOpenWebView(MessageObject messageObject, String str, String str2, String str3, String str4, int i, int i2) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$needOpenWebView(this, messageObject, str, str2, str3, str4, i, i2);
                     }
 
                     public /* synthetic */ boolean needPlayMessage(MessageObject messageObject) {

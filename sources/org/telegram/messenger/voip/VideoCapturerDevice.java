@@ -23,6 +23,7 @@ import org.webrtc.Logging;
 import org.webrtc.ScreenCapturerAndroid;
 import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.VideoCapturer;
+import org.webrtc.voiceengine.WebRtcAudioRecord;
 
 @TargetApi(18)
 public class VideoCapturerDevice {
@@ -223,7 +224,32 @@ public class VideoCapturerDevice {
                 if (i != -1) {
                     String str2 = deviceNames[i];
                     if (this.videoCapturer == null) {
-                        this.videoCapturer = camera2Enumerator.createCapturer(str2, (CameraVideoCapturer.CameraEventsHandler) null);
+                        this.videoCapturer = camera2Enumerator.createCapturer(str2, new CameraVideoCapturer.CameraEventsHandler() {
+                            public void onCameraClosed() {
+                            }
+
+                            public void onCameraDisconnected() {
+                            }
+
+                            public void onCameraError(String str) {
+                            }
+
+                            public void onCameraFreezed(String str) {
+                            }
+
+                            public void onCameraOpening(String str) {
+                            }
+
+                            public void onFirstFrameAvailable() {
+                                AndroidUtilities.runOnUIThread($$Lambda$VideoCapturerDevice$2$gGum1UL86zhpmQ75hwsQ00gpU.INSTANCE);
+                            }
+
+                            static /* synthetic */ void lambda$onFirstFrameAvailable$0() {
+                                if (VoIPService.getSharedInstance() != null) {
+                                    VoIPService.getSharedInstance().onCameraFirstFrameAvailable();
+                                }
+                            }
+                        });
                         this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.getEglBaseContext());
                         this.handler.post(new Runnable() {
                             public final void run() {
@@ -284,6 +310,10 @@ public class VideoCapturerDevice {
                 this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(j);
                 this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
                 this.videoCapturer.startCapture(point.x, point.y, 30);
+                WebRtcAudioRecord webRtcAudioRecord = WebRtcAudioRecord.Instance;
+                if (webRtcAudioRecord != null) {
+                    webRtcAudioRecord.initDeviceAudioRecord(((ScreenCapturerAndroid) this.videoCapturer).getMediaProjection());
+                }
             }
         }
     }
@@ -314,7 +344,7 @@ public class VideoCapturerDevice {
                     }
 
                     public final void run() {
-                        VideoCapturerDevice.AnonymousClass2.lambda$onCameraSwitchDone$0(this.f$0);
+                        VideoCapturerDevice.AnonymousClass3.lambda$onCameraSwitchDone$0(this.f$0);
                     }
                 });
             }
@@ -429,6 +459,10 @@ public class VideoCapturerDevice {
     /* access modifiers changed from: private */
     /* renamed from: lambda$onDestroy$8 */
     public /* synthetic */ void lambda$onDestroy$8$VideoCapturerDevice() {
+        WebRtcAudioRecord webRtcAudioRecord;
+        if ((this.videoCapturer instanceof ScreenCapturerAndroid) && (webRtcAudioRecord = WebRtcAudioRecord.Instance) != null) {
+            webRtcAudioRecord.stopDeviceAudioRecord();
+        }
         VideoCapturer videoCapturer2 = this.videoCapturer;
         if (videoCapturer2 != null) {
             try {

@@ -56,7 +56,7 @@ public class BotHelpCell extends View {
         if (str == null || str.length() == 0) {
             setVisibility(8);
         } else if (!str.equals(this.oldText)) {
-            this.oldText = str;
+            this.oldText = AndroidUtilities.getSafeString(str);
             setVisibility(0);
             if (AndroidUtilities.isTablet()) {
                 i = AndroidUtilities.getMinTabletSide();

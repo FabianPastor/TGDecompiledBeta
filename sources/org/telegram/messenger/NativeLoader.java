@@ -1,10 +1,10 @@
 package org.telegram.messenger;
 
 public class NativeLoader {
-    private static final String LIB_NAME = "tmessages.39";
-    private static final String LIB_SO_NAME = "libtmessages.39.so";
-    private static final int LIB_VERSION = 39;
-    private static final String LOCALE_LIB_SO_NAME = "libtmessages.39loc.so";
+    private static final String LIB_NAME = "tmessages.40";
+    private static final String LIB_SO_NAME = "libtmessages.40.so";
+    private static final int LIB_VERSION = 40;
+    private static final String LOCALE_LIB_SO_NAME = "libtmessages.40loc.so";
     private static volatile boolean nativeLoaded = false;
     private String crashPath = "";
 
@@ -83,7 +83,7 @@ public class NativeLoader {
             r5.append(r3)     // Catch:{ Exception -> 0x00a8 }
             r5.append(r8)     // Catch:{ Exception -> 0x00a8 }
             r5.append(r0)     // Catch:{ Exception -> 0x00a8 }
-            java.lang.String r3 = "libtmessages.39.so"
+            java.lang.String r3 = "libtmessages.40.so"
             r5.append(r3)     // Catch:{ Exception -> 0x00a8 }
             java.lang.String r5 = r5.toString()     // Catch:{ Exception -> 0x00a8 }
             java.util.zip.ZipEntry r5 = r2.getEntry(r5)     // Catch:{ Exception -> 0x00a8 }
@@ -134,7 +134,7 @@ public class NativeLoader {
             r7.append(r3)     // Catch:{ Exception -> 0x00a8 }
             r7.append(r8)     // Catch:{ Exception -> 0x00a8 }
             r7.append(r0)     // Catch:{ Exception -> 0x00a8 }
-            java.lang.String r8 = "tmessages.39"
+            java.lang.String r8 = "tmessages.40"
             r7.append(r8)     // Catch:{ Exception -> 0x00a8 }
             java.lang.String r7 = r7.toString()     // Catch:{ Exception -> 0x00a8 }
             r5.<init>(r7)     // Catch:{ Exception -> 0x00a8 }
@@ -209,7 +209,7 @@ public class NativeLoader {
             return
         L_0x0009:
             r1 = 1
-            java.lang.String r2 = "tmessages.39"
+            java.lang.String r2 = "tmessages.40"
             java.lang.System.loadLibrary(r2)     // Catch:{ Error -> 0x0020 }
             nativeLoaded = r1     // Catch:{ Error -> 0x0020 }
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Error -> 0x0020 }
@@ -294,7 +294,7 @@ public class NativeLoader {
             r3.<init>(r4, r5)     // Catch:{ all -> 0x001d }
             r3.mkdirs()     // Catch:{ all -> 0x001d }
             java.io.File r4 = new java.io.File     // Catch:{ all -> 0x001d }
-            java.lang.String r5 = "libtmessages.39loc.so"
+            java.lang.String r5 = "libtmessages.40loc.so"
             r4.<init>(r3, r5)     // Catch:{ all -> 0x001d }
             boolean r5 = r4.exists()     // Catch:{ all -> 0x001d }
             if (r5 == 0) goto L_0x00d7
@@ -330,7 +330,7 @@ public class NativeLoader {
         L_0x00f7:
             r7.printStackTrace()     // Catch:{ all -> 0x0109 }
         L_0x00fa:
-            java.lang.String r7 = "tmessages.39"
+            java.lang.String r7 = "tmessages.40"
             java.lang.System.loadLibrary(r7)     // Catch:{ Error -> 0x0103 }
             nativeLoaded = r1     // Catch:{ Error -> 0x0103 }
             goto L_0x0107

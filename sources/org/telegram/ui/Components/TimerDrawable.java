@@ -57,7 +57,12 @@ public class TimerDrawable extends Drawable {
             if (str.length() < 2) {
                 str = str + LocaleController.getString("SecretChatTimerHours", NUM);
             }
-        } else if (i < 86400 || i >= 604800) {
+        } else if (i >= 86400 && i < 604800) {
+            str = "" + (((i / 60) / 60) / 24);
+            if (str.length() < 2) {
+                str = str + LocaleController.getString("SecretChatTimerDays", NUM);
+            }
+        } else if (i < 2592000 || i > 2678400) {
             str = "" + ((((i / 60) / 60) / 24) / 7);
             if (str.length() < 2) {
                 str = str + LocaleController.getString("SecretChatTimerWeeks", NUM);
@@ -65,9 +70,9 @@ public class TimerDrawable extends Drawable {
                 str = "c";
             }
         } else {
-            str = "" + (((i / 60) / 60) / 24);
+            str = "" + ((((i / 60) / 60) / 24) / 30);
             if (str.length() < 2) {
-                str = str + LocaleController.getString("SecretChatTimerDays", NUM);
+                str = str + LocaleController.getString("SecretChatTimerMonths", NUM);
             }
         }
         String str2 = str;

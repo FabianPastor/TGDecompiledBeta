@@ -1411,7 +1411,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
             boolean r2 = r2.masks
-            r3 = 2131627196(0x7f0e0cbc, float:1.888165E38)
+            r3 = 2131627197(0x7f0e0cbd, float:1.8881652E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r2 == 0) goto L_0x00d1
             java.lang.Object[] r2 = new java.lang.Object[r6]
@@ -1495,7 +1495,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (r0 == 0) goto L_0x0171
             goto L_0x0189
         L_0x0171:
-            r0 = 2131625852(0x7f0e077c, float:1.8878924E38)
+            r0 = 2131625853(0x7f0e077d, float:1.8878926E38)
             java.lang.String r1 = "ImportStickersProcessing"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1507,7 +1507,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x0189:
             org.telegram.ui.Components.-$$Lambda$StickersAlert$ekNx1b09uSe2umZqR4EaIlPaJH0 r0 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$ekNx1b09uSe2umZqR4EaIlPaJH0
             r0.<init>()
-            r1 = 2131625839(0x7f0e076f, float:1.8878897E38)
+            r1 = 2131625840(0x7f0e0770, float:1.88789E38)
             java.lang.Object[] r3 = new java.lang.Object[r6]
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
             if (r7 == 0) goto L_0x0198
@@ -1526,7 +1526,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.setEnabled(r6)
             goto L_0x01cc
         L_0x01b7:
-            r0 = 2131624946(0x7f0e03f2, float:1.8877086E38)
+            r0 = 2131624947(0x7f0e03f3, float:1.8877088E38)
             java.lang.String r1 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()

@@ -290,7 +290,7 @@ public class EditTextBoldCursor extends EditText {
         L_0x00d3:
             java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00e1 }
             if (r0 == 0) goto L_0x00e1
-            r1 = 2131165394(0x7var_d2, float:1.7945004E38)
+            r1 = 2131165395(0x7var_d3, float:1.7945006E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00e1 }
             r0.set(r8, r1)     // Catch:{ all -> 0x00e1 }
         L_0x00e1:
@@ -919,10 +919,8 @@ public class EditTextBoldCursor extends EditText {
     private boolean updateCursorPosition() {
         Layout layout = getLayout();
         int selectionStart = getSelectionStart();
-        if (!(selectionStart == this.lastOffset && this.lastText == layout.getText())) {
-            int lineForOffset = layout.getLineForOffset(selectionStart);
-            updateCursorPosition(layout.getLineTop(lineForOffset), layout.getLineTop(lineForOffset + 1), layout.getPrimaryHorizontal(selectionStart));
-        }
+        int lineForOffset = layout.getLineForOffset(selectionStart);
+        updateCursorPosition(layout.getLineTop(lineForOffset), layout.getLineTop(lineForOffset + 1), layout.getPrimaryHorizontal(selectionStart));
         this.lastText = layout.getText();
         this.lastOffset = selectionStart;
         return true;

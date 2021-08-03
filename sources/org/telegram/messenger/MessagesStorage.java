@@ -21778,7 +21778,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: type inference failed for: r7v4 */
     /* JADX WARNING: type inference failed for: r7v11 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v1, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v1, types: [boolean, int] */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x00c7 A[Catch:{ Exception -> 0x0109 }] */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x00f4  */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x0131 A[Catch:{ Exception -> 0x02b7 }] */
@@ -25987,7 +25987,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r6 = "SavedMessages"
-            r7 = 2131627331(0x7f0e0d43, float:1.8881923E38)
+            r7 = 2131627332(0x7f0e0d44, float:1.8881925E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)     // Catch:{ Exception -> 0x063e }
             java.lang.String r6 = r6.toLowerCase()     // Catch:{ Exception -> 0x063e }
             java.lang.String r7 = "saved messages"

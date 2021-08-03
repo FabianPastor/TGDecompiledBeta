@@ -16,6 +16,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.transition.ChangeBounds;
+import android.transition.Fade;
+import android.transition.TransitionManager;
+import android.transition.TransitionSet;
+import android.transition.TransitionValues;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +33,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.Adapters.FiltersView;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
@@ -57,6 +63,7 @@ public class ActionBar extends FrameLayout {
     private boolean allowOverlayTitle;
     private ImageView backButtonImageView;
     private boolean castShadows;
+    private boolean centerScale;
     private boolean clipContent;
     EllipsizeSpanAnimator ellipsizeSpanAnimator;
     private int extraHeight;
@@ -87,6 +94,8 @@ public class ActionBar extends FrameLayout {
     AnimatorSet searchVisibleAnimator;
     private SnowflakesEffect snowflakesEffect;
     /* access modifiers changed from: private */
+    public CharSequence subtitle;
+    /* access modifiers changed from: private */
     public SimpleTextView subtitleTextView;
     private boolean supportsHolidayImage;
     private Runnable titleActionRunnable;
@@ -104,6 +113,7 @@ public class ActionBar extends FrameLayout {
         }
 
         public void onItemClick(int i) {
+            throw null;
         }
     }
 
@@ -342,11 +352,14 @@ public class ActionBar extends FrameLayout {
         if (charSequence != null && this.subtitleTextView == null) {
             createSubtitleTextView();
         }
-        SimpleTextView simpleTextView = this.subtitleTextView;
-        if (simpleTextView != null) {
-            simpleTextView.setVisibility((TextUtils.isEmpty(charSequence) || this.isSearchFieldVisible) ? 8 : 0);
+        if (this.subtitleTextView != null) {
+            boolean isEmpty = TextUtils.isEmpty(charSequence);
+            this.subtitleTextView.setVisibility((isEmpty || this.isSearchFieldVisible) ? 8 : 0);
             this.subtitleTextView.setAlpha(1.0f);
-            this.subtitleTextView.setText(charSequence);
+            if (!isEmpty) {
+                this.subtitleTextView.setText(charSequence);
+            }
+            this.subtitle = charSequence;
         }
     }
 
@@ -453,11 +466,11 @@ public class ActionBar extends FrameLayout {
     }
 
     public String getSubtitle() {
-        SimpleTextView simpleTextView = this.subtitleTextView;
-        if (simpleTextView == null) {
+        CharSequence charSequence;
+        if (this.subtitleTextView == null || (charSequence = this.subtitle) == null) {
             return null;
         }
-        return simpleTextView.getText().toString();
+        return charSequence.toString();
     }
 
     public ActionBarMenu createMenu() {
@@ -611,7 +624,7 @@ public class ActionBar extends FrameLayout {
                             if (ActionBar.this.titleTextView[0] != null) {
                                 ActionBar.this.titleTextView[0].setVisibility(4);
                             }
-                            if (ActionBar.this.subtitleTextView != null && !TextUtils.isEmpty(ActionBar.this.subtitleTextView.getText())) {
+                            if (ActionBar.this.subtitleTextView != null && !TextUtils.isEmpty(ActionBar.this.subtitle)) {
                                 ActionBar.this.subtitleTextView.setVisibility(4);
                             }
                             if (ActionBar.this.menu != null) {
@@ -681,8 +694,7 @@ public class ActionBar extends FrameLayout {
             if (simpleTextViewArr[0] != null) {
                 simpleTextViewArr[0].setVisibility(4);
             }
-            SimpleTextView simpleTextView = this.subtitleTextView;
-            if (simpleTextView != null && !TextUtils.isEmpty(simpleTextView.getText())) {
+            if (this.subtitleTextView != null && !TextUtils.isEmpty(this.subtitle)) {
                 this.subtitleTextView.setVisibility(4);
             }
             ActionBarMenu actionBarMenu2 = this.menu;
@@ -788,8 +800,7 @@ public class ActionBar extends FrameLayout {
                 if (simpleTextViewArr[0] != null) {
                     simpleTextViewArr[0].setVisibility(0);
                 }
-                SimpleTextView simpleTextView = this.subtitleTextView;
-                if (simpleTextView != null && !TextUtils.isEmpty(simpleTextView.getText())) {
+                if (this.subtitleTextView != null && !TextUtils.isEmpty(this.subtitle)) {
                     this.subtitleTextView.setVisibility(0);
                 }
             }
@@ -905,8 +916,7 @@ public class ActionBar extends FrameLayout {
         if (simpleTextViewArr[0] != null) {
             arrayList.add(simpleTextViewArr[0]);
         }
-        SimpleTextView simpleTextView = this.subtitleTextView;
-        if (simpleTextView != null && !TextUtils.isEmpty(simpleTextView.getText())) {
+        if (this.subtitleTextView != null && !TextUtils.isEmpty(this.subtitle)) {
             arrayList.add(this.subtitleTextView);
             this.subtitleTextView.setVisibility(z ? 4 : 0);
         }
@@ -953,6 +963,8 @@ public class ActionBar extends FrameLayout {
             animatorSet4.playTogether(animatorArr3);
             i++;
         }
+        this.centerScale = true;
+        requestLayout();
         this.searchVisibleAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 for (int i = 0; i < arrayList.size(); i++) {
@@ -1163,11 +1175,16 @@ public class ActionBar extends FrameLayout {
                 }
                 SimpleTextView[] simpleTextViewArr5 = this.titleTextView;
                 if (!(simpleTextViewArr5[i5] == null || simpleTextViewArr5[i5].getVisibility() == 8)) {
-                    CharSequence text = this.titleTextView[i5].getText();
-                    SimpleTextView[] simpleTextViewArr6 = this.titleTextView;
-                    simpleTextViewArr6[i5].setPivotX(simpleTextViewArr6[i5].getTextPaint().measureText(text, 0, text.length()) / 2.0f);
-                    this.titleTextView[i5].setPivotY((float) (AndroidUtilities.dp(24.0f) >> 1));
                     this.titleTextView[i5].measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), Integer.MIN_VALUE));
+                    if (this.centerScale) {
+                        CharSequence text = this.titleTextView[i5].getText();
+                        SimpleTextView[] simpleTextViewArr6 = this.titleTextView;
+                        simpleTextViewArr6[i5].setPivotX(simpleTextViewArr6[i5].getTextPaint().measureText(text, 0, text.length()) / 2.0f);
+                        this.titleTextView[i5].setPivotY((float) (AndroidUtilities.dp(24.0f) >> 1));
+                    } else {
+                        this.titleTextView[i5].setPivotX(0.0f);
+                        this.titleTextView[i5].setPivotY(0.0f);
+                    }
                 }
                 SimpleTextView simpleTextView9 = this.subtitleTextView;
                 if (!(simpleTextView9 == null || simpleTextView9.getVisibility() == 8)) {
@@ -1516,17 +1533,17 @@ public class ActionBar extends FrameLayout {
         this.lastRunnable = runnable;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0150  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0155  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setTitleOverlayText(java.lang.String r5, int r6, java.lang.Runnable r7) {
         /*
             r4 = this;
             boolean r0 = r4.allowOverlayTitle
-            if (r0 == 0) goto L_0x0154
+            if (r0 == 0) goto L_0x0159
             org.telegram.ui.ActionBar.BaseFragment r0 = r4.parentFragment
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r0.parentLayout
             if (r0 != 0) goto L_0x000c
-            goto L_0x0154
+            goto L_0x0159
         L_0x000c:
             java.lang.Object[] r0 = r4.overlayTitleToSet
             r1 = 0
@@ -1580,21 +1597,21 @@ public class ActionBar extends FrameLayout {
             if (r6 == 0) goto L_0x0061
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
             r5 = r5[r1]
-            if (r5 == 0) goto L_0x0120
+            if (r5 == 0) goto L_0x0125
         L_0x0061:
             int r5 = r4.getMeasuredWidth()
-            if (r5 == 0) goto L_0x0120
+            if (r5 == 0) goto L_0x0125
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
             r2 = r5[r1]
             if (r2 == 0) goto L_0x0077
             r5 = r5[r1]
             int r5 = r5.getVisibility()
             if (r5 == 0) goto L_0x0077
-            goto L_0x0120
+            goto L_0x0125
         L_0x0077:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
             r2 = r5[r1]
-            if (r2 == 0) goto L_0x014d
+            if (r2 == 0) goto L_0x0152
             r5 = r5[r1]
             android.view.ViewPropertyAnimator r5 = r5.animate()
             r5.cancel()
@@ -1659,43 +1676,45 @@ public class ActionBar extends FrameLayout {
             android.view.ViewPropertyAnimator r0 = r5.scaleY(r6)
             r0.scaleX(r6)
         L_0x010f:
+            r4.requestLayout()
+            r4.centerScale = r3
             android.view.ViewPropertyAnimator r5 = r5.setDuration(r1)
             org.telegram.ui.ActionBar.ActionBar$5 r6 = new org.telegram.ui.ActionBar.ActionBar$5
             r6.<init>()
             android.view.ViewPropertyAnimator r5 = r5.setListener(r6)
             r5.start()
-            goto L_0x014d
-        L_0x0120:
+            goto L_0x0152
+        L_0x0125:
             r4.createTitleTextView(r1)
             boolean r5 = r4.supportsHolidayImage
-            if (r5 == 0) goto L_0x0131
+            if (r5 == 0) goto L_0x0136
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
             r5 = r5[r1]
             r5.invalidate()
             r4.invalidate()
-        L_0x0131:
+        L_0x0136:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
             r5 = r5[r1]
             r5.setText(r6)
-            if (r0 == 0) goto L_0x0144
+            if (r0 == 0) goto L_0x0149
             org.telegram.ui.Components.EllipsizeSpanAnimator r5 = r4.ellipsizeSpanAnimator
             org.telegram.ui.ActionBar.SimpleTextView[] r6 = r4.titleTextView
             r6 = r6[r1]
             r5.addView(r6)
-            goto L_0x014d
-        L_0x0144:
+            goto L_0x0152
+        L_0x0149:
             org.telegram.ui.Components.EllipsizeSpanAnimator r5 = r4.ellipsizeSpanAnimator
             org.telegram.ui.ActionBar.SimpleTextView[] r6 = r4.titleTextView
             r6 = r6[r1]
             r5.removeView(r6)
-        L_0x014d:
-            if (r7 == 0) goto L_0x0150
-            goto L_0x0152
-        L_0x0150:
-            java.lang.Runnable r7 = r4.lastRunnable
         L_0x0152:
+            if (r7 == 0) goto L_0x0155
+            goto L_0x0157
+        L_0x0155:
+            java.lang.Runnable r7 = r4.lastRunnable
+        L_0x0157:
             r4.titleActionRunnable = r7
-        L_0x0154:
+        L_0x0159:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBar.setTitleOverlayText(java.lang.String, int, java.lang.Runnable):void");
@@ -1805,7 +1824,7 @@ public class ActionBar extends FrameLayout {
             setTitle(charSequence);
             return;
         }
-        final boolean z2 = this.overlayTitleAnimation && !TextUtils.isEmpty(this.subtitleTextView.getText());
+        final boolean z2 = this.overlayTitleAnimation && !TextUtils.isEmpty(this.subtitle);
         if (z2) {
             if (this.subtitleTextView.getVisibility() != 0) {
                 this.subtitleTextView.setVisibility(0);
@@ -1892,5 +1911,62 @@ public class ActionBar extends FrameLayout {
 
     public void setOverlayTitleAnimation(boolean z) {
         this.overlayTitleAnimation = z;
+    }
+
+    public void beginDelayedTransition() {
+        if (Build.VERSION.SDK_INT >= 19) {
+            TransitionSet transitionSet = new TransitionSet();
+            transitionSet.setOrdering(0);
+            transitionSet.addTransition(new Fade());
+            transitionSet.addTransition(new ChangeBounds() {
+                public void captureStartValues(TransitionValues transitionValues) {
+                    super.captureStartValues(transitionValues);
+                    View view = transitionValues.view;
+                    if (view instanceof SimpleTextView) {
+                        transitionValues.values.put("text_size", Float.valueOf(((SimpleTextView) view).getTextPaint().getTextSize()));
+                    }
+                }
+
+                public void captureEndValues(TransitionValues transitionValues) {
+                    super.captureEndValues(transitionValues);
+                    View view = transitionValues.view;
+                    if (view instanceof SimpleTextView) {
+                        transitionValues.values.put("text_size", Float.valueOf(((SimpleTextView) view).getTextPaint().getTextSize()));
+                    }
+                }
+
+                public Animator createAnimator(ViewGroup viewGroup, final TransitionValues transitionValues, TransitionValues transitionValues2) {
+                    if (transitionValues == null || !(transitionValues.view instanceof SimpleTextView)) {
+                        return super.createAnimator(viewGroup, transitionValues, transitionValues2);
+                    }
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    Animator createAnimator = super.createAnimator(viewGroup, transitionValues, transitionValues2);
+                    float floatValue = ((Float) transitionValues.values.get("text_size")).floatValue() / ((Float) transitionValues2.values.get("text_size")).floatValue();
+                    transitionValues.view.setScaleX(floatValue);
+                    transitionValues.view.setScaleY(floatValue);
+                    if (createAnimator != null) {
+                        animatorSet.playTogether(new Animator[]{createAnimator});
+                    }
+                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(transitionValues.view, View.SCALE_X, new float[]{1.0f})});
+                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(transitionValues.view, View.SCALE_Y, new float[]{1.0f})});
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationStart(Animator animator) {
+                            super.onAnimationStart(animator);
+                            transitionValues.view.setLayerType(2, (Paint) null);
+                        }
+
+                        public void onAnimationEnd(Animator animator) {
+                            super.onAnimationEnd(animator);
+                            transitionValues.view.setLayerType(0, (Paint) null);
+                        }
+                    });
+                    return animatorSet;
+                }
+            });
+            this.centerScale = false;
+            transitionSet.setDuration(220);
+            transitionSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            TransitionManager.beginDelayedTransition(this, transitionSet);
+        }
     }
 }

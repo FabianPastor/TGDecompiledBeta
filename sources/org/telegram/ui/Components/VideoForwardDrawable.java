@@ -12,10 +12,13 @@ public class VideoForwardDrawable extends Drawable {
     private static final int[] playPath = {10, 7, 26, 16, 10, 25};
     private boolean animating;
     private float animationProgress;
+    private Path clippingPath;
     private VideoForwardDrawableDelegate delegate;
     private float enterAnimationProgress;
     private boolean isOneShootAnimation;
+    private boolean isRound;
     private long lastAnimationTime;
+    private int lastClippingPath;
     private boolean leftSide;
     private Paint paint = new Paint(1);
     private Path path1 = new Path();
@@ -43,7 +46,8 @@ public class VideoForwardDrawable extends Drawable {
         }
     }
 
-    public VideoForwardDrawable() {
+    public VideoForwardDrawable(boolean z) {
+        this.isRound = z;
         this.paint.setColor(-1);
         this.textPaint.setColor(-1);
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
@@ -112,8 +116,8 @@ public class VideoForwardDrawable extends Drawable {
         this.paint.setColorFilter(colorFilter);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x025d  */
-    /* JADX WARNING: Removed duplicated region for block: B:93:0x0260  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x029a  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x029d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void draw(android.graphics.Canvas r12) {
         /*
@@ -148,16 +152,50 @@ public class VideoForwardDrawable extends Drawable {
             int r1 = r1 + r3
         L_0x003f:
             r12.save()
+            boolean r3 = r11.isRound
+            if (r3 == 0) goto L_0x007f
+            android.graphics.Path r3 = r11.clippingPath
+            if (r3 != 0) goto L_0x0051
+            android.graphics.Path r3 = new android.graphics.Path
+            r3.<init>()
+            r11.clippingPath = r3
+        L_0x0051:
+            int r3 = r0.left
+            int r5 = r0.top
+            int r5 = r5 << 8
+            int r3 = r3 + r5
+            int r5 = r0.bottom
+            int r5 = r5 << 16
+            int r3 = r3 + r5
+            int r5 = r0.right
+            int r5 = r5 << 24
+            int r3 = r3 + r5
+            int r5 = r11.lastClippingPath
+            if (r5 == r3) goto L_0x0079
+            android.graphics.Path r5 = r11.clippingPath
+            r5.reset()
+            android.graphics.RectF r5 = org.telegram.messenger.AndroidUtilities.rectTmp
+            r5.set(r0)
+            android.graphics.Path r6 = r11.clippingPath
+            android.graphics.Path$Direction r7 = android.graphics.Path.Direction.CCW
+            r6.addOval(r5, r7)
+            r11.lastClippingPath = r3
+        L_0x0079:
+            android.graphics.Path r3 = r11.clippingPath
+            r12.clipPath(r3)
+            goto L_0x008a
+        L_0x007f:
             int r3 = r0.left
             int r5 = r0.top
             int r6 = r0.right
             int r7 = r0.bottom
             r12.clipRect(r3, r5, r6, r7)
+        L_0x008a:
             boolean r3 = r11.isOneShootAnimation
             r5 = 1117782016(0x42a00000, float:80.0)
             r6 = 1132396544(0x437var_, float:255.0)
             r7 = 1065353216(0x3var_, float:1.0)
-            if (r3 != 0) goto L_0x006c
+            if (r3 != 0) goto L_0x00a9
             android.graphics.Paint r3 = r11.paint
             float r8 = r11.enterAnimationProgress
             float r8 = r8 * r5
@@ -168,13 +206,13 @@ public class VideoForwardDrawable extends Drawable {
             float r5 = r5 * r6
             int r5 = (int) r5
             r3.setAlpha(r5)
-            goto L_0x00af
-        L_0x006c:
+            goto L_0x00ec
+        L_0x00a9:
             float r3 = r11.animationProgress
             r8 = 1060320051(0x3var_, float:0.7)
             r9 = 1050253722(0x3e99999a, float:0.3)
             int r10 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
-            if (r10 > 0) goto L_0x0095
+            if (r10 > 0) goto L_0x00d2
             android.graphics.Paint r8 = r11.paint
             float r3 = r3 / r9
             float r3 = java.lang.Math.min(r7, r3)
@@ -188,8 +226,8 @@ public class VideoForwardDrawable extends Drawable {
             float r5 = r5 * r6
             int r5 = (int) r5
             r3.setAlpha(r5)
-            goto L_0x00af
-        L_0x0095:
+            goto L_0x00ec
+        L_0x00d2:
             android.graphics.Paint r10 = r11.paint
             float r3 = r3 - r8
             float r3 = r3 / r9
@@ -205,7 +243,7 @@ public class VideoForwardDrawable extends Drawable {
             float r5 = r5 * r6
             int r5 = (int) r5
             r3.setAlpha(r5)
-        L_0x00af:
+        L_0x00ec:
             int r3 = r0.width()
             int r5 = r0.height()
             int r3 = java.lang.Math.max(r3, r5)
@@ -213,12 +251,12 @@ public class VideoForwardDrawable extends Drawable {
             boolean r5 = r11.leftSide
             r8 = -1
             r9 = 1
-            if (r5 == 0) goto L_0x00c5
+            if (r5 == 0) goto L_0x0102
             r5 = -1
-            goto L_0x00c6
-        L_0x00c5:
+            goto L_0x0103
+        L_0x0102:
             r5 = 1
-        L_0x00c6:
+        L_0x0103:
             int r3 = r3 * r5
             int r3 = r3 + r1
             float r3 = (float) r3
@@ -234,14 +272,14 @@ public class VideoForwardDrawable extends Drawable {
             r12.drawCircle(r3, r4, r0, r5)
             r12.restore()
             java.lang.String r0 = r11.timeStr
-            if (r0 == 0) goto L_0x010b
+            if (r0 == 0) goto L_0x0148
             int r3 = r11.getIntrinsicWidth()
             boolean r4 = r11.leftSide
-            if (r4 == 0) goto L_0x00f4
-            goto L_0x00f5
-        L_0x00f4:
+            if (r4 == 0) goto L_0x0131
+            goto L_0x0132
+        L_0x0131:
             r8 = 1
-        L_0x00f5:
+        L_0x0132:
             int r3 = r3 * r8
             int r3 = r3 + r1
             float r3 = (float) r3
@@ -253,10 +291,10 @@ public class VideoForwardDrawable extends Drawable {
             float r4 = (float) r4
             android.text.TextPaint r5 = r11.textPaint
             r12.drawText(r0, r3, r4, r5)
-        L_0x010b:
+        L_0x0148:
             r12.save()
             boolean r0 = r11.leftSide
-            if (r0 == 0) goto L_0x0120
+            if (r0 == 0) goto L_0x015d
             r0 = 1127481344(0x43340000, float:180.0)
             float r3 = (float) r1
             int r4 = r11.getIntrinsicHeight()
@@ -264,7 +302,7 @@ public class VideoForwardDrawable extends Drawable {
             int r4 = r4 + r2
             float r4 = (float) r4
             r12.rotate(r0, r3, r4)
-        L_0x0120:
+        L_0x015d:
             float r0 = (float) r1
             float r1 = (float) r2
             r12.translate(r0, r1)
@@ -274,34 +312,34 @@ public class VideoForwardDrawable extends Drawable {
             r3 = 1053609165(0x3ecccccd, float:0.4)
             r4 = 1045220557(0x3e4ccccd, float:0.2)
             int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 > 0) goto L_0x0160
+            if (r1 > 0) goto L_0x019d
             int r1 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r1 >= 0) goto L_0x0143
+            if (r1 >= 0) goto L_0x0180
             float r0 = r0 * r6
             float r0 = r0 / r4
             int r0 = (int) r0
             int r0 = java.lang.Math.min(r2, r0)
-            goto L_0x014a
-        L_0x0143:
+            goto L_0x0187
+        L_0x0180:
             float r0 = r0 - r3
             float r0 = r0 / r4
             float r0 = r7 - r0
             float r0 = r0 * r6
             int r0 = (int) r0
-        L_0x014a:
+        L_0x0187:
             boolean r1 = r11.isOneShootAnimation
-            if (r1 != 0) goto L_0x0154
+            if (r1 != 0) goto L_0x0191
             float r0 = (float) r0
             float r1 = r11.enterAnimationProgress
             float r0 = r0 * r1
             int r0 = (int) r0
-        L_0x0154:
+        L_0x0191:
             android.graphics.Paint r1 = r11.paint
             r1.setAlpha(r0)
             android.graphics.Path r0 = r11.path1
             android.graphics.Paint r1 = r11.paint
             r12.drawPath(r0, r1)
-        L_0x0160:
+        L_0x019d:
             r0 = 1099956224(0x41900000, float:18.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r0)
             float r1 = (float) r1
@@ -309,108 +347,108 @@ public class VideoForwardDrawable extends Drawable {
             r12.translate(r1, r5)
             float r1 = r11.animationProgress
             int r8 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r8 < 0) goto L_0x01a3
+            if (r8 < 0) goto L_0x01e0
             r8 = 1061997773(0x3f4ccccd, float:0.8)
             int r8 = (r1 > r8 ? 1 : (r1 == r8 ? 0 : -1))
-            if (r8 > 0) goto L_0x01a3
+            if (r8 > 0) goto L_0x01e0
             float r1 = r1 - r4
             int r8 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r8 >= 0) goto L_0x0186
+            if (r8 >= 0) goto L_0x01c3
             float r1 = r1 * r6
             float r1 = r1 / r4
             int r1 = (int) r1
             int r1 = java.lang.Math.min(r2, r1)
-            goto L_0x018d
-        L_0x0186:
+            goto L_0x01ca
+        L_0x01c3:
             float r1 = r1 - r3
             float r1 = r1 / r4
             float r1 = r7 - r1
             float r1 = r1 * r6
             int r1 = (int) r1
-        L_0x018d:
+        L_0x01ca:
             boolean r8 = r11.isOneShootAnimation
-            if (r8 != 0) goto L_0x0197
+            if (r8 != 0) goto L_0x01d4
             float r1 = (float) r1
             float r8 = r11.enterAnimationProgress
             float r1 = r1 * r8
             int r1 = (int) r1
-        L_0x0197:
+        L_0x01d4:
             android.graphics.Paint r8 = r11.paint
             r8.setAlpha(r1)
             android.graphics.Path r1 = r11.path1
             android.graphics.Paint r8 = r11.paint
             r12.drawPath(r1, r8)
-        L_0x01a3:
+        L_0x01e0:
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             float r0 = (float) r0
             r12.translate(r0, r5)
             float r0 = r11.animationProgress
             int r1 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r1 < 0) goto L_0x01e0
+            if (r1 < 0) goto L_0x021d
             int r1 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-            if (r1 > 0) goto L_0x01e0
+            if (r1 > 0) goto L_0x021d
             float r0 = r0 - r3
             int r1 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r1 >= 0) goto L_0x01c3
+            if (r1 >= 0) goto L_0x0200
             float r0 = r0 * r6
             float r0 = r0 / r4
             int r0 = (int) r0
             int r0 = java.lang.Math.min(r2, r0)
-            goto L_0x01ca
-        L_0x01c3:
+            goto L_0x0207
+        L_0x0200:
             float r0 = r0 - r3
             float r0 = r0 / r4
             float r0 = r7 - r0
             float r0 = r0 * r6
             int r0 = (int) r0
-        L_0x01ca:
+        L_0x0207:
             boolean r1 = r11.isOneShootAnimation
-            if (r1 != 0) goto L_0x01d4
+            if (r1 != 0) goto L_0x0211
             float r0 = (float) r0
             float r1 = r11.enterAnimationProgress
             float r0 = r0 * r1
             int r0 = (int) r0
-        L_0x01d4:
+        L_0x0211:
             android.graphics.Paint r1 = r11.paint
             r1.setAlpha(r0)
             android.graphics.Path r0 = r11.path1
             android.graphics.Paint r1 = r11.paint
             r12.drawPath(r0, r1)
-        L_0x01e0:
+        L_0x021d:
             r12.restore()
             boolean r12 = r11.animating
-            if (r12 == 0) goto L_0x0266
+            if (r12 == 0) goto L_0x02a3
             long r0 = java.lang.System.currentTimeMillis()
             long r2 = r11.lastAnimationTime
             long r2 = r0 - r2
             r8 = 17
             int r12 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
-            if (r12 <= 0) goto L_0x01f6
+            if (r12 <= 0) goto L_0x0233
             r2 = r8
-        L_0x01f6:
+        L_0x0233:
             r11.lastAnimationTime = r0
             float r12 = r11.animationProgress
             int r0 = (r12 > r7 ? 1 : (r12 == r7 ? 0 : -1))
-            if (r0 >= 0) goto L_0x0231
+            if (r0 >= 0) goto L_0x026e
             float r0 = (float) r2
             r1 = 1145569280(0x44480000, float:800.0)
             float r0 = r0 / r1
             float r12 = r12 + r0
             r11.animationProgress = r12
             boolean r0 = r11.isOneShootAnimation
-            if (r0 != 0) goto L_0x0217
+            if (r0 != 0) goto L_0x0254
             int r12 = (r12 > r7 ? 1 : (r12 == r7 ? 0 : -1))
-            if (r12 < 0) goto L_0x022e
+            if (r12 < 0) goto L_0x026b
             boolean r12 = r11.showing
-            if (r12 == 0) goto L_0x0214
+            if (r12 == 0) goto L_0x0251
             r11.animationProgress = r5
-            goto L_0x022e
-        L_0x0214:
+            goto L_0x026b
+        L_0x0251:
             r11.animationProgress = r7
-            goto L_0x022e
-        L_0x0217:
+            goto L_0x026b
+        L_0x0254:
             int r12 = (r12 > r7 ? 1 : (r12 == r7 ? 0 : -1))
-            if (r12 < 0) goto L_0x022e
+            if (r12 < 0) goto L_0x026b
             r11.animationProgress = r5
             r12 = 0
             r11.animating = r12
@@ -419,42 +457,42 @@ public class VideoForwardDrawable extends Drawable {
             r12 = 0
             r11.timeStr = r12
             org.telegram.ui.Components.VideoForwardDrawable$VideoForwardDrawableDelegate r12 = r11.delegate
-            if (r12 == 0) goto L_0x022e
+            if (r12 == 0) goto L_0x026b
             r12.onAnimationEnd()
-        L_0x022e:
+        L_0x026b:
             r11.invalidate()
-        L_0x0231:
+        L_0x026e:
             boolean r12 = r11.isOneShootAnimation
-            if (r12 != 0) goto L_0x0266
+            if (r12 != 0) goto L_0x02a3
             boolean r12 = r11.showing
             r0 = 1037726734(0x3dda740e, float:0.10666667)
-            if (r12 == 0) goto L_0x0249
+            if (r12 == 0) goto L_0x0286
             float r1 = r11.enterAnimationProgress
             int r2 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1))
-            if (r2 == 0) goto L_0x0249
+            if (r2 == 0) goto L_0x0286
             float r1 = r1 + r0
             r11.enterAnimationProgress = r1
             r11.invalidate()
-            goto L_0x0257
-        L_0x0249:
-            if (r12 != 0) goto L_0x0257
+            goto L_0x0294
+        L_0x0286:
+            if (r12 != 0) goto L_0x0294
             float r12 = r11.enterAnimationProgress
             int r1 = (r12 > r5 ? 1 : (r12 == r5 ? 0 : -1))
-            if (r1 == 0) goto L_0x0257
+            if (r1 == 0) goto L_0x0294
             float r12 = r12 - r0
             r11.enterAnimationProgress = r12
             r11.invalidate()
-        L_0x0257:
+        L_0x0294:
             float r12 = r11.enterAnimationProgress
             int r0 = (r12 > r5 ? 1 : (r12 == r5 ? 0 : -1))
-            if (r0 >= 0) goto L_0x0260
+            if (r0 >= 0) goto L_0x029d
             r11.enterAnimationProgress = r5
-            goto L_0x0266
-        L_0x0260:
+            goto L_0x02a3
+        L_0x029d:
             int r12 = (r12 > r7 ? 1 : (r12 == r7 ? 0 : -1))
-            if (r12 <= 0) goto L_0x0266
+            if (r12 <= 0) goto L_0x02a3
             r11.enterAnimationProgress = r7
-        L_0x0266:
+        L_0x02a3:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.VideoForwardDrawable.draw(android.graphics.Canvas):void");

@@ -748,7 +748,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r16)
             r0.setBackgroundColor(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131165462(0x7var_, float:1.7945142E38)
+            r1 = 2131165463(0x7var_, float:1.7945144E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r17 = "dialogTextBlack"
@@ -777,7 +777,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.selectedMenuItem = r0
             r0.setLongClickEnabled(r10)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
-            r1 = 2131165469(0x7var_d, float:1.7945156E38)
+            r1 = 2131165470(0x7var_e, float:1.7945158E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             r1 = 2131623987(0x7f0e0033, float:1.887514E38)
@@ -832,7 +832,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.doneItem = r15
             r15.setLongClickEnabled(r10)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.doneItem
-            r1 = 2131625040(0x7f0e0450, float:1.8877277E38)
+            r1 = 2131625041(0x7f0e0451, float:1.8877279E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -862,10 +862,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.searchItem = r0
             r0.setLongClickEnabled(r10)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131165472(0x7var_, float:1.7945162E38)
+            r1 = 2131165473(0x7var_, float:1.7945164E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131627343(0x7f0e0d4f, float:1.8881948E38)
+            r1 = 2131627344(0x7f0e0d50, float:1.888195E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -1153,7 +1153,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.writeButtonDrawable = r2
             if (r4 >= r5) goto L_0x04e7
             android.content.res.Resources r2 = r32.getResources()
-            r3 = 2131165413(0x7var_e5, float:1.7945042E38)
+            r3 = 2131165414(0x7var_e6, float:1.7945044E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter

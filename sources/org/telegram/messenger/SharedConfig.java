@@ -464,7 +464,7 @@ public class SharedConfig {
             boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x0329 }
             smoothKeyboard = r2     // Catch:{ all -> 0x0329 }
             java.lang.String r2 = "pauseMusicOnRecord"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x0329 }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x0329 }
             pauseMusicOnRecord = r2     // Catch:{ all -> 0x0329 }
             java.lang.String r2 = "streamAllVideo"
             boolean r7 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ all -> 0x0329 }
@@ -617,7 +617,7 @@ public class SharedConfig {
     public static boolean isAppUpdateAvailable() {
         int i;
         TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate = pendingAppUpdate;
-        if (tLRPC$TL_help_appUpdate == null || tLRPC$TL_help_appUpdate.document == null || !AndroidUtilities.isStandaloneApp()) {
+        if (tLRPC$TL_help_appUpdate == null || tLRPC$TL_help_appUpdate.document == null || !BuildVars.isStandaloneApp()) {
             return false;
         }
         try {

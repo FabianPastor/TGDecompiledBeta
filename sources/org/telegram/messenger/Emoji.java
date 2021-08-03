@@ -315,7 +315,6 @@ public class Emoji {
         }
 
         public void setAlpha(int i) {
-            Emoji.placeholderPaint.setAlpha(i);
             paint.setAlpha(i);
         }
 

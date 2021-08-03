@@ -319,9 +319,12 @@ public final class Bulletin {
             this.layout.onExitTransitionStart();
             this.layout.onExitTransitionEnd();
             this.layout.onHide();
-            FrameLayout frameLayout = this.containerLayout;
-            if (frameLayout != null) {
-                frameLayout.removeView(this.parentLayout);
+            if (this.containerLayout != null) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public final void run() {
+                        Bulletin.this.lambda$hide$2$Bulletin();
+                    }
+                });
             }
             this.layout.onDetach();
         }
@@ -350,6 +353,12 @@ public final class Bulletin {
         if (delegate != null) {
             delegate.onOffsetChange(((float) this.layout.getHeight()) - f.floatValue());
         }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$hide$2 */
+    public /* synthetic */ void lambda$hide$2$Bulletin() {
+        this.containerLayout.removeView(this.parentLayout);
     }
 
     public boolean isShowing() {

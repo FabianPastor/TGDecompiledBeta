@@ -618,7 +618,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165911(0x7var_d7, float:1.7946052E38)
+                r14 = 2131165922(0x7var_e2, float:1.7946075E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x0113
@@ -686,7 +686,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166057(0x7var_, float:1.7946349E38)
+                r11 = 2131166069(0x7var_, float:1.7946373E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -707,7 +707,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166055(0x7var_, float:1.7946345E38)
+                r10 = 2131166067(0x7var_, float:1.7946369E38)
                 r8.setImageResource(r10)
                 org.telegram.ui.Components.RLottieImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -719,7 +719,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627462(0x7f0e0dc6, float:1.888219E38)
+                r8 = 2131627464(0x7f0e0dc8, float:1.8882193E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -760,7 +760,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627466(0x7f0e0dca, float:1.8882197E38)
+                r8 = 2131627468(0x7f0e0dcc, float:1.8882201E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -878,14 +878,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 int r1 = r0.currentType
                 if (r1 != r3) goto L_0x0331
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625207(0x7f0e04f7, float:1.8877615E38)
+                r2 = 2131625208(0x7f0e04f8, float:1.8877617E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x033f
             L_0x0331:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625206(0x7f0e04f6, float:1.8877613E38)
+                r2 = 2131625207(0x7f0e04f7, float:1.8877615E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1778,7 +1778,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         if (r2 != r6) goto L_0x0098
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627597(0x7f0e0e4d, float:1.8882463E38)
+                                        r3 = 2131627599(0x7f0e0e4f, float:1.8882467E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -1791,7 +1791,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                     L_0x0078:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624641(0x7f0e02c1, float:1.8876467E38)
+                                        r3 = 2131624642(0x7f0e02c2, float:1.887647E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -1878,7 +1878,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         if (r0 != r4) goto L_0x015a
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624646(0x7f0e02c6, float:1.8876478E38)
+                                        r1 = 2131624647(0x7f0e02c7, float:1.887648E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -1886,7 +1886,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                     L_0x015a:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131627458(0x7f0e0dc2, float:1.888218E38)
+                                        r1 = 2131627460(0x7f0e0dc4, float:1.8882185E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)

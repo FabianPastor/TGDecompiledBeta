@@ -984,10 +984,6 @@ public class ViewPagerFixed extends FrameLayout {
                     startSmoothScroll(r2);
                 }
 
-                public int scrollHorizontallyBy(int i, RecyclerView.Recycler recycler, RecyclerView.State state) {
-                    return super.scrollHorizontallyBy(i, recycler, state);
-                }
-
                 public void onInitializeAccessibilityNodeInfo(RecyclerView.Recycler recycler, RecyclerView.State state, AccessibilityNodeInfoCompat accessibilityNodeInfoCompat) {
                     super.onInitializeAccessibilityNodeInfo(recycler, state, accessibilityNodeInfoCompat);
                     if (TabsView.this.isInHiddenMode) {

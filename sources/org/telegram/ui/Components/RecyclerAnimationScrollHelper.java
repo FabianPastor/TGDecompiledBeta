@@ -225,6 +225,7 @@ public class RecyclerAnimationScrollHelper {
                                     RecyclerAnimationScrollHelper.this.animationCallback.recycleView(view);
                                 }
                             }
+                            RecyclerAnimationScrollHelper.this.recyclerView.setScrollEnabled(true);
                             RecyclerAnimationScrollHelper.this.recyclerView.setVerticalScrollBarEnabled(true);
                             if (BuildVars.DEBUG_VERSION) {
                                 if (RecyclerAnimationScrollHelper.this.recyclerView.mChildHelper.getChildCount() != RecyclerAnimationScrollHelper.this.recyclerView.getChildCount()) {

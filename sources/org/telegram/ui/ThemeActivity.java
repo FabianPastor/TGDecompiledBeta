@@ -1915,7 +1915,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0161:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0177 }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627506(0x7f0e0df2, float:1.8882278E38)
+                r0 = 2131627508(0x7f0e0df4, float:1.8882282E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x0177 }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x0177 }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -1958,21 +1958,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625185(0x7f0e04e1, float:1.887757E38)
+                r10 = 2131625186(0x7f0e04e2, float:1.8877573E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625184(0x7f0e04e0, float:1.8877569E38)
+                r10 = 2131625185(0x7f0e04e1, float:1.887757E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131625126(0x7f0e04a6, float:1.8877451E38)
+                r10 = 2131625127(0x7f0e04a7, float:1.8877453E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$4GGCTaKlztIhin-v1UmHzaQzF6I r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$4GGCTaKlztIhin-v1UmHzaQzF6I
                 r0.<init>(r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624657(0x7f0e02d1, float:1.88765E38)
+                r8 = 2131624658(0x7f0e02d2, float:1.8876502E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)
