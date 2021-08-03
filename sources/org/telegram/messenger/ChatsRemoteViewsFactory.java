@@ -785,13 +785,13 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             java.lang.String r9 = "setEnabled"
             if (r6 == 0) goto L_0x05b4
             r13.setBoolean(r4, r9, r8)
-            r6 = 2131166163(0x7var_d3, float:1.7946564E38)
+            r6 = 2131166165(0x7var_d5, float:1.7946568E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05c3
         L_0x05b4:
             r6 = 1
             r13.setBoolean(r4, r9, r6)
-            r6 = 2131166162(0x7var_d2, float:1.7946562E38)
+            r6 = 2131166164(0x7var_d4, float:1.7946566E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05c3
         L_0x05bf:

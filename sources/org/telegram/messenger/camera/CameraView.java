@@ -488,8 +488,9 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     /* access modifiers changed from: private */
     /* renamed from: lambda$checkPreviewMatrix$0 */
     public /* synthetic */ void lambda$checkPreviewMatrix$0$CameraView() {
-        if (this.cameraThread.currentSession != null) {
-            int worldAngle = this.cameraThread.currentSession.getWorldAngle();
+        CameraGLThread cameraGLThread = this.cameraThread;
+        if (cameraGLThread != null && cameraGLThread.currentSession != null) {
+            int worldAngle = cameraGLThread.currentSession.getWorldAngle();
             android.opengl.Matrix.setIdentityM(this.mMVPMatrix, 0);
             if (worldAngle != 0) {
                 android.opengl.Matrix.rotateM(this.mMVPMatrix, 0, (float) worldAngle, 0.0f, 0.0f, 1.0f);

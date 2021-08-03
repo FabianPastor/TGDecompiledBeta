@@ -40,7 +40,6 @@ public class VoIPFloatingLayout extends FrameLayout {
     WindowInsets lastInsets;
     int lastW;
     float leftPadding;
-    /* access modifiers changed from: private */
     public boolean measuredAsFloatingMode;
     boolean moving;
     ValueAnimator mutedAnimator;
@@ -636,15 +635,16 @@ public class VoIPFloatingLayout extends FrameLayout {
             animate().setListener((Animator.AnimatorListener) null).cancel();
             getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 public boolean onPreDraw() {
-                    if (!VoIPFloatingLayout.this.measuredAsFloatingMode) {
-                        ValueAnimator valueAnimator = VoIPFloatingLayout.this.switchToFloatingModeAnimator;
+                    VoIPFloatingLayout voIPFloatingLayout = VoIPFloatingLayout.this;
+                    if (!voIPFloatingLayout.measuredAsFloatingMode) {
+                        ValueAnimator valueAnimator = voIPFloatingLayout.switchToFloatingModeAnimator;
                         if (valueAnimator != null) {
                             valueAnimator.cancel();
                         }
-                        VoIPFloatingLayout voIPFloatingLayout = VoIPFloatingLayout.this;
-                        voIPFloatingLayout.switchToFloatingModeAnimator = ValueAnimator.ofFloat(new float[]{voIPFloatingLayout.toFloatingModeProgress, 0.0f});
                         VoIPFloatingLayout voIPFloatingLayout2 = VoIPFloatingLayout.this;
-                        voIPFloatingLayout2.switchToFloatingModeAnimator.addUpdateListener(voIPFloatingLayout2.progressUpdateListener);
+                        voIPFloatingLayout2.switchToFloatingModeAnimator = ValueAnimator.ofFloat(new float[]{voIPFloatingLayout2.toFloatingModeProgress, 0.0f});
+                        VoIPFloatingLayout voIPFloatingLayout3 = VoIPFloatingLayout.this;
+                        voIPFloatingLayout3.switchToFloatingModeAnimator.addUpdateListener(voIPFloatingLayout3.progressUpdateListener);
                         VoIPFloatingLayout.this.switchToFloatingModeAnimator.setDuration(300);
                         VoIPFloatingLayout.this.switchToFloatingModeAnimator.start();
                         float measuredWidth = translationX2 - ((((float) VoIPFloatingLayout.this.getMeasuredWidth()) - (((float) VoIPFloatingLayout.this.getMeasuredWidth()) * 0.23f)) / 2.0f);
@@ -661,7 +661,7 @@ public class VoIPFloatingLayout extends FrameLayout {
                             }
                         }).scaleX(1.0f).scaleY(1.0f).translationX(0.0f).translationY(0.0f).alpha(1.0f).setDuration(300).setStartDelay(0).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
                     } else {
-                        boolean unused = VoIPFloatingLayout.this.floatingMode = false;
+                        boolean unused = voIPFloatingLayout.floatingMode = false;
                         VoIPFloatingLayout.this.requestLayout();
                     }
                     return false;

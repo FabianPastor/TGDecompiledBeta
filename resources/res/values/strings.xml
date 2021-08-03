@@ -3679,7 +3679,7 @@
     <string name="SpeedFast">Fast</string>
     <string name="SpeedNormal">Normal</string>
     <string name="SpeedSlow">Slow</string>
-    <string name="SpeedVeryFast">Vert fast</string>
+    <string name="SpeedVeryFast">Very fast</string>
     <string name="SpeedVerySlow">Very slow</string>
     <string name="Start">Start</string>
     <string name="StartDayAt">\'Start on\' MMM d \'at\' HH:mm</string>

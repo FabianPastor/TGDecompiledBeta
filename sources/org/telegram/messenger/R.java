@@ -1131,7 +1131,9 @@ public final class R {
         public static final int video_send_mute = NUM;
         public static final int video_send_unmute = NUM;
         public static final int videopreview = NUM;
-        public static final int voice2x = NUM;
+        public static final int voice_mini_0_5 = NUM;
+        public static final int voice_mini_1_5 = NUM;
+        public static final int voice_mini_2_0 = NUM;
         public static final int voice_muted_large = NUM;
         public static final int voice_unmuted_large = NUM;
         public static final int voice_volume_mini = NUM;

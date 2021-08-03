@@ -33,7 +33,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
@@ -148,20 +147,60 @@ public class EmbedBottomSheet extends BottomSheet {
         show(activity, messageObject, photoViewerProvider, str, str2, str3, str4, i, i2, -1, z);
     }
 
-    public static void show(Activity activity, MessageObject messageObject, PhotoViewer.PhotoViewerProvider photoViewerProvider, String str, String str2, String str3, String str4, int i, int i2, int i3, boolean z) {
-        EmbedBottomSheet embedBottomSheet = instance;
-        if (embedBottomSheet != null) {
-            embedBottomSheet.destroy();
-        }
-        if ((messageObject != null ? WebPlayerView.getYouTubeVideoId(str4) : null) != null) {
-            Activity activity2 = activity;
-            PhotoViewer.getInstance().setParentActivity(activity);
-            PhotoViewer.getInstance().openPhoto(messageObject, i3, (ChatActivity) null, 0, 0, photoViewerProvider);
-            return;
-        }
-        EmbedBottomSheet embedBottomSheet2 = new EmbedBottomSheet(activity, str, str2, str3, str4, i, i2, i3);
-        embedBottomSheet2.setCalcMandatoryInsets(z);
-        embedBottomSheet2.show();
+    /* JADX WARNING: Code restructure failed: missing block: B:4:0x000a, code lost:
+        r0 = r1.messageOwner.media;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static void show(android.app.Activity r10, org.telegram.messenger.MessageObject r11, org.telegram.ui.PhotoViewer.PhotoViewerProvider r12, java.lang.String r13, java.lang.String r14, java.lang.String r15, java.lang.String r16, int r17, int r18, int r19, boolean r20) {
+        /*
+            r1 = r11
+            org.telegram.ui.Components.EmbedBottomSheet r0 = instance
+            if (r0 == 0) goto L_0x0008
+            r0.destroy()
+        L_0x0008:
+            if (r1 == 0) goto L_0x0019
+            org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
+            org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
+            if (r0 == 0) goto L_0x0019
+            org.telegram.tgnet.TLRPC$WebPage r0 = r0.webpage
+            if (r0 == 0) goto L_0x0019
+            java.lang.String r0 = org.telegram.ui.Components.WebPlayerView.getYouTubeVideoId(r16)
+            goto L_0x001a
+        L_0x0019:
+            r0 = 0
+        L_0x001a:
+            if (r0 == 0) goto L_0x0035
+            org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.getInstance()
+            r2 = r10
+            r0.setParentActivity(r10)
+            org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.getInstance()
+            r3 = 0
+            r4 = 0
+            r6 = 0
+            r1 = r11
+            r2 = r19
+            r8 = r12
+            r0.openPhoto(r1, r2, r3, r4, r6, r8)
+            goto L_0x004f
+        L_0x0035:
+            r2 = r10
+            org.telegram.ui.Components.EmbedBottomSheet r0 = new org.telegram.ui.Components.EmbedBottomSheet
+            r1 = r0
+            r3 = r13
+            r4 = r14
+            r5 = r15
+            r6 = r16
+            r7 = r17
+            r8 = r18
+            r9 = r19
+            r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9)
+            r1 = r20
+            r0.setCalcMandatoryInsets(r1)
+            r0.show()
+        L_0x004f:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmbedBottomSheet.show(android.app.Activity, org.telegram.messenger.MessageObject, org.telegram.ui.PhotoViewer$PhotoViewerProvider, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, int, int, boolean):void");
     }
 
     /* JADX WARNING: Illegal instructions before constructor call */

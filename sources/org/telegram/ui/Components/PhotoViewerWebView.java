@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -37,17 +36,10 @@ public class PhotoViewerWebView extends FrameLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private TLRPC$WebPage currentWebpage;
     /* access modifiers changed from: private */
-    public View customView;
-    /* access modifiers changed from: private */
-    public WebChromeClient.CustomViewCallback customViewCallback;
-    /* access modifiers changed from: private */
-    public FrameLayout fullscreenVideoContainer;
-    /* access modifiers changed from: private */
     public boolean isYouTube;
     /* access modifiers changed from: private */
     public View pipItem;
-    /* access modifiers changed from: private */
-    public PipVideoView pipVideoView;
+    private PipVideoView pipVideoView;
     /* access modifiers changed from: private */
     public float playbackSpeed;
     /* access modifiers changed from: private */
@@ -60,6 +52,10 @@ public class PhotoViewerWebView extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void drawBlackBackground(Canvas canvas, int i, int i2) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void processTouch(MotionEvent motionEvent) {
     }
 
     private class YoutubeProxy {
@@ -96,17 +92,14 @@ public class PhotoViewerWebView extends FrameLayout {
     public PhotoViewerWebView(Context context, View view) {
         super(context);
         this.pipItem = view;
-        AnonymousClass1 r11 = new WebView(context) {
+        AnonymousClass1 r6 = new WebView(context) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
-                boolean onTouchEvent = super.onTouchEvent(motionEvent);
-                if (onTouchEvent) {
-                    motionEvent.getAction();
-                }
-                return onTouchEvent;
+                PhotoViewerWebView.this.processTouch(motionEvent);
+                return super.onTouchEvent(motionEvent);
             }
         };
-        this.webView = r11;
-        r11.getSettings().setJavaScriptEnabled(true);
+        this.webView = r6;
+        r6.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);
         int i = Build.VERSION.SDK_INT;
         if (i >= 17) {
@@ -116,35 +109,6 @@ public class PhotoViewerWebView extends FrameLayout {
             this.webView.getSettings().setMixedContentMode(0);
             CookieManager.getInstance().setAcceptThirdPartyCookies(this.webView, true);
         }
-        this.webView.setWebChromeClient(new WebChromeClient() {
-            public void onShowCustomView(View view, int i, WebChromeClient.CustomViewCallback customViewCallback) {
-                onShowCustomView(view, customViewCallback);
-            }
-
-            public void onShowCustomView(View view, WebChromeClient.CustomViewCallback customViewCallback) {
-                if (PhotoViewerWebView.this.customView == null && PhotoViewerWebView.this.pipVideoView == null) {
-                    PhotoViewerWebView.this.exitFromPip();
-                    View unused = PhotoViewerWebView.this.customView = view;
-                    PhotoViewerWebView.this.fullscreenVideoContainer.setVisibility(0);
-                    PhotoViewerWebView.this.fullscreenVideoContainer.addView(view, LayoutHelper.createFrame(-1, -1.0f));
-                    WebChromeClient.CustomViewCallback unused2 = PhotoViewerWebView.this.customViewCallback = customViewCallback;
-                    return;
-                }
-                customViewCallback.onCustomViewHidden();
-            }
-
-            public void onHideCustomView() {
-                super.onHideCustomView();
-                if (PhotoViewerWebView.this.customView != null) {
-                    PhotoViewerWebView.this.fullscreenVideoContainer.setVisibility(4);
-                    PhotoViewerWebView.this.fullscreenVideoContainer.removeView(PhotoViewerWebView.this.customView);
-                    if (PhotoViewerWebView.this.customViewCallback != null && !PhotoViewerWebView.this.customViewCallback.getClass().getName().contains(".chromium.")) {
-                        PhotoViewerWebView.this.customViewCallback.onCustomViewHidden();
-                    }
-                    View unused = PhotoViewerWebView.this.customView = null;
-                }
-            }
-        });
         this.webView.setWebViewClient(new WebViewClient() {
             public void onLoadResource(WebView webView, String str) {
                 super.onLoadResource(webView, str);
@@ -169,30 +133,21 @@ public class PhotoViewerWebView extends FrameLayout {
             }
         });
         addView(this.webView, LayoutHelper.createFrame(-1, -1, 51));
-        AnonymousClass4 r1 = new View(context) {
+        AnonymousClass3 r62 = new View(context) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 PhotoViewerWebView.this.drawBlackBackground(canvas, getMeasuredWidth(), getMeasuredHeight());
             }
         };
-        this.progressBarBlackBackground = r1;
-        r1.setBackgroundColor(-16777216);
+        this.progressBarBlackBackground = r62;
+        r62.setBackgroundColor(-16777216);
         this.progressBarBlackBackground.setVisibility(4);
         addView(this.progressBarBlackBackground, LayoutHelper.createFrame(-1, -1.0f));
         RadialProgressView radialProgressView = new RadialProgressView(context);
         this.progressBar = radialProgressView;
         radialProgressView.setVisibility(4);
         addView(this.progressBar, LayoutHelper.createFrame(-2, -2, 17));
-        FrameLayout frameLayout = new FrameLayout(context);
-        this.fullscreenVideoContainer = frameLayout;
-        frameLayout.setKeepScreenOn(true);
-        this.fullscreenVideoContainer.setBackgroundColor(-16777216);
-        if (i >= 21) {
-            this.fullscreenVideoContainer.setFitsSystemWindows(true);
-        }
-        addView(this.fullscreenVideoContainer, LayoutHelper.createFrame(-1, -1.0f));
-        this.fullscreenVideoContainer.setVisibility(4);
     }
 
     private void runJsCode(String str) {
@@ -237,6 +192,10 @@ public class PhotoViewerWebView extends FrameLayout {
         super.onMeasure(i, i2);
     }
 
+    public boolean isLoaded() {
+        return this.progressBar.getVisibility() != 0;
+    }
+
     public PipVideoView openInPip() {
         int i;
         boolean z = this.isYouTube && "inapp".equals(MessagesController.getInstance(this.currentAccount).youtubePipType);
@@ -250,9 +209,6 @@ public class PhotoViewerWebView extends FrameLayout {
         TLRPC$WebPage tLRPC$WebPage = this.currentWebpage;
         int i2 = tLRPC$WebPage.embed_width;
         pipVideoView2.show(activity, instance, (i2 == 0 || (i = tLRPC$WebPage.embed_height) == 0) ? 1.0f : ((float) i2) / ((float) i), 0, this.webView);
-        if (this.isYouTube) {
-            runJsCode("hideControls();");
-        }
         return this.pipVideoView;
     }
 
@@ -296,14 +252,14 @@ public class PhotoViewerWebView extends FrameLayout {
                             } else {
                                 i2 = Utilities.parseInt(str2).intValue();
                             }
-                            this.webView.loadDataWithBaseURL("https://messenger.telegram.org/", String.format(Locale.US, "<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var observer;   var videoEl;   var playing;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              \"onStateChange\" : \"onStateChange\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 1,                              \"showinfo\" : 0,                              \"modestbranding\" : 0,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function setPlaybackSpeed(speed) {        player.setPlaybackRate(speed);    }    function hideControls() {        playing = !videoEl.paused;       videoEl.controls = 0;       observer.observe(videoEl, {attributes: true});    }    function showControls() {        playing = !videoEl.paused;       observer.disconnect();       videoEl.controls = 1;    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onStateChange(event) {       if (event.data == YT.PlayerState.PLAYING && !posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();    }    window.onresize = function() {       player.setSize(window.innerWidth, window.innerHeight);       player.playVideo();    }    </script></body></html>", new Object[]{youTubeVideoId, Integer.valueOf(i2)}), "text/html", "UTF-8", "https://youtube.com");
+                            this.webView.loadDataWithBaseURL("https://messenger.telegram.org/", String.format(Locale.US, "<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              \"onStateChange\" : \"onStateChange\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 1,                              \"showinfo\" : 0,                              \"modestbranding\" : 0,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function setPlaybackSpeed(speed) {        player.setPlaybackRate(speed);    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onStateChange(event) {       if (event.data == YT.PlayerState.PLAYING && !posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();    }    window.onresize = function() {       player.setSize(window.innerWidth, window.innerHeight);       player.playVideo();    }    </script></body></html>", new Object[]{youTubeVideoId, Integer.valueOf(i2)}), "text/html", "UTF-8", "https://youtube.com");
                         }
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
                     }
                 }
                 i2 = 0;
-                this.webView.loadDataWithBaseURL("https://messenger.telegram.org/", String.format(Locale.US, "<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var observer;   var videoEl;   var playing;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              \"onStateChange\" : \"onStateChange\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 1,                              \"showinfo\" : 0,                              \"modestbranding\" : 0,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function setPlaybackSpeed(speed) {        player.setPlaybackRate(speed);    }    function hideControls() {        playing = !videoEl.paused;       videoEl.controls = 0;       observer.observe(videoEl, {attributes: true});    }    function showControls() {        playing = !videoEl.paused;       observer.disconnect();       videoEl.controls = 1;    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onStateChange(event) {       if (event.data == YT.PlayerState.PLAYING && !posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();    }    window.onresize = function() {       player.setSize(window.innerWidth, window.innerHeight);       player.playVideo();    }    </script></body></html>", new Object[]{youTubeVideoId, Integer.valueOf(i2)}), "text/html", "UTF-8", "https://youtube.com");
+                this.webView.loadDataWithBaseURL("https://messenger.telegram.org/", String.format(Locale.US, "<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              \"onStateChange\" : \"onStateChange\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 1,                              \"showinfo\" : 0,                              \"modestbranding\" : 0,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function setPlaybackSpeed(speed) {        player.setPlaybackRate(speed);    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onStateChange(event) {       if (event.data == YT.PlayerState.PLAYING && !posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();    }    window.onresize = function() {       player.setSize(window.innerWidth, window.innerHeight);       player.playVideo();    }    </script></body></html>", new Object[]{youTubeVideoId, Integer.valueOf(i2)}), "text/html", "UTF-8", "https://youtube.com");
             } catch (Exception e2) {
                 FileLog.e((Throwable) e2);
             }
@@ -341,9 +297,6 @@ public class PhotoViewerWebView extends FrameLayout {
                 } catch (Throwable th) {
                     FileLog.e(th);
                 }
-            }
-            if (this.isYouTube) {
-                runJsCode("showControls();");
             }
             ViewGroup viewGroup = (ViewGroup) this.webView.getParent();
             if (viewGroup != null) {

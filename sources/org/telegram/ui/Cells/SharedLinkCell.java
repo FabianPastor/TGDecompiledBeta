@@ -980,6 +980,10 @@ public class SharedLinkCell extends FrameLayout {
         requestLayout();
     }
 
+    public ImageReceiver getLinkImageView() {
+        return this.linkImageView;
+    }
+
     public void setDelegate(SharedLinkCellDelegate sharedLinkCellDelegate) {
         this.delegate = sharedLinkCellDelegate;
     }

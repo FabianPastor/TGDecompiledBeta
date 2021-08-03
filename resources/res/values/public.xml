@@ -1150,7 +1150,9 @@
     <public type="drawable" name="video_send_mute" id="NUM" />
     <public type="drawable" name="video_send_unmute" id="NUM" />
     <public type="drawable" name="videopreview" id="NUM" />
-    <public type="drawable" name="voice2x" id="NUM" />
+    <public type="drawable" name="voice_mini_0_5" id="NUM" />
+    <public type="drawable" name="voice_mini_1_5" id="NUM" />
+    <public type="drawable" name="voice_mini_2_0" id="NUM" />
     <public type="drawable" name="voice_muted_large" id="NUM" />
     <public type="drawable" name="voice_unmuted_large" id="NUM" />
     <public type="drawable" name="voice_volume_mini" id="NUM" />

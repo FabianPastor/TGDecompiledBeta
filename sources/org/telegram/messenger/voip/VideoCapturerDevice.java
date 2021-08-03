@@ -23,6 +23,7 @@ import org.webrtc.Logging;
 import org.webrtc.ScreenCapturerAndroid;
 import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.VideoCapturer;
+import org.webrtc.voiceengine.WebRtcAudioRecord;
 
 @TargetApi(18)
 public class VideoCapturerDevice {
@@ -309,6 +310,10 @@ public class VideoCapturerDevice {
                 this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(j);
                 this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
                 this.videoCapturer.startCapture(point.x, point.y, 30);
+                WebRtcAudioRecord webRtcAudioRecord = WebRtcAudioRecord.Instance;
+                if (webRtcAudioRecord != null) {
+                    webRtcAudioRecord.initDeviceAudioRecord(((ScreenCapturerAndroid) this.videoCapturer).getMediaProjection());
+                }
             }
         }
     }
@@ -454,6 +459,10 @@ public class VideoCapturerDevice {
     /* access modifiers changed from: private */
     /* renamed from: lambda$onDestroy$8 */
     public /* synthetic */ void lambda$onDestroy$8$VideoCapturerDevice() {
+        WebRtcAudioRecord webRtcAudioRecord;
+        if ((this.videoCapturer instanceof ScreenCapturerAndroid) && (webRtcAudioRecord = WebRtcAudioRecord.Instance) != null) {
+            webRtcAudioRecord.stopDeviceAudioRecord();
+        }
         VideoCapturer videoCapturer2 = this.videoCapturer;
         if (videoCapturer2 != null) {
             try {

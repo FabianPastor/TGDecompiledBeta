@@ -910,10 +910,9 @@ public class PasscodeView extends FrameLayout {
                     this.numbersFrameLayout.setVisibility(4);
                 }
                 AndroidUtilities.hideKeyboard(this.passwordEditText);
-                AndroidUtilities.cancelRunOnUIThread(this.checkRunnable);
-                AndroidUtilities.runOnUIThread(this.checkRunnable, 100);
-                return;
             }
+            AndroidUtilities.cancelRunOnUIThread(this.checkRunnable);
+            AndroidUtilities.runOnUIThread(this.checkRunnable, 100);
             return;
         }
         AndroidUtilities.cancelRunOnUIThread(this.checkRunnable);

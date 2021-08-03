@@ -1392,6 +1392,9 @@ public class LocaleController {
         if (i < 604800) {
             return formatPluralString("Days", ((i / 60) / 60) / 24);
         }
+        if (i >= 2592000 && i <= 2678400) {
+            return formatPluralString("Months", (((i / 60) / 60) / 24) / 30);
+        }
         int i2 = ((i / 60) / 60) / 24;
         if (i % 7 == 0) {
             return formatPluralString("Weeks", i2 / 7);

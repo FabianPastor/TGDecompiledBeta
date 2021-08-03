@@ -251,7 +251,7 @@ public class ActionBarMenuItem extends FrameLayout {
                         }
                     }
                     this.popupWindow.dismiss(this.allowCloseAnimation);
-                } else {
+                } else if (this.showSubmenuByMove) {
                     this.popupWindow.dismiss();
                 }
             }

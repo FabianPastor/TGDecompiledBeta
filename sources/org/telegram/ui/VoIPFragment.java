@@ -1251,7 +1251,10 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
         float var_ = (var_ * var_) + (var_ * floatValue);
         this.callingUserTextureView.setTranslationX(var_);
         this.callingUserTextureView.setTranslationY(var_);
-        this.callingUserTextureView.setRoundCorners(((floatValue * ((float) AndroidUtilities.dp(4.0f))) * 1.0f) / var_);
+        this.callingUserTextureView.setRoundCorners(((((float) AndroidUtilities.dp(4.0f)) * floatValue) * 1.0f) / var_);
+        if (!this.currentUserCameraFloatingLayout.measuredAsFloatingMode) {
+            this.currentUserTextureView.setScreenshareMiniProgress(floatValue, false);
+        }
         this.callingUserPhotoView.setScaleX(var_);
         this.callingUserPhotoView.setScaleY(var_);
         this.callingUserPhotoView.setTranslationX(var_);
@@ -1306,159 +1309,101 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Can't fix incorrect switch cases order */
-    /* JADX WARNING: Code restructure failed: missing block: B:39:0x0082, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:18:0x004b, code lost:
         r11 = true;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x02d8  */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x0303  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x0316  */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x0318  */
-    /* JADX WARNING: Removed duplicated region for block: B:128:0x0324  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x0326  */
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x0342  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0344  */
-    /* JADX WARNING: Removed duplicated region for block: B:142:0x0355  */
-    /* JADX WARNING: Removed duplicated region for block: B:143:0x0357  */
-    /* JADX WARNING: Removed duplicated region for block: B:165:0x0394  */
-    /* JADX WARNING: Removed duplicated region for block: B:168:0x03a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x0402  */
-    /* JADX WARNING: Removed duplicated region for block: B:199:0x043d  */
-    /* JADX WARNING: Removed duplicated region for block: B:202:0x0449  */
-    /* JADX WARNING: Removed duplicated region for block: B:205:0x0466  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x0479  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x047b  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x048f  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0491  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x0497  */
-    /* JADX WARNING: Removed duplicated region for block: B:277:0x05a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x05cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x05e0  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x05f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:295:0x064e A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x0294  */
+    /* JADX WARNING: Removed duplicated region for block: B:277:0x05a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x0259 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x025a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateViewState() {
         /*
-            r20 = this;
-            r0 = r20
+            r19 = this;
+            r0 = r19
             boolean r1 = r0.isFinished
-            if (r1 != 0) goto L_0x0699
+            if (r1 != 0) goto L_0x069c
             boolean r1 = r0.switchingToPip
-            if (r1 != 0) goto L_0x0699
-            org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r1 = r0.previewDialog
-            if (r1 == 0) goto L_0x0010
-            goto L_0x0699
-        L_0x0010:
+            if (r1 == 0) goto L_0x000c
+            goto L_0x069c
+        L_0x000c:
             r1 = 0
             r0.lockOnScreen = r1
             int r2 = r0.previousState
             r3 = -1
             r4 = 1
-            if (r2 == r3) goto L_0x001b
+            if (r2 == r3) goto L_0x0017
             r2 = 1
-            goto L_0x001c
-        L_0x001b:
+            goto L_0x0018
+        L_0x0017:
             r2 = 0
-        L_0x001c:
+        L_0x0018:
             org.telegram.messenger.voip.VoIPService r3 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            r5 = 2
-            if (r3 == 0) goto L_0x0048
-            int r6 = r3.getRemoteVideoState()
-            if (r6 != r5) goto L_0x002b
-            r6 = 1
-            goto L_0x002c
-        L_0x002b:
-            r6 = 0
-        L_0x002c:
-            r0.callingUserIsVideo = r6
-            int r6 = r3.getVideoState(r1)
-            if (r6 == r5) goto L_0x003d
-            int r6 = r3.getVideoState(r1)
-            if (r6 != r4) goto L_0x003b
-            goto L_0x003d
-        L_0x003b:
-            r6 = 0
-            goto L_0x003e
-        L_0x003d:
-            r6 = 1
-        L_0x003e:
-            r0.currentUserIsVideo = r6
-            if (r6 == 0) goto L_0x0048
-            boolean r6 = r0.isVideoCall
-            if (r6 != 0) goto L_0x0048
-            r0.isVideoCall = r4
-        L_0x0048:
-            if (r2 == 0) goto L_0x0054
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r6 = r0.currentUserCameraFloatingLayout
-            r6.saveRelatedPosition()
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r6 = r0.callingUserMiniFloatingLayout
-            r6.saveRelatedPosition()
-        L_0x0054:
-            int r6 = r0.currentState
-            r7 = 5
-            r8 = 3
+            int r5 = r0.currentState
+            r6 = 5
+            r7 = 3
+            r8 = 2
             r9 = 0
-            if (r6 == r4) goto L_0x0279
-            if (r6 == r5) goto L_0x0279
-            if (r6 == r8) goto L_0x0267
+            if (r5 == r4) goto L_0x0242
+            if (r5 == r8) goto L_0x0242
+            if (r5 == r7) goto L_0x0230
             r10 = 4
-            if (r6 == r10) goto L_0x0128
-            if (r6 == r7) goto L_0x0267
-            switch(r6) {
-                case 11: goto L_0x0117;
-                case 12: goto L_0x0107;
-                case 13: goto L_0x00f7;
-                case 14: goto L_0x00e7;
-                case 15: goto L_0x0095;
-                case 16: goto L_0x0085;
-                case 17: goto L_0x0069;
-                default: goto L_0x0067;
+            if (r5 == r10) goto L_0x00f1
+            if (r5 == r6) goto L_0x0230
+            switch(r5) {
+                case 11: goto L_0x00e0;
+                case 12: goto L_0x00d0;
+                case 13: goto L_0x00c0;
+                case 14: goto L_0x00b0;
+                case 15: goto L_0x005e;
+                case 16: goto L_0x004e;
+                case 17: goto L_0x0032;
+                default: goto L_0x0030;
             }
-        L_0x0067:
-            goto L_0x0287
-        L_0x0069:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
+        L_0x0030:
+            goto L_0x0250
+        L_0x0032:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r5 = r0.statusTextView
             r10 = 2131628104(0x7f0e1048, float:1.8883491E38)
             java.lang.String r11 = "VoipBusy"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r1, r2)
-            org.telegram.ui.Components.voip.AcceptDeclineView r6 = r0.acceptDeclineView
-            r6.setRetryMod(r4)
+            r5.setText(r10, r1, r2)
+            org.telegram.ui.Components.voip.AcceptDeclineView r5 = r0.acceptDeclineView
+            r5.setRetryMod(r4)
             r0.currentUserIsVideo = r1
             r0.callingUserIsVideo = r1
-            r6 = 0
-        L_0x0081:
+            r5 = 0
+        L_0x004a:
             r10 = 0
-        L_0x0082:
+        L_0x004b:
             r11 = 1
-            goto L_0x028a
-        L_0x0085:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
+            goto L_0x0253
+        L_0x004e:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r5 = r0.statusTextView
             r10 = 2131628279(0x7f0e10f7, float:1.8883846E38)
             java.lang.String r11 = "VoipRinging"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r2)
-            goto L_0x0287
-        L_0x0095:
+            r5.setText(r10, r4, r2)
+            goto L_0x0250
+        L_0x005e:
             r0.lockOnScreen = r4
-            r6 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r5 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             org.telegram.ui.Components.voip.AcceptDeclineView r10 = r0.acceptDeclineView
             r10.setRetryMod(r1)
-            if (r3 == 0) goto L_0x00d3
+            if (r3 == 0) goto L_0x009c
             org.telegram.tgnet.TLRPC$PhoneCall r10 = r3.privateCall
             boolean r10 = r10.video
-            if (r10 == 0) goto L_0x00d3
+            if (r10 == 0) goto L_0x009c
             boolean r10 = r0.currentUserIsVideo
-            if (r10 == 0) goto L_0x00b6
+            if (r10 == 0) goto L_0x007f
             org.telegram.tgnet.TLRPC$User r10 = r0.callingUser
             org.telegram.tgnet.TLRPC$UserProfilePhoto r10 = r10.photo
-            if (r10 == 0) goto L_0x00b6
+            if (r10 == 0) goto L_0x007f
             r10 = 1
-            goto L_0x00b7
-        L_0x00b6:
+            goto L_0x0080
+        L_0x007f:
             r10 = 0
-        L_0x00b7:
+        L_0x0080:
             org.telegram.ui.Components.voip.VoIPStatusTextView r11 = r0.statusTextView
             r12 = 2131628239(0x7f0e10cf, float:1.8883765E38)
             java.lang.String r13 = "VoipInVideoCallBranding"
@@ -1470,8 +1415,8 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             int r12 = -r12
             float r12 = (float) r12
             r11.setTranslationY(r12)
-            goto L_0x0082
-        L_0x00d3:
+            goto L_0x004b
+        L_0x009c:
             org.telegram.ui.Components.voip.VoIPStatusTextView r10 = r0.statusTextView
             r11 = 2131628237(0x7f0e10cd, float:1.888376E38)
             java.lang.String r12 = "VoipInCallBranding"
@@ -1479,622 +1424,659 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             r10.setText(r11, r4, r2)
             org.telegram.ui.Components.voip.AcceptDeclineView r10 = r0.acceptDeclineView
             r10.setTranslationY(r9)
-            goto L_0x0081
-        L_0x00e7:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
+            goto L_0x004a
+        L_0x00b0:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r5 = r0.statusTextView
             r10 = 2131628278(0x7f0e10f6, float:1.8883844E38)
             java.lang.String r11 = "VoipRequesting"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r2)
-            goto L_0x0287
-        L_0x00f7:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
+            r5.setText(r10, r4, r2)
+            goto L_0x0250
+        L_0x00c0:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r5 = r0.statusTextView
             r10 = 2131628305(0x7f0e1111, float:1.8883899E38)
             java.lang.String r11 = "VoipWaiting"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r2)
-            goto L_0x0287
-        L_0x0107:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
+            r5.setText(r10, r4, r2)
+            goto L_0x0250
+        L_0x00d0:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r5 = r0.statusTextView
             r10 = 2131628130(0x7f0e1062, float:1.8883544E38)
             java.lang.String r11 = "VoipExchangingKeys"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r2)
-            goto L_0x0287
-        L_0x0117:
-            org.telegram.ui.Components.voip.VoIPTextureView r6 = r0.currentUserTextureView
-            r6.saveCameraLastBitmap()
-            org.telegram.ui.-$$Lambda$VoIPFragment$wlGE1E0MEZMutJu6GTKRaLq1FDs r6 = new org.telegram.ui.-$$Lambda$VoIPFragment$wlGE1E0MEZMutJu6GTKRaLq1FDs
-            r6.<init>()
+            r5.setText(r10, r4, r2)
+            goto L_0x0250
+        L_0x00e0:
+            org.telegram.ui.Components.voip.VoIPTextureView r5 = r0.currentUserTextureView
+            r5.saveCameraLastBitmap()
+            org.telegram.ui.-$$Lambda$VoIPFragment$wlGE1E0MEZMutJu6GTKRaLq1FDs r5 = new org.telegram.ui.-$$Lambda$VoIPFragment$wlGE1E0MEZMutJu6GTKRaLq1FDs
+            r5.<init>()
             r10 = 200(0xc8, double:9.9E-322)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6, r10)
-            goto L_0x0287
-        L_0x0128:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r5, r10)
+            goto L_0x0250
+        L_0x00f1:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r5 = r0.statusTextView
             java.lang.String r10 = "VoipFailed"
             r11 = 2131628131(0x7f0e1063, float:1.8883546E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r10, r11)
-            r6.setText(r12, r1, r2)
-            org.telegram.messenger.voip.VoIPService r6 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            r5.setText(r12, r1, r2)
+            org.telegram.messenger.voip.VoIPService r5 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             java.lang.String r12 = "ERROR_UNKNOWN"
-            if (r6 == 0) goto L_0x0143
-            java.lang.String r6 = r6.getLastError()
-            goto L_0x0144
-        L_0x0143:
-            r6 = r12
-        L_0x0144:
-            boolean r12 = android.text.TextUtils.equals(r6, r12)
+            if (r5 == 0) goto L_0x010c
+            java.lang.String r5 = r5.getLastError()
+            goto L_0x010d
+        L_0x010c:
+            r5 = r12
+        L_0x010d:
+            boolean r12 = android.text.TextUtils.equals(r5, r12)
             r13 = 1000(0x3e8, double:4.94E-321)
-            if (r12 != 0) goto L_0x025e
+            if (r12 != 0) goto L_0x0227
             java.lang.String r12 = "ERROR_INCOMPATIBLE"
-            boolean r12 = android.text.TextUtils.equals(r6, r12)
-            if (r12 == 0) goto L_0x0174
-            org.telegram.tgnet.TLRPC$User r6 = r0.callingUser
-            java.lang.String r10 = r6.first_name
-            java.lang.String r6 = r6.last_name
-            java.lang.String r6 = org.telegram.messenger.ContactsController.formatName(r10, r6)
+            boolean r12 = android.text.TextUtils.equals(r5, r12)
+            if (r12 == 0) goto L_0x013d
+            org.telegram.tgnet.TLRPC$User r5 = r0.callingUser
+            java.lang.String r10 = r5.first_name
+            java.lang.String r5 = r5.last_name
+            java.lang.String r5 = org.telegram.messenger.ContactsController.formatName(r10, r5)
             r10 = 2131628269(0x7f0e10ed, float:1.8883826E38)
             java.lang.Object[] r11 = new java.lang.Object[r4]
-            r11[r1] = r6
-            java.lang.String r6 = "VoipPeerIncompatible"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r10, r11)
-            android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
-            r0.showErrorDialog(r6)
-            goto L_0x0287
-        L_0x0174:
+            r11[r1] = r5
+            java.lang.String r5 = "VoipPeerIncompatible"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r5, r10, r11)
+            android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
+            r0.showErrorDialog(r5)
+            goto L_0x0250
+        L_0x013d:
             java.lang.String r12 = "ERROR_PEER_OUTDATED"
-            boolean r12 = android.text.TextUtils.equals(r6, r12)
-            if (r12 == 0) goto L_0x01fd
-            boolean r6 = r0.isVideoCall
-            if (r6 == 0) goto L_0x01e1
-            org.telegram.tgnet.TLRPC$User r6 = r0.callingUser
-            java.lang.String r6 = org.telegram.messenger.UserObject.getFirstName(r6)
+            boolean r12 = android.text.TextUtils.equals(r5, r12)
+            if (r12 == 0) goto L_0x01c6
+            boolean r5 = r0.isVideoCall
+            if (r5 == 0) goto L_0x01aa
+            org.telegram.tgnet.TLRPC$User r5 = r0.callingUser
+            java.lang.String r5 = org.telegram.messenger.UserObject.getFirstName(r5)
             r12 = 2131628271(0x7f0e10ef, float:1.888383E38)
             java.lang.Object[] r13 = new java.lang.Object[r4]
-            r13[r1] = r6
-            java.lang.String r6 = "VoipPeerVideoOutdated"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r12, r13)
+            r13[r1] = r5
+            java.lang.String r5 = "VoipPeerVideoOutdated"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r5, r12, r13)
             boolean[] r12 = new boolean[r4]
             org.telegram.ui.ActionBar.DarkAlertDialog$Builder r13 = new org.telegram.ui.ActionBar.DarkAlertDialog$Builder
             android.app.Activity r14 = r0.activity
             r13.<init>(r14)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
             org.telegram.ui.ActionBar.AlertDialog$Builder r10 = r13.setTitle(r10)
-            android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
-            org.telegram.ui.ActionBar.AlertDialog$Builder r6 = r10.setMessage(r6)
+            android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r5 = r10.setMessage(r5)
             r10 = 2131624658(0x7f0e02d2, float:1.8876502E38)
             java.lang.String r11 = "Cancel"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             org.telegram.ui.-$$Lambda$VoIPFragment$ojGeWuJU6g5BPAwVIIO5-YSMeUk r11 = new org.telegram.ui.-$$Lambda$VoIPFragment$ojGeWuJU6g5BPAwVIIO5-YSMeUk
             r11.<init>()
-            org.telegram.ui.ActionBar.AlertDialog$Builder r6 = r6.setNegativeButton(r10, r11)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r5 = r5.setNegativeButton(r10, r11)
             r10 = 2131628272(0x7f0e10f0, float:1.8883832E38)
             java.lang.String r11 = "VoipPeerVideoOutdatedMakeVoice"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             org.telegram.ui.-$$Lambda$VoIPFragment$Y8iJLGoAb_XpjQLKsNKCAckpw-I r11 = new org.telegram.ui.-$$Lambda$VoIPFragment$Y8iJLGoAb_XpjQLKsNKCAckpw-I
             r11.<init>(r12)
-            org.telegram.ui.ActionBar.AlertDialog$Builder r6 = r6.setPositiveButton(r10, r11)
-            org.telegram.ui.ActionBar.AlertDialog r6 = r6.show()
-            r6.setCanceledOnTouchOutside(r4)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r5 = r5.setPositiveButton(r10, r11)
+            org.telegram.ui.ActionBar.AlertDialog r5 = r5.show()
+            r5.setCanceledOnTouchOutside(r4)
             org.telegram.ui.-$$Lambda$VoIPFragment$nqzifKWhd4yBRmKR5HwfGZ4-CY8 r10 = new org.telegram.ui.-$$Lambda$VoIPFragment$nqzifKWhd4yBRmKR5HwfGZ4-CY8
             r10.<init>(r12)
-            r6.setOnDismissListener(r10)
-            goto L_0x0287
-        L_0x01e1:
-            org.telegram.tgnet.TLRPC$User r6 = r0.callingUser
-            java.lang.String r6 = org.telegram.messenger.UserObject.getFirstName(r6)
+            r5.setOnDismissListener(r10)
+            goto L_0x0250
+        L_0x01aa:
+            org.telegram.tgnet.TLRPC$User r5 = r0.callingUser
+            java.lang.String r5 = org.telegram.messenger.UserObject.getFirstName(r5)
             r10 = 2131628270(0x7f0e10ee, float:1.8883828E38)
             java.lang.Object[] r11 = new java.lang.Object[r4]
-            r11[r1] = r6
-            java.lang.String r6 = "VoipPeerOutdated"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r10, r11)
-            android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
-            r0.showErrorDialog(r6)
-            goto L_0x0287
-        L_0x01fd:
+            r11[r1] = r5
+            java.lang.String r5 = "VoipPeerOutdated"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r5, r10, r11)
+            android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
+            r0.showErrorDialog(r5)
+            goto L_0x0250
+        L_0x01c6:
             java.lang.String r10 = "ERROR_PRIVACY"
-            boolean r10 = android.text.TextUtils.equals(r6, r10)
-            if (r10 == 0) goto L_0x0224
-            org.telegram.tgnet.TLRPC$User r6 = r0.callingUser
-            java.lang.String r10 = r6.first_name
-            java.lang.String r6 = r6.last_name
-            java.lang.String r6 = org.telegram.messenger.ContactsController.formatName(r10, r6)
+            boolean r10 = android.text.TextUtils.equals(r5, r10)
+            if (r10 == 0) goto L_0x01ed
+            org.telegram.tgnet.TLRPC$User r5 = r0.callingUser
+            java.lang.String r10 = r5.first_name
+            java.lang.String r5 = r5.last_name
+            java.lang.String r5 = org.telegram.messenger.ContactsController.formatName(r10, r5)
             r10 = 2131624637(0x7f0e02bd, float:1.887646E38)
             java.lang.Object[] r11 = new java.lang.Object[r4]
-            r11[r1] = r6
-            java.lang.String r6 = "CallNotAvailable"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r10, r11)
-            android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
-            r0.showErrorDialog(r6)
-            goto L_0x0287
-        L_0x0224:
+            r11[r1] = r5
+            java.lang.String r5 = "CallNotAvailable"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r5, r10, r11)
+            android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
+            r0.showErrorDialog(r5)
+            goto L_0x0250
+        L_0x01ed:
             java.lang.String r10 = "ERROR_AUDIO_IO"
-            boolean r10 = android.text.TextUtils.equals(r6, r10)
-            if (r10 == 0) goto L_0x0232
-            java.lang.String r6 = "Error initializing audio hardware"
-            r0.showErrorDialog(r6)
-            goto L_0x0287
-        L_0x0232:
+            boolean r10 = android.text.TextUtils.equals(r5, r10)
+            if (r10 == 0) goto L_0x01fb
+            java.lang.String r5 = "Error initializing audio hardware"
+            r0.showErrorDialog(r5)
+            goto L_0x0250
+        L_0x01fb:
             java.lang.String r10 = "ERROR_LOCALIZED"
-            boolean r10 = android.text.TextUtils.equals(r6, r10)
-            if (r10 == 0) goto L_0x0240
-            org.telegram.ui.Components.voip.VoIPWindowView r6 = r0.windowView
-            r6.finish()
-            goto L_0x0287
-        L_0x0240:
+            boolean r10 = android.text.TextUtils.equals(r5, r10)
+            if (r10 == 0) goto L_0x0209
+            org.telegram.ui.Components.voip.VoIPWindowView r5 = r0.windowView
+            r5.finish()
+            goto L_0x0250
+        L_0x0209:
             java.lang.String r10 = "ERROR_CONNECTION_SERVICE"
-            boolean r6 = android.text.TextUtils.equals(r6, r10)
-            if (r6 == 0) goto L_0x0255
-            r6 = 2131628129(0x7f0e1061, float:1.8883542E38)
+            boolean r5 = android.text.TextUtils.equals(r5, r10)
+            if (r5 == 0) goto L_0x021e
+            r5 = 2131628129(0x7f0e1061, float:1.8883542E38)
             java.lang.String r10 = "VoipErrorUnknown"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-            r0.showErrorDialog(r6)
-            goto L_0x0287
-        L_0x0255:
-            org.telegram.ui.-$$Lambda$VoIPFragment$UueVJKqKgBWmV7xZu74My-hTS4k r6 = new org.telegram.ui.-$$Lambda$VoIPFragment$UueVJKqKgBWmV7xZu74My-hTS4k
-            r6.<init>()
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6, r13)
-            goto L_0x0287
-        L_0x025e:
-            org.telegram.ui.-$$Lambda$VoIPFragment$51K6w2K4s88DQNBm4RmaJQqW0XU r6 = new org.telegram.ui.-$$Lambda$VoIPFragment$51K6w2K4s88DQNBm4RmaJQqW0XU
-            r6.<init>()
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6, r13)
-            goto L_0x0287
-        L_0x0267:
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r10, r5)
+            r0.showErrorDialog(r5)
+            goto L_0x0250
+        L_0x021e:
+            org.telegram.ui.-$$Lambda$VoIPFragment$UueVJKqKgBWmV7xZu74My-hTS4k r5 = new org.telegram.ui.-$$Lambda$VoIPFragment$UueVJKqKgBWmV7xZu74My-hTS4k
+            r5.<init>()
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r5, r13)
+            goto L_0x0250
+        L_0x0227:
+            org.telegram.ui.-$$Lambda$VoIPFragment$51K6w2K4s88DQNBm4RmaJQqW0XU r5 = new org.telegram.ui.-$$Lambda$VoIPFragment$51K6w2K4s88DQNBm4RmaJQqW0XU
+            r5.<init>()
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r5, r13)
+            goto L_0x0250
+        L_0x0230:
             r0.updateKeyView(r2)
-            int r6 = r0.currentState
-            if (r6 != r7) goto L_0x0274
-            r6 = 0
+            int r5 = r0.currentState
+            if (r5 != r6) goto L_0x023d
+            r5 = 0
             r10 = 0
             r11 = 0
             r12 = 1
             r13 = 1
-            goto L_0x028c
-        L_0x0274:
-            r6 = 0
+            goto L_0x0255
+        L_0x023d:
+            r5 = 0
             r10 = 0
             r11 = 0
             r12 = 1
-            goto L_0x028b
-        L_0x0279:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
+            goto L_0x0254
+        L_0x0242:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r5 = r0.statusTextView
             r10 = 2131628121(0x7f0e1059, float:1.8883526E38)
             java.lang.String r11 = "VoipConnecting"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r2)
-        L_0x0287:
-            r6 = 0
+            r5.setText(r10, r4, r2)
+        L_0x0250:
+            r5 = 0
             r10 = 0
             r11 = 0
-        L_0x028a:
+        L_0x0253:
             r12 = 0
-        L_0x028b:
+        L_0x0254:
             r13 = 0
-        L_0x028c:
+        L_0x0255:
+            org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r14 = r0.previewDialog
+            if (r14 == 0) goto L_0x025a
+            return
+        L_0x025a:
+            if (r3 == 0) goto L_0x0281
+            int r14 = r3.getRemoteVideoState()
+            if (r14 != r8) goto L_0x0264
+            r14 = 1
+            goto L_0x0265
+        L_0x0264:
+            r14 = 0
+        L_0x0265:
+            r0.callingUserIsVideo = r14
+            int r14 = r3.getVideoState(r1)
+            if (r14 == r8) goto L_0x0276
+            int r14 = r3.getVideoState(r1)
+            if (r14 != r4) goto L_0x0274
+            goto L_0x0276
+        L_0x0274:
+            r14 = 0
+            goto L_0x0277
+        L_0x0276:
+            r14 = 1
+        L_0x0277:
+            r0.currentUserIsVideo = r14
+            if (r14 == 0) goto L_0x0281
+            boolean r14 = r0.isVideoCall
+            if (r14 != 0) goto L_0x0281
+            r0.isVideoCall = r4
+        L_0x0281:
+            if (r2 == 0) goto L_0x028d
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r14 = r0.currentUserCameraFloatingLayout
+            r14.saveRelatedPosition()
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r14 = r0.callingUserMiniFloatingLayout
+            r14.saveRelatedPosition()
+        L_0x028d:
             boolean r14 = r0.callingUserIsVideo
-            r7 = 250(0xfa, double:1.235E-321)
+            r6 = 250(0xfa, double:1.235E-321)
             r15 = 1065353216(0x3var_, float:1.0)
-            if (r14 == 0) goto L_0x02cf
+            if (r14 == 0) goto L_0x02d0
             boolean r14 = r0.switchingToPip
-            if (r14 != 0) goto L_0x029d
+            if (r14 != 0) goto L_0x029e
             org.telegram.ui.Components.BackupImageView r14 = r0.callingUserPhotoView
             r14.setAlpha(r15)
-        L_0x029d:
-            if (r2 == 0) goto L_0x02b1
+        L_0x029e:
+            if (r2 == 0) goto L_0x02b2
             org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
             android.view.ViewPropertyAnimator r14 = r14.animate()
             android.view.ViewPropertyAnimator r14 = r14.alpha(r15)
-            android.view.ViewPropertyAnimator r14 = r14.setDuration(r7)
+            android.view.ViewPropertyAnimator r14 = r14.setDuration(r6)
             r14.start()
-            goto L_0x02bf
-        L_0x02b1:
+            goto L_0x02c0
+        L_0x02b2:
             org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
             android.view.ViewPropertyAnimator r14 = r14.animate()
             r14.cancel()
             org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
             r14.setAlpha(r15)
-        L_0x02bf:
+        L_0x02c0:
             org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
             org.webrtc.TextureViewRenderer r14 = r14.renderer
             boolean r14 = r14.isFirstFrameRendered()
-            if (r14 != 0) goto L_0x02cf
+            if (r14 != 0) goto L_0x02d0
             boolean r14 = r0.enterFromPiP
-            if (r14 != 0) goto L_0x02cf
+            if (r14 != 0) goto L_0x02d0
             r0.callingUserIsVideo = r1
-        L_0x02cf:
+        L_0x02d0:
             boolean r14 = r0.currentUserIsVideo
-            if (r14 != 0) goto L_0x0303
+            if (r14 != 0) goto L_0x0304
             boolean r14 = r0.callingUserIsVideo
-            if (r14 == 0) goto L_0x02d8
-            goto L_0x0303
-        L_0x02d8:
+            if (r14 == 0) goto L_0x02d9
+            goto L_0x0304
+        L_0x02d9:
             r0.fillNavigationBar(r1, r2)
             org.telegram.ui.Components.BackupImageView r14 = r0.callingUserPhotoView
             r14.setVisibility(r1)
-            if (r2 == 0) goto L_0x02f4
+            if (r2 == 0) goto L_0x02f5
             org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
             android.view.ViewPropertyAnimator r14 = r14.animate()
             android.view.ViewPropertyAnimator r14 = r14.alpha(r9)
-            android.view.ViewPropertyAnimator r7 = r14.setDuration(r7)
-            r7.start()
-            goto L_0x0306
-        L_0x02f4:
-            org.telegram.ui.Components.voip.VoIPTextureView r7 = r0.callingUserTextureView
-            android.view.ViewPropertyAnimator r7 = r7.animate()
-            r7.cancel()
-            org.telegram.ui.Components.voip.VoIPTextureView r7 = r0.callingUserTextureView
-            r7.setAlpha(r9)
-            goto L_0x0306
-        L_0x0303:
+            android.view.ViewPropertyAnimator r6 = r14.setDuration(r6)
+            r6.start()
+            goto L_0x0307
+        L_0x02f5:
+            org.telegram.ui.Components.voip.VoIPTextureView r6 = r0.callingUserTextureView
+            android.view.ViewPropertyAnimator r6 = r6.animate()
+            r6.cancel()
+            org.telegram.ui.Components.voip.VoIPTextureView r6 = r0.callingUserTextureView
+            r6.setAlpha(r9)
+            goto L_0x0307
+        L_0x0304:
             r0.fillNavigationBar(r4, r2)
-        L_0x0306:
-            boolean r7 = r0.currentUserIsVideo
-            if (r7 == 0) goto L_0x030e
-            boolean r8 = r0.callingUserIsVideo
-            if (r8 != 0) goto L_0x0310
-        L_0x030e:
+        L_0x0307:
+            boolean r6 = r0.currentUserIsVideo
+            if (r6 == 0) goto L_0x030f
+            boolean r7 = r0.callingUserIsVideo
+            if (r7 != 0) goto L_0x0311
+        L_0x030f:
             r0.cameraForceExpanded = r1
-        L_0x0310:
-            if (r7 == 0) goto L_0x0318
-            boolean r7 = r0.cameraForceExpanded
-            if (r7 == 0) goto L_0x0318
-            r7 = 1
-            goto L_0x0319
-        L_0x0318:
-            r7 = 0
+        L_0x0311:
+            if (r6 == 0) goto L_0x0319
+            boolean r6 = r0.cameraForceExpanded
+            if (r6 == 0) goto L_0x0319
+            r6 = 1
+            goto L_0x031a
         L_0x0319:
+            r6 = 0
+        L_0x031a:
             r0.showCallingUserAvatarMini(r10, r2)
-            org.telegram.ui.Components.BackupImageView r8 = r0.callingUserPhotoViewMini
-            java.lang.Object r8 = r8.getTag()
-            if (r8 != 0) goto L_0x0326
-            r8 = 0
-            goto L_0x0333
-        L_0x0326:
-            r8 = 1124532224(0x43070000, float:135.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.BackupImageView r7 = r0.callingUserPhotoViewMini
+            java.lang.Object r7 = r7.getTag()
+            if (r7 != 0) goto L_0x0327
+            r7 = 0
+            goto L_0x0334
+        L_0x0327:
+            r7 = 1124532224(0x43070000, float:135.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r10 = 1094713344(0x41400000, float:12.0)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            int r8 = r8 + r10
-        L_0x0333:
-            int r6 = r6 + r8
+            int r7 = r7 + r10
+        L_0x0334:
+            int r5 = r5 + r7
             r0.showAcceptDeclineView(r11, r2)
-            org.telegram.ui.Components.voip.VoIPWindowView r8 = r0.windowView
+            org.telegram.ui.Components.voip.VoIPWindowView r7 = r0.windowView
             boolean r10 = r0.lockOnScreen
-            if (r10 != 0) goto L_0x0344
+            if (r10 != 0) goto L_0x0345
             boolean r10 = r0.deviceIsLocked
-            if (r10 == 0) goto L_0x0342
-            goto L_0x0344
-        L_0x0342:
-            r10 = 0
+            if (r10 == 0) goto L_0x0343
             goto L_0x0345
-        L_0x0344:
-            r10 = 1
+        L_0x0343:
+            r10 = 0
+            goto L_0x0346
         L_0x0345:
-            r8.setLockOnScreen(r10)
-            int r8 = r0.currentState
+            r10 = 1
+        L_0x0346:
+            r7.setLockOnScreen(r10)
+            int r7 = r0.currentState
             r10 = 3
-            if (r8 != r10) goto L_0x0357
-            boolean r8 = r0.currentUserIsVideo
-            if (r8 != 0) goto L_0x0355
-            boolean r8 = r0.callingUserIsVideo
-            if (r8 == 0) goto L_0x0357
-        L_0x0355:
-            r8 = 1
-            goto L_0x0358
-        L_0x0357:
-            r8 = 0
+            if (r7 != r10) goto L_0x0358
+            boolean r7 = r0.currentUserIsVideo
+            if (r7 != 0) goto L_0x0356
+            boolean r7 = r0.callingUserIsVideo
+            if (r7 == 0) goto L_0x0358
+        L_0x0356:
+            r7 = 1
+            goto L_0x0359
         L_0x0358:
-            r0.canHideUI = r8
-            if (r8 != 0) goto L_0x0363
-            boolean r8 = r0.uiVisible
-            if (r8 != 0) goto L_0x0363
+            r7 = 0
+        L_0x0359:
+            r0.canHideUI = r7
+            if (r7 != 0) goto L_0x0364
+            boolean r7 = r0.uiVisible
+            if (r7 != 0) goto L_0x0364
             r0.showUi(r4)
-        L_0x0363:
-            boolean r8 = r0.uiVisible
-            if (r8 == 0) goto L_0x0381
-            boolean r8 = r0.canHideUI
-            if (r8 == 0) goto L_0x0381
-            boolean r8 = r0.hideUiRunnableWaiting
-            if (r8 != 0) goto L_0x0381
-            if (r3 == 0) goto L_0x0381
-            boolean r8 = r3.isMicMute()
-            if (r8 != 0) goto L_0x0381
-            java.lang.Runnable r8 = r0.hideUIRunnable
+        L_0x0364:
+            boolean r7 = r0.uiVisible
+            if (r7 == 0) goto L_0x0382
+            boolean r7 = r0.canHideUI
+            if (r7 == 0) goto L_0x0382
+            boolean r7 = r0.hideUiRunnableWaiting
+            if (r7 != 0) goto L_0x0382
+            if (r3 == 0) goto L_0x0382
+            boolean r7 = r3.isMicMute()
+            if (r7 != 0) goto L_0x0382
+            java.lang.Runnable r7 = r0.hideUIRunnable
             r10 = 3000(0xbb8, double:1.482E-320)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r10)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r7, r10)
             r0.hideUiRunnableWaiting = r4
-            goto L_0x0390
-        L_0x0381:
-            if (r3 == 0) goto L_0x0390
-            boolean r8 = r3.isMicMute()
-            if (r8 == 0) goto L_0x0390
-            java.lang.Runnable r8 = r0.hideUIRunnable
-            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r8)
+            goto L_0x0391
+        L_0x0382:
+            if (r3 == 0) goto L_0x0391
+            boolean r7 = r3.isMicMute()
+            if (r7 == 0) goto L_0x0391
+            java.lang.Runnable r7 = r0.hideUIRunnable
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r7)
             r0.hideUiRunnableWaiting = r1
-        L_0x0390:
-            boolean r8 = r0.uiVisible
-            if (r8 != 0) goto L_0x039b
-            r8 = 1112014848(0x42480000, float:50.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r6 = r6 - r8
-        L_0x039b:
-            r8 = 1117782016(0x42a00000, float:80.0)
+        L_0x0391:
+            boolean r7 = r0.uiVisible
+            if (r7 != 0) goto L_0x039c
+            r7 = 1112014848(0x42480000, float:50.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r5 = r5 - r7
+        L_0x039c:
+            r7 = 1117782016(0x42a00000, float:80.0)
             r10 = 1098907648(0x41800000, float:16.0)
+            r14 = r5
             r4 = 150(0x96, double:7.4E-322)
-            if (r2 == 0) goto L_0x0402
+            if (r2 == 0) goto L_0x0404
             boolean r11 = r0.lockOnScreen
-            if (r11 != 0) goto L_0x03ba
+            if (r11 != 0) goto L_0x03bc
             boolean r11 = r0.uiVisible
-            if (r11 != 0) goto L_0x03ac
-            goto L_0x03ba
-        L_0x03ac:
+            if (r11 != 0) goto L_0x03ae
+            goto L_0x03bc
+        L_0x03ae:
             android.widget.ImageView r11 = r0.backIcon
             android.view.ViewPropertyAnimator r11 = r11.animate()
             android.view.ViewPropertyAnimator r11 = r11.alpha(r15)
             r11.start()
-            goto L_0x03d9
-        L_0x03ba:
+            goto L_0x03db
+        L_0x03bc:
             android.widget.ImageView r11 = r0.backIcon
             int r11 = r11.getVisibility()
-            if (r11 == 0) goto L_0x03cc
+            if (r11 == 0) goto L_0x03ce
             android.widget.ImageView r11 = r0.backIcon
             r11.setVisibility(r1)
             android.widget.ImageView r11 = r0.backIcon
             r11.setAlpha(r9)
-        L_0x03cc:
+        L_0x03ce:
             android.widget.ImageView r11 = r0.backIcon
             android.view.ViewPropertyAnimator r11 = r11.animate()
             android.view.ViewPropertyAnimator r11 = r11.alpha(r9)
             r11.start()
-        L_0x03d9:
+        L_0x03db:
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r11 = r0.notificationsLayout
             android.view.ViewPropertyAnimator r11 = r11.animate()
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r10 = -r10
-            boolean r14 = r0.uiVisible
-            if (r14 == 0) goto L_0x03ed
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            goto L_0x03ee
-        L_0x03ed:
-            r8 = 0
-        L_0x03ee:
-            int r10 = r10 - r8
-            float r8 = (float) r10
-            android.view.ViewPropertyAnimator r8 = r11.translationY(r8)
-            android.view.ViewPropertyAnimator r8 = r8.setDuration(r4)
+            boolean r15 = r0.uiVisible
+            if (r15 == 0) goto L_0x03ef
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            goto L_0x03f0
+        L_0x03ef:
+            r7 = 0
+        L_0x03f0:
+            int r10 = r10 - r7
+            float r7 = (float) r10
+            android.view.ViewPropertyAnimator r7 = r11.translationY(r7)
+            android.view.ViewPropertyAnimator r7 = r7.setDuration(r4)
             org.telegram.ui.Components.CubicBezierInterpolator r10 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            android.view.ViewPropertyAnimator r8 = r8.setInterpolator(r10)
-            r8.start()
-            goto L_0x042e
-        L_0x0402:
+            android.view.ViewPropertyAnimator r7 = r7.setInterpolator(r10)
+            r7.start()
+            goto L_0x0430
+        L_0x0404:
             boolean r11 = r0.lockOnScreen
-            if (r11 != 0) goto L_0x040b
+            if (r11 != 0) goto L_0x040d
             android.widget.ImageView r11 = r0.backIcon
             r11.setVisibility(r1)
-        L_0x040b:
+        L_0x040d:
             android.widget.ImageView r11 = r0.backIcon
-            boolean r14 = r0.lockOnScreen
-            if (r14 == 0) goto L_0x0413
-            r14 = 0
-            goto L_0x0415
-        L_0x0413:
-            r14 = 1065353216(0x3var_, float:1.0)
+            boolean r15 = r0.lockOnScreen
+            if (r15 == 0) goto L_0x0415
+            r15 = 0
+            goto L_0x0417
         L_0x0415:
-            r11.setAlpha(r14)
+            r15 = 1065353216(0x3var_, float:1.0)
+        L_0x0417:
+            r11.setAlpha(r15)
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r11 = r0.notificationsLayout
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r10 = -r10
-            boolean r14 = r0.uiVisible
-            if (r14 == 0) goto L_0x0428
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            goto L_0x0429
-        L_0x0428:
-            r8 = 0
-        L_0x0429:
-            int r10 = r10 - r8
-            float r8 = (float) r10
-            r11.setTranslationY(r8)
-        L_0x042e:
-            int r8 = r0.currentState
+            boolean r15 = r0.uiVisible
+            if (r15 == 0) goto L_0x042a
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            goto L_0x042b
+        L_0x042a:
+            r7 = 0
+        L_0x042b:
+            int r10 = r10 - r7
+            float r7 = (float) r10
+            r11.setTranslationY(r7)
+        L_0x0430:
+            int r7 = r0.currentState
             r10 = 10
             r11 = 11
-            if (r8 == r10) goto L_0x043b
-            if (r8 == r11) goto L_0x043b
+            if (r7 == r10) goto L_0x043d
+            if (r7 == r11) goto L_0x043d
             r0.updateButtons(r2)
-        L_0x043b:
-            if (r12 == 0) goto L_0x0442
-            org.telegram.ui.Components.voip.VoIPStatusTextView r8 = r0.statusTextView
-            r8.showTimer(r2)
-        L_0x0442:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r8 = r0.statusTextView
-            r8.showReconnect(r13, r2)
-            if (r2 == 0) goto L_0x0466
-            int r8 = r0.statusLayoutAnimateToOffset
-            if (r6 == r8) goto L_0x046c
-            android.widget.LinearLayout r8 = r0.statusLayout
-            android.view.ViewPropertyAnimator r8 = r8.animate()
-            float r10 = (float) r6
-            android.view.ViewPropertyAnimator r8 = r8.translationY(r10)
-            android.view.ViewPropertyAnimator r8 = r8.setDuration(r4)
+        L_0x043d:
+            if (r12 == 0) goto L_0x0444
+            org.telegram.ui.Components.voip.VoIPStatusTextView r7 = r0.statusTextView
+            r7.showTimer(r2)
+        L_0x0444:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r7 = r0.statusTextView
+            r7.showReconnect(r13, r2)
+            if (r2 == 0) goto L_0x0468
+            int r7 = r0.statusLayoutAnimateToOffset
+            if (r14 == r7) goto L_0x046e
+            android.widget.LinearLayout r7 = r0.statusLayout
+            android.view.ViewPropertyAnimator r7 = r7.animate()
+            float r10 = (float) r14
+            android.view.ViewPropertyAnimator r7 = r7.translationY(r10)
+            android.view.ViewPropertyAnimator r7 = r7.setDuration(r4)
             org.telegram.ui.Components.CubicBezierInterpolator r10 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            android.view.ViewPropertyAnimator r8 = r8.setInterpolator(r10)
-            r8.start()
-            goto L_0x046c
-        L_0x0466:
-            android.widget.LinearLayout r8 = r0.statusLayout
-            float r10 = (float) r6
-            r8.setTranslationY(r10)
-        L_0x046c:
-            r0.statusLayoutAnimateToOffset = r6
-            org.telegram.ui.Components.voip.VoIPOverlayBackground r6 = r0.overlayBackground
-            boolean r8 = r0.currentUserIsVideo
-            if (r8 != 0) goto L_0x047b
-            boolean r8 = r0.callingUserIsVideo
-            if (r8 == 0) goto L_0x0479
-            goto L_0x047b
-        L_0x0479:
-            r8 = 0
-            goto L_0x047c
+            android.view.ViewPropertyAnimator r7 = r7.setInterpolator(r10)
+            r7.start()
+            goto L_0x046e
+        L_0x0468:
+            android.widget.LinearLayout r7 = r0.statusLayout
+            float r10 = (float) r14
+            r7.setTranslationY(r10)
+        L_0x046e:
+            r0.statusLayoutAnimateToOffset = r14
+            org.telegram.ui.Components.voip.VoIPOverlayBackground r7 = r0.overlayBackground
+            boolean r10 = r0.currentUserIsVideo
+            if (r10 != 0) goto L_0x047d
+            boolean r10 = r0.callingUserIsVideo
+            if (r10 == 0) goto L_0x047b
+            goto L_0x047d
         L_0x047b:
-            r8 = 1
-        L_0x047c:
-            r6.setShowBlackout(r8, r2)
-            int r6 = r0.currentState
-            if (r6 == r11) goto L_0x0491
-            r8 = 17
-            if (r6 == r8) goto L_0x0491
-            boolean r6 = r0.currentUserIsVideo
-            if (r6 != 0) goto L_0x048f
-            boolean r6 = r0.callingUserIsVideo
-            if (r6 == 0) goto L_0x0491
-        L_0x048f:
-            r11 = 1
-            goto L_0x0492
-        L_0x0491:
-            r11 = 0
-        L_0x0492:
-            r0.canSwitchToPip = r11
-            r6 = 0
-            if (r3 == 0) goto L_0x05aa
-            boolean r8 = r0.currentUserIsVideo
-            if (r8 == 0) goto L_0x04a0
-            org.telegram.messenger.voip.VoIPService$SharedUIParams r8 = r3.sharedUIParams
+            r10 = 0
+            goto L_0x047e
+        L_0x047d:
             r10 = 1
-            r8.tapToVideoTooltipWasShowed = r10
-        L_0x04a0:
-            org.telegram.ui.Components.voip.VoIPTextureView r8 = r0.currentUserTextureView
-            boolean r10 = r3.isScreencast()
-            r8.setIsScreencast(r10)
-            org.telegram.ui.Components.voip.VoIPTextureView r8 = r0.currentUserTextureView
-            org.webrtc.TextureViewRenderer r8 = r8.renderer
-            boolean r10 = r3.isFrontFaceCamera()
-            r8.setMirror(r10)
-            boolean r8 = r0.currentUserIsVideo
-            if (r8 == 0) goto L_0x04c3
-            boolean r8 = r3.isScreencast()
-            if (r8 != 0) goto L_0x04c3
-            org.telegram.ui.Components.voip.VoIPTextureView r8 = r0.currentUserTextureView
-            org.webrtc.TextureViewRenderer r8 = r8.renderer
-            goto L_0x04c4
-        L_0x04c3:
-            r8 = r6
-        L_0x04c4:
-            if (r7 == 0) goto L_0x04c9
-            org.webrtc.TextureViewRenderer r10 = r0.callingUserMiniTextureRenderer
-            goto L_0x04cd
-        L_0x04c9:
-            org.telegram.ui.Components.voip.VoIPTextureView r10 = r0.callingUserTextureView
+        L_0x047e:
+            r7.setShowBlackout(r10, r2)
+            int r7 = r0.currentState
+            if (r7 == r11) goto L_0x0493
+            r10 = 17
+            if (r7 == r10) goto L_0x0493
+            boolean r7 = r0.currentUserIsVideo
+            if (r7 != 0) goto L_0x0491
+            boolean r7 = r0.callingUserIsVideo
+            if (r7 == 0) goto L_0x0493
+        L_0x0491:
+            r11 = 1
+            goto L_0x0494
+        L_0x0493:
+            r11 = 0
+        L_0x0494:
+            r0.canSwitchToPip = r11
+            r7 = 0
+            if (r3 == 0) goto L_0x05ac
+            boolean r10 = r0.currentUserIsVideo
+            if (r10 == 0) goto L_0x04a2
+            org.telegram.messenger.voip.VoIPService$SharedUIParams r10 = r3.sharedUIParams
+            r11 = 1
+            r10.tapToVideoTooltipWasShowed = r11
+        L_0x04a2:
+            org.telegram.ui.Components.voip.VoIPTextureView r10 = r0.currentUserTextureView
+            boolean r12 = r3.isScreencast()
+            r10.setIsScreencast(r12)
+            org.telegram.ui.Components.voip.VoIPTextureView r10 = r0.currentUserTextureView
             org.webrtc.TextureViewRenderer r10 = r10.renderer
-        L_0x04cd:
-            r3.setSinks(r8, r10)
-            if (r2 == 0) goto L_0x04d7
-            org.telegram.ui.Components.voip.VoIPNotificationsLayout r8 = r0.notificationsLayout
-            r8.beforeLayoutChanges()
-        L_0x04d7:
-            boolean r8 = r0.currentUserIsVideo
-            java.lang.String r10 = "VoipUserMicrophoneIsOff"
-            r12 = 2131165327(0x7var_f, float:1.7944868E38)
-            java.lang.String r13 = "video"
-            java.lang.String r14 = "muted"
-            if (r8 != 0) goto L_0x04e8
-            boolean r8 = r0.callingUserIsVideo
-            if (r8 == 0) goto L_0x0546
-        L_0x04e8:
-            int r8 = r0.currentState
+            boolean r12 = r3.isFrontFaceCamera()
+            r10.setMirror(r12)
+            boolean r10 = r0.currentUserIsVideo
+            if (r10 == 0) goto L_0x04c5
+            boolean r10 = r3.isScreencast()
+            if (r10 != 0) goto L_0x04c5
+            org.telegram.ui.Components.voip.VoIPTextureView r10 = r0.currentUserTextureView
+            org.webrtc.TextureViewRenderer r10 = r10.renderer
+            goto L_0x04c6
+        L_0x04c5:
+            r10 = r7
+        L_0x04c6:
+            if (r6 == 0) goto L_0x04cb
+            org.webrtc.TextureViewRenderer r12 = r0.callingUserMiniTextureRenderer
+            goto L_0x04cf
+        L_0x04cb:
+            org.telegram.ui.Components.voip.VoIPTextureView r12 = r0.callingUserTextureView
+            org.webrtc.TextureViewRenderer r12 = r12.renderer
+        L_0x04cf:
+            r3.setSinks(r10, r12)
+            if (r2 == 0) goto L_0x04d9
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r10 = r0.notificationsLayout
+            r10.beforeLayoutChanges()
+        L_0x04d9:
+            boolean r10 = r0.currentUserIsVideo
+            java.lang.String r12 = "VoipUserMicrophoneIsOff"
+            r13 = 2131165327(0x7var_f, float:1.7944868E38)
+            java.lang.String r14 = "video"
+            java.lang.String r15 = "muted"
+            if (r10 != 0) goto L_0x04ea
+            boolean r10 = r0.callingUserIsVideo
+            if (r10 == 0) goto L_0x0548
+        L_0x04ea:
+            int r10 = r0.currentState
             r11 = 3
-            if (r8 == r11) goto L_0x04f0
+            if (r10 == r11) goto L_0x04f2
             r11 = 5
-            if (r8 != r11) goto L_0x0546
-        L_0x04f0:
-            long r16 = r3.getCallDuration()
-            r18 = 500(0x1f4, double:2.47E-321)
-            int r8 = (r16 > r18 ? 1 : (r16 == r18 ? 0 : -1))
-            if (r8 <= 0) goto L_0x0546
-            int r8 = r3.getRemoteAudioState()
-            if (r8 != 0) goto L_0x0518
-            org.telegram.ui.Components.voip.VoIPNotificationsLayout r8 = r0.notificationsLayout
+            if (r10 != r11) goto L_0x0548
+        L_0x04f2:
+            long r10 = r3.getCallDuration()
+            r16 = 500(0x1f4, double:2.47E-321)
+            int r18 = (r10 > r16 ? 1 : (r10 == r16 ? 0 : -1))
+            if (r18 <= 0) goto L_0x0548
+            int r10 = r3.getRemoteAudioState()
+            if (r10 != 0) goto L_0x051a
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r10 = r0.notificationsLayout
             r11 = 1
             java.lang.Object[] r4 = new java.lang.Object[r11]
             r5 = 2131628295(0x7f0e1107, float:1.8883879E38)
             org.telegram.tgnet.TLRPC$User r11 = r0.callingUser
             java.lang.String r11 = org.telegram.messenger.UserObject.getFirstName(r11)
             r4[r1] = r11
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r10, r5, r4)
-            r8.addNotification(r12, r4, r14, r2)
-            goto L_0x051d
-        L_0x0518:
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r12, r5, r4)
+            r10.addNotification(r13, r4, r15, r2)
+            goto L_0x051f
+        L_0x051a:
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
-            r4.removeNotification(r14)
-        L_0x051d:
+            r4.removeNotification(r15)
+        L_0x051f:
             int r4 = r3.getRemoteVideoState()
-            if (r4 != 0) goto L_0x0540
+            if (r4 != 0) goto L_0x0542
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
             r5 = 2131165318(0x7var_, float:1.794485E38)
-            r8 = 2131628294(0x7f0e1106, float:1.8883877E38)
-            r10 = 1
-            java.lang.Object[] r12 = new java.lang.Object[r10]
-            org.telegram.tgnet.TLRPC$User r10 = r0.callingUser
-            java.lang.String r10 = org.telegram.messenger.UserObject.getFirstName(r10)
-            r12[r1] = r10
-            java.lang.String r10 = "VoipUserCameraIsOff"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.formatString(r10, r8, r12)
-            r4.addNotification(r5, r8, r13, r2)
-            goto L_0x056f
-        L_0x0540:
-            org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
-            r4.removeNotification(r13)
-            goto L_0x056f
-        L_0x0546:
-            int r4 = r3.getRemoteAudioState()
-            if (r4 != 0) goto L_0x0565
-            org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
-            r5 = 2131628295(0x7f0e1107, float:1.8883879E38)
-            r8 = 1
-            java.lang.Object[] r11 = new java.lang.Object[r8]
-            r8 = r11
-            org.telegram.tgnet.TLRPC$User r11 = r0.callingUser
-            java.lang.String r11 = org.telegram.messenger.UserObject.getFirstName(r11)
-            r8[r1] = r11
-            java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r10, r5, r8)
-            r4.addNotification(r12, r5, r14, r2)
-            goto L_0x056a
-        L_0x0565:
+            r10 = 2131628294(0x7f0e1106, float:1.8883877E38)
+            r11 = 1
+            java.lang.Object[] r12 = new java.lang.Object[r11]
+            org.telegram.tgnet.TLRPC$User r13 = r0.callingUser
+            java.lang.String r13 = org.telegram.messenger.UserObject.getFirstName(r13)
+            r12[r1] = r13
+            java.lang.String r13 = "VoipUserCameraIsOff"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.formatString(r13, r10, r12)
+            r4.addNotification(r5, r10, r14, r2)
+            goto L_0x0571
+        L_0x0542:
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
             r4.removeNotification(r14)
-        L_0x056a:
+            goto L_0x0571
+        L_0x0548:
+            int r4 = r3.getRemoteAudioState()
+            if (r4 != 0) goto L_0x0567
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
-            r4.removeNotification(r13)
-        L_0x056f:
+            r5 = 2131628295(0x7f0e1107, float:1.8883879E38)
+            r10 = 1
+            java.lang.Object[] r11 = new java.lang.Object[r10]
+            r10 = r11
+            org.telegram.tgnet.TLRPC$User r11 = r0.callingUser
+            java.lang.String r11 = org.telegram.messenger.UserObject.getFirstName(r11)
+            r10[r1] = r11
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r12, r5, r10)
+            r4.addNotification(r13, r5, r15, r2)
+            goto L_0x056c
+        L_0x0567:
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
+            r4.removeNotification(r15)
+        L_0x056c:
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
+            r4.removeNotification(r14)
+        L_0x0571:
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
             int r4 = r4.getChildCount()
-            if (r4 != 0) goto L_0x0596
+            if (r4 != 0) goto L_0x0598
             boolean r4 = r0.callingUserIsVideo
-            if (r4 == 0) goto L_0x0596
+            if (r4 == 0) goto L_0x0598
             org.telegram.tgnet.TLRPC$PhoneCall r4 = r3.privateCall
-            if (r4 == 0) goto L_0x0596
+            if (r4 == 0) goto L_0x0598
             boolean r4 = r4.video
-            if (r4 != 0) goto L_0x0596
+            if (r4 != 0) goto L_0x0598
             org.telegram.messenger.voip.VoIPService$SharedUIParams r3 = r3.sharedUIParams
             boolean r4 = r3.tapToVideoTooltipWasShowed
-            if (r4 != 0) goto L_0x0596
+            if (r4 != 0) goto L_0x0598
             r4 = 1
             r3.tapToVideoTooltipWasShowed = r4
             org.telegram.ui.Components.HintView r3 = r0.tapToVideoTooltip
             org.telegram.ui.Components.voip.VoIPToggleButton[] r5 = r0.bottomButtons
             r5 = r5[r4]
             r3.showForView(r5, r4)
-            goto L_0x05a3
-        L_0x0596:
+            goto L_0x05a5
+        L_0x0598:
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r3 = r0.notificationsLayout
             int r3 = r3.getChildCount()
-            if (r3 == 0) goto L_0x05a3
+            if (r3 == 0) goto L_0x05a5
             org.telegram.ui.Components.HintView r3 = r0.tapToVideoTooltip
             r3.hide()
-        L_0x05a3:
-            if (r2 == 0) goto L_0x05aa
+        L_0x05a5:
+            if (r2 == 0) goto L_0x05ac
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r3 = r0.notificationsLayout
             r3.animateLayoutChanges()
-        L_0x05aa:
+        L_0x05ac:
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r3 = r0.notificationsLayout
             int r3 = r3.getChildsHight()
             org.telegram.ui.Components.voip.VoIPFloatingLayout r4 = r0.callingUserMiniFloatingLayout
@@ -2108,35 +2090,34 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             boolean r4 = r0.uiVisible
             r3.setUiVisible(r4)
             boolean r3 = r0.currentUserIsVideo
-            if (r3 == 0) goto L_0x05e0
+            if (r3 == 0) goto L_0x05e1
             boolean r3 = r0.callingUserIsVideo
-            if (r3 == 0) goto L_0x05db
+            if (r3 == 0) goto L_0x05dc
             boolean r3 = r0.cameraForceExpanded
-            if (r3 == 0) goto L_0x05d5
-            goto L_0x05db
-        L_0x05d5:
-            r3 = 2
-            r0.showFloatingLayout(r3, r2)
+            if (r3 == 0) goto L_0x05d7
+            goto L_0x05dc
+        L_0x05d7:
+            r0.showFloatingLayout(r8, r2)
             r3 = 1
-            goto L_0x05e4
-        L_0x05db:
+            goto L_0x05e5
+        L_0x05dc:
             r3 = 1
             r0.showFloatingLayout(r3, r2)
-            goto L_0x05e4
-        L_0x05e0:
+            goto L_0x05e5
+        L_0x05e1:
             r3 = 1
             r0.showFloatingLayout(r1, r2)
-        L_0x05e4:
+        L_0x05e5:
             r2 = 1056964608(0x3var_, float:0.5)
-            if (r7 == 0) goto L_0x064e
+            if (r6 == 0) goto L_0x0651
             org.telegram.ui.Components.voip.VoIPFloatingLayout r4 = r0.callingUserMiniFloatingLayout
             java.lang.Object r4 = r4.getTag()
-            if (r4 != 0) goto L_0x064e
+            if (r4 != 0) goto L_0x0651
             org.telegram.ui.Components.voip.VoIPFloatingLayout r4 = r0.callingUserMiniFloatingLayout
             r4.setIsActive(r3)
             org.telegram.ui.Components.voip.VoIPFloatingLayout r3 = r0.callingUserMiniFloatingLayout
             int r3 = r3.getVisibility()
-            if (r3 == 0) goto L_0x0611
+            if (r3 == 0) goto L_0x0612
             org.telegram.ui.Components.voip.VoIPFloatingLayout r3 = r0.callingUserMiniFloatingLayout
             r3.setVisibility(r1)
             org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
@@ -2145,16 +2126,17 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             r1.setScaleX(r2)
             org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
             r1.setScaleY(r2)
-        L_0x0611:
+        L_0x0612:
             org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
             android.view.ViewPropertyAnimator r1 = r1.animate()
-            android.view.ViewPropertyAnimator r1 = r1.setListener(r6)
+            android.view.ViewPropertyAnimator r1 = r1.setListener(r7)
             r1.cancel()
             org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
             android.view.ViewPropertyAnimator r1 = r1.animate()
-            android.view.ViewPropertyAnimator r1 = r1.alpha(r15)
-            android.view.ViewPropertyAnimator r1 = r1.scaleX(r15)
-            android.view.ViewPropertyAnimator r1 = r1.scaleY(r15)
+            r2 = 1065353216(0x3var_, float:1.0)
+            android.view.ViewPropertyAnimator r1 = r1.alpha(r2)
+            android.view.ViewPropertyAnimator r1 = r1.scaleX(r2)
+            android.view.ViewPropertyAnimator r1 = r1.scaleY(r2)
             r2 = 150(0x96, double:7.4E-322)
             android.view.ViewPropertyAnimator r1 = r1.setDuration(r2)
             org.telegram.ui.Components.CubicBezierInterpolator r4 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
@@ -2165,12 +2147,12 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             r2 = 1
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r1.setTag(r2)
-            goto L_0x068c
-        L_0x064e:
-            if (r7 != 0) goto L_0x068c
+            goto L_0x068f
+        L_0x0651:
+            if (r6 != 0) goto L_0x068f
             org.telegram.ui.Components.voip.VoIPFloatingLayout r3 = r0.callingUserMiniFloatingLayout
             java.lang.Object r3 = r3.getTag()
-            if (r3 == 0) goto L_0x068c
+            if (r3 == 0) goto L_0x068f
             org.telegram.ui.Components.voip.VoIPFloatingLayout r3 = r0.callingUserMiniFloatingLayout
             r3.setIsActive(r1)
             org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
@@ -2187,14 +2169,14 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             android.view.ViewPropertyAnimator r1 = r1.setInterpolator(r2)
             r1.start()
             org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
-            r1.setTag(r6)
-        L_0x068c:
+            r1.setTag(r7)
+        L_0x068f:
             org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.currentUserCameraFloatingLayout
             r1.restoreRelativePosition()
             org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
             r1.restoreRelativePosition()
-            r20.updateSpeakerPhoneIcon()
-        L_0x0699:
+            r19.updateSpeakerPhoneIcon()
+        L_0x069c:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.VoIPFragment.updateViewState():void");
@@ -2360,10 +2342,10 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                 this.currentUserCameraFloatingLayout.setVisibility(0);
             } else if (this.currentUserCameraFloatingLayout.getTag() != null && ((Integer) this.currentUserCameraFloatingLayout.getTag()).intValue() == 0) {
                 if (this.currentUserCameraFloatingLayout.getVisibility() == 8) {
-                    this.currentUserCameraFloatingLayout.setVisibility(0);
                     this.currentUserCameraFloatingLayout.setAlpha(0.0f);
                     this.currentUserCameraFloatingLayout.setScaleX(0.7f);
                     this.currentUserCameraFloatingLayout.setScaleY(0.7f);
+                    this.currentUserCameraFloatingLayout.setVisibility(0);
                 }
                 Animator animator2 = this.cameraShowingAnimator;
                 if (animator2 != null) {
@@ -2371,28 +2353,21 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                     this.cameraShowingAnimator.cancel();
                 }
                 AnimatorSet animatorSet = new AnimatorSet();
-                VoIPFloatingLayout voIPFloatingLayout = this.currentUserCameraFloatingLayout;
-                Property property = View.ALPHA;
-                float[] fArr = {voIPFloatingLayout.getAlpha(), 1.0f};
-                VoIPFloatingLayout voIPFloatingLayout2 = this.currentUserCameraFloatingLayout;
-                Property property2 = View.SCALE_X;
-                float[] fArr2 = {voIPFloatingLayout2.getScaleX(), 1.0f};
-                VoIPFloatingLayout voIPFloatingLayout3 = this.currentUserCameraFloatingLayout;
-                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(voIPFloatingLayout, property, fArr), ObjectAnimator.ofFloat(voIPFloatingLayout2, property2, fArr2), ObjectAnimator.ofFloat(voIPFloatingLayout3, View.SCALE_Y, new float[]{voIPFloatingLayout3.getScaleY(), 1.0f})});
+                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.currentUserCameraFloatingLayout, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.currentUserCameraFloatingLayout, View.SCALE_X, new float[]{0.7f, 1.0f}), ObjectAnimator.ofFloat(this.currentUserCameraFloatingLayout, View.SCALE_Y, new float[]{0.7f, 1.0f})});
                 this.cameraShowingAnimator = animatorSet;
                 animatorSet.setDuration(150).start();
             }
             if (this.currentUserCameraFloatingLayout.getTag() == null || ((Integer) this.currentUserCameraFloatingLayout.getTag()).intValue() != 2) {
-                VoIPFloatingLayout voIPFloatingLayout4 = this.currentUserCameraFloatingLayout;
-                if (voIPFloatingLayout4.relativePositionToSetX < 0.0f) {
-                    voIPFloatingLayout4.setRelativePosition(1.0f, 1.0f);
+                VoIPFloatingLayout voIPFloatingLayout = this.currentUserCameraFloatingLayout;
+                if (voIPFloatingLayout.relativePositionToSetX < 0.0f) {
+                    voIPFloatingLayout.setRelativePosition(1.0f, 1.0f);
                 }
             }
-            VoIPFloatingLayout voIPFloatingLayout5 = this.currentUserCameraFloatingLayout;
+            VoIPFloatingLayout voIPFloatingLayout2 = this.currentUserCameraFloatingLayout;
             if (i != 2) {
                 z2 = false;
             }
-            voIPFloatingLayout5.setFloatingMode(z2, z3);
+            voIPFloatingLayout2.setFloatingMode(z2, z3);
         } else if (!z) {
             this.currentUserCameraFloatingLayout.setVisibility(8);
         } else if (!(this.currentUserCameraFloatingLayout.getTag() == null || ((Integer) this.currentUserCameraFloatingLayout.getTag()).intValue() == 0)) {
@@ -2402,14 +2377,14 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                 this.cameraShowingAnimator.cancel();
             }
             AnimatorSet animatorSet2 = new AnimatorSet();
-            VoIPFloatingLayout voIPFloatingLayout6 = this.currentUserCameraFloatingLayout;
-            animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(voIPFloatingLayout6, View.ALPHA, new float[]{voIPFloatingLayout6.getAlpha(), 0.0f})});
+            VoIPFloatingLayout voIPFloatingLayout3 = this.currentUserCameraFloatingLayout;
+            animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(voIPFloatingLayout3, View.ALPHA, new float[]{voIPFloatingLayout3.getAlpha(), 0.0f})});
             if (this.currentUserCameraFloatingLayout.getTag() != null && ((Integer) this.currentUserCameraFloatingLayout.getTag()).intValue() == 2) {
-                VoIPFloatingLayout voIPFloatingLayout7 = this.currentUserCameraFloatingLayout;
-                Property property3 = View.SCALE_X;
-                float[] fArr3 = {voIPFloatingLayout7.getScaleX(), 0.7f};
-                VoIPFloatingLayout voIPFloatingLayout8 = this.currentUserCameraFloatingLayout;
-                animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(voIPFloatingLayout7, property3, fArr3), ObjectAnimator.ofFloat(voIPFloatingLayout8, View.SCALE_Y, new float[]{voIPFloatingLayout8.getScaleX(), 0.7f})});
+                VoIPFloatingLayout voIPFloatingLayout4 = this.currentUserCameraFloatingLayout;
+                Property property = View.SCALE_X;
+                float[] fArr = {voIPFloatingLayout4.getScaleX(), 0.7f};
+                VoIPFloatingLayout voIPFloatingLayout5 = this.currentUserCameraFloatingLayout;
+                animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(voIPFloatingLayout4, property, fArr), ObjectAnimator.ofFloat(voIPFloatingLayout5, View.SCALE_Y, new float[]{voIPFloatingLayout5.getScaleX(), 0.7f})});
             }
             this.cameraShowingAnimator = animatorSet2;
             animatorSet2.addListener(new AnimatorListenerAdapter() {
@@ -2854,7 +2829,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                     sharedInstance.switchCamera();
                 }
                 this.windowView.setLockOnScreen(true);
-                AnonymousClass20 r0 = new PrivateVideoPreviewDialog(this.fragmentView.getContext()) {
+                AnonymousClass20 r0 = new PrivateVideoPreviewDialog(this.fragmentView.getContext(), false, true) {
                     public void onDismiss(boolean z, boolean z2) {
                         PrivateVideoPreviewDialog unused = VoIPFragment.this.previewDialog = null;
                         VoIPService sharedInstance = VoIPService.getSharedInstance();

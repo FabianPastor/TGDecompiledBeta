@@ -1427,100 +1427,108 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r0 = org.telegram.messenger.NotificationCenter.groupCallScreencastStateChanged
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r11.postNotificationName(r0, r1)
-            goto L_0x0083
+            goto L_0x00a0
         L_0x0056:
             r10.requestVideoCall(r2)
             r10.setVideoState(r2, r0)
             org.telegram.ui.VoIPFragment r11 = org.telegram.ui.VoIPFragment.getInstance()
-            if (r11 == 0) goto L_0x0083
+            if (r11 == 0) goto L_0x00a0
             org.telegram.ui.VoIPFragment r11 = org.telegram.ui.VoIPFragment.getInstance()
             r11.onScreenCastStart()
-            goto L_0x0083
+            goto L_0x00a0
         L_0x006a:
             long[] r0 = r10.captureDevice
             r2 = r0[r11]
             int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r6 != 0) goto L_0x0084
+            if (r6 != 0) goto L_0x0078
             org.telegram.messenger.voip.NativeInstance[] r2 = r10.tgVoip
             r2 = r2[r11]
-            if (r2 != 0) goto L_0x0079
-            goto L_0x0084
-        L_0x0079:
+            if (r2 != 0) goto L_0x0094
+        L_0x0078:
+            org.telegram.messenger.voip.NativeInstance[] r2 = r10.tgVoip
+            r3 = r2[r11]
+            if (r3 == 0) goto L_0x008b
+            r6 = r0[r11]
+            int r3 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1))
+            if (r3 == 0) goto L_0x008b
+            r2 = r2[r11]
+            r6 = r0[r11]
+            r2.activateVideoCapturer(r6)
+        L_0x008b:
+            long[] r0 = r10.captureDevice
+            r2 = r0[r11]
+            int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r0 == 0) goto L_0x0094
+            return
+        L_0x0094:
+            long[] r0 = r10.captureDevice
             org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r2 = r10.localSink
             r2 = r2[r11]
             long r1 = org.telegram.messenger.voip.NativeInstance.createVideoCapturer(r2, r1)
             r0[r11] = r1
-        L_0x0083:
-            return
-        L_0x0084:
-            org.telegram.messenger.voip.NativeInstance[] r1 = r10.tgVoip
-            r2 = r1[r11]
-            if (r2 == 0) goto L_0x0097
-            r2 = r0[r11]
-            int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r6 == 0) goto L_0x0097
-            r1 = r1[r11]
-            r2 = r0[r11]
-            r1.activateVideoCapturer(r2)
-        L_0x0097:
+        L_0x00a0:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.createCaptureDevice(boolean):void");
     }
 
-    /* JADX WARNING: type inference failed for: r12v0, types: [boolean] */
+    /* JADX WARNING: type inference failed for: r11v0, types: [boolean] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setupCaptureDevice(boolean r12, boolean r13) {
+    public void setupCaptureDevice(boolean r11, boolean r12) {
         /*
-            r11 = this;
-            long[] r0 = r11.captureDevice
-            r1 = r0[r12]
-            r3 = 0
-            int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 == 0) goto L_0x0059
-            org.telegram.messenger.voip.NativeInstance[] r1 = r11.tgVoip
-            r2 = r1[r12]
-            if (r2 != 0) goto L_0x0011
-            goto L_0x0059
-        L_0x0011:
-            r1 = r1[r12]
-            r2 = r0[r12]
-            r1.setupOutgoingVideoCreated(r2)
-            boolean[] r0 = r11.destroyCaptureDevice
+            r10 = this;
+            r0 = 2
             r1 = 0
-            r0[r12] = r1
-            int[] r0 = r11.videoState
-            r2 = 2
-            r0[r12] = r2
-            boolean r0 = r11.micMute
-            r3 = 1
-            if (r0 != r13) goto L_0x002e
-            r0 = r13 ^ 1
-            r11.setMicMute(r0, r1, r1)
-            r11.micSwitching = r3
-        L_0x002e:
-            if (r12 != 0) goto L_0x0059
-            org.telegram.messenger.ChatObject$Call r0 = r11.groupCall
-            if (r0 == 0) goto L_0x0059
-            int r0 = r11.currentAccount
-            org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
-            org.telegram.tgnet.TLRPC$User r5 = r0.getCurrentUser()
-            r13 = r13 ^ r3
-            java.lang.Boolean r6 = java.lang.Boolean.valueOf(r13)
-            int[] r13 = r11.videoState
-            r12 = r13[r12]
-            if (r12 == r2) goto L_0x004a
+            if (r11 != 0) goto L_0x0026
+            long[] r2 = r10.captureDevice
+            r3 = r2[r11]
+            r5 = 0
+            int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r7 == 0) goto L_0x0025
+            org.telegram.messenger.voip.NativeInstance[] r3 = r10.tgVoip
+            r4 = r3[r11]
+            if (r4 != 0) goto L_0x0015
+            goto L_0x0025
+        L_0x0015:
+            r3 = r3[r11]
+            r4 = r2[r11]
+            r3.setupOutgoingVideoCreated(r4)
+            boolean[] r2 = r10.destroyCaptureDevice
+            r2[r11] = r1
+            int[] r2 = r10.videoState
+            r2[r11] = r0
+            goto L_0x0026
+        L_0x0025:
+            return
+        L_0x0026:
+            boolean r11 = r10.micMute
+            r2 = 1
+            if (r11 != r12) goto L_0x0032
+            r11 = r12 ^ 1
+            r10.setMicMute(r11, r1, r1)
+            r10.micSwitching = r2
+        L_0x0032:
+            org.telegram.messenger.ChatObject$Call r11 = r10.groupCall
+            if (r11 == 0) goto L_0x005c
+            int r11 = r10.currentAccount
+            org.telegram.messenger.UserConfig r11 = org.telegram.messenger.UserConfig.getInstance(r11)
+            org.telegram.tgnet.TLRPC$User r4 = r11.getCurrentUser()
+            r11 = r12 ^ 1
+            java.lang.Boolean r5 = java.lang.Boolean.valueOf(r11)
+            int[] r11 = r10.videoState
+            r11 = r11[r1]
+            if (r11 == r0) goto L_0x004d
             r1 = 1
-        L_0x004a:
-            java.lang.Boolean r7 = java.lang.Boolean.valueOf(r1)
+        L_0x004d:
+            java.lang.Boolean r6 = java.lang.Boolean.valueOf(r1)
+            r7 = 0
             r8 = 0
-            r9 = 0
-            org.telegram.messenger.voip.-$$Lambda$VoIPService$2tTekcYS4k24m1N7v0o3Fp2hEys r10 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$2tTekcYS4k24m1N7v0o3Fp2hEys
-            r10.<init>()
-            r4 = r11
-            r4.editCallMember(r5, r6, r7, r8, r9, r10)
-        L_0x0059:
+            org.telegram.messenger.voip.-$$Lambda$VoIPService$2tTekcYS4k24m1N7v0o3Fp2hEys r9 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$2tTekcYS4k24m1N7v0o3Fp2hEys
+            r9.<init>()
+            r3 = r10
+            r3.editCallMember(r4, r5, r6, r7, r8, r9)
+        L_0x005c:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.setupCaptureDevice(boolean, boolean):void");
@@ -5653,7 +5661,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v6, resolved type: java.lang.String} */
     /* JADX WARNING: type inference failed for: r7v11 */
     /* JADX WARNING: type inference failed for: r7v12 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [boolean, int] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x00ea  */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x013a  */

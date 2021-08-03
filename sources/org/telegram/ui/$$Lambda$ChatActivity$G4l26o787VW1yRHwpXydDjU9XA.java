@@ -7,12 +7,12 @@ import j$.util.function.ToIntFunction;
 import j$.util.function.ToLongFunction;
 import java.util.Comparator;
 
-/* renamed from: org.telegram.ui.-$$Lambda$ChatActivity$FJFZURo6IXFv2czjQT1QYHYY3qo  reason: invalid class name */
+/* renamed from: org.telegram.ui.-$$Lambda$ChatActivity$G-4l26o787VW1yRHwpXydDjU9XA  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$ChatActivity$FJFZURo6IXFv2czjQT1QYHYY3qo implements Comparator, j$.util.Comparator {
-    public static final /* synthetic */ $$Lambda$ChatActivity$FJFZURo6IXFv2czjQT1QYHYY3qo INSTANCE = new $$Lambda$ChatActivity$FJFZURo6IXFv2czjQT1QYHYY3qo();
+public final /* synthetic */ class $$Lambda$ChatActivity$G4l26o787VW1yRHwpXydDjU9XA implements Comparator, j$.util.Comparator {
+    public static final /* synthetic */ $$Lambda$ChatActivity$G4l26o787VW1yRHwpXydDjU9XA INSTANCE = new $$Lambda$ChatActivity$G4l26o787VW1yRHwpXydDjU9XA();
 
-    private /* synthetic */ $$Lambda$ChatActivity$FJFZURo6IXFv2czjQT1QYHYY3qo() {
+    private /* synthetic */ $$Lambda$ChatActivity$G4l26o787VW1yRHwpXydDjU9XA() {
     }
 
     public final int compare(Object obj, Object obj2) {

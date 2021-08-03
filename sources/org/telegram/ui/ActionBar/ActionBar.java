@@ -113,6 +113,7 @@ public class ActionBar extends FrameLayout {
         }
 
         public void onItemClick(int i) {
+            throw null;
         }
     }
 

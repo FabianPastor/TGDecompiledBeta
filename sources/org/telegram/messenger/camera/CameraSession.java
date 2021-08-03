@@ -239,9 +239,9 @@ public class CameraSession {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x0059  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x005f  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x006a  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0059  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x005f  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x006a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateRotation() {
         /*
@@ -250,9 +250,9 @@ public class CameraSession {
             if (r0 != 0) goto L_0x0005
             return
         L_0x0005:
-            int r0 = r0.getCameraId()
-            android.hardware.Camera$CameraInfo r1 = r7.info
-            android.hardware.Camera.getCameraInfo(r0, r1)
+            int r0 = r0.getCameraId()     // Catch:{ all -> 0x0089 }
+            android.hardware.Camera$CameraInfo r1 = r7.info     // Catch:{ all -> 0x0089 }
+            android.hardware.Camera.getCameraInfo(r0, r1)     // Catch:{ all -> 0x0089 }
             org.telegram.messenger.camera.CameraInfo r0 = r7.cameraInfo
             if (r0 == 0) goto L_0x001a
             boolean r1 = r7.destroyed
@@ -322,17 +322,23 @@ public class CameraSession {
             r3 = r2
         L_0x0072:
             r7.currentOrientation = r3
-            if (r0 == 0) goto L_0x0079
-            r0.setDisplayOrientation(r3)
-        L_0x0079:
+            if (r0 == 0) goto L_0x007b
+            r0.setDisplayOrientation(r3)     // Catch:{ all -> 0x007a }
+            goto L_0x007b
+        L_0x007a:
+        L_0x007b:
             int r0 = r7.currentOrientation
             int r1 = r7.displayOrientation
             int r0 = r0 - r1
             r7.diffOrientation = r0
-            if (r0 >= 0) goto L_0x0086
+            if (r0 >= 0) goto L_0x0088
             int r0 = r0 + 360
             r7.diffOrientation = r0
-        L_0x0086:
+        L_0x0088:
+            return
+        L_0x0089:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraSession.updateRotation():void");

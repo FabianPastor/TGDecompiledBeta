@@ -410,12 +410,12 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
                 int scrollX = getScrollX();
                 int left = textView.getLeft();
                 int measuredWidth = textView.getMeasuredWidth();
-                if (left < scrollX) {
-                    smoothScrollTo(left, 0);
+                if (left - AndroidUtilities.dp(50.0f) < scrollX) {
+                    smoothScrollTo(left - AndroidUtilities.dp(50.0f), 0);
                     return;
                 }
                 int i2 = left + measuredWidth;
-                if (i2 > scrollX + getWidth()) {
+                if (AndroidUtilities.dp(21.0f) + i2 > scrollX + getWidth()) {
                     smoothScrollTo(i2, 0);
                 }
             }

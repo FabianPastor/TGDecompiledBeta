@@ -210,8 +210,11 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, TLRPC$FileLocation tLRPC$FileLocation, int i, boolean z) {
             ImageReceiver imageReceiver;
             View pinnedHeader;
+            SharedLinkCell sharedLinkCell;
+            MessageObject message;
+            ImageReceiver photoImage;
             MessageObject messageObject2;
-            if (messageObject != null && (SharedMediaLayout.this.mediaPages[0].selectedType == 0 || SharedMediaLayout.this.mediaPages[0].selectedType == 1 || SharedMediaLayout.this.mediaPages[0].selectedType == 5)) {
+            if (messageObject != null && (SharedMediaLayout.this.mediaPages[0].selectedType == 0 || SharedMediaLayout.this.mediaPages[0].selectedType == 1 || SharedMediaLayout.this.mediaPages[0].selectedType == 3 || SharedMediaLayout.this.mediaPages[0].selectedType == 5)) {
                 RecyclerListView access$200 = SharedMediaLayout.this.mediaPages[0].listView;
                 int childCount = access$200.getChildCount();
                 int i2 = -1;
@@ -251,19 +254,25 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                                 SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) childAt;
                                 if (sharedDocumentCell.getMessage().getId() == messageObject.getId()) {
                                     BackupImageView imageView2 = sharedDocumentCell.getImageView();
-                                    ImageReceiver imageReceiver2 = imageView2.getImageReceiver();
+                                    photoImage = imageView2.getImageReceiver();
                                     imageView2.getLocationInWindow(iArr);
-                                    imageReceiver = imageReceiver2;
                                 }
-                            } else if (childAt instanceof ContextLinkCell) {
-                                ContextLinkCell contextLinkCell = (ContextLinkCell) childAt;
-                                MessageObject messageObject3 = (MessageObject) contextLinkCell.getParentObject();
-                                if (messageObject3 != null && messageObject3.getId() == messageObject.getId()) {
-                                    imageReceiver = contextLinkCell.getPhotoImage();
-                                    contextLinkCell.getLocationInWindow(iArr);
+                                imageReceiver = null;
+                            } else {
+                                if (childAt instanceof ContextLinkCell) {
+                                    ContextLinkCell contextLinkCell = (ContextLinkCell) childAt;
+                                    MessageObject messageObject3 = (MessageObject) contextLinkCell.getParentObject();
+                                    if (messageObject3 != null && messageObject3.getId() == messageObject.getId()) {
+                                        photoImage = contextLinkCell.getPhotoImage();
+                                        contextLinkCell.getLocationInWindow(iArr);
+                                    }
+                                } else if ((childAt instanceof SharedLinkCell) && (message = sharedLinkCell.getMessage()) != null && message.getId() == messageObject.getId()) {
+                                    imageReceiver = (sharedLinkCell = (SharedLinkCell) childAt).getLinkImageView();
+                                    sharedLinkCell.getLocationInWindow(iArr);
                                 }
+                                imageReceiver = null;
                             }
-                            imageReceiver = null;
+                            imageReceiver = photoImage;
                         }
                         if (imageReceiver != null) {
                             PhotoViewer.PlaceProviderObject placeProviderObject = new PhotoViewer.PlaceProviderObject();

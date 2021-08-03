@@ -647,7 +647,7 @@ public class ClearHistoryAlert extends BottomSheet {
                 this.dismissedDelayed = true;
                 int i3 = 70;
                 if (i2 == 3) {
-                    i = 2592000;
+                    i = 2678400;
                 } else if (i2 == 2) {
                     i = 604800;
                 } else if (i2 == 1) {

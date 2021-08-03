@@ -2160,6 +2160,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
                     GroupCallRenderersContainer groupCallRenderersContainer = GroupCallRenderersContainer.this;
                     groupCallRenderersContainer.swipeToBackAnimator = null;
                     groupCallRenderersContainer.swipeToBackDy = 0.0f;
+                    groupCallRenderersContainer.invalidate();
                 }
             });
             ValueAnimator valueAnimator2 = this.swipeToBackAnimator;

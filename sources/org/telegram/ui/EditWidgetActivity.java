@@ -232,7 +232,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout r9 = new android.widget.LinearLayout
                 r9.<init>(r2)
                 r9.setOrientation(r4)
-                r10 = 2131166164(0x7var_d4, float:1.7946566E38)
+                r10 = 2131166166(0x7var_d6, float:1.794657E38)
                 r9.setBackgroundResource(r10)
                 r14 = 10
                 r16 = 10
@@ -1056,14 +1056,14 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166168(0x7var_d8, float:1.7946574E38)
+                r2 = 2131166170(0x7var_da, float:1.7946578E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x05fd
             L_0x05e1:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166167(0x7var_d7, float:1.7946572E38)
+                r2 = 2131166169(0x7var_d9, float:1.7946576E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x05fd
             L_0x05f0:

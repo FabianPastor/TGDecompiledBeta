@@ -22,6 +22,7 @@ import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
+import org.telegram.ui.Components.ThemeEditorView;
 
 public class BubbleActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate {
     private ActionBarLayout actionBarLayout;
@@ -216,6 +217,19 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
             AccountInstance.getInstance(this.currentAccount).getConnectionsManager().setAppPaused(false, false);
         }
         onFinish();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onActivityResult(int i, int i2, Intent intent) {
+        super.onActivityResult(i, i2, intent);
+        ThemeEditorView instance = ThemeEditorView.getInstance();
+        if (instance != null) {
+            instance.onActivityResult(i, i2, intent);
+        }
+        if (this.actionBarLayout.fragmentsStack.size() != 0) {
+            ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
+            arrayList.get(arrayList.size() - 1).onActivityResultFragment(i, i2, intent);
+        }
     }
 
     /* access modifiers changed from: protected */
