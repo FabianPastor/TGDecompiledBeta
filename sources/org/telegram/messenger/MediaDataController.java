@@ -8321,6 +8321,45 @@ public class MediaDataController extends BaseController {
         return i < i2 ? -1 : 0;
     }
 
+    public void addStyle(int i, int i2, int i3, ArrayList<TLRPC$MessageEntity> arrayList) {
+        if ((i & 1) != 0) {
+            TLRPC$TL_messageEntityBold tLRPC$TL_messageEntityBold = new TLRPC$TL_messageEntityBold();
+            tLRPC$TL_messageEntityBold.offset = i2;
+            tLRPC$TL_messageEntityBold.length = i3 - i2;
+            arrayList.add(tLRPC$TL_messageEntityBold);
+        }
+        if ((i & 2) != 0) {
+            TLRPC$TL_messageEntityItalic tLRPC$TL_messageEntityItalic = new TLRPC$TL_messageEntityItalic();
+            tLRPC$TL_messageEntityItalic.offset = i2;
+            tLRPC$TL_messageEntityItalic.length = i3 - i2;
+            arrayList.add(tLRPC$TL_messageEntityItalic);
+        }
+        if ((i & 4) != 0) {
+            TLRPC$TL_messageEntityCode tLRPC$TL_messageEntityCode = new TLRPC$TL_messageEntityCode();
+            tLRPC$TL_messageEntityCode.offset = i2;
+            tLRPC$TL_messageEntityCode.length = i3 - i2;
+            arrayList.add(tLRPC$TL_messageEntityCode);
+        }
+        if ((i & 8) != 0) {
+            TLRPC$TL_messageEntityStrike tLRPC$TL_messageEntityStrike = new TLRPC$TL_messageEntityStrike();
+            tLRPC$TL_messageEntityStrike.offset = i2;
+            tLRPC$TL_messageEntityStrike.length = i3 - i2;
+            arrayList.add(tLRPC$TL_messageEntityStrike);
+        }
+        if ((i & 16) != 0) {
+            TLRPC$TL_messageEntityUnderline tLRPC$TL_messageEntityUnderline = new TLRPC$TL_messageEntityUnderline();
+            tLRPC$TL_messageEntityUnderline.offset = i2;
+            tLRPC$TL_messageEntityUnderline.length = i3 - i2;
+            arrayList.add(tLRPC$TL_messageEntityUnderline);
+        }
+        if ((i & 32) != 0) {
+            TLRPC$TL_messageEntityBlockquote tLRPC$TL_messageEntityBlockquote = new TLRPC$TL_messageEntityBlockquote();
+            tLRPC$TL_messageEntityBlockquote.offset = i2;
+            tLRPC$TL_messageEntityBlockquote.length = i3 - i2;
+            arrayList.add(tLRPC$TL_messageEntityBlockquote);
+        }
+    }
+
     /* JADX WARNING: Code restructure failed: missing block: B:26:0x0056, code lost:
         if (r1 != null) goto L_0x005d;
      */
@@ -8464,11 +8503,11 @@ public class MediaDataController extends BaseController {
             r19 = this;
             r0 = r19
             r1 = 0
-            if (r20 == 0) goto L_0x0423
+            if (r20 == 0) goto L_0x03cb
             r2 = 0
             r3 = r20[r2]
             if (r3 != 0) goto L_0x000c
-            goto L_0x0423
+            goto L_0x03cb
         L_0x000c:
             r3 = -1
             r4 = 0
@@ -8699,7 +8738,7 @@ public class MediaDataController extends BaseController {
         L_0x0199:
             r3 = r20[r2]
             boolean r3 = r3 instanceof android.text.Spanned
-            if (r3 == 0) goto L_0x030f
+            if (r3 == 0) goto L_0x02b7
             r3 = r20[r2]
             android.text.Spanned r3 = (android.text.Spanned) r3
             r4 = r20[r2]
@@ -8707,102 +8746,50 @@ public class MediaDataController extends BaseController {
             java.lang.Class<org.telegram.ui.Components.TextStyleSpan> r5 = org.telegram.ui.Components.TextStyleSpan.class
             java.lang.Object[] r4 = r3.getSpans(r2, r4, r5)
             org.telegram.ui.Components.TextStyleSpan[] r4 = (org.telegram.ui.Components.TextStyleSpan[]) r4
-            if (r4 == 0) goto L_0x0252
+            if (r4 == 0) goto L_0x01e8
             int r5 = r4.length
-            if (r5 <= 0) goto L_0x0252
+            if (r5 <= 0) goto L_0x01e8
             r5 = 0
         L_0x01b7:
             int r6 = r4.length
-            if (r5 >= r6) goto L_0x0252
+            if (r5 >= r6) goto L_0x01e8
             r6 = r4[r5]
             int r9 = r3.getSpanStart(r6)
             int r12 = r3.getSpanEnd(r6)
             boolean r13 = checkInclusion(r9, r1, r2)
-            if (r13 != 0) goto L_0x024e
+            if (r13 != 0) goto L_0x01e5
             boolean r13 = checkInclusion(r12, r1, r11)
-            if (r13 != 0) goto L_0x024e
+            if (r13 != 0) goto L_0x01e5
             boolean r13 = checkIntersection(r9, r12, r1)
-            if (r13 == 0) goto L_0x01d8
-            goto L_0x024e
-        L_0x01d8:
-            if (r1 != 0) goto L_0x01df
+            if (r13 == 0) goto L_0x01d7
+            goto L_0x01e5
+        L_0x01d7:
+            if (r1 != 0) goto L_0x01de
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x01df:
+        L_0x01de:
             int r6 = r6.getStyleFlags()
-            r13 = r6 & 1
-            if (r13 == 0) goto L_0x01f5
-            org.telegram.tgnet.TLRPC$TL_messageEntityBold r13 = new org.telegram.tgnet.TLRPC$TL_messageEntityBold
-            r13.<init>()
-            r13.offset = r9
-            int r14 = r12 - r9
-            r13.length = r14
-            r1.add(r13)
-        L_0x01f5:
-            r13 = r6 & 2
-            if (r13 == 0) goto L_0x0207
-            org.telegram.tgnet.TLRPC$TL_messageEntityItalic r13 = new org.telegram.tgnet.TLRPC$TL_messageEntityItalic
-            r13.<init>()
-            r13.offset = r9
-            int r14 = r12 - r9
-            r13.length = r14
-            r1.add(r13)
-        L_0x0207:
-            r13 = r6 & 4
-            if (r13 == 0) goto L_0x0219
-            org.telegram.tgnet.TLRPC$TL_messageEntityCode r13 = new org.telegram.tgnet.TLRPC$TL_messageEntityCode
-            r13.<init>()
-            r13.offset = r9
-            int r14 = r12 - r9
-            r13.length = r14
-            r1.add(r13)
-        L_0x0219:
-            r13 = r6 & 8
-            if (r13 == 0) goto L_0x022b
-            org.telegram.tgnet.TLRPC$TL_messageEntityStrike r13 = new org.telegram.tgnet.TLRPC$TL_messageEntityStrike
-            r13.<init>()
-            r13.offset = r9
-            int r14 = r12 - r9
-            r13.length = r14
-            r1.add(r13)
-        L_0x022b:
-            r13 = r6 & 16
-            if (r13 == 0) goto L_0x023d
-            org.telegram.tgnet.TLRPC$TL_messageEntityUnderline r13 = new org.telegram.tgnet.TLRPC$TL_messageEntityUnderline
-            r13.<init>()
-            r13.offset = r9
-            int r14 = r12 - r9
-            r13.length = r14
-            r1.add(r13)
-        L_0x023d:
-            r6 = r6 & 32
-            if (r6 == 0) goto L_0x024e
-            org.telegram.tgnet.TLRPC$TL_messageEntityBlockquote r6 = new org.telegram.tgnet.TLRPC$TL_messageEntityBlockquote
-            r6.<init>()
-            r6.offset = r9
-            int r12 = r12 - r9
-            r6.length = r12
-            r1.add(r6)
-        L_0x024e:
+            r0.addStyle(r6, r9, r12, r1)
+        L_0x01e5:
             int r5 = r5 + 1
             goto L_0x01b7
-        L_0x0252:
+        L_0x01e8:
             r4 = r20[r2]
             int r4 = r4.length()
             java.lang.Class<org.telegram.ui.Components.URLSpanUserMention> r5 = org.telegram.ui.Components.URLSpanUserMention.class
             java.lang.Object[] r4 = r3.getSpans(r2, r4, r5)
             org.telegram.ui.Components.URLSpanUserMention[] r4 = (org.telegram.ui.Components.URLSpanUserMention[]) r4
-            if (r4 == 0) goto L_0x02c1
+            if (r4 == 0) goto L_0x0257
             int r5 = r4.length
-            if (r5 <= 0) goto L_0x02c1
-            if (r1 != 0) goto L_0x026c
+            if (r5 <= 0) goto L_0x0257
+            if (r1 != 0) goto L_0x0202
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x026c:
+        L_0x0202:
             r5 = 0
-        L_0x026d:
+        L_0x0203:
             int r6 = r4.length
-            if (r5 >= r6) goto L_0x02c1
+            if (r5 >= r6) goto L_0x0257
             org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName r6 = new org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName
             r6.<init>()
             org.telegram.messenger.MessagesController r9 = r19.getMessagesController()
@@ -8812,7 +8799,7 @@ public class MediaDataController extends BaseController {
             int r12 = r12.intValue()
             org.telegram.tgnet.TLRPC$InputUser r9 = r9.getInputUser((int) r12)
             r6.user_id = r9
-            if (r9 == 0) goto L_0x02be
+            if (r9 == 0) goto L_0x0254
             r9 = r4[r5]
             int r9 = r3.getSpanStart(r9)
             r6.offset = r9
@@ -8828,32 +8815,32 @@ public class MediaDataController extends BaseController {
             int r12 = r12 + r9
             int r12 = r12 - r11
             char r9 = r13.charAt(r12)
-            if (r9 != r8) goto L_0x02bb
+            if (r9 != r8) goto L_0x0251
             int r9 = r6.length
             int r9 = r9 - r11
             r6.length = r9
-        L_0x02bb:
+        L_0x0251:
             r1.add(r6)
-        L_0x02be:
+        L_0x0254:
             int r5 = r5 + 1
-            goto L_0x026d
-        L_0x02c1:
+            goto L_0x0203
+        L_0x0257:
             r4 = r20[r2]
             int r4 = r4.length()
             java.lang.Class<org.telegram.ui.Components.URLSpanReplacement> r5 = org.telegram.ui.Components.URLSpanReplacement.class
             java.lang.Object[] r4 = r3.getSpans(r2, r4, r5)
             org.telegram.ui.Components.URLSpanReplacement[] r4 = (org.telegram.ui.Components.URLSpanReplacement[]) r4
-            if (r4 == 0) goto L_0x030f
+            if (r4 == 0) goto L_0x02b7
             int r5 = r4.length
-            if (r5 <= 0) goto L_0x030f
-            if (r1 != 0) goto L_0x02db
+            if (r5 <= 0) goto L_0x02b7
+            if (r1 != 0) goto L_0x0271
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x02db:
+        L_0x0271:
             r5 = 0
-        L_0x02dc:
+        L_0x0272:
             int r6 = r4.length
-            if (r5 >= r6) goto L_0x030f
+            if (r5 >= r6) goto L_0x02b7
             org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl r6 = new org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl
             r6.<init>()
             r9 = r4[r5]
@@ -8871,107 +8858,116 @@ public class MediaDataController extends BaseController {
             java.lang.String r9 = r9.getURL()
             r6.url = r9
             r1.add(r6)
+            r9 = r4[r5]
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r9 = r9.getTextStyleRun()
+            if (r9 == 0) goto L_0x02b4
+            int r9 = r9.flags
+            int r12 = r6.offset
+            int r6 = r6.length
+            int r6 = r6 + r12
+            r0.addStyle(r9, r12, r6, r1)
+        L_0x02b4:
             int r5 = r5 + 1
-            goto L_0x02dc
-        L_0x030f:
-            if (r21 == 0) goto L_0x0313
+            goto L_0x0272
+        L_0x02b7:
+            if (r21 == 0) goto L_0x02bb
             r3 = 3
-            goto L_0x0314
-        L_0x0313:
+            goto L_0x02bc
+        L_0x02bb:
             r3 = 2
-        L_0x0314:
+        L_0x02bc:
             r4 = 0
-        L_0x0315:
-            if (r4 >= r3) goto L_0x0423
-            if (r4 == 0) goto L_0x032d
-            if (r4 == r11) goto L_0x0324
+        L_0x02bd:
+            if (r4 >= r3) goto L_0x03cb
+            if (r4 == 0) goto L_0x02d5
+            if (r4 == r11) goto L_0x02cc
             r5 = 126(0x7e, float:1.77E-43)
             java.lang.String r6 = "~~"
             r9 = r6
             r5 = -1
             r6 = 126(0x7e, float:1.77E-43)
-            goto L_0x0335
-        L_0x0324:
+            goto L_0x02dd
+        L_0x02cc:
             r5 = 95
             java.lang.String r6 = "__"
             r9 = r6
             r5 = -1
             r6 = 95
-            goto L_0x0335
-        L_0x032d:
+            goto L_0x02dd
+        L_0x02d5:
             r5 = 42
             java.lang.String r6 = "**"
             r9 = r6
             r5 = -1
             r6 = 42
-        L_0x0335:
+        L_0x02dd:
             r12 = 0
-        L_0x0336:
+        L_0x02de:
             r13 = r20[r2]
             int r12 = android.text.TextUtils.indexOf(r13, r9, r12)
             r13 = -1
-            if (r12 == r13) goto L_0x041b
-            if (r5 != r13) goto L_0x035c
-            if (r12 != 0) goto L_0x0346
+            if (r12 == r13) goto L_0x03c3
+            if (r5 != r13) goto L_0x0304
+            if (r12 != 0) goto L_0x02ee
             r14 = 32
-            goto L_0x034e
-        L_0x0346:
+            goto L_0x02f6
+        L_0x02ee:
             r14 = r20[r2]
             int r15 = r12 + -1
             char r14 = r14.charAt(r15)
-        L_0x034e:
+        L_0x02f6:
             boolean r15 = checkInclusion(r12, r1, r2)
-            if (r15 != 0) goto L_0x0359
-            if (r14 == r8) goto L_0x0358
-            if (r14 != r7) goto L_0x0359
-        L_0x0358:
+            if (r15 != 0) goto L_0x0301
+            if (r14 == r8) goto L_0x0300
+            if (r14 != r7) goto L_0x0301
+        L_0x0300:
             r5 = r12
-        L_0x0359:
+        L_0x0301:
             int r12 = r12 + 2
-            goto L_0x0336
-        L_0x035c:
+            goto L_0x02de
+        L_0x0304:
             int r14 = r12 + 2
-        L_0x035e:
+        L_0x0306:
             r15 = r20[r2]
             int r15 = r15.length()
-            if (r14 >= r15) goto L_0x0373
+            if (r14 >= r15) goto L_0x031b
             r15 = r20[r2]
             char r15 = r15.charAt(r14)
-            if (r15 != r6) goto L_0x0373
+            if (r15 != r6) goto L_0x031b
             int r12 = r12 + 1
             int r14 = r14 + 1
-            goto L_0x035e
-        L_0x0373:
+            goto L_0x0306
+        L_0x031b:
             int r14 = r12 + 2
             boolean r15 = checkInclusion(r12, r1, r2)
-            if (r15 != 0) goto L_0x0413
+            if (r15 != 0) goto L_0x03bb
             boolean r15 = checkIntersection(r5, r12, r1)
-            if (r15 == 0) goto L_0x0383
-            goto L_0x0413
-        L_0x0383:
+            if (r15 == 0) goto L_0x032b
+            goto L_0x03bb
+        L_0x032b:
             int r15 = r5 + 2
-            if (r15 == r12) goto L_0x0413
-            if (r1 != 0) goto L_0x038e
+            if (r15 == r12) goto L_0x03bb
+            if (r1 != 0) goto L_0x0336
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x038e:
+        L_0x0336:
             r7 = 3
-            java.lang.CharSequence[] r8 = new java.lang.CharSequence[r7]     // Catch:{ Exception -> 0x03b6 }
-            r7 = r20[r2]     // Catch:{ Exception -> 0x03b6 }
-            java.lang.CharSequence r7 = r0.substring(r7, r2, r5)     // Catch:{ Exception -> 0x03b6 }
-            r8[r2] = r7     // Catch:{ Exception -> 0x03b6 }
-            r7 = r20[r2]     // Catch:{ Exception -> 0x03b6 }
-            java.lang.CharSequence r7 = r0.substring(r7, r15, r12)     // Catch:{ Exception -> 0x03b6 }
-            r8[r11] = r7     // Catch:{ Exception -> 0x03b6 }
-            r7 = r20[r2]     // Catch:{ Exception -> 0x03b6 }
-            r17 = r20[r2]     // Catch:{ Exception -> 0x03b6 }
-            int r13 = r17.length()     // Catch:{ Exception -> 0x03b6 }
-            java.lang.CharSequence r7 = r0.substring(r7, r14, r13)     // Catch:{ Exception -> 0x03b6 }
-            r8[r10] = r7     // Catch:{ Exception -> 0x03b6 }
-            java.lang.CharSequence r7 = org.telegram.messenger.AndroidUtilities.concat(r8)     // Catch:{ Exception -> 0x03b6 }
-            r20[r2] = r7     // Catch:{ Exception -> 0x03b6 }
-            goto L_0x03ee
-        L_0x03b6:
+            java.lang.CharSequence[] r8 = new java.lang.CharSequence[r7]     // Catch:{ Exception -> 0x035e }
+            r7 = r20[r2]     // Catch:{ Exception -> 0x035e }
+            java.lang.CharSequence r7 = r0.substring(r7, r2, r5)     // Catch:{ Exception -> 0x035e }
+            r8[r2] = r7     // Catch:{ Exception -> 0x035e }
+            r7 = r20[r2]     // Catch:{ Exception -> 0x035e }
+            java.lang.CharSequence r7 = r0.substring(r7, r15, r12)     // Catch:{ Exception -> 0x035e }
+            r8[r11] = r7     // Catch:{ Exception -> 0x035e }
+            r7 = r20[r2]     // Catch:{ Exception -> 0x035e }
+            r17 = r20[r2]     // Catch:{ Exception -> 0x035e }
+            int r13 = r17.length()     // Catch:{ Exception -> 0x035e }
+            java.lang.CharSequence r7 = r0.substring(r7, r14, r13)     // Catch:{ Exception -> 0x035e }
+            r8[r10] = r7     // Catch:{ Exception -> 0x035e }
+            java.lang.CharSequence r7 = org.telegram.messenger.AndroidUtilities.concat(r8)     // Catch:{ Exception -> 0x035e }
+            r20[r2] = r7     // Catch:{ Exception -> 0x035e }
+            goto L_0x0396
+        L_0x035e:
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             r8 = r20[r2]
@@ -8990,20 +8986,20 @@ public class MediaDataController extends BaseController {
             r7.append(r8)
             java.lang.String r7 = r7.toString()
             r20[r2] = r7
-        L_0x03ee:
-            if (r4 != 0) goto L_0x03f6
+        L_0x0396:
+            if (r4 != 0) goto L_0x039e
             org.telegram.tgnet.TLRPC$TL_messageEntityBold r7 = new org.telegram.tgnet.TLRPC$TL_messageEntityBold
             r7.<init>()
-            goto L_0x0403
-        L_0x03f6:
-            if (r4 != r11) goto L_0x03fe
+            goto L_0x03ab
+        L_0x039e:
+            if (r4 != r11) goto L_0x03a6
             org.telegram.tgnet.TLRPC$TL_messageEntityItalic r7 = new org.telegram.tgnet.TLRPC$TL_messageEntityItalic
             r7.<init>()
-            goto L_0x0403
-        L_0x03fe:
+            goto L_0x03ab
+        L_0x03a6:
             org.telegram.tgnet.TLRPC$TL_messageEntityStrike r7 = new org.telegram.tgnet.TLRPC$TL_messageEntityStrike
             r7.<init>()
-        L_0x0403:
+        L_0x03ab:
             r7.offset = r5
             int r12 = r12 - r5
             int r12 = r12 - r10
@@ -9013,18 +9009,18 @@ public class MediaDataController extends BaseController {
             removeOffsetAfter(r5, r8, r1)
             r1.add(r7)
             int r14 = r14 + -4
-        L_0x0413:
+        L_0x03bb:
             r12 = r14
             r5 = -1
             r7 = 10
             r8 = 32
-            goto L_0x0336
-        L_0x041b:
+            goto L_0x02de
+        L_0x03c3:
             int r4 = r4 + 1
             r7 = 10
             r8 = 32
-            goto L_0x0315
-        L_0x0423:
+            goto L_0x02bd
+        L_0x03cb:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.getEntities(java.lang.CharSequence[], boolean):java.util.ArrayList");

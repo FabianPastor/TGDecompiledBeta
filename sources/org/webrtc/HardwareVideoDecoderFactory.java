@@ -19,8 +19,8 @@ public class HardwareVideoDecoderFactory extends MediaCodecVideoDecoderFactory {
         }
 
         /* JADX WARNING: Can't fix incorrect switch cases order */
-        /* JADX WARNING: Code restructure failed: missing block: B:20:0x0046, code lost:
-            if (r3.equals("video/avc") == false) goto L_0x0028;
+        /* JADX WARNING: Code restructure failed: missing block: B:20:0x0047, code lost:
+            if (r3.equals("video/avc") == false) goto L_0x0029;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean test(android.media.MediaCodecInfo r8) {
@@ -32,92 +32,99 @@ public class HardwareVideoDecoderFactory extends MediaCodecVideoDecoderFactory {
                 return r1
             L_0x0008:
                 java.lang.String[] r8 = r8.getSupportedTypes()
-                if (r8 == 0) goto L_0x0075
+                if (r8 == 0) goto L_0x0085
                 int r0 = r8.length
-                if (r0 != 0) goto L_0x0012
-                goto L_0x0075
-            L_0x0012:
+                if (r0 != 0) goto L_0x0013
+                goto L_0x0085
+            L_0x0013:
                 org.telegram.messenger.voip.Instance$ServerConfig r0 = org.telegram.messenger.voip.Instance.getGlobalServerConfig()
                 r2 = 0
-            L_0x0017:
+            L_0x0018:
                 int r3 = r8.length
                 r4 = 1
-                if (r2 >= r3) goto L_0x0074
+                if (r2 >= r3) goto L_0x0084
                 r3 = r8[r2]
                 r3.hashCode()
                 r5 = -1
                 int r6 = r3.hashCode()
                 switch(r6) {
-                    case -1662541442: goto L_0x0049;
-                    case 1331836730: goto L_0x0040;
-                    case 1599127256: goto L_0x0035;
-                    case 1599127257: goto L_0x002a;
-                    default: goto L_0x0028;
+                    case -1662541442: goto L_0x004a;
+                    case 1331836730: goto L_0x0041;
+                    case 1599127256: goto L_0x0036;
+                    case 1599127257: goto L_0x002b;
+                    default: goto L_0x0029;
                 }
-            L_0x0028:
+            L_0x0029:
                 r4 = -1
-                goto L_0x0053
-            L_0x002a:
+                goto L_0x0054
+            L_0x002b:
                 java.lang.String r4 = "video/x-vnd.on2.vp9"
                 boolean r3 = r3.equals(r4)
-                if (r3 != 0) goto L_0x0033
-                goto L_0x0028
-            L_0x0033:
+                if (r3 != 0) goto L_0x0034
+                goto L_0x0029
+            L_0x0034:
                 r4 = 3
-                goto L_0x0053
-            L_0x0035:
+                goto L_0x0054
+            L_0x0036:
                 java.lang.String r4 = "video/x-vnd.on2.vp8"
                 boolean r3 = r3.equals(r4)
-                if (r3 != 0) goto L_0x003e
-                goto L_0x0028
-            L_0x003e:
+                if (r3 != 0) goto L_0x003f
+                goto L_0x0029
+            L_0x003f:
                 r4 = 2
-                goto L_0x0053
-            L_0x0040:
+                goto L_0x0054
+            L_0x0041:
                 java.lang.String r6 = "video/avc"
                 boolean r3 = r3.equals(r6)
-                if (r3 != 0) goto L_0x0053
-                goto L_0x0028
-            L_0x0049:
+                if (r3 != 0) goto L_0x0054
+                goto L_0x0029
+            L_0x004a:
                 java.lang.String r4 = "video/hevc"
                 boolean r3 = r3.equals(r4)
-                if (r3 != 0) goto L_0x0052
-                goto L_0x0028
-            L_0x0052:
-                r4 = 0
+                if (r3 != 0) goto L_0x0053
+                goto L_0x0029
             L_0x0053:
+                r4 = 0
+            L_0x0054:
                 switch(r4) {
-                    case 0: goto L_0x0071;
-                    case 1: goto L_0x006e;
-                    case 2: goto L_0x005c;
-                    case 3: goto L_0x0059;
-                    default: goto L_0x0056;
+                    case 0: goto L_0x0081;
+                    case 1: goto L_0x006f;
+                    case 2: goto L_0x005d;
+                    case 3: goto L_0x005a;
+                    default: goto L_0x0057;
                 }
-            L_0x0056:
+            L_0x0057:
                 int r2 = r2 + 1
-                goto L_0x0017
-            L_0x0059:
+                goto L_0x0018
+            L_0x005a:
                 boolean r8 = r0.enable_vp9_decoder
                 return r8
-            L_0x005c:
+            L_0x005d:
                 org.telegram.messenger.voip.VoIPService r8 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-                if (r8 == 0) goto L_0x006b
+                if (r8 == 0) goto L_0x006c
                 org.telegram.messenger.voip.VoIPService r8 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
                 org.telegram.messenger.ChatObject$Call r8 = r8.groupCall
-                if (r8 == 0) goto L_0x006b
+                if (r8 == 0) goto L_0x006c
                 return r1
-            L_0x006b:
+            L_0x006c:
                 boolean r8 = r0.enable_vp8_decoder
                 return r8
-            L_0x006e:
+            L_0x006f:
+                org.telegram.messenger.voip.VoIPService r8 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+                if (r8 == 0) goto L_0x007e
+                org.telegram.messenger.voip.VoIPService r8 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+                org.telegram.messenger.ChatObject$Call r8 = r8.groupCall
+                if (r8 == 0) goto L_0x007e
+                return r1
+            L_0x007e:
                 boolean r8 = r0.enable_h264_decoder
                 return r8
-            L_0x0071:
+            L_0x0081:
                 boolean r8 = r0.enable_h265_decoder
                 return r8
-            L_0x0074:
+            L_0x0084:
                 return r4
-            L_0x0075:
+            L_0x0085:
                 return r1
             */
             throw new UnsupportedOperationException("Method not decompiled: org.webrtc.HardwareVideoDecoderFactory.AnonymousClass1.test(android.media.MediaCodecInfo):boolean");

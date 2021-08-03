@@ -69,6 +69,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -1822,48 +1823,38 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             };
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:24:0x0052, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:15:0x004a, code lost:
             r2.keyframeThumbs.clear();
             r2.frameCount = 0;
             r4 = r2.generateKeyframeThumbsQueue;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:25:0x005c, code lost:
-            if (r4 == null) goto L_0x0066;
+        /* JADX WARNING: Code restructure failed: missing block: B:16:0x0054, code lost:
+            if (r4 == null) goto L_0x005e;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:26:0x005e, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:17:0x0056, code lost:
             r4.cleanupQueue();
             r2.generateKeyframeThumbsQueue.recycle();
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:27:0x0066, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:18:0x005e, code lost:
             r2.generateKeyframeThumbsQueue = new org.telegram.messenger.DispatchQueue("keyframes_thumb_queque");
             r2.handler.sendMessage(r2.handler.obtainMessage(0));
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:28:0x007a, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:19:0x0072, code lost:
             return;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void startRecording(java.io.File r3, android.opengl.EGLContext r4) {
             /*
                 r2 = this;
-                java.lang.String r0 = android.os.Build.DEVICE
-                if (r0 != 0) goto L_0x0006
-                java.lang.String r0 = ""
-            L_0x0006:
-                java.lang.String r1 = "zeroflte"
-                boolean r1 = r0.startsWith(r1)
-                if (r1 != 0) goto L_0x001d
-                java.lang.String r1 = "zenlte"
-                boolean r0 = r0.startsWith(r1)
-                if (r0 == 0) goto L_0x0017
-                goto L_0x001d
-            L_0x0017:
-                r0 = 360(0x168, float:5.04E-43)
-                r1 = 1000000(0xvar_, float:1.401298E-39)
-                goto L_0x0022
-            L_0x001d:
-                r0 = 320(0x140, float:4.48E-43)
-                r1 = 600000(0x927c0, float:8.40779E-40)
-            L_0x0022:
+                org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
+                int r0 = r0.currentAccount
+                org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
+                int r0 = r0.roundVideoSize
+                org.telegram.ui.Components.InstantCameraView r1 = org.telegram.ui.Components.InstantCameraView.this
+                int r1 = r1.currentAccount
+                org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
+                int r1 = r1.roundVideoBitrate
+                int r1 = r1 * 1024
                 r2.videoFile = r3
                 r2.videoWidth = r0
                 r2.videoHeight = r0
@@ -1871,37 +1862,37 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 r2.sharedEglContext = r4
                 java.lang.Object r3 = r2.sync
                 monitor-enter(r3)
-                boolean r4 = r2.running     // Catch:{ all -> 0x007b }
-                if (r4 == 0) goto L_0x0035
-                monitor-exit(r3)     // Catch:{ all -> 0x007b }
+                boolean r4 = r2.running     // Catch:{ all -> 0x0073 }
+                if (r4 == 0) goto L_0x002d
+                monitor-exit(r3)     // Catch:{ all -> 0x0073 }
                 return
-            L_0x0035:
+            L_0x002d:
                 r4 = 1
-                r2.running = r4     // Catch:{ all -> 0x007b }
-                java.lang.Thread r4 = new java.lang.Thread     // Catch:{ all -> 0x007b }
+                r2.running = r4     // Catch:{ all -> 0x0073 }
+                java.lang.Thread r4 = new java.lang.Thread     // Catch:{ all -> 0x0073 }
                 java.lang.String r0 = "TextureMovieEncoder"
-                r4.<init>(r2, r0)     // Catch:{ all -> 0x007b }
+                r4.<init>(r2, r0)     // Catch:{ all -> 0x0073 }
                 r0 = 10
-                r4.setPriority(r0)     // Catch:{ all -> 0x007b }
-                r4.start()     // Catch:{ all -> 0x007b }
-            L_0x0047:
-                boolean r4 = r2.ready     // Catch:{ all -> 0x007b }
-                if (r4 != 0) goto L_0x0051
-                java.lang.Object r4 = r2.sync     // Catch:{ InterruptedException -> 0x0047 }
-                r4.wait()     // Catch:{ InterruptedException -> 0x0047 }
-                goto L_0x0047
-            L_0x0051:
-                monitor-exit(r3)     // Catch:{ all -> 0x007b }
+                r4.setPriority(r0)     // Catch:{ all -> 0x0073 }
+                r4.start()     // Catch:{ all -> 0x0073 }
+            L_0x003f:
+                boolean r4 = r2.ready     // Catch:{ all -> 0x0073 }
+                if (r4 != 0) goto L_0x0049
+                java.lang.Object r4 = r2.sync     // Catch:{ InterruptedException -> 0x003f }
+                r4.wait()     // Catch:{ InterruptedException -> 0x003f }
+                goto L_0x003f
+            L_0x0049:
+                monitor-exit(r3)     // Catch:{ all -> 0x0073 }
                 java.util.ArrayList<android.graphics.Bitmap> r3 = r2.keyframeThumbs
                 r3.clear()
                 r3 = 0
                 r2.frameCount = r3
                 org.telegram.messenger.DispatchQueue r4 = r2.generateKeyframeThumbsQueue
-                if (r4 == 0) goto L_0x0066
+                if (r4 == 0) goto L_0x005e
                 r4.cleanupQueue()
                 org.telegram.messenger.DispatchQueue r4 = r2.generateKeyframeThumbsQueue
                 r4.recycle()
-            L_0x0066:
+            L_0x005e:
                 org.telegram.messenger.DispatchQueue r4 = new org.telegram.messenger.DispatchQueue
                 java.lang.String r0 = "keyframes_thumb_queque"
                 r4.<init>(r0)
@@ -1911,14 +1902,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 android.os.Message r3 = r0.obtainMessage(r3)
                 r4.sendMessage(r3)
                 return
-            L_0x007b:
+            L_0x0073:
                 r4 = move-exception
-                monitor-exit(r3)     // Catch:{ all -> 0x007b }
-                goto L_0x007f
-            L_0x007e:
+                monitor-exit(r3)     // Catch:{ all -> 0x0073 }
+                goto L_0x0077
+            L_0x0076:
                 throw r4
-            L_0x007f:
-                goto L_0x007e
+            L_0x0077:
+                goto L_0x0076
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView.VideoRecorder.startRecording(java.io.File, android.opengl.EGLContext):void");
         }
@@ -2931,7 +2922,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     mediaFormat.setString("mime", "audio/mp4a-latm");
                     mediaFormat.setInteger("sample-rate", 44100);
                     mediaFormat.setInteger("channel-count", 1);
-                    mediaFormat.setInteger("bitrate", 32000);
+                    mediaFormat.setInteger("bitrate", MessagesController.getInstance(InstantCameraView.this.currentAccount).roundAudioBitrate * 1024);
                     mediaFormat.setInteger("max-input-size", 20480);
                     MediaCodec createEncoderByType = MediaCodec.createEncoderByType("audio/mp4a-latm");
                     this.audioEncoder = createEncoderByType;

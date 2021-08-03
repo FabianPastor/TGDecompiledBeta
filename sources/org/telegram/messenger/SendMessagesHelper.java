@@ -11527,21 +11527,23 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v7, resolved type: org.telegram.tgnet.TLRPC$TL_inputMediaPhoto} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v8, resolved type: org.telegram.tgnet.TLRPC$TL_inputMediaDocument} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v9, resolved type: org.telegram.tgnet.TLRPC$TL_inputMediaDocument} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v10, resolved type: org.telegram.tgnet.TLRPC$TL_inputMediaDocument} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v11, resolved type: org.telegram.tgnet.TLRPC$TL_inputMediaDocument} */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x004d  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0085  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x005f  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0097  */
     /* renamed from: lambda$uploadMultiMedia$34 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$uploadMultiMedia$34$SendMessagesHelper(org.telegram.tgnet.TLObject r6, org.telegram.tgnet.TLRPC$InputMedia r7, org.telegram.messenger.SendMessagesHelper.DelayedMessage r8) {
         /*
             r5 = this;
-            if (r6 == 0) goto L_0x004a
+            if (r6 == 0) goto L_0x005c
             org.telegram.tgnet.TLRPC$MessageMedia r6 = (org.telegram.tgnet.TLRPC$MessageMedia) r6
             boolean r0 = r7 instanceof org.telegram.tgnet.TLRPC$TL_inputMediaUploadedPhoto
-            if (r0 == 0) goto L_0x0027
+            if (r0 == 0) goto L_0x0030
             boolean r0 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto
-            if (r0 == 0) goto L_0x0027
+            if (r0 == 0) goto L_0x0030
             org.telegram.tgnet.TLRPC$TL_inputMediaPhoto r0 = new org.telegram.tgnet.TLRPC$TL_inputMediaPhoto
             r0.<init>()
             org.telegram.tgnet.TLRPC$TL_inputPhoto r1 = new org.telegram.tgnet.TLRPC$TL_inputPhoto
@@ -11554,12 +11556,16 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1.access_hash = r2
             byte[] r6 = r6.file_reference
             r1.file_reference = r6
-            goto L_0x004b
-        L_0x0027:
+            boolean r6 = org.telegram.messenger.BuildVars.DEBUG_VERSION
+            if (r6 == 0) goto L_0x005d
+            java.lang.String r6 = "set uploaded photo"
+            org.telegram.messenger.FileLog.d(r6)
+            goto L_0x005d
+        L_0x0030:
             boolean r0 = r7 instanceof org.telegram.tgnet.TLRPC$TL_inputMediaUploadedDocument
-            if (r0 == 0) goto L_0x004a
+            if (r0 == 0) goto L_0x005c
             boolean r0 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument
-            if (r0 == 0) goto L_0x004a
+            if (r0 == 0) goto L_0x005c
             org.telegram.tgnet.TLRPC$TL_inputMediaDocument r0 = new org.telegram.tgnet.TLRPC$TL_inputMediaDocument
             r0.<init>()
             org.telegram.tgnet.TLRPC$TL_inputDocument r1 = new org.telegram.tgnet.TLRPC$TL_inputDocument
@@ -11572,46 +11578,50 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1.access_hash = r2
             byte[] r6 = r6.file_reference
             r1.file_reference = r6
-            goto L_0x004b
-        L_0x004a:
+            boolean r6 = org.telegram.messenger.BuildVars.DEBUG_VERSION
+            if (r6 == 0) goto L_0x005d
+            java.lang.String r6 = "set uploaded document"
+            org.telegram.messenger.FileLog.d(r6)
+            goto L_0x005d
+        L_0x005c:
             r0 = 0
-        L_0x004b:
-            if (r0 == 0) goto L_0x0085
+        L_0x005d:
+            if (r0 == 0) goto L_0x0097
             int r6 = r7.ttl_seconds
             r1 = 1
-            if (r6 == 0) goto L_0x0059
+            if (r6 == 0) goto L_0x006b
             r0.ttl_seconds = r6
             int r6 = r0.flags
             r6 = r6 | r1
             r0.flags = r6
-        L_0x0059:
+        L_0x006b:
             org.telegram.tgnet.TLObject r6 = r8.sendRequest
             org.telegram.tgnet.TLRPC$TL_messages_sendMultiMedia r6 = (org.telegram.tgnet.TLRPC$TL_messages_sendMultiMedia) r6
             r2 = 0
             r3 = 0
-        L_0x005f:
+        L_0x0071:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_inputSingleMedia> r4 = r6.multi_media
             int r4 = r4.size()
-            if (r3 >= r4) goto L_0x0081
+            if (r3 >= r4) goto L_0x0093
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_inputSingleMedia> r4 = r6.multi_media
             java.lang.Object r4 = r4.get(r3)
             org.telegram.tgnet.TLRPC$TL_inputSingleMedia r4 = (org.telegram.tgnet.TLRPC$TL_inputSingleMedia) r4
             org.telegram.tgnet.TLRPC$InputMedia r4 = r4.media
-            if (r4 != r7) goto L_0x007e
+            if (r4 != r7) goto L_0x0090
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_inputSingleMedia> r6 = r6.multi_media
             java.lang.Object r6 = r6.get(r3)
             org.telegram.tgnet.TLRPC$TL_inputSingleMedia r6 = (org.telegram.tgnet.TLRPC$TL_inputSingleMedia) r6
             r6.media = r0
-            goto L_0x0081
-        L_0x007e:
+            goto L_0x0093
+        L_0x0090:
             int r3 = r3 + 1
-            goto L_0x005f
-        L_0x0081:
+            goto L_0x0071
+        L_0x0093:
             r5.sendReadyToSendGroup(r8, r2, r1)
-            goto L_0x0088
-        L_0x0085:
+            goto L_0x009a
+        L_0x0097:
             r8.markAsError()
-        L_0x0088:
+        L_0x009a:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$uploadMultiMedia$34$SendMessagesHelper(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$InputMedia, org.telegram.messenger.SendMessagesHelper$DelayedMessage):void");
@@ -11635,6 +11645,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 if (!delayedMessage.scheduled) {
                     getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                 }
+                if (BuildVars.DEBUG_VERSION) {
+                    FileLog.d("add message");
+                }
             }
             TLObject tLObject = delayedMessage.sendRequest;
             if (tLObject instanceof TLRPC$TL_messages_sendMultiMedia) {
@@ -11643,6 +11656,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     TLRPC$InputMedia tLRPC$InputMedia = tLRPC$TL_messages_sendMultiMedia.multi_media.get(i2).media;
                     if (!(tLRPC$InputMedia instanceof TLRPC$TL_inputMediaUploadedPhoto) && !(tLRPC$InputMedia instanceof TLRPC$TL_inputMediaUploadedDocument)) {
                         i2++;
+                    } else if (BuildVars.DEBUG_VERSION) {
+                        FileLog.d("multi media not ready");
+                        return;
                     } else {
                         return;
                     }
@@ -11652,6 +11668,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     ArrayList<DelayedMessageSendAfterRequest> arrayList2 = delayedMessage.requests;
                     if (arrayList2 != null) {
                         findMaxDelayedMessageForMessageId.requests.addAll(arrayList2);
+                    }
+                    if (BuildVars.DEBUG_VERSION) {
+                        FileLog.d("has maxDelayedMessage, delay");
                         return;
                     }
                     return;
@@ -11674,7 +11693,12 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             }
             delayedMessage.sendDelayedRequests();
         } else if (z) {
+            if (BuildVars.DEBUG_VERSION) {
+                FileLog.d("final message not added, add");
+            }
             putToDelayedMessages(str, delayedMessage);
+        } else if (BuildVars.DEBUG_VERSION) {
+            FileLog.d("final message not added");
         }
     }
 
@@ -14101,17 +14125,24 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* access modifiers changed from: private */
     /* renamed from: lambda$processUnsentMessages$63 */
     public /* synthetic */ void lambda$processUnsentMessages$63$SendMessagesHelper(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5) {
+        HashMap<String, String> hashMap;
         getMessagesController().putUsers(arrayList, true);
         getMessagesController().putChats(arrayList2, true);
         getMessagesController().putEncryptedChats(arrayList3, true);
-        for (int i = 0; i < arrayList4.size(); i++) {
-            retrySendMessage(new MessageObject(this.currentAccount, (TLRPC$Message) arrayList4.get(i), false, true), true);
+        int size = arrayList4.size();
+        for (int i = 0; i < size; i++) {
+            MessageObject messageObject = new MessageObject(this.currentAccount, (TLRPC$Message) arrayList4.get(i), false, true);
+            long groupId = messageObject.getGroupId();
+            if (groupId != 0 && (hashMap = messageObject.messageOwner.params) != null && !hashMap.containsKey("final") && (i == size - 1 || ((TLRPC$Message) arrayList4.get(i + 1)).grouped_id != groupId)) {
+                messageObject.messageOwner.params.put("final", "1");
+            }
+            retrySendMessage(messageObject, true);
         }
         if (arrayList5 != null) {
             for (int i2 = 0; i2 < arrayList5.size(); i2++) {
-                MessageObject messageObject = new MessageObject(this.currentAccount, (TLRPC$Message) arrayList5.get(i2), false, true);
-                messageObject.scheduled = true;
-                retrySendMessage(messageObject, true);
+                MessageObject messageObject2 = new MessageObject(this.currentAccount, (TLRPC$Message) arrayList5.get(i2), false, true);
+                messageObject2.scheduled = true;
+                retrySendMessage(messageObject2, true);
             }
         }
     }

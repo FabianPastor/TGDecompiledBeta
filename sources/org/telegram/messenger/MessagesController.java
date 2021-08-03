@@ -546,6 +546,9 @@ public class MessagesController extends BaseController implements NotificationCe
     private boolean resetingDialogs;
     public int revokeTimeLimit;
     public int revokeTimePmLimit;
+    public int roundAudioBitrate;
+    public int roundVideoBitrate;
+    public int roundVideoSize;
     public boolean saveGifsWithStickers;
     public int secretWebpagePreview;
     public DialogFilter[] selectedDialogFilter = new DialogFilter[2];
@@ -1256,6 +1259,9 @@ public class MessagesController extends BaseController implements NotificationCe
         this.autoarchiveAvailable = this.mainPreferences.getBoolean("autoarchiveAvailable", false);
         this.groipCallVideoMaxParticipants = this.mainPreferences.getInt("groipCallVideoMaxParticipants", 30);
         this.suggestStickersApiOnly = this.mainPreferences.getBoolean("suggestStickersApiOnly", false);
+        this.roundVideoSize = this.mainPreferences.getInt("roundVideoSize", 384);
+        this.roundVideoBitrate = this.mainPreferences.getInt("roundVideoBitrate", 1000);
+        this.roundAudioBitrate = this.mainPreferences.getInt("roundAudioBitrate", 64);
         Set<String> stringSet = this.mainPreferences.getStringSet("pendingSuggestions", (Set) null);
         this.pendingSuggestions = stringSet;
         if (stringSet != null) {
@@ -2271,11 +2277,14 @@ public class MessagesController extends BaseController implements NotificationCe
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Can't fix incorrect switch cases order */
-    /* JADX WARNING: Code restructure failed: missing block: B:265:0x061f, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:175:0x0391, code lost:
+        r7 = true;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:303:0x06d0, code lost:
         r7 = true;
         r8 = true;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:82:0x017a, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:86:0x0189, code lost:
         r25 = r4;
         r26 = r5;
      */
@@ -2287,7 +2296,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r1 = r27
             r0 = r28
             boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject
-            if (r2 == 0) goto L_0x07af
+            if (r2 == 0) goto L_0x0860
             android.content.SharedPreferences r2 = r1.mainPreferences
             android.content.SharedPreferences$Editor r2 = r2.edit()
             r4 = r0
@@ -2298,633 +2307,754 @@ public class MessagesController extends BaseController implements NotificationCe
             r7 = 0
             r8 = 0
         L_0x001a:
-            if (r6 >= r5) goto L_0x079a
+            if (r6 >= r5) goto L_0x084b
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r0 = r4.value
             java.lang.Object r0 = r0.get(r6)
             org.telegram.tgnet.TLRPC$TL_jsonObjectValue r0 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r0
             java.lang.String r9 = r0.key
             r9.hashCode()
-            r10 = -1
-            int r11 = r9.hashCode()
-            switch(r11) {
-                case -1688620344: goto L_0x0152;
-                case -1683918311: goto L_0x0147;
-                case -1391086521: goto L_0x013c;
-                case -1032177933: goto L_0x0131;
-                case -980397720: goto L_0x0126;
-                case -515715076: goto L_0x011b;
-                case -404170231: goto L_0x0110;
-                case -253815153: goto L_0x0105;
-                case -232883529: goto L_0x00f7;
-                case -111779186: goto L_0x00e9;
-                case -76561797: goto L_0x00db;
-                case -24016028: goto L_0x00cd;
-                case 169095108: goto L_0x00bf;
-                case 222975416: goto L_0x00b1;
-                case 227342346: goto L_0x00a3;
-                case 246778895: goto L_0x0095;
-                case 314452116: goto L_0x0087;
-                case 676199595: goto L_0x0079;
-                case 684764449: goto L_0x006b;
-                case 992898905: goto L_0x005d;
-                case 1850325103: goto L_0x004f;
-                case 2074702027: goto L_0x0041;
-                case 2136829446: goto L_0x0033;
-                default: goto L_0x0031;
-            }
-        L_0x0031:
-            goto L_0x015c
-        L_0x0033:
-            java.lang.String r11 = "dialog_filters_enabled"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x003d
-            goto L_0x015c
-        L_0x003d:
-            r10 = 22
-            goto L_0x015c
-        L_0x0041:
-            java.lang.String r11 = "export_private_urls"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x004b
-            goto L_0x015c
-        L_0x004b:
-            r10 = 21
-            goto L_0x015c
-        L_0x004f:
-            java.lang.String r11 = "emojies_sounds"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0059
-            goto L_0x015c
-        L_0x0059:
-            r10 = 20
-            goto L_0x015c
-        L_0x005d:
-            java.lang.String r11 = "inapp_update_check_delay"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0067
-            goto L_0x015c
-        L_0x0067:
-            r10 = 19
-            goto L_0x015c
-        L_0x006b:
-            java.lang.String r11 = "save_gifs_with_stickers"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0075
-            goto L_0x015c
-        L_0x0075:
-            r10 = 18
-            goto L_0x015c
-        L_0x0079:
-            java.lang.String r11 = "groupcall_video_participants_max"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0083
-            goto L_0x015c
-        L_0x0083:
-            r10 = 17
-            goto L_0x015c
-        L_0x0087:
-            java.lang.String r11 = "autologin_token"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0091
-            goto L_0x015c
-        L_0x0091:
-            r10 = 16
-            goto L_0x015c
-        L_0x0095:
-            java.lang.String r11 = "export_group_urls"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x009f
-            goto L_0x015c
-        L_0x009f:
-            r10 = 15
-            goto L_0x015c
-        L_0x00a3:
-            java.lang.String r11 = "autologin_domains"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x00ad
-            goto L_0x015c
-        L_0x00ad:
-            r10 = 14
-            goto L_0x015c
-        L_0x00b1:
-            java.lang.String r11 = "gif_search_emojies"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x00bb
-            goto L_0x015c
-        L_0x00bb:
-            r10 = 13
-            goto L_0x015c
-        L_0x00bf:
-            java.lang.String r11 = "stickers_emoji_suggest_only_api"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x00c9
-            goto L_0x015c
-        L_0x00c9:
-            r10 = 12
-            goto L_0x015c
-        L_0x00cd:
-            java.lang.String r11 = "emojies_animated_zoom"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x00d7
-            goto L_0x015c
-        L_0x00d7:
-            r10 = 11
-            goto L_0x015c
-        L_0x00db:
-            java.lang.String r11 = "youtube_pip"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x00e5
-            goto L_0x015c
-        L_0x00e5:
-            r10 = 10
-            goto L_0x015c
-        L_0x00e9:
-            java.lang.String r11 = "autoarchive_setting_available"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x00f3
-            goto L_0x015c
-        L_0x00f3:
-            r10 = 9
-            goto L_0x015c
-        L_0x00f7:
-            java.lang.String r11 = "emojies_send_dice_success"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0101
-            goto L_0x015c
-        L_0x0101:
-            r10 = 8
-            goto L_0x015c
-        L_0x0105:
-            java.lang.String r11 = "background_connection"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x010e
-            goto L_0x015c
-        L_0x010e:
-            r10 = 7
-            goto L_0x015c
-        L_0x0110:
-            java.lang.String r11 = "keep_alive_service"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0119
-            goto L_0x015c
-        L_0x0119:
-            r10 = 6
-            goto L_0x015c
-        L_0x011b:
-            java.lang.String r11 = "export_regex"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0124
-            goto L_0x015c
-        L_0x0124:
-            r10 = 5
-            goto L_0x015c
-        L_0x0126:
-            java.lang.String r11 = "url_auth_domains"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x012f
-            goto L_0x015c
-        L_0x012f:
-            r10 = 4
-            goto L_0x015c
-        L_0x0131:
-            java.lang.String r11 = "emojies_send_dice"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x013a
-            goto L_0x015c
-        L_0x013a:
-            r10 = 3
-            goto L_0x015c
-        L_0x013c:
-            java.lang.String r11 = "pending_suggestions"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0145
-            goto L_0x015c
-        L_0x0145:
-            r10 = 2
-            goto L_0x015c
-        L_0x0147:
-            java.lang.String r11 = "qr_login_camera"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x0150
-            goto L_0x015c
-        L_0x0150:
-            r10 = 1
-            goto L_0x015c
-        L_0x0152:
-            java.lang.String r11 = "dialog_filters_tooltip"
-            boolean r9 = r9.equals(r11)
-            if (r9 != 0) goto L_0x015b
-            goto L_0x015c
-        L_0x015b:
-            r10 = 0
-        L_0x015c:
-            java.lang.String r9 = ""
-            java.lang.String r11 = "️"
+            int r10 = r9.hashCode()
+            r11 = 2
+            r12 = -1
             switch(r10) {
-                case 0: goto L_0x076b;
-                case 1: goto L_0x0750;
-                case 2: goto L_0x0703;
-                case 3: goto L_0x06bf;
-                case 4: goto L_0x067d;
-                case 5: goto L_0x063d;
-                case 6: goto L_0x0623;
-                case 7: goto L_0x0606;
-                case 8: goto L_0x0503;
-                case 9: goto L_0x04e8;
-                case 10: goto L_0x04c7;
-                case 11: goto L_0x04a8;
-                case 12: goto L_0x048d;
-                case 13: goto L_0x0417;
-                case 14: goto L_0x03d6;
-                case 15: goto L_0x0395;
-                case 16: goto L_0x0374;
-                case 17: goto L_0x0355;
-                case 18: goto L_0x033a;
-                case 19: goto L_0x0300;
-                case 20: goto L_0x01c1;
-                case 21: goto L_0x0180;
-                case 22: goto L_0x0164;
-                default: goto L_0x0163;
+                case -1688620344: goto L_0x0160;
+                case -1683918311: goto L_0x0154;
+                case -1391086521: goto L_0x0148;
+                case -1032177933: goto L_0x013c;
+                case -980397720: goto L_0x0130;
+                case -515715076: goto L_0x0124;
+                case -404170231: goto L_0x0118;
+                case -253815153: goto L_0x010c;
+                case -232883529: goto L_0x00fe;
+                case -111779186: goto L_0x00f0;
+                case -76561797: goto L_0x00e2;
+                case -24016028: goto L_0x00d4;
+                case 169095108: goto L_0x00c6;
+                case 222975416: goto L_0x00b8;
+                case 227342346: goto L_0x00aa;
+                case 246778895: goto L_0x009d;
+                case 314452116: goto L_0x0090;
+                case 676199595: goto L_0x0083;
+                case 684764449: goto L_0x0076;
+                case 992898905: goto L_0x0069;
+                case 1322701672: goto L_0x005c;
+                case 1850325103: goto L_0x004f;
+                case 2074702027: goto L_0x0042;
+                case 2136829446: goto L_0x0035;
+                default: goto L_0x0032;
             }
-        L_0x0163:
-            goto L_0x017a
-        L_0x0164:
+        L_0x0032:
+            r9 = -1
+            goto L_0x016b
+        L_0x0035:
+            java.lang.String r10 = "dialog_filters_enabled"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x003e
+            goto L_0x0032
+        L_0x003e:
+            r9 = 23
+            goto L_0x016b
+        L_0x0042:
+            java.lang.String r10 = "export_private_urls"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x004b
+            goto L_0x0032
+        L_0x004b:
+            r9 = 22
+            goto L_0x016b
+        L_0x004f:
+            java.lang.String r10 = "emojies_sounds"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0058
+            goto L_0x0032
+        L_0x0058:
+            r9 = 21
+            goto L_0x016b
+        L_0x005c:
+            java.lang.String r10 = "round_video_encoding"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0065
+            goto L_0x0032
+        L_0x0065:
+            r9 = 20
+            goto L_0x016b
+        L_0x0069:
+            java.lang.String r10 = "inapp_update_check_delay"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0072
+            goto L_0x0032
+        L_0x0072:
+            r9 = 19
+            goto L_0x016b
+        L_0x0076:
+            java.lang.String r10 = "save_gifs_with_stickers"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x007f
+            goto L_0x0032
+        L_0x007f:
+            r9 = 18
+            goto L_0x016b
+        L_0x0083:
+            java.lang.String r10 = "groupcall_video_participants_max"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x008c
+            goto L_0x0032
+        L_0x008c:
+            r9 = 17
+            goto L_0x016b
+        L_0x0090:
+            java.lang.String r10 = "autologin_token"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0099
+            goto L_0x0032
+        L_0x0099:
+            r9 = 16
+            goto L_0x016b
+        L_0x009d:
+            java.lang.String r10 = "export_group_urls"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x00a6
+            goto L_0x0032
+        L_0x00a6:
+            r9 = 15
+            goto L_0x016b
+        L_0x00aa:
+            java.lang.String r10 = "autologin_domains"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x00b4
+            goto L_0x0032
+        L_0x00b4:
+            r9 = 14
+            goto L_0x016b
+        L_0x00b8:
+            java.lang.String r10 = "gif_search_emojies"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x00c2
+            goto L_0x0032
+        L_0x00c2:
+            r9 = 13
+            goto L_0x016b
+        L_0x00c6:
+            java.lang.String r10 = "stickers_emoji_suggest_only_api"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x00d0
+            goto L_0x0032
+        L_0x00d0:
+            r9 = 12
+            goto L_0x016b
+        L_0x00d4:
+            java.lang.String r10 = "emojies_animated_zoom"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x00de
+            goto L_0x0032
+        L_0x00de:
+            r9 = 11
+            goto L_0x016b
+        L_0x00e2:
+            java.lang.String r10 = "youtube_pip"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x00ec
+            goto L_0x0032
+        L_0x00ec:
+            r9 = 10
+            goto L_0x016b
+        L_0x00f0:
+            java.lang.String r10 = "autoarchive_setting_available"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x00fa
+            goto L_0x0032
+        L_0x00fa:
+            r9 = 9
+            goto L_0x016b
+        L_0x00fe:
+            java.lang.String r10 = "emojies_send_dice_success"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0108
+            goto L_0x0032
+        L_0x0108:
+            r9 = 8
+            goto L_0x016b
+        L_0x010c:
+            java.lang.String r10 = "background_connection"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0116
+            goto L_0x0032
+        L_0x0116:
+            r9 = 7
+            goto L_0x016b
+        L_0x0118:
+            java.lang.String r10 = "keep_alive_service"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0122
+            goto L_0x0032
+        L_0x0122:
+            r9 = 6
+            goto L_0x016b
+        L_0x0124:
+            java.lang.String r10 = "export_regex"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x012e
+            goto L_0x0032
+        L_0x012e:
+            r9 = 5
+            goto L_0x016b
+        L_0x0130:
+            java.lang.String r10 = "url_auth_domains"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x013a
+            goto L_0x0032
+        L_0x013a:
+            r9 = 4
+            goto L_0x016b
+        L_0x013c:
+            java.lang.String r10 = "emojies_send_dice"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0146
+            goto L_0x0032
+        L_0x0146:
+            r9 = 3
+            goto L_0x016b
+        L_0x0148:
+            java.lang.String r10 = "pending_suggestions"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0152
+            goto L_0x0032
+        L_0x0152:
+            r9 = 2
+            goto L_0x016b
+        L_0x0154:
+            java.lang.String r10 = "qr_login_camera"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x015e
+            goto L_0x0032
+        L_0x015e:
+            r9 = 1
+            goto L_0x016b
+        L_0x0160:
+            java.lang.String r10 = "dialog_filters_tooltip"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x016a
+            goto L_0x0032
+        L_0x016a:
+            r9 = 0
+        L_0x016b:
+            java.lang.String r10 = ""
+            java.lang.String r14 = "️"
+            switch(r9) {
+                case 0: goto L_0x081c;
+                case 1: goto L_0x0801;
+                case 2: goto L_0x07b4;
+                case 3: goto L_0x0770;
+                case 4: goto L_0x072e;
+                case 5: goto L_0x06ee;
+                case 6: goto L_0x06d4;
+                case 7: goto L_0x06b7;
+                case 8: goto L_0x05b4;
+                case 9: goto L_0x0599;
+                case 10: goto L_0x0578;
+                case 11: goto L_0x0559;
+                case 12: goto L_0x053e;
+                case 13: goto L_0x04c8;
+                case 14: goto L_0x0487;
+                case 15: goto L_0x0446;
+                case 16: goto L_0x0425;
+                case 17: goto L_0x0406;
+                case 18: goto L_0x03eb;
+                case 19: goto L_0x03b1;
+                case 20: goto L_0x030f;
+                case 21: goto L_0x01d0;
+                case 22: goto L_0x018f;
+                case 23: goto L_0x0173;
+                default: goto L_0x0172;
+            }
+        L_0x0172:
+            goto L_0x0189
+        L_0x0173:
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r9 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r9 == 0) goto L_0x017a
+            if (r9 == 0) goto L_0x0189
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r9 = r1.filtersEnabled
-            if (r0 == r9) goto L_0x017a
+            if (r0 == r9) goto L_0x0189
             r1.filtersEnabled = r0
             java.lang.String r7 = "filtersEnabled"
             r2.putBoolean(r7, r0)
             r7 = 1
-        L_0x017a:
+        L_0x0189:
             r25 = r4
             r26 = r5
-            goto L_0x0792
-        L_0x0180:
+            goto L_0x0843
+        L_0x018f:
             java.util.HashSet r9 = new java.util.HashSet
             r9.<init>()
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r10 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
-            if (r10 == 0) goto L_0x01ac
+            if (r10 == 0) goto L_0x01bb
             org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r10 = r0.value
             int r10 = r10.size()
             r11 = 0
-        L_0x0194:
-            if (r11 >= r10) goto L_0x01ac
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r13 = r0.value
-            java.lang.Object r13 = r13.get(r11)
-            org.telegram.tgnet.TLRPC$JSONValue r13 = (org.telegram.tgnet.TLRPC$JSONValue) r13
-            boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r14 == 0) goto L_0x01a9
-            org.telegram.tgnet.TLRPC$TL_jsonString r13 = (org.telegram.tgnet.TLRPC$TL_jsonString) r13
-            java.lang.String r13 = r13.value
-            r9.add(r13)
-        L_0x01a9:
+        L_0x01a3:
+            if (r11 >= r10) goto L_0x01bb
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r12 = r0.value
+            java.lang.Object r12 = r12.get(r11)
+            org.telegram.tgnet.TLRPC$JSONValue r12 = (org.telegram.tgnet.TLRPC$JSONValue) r12
+            boolean r14 = r12 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
+            if (r14 == 0) goto L_0x01b8
+            org.telegram.tgnet.TLRPC$TL_jsonString r12 = (org.telegram.tgnet.TLRPC$TL_jsonString) r12
+            java.lang.String r12 = r12.value
+            r9.add(r12)
+        L_0x01b8:
             int r11 = r11 + 1
-            goto L_0x0194
-        L_0x01ac:
+            goto L_0x01a3
+        L_0x01bb:
             java.util.Set<java.lang.String> r0 = r1.exportPrivateUri
             boolean r0 = r0.equals(r9)
-            if (r0 != 0) goto L_0x017a
+            if (r0 != 0) goto L_0x0189
             r1.exportPrivateUri = r9
             java.lang.String r0 = "exportPrivateUri"
             r2.putStringSet(r0, r9)
             r25 = r4
             r26 = r5
-            goto L_0x06bc
-        L_0x01c1:
-            java.util.HashMap r10 = new java.util.HashMap     // Catch:{ Exception -> 0x02f6 }
-            r10.<init>()     // Catch:{ Exception -> 0x02f6 }
-            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value     // Catch:{ Exception -> 0x02f6 }
-            boolean r13 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x02f6 }
-            if (r13 == 0) goto L_0x0290
-            org.telegram.tgnet.TLRPC$TL_jsonObject r0 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r0     // Catch:{ Exception -> 0x02f6 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r13 = r0.value     // Catch:{ Exception -> 0x02f6 }
-            int r13 = r13.size()     // Catch:{ Exception -> 0x02f6 }
-            r14 = 0
-        L_0x01d5:
-            if (r14 >= r13) goto L_0x0290
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r15 = r0.value     // Catch:{ Exception -> 0x02f6 }
-            java.lang.Object r15 = r15.get(r14)     // Catch:{ Exception -> 0x02f6 }
-            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r15 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r15     // Catch:{ Exception -> 0x02f6 }
-            org.telegram.tgnet.TLRPC$JSONValue r12 = r15.value     // Catch:{ Exception -> 0x02f6 }
-            boolean r3 = r12 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x02f6 }
-            if (r3 == 0) goto L_0x0280
-            org.telegram.tgnet.TLRPC$TL_jsonObject r12 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r12     // Catch:{ Exception -> 0x02f6 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r3 = r12.value     // Catch:{ Exception -> 0x02f6 }
-            int r3 = r3.size()     // Catch:{ Exception -> 0x02f6 }
+            goto L_0x076d
+        L_0x01d0:
+            java.util.HashMap r9 = new java.util.HashMap     // Catch:{ Exception -> 0x0305 }
+            r9.<init>()     // Catch:{ Exception -> 0x0305 }
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value     // Catch:{ Exception -> 0x0305 }
+            boolean r11 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x0305 }
+            if (r11 == 0) goto L_0x029f
+            org.telegram.tgnet.TLRPC$TL_jsonObject r0 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r0     // Catch:{ Exception -> 0x0305 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r11 = r0.value     // Catch:{ Exception -> 0x0305 }
+            int r11 = r11.size()     // Catch:{ Exception -> 0x0305 }
+            r12 = 0
+        L_0x01e4:
+            if (r12 >= r11) goto L_0x029f
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r15 = r0.value     // Catch:{ Exception -> 0x0305 }
+            java.lang.Object r15 = r15.get(r12)     // Catch:{ Exception -> 0x0305 }
+            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r15 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r15     // Catch:{ Exception -> 0x0305 }
+            org.telegram.tgnet.TLRPC$JSONValue r13 = r15.value     // Catch:{ Exception -> 0x0305 }
+            boolean r3 = r13 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x0305 }
+            if (r3 == 0) goto L_0x028f
+            org.telegram.tgnet.TLRPC$TL_jsonObject r13 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r13     // Catch:{ Exception -> 0x0305 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r3 = r13.value     // Catch:{ Exception -> 0x0305 }
+            int r3 = r3.size()     // Catch:{ Exception -> 0x0305 }
             r17 = 0
             r16 = r0
             r20 = r17
             r22 = r20
             r0 = 0
             r24 = 0
-        L_0x01f8:
-            if (r0 >= r3) goto L_0x0261
+        L_0x0207:
+            if (r0 >= r3) goto L_0x0270
             r19 = r3
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r3 = r12.value     // Catch:{ Exception -> 0x02f6 }
-            java.lang.Object r3 = r3.get(r0)     // Catch:{ Exception -> 0x02f6 }
-            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r3 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r3     // Catch:{ Exception -> 0x02f6 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r3 = r13.value     // Catch:{ Exception -> 0x0305 }
+            java.lang.Object r3 = r3.get(r0)     // Catch:{ Exception -> 0x0305 }
+            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r3 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r3     // Catch:{ Exception -> 0x0305 }
             r25 = r4
-            org.telegram.tgnet.TLRPC$JSONValue r4 = r3.value     // Catch:{ Exception -> 0x025e }
-            boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_jsonString     // Catch:{ Exception -> 0x025e }
-            if (r4 == 0) goto L_0x0253
+            org.telegram.tgnet.TLRPC$JSONValue r4 = r3.value     // Catch:{ Exception -> 0x026d }
+            boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_jsonString     // Catch:{ Exception -> 0x026d }
+            if (r4 == 0) goto L_0x0262
             java.lang.String r4 = "id"
             r26 = r5
-            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x02f4 }
-            boolean r4 = r4.equals(r5)     // Catch:{ Exception -> 0x02f4 }
-            if (r4 == 0) goto L_0x0227
-            org.telegram.tgnet.TLRPC$JSONValue r3 = r3.value     // Catch:{ Exception -> 0x02f4 }
-            org.telegram.tgnet.TLRPC$TL_jsonString r3 = (org.telegram.tgnet.TLRPC$TL_jsonString) r3     // Catch:{ Exception -> 0x02f4 }
-            java.lang.String r3 = r3.value     // Catch:{ Exception -> 0x02f4 }
-            java.lang.Long r3 = org.telegram.messenger.Utilities.parseLong(r3)     // Catch:{ Exception -> 0x02f4 }
-            long r20 = r3.longValue()     // Catch:{ Exception -> 0x02f4 }
-            goto L_0x0255
-        L_0x0227:
+            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x0303 }
+            boolean r4 = r4.equals(r5)     // Catch:{ Exception -> 0x0303 }
+            if (r4 == 0) goto L_0x0236
+            org.telegram.tgnet.TLRPC$JSONValue r3 = r3.value     // Catch:{ Exception -> 0x0303 }
+            org.telegram.tgnet.TLRPC$TL_jsonString r3 = (org.telegram.tgnet.TLRPC$TL_jsonString) r3     // Catch:{ Exception -> 0x0303 }
+            java.lang.String r3 = r3.value     // Catch:{ Exception -> 0x0303 }
+            java.lang.Long r3 = org.telegram.messenger.Utilities.parseLong(r3)     // Catch:{ Exception -> 0x0303 }
+            long r20 = r3.longValue()     // Catch:{ Exception -> 0x0303 }
+            goto L_0x0264
+        L_0x0236:
             java.lang.String r4 = "access_hash"
-            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x02f4 }
-            boolean r4 = r4.equals(r5)     // Catch:{ Exception -> 0x02f4 }
-            if (r4 == 0) goto L_0x0240
-            org.telegram.tgnet.TLRPC$JSONValue r3 = r3.value     // Catch:{ Exception -> 0x02f4 }
-            org.telegram.tgnet.TLRPC$TL_jsonString r3 = (org.telegram.tgnet.TLRPC$TL_jsonString) r3     // Catch:{ Exception -> 0x02f4 }
-            java.lang.String r3 = r3.value     // Catch:{ Exception -> 0x02f4 }
-            java.lang.Long r3 = org.telegram.messenger.Utilities.parseLong(r3)     // Catch:{ Exception -> 0x02f4 }
-            long r22 = r3.longValue()     // Catch:{ Exception -> 0x02f4 }
-            goto L_0x0255
-        L_0x0240:
+            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x0303 }
+            boolean r4 = r4.equals(r5)     // Catch:{ Exception -> 0x0303 }
+            if (r4 == 0) goto L_0x024f
+            org.telegram.tgnet.TLRPC$JSONValue r3 = r3.value     // Catch:{ Exception -> 0x0303 }
+            org.telegram.tgnet.TLRPC$TL_jsonString r3 = (org.telegram.tgnet.TLRPC$TL_jsonString) r3     // Catch:{ Exception -> 0x0303 }
+            java.lang.String r3 = r3.value     // Catch:{ Exception -> 0x0303 }
+            java.lang.Long r3 = org.telegram.messenger.Utilities.parseLong(r3)     // Catch:{ Exception -> 0x0303 }
+            long r22 = r3.longValue()     // Catch:{ Exception -> 0x0303 }
+            goto L_0x0264
+        L_0x024f:
             java.lang.String r4 = "file_reference_base64"
-            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x02f4 }
-            boolean r4 = r4.equals(r5)     // Catch:{ Exception -> 0x02f4 }
-            if (r4 == 0) goto L_0x0255
-            org.telegram.tgnet.TLRPC$JSONValue r3 = r3.value     // Catch:{ Exception -> 0x02f4 }
-            org.telegram.tgnet.TLRPC$TL_jsonString r3 = (org.telegram.tgnet.TLRPC$TL_jsonString) r3     // Catch:{ Exception -> 0x02f4 }
-            java.lang.String r3 = r3.value     // Catch:{ Exception -> 0x02f4 }
+            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x0303 }
+            boolean r4 = r4.equals(r5)     // Catch:{ Exception -> 0x0303 }
+            if (r4 == 0) goto L_0x0264
+            org.telegram.tgnet.TLRPC$JSONValue r3 = r3.value     // Catch:{ Exception -> 0x0303 }
+            org.telegram.tgnet.TLRPC$TL_jsonString r3 = (org.telegram.tgnet.TLRPC$TL_jsonString) r3     // Catch:{ Exception -> 0x0303 }
+            java.lang.String r3 = r3.value     // Catch:{ Exception -> 0x0303 }
             r24 = r3
-            goto L_0x0255
-        L_0x0253:
+            goto L_0x0264
+        L_0x0262:
             r26 = r5
-        L_0x0255:
+        L_0x0264:
             int r0 = r0 + 1
             r3 = r19
             r4 = r25
             r5 = r26
-            goto L_0x01f8
-        L_0x025e:
+            goto L_0x0207
+        L_0x026d:
             r0 = move-exception
-            goto L_0x02f9
-        L_0x0261:
+            goto L_0x0308
+        L_0x0270:
             r25 = r4
             r26 = r5
             int r0 = (r20 > r17 ? 1 : (r20 == r17 ? 0 : -1))
-            if (r0 == 0) goto L_0x0286
+            if (r0 == 0) goto L_0x0295
             int r0 = (r22 > r17 ? 1 : (r22 == r17 ? 0 : -1))
-            if (r0 == 0) goto L_0x0286
-            if (r24 == 0) goto L_0x0286
-            java.lang.String r0 = r15.key     // Catch:{ Exception -> 0x02f4 }
-            java.lang.String r0 = r0.replace(r11, r9)     // Catch:{ Exception -> 0x02f4 }
-            org.telegram.messenger.MessagesController$EmojiSound r3 = new org.telegram.messenger.MessagesController$EmojiSound     // Catch:{ Exception -> 0x02f4 }
+            if (r0 == 0) goto L_0x0295
+            if (r24 == 0) goto L_0x0295
+            java.lang.String r0 = r15.key     // Catch:{ Exception -> 0x0303 }
+            java.lang.String r0 = r0.replace(r14, r10)     // Catch:{ Exception -> 0x0303 }
+            org.telegram.messenger.MessagesController$EmojiSound r3 = new org.telegram.messenger.MessagesController$EmojiSound     // Catch:{ Exception -> 0x0303 }
             r19 = r3
-            r19.<init>((long) r20, (long) r22, (java.lang.String) r24)     // Catch:{ Exception -> 0x02f4 }
-            r10.put(r0, r3)     // Catch:{ Exception -> 0x02f4 }
-            goto L_0x0286
-        L_0x0280:
+            r19.<init>((long) r20, (long) r22, (java.lang.String) r24)     // Catch:{ Exception -> 0x0303 }
+            r9.put(r0, r3)     // Catch:{ Exception -> 0x0303 }
+            goto L_0x0295
+        L_0x028f:
             r16 = r0
             r25 = r4
             r26 = r5
-        L_0x0286:
-            int r14 = r14 + 1
+        L_0x0295:
+            int r12 = r12 + 1
             r0 = r16
             r4 = r25
             r5 = r26
-            goto L_0x01d5
-        L_0x0290:
+            goto L_0x01e4
+        L_0x029f:
             r25 = r4
             r26 = r5
-            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$EmojiSound> r0 = r1.emojiSounds     // Catch:{ Exception -> 0x02f4 }
-            boolean r0 = r0.equals(r10)     // Catch:{ Exception -> 0x02f4 }
-            if (r0 != 0) goto L_0x0792
-            r1.emojiSounds = r10     // Catch:{ Exception -> 0x02f4 }
-            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x02f4 }
-            r0.<init>()     // Catch:{ Exception -> 0x02f4 }
-            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$EmojiSound> r3 = r1.emojiSounds     // Catch:{ Exception -> 0x02f4 }
-            int r3 = r3.size()     // Catch:{ Exception -> 0x02f4 }
-            r0.writeInt32(r3)     // Catch:{ Exception -> 0x02f4 }
-            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$EmojiSound> r3 = r1.emojiSounds     // Catch:{ Exception -> 0x02f4 }
-            java.util.Set r3 = r3.entrySet()     // Catch:{ Exception -> 0x02f4 }
-            java.util.Iterator r3 = r3.iterator()     // Catch:{ Exception -> 0x02f4 }
-        L_0x02b6:
-            boolean r4 = r3.hasNext()     // Catch:{ Exception -> 0x02f4 }
-            if (r4 == 0) goto L_0x02e1
-            java.lang.Object r4 = r3.next()     // Catch:{ Exception -> 0x02f4 }
-            java.util.Map$Entry r4 = (java.util.Map.Entry) r4     // Catch:{ Exception -> 0x02f4 }
-            java.lang.Object r5 = r4.getKey()     // Catch:{ Exception -> 0x02f4 }
-            java.lang.String r5 = (java.lang.String) r5     // Catch:{ Exception -> 0x02f4 }
-            r0.writeString(r5)     // Catch:{ Exception -> 0x02f4 }
-            java.lang.Object r4 = r4.getValue()     // Catch:{ Exception -> 0x02f4 }
-            org.telegram.messenger.MessagesController$EmojiSound r4 = (org.telegram.messenger.MessagesController.EmojiSound) r4     // Catch:{ Exception -> 0x02f4 }
-            long r9 = r4.id     // Catch:{ Exception -> 0x02f4 }
-            r0.writeInt64(r9)     // Catch:{ Exception -> 0x02f4 }
-            long r9 = r4.accessHash     // Catch:{ Exception -> 0x02f4 }
-            r0.writeInt64(r9)     // Catch:{ Exception -> 0x02f4 }
-            byte[] r4 = r4.fileReference     // Catch:{ Exception -> 0x02f4 }
-            r0.writeByteArray(r4)     // Catch:{ Exception -> 0x02f4 }
-            goto L_0x02b6
-        L_0x02e1:
+            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$EmojiSound> r0 = r1.emojiSounds     // Catch:{ Exception -> 0x0303 }
+            boolean r0 = r0.equals(r9)     // Catch:{ Exception -> 0x0303 }
+            if (r0 != 0) goto L_0x0843
+            r1.emojiSounds = r9     // Catch:{ Exception -> 0x0303 }
+            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0303 }
+            r0.<init>()     // Catch:{ Exception -> 0x0303 }
+            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$EmojiSound> r3 = r1.emojiSounds     // Catch:{ Exception -> 0x0303 }
+            int r3 = r3.size()     // Catch:{ Exception -> 0x0303 }
+            r0.writeInt32(r3)     // Catch:{ Exception -> 0x0303 }
+            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$EmojiSound> r3 = r1.emojiSounds     // Catch:{ Exception -> 0x0303 }
+            java.util.Set r3 = r3.entrySet()     // Catch:{ Exception -> 0x0303 }
+            java.util.Iterator r3 = r3.iterator()     // Catch:{ Exception -> 0x0303 }
+        L_0x02c5:
+            boolean r4 = r3.hasNext()     // Catch:{ Exception -> 0x0303 }
+            if (r4 == 0) goto L_0x02f0
+            java.lang.Object r4 = r3.next()     // Catch:{ Exception -> 0x0303 }
+            java.util.Map$Entry r4 = (java.util.Map.Entry) r4     // Catch:{ Exception -> 0x0303 }
+            java.lang.Object r5 = r4.getKey()     // Catch:{ Exception -> 0x0303 }
+            java.lang.String r5 = (java.lang.String) r5     // Catch:{ Exception -> 0x0303 }
+            r0.writeString(r5)     // Catch:{ Exception -> 0x0303 }
+            java.lang.Object r4 = r4.getValue()     // Catch:{ Exception -> 0x0303 }
+            org.telegram.messenger.MessagesController$EmojiSound r4 = (org.telegram.messenger.MessagesController.EmojiSound) r4     // Catch:{ Exception -> 0x0303 }
+            long r9 = r4.id     // Catch:{ Exception -> 0x0303 }
+            r0.writeInt64(r9)     // Catch:{ Exception -> 0x0303 }
+            long r9 = r4.accessHash     // Catch:{ Exception -> 0x0303 }
+            r0.writeInt64(r9)     // Catch:{ Exception -> 0x0303 }
+            byte[] r4 = r4.fileReference     // Catch:{ Exception -> 0x0303 }
+            r0.writeByteArray(r4)     // Catch:{ Exception -> 0x0303 }
+            goto L_0x02c5
+        L_0x02f0:
             java.lang.String r3 = "emojiSounds"
-            byte[] r4 = r0.toByteArray()     // Catch:{ Exception -> 0x02f4 }
+            byte[] r4 = r0.toByteArray()     // Catch:{ Exception -> 0x0303 }
             r5 = 0
-            java.lang.String r4 = android.util.Base64.encodeToString(r4, r5)     // Catch:{ Exception -> 0x02f4 }
-            r2.putString(r3, r4)     // Catch:{ Exception -> 0x02f4 }
-            r0.cleanup()     // Catch:{ Exception -> 0x02f4 }
-            goto L_0x06bc
-        L_0x02f4:
+            java.lang.String r4 = android.util.Base64.encodeToString(r4, r5)     // Catch:{ Exception -> 0x0303 }
+            r2.putString(r3, r4)     // Catch:{ Exception -> 0x0303 }
+            r0.cleanup()     // Catch:{ Exception -> 0x0303 }
+            goto L_0x076d
+        L_0x0303:
             r0 = move-exception
-            goto L_0x02fb
-        L_0x02f6:
+            goto L_0x030a
+        L_0x0305:
             r0 = move-exception
             r25 = r4
-        L_0x02f9:
+        L_0x0308:
             r26 = r5
-        L_0x02fb:
+        L_0x030a:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x0792
-        L_0x0300:
+            goto L_0x0843
+        L_0x030f:
+            r25 = r4
+            r26 = r5
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject
+            if (r3 == 0) goto L_0x0843
+            org.telegram.tgnet.TLRPC$TL_jsonObject r0 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r0
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r3 = r0.value
+            int r3 = r3.size()
+            r4 = 0
+        L_0x0322:
+            if (r4 >= r3) goto L_0x0843
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r5 = r0.value
+            java.lang.Object r5 = r5.get(r4)
+            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r5 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r5
+            java.lang.String r9 = r5.key
+            r9.hashCode()
+            int r10 = r9.hashCode()
+            switch(r10) {
+                case -233204595: goto L_0x0350;
+                case 258902020: goto L_0x0345;
+                case 1924434857: goto L_0x033a;
+                default: goto L_0x0338;
+            }
+        L_0x0338:
+            r9 = -1
+            goto L_0x035a
+        L_0x033a:
+            java.lang.String r10 = "video_bitrate"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0343
+            goto L_0x0338
+        L_0x0343:
+            r9 = 2
+            goto L_0x035a
+        L_0x0345:
+            java.lang.String r10 = "audio_bitrate"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x034e
+            goto L_0x0338
+        L_0x034e:
+            r9 = 1
+            goto L_0x035a
+        L_0x0350:
+            java.lang.String r10 = "diameter"
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0359
+            goto L_0x0338
+        L_0x0359:
+            r9 = 0
+        L_0x035a:
+            switch(r9) {
+                case 0: goto L_0x0393;
+                case 1: goto L_0x0378;
+                case 2: goto L_0x035e;
+                default: goto L_0x035d;
+            }
+        L_0x035d:
+            goto L_0x03ad
+        L_0x035e:
+            org.telegram.tgnet.TLRPC$JSONValue r5 = r5.value
+            boolean r9 = r5 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber
+            if (r9 == 0) goto L_0x03ad
+            org.telegram.tgnet.TLRPC$TL_jsonNumber r5 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r5
+            double r9 = r5.value
+            int r5 = r1.roundVideoBitrate
+            double r13 = (double) r5
+            int r5 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1))
+            if (r5 == 0) goto L_0x03ad
+            int r5 = (int) r9
+            r1.roundVideoBitrate = r5
+            java.lang.String r7 = "roundVideoBitrate"
+            r2.putInt(r7, r5)
+            goto L_0x0391
+        L_0x0378:
+            org.telegram.tgnet.TLRPC$JSONValue r5 = r5.value
+            boolean r9 = r5 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber
+            if (r9 == 0) goto L_0x03ad
+            org.telegram.tgnet.TLRPC$TL_jsonNumber r5 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r5
+            double r9 = r5.value
+            int r5 = r1.roundAudioBitrate
+            double r13 = (double) r5
+            int r5 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1))
+            if (r5 == 0) goto L_0x03ad
+            int r5 = (int) r9
+            r1.roundAudioBitrate = r5
+            java.lang.String r7 = "roundAudioBitrate"
+            r2.putInt(r7, r5)
+        L_0x0391:
+            r7 = 1
+            goto L_0x03ad
+        L_0x0393:
+            org.telegram.tgnet.TLRPC$JSONValue r5 = r5.value
+            boolean r9 = r5 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber
+            if (r9 == 0) goto L_0x03ad
+            org.telegram.tgnet.TLRPC$TL_jsonNumber r5 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r5
+            double r9 = r5.value
+            int r5 = r1.roundVideoSize
+            double r13 = (double) r5
+            int r5 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1))
+            if (r5 == 0) goto L_0x03ad
+            int r5 = (int) r9
+            r1.roundVideoSize = r5
+            java.lang.String r7 = "roundVideoSize"
+            r2.putInt(r7, r5)
+            goto L_0x0391
+        L_0x03ad:
+            int r4 = r4 + 1
+            goto L_0x0322
+        L_0x03b1:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber
             java.lang.String r4 = "updateCheckDelay"
-            if (r3 == 0) goto L_0x031f
+            if (r3 == 0) goto L_0x03d0
             org.telegram.tgnet.TLRPC$TL_jsonNumber r0 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r0
             double r9 = r0.value
             int r0 = r1.updateCheckDelay
             double r11 = (double) r0
             int r0 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
-            if (r0 == 0) goto L_0x0792
+            if (r0 == 0) goto L_0x0843
             int r0 = (int) r9
             r1.updateCheckDelay = r0
             r2.putInt(r4, r0)
-            goto L_0x06bc
-        L_0x031f:
+            goto L_0x076d
+        L_0x03d0:
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonString r0 = (org.telegram.tgnet.TLRPC$TL_jsonString) r0
             java.lang.String r0 = r0.value
             java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
             int r0 = r0.intValue()
             int r3 = r1.updateCheckDelay
-            if (r0 == r3) goto L_0x0792
+            if (r0 == r3) goto L_0x0843
             r1.updateCheckDelay = r0
             r2.putInt(r4, r0)
-            goto L_0x06bc
-        L_0x033a:
+            goto L_0x076d
+        L_0x03eb:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.saveGifsWithStickers
-            if (r0 == r3) goto L_0x0792
+            if (r0 == r3) goto L_0x0843
             r1.saveGifsWithStickers = r0
             java.lang.String r3 = "saveGifsWithStickers"
             r2.putBoolean(r3, r0)
-            goto L_0x06bc
-        L_0x0355:
+            goto L_0x076d
+        L_0x0406:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonNumber r0 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r0
             double r3 = r0.value
             int r0 = r1.groipCallVideoMaxParticipants
             double r9 = (double) r0
             int r0 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r0 == 0) goto L_0x0792
+            if (r0 == 0) goto L_0x0843
             int r0 = (int) r3
             r1.groipCallVideoMaxParticipants = r0
             java.lang.String r3 = "groipCallVideoMaxParticipants"
             r2.putInt(r3, r0)
-            goto L_0x06bc
-        L_0x0374:
+            goto L_0x076d
+        L_0x0425:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonString r0 = (org.telegram.tgnet.TLRPC$TL_jsonString) r0
             java.lang.String r3 = r0.value
             java.lang.String r4 = r1.autologinToken
             boolean r3 = r3.equals(r4)
-            if (r3 != 0) goto L_0x0792
+            if (r3 != 0) goto L_0x0843
             java.lang.String r0 = r0.value
             r1.autologinToken = r0
             java.lang.String r3 = "autologinToken"
             r2.putString(r3, r0)
-            goto L_0x06bc
-        L_0x0395:
+            goto L_0x076d
+        L_0x0446:
             r25 = r4
             r26 = r5
             java.util.HashSet r3 = new java.util.HashSet
             r3.<init>()
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
-            if (r4 == 0) goto L_0x03c5
+            if (r4 == 0) goto L_0x0476
             org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r4 = r0.value
             int r4 = r4.size()
             r5 = 0
-        L_0x03ad:
-            if (r5 >= r4) goto L_0x03c5
+        L_0x045e:
+            if (r5 >= r4) goto L_0x0476
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r9 = r0.value
             java.lang.Object r9 = r9.get(r5)
             org.telegram.tgnet.TLRPC$JSONValue r9 = (org.telegram.tgnet.TLRPC$JSONValue) r9
             boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r10 == 0) goto L_0x03c2
+            if (r10 == 0) goto L_0x0473
             org.telegram.tgnet.TLRPC$TL_jsonString r9 = (org.telegram.tgnet.TLRPC$TL_jsonString) r9
             java.lang.String r9 = r9.value
             r3.add(r9)
-        L_0x03c2:
+        L_0x0473:
             int r5 = r5 + 1
-            goto L_0x03ad
-        L_0x03c5:
+            goto L_0x045e
+        L_0x0476:
             java.util.Set<java.lang.String> r0 = r1.exportGroupUri
             boolean r0 = r0.equals(r3)
-            if (r0 != 0) goto L_0x0792
+            if (r0 != 0) goto L_0x0843
             r1.exportGroupUri = r3
             java.lang.String r0 = "exportGroupUri"
             r2.putStringSet(r0, r3)
-            goto L_0x06bc
-        L_0x03d6:
+            goto L_0x076d
+        L_0x0487:
             r25 = r4
             r26 = r5
             java.util.HashSet r3 = new java.util.HashSet
             r3.<init>()
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
-            if (r4 == 0) goto L_0x0406
+            if (r4 == 0) goto L_0x04b7
             org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r4 = r0.value
             int r4 = r4.size()
             r5 = 0
-        L_0x03ee:
-            if (r5 >= r4) goto L_0x0406
+        L_0x049f:
+            if (r5 >= r4) goto L_0x04b7
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r9 = r0.value
             java.lang.Object r9 = r9.get(r5)
             org.telegram.tgnet.TLRPC$JSONValue r9 = (org.telegram.tgnet.TLRPC$JSONValue) r9
             boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r10 == 0) goto L_0x0403
+            if (r10 == 0) goto L_0x04b4
             org.telegram.tgnet.TLRPC$TL_jsonString r9 = (org.telegram.tgnet.TLRPC$TL_jsonString) r9
             java.lang.String r9 = r9.value
             r3.add(r9)
-        L_0x0403:
+        L_0x04b4:
             int r5 = r5 + 1
-            goto L_0x03ee
-        L_0x0406:
+            goto L_0x049f
+        L_0x04b7:
             java.util.Set<java.lang.String> r0 = r1.autologinDomains
             boolean r0 = r0.equals(r3)
-            if (r0 != 0) goto L_0x0792
+            if (r0 != 0) goto L_0x0843
             r1.autologinDomains = r3
             java.lang.String r0 = "autologinDomains"
             r2.putStringSet(r0, r3)
-            goto L_0x06bc
-        L_0x0417:
+            goto L_0x076d
+        L_0x04c8:
             r25 = r4
             r26 = r5
             java.util.ArrayList r3 = new java.util.ArrayList
             r3.<init>()
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
-            if (r4 == 0) goto L_0x044b
+            if (r4 == 0) goto L_0x04fc
             org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r4 = r0.value
             int r4 = r4.size()
             r5 = 0
-        L_0x042f:
-            if (r5 >= r4) goto L_0x044b
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r10 = r0.value
-            java.lang.Object r10 = r10.get(r5)
-            org.telegram.tgnet.TLRPC$JSONValue r10 = (org.telegram.tgnet.TLRPC$JSONValue) r10
-            boolean r12 = r10 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r12 == 0) goto L_0x0448
-            org.telegram.tgnet.TLRPC$TL_jsonString r10 = (org.telegram.tgnet.TLRPC$TL_jsonString) r10
-            java.lang.String r10 = r10.value
-            java.lang.String r10 = r10.replace(r11, r9)
-            r3.add(r10)
-        L_0x0448:
+        L_0x04e0:
+            if (r5 >= r4) goto L_0x04fc
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r9 = r0.value
+            java.lang.Object r9 = r9.get(r5)
+            org.telegram.tgnet.TLRPC$JSONValue r9 = (org.telegram.tgnet.TLRPC$JSONValue) r9
+            boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
+            if (r11 == 0) goto L_0x04f9
+            org.telegram.tgnet.TLRPC$TL_jsonString r9 = (org.telegram.tgnet.TLRPC$TL_jsonString) r9
+            java.lang.String r9 = r9.value
+            java.lang.String r9 = r9.replace(r14, r10)
+            r3.add(r9)
+        L_0x04f9:
             int r5 = r5 + 1
-            goto L_0x042f
-        L_0x044b:
+            goto L_0x04e0
+        L_0x04fc:
             java.util.ArrayList<java.lang.String> r0 = r1.gifSearchEmojies
             boolean r0 = r0.equals(r3)
-            if (r0 != 0) goto L_0x0792
+            if (r0 != 0) goto L_0x0843
             r1.gifSearchEmojies = r3
             org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData
             r0.<init>()
@@ -2934,369 +3064,369 @@ public class MessagesController extends BaseController implements NotificationCe
             java.util.ArrayList<java.lang.String> r3 = r1.gifSearchEmojies
             int r3 = r3.size()
             r4 = 0
-        L_0x046a:
-            if (r4 >= r3) goto L_0x047a
+        L_0x051b:
+            if (r4 >= r3) goto L_0x052b
             java.util.ArrayList<java.lang.String> r5 = r1.gifSearchEmojies
             java.lang.Object r5 = r5.get(r4)
             java.lang.String r5 = (java.lang.String) r5
             r0.writeString(r5)
             int r4 = r4 + 1
-            goto L_0x046a
-        L_0x047a:
+            goto L_0x051b
+        L_0x052b:
             byte[] r3 = r0.toByteArray()
             r4 = 0
             java.lang.String r3 = android.util.Base64.encodeToString(r3, r4)
             java.lang.String r4 = "gifSearchEmojies"
             r2.putString(r4, r3)
             r0.cleanup()
-            goto L_0x06bc
-        L_0x048d:
+            goto L_0x076d
+        L_0x053e:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.suggestStickersApiOnly
-            if (r0 == r3) goto L_0x0792
+            if (r0 == r3) goto L_0x0843
             r1.suggestStickersApiOnly = r0
             java.lang.String r3 = "suggestStickersApiOnly"
             r2.putBoolean(r3, r0)
-            goto L_0x06bc
-        L_0x04a8:
+            goto L_0x076d
+        L_0x0559:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonNumber r0 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r0
             float r3 = r1.animatedEmojisZoom
             double r3 = (double) r3
             double r9 = r0.value
             int r0 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r0 == 0) goto L_0x0792
+            if (r0 == 0) goto L_0x0843
             float r0 = (float) r9
             r1.animatedEmojisZoom = r0
             java.lang.String r3 = "animatedEmojisZoom"
             r2.putFloat(r3, r0)
-            goto L_0x06bc
-        L_0x04c7:
+            goto L_0x076d
+        L_0x0578:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonString r0 = (org.telegram.tgnet.TLRPC$TL_jsonString) r0
             java.lang.String r3 = r0.value
             java.lang.String r4 = r1.youtubePipType
             boolean r3 = r3.equals(r4)
-            if (r3 != 0) goto L_0x0792
+            if (r3 != 0) goto L_0x0843
             java.lang.String r0 = r0.value
             r1.youtubePipType = r0
             java.lang.String r3 = "youtubePipType"
             r2.putString(r3, r0)
-            goto L_0x06bc
-        L_0x04e8:
+            goto L_0x076d
+        L_0x0599:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.autoarchiveAvailable
-            if (r0 == r3) goto L_0x0792
+            if (r0 == r3) goto L_0x0843
             r1.autoarchiveAvailable = r0
             java.lang.String r3 = "autoarchiveAvailable"
             r2.putBoolean(r3, r0)
-            goto L_0x06bc
-        L_0x0503:
+            goto L_0x076d
+        L_0x05b4:
             r25 = r4
             r26 = r5
-            java.util.HashMap r3 = new java.util.HashMap     // Catch:{ Exception -> 0x0600 }
-            r3.<init>()     // Catch:{ Exception -> 0x0600 }
-            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value     // Catch:{ Exception -> 0x0600 }
-            boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x0600 }
-            if (r4 == 0) goto L_0x05a5
-            org.telegram.tgnet.TLRPC$TL_jsonObject r0 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r0     // Catch:{ Exception -> 0x0600 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r4 = r0.value     // Catch:{ Exception -> 0x0600 }
-            int r4 = r4.size()     // Catch:{ Exception -> 0x0600 }
+            java.util.HashMap r3 = new java.util.HashMap     // Catch:{ Exception -> 0x06b1 }
+            r3.<init>()     // Catch:{ Exception -> 0x06b1 }
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value     // Catch:{ Exception -> 0x06b1 }
+            boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x06b1 }
+            if (r4 == 0) goto L_0x0656
+            org.telegram.tgnet.TLRPC$TL_jsonObject r0 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r0     // Catch:{ Exception -> 0x06b1 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r4 = r0.value     // Catch:{ Exception -> 0x06b1 }
+            int r4 = r4.size()     // Catch:{ Exception -> 0x06b1 }
             r5 = 0
-        L_0x051b:
-            if (r5 >= r4) goto L_0x05a5
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r10 = r0.value     // Catch:{ Exception -> 0x0600 }
-            java.lang.Object r10 = r10.get(r5)     // Catch:{ Exception -> 0x0600 }
-            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r10 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r10     // Catch:{ Exception -> 0x0600 }
-            org.telegram.tgnet.TLRPC$JSONValue r12 = r10.value     // Catch:{ Exception -> 0x0600 }
-            boolean r13 = r12 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x0600 }
-            if (r13 == 0) goto L_0x0599
-            org.telegram.tgnet.TLRPC$TL_jsonObject r12 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r12     // Catch:{ Exception -> 0x0600 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r13 = r12.value     // Catch:{ Exception -> 0x0600 }
-            int r13 = r13.size()     // Catch:{ Exception -> 0x0600 }
+        L_0x05cc:
+            if (r5 >= r4) goto L_0x0656
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r9 = r0.value     // Catch:{ Exception -> 0x06b1 }
+            java.lang.Object r9 = r9.get(r5)     // Catch:{ Exception -> 0x06b1 }
+            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r9 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r9     // Catch:{ Exception -> 0x06b1 }
+            org.telegram.tgnet.TLRPC$JSONValue r11 = r9.value     // Catch:{ Exception -> 0x06b1 }
+            boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x06b1 }
+            if (r12 == 0) goto L_0x064a
+            org.telegram.tgnet.TLRPC$TL_jsonObject r11 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r11     // Catch:{ Exception -> 0x06b1 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r12 = r11.value     // Catch:{ Exception -> 0x06b1 }
+            int r12 = r12.size()     // Catch:{ Exception -> 0x06b1 }
             r17 = r0
             r0 = 2147483647(0x7fffffff, float:NaN)
-            r14 = 2147483647(0x7fffffff, float:NaN)
+            r13 = 2147483647(0x7fffffff, float:NaN)
             r15 = 0
-        L_0x053c:
-            if (r15 >= r13) goto L_0x0581
+        L_0x05ed:
+            if (r15 >= r12) goto L_0x0632
             r18 = r4
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r4 = r12.value     // Catch:{ Exception -> 0x0600 }
-            java.lang.Object r4 = r4.get(r15)     // Catch:{ Exception -> 0x0600 }
-            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r4 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r4     // Catch:{ Exception -> 0x0600 }
-            r19 = r12
-            org.telegram.tgnet.TLRPC$JSONValue r12 = r4.value     // Catch:{ Exception -> 0x0600 }
-            boolean r12 = r12 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber     // Catch:{ Exception -> 0x0600 }
-            if (r12 == 0) goto L_0x0576
-            java.lang.String r12 = "value"
-            r20 = r13
-            java.lang.String r13 = r4.key     // Catch:{ Exception -> 0x0600 }
-            boolean r12 = r12.equals(r13)     // Catch:{ Exception -> 0x0600 }
-            if (r12 == 0) goto L_0x0564
-            org.telegram.tgnet.TLRPC$JSONValue r0 = r4.value     // Catch:{ Exception -> 0x0600 }
-            org.telegram.tgnet.TLRPC$TL_jsonNumber r0 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r0     // Catch:{ Exception -> 0x0600 }
-            double r12 = r0.value     // Catch:{ Exception -> 0x0600 }
-            int r0 = (int) r12     // Catch:{ Exception -> 0x0600 }
-            goto L_0x0578
-        L_0x0564:
-            java.lang.String r12 = "frame_start"
-            java.lang.String r13 = r4.key     // Catch:{ Exception -> 0x0600 }
-            boolean r12 = r12.equals(r13)     // Catch:{ Exception -> 0x0600 }
-            if (r12 == 0) goto L_0x0578
-            org.telegram.tgnet.TLRPC$JSONValue r4 = r4.value     // Catch:{ Exception -> 0x0600 }
-            org.telegram.tgnet.TLRPC$TL_jsonNumber r4 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r4     // Catch:{ Exception -> 0x0600 }
-            double r12 = r4.value     // Catch:{ Exception -> 0x0600 }
-            int r14 = (int) r12     // Catch:{ Exception -> 0x0600 }
-            goto L_0x0578
-        L_0x0576:
-            r20 = r13
-        L_0x0578:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r4 = r11.value     // Catch:{ Exception -> 0x06b1 }
+            java.lang.Object r4 = r4.get(r15)     // Catch:{ Exception -> 0x06b1 }
+            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r4 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r4     // Catch:{ Exception -> 0x06b1 }
+            r19 = r11
+            org.telegram.tgnet.TLRPC$JSONValue r11 = r4.value     // Catch:{ Exception -> 0x06b1 }
+            boolean r11 = r11 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber     // Catch:{ Exception -> 0x06b1 }
+            if (r11 == 0) goto L_0x0627
+            java.lang.String r11 = "value"
+            r20 = r12
+            java.lang.String r12 = r4.key     // Catch:{ Exception -> 0x06b1 }
+            boolean r11 = r11.equals(r12)     // Catch:{ Exception -> 0x06b1 }
+            if (r11 == 0) goto L_0x0615
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r4.value     // Catch:{ Exception -> 0x06b1 }
+            org.telegram.tgnet.TLRPC$TL_jsonNumber r0 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r0     // Catch:{ Exception -> 0x06b1 }
+            double r11 = r0.value     // Catch:{ Exception -> 0x06b1 }
+            int r0 = (int) r11     // Catch:{ Exception -> 0x06b1 }
+            goto L_0x0629
+        L_0x0615:
+            java.lang.String r11 = "frame_start"
+            java.lang.String r12 = r4.key     // Catch:{ Exception -> 0x06b1 }
+            boolean r11 = r11.equals(r12)     // Catch:{ Exception -> 0x06b1 }
+            if (r11 == 0) goto L_0x0629
+            org.telegram.tgnet.TLRPC$JSONValue r4 = r4.value     // Catch:{ Exception -> 0x06b1 }
+            org.telegram.tgnet.TLRPC$TL_jsonNumber r4 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r4     // Catch:{ Exception -> 0x06b1 }
+            double r11 = r4.value     // Catch:{ Exception -> 0x06b1 }
+            int r13 = (int) r11     // Catch:{ Exception -> 0x06b1 }
+            goto L_0x0629
+        L_0x0627:
+            r20 = r12
+        L_0x0629:
             int r15 = r15 + 1
             r4 = r18
-            r12 = r19
-            r13 = r20
-            goto L_0x053c
-        L_0x0581:
+            r11 = r19
+            r12 = r20
+            goto L_0x05ed
+        L_0x0632:
             r18 = r4
             r4 = 2147483647(0x7fffffff, float:NaN)
-            if (r14 == r4) goto L_0x059d
-            if (r0 == r4) goto L_0x059d
-            java.lang.String r4 = r10.key     // Catch:{ Exception -> 0x0600 }
-            java.lang.String r4 = r4.replace(r11, r9)     // Catch:{ Exception -> 0x0600 }
-            org.telegram.messenger.MessagesController$DiceFrameSuccess r10 = new org.telegram.messenger.MessagesController$DiceFrameSuccess     // Catch:{ Exception -> 0x0600 }
-            r10.<init>(r14, r0)     // Catch:{ Exception -> 0x0600 }
-            r3.put(r4, r10)     // Catch:{ Exception -> 0x0600 }
-            goto L_0x059d
-        L_0x0599:
+            if (r13 == r4) goto L_0x064e
+            if (r0 == r4) goto L_0x064e
+            java.lang.String r4 = r9.key     // Catch:{ Exception -> 0x06b1 }
+            java.lang.String r4 = r4.replace(r14, r10)     // Catch:{ Exception -> 0x06b1 }
+            org.telegram.messenger.MessagesController$DiceFrameSuccess r9 = new org.telegram.messenger.MessagesController$DiceFrameSuccess     // Catch:{ Exception -> 0x06b1 }
+            r9.<init>(r13, r0)     // Catch:{ Exception -> 0x06b1 }
+            r3.put(r4, r9)     // Catch:{ Exception -> 0x06b1 }
+            goto L_0x064e
+        L_0x064a:
             r17 = r0
             r18 = r4
-        L_0x059d:
+        L_0x064e:
             int r5 = r5 + 1
             r0 = r17
             r4 = r18
-            goto L_0x051b
-        L_0x05a5:
-            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r0 = r1.diceSuccess     // Catch:{ Exception -> 0x0600 }
-            boolean r0 = r0.equals(r3)     // Catch:{ Exception -> 0x0600 }
-            if (r0 != 0) goto L_0x0792
-            r1.diceSuccess = r3     // Catch:{ Exception -> 0x0600 }
-            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0600 }
-            r0.<init>()     // Catch:{ Exception -> 0x0600 }
-            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r3 = r1.diceSuccess     // Catch:{ Exception -> 0x0600 }
-            int r3 = r3.size()     // Catch:{ Exception -> 0x0600 }
-            r0.writeInt32(r3)     // Catch:{ Exception -> 0x0600 }
-            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r3 = r1.diceSuccess     // Catch:{ Exception -> 0x0600 }
-            java.util.Set r3 = r3.entrySet()     // Catch:{ Exception -> 0x0600 }
-            java.util.Iterator r3 = r3.iterator()     // Catch:{ Exception -> 0x0600 }
-        L_0x05c7:
-            boolean r4 = r3.hasNext()     // Catch:{ Exception -> 0x0600 }
-            if (r4 == 0) goto L_0x05ed
-            java.lang.Object r4 = r3.next()     // Catch:{ Exception -> 0x0600 }
-            java.util.Map$Entry r4 = (java.util.Map.Entry) r4     // Catch:{ Exception -> 0x0600 }
-            java.lang.Object r5 = r4.getKey()     // Catch:{ Exception -> 0x0600 }
-            java.lang.String r5 = (java.lang.String) r5     // Catch:{ Exception -> 0x0600 }
-            r0.writeString(r5)     // Catch:{ Exception -> 0x0600 }
-            java.lang.Object r4 = r4.getValue()     // Catch:{ Exception -> 0x0600 }
-            org.telegram.messenger.MessagesController$DiceFrameSuccess r4 = (org.telegram.messenger.MessagesController.DiceFrameSuccess) r4     // Catch:{ Exception -> 0x0600 }
-            int r5 = r4.frame     // Catch:{ Exception -> 0x0600 }
-            r0.writeInt32(r5)     // Catch:{ Exception -> 0x0600 }
-            int r4 = r4.num     // Catch:{ Exception -> 0x0600 }
-            r0.writeInt32(r4)     // Catch:{ Exception -> 0x0600 }
-            goto L_0x05c7
-        L_0x05ed:
+            goto L_0x05cc
+        L_0x0656:
+            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r0 = r1.diceSuccess     // Catch:{ Exception -> 0x06b1 }
+            boolean r0 = r0.equals(r3)     // Catch:{ Exception -> 0x06b1 }
+            if (r0 != 0) goto L_0x0843
+            r1.diceSuccess = r3     // Catch:{ Exception -> 0x06b1 }
+            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x06b1 }
+            r0.<init>()     // Catch:{ Exception -> 0x06b1 }
+            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r3 = r1.diceSuccess     // Catch:{ Exception -> 0x06b1 }
+            int r3 = r3.size()     // Catch:{ Exception -> 0x06b1 }
+            r0.writeInt32(r3)     // Catch:{ Exception -> 0x06b1 }
+            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r3 = r1.diceSuccess     // Catch:{ Exception -> 0x06b1 }
+            java.util.Set r3 = r3.entrySet()     // Catch:{ Exception -> 0x06b1 }
+            java.util.Iterator r3 = r3.iterator()     // Catch:{ Exception -> 0x06b1 }
+        L_0x0678:
+            boolean r4 = r3.hasNext()     // Catch:{ Exception -> 0x06b1 }
+            if (r4 == 0) goto L_0x069e
+            java.lang.Object r4 = r3.next()     // Catch:{ Exception -> 0x06b1 }
+            java.util.Map$Entry r4 = (java.util.Map.Entry) r4     // Catch:{ Exception -> 0x06b1 }
+            java.lang.Object r5 = r4.getKey()     // Catch:{ Exception -> 0x06b1 }
+            java.lang.String r5 = (java.lang.String) r5     // Catch:{ Exception -> 0x06b1 }
+            r0.writeString(r5)     // Catch:{ Exception -> 0x06b1 }
+            java.lang.Object r4 = r4.getValue()     // Catch:{ Exception -> 0x06b1 }
+            org.telegram.messenger.MessagesController$DiceFrameSuccess r4 = (org.telegram.messenger.MessagesController.DiceFrameSuccess) r4     // Catch:{ Exception -> 0x06b1 }
+            int r5 = r4.frame     // Catch:{ Exception -> 0x06b1 }
+            r0.writeInt32(r5)     // Catch:{ Exception -> 0x06b1 }
+            int r4 = r4.num     // Catch:{ Exception -> 0x06b1 }
+            r0.writeInt32(r4)     // Catch:{ Exception -> 0x06b1 }
+            goto L_0x0678
+        L_0x069e:
             java.lang.String r3 = "diceSuccess"
-            byte[] r4 = r0.toByteArray()     // Catch:{ Exception -> 0x0600 }
+            byte[] r4 = r0.toByteArray()     // Catch:{ Exception -> 0x06b1 }
             r5 = 0
-            java.lang.String r4 = android.util.Base64.encodeToString(r4, r5)     // Catch:{ Exception -> 0x0600 }
-            r2.putString(r3, r4)     // Catch:{ Exception -> 0x0600 }
-            r0.cleanup()     // Catch:{ Exception -> 0x0600 }
-            goto L_0x06bc
-        L_0x0600:
+            java.lang.String r4 = android.util.Base64.encodeToString(r4, r5)     // Catch:{ Exception -> 0x06b1 }
+            r2.putString(r3, r4)     // Catch:{ Exception -> 0x06b1 }
+            r0.cleanup()     // Catch:{ Exception -> 0x06b1 }
+            goto L_0x076d
+        L_0x06b1:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x0792
-        L_0x0606:
+            goto L_0x0843
+        L_0x06b7:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.backgroundConnection
-            if (r0 == r3) goto L_0x0792
+            if (r0 == r3) goto L_0x0843
             r1.backgroundConnection = r0
             java.lang.String r3 = "backgroundConnection"
             r2.putBoolean(r3, r0)
-        L_0x061f:
+        L_0x06d0:
             r7 = 1
             r8 = 1
-            goto L_0x0792
-        L_0x0623:
+            goto L_0x0843
+        L_0x06d4:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.keepAliveService
-            if (r0 == r3) goto L_0x0792
+            if (r0 == r3) goto L_0x0843
             r1.keepAliveService = r0
             java.lang.String r3 = "keepAliveService"
             r2.putBoolean(r3, r0)
-            goto L_0x061f
-        L_0x063d:
+            goto L_0x06d0
+        L_0x06ee:
             r25 = r4
             r26 = r5
             java.util.HashSet r3 = new java.util.HashSet
             r3.<init>()
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
-            if (r4 == 0) goto L_0x066d
+            if (r4 == 0) goto L_0x071e
             org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r4 = r0.value
             int r4 = r4.size()
             r5 = 0
-        L_0x0655:
-            if (r5 >= r4) goto L_0x066d
+        L_0x0706:
+            if (r5 >= r4) goto L_0x071e
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r9 = r0.value
             java.lang.Object r9 = r9.get(r5)
             org.telegram.tgnet.TLRPC$JSONValue r9 = (org.telegram.tgnet.TLRPC$JSONValue) r9
             boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r10 == 0) goto L_0x066a
+            if (r10 == 0) goto L_0x071b
             org.telegram.tgnet.TLRPC$TL_jsonString r9 = (org.telegram.tgnet.TLRPC$TL_jsonString) r9
             java.lang.String r9 = r9.value
             r3.add(r9)
-        L_0x066a:
+        L_0x071b:
             int r5 = r5 + 1
-            goto L_0x0655
-        L_0x066d:
+            goto L_0x0706
+        L_0x071e:
             java.util.Set<java.lang.String> r0 = r1.exportUri
             boolean r0 = r0.equals(r3)
-            if (r0 != 0) goto L_0x0792
+            if (r0 != 0) goto L_0x0843
             r1.exportUri = r3
             java.lang.String r0 = "exportUri2"
             r2.putStringSet(r0, r3)
-            goto L_0x06bc
-        L_0x067d:
+            goto L_0x076d
+        L_0x072e:
             r25 = r4
             r26 = r5
             java.util.HashSet r3 = new java.util.HashSet
             r3.<init>()
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
-            if (r4 == 0) goto L_0x06ad
+            if (r4 == 0) goto L_0x075e
             org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r4 = r0.value
             int r4 = r4.size()
             r5 = 0
-        L_0x0695:
-            if (r5 >= r4) goto L_0x06ad
+        L_0x0746:
+            if (r5 >= r4) goto L_0x075e
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r9 = r0.value
             java.lang.Object r9 = r9.get(r5)
             org.telegram.tgnet.TLRPC$JSONValue r9 = (org.telegram.tgnet.TLRPC$JSONValue) r9
             boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r10 == 0) goto L_0x06aa
+            if (r10 == 0) goto L_0x075b
             org.telegram.tgnet.TLRPC$TL_jsonString r9 = (org.telegram.tgnet.TLRPC$TL_jsonString) r9
             java.lang.String r9 = r9.value
             r3.add(r9)
-        L_0x06aa:
+        L_0x075b:
             int r5 = r5 + 1
-            goto L_0x0695
-        L_0x06ad:
+            goto L_0x0746
+        L_0x075e:
             java.util.Set<java.lang.String> r0 = r1.authDomains
             boolean r0 = r0.equals(r3)
-            if (r0 != 0) goto L_0x0792
+            if (r0 != 0) goto L_0x0843
             r1.authDomains = r3
             java.lang.String r0 = "authDomains"
             r2.putStringSet(r0, r3)
-        L_0x06bc:
+        L_0x076d:
             r7 = 1
-            goto L_0x0792
-        L_0x06bf:
+            goto L_0x0843
+        L_0x0770:
             r25 = r4
             r26 = r5
             java.util.HashSet r3 = new java.util.HashSet
             r3.<init>()
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
-            if (r4 == 0) goto L_0x06f3
+            if (r4 == 0) goto L_0x07a4
             org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r4 = r0.value
             int r4 = r4.size()
             r5 = 0
-        L_0x06d7:
-            if (r5 >= r4) goto L_0x06f3
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r10 = r0.value
-            java.lang.Object r10 = r10.get(r5)
-            org.telegram.tgnet.TLRPC$JSONValue r10 = (org.telegram.tgnet.TLRPC$JSONValue) r10
-            boolean r12 = r10 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r12 == 0) goto L_0x06f0
-            org.telegram.tgnet.TLRPC$TL_jsonString r10 = (org.telegram.tgnet.TLRPC$TL_jsonString) r10
-            java.lang.String r10 = r10.value
-            java.lang.String r10 = r10.replace(r11, r9)
-            r3.add(r10)
-        L_0x06f0:
+        L_0x0788:
+            if (r5 >= r4) goto L_0x07a4
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r9 = r0.value
+            java.lang.Object r9 = r9.get(r5)
+            org.telegram.tgnet.TLRPC$JSONValue r9 = (org.telegram.tgnet.TLRPC$JSONValue) r9
+            boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
+            if (r11 == 0) goto L_0x07a1
+            org.telegram.tgnet.TLRPC$TL_jsonString r9 = (org.telegram.tgnet.TLRPC$TL_jsonString) r9
+            java.lang.String r9 = r9.value
+            java.lang.String r9 = r9.replace(r14, r10)
+            r3.add(r9)
+        L_0x07a1:
             int r5 = r5 + 1
-            goto L_0x06d7
-        L_0x06f3:
+            goto L_0x0788
+        L_0x07a4:
             java.util.HashSet<java.lang.String> r0 = r1.diceEmojies
             boolean r0 = r0.equals(r3)
-            if (r0 != 0) goto L_0x0792
+            if (r0 != 0) goto L_0x0843
             r1.diceEmojies = r3
             java.lang.String r0 = "diceEmojies"
             r2.putStringSet(r0, r3)
-            goto L_0x06bc
-        L_0x0703:
+            goto L_0x076d
+        L_0x07b4:
             r25 = r4
             r26 = r5
             java.util.HashSet r3 = new java.util.HashSet
             r3.<init>()
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
-            if (r4 == 0) goto L_0x0733
+            if (r4 == 0) goto L_0x07e4
             org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r4 = r0.value
             int r4 = r4.size()
             r5 = 0
-        L_0x071b:
-            if (r5 >= r4) goto L_0x0733
+        L_0x07cc:
+            if (r5 >= r4) goto L_0x07e4
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r9 = r0.value
             java.lang.Object r9 = r9.get(r5)
             org.telegram.tgnet.TLRPC$JSONValue r9 = (org.telegram.tgnet.TLRPC$JSONValue) r9
             boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r10 == 0) goto L_0x0730
+            if (r10 == 0) goto L_0x07e1
             org.telegram.tgnet.TLRPC$TL_jsonString r9 = (org.telegram.tgnet.TLRPC$TL_jsonString) r9
             java.lang.String r9 = r9.value
             r3.add(r9)
-        L_0x0730:
+        L_0x07e1:
             int r5 = r5 + 1
-            goto L_0x071b
-        L_0x0733:
+            goto L_0x07cc
+        L_0x07e4:
             java.util.Set<java.lang.String> r0 = r1.pendingSuggestions
             boolean r0 = r0.equals(r3)
-            if (r0 != 0) goto L_0x0792
+            if (r0 != 0) goto L_0x0843
             r1.pendingSuggestions = r3
             java.lang.String r0 = "pendingSuggestions"
             r2.putStringSet(r0, r3)
@@ -3305,31 +3435,31 @@ public class MessagesController extends BaseController implements NotificationCe
             r4 = 0
             java.lang.Object[] r5 = new java.lang.Object[r4]
             r0.postNotificationName(r3, r5)
-            goto L_0x06bc
-        L_0x0750:
+            goto L_0x076d
+        L_0x0801:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.qrLoginCamera
-            if (r0 == r3) goto L_0x0792
+            if (r0 == r3) goto L_0x0843
             r1.qrLoginCamera = r0
             java.lang.String r3 = "qrLoginCamera"
             r2.putBoolean(r3, r0)
-            goto L_0x06bc
-        L_0x076b:
+            goto L_0x076d
+        L_0x081c:
             r25 = r4
             r26 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x0792
+            if (r3 == 0) goto L_0x0843
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.showFiltersTooltip
-            if (r0 == r3) goto L_0x0792
+            if (r0 == r3) goto L_0x0843
             r1.showFiltersTooltip = r0
             java.lang.String r3 = "showFiltersTooltip"
             r2.putBoolean(r3, r0)
@@ -3338,22 +3468,22 @@ public class MessagesController extends BaseController implements NotificationCe
             r4 = 0
             java.lang.Object[] r5 = new java.lang.Object[r4]
             r0.postNotificationName(r3, r5)
-            goto L_0x06bc
-        L_0x0792:
+            goto L_0x076d
+        L_0x0843:
             int r6 = r6 + 1
             r4 = r25
             r5 = r26
             goto L_0x001a
-        L_0x079a:
-            if (r7 == 0) goto L_0x079f
+        L_0x084b:
+            if (r7 == 0) goto L_0x0850
             r2.commit()
-        L_0x079f:
-            if (r8 == 0) goto L_0x07af
+        L_0x0850:
+            if (r8 == 0) goto L_0x0860
             org.telegram.messenger.ApplicationLoader.startPushService()
             org.telegram.tgnet.ConnectionsManager r0 = r27.getConnectionsManager()
             boolean r2 = r0.isPushConnectionEnabled()
             r0.setPushConnectionEnabled(r2)
-        L_0x07af:
+        L_0x0860:
             r2 = 0
             r1.loadingAppConfig = r2
             return

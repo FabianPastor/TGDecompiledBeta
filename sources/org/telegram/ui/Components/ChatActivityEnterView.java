@@ -981,9 +981,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.tooltipWidth = lineWidth;
                     }
                 }
-                if (this.tooltipLayout.getLineCount() > 1) {
-                    dp += this.tooltipLayout.getHeight() - this.tooltipLayout.getLineBottom(0);
-                }
+            }
+            StaticLayout staticLayout2 = this.tooltipLayout;
+            if (staticLayout2 != null && staticLayout2.getLineCount() > 1) {
+                dp += this.tooltipLayout.getHeight() - this.tooltipLayout.getLineBottom(0);
             }
             super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(dp, NUM));
             float measuredWidth = ((float) getMeasuredWidth()) * 0.35f;
@@ -5822,6 +5823,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public void sendMessageInternal(boolean z, int i) {
         ChatActivityEnterViewDelegate chatActivityEnterViewDelegate;
         TLRPC$Chat currentChat;
+        EmojiView emojiView2;
         boolean z2 = z;
         int i2 = i;
         if (this.slowModeTimer != Integer.MAX_VALUE || isInScheduleMode()) {
@@ -5835,8 +5837,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             if (this.stickersExpanded) {
                 setStickersExpanded(false, true, false);
-                if (this.searchingType != 0) {
-                    this.emojiView.closeSearch(false);
+                if (!(this.searchingType == 0 || (emojiView2 = this.emojiView) == null)) {
+                    emojiView2.closeSearch(false);
                     this.emojiView.hideSearchKeyboard();
                 }
             }

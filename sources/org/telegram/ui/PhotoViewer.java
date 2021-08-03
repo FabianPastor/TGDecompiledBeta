@@ -1706,8 +1706,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:33:0x00fd  */
-        /* JADX WARNING: Removed duplicated region for block: B:34:0x0107  */
+        /* JADX WARNING: Removed duplicated region for block: B:46:0x0127  */
+        /* JADX WARNING: Removed duplicated region for block: B:47:0x0131  */
         /* renamed from: lambda$onLongClick$0 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public /* synthetic */ void lambda$onLongClick$0$PhotoViewer$CaptionLinkMovementMethod(android.text.style.URLSpan r6, int r7, android.content.DialogInterface r8, int r9) {
@@ -1716,64 +1716,83 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (r9 != 0) goto L_0x0009
                 android.widget.TextView r7 = r5.selectedWidget
                 r5.onClick(r6, r7)
-                goto L_0x0148
+                goto L_0x0172
             L_0x0009:
                 r8 = 1
-                if (r9 != r8) goto L_0x0148
+                if (r9 != r8) goto L_0x0172
                 java.lang.String r6 = r6.getURL()
-                r9 = 0
-                java.lang.String r0 = "mailto:"
-                boolean r0 = r6.startsWith(r0)
-                if (r0 == 0) goto L_0x0021
+                java.lang.String r9 = "mailto:"
+                boolean r9 = r6.startsWith(r9)
+                r0 = 0
+                if (r9 == 0) goto L_0x0021
                 r7 = 7
                 java.lang.String r6 = r6.substring(r7)
             L_0x001e:
                 r8 = 0
-                goto L_0x00f8
+                goto L_0x0122
             L_0x0021:
-                java.lang.String r0 = "tel:"
-                boolean r0 = r6.startsWith(r0)
-                if (r0 == 0) goto L_0x0030
+                java.lang.String r9 = "tel:"
+                boolean r9 = r6.startsWith(r9)
+                if (r9 == 0) goto L_0x0030
                 r7 = 4
                 java.lang.String r6 = r6.substring(r7)
-                goto L_0x00f8
+                goto L_0x0122
             L_0x0030:
                 if (r7 < 0) goto L_0x001e
-                org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
-                org.telegram.messenger.MessageObject r8 = r8.currentMessageObject
-                if (r8 == 0) goto L_0x001e
-                org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
-                org.telegram.messenger.MessageObject r8 = r8.currentMessageObject
-                boolean r8 = r8.scheduled
-                if (r8 != 0) goto L_0x001e
-                org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
-                org.telegram.messenger.MessageObject r8 = r8.currentMessageObject
-                long r0 = r8.getDialogId()
-                int r8 = (int) r0
-                org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
-                org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
-                int r0 = r0.getId()
+                org.telegram.ui.PhotoViewer r9 = org.telegram.ui.PhotoViewer.this
+                org.telegram.messenger.MessageObject r9 = r9.currentMessageObject
+                if (r9 == 0) goto L_0x001e
+                org.telegram.ui.PhotoViewer r9 = org.telegram.ui.PhotoViewer.this
+                org.telegram.messenger.MessageObject r9 = r9.currentMessageObject
+                boolean r9 = r9.scheduled
+                if (r9 != 0) goto L_0x001e
+                org.telegram.ui.PhotoViewer r9 = org.telegram.ui.PhotoViewer.this
+                org.telegram.messenger.MessageObject r9 = r9.currentMessageObject
                 org.telegram.ui.PhotoViewer r1 = org.telegram.ui.PhotoViewer.this
                 org.telegram.messenger.MessageObject r1 = r1.currentMessageObject
-                org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
-                org.telegram.tgnet.TLRPC$MessageFwdHeader r1 = r1.fwd_from
-                if (r1 == 0) goto L_0x0081
+                boolean r1 = r1.isVideo()
+                if (r1 != 0) goto L_0x007c
+                org.telegram.ui.PhotoViewer r1 = org.telegram.ui.PhotoViewer.this
+                org.telegram.messenger.MessageObject r1 = r1.currentMessageObject
+                boolean r1 = r1.isRoundVideo()
+                if (r1 != 0) goto L_0x007c
+                org.telegram.ui.PhotoViewer r1 = org.telegram.ui.PhotoViewer.this
+                org.telegram.messenger.MessageObject r1 = r1.currentMessageObject
+                boolean r1 = r1.isVoice()
+                if (r1 != 0) goto L_0x007c
+                org.telegram.ui.PhotoViewer r1 = org.telegram.ui.PhotoViewer.this
+                org.telegram.messenger.MessageObject r1 = r1.currentMessageObject
+                boolean r1 = r1.isMusic()
+                if (r1 == 0) goto L_0x007b
+                goto L_0x007c
+            L_0x007b:
+                r8 = 0
+            L_0x007c:
+                if (r8 != 0) goto L_0x0090
                 org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
                 org.telegram.messenger.MessageObject r8 = r8.currentMessageObject
-                org.telegram.tgnet.TLRPC$Message r8 = r8.messageOwner
-                org.telegram.tgnet.TLRPC$MessageFwdHeader r8 = r8.fwd_from
-                org.telegram.tgnet.TLRPC$Peer r8 = r8.saved_from_peer
+                org.telegram.messenger.MessageObject r8 = r8.replyMessageObject
+                if (r8 == 0) goto L_0x0090
+                org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
+                org.telegram.messenger.MessageObject r8 = r8.currentMessageObject
+                org.telegram.messenger.MessageObject r9 = r8.replyMessageObject
+            L_0x0090:
+                long r1 = r9.getDialogId()
+                int r8 = (int) r1
+                int r1 = r9.getId()
+                org.telegram.tgnet.TLRPC$Message r2 = r9.messageOwner
+                org.telegram.tgnet.TLRPC$MessageFwdHeader r2 = r2.fwd_from
+                if (r2 == 0) goto L_0x00ab
+                org.telegram.tgnet.TLRPC$Peer r8 = r2.saved_from_peer
                 int r8 = org.telegram.messenger.MessageObject.getPeerId(r8)
-                org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
-                org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
-                org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-                org.telegram.tgnet.TLRPC$MessageFwdHeader r0 = r0.fwd_from
-                int r0 = r0.saved_from_msg_id
-            L_0x0081:
-                java.lang.String r1 = "?t="
+                org.telegram.tgnet.TLRPC$Message r9 = r9.messageOwner
+                org.telegram.tgnet.TLRPC$MessageFwdHeader r9 = r9.fwd_from
+                int r1 = r9.saved_from_msg_id
+            L_0x00ab:
+                java.lang.String r9 = "?t="
                 java.lang.String r2 = "/"
                 java.lang.String r3 = "https://t.me/"
-                if (r8 >= 0) goto L_0x00c1
+                if (r8 >= 0) goto L_0x00eb
                 org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                 int r4 = r4.currentAccount
                 org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
@@ -1789,12 +1808,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r8 = r8.username
                 r6.append(r8)
                 r6.append(r2)
-                r6.append(r0)
                 r6.append(r1)
+                r6.append(r9)
                 r6.append(r7)
                 java.lang.String r6 = r6.toString()
                 goto L_0x001e
-            L_0x00c1:
+            L_0x00eb:
                 org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                 int r4 = r4.currentAccount
                 org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
@@ -1809,46 +1828,46 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r8 = r8.username
                 r6.append(r8)
                 r6.append(r2)
-                r6.append(r0)
                 r6.append(r1)
+                r6.append(r9)
                 r6.append(r7)
                 java.lang.String r6 = r6.toString()
                 goto L_0x001e
-            L_0x00f8:
+            L_0x0122:
                 org.telegram.messenger.AndroidUtilities.addToClipboard(r6)
-                if (r8 == 0) goto L_0x0107
+                if (r8 == 0) goto L_0x0131
                 r6 = 2131626956(0x7f0e0bcc, float:1.8881163E38)
                 java.lang.String r7 = "PhoneCopied"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-                goto L_0x0134
-            L_0x0107:
+                goto L_0x015e
+            L_0x0131:
                 java.lang.String r7 = "#"
                 boolean r7 = r6.startsWith(r7)
-                if (r7 == 0) goto L_0x0119
+                if (r7 == 0) goto L_0x0143
                 r6 = 2131625777(0x7f0e0731, float:1.8878772E38)
                 java.lang.String r7 = "HashtagCopied"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-                goto L_0x0134
-            L_0x0119:
+                goto L_0x015e
+            L_0x0143:
                 java.lang.String r7 = "@"
                 boolean r6 = r6.startsWith(r7)
-                if (r6 == 0) goto L_0x012b
+                if (r6 == 0) goto L_0x0155
                 r6 = 2131627996(0x7f0e0fdc, float:1.8883272E38)
                 java.lang.String r7 = "UsernameCopied"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-                goto L_0x0134
-            L_0x012b:
+                goto L_0x015e
+            L_0x0155:
                 r6 = 2131626002(0x7f0e0812, float:1.8879228E38)
                 java.lang.String r7 = "LinkCopied"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            L_0x0134:
+            L_0x015e:
                 org.telegram.ui.PhotoViewer r7 = org.telegram.ui.PhotoViewer.this
                 org.telegram.ui.PhotoViewer$FrameLayoutDrawer r7 = r7.containerView
                 org.telegram.ui.Components.BulletinFactory r7 = org.telegram.ui.Components.BulletinFactory.of((android.widget.FrameLayout) r7)
                 r8 = 2131558524(0x7f0d007c, float:1.8742366E38)
                 org.telegram.ui.Components.Bulletin r6 = r7.createSimpleBulletin(r8, r6)
                 r6.show()
-            L_0x0148:
+            L_0x0172:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.CaptionLinkMovementMethod.lambda$onLongClick$0$PhotoViewer$CaptionLinkMovementMethod(android.text.style.URLSpan, int, android.content.DialogInterface, int):void");
@@ -20719,6 +20738,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 };
                 this.photoViewerWebView = r0;
                 r0.init(i, this.currentMessageObject.messageOwner.media.webpage);
+                this.photoViewerWebView.setPlaybackSpeed(this.currentVideoSpeed);
                 this.containerView.addView(this.photoViewerWebView, 0, LayoutHelper.createFrame(-1, -1.0f));
             }
         }
