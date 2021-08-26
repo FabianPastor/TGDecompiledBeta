@@ -2671,6 +2671,7 @@ public final class R {
         public static final int ChatYourSelfName = NUM;
         public static final int ChatYourSelfTitle = NUM;
         public static final int ChatsArchived = NUM;
+        public static final int ChatsDeletedUndo = NUM;
         public static final int ChatsException_few = NUM;
         public static final int ChatsException_many = NUM;
         public static final int ChatsException_one = NUM;
@@ -3738,6 +3739,9 @@ public final class R {
         public static final int InvoiceCantSendSecretChat = NUM;
         public static final int IsRecordingAudio = NUM;
         public static final int IsRecordingRound = NUM;
+        public static final int IsRecordingVideo = NUM;
+        public static final int IsSelectingContact = NUM;
+        public static final int IsSelectingLocation = NUM;
         public static final int IsSendingAudio = NUM;
         public static final int IsSendingFile = NUM;
         public static final int IsSendingGame = NUM;
@@ -4997,6 +5001,7 @@ public final class R {
         public static final int Recipient_zero = NUM;
         public static final int RecordingAudio = NUM;
         public static final int RecordingRound = NUM;
+        public static final int RecordingVideoStatus = NUM;
         public static final int RecoveryEmail = NUM;
         public static final int RecoveryEmailTitle = NUM;
         public static final int Red = NUM;
@@ -5228,6 +5233,8 @@ public final class R {
         public static final int SelectFromGallery = NUM;
         public static final int SelectImage = NUM;
         public static final int SelectOtherChat = NUM;
+        public static final int SelectingContact = NUM;
+        public static final int SelectingLocation = NUM;
         public static final int Send = NUM;
         public static final int SendAnonymously = NUM;
         public static final int SendAsFile = NUM;

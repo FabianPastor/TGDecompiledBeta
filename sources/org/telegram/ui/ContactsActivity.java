@@ -235,7 +235,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.returnAsResult
             if (r0 == 0) goto L_0x002e
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131627412(0x7f0e0d94, float:1.8882088E38)
+            r1 = 2131627417(0x7f0e0d99, float:1.8882098E38)
             java.lang.String r2 = "SelectContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -244,21 +244,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.createSecretChat
             if (r0 == 0) goto L_0x0041
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626306(0x7f0e0942, float:1.8879844E38)
+            r1 = 2131626310(0x7f0e0946, float:1.8879853E38)
             java.lang.String r2 = "NewSecretChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0041:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626296(0x7f0e0938, float:1.8879824E38)
+            r1 = 2131626300(0x7f0e093c, float:1.8879832E38)
             java.lang.String r2 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0050:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131625016(0x7f0e0438, float:1.8877228E38)
+            r1 = 2131625017(0x7f0e0439, float:1.887723E38)
             java.lang.String r2 = "Contacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -276,7 +276,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r2.<init>()
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setActionBarMenuItemSearchListener(r2)
             java.lang.String r2 = "Search"
-            r3 = 2131627344(0x7f0e0d50, float:1.888195E38)
+            r3 = 2131627349(0x7f0e0d55, float:1.888196E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setSearchFieldHint(r4)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
@@ -402,13 +402,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1.showProgress(r14, r13)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.title
-            r2 = 2131626367(0x7f0e097f, float:1.8879968E38)
+            r2 = 2131626371(0x7f0e0983, float:1.8879976E38)
             java.lang.String r3 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.subtitle
-            r2 = 2131627349(0x7f0e0d55, float:1.888196E38)
+            r2 = 2131627354(0x7f0e0d5a, float:1.888197E38)
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -554,7 +554,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r6 = 52
             r1.setAnimation(r0, r6, r6)
             android.widget.FrameLayout r0 = r11.floatingButtonContainer
-            r1 = 2131625046(0x7f0e0456, float:1.8877289E38)
+            r1 = 2131625047(0x7f0e0457, float:1.887729E38)
             java.lang.String r6 = "CreateNewContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r0.setContentDescription(r1)

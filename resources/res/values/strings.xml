@@ -924,6 +924,7 @@
     <string name="ChatYourSelfName">You</string>
     <string name="ChatYourSelfTitle">Your cloud storage</string>
     <string name="ChatsArchived">Chats archived.</string>
+    <string name="ChatsDeletedUndo">Chats deleted.</string>
     <string name="ChatsException_few">%1$d chats</string>
     <string name="ChatsException_many">%1$d chats</string>
     <string name="ChatsException_one">%1$d chat</string>
@@ -1991,6 +1992,9 @@
     <string name="InvoiceCantSendSecretChat">Sorry, invoices can’t be sent to secret chats.</string>
     <string name="IsRecordingAudio">%1$s is recording a voice message...</string>
     <string name="IsRecordingRound">%1$s is recording a video message...</string>
+    <string name="IsRecordingVideo">%1$s is recording video...</string>
+    <string name="IsSelectingContact">%1$s is selecting contact to share...</string>
+    <string name="IsSelectingLocation">%1$s is selecting location to share...</string>
     <string name="IsSendingAudio">%1$s is sending audio...</string>
     <string name="IsSendingFile">%1$s is sending file...</string>
     <string name="IsSendingGame">%1$s is playing a game...</string>
@@ -3250,6 +3254,7 @@
     <string name="Recipient_zero">%1$d recipients</string>
     <string name="RecordingAudio">recording a voice message...</string>
     <string name="RecordingRound">recording a video message...</string>
+    <string name="RecordingVideoStatus">recording a video...</string>
     <string name="RecoveryEmail">Recovery email</string>
     <string name="RecoveryEmailTitle">Recovery Email</string>
     <string name="Red">Red</string>
@@ -3481,6 +3486,8 @@
     <string name="SelectFromGallery">Select from gallery</string>
     <string name="SelectImage">Select image</string>
     <string name="SelectOtherChat">Select another chat</string>
+    <string name="SelectingContact">selecting a contact to share...</string>
+    <string name="SelectingLocation">selecting a location to share...</string>
     <string name="Send">Send</string>
     <string name="SendAnonymously">Send anonymously</string>
     <string name="SendAsFile">Send as file</string>

@@ -245,7 +245,9 @@ import org.telegram.tgnet.TLRPC$TL_photos_uploadProfilePhoto;
 import org.telegram.tgnet.TLRPC$TL_replyKeyboardHide;
 import org.telegram.tgnet.TLRPC$TL_restrictionReason;
 import org.telegram.tgnet.TLRPC$TL_sendMessageCancelAction;
+import org.telegram.tgnet.TLRPC$TL_sendMessageChooseContactAction;
 import org.telegram.tgnet.TLRPC$TL_sendMessageGamePlayAction;
+import org.telegram.tgnet.TLRPC$TL_sendMessageGeoLocationAction;
 import org.telegram.tgnet.TLRPC$TL_sendMessageRecordAudioAction;
 import org.telegram.tgnet.TLRPC$TL_sendMessageRecordRoundAction;
 import org.telegram.tgnet.TLRPC$TL_sendMessageRecordVideoAction;
@@ -8864,10 +8866,15 @@ public class MessagesController extends BaseController implements NotificationCe
         if (tLRPC$UserFull != null) {
             if (this.fullUsers.get(tLRPC$User.id) == null) {
                 this.fullUsers.put(tLRPC$User.id, tLRPC$UserFull);
+                int indexOfKey = this.blockePeers.indexOfKey(tLRPC$User.id);
                 if (tLRPC$UserFull.blocked) {
-                    this.blockePeers.put(tLRPC$User.id, 1);
-                } else {
-                    this.blockePeers.delete(tLRPC$User.id);
+                    if (indexOfKey < 0) {
+                        this.blockePeers.put(tLRPC$User.id, 1);
+                        getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
+                    }
+                } else if (indexOfKey >= 0) {
+                    this.blockePeers.removeAt(indexOfKey);
+                    getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
                 }
             }
             getNotificationCenter().postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(tLRPC$User.id), tLRPC$UserFull);
@@ -9965,7 +9972,6 @@ public class MessagesController extends BaseController implements NotificationCe
     private void updatePrintingStrings() {
         int i;
         int i2;
-        int i3;
         LongSparseArray longSparseArray = new LongSparseArray();
         LongSparseArray longSparseArray2 = new LongSparseArray();
         for (Map.Entry entry : this.printingUsers.entrySet()) {
@@ -9990,11 +9996,18 @@ public class MessagesController extends BaseController implements NotificationCe
                                 sparseArray.put(num.intValue(), LocaleController.getString("RecordingAudio", NUM));
                             }
                             sparseArray2.put(num.intValue(), 1);
-                        } else if ((tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageRecordRoundAction) || (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageUploadRoundAction)) {
+                        } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageRecordRoundAction) {
                             if (longValue < 0) {
                                 sparseArray.put(num.intValue(), LocaleController.formatString("IsRecordingRound", NUM, getUserNameForTyping(user)));
                             } else {
                                 sparseArray.put(num.intValue(), LocaleController.getString("RecordingRound", NUM));
+                            }
+                            sparseArray2.put(num.intValue(), 4);
+                        } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageUploadRoundAction) {
+                            if (longValue < 0) {
+                                sparseArray.put(num.intValue(), LocaleController.formatString("IsSendingVideo", NUM, getUserNameForTyping(user)));
+                            } else {
+                                sparseArray.put(num.intValue(), LocaleController.getString("SendingVideoStatus", NUM));
                             }
                             sparseArray2.put(num.intValue(), 4);
                         } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageUploadAudioAction) {
@@ -10004,11 +10017,18 @@ public class MessagesController extends BaseController implements NotificationCe
                                 sparseArray.put(num.intValue(), LocaleController.getString("SendingAudio", NUM));
                             }
                             sparseArray2.put(num.intValue(), 2);
-                        } else if ((tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageUploadVideoAction) || (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageRecordVideoAction)) {
+                        } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageUploadVideoAction) {
                             if (longValue < 0) {
                                 sparseArray.put(num.intValue(), LocaleController.formatString("IsSendingVideo", NUM, getUserNameForTyping(user)));
                             } else {
                                 sparseArray.put(num.intValue(), LocaleController.getString("SendingVideoStatus", NUM));
+                            }
+                            sparseArray2.put(num.intValue(), 2);
+                        } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageRecordVideoAction) {
+                            if (longValue < 0) {
+                                sparseArray.put(num.intValue(), LocaleController.formatString("IsRecordingVideo", NUM, getUserNameForTyping(user)));
+                            } else {
+                                sparseArray.put(num.intValue(), LocaleController.getString("RecordingVideoStatus", NUM));
                             }
                             sparseArray2.put(num.intValue(), 2);
                         } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageUploadDocumentAction) {
@@ -10032,24 +10052,36 @@ public class MessagesController extends BaseController implements NotificationCe
                                 sparseArray.put(num.intValue(), LocaleController.getString("SendingGame", NUM));
                             }
                             sparseArray2.put(num.intValue(), 3);
+                        } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageGeoLocationAction) {
+                            if (longValue < 0) {
+                                sparseArray.put(num.intValue(), LocaleController.formatString("IsSelectingLocation", NUM, getUserNameForTyping(user)));
+                            } else {
+                                sparseArray.put(num.intValue(), LocaleController.getString("SelectingLocation", NUM));
+                            }
+                            sparseArray2.put(num.intValue(), 0);
+                        } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageChooseContactAction) {
+                            if (longValue < 0) {
+                                sparseArray.put(num.intValue(), LocaleController.formatString("IsSelectingContact", NUM, getUserNameForTyping(user)));
+                            } else {
+                                sparseArray.put(num.intValue(), LocaleController.getString("SelectingContact", NUM));
+                            }
+                            sparseArray2.put(num.intValue(), 0);
                         } else {
                             if (longValue < 0) {
-                                i = 0;
                                 sparseArray.put(num.intValue(), LocaleController.formatString("IsTypingGroup", NUM, getUserNameForTyping(user)));
                             } else {
-                                i = 0;
                                 sparseArray.put(num.intValue(), LocaleController.getString("Typing", NUM));
                             }
-                            sparseArray2.put(num.intValue(), Integer.valueOf(i));
+                            sparseArray2.put(num.intValue(), 0);
                         }
                     }
                 } else {
                     StringBuilder sb = new StringBuilder();
                     Iterator it = arrayList.iterator();
-                    int i4 = 0;
+                    int i3 = 0;
                     while (true) {
                         if (!it.hasNext()) {
-                            i2 = i4;
+                            i = i3;
                             break;
                         }
                         TLRPC$User user2 = getUser(Integer.valueOf(((PrintingUser) it.next()).userId));
@@ -10058,16 +10090,16 @@ public class MessagesController extends BaseController implements NotificationCe
                                 sb.append(", ");
                             }
                             sb.append(getUserNameForTyping(user2));
-                            i4++;
+                            i3++;
                         }
-                        i2 = i4;
-                        if (i2 == 2) {
+                        i = i3;
+                        if (i == 2) {
                             break;
                         }
-                        i4 = i2;
+                        i3 = i;
                     }
                     if (sb.length() != 0) {
-                        if (i2 == 1) {
+                        if (i == 1) {
                             sparseArray.put(num.intValue(), LocaleController.formatString("IsTypingGroup", NUM, sb.toString()));
                         } else if (arrayList.size() > 2) {
                             String pluralString = LocaleController.getPluralString("AndMoreTypingGroup", arrayList.size() - 2);
@@ -10077,12 +10109,12 @@ public class MessagesController extends BaseController implements NotificationCe
                                 sparseArray.put(num.intValue(), "LOC_ERR: AndMoreTypingGroup");
                             }
                         } else {
-                            i3 = 0;
+                            i2 = 0;
                             sparseArray.put(num.intValue(), LocaleController.formatString("AreTypingGroup", NUM, sb.toString()));
-                            sparseArray2.put(num.intValue(), Integer.valueOf(i3));
+                            sparseArray2.put(num.intValue(), Integer.valueOf(i2));
                         }
-                        i3 = 0;
-                        sparseArray2.put(num.intValue(), Integer.valueOf(i3));
+                        i2 = 0;
+                        sparseArray2.put(num.intValue(), Integer.valueOf(i2));
                     }
                 }
             }

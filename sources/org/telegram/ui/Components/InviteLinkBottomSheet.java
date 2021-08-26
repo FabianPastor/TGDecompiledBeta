@@ -232,13 +232,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             java.lang.String r4 = "fonts/rmedium.ttf"
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r1.setTypeface(r4)
-            r1 = 2131625902(0x7f0e07ae, float:1.8879025E38)
+            r1 = 2131625903(0x7f0e07af, float:1.8879027E38)
             java.lang.String r4 = "InviteLink"
             if (r5 != 0) goto L_0x0150
             boolean r5 = r2.expired
             if (r5 == 0) goto L_0x0131
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131625483(0x7f0e060b, float:1.8878175E38)
+            r4 = 2131625484(0x7f0e060c, float:1.8878177E38)
             java.lang.String r5 = "ExpiredLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -247,7 +247,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             boolean r5 = r2.revoked
             if (r5 == 0) goto L_0x0144
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131627317(0x7f0e0d35, float:1.8881895E38)
+            r4 = 2131627322(0x7f0e0d3a, float:1.8881905E38)
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)

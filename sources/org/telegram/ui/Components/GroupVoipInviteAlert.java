@@ -24,6 +24,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -373,7 +374,6 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     /* access modifiers changed from: protected */
     public void loadChatParticipants(int i, int i2, boolean z) {
         SparseArray<TLRPC$TL_groupCallParticipant> sparseArray;
-        TLRPC$User user;
         if (!ChatObject.isChannel(this.currentChat)) {
             this.loadingUsers = false;
             this.participants.clear();
@@ -386,9 +386,12 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 for (int i4 = 0; i4 < size; i4++) {
                     TLRPC$ChatParticipant tLRPC$ChatParticipant = this.info.participants.participants.get(i4);
                     int i5 = tLRPC$ChatParticipant.user_id;
-                    if (i5 != i3 && (((sparseArray = this.ignoredUsers) == null || sparseArray.indexOfKey(i5) < 0) && ((user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tLRPC$ChatParticipant.user_id))) == null || !user.bot))) {
-                        this.participants.add(tLRPC$ChatParticipant);
-                        this.participantsMap.put(tLRPC$ChatParticipant.user_id, tLRPC$ChatParticipant);
+                    if (i5 != i3 && ((sparseArray = this.ignoredUsers) == null || sparseArray.indexOfKey(i5) < 0)) {
+                        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tLRPC$ChatParticipant.user_id));
+                        if (!UserObject.isDeleted(user) && !user.bot) {
+                            this.participants.add(tLRPC$ChatParticipant);
+                            this.participantsMap.put(tLRPC$ChatParticipant.user_id, tLRPC$ChatParticipant);
+                        }
                     }
                 }
                 if (this.participants.isEmpty()) {
@@ -511,7 +514,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                     z = true;
                 }
                 TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(peerId));
-                if (user != null && user.bot) {
+                if ((user != null && user.bot) || UserObject.isDeleted(user)) {
                     z = true;
                 }
                 if (z) {
@@ -1119,7 +1122,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x0133
-                r15 = 2131625732(0x7f0e0704, float:1.887868E38)
+                r15 = 2131625733(0x7f0e0705, float:1.8878682E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)

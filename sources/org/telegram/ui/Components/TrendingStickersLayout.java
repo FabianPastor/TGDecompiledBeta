@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -82,6 +83,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     public final LongSparseArray<TLRPC$StickerSetCovered> removingStickerSets;
     /* access modifiers changed from: private */
     public boolean scrollFromAnimator;
+    private TLRPC$StickerSetCovered scrollToSet;
     /* access modifiers changed from: private */
     public final StickersSearchAdapter searchAdapter;
     private final FrameLayout searchLayout;
@@ -133,11 +135,11 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     }
 
     public TrendingStickersLayout(Context context, Delegate delegate2) {
-        this(context, delegate2, new TLRPC$StickerSetCovered[10], new LongSparseArray(), new LongSparseArray());
+        this(context, delegate2, new TLRPC$StickerSetCovered[10], new LongSparseArray(), new LongSparseArray(), (TLRPC$StickerSetCovered) null);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public TrendingStickersLayout(Context context, Delegate delegate2, TLRPC$StickerSetCovered[] tLRPC$StickerSetCoveredArr, LongSparseArray<TLRPC$StickerSetCovered> longSparseArray, LongSparseArray<TLRPC$StickerSetCovered> longSparseArray2) {
+    public TrendingStickersLayout(Context context, Delegate delegate2, TLRPC$StickerSetCovered[] tLRPC$StickerSetCoveredArr, LongSparseArray<TLRPC$StickerSetCovered> longSparseArray, LongSparseArray<TLRPC$StickerSetCovered> longSparseArray2, TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {
         super(context);
         Context context2 = context;
         final Delegate delegate3 = delegate2;
@@ -150,6 +152,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
         this.installingStickerSets = longSparseArray3;
         LongSparseArray<TLRPC$StickerSetCovered> longSparseArray4 = longSparseArray2;
         this.removingStickerSets = longSparseArray4;
+        this.scrollToSet = tLRPC$StickerSetCovered;
         TrendingStickersAdapter trendingStickersAdapter = new TrendingStickersAdapter(context2);
         this.adapter = trendingStickersAdapter;
         this.searchAdapter = new StickersSearchAdapter(context, new StickersSearchAdapter.Delegate() {
@@ -375,10 +378,14 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
 
     /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        Integer num;
         super.onLayout(z, i, i2, i3, i4);
         if (!this.wasLayout) {
             this.wasLayout = true;
             this.adapter.refreshStickerSets();
+            if (this.scrollToSet != null && (num = (Integer) this.adapter.setsToPosition.get(this.scrollToSet)) != null) {
+                this.layoutManager.scrollToPositionWithOffset(num.intValue(), (-this.listView.getPaddingTop()) + AndroidUtilities.dp(58.0f));
+            }
         }
     }
 
@@ -620,6 +627,8 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
         public final SparseArray<TLRPC$StickerSetCovered> positionsToSets = new SparseArray<>();
         /* access modifiers changed from: private */
         public final ArrayList<TLRPC$StickerSetCovered> sets = new ArrayList<>();
+        /* access modifiers changed from: private */
+        public final HashMap<TLRPC$StickerSetCovered, Integer> setsToPosition = new HashMap<>();
         /* access modifiers changed from: private */
         public int stickersPerRow = 5;
         /* access modifiers changed from: private */
@@ -1040,6 +1049,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
             if (!TrendingStickersLayout.this.loaded) {
                 this.cache.clear();
                 this.positionsToSets.clear();
+                this.setsToPosition.clear();
                 this.sets.clear();
                 this.totalItems = 0;
                 MediaDataController instance = MediaDataController.getInstance(TrendingStickersLayout.this.currentAccount);
@@ -1063,6 +1073,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                         }
                         this.sets.add(tLRPC$StickerSetCovered);
                         this.positionsToSets.put(this.totalItems, tLRPC$StickerSetCovered);
+                        this.setsToPosition.put(tLRPC$StickerSetCovered, Integer.valueOf(this.totalItems));
                         SparseArray<Object> sparseArray2 = this.cache;
                         int i6 = this.totalItems;
                         this.totalItems = i6 + 1;

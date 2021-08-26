@@ -2532,6 +2532,7 @@
     <public type="string" name="ChatYourSelfName" id="NUM" />
     <public type="string" name="ChatYourSelfTitle" id="NUM" />
     <public type="string" name="ChatsArchived" id="NUM" />
+    <public type="string" name="ChatsDeletedUndo" id="NUM" />
     <public type="string" name="ChatsException_few" id="NUM" />
     <public type="string" name="ChatsException_many" id="NUM" />
     <public type="string" name="ChatsException_one" id="NUM" />
@@ -3599,6 +3600,9 @@
     <public type="string" name="InvoiceCantSendSecretChat" id="NUM" />
     <public type="string" name="IsRecordingAudio" id="NUM" />
     <public type="string" name="IsRecordingRound" id="NUM" />
+    <public type="string" name="IsRecordingVideo" id="NUM" />
+    <public type="string" name="IsSelectingContact" id="NUM" />
+    <public type="string" name="IsSelectingLocation" id="NUM" />
     <public type="string" name="IsSendingAudio" id="NUM" />
     <public type="string" name="IsSendingFile" id="NUM" />
     <public type="string" name="IsSendingGame" id="NUM" />
@@ -4858,6 +4862,7 @@
     <public type="string" name="Recipient_zero" id="NUM" />
     <public type="string" name="RecordingAudio" id="NUM" />
     <public type="string" name="RecordingRound" id="NUM" />
+    <public type="string" name="RecordingVideoStatus" id="NUM" />
     <public type="string" name="RecoveryEmail" id="NUM" />
     <public type="string" name="RecoveryEmailTitle" id="NUM" />
     <public type="string" name="Red" id="NUM" />
@@ -5089,6 +5094,8 @@
     <public type="string" name="SelectFromGallery" id="NUM" />
     <public type="string" name="SelectImage" id="NUM" />
     <public type="string" name="SelectOtherChat" id="NUM" />
+    <public type="string" name="SelectingContact" id="NUM" />
+    <public type="string" name="SelectingLocation" id="NUM" />
     <public type="string" name="Send" id="NUM" />
     <public type="string" name="SendAnonymously" id="NUM" />
     <public type="string" name="SendAsFile" id="NUM" />

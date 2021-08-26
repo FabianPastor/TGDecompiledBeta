@@ -228,9 +228,17 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        EmojiView emojiView2;
-        if (i == NotificationCenter.emojiLoaded && (emojiView2 = this.emojiView) != null) {
-            emojiView2.invalidateViews();
+        if (i == NotificationCenter.emojiLoaded) {
+            EmojiView emojiView2 = this.emojiView;
+            if (emojiView2 != null) {
+                emojiView2.invalidateViews();
+            }
+            EditTextCaption editTextCaption = this.editText;
+            if (editTextCaption != null) {
+                int currentTextColor = editTextCaption.getCurrentTextColor();
+                this.editText.setTextColor(-1);
+                this.editText.setTextColor(currentTextColor);
+            }
         }
     }
 
