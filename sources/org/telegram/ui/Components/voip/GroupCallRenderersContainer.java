@@ -277,7 +277,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             }
         };
         this.speakingMembersToast = r6;
-        AvatarsImageView avatarsImageView = new AvatarsImageView(context2);
+        AvatarsImageView avatarsImageView = new AvatarsImageView(context2, true);
         this.speakingMembersAvatars = avatarsImageView;
         avatarsImageView.setStyle(10);
         r6.setClipChildren(false);

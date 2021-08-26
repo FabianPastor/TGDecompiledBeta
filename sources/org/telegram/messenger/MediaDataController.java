@@ -5720,7 +5720,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e7 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02e7 }
-            r10 = 2131626291(0x7f0e0933, float:1.8879814E38)
+            r10 = 2131626295(0x7f0e0937, float:1.8879822E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e7 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02e7 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e7 }
@@ -6581,7 +6581,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627213(0x7f0e0ccd, float:1.8881684E38)
+            r9 = 2131627218(0x7f0e0cd2, float:1.8881694E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
         L_0x0067:
             r9 = r4
@@ -6591,7 +6591,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627332(0x7f0e0d44, float:1.8881925E38)
+            r9 = 2131627337(0x7f0e0d49, float:1.8881936E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
             goto L_0x0067
         L_0x007a:
@@ -7755,7 +7755,7 @@ public class MediaDataController extends BaseController {
     /* access modifiers changed from: private */
     /* renamed from: lambda$loadReplyMessagesForMessages$113 */
     public /* synthetic */ void lambda$loadReplyMessagesForMessages$113$MediaDataController(long j, ArrayList arrayList) {
-        getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j), arrayList);
+        getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j), arrayList, null);
     }
 
     /* access modifiers changed from: private */
@@ -8017,7 +8017,7 @@ public class MediaDataController extends BaseController {
             }
         }
         if (z2) {
-            getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j), arrayList3);
+            getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j), arrayList3, longSparseArray);
         }
     }
 

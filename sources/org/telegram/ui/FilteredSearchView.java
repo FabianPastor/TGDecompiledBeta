@@ -1535,12 +1535,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626585(0x7f0e0a59, float:1.888041E38)
+                        r2 = 2131626589(0x7f0e0a5d, float:1.8880418E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
                         r1 = 1
-                        r2 = 2131625030(0x7f0e0446, float:1.8877256E38)
+                        r2 = 2131625031(0x7f0e0447, float:1.8877258E38)
                         java.lang.String r3 = "Copy"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
@@ -2035,7 +2035,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r4 = r4.getContext()
                     r5.<init>(r4)
-                    r4 = 2131627369(0x7f0e0d69, float:1.8882E38)
+                    r4 = 2131627374(0x7f0e0d6e, float:1.888201E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                     r5.setText(r4)

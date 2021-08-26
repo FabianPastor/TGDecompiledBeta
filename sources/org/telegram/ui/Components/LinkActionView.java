@@ -549,7 +549,7 @@ public class LinkActionView extends LinearLayout {
 
         public AvatarsContainer(Context context) {
             super(context);
-            this.avatarsImageView = new AvatarsImageView(context, LinkActionView.this) {
+            this.avatarsImageView = new AvatarsImageView(context, false, LinkActionView.this) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     int min = Math.min(3, LinkActionView.this.usersCount);

@@ -13522,7 +13522,7 @@ public class Theme {
         }
     }
 
-    public static void createCommonChatResources() {
+    public static void createCommonMessageResources() {
         synchronized (sync) {
             if (chat_msgTextPaint == null) {
                 chat_msgTextPaint = new TextPaint(1);
@@ -13541,23 +13541,27 @@ public class Theme {
             chat_msgGameTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
             chat_msgBotButtonPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
         }
+    }
+
+    public static void createCommonChatResources() {
+        createCommonMessageResources();
         if (chat_infoPaint == null) {
             chat_infoPaint = new TextPaint(1);
+            TextPaint textPaint = new TextPaint(1);
+            chat_stickerCommentCountPaint = textPaint;
+            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             TextPaint textPaint2 = new TextPaint(1);
-            chat_stickerCommentCountPaint = textPaint2;
+            chat_docNamePaint = textPaint2;
             textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            TextPaint textPaint3 = new TextPaint(1);
-            chat_docNamePaint = textPaint3;
-            textPaint3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_docBackPaint = new Paint(1);
             chat_deleteProgressPaint = new Paint(1);
             Paint paint = new Paint(1);
             chat_botProgressPaint = paint;
             paint.setStrokeCap(Paint.Cap.ROUND);
             chat_botProgressPaint.setStyle(Paint.Style.STROKE);
-            TextPaint textPaint4 = new TextPaint(1);
-            chat_locationTitlePaint = textPaint4;
-            textPaint4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint3 = new TextPaint(1);
+            chat_locationTitlePaint = textPaint3;
+            textPaint3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_locationAddressPaint = new TextPaint(1);
             chat_urlPaint = new Paint();
             chat_textSearchSelectionPaint = new Paint();
@@ -13571,38 +13575,38 @@ public class Theme {
             paint3.setStrokeCap(Paint.Cap.ROUND);
             chat_radialProgress2Paint.setStyle(Paint.Style.STROKE);
             chat_audioTimePaint = new TextPaint(1);
+            TextPaint textPaint4 = new TextPaint(1);
+            chat_livePaint = textPaint4;
+            textPaint4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             TextPaint textPaint5 = new TextPaint(1);
-            chat_livePaint = textPaint5;
+            chat_audioTitlePaint = textPaint5;
             textPaint5.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            TextPaint textPaint6 = new TextPaint(1);
-            chat_audioTitlePaint = textPaint6;
-            textPaint6.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_audioPerformerPaint = new TextPaint(1);
+            TextPaint textPaint6 = new TextPaint(1);
+            chat_botButtonPaint = textPaint6;
+            textPaint6.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             TextPaint textPaint7 = new TextPaint(1);
-            chat_botButtonPaint = textPaint7;
+            chat_contactNamePaint = textPaint7;
             textPaint7.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            TextPaint textPaint8 = new TextPaint(1);
-            chat_contactNamePaint = textPaint8;
-            textPaint8.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_contactPhonePaint = new TextPaint(1);
             chat_durationPaint = new TextPaint(1);
-            TextPaint textPaint9 = new TextPaint(1);
-            chat_gamePaint = textPaint9;
-            textPaint9.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint8 = new TextPaint(1);
+            chat_gamePaint = textPaint8;
+            textPaint8.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_shipmentPaint = new TextPaint(1);
             chat_timePaint = new TextPaint(1);
             chat_adminPaint = new TextPaint(1);
-            TextPaint textPaint10 = new TextPaint(1);
-            chat_namePaint = textPaint10;
-            textPaint10.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint9 = new TextPaint(1);
+            chat_namePaint = textPaint9;
+            textPaint9.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_forwardNamePaint = new TextPaint(1);
-            TextPaint textPaint11 = new TextPaint(1);
-            chat_replyNamePaint = textPaint11;
-            textPaint11.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint10 = new TextPaint(1);
+            chat_replyNamePaint = textPaint10;
+            textPaint10.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_replyTextPaint = new TextPaint(1);
-            TextPaint textPaint12 = new TextPaint(1);
-            chat_instantViewPaint = textPaint12;
-            textPaint12.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint11 = new TextPaint(1);
+            chat_instantViewPaint = textPaint11;
+            textPaint11.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             Paint paint4 = new Paint(1);
             chat_instantViewRectPaint = paint4;
             paint4.setStyle(Paint.Style.STROKE);
@@ -13618,31 +13622,23 @@ public class Theme {
             chat_statusRecordPaint = paint6;
             paint6.setStyle(Paint.Style.STROKE);
             chat_statusRecordPaint.setStrokeCap(Paint.Cap.ROUND);
-            TextPaint textPaint13 = new TextPaint(1);
-            chat_actionTextPaint = textPaint13;
-            textPaint13.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint12 = new TextPaint(1);
+            chat_actionTextPaint = textPaint12;
+            textPaint12.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             Paint paint7 = new Paint(1);
             chat_actionBackgroundGradientDarkenPaint = paint7;
             paint7.setColor(NUM);
             chat_timeBackgroundPaint = new Paint(1);
-            TextPaint textPaint14 = new TextPaint(1);
-            chat_contextResult_titleTextPaint = textPaint14;
-            textPaint14.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint13 = new TextPaint(1);
+            chat_contextResult_titleTextPaint = textPaint13;
+            textPaint13.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_contextResult_descriptionTextPaint = new TextPaint(1);
             chat_composeBackgroundPaint = new Paint();
             chat_radialProgressPausedPaint = new Paint(1);
             chat_radialProgressPausedSeekbarPaint = new Paint(1);
-        }
-        if (chat_actionBackgroundPaint == null) {
             chat_actionBackgroundPaint = new Paint(1);
-        }
-        if (chat_actionBackgroundSelectedPaint == null) {
             chat_actionBackgroundSelectedPaint = new Paint(1);
-        }
-        if (chat_actionBackgroundPaint2 == null) {
             chat_actionBackgroundPaint2 = new Paint(1);
-        }
-        if (chat_actionBackgroundSelectedPaint2 == null) {
             chat_actionBackgroundSelectedPaint2 = new Paint(1);
         }
     }

@@ -114,6 +114,7 @@ import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
 import org.telegram.tgnet.TLRPC$TL_document;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
+import org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC$TL_keyboardButton;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonBuy;
@@ -126,6 +127,14 @@ import org.telegram.tgnet.TLRPC$TL_keyboardButtonSwitchInline;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonUrl;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth;
 import org.telegram.tgnet.TLRPC$TL_message;
+import org.telegram.tgnet.TLRPC$TL_messageEntityBold;
+import org.telegram.tgnet.TLRPC$TL_messageEntityCode;
+import org.telegram.tgnet.TLRPC$TL_messageEntityItalic;
+import org.telegram.tgnet.TLRPC$TL_messageEntityMentionName;
+import org.telegram.tgnet.TLRPC$TL_messageEntityPre;
+import org.telegram.tgnet.TLRPC$TL_messageEntityStrike;
+import org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl;
+import org.telegram.tgnet.TLRPC$TL_messageEntityUnderline;
 import org.telegram.tgnet.TLRPC$TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC$TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
@@ -152,6 +161,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBar;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
+import org.telegram.ui.Components.TextStyleSpan;
 import org.telegram.ui.Components.VideoTimelineView;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.GroupStickersActivity;
@@ -252,6 +262,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public final Drawable doneCheckDrawable;
     /* access modifiers changed from: private */
     public Paint dotPaint;
+    private CharSequence draftMessage;
     private boolean editingCaption;
     /* access modifiers changed from: private */
     public MessageObject editingMessageObject;
@@ -3235,11 +3246,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.checkSendButton(true);
                         CharSequence trimmedString = AndroidUtilities.getTrimmedString(charSequence.toString());
                         if (ChatActivityEnterView.this.delegate != null && !ChatActivityEnterView.this.ignoreTextChange) {
-                            if (i3 > 2 || TextUtils.isEmpty(charSequence)) {
+                            int i4 = i3 + 1;
+                            if (i2 > i4 || i3 - i2 > 2 || TextUtils.isEmpty(charSequence)) {
                                 boolean unused3 = ChatActivityEnterView.this.messageWebPageSearch = true;
                             }
                             ChatActivityEnterViewDelegate access$1300 = ChatActivityEnterView.this.delegate;
-                            if (i2 > i3 + 1 || i3 - i2 > 2) {
+                            if (i2 > i4 || i3 - i2 > 2) {
                                 z = true;
                             }
                             access$1300.onTextChanged(charSequence, z);
@@ -8623,456 +8635,226 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* JADX WARNING: type inference failed for: r1v4, types: [java.lang.CharSequence] */
-    /* JADX WARNING: Failed to insert additional move for type inference */
-    /* JADX WARNING: Multi-variable type inference failed */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setEditingMessageObject(org.telegram.messenger.MessageObject r13, boolean r14) {
-        /*
-            r12 = this;
-            org.telegram.tgnet.TLRPC$TL_document r0 = r12.audioToSend
-            if (r0 != 0) goto L_0x03a8
-            org.telegram.messenger.VideoEditedInfo r0 = r12.videoToSendMessageObject
-            if (r0 != 0) goto L_0x03a8
-            org.telegram.messenger.MessageObject r0 = r12.editingMessageObject
-            if (r0 != r13) goto L_0x000e
-            goto L_0x03a8
-        L_0x000e:
-            r12.editingMessageObject = r13
-            r12.editingCaption = r14
-            r0 = 0
-            java.lang.String r1 = ""
-            r2 = 0
-            r3 = 1
-            r4 = 8
-            r5 = 1036831949(0x3dcccccd, float:0.1)
-            r6 = 0
-            r7 = 1065353216(0x3var_, float:1.0)
-            if (r13 == 0) goto L_0x0279
-            android.animation.AnimatorSet r13 = r12.doneButtonAnimation
-            if (r13 == 0) goto L_0x002a
-            r13.cancel()
-            r12.doneButtonAnimation = r0
-        L_0x002a:
-            android.widget.FrameLayout r13 = r12.doneButtonContainer
-            r13.setVisibility(r6)
-            android.widget.ImageView r13 = r12.doneButtonImage
-            r13.setScaleX(r5)
-            android.widget.ImageView r13 = r12.doneButtonImage
-            r13.setScaleY(r5)
-            android.widget.ImageView r13 = r12.doneButtonImage
-            r13.setAlpha(r2)
-            android.widget.ImageView r13 = r12.doneButtonImage
-            android.view.ViewPropertyAnimator r13 = r13.animate()
-            android.view.ViewPropertyAnimator r13 = r13.alpha(r7)
-            android.view.ViewPropertyAnimator r13 = r13.scaleX(r7)
-            android.view.ViewPropertyAnimator r13 = r13.scaleY(r7)
-            r7 = 150(0x96, double:7.4E-322)
-            android.view.ViewPropertyAnimator r13 = r13.setDuration(r7)
-            org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            android.view.ViewPropertyAnimator r13 = r13.setInterpolator(r2)
-            r13.start()
-            if (r14 == 0) goto L_0x0070
-            org.telegram.messenger.AccountInstance r13 = r12.accountInstance
-            org.telegram.messenger.MessagesController r13 = r13.getMessagesController()
-            int r13 = r13.maxCaptionLength
-            r12.currentLimit = r13
-            org.telegram.messenger.MessageObject r13 = r12.editingMessageObject
-            java.lang.CharSequence r13 = r13.caption
-            goto L_0x007e
-        L_0x0070:
-            org.telegram.messenger.AccountInstance r13 = r12.accountInstance
-            org.telegram.messenger.MessagesController r13 = r13.getMessagesController()
-            int r13 = r13.maxMessageLength
-            r12.currentLimit = r13
-            org.telegram.messenger.MessageObject r13 = r12.editingMessageObject
-            java.lang.CharSequence r13 = r13.messageText
-        L_0x007e:
-            if (r13 == 0) goto L_0x021a
-            org.telegram.messenger.MessageObject r14 = r12.editingMessageObject
-            org.telegram.tgnet.TLRPC$Message r14 = r14.messageOwner
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r14 = r14.entities
-            org.telegram.messenger.MediaDataController.sortEntities(r14)
-            android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder
-            r2.<init>(r13)
-            int r13 = r2.length()
-            java.lang.Class<java.lang.Object> r5 = java.lang.Object.class
-            java.lang.Object[] r13 = r2.getSpans(r6, r13, r5)
-            if (r13 == 0) goto L_0x00a9
-            int r5 = r13.length
-            if (r5 <= 0) goto L_0x00a9
-            r5 = 0
-        L_0x009e:
-            int r7 = r13.length
-            if (r5 >= r7) goto L_0x00a9
-            r7 = r13[r5]
-            r2.removeSpan(r7)
-            int r5 = r5 + 1
-            goto L_0x009e
-        L_0x00a9:
-            if (r14 == 0) goto L_0x0201
-            r13 = 0
-        L_0x00ac:
-            int r5 = r14.size()     // Catch:{ Exception -> 0x01fd }
-            if (r13 >= r5) goto L_0x0201
-            java.lang.Object r5 = r14.get(r13)     // Catch:{ Exception -> 0x01fd }
-            org.telegram.tgnet.TLRPC$MessageEntity r5 = (org.telegram.tgnet.TLRPC$MessageEntity) r5     // Catch:{ Exception -> 0x01fd }
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r8 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r7 = r7 + r8
-            int r8 = r2.length()     // Catch:{ Exception -> 0x01fd }
-            if (r7 <= r8) goto L_0x00c5
-            goto L_0x01f9
-        L_0x00c5:
-            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName     // Catch:{ Exception -> 0x01fd }
-            r8 = 3
-            r9 = 32
-            r10 = 33
-            if (r7 == 0) goto L_0x010e
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r11 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r7 = r7 + r11
-            int r11 = r2.length()     // Catch:{ Exception -> 0x01fd }
-            if (r7 >= r11) goto L_0x00e9
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r11 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r7 = r7 + r11
-            char r7 = r2.charAt(r7)     // Catch:{ Exception -> 0x01fd }
-            if (r7 != r9) goto L_0x00e9
-            int r7 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r7 = r7 + r3
-            r5.length = r7     // Catch:{ Exception -> 0x01fd }
-        L_0x00e9:
-            org.telegram.ui.Components.URLSpanUserMention r7 = new org.telegram.ui.Components.URLSpanUserMention     // Catch:{ Exception -> 0x01fd }
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01fd }
-            r9.<init>()     // Catch:{ Exception -> 0x01fd }
-            r9.append(r1)     // Catch:{ Exception -> 0x01fd }
-            r11 = r5
-            org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName r11 = (org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName) r11     // Catch:{ Exception -> 0x01fd }
-            org.telegram.tgnet.TLRPC$InputUser r11 = r11.user_id     // Catch:{ Exception -> 0x01fd }
-            int r11 = r11.user_id     // Catch:{ Exception -> 0x01fd }
-            r9.append(r11)     // Catch:{ Exception -> 0x01fd }
-            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x01fd }
-            r7.<init>(r9, r8)     // Catch:{ Exception -> 0x01fd }
-            int r8 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5 + r8
-            r2.setSpan(r7, r8, r5, r10)     // Catch:{ Exception -> 0x01fd }
-            goto L_0x01f9
-        L_0x010e:
-            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMentionName     // Catch:{ Exception -> 0x01fd }
-            if (r7 == 0) goto L_0x0150
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r11 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r7 = r7 + r11
-            int r11 = r2.length()     // Catch:{ Exception -> 0x01fd }
-            if (r7 >= r11) goto L_0x012d
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r11 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r7 = r7 + r11
-            char r7 = r2.charAt(r7)     // Catch:{ Exception -> 0x01fd }
-            if (r7 != r9) goto L_0x012d
-            int r7 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r7 = r7 + r3
-            r5.length = r7     // Catch:{ Exception -> 0x01fd }
-        L_0x012d:
-            org.telegram.ui.Components.URLSpanUserMention r7 = new org.telegram.ui.Components.URLSpanUserMention     // Catch:{ Exception -> 0x01fd }
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01fd }
-            r9.<init>()     // Catch:{ Exception -> 0x01fd }
-            r9.append(r1)     // Catch:{ Exception -> 0x01fd }
-            r11 = r5
-            org.telegram.tgnet.TLRPC$TL_messageEntityMentionName r11 = (org.telegram.tgnet.TLRPC$TL_messageEntityMentionName) r11     // Catch:{ Exception -> 0x01fd }
-            int r11 = r11.user_id     // Catch:{ Exception -> 0x01fd }
-            r9.append(r11)     // Catch:{ Exception -> 0x01fd }
-            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x01fd }
-            r7.<init>(r9, r8)     // Catch:{ Exception -> 0x01fd }
-            int r8 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5 + r8
-            r2.setSpan(r7, r8, r5, r10)     // Catch:{ Exception -> 0x01fd }
-            goto L_0x01f9
-        L_0x0150:
-            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCode     // Catch:{ Exception -> 0x01fd }
-            if (r7 != 0) goto L_0x01e1
-            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityPre     // Catch:{ Exception -> 0x01fd }
-            if (r7 == 0) goto L_0x015a
-            goto L_0x01e1
-        L_0x015a:
-            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBold     // Catch:{ Exception -> 0x01fd }
-            if (r7 == 0) goto L_0x0177
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
-            r7.<init>()     // Catch:{ Exception -> 0x01fd }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
-            r8 = r8 | r3
-            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
-            goto L_0x01f9
-        L_0x0177:
-            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityItalic     // Catch:{ Exception -> 0x01fd }
-            if (r7 == 0) goto L_0x0194
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
-            r7.<init>()     // Catch:{ Exception -> 0x01fd }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
-            r8 = r8 | 2
-            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
-            goto L_0x01f9
-        L_0x0194:
-            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityStrike     // Catch:{ Exception -> 0x01fd }
-            if (r7 == 0) goto L_0x01b0
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
-            r7.<init>()     // Catch:{ Exception -> 0x01fd }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
-            r8 = r8 | r4
-            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
-            goto L_0x01f9
-        L_0x01b0:
-            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUnderline     // Catch:{ Exception -> 0x01fd }
-            if (r7 == 0) goto L_0x01cd
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
-            r7.<init>()     // Catch:{ Exception -> 0x01fd }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
-            r8 = r8 | 16
-            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
-            goto L_0x01f9
-        L_0x01cd:
-            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl     // Catch:{ Exception -> 0x01fd }
-            if (r7 == 0) goto L_0x01f9
-            org.telegram.ui.Components.URLSpanReplacement r7 = new org.telegram.ui.Components.URLSpanReplacement     // Catch:{ Exception -> 0x01fd }
-            java.lang.String r8 = r5.url     // Catch:{ Exception -> 0x01fd }
-            r7.<init>(r8)     // Catch:{ Exception -> 0x01fd }
-            int r8 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5 + r8
-            r2.setSpan(r7, r8, r5, r10)     // Catch:{ Exception -> 0x01fd }
-            goto L_0x01f9
-        L_0x01e1:
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
-            r7.<init>()     // Catch:{ Exception -> 0x01fd }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
-            r8 = r8 | 4
-            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
-            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
-            int r5 = r5 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
-        L_0x01f9:
-            int r13 = r13 + 1
-            goto L_0x00ac
-        L_0x01fd:
-            r13 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
-        L_0x0201:
-            android.text.SpannableStringBuilder r13 = new android.text.SpannableStringBuilder
-            r13.<init>(r2)
-            org.telegram.ui.Components.EditTextCaption r14 = r12.messageEditText
-            android.text.TextPaint r14 = r14.getPaint()
-            android.graphics.Paint$FontMetricsInt r14 = r14.getFontMetricsInt()
-            r1 = 1101004800(0x41a00000, float:20.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            java.lang.CharSequence r1 = org.telegram.messenger.Emoji.replaceEmoji(r13, r14, r1, r6)
-        L_0x021a:
-            boolean r13 = r12.keyboardVisible
-            if (r13 != 0) goto L_0x022b
-            org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$-1he_YaXaJFVLMVp1_h9qhIui8I r13 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$-1he_YaXaJFVLMVp1_h9qhIui8I
-            r13.<init>(r1)
-            r12.setTextFieldRunnable = r13
-            r0 = 200(0xc8, double:9.9E-322)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r13, r0)
-            goto L_0x0237
-        L_0x022b:
-            java.lang.Runnable r13 = r12.setTextFieldRunnable
-            if (r13 == 0) goto L_0x0234
-            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r13)
-            r12.setTextFieldRunnable = r0
-        L_0x0234:
-            r12.setFieldText(r1)
-        L_0x0237:
-            org.telegram.ui.Components.EditTextCaption r13 = r12.messageEditText
-            r13.requestFocus()
-            r12.openKeyboard()
-            org.telegram.ui.Components.EditTextCaption r13 = r12.messageEditText
-            android.view.ViewGroup$LayoutParams r13 = r13.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r13 = (android.widget.FrameLayout.LayoutParams) r13
-            r14 = 1082130432(0x40800000, float:4.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r13.rightMargin = r14
-            org.telegram.ui.Components.EditTextCaption r14 = r12.messageEditText
-            r14.setLayoutParams(r13)
-            android.view.View r13 = r12.sendButton
-            r13.setVisibility(r4)
-            r12.setSlowModeButtonVisible(r6)
-            android.widget.ImageView r13 = r12.cancelBotButton
-            r13.setVisibility(r4)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setVisibility(r4)
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setVisibility(r4)
-            android.widget.FrameLayout r13 = r12.sendButtonContainer
-            r13.setVisibility(r4)
-            android.widget.ImageView r13 = r12.scheduledButton
-            if (r13 == 0) goto L_0x03a5
-            r13.setVisibility(r4)
-            goto L_0x03a5
-        L_0x0279:
-            java.lang.Runnable r13 = r12.setTextFieldRunnable
-            if (r13 == 0) goto L_0x0282
-            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r13)
-            r12.setTextFieldRunnable = r0
-        L_0x0282:
-            android.widget.FrameLayout r13 = r12.doneButtonContainer
-            r13.setVisibility(r4)
-            r13 = -1
-            r12.currentLimit = r13
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r13 = r12.delegate
-            r13.onMessageEditEnd(r6)
-            android.widget.FrameLayout r13 = r12.sendButtonContainer
-            r13.setVisibility(r6)
-            android.widget.ImageView r13 = r12.cancelBotButton
-            r13.setScaleX(r5)
-            android.widget.ImageView r13 = r12.cancelBotButton
-            r13.setScaleY(r5)
-            android.widget.ImageView r13 = r12.cancelBotButton
-            r13.setAlpha(r2)
-            android.widget.ImageView r13 = r12.cancelBotButton
-            r13.setVisibility(r4)
-            int r13 = r12.slowModeTimer
-            if (r13 <= 0) goto L_0x032d
-            boolean r13 = r12.isInScheduleMode()
-            if (r13 != 0) goto L_0x032d
-            int r13 = r12.slowModeTimer
-            r14 = 2147483647(0x7fffffff, float:NaN)
-            if (r13 != r14) goto L_0x02e0
-            android.view.View r13 = r12.sendButton
-            r13.setScaleX(r7)
-            android.view.View r13 = r12.sendButton
-            r13.setScaleY(r7)
-            android.view.View r13 = r12.sendButton
-            r13.setAlpha(r7)
-            android.view.View r13 = r12.sendButton
-            r13.setVisibility(r6)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleX(r5)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleY(r5)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setAlpha(r2)
-            r12.setSlowModeButtonVisible(r6)
-            goto L_0x0306
-        L_0x02e0:
-            android.view.View r13 = r12.sendButton
-            r13.setScaleX(r5)
-            android.view.View r13 = r12.sendButton
-            r13.setScaleY(r5)
-            android.view.View r13 = r12.sendButton
-            r13.setAlpha(r2)
-            android.view.View r13 = r12.sendButton
-            r13.setVisibility(r4)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleX(r7)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleY(r7)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setAlpha(r7)
-            r12.setSlowModeButtonVisible(r3)
-        L_0x0306:
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r14 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
-            r13.setScaleX(r14)
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setAlpha(r2)
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setVisibility(r4)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setScaleX(r5)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setScaleY(r5)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setAlpha(r2)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setVisibility(r4)
-            goto L_0x0376
-        L_0x032d:
-            android.view.View r13 = r12.sendButton
-            r13.setScaleX(r5)
-            android.view.View r13 = r12.sendButton
-            r13.setScaleY(r5)
-            android.view.View r13 = r12.sendButton
-            r13.setAlpha(r2)
-            android.view.View r13 = r12.sendButton
-            r13.setVisibility(r4)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleX(r5)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleY(r5)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setAlpha(r2)
-            r12.setSlowModeButtonVisible(r6)
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setScaleX(r7)
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setAlpha(r7)
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setVisibility(r6)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setScaleX(r7)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setScaleY(r7)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setAlpha(r7)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setVisibility(r6)
-        L_0x0376:
-            android.widget.ImageView r13 = r12.scheduledButton
-            java.lang.Object r13 = r13.getTag()
-            if (r13 == 0) goto L_0x0392
-            android.widget.ImageView r13 = r12.scheduledButton
-            r13.setScaleX(r7)
-            android.widget.ImageView r13 = r12.scheduledButton
-            r13.setScaleY(r7)
-            android.widget.ImageView r13 = r12.scheduledButton
-            r13.setAlpha(r7)
-            android.widget.ImageView r13 = r12.scheduledButton
-            r13.setVisibility(r6)
-        L_0x0392:
-            org.telegram.ui.Components.EditTextCaption r13 = r12.messageEditText
-            r13.setText(r1)
-            int r13 = r12.getVisibility()
-            if (r13 != 0) goto L_0x03a2
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r13 = r12.delegate
-            r13.onAttachButtonShow()
-        L_0x03a2:
-            r12.updateFieldRight(r3)
-        L_0x03a5:
-            r12.updateFieldHint(r6)
-        L_0x03a8:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.setEditingMessageObject(org.telegram.messenger.MessageObject, boolean):void");
+    public void setEditingMessageObject(MessageObject messageObject, boolean z) {
+        MessageObject messageObject2;
+        CharSequence charSequence;
+        if (this.audioToSend == null && this.videoToSendMessageObject == null && (messageObject2 = this.editingMessageObject) != messageObject) {
+            boolean z2 = messageObject2 != null;
+            this.editingMessageObject = messageObject;
+            this.editingCaption = z;
+            if (messageObject != null) {
+                AnimatorSet animatorSet = this.doneButtonAnimation;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
+                    this.doneButtonAnimation = null;
+                }
+                this.doneButtonContainer.setVisibility(0);
+                this.doneButtonImage.setScaleX(0.1f);
+                this.doneButtonImage.setScaleY(0.1f);
+                this.doneButtonImage.setAlpha(0.0f);
+                this.doneButtonImage.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                if (z) {
+                    this.currentLimit = this.accountInstance.getMessagesController().maxCaptionLength;
+                    charSequence = this.editingMessageObject.caption;
+                } else {
+                    this.currentLimit = this.accountInstance.getMessagesController().maxMessageLength;
+                    charSequence = this.editingMessageObject.messageText;
+                }
+                String str = "";
+                CharSequence charSequence2 = str;
+                if (charSequence != null) {
+                    ArrayList<TLRPC$MessageEntity> arrayList = this.editingMessageObject.messageOwner.entities;
+                    MediaDataController.sortEntities(arrayList);
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(charSequence);
+                    Object[] spans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), Object.class);
+                    if (spans != null && spans.length > 0) {
+                        for (Object removeSpan : spans) {
+                            spannableStringBuilder.removeSpan(removeSpan);
+                        }
+                    }
+                    if (arrayList != null) {
+                        int i = 0;
+                        while (i < arrayList.size()) {
+                            try {
+                                TLRPC$MessageEntity tLRPC$MessageEntity = arrayList.get(i);
+                                if (tLRPC$MessageEntity.offset + tLRPC$MessageEntity.length <= spannableStringBuilder.length()) {
+                                    if (tLRPC$MessageEntity instanceof TLRPC$TL_inputMessageEntityMentionName) {
+                                        if (tLRPC$MessageEntity.offset + tLRPC$MessageEntity.length < spannableStringBuilder.length() && spannableStringBuilder.charAt(tLRPC$MessageEntity.offset + tLRPC$MessageEntity.length) == ' ') {
+                                            tLRPC$MessageEntity.length++;
+                                        }
+                                        URLSpanUserMention uRLSpanUserMention = new URLSpanUserMention(str + ((TLRPC$TL_inputMessageEntityMentionName) tLRPC$MessageEntity).user_id.user_id, 3);
+                                        int i2 = tLRPC$MessageEntity.offset;
+                                        spannableStringBuilder.setSpan(uRLSpanUserMention, i2, tLRPC$MessageEntity.length + i2, 33);
+                                    } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityMentionName) {
+                                        if (tLRPC$MessageEntity.offset + tLRPC$MessageEntity.length < spannableStringBuilder.length() && spannableStringBuilder.charAt(tLRPC$MessageEntity.offset + tLRPC$MessageEntity.length) == ' ') {
+                                            tLRPC$MessageEntity.length++;
+                                        }
+                                        URLSpanUserMention uRLSpanUserMention2 = new URLSpanUserMention(str + ((TLRPC$TL_messageEntityMentionName) tLRPC$MessageEntity).user_id, 3);
+                                        int i3 = tLRPC$MessageEntity.offset;
+                                        spannableStringBuilder.setSpan(uRLSpanUserMention2, i3, tLRPC$MessageEntity.length + i3, 33);
+                                    } else {
+                                        if (!(tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityCode)) {
+                                            if (!(tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityPre)) {
+                                                if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityBold) {
+                                                    TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
+                                                    textStyleRun.flags |= 1;
+                                                    TextStyleSpan textStyleSpan = new TextStyleSpan(textStyleRun);
+                                                    int i4 = tLRPC$MessageEntity.offset;
+                                                    MediaDataController.addStyleToText(textStyleSpan, i4, tLRPC$MessageEntity.length + i4, spannableStringBuilder, true);
+                                                } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityItalic) {
+                                                    TextStyleSpan.TextStyleRun textStyleRun2 = new TextStyleSpan.TextStyleRun();
+                                                    textStyleRun2.flags |= 2;
+                                                    TextStyleSpan textStyleSpan2 = new TextStyleSpan(textStyleRun2);
+                                                    int i5 = tLRPC$MessageEntity.offset;
+                                                    MediaDataController.addStyleToText(textStyleSpan2, i5, tLRPC$MessageEntity.length + i5, spannableStringBuilder, true);
+                                                } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityStrike) {
+                                                    TextStyleSpan.TextStyleRun textStyleRun3 = new TextStyleSpan.TextStyleRun();
+                                                    textStyleRun3.flags |= 8;
+                                                    TextStyleSpan textStyleSpan3 = new TextStyleSpan(textStyleRun3);
+                                                    int i6 = tLRPC$MessageEntity.offset;
+                                                    MediaDataController.addStyleToText(textStyleSpan3, i6, tLRPC$MessageEntity.length + i6, spannableStringBuilder, true);
+                                                } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityUnderline) {
+                                                    TextStyleSpan.TextStyleRun textStyleRun4 = new TextStyleSpan.TextStyleRun();
+                                                    textStyleRun4.flags |= 16;
+                                                    TextStyleSpan textStyleSpan4 = new TextStyleSpan(textStyleRun4);
+                                                    int i7 = tLRPC$MessageEntity.offset;
+                                                    MediaDataController.addStyleToText(textStyleSpan4, i7, tLRPC$MessageEntity.length + i7, spannableStringBuilder, true);
+                                                } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityTextUrl) {
+                                                    URLSpanReplacement uRLSpanReplacement = new URLSpanReplacement(tLRPC$MessageEntity.url);
+                                                    int i8 = tLRPC$MessageEntity.offset;
+                                                    spannableStringBuilder.setSpan(uRLSpanReplacement, i8, tLRPC$MessageEntity.length + i8, 33);
+                                                }
+                                            }
+                                        }
+                                        TextStyleSpan.TextStyleRun textStyleRun5 = new TextStyleSpan.TextStyleRun();
+                                        textStyleRun5.flags |= 4;
+                                        TextStyleSpan textStyleSpan5 = new TextStyleSpan(textStyleRun5);
+                                        int i9 = tLRPC$MessageEntity.offset;
+                                        MediaDataController.addStyleToText(textStyleSpan5, i9, tLRPC$MessageEntity.length + i9, spannableStringBuilder, true);
+                                    }
+                                }
+                                i++;
+                            } catch (Exception e) {
+                                FileLog.e((Throwable) e);
+                            }
+                        }
+                    }
+                    charSequence2 = Emoji.replaceEmoji(new SpannableStringBuilder(spannableStringBuilder), this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                }
+                if (this.draftMessage == null && !z2) {
+                    this.draftMessage = this.messageEditText.length() > 0 ? this.messageEditText.getText() : null;
+                }
+                if (!this.keyboardVisible) {
+                    $$Lambda$ChatActivityEnterView$1he_YaXaJFVLMVp1_h9qhIui8I r14 = new Runnable(charSequence2) {
+                        public final /* synthetic */ CharSequence f$1;
+
+                        {
+                            this.f$1 = r2;
+                        }
+
+                        public final void run() {
+                            ChatActivityEnterView.this.lambda$setEditingMessageObject$31$ChatActivityEnterView(this.f$1);
+                        }
+                    };
+                    this.setTextFieldRunnable = r14;
+                    AndroidUtilities.runOnUIThread(r14, 200);
+                } else {
+                    Runnable runnable = this.setTextFieldRunnable;
+                    if (runnable != null) {
+                        AndroidUtilities.cancelRunOnUIThread(runnable);
+                        this.setTextFieldRunnable = null;
+                    }
+                    setFieldText(charSequence2);
+                }
+                this.messageEditText.requestFocus();
+                openKeyboard();
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.messageEditText.getLayoutParams();
+                layoutParams.rightMargin = AndroidUtilities.dp(4.0f);
+                this.messageEditText.setLayoutParams(layoutParams);
+                this.sendButton.setVisibility(8);
+                setSlowModeButtonVisible(false);
+                this.cancelBotButton.setVisibility(8);
+                this.audioVideoButtonContainer.setVisibility(8);
+                this.attachLayout.setVisibility(8);
+                this.sendButtonContainer.setVisibility(8);
+                ImageView imageView = this.scheduledButton;
+                if (imageView != null) {
+                    imageView.setVisibility(8);
+                }
+            } else {
+                Runnable runnable2 = this.setTextFieldRunnable;
+                if (runnable2 != null) {
+                    AndroidUtilities.cancelRunOnUIThread(runnable2);
+                    this.setTextFieldRunnable = null;
+                }
+                this.doneButtonContainer.setVisibility(8);
+                this.currentLimit = -1;
+                this.delegate.onMessageEditEnd(false);
+                this.sendButtonContainer.setVisibility(0);
+                this.cancelBotButton.setScaleX(0.1f);
+                this.cancelBotButton.setScaleY(0.1f);
+                this.cancelBotButton.setAlpha(0.0f);
+                this.cancelBotButton.setVisibility(8);
+                if (this.slowModeTimer <= 0 || isInScheduleMode()) {
+                    this.sendButton.setScaleX(0.1f);
+                    this.sendButton.setScaleY(0.1f);
+                    this.sendButton.setAlpha(0.0f);
+                    this.sendButton.setVisibility(8);
+                    this.slowModeButton.setScaleX(0.1f);
+                    this.slowModeButton.setScaleY(0.1f);
+                    this.slowModeButton.setAlpha(0.0f);
+                    setSlowModeButtonVisible(false);
+                    this.attachLayout.setScaleX(1.0f);
+                    this.attachLayout.setAlpha(1.0f);
+                    this.attachLayout.setVisibility(0);
+                    this.audioVideoButtonContainer.setScaleX(1.0f);
+                    this.audioVideoButtonContainer.setScaleY(1.0f);
+                    this.audioVideoButtonContainer.setAlpha(1.0f);
+                    this.audioVideoButtonContainer.setVisibility(0);
+                } else {
+                    if (this.slowModeTimer == Integer.MAX_VALUE) {
+                        this.sendButton.setScaleX(1.0f);
+                        this.sendButton.setScaleY(1.0f);
+                        this.sendButton.setAlpha(1.0f);
+                        this.sendButton.setVisibility(0);
+                        this.slowModeButton.setScaleX(0.1f);
+                        this.slowModeButton.setScaleY(0.1f);
+                        this.slowModeButton.setAlpha(0.0f);
+                        setSlowModeButtonVisible(false);
+                    } else {
+                        this.sendButton.setScaleX(0.1f);
+                        this.sendButton.setScaleY(0.1f);
+                        this.sendButton.setAlpha(0.0f);
+                        this.sendButton.setVisibility(8);
+                        this.slowModeButton.setScaleX(1.0f);
+                        this.slowModeButton.setScaleY(1.0f);
+                        this.slowModeButton.setAlpha(1.0f);
+                        setSlowModeButtonVisible(true);
+                    }
+                    this.attachLayout.setScaleX(0.01f);
+                    this.attachLayout.setAlpha(0.0f);
+                    this.attachLayout.setVisibility(8);
+                    this.audioVideoButtonContainer.setScaleX(0.1f);
+                    this.audioVideoButtonContainer.setScaleY(0.1f);
+                    this.audioVideoButtonContainer.setAlpha(0.0f);
+                    this.audioVideoButtonContainer.setVisibility(8);
+                }
+                if (this.scheduledButton.getTag() != null) {
+                    this.scheduledButton.setScaleX(1.0f);
+                    this.scheduledButton.setScaleY(1.0f);
+                    this.scheduledButton.setAlpha(1.0f);
+                    this.scheduledButton.setVisibility(0);
+                }
+                this.messageEditText.setText(this.draftMessage);
+                EditTextCaption editTextCaption = this.messageEditText;
+                editTextCaption.setSelection(editTextCaption.length());
+                if (getVisibility() == 0) {
+                    this.delegate.onAttachButtonShow();
+                }
+                updateFieldRight(1);
+            }
+            updateFieldHint(false);
+        }
     }
 
     /* access modifiers changed from: private */
@@ -9286,6 +9068,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public EditTextCaption getEditField() {
         return this.messageEditText;
+    }
+
+    public CharSequence getDraftMessage() {
+        if (this.editingMessageObject != null) {
+            if (TextUtils.isEmpty(this.draftMessage)) {
+                return null;
+            }
+            return this.draftMessage;
+        } else if (hasText()) {
+            return this.messageEditText.getText();
+        } else {
+            return null;
+        }
     }
 
     public CharSequence getFieldText() {
