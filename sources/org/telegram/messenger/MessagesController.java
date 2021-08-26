@@ -6141,7 +6141,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public /* synthetic */ void lambda$didAddedNewTask$53$MessagesController(int i) {
         int i2;
         if ((this.currentDeletingTaskMids == null && !this.gettingNewDeleteTask) || ((i2 = this.currentDeletingTaskTime) != 0 && i < i2)) {
-            getNewDeleteTask((ArrayList<Integer>) null, 0);
+            getNewDeleteTask((ArrayList<Integer>) null, 0, false);
         }
     }
 
@@ -6151,27 +6151,29 @@ public class MessagesController extends BaseController implements NotificationCe
         getNotificationCenter().postNotificationName(NotificationCenter.didCreatedNewDeleteTask, sparseArray);
     }
 
-    public void getNewDeleteTask(ArrayList<Integer> arrayList, int i) {
-        Utilities.stageQueue.postRunnable(new Runnable(arrayList, i) {
+    public void getNewDeleteTask(ArrayList<Integer> arrayList, int i, boolean z) {
+        Utilities.stageQueue.postRunnable(new Runnable(arrayList, i, z) {
             public final /* synthetic */ ArrayList f$1;
             public final /* synthetic */ int f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
+                this.f$3 = r4;
             }
 
             public final void run() {
-                MessagesController.this.lambda$getNewDeleteTask$55$MessagesController(this.f$1, this.f$2);
+                MessagesController.this.lambda$getNewDeleteTask$55$MessagesController(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$getNewDeleteTask$55 */
-    public /* synthetic */ void lambda$getNewDeleteTask$55$MessagesController(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$getNewDeleteTask$55$MessagesController(ArrayList arrayList, int i, boolean z) {
         this.gettingNewDeleteTask = true;
-        getMessagesStorage().getNewTask(arrayList, i);
+        getMessagesStorage().getNewTask(arrayList, i, z);
     }
 
     private boolean checkDeletingTask(boolean z) {
@@ -6223,7 +6225,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* access modifiers changed from: private */
     /* renamed from: lambda$checkDeletingTask$56 */
     public /* synthetic */ void lambda$checkDeletingTask$56$MessagesController(ArrayList arrayList) {
-        getNewDeleteTask(arrayList, this.currentDeletingTaskChannelId);
+        getNewDeleteTask(arrayList, this.currentDeletingTaskChannelId, this.currentDeletingTaskMedia);
         this.currentDeletingTaskTime = 0;
         this.currentDeletingTaskMids = null;
         this.currentDeletingTaskMedia = false;
@@ -13623,7 +13625,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r14 = 0
             java.lang.Integer r16 = java.lang.Integer.valueOf(r14)
             if (r0 != 0) goto L_0x001a
-            r15.getNewDeleteTask(r1, r14)
+            r15.getNewDeleteTask(r1, r14, r14)
             r15.firstGettingTask = r13
         L_0x001a:
             boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED

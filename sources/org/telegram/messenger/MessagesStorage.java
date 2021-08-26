@@ -120,7 +120,7 @@ import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 79;
+    private static final int LAST_DB_VERSION = 80;
     private int archiveUnreadCount;
     private int[][] bots = {new int[2], new int[2]};
     private File cacheFile;
@@ -389,8 +389,8 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE dialog_filter_pin_v2(id INTEGER, peer INTEGER, pin INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE randoms(random_id INTEGER, mid INTEGER, PRIMARY KEY (random_id, mid))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms ON randoms(mid);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE enc_tasks_v2(mid INTEGER PRIMARY KEY, date INTEGER, media INTEGER)").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v2 ON enc_tasks_v2(date);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE enc_tasks_v3(mid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, media))").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v3 ON enc_tasks_v3(date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE messages_seq(mid INTEGER PRIMARY KEY, seq_in INTEGER, seq_out INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS seq_idx_messages_seq ON messages_seq(seq_in, seq_out);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE params(id INTEGER PRIMARY KEY, seq INTEGER, pts INTEGER, date INTEGER, qts INTEGER, lsv INTEGER, sg INTEGER, pbytes BLOB)").stepThis().dispose();
@@ -444,7 +444,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE polls(mid INTEGER PRIMARY KEY, id INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls(id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 79").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 80").stepThis().dispose();
                 loadDialogFilters();
                 loadUnreadMessages();
                 loadPendingTasks();
@@ -487,7 +487,7 @@ public class MessagesStorage extends BaseController {
                             FileLog.e((Throwable) e2);
                         }
                     }
-                    if (intValue < 79) {
+                    if (intValue < 80) {
                         updateDbToLastVersion(intValue);
                     }
                     loadDialogFilters();
@@ -1008,6 +1008,30 @@ public class MessagesStorage extends BaseController {
             this.database.executeFast("DROP TABLE IF EXISTS bot_info;").stepThis().dispose();
             this.database.executeFast("CREATE TABLE IF NOT EXISTS bot_info_v2(uid INTEGER, dialogId INTEGER, info BLOB, PRIMARY KEY(uid, dialogId))").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 79").stepThis().dispose();
+            i = 79;
+        }
+        if (i == 79) {
+            this.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v3(mid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, media))").stepThis().dispose();
+            this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v3 ON enc_tasks_v3(date);").stepThis().dispose();
+            this.database.beginTransaction();
+            SQLiteCursor queryFinalized3 = this.database.queryFinalized("SELECT mid, date, media FROM enc_tasks_v2 WHERE 1", new Object[0]);
+            SQLitePreparedStatement executeFast3 = this.database.executeFast("REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)");
+            if (queryFinalized3.next()) {
+                long longValue = queryFinalized3.longValue(0);
+                int intValue3 = queryFinalized3.intValue(1);
+                int intValue4 = queryFinalized3.intValue(2);
+                executeFast3.requery();
+                executeFast3.bindLong(1, longValue);
+                executeFast3.bindInteger(2, intValue3);
+                executeFast3.bindInteger(3, intValue4);
+                executeFast3.step();
+            }
+            executeFast3.dispose();
+            queryFinalized3.dispose();
+            this.database.commitTransaction();
+            this.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks_v2;").stepThis().dispose();
+            this.database.executeFast("DROP TABLE IF EXISTS enc_tasks_v2;").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 80").stepThis().dispose();
         }
     }
 
@@ -6736,128 +6760,154 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void getNewTask(ArrayList<Integer> arrayList, int i) {
-        this.storageQueue.postRunnable(new Runnable(arrayList, i) {
+    public void getNewTask(ArrayList<Integer> arrayList, int i, boolean z) {
+        this.storageQueue.postRunnable(new Runnable(arrayList, i, z) {
             public final /* synthetic */ ArrayList f$1;
             public final /* synthetic */ int f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
+                this.f$3 = r4;
             }
 
             public final void run() {
-                MessagesStorage.this.lambda$getNewTask$67$MessagesStorage(this.f$1, this.f$2);
+                MessagesStorage.this.lambda$getNewTask$67$MessagesStorage(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:29:0x0093, code lost:
-        if (r5 != 0) goto L_0x0095;
+    /* JADX WARNING: Code restructure failed: missing block: B:29:0x00a5, code lost:
+        if (r6 > 0) goto L_0x00a7;
      */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00b0 A[Catch:{ Exception -> 0x00d4 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00b5 A[Catch:{ Exception -> 0x00d4 }] */
     /* renamed from: lambda$getNewTask$67 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getNewTask$67$MessagesStorage(java.util.ArrayList r12, int r13) {
+    public /* synthetic */ void lambda$getNewTask$67$MessagesStorage(java.util.ArrayList r12, int r13, boolean r14) {
         /*
             r11 = this;
             r0 = 32
             r1 = 1
             r2 = 0
-            if (r12 == 0) goto L_0x0055
+            if (r12 == 0) goto L_0x0071
             java.lang.String r3 = ","
             if (r13 == 0) goto L_0x0038
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00a6 }
-            r4.<init>()     // Catch:{ Exception -> 0x00a6 }
-            int r5 = r12.size()     // Catch:{ Exception -> 0x00a6 }
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00d4 }
+            r4.<init>()     // Catch:{ Exception -> 0x00d4 }
+            int r5 = r12.size()     // Catch:{ Exception -> 0x00d4 }
             r6 = 0
         L_0x0014:
             if (r6 >= r5) goto L_0x0033
-            java.lang.Object r7 = r12.get(r6)     // Catch:{ Exception -> 0x00a6 }
-            java.lang.Integer r7 = (java.lang.Integer) r7     // Catch:{ Exception -> 0x00a6 }
-            int r7 = r7.intValue()     // Catch:{ Exception -> 0x00a6 }
-            long r7 = (long) r7     // Catch:{ Exception -> 0x00a6 }
-            long r9 = (long) r13     // Catch:{ Exception -> 0x00a6 }
+            java.lang.Object r7 = r12.get(r6)     // Catch:{ Exception -> 0x00d4 }
+            java.lang.Integer r7 = (java.lang.Integer) r7     // Catch:{ Exception -> 0x00d4 }
+            int r7 = r7.intValue()     // Catch:{ Exception -> 0x00d4 }
+            long r7 = (long) r7     // Catch:{ Exception -> 0x00d4 }
+            long r9 = (long) r13     // Catch:{ Exception -> 0x00d4 }
             long r9 = r9 << r0
             long r7 = r7 | r9
-            int r9 = r4.length()     // Catch:{ Exception -> 0x00a6 }
+            int r9 = r4.length()     // Catch:{ Exception -> 0x00d4 }
             if (r9 <= 0) goto L_0x002d
-            r4.append(r3)     // Catch:{ Exception -> 0x00a6 }
+            r4.append(r3)     // Catch:{ Exception -> 0x00d4 }
         L_0x002d:
-            r4.append(r7)     // Catch:{ Exception -> 0x00a6 }
+            r4.append(r7)     // Catch:{ Exception -> 0x00d4 }
             int r6 = r6 + 1
             goto L_0x0014
         L_0x0033:
-            java.lang.String r12 = r4.toString()     // Catch:{ Exception -> 0x00a6 }
+            java.lang.String r12 = r4.toString()     // Catch:{ Exception -> 0x00d4 }
             goto L_0x003c
         L_0x0038:
-            java.lang.String r12 = android.text.TextUtils.join(r3, r12)     // Catch:{ Exception -> 0x00a6 }
+            java.lang.String r12 = android.text.TextUtils.join(r3, r12)     // Catch:{ Exception -> 0x00d4 }
         L_0x003c:
-            org.telegram.SQLite.SQLiteDatabase r13 = r11.database     // Catch:{ Exception -> 0x00a6 }
-            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x00a6 }
-            java.lang.String r4 = "DELETE FROM enc_tasks_v2 WHERE mid IN(%s)"
-            java.lang.Object[] r5 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x00a6 }
-            r5[r2] = r12     // Catch:{ Exception -> 0x00a6 }
-            java.lang.String r12 = java.lang.String.format(r3, r4, r5)     // Catch:{ Exception -> 0x00a6 }
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r13.executeFast(r12)     // Catch:{ Exception -> 0x00a6 }
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x00a6 }
-            r12.dispose()     // Catch:{ Exception -> 0x00a6 }
-        L_0x0055:
-            r12 = 0
-            org.telegram.SQLite.SQLiteDatabase r13 = r11.database     // Catch:{ Exception -> 0x00a6 }
-            java.lang.String r3 = "SELECT mid, date, media FROM enc_tasks_v2 WHERE date = (SELECT min(date) FROM enc_tasks_v2)"
-            java.lang.Object[] r4 = new java.lang.Object[r2]     // Catch:{ Exception -> 0x00a6 }
-            org.telegram.SQLite.SQLiteCursor r13 = r13.queryFinalized(r3, r4)     // Catch:{ Exception -> 0x00a6 }
-            r3 = -1
+            if (r14 == 0) goto L_0x0058
+            org.telegram.SQLite.SQLiteDatabase r13 = r11.database     // Catch:{ Exception -> 0x00d4 }
+            java.util.Locale r14 = java.util.Locale.US     // Catch:{ Exception -> 0x00d4 }
+            java.lang.String r3 = "DELETE FROM enc_tasks_v3 WHERE mid IN(%s) AND media = 1"
+            java.lang.Object[] r4 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x00d4 }
+            r4[r2] = r12     // Catch:{ Exception -> 0x00d4 }
+            java.lang.String r12 = java.lang.String.format(r14, r3, r4)     // Catch:{ Exception -> 0x00d4 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r13.executeFast(r12)     // Catch:{ Exception -> 0x00d4 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x00d4 }
+            r12.dispose()     // Catch:{ Exception -> 0x00d4 }
+            goto L_0x0071
+        L_0x0058:
+            org.telegram.SQLite.SQLiteDatabase r13 = r11.database     // Catch:{ Exception -> 0x00d4 }
+            java.util.Locale r14 = java.util.Locale.US     // Catch:{ Exception -> 0x00d4 }
+            java.lang.String r3 = "DELETE FROM enc_tasks_v3 WHERE mid IN(%s) AND media = 0"
+            java.lang.Object[] r4 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x00d4 }
+            r4[r2] = r12     // Catch:{ Exception -> 0x00d4 }
+            java.lang.String r12 = java.lang.String.format(r14, r3, r4)     // Catch:{ Exception -> 0x00d4 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r13.executeFast(r12)     // Catch:{ Exception -> 0x00d4 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x00d4 }
+            r12.dispose()     // Catch:{ Exception -> 0x00d4 }
+        L_0x0071:
+            org.telegram.SQLite.SQLiteDatabase r12 = r11.database     // Catch:{ Exception -> 0x00d4 }
+            java.lang.String r13 = "SELECT mid, date, media FROM enc_tasks_v3 WHERE date = (SELECT min(date) FROM enc_tasks_v3)"
+            java.lang.Object[] r14 = new java.lang.Object[r2]     // Catch:{ Exception -> 0x00d4 }
+            org.telegram.SQLite.SQLiteCursor r12 = r12.queryFinalized(r13, r14)     // Catch:{ Exception -> 0x00d4 }
+            r13 = 0
+            r14 = -1
+            r3 = r13
             r4 = -1
             r5 = 0
-            r6 = 0
-        L_0x0064:
-            boolean r7 = r13.next()     // Catch:{ Exception -> 0x00a6 }
-            if (r7 == 0) goto L_0x009b
-            long r5 = r13.longValue(r2)     // Catch:{ Exception -> 0x00a6 }
-            if (r4 != r3) goto L_0x0076
+        L_0x0080:
+            boolean r6 = r12.next()     // Catch:{ Exception -> 0x00d4 }
+            if (r6 == 0) goto L_0x00c5
+            long r5 = r12.longValue(r2)     // Catch:{ Exception -> 0x00d4 }
+            if (r4 != r14) goto L_0x0092
             long r7 = r5 >> r0
-            int r4 = (int) r7     // Catch:{ Exception -> 0x00a6 }
-            if (r4 >= 0) goto L_0x0076
+            int r4 = (int) r7     // Catch:{ Exception -> 0x00d4 }
+            if (r4 >= 0) goto L_0x0092
             r4 = 0
-        L_0x0076:
-            int r7 = r13.intValue(r1)     // Catch:{ Exception -> 0x00a6 }
-            if (r12 != 0) goto L_0x0081
-            java.util.ArrayList r12 = new java.util.ArrayList     // Catch:{ Exception -> 0x00a6 }
-            r12.<init>()     // Catch:{ Exception -> 0x00a6 }
-        L_0x0081:
-            int r6 = (int) r5     // Catch:{ Exception -> 0x00a6 }
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r6)     // Catch:{ Exception -> 0x00a6 }
-            r12.add(r5)     // Catch:{ Exception -> 0x00a6 }
+        L_0x0092:
+            int r7 = r12.intValue(r1)     // Catch:{ Exception -> 0x00d4 }
+            if (r13 != 0) goto L_0x009d
+            java.util.ArrayList r13 = new java.util.ArrayList     // Catch:{ Exception -> 0x00d4 }
+            r13.<init>()     // Catch:{ Exception -> 0x00d4 }
+        L_0x009d:
+            int r6 = (int) r5     // Catch:{ Exception -> 0x00d4 }
             r5 = 2
-            int r5 = r13.intValue(r5)     // Catch:{ Exception -> 0x00a6 }
-            if (r5 != r3) goto L_0x0093
-            if (r6 <= 0) goto L_0x0097
-            goto L_0x0095
-        L_0x0093:
-            if (r5 == 0) goto L_0x0097
-        L_0x0095:
+            int r5 = r12.intValue(r5)     // Catch:{ Exception -> 0x00d4 }
+            if (r5 != r14) goto L_0x00ab
+            if (r6 <= 0) goto L_0x00a9
+        L_0x00a7:
             r5 = 1
-            goto L_0x0098
-        L_0x0097:
+            goto L_0x00ae
+        L_0x00a9:
             r5 = 0
-        L_0x0098:
-            r6 = r5
+            goto L_0x00ae
+        L_0x00ab:
+            if (r5 == 0) goto L_0x00a9
+            goto L_0x00a7
+        L_0x00ae:
+            if (r3 != 0) goto L_0x00b5
+            java.lang.Boolean r3 = java.lang.Boolean.valueOf(r5)     // Catch:{ Exception -> 0x00d4 }
+            goto L_0x00bd
+        L_0x00b5:
+            boolean r8 = r3.booleanValue()     // Catch:{ Exception -> 0x00d4 }
+            if (r8 == r5) goto L_0x00bd
+        L_0x00bb:
             r5 = r7
-            goto L_0x0064
-        L_0x009b:
-            r13.dispose()     // Catch:{ Exception -> 0x00a6 }
-            org.telegram.messenger.MessagesController r13 = r11.getMessagesController()     // Catch:{ Exception -> 0x00a6 }
-            r13.processLoadedDeleteTask(r5, r12, r6, r4)     // Catch:{ Exception -> 0x00a6 }
-            goto L_0x00aa
-        L_0x00a6:
+            goto L_0x0080
+        L_0x00bd:
+            java.lang.Integer r5 = java.lang.Integer.valueOf(r6)     // Catch:{ Exception -> 0x00d4 }
+            r13.add(r5)     // Catch:{ Exception -> 0x00d4 }
+            goto L_0x00bb
+        L_0x00c5:
+            r12.dispose()     // Catch:{ Exception -> 0x00d4 }
+            org.telegram.messenger.MessagesController r12 = r11.getMessagesController()     // Catch:{ Exception -> 0x00d4 }
+            boolean r14 = r3.booleanValue()     // Catch:{ Exception -> 0x00d4 }
+            r12.processLoadedDeleteTask(r5, r13, r14, r4)     // Catch:{ Exception -> 0x00d4 }
+            goto L_0x00d8
+        L_0x00d4:
             r12 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
-        L_0x00aa:
+        L_0x00d8:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getNewTask$67$MessagesStorage(java.util.ArrayList, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getNewTask$67$MessagesStorage(java.util.ArrayList, int, boolean):void");
     }
 
     public void markMentionMessageAsRead(int i, int i2, long j) {
@@ -7020,7 +7070,7 @@ public class MessagesStorage extends BaseController {
                     MessagesStorage.this.lambda$createTaskForMid$71$MessagesStorage(this.f$1, this.f$2);
                 }
             });
-            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?, ?)");
+            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)");
             for (int i6 = 0; i6 < sparseArray.size(); i6++) {
                 int keyAt = sparseArray.keyAt(i6);
                 ArrayList arrayList2 = (ArrayList) sparseArray.get(keyAt);
@@ -7130,7 +7180,7 @@ public class MessagesStorage extends BaseController {
             }
             if (sparseArray4.size() != 0) {
                 this.database.beginTransaction();
-                SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?, ?)");
+                SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)");
                 for (int i6 = 0; i6 < sparseArray4.size(); i6++) {
                     int keyAt = sparseArray4.keyAt(i6);
                     ArrayList arrayList5 = (ArrayList) sparseArray4.get(keyAt);
@@ -15108,7 +15158,7 @@ public class MessagesStorage extends BaseController {
             if (r8 == 0) goto L_0x1195
             org.telegram.SQLite.SQLiteDatabase r8 = r13.database     // Catch:{ Exception -> 0x117f }
             java.util.Locale r10 = java.util.Locale.US     // Catch:{ Exception -> 0x117f }
-            java.lang.String r11 = "SELECT date FROM enc_tasks_v2 WHERE mid = %d"
+            java.lang.String r11 = "SELECT date FROM enc_tasks_v3 WHERE mid = %d"
             r39 = r15
             r9 = 1
             java.lang.Object[] r15 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x117b }
@@ -18935,7 +18985,7 @@ public class MessagesStorage extends BaseController {
             if (r3 <= 0) goto L_0x0685
             if (r8 != 0) goto L_0x0663
             org.telegram.SQLite.SQLiteDatabase r3 = r1.database     // Catch:{ Exception -> 0x0112 }
-            java.lang.String r4 = "REPLACE INTO enc_tasks_v2 VALUES(?, ?, ?)"
+            java.lang.String r4 = "REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r4)     // Catch:{ Exception -> 0x0112 }
             r8 = r3
         L_0x0663:
@@ -23460,7 +23510,7 @@ public class MessagesStorage extends BaseController {
             if (r0 <= 0) goto L_0x0547
             if (r20 != 0) goto L_0x051d
             org.telegram.SQLite.SQLiteDatabase r0 = r7.database     // Catch:{ Exception -> 0x067a }
-            java.lang.String r1 = "REPLACE INTO enc_tasks_v2 VALUES(?, ?, ?)"
+            java.lang.String r1 = "REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r1)     // Catch:{ Exception -> 0x067a }
             goto L_0x051f
         L_0x051d:
@@ -24849,7 +24899,7 @@ public class MessagesStorage extends BaseController {
             if (r1 <= 0) goto L_0x0297
             if (r2 != 0) goto L_0x0270
             org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x0411 }
-            java.lang.String r2 = "REPLACE INTO enc_tasks_v2 VALUES(?, ?, ?)"
+            java.lang.String r2 = "REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r2 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0411 }
         L_0x0270:
             r2.requery()     // Catch:{ Exception -> 0x0411 }

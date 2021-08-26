@@ -34017,7 +34017,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         i7++;
                     }
                 }
-                if (ChatMessageCell.this.currentMessageObject.caption instanceof Spannable) {
+                if ((ChatMessageCell.this.currentMessageObject.caption instanceof Spannable) && ChatMessageCell.this.captionLayout != null) {
                     Spannable spannable2 = (Spannable) ChatMessageCell.this.currentMessageObject.caption;
                     int i8 = 0;
                     for (CharacterStyle characterStyle2 : (CharacterStyle[]) spannable2.getSpans(0, spannable2.length(), ClickableSpan.class)) {

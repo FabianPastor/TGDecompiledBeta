@@ -3235,11 +3235,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.checkSendButton(true);
                         CharSequence trimmedString = AndroidUtilities.getTrimmedString(charSequence.toString());
                         if (ChatActivityEnterView.this.delegate != null && !ChatActivityEnterView.this.ignoreTextChange) {
-                            if (i3 > 2 || TextUtils.isEmpty(charSequence)) {
+                            int i4 = i3 + 1;
+                            if (i2 > i4 || i3 - i2 > 2 || TextUtils.isEmpty(charSequence)) {
                                 boolean unused3 = ChatActivityEnterView.this.messageWebPageSearch = true;
                             }
                             ChatActivityEnterViewDelegate access$1300 = ChatActivityEnterView.this.delegate;
-                            if (i2 > i3 + 1 || i3 - i2 > 2) {
+                            if (i2 > i4 || i3 - i2 > 2) {
                                 z = true;
                             }
                             access$1300.onTextChanged(charSequence, z);

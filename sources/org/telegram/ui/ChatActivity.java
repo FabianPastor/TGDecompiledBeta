@@ -6677,35 +6677,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     public /* synthetic */ void lambda$createView$35$ChatActivity(View view) {
         ArrayList<MessageObject> arrayList = this.forwardingMessages;
         if (arrayList != null && !arrayList.isEmpty()) {
-            int size = this.forwardingMessages.size();
-            int i = 0;
-            boolean z = false;
-            for (int i2 = 0; i2 < size; i2++) {
-                MessageObject messageObject = this.forwardingMessages.get(i2);
-                if (messageObject.isPoll()) {
-                    if (i != 2) {
-                        i = messageObject.isPublicPoll() ? 2 : 1;
-                    }
-                } else if (messageObject.isInvoice()) {
-                    z = true;
-                }
-                this.selectedMessagesIds[0].put(messageObject.getId(), messageObject);
-            }
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("onlySelect", true);
-            bundle.putInt("dialogsType", 3);
-            bundle.putInt("hasPoll", i);
-            bundle.putBoolean("hasInvoice", z);
-            bundle.putInt("messagesCount", this.forwardingMessages.size());
-            DialogsActivity dialogsActivity = new DialogsActivity(bundle);
-            dialogsActivity.setDelegate(this);
-            presentFragment(dialogsActivity);
+            openAnotherForward();
         } else if (this.replyingMessageObject == null || (isThreadChat() && this.replyingMessageObject.getId() == this.threadMessageId)) {
-            MessageObject messageObject2 = this.editingMessageObject;
-            if (messageObject2 == null) {
+            MessageObject messageObject = this.editingMessageObject;
+            if (messageObject == null) {
                 return;
             }
-            if (!messageObject2.canEditMedia() || this.editingMessageObjectReqId != 0) {
+            if (!messageObject.canEditMedia() || this.editingMessageObjectReqId != 0) {
                 scrollToMessageId(this.editingMessageObject.getId(), 0, true, 0, true, 0);
                 return;
             }
@@ -6759,29 +6737,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     public /* synthetic */ void lambda$createView$37$ChatActivity(DialogInterface dialogInterface, int i) {
         ArrayList<MessageObject> arrayList = this.forwardingMessages;
         if (arrayList != null && !arrayList.isEmpty()) {
-            int size = this.forwardingMessages.size();
-            int i2 = 0;
-            boolean z = false;
-            for (int i3 = 0; i3 < size; i3++) {
-                MessageObject messageObject = this.forwardingMessages.get(i3);
-                if (messageObject.isPoll()) {
-                    if (i2 != 2) {
-                        i2 = messageObject.isPublicPoll() ? 2 : 1;
-                    }
-                } else if (messageObject.isInvoice()) {
-                    z = true;
-                }
-                this.selectedMessagesIds[0].put(messageObject.getId(), messageObject);
-            }
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("onlySelect", true);
-            bundle.putInt("dialogsType", 3);
-            bundle.putInt("hasPoll", i2);
-            bundle.putBoolean("hasInvoice", z);
-            bundle.putInt("messagesCount", this.forwardingMessages.size());
-            DialogsActivity dialogsActivity = new DialogsActivity(bundle);
-            dialogsActivity.setDelegate(this);
-            presentFragment(dialogsActivity);
+            openAnotherForward();
         }
     }
 
@@ -7201,6 +7157,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         this.topViewOffset = ((float) AndroidUtilities.dp(30.0f)) * floatValue;
         invalidateChatListViewTopPadding();
         view.setAlpha(floatValue);
+    }
+
+    private void openAnotherForward() {
+        int size = this.forwardingMessages.size();
+        int i = 0;
+        boolean z = false;
+        for (int i2 = 0; i2 < size; i2++) {
+            MessageObject messageObject = this.forwardingMessages.get(i2);
+            if (messageObject.isPoll()) {
+                if (i != 2) {
+                    i = messageObject.isPublicPoll() ? 2 : 1;
+                }
+            } else if (messageObject.isInvoice()) {
+                z = true;
+            }
+            this.selectedMessagesIds[0].put(messageObject.getId(), messageObject);
+        }
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("onlySelect", true);
+        bundle.putInt("dialogsType", 3);
+        bundle.putInt("hasPoll", i);
+        bundle.putBoolean("hasInvoice", z);
+        bundle.putInt("messagesCount", this.forwardingMessages.size());
+        DialogsActivity dialogsActivity = new DialogsActivity(bundle);
+        dialogsActivity.setDelegate(this);
+        presentFragment(dialogsActivity);
     }
 
     /* access modifiers changed from: private */
@@ -10332,450 +10314,451 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         TLRPC$WebPage tLRPC$WebPage2 = tLRPC$WebPage;
         int i8 = i;
         boolean z8 = z4;
-        if (this.chatActivityEnterView != null) {
-            if (!z) {
-                MessageObject messageObject6 = this.replyingMessageObject;
-                if (messageObject6 != null || this.forwardingMessages != null || this.foundWebPage != null || this.editingMessageObject != null) {
-                    if (messageObject6 != null && (messageObject6.messageOwner.reply_markup instanceof TLRPC$TL_replyKeyboardForceReply)) {
-                        MessagesController.getMainSettings(this.currentAccount).edit().putInt("answered_" + this.dialog_id, this.replyingMessageObject.getId()).commit();
+        ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
+        if (chatActivityEnterView2 != null) {
+            if (z) {
+                if (messageObject4 != null || arrayList != null || messageObject5 != null || tLRPC$WebPage2 != null) {
+                    hideHints(false);
+                    if (this.searchItem != null && this.actionBar.isSearchFieldVisible()) {
+                        this.actionBar.closeSearchField(false);
+                        this.chatActivityEnterView.setFieldFocused();
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public final void run() {
+                                ChatActivity.this.lambda$showFieldPanel$75$ChatActivity();
+                            }
+                        }, 100);
                     }
-                    if (this.foundWebPage != null) {
-                        this.foundWebPage = null;
-                        this.chatActivityEnterView.setWebPage((TLRPC$WebPage) null, !z3);
-                        if (!(tLRPC$WebPage2 == null || ((messageObject3 = this.replyingMessageObject) == null && this.forwardingMessages == null && this.editingMessageObject == null))) {
-                            showFieldPanel(true, messageObject3, this.editingMessageObject, this.forwardingMessages, (TLRPC$WebPage) null, z2, i, false, true);
+                    if (messageObject4 == null || messageObject.getDialogId() == this.dialog_id) {
+                        arrayList2 = arrayList;
+                        z7 = false;
+                    } else {
+                        arrayList2 = new ArrayList<>();
+                        arrayList2.add(messageObject4);
+                        messageObject4 = null;
+                        z7 = true;
+                    }
+                    this.chatActivityEnterTopView.setEditMode(false);
+                    if (messageObject5 != null) {
+                        this.forwardingMessages = null;
+                        if (this.threadMessageId == 0) {
+                            this.replyingMessageObject = null;
+                            this.chatActivityEnterView.setReplyingMessageObject((MessageObject) null);
+                        }
+                        this.editingMessageObject = messageObject5;
+                        boolean isMediaEmpty = messageObject2.isMediaEmpty();
+                        this.chatActivityEnterView.setEditingMessageObject(messageObject5, !isMediaEmpty);
+                        if (this.foundWebPage == null) {
+                            this.chatActivityEnterView.setForceShowSendButton(false, false);
+                            boolean canEditMedia = messageObject2.canEditMedia();
+                            if (isMediaEmpty || !canEditMedia) {
+                                this.replyIconImageView.setImageResource(NUM);
+                                this.replyIconImageView.setContentDescription(LocaleController.getString("AccDescrEditing", NUM));
+                                this.replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelEdit", NUM));
+                                if (isMediaEmpty) {
+                                    this.replyNameTextView.setText(LocaleController.getString("EditMessage", NUM));
+                                } else {
+                                    this.replyNameTextView.setText(LocaleController.getString("EditCaption", NUM));
+                                }
+                                if (canEditMedia) {
+                                    this.replyObjectTextView.setText(LocaleController.getString("EditMessageMedia", NUM));
+                                } else {
+                                    CharSequence charSequence = messageObject5.messageText;
+                                    if (!(charSequence == null && messageObject5.caption == null)) {
+                                        CharSequence charSequence2 = messageObject5.caption;
+                                        String charSequence3 = charSequence2 != null ? charSequence2.toString() : charSequence.toString();
+                                        if (charSequence3.length() > 150) {
+                                            charSequence3 = charSequence3.substring(0, 150);
+                                        }
+                                        String replace = charSequence3.replace(10, ' ');
+                                        SimpleTextView simpleTextView = this.replyObjectTextView;
+                                        simpleTextView.setText(Emoji.replaceEmoji(replace, simpleTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+                                    }
+                                }
+                            } else {
+                                if (messageObject2.isPhoto()) {
+                                    str3 = LocaleController.getString("EditMessageEditPhoto", NUM);
+                                    str2 = LocaleController.getString("EditMessageReplacePhoto", NUM);
+                                } else if (messageObject2.isVideo()) {
+                                    str3 = LocaleController.getString("EditMessageEditVideo", NUM);
+                                    str2 = LocaleController.getString("EditMessageReplaceVideo", NUM);
+                                } else {
+                                    if (messageObject2.isGif()) {
+                                        str2 = LocaleController.getString("EditMessageReplaceGif", NUM);
+                                    } else if (messageObject2.isMusic()) {
+                                        str2 = LocaleController.getString("EditMessageReplaceAudio", NUM);
+                                    } else {
+                                        str2 = LocaleController.getString("EditMessageReplaceFile", NUM);
+                                    }
+                                    str3 = null;
+                                }
+                                ChatActivityEnterTopView.EditViewButton[] buttons = this.chatActivityEnterTopView.getEditView().getButtons();
+                                buttons[0].setEditButton(str3 != null);
+                                buttons[0].getTextView().setText(str3 != null ? str3 : str2);
+                                buttons[0].getImageView().setImageResource(str3 != null ? NUM : NUM);
+                                buttons[1].setVisibility(str3 != null ? 0 : 8);
+                                if (str3 != null) {
+                                    buttons[1].getTextView().setText(str2);
+                                }
+                                this.chatActivityEnterTopView.setEditMode(true);
+                            }
+                        } else {
                             return;
                         }
-                    }
-                    ArrayList<MessageObject> arrayList3 = this.forwardingMessages;
-                    if (arrayList3 != null) {
+                    } else if (messageObject4 != null) {
                         this.forwardingMessages = null;
-                        if (i8 == 0 || i8 == NUM) {
-                            z6 = z2;
-                            z5 = false;
-                        } else {
-                            i8++;
-                            z5 = false;
-                            z6 = z2;
-                        }
-                        forwardMessages(arrayList3, z5, z6, i8);
-                    } else {
-                        z5 = false;
-                    }
-                    this.chatActivityEnterView.setForceShowSendButton(z5, z8);
-                    if (!this.waitingForSendingMessageLoad) {
-                        this.chatActivityEnterView.hideTopView(z8);
-                    }
-                    this.chatActivityEnterView.setReplyingMessageObject(this.threadMessageObject);
-                    this.chatActivityEnterView.setEditingMessageObject((MessageObject) null, z5);
-                    this.topViewWasVisible = z5 ? 1 : 0;
-                    this.replyingMessageObject = this.threadMessageObject;
-                    this.editingMessageObject = null;
-                    this.replyImageLocation = null;
-                    this.replyImageLocationObject = null;
-                }
-            } else if (messageObject4 != null || arrayList != null || messageObject5 != null || tLRPC$WebPage2 != null) {
-                hideHints(false);
-                if (this.searchItem != null && this.actionBar.isSearchFieldVisible()) {
-                    this.actionBar.closeSearchField(false);
-                    this.chatActivityEnterView.setFieldFocused();
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public final void run() {
-                            ChatActivity.this.lambda$showFieldPanel$75$ChatActivity();
-                        }
-                    }, 100);
-                }
-                if (messageObject4 == null || messageObject.getDialogId() == this.dialog_id) {
-                    arrayList2 = arrayList;
-                    z7 = false;
-                } else {
-                    arrayList2 = new ArrayList<>();
-                    arrayList2.add(messageObject4);
-                    messageObject4 = null;
-                    z7 = true;
-                }
-                this.chatActivityEnterTopView.setEditMode(false);
-                if (messageObject5 != null) {
-                    this.forwardingMessages = null;
-                    if (this.threadMessageId == 0) {
-                        this.replyingMessageObject = null;
-                        this.chatActivityEnterView.setReplyingMessageObject((MessageObject) null);
-                    }
-                    this.editingMessageObject = messageObject5;
-                    boolean isMediaEmpty = messageObject2.isMediaEmpty();
-                    this.chatActivityEnterView.setEditingMessageObject(messageObject5, !isMediaEmpty);
-                    if (this.foundWebPage == null) {
-                        this.chatActivityEnterView.setForceShowSendButton(false, false);
-                        boolean canEditMedia = messageObject2.canEditMedia();
-                        if (isMediaEmpty || !canEditMedia) {
+                        this.editingMessageObject = null;
+                        this.replyingMessageObject = messageObject4;
+                        this.chatActivityEnterView.setReplyingMessageObject(messageObject4);
+                        this.chatActivityEnterView.setEditingMessageObject((MessageObject) null, false);
+                        if (this.foundWebPage == null) {
+                            String restrictionReason = MessagesController.getRestrictionReason(messageObject4.messageOwner.restriction_reason);
+                            this.chatActivityEnterView.setForceShowSendButton(false, false);
+                            if (!messageObject4.isFromUser()) {
+                                if (!ChatObject.isChannel(this.currentChat) || !this.currentChat.megagroup || !messageObject4.isForwardedChannelPost()) {
+                                    tLRPC$Chat2 = getMessagesController().getChat(Integer.valueOf(messageObject4.messageOwner.peer_id.channel_id));
+                                } else {
+                                    tLRPC$Chat2 = getMessagesController().getChat(Integer.valueOf(messageObject4.messageOwner.fwd_from.from_id.channel_id));
+                                }
+                                if (tLRPC$Chat2 != null) {
+                                    str = tLRPC$Chat2.title;
+                                } else {
+                                    return;
+                                }
+                            } else if (messageObject4.messageOwner.from_id.channel_id != 0) {
+                                TLRPC$Chat chat = getMessagesController().getChat(Integer.valueOf(messageObject4.messageOwner.from_id.channel_id));
+                                if (chat != null) {
+                                    str = chat.title;
+                                } else {
+                                    return;
+                                }
+                            } else {
+                                TLRPC$User user = getMessagesController().getUser(Integer.valueOf(messageObject4.messageOwner.from_id.user_id));
+                                if (user != null) {
+                                    str = UserObject.getUserName(user);
+                                } else {
+                                    return;
+                                }
+                            }
                             this.replyIconImageView.setImageResource(NUM);
-                            this.replyIconImageView.setContentDescription(LocaleController.getString("AccDescrEditing", NUM));
-                            this.replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelEdit", NUM));
-                            if (isMediaEmpty) {
-                                this.replyNameTextView.setText(LocaleController.getString("EditMessage", NUM));
+                            this.replyNameTextView.setText(str);
+                            this.replyIconImageView.setContentDescription(LocaleController.getString("AccDescrReplying", NUM));
+                            this.replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelReply", NUM));
+                            if (!TextUtils.isEmpty(restrictionReason)) {
+                                this.replyObjectTextView.setText(restrictionReason);
                             } else {
-                                this.replyNameTextView.setText(LocaleController.getString("EditCaption", NUM));
-                            }
-                            if (canEditMedia) {
-                                this.replyObjectTextView.setText(LocaleController.getString("EditMessageMedia", NUM));
-                            } else {
-                                CharSequence charSequence = messageObject5.messageText;
-                                if (!(charSequence == null && messageObject5.caption == null)) {
-                                    CharSequence charSequence2 = messageObject5.caption;
-                                    String charSequence3 = charSequence2 != null ? charSequence2.toString() : charSequence.toString();
-                                    if (charSequence3.length() > 150) {
-                                        charSequence3 = charSequence3.substring(0, 150);
-                                    }
-                                    String replace = charSequence3.replace(10, ' ');
-                                    SimpleTextView simpleTextView = this.replyObjectTextView;
-                                    simpleTextView.setText(Emoji.replaceEmoji(replace, simpleTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
-                                }
-                            }
-                        } else {
-                            if (messageObject2.isPhoto()) {
-                                str3 = LocaleController.getString("EditMessageEditPhoto", NUM);
-                                str2 = LocaleController.getString("EditMessageReplacePhoto", NUM);
-                            } else if (messageObject2.isVideo()) {
-                                str3 = LocaleController.getString("EditMessageEditVideo", NUM);
-                                str2 = LocaleController.getString("EditMessageReplaceVideo", NUM);
-                            } else {
-                                if (messageObject2.isGif()) {
-                                    str2 = LocaleController.getString("EditMessageReplaceGif", NUM);
-                                } else if (messageObject2.isMusic()) {
-                                    str2 = LocaleController.getString("EditMessageReplaceAudio", NUM);
+                                TLRPC$MessageMedia tLRPC$MessageMedia = messageObject4.messageOwner.media;
+                                if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaGame) {
+                                    SimpleTextView simpleTextView2 = this.replyObjectTextView;
+                                    simpleTextView2.setText(Emoji.replaceEmoji(tLRPC$MessageMedia.game.title, simpleTextView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
                                 } else {
-                                    str2 = LocaleController.getString("EditMessageReplaceFile", NUM);
+                                    CharSequence charSequence4 = messageObject4.messageText;
+                                    if (!(charSequence4 == null && messageObject4.caption == null)) {
+                                        CharSequence charSequence5 = messageObject4.caption;
+                                        String charSequence6 = charSequence5 != null ? charSequence5.toString() : charSequence4.toString();
+                                        if (charSequence6.length() > 150) {
+                                            charSequence6 = charSequence6.substring(0, 150);
+                                        }
+                                        String replace2 = charSequence6.replace(10, ' ');
+                                        SimpleTextView simpleTextView3 = this.replyObjectTextView;
+                                        simpleTextView3.setText(Emoji.replaceEmoji(replace2, simpleTextView3.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+                                    }
                                 }
-                                str3 = null;
-                            }
-                            ChatActivityEnterTopView.EditViewButton[] buttons = this.chatActivityEnterTopView.getEditView().getButtons();
-                            buttons[0].setEditButton(str3 != null);
-                            buttons[0].getTextView().setText(str3 != null ? str3 : str2);
-                            buttons[0].getImageView().setImageResource(str3 != null ? NUM : NUM);
-                            buttons[1].setVisibility(str3 != null ? 0 : 8);
-                            if (str3 != null) {
-                                buttons[1].getTextView().setText(str2);
-                            }
-                            this.chatActivityEnterTopView.setEditMode(true);
-                        }
-                    } else {
-                        return;
-                    }
-                } else if (messageObject4 != null) {
-                    this.forwardingMessages = null;
-                    this.editingMessageObject = null;
-                    this.replyingMessageObject = messageObject4;
-                    this.chatActivityEnterView.setReplyingMessageObject(messageObject4);
-                    this.chatActivityEnterView.setEditingMessageObject((MessageObject) null, false);
-                    if (this.foundWebPage == null) {
-                        String restrictionReason = MessagesController.getRestrictionReason(messageObject4.messageOwner.restriction_reason);
-                        this.chatActivityEnterView.setForceShowSendButton(false, false);
-                        if (!messageObject4.isFromUser()) {
-                            if (!ChatObject.isChannel(this.currentChat) || !this.currentChat.megagroup || !messageObject4.isForwardedChannelPost()) {
-                                tLRPC$Chat2 = getMessagesController().getChat(Integer.valueOf(messageObject4.messageOwner.peer_id.channel_id));
-                            } else {
-                                tLRPC$Chat2 = getMessagesController().getChat(Integer.valueOf(messageObject4.messageOwner.fwd_from.from_id.channel_id));
-                            }
-                            if (tLRPC$Chat2 != null) {
-                                str = tLRPC$Chat2.title;
-                            } else {
-                                return;
-                            }
-                        } else if (messageObject4.messageOwner.from_id.channel_id != 0) {
-                            TLRPC$Chat chat = getMessagesController().getChat(Integer.valueOf(messageObject4.messageOwner.from_id.channel_id));
-                            if (chat != null) {
-                                str = chat.title;
-                            } else {
-                                return;
                             }
                         } else {
-                            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(messageObject4.messageOwner.from_id.user_id));
-                            if (user != null) {
-                                str = UserObject.getUserName(user);
-                            } else {
-                                return;
-                            }
+                            return;
                         }
+                    } else if (arrayList2 == null) {
                         this.replyIconImageView.setImageResource(NUM);
-                        this.replyNameTextView.setText(str);
-                        this.replyIconImageView.setContentDescription(LocaleController.getString("AccDescrReplying", NUM));
-                        this.replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelReply", NUM));
-                        if (!TextUtils.isEmpty(restrictionReason)) {
-                            this.replyObjectTextView.setText(restrictionReason);
+                        if (tLRPC$WebPage2 instanceof TLRPC$TL_webPagePending) {
+                            this.replyNameTextView.setText(LocaleController.getString("GettingLinkInfo", NUM));
+                            this.replyObjectTextView.setText(this.pendingLinkSearchString);
                         } else {
-                            TLRPC$MessageMedia tLRPC$MessageMedia = messageObject4.messageOwner.media;
-                            if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaGame) {
-                                SimpleTextView simpleTextView2 = this.replyObjectTextView;
-                                simpleTextView2.setText(Emoji.replaceEmoji(tLRPC$MessageMedia.game.title, simpleTextView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+                            String str4 = tLRPC$WebPage2.site_name;
+                            if (str4 != null) {
+                                this.replyNameTextView.setText(str4);
                             } else {
-                                CharSequence charSequence4 = messageObject4.messageText;
-                                if (!(charSequence4 == null && messageObject4.caption == null)) {
-                                    CharSequence charSequence5 = messageObject4.caption;
-                                    String charSequence6 = charSequence5 != null ? charSequence5.toString() : charSequence4.toString();
-                                    if (charSequence6.length() > 150) {
-                                        charSequence6 = charSequence6.substring(0, 150);
-                                    }
-                                    String replace2 = charSequence6.replace(10, ' ');
-                                    SimpleTextView simpleTextView3 = this.replyObjectTextView;
-                                    simpleTextView3.setText(Emoji.replaceEmoji(replace2, simpleTextView3.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
-                                }
-                            }
-                        }
-                    } else {
-                        return;
-                    }
-                } else if (arrayList2 == null) {
-                    this.replyIconImageView.setImageResource(NUM);
-                    if (tLRPC$WebPage2 instanceof TLRPC$TL_webPagePending) {
-                        this.replyNameTextView.setText(LocaleController.getString("GettingLinkInfo", NUM));
-                        this.replyObjectTextView.setText(this.pendingLinkSearchString);
-                    } else {
-                        String str4 = tLRPC$WebPage2.site_name;
-                        if (str4 != null) {
-                            this.replyNameTextView.setText(str4);
-                        } else {
-                            String str5 = tLRPC$WebPage2.title;
-                            if (str5 != null) {
-                                this.replyNameTextView.setText(str5);
-                            } else {
-                                this.replyNameTextView.setText(LocaleController.getString("LinkPreview", NUM));
-                            }
-                        }
-                        String str6 = tLRPC$WebPage2.title;
-                        if (str6 != null) {
-                            this.replyObjectTextView.setText(str6);
-                        } else {
-                            String str7 = tLRPC$WebPage2.description;
-                            if (str7 != null) {
-                                this.replyObjectTextView.setText(str7);
-                            } else {
-                                String str8 = tLRPC$WebPage2.author;
-                                if (str8 != null) {
-                                    this.replyObjectTextView.setText(str8);
+                                String str5 = tLRPC$WebPage2.title;
+                                if (str5 != null) {
+                                    this.replyNameTextView.setText(str5);
                                 } else {
-                                    this.replyObjectTextView.setText(tLRPC$WebPage2.display_url);
+                                    this.replyNameTextView.setText(LocaleController.getString("LinkPreview", NUM));
                                 }
                             }
-                        }
-                        this.chatActivityEnterView.setWebPage(tLRPC$WebPage2, true);
-                    }
-                } else if (!arrayList2.isEmpty()) {
-                    if (this.threadMessageId == 0) {
-                        this.replyingMessageObject = null;
-                        this.chatActivityEnterView.setReplyingMessageObject((MessageObject) null);
-                    }
-                    this.editingMessageObject = null;
-                    this.chatActivityEnterView.setEditingMessageObject((MessageObject) null, false);
-                    this.forwardingMessages = arrayList2;
-                    if (this.foundWebPage == null) {
-                        this.chatActivityEnterView.setForceShowSendButton(true, false);
-                        ArrayList arrayList4 = new ArrayList();
-                        this.replyIconImageView.setImageResource(NUM);
-                        this.replyIconImageView.setContentDescription(LocaleController.getString("AccDescrForwarding", NUM));
-                        this.replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelForward", NUM));
-                        MessageObject messageObject7 = arrayList2.get(0);
-                        if (messageObject7.isFromUser()) {
-                            arrayList4.add(Integer.valueOf(messageObject7.messageOwner.from_id.user_id));
-                        } else {
-                            TLRPC$Chat chat2 = getMessagesController().getChat(Integer.valueOf(messageObject7.messageOwner.peer_id.channel_id));
-                            if (!ChatObject.isChannel(chat2) || !chat2.megagroup || !messageObject7.isForwardedChannelPost()) {
-                                arrayList4.add(Integer.valueOf(-messageObject7.messageOwner.peer_id.channel_id));
+                            String str6 = tLRPC$WebPage2.title;
+                            if (str6 != null) {
+                                this.replyObjectTextView.setText(str6);
                             } else {
-                                arrayList4.add(Integer.valueOf(-messageObject7.messageOwner.fwd_from.from_id.channel_id));
-                            }
-                        }
-                        int i9 = (messageObject7.isAnimatedEmoji() || messageObject7.isDice()) ? 0 : messageObject7.type;
-                        for (int i10 = 1; i10 < arrayList2.size(); i10++) {
-                            MessageObject messageObject8 = arrayList2.get(i10);
-                            if (messageObject8.isFromUser()) {
-                                i6 = messageObject8.messageOwner.from_id.user_id;
-                            } else {
-                                TLRPC$Chat chat3 = getMessagesController().getChat(Integer.valueOf(messageObject8.messageOwner.peer_id.channel_id));
-                                if (!ChatObject.isChannel(chat3) || !chat3.megagroup || !messageObject8.isForwardedChannelPost()) {
-                                    i7 = messageObject8.messageOwner.peer_id.channel_id;
+                                String str7 = tLRPC$WebPage2.description;
+                                if (str7 != null) {
+                                    this.replyObjectTextView.setText(str7);
                                 } else {
-                                    i7 = messageObject8.messageOwner.fwd_from.from_id.channel_id;
-                                }
-                                i6 = -i7;
-                            }
-                            if (!arrayList4.contains(Integer.valueOf(i6))) {
-                                arrayList4.add(Integer.valueOf(i6));
-                            }
-                            if (arrayList2.get(i10).type != i9) {
-                                i9 = -1;
-                            }
-                        }
-                        StringBuilder sb = new StringBuilder();
-                        int i11 = 0;
-                        while (true) {
-                            if (i11 >= arrayList4.size()) {
-                                break;
-                            }
-                            Integer num = (Integer) arrayList4.get(i11);
-                            if (num.intValue() > 0) {
-                                tLRPC$User = getMessagesController().getUser(num);
-                                tLRPC$Chat = null;
-                            } else {
-                                tLRPC$Chat = getMessagesController().getChat(Integer.valueOf(-num.intValue()));
-                                tLRPC$User = null;
-                            }
-                            if (tLRPC$User != null || tLRPC$Chat != null) {
-                                if (arrayList4.size() != 1) {
-                                    if (arrayList4.size() != 2 && sb.length() != 0) {
-                                        sb.append(" ");
-                                        sb.append(LocaleController.formatPluralString("AndOther", arrayList4.size() - 1));
-                                        break;
-                                    }
-                                    if (sb.length() > 0) {
-                                        sb.append(", ");
-                                    }
-                                    if (tLRPC$User == null) {
-                                        sb.append(tLRPC$Chat.title);
-                                    } else if (!TextUtils.isEmpty(tLRPC$User.first_name)) {
-                                        sb.append(tLRPC$User.first_name);
-                                    } else if (!TextUtils.isEmpty(tLRPC$User.last_name)) {
-                                        sb.append(tLRPC$User.last_name);
+                                    String str8 = tLRPC$WebPage2.author;
+                                    if (str8 != null) {
+                                        this.replyObjectTextView.setText(str8);
                                     } else {
-                                        sb.append(" ");
+                                        this.replyObjectTextView.setText(tLRPC$WebPage2.display_url);
                                     }
-                                } else if (tLRPC$User != null) {
-                                    sb.append(UserObject.getUserName(tLRPC$User));
-                                } else {
-                                    sb.append(tLRPC$Chat.title);
                                 }
                             }
-                            i11++;
+                            this.chatActivityEnterView.setWebPage(tLRPC$WebPage2, true);
                         }
-                        this.replyNameTextView.setText(sb);
-                        if (i9 == -1 || i9 == 0 || i9 == 10 || i9 == 11) {
-                            if (arrayList2.size() != 1 || arrayList2.get(0).messageText == null) {
-                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedMessageCount", arrayList2.size()));
+                    } else if (!arrayList2.isEmpty()) {
+                        if (this.threadMessageId == 0) {
+                            this.replyingMessageObject = null;
+                            this.chatActivityEnterView.setReplyingMessageObject((MessageObject) null);
+                        }
+                        this.editingMessageObject = null;
+                        this.chatActivityEnterView.setEditingMessageObject((MessageObject) null, false);
+                        this.forwardingMessages = arrayList2;
+                        if (this.foundWebPage == null) {
+                            this.chatActivityEnterView.setForceShowSendButton(true, false);
+                            ArrayList arrayList3 = new ArrayList();
+                            this.replyIconImageView.setImageResource(NUM);
+                            this.replyIconImageView.setContentDescription(LocaleController.getString("AccDescrForwarding", NUM));
+                            this.replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelForward", NUM));
+                            MessageObject messageObject6 = arrayList2.get(0);
+                            if (messageObject6.isFromUser()) {
+                                arrayList3.add(Integer.valueOf(messageObject6.messageOwner.from_id.user_id));
                             } else {
-                                MessageObject messageObject9 = arrayList2.get(0);
-                                TLRPC$MessageMedia tLRPC$MessageMedia2 = messageObject9.messageOwner.media;
-                                if (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaGame) {
-                                    SimpleTextView simpleTextView4 = this.replyObjectTextView;
-                                    simpleTextView4.setText(Emoji.replaceEmoji(tLRPC$MessageMedia2.game.title, simpleTextView4.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+                                TLRPC$Chat chat2 = getMessagesController().getChat(Integer.valueOf(messageObject6.messageOwner.peer_id.channel_id));
+                                if (!ChatObject.isChannel(chat2) || !chat2.megagroup || !messageObject6.isForwardedChannelPost()) {
+                                    arrayList3.add(Integer.valueOf(-messageObject6.messageOwner.peer_id.channel_id));
                                 } else {
-                                    String charSequence7 = messageObject9.messageText.toString();
-                                    if (charSequence7.length() > 150) {
-                                        charSequence7 = charSequence7.substring(0, 150);
+                                    arrayList3.add(Integer.valueOf(-messageObject6.messageOwner.fwd_from.from_id.channel_id));
+                                }
+                            }
+                            int i9 = (messageObject6.isAnimatedEmoji() || messageObject6.isDice()) ? 0 : messageObject6.type;
+                            for (int i10 = 1; i10 < arrayList2.size(); i10++) {
+                                MessageObject messageObject7 = arrayList2.get(i10);
+                                if (messageObject7.isFromUser()) {
+                                    i6 = messageObject7.messageOwner.from_id.user_id;
+                                } else {
+                                    TLRPC$Chat chat3 = getMessagesController().getChat(Integer.valueOf(messageObject7.messageOwner.peer_id.channel_id));
+                                    if (!ChatObject.isChannel(chat3) || !chat3.megagroup || !messageObject7.isForwardedChannelPost()) {
+                                        i7 = messageObject7.messageOwner.peer_id.channel_id;
+                                    } else {
+                                        i7 = messageObject7.messageOwner.fwd_from.from_id.channel_id;
                                     }
-                                    String replace3 = charSequence7.replace(10, ' ');
-                                    SimpleTextView simpleTextView5 = this.replyObjectTextView;
-                                    simpleTextView5.setText(Emoji.replaceEmoji(replace3, simpleTextView5.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+                                    i6 = -i7;
+                                }
+                                if (!arrayList3.contains(Integer.valueOf(i6))) {
+                                    arrayList3.add(Integer.valueOf(i6));
+                                }
+                                if (arrayList2.get(i10).type != i9) {
+                                    i9 = -1;
                                 }
                             }
-                        } else if (i9 == 1) {
-                            this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedPhoto", arrayList2.size()));
-                            if (arrayList2.size() == 1) {
-                                messageObject4 = arrayList2.get(0);
-                            }
-                        } else if (i9 == 4) {
-                            this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedLocation", arrayList2.size()));
-                        } else if (i9 == 3) {
-                            this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedVideo", arrayList2.size()));
-                            if (arrayList2.size() == 1) {
-                                messageObject4 = arrayList2.get(0);
-                            }
-                        } else if (i9 == 12) {
-                            this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedContact", arrayList2.size()));
-                        } else if (i9 == 2) {
-                            this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedAudio", arrayList2.size()));
-                        } else if (i9 == 5) {
-                            this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedRound", arrayList2.size()));
-                        } else if (i9 == 14) {
-                            this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedMusic", arrayList2.size()));
-                        } else if (i9 == 13 || i9 == 15) {
-                            this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedSticker", arrayList2.size()));
-                        } else if (i9 == 17) {
-                            this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedPoll", arrayList2.size()));
-                        } else if (i9 == 8 || i9 == 9) {
-                            if (arrayList2.size() != 1) {
-                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedFile", arrayList2.size()));
-                            } else if (i9 == 8) {
-                                this.replyObjectTextView.setText(LocaleController.getString("AttachGif", NUM));
-                            } else {
-                                String documentFileName = FileLoader.getDocumentFileName(arrayList2.get(0).getDocument());
-                                if (documentFileName.length() != 0) {
-                                    this.replyObjectTextView.setText(documentFileName);
+                            StringBuilder sb = new StringBuilder();
+                            int i11 = 0;
+                            while (true) {
+                                if (i11 >= arrayList3.size()) {
+                                    break;
                                 }
-                                messageObject4 = arrayList2.get(0);
+                                Integer num = (Integer) arrayList3.get(i11);
+                                if (num.intValue() > 0) {
+                                    tLRPC$User = getMessagesController().getUser(num);
+                                    tLRPC$Chat = null;
+                                } else {
+                                    tLRPC$Chat = getMessagesController().getChat(Integer.valueOf(-num.intValue()));
+                                    tLRPC$User = null;
+                                }
+                                if (tLRPC$User != null || tLRPC$Chat != null) {
+                                    if (arrayList3.size() != 1) {
+                                        if (arrayList3.size() != 2 && sb.length() != 0) {
+                                            sb.append(" ");
+                                            sb.append(LocaleController.formatPluralString("AndOther", arrayList3.size() - 1));
+                                            break;
+                                        }
+                                        if (sb.length() > 0) {
+                                            sb.append(", ");
+                                        }
+                                        if (tLRPC$User == null) {
+                                            sb.append(tLRPC$Chat.title);
+                                        } else if (!TextUtils.isEmpty(tLRPC$User.first_name)) {
+                                            sb.append(tLRPC$User.first_name);
+                                        } else if (!TextUtils.isEmpty(tLRPC$User.last_name)) {
+                                            sb.append(tLRPC$User.last_name);
+                                        } else {
+                                            sb.append(" ");
+                                        }
+                                    } else if (tLRPC$User != null) {
+                                        sb.append(UserObject.getUserName(tLRPC$User));
+                                    } else {
+                                        sb.append(tLRPC$Chat.title);
+                                    }
+                                }
+                                i11++;
                             }
+                            this.replyNameTextView.setText(sb);
+                            if (i9 == -1 || i9 == 0 || i9 == 10 || i9 == 11) {
+                                if (arrayList2.size() != 1 || arrayList2.get(0).messageText == null) {
+                                    this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedMessageCount", arrayList2.size()));
+                                } else {
+                                    MessageObject messageObject8 = arrayList2.get(0);
+                                    TLRPC$MessageMedia tLRPC$MessageMedia2 = messageObject8.messageOwner.media;
+                                    if (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaGame) {
+                                        SimpleTextView simpleTextView4 = this.replyObjectTextView;
+                                        simpleTextView4.setText(Emoji.replaceEmoji(tLRPC$MessageMedia2.game.title, simpleTextView4.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+                                    } else {
+                                        String charSequence7 = messageObject8.messageText.toString();
+                                        if (charSequence7.length() > 150) {
+                                            charSequence7 = charSequence7.substring(0, 150);
+                                        }
+                                        String replace3 = charSequence7.replace(10, ' ');
+                                        SimpleTextView simpleTextView5 = this.replyObjectTextView;
+                                        simpleTextView5.setText(Emoji.replaceEmoji(replace3, simpleTextView5.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+                                    }
+                                }
+                            } else if (i9 == 1) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedPhoto", arrayList2.size()));
+                                if (arrayList2.size() == 1) {
+                                    messageObject4 = arrayList2.get(0);
+                                }
+                            } else if (i9 == 4) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedLocation", arrayList2.size()));
+                            } else if (i9 == 3) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedVideo", arrayList2.size()));
+                                if (arrayList2.size() == 1) {
+                                    messageObject4 = arrayList2.get(0);
+                                }
+                            } else if (i9 == 12) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedContact", arrayList2.size()));
+                            } else if (i9 == 2) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedAudio", arrayList2.size()));
+                            } else if (i9 == 5) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedRound", arrayList2.size()));
+                            } else if (i9 == 14) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedMusic", arrayList2.size()));
+                            } else if (i9 == 13 || i9 == 15) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedSticker", arrayList2.size()));
+                            } else if (i9 == 17) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedPoll", arrayList2.size()));
+                            } else if (i9 == 8 || i9 == 9) {
+                                if (arrayList2.size() != 1) {
+                                    this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedFile", arrayList2.size()));
+                                } else if (i9 == 8) {
+                                    this.replyObjectTextView.setText(LocaleController.getString("AttachGif", NUM));
+                                } else {
+                                    String documentFileName = FileLoader.getDocumentFileName(arrayList2.get(0).getDocument());
+                                    if (documentFileName.length() != 0) {
+                                        this.replyObjectTextView.setText(documentFileName);
+                                    }
+                                    messageObject4 = arrayList2.get(0);
+                                }
+                            }
+                        } else {
+                            return;
                         }
                     } else {
                         return;
                     }
-                } else {
-                    return;
-                }
-                if (messageObject4 == null) {
-                    messageObject4 = (messageObject5 == null || this.chatActivityEnterTopView.isEditMode()) ? null : messageObject5;
-                }
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.replyNameTextView.getLayoutParams();
-                FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.replyObjectTextView.getLayoutParams();
-                if (messageObject4 == null || !TextUtils.isEmpty(MessagesController.getRestrictionReason(messageObject4.messageOwner.restriction_reason))) {
-                    tLRPC$PhotoSize2 = null;
-                    i3 = 0;
-                    tLRPC$PhotoSize = null;
-                    i2 = 1;
-                    tLObject = null;
-                } else {
-                    tLRPC$PhotoSize2 = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs2, 320);
-                    tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs2, AndroidUtilities.dp(40.0f));
-                    tLObject = messageObject4.photoThumbsObject2;
-                    if (tLRPC$PhotoSize2 == null) {
-                        if (messageObject4.mediaExists) {
-                            tLRPC$PhotoSize2 = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs, AndroidUtilities.getPhotoSize());
-                            i4 = tLRPC$PhotoSize2 != null ? tLRPC$PhotoSize2.size : 0;
-                            i5 = 0;
-                        } else {
-                            tLRPC$PhotoSize2 = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs, 320);
-                            i5 = 1;
-                            i4 = 0;
-                        }
-                        TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs, AndroidUtilities.dp(40.0f));
-                        tLObject = messageObject4.photoThumbsObject;
-                        TLRPC$PhotoSize tLRPC$PhotoSize3 = closestPhotoSizeWithSize;
-                        i2 = i5;
-                        i3 = i4;
-                        tLRPC$PhotoSize = tLRPC$PhotoSize3;
-                    } else {
+                    if (messageObject4 == null) {
+                        messageObject4 = (messageObject5 == null || this.chatActivityEnterTopView.isEditMode()) ? null : messageObject5;
+                    }
+                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.replyNameTextView.getLayoutParams();
+                    FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.replyObjectTextView.getLayoutParams();
+                    if (messageObject4 == null || !TextUtils.isEmpty(MessagesController.getRestrictionReason(messageObject4.messageOwner.restriction_reason))) {
+                        tLRPC$PhotoSize2 = null;
                         i3 = 0;
+                        tLRPC$PhotoSize = null;
                         i2 = 1;
-                    }
-                }
-                if (tLRPC$PhotoSize2 == tLRPC$PhotoSize) {
-                    tLRPC$PhotoSize = null;
-                }
-                if (tLRPC$PhotoSize2 == null || (tLRPC$PhotoSize2 instanceof TLRPC$TL_photoSizeEmpty) || (tLRPC$PhotoSize2.location instanceof TLRPC$TL_fileLocationUnavailable) || messageObject4.isAnyKindOfSticker() || messageObject4.isSecretMedia() || messageObject4.isWebpageDocument()) {
-                    this.replyImageView.setImageBitmap((Bitmap) null);
-                    this.replyImageLocation = null;
-                    this.replyImageLocationObject = null;
-                    this.replyImageView.setVisibility(4);
-                    int dp = AndroidUtilities.dp(52.0f);
-                    layoutParams2.leftMargin = dp;
-                    layoutParams.leftMargin = dp;
-                } else {
-                    if (messageObject4.isRoundVideo()) {
-                        this.replyImageView.setRoundRadius(AndroidUtilities.dp(17.0f));
+                        tLObject = null;
                     } else {
-                        this.replyImageView.setRoundRadius(0);
+                        tLRPC$PhotoSize2 = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs2, 320);
+                        tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs2, AndroidUtilities.dp(40.0f));
+                        tLObject = messageObject4.photoThumbsObject2;
+                        if (tLRPC$PhotoSize2 == null) {
+                            if (messageObject4.mediaExists) {
+                                tLRPC$PhotoSize2 = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs, AndroidUtilities.getPhotoSize());
+                                i4 = tLRPC$PhotoSize2 != null ? tLRPC$PhotoSize2.size : 0;
+                                i5 = 0;
+                            } else {
+                                tLRPC$PhotoSize2 = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs, 320);
+                                i5 = 1;
+                                i4 = 0;
+                            }
+                            TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject4.photoThumbs, AndroidUtilities.dp(40.0f));
+                            tLObject = messageObject4.photoThumbsObject;
+                            TLRPC$PhotoSize tLRPC$PhotoSize3 = closestPhotoSizeWithSize;
+                            i2 = i5;
+                            i3 = i4;
+                            tLRPC$PhotoSize = tLRPC$PhotoSize3;
+                        } else {
+                            i3 = 0;
+                            i2 = 1;
+                        }
                     }
-                    this.replyImageSize = i3;
-                    this.replyImageCacheType = i2;
-                    this.replyImageLocation = tLRPC$PhotoSize2;
-                    this.replyImageThumbLocation = tLRPC$PhotoSize;
-                    this.replyImageLocationObject = tLObject;
-                    this.replyImageView.setImage(ImageLocation.getForObject(tLRPC$PhotoSize2, tLObject), "50_50", ImageLocation.getForObject(tLRPC$PhotoSize, tLObject), "50_50_b", (String) null, i3, i2, messageObject4);
-                    this.replyImageView.setVisibility(0);
-                    int dp2 = AndroidUtilities.dp(96.0f);
-                    layoutParams2.leftMargin = dp2;
-                    layoutParams.leftMargin = dp2;
+                    if (tLRPC$PhotoSize2 == tLRPC$PhotoSize) {
+                        tLRPC$PhotoSize = null;
+                    }
+                    if (tLRPC$PhotoSize2 == null || (tLRPC$PhotoSize2 instanceof TLRPC$TL_photoSizeEmpty) || (tLRPC$PhotoSize2.location instanceof TLRPC$TL_fileLocationUnavailable) || messageObject4.isAnyKindOfSticker() || messageObject4.isSecretMedia() || messageObject4.isWebpageDocument()) {
+                        this.replyImageView.setImageBitmap((Bitmap) null);
+                        this.replyImageLocation = null;
+                        this.replyImageLocationObject = null;
+                        this.replyImageView.setVisibility(4);
+                        int dp = AndroidUtilities.dp(52.0f);
+                        layoutParams2.leftMargin = dp;
+                        layoutParams.leftMargin = dp;
+                    } else {
+                        if (messageObject4.isRoundVideo()) {
+                            this.replyImageView.setRoundRadius(AndroidUtilities.dp(17.0f));
+                        } else {
+                            this.replyImageView.setRoundRadius(0);
+                        }
+                        this.replyImageSize = i3;
+                        this.replyImageCacheType = i2;
+                        this.replyImageLocation = tLRPC$PhotoSize2;
+                        this.replyImageThumbLocation = tLRPC$PhotoSize;
+                        this.replyImageLocationObject = tLObject;
+                        this.replyImageView.setImage(ImageLocation.getForObject(tLRPC$PhotoSize2, tLObject), "50_50", ImageLocation.getForObject(tLRPC$PhotoSize, tLObject), "50_50_b", (String) null, i3, i2, messageObject4);
+                        this.replyImageView.setVisibility(0);
+                        int dp2 = AndroidUtilities.dp(96.0f);
+                        layoutParams2.leftMargin = dp2;
+                        layoutParams.leftMargin = dp2;
+                    }
+                    this.replyNameTextView.setLayoutParams(layoutParams);
+                    this.replyObjectTextView.setLayoutParams(layoutParams2);
+                    this.chatActivityEnterView.showTopView(true, z7);
                 }
-                this.replyNameTextView.setLayoutParams(layoutParams);
-                this.replyObjectTextView.setLayoutParams(layoutParams2);
-                this.chatActivityEnterView.showTopView(true, z7);
+            } else if (this.replyingMessageObject != null || this.forwardingMessages != null || this.foundWebPage != null || this.editingMessageObject != null || chatActivityEnterView2.isTopViewVisible()) {
+                MessageObject messageObject9 = this.replyingMessageObject;
+                if (messageObject9 != null && (messageObject9.messageOwner.reply_markup instanceof TLRPC$TL_replyKeyboardForceReply)) {
+                    MessagesController.getMainSettings(this.currentAccount).edit().putInt("answered_" + this.dialog_id, this.replyingMessageObject.getId()).commit();
+                }
+                if (this.foundWebPage != null) {
+                    this.foundWebPage = null;
+                    this.chatActivityEnterView.setWebPage((TLRPC$WebPage) null, !z3);
+                    if (!(tLRPC$WebPage2 == null || ((messageObject3 = this.replyingMessageObject) == null && this.forwardingMessages == null && this.editingMessageObject == null))) {
+                        showFieldPanel(true, messageObject3, this.editingMessageObject, this.forwardingMessages, (TLRPC$WebPage) null, z2, i, false, true);
+                        return;
+                    }
+                }
+                ArrayList<MessageObject> arrayList4 = this.forwardingMessages;
+                if (arrayList4 != null) {
+                    this.forwardingMessages = null;
+                    if (i8 == 0 || i8 == NUM) {
+                        z6 = z2;
+                        z5 = false;
+                    } else {
+                        i8++;
+                        z5 = false;
+                        z6 = z2;
+                    }
+                    forwardMessages(arrayList4, z5, z6, i8);
+                } else {
+                    z5 = false;
+                }
+                this.chatActivityEnterView.setForceShowSendButton(z5, z8);
+                if (!this.waitingForSendingMessageLoad) {
+                    this.chatActivityEnterView.hideTopView(z8);
+                }
+                this.chatActivityEnterView.setReplyingMessageObject(this.threadMessageObject);
+                this.chatActivityEnterView.setEditingMessageObject((MessageObject) null, z5);
+                this.topViewWasVisible = z5 ? 1 : 0;
+                this.replyingMessageObject = this.threadMessageObject;
+                this.editingMessageObject = null;
+                this.replyImageLocation = null;
+                this.replyImageLocationObject = null;
             }
         }
     }
@@ -31051,6 +31034,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (arrayList.size() > 1 || arrayList2.get(0).longValue() == ((long) getUserConfig().getClientUserId()) || charSequence != null) {
                 DialogsActivity dialogsActivity2 = dialogsActivity;
+                this.forwardingMessages = null;
                 hideFieldPanel(false);
                 for (int i4 = 0; i4 < arrayList.size(); i4++) {
                     long longValue = arrayList2.get(i4).longValue();

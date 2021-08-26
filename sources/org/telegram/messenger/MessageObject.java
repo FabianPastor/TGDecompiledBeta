@@ -10446,12 +10446,11 @@ public class MessageObject {
     }
 
     public static TLRPC$InputStickerSet getInputStickerSet(TLRPC$Message tLRPC$Message) {
-        TLRPC$Document tLRPC$Document;
-        TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
-        if (tLRPC$MessageMedia == null || (tLRPC$Document = tLRPC$MessageMedia.document) == null) {
-            return null;
+        TLRPC$Document document = getDocument(tLRPC$Message);
+        if (document != null) {
+            return getInputStickerSet(document);
         }
-        return getInputStickerSet(tLRPC$Document);
+        return null;
     }
 
     public static TLRPC$InputStickerSet getInputStickerSet(TLRPC$Document tLRPC$Document) {

@@ -91,6 +91,7 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$GroupCall;
 import org.telegram.tgnet.TLRPC$InputPeer;
+import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$PhoneCall;
 import org.telegram.tgnet.TLRPC$TL_chatFull;
 import org.telegram.tgnet.TLRPC$TL_dataJSON;
@@ -2442,6 +2443,22 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         if (call != null) {
             this.groupCallPeer = tLRPC$InputPeer;
             call.setSelfPeer(tLRPC$InputPeer);
+            TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(this.groupCall.chatId);
+            if (chatFull != null) {
+                TLRPC$Peer tLRPC$Peer = this.groupCall.selfPeer;
+                chatFull.groupcall_default_join_as = tLRPC$Peer;
+                if (tLRPC$Peer != null) {
+                    if (chatFull instanceof TLRPC$TL_chatFull) {
+                        chatFull.flags |= 32768;
+                    } else {
+                        chatFull.flags |= 67108864;
+                    }
+                } else if (chatFull instanceof TLRPC$TL_chatFull) {
+                    chatFull.flags &= -32769;
+                } else {
+                    chatFull.flags &= -67108865;
+                }
+            }
             createGroupInstance(0, true);
             if (this.videoState[1] == 2) {
                 createGroupInstance(1, true);

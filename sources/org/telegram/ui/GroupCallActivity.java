@@ -4313,6 +4313,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         } else if (view instanceof GroupCallInvitedCell) {
             GroupCallInvitedCell groupCallInvitedCell = (GroupCallInvitedCell) view;
             if (groupCallInvitedCell.getUser() != null) {
+                this.parentActivity.switchToAccount(this.currentAccount, true);
                 Bundle bundle = new Bundle();
                 bundle.putInt("user_id", groupCallInvitedCell.getUser().id);
                 if (groupCallInvitedCell.hasAvatarSet()) {
@@ -7286,6 +7287,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     getUndoView().showWithAction(0, 30, tLObject3, (Object) null, (Runnable) null, (Runnable) null);
                 }
             } else if (i4 == 6) {
+                this.parentActivity.switchToAccount(this.currentAccount, true);
                 Bundle bundle = new Bundle();
                 if (i3 > 0) {
                     bundle.putInt("user_id", i3);
@@ -7295,6 +7297,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 this.parentActivity.lambda$runLinkRequest$43(new ChatActivity(bundle));
                 dismiss();
             } else if (i4 == 8) {
+                this.parentActivity.switchToAccount(this.currentAccount, true);
                 BaseFragment baseFragment = this.parentActivity.getActionBarLayout().fragmentsStack.get(this.parentActivity.getActionBarLayout().fragmentsStack.size() - 1);
                 if (!(baseFragment instanceof ChatActivity) || ((ChatActivity) baseFragment).getDialogId() != ((long) i3)) {
                     Bundle bundle2 = new Bundle();

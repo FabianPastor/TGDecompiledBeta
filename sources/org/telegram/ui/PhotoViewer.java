@@ -10271,7 +10271,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         this.skipFirstBufferingProgress = false;
                     }
                 }
+                AspectRatioFrameLayout aspectRatioFrameLayout2 = this.aspectRatioFrameLayout;
                 int i2 = 4;
+                if (aspectRatioFrameLayout2 != null) {
+                    aspectRatioFrameLayout2.setKeepScreenOn((!z || i == 4 || i == 1) ? false : true);
+                }
                 if (!z || i == 4 || i == 1) {
                     try {
                         this.parentActivity.getWindow().clearFlags(128);

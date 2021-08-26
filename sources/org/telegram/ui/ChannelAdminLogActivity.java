@@ -3376,9 +3376,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                             /*
                                                 r8 = this;
                                                 org.telegram.messenger.MessageObject r1 = r9.getMessageObject()
-                                                int r9 = r1.type
-                                                r10 = 13
-                                                if (r9 != r10) goto L_0x002b
+                                                org.telegram.tgnet.TLRPC$InputStickerSet r9 = r1.getInputStickerSet()
+                                                if (r9 == 0) goto L_0x002b
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 org.telegram.ui.Components.StickersAlert r10 = new org.telegram.ui.Components.StickersAlert
