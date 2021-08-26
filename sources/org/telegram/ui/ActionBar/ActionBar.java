@@ -130,16 +130,11 @@ public class ActionBar extends FrameLayout {
         this.castShadows = true;
         this.titleColorToSet = 0;
         this.ellipsizeSpanAnimator = new EllipsizeSpanAnimator(this);
-        setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ActionBar.this.lambda$new$0$ActionBar(view);
-            }
-        });
+        setOnClickListener(new ActionBar$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ActionBar(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         Runnable runnable;
         if (!isSearchFieldVisible() && (runnable = this.titleActionRunnable) != null) {
             runnable.run();
@@ -157,18 +152,13 @@ public class ActionBar extends FrameLayout {
             }
             this.backButtonImageView.setPadding(AndroidUtilities.dp(1.0f), 0, 0, 0);
             addView(this.backButtonImageView, LayoutHelper.createFrame(54, 54, 51));
-            this.backButtonImageView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    ActionBar.this.lambda$createBackButtonImage$1$ActionBar(view);
-                }
-            });
+            this.backButtonImageView.setOnClickListener(new ActionBar$$ExternalSyntheticLambda0(this));
             this.backButtonImageView.setContentDescription(LocaleController.getString("AccDescrGoBack", NUM));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createBackButtonImage$1 */
-    public /* synthetic */ void lambda$createBackButtonImage$1$ActionBar(View view) {
+    public /* synthetic */ void lambda$createBackButtonImage$1(View view) {
         if (this.actionModeVisible || !this.isSearchFieldVisible) {
             ActionBarMenuOnItemClick actionBarMenuOnItemClick2 = this.actionBarMenuOnItemClick;
             if (actionBarMenuOnItemClick2 != null) {
@@ -1918,7 +1908,7 @@ public class ActionBar extends FrameLayout {
             TransitionSet transitionSet = new TransitionSet();
             transitionSet.setOrdering(0);
             transitionSet.addTransition(new Fade());
-            transitionSet.addTransition(new ChangeBounds() {
+            transitionSet.addTransition(new ChangeBounds(this) {
                 public void captureStartValues(TransitionValues transitionValues) {
                     super.captureStartValues(transitionValues);
                     View view = transitionValues.view;
@@ -1949,7 +1939,7 @@ public class ActionBar extends FrameLayout {
                     }
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(transitionValues.view, View.SCALE_X, new float[]{1.0f})});
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(transitionValues.view, View.SCALE_Y, new float[]{1.0f})});
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                    animatorSet.addListener(new AnimatorListenerAdapter(this) {
                         public void onAnimationStart(Animator animator) {
                             super.onAnimationStart(animator);
                             transitionValues.view.setLayerType(2, (Paint) null);

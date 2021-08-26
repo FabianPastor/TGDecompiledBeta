@@ -37,7 +37,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.SharedAudioCell;
 import org.telegram.ui.Components.ChatAttachAlert;
-import org.telegram.ui.Components.ChatAttachAlertAudioLayout;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -79,7 +78,8 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
         void didSelectAudio(ArrayList<MessageObject> arrayList, CharSequence charSequence, boolean z, int i);
     }
 
-    static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -135,7 +135,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
         this.emptyView.setGravity(17);
         this.emptyView.setVisibility(8);
         addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
-        this.emptyView.setOnTouchListener($$Lambda$ChatAttachAlertAudioLayout$UXushIeS54bEwzKZj1g46mjKy0.INSTANCE);
+        this.emptyView.setOnTouchListener(ChatAttachAlertAudioLayout$$ExternalSyntheticLambda0.INSTANCE);
         ImageView imageView = new ImageView(context2);
         this.emptyImageView = imageView;
         imageView.setImageResource(NUM);
@@ -191,16 +191,8 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
         this.listAdapter = listAdapter2;
         recyclerListView2.setAdapter(listAdapter2);
         this.listView.setGlowColor(Theme.getColor("dialogScrollGlow"));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ChatAttachAlertAudioLayout.this.lambda$new$1$ChatAttachAlertAudioLayout(view, i);
-            }
-        });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return ChatAttachAlertAudioLayout.this.lambda$new$2$ChatAttachAlertAudioLayout(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatAttachAlertAudioLayout$$ExternalSyntheticLambda3(this));
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ChatAttachAlertAudioLayout$$ExternalSyntheticLambda4(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 ChatAttachAlertAudioLayout chatAttachAlertAudioLayout = ChatAttachAlertAudioLayout.this;
@@ -222,14 +214,12 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$ChatAttachAlertAudioLayout(View view, int i) {
+    public /* synthetic */ void lambda$new$1(View view, int i) {
         onItemClick(view);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ boolean lambda$new$2$ChatAttachAlertAudioLayout(View view, int i) {
+    public /* synthetic */ boolean lambda$new$2(View view, int i) {
         onItemClick(view);
         return true;
     }
@@ -515,20 +505,15 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
 
     private void loadAudio() {
         this.loadingAudio = true;
-        Utilities.globalQueue.postRunnable(new Runnable() {
-            public final void run() {
-                ChatAttachAlertAudioLayout.this.lambda$loadAudio$4$ChatAttachAlertAudioLayout();
-            }
-        });
+        Utilities.globalQueue.postRunnable(new ChatAttachAlertAudioLayout$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Can't wrap try/catch for region: R(4:16|(2:23|24)|25|26) */
     /* JADX WARNING: Missing exception handler attribute for start block: B:25:0x0165 */
     /* JADX WARNING: Removed duplicated region for block: B:23:0x0162 A[SYNTHETIC, Splitter:B:23:0x0162] */
-    /* renamed from: lambda$loadAudio$4 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$loadAudio$4$ChatAttachAlertAudioLayout() {
+    public /* synthetic */ void lambda$loadAudio$4() {
         /*
             r18 = this;
             r1 = r18
@@ -714,17 +699,16 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
         L_0x016a:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x016d:
-            org.telegram.ui.Components.-$$Lambda$ChatAttachAlertAudioLayout$2tkwzVv4Lf8Cn1d7_KL7Mcx8xWM r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertAudioLayout$2tkwzVv4Lf8Cn1d7_KL7Mcx8xWM
-            r0.<init>(r12)
+            org.telegram.ui.Components.ChatAttachAlertAudioLayout$$ExternalSyntheticLambda2 r0 = new org.telegram.ui.Components.ChatAttachAlertAudioLayout$$ExternalSyntheticLambda2
+            r0.<init>(r1, r12)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertAudioLayout.lambda$loadAudio$4$ChatAttachAlertAudioLayout():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertAudioLayout.lambda$loadAudio$4():void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadAudio$3 */
-    public /* synthetic */ void lambda$loadAudio$3$ChatAttachAlertAudioLayout(ArrayList arrayList) {
+    public /* synthetic */ void lambda$loadAudio$3(ArrayList arrayList) {
         this.loadingAudio = false;
         this.audioEntries = arrayList;
         this.listAdapter.notifyDataSetChanged();
@@ -805,7 +789,6 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
     public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         private int lastSearchId;
         private Context mContext;
-        private int reqId = 0;
         /* access modifiers changed from: private */
         public ArrayList<MediaController.AudioEntry> searchResult = new ArrayList<>();
         private Runnable searchRunnable;
@@ -832,46 +815,18 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
             }
             int i = this.lastSearchId + 1;
             this.lastSearchId = i;
-            $$Lambda$ChatAttachAlertAudioLayout$SearchAdapter$JRqw_pNZgQzvfhH4m58tvIOYDc r1 = new Runnable(str, i) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ChatAttachAlertAudioLayout.SearchAdapter.this.lambda$search$1$ChatAttachAlertAudioLayout$SearchAdapter(this.f$1, this.f$2);
-                }
-            };
-            this.searchRunnable = r1;
-            AndroidUtilities.runOnUIThread(r1, 300);
+            ChatAttachAlertAudioLayout$SearchAdapter$$ExternalSyntheticLambda1 chatAttachAlertAudioLayout$SearchAdapter$$ExternalSyntheticLambda1 = new ChatAttachAlertAudioLayout$SearchAdapter$$ExternalSyntheticLambda1(this, str, i);
+            this.searchRunnable = chatAttachAlertAudioLayout$SearchAdapter$$ExternalSyntheticLambda1;
+            AndroidUtilities.runOnUIThread(chatAttachAlertAudioLayout$SearchAdapter$$ExternalSyntheticLambda1, 300);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$search$1 */
-        public /* synthetic */ void lambda$search$1$ChatAttachAlertAudioLayout$SearchAdapter(String str, int i) {
-            Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ChatAttachAlertAudioLayout.this.audioEntries), i) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ ArrayList f$2;
-                public final /* synthetic */ int f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    ChatAttachAlertAudioLayout.SearchAdapter.this.lambda$search$0$ChatAttachAlertAudioLayout$SearchAdapter(this.f$1, this.f$2, this.f$3);
-                }
-            });
+        public /* synthetic */ void lambda$search$1(String str, int i) {
+            Utilities.searchQueue.postRunnable(new ChatAttachAlertAudioLayout$SearchAdapter$$ExternalSyntheticLambda2(this, str, new ArrayList(ChatAttachAlertAudioLayout.this.audioEntries), i));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$search$0 */
-        public /* synthetic */ void lambda$search$0$ChatAttachAlertAudioLayout$SearchAdapter(String str, ArrayList arrayList, int i) {
+        public /* synthetic */ void lambda$search$0(String str, ArrayList arrayList, int i) {
             String str2;
             String lowerCase = str.trim().toLowerCase();
             if (lowerCase.length() == 0) {
@@ -913,26 +868,11 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
         }
 
         private void updateSearchResults(ArrayList<MediaController.AudioEntry> arrayList, String str, int i) {
-            AndroidUtilities.runOnUIThread(new Runnable(i, str, arrayList) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ String f$2;
-                public final /* synthetic */ ArrayList f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    ChatAttachAlertAudioLayout.SearchAdapter.this.lambda$updateSearchResults$2$ChatAttachAlertAudioLayout$SearchAdapter(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChatAttachAlertAudioLayout$SearchAdapter$$ExternalSyntheticLambda0(this, i, str, arrayList));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$2 */
-        public /* synthetic */ void lambda$updateSearchResults$2$ChatAttachAlertAudioLayout$SearchAdapter(int i, String str, ArrayList arrayList) {
+        public /* synthetic */ void lambda$updateSearchResults$2(int i, String str, ArrayList arrayList) {
             if (i == this.lastSearchId) {
                 if (!(i == -1 || ChatAttachAlertAudioLayout.this.listView.getAdapter() == ChatAttachAlertAudioLayout.this.searchAdapter)) {
                     ChatAttachAlertAudioLayout.this.listView.setAdapter(ChatAttachAlertAudioLayout.this.searchAdapter);

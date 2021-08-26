@@ -387,6 +387,11 @@ public final class R {
         public static final int doc_big = NUM;
         public static final int edit_cancel = NUM;
         public static final int editor_rotate = NUM;
+        public static final int emoji_tabs_faves = NUM;
+        public static final int emoji_tabs_new1 = NUM;
+        public static final int emoji_tabs_new2 = NUM;
+        public static final int emoji_tabs_new3 = NUM;
+        public static final int emoji_tabs_recent = NUM;
         public static final int fab_highlight_dark = NUM;
         public static final int fast_reply = NUM;
         public static final int field_carret_empty = NUM;
@@ -1677,6 +1682,9 @@ public final class R {
         public static final int qr_code_logo = NUM;
         public static final int qr_login = NUM;
         public static final int qr_logo = NUM;
+        public static final int record_audio = NUM;
+        public static final int record_video_l = NUM;
+        public static final int record_video_p = NUM;
         public static final int report_police = NUM;
         public static final int saved_messages = NUM;
         public static final int shared_link_enter = NUM;
@@ -2335,6 +2343,8 @@ public final class R {
         public static final int AwaitingEncryption = NUM;
         public static final int AwayTo = NUM;
         public static final int Back = NUM;
+        public static final int BackgroundAnimate = NUM;
+        public static final int BackgroundAnimateInfo = NUM;
         public static final int BackgroundBlurred = NUM;
         public static final int BackgroundBrightness = NUM;
         public static final int BackgroundChoosePattern = NUM;
@@ -2474,8 +2484,8 @@ public final class R {
         public static final int CancelAccountResetInfo2 = NUM;
         public static final int CancelEmailQuestion = NUM;
         public static final int CancelEmailQuestionTitle = NUM;
-        public static final int CancelForward = NUM;
-        public static final int CancelForwardMessage = NUM;
+        public static final int CancelForwardChat = NUM;
+        public static final int CancelForwardPrivate = NUM;
         public static final int CancelForwarding = NUM;
         public static final int CancelLinkExpired = NUM;
         public static final int CancelLinkSuccess = NUM;
@@ -2735,6 +2745,7 @@ public final class R {
         public static final int ChooseTheme = NUM;
         public static final int ChooseYourLanguage = NUM;
         public static final int ChooseYourLanguageOther = NUM;
+        public static final int ChoosingSticker = NUM;
         public static final int ChromeCustomTabs = NUM;
         public static final int ChromeCustomTabsInfo = NUM;
         public static final int ClearButton = NUM;
@@ -3302,9 +3313,11 @@ public final class R {
         public static final int Fade = NUM;
         public static final int FakeMessage = NUM;
         public static final int FavoriteStickers = NUM;
+        public static final int FavoriteStickersShort = NUM;
         public static final int FeaturedGifs = NUM;
         public static final int FeaturedStickers = NUM;
         public static final int FeaturedStickersInfo = NUM;
+        public static final int FeaturedStickersShort = NUM;
         public static final int February = NUM;
         public static final int FileSavedHint = NUM;
         public static final int FileUploadLimit = NUM;
@@ -3422,6 +3435,7 @@ public final class R {
         public static final int FootsShort = NUM;
         public static final int ForgotPassword = NUM;
         public static final int Forward = NUM;
+        public static final int ForwardAnotherChat = NUM;
         public static final int ForwardTo = NUM;
         public static final int ForwardedAudio_few = NUM;
         public static final int ForwardedAudio_many = NUM;
@@ -3597,6 +3611,8 @@ public final class R {
         public static final int HideNewChatsAlertTitle = NUM;
         public static final int HideOnTop = NUM;
         public static final int HidePinnedMessages = NUM;
+        public static final int HideSenderName = NUM;
+        public static final int HideSendersName = NUM;
         public static final int Highlights = NUM;
         public static final int HintRead = NUM;
         public static final int HintSent = NUM;
@@ -3737,6 +3753,7 @@ public final class R {
         public static final int Invited = NUM;
         public static final int InvoiceCantForwardSecretChat = NUM;
         public static final int InvoiceCantSendSecretChat = NUM;
+        public static final int IsChoosingSticker = NUM;
         public static final int IsRecordingAudio = NUM;
         public static final int IsRecordingRound = NUM;
         public static final int IsRecordingVideo = NUM;
@@ -4015,6 +4032,12 @@ public final class R {
         public static final int MessageScheduledVote = NUM;
         public static final int MessageScheduledVoteResults = NUM;
         public static final int MessageUnpinnedHint = NUM;
+        public static final int MessagesBold_few = NUM;
+        public static final int MessagesBold_many = NUM;
+        public static final int MessagesBold_one = NUM;
+        public static final int MessagesBold_other = NUM;
+        public static final int MessagesBold_two = NUM;
+        public static final int MessagesBold_zero = NUM;
         public static final int MessagesChartTitle = NUM;
         public static final int MessagesDataUsage = NUM;
         public static final int MessagesDeletedHint_few = NUM;
@@ -4991,6 +5014,7 @@ public final class R {
         public static final int RecentFilesAZ = NUM;
         public static final int RecentPosts = NUM;
         public static final int RecentStickers = NUM;
+        public static final int RecentStickersShort = NUM;
         public static final int RecentlyViewed = NUM;
         public static final int RecentlyViewedHide = NUM;
         public static final int Recipient_few = NUM;
@@ -5007,6 +5031,8 @@ public final class R {
         public static final int Red = NUM;
         public static final int RegisterText2 = NUM;
         public static final int Regular = NUM;
+        public static final int ReleaseToGoNextChannel = NUM;
+        public static final int ReleaseToGoNextFolder = NUM;
         public static final int RemindDayAt = NUM;
         public static final int RemindDayYearAt = NUM;
         public static final int RemindTodayAt = NUM;
@@ -5232,7 +5258,6 @@ public final class R {
         public static final int SelectFile = NUM;
         public static final int SelectFromGallery = NUM;
         public static final int SelectImage = NUM;
-        public static final int SelectOtherChat = NUM;
         public static final int SelectingContact = NUM;
         public static final int SelectingLocation = NUM;
         public static final int Send = NUM;
@@ -5388,6 +5413,8 @@ public final class R {
         public static final int ShowInChat = NUM;
         public static final int ShowNotificationsFor = NUM;
         public static final int ShowNotificationsForInfo = NUM;
+        public static final int ShowSenderName = NUM;
+        public static final int ShowSendersName = NUM;
         public static final int ShowStickers = NUM;
         public static final int ShowVotes_few = NUM;
         public static final int ShowVotes_many = NUM;
@@ -5435,6 +5462,8 @@ public final class R {
         public static final int SpeedSlow = NUM;
         public static final int SpeedVeryFast = NUM;
         public static final int SpeedVerySlow = NUM;
+        public static final int SponsoredMessage = NUM;
+        public static final int SponsoredMessageInfo = NUM;
         public static final int Start = NUM;
         public static final int StartDayAt = NUM;
         public static final int StartDayYearAt = NUM;
@@ -5531,6 +5560,9 @@ public final class R {
         public static final int SwipeSettingsMute = NUM;
         public static final int SwipeSettingsPin = NUM;
         public static final int SwipeSettingsRead = NUM;
+        public static final int SwipeToGoNextChannel = NUM;
+        public static final int SwipeToGoNextChannelEnd = NUM;
+        public static final int SwipeToGoNextFolder = NUM;
         public static final int SwipeUnmute = NUM;
         public static final int SwipeUnpin = NUM;
         public static final int SyncContacts = NUM;
@@ -6033,6 +6065,7 @@ public final class R {
         public static final int VoipGroupStartNow = NUM;
         public static final int VoipGroupStartRecordingText = NUM;
         public static final int VoipGroupStartRecordingTitle = NUM;
+        public static final int VoipGroupStartRecordingVideoText = NUM;
         public static final int VoipGroupStartVoiceChat = NUM;
         public static final int VoipGroupStopRecordCall = NUM;
         public static final int VoipGroupStopRecordingText = NUM;
@@ -6047,6 +6080,8 @@ public final class R {
         public static final int VoipGroupUserCantNowSpeakForYou = NUM;
         public static final int VoipGroupUserChanged = NUM;
         public static final int VoipGroupUserRemove = NUM;
+        public static final int VoipGroupVideoRecordSaved = NUM;
+        public static final int VoipGroupVideoRecordStarted = NUM;
         public static final int VoipGroupViewVoiceChat = NUM;
         public static final int VoipGroupVoiceChat = NUM;
         public static final int VoipGroupVolume = NUM;
@@ -6095,6 +6130,12 @@ public final class R {
         public static final int VoipQuickRepliesExplain = NUM;
         public static final int VoipRateCallAlert = NUM;
         public static final int VoipReconnecting = NUM;
+        public static final int VoipRecordAudio = NUM;
+        public static final int VoipRecordLandscape = NUM;
+        public static final int VoipRecordPortrait = NUM;
+        public static final int VoipRecordStart = NUM;
+        public static final int VoipRecordVoiceChat = NUM;
+        public static final int VoipRecordVoiceChatInfo = NUM;
         public static final int VoipRequesting = NUM;
         public static final int VoipRinging = NUM;
         public static final int VoipRingtoneInfo = NUM;
@@ -6176,6 +6217,8 @@ public final class R {
         public static final int YouCreatedBroadcastList = NUM;
         public static final int YouHaveNewMessage = NUM;
         public static final int YouLeft = NUM;
+        public static final int YouSenderNameHidden = NUM;
+        public static final int YouSendersNameHidden = NUM;
         public static final int YouWereKicked = NUM;
         public static final int YourBioChanged = NUM;
         public static final int YourCode = NUM;

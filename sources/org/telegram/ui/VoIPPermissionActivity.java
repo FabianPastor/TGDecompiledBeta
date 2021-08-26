@@ -88,11 +88,7 @@ public class VoIPPermissionActivity extends Activity {
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().declineIncomingCall();
                 }
-                VoIPHelper.permissionDenied(this, new Runnable() {
-                    public final void run() {
-                        VoIPPermissionActivity.this.finish();
-                    }
-                }, i);
+                VoIPHelper.permissionDenied(this, new VoIPPermissionActivity$$ExternalSyntheticLambda0(this), i);
             } else {
                 finish();
             }

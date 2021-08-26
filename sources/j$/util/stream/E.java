@@ -1,14 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.J;
+import j$.util.function.d;
 
-public final /* synthetic */ class E implements J {
+public final /* synthetic */ class E implements d {
     public static final /* synthetic */ E a = new E();
 
     private /* synthetic */ E() {
     }
 
-    public final Object get() {
-        return new long[2];
+    public final double applyAsDouble(double d, double d2) {
+        return Math.min(d, d2);
     }
 }

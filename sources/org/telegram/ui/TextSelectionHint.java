@@ -281,38 +281,22 @@ class TextSelectionHint extends View {
         this.endOffsetValue = 1.0f;
         invalidate();
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                TextSelectionHint.this.lambda$show$0$TextSelectionHint(valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda0(this));
         ofFloat.setDuration(210);
         ofFloat.setInterpolator(new DecelerateInterpolator());
         ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                TextSelectionHint.this.lambda$show$1$TextSelectionHint(valueAnimator);
-            }
-        });
+        ofFloat2.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda4(this));
         ofFloat2.setStartDelay(600);
         ofFloat2.setDuration(250);
         ValueAnimator ofFloat3 = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
         ofFloat3.setStartDelay(500);
-        ofFloat3.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                TextSelectionHint.this.lambda$show$2$TextSelectionHint(valueAnimator);
-            }
-        });
+        ofFloat3.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda2(this));
         CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.EASE_OUT;
         ofFloat3.setInterpolator(cubicBezierInterpolator);
         ofFloat3.setDuration(500);
         ValueAnimator ofFloat4 = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
         ofFloat4.setStartDelay(400);
-        ofFloat4.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                TextSelectionHint.this.lambda$show$3$TextSelectionHint(valueAnimator);
-            }
-        });
+        ofFloat4.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda3(this));
         ofFloat4.setInterpolator(cubicBezierInterpolator);
         ofFloat4.setDuration(900);
         AnimatorSet animatorSet = new AnimatorSet();
@@ -323,22 +307,19 @@ class TextSelectionHint extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$show$0 */
-    public /* synthetic */ void lambda$show$0$TextSelectionHint(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$show$0(ValueAnimator valueAnimator) {
         this.prepareProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$show$1 */
-    public /* synthetic */ void lambda$show$1$TextSelectionHint(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$show$1(ValueAnimator valueAnimator) {
         this.enterValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$show$2 */
-    public /* synthetic */ void lambda$show$2$TextSelectionHint(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$show$2(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.startOffsetValue = floatValue;
         int i = this.animateToStart;
@@ -347,8 +328,7 @@ class TextSelectionHint extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$show$3 */
-    public /* synthetic */ void lambda$show$3$TextSelectionHint(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$show$3(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.endOffsetValue = floatValue;
         int i = this.animateToEnd;
@@ -370,11 +350,7 @@ class TextSelectionHint extends View {
         }
         this.showing = false;
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.prepareProgress, 0.0f});
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                TextSelectionHint.this.lambda$hideInternal$4$TextSelectionHint(valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda1(this));
         ofFloat.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 TextSelectionHint.this.setVisibility(4);
@@ -385,8 +361,7 @@ class TextSelectionHint extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$hideInternal$4 */
-    public /* synthetic */ void lambda$hideInternal$4$TextSelectionHint(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$hideInternal$4(ValueAnimator valueAnimator) {
         this.prepareProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }

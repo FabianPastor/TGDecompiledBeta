@@ -1,63 +1,68 @@
 package j$.util.stream;
 
 import j$.util.Optional;
+import j$.util.function.A;
+import j$.util.function.B;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
+import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
 import j$.util.function.Function;
-import j$.util.function.J;
-import j$.util.function.Predicate;
-import j$.util.function.ToDoubleFunction;
-import j$.util.function.ToIntFunction;
-import j$.util.function.ToLongFunction;
-import j$.util.function.n;
+import j$.util.function.l;
 import j$.util.function.x;
+import j$.util.function.y;
+import j$.util.function.z;
+import j$.wrappers.J0;
 import java.util.Comparator;
 
-public interface Stream<T> extends CLASSNAMEl1<T, Stream<T>> {
-    CLASSNAMEs1 B(Function function);
+public interface Stream<T> extends CLASSNAMEg {
+    Object B(Object obj, BiFunction biFunction, CLASSNAMEb bVar);
 
-    Stream P(Predicate predicate);
+    U E(Function function);
 
-    Stream S(Consumer consumer);
+    Stream T(x xVar);
 
-    Object T(CLASSNAMEm1 m1Var);
+    Stream V(Consumer consumer);
 
-    boolean U(Predicate predicate);
+    boolean W(x xVar);
 
-    H1 V(Function function);
+    CLASSNAMEf1 X(Function function);
 
-    boolean a(Predicate predicate);
+    boolean a(x xVar);
 
-    boolean c0(Predicate predicate);
+    Object b0(J0 j0);
+
+    M0 c(Function function);
 
     /* synthetic */ void close();
 
     long count();
 
+    boolean d0(x xVar);
+
     Stream distinct();
 
-    C1 e(Function function);
-
-    H1 e0(ToLongFunction toLongFunction);
+    void e(Consumer consumer);
 
     Optional findAny();
 
     Optional findFirst();
 
-    void forEach(Consumer consumer);
+    void forEach(Consumer<? super T> consumer);
 
-    void g(Consumer consumer);
+    CLASSNAMEf1 g0(B b);
 
-    CLASSNAMEs1 h0(ToDoubleFunction toDoubleFunction);
+    Object i(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2);
 
-    Object k(J j, BiConsumer biConsumer, BiConsumer biConsumer2);
+    U j0(z zVar);
 
-    Object l0(Object obj, n nVar);
+    Object[] l(l lVar);
 
     Stream limit(long j);
 
-    C1 m(ToIntFunction toIntFunction);
+    M0 m(A a);
+
+    Object m0(Object obj, CLASSNAMEb bVar);
 
     Optional max(Comparator comparator);
 
@@ -65,9 +70,7 @@ public interface Stream<T> extends CLASSNAMEl1<T, Stream<T>> {
 
     Stream n(Function function);
 
-    Stream p(Function function);
-
-    Optional s(n nVar);
+    Stream o(Function function);
 
     Stream skip(long j);
 
@@ -75,9 +78,7 @@ public interface Stream<T> extends CLASSNAMEl1<T, Stream<T>> {
 
     Stream sorted(Comparator comparator);
 
+    Optional t(CLASSNAMEb bVar);
+
     Object[] toArray();
-
-    Object[] toArray(x xVar);
-
-    Object z(Object obj, BiFunction biFunction, n nVar);
 }

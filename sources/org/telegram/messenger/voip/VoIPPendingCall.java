@@ -28,32 +28,22 @@ public final class VoIPPendingCall {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$VoIPPendingCall(int i, int i2, Object[] objArr) {
+    public /* synthetic */ void lambda$new$0(int i, int i2, Object[] objArr) {
         if (i == NotificationCenter.didUpdateConnectionState) {
             onConnectionStateUpdated(false);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$VoIPPendingCall() {
+    public /* synthetic */ void lambda$new$1() {
         onConnectionStateUpdated(true);
     }
 
     private VoIPPendingCall(Activity activity2, int i, boolean z, long j, AccountInstance accountInstance2) {
-        $$Lambda$VoIPPendingCall$d9Fcvb5T4_aQs_zzulCXCagMFw r0 = new NotificationCenter.NotificationCenterDelegate() {
-            public final void didReceivedNotification(int i, int i2, Object[] objArr) {
-                VoIPPendingCall.this.lambda$new$0$VoIPPendingCall(i, i2, objArr);
-            }
-        };
-        this.observer = r0;
-        $$Lambda$VoIPPendingCall$8pKAoVuJaHx14zmyaJ4c3Y1teI r1 = new Runnable() {
-            public final void run() {
-                VoIPPendingCall.this.lambda$new$1$VoIPPendingCall();
-            }
-        };
-        this.releaseRunnable = r1;
+        VoIPPendingCall$$ExternalSyntheticLambda1 voIPPendingCall$$ExternalSyntheticLambda1 = new VoIPPendingCall$$ExternalSyntheticLambda1(this);
+        this.observer = voIPPendingCall$$ExternalSyntheticLambda1;
+        VoIPPendingCall$$ExternalSyntheticLambda0 voIPPendingCall$$ExternalSyntheticLambda0 = new VoIPPendingCall$$ExternalSyntheticLambda0(this);
+        this.releaseRunnable = voIPPendingCall$$ExternalSyntheticLambda0;
         this.activity = activity2;
         this.userId = i;
         this.video = z;
@@ -61,10 +51,10 @@ public final class VoIPPendingCall {
         if (!onConnectionStateUpdated(false)) {
             NotificationCenter instance = NotificationCenter.getInstance(UserConfig.selectedAccount);
             this.notificationCenter = instance;
-            instance.addObserver(r0, NotificationCenter.didUpdateConnectionState);
+            instance.addObserver(voIPPendingCall$$ExternalSyntheticLambda1, NotificationCenter.didUpdateConnectionState);
             Handler handler2 = new Handler(Looper.myLooper());
             this.handler = handler2;
-            handler2.postDelayed(r1, j);
+            handler2.postDelayed(voIPPendingCall$$ExternalSyntheticLambda0, j);
         }
     }
 

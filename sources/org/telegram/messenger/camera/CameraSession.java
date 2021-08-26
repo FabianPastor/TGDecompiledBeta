@@ -14,7 +14,7 @@ import org.telegram.messenger.FileLog;
 
 public class CameraSession {
     public static final int ORIENTATION_HYSTERESIS = 5;
-    private Camera.AutoFocusCallback autoFocusCallback = $$Lambda$CameraSession$aUpvoh7skCacjuNQtDivSRvySJM.INSTANCE;
+    private Camera.AutoFocusCallback autoFocusCallback = CameraSession$$ExternalSyntheticLambda0.INSTANCE;
     protected CameraInfo cameraInfo;
     private String currentFlashMode;
     private int currentOrientation;
@@ -46,7 +46,8 @@ public class CameraSession {
     private boolean sameTakePictureOrientation;
     private boolean useTorch;
 
-    static /* synthetic */ void lambda$new$0(boolean z, Camera camera) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$new$0(boolean z, Camera camera) {
     }
 
     public CameraSession(CameraInfo cameraInfo2, Size size, Size size2, int i, boolean z) {

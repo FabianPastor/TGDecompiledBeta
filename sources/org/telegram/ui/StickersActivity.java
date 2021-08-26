@@ -36,7 +36,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
@@ -69,12 +68,10 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.TrendingStickersAlert;
 import org.telegram.ui.Components.TrendingStickersLayout;
 import org.telegram.ui.Components.URLSpanNoUnderline;
-import org.telegram.ui.StickersActivity;
 
 public class StickersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
     public int activeReorderingRequests;
-    private ActionBarMenuItem archiveMenuItem;
     /* access modifiers changed from: private */
     public int archivedInfoRow;
     /* access modifiers changed from: private */
@@ -119,7 +116,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     public int suggestRow;
     private TrendingStickersAlert trendingStickersAlert;
 
-    static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -225,8 +223,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         this.selectedCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
         createActionMode.addView(this.selectedCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
-        this.selectedCountTextView.setOnTouchListener($$Lambda$StickersActivity$Xk67QgVSNe1W5ZwlRfSZIQcgygo.INSTANCE);
-        this.archiveMenuItem = createActionMode.addItemWithWidth(0, NUM, AndroidUtilities.dp(54.0f));
+        this.selectedCountTextView.setOnTouchListener(StickersActivity$$ExternalSyntheticLambda1.INSTANCE);
+        createActionMode.addItemWithWidth(0, NUM, AndroidUtilities.dp(54.0f));
         this.deleteMenuItem = createActionMode.addItemWithWidth(1, NUM, AndroidUtilities.dp(54.0f));
         this.listAdapter = new ListAdapter(context, MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType));
         FrameLayout frameLayout = new FrameLayout(context);
@@ -258,28 +256,13 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         defaultItemAnimator.setSupportsChangeAnimations(false);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(context) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onItemClick(View view, int i) {
-                StickersActivity.this.lambda$createView$2$StickersActivity(this.f$1, view, i);
-            }
-        });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return StickersActivity.this.lambda$createView$3$StickersActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new StickersActivity$$ExternalSyntheticLambda4(this, context));
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new StickersActivity$$ExternalSyntheticLambda5(this));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$StickersActivity(Context context, View view, int i) {
+    public /* synthetic */ void lambda$createView$2(Context context, View view, int i) {
         if (i < this.stickersStartRow || i >= this.stickersEndRow || getParentActivity() == null) {
             if (i == this.featuredRow) {
                 TrendingStickersAlert trendingStickersAlert2 = new TrendingStickersAlert(context, this, new TrendingStickersLayout(context, new TrendingStickersLayout.Delegate() {
@@ -313,17 +296,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
                         radioColorCell.setTextAndValue(strArr[i2], SharedConfig.suggestStickers == i2);
                         linearLayout.addView(radioColorCell);
-                        radioColorCell.setOnClickListener(new View.OnClickListener(builder) {
-                            public final /* synthetic */ AlertDialog.Builder f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void onClick(View view) {
-                                StickersActivity.this.lambda$createView$1$StickersActivity(this.f$1, view);
-                            }
-                        });
+                        radioColorCell.setOnClickListener(new StickersActivity$$ExternalSyntheticLambda0(this, builder));
                         i2++;
                     }
                     showDialog(builder.create());
@@ -344,16 +317,14 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$StickersActivity(AlertDialog.Builder builder, View view) {
+    public /* synthetic */ void lambda$createView$1(AlertDialog.Builder builder, View view) {
         SharedConfig.setSuggestStickers(((Integer) view.getTag()).intValue());
         this.listAdapter.notifyItemChanged(this.suggestRow);
         builder.getDismissRunnable().run();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ boolean lambda$createView$3$StickersActivity(View view, int i) {
+    public /* synthetic */ boolean lambda$createView$3(View view, int i) {
         if (this.listAdapter.hasSelected() || i < this.stickersStartRow || i >= this.stickersEndRow) {
             return false;
         }
@@ -399,29 +370,19 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             for (int i = 0; i < this.listAdapter.stickerSets.size(); i++) {
                 tLRPC$TL_messages_reorderStickerSets.order.add(Long.valueOf(((TLRPC$TL_messages_stickerSet) this.listAdapter.stickerSets.get(i)).set.id));
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_reorderStickerSets, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    StickersActivity.this.lambda$sendReorder$5$StickersActivity(tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_reorderStickerSets, new StickersActivity$$ExternalSyntheticLambda3(this));
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(this.currentType));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$sendReorder$4 */
-    public /* synthetic */ void lambda$sendReorder$4$StickersActivity() {
+    public /* synthetic */ void lambda$sendReorder$4() {
         this.activeReorderingRequests--;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$sendReorder$5 */
-    public /* synthetic */ void lambda$sendReorder$5$StickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                StickersActivity.this.lambda$sendReorder$4$StickersActivity();
-            }
-        });
+    public /* synthetic */ void lambda$sendReorder$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new StickersActivity$$ExternalSyntheticLambda2(this));
     }
 
     private void updateRows() {
@@ -640,19 +601,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         builder.setMessage(LocaleController.formatString("ArchiveStickersAlertMessage", NUM, Integer.valueOf(size2)));
                         str = LocaleController.getString("Archive", NUM);
                     }
-                    builder.setPositiveButton(str, new DialogInterface.OnClickListener(arrayList, i) {
-                        public final /* synthetic */ ArrayList f$1;
-                        public final /* synthetic */ int f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            StickersActivity.ListAdapter.this.lambda$processSelectionMenu$0$StickersActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
-                        }
-                    });
+                    builder.setPositiveButton(str, new StickersActivity$ListAdapter$$ExternalSyntheticLambda0(this, arrayList, i));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     AlertDialog create = builder.create();
                     StickersActivity.this.showDialog(create);
@@ -679,8 +628,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$processSelectionMenu$0 */
-        public /* synthetic */ void lambda$processSelectionMenu$0$StickersActivity$ListAdapter(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
+        public /* synthetic */ void lambda$processSelectionMenu$0(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
             StickersActivity.this.listAdapter.clearSelected();
             MediaDataController.getInstance(StickersActivity.this.currentAccount).toggleStickerSets(arrayList, StickersActivity.this.currentType, i == 1 ? 0 : 1, StickersActivity.this, true);
         }
@@ -825,8 +773,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$1 */
-        public /* synthetic */ boolean lambda$onCreateViewHolder$1$StickersActivity$ListAdapter(StickerSetCell stickerSetCell, View view, MotionEvent motionEvent) {
+        public /* synthetic */ boolean lambda$onCreateViewHolder$1(StickerSetCell stickerSetCell, View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() != 0) {
                 return false;
             }
@@ -835,8 +782,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$3 */
-        public /* synthetic */ void lambda$onCreateViewHolder$3$StickersActivity$ListAdapter(View view) {
+        public /* synthetic */ void lambda$onCreateViewHolder$3(View view) {
             CharSequence[] charSequenceArr;
             int[] iArr;
             int[] iArr2;
@@ -852,19 +798,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 iArr2 = new int[]{0, 3, 4, 2, 1};
                 charSequenceArr = new CharSequence[]{LocaleController.getString("StickersHide", NUM), LocaleController.getString("StickersCopy", NUM), LocaleController.getString("StickersReorder", NUM), LocaleController.getString("StickersShare", NUM), LocaleController.getString("StickersRemove", NUM)};
             }
-            builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener(iArr2, stickersSet) {
-                public final /* synthetic */ int[] f$1;
-                public final /* synthetic */ TLRPC$TL_messages_stickerSet f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    StickersActivity.ListAdapter.this.lambda$onCreateViewHolder$2$StickersActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
-                }
-            });
+            builder.setItems(charSequenceArr, iArr, new StickersActivity$ListAdapter$$ExternalSyntheticLambda1(this, iArr2, stickersSet));
             AlertDialog create = builder.create();
             StickersActivity.this.showDialog(create);
             if (iArr2[iArr2.length - 1] == 1) {
@@ -873,8 +807,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$2 */
-        public /* synthetic */ void lambda$onCreateViewHolder$2$StickersActivity$ListAdapter(int[] iArr, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$onCreateViewHolder$2(int[] iArr, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, DialogInterface dialogInterface, int i) {
             processSelectionOption(iArr[i], tLRPC$TL_messages_stickerSet);
         }
 
@@ -884,22 +817,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (i == 0) {
                 StickerSetCell stickerSetCell = new StickerSetCell(this.mContext, 1);
                 stickerSetCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                stickerSetCell.setOnReorderButtonTouchListener(new View.OnTouchListener(stickerSetCell) {
-                    public final /* synthetic */ StickerSetCell f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final boolean onTouch(View view, MotionEvent motionEvent) {
-                        return StickersActivity.ListAdapter.this.lambda$onCreateViewHolder$1$StickersActivity$ListAdapter(this.f$1, view, motionEvent);
-                    }
-                });
-                stickerSetCell.setOnOptionsClick(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        StickersActivity.ListAdapter.this.lambda$onCreateViewHolder$3$StickersActivity$ListAdapter(view);
-                    }
-                });
+                stickerSetCell.setOnReorderButtonTouchListener(new StickersActivity$ListAdapter$$ExternalSyntheticLambda3(this, stickerSetCell));
+                stickerSetCell.setOnOptionsClick(new StickersActivity$ListAdapter$$ExternalSyntheticLambda2(this));
                 view = stickerSetCell;
             } else if (i == 1) {
                 view = new TextInfoPrivacyCell(this.mContext);

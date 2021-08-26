@@ -50,7 +50,6 @@ import org.telegram.ui.Components.InviteMembersBottomSheet;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.EditWidgetActivity;
 
 public class EditWidgetActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -217,7 +216,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.Cells.ChatActionCell r9 = new org.telegram.ui.Cells.ChatActionCell
                 r9.<init>(r2)
                 java.lang.String r10 = "WidgetPreview"
-                r11 = 2131628345(0x7f0e1139, float:1.888398E38)
+                r11 = 2131628381(0x7f0e115d, float:1.8884053E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
                 r9.setCustomText(r10)
                 r11 = -2
@@ -232,7 +231,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout r9 = new android.widget.LinearLayout
                 r9.<init>(r2)
                 r9.setOrientation(r4)
-                r10 = 2131166166(0x7var_d6, float:1.794657E38)
+                r10 = 2131166171(0x7var_db, float:1.794658E38)
                 r9.setBackgroundResource(r10)
                 r14 = 10
                 r16 = 10
@@ -298,7 +297,7 @@ public class EditWidgetActivity extends BaseFragment {
                 r1.setImageResource(r3)
             L_0x010e:
                 r18.updateDialogs()
-                r1 = 2131165444(0x7var_, float:1.7945105E38)
+                r1 = 2131165449(0x7var_, float:1.7945115E38)
                 java.lang.String r3 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r1, (java.lang.String) r3)
                 r0.shadowDrawable = r1
@@ -352,7 +351,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.EditWidgetActivity r0 = r1.this$0
                 int r0 = r0.widgetType
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+                r3 = 2131627357(0x7f0e0d5d, float:1.8881976E38)
                 java.lang.String r4 = "SavedMessages"
                 r5 = 0
                 r6 = 0
@@ -439,14 +438,14 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x00c4:
                 boolean r9 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r9 == 0) goto L_0x00d4
-                r9 = 2131627218(0x7f0e0cd2, float:1.8881694E38)
+                r9 = 2131627238(0x7f0e0ce6, float:1.8881735E38)
                 java.lang.String r15 = "RepliesTitle"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r15, r9)
                 goto L_0x00ec
             L_0x00d4:
                 boolean r9 = org.telegram.messenger.UserObject.isDeleted(r0)
                 if (r9 == 0) goto L_0x00e4
-                r9 = 2131625781(0x7f0e0735, float:1.887878E38)
+                r9 = 2131625789(0x7f0e073d, float:1.8878796E38)
                 java.lang.String r15 = "HiddenName"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r15, r9)
                 goto L_0x00ec
@@ -663,7 +662,7 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x0296:
                 boolean r0 = r4.isOutOwner()
                 if (r0 == 0) goto L_0x02a7
-                r0 = 2131625691(0x7f0e06db, float:1.8878597E38)
+                r0 = 2131625699(0x7f0e06e3, float:1.8878613E38)
                 java.lang.String r3 = "FromYou"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             L_0x02a5:
@@ -1056,14 +1055,14 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166170(0x7var_da, float:1.7946578E38)
+                r2 = 2131166175(0x7var_df, float:1.7946588E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x05fd
             L_0x05e1:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166169(0x7var_d9, float:1.7946576E38)
+                r2 = 2131166174(0x7var_de, float:1.7946586E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x05fd
             L_0x05f0:
@@ -1076,7 +1075,7 @@ public class EditWidgetActivity extends BaseFragment {
                 int r13 = r13 + 1
                 r4 = r18
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+                r3 = 2131627357(0x7f0e0d5d, float:1.8881976E38)
                 r5 = 0
                 r6 = 0
                 r8 = 8
@@ -1223,22 +1222,22 @@ public class EditWidgetActivity extends BaseFragment {
                 boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r0)
                 if (r6 == 0) goto L_0x0744
                 r7 = r18
-                r6 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+                r6 = 2131627357(0x7f0e0d5d, float:1.8881976E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 goto L_0x076d
             L_0x0744:
                 r7 = r18
-                r6 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+                r6 = 2131627357(0x7f0e0d5d, float:1.8881976E38)
                 boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r8 == 0) goto L_0x0759
-                r8 = 2131627218(0x7f0e0cd2, float:1.8881694E38)
+                r8 = 2131627238(0x7f0e0ce6, float:1.8881735E38)
                 java.lang.String r9 = "RepliesTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
                 goto L_0x076d
             L_0x0759:
                 boolean r8 = org.telegram.messenger.UserObject.isDeleted(r0)
                 if (r8 == 0) goto L_0x0769
-                r8 = 2131625781(0x7f0e0735, float:1.887878E38)
+                r8 = 2131625789(0x7f0e073d, float:1.8878796E38)
                 java.lang.String r9 = "HiddenName"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
                 goto L_0x076d
@@ -1273,7 +1272,7 @@ public class EditWidgetActivity extends BaseFragment {
                 goto L_0x07ce
             L_0x079b:
                 r7 = r18
-                r6 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+                r6 = 2131627357(0x7f0e0d5d, float:1.8881976E38)
                 org.telegram.ui.EditWidgetActivity r8 = r1.this$0
                 org.telegram.messenger.MessagesController r8 = r8.getMessagesController()
                 int r0 = -r0
@@ -1692,17 +1691,7 @@ public class EditWidgetActivity extends BaseFragment {
         ItemTouchHelper itemTouchHelper2 = new ItemTouchHelper(new TouchHelperCallback());
         this.itemTouchHelper = itemTouchHelper2;
         itemTouchHelper2.attachToRecyclerView(this.listView);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(context) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onItemClick(View view, int i) {
-                EditWidgetActivity.this.lambda$createView$1$EditWidgetActivity(this.f$1, view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new EditWidgetActivity$$ExternalSyntheticLambda2(this, context));
         this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListenerExtended) new RecyclerListView.OnItemLongClickListenerExtended() {
             private Rect rect = new Rect();
 
@@ -1717,17 +1706,7 @@ public class EditWidgetActivity extends BaseFragment {
                     ((ImageView) view.getTag(NUM)).getHitRect(this.rect);
                     if (!this.rect.contains((int) f, (int) f2)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) EditWidgetActivity.this.getParentActivity());
-                        builder.setItems(new CharSequence[]{LocaleController.getString("Delete", NUM)}, new DialogInterface.OnClickListener(i) {
-                            public final /* synthetic */ int f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void onClick(DialogInterface dialogInterface, int i) {
-                                EditWidgetActivity.AnonymousClass2.this.lambda$onItemClick$0$EditWidgetActivity$2(this.f$1, dialogInterface, i);
-                            }
-                        });
+                        builder.setItems(new CharSequence[]{LocaleController.getString("Delete", NUM)}, new EditWidgetActivity$2$$ExternalSyntheticLambda0(this, i));
                         EditWidgetActivity.this.showDialog(builder.create());
                         return true;
                     }
@@ -1736,8 +1715,7 @@ public class EditWidgetActivity extends BaseFragment {
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$0 */
-            public /* synthetic */ void lambda$onItemClick$0$EditWidgetActivity$2(int i, DialogInterface dialogInterface, int i2) {
+            public /* synthetic */ void lambda$onItemClick$0(int i, DialogInterface dialogInterface, int i2) {
                 if (i2 == 0) {
                     EditWidgetActivity.this.selectedDialogs.remove(i - EditWidgetActivity.this.chatsStartRow);
                     EditWidgetActivity.this.updateRows();
@@ -1751,23 +1729,17 @@ public class EditWidgetActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$EditWidgetActivity(Context context, View view, int i) {
+    public /* synthetic */ void lambda$createView$1(Context context, View view, int i) {
         if (i == this.selectChatsRow) {
             InviteMembersBottomSheet inviteMembersBottomSheet = new InviteMembersBottomSheet(context, this.currentAccount, (SparseArray<TLObject>) null, 0, this);
-            inviteMembersBottomSheet.setDelegate(new InviteMembersBottomSheet.InviteMembersBottomSheetDelegate() {
-                public final void didSelectDialogs(ArrayList arrayList) {
-                    EditWidgetActivity.this.lambda$createView$0$EditWidgetActivity(arrayList);
-                }
-            }, this.selectedDialogs);
+            inviteMembersBottomSheet.setDelegate(new EditWidgetActivity$$ExternalSyntheticLambda1(this), this.selectedDialogs);
             inviteMembersBottomSheet.setSelectedContacts(this.selectedDialogs);
             showDialog(inviteMembersBottomSheet);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$EditWidgetActivity(ArrayList arrayList) {
+    public /* synthetic */ void lambda$createView$0(ArrayList arrayList) {
         this.selectedDialogs.clear();
         this.selectedDialogs.addAll(arrayList);
         updateRows();
@@ -1781,11 +1753,7 @@ public class EditWidgetActivity extends BaseFragment {
     public void finishActivity() {
         if (getParentActivity() != null) {
             getParentActivity().finish();
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    EditWidgetActivity.this.removeSelfFromStack();
-                }
-            }, 1000);
+            AndroidUtilities.runOnUIThread(new EditWidgetActivity$$ExternalSyntheticLambda0(this), 1000);
         }
     }
 
@@ -1822,17 +1790,7 @@ public class EditWidgetActivity extends BaseFragment {
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
                 groupCreateUserCell2.setTag(NUM, imageView);
                 groupCreateUserCell2.addView(imageView, LayoutHelper.createFrame(40, -1.0f, (LocaleController.isRTL ? 3 : 5) | 16, 10.0f, 0.0f, 10.0f, 0.0f));
-                imageView.setOnTouchListener(new View.OnTouchListener(groupCreateUserCell2) {
-                    public final /* synthetic */ GroupCreateUserCell f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final boolean onTouch(View view, MotionEvent motionEvent) {
-                        return EditWidgetActivity.ListAdapter.this.lambda$onCreateViewHolder$0$EditWidgetActivity$ListAdapter(this.f$1, view, motionEvent);
-                    }
-                });
+                imageView.setOnTouchListener(new EditWidgetActivity$ListAdapter$$ExternalSyntheticLambda0(this, groupCreateUserCell2));
                 imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_pinnedIcon"), PorterDuff.Mode.MULTIPLY));
                 groupCreateUserCell = groupCreateUserCell2;
             } else {
@@ -1842,8 +1800,7 @@ public class EditWidgetActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$0 */
-        public /* synthetic */ boolean lambda$onCreateViewHolder$0$EditWidgetActivity$ListAdapter(GroupCreateUserCell groupCreateUserCell, View view, MotionEvent motionEvent) {
+        public /* synthetic */ boolean lambda$onCreateViewHolder$0(GroupCreateUserCell groupCreateUserCell, View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() != 0) {
                 return false;
             }

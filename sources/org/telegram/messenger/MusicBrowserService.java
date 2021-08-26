@@ -119,21 +119,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             if (!this.loadingChats) {
                 this.loadingChats = true;
                 MessagesStorage instance = MessagesStorage.getInstance(this.currentAccount);
-                instance.getStorageQueue().postRunnable(new Runnable(instance, str, result) {
-                    public final /* synthetic */ MessagesStorage f$1;
-                    public final /* synthetic */ String f$2;
-                    public final /* synthetic */ MediaBrowserService.Result f$3;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                    }
-
-                    public final void run() {
-                        MusicBrowserService.this.lambda$onLoadChildren$1$MusicBrowserService(this.f$1, this.f$2, this.f$3);
-                    }
-                });
+                instance.getStorageQueue().postRunnable(new MusicBrowserService$$ExternalSyntheticLambda1(this, instance, str, result));
                 return;
             }
             return;
@@ -142,8 +128,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onLoadChildren$1 */
-    public /* synthetic */ void lambda$onLoadChildren$1$MusicBrowserService(MessagesStorage messagesStorage, String str, MediaBrowserService.Result result) {
+    public /* synthetic */ void lambda$onLoadChildren$1(MessagesStorage messagesStorage, String str, MediaBrowserService.Result result) {
         MessagesStorage messagesStorage2 = messagesStorage;
         try {
             ArrayList arrayList = new ArrayList();
@@ -213,24 +198,11 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        AndroidUtilities.runOnUIThread(new Runnable(str, result) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ MediaBrowserService.Result f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                MusicBrowserService.this.lambda$onLoadChildren$0$MusicBrowserService(this.f$1, this.f$2);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new MusicBrowserService$$ExternalSyntheticLambda0(this, str, result));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onLoadChildren$0 */
-    public /* synthetic */ void lambda$onLoadChildren$0$MusicBrowserService(String str, MediaBrowserService.Result result) {
+    public /* synthetic */ void lambda$onLoadChildren$0(String str, MediaBrowserService.Result result) {
         this.chatsLoaded = true;
         this.loadingChats = false;
         loadChildrenImpl(str, result);

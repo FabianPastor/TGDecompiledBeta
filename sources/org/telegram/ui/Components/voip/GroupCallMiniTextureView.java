@@ -578,17 +578,12 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         this.stopSharingTextView.setTextColor(-1);
         this.stopSharingTextView.setBackground(createSimpleSelectorRoundRectDrawable);
         this.stopSharingTextView.setGravity(17);
-        this.stopSharingTextView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                GroupCallMiniTextureView.this.lambda$new$0$GroupCallMiniTextureView(view);
-            }
-        });
+        this.stopSharingTextView.setOnClickListener(new GroupCallMiniTextureView$$ExternalSyntheticLambda3(this));
         addView(this.stopSharingTextView, LayoutHelper.createFrame(-2, 38, 51));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$GroupCallMiniTextureView(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().stopScreenCapture();
         }
@@ -1214,8 +1209,8 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r0.parentContainer
             boolean r4 = r1.inLayout
             if (r4 == 0) goto L_0x00cc
-            org.telegram.ui.Components.voip.-$$Lambda$GroupCallMiniTextureView$uIk9Hs0tacfdrDalrwQRndy8mxY r1 = new org.telegram.ui.Components.voip.-$$Lambda$GroupCallMiniTextureView$uIk9Hs0tacfdrDalrwQRndy8mxY
-            r1.<init>(r0)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda6 r1 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda6
+            r1.<init>(r0, r0)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
             goto L_0x00cf
         L_0x00cc:
@@ -1586,8 +1581,8 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
             r2.requestLayout()
         L_0x0380:
-            org.telegram.ui.Components.voip.-$$Lambda$qlWeM_Ffarc-WFXvdj67MUDb5-A r2 = new org.telegram.ui.Components.voip.-$$Lambda$qlWeM_Ffarc-WFXvdj67MUDb5-A
-            r2.<init>()
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda4 r2 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda4
+            r2.<init>(r0)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r2 = r0.parentContainer
             r2.requestLayout()
@@ -1769,8 +1764,8 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r2[r8] = r3
             android.animation.ValueAnimator r2 = android.animation.ValueAnimator.ofFloat(r2)
             r0.noVideoStubAnimator = r2
-            org.telegram.ui.Components.voip.-$$Lambda$GroupCallMiniTextureView$1uDoR4XbhYIJLR8Z4hOzIcNOIw4 r3 = new org.telegram.ui.Components.voip.-$$Lambda$GroupCallMiniTextureView$1uDoR4XbhYIJLR8Z4hOzIcNOIw4
-            r3.<init>()
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda0 r3 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda0
+            r3.<init>(r0)
             r2.addUpdateListener(r3)
             android.animation.ValueAnimator r2 = r0.noVideoStubAnimator
             org.telegram.ui.Components.voip.GroupCallMiniTextureView$6 r3 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$6
@@ -1960,14 +1955,12 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateAttachState$1 */
-    public /* synthetic */ void lambda$updateAttachState$1$GroupCallMiniTextureView(View view) {
+    public /* synthetic */ void lambda$updateAttachState$1(View view) {
         this.parentContainer.removeView(view);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateAttachState$2 */
-    public /* synthetic */ void lambda$updateAttachState$2$GroupCallMiniTextureView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateAttachState$2(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.progressToNoVideoStub = floatValue;
         this.noVideoStubLayout.setAlpha(floatValue);
@@ -2341,36 +2334,20 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
 
     public void saveThumb() {
         if (this.participant != null && this.textureView.renderer.getMeasuredHeight() != 0 && this.textureView.renderer.getMeasuredWidth() != 0) {
-            getRenderBufferBitmap(new GlGenericDrawer.TextureCallback() {
-                public final void run(Bitmap bitmap, int i) {
-                    GroupCallMiniTextureView.this.lambda$saveThumb$4$GroupCallMiniTextureView(bitmap, i);
-                }
-            });
+            getRenderBufferBitmap(new GroupCallMiniTextureView$$ExternalSyntheticLambda7(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveThumb$4 */
-    public /* synthetic */ void lambda$saveThumb$4$GroupCallMiniTextureView(Bitmap bitmap, int i) {
+    public /* synthetic */ void lambda$saveThumb$4(Bitmap bitmap, int i) {
         if (bitmap != null && bitmap.getPixel(0, 0) != 0) {
             Utilities.stackBlurBitmap(bitmap, Math.max(7, Math.max(bitmap.getWidth(), bitmap.getHeight()) / 180));
-            AndroidUtilities.runOnUIThread(new Runnable(bitmap) {
-                public final /* synthetic */ Bitmap f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    GroupCallMiniTextureView.this.lambda$saveThumb$3$GroupCallMiniTextureView(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new GroupCallMiniTextureView$$ExternalSyntheticLambda5(this, bitmap));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveThumb$3 */
-    public /* synthetic */ void lambda$saveThumb$3$GroupCallMiniTextureView(Bitmap bitmap) {
+    public /* synthetic */ void lambda$saveThumb$3(Bitmap bitmap) {
         HashMap<String, Bitmap> hashMap = this.call.thumbs;
         ChatObject.VideoParticipant videoParticipant = this.participant;
         boolean z = videoParticipant.presentation;
@@ -2481,12 +2458,12 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r10 = {0, NUM} // fill-array
             android.animation.ValueAnimator r10 = android.animation.ValueAnimator.ofFloat(r10)
             r9.colorAnimator = r10
-            org.telegram.ui.Components.voip.-$$Lambda$GroupCallMiniTextureView$C9SE2lB4ybMFpB9NtgnNJnG9tKU r8 = new org.telegram.ui.Components.voip.-$$Lambda$GroupCallMiniTextureView$C9SE2lB4ybMFpB9NtgnNJnG9tKU
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda2 r8 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda2
             r2 = r8
             r3 = r9
             r5 = r0
             r7 = r1
-            r2.<init>(r4, r5, r6, r7)
+            r2.<init>(r3, r4, r5, r6, r7)
             r10.addUpdateListener(r8)
             android.animation.ValueAnimator r10 = r9.colorAnimator
             org.telegram.ui.Components.voip.GroupCallMiniTextureView$7 r2 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$7
@@ -2501,8 +2478,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateIconColor$5 */
-    public /* synthetic */ void lambda$updateIconColor$5$GroupCallMiniTextureView(int i, int i2, int i3, int i4, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateIconColor$5(int i, int i2, int i3, int i4, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.lastIconColor = ColorUtils.blendARGB(i, i2, floatValue);
         int blendARGB = ColorUtils.blendARGB(i3, i4, floatValue);
@@ -2552,7 +2528,6 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         private GroupCallActivity.WeavingState[] states = new GroupCallActivity.WeavingState[3];
         float switchProgress = 1.0f;
         BlobDrawable tinyWaveDrawable = new BlobDrawable(9);
-        float wavesEnter = 0.0f;
 
         public NoVideoStubLayout(Context context) {
             super(context);
@@ -2761,11 +2736,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             ((FrameLayout.LayoutParams) this.blurredFlippingStub.getLayoutParams()).gravity = 17;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.flipAnimator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    GroupCallMiniTextureView.this.lambda$startFlipAnimation$6$GroupCallMiniTextureView(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new GroupCallMiniTextureView$$ExternalSyntheticLambda1(this));
             this.flipAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     super.onAnimationEnd(animator);
@@ -2785,8 +2756,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startFlipAnimation$6 */
-    public /* synthetic */ void lambda$startFlipAnimation$6$GroupCallMiniTextureView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$startFlipAnimation$6(ValueAnimator valueAnimator) {
         boolean z;
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         if (floatValue < 0.5f) {

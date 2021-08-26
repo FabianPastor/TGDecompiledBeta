@@ -21,7 +21,6 @@ public class MP3Info extends AudioInfo {
 
     public MP3Info(InputStream inputStream, long j, Level level) throws IOException, ID3v2Exception, MP3Exception {
         this.brand = "MP3";
-        this.version = "0";
         MP3Input mP3Input = new MP3Input(inputStream);
         if (ID3v2Info.isID3v2StartPosition(mP3Input)) {
             ID3v2Info iD3v2Info = new ID3v2Info(mP3Input, level);
@@ -48,7 +47,7 @@ public class MP3Info extends AudioInfo {
         long j2 = this.duration;
         if (j2 <= 0 || j2 >= 3600000) {
             try {
-                this.duration = calculateDuration(mP3Input, j, new StopReadCondition(j) {
+                this.duration = calculateDuration(mP3Input, j, new StopReadCondition(this, j) {
                     final long stopPosition;
                     final /* synthetic */ long val$fileLength;
 

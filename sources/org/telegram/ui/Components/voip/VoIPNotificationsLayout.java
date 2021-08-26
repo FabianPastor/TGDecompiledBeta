@@ -25,7 +25,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.voip.VoIPNotificationsLayout;
 
 public class VoIPNotificationsLayout extends LinearLayout {
     boolean lockAnimation;
@@ -42,7 +41,7 @@ public class VoIPNotificationsLayout extends LinearLayout {
         if (Build.VERSION.SDK_INT >= 19) {
             TransitionSet transitionSet2 = new TransitionSet();
             this.transitionSet = transitionSet2;
-            transitionSet2.addTransition(new Fade(2).setDuration(150)).addTransition(new ChangeBounds().setDuration(200)).addTransition(new Visibility() {
+            transitionSet2.addTransition(new Fade(2).setDuration(150)).addTransition(new ChangeBounds().setDuration(200)).addTransition(new Visibility(this) {
                 public Animator onAppear(ViewGroup viewGroup, View view, TransitionValues transitionValues, TransitionValues transitionValues2) {
                     AnimatorSet animatorSet = new AnimatorSet();
                     view.setAlpha(0.0f);
@@ -89,16 +88,11 @@ public class VoIPNotificationsLayout extends LinearLayout {
 
     private void lock() {
         this.lockAnimation = true;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                VoIPNotificationsLayout.this.lambda$lock$0$VoIPNotificationsLayout();
-            }
-        }, 700);
+        AndroidUtilities.runOnUIThread(new VoIPNotificationsLayout$$ExternalSyntheticLambda0(this), 700);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$lock$0 */
-    public /* synthetic */ void lambda$lock$0$VoIPNotificationsLayout() {
+    public /* synthetic */ void lambda$lock$0() {
         this.lockAnimation = false;
         runDelayed();
     }
@@ -187,16 +181,11 @@ public class VoIPNotificationsLayout extends LinearLayout {
 
         public void startAnimation() {
             this.textView.setVisibility(8);
-            postDelayed(new Runnable() {
-                public final void run() {
-                    VoIPNotificationsLayout.NotificationView.this.lambda$startAnimation$0$VoIPNotificationsLayout$NotificationView();
-                }
-            }, 400);
+            postDelayed(new VoIPNotificationsLayout$NotificationView$$ExternalSyntheticLambda0(this), 400);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$startAnimation$0 */
-        public /* synthetic */ void lambda$startAnimation$0$VoIPNotificationsLayout$NotificationView() {
+        public /* synthetic */ void lambda$startAnimation$0() {
             if (Build.VERSION.SDK_INT >= 19) {
                 TransitionSet transitionSet = new TransitionSet();
                 transitionSet.addTransition(new Fade(1).setDuration(150)).addTransition(new ChangeBounds().setDuration(200));

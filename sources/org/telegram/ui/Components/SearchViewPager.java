@@ -48,7 +48,6 @@ import org.telegram.ui.FilteredSearchView;
 public class SearchViewPager extends ViewPagerFixed implements FilteredSearchView.UiCallback {
     int animateFromCount = 0;
     private boolean attached;
-    ChatPreviewDelegate chatPreviewDelegate;
     int currentAccount = UserConfig.selectedAccount;
     private ArrayList<FiltersView.MediaFilterData> currentSearchFilters = new ArrayList<>();
     public DialogsSearchAdapter dialogsSearchAdapter;
@@ -84,15 +83,15 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         void startChatPreview(DialogCell dialogCell);
     }
 
-    static /* synthetic */ boolean lambda$showActionMode$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$showActionMode$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
-    public SearchViewPager(Context context, final BaseFragment baseFragment, int i, int i2, int i3, final ChatPreviewDelegate chatPreviewDelegate2) {
+    public SearchViewPager(Context context, final BaseFragment baseFragment, int i, int i2, int i3, final ChatPreviewDelegate chatPreviewDelegate) {
         super(context);
         this.folderId = i3;
         this.parent = baseFragment;
-        this.chatPreviewDelegate = chatPreviewDelegate2;
         this.dialogsSearchAdapter = new DialogsSearchAdapter(context, i, i2, i3) {
             public void notifyDataSetChanged() {
                 RecyclerListView recyclerListView;
@@ -150,7 +149,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.noMediaFiltersSearchView = filteredSearchView;
         filteredSearchView.setUiCallback(this);
         this.noMediaFiltersSearchView.setVisibility(8);
-        this.noMediaFiltersSearchView.setChatPreviewDelegate(chatPreviewDelegate2);
+        this.noMediaFiltersSearchView.setChatPreviewDelegate(chatPreviewDelegate);
         this.searchContainer = new FrameLayout(context);
         FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
         flickerLoadingView.setViewType(1);
@@ -201,7 +200,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                     return SearchViewPager.this.searchContainer;
                 }
                 FilteredSearchView filteredSearchView = new FilteredSearchView(SearchViewPager.this.parent);
-                filteredSearchView.setChatPreviewDelegate(chatPreviewDelegate2);
+                filteredSearchView.setChatPreviewDelegate(chatPreviewDelegate);
                 filteredSearchView.setUiCallback(SearchViewPager.this);
                 return filteredSearchView;
             }
@@ -342,7 +341,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                     this.selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                     this.selectedMessagesCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
                     createActionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
-                    this.selectedMessagesCountTextView.setOnTouchListener($$Lambda$SearchViewPager$TDsWTBkeEmn4ywq1WEkaayHK0U.INSTANCE);
+                    this.selectedMessagesCountTextView.setOnTouchListener(SearchViewPager$$ExternalSyntheticLambda0.INSTANCE);
                     this.gotoItem = createActionMode.addItemWithWidth(200, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("AccDescrGoToMessage", NUM));
                     this.forwardItem = createActionMode.addItemWithWidth(201, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("Forward", NUM));
                 }
@@ -390,18 +389,13 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             bundle.putBoolean("onlySelect", true);
             bundle.putInt("dialogsType", 3);
             DialogsActivity dialogsActivity = new DialogsActivity(bundle);
-            dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate() {
-                public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-                    SearchViewPager.this.lambda$onActionBarItemClick$1$SearchViewPager(dialogsActivity, arrayList, charSequence, z);
-                }
-            });
+            dialogsActivity.setDelegate(new SearchViewPager$$ExternalSyntheticLambda1(this));
             this.parent.presentFragment(dialogsActivity);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onActionBarItemClick$1 */
-    public /* synthetic */ void lambda$onActionBarItemClick$1$SearchViewPager(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+    public /* synthetic */ void lambda$onActionBarItemClick$1(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
         DialogsActivity dialogsActivity2 = dialogsActivity;
         ArrayList arrayList2 = arrayList;
         ArrayList arrayList3 = new ArrayList();
@@ -416,7 +410,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 if (charSequence != null) {
                     AccountInstance.getInstance(this.currentAccount).getSendMessagesHelper().sendMessage(charSequence.toString(), longValue, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
                 }
-                AccountInstance.getInstance(this.currentAccount).getSendMessagesHelper().sendMessage(arrayList3, longValue, true, 0);
+                AccountInstance.getInstance(this.currentAccount).getSendMessagesHelper().sendMessage(arrayList3, longValue, false, true, 0);
             }
             dialogsActivity.finishFragment();
             return;

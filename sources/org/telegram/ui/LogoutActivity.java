@@ -119,17 +119,12 @@ public class LogoutActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
-            public final void onItemClick(View view, int i, float f, float f2) {
-                LogoutActivity.this.lambda$createView$1$LogoutActivity(view, i, f, f2);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new LogoutActivity$$ExternalSyntheticLambda1(this));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$LogoutActivity(View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$createView$1(View view, int i, float f, float f2) {
         int i2 = 0;
         int i3 = -1;
         if (i == this.addAccountRow) {
@@ -159,11 +154,7 @@ public class LogoutActivity extends BaseFragment {
             getUserConfig();
             builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
             builder.setTitle(LocaleController.getString("LogOut", NUM));
-            builder.setPositiveButton(LocaleController.getString("LogOut", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    LogoutActivity.this.lambda$createView$0$LogoutActivity(dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("LogOut", NUM), new LogoutActivity$$ExternalSyntheticLambda0(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             AlertDialog create = builder.create();
             showDialog(create);
@@ -175,8 +166,7 @@ public class LogoutActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$LogoutActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$0(DialogInterface dialogInterface, int i) {
         MessagesController.getInstance(this.currentAccount).performLogout(1);
     }
 
@@ -264,7 +254,7 @@ public class LogoutActivity extends BaseFragment {
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
                 android.content.Context r4 = r2.mContext
-                r0 = 2131165443(0x7var_, float:1.7945103E38)
+                r0 = 2131165448(0x7var_, float:1.7945113E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r0, (java.lang.String) r1)
                 r3.setBackgroundDrawable(r4)

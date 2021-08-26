@@ -106,16 +106,11 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     StickerEmptyView emptyView;
     /* access modifiers changed from: private */
     public boolean endReached;
-    private boolean firstLoading = true;
     /* access modifiers changed from: private */
     public AnimatorSet floatingDateAnimation;
     /* access modifiers changed from: private */
     public final ChatActionCell floatingDateView;
-    private Runnable hideFloatingDateRunnable = new Runnable() {
-        public final void run() {
-            FilteredSearchView.this.lambda$new$0$FilteredSearchView();
-        }
-    };
+    private Runnable hideFloatingDateRunnable = new FilteredSearchView$$ExternalSyntheticLambda0(this);
     boolean ignoreRequestLayout;
     /* access modifiers changed from: private */
     public boolean isLoading;
@@ -268,8 +263,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$FilteredSearchView() {
+    public /* synthetic */ void lambda$new$0() {
         hideFloatingDateView(true);
     }
 
@@ -279,7 +273,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         Activity parentActivity2 = baseFragment.getParentActivity();
         this.parentActivity = parentActivity2;
         setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        AnonymousClass3 r2 = new RecyclerListView(parentActivity2) {
+        AnonymousClass3 r0 = new RecyclerListView(parentActivity2) {
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
                 if (getAdapter() == FilteredSearchView.this.sharedPhotoVideoAdapter) {
@@ -303,12 +297,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 return super.drawChild(canvas, view, j);
             }
         };
-        this.recyclerListView = r2;
-        r2.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                FilteredSearchView.this.lambda$new$1$FilteredSearchView(view, i);
-            }
-        });
+        this.recyclerListView = r0;
+        r0.setOnItemClickListener((RecyclerListView.OnItemClickListener) new FilteredSearchView$$ExternalSyntheticLambda4(this));
         this.recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListenerExtended) new RecyclerListView.OnItemLongClickListenerExtended() {
             public boolean onItemClick(View view, int i, float f, float f2) {
                 if (view instanceof SharedDocumentCell) {
@@ -344,13 +334,13 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(parentActivity2);
         this.layoutManager = linearLayoutManager;
         this.recyclerListView.setLayoutManager(linearLayoutManager);
-        AnonymousClass5 r22 = new FlickerLoadingView(parentActivity2) {
+        AnonymousClass5 r02 = new FlickerLoadingView(parentActivity2) {
             public int getColumnsCount() {
                 return FilteredSearchView.this.columnsCount;
             }
         };
-        this.loadingView = r22;
-        addView(r22);
+        this.loadingView = r02;
+        addView(r02);
         addView(this.recyclerListView);
         this.recyclerListView.setSectionsType(2);
         this.recyclerListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -403,7 +393,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         this.sharedLinksAdapter = new SharedLinksAdapter(getContext());
         this.sharedAudioAdapter = new SharedDocumentsAdapter(getContext(), 4);
         this.sharedVoiceAdapter = new SharedDocumentsAdapter(getContext(), 2);
-        StickerEmptyView stickerEmptyView = new StickerEmptyView(parentActivity2, r22, 1);
+        StickerEmptyView stickerEmptyView = new StickerEmptyView(parentActivity2, r02, 1);
         this.emptyView = stickerEmptyView;
         addView(stickerEmptyView);
         this.recyclerListView.setEmptyView(this.emptyView);
@@ -411,8 +401,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$FilteredSearchView(View view, int i) {
+    public /* synthetic */ void lambda$new$1(View view, int i) {
         if (view instanceof SharedDocumentCell) {
             onItemClick(i, view, ((SharedDocumentCell) view).getMessage(), 0);
         } else if (view instanceof SharedLinkCell) {
@@ -444,7 +433,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131166009(0x7var_, float:1.7946251E38)
+            r3 = 2131166014(0x7var_e, float:1.7946261E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -607,7 +596,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     adapter2.notifyDataSetChanged();
                 }
                 this.requestIndex++;
-                this.firstLoading = true;
                 if (this.recyclerListView.getPinnedHeader() != null) {
                     this.recyclerListView.getPinnedHeader().setAlpha(0.0f);
                 }
@@ -638,41 +626,13 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             }
             int i3 = this.requestIndex + 1;
             this.requestIndex = i3;
-            $$Lambda$FilteredSearchView$pH11LBCozxIcqwXcsnRO6NgHA r30 = r0;
-            $$Lambda$FilteredSearchView$pH11LBCozxIcqwXcsnRO6NgHA r0 = new Runnable(i, str, mediaFilterData, UserConfig.selectedAccount, j, j2, z3, z, format, i3) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ int f$10;
-                public final /* synthetic */ String f$2;
-                public final /* synthetic */ FiltersView.MediaFilterData f$3;
-                public final /* synthetic */ int f$4;
-                public final /* synthetic */ long f$5;
-                public final /* synthetic */ long f$6;
-                public final /* synthetic */ boolean f$7;
-                public final /* synthetic */ boolean f$8;
-                public final /* synthetic */ String f$9;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                    this.f$6 = r8;
-                    this.f$7 = r10;
-                    this.f$8 = r11;
-                    this.f$9 = r12;
-                    this.f$10 = r13;
-                }
-
-                public final void run() {
-                    FilteredSearchView.this.lambda$search$4$FilteredSearchView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
-                }
-            };
-            this.searchRunnable = r0;
+            FilteredSearchView$$ExternalSyntheticLambda1 filteredSearchView$$ExternalSyntheticLambda1 = r0;
+            FilteredSearchView$$ExternalSyntheticLambda1 filteredSearchView$$ExternalSyntheticLambda12 = new FilteredSearchView$$ExternalSyntheticLambda1(this, i, str, mediaFilterData, UserConfig.selectedAccount, j, j2, z3, z, format, i3);
+            this.searchRunnable = filteredSearchView$$ExternalSyntheticLambda12;
             if (!z3 || this.messages.isEmpty()) {
                 j5 = 350;
             }
-            AndroidUtilities.runOnUIThread(r0, j5);
+            AndroidUtilities.runOnUIThread(filteredSearchView$$ExternalSyntheticLambda12, j5);
             if (mediaFilterData2 == null) {
                 this.loadingView.setViewType(1);
                 return;
@@ -701,9 +661,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v8, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* renamed from: lambda$search$4 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$search$4$FilteredSearchView(int r19, java.lang.String r20, org.telegram.ui.Adapters.FiltersView.MediaFilterData r21, int r22, long r23, long r25, boolean r27, boolean r28, java.lang.String r29, int r30) {
+    public /* synthetic */ void lambda$search$4(int r19, java.lang.String r20, org.telegram.ui.Adapters.FiltersView.MediaFilterData r21, int r22, long r23, long r25, boolean r27, boolean r28, java.lang.String r29, int r30) {
         /*
             r18 = this;
             r12 = r18
@@ -862,7 +821,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             java.lang.String r0 = r12.lastMessagesSearchString
             org.telegram.ui.Adapters.FiltersView.fillTipDates(r0, r11)
             org.telegram.tgnet.ConnectionsManager r14 = org.telegram.tgnet.ConnectionsManager.getInstance(r22)
-            org.telegram.ui.-$$Lambda$FilteredSearchView$bhW4Da5YRO9mwzaRWY5L9Wys32s r15 = new org.telegram.ui.-$$Lambda$FilteredSearchView$bhW4Da5YRO9mwzaRWY5L9Wys32s
+            org.telegram.ui.FilteredSearchView$$ExternalSyntheticLambda3 r15 = new org.telegram.ui.FilteredSearchView$$ExternalSyntheticLambda3
             r0 = r15
             r1 = r18
             r2 = r22
@@ -872,16 +831,15 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             r6 = r21
             r7 = r19
             r8 = r23
-            r0.<init>(r2, r3, r4, r5, r6, r7, r8, r10, r11)
+            r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r10, r11)
             r14.sendRequest(r13, r15)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.lambda$search$4$FilteredSearchView(int, java.lang.String, org.telegram.ui.Adapters.FiltersView$MediaFilterData, int, long, long, boolean, boolean, java.lang.String, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.lambda$search$4(int, java.lang.String, org.telegram.ui.Adapters.FiltersView$MediaFilterData, int, long, long, boolean, boolean, java.lang.String, int):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$search$3 */
-    public /* synthetic */ void lambda$search$3$FilteredSearchView(int i, String str, int i2, boolean z, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$search$3(int i, String str, int i2, boolean z, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ArrayList arrayList3 = new ArrayList();
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
@@ -894,44 +852,11 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         }
         int i5 = i;
         String str2 = str;
-        AndroidUtilities.runOnUIThread(new Runnable(i2, tLRPC$TL_error, tLObject, i, z, str, arrayList3, mediaFilterData, i3, j, arrayList, arrayList2) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ long f$10;
-            public final /* synthetic */ ArrayList f$11;
-            public final /* synthetic */ ArrayList f$12;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-            public final /* synthetic */ TLObject f$3;
-            public final /* synthetic */ int f$4;
-            public final /* synthetic */ boolean f$5;
-            public final /* synthetic */ String f$6;
-            public final /* synthetic */ ArrayList f$7;
-            public final /* synthetic */ FiltersView.MediaFilterData f$8;
-            public final /* synthetic */ int f$9;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-                this.f$6 = r7;
-                this.f$7 = r8;
-                this.f$8 = r9;
-                this.f$9 = r10;
-                this.f$10 = r11;
-                this.f$11 = r13;
-                this.f$12 = r14;
-            }
-
-            public final void run() {
-                FilteredSearchView.this.lambda$search$2$FilteredSearchView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new FilteredSearchView$$ExternalSyntheticLambda2(this, i2, tLRPC$TL_error, tLObject, i, z, str, arrayList3, mediaFilterData, i3, j, arrayList, arrayList2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$search$2 */
-    public /* synthetic */ void lambda$search$2$FilteredSearchView(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i2, boolean z, String str, ArrayList arrayList, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList2, ArrayList arrayList3) {
+    public /* synthetic */ void lambda$search$2(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i2, boolean z, String str, ArrayList arrayList, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList2, ArrayList arrayList3) {
         boolean z2;
         String str2;
         String str3 = str;
@@ -1065,7 +990,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     delegate2.updateFiltersView(TextUtils.isEmpty(this.currentDataQuery), this.localTipChats, this.localTipDates, this.localTipArchive);
                 }
             }
-            this.firstLoading = false;
             final View view = null;
             final int i8 = -1;
             for (int i9 = 0; i9 < size; i9++) {
@@ -1426,733 +1350,626 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (z) {
                     BottomSheet.Builder builder = new BottomSheet.Builder(FilteredSearchView.this.parentActivity);
                     builder.setTitle(str);
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, 
-                    /*  JADX ERROR: Method code generation error
-                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0030: INVOKE  
-                          (r6v3 'builder' org.telegram.ui.ActionBar.BottomSheet$Builder)
-                          (wrap: java.lang.CharSequence[] : ?: FILLED_NEW_ARRAY  (r0v4 java.lang.CharSequence[]) = 
-                          (wrap: java.lang.String : 0x0019: INVOKE  (r2v1 java.lang.String) = ("Open"), (NUM int) org.telegram.messenger.LocaleController.getString(java.lang.String, int):java.lang.String type: STATIC)
-                          (wrap: java.lang.String : 0x0025: INVOKE  (r2v3 java.lang.String) = ("Copy"), (NUM int) org.telegram.messenger.LocaleController.getString(java.lang.String, int):java.lang.String type: STATIC)
-                         elemType: java.lang.CharSequence)
-                          (wrap: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk : 0x002d: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk) = 
-                          (r4v0 'this' org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1 A[THIS])
-                          (r5v0 'str' java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk.<init>(org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1, java.lang.String):void type: CONSTRUCTOR)
-                         org.telegram.ui.ActionBar.BottomSheet.Builder.setItems(java.lang.CharSequence[], android.content.DialogInterface$OnClickListener):org.telegram.ui.ActionBar.BottomSheet$Builder type: VIRTUAL in method: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.1.onLinkPress(java.lang.String, boolean):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:98)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:480)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.ClassGen.addInsnBody(ClassGen.java:437)
-                        	at jadx.core.codegen.ClassGen.addField(ClassGen.java:378)
-                        	at jadx.core.codegen.ClassGen.addFields(ClassGen.java:348)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:226)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002d: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk) = 
-                          (r4v0 'this' org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1 A[THIS])
-                          (r5v0 'str' java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk.<init>(org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.1.onLinkPress(java.lang.String, boolean):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	... 64 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk, state: NOT_LOADED
-                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	... 70 more
-                        */
-                    /*
-                        this = this;
-                        if (r6 == 0) goto L_0x0041
-                        org.telegram.ui.ActionBar.BottomSheet$Builder r6 = new org.telegram.ui.ActionBar.BottomSheet$Builder
-                        org.telegram.ui.FilteredSearchView$SharedLinksAdapter r0 = org.telegram.ui.FilteredSearchView.SharedLinksAdapter.this
-                        org.telegram.ui.FilteredSearchView r0 = org.telegram.ui.FilteredSearchView.this
-                        android.app.Activity r0 = r0.parentActivity
-                        r6.<init>(r0)
-                        r6.setTitle(r5)
-                        r0 = 2
-                        java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
-                        r1 = 0
-                        r2 = 2131626589(0x7f0e0a5d, float:1.8880418E38)
-                        java.lang.String r3 = "Open"
-                        java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                        r0[r1] = r2
-                        r1 = 1
-                        r2 = 2131625031(0x7f0e0447, float:1.8877258E38)
-                        java.lang.String r3 = "Copy"
-                        java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                        r0[r1] = r2
-                        org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk r1 = new org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk
-                        r1.<init>(r4, r5)
-                        r6.setItems(r0, r1)
-                        org.telegram.ui.FilteredSearchView$SharedLinksAdapter r5 = org.telegram.ui.FilteredSearchView.SharedLinksAdapter.this
-                        org.telegram.ui.FilteredSearchView r5 = org.telegram.ui.FilteredSearchView.this
-                        org.telegram.ui.ActionBar.BaseFragment r5 = r5.parentFragment
-                        org.telegram.ui.ActionBar.BottomSheet r6 = r6.create()
-                        r5.showDialog(r6)
-                        goto L_0x0048
-                    L_0x0041:
-                        org.telegram.ui.FilteredSearchView$SharedLinksAdapter r6 = org.telegram.ui.FilteredSearchView.SharedLinksAdapter.this
-                        org.telegram.ui.FilteredSearchView r6 = org.telegram.ui.FilteredSearchView.this
-                        r6.openUrl(r5)
-                    L_0x0048:
-                        return
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.AnonymousClass1.onLinkPress(java.lang.String, boolean):void");
+                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new FilteredSearchView$SharedLinksAdapter$1$$ExternalSyntheticLambda0(this, str));
+                    FilteredSearchView.this.parentFragment.showDialog(builder.create());
+                    return;
                 }
-
-                /* access modifiers changed from: private */
-                /* renamed from: lambda$onLinkPress$0 */
-                public /* synthetic */ void lambda$onLinkPress$0$FilteredSearchView$SharedLinksAdapter$1(String str, DialogInterface dialogInterface, int i) {
-                    if (i == 0) {
-                        FilteredSearchView.this.openUrl(str);
-                    } else if (i == 1) {
-                        if (str.startsWith("mailto:")) {
-                            str = str.substring(7);
-                        } else if (str.startsWith("tel:")) {
-                            str = str.substring(4);
-                        }
-                        AndroidUtilities.addToClipboard(str);
-                    }
-                }
-            };
-
-            public Object getItem(int i, int i2) {
-                return null;
+                FilteredSearchView.this.openUrl(str);
             }
 
-            public String getLetter(int i) {
-                return null;
-            }
-
-            public int getPositionForScrollProgress(float f) {
-                return 0;
-            }
-
-            public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
-                return true;
-            }
-
-            public SharedLinksAdapter(Context context) {
-                this.mContext = context;
-            }
-
-            public int getSectionCount() {
-                int i = 0;
-                if (FilteredSearchView.this.messages.isEmpty()) {
-                    return 0;
-                }
-                if (FilteredSearchView.this.sections.isEmpty() && FilteredSearchView.this.isLoading) {
-                    return 0;
-                }
-                int size = FilteredSearchView.this.sections.size();
-                if (!FilteredSearchView.this.sections.isEmpty() && !FilteredSearchView.this.endReached) {
-                    i = 1;
-                }
-                return size + i;
-            }
-
-            public int getCountForSection(int i) {
-                int i2 = 1;
-                if (i >= FilteredSearchView.this.sections.size()) {
-                    return 1;
-                }
-                FilteredSearchView filteredSearchView = FilteredSearchView.this;
-                int size = filteredSearchView.sectionArrays.get(filteredSearchView.sections.get(i)).size();
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onLinkPress$0(String str, DialogInterface dialogInterface, int i) {
                 if (i == 0) {
-                    i2 = 0;
-                }
-                return size + i2;
-            }
-
-            public View getSectionHeaderView(int i, View view) {
-                if (view == null) {
-                    view = new GraySectionCell(this.mContext);
-                    view.setBackgroundColor(Theme.getColor("graySection") & -NUM);
-                }
-                if (i == 0) {
-                    view.setAlpha(0.0f);
-                    return view;
-                }
-                if (i < FilteredSearchView.this.sections.size()) {
-                    view.setAlpha(1.0f);
-                    ((GraySectionCell) view).setText(LocaleController.formatSectionDate((long) ((MessageObject) FilteredSearchView.this.sectionArrays.get(FilteredSearchView.this.sections.get(i)).get(0)).messageOwner.date));
-                }
-                return view;
-            }
-
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v1, resolved type: org.telegram.ui.Cells.GraySectionCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v3, resolved type: org.telegram.ui.Cells.SharedLinkCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v4, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v5, resolved type: org.telegram.ui.Cells.GraySectionCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v6, resolved type: org.telegram.ui.Cells.GraySectionCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v7, resolved type: org.telegram.ui.Cells.GraySectionCell} */
-            /* JADX WARNING: Multi-variable type inference failed */
-            /* Code decompiled incorrectly, please refer to instructions dump. */
-            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r3, int r4) {
-                /*
-                    r2 = this;
-                    if (r4 == 0) goto L_0x0021
-                    r3 = 1
-                    if (r4 == r3) goto L_0x0014
-                    org.telegram.ui.Components.FlickerLoadingView r4 = new org.telegram.ui.Components.FlickerLoadingView
-                    android.content.Context r0 = r2.mContext
-                    r4.<init>(r0)
-                    r0 = 5
-                    r4.setViewType(r0)
-                    r4.setIsSingleCell(r3)
-                    goto L_0x0028
-                L_0x0014:
-                    org.telegram.ui.Cells.SharedLinkCell r4 = new org.telegram.ui.Cells.SharedLinkCell
-                    android.content.Context r0 = r2.mContext
-                    r4.<init>(r0, r3)
-                    org.telegram.ui.Cells.SharedLinkCell$SharedLinkCellDelegate r3 = r2.sharedLinkCellDelegate
-                    r4.setDelegate(r3)
-                    goto L_0x0028
-                L_0x0021:
-                    org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
-                    android.content.Context r3 = r2.mContext
-                    r4.<init>(r3)
-                L_0x0028:
-                    androidx.recyclerview.widget.RecyclerView$LayoutParams r3 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                    r0 = -1
-                    r1 = -2
-                    r3.<init>((int) r0, (int) r1)
-                    r4.setLayoutParams(r3)
-                    org.telegram.ui.Components.RecyclerListView$Holder r3 = new org.telegram.ui.Components.RecyclerListView$Holder
-                    r3.<init>(r4)
-                    return r3
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
-            }
-
-            public void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder) {
-                if (viewHolder.getItemViewType() != 2) {
-                    ArrayList arrayList = FilteredSearchView.this.sectionArrays.get(FilteredSearchView.this.sections.get(i));
-                    int itemViewType = viewHolder.getItemViewType();
-                    boolean z = false;
-                    if (itemViewType == 0) {
-                        ((GraySectionCell) viewHolder.itemView).setText(LocaleController.formatSectionDate((long) ((MessageObject) arrayList.get(0)).messageOwner.date));
-                    } else if (itemViewType == 1) {
-                        if (i != 0) {
-                            i2--;
-                        }
-                        final SharedLinkCell sharedLinkCell = (SharedLinkCell) viewHolder.itemView;
-                        final MessageObject messageObject = (MessageObject) arrayList.get(i2);
-                        final boolean z2 = sharedLinkCell.getMessage() != null && sharedLinkCell.getMessage().getId() == messageObject.getId();
-                        if (i2 != arrayList.size() - 1 || (i == FilteredSearchView.this.sections.size() - 1 && FilteredSearchView.this.isLoading)) {
-                            z = true;
-                        }
-                        sharedLinkCell.setLink(messageObject, z);
-                        sharedLinkCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                            public boolean onPreDraw() {
-                                sharedLinkCell.getViewTreeObserver().removeOnPreDrawListener(this);
-                                if (FilteredSearchView.this.uiCallback.actionModeShowing()) {
-                                    FilteredSearchView.this.messageHashIdTmp.set(messageObject.getId(), messageObject.getDialogId());
-                                    sharedLinkCell.setChecked(FilteredSearchView.this.uiCallback.isSelected(FilteredSearchView.this.messageHashIdTmp), z2);
-                                    return true;
-                                }
-                                sharedLinkCell.setChecked(false, z2);
-                                return true;
-                            }
-                        });
+                    FilteredSearchView.this.openUrl(str);
+                } else if (i == 1) {
+                    if (str.startsWith("mailto:")) {
+                        str = str.substring(7);
+                    } else if (str.startsWith("tel:")) {
+                        str = str.substring(4);
                     }
+                    AndroidUtilities.addToClipboard(str);
                 }
             }
+        };
 
-            public int getItemViewType(int i, int i2) {
-                if (i < FilteredSearchView.this.sections.size()) {
-                    return (i == 0 || i2 != 0) ? 1 : 0;
-                }
-                return 2;
-            }
+        public Object getItem(int i, int i2) {
+            return null;
         }
 
-        private class SharedDocumentsAdapter extends RecyclerListView.SectionsAdapter {
-            private int currentType;
-            private Context mContext;
-
-            public Object getItem(int i, int i2) {
-                return null;
-            }
-
-            public String getLetter(int i) {
-                return null;
-            }
-
-            public int getPositionForScrollProgress(float f) {
-                return 0;
-            }
-
-            public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
-                return i == 0 || i2 != 0;
-            }
-
-            public SharedDocumentsAdapter(Context context, int i) {
-                this.mContext = context;
-                this.currentType = i;
-            }
-
-            public int getSectionCount() {
-                int i = 0;
-                if (FilteredSearchView.this.sections.isEmpty()) {
-                    return 0;
-                }
-                int size = FilteredSearchView.this.sections.size();
-                if (!FilteredSearchView.this.sections.isEmpty() && !FilteredSearchView.this.endReached) {
-                    i = 1;
-                }
-                return size + i;
-            }
-
-            public int getCountForSection(int i) {
-                int i2 = 1;
-                if (i >= FilteredSearchView.this.sections.size()) {
-                    return 1;
-                }
-                FilteredSearchView filteredSearchView = FilteredSearchView.this;
-                int size = filteredSearchView.sectionArrays.get(filteredSearchView.sections.get(i)).size();
-                if (i == 0) {
-                    i2 = 0;
-                }
-                return size + i2;
-            }
-
-            public View getSectionHeaderView(int i, View view) {
-                if (view == null) {
-                    view = new GraySectionCell(this.mContext);
-                    view.setBackgroundColor(Theme.getColor("graySection") & -NUM);
-                }
-                if (i == 0) {
-                    view.setAlpha(0.0f);
-                    return view;
-                }
-                if (i < FilteredSearchView.this.sections.size()) {
-                    view.setAlpha(1.0f);
-                    ((GraySectionCell) view).setText(LocaleController.formatSectionDate((long) ((MessageObject) FilteredSearchView.this.sectionArrays.get(FilteredSearchView.this.sections.get(i)).get(0)).messageOwner.date));
-                }
-                return view;
-            }
-
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v4, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v8, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v9, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
-            /* JADX WARNING: Multi-variable type inference failed */
-            /* Code decompiled incorrectly, please refer to instructions dump. */
-            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
-                /*
-                    r3 = this;
-                    if (r5 == 0) goto L_0x0034
-                    r4 = 2
-                    r0 = 1
-                    if (r5 == r0) goto L_0x002b
-                    if (r5 == r4) goto L_0x0010
-                    org.telegram.ui.FilteredSearchView$SharedDocumentsAdapter$1 r4 = new org.telegram.ui.FilteredSearchView$SharedDocumentsAdapter$1
-                    android.content.Context r5 = r3.mContext
-                    r4.<init>(r5, r0)
-                    goto L_0x003b
-                L_0x0010:
-                    org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
-                    android.content.Context r1 = r3.mContext
-                    r5.<init>(r1)
-                    int r1 = r3.currentType
-                    r2 = 4
-                    if (r1 == r4) goto L_0x0024
-                    if (r1 != r2) goto L_0x001f
-                    goto L_0x0024
-                L_0x001f:
-                    r4 = 3
-                    r5.setViewType(r4)
-                    goto L_0x0027
-                L_0x0024:
-                    r5.setViewType(r2)
-                L_0x0027:
-                    r5.setIsSingleCell(r0)
-                    goto L_0x0032
-                L_0x002b:
-                    org.telegram.ui.Cells.SharedDocumentCell r5 = new org.telegram.ui.Cells.SharedDocumentCell
-                    android.content.Context r0 = r3.mContext
-                    r5.<init>(r0, r4)
-                L_0x0032:
-                    r4 = r5
-                    goto L_0x003b
-                L_0x0034:
-                    org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
-                    android.content.Context r5 = r3.mContext
-                    r4.<init>(r5)
-                L_0x003b:
-                    androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                    r0 = -1
-                    r1 = -2
-                    r5.<init>((int) r0, (int) r1)
-                    r4.setLayoutParams(r5)
-                    org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
-                    r5.<init>(r4)
-                    return r5
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.SharedDocumentsAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
-            }
-
-            public void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder) {
-                if (viewHolder.getItemViewType() != 2) {
-                    ArrayList arrayList = FilteredSearchView.this.sectionArrays.get(FilteredSearchView.this.sections.get(i));
-                    int itemViewType = viewHolder.getItemViewType();
-                    boolean z = false;
-                    if (itemViewType == 0) {
-                        ((GraySectionCell) viewHolder.itemView).setText(LocaleController.formatSectionDate((long) ((MessageObject) arrayList.get(0)).messageOwner.date));
-                    } else if (itemViewType == 1) {
-                        if (i != 0) {
-                            i2--;
-                        }
-                        final SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) viewHolder.itemView;
-                        final MessageObject messageObject = (MessageObject) arrayList.get(i2);
-                        final boolean z2 = sharedDocumentCell.getMessage() != null && sharedDocumentCell.getMessage().getId() == messageObject.getId();
-                        if (i2 != arrayList.size() - 1 || (i == FilteredSearchView.this.sections.size() - 1 && FilteredSearchView.this.isLoading)) {
-                            z = true;
-                        }
-                        sharedDocumentCell.setDocument(messageObject, z);
-                        sharedDocumentCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                            public boolean onPreDraw() {
-                                sharedDocumentCell.getViewTreeObserver().removeOnPreDrawListener(this);
-                                if (FilteredSearchView.this.uiCallback.actionModeShowing()) {
-                                    FilteredSearchView.this.messageHashIdTmp.set(messageObject.getId(), messageObject.getDialogId());
-                                    sharedDocumentCell.setChecked(FilteredSearchView.this.uiCallback.isSelected(FilteredSearchView.this.messageHashIdTmp), z2);
-                                    return true;
-                                }
-                                sharedDocumentCell.setChecked(false, z2);
-                                return true;
-                            }
-                        });
-                    } else if (itemViewType == 3) {
-                        if (i != 0) {
-                            i2--;
-                        }
-                        final SharedAudioCell sharedAudioCell = (SharedAudioCell) viewHolder.itemView;
-                        final MessageObject messageObject2 = (MessageObject) arrayList.get(i2);
-                        final boolean z3 = sharedAudioCell.getMessage() != null && sharedAudioCell.getMessage().getId() == messageObject2.getId();
-                        if (i2 != arrayList.size() - 1 || (i == FilteredSearchView.this.sections.size() - 1 && FilteredSearchView.this.isLoading)) {
-                            z = true;
-                        }
-                        sharedAudioCell.setMessageObject(messageObject2, z);
-                        sharedAudioCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                            public boolean onPreDraw() {
-                                sharedAudioCell.getViewTreeObserver().removeOnPreDrawListener(this);
-                                if (FilteredSearchView.this.uiCallback.actionModeShowing()) {
-                                    FilteredSearchView.this.messageHashIdTmp.set(messageObject2.getId(), messageObject2.getDialogId());
-                                    sharedAudioCell.setChecked(FilteredSearchView.this.uiCallback.isSelected(FilteredSearchView.this.messageHashIdTmp), z3);
-                                    return true;
-                                }
-                                sharedAudioCell.setChecked(false, z3);
-                                return true;
-                            }
-                        });
-                    }
-                }
-            }
-
-            public int getItemViewType(int i, int i2) {
-                if (i >= FilteredSearchView.this.sections.size()) {
-                    return 2;
-                }
-                if (i != 0 && i2 == 0) {
-                    return 0;
-                }
-                int i3 = this.currentType;
-                return (i3 == 2 || i3 == 4) ? 3 : 1;
-            }
+        public String getLetter(int i) {
+            return null;
         }
 
-        /* access modifiers changed from: private */
-        public void openUrl(String str) {
-            if (AndroidUtilities.shouldShowUrlInAlert(str)) {
-                AlertsCreator.showOpenUrlAlert(this.parentFragment, str, true, true);
-            } else {
-                Browser.openUrl((Context) this.parentActivity, str);
-            }
+        public int getPositionForScrollProgress(float f) {
+            return 0;
         }
 
-        /* access modifiers changed from: private */
-        public void openWebView(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject) {
-            EmbedBottomSheet.show(this.parentActivity, messageObject, this.provider, tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
-        }
-
-        /* access modifiers changed from: protected */
-        public void onAttachedToWindow() {
-            super.onAttachedToWindow();
-            int i = UserConfig.selectedAccount;
-            this.lastAccount = i;
-            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.emojiLoaded);
-        }
-
-        /* access modifiers changed from: protected */
-        public void onDetachedFromWindow() {
-            super.onDetachedFromWindow();
-            NotificationCenter.getInstance(this.lastAccount).removeObserver(this, NotificationCenter.emojiLoaded);
-        }
-
-        public void didReceivedNotification(int i, int i2, Object... objArr) {
-            if (i == NotificationCenter.emojiLoaded) {
-                int childCount = this.recyclerListView.getChildCount();
-                for (int i3 = 0; i3 < childCount; i3++) {
-                    if (this.recyclerListView.getChildAt(i3) instanceof DialogCell) {
-                        ((DialogCell) this.recyclerListView.getChildAt(i3)).update(0);
-                    }
-                    this.recyclerListView.getChildAt(i3).invalidate();
-                }
-            }
-        }
-
-        /* access modifiers changed from: private */
-        public boolean onItemLongClick(MessageObject messageObject, View view, int i) {
-            if (!this.uiCallback.actionModeShowing()) {
-                this.uiCallback.showActionMode();
-            }
-            if (!this.uiCallback.actionModeShowing()) {
-                return true;
-            }
-            this.uiCallback.toggleItemSelection(messageObject, view, i);
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
             return true;
         }
 
-        public static class MessageHashId {
-            public long dialogId;
-            public int messageId;
-
-            public MessageHashId(int i, long j) {
-                this.dialogId = j;
-                this.messageId = i;
-            }
-
-            public void set(int i, long j) {
-                this.dialogId = j;
-                this.messageId = i;
-            }
-
-            public boolean equals(Object obj) {
-                if (this == obj) {
-                    return true;
-                }
-                if (obj == null || MessageHashId.class != obj.getClass()) {
-                    return false;
-                }
-                MessageHashId messageHashId = (MessageHashId) obj;
-                if (this.dialogId == messageHashId.dialogId && this.messageId == messageHashId.messageId) {
-                    return true;
-                }
-                return false;
-            }
-
-            public int hashCode() {
-                return this.messageId;
-            }
+        public SharedLinksAdapter(Context context) {
+            this.mContext = context;
         }
 
-        class OnlyUserFiltersAdapter extends RecyclerListView.SelectionAdapter {
-            public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-                return true;
+        public int getSectionCount() {
+            int i = 0;
+            if (FilteredSearchView.this.messages.isEmpty()) {
+                return 0;
             }
-
-            OnlyUserFiltersAdapter() {
+            if (FilteredSearchView.this.sections.isEmpty() && FilteredSearchView.this.isLoading) {
+                return 0;
             }
-
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v1, resolved type: org.telegram.ui.Cells.DialogCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v3, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v4, resolved type: org.telegram.ui.Cells.GraySectionCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v5, resolved type: org.telegram.ui.Cells.DialogCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v6, resolved type: org.telegram.ui.Cells.DialogCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v7, resolved type: org.telegram.ui.Cells.DialogCell} */
-            /* JADX WARNING: Multi-variable type inference failed */
-            /* Code decompiled incorrectly, please refer to instructions dump. */
-            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
-                /*
-                    r3 = this;
-                    r0 = 1
-                    if (r5 == 0) goto L_0x002c
-                    r1 = 3
-                    if (r5 == r1) goto L_0x001c
-                    org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
-                    android.content.Context r4 = r4.getContext()
-                    r5.<init>(r4)
-                    r4 = 2131627374(0x7f0e0d6e, float:1.888201E38)
-                    java.lang.String r0 = "SearchMessages"
-                    java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
-                    r5.setText(r4)
-                    goto L_0x0037
-                L_0x001c:
-                    org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
-                    android.content.Context r4 = r4.getContext()
-                    r5.<init>(r4)
-                    r5.setIsSingleCell(r0)
-                    r5.setViewType(r0)
-                    goto L_0x0037
-                L_0x002c:
-                    org.telegram.ui.Cells.DialogCell r5 = new org.telegram.ui.Cells.DialogCell
-                    r1 = 0
-                    android.content.Context r4 = r4.getContext()
-                    r2 = 0
-                    r5.<init>(r1, r4, r0, r2)
-                L_0x0037:
-                    androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                    r0 = -1
-                    r1 = -2
-                    r4.<init>((int) r0, (int) r1)
-                    r5.setLayoutParams(r4)
-                    org.telegram.ui.Components.RecyclerListView$Holder r4 = new org.telegram.ui.Components.RecyclerListView$Holder
-                    r4.<init>(r5)
-                    return r4
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.OnlyUserFiltersAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+            int size = FilteredSearchView.this.sections.size();
+            if (!FilteredSearchView.this.sections.isEmpty() && !FilteredSearchView.this.endReached) {
+                i = 1;
             }
+            return size + i;
+        }
 
-            public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-                if (viewHolder.getItemViewType() == 0) {
-                    final DialogCell dialogCell = (DialogCell) viewHolder.itemView;
-                    final MessageObject messageObject = FilteredSearchView.this.messages.get(i);
-                    dialogCell.setDialog(messageObject.getDialogId(), messageObject, messageObject.messageOwner.date, false);
-                    final boolean z = true;
-                    dialogCell.useSeparator = i != getItemCount() - 1;
-                    if (dialogCell.getMessage() == null || dialogCell.getMessage().getId() != messageObject.getId()) {
-                        z = false;
+        public int getCountForSection(int i) {
+            int i2 = 1;
+            if (i >= FilteredSearchView.this.sections.size()) {
+                return 1;
+            }
+            FilteredSearchView filteredSearchView = FilteredSearchView.this;
+            int size = filteredSearchView.sectionArrays.get(filteredSearchView.sections.get(i)).size();
+            if (i == 0) {
+                i2 = 0;
+            }
+            return size + i2;
+        }
+
+        public View getSectionHeaderView(int i, View view) {
+            if (view == null) {
+                view = new GraySectionCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("graySection") & -NUM);
+            }
+            if (i == 0) {
+                view.setAlpha(0.0f);
+                return view;
+            }
+            if (i < FilteredSearchView.this.sections.size()) {
+                view.setAlpha(1.0f);
+                ((GraySectionCell) view).setText(LocaleController.formatSectionDate((long) ((MessageObject) FilteredSearchView.this.sectionArrays.get(FilteredSearchView.this.sections.get(i)).get(0)).messageOwner.date));
+            }
+            return view;
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v1, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v3, resolved type: org.telegram.ui.Cells.SharedLinkCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v4, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v5, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v6, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v7, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r3, int r4) {
+            /*
+                r2 = this;
+                if (r4 == 0) goto L_0x0021
+                r3 = 1
+                if (r4 == r3) goto L_0x0014
+                org.telegram.ui.Components.FlickerLoadingView r4 = new org.telegram.ui.Components.FlickerLoadingView
+                android.content.Context r0 = r2.mContext
+                r4.<init>(r0)
+                r0 = 5
+                r4.setViewType(r0)
+                r4.setIsSingleCell(r3)
+                goto L_0x0028
+            L_0x0014:
+                org.telegram.ui.Cells.SharedLinkCell r4 = new org.telegram.ui.Cells.SharedLinkCell
+                android.content.Context r0 = r2.mContext
+                r4.<init>(r0, r3)
+                org.telegram.ui.Cells.SharedLinkCell$SharedLinkCellDelegate r3 = r2.sharedLinkCellDelegate
+                r4.setDelegate(r3)
+                goto L_0x0028
+            L_0x0021:
+                org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
+                android.content.Context r3 = r2.mContext
+                r4.<init>(r3)
+            L_0x0028:
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r3 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r0 = -1
+                r1 = -2
+                r3.<init>((int) r0, (int) r1)
+                r4.setLayoutParams(r3)
+                org.telegram.ui.Components.RecyclerListView$Holder r3 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r3.<init>(r4)
+                return r3
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        }
+
+        public void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder) {
+            if (viewHolder.getItemViewType() != 2) {
+                ArrayList arrayList = FilteredSearchView.this.sectionArrays.get(FilteredSearchView.this.sections.get(i));
+                int itemViewType = viewHolder.getItemViewType();
+                boolean z = false;
+                if (itemViewType == 0) {
+                    ((GraySectionCell) viewHolder.itemView).setText(LocaleController.formatSectionDate((long) ((MessageObject) arrayList.get(0)).messageOwner.date));
+                } else if (itemViewType == 1) {
+                    if (i != 0) {
+                        i2--;
                     }
-                    dialogCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    final SharedLinkCell sharedLinkCell = (SharedLinkCell) viewHolder.itemView;
+                    final MessageObject messageObject = (MessageObject) arrayList.get(i2);
+                    final boolean z2 = sharedLinkCell.getMessage() != null && sharedLinkCell.getMessage().getId() == messageObject.getId();
+                    if (i2 != arrayList.size() - 1 || (i == FilteredSearchView.this.sections.size() - 1 && FilteredSearchView.this.isLoading)) {
+                        z = true;
+                    }
+                    sharedLinkCell.setLink(messageObject, z);
+                    sharedLinkCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                         public boolean onPreDraw() {
-                            dialogCell.getViewTreeObserver().removeOnPreDrawListener(this);
+                            sharedLinkCell.getViewTreeObserver().removeOnPreDrawListener(this);
                             if (FilteredSearchView.this.uiCallback.actionModeShowing()) {
                                 FilteredSearchView.this.messageHashIdTmp.set(messageObject.getId(), messageObject.getDialogId());
-                                dialogCell.setChecked(FilteredSearchView.this.uiCallback.isSelected(FilteredSearchView.this.messageHashIdTmp), z);
+                                sharedLinkCell.setChecked(FilteredSearchView.this.uiCallback.isSelected(FilteredSearchView.this.messageHashIdTmp), z2);
                                 return true;
                             }
-                            dialogCell.setChecked(false, z);
+                            sharedLinkCell.setChecked(false, z2);
                             return true;
                         }
                     });
                 }
             }
+        }
 
-            public int getItemViewType(int i) {
-                return i >= FilteredSearchView.this.messages.size() ? 3 : 0;
+        public int getItemViewType(int i, int i2) {
+            if (i < FilteredSearchView.this.sections.size()) {
+                return (i == 0 || i2 != 0) ? 1 : 0;
             }
+            return 2;
+        }
+    }
 
-            public int getItemCount() {
-                if (FilteredSearchView.this.messages.isEmpty()) {
-                    return 0;
+    private class SharedDocumentsAdapter extends RecyclerListView.SectionsAdapter {
+        private int currentType;
+        private Context mContext;
+
+        public Object getItem(int i, int i2) {
+            return null;
+        }
+
+        public String getLetter(int i) {
+            return null;
+        }
+
+        public int getPositionForScrollProgress(float f) {
+            return 0;
+        }
+
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
+            return i == 0 || i2 != 0;
+        }
+
+        public SharedDocumentsAdapter(Context context, int i) {
+            this.mContext = context;
+            this.currentType = i;
+        }
+
+        public int getSectionCount() {
+            int i = 0;
+            if (FilteredSearchView.this.sections.isEmpty()) {
+                return 0;
+            }
+            int size = FilteredSearchView.this.sections.size();
+            if (!FilteredSearchView.this.sections.isEmpty() && !FilteredSearchView.this.endReached) {
+                i = 1;
+            }
+            return size + i;
+        }
+
+        public int getCountForSection(int i) {
+            int i2 = 1;
+            if (i >= FilteredSearchView.this.sections.size()) {
+                return 1;
+            }
+            FilteredSearchView filteredSearchView = FilteredSearchView.this;
+            int size = filteredSearchView.sectionArrays.get(filteredSearchView.sections.get(i)).size();
+            if (i == 0) {
+                i2 = 0;
+            }
+            return size + i2;
+        }
+
+        public View getSectionHeaderView(int i, View view) {
+            if (view == null) {
+                view = new GraySectionCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("graySection") & -NUM);
+            }
+            if (i == 0) {
+                view.setAlpha(0.0f);
+                return view;
+            }
+            if (i < FilteredSearchView.this.sections.size()) {
+                view.setAlpha(1.0f);
+                ((GraySectionCell) view).setText(LocaleController.formatSectionDate((long) ((MessageObject) FilteredSearchView.this.sectionArrays.get(FilteredSearchView.this.sections.get(i)).get(0)).messageOwner.date));
+            }
+            return view;
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v4, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v8, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v9, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
+            /*
+                r3 = this;
+                if (r5 == 0) goto L_0x0034
+                r4 = 2
+                r0 = 1
+                if (r5 == r0) goto L_0x002b
+                if (r5 == r4) goto L_0x0010
+                org.telegram.ui.FilteredSearchView$SharedDocumentsAdapter$1 r4 = new org.telegram.ui.FilteredSearchView$SharedDocumentsAdapter$1
+                android.content.Context r5 = r3.mContext
+                r4.<init>(r5, r0)
+                goto L_0x003b
+            L_0x0010:
+                org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
+                android.content.Context r1 = r3.mContext
+                r5.<init>(r1)
+                int r1 = r3.currentType
+                r2 = 4
+                if (r1 == r4) goto L_0x0024
+                if (r1 != r2) goto L_0x001f
+                goto L_0x0024
+            L_0x001f:
+                r4 = 3
+                r5.setViewType(r4)
+                goto L_0x0027
+            L_0x0024:
+                r5.setViewType(r2)
+            L_0x0027:
+                r5.setIsSingleCell(r0)
+                goto L_0x0032
+            L_0x002b:
+                org.telegram.ui.Cells.SharedDocumentCell r5 = new org.telegram.ui.Cells.SharedDocumentCell
+                android.content.Context r0 = r3.mContext
+                r5.<init>(r0, r4)
+            L_0x0032:
+                r4 = r5
+                goto L_0x003b
+            L_0x0034:
+                org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
+                android.content.Context r5 = r3.mContext
+                r4.<init>(r5)
+            L_0x003b:
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r0 = -1
+                r1 = -2
+                r5.<init>((int) r0, (int) r1)
+                r4.setLayoutParams(r5)
+                org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r5.<init>(r4)
+                return r5
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.SharedDocumentsAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        }
+
+        public void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder) {
+            if (viewHolder.getItemViewType() != 2) {
+                ArrayList arrayList = FilteredSearchView.this.sectionArrays.get(FilteredSearchView.this.sections.get(i));
+                int itemViewType = viewHolder.getItemViewType();
+                boolean z = false;
+                if (itemViewType == 0) {
+                    ((GraySectionCell) viewHolder.itemView).setText(LocaleController.formatSectionDate((long) ((MessageObject) arrayList.get(0)).messageOwner.date));
+                } else if (itemViewType == 1) {
+                    if (i != 0) {
+                        i2--;
+                    }
+                    final SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) viewHolder.itemView;
+                    final MessageObject messageObject = (MessageObject) arrayList.get(i2);
+                    final boolean z2 = sharedDocumentCell.getMessage() != null && sharedDocumentCell.getMessage().getId() == messageObject.getId();
+                    if (i2 != arrayList.size() - 1 || (i == FilteredSearchView.this.sections.size() - 1 && FilteredSearchView.this.isLoading)) {
+                        z = true;
+                    }
+                    sharedDocumentCell.setDocument(messageObject, z);
+                    sharedDocumentCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            sharedDocumentCell.getViewTreeObserver().removeOnPreDrawListener(this);
+                            if (FilteredSearchView.this.uiCallback.actionModeShowing()) {
+                                FilteredSearchView.this.messageHashIdTmp.set(messageObject.getId(), messageObject.getDialogId());
+                                sharedDocumentCell.setChecked(FilteredSearchView.this.uiCallback.isSelected(FilteredSearchView.this.messageHashIdTmp), z2);
+                                return true;
+                            }
+                            sharedDocumentCell.setChecked(false, z2);
+                            return true;
+                        }
+                    });
+                } else if (itemViewType == 3) {
+                    if (i != 0) {
+                        i2--;
+                    }
+                    final SharedAudioCell sharedAudioCell = (SharedAudioCell) viewHolder.itemView;
+                    final MessageObject messageObject2 = (MessageObject) arrayList.get(i2);
+                    final boolean z3 = sharedAudioCell.getMessage() != null && sharedAudioCell.getMessage().getId() == messageObject2.getId();
+                    if (i2 != arrayList.size() - 1 || (i == FilteredSearchView.this.sections.size() - 1 && FilteredSearchView.this.isLoading)) {
+                        z = true;
+                    }
+                    sharedAudioCell.setMessageObject(messageObject2, z);
+                    sharedAudioCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            sharedAudioCell.getViewTreeObserver().removeOnPreDrawListener(this);
+                            if (FilteredSearchView.this.uiCallback.actionModeShowing()) {
+                                FilteredSearchView.this.messageHashIdTmp.set(messageObject2.getId(), messageObject2.getDialogId());
+                                sharedAudioCell.setChecked(FilteredSearchView.this.uiCallback.isSelected(FilteredSearchView.this.messageHashIdTmp), z3);
+                                return true;
+                            }
+                            sharedAudioCell.setChecked(false, z3);
+                            return true;
+                        }
+                    });
                 }
-                return FilteredSearchView.this.messages.size() + (FilteredSearchView.this.endReached ^ true ? 1 : 0);
             }
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
-            RecyclerView.Adapter adapter2;
-            int i3 = this.columnsCount;
-            if (AndroidUtilities.isTablet()) {
-                this.columnsCount = 3;
-            } else if (getResources().getConfiguration().orientation == 2) {
-                this.columnsCount = 6;
-            } else {
-                this.columnsCount = 3;
+        public int getItemViewType(int i, int i2) {
+            if (i >= FilteredSearchView.this.sections.size()) {
+                return 2;
             }
-            if (i3 != this.columnsCount && (adapter2 = this.adapter) == this.sharedPhotoVideoAdapter) {
-                this.ignoreRequestLayout = true;
-                adapter2.notifyDataSetChanged();
-                this.ignoreRequestLayout = false;
+            if (i != 0 && i2 == 0) {
+                return 0;
             }
-            super.onMeasure(i, i2);
+            int i3 = this.currentType;
+            return (i3 == 2 || i3 == 4) ? 3 : 1;
         }
+    }
 
-        public void requestLayout() {
-            if (!this.ignoreRequestLayout) {
-                super.requestLayout();
-            }
+    /* access modifiers changed from: private */
+    public void openUrl(String str) {
+        if (AndroidUtilities.shouldShowUrlInAlert(str)) {
+            AlertsCreator.showOpenUrlAlert(this.parentFragment, str, true, true);
+        } else {
+            Browser.openUrl((Context) this.parentActivity, str);
         }
+    }
 
-        public void setDelegate(Delegate delegate2, boolean z) {
-            this.delegate = delegate2;
-            if (z && delegate2 != null && !this.localTipChats.isEmpty()) {
-                delegate2.updateFiltersView(false, this.localTipChats, this.localTipDates, this.localTipArchive);
-            }
-        }
+    /* access modifiers changed from: private */
+    public void openWebView(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject) {
+        EmbedBottomSheet.show(this.parentActivity, messageObject, this.provider, tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
+    }
 
-        public void setUiCallback(UiCallback uiCallback2) {
-            this.uiCallback = uiCallback2;
-        }
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        int i = UserConfig.selectedAccount;
+        this.lastAccount = i;
+        NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.emojiLoaded);
+    }
 
-        /* access modifiers changed from: private */
-        public void showFloatingDateView() {
-            AndroidUtilities.cancelRunOnUIThread(this.hideFloatingDateRunnable);
-            AndroidUtilities.runOnUIThread(this.hideFloatingDateRunnable, 650);
-            if (this.floatingDateView.getTag() == null) {
-                AnimatorSet animatorSet = this.floatingDateAnimation;
-                if (animatorSet != null) {
-                    animatorSet.cancel();
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        NotificationCenter.getInstance(this.lastAccount).removeObserver(this, NotificationCenter.emojiLoaded);
+    }
+
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.emojiLoaded) {
+            int childCount = this.recyclerListView.getChildCount();
+            for (int i3 = 0; i3 < childCount; i3++) {
+                if (this.recyclerListView.getChildAt(i3) instanceof DialogCell) {
+                    ((DialogCell) this.recyclerListView.getChildAt(i3)).update(0);
                 }
-                this.floatingDateView.setTag(1);
+                this.recyclerListView.getChildAt(i3).invalidate();
+            }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public boolean onItemLongClick(MessageObject messageObject, View view, int i) {
+        if (!this.uiCallback.actionModeShowing()) {
+            this.uiCallback.showActionMode();
+        }
+        if (!this.uiCallback.actionModeShowing()) {
+            return true;
+        }
+        this.uiCallback.toggleItemSelection(messageObject, view, i);
+        return true;
+    }
+
+    public static class MessageHashId {
+        public long dialogId;
+        public int messageId;
+
+        public MessageHashId(int i, long j) {
+            this.dialogId = j;
+            this.messageId = i;
+        }
+
+        public void set(int i, long j) {
+            this.dialogId = j;
+            this.messageId = i;
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || MessageHashId.class != obj.getClass()) {
+                return false;
+            }
+            MessageHashId messageHashId = (MessageHashId) obj;
+            if (this.dialogId == messageHashId.dialogId && this.messageId == messageHashId.messageId) {
+                return true;
+            }
+            return false;
+        }
+
+        public int hashCode() {
+            return this.messageId;
+        }
+    }
+
+    class OnlyUserFiltersAdapter extends RecyclerListView.SelectionAdapter {
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            return true;
+        }
+
+        OnlyUserFiltersAdapter() {
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v1, resolved type: org.telegram.ui.Cells.DialogCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v3, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v4, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v5, resolved type: org.telegram.ui.Cells.DialogCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v6, resolved type: org.telegram.ui.Cells.DialogCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v7, resolved type: org.telegram.ui.Cells.DialogCell} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
+            /*
+                r3 = this;
+                r0 = 1
+                if (r5 == 0) goto L_0x002c
+                r1 = 3
+                if (r5 == r1) goto L_0x001c
+                org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
+                android.content.Context r4 = r4.getContext()
+                r5.<init>(r4)
+                r4 = 2131627394(0x7f0e0d82, float:1.8882051E38)
+                java.lang.String r0 = "SearchMessages"
+                java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
+                r5.setText(r4)
+                goto L_0x0037
+            L_0x001c:
+                org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
+                android.content.Context r4 = r4.getContext()
+                r5.<init>(r4)
+                r5.setIsSingleCell(r0)
+                r5.setViewType(r0)
+                goto L_0x0037
+            L_0x002c:
+                org.telegram.ui.Cells.DialogCell r5 = new org.telegram.ui.Cells.DialogCell
+                r1 = 0
+                android.content.Context r4 = r4.getContext()
+                r2 = 0
+                r5.<init>(r1, r4, r0, r2)
+            L_0x0037:
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r0 = -1
+                r1 = -2
+                r4.<init>((int) r0, (int) r1)
+                r5.setLayoutParams(r4)
+                org.telegram.ui.Components.RecyclerListView$Holder r4 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r4.<init>(r5)
+                return r4
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.OnlyUserFiltersAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            if (viewHolder.getItemViewType() == 0) {
+                final DialogCell dialogCell = (DialogCell) viewHolder.itemView;
+                final MessageObject messageObject = FilteredSearchView.this.messages.get(i);
+                dialogCell.setDialog(messageObject.getDialogId(), messageObject, messageObject.messageOwner.date, false);
+                final boolean z = true;
+                dialogCell.useSeparator = i != getItemCount() - 1;
+                if (dialogCell.getMessage() == null || dialogCell.getMessage().getId() != messageObject.getId()) {
+                    z = false;
+                }
+                dialogCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    public boolean onPreDraw() {
+                        dialogCell.getViewTreeObserver().removeOnPreDrawListener(this);
+                        if (FilteredSearchView.this.uiCallback.actionModeShowing()) {
+                            FilteredSearchView.this.messageHashIdTmp.set(messageObject.getId(), messageObject.getDialogId());
+                            dialogCell.setChecked(FilteredSearchView.this.uiCallback.isSelected(FilteredSearchView.this.messageHashIdTmp), z);
+                            return true;
+                        }
+                        dialogCell.setChecked(false, z);
+                        return true;
+                    }
+                });
+            }
+        }
+
+        public int getItemViewType(int i) {
+            return i >= FilteredSearchView.this.messages.size() ? 3 : 0;
+        }
+
+        public int getItemCount() {
+            if (FilteredSearchView.this.messages.isEmpty()) {
+                return 0;
+            }
+            return FilteredSearchView.this.messages.size() + (FilteredSearchView.this.endReached ^ true ? 1 : 0);
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onMeasure(int i, int i2) {
+        RecyclerView.Adapter adapter2;
+        int i3 = this.columnsCount;
+        if (AndroidUtilities.isTablet()) {
+            this.columnsCount = 3;
+        } else if (getResources().getConfiguration().orientation == 2) {
+            this.columnsCount = 6;
+        } else {
+            this.columnsCount = 3;
+        }
+        if (i3 != this.columnsCount && (adapter2 = this.adapter) == this.sharedPhotoVideoAdapter) {
+            this.ignoreRequestLayout = true;
+            adapter2.notifyDataSetChanged();
+            this.ignoreRequestLayout = false;
+        }
+        super.onMeasure(i, i2);
+    }
+
+    public void requestLayout() {
+        if (!this.ignoreRequestLayout) {
+            super.requestLayout();
+        }
+    }
+
+    public void setDelegate(Delegate delegate2, boolean z) {
+        this.delegate = delegate2;
+        if (z && delegate2 != null && !this.localTipChats.isEmpty()) {
+            delegate2.updateFiltersView(false, this.localTipChats, this.localTipDates, this.localTipArchive);
+        }
+    }
+
+    public void setUiCallback(UiCallback uiCallback2) {
+        this.uiCallback = uiCallback2;
+    }
+
+    /* access modifiers changed from: private */
+    public void showFloatingDateView() {
+        AndroidUtilities.cancelRunOnUIThread(this.hideFloatingDateRunnable);
+        AndroidUtilities.runOnUIThread(this.hideFloatingDateRunnable, 650);
+        if (this.floatingDateView.getTag() == null) {
+            AnimatorSet animatorSet = this.floatingDateAnimation;
+            if (animatorSet != null) {
+                animatorSet.cancel();
+            }
+            this.floatingDateView.setTag(1);
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.floatingDateAnimation = animatorSet2;
+            animatorSet2.setDuration(180);
+            this.floatingDateAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingDateView, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.floatingDateView, View.TRANSLATION_Y, new float[]{0.0f})});
+            this.floatingDateAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+            this.floatingDateAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    AnimatorSet unused = FilteredSearchView.this.floatingDateAnimation = null;
+                }
+            });
+            this.floatingDateAnimation.start();
+        }
+    }
+
+    private void hideFloatingDateView(boolean z) {
+        AndroidUtilities.cancelRunOnUIThread(this.hideFloatingDateRunnable);
+        if (this.floatingDateView.getTag() != null) {
+            this.floatingDateView.setTag((Object) null);
+            AnimatorSet animatorSet = this.floatingDateAnimation;
+            if (animatorSet != null) {
+                animatorSet.cancel();
+                this.floatingDateAnimation = null;
+            }
+            if (z) {
                 AnimatorSet animatorSet2 = new AnimatorSet();
                 this.floatingDateAnimation = animatorSet2;
                 animatorSet2.setDuration(180);
-                this.floatingDateAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingDateView, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.floatingDateView, View.TRANSLATION_Y, new float[]{0.0f})});
+                this.floatingDateAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingDateView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.floatingDateView, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(48.0f))})});
                 this.floatingDateAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
                 this.floatingDateAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
@@ -2160,109 +1977,85 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     }
                 });
                 this.floatingDateAnimation.start();
+                return;
             }
-        }
-
-        private void hideFloatingDateView(boolean z) {
-            AndroidUtilities.cancelRunOnUIThread(this.hideFloatingDateRunnable);
-            if (this.floatingDateView.getTag() != null) {
-                this.floatingDateView.setTag((Object) null);
-                AnimatorSet animatorSet = this.floatingDateAnimation;
-                if (animatorSet != null) {
-                    animatorSet.cancel();
-                    this.floatingDateAnimation = null;
-                }
-                if (z) {
-                    AnimatorSet animatorSet2 = new AnimatorSet();
-                    this.floatingDateAnimation = animatorSet2;
-                    animatorSet2.setDuration(180);
-                    this.floatingDateAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingDateView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.floatingDateView, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(48.0f))})});
-                    this.floatingDateAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-                    this.floatingDateAnimation.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animator) {
-                            AnimatorSet unused = FilteredSearchView.this.floatingDateAnimation = null;
-                        }
-                    });
-                    this.floatingDateAnimation.start();
-                    return;
-                }
-                this.floatingDateView.setAlpha(0.0f);
-            }
-        }
-
-        public void setChatPreviewDelegate(SearchViewPager.ChatPreviewDelegate chatPreviewDelegate2) {
-            this.chatPreviewDelegate = chatPreviewDelegate2;
-        }
-
-        public ArrayList<ThemeDescription> getThemeDescriptions() {
-            ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-            arrayList.add(new ThemeDescription(this, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-            arrayList.add(new ThemeDescription(this, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
-            arrayList.add(new ThemeDescription(this, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"dateTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{SharedDocumentCell.class}, new String[]{"progressView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sharedMedia_startStopLoadIcon"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"statusImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sharedMedia_startStopLoadIcon"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "files_folderIcon"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"extTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "files_iconText"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedAudioCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedAudioCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
-            RecyclerListView recyclerListView2 = this.recyclerListView;
-            RecyclerListView recyclerListView3 = recyclerListView2;
-            arrayList.add(new ThemeDescription(recyclerListView3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_titleTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_descriptionTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedLinkCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedLinkCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{SharedLinkCell.class}, new String[]{"titleTextPaint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{SharedLinkCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{SharedLinkCell.class}, Theme.linkSelectionPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkSelection"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{SharedLinkCell.class}, new String[]{"letterDrawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sharedMedia_linkPlaceholderText"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{SharedLinkCell.class}, new String[]{"letterDrawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sharedMedia_linkPlaceholder"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_SECTIONS, new Class[]{SharedMediaSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_SECTIONS, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounter"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countGrayPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounterMuted"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounterText"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_lockDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_secretIcon"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameIcon"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_scamDrawable, Theme.dialogs_fakeDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_draft"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_pinnedDrawable, Theme.dialogs_reorderDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_pinnedIcon"));
-            TextPaint[] textPaintArr = Theme.dialogs_namePaint;
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (String[]) null, new Paint[]{textPaintArr[0], textPaintArr[1], Theme.dialogs_searchNamePaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_name"));
-            TextPaint[] textPaintArr2 = Theme.dialogs_nameEncryptedPaint;
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (String[]) null, new Paint[]{textPaintArr2[0], textPaintArr2[1], Theme.dialogs_searchNameEncryptedPaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_secretName"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_messagePaint[1], (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_message_threeLines"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_messagePaint[0], (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_message"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_messageNamePaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameMessage_threeLines"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_draft"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{DialogCell.class}, (String[]) null, (Paint[]) Theme.dialogs_messagePrintingPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionMessage"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_timePaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_date"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_pinnedPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_pinnedOverlay"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_tabletSeletedPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_tabletSelectedOverlay"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_checkDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentCheck"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_checkReadDrawable, Theme.dialogs_halfCheckDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentReadCheck"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_clockDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentClock"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_errorPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentError"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_errorDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentErrorIcon"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_verifiedCheck"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_verifiedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_verifiedBackground"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_muteDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_muteIcon"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_mentionDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_mentionIcon"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_archivePinBackground"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_archiveBackground"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_onlineCircle"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOX, new Class[]{DialogCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{DialogCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
-            arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_SECTIONS, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_SECTIONS, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"));
-            arrayList.add(new ThemeDescription(this.emptyView.title, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-            arrayList.add(new ThemeDescription(this.emptyView.subtitle, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
-            return arrayList;
+            this.floatingDateView.setAlpha(0.0f);
         }
     }
+
+    public void setChatPreviewDelegate(SearchViewPager.ChatPreviewDelegate chatPreviewDelegate2) {
+        this.chatPreviewDelegate = chatPreviewDelegate2;
+    }
+
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
+        arrayList.add(new ThemeDescription(this, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
+        arrayList.add(new ThemeDescription(this, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"dateTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{SharedDocumentCell.class}, new String[]{"progressView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sharedMedia_startStopLoadIcon"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"statusImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sharedMedia_startStopLoadIcon"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "files_folderIcon"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"extTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "files_iconText"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedAudioCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedAudioCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
+        RecyclerListView recyclerListView2 = this.recyclerListView;
+        RecyclerListView recyclerListView3 = recyclerListView2;
+        arrayList.add(new ThemeDescription(recyclerListView3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_titleTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_descriptionTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedLinkCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedLinkCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{SharedLinkCell.class}, new String[]{"titleTextPaint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{SharedLinkCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{SharedLinkCell.class}, Theme.linkSelectionPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkSelection"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{SharedLinkCell.class}, new String[]{"letterDrawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sharedMedia_linkPlaceholderText"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{SharedLinkCell.class}, new String[]{"letterDrawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sharedMedia_linkPlaceholder"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_SECTIONS, new Class[]{SharedMediaSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_SECTIONS, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounter"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countGrayPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounterMuted"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounterText"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_lockDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_secretIcon"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameIcon"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_scamDrawable, Theme.dialogs_fakeDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_draft"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_pinnedDrawable, Theme.dialogs_reorderDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_pinnedIcon"));
+        TextPaint[] textPaintArr = Theme.dialogs_namePaint;
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (String[]) null, new Paint[]{textPaintArr[0], textPaintArr[1], Theme.dialogs_searchNamePaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_name"));
+        TextPaint[] textPaintArr2 = Theme.dialogs_nameEncryptedPaint;
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (String[]) null, new Paint[]{textPaintArr2[0], textPaintArr2[1], Theme.dialogs_searchNameEncryptedPaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_secretName"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_messagePaint[1], (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_message_threeLines"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_messagePaint[0], (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_message"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_messageNamePaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameMessage_threeLines"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_draft"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{DialogCell.class}, (String[]) null, (Paint[]) Theme.dialogs_messagePrintingPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionMessage"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_timePaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_date"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_pinnedPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_pinnedOverlay"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_tabletSeletedPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_tabletSelectedOverlay"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_checkDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentCheck"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_checkReadDrawable, Theme.dialogs_halfCheckDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentReadCheck"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_clockDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentClock"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_errorPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentError"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_errorDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_sentErrorIcon"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_verifiedCheck"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_verifiedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_verifiedBackground"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_muteDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_muteIcon"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_mentionDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_mentionIcon"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_archivePinBackground"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_archiveBackground"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_onlineCircle"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOX, new Class[]{DialogCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{DialogCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
+        arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_SECTIONS, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
+        arrayList.add(new ThemeDescription(this.recyclerListView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_SECTIONS, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"));
+        arrayList.add(new ThemeDescription(this.emptyView.title, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.emptyView.subtitle, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
+        return arrayList;
+    }
+}

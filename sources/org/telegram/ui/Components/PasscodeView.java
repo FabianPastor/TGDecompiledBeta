@@ -51,7 +51,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.PasscodeView;
 
 public class PasscodeView extends FrameLayout {
     private static final int[] ids = {NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
@@ -108,7 +107,8 @@ public class PasscodeView extends FrameLayout {
         void didAcceptedPassword();
     }
 
-    static /* synthetic */ boolean lambda$onShow$8(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$onShow$8(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -498,11 +498,7 @@ public class PasscodeView extends FrameLayout {
         this.passwordEditText.setCursorColor(-1);
         this.passwordEditText.setCursorSize(AndroidUtilities.dp(32.0f));
         this.passwordFrameLayout.addView(this.passwordEditText, LayoutHelper.createFrame(-1, -2.0f, 81, 70.0f, 0.0f, 70.0f, 0.0f));
-        this.passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                return PasscodeView.this.lambda$new$0$PasscodeView(textView, i, keyEvent);
-            }
-        });
+        this.passwordEditText.setOnEditorActionListener(new PasscodeView$$ExternalSyntheticLambda6(this));
         this.passwordEditText.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
@@ -524,7 +520,7 @@ public class PasscodeView extends FrameLayout {
                 }
             }
         });
-        this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+        this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 return false;
             }
@@ -547,11 +543,7 @@ public class PasscodeView extends FrameLayout {
         this.checkImage.setBackgroundResource(NUM);
         this.passwordFrameLayout.addView(this.checkImage, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 10.0f, 4.0f));
         this.checkImage.setContentDescription(LocaleController.getString("Done", NUM));
-        this.checkImage.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PasscodeView.this.lambda$new$1$PasscodeView(view);
-            }
-        });
+        this.checkImage.setOnClickListener(new PasscodeView$$ExternalSyntheticLambda3(this));
         ImageView imageView3 = new ImageView(context2);
         this.fingerprintImage = imageView3;
         imageView3.setImageResource(NUM);
@@ -559,11 +551,7 @@ public class PasscodeView extends FrameLayout {
         this.fingerprintImage.setBackgroundResource(NUM);
         this.passwordFrameLayout.addView(this.fingerprintImage, LayoutHelper.createFrame(60, 60.0f, 83, 10.0f, 0.0f, 0.0f, 4.0f));
         this.fingerprintImage.setContentDescription(LocaleController.getString("AccDescrFingerprint", NUM));
-        this.fingerprintImage.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PasscodeView.this.lambda$new$2$PasscodeView(view);
-            }
-        });
+        this.fingerprintImage.setOnClickListener(new PasscodeView$$ExternalSyntheticLambda2(this));
         FrameLayout frameLayout2 = new FrameLayout(context2);
         frameLayout2.setBackgroundColor(NUM);
         this.passwordFrameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, 1.0f, 83, 20.0f, 0.0f, 20.0f, 0.0f));
@@ -643,7 +631,7 @@ public class PasscodeView extends FrameLayout {
         int i4 = 0;
         while (true) {
             if (i4 < 12) {
-                AnonymousClass4 r3 = new FrameLayout(context2) {
+                AnonymousClass4 r3 = new FrameLayout(this, context2) {
                     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
                         accessibilityNodeInfo.setClassName("android.widget.Button");
@@ -655,11 +643,7 @@ public class PasscodeView extends FrameLayout {
                     r3.setContentDescription(LocaleController.getString("AccDescrFingerprint", NUM));
                     setNextFocus(r3, NUM);
                 } else if (i4 == 10) {
-                    r3.setOnLongClickListener(new View.OnLongClickListener() {
-                        public final boolean onLongClick(View view) {
-                            return PasscodeView.this.lambda$new$3$PasscodeView(view);
-                        }
-                    });
+                    r3.setOnLongClickListener(new PasscodeView$$ExternalSyntheticLambda4(this));
                     r3.setContentDescription(LocaleController.getString("AccDescrBackspace", NUM));
                     setNextFocus(r3, NUM);
                 } else {
@@ -675,11 +659,7 @@ public class PasscodeView extends FrameLayout {
                     }
                 }
                 r3.setId(ids[i4]);
-                r3.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        PasscodeView.this.lambda$new$4$PasscodeView(view);
-                    }
-                });
+                r3.setOnClickListener(new PasscodeView$$ExternalSyntheticLambda1(this));
                 this.numberFrameLayouts.add(r3);
                 i4++;
             } else {
@@ -692,8 +672,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ boolean lambda$new$0$PasscodeView(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$new$0(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
         }
@@ -702,20 +681,17 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$PasscodeView(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         processDone(false);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$PasscodeView(View view) {
+    public /* synthetic */ void lambda$new$2(View view) {
         checkFingerprint();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ boolean lambda$new$3$PasscodeView(View view) {
+    public /* synthetic */ boolean lambda$new$3(View view) {
         this.passwordEditText.setText("");
         this.passwordEditText2.eraseAllCharacters(true);
         Drawable drawable = this.backgroundDrawable;
@@ -726,8 +702,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$PasscodeView(View view) {
+    public /* synthetic */ void lambda$new$4(View view) {
         boolean z;
         int intValue = ((Integer) view.getTag()).intValue();
         switch (intValue) {
@@ -844,16 +819,11 @@ public class PasscodeView extends FrameLayout {
         if (passcodeViewDelegate != null) {
             passcodeViewDelegate.didAcceptedPassword();
         }
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                PasscodeView.this.lambda$processDone$5$PasscodeView();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new PasscodeView$$ExternalSyntheticLambda7(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processDone$5 */
-    public /* synthetic */ void lambda$processDone$5$PasscodeView() {
+    public /* synthetic */ void lambda$processDone$5() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setDuration(200);
         animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(20.0f)}), ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{(float) AndroidUtilities.dp(0.0f)})});
@@ -945,19 +915,14 @@ public class PasscodeView extends FrameLayout {
                     editTextBoldCursor.requestFocus();
                     AndroidUtilities.showKeyboard(this.passwordEditText);
                 }
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public final void run() {
-                        PasscodeView.this.lambda$onResume$6$PasscodeView();
-                    }
-                }, 200);
+                AndroidUtilities.runOnUIThread(new PasscodeView$$ExternalSyntheticLambda8(this), 200);
             }
             checkFingerprint();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onResume$6 */
-    public /* synthetic */ void lambda$onResume$6$PasscodeView() {
+    public /* synthetic */ void lambda$onResume$6() {
         EditTextBoldCursor editTextBoldCursor;
         if (this.retryTextView.getVisibility() != 0 && (editTextBoldCursor = this.passwordEditText) != null) {
             editTextBoldCursor.requestFocus();
@@ -1036,11 +1001,7 @@ public class PasscodeView extends FrameLayout {
                     builder.setTitle(LocaleController.getString("AppName", NUM));
                     builder.setView(relativeLayout);
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        public final void onDismiss(DialogInterface dialogInterface) {
-                            PasscodeView.this.lambda$checkFingerprint$7$PasscodeView(dialogInterface);
-                        }
-                    });
+                    builder.setOnDismissListener(new PasscodeView$$ExternalSyntheticLambda0(this));
                     AlertDialog alertDialog2 = this.fingerprintDialog;
                     if (alertDialog2 != null) {
                         if (alertDialog2.isShowing()) {
@@ -1096,8 +1057,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkFingerprint$7 */
-    public /* synthetic */ void lambda$checkFingerprint$7$PasscodeView(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$checkFingerprint$7(DialogInterface dialogInterface) {
         CancellationSignal cancellationSignal2 = this.cancellationSignal;
         if (cancellationSignal2 != null) {
             this.selfCancelled = true;
@@ -1252,11 +1212,7 @@ public class PasscodeView extends FrameLayout {
                         float f2 = 0.0f;
                         PasscodeView.this.imageView.setProgress(0.0f);
                         PasscodeView.this.imageView.playAnimation();
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public final void run() {
-                                PasscodeView.AnonymousClass9.this.lambda$onGlobalLayout$0$PasscodeView$9();
-                            }
-                        }, 350);
+                        AndroidUtilities.runOnUIThread(new PasscodeView$9$$ExternalSyntheticLambda1(this), 350);
                         AnimatorSet animatorSet2 = new AnimatorSet();
                         ArrayList arrayList = new ArrayList();
                         Point point = AndroidUtilities.displaySize;
@@ -1347,7 +1303,7 @@ public class PasscodeView extends FrameLayout {
                                     animatorArr2[c] = ObjectAnimator.ofFloat(view, property4, fArr4);
                                     animatorArr2[2] = ObjectAnimator.ofFloat(view, View.ALPHA, new float[]{0.0f, 1.0f});
                                     access$2200.playTogether(animatorArr2);
-                                    innerAnimator.animatorSet.addListener(new AnimatorListenerAdapter() {
+                                    innerAnimator.animatorSet.addListener(new AnimatorListenerAdapter(this) {
                                         public void onAnimationEnd(Animator animator) {
                                             AnimatorSet animatorSet = animatorSet;
                                             if (animatorSet != null) {
@@ -1371,17 +1327,7 @@ public class PasscodeView extends FrameLayout {
                             arrayList.add(ViewAnimationUtils.createCircularReveal(PasscodeView.this.backgroundFrameLayout, i4, i5, 0.0f, (float) max));
                             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                             arrayList.add(ofFloat);
-                            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(max) {
-                                public final /* synthetic */ double f$1;
-
-                                {
-                                    this.f$1 = r2;
-                                }
-
-                                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    PasscodeView.AnonymousClass9.this.lambda$onGlobalLayout$1$PasscodeView$9(this.f$1, valueAnimator);
-                                }
-                            });
+                            ofFloat.addUpdateListener(new PasscodeView$9$$ExternalSyntheticLambda0(this, max));
                             animatorSet2.setInterpolator(Easings.easeInOutQuad);
                             animatorSet2.setDuration(498);
                         } else {
@@ -1439,14 +1385,12 @@ public class PasscodeView extends FrameLayout {
                     }
 
                     /* access modifiers changed from: private */
-                    /* renamed from: lambda$onGlobalLayout$0 */
-                    public /* synthetic */ void lambda$onGlobalLayout$0$PasscodeView$9() {
+                    public /* synthetic */ void lambda$onGlobalLayout$0() {
                         PasscodeView.this.imageView.performHapticFeedback(3, 2);
                     }
 
                     /* access modifiers changed from: private */
-                    /* renamed from: lambda$onGlobalLayout$1 */
-                    public /* synthetic */ void lambda$onGlobalLayout$1$PasscodeView$9(double d, ValueAnimator valueAnimator) {
+                    public /* synthetic */ void lambda$onGlobalLayout$1(double d, ValueAnimator valueAnimator) {
                         double animatedFraction = (double) valueAnimator.getAnimatedFraction();
                         Double.isNaN(animatedFraction);
                         double d2 = d * animatedFraction;
@@ -1473,7 +1417,7 @@ public class PasscodeView extends FrameLayout {
                     runnable.run();
                 }
             }
-            setOnTouchListener($$Lambda$PasscodeView$X1HtHZ47tI94bgr3OCF_XwV9BBM.INSTANCE);
+            setOnTouchListener(PasscodeView$$ExternalSyntheticLambda5.INSTANCE);
         }
     }
 

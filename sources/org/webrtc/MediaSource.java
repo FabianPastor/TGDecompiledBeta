@@ -19,17 +19,7 @@ public class MediaSource {
     }
 
     public MediaSource(long j) {
-        this.refCountDelegate = new RefCountDelegate(new Runnable(j) {
-            public final /* synthetic */ long f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void run() {
-                JniCommon.nativeReleaseRef(this.f$0);
-            }
-        });
+        this.refCountDelegate = new RefCountDelegate(new MediaSource$$ExternalSyntheticLambda0(j));
         this.nativeSource = j;
     }
 

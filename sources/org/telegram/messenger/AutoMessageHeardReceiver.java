@@ -18,88 +18,26 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
             AccountInstance instance = AccountInstance.getInstance(intExtra2);
             if (i > 0) {
                 if (instance.getMessagesController().getUser(Integer.valueOf(i)) == null) {
-                    Utilities.globalQueue.postRunnable(new Runnable(i, intExtra2, longExtra, intExtra) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ int f$2;
-                        public final /* synthetic */ long f$3;
-                        public final /* synthetic */ int f$4;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r6;
-                        }
-
-                        public final void run() {
-                            AndroidUtilities.runOnUIThread(new Runnable(AccountInstance.this.getMessagesStorage().getUserSync(this.f$1), this.f$2, this.f$3, this.f$4) {
-                                public final /* synthetic */ TLRPC$User f$1;
-                                public final /* synthetic */ int f$2;
-                                public final /* synthetic */ long f$3;
-                                public final /* synthetic */ int f$4;
-
-                                {
-                                    this.f$1 = r2;
-                                    this.f$2 = r3;
-                                    this.f$3 = r4;
-                                    this.f$4 = r6;
-                                }
-
-                                public final void run() {
-                                    AutoMessageHeardReceiver.lambda$onReceive$0(AccountInstance.this, this.f$1, this.f$2, this.f$3, this.f$4);
-                                }
-                            });
-                        }
-                    });
+                    Utilities.globalQueue.postRunnable(new AutoMessageHeardReceiver$$ExternalSyntheticLambda1(instance, i, intExtra2, longExtra, intExtra));
                     return;
                 }
             } else if (i < 0 && instance.getMessagesController().getChat(Integer.valueOf(-i)) == null) {
-                Utilities.globalQueue.postRunnable(new Runnable(i, intExtra2, longExtra, intExtra) {
-                    public final /* synthetic */ int f$1;
-                    public final /* synthetic */ int f$2;
-                    public final /* synthetic */ long f$3;
-                    public final /* synthetic */ int f$4;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                        this.f$4 = r6;
-                    }
-
-                    public final void run() {
-                        AndroidUtilities.runOnUIThread(new Runnable(AccountInstance.this.getMessagesStorage().getChatSync(-this.f$1), this.f$2, this.f$3, this.f$4) {
-                            public final /* synthetic */ TLRPC$Chat f$1;
-                            public final /* synthetic */ int f$2;
-                            public final /* synthetic */ long f$3;
-                            public final /* synthetic */ int f$4;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                                this.f$3 = r4;
-                                this.f$4 = r6;
-                            }
-
-                            public final void run() {
-                                AutoMessageHeardReceiver.lambda$onReceive$2(AccountInstance.this, this.f$1, this.f$2, this.f$3, this.f$4);
-                            }
-                        });
-                    }
-                });
+                Utilities.globalQueue.postRunnable(new AutoMessageHeardReceiver$$ExternalSyntheticLambda0(instance, i, intExtra2, longExtra, intExtra));
                 return;
             }
             MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, 0, true, 0);
         }
     }
 
-    static /* synthetic */ void lambda$onReceive$0(AccountInstance accountInstance, TLRPC$User tLRPC$User, int i, long j, int i2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onReceive$0(AccountInstance accountInstance, TLRPC$User tLRPC$User, int i, long j, int i2) {
         TLRPC$User tLRPC$User2 = tLRPC$User;
         accountInstance.getMessagesController().putUser(tLRPC$User, true);
         MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, 0, true, 0);
     }
 
-    static /* synthetic */ void lambda$onReceive$2(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, int i, long j, int i2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onReceive$2(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, int i, long j, int i2) {
         TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
         accountInstance.getMessagesController().putChat(tLRPC$Chat, true);
         MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, 0, true, 0);

@@ -22,7 +22,6 @@ import org.telegram.ui.Components.RecyclerListView;
 
 public class FeaturedStickerSetCell2 extends FrameLayout {
     private final ProgressButton addButton;
-    private final int currentAccount = UserConfig.selectedAccount;
     private final TextView delButton;
     private final BackupImageView imageView;
     private boolean isInstalled;
@@ -33,6 +32,7 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
 
     public FeaturedStickerSetCell2(Context context) {
         super(context);
+        int i = UserConfig.selectedAccount;
         TextView textView2 = new TextView(context);
         this.textView = textView2;
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -41,7 +41,7 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         textView2.setMaxLines(1);
         textView2.setSingleLine(true);
         textView2.setEllipsize(TextUtils.TruncateAt.END);
-        int i = 5;
+        int i2 = 5;
         textView2.setGravity(LocaleController.isRTL ? 5 : 3);
         boolean z = LocaleController.isRTL;
         float f = 71.0f;
@@ -62,7 +62,7 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         backupImageView.setAspectFit(true);
         backupImageView.setLayerNum(1);
         boolean z3 = LocaleController.isRTL;
-        addView(backupImageView, LayoutHelper.createFrame(48, 48.0f, (!z3 ? 3 : i) | 48, z3 ? 0.0f : 12.0f, 8.0f, z3 ? 12.0f : 0.0f, 0.0f));
+        addView(backupImageView, LayoutHelper.createFrame(48, 48.0f, (!z3 ? 3 : i2) | 48, z3 ? 0.0f : 12.0f, 8.0f, z3 ? 12.0f : 0.0f, 0.0f));
         ProgressButton progressButton = new ProgressButton(context);
         this.addButton = progressButton;
         progressButton.setText(LocaleController.getString("Add", NUM));

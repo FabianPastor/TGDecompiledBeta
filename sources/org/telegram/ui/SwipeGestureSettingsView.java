@@ -88,16 +88,8 @@ public class SwipeGestureSettingsView extends FrameLayout {
         boolean z = !MessagesController.getInstance(i).dialogFilters.isEmpty();
         this.hasTabs = z;
         this.picker.setMaxValue(z ? this.strings.length - 1 : this.strings.length - 2);
-        this.picker.setFormatter(new NumberPicker.Formatter() {
-            public final String format(int i) {
-                return SwipeGestureSettingsView.this.lambda$new$0$SwipeGestureSettingsView(i);
-            }
-        });
-        this.picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-                SwipeGestureSettingsView.this.lambda$new$1$SwipeGestureSettingsView(numberPicker, i, i2);
-            }
-        });
+        this.picker.setFormatter(new SwipeGestureSettingsView$$ExternalSyntheticLambda0(this));
+        this.picker.setOnValueChangedListener(new SwipeGestureSettingsView$$ExternalSyntheticLambda1(this));
         this.picker.setValue(SharedConfig.getChatSwipeAction(i));
         addView(this.picker, LayoutHelper.createFrame(132, -1.0f, 5, 21.0f, 0.0f, 21.0f, 0.0f));
         setWillNotDraw(false);
@@ -118,14 +110,12 @@ public class SwipeGestureSettingsView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ String lambda$new$0$SwipeGestureSettingsView(int i) {
+    public /* synthetic */ String lambda$new$0(int i) {
         return this.strings[i];
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$SwipeGestureSettingsView(NumberPicker numberPicker, int i, int i2) {
+    public /* synthetic */ void lambda$new$1(NumberPicker numberPicker, int i, int i2) {
         swapIcons();
         SharedConfig.updateChatListSwipeSetting(i2);
         invalidate();

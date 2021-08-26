@@ -61,11 +61,7 @@ public class ShareActivity extends Activity {
             ShareAlert createShareAlert = ShareAlert.createShareAlert(this, messageObject, (String) null, false, string2, false);
             this.visibleDialog = createShareAlert;
             createShareAlert.setCanceledOnTouchOutside(true);
-            this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                public final void onDismiss(DialogInterface dialogInterface) {
-                    ShareActivity.this.lambda$onCreate$0$ShareActivity(dialogInterface);
-                }
-            });
+            this.visibleDialog.setOnDismissListener(new ShareActivity$$ExternalSyntheticLambda0(this));
             this.visibleDialog.show();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -74,8 +70,7 @@ public class ShareActivity extends Activity {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$0 */
-    public /* synthetic */ void lambda$onCreate$0$ShareActivity(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$onCreate$0(DialogInterface dialogInterface) {
         if (!isFinishing()) {
             finish();
         }

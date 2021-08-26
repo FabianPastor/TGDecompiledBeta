@@ -21,10 +21,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$LangPackString;
 import org.telegram.tgnet.TLRPC$TL_error;
@@ -204,16 +202,11 @@ public class LocaleController {
         }
 
         public void onReceive(Context context, Intent intent) {
-            ApplicationLoader.applicationHandler.post(new Runnable() {
-                public final void run() {
-                    LocaleController.TimeZoneChangedReceiver.this.lambda$onReceive$0$LocaleController$TimeZoneChangedReceiver();
-                }
-            });
+            ApplicationLoader.applicationHandler.post(new LocaleController$TimeZoneChangedReceiver$$ExternalSyntheticLambda0(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onReceive$0 */
-        public /* synthetic */ void lambda$onReceive$0$LocaleController$TimeZoneChangedReceiver() {
+        public /* synthetic */ void lambda$onReceive$0() {
             if (!LocaleController.this.formatterDayMonth.getTimeZone().equals(TimeZone.getDefault())) {
                 LocaleController.getInstance().recreateFormatters();
             }
@@ -238,7 +231,7 @@ public class LocaleController {
             if (str == null) {
                 str = "";
             }
-            boolean isEmpty = TextUtils.isEmpty(this.pluralLangCode);
+            TextUtils.isEmpty(this.pluralLangCode);
             return this.name + "|" + this.nameEnglish + "|" + this.shortName + "|" + this.pathToFile + "|" + this.version + "|" + str + "|" + this.pluralLangCode + "|" + (this.isRtl ? 1 : 0) + "|" + this.baseVersion + "|" + this.serverIndex;
         }
 
@@ -460,11 +453,7 @@ public class LocaleController {
         this.languagesDict.put(localeInfo9.shortName, localeInfo9);
         loadOtherLanguages();
         if (this.remoteLanguages.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    LocaleController.this.lambda$new$0$LocaleController();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda1(this));
         }
         for (int i = 0; i < this.otherLanguages.size(); i++) {
             LocaleInfo localeInfo10 = this.otherLanguages.get(i);
@@ -525,22 +514,16 @@ public class LocaleController {
         } catch (Exception e2) {
             FileLog.e((Throwable) e2);
         }
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                LocaleController.this.lambda$new$1$LocaleController();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda0(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$LocaleController() {
+    public /* synthetic */ void lambda$new$0() {
         loadRemoteLanguages(UserConfig.selectedAccount);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$LocaleController() {
+    public /* synthetic */ void lambda$new$1() {
         this.currentSystemLocale = getSystemLocaleStringIso639();
     }
 
@@ -1113,19 +1096,7 @@ public class LocaleController {
                     FileLog.d("reload locale because one of file doesn't exist" + pathToFile + " " + pathToBaseFile);
                 }
                 if (z2) {
-                    AndroidUtilities.runOnUIThread(new Runnable(localeInfo, i) {
-                        public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                        public final /* synthetic */ int f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run() {
-                            LocaleController.this.lambda$applyLanguage$2$LocaleController(this.f$1, this.f$2);
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda4(this, localeInfo, i));
                 } else {
                     applyRemoteLanguage(localeInfo, (String) null, true, i);
                 }
@@ -1182,19 +1153,7 @@ public class LocaleController {
                 this.changingConfiguration = false;
                 if (this.reloadLastFile) {
                     if (z2) {
-                        AndroidUtilities.runOnUIThread(new Runnable(i, z4) {
-                            public final /* synthetic */ int f$1;
-                            public final /* synthetic */ boolean f$2;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                            }
-
-                            public final void run() {
-                                LocaleController.this.lambda$applyLanguage$3$LocaleController(this.f$1, this.f$2);
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda3(this, i, z4));
                     } else {
                         reloadCurrentRemoteLocale(i, (String) null, z4);
                     }
@@ -1209,14 +1168,12 @@ public class LocaleController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyLanguage$2 */
-    public /* synthetic */ void lambda$applyLanguage$2$LocaleController(LocaleInfo localeInfo, int i) {
+    public /* synthetic */ void lambda$applyLanguage$2(LocaleInfo localeInfo, int i) {
         applyRemoteLanguage(localeInfo, (String) null, true, i);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyLanguage$3 */
-    public /* synthetic */ void lambda$applyLanguage$3$LocaleController(int i, boolean z) {
+    public /* synthetic */ void lambda$applyLanguage$3(int i, boolean z) {
         reloadCurrentRemoteLocale(i, (String) null, z);
     }
 
@@ -2549,61 +2506,61 @@ public class LocaleController {
             r7 = 1
         L_0x0076:
             nameDisplayOrder = r7
-            r7 = 2131628450(0x7f0e11a2, float:1.8884193E38)
+            r7 = 2131628488(0x7f0e11c8, float:1.888427E38)
             java.lang.String r8 = "formatterMonthYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterMonthYear = r7
-            r7 = 2131628448(0x7f0e11a0, float:1.8884189E38)
+            r7 = 2131628486(0x7f0e11c6, float:1.8884266E38)
             java.lang.String r8 = "formatterMonth"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd MMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterDayMonth = r7
-            r7 = 2131628456(0x7f0e11a8, float:1.8884205E38)
+            r7 = 2131628494(0x7f0e11ce, float:1.8884282E38)
             java.lang.String r8 = "formatterYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYear = r7
-            r7 = 2131628457(0x7f0e11a9, float:1.8884207E38)
+            r7 = 2131628495(0x7f0e11cf, float:1.8884284E38)
             java.lang.String r8 = "formatterYearMax"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYearMax = r7
-            r7 = 2131628416(0x7f0e1180, float:1.8884124E38)
+            r7 = 2131628454(0x7f0e11a6, float:1.8884201E38)
             java.lang.String r8 = "chatDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatDate = r7
-            r7 = 2131628417(0x7f0e1181, float:1.8884126E38)
+            r7 = 2131628455(0x7f0e11a7, float:1.8884203E38)
             java.lang.String r8 = "chatFullDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatFullDate = r7
-            r7 = 2131628454(0x7f0e11a6, float:1.8884201E38)
+            r7 = 2131628492(0x7f0e11cc, float:1.8884278E38)
             java.lang.String r8 = "formatterWeek"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeek = r7
-            r7 = 2131628455(0x7f0e11a7, float:1.8884203E38)
+            r7 = 2131628493(0x7f0e11cd, float:1.888428E38)
             java.lang.String r8 = "formatterWeekLong"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeekLong = r7
-            r7 = 2131628440(0x7f0e1198, float:1.8884173E38)
+            r7 = 2131628478(0x7f0e11be, float:1.888425E38)
             java.lang.String r8 = "formatDateSchedule"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterScheduleDay = r7
-            r7 = 2131628441(0x7f0e1199, float:1.8884175E38)
+            r7 = 2131628479(0x7f0e11bf, float:1.8884252E38)
             java.lang.String r8 = "formatDateScheduleYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d yyyy"
@@ -2624,11 +2581,11 @@ public class LocaleController {
         L_0x013b:
             boolean r2 = is24HourFormat
             if (r2 == 0) goto L_0x0145
-            r2 = 2131628447(0x7f0e119f, float:1.8884187E38)
+            r2 = 2131628485(0x7f0e11c5, float:1.8884264E38)
             java.lang.String r4 = "formatterDay24H"
             goto L_0x014a
         L_0x0145:
-            r2 = 2131628446(0x7f0e119e, float:1.8884185E38)
+            r2 = 2131628484(0x7f0e11c4, float:1.8884262E38)
             java.lang.String r4 = "formatterDay12H"
         L_0x014a:
             java.lang.String r2 = r9.getStringInternal(r4, r2)
@@ -2643,11 +2600,11 @@ public class LocaleController {
             r9.formatterDay = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x0167
-            r1 = 2131628453(0x7f0e11a5, float:1.88842E38)
+            r1 = 2131628491(0x7f0e11cb, float:1.8884276E38)
             java.lang.String r2 = "formatterStats24H"
             goto L_0x016c
         L_0x0167:
-            r1 = 2131628452(0x7f0e11a4, float:1.8884197E38)
+            r1 = 2131628490(0x7f0e11ca, float:1.8884274E38)
             java.lang.String r2 = "formatterStats12H"
         L_0x016c:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2664,11 +2621,11 @@ public class LocaleController {
             r9.formatterStats = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x018b
-            r1 = 2131628443(0x7f0e119b, float:1.8884179E38)
+            r1 = 2131628481(0x7f0e11c1, float:1.8884256E38)
             java.lang.String r2 = "formatterBannedUntil24H"
             goto L_0x0190
         L_0x018b:
-            r1 = 2131628442(0x7f0e119a, float:1.8884177E38)
+            r1 = 2131628480(0x7f0e11c0, float:1.8884254E38)
             java.lang.String r2 = "formatterBannedUntil12H"
         L_0x0190:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2682,11 +2639,11 @@ public class LocaleController {
             r9.formatterBannedUntil = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x01aa
-            r1 = 2131628445(0x7f0e119d, float:1.8884183E38)
+            r1 = 2131628483(0x7f0e11c3, float:1.888426E38)
             java.lang.String r2 = "formatterBannedUntilThisYear24H"
             goto L_0x01af
         L_0x01aa:
-            r1 = 2131628444(0x7f0e119c, float:1.888418E38)
+            r1 = 2131628482(0x7f0e11c2, float:1.8884258E38)
             java.lang.String r2 = "formatterBannedUntilThisYear12H"
         L_0x01af:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2700,21 +2657,21 @@ public class LocaleController {
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
             r9.formatterBannedUntilThisYear = r1
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627458(0x7f0e0dc2, float:1.888218E38)
+            r2 = 2131627478(0x7f0e0dd6, float:1.8882222E38)
             java.lang.String r4 = "SendTodayAt"
             java.lang.String r2 = r9.getStringInternal(r4, r2)
             java.lang.String r4 = "'Send today at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r4)
             r1[r3] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627433(0x7f0e0da9, float:1.888213E38)
+            r2 = 2131627453(0x7f0e0dbd, float:1.888217E38)
             java.lang.String r3 = "SendDayAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d 'at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r3)
             r1[r5] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627434(0x7f0e0daa, float:1.8882132E38)
+            r2 = 2131627454(0x7f0e0dbe, float:1.8882173E38)
             java.lang.String r3 = "SendDayYearAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d yyyy 'at' HH:mm"
@@ -2722,7 +2679,7 @@ public class LocaleController {
             r1[r6] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 3
-            r3 = 2131627199(0x7f0e0cbf, float:1.8881656E38)
+            r3 = 2131627219(0x7f0e0cd3, float:1.8881696E38)
             java.lang.String r4 = "RemindTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind today at' HH:mm"
@@ -2730,7 +2687,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 4
-            r3 = 2131627197(0x7f0e0cbd, float:1.8881652E38)
+            r3 = 2131627217(0x7f0e0cd1, float:1.8881692E38)
             java.lang.String r4 = "RemindDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d 'at' HH:mm"
@@ -2738,7 +2695,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 5
-            r3 = 2131627198(0x7f0e0cbe, float:1.8881654E38)
+            r3 = 2131627218(0x7f0e0cd2, float:1.8881694E38)
             java.lang.String r4 = "RemindDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d yyyy 'at' HH:mm"
@@ -2746,7 +2703,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 6
-            r3 = 2131627634(0x7f0e0e72, float:1.8882538E38)
+            r3 = 2131627658(0x7f0e0e8a, float:1.8882587E38)
             java.lang.String r4 = "StartTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Start today at' HH:mm"
@@ -2754,7 +2711,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 7
-            r3 = 2131627626(0x7f0e0e6a, float:1.8882522E38)
+            r3 = 2131627650(0x7f0e0e82, float:1.888257E38)
             java.lang.String r4 = "StartDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Start on' MMM d 'at' HH:mm"
@@ -2762,7 +2719,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 8
-            r3 = 2131627627(0x7f0e0e6b, float:1.8882524E38)
+            r3 = 2131627651(0x7f0e0e83, float:1.8882572E38)
             java.lang.String r4 = "StartDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Start on' MMM d yyyy 'at' HH:mm"
@@ -2770,7 +2727,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 9
-            r3 = 2131627632(0x7f0e0e70, float:1.8882534E38)
+            r3 = 2131627656(0x7f0e0e88, float:1.8882583E38)
             java.lang.String r4 = "StartShortTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Today,' HH:mm"
@@ -2778,7 +2735,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 10
-            r3 = 2131627630(0x7f0e0e6e, float:1.888253E38)
+            r3 = 2131627654(0x7f0e0e86, float:1.8882579E38)
             java.lang.String r4 = "StartShortDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "MMM d',' HH:mm"
@@ -2786,7 +2743,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 11
-            r3 = 2131627631(0x7f0e0e6f, float:1.8882532E38)
+            r3 = 2131627655(0x7f0e0e87, float:1.888258E38)
             java.lang.String r4 = "StartShortDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "MMM d yyyy, HH:mm"
@@ -2794,7 +2751,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 12
-            r3 = 2131627642(0x7f0e0e7a, float:1.8882554E38)
+            r3 = 2131627666(0x7f0e0e92, float:1.8882603E38)
             java.lang.String r4 = "StartsTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Starts today at' HH:mm"
@@ -2802,7 +2759,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 13
-            r3 = 2131627640(0x7f0e0e78, float:1.888255E38)
+            r3 = 2131627664(0x7f0e0e90, float:1.8882599E38)
             java.lang.String r4 = "StartsDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Starts on' MMM d 'at' HH:mm"
@@ -2810,7 +2767,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 14
-            r3 = 2131627641(0x7f0e0e79, float:1.8882552E38)
+            r3 = 2131627665(0x7f0e0e91, float:1.88826E38)
             java.lang.String r4 = "StartsDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Starts on' MMM d yyyy 'at' HH:mm"
@@ -3106,23 +3063,7 @@ public class LocaleController {
                     if (hasBaseLang) {
                         localeFileStrings.putAll(getLocaleFileStrings(localeInfo.getPathToFile()));
                     }
-                    AndroidUtilities.runOnUIThread(new Runnable(i2, localeInfo, tLRPC$TL_langPackDifference, localeFileStrings) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ LocaleController.LocaleInfo f$2;
-                        public final /* synthetic */ TLRPC$TL_langPackDifference f$3;
-                        public final /* synthetic */ HashMap f$4;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                        }
-
-                        public final void run() {
-                            LocaleController.this.lambda$saveRemoteLocaleStrings$4$LocaleController(this.f$1, this.f$2, this.f$3, this.f$4);
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda2(this, i2, localeInfo, tLRPC$TL_langPackDifference, localeFileStrings));
                 } catch (Exception unused) {
                 }
             }
@@ -3130,8 +3071,7 @@ public class LocaleController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveRemoteLocaleStrings$4 */
-    public /* synthetic */ void lambda$saveRemoteLocaleStrings$4$LocaleController(int i, LocaleInfo localeInfo, TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference, HashMap hashMap) {
+    public /* synthetic */ void lambda$saveRemoteLocaleStrings$4(int i, LocaleInfo localeInfo, TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference, HashMap hashMap) {
         String[] strArr;
         Locale locale;
         if (i == 0) {
@@ -3189,43 +3129,19 @@ public class LocaleController {
     public void loadRemoteLanguages(int i) {
         if (!this.loadingRemoteLanguages) {
             this.loadingRemoteLanguages = true;
-            ConnectionsManager.getInstance(i).sendRequest(new TLRPC$TL_langpack_getLanguages(), new RequestDelegate(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    LocaleController.this.lambda$loadRemoteLanguages$6$LocaleController(this.f$1, tLObject, tLRPC$TL_error);
-                }
-            }, 8);
+            ConnectionsManager.getInstance(i).sendRequest(new TLRPC$TL_langpack_getLanguages(), new LocaleController$$ExternalSyntheticLambda10(this, i), 8);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadRemoteLanguages$6 */
-    public /* synthetic */ void lambda$loadRemoteLanguages$6$LocaleController(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadRemoteLanguages$6(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(tLObject, i) {
-                public final /* synthetic */ TLObject f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    LocaleController.this.lambda$loadRemoteLanguages$5$LocaleController(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda9(this, tLObject, i));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadRemoteLanguages$5 */
-    public /* synthetic */ void lambda$loadRemoteLanguages$5$LocaleController(TLObject tLObject, int i) {
+    public /* synthetic */ void lambda$loadRemoteLanguages$5(TLObject tLObject, int i) {
         this.loadingRemoteLanguages = false;
         TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
         int size = this.remoteLanguages.size();
@@ -3299,37 +3215,13 @@ public class LocaleController {
                 if (localeInfo.baseVersion == 0 || z) {
                     TLRPC$TL_langpack_getLangPack tLRPC$TL_langpack_getLangPack = new TLRPC$TL_langpack_getLangPack();
                     tLRPC$TL_langpack_getLangPack.lang_code = localeInfo.getBaseLangCode();
-                    ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getLangPack, new RequestDelegate(localeInfo, i) {
-                        public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                        public final /* synthetic */ int f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            LocaleController.this.lambda$applyRemoteLanguage$10$LocaleController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                        }
-                    }, 8);
+                    ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getLangPack, new LocaleController$$ExternalSyntheticLambda14(this, localeInfo, i), 8);
                 } else if (localeInfo.hasBaseLang()) {
                     TLRPC$TL_langpack_getDifference tLRPC$TL_langpack_getDifference = new TLRPC$TL_langpack_getDifference();
                     tLRPC$TL_langpack_getDifference.from_version = localeInfo.baseVersion;
                     tLRPC$TL_langpack_getDifference.lang_code = localeInfo.getBaseLangCode();
                     tLRPC$TL_langpack_getDifference.lang_pack = "";
-                    ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getDifference, new RequestDelegate(localeInfo, i) {
-                        public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                        public final /* synthetic */ int f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            LocaleController.this.lambda$applyRemoteLanguage$8$LocaleController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                        }
-                    }, 8);
+                    ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getDifference, new LocaleController$$ExternalSyntheticLambda13(this, localeInfo, i), 8);
                 }
             }
             if (str != null && !str.equals(localeInfo.shortName)) {
@@ -3341,126 +3233,42 @@ public class LocaleController {
                 }
                 TLRPC$TL_langpack_getLangPack tLRPC$TL_langpack_getLangPack2 = new TLRPC$TL_langpack_getLangPack();
                 tLRPC$TL_langpack_getLangPack2.lang_code = localeInfo.getLangCode();
-                ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getLangPack2, new RequestDelegate(localeInfo, i) {
-                    public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                    public final /* synthetic */ int f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        LocaleController.this.lambda$applyRemoteLanguage$14$LocaleController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                    }
-                }, 8);
+                ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getLangPack2, new LocaleController$$ExternalSyntheticLambda11(this, localeInfo, i), 8);
                 return;
             }
             TLRPC$TL_langpack_getDifference tLRPC$TL_langpack_getDifference2 = new TLRPC$TL_langpack_getDifference();
             tLRPC$TL_langpack_getDifference2.from_version = localeInfo.version;
             tLRPC$TL_langpack_getDifference2.lang_code = localeInfo.getLangCode();
             tLRPC$TL_langpack_getDifference2.lang_pack = "";
-            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getDifference2, new RequestDelegate(localeInfo, i) {
-                public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    LocaleController.this.lambda$applyRemoteLanguage$12$LocaleController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                }
-            }, 8);
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getDifference2, new LocaleController$$ExternalSyntheticLambda12(this, localeInfo, i), 8);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyRemoteLanguage$8 */
-    public /* synthetic */ void lambda$applyRemoteLanguage$8$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$applyRemoteLanguage$8(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
-                public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                public final /* synthetic */ TLObject f$2;
-                public final /* synthetic */ int f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    LocaleController.this.lambda$applyRemoteLanguage$7$LocaleController(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda6(this, localeInfo, tLObject, i));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyRemoteLanguage$10 */
-    public /* synthetic */ void lambda$applyRemoteLanguage$10$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$applyRemoteLanguage$10(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
-                public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                public final /* synthetic */ TLObject f$2;
-                public final /* synthetic */ int f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    LocaleController.this.lambda$applyRemoteLanguage$9$LocaleController(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda5(this, localeInfo, tLObject, i));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyRemoteLanguage$12 */
-    public /* synthetic */ void lambda$applyRemoteLanguage$12$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$applyRemoteLanguage$12(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
-                public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                public final /* synthetic */ TLObject f$2;
-                public final /* synthetic */ int f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    LocaleController.this.lambda$applyRemoteLanguage$11$LocaleController(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda8(this, localeInfo, tLObject, i));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyRemoteLanguage$14 */
-    public /* synthetic */ void lambda$applyRemoteLanguage$14$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$applyRemoteLanguage$14(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
-                public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                public final /* synthetic */ TLObject f$2;
-                public final /* synthetic */ int f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    LocaleController.this.lambda$applyRemoteLanguage$13$LocaleController(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda7(this, localeInfo, tLObject, i));
         }
     }
 

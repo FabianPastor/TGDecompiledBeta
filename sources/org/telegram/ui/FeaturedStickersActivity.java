@@ -28,7 +28,6 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.StickersAlert;
-import org.telegram.ui.FeaturedStickersActivity;
 
 public class FeaturedStickersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
@@ -88,7 +87,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         this.listView.setLayoutAnimation((LayoutAnimationController) null);
         this.listView.setFocusable(true);
         this.listView.setTag(14);
-        AnonymousClass2 r2 = new LinearLayoutManager(context) {
+        AnonymousClass2 r2 = new LinearLayoutManager(this, context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
@@ -98,17 +97,12 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         this.listView.setLayoutManager(this.layoutManager);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                FeaturedStickersActivity.this.lambda$createView$0$FeaturedStickersActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new FeaturedStickersActivity$$ExternalSyntheticLambda0(this));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$FeaturedStickersActivity(final View view, int i) {
+    public /* synthetic */ void lambda$createView$0(final View view, int i) {
         TLRPC$InputStickerSet tLRPC$InputStickerSet;
         if (i >= this.stickersStartRow && i < this.stickersEndRow && getParentActivity() != null) {
             final TLRPC$StickerSetCovered tLRPC$StickerSetCovered = MediaDataController.getInstance(this.currentAccount).getFeaturedStickerSets().get(i);
@@ -223,8 +217,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$0 */
-        public /* synthetic */ void lambda$onCreateViewHolder$0$FeaturedStickersActivity$ListAdapter(View view) {
+        public /* synthetic */ void lambda$onCreateViewHolder$0(View view) {
             FeaturedStickerSetCell featuredStickerSetCell = (FeaturedStickerSetCell) view.getParent();
             TLRPC$StickerSetCovered stickerSet = featuredStickerSetCell.getStickerSet();
             if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(stickerSet.set.id) < 0) {
@@ -239,11 +232,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
             if (i == 0) {
                 FeaturedStickerSetCell featuredStickerSetCell = new FeaturedStickerSetCell(this.mContext);
                 featuredStickerSetCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                featuredStickerSetCell.setAddOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        FeaturedStickersActivity.ListAdapter.this.lambda$onCreateViewHolder$0$FeaturedStickersActivity$ListAdapter(view);
-                    }
-                });
+                featuredStickerSetCell.setAddOnClickListener(new FeaturedStickersActivity$ListAdapter$$ExternalSyntheticLambda0(this));
                 textInfoPrivacyCell = featuredStickerSetCell;
             } else if (i != 1) {
                 textInfoPrivacyCell = null;

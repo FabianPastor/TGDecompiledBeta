@@ -104,17 +104,12 @@ public class FileUploadOperation {
     public void start() {
         if (this.state == 0) {
             this.state = 1;
-            Utilities.stageQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    FileUploadOperation.this.lambda$start$0$FileUploadOperation();
-                }
-            });
+            Utilities.stageQueue.postRunnable(new FileUploadOperation$$ExternalSyntheticLambda2(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$start$0 */
-    public /* synthetic */ void lambda$start$0$FileUploadOperation() {
+    public /* synthetic */ void lambda$start$0() {
         this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo", 0);
         this.slowNetwork = ApplicationLoader.isConnectionSlow();
         if (BuildVars.LOGS_ENABLED) {
@@ -129,23 +124,12 @@ public class FileUploadOperation {
     /* access modifiers changed from: protected */
     public void onNetworkChanged(boolean z) {
         if (this.state == 1) {
-            Utilities.stageQueue.postRunnable(new Runnable(z) {
-                public final /* synthetic */ boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    FileUploadOperation.this.lambda$onNetworkChanged$1$FileUploadOperation(this.f$1);
-                }
-            });
+            Utilities.stageQueue.postRunnable(new FileUploadOperation$$ExternalSyntheticLambda4(this, z));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onNetworkChanged$1 */
-    public /* synthetic */ void lambda$onNetworkChanged$1$FileUploadOperation(boolean z) {
+    public /* synthetic */ void lambda$onNetworkChanged$1(boolean z) {
         int i;
         if (this.slowNetwork != z) {
             this.slowNetwork = z;
@@ -190,19 +174,14 @@ public class FileUploadOperation {
     public void cancel() {
         if (this.state != 3) {
             this.state = 2;
-            Utilities.stageQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    FileUploadOperation.this.lambda$cancel$2$FileUploadOperation();
-                }
-            });
+            Utilities.stageQueue.postRunnable(new FileUploadOperation$$ExternalSyntheticLambda0(this));
             this.delegate.didFailedUploadingFile(this);
             cleanup();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$cancel$2 */
-    public /* synthetic */ void lambda$cancel$2$FileUploadOperation() {
+    public /* synthetic */ void lambda$cancel$2() {
         for (int i = 0; i < this.requestTokens.size(); i++) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.requestTokens.valueAt(i), true);
         }
@@ -233,24 +212,11 @@ public class FileUploadOperation {
 
     /* access modifiers changed from: protected */
     public void checkNewDataAvailable(long j, long j2) {
-        Utilities.stageQueue.postRunnable(new Runnable(j2, j) {
-            public final /* synthetic */ long f$1;
-            public final /* synthetic */ long f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r4;
-            }
-
-            public final void run() {
-                FileUploadOperation.this.lambda$checkNewDataAvailable$3$FileUploadOperation(this.f$1, this.f$2);
-            }
-        });
+        Utilities.stageQueue.postRunnable(new FileUploadOperation$$ExternalSyntheticLambda3(this, j2, j));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkNewDataAvailable$3 */
-    public /* synthetic */ void lambda$checkNewDataAvailable$3$FileUploadOperation(long j, long j2) {
+    public /* synthetic */ void lambda$checkNewDataAvailable$3(long j, long j2) {
         if (!(this.estimatedSize == 0 || j == 0)) {
             this.estimatedSize = 0;
             this.totalFileSize = j;
@@ -941,14 +907,14 @@ public class FileUploadOperation {
         L_0x0489:
             int r1 = r11.currentAccount
             org.telegram.tgnet.ConnectionsManager r14 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
-            org.telegram.messenger.-$$Lambda$FileUploadOperation$06_JEIqHeimaCLASSNAMEYhLgoyYozb2A r16 = new org.telegram.messenger.-$$Lambda$FileUploadOperation$06_JEIqHeimaCLASSNAMEYhLgoyYozb2A
+            org.telegram.messenger.FileUploadOperation$$ExternalSyntheticLambda5 r16 = new org.telegram.messenger.FileUploadOperation$$ExternalSyntheticLambda5
             r1 = r16
             r2 = r26
             r6 = r0
-            r1.<init>(r3, r4, r5, r6, r7, r8, r9)
+            r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9)
             r17 = 0
-            org.telegram.messenger.-$$Lambda$FileUploadOperation$runCwhotZAORV0DsK4gN0v7nL14 r1 = new org.telegram.messenger.-$$Lambda$FileUploadOperation$runCwhotZAORV0DsK4gN0v7nL14
-            r1.<init>()
+            org.telegram.messenger.FileUploadOperation$$ExternalSyntheticLambda6 r1 = new org.telegram.messenger.FileUploadOperation$$ExternalSyntheticLambda6
+            r1.<init>(r11)
             boolean r2 = r11.forceSmallFile
             if (r2 == 0) goto L_0x04a7
             r19 = 4
@@ -976,8 +942,7 @@ public class FileUploadOperation {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startUploadRequest$4 */
-    public /* synthetic */ void lambda$startUploadRequest$4$FileUploadOperation(int i, int i2, byte[] bArr, int i3, int i4, int i5, long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$startUploadRequest$4(int i, int i2, byte[] bArr, int i3, int i4, int i5, long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         long j2;
         TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile;
         TLRPC$InputFile tLRPC$InputFile;
@@ -1100,18 +1065,12 @@ public class FileUploadOperation {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startUploadRequest$6 */
-    public /* synthetic */ void lambda$startUploadRequest$6$FileUploadOperation() {
-        Utilities.stageQueue.postRunnable(new Runnable() {
-            public final void run() {
-                FileUploadOperation.this.lambda$startUploadRequest$5$FileUploadOperation();
-            }
-        });
+    public /* synthetic */ void lambda$startUploadRequest$6() {
+        Utilities.stageQueue.postRunnable(new FileUploadOperation$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startUploadRequest$5 */
-    public /* synthetic */ void lambda$startUploadRequest$5$FileUploadOperation() {
+    public /* synthetic */ void lambda$startUploadRequest$5() {
         if (this.currentUploadRequetsCount < this.maxRequestsCount) {
             startUploadRequest();
         }

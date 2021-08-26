@@ -47,7 +47,6 @@ import org.telegram.ui.GroupCallActivity;
 
 @SuppressLint({"ViewConstructor"})
 public class GroupCallRenderersContainer extends FrameLayout {
-    private boolean animateSpeakingOnNextDraw = true;
     int animationIndex;
     private SparseIntArray attachedPeerIds = new SparseIntArray();
     private final ArrayList<GroupCallMiniTextureView> attachedRenderers;
@@ -164,7 +163,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
         this.attachedRenderers = arrayList;
         this.call = call2;
         this.groupCallActivity = groupCallActivity2;
-        AnonymousClass2 r5 = new ImageView(context2) {
+        AnonymousClass2 r5 = new ImageView(this, context2) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(ActionBar.getCurrentActionBarHeight(), NUM));
@@ -184,11 +183,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
         view.setBackgroundDrawable(gradientDrawable);
         addView(view, LayoutHelper.createFrame(-1, 120.0f));
         addView(r5, LayoutHelper.createFrame(56, -1, 51));
-        r5.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                GroupCallRenderersContainer.this.lambda$new$0$GroupCallRenderersContainer(view);
-            }
-        });
+        r5.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda5(this));
         AnonymousClass3 r52 = new ImageView(context2) {
             public void invalidate() {
                 super.invalidate();
@@ -229,11 +224,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             }
         };
         this.pinContainer = r12;
-        r12.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                GroupCallRenderersContainer.this.lambda$new$1$GroupCallRenderersContainer(view);
-            }
-        });
+        r12.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda4(this));
         createSimpleSelectorRoundRectDrawable.setCallback(this.pinContainer);
         addView(this.pinContainer);
         CrossOutDrawable crossOutDrawable = new CrossOutDrawable(context2, NUM, (String) null);
@@ -308,14 +299,12 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$GroupCallRenderersContainer(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         onBackPressed();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$GroupCallRenderersContainer(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         if (this.inFullscreenMode) {
             boolean z = !this.hasPinnedVideo;
             this.hasPinnedVideo = z;
@@ -1245,8 +1234,8 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r1.setScaleY(r12)
             r1.animateEnter = r10
         L_0x01cd:
-            org.telegram.ui.Components.voip.-$$Lambda$GroupCallRenderersContainer$9NlWBW3dhhuxw-ncKdlwogwYeHA r4 = new org.telegram.ui.Components.voip.-$$Lambda$GroupCallRenderersContainer$9NlWBW3dhhuxw-ncKdlwogwYeHA
-            r4.<init>(r11, r1)
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8 r4 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8
+            r4.<init>(r0, r11, r1)
             r13.runOnFrameRendered(r4)
             r16.clearCurrentFullscreenTextureView()
             r0.fullscreenTextureView = r13
@@ -1313,8 +1302,8 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r4.setScaleX(r12)
             r4.setScaleY(r12)
             r4.animateEnter = r10
-            org.telegram.ui.Components.voip.-$$Lambda$GroupCallRenderersContainer$KXeEaD1-nec5x50G8V2Rxw_pZx4 r5 = new org.telegram.ui.Components.voip.-$$Lambda$GroupCallRenderersContainer$KXeEaD1-nec5x50G8V2Rxw_pZx4
-            r5.<init>(r4)
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda7 r5 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda7
+            r5.<init>(r0, r4)
             r4.runOnFrameRendered(r5)
         L_0x0251:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView
@@ -1334,8 +1323,8 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r1 = {0, NUM} // fill-array
             android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
             r0.replaceFullscreenViewAnimator = r1
-            org.telegram.ui.Components.voip.-$$Lambda$GroupCallRenderersContainer$89hD6AwIwR24tybDizgDzRTjUnY r5 = new org.telegram.ui.Components.voip.-$$Lambda$GroupCallRenderersContainer$89hD6AwIwR24tybDizgDzRTjUnY
-            r5.<init>(r4)
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda3 r5 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda3
+            r5.<init>(r0, r4)
             r1.addUpdateListener(r5)
             android.animation.ValueAnimator r1 = r0.replaceFullscreenViewAnimator
             org.telegram.ui.Components.voip.GroupCallRenderersContainer$12 r5 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$12
@@ -1418,8 +1407,8 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r1[r10] = r6
             android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
             r0.fullscreenAnimator = r1
-            org.telegram.ui.Components.voip.-$$Lambda$GroupCallRenderersContainer$JUury30Nbkwb3zQadlyD3CLASSNAMEITE r3 = new org.telegram.ui.Components.voip.-$$Lambda$GroupCallRenderersContainer$JUury30Nbkwb3zQadlyD3CLASSNAMEITE
-            r3.<init>()
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda0 r3 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda0
+            r3.<init>(r0)
             r1.addUpdateListener(r3)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             r1.animateToFullscreen = r10
@@ -1457,8 +1446,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$requestFullscreen$2 */
-    public /* synthetic */ void lambda$requestFullscreen$2$GroupCallRenderersContainer(final GroupCallMiniTextureView groupCallMiniTextureView, final GroupCallMiniTextureView groupCallMiniTextureView2) {
+    public /* synthetic */ void lambda$requestFullscreen$2(final GroupCallMiniTextureView groupCallMiniTextureView, final GroupCallMiniTextureView groupCallMiniTextureView2) {
         ValueAnimator valueAnimator = this.replaceFullscreenViewAnimator;
         if (valueAnimator != null) {
             valueAnimator.start();
@@ -1472,7 +1460,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             }
         }).setDuration(100).start();
         if (groupCallMiniTextureView2 != null) {
-            groupCallMiniTextureView2.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
+            groupCallMiniTextureView2.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(100).setListener(new AnimatorListenerAdapter(this) {
                 public void onAnimationEnd(Animator animator) {
                     groupCallMiniTextureView2.animateEnter = false;
                 }
@@ -1481,9 +1469,8 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$requestFullscreen$3 */
-    public /* synthetic */ void lambda$requestFullscreen$3$GroupCallRenderersContainer(final GroupCallMiniTextureView groupCallMiniTextureView) {
-        groupCallMiniTextureView.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setListener(new AnimatorListenerAdapter() {
+    public /* synthetic */ void lambda$requestFullscreen$3(final GroupCallMiniTextureView groupCallMiniTextureView) {
+        groupCallMiniTextureView.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setListener(new AnimatorListenerAdapter(this) {
             public void onAnimationEnd(Animator animator) {
                 groupCallMiniTextureView.animateEnter = false;
             }
@@ -1491,15 +1478,13 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$requestFullscreen$4 */
-    public /* synthetic */ void lambda$requestFullscreen$4$GroupCallRenderersContainer(GroupCallMiniTextureView groupCallMiniTextureView, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$requestFullscreen$4(GroupCallMiniTextureView groupCallMiniTextureView, ValueAnimator valueAnimator) {
         groupCallMiniTextureView.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
         invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$requestFullscreen$5 */
-    public /* synthetic */ void lambda$requestFullscreen$5$GroupCallRenderersContainer(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$requestFullscreen$5(ValueAnimator valueAnimator) {
         this.progressToFullscreenMode = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         update();
     }
@@ -2149,11 +2134,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
                 valueAnimator = ValueAnimator.ofFloat(fArr);
             }
             this.swipeToBackAnimator = valueAnimator;
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    GroupCallRenderersContainer.this.lambda$animateSwipeToBack$6$GroupCallRenderersContainer(valueAnimator);
-                }
-            });
+            valueAnimator.addUpdateListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda1(this));
             this.swipeToBackAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     super.onAnimationEnd(animator);
@@ -2180,8 +2161,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$animateSwipeToBack$6 */
-    public /* synthetic */ void lambda$animateSwipeToBack$6$GroupCallRenderersContainer(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$animateSwipeToBack$6(ValueAnimator valueAnimator) {
         this.swipeToBackDy = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -2191,21 +2171,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             this.zoomStarted = false;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
             this.zoomBackAnimator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(this.pinchScale, this.pinchTranslationX, this.pinchTranslationY) {
-                public final /* synthetic */ float f$1;
-                public final /* synthetic */ float f$2;
-                public final /* synthetic */ float f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    GroupCallRenderersContainer.this.lambda$finishZoom$7$GroupCallRenderersContainer(this.f$1, this.f$2, this.f$3, valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda2(this, this.pinchScale, this.pinchTranslationX, this.pinchTranslationY));
             this.zoomBackAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     GroupCallRenderersContainer groupCallRenderersContainer = GroupCallRenderersContainer.this;
@@ -2226,8 +2192,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$finishZoom$7 */
-    public /* synthetic */ void lambda$finishZoom$7$GroupCallRenderersContainer(float f, float f2, float f3, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$finishZoom$7(float f, float f2, float f3, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.pinchScale = (f * floatValue) + ((1.0f - floatValue) * 1.0f);
         this.pinchTranslationX = f2 * floatValue;
@@ -2413,13 +2378,9 @@ public class GroupCallRenderersContainer extends FrameLayout {
                 }
                 this.speakingMembersAvatars.commitTransition(z2);
             } else if (this.updateTooltipRunnbale == null) {
-                $$Lambda$GroupCallRenderersContainer$_Y0FYNsyJ9FACJZ4bH6rsU3t4H8 r1 = new Runnable() {
-                    public final void run() {
-                        GroupCallRenderersContainer.this.lambda$setVisibleParticipant$8$GroupCallRenderersContainer();
-                    }
-                };
-                this.updateTooltipRunnbale = r1;
-                AndroidUtilities.runOnUIThread(r1, (System.currentTimeMillis() - this.lastUpdateTooltipTime) + 50);
+                GroupCallRenderersContainer$$ExternalSyntheticLambda6 groupCallRenderersContainer$$ExternalSyntheticLambda6 = new GroupCallRenderersContainer$$ExternalSyntheticLambda6(this);
+                this.updateTooltipRunnbale = groupCallRenderersContainer$$ExternalSyntheticLambda6;
+                AndroidUtilities.runOnUIThread(groupCallRenderersContainer$$ExternalSyntheticLambda6, (System.currentTimeMillis() - this.lastUpdateTooltipTime) + 50);
             }
         } else if (this.showSpeakingMembersToast) {
             this.showSpeakingMembersToast = false;
@@ -2428,8 +2389,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setVisibleParticipant$8 */
-    public /* synthetic */ void lambda$setVisibleParticipant$8$GroupCallRenderersContainer() {
+    public /* synthetic */ void lambda$setVisibleParticipant$8() {
         this.updateTooltipRunnbale = null;
         setVisibleParticipant(true);
     }

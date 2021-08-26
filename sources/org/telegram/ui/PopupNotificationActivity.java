@@ -107,7 +107,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private VelocityTracker velocityTracker = null;
     private PowerManager.WakeLock wakeLock = null;
 
-    static /* synthetic */ boolean lambda$getButtonsViewForMessage$4(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$getButtonsViewForMessage$4(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -566,19 +567,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setMessage(LocaleController.getString("PermissionNoAudio", NUM));
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    PopupNotificationActivity.this.lambda$onRequestPermissionsResult$0$PopupNotificationActivity(dialogInterface, i);
-                }
-            });
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new PopupNotificationActivity$$ExternalSyntheticLambda0(this));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onRequestPermissionsResult$0 */
-    public /* synthetic */ void lambda$onRequestPermissionsResult$0$PopupNotificationActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onRequestPermissionsResult$0(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -754,8 +750,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             float r14 = r14 - r2
             android.view.ViewGroup r2 = r13.leftView
             android.view.ViewGroup r4 = r13.leftButtonsView
-            org.telegram.ui.-$$Lambda$PopupNotificationActivity$syUpRW04SxGlYDS2GlRdS_Z2SIA r7 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$syUpRW04SxGlYDS2GlRdS_Z2SIA
-            r7.<init>()
+            org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda8 r7 = new org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda8
+            r7.<init>(r13)
             r13.onAnimationEndRunnable = r7
             goto L_0x0133
         L_0x00e6:
@@ -773,8 +769,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             float r14 = r14 - r2
             android.view.ViewGroup r2 = r13.rightView
             android.view.ViewGroup r4 = r13.rightButtonsView
-            org.telegram.ui.-$$Lambda$PopupNotificationActivity$-PKpx0tbtWowaBnMtDtSUBoyCGY r7 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$-PKpx0tbtWowaBnMtDtSUBoyCGY
-            r7.<init>()
+            org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda6 r7 = new org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda6
+            r7.<init>(r13)
             r13.onAnimationEndRunnable = r7
             goto L_0x0133
         L_0x0105:
@@ -797,8 +793,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         L_0x0122:
             android.view.ViewGroup r14 = r13.rightButtonsView
         L_0x0124:
-            org.telegram.ui.-$$Lambda$PopupNotificationActivity$_iMx0yc-3fche-JsFusYelodYKQ r7 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$_iMx0yc-3fche-JsFusYelodYKQ
-            r7.<init>()
+            org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda7 r7 = new org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda7
+            r7.<init>(r13)
             r13.onAnimationEndRunnable = r7
             r12 = r4
             r4 = r14
@@ -884,24 +880,21 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onTouchEventMy$1 */
-    public /* synthetic */ void lambda$onTouchEventMy$1$PopupNotificationActivity() {
+    public /* synthetic */ void lambda$onTouchEventMy$1() {
         this.animationInProgress = false;
         switchToPreviousMessage();
         AndroidUtilities.unlockOrientation(this);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onTouchEventMy$2 */
-    public /* synthetic */ void lambda$onTouchEventMy$2$PopupNotificationActivity() {
+    public /* synthetic */ void lambda$onTouchEventMy$2() {
         this.animationInProgress = false;
         switchToNextMessage();
         AndroidUtilities.unlockOrientation(this);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onTouchEventMy$3 */
-    public /* synthetic */ void lambda$onTouchEventMy$3$PopupNotificationActivity() {
+    public /* synthetic */ void lambda$onTouchEventMy$3() {
         this.animationInProgress = false;
         applyViewsLayoutParams(0);
         AndroidUtilities.unlockOrientation(this);
@@ -1001,7 +994,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                             linearLayout.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                             linearLayout.setWeightSum(100.0f);
                             linearLayout.setTag("b");
-                            linearLayout.setOnTouchListener($$Lambda$PopupNotificationActivity$5MVdshyCJT4IRL3ieSzQh4PZlTs.INSTANCE);
+                            linearLayout.setOnTouchListener(PopupNotificationActivity$$ExternalSyntheticLambda5.INSTANCE);
                         }
                         TextView textView = new TextView(this);
                         textView.setTextSize(1, 16.0f);
@@ -1012,19 +1005,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                         textView.setGravity(17);
                         textView.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                         linearLayout.addView(textView, LayoutHelper.createLinear(-1, -1, 100.0f / ((float) i2)));
-                        textView.setOnClickListener(new View.OnClickListener(i7, messageObject) {
-                            public final /* synthetic */ int f$0;
-                            public final /* synthetic */ MessageObject f$1;
-
-                            {
-                                this.f$0 = r1;
-                                this.f$1 = r2;
-                            }
-
-                            public final void onClick(View view) {
-                                PopupNotificationActivity.lambda$getButtonsViewForMessage$5(this.f$0, this.f$1, view);
-                            }
-                        });
+                        textView.setOnClickListener(new PopupNotificationActivity$$ExternalSyntheticLambda1(i7, messageObject));
                     }
                     i9++;
                     i4 = 0;
@@ -1052,7 +1033,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         return linearLayout;
     }
 
-    static /* synthetic */ void lambda$getButtonsViewForMessage$5(int i, MessageObject messageObject, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$getButtonsViewForMessage$5(int i, MessageObject messageObject, View view) {
         TLRPC$KeyboardButton tLRPC$KeyboardButton = (TLRPC$KeyboardButton) view.getTag();
         if (tLRPC$KeyboardButton != null) {
             SendMessagesHelper.getInstance(i).sendNotificationCallback(messageObject.getDialogId(), messageObject.getId(), tLRPC$KeyboardButton.data);
@@ -1152,8 +1134,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r3 = 2
             java.lang.Integer r8 = java.lang.Integer.valueOf(r3)
             r7.setTag(r8)
-            org.telegram.ui.-$$Lambda$PopupNotificationActivity$K5nMoPuF1rIAMt3-QqA3BYLyfHA r3 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$K5nMoPuF1rIAMt3-QqA3BYLyfHA
-            r3.<init>()
+            org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda3 r3 = new org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda3
+            r3.<init>(r0)
             r7.setOnClickListener(r3)
         L_0x00d6:
             r3 = r7
@@ -1340,8 +1322,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r4 = 3
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             r3.setTag(r4)
-            org.telegram.ui.-$$Lambda$PopupNotificationActivity$jDtdxgwq45g_3jEgneeE9-Na-z4 r4 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$jDtdxgwq45g_3jEgneeE9-Na-z4
-            r4.<init>()
+            org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda4 r4 = new org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda4
+            r4.<init>(r0)
             r3.setOnClickListener(r4)
             r4 = r7
         L_0x0270:
@@ -1385,8 +1367,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r15)
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r10.setPadding(r7, r9, r13, r14)
-            org.telegram.ui.-$$Lambda$PopupNotificationActivity$5govlMnVVL12MDJEj8C5JgNFZAo r7 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$5govlMnVVL12MDJEj8C5JgNFZAo
-            r7.<init>()
+            org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda2 r7 = new org.telegram.ui.PopupNotificationActivity$$ExternalSyntheticLambda2
+            r7.<init>(r0)
             r10.setOnClickListener(r7)
             android.widget.TextView r7 = new android.widget.TextView
             r7.<init>(r0)
@@ -1461,20 +1443,17 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getViewForMessage$6 */
-    public /* synthetic */ void lambda$getViewForMessage$6$PopupNotificationActivity(View view) {
+    public /* synthetic */ void lambda$getViewForMessage$6(View view) {
         openCurrentMessage();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getViewForMessage$7 */
-    public /* synthetic */ void lambda$getViewForMessage$7$PopupNotificationActivity(View view) {
+    public /* synthetic */ void lambda$getViewForMessage$7(View view) {
         openCurrentMessage();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getViewForMessage$8 */
-    public /* synthetic */ void lambda$getViewForMessage$8$PopupNotificationActivity(View view) {
+    public /* synthetic */ void lambda$getViewForMessage$8(View view) {
         openCurrentMessage();
     }
 

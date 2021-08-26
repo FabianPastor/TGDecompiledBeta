@@ -169,7 +169,7 @@ public class ApplicationLoader extends Application {
             FileLog.d("load libs time = " + (SystemClock.elapsedRealtime() - startTime));
         }
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        AndroidUtilities.runOnUIThread($$Lambda$6var_mOFSl8nO3HAcLKG9VPMoeQg.INSTANCE);
+        AndroidUtilities.runOnUIThread(ApplicationLoader$$ExternalSyntheticLambda3.INSTANCE);
     }
 
     public static void startPushService() {
@@ -203,16 +203,11 @@ public class ApplicationLoader extends Application {
     }
 
     private void initPlayServices() {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                ApplicationLoader.this.lambda$initPlayServices$2$ApplicationLoader();
-            }
-        }, 1000);
+        AndroidUtilities.runOnUIThread(new ApplicationLoader$$ExternalSyntheticLambda1(this), 1000);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initPlayServices$2 */
-    public /* synthetic */ void lambda$initPlayServices$2$ApplicationLoader() {
+    public /* synthetic */ void lambda$initPlayServices$2() {
         boolean checkPlayServices = checkPlayServices();
         hasPlayServices = checkPlayServices;
         if (checkPlayServices) {
@@ -224,7 +219,7 @@ public class ApplicationLoader extends Application {
             } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("GCM Registration not found.");
             }
-            Utilities.globalQueue.postRunnable($$Lambda$ApplicationLoader$L1Kxv3czXMk_jNWLP2gmgiHCrPM.INSTANCE);
+            Utilities.globalQueue.postRunnable(ApplicationLoader$$ExternalSyntheticLambda2.INSTANCE);
             return;
         }
         if (BuildVars.LOGS_ENABLED) {
@@ -234,15 +229,17 @@ public class ApplicationLoader extends Application {
         GcmPushListenerService.sendRegistrationToServer((String) null);
     }
 
-    static /* synthetic */ void lambda$initPlayServices$1() {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$initPlayServices$1() {
         try {
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener($$Lambda$ApplicationLoader$uH1noiBBUj9vNZJEae0KZQ4oQc.INSTANCE);
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(ApplicationLoader$$ExternalSyntheticLambda0.INSTANCE);
         } catch (Throwable th) {
             FileLog.e(th);
         }
     }
 
-    static /* synthetic */ void lambda$initPlayServices$0(Task task) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$initPlayServices$0(Task task) {
         if (!task.isSuccessful()) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("Failed to get regid");

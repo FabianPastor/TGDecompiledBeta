@@ -30,7 +30,6 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_wallPaper;
 import org.telegram.tgnet.TLRPC$WallPaperSettings;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Cells.WallpaperCell;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.LayoutHelper;
@@ -345,32 +344,8 @@ public class WallpaperCell extends FrameLayout {
                 WallpaperView wallpaperView = new WallpaperView(context);
                 wallpaperViewArr[i] = wallpaperView;
                 addView(wallpaperView);
-                wallpaperView.setOnClickListener(new View.OnClickListener(wallpaperView, i) {
-                    public final /* synthetic */ WallpaperCell.WallpaperView f$1;
-                    public final /* synthetic */ int f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void onClick(View view) {
-                        WallpaperCell.this.lambda$new$0$WallpaperCell(this.f$1, this.f$2, view);
-                    }
-                });
-                wallpaperView.setOnLongClickListener(new View.OnLongClickListener(wallpaperView, i) {
-                    public final /* synthetic */ WallpaperCell.WallpaperView f$1;
-                    public final /* synthetic */ int f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final boolean onLongClick(View view) {
-                        return WallpaperCell.this.lambda$new$1$WallpaperCell(this.f$1, this.f$2, view);
-                    }
-                });
+                wallpaperView.setOnClickListener(new WallpaperCell$$ExternalSyntheticLambda0(this, wallpaperView, i));
+                wallpaperView.setOnLongClickListener(new WallpaperCell$$ExternalSyntheticLambda1(this, wallpaperView, i));
                 i++;
             } else {
                 Paint paint = new Paint();
@@ -387,14 +362,12 @@ public class WallpaperCell extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$WallpaperCell(WallpaperView wallpaperView, int i, View view) {
+    public /* synthetic */ void lambda$new$0(WallpaperView wallpaperView, int i, View view) {
         onWallpaperClick(wallpaperView.currentWallpaper, i);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ boolean lambda$new$1$WallpaperCell(WallpaperView wallpaperView, int i, View view) {
+    public /* synthetic */ boolean lambda$new$1(WallpaperView wallpaperView, int i, View view) {
         return onWallpaperLongClick(wallpaperView.currentWallpaper, i);
     }
 

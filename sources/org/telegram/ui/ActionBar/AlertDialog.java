@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 import org.telegram.ui.Components.RLottieImageView;
@@ -63,11 +62,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public boolean dimEnabled = true;
     private boolean dismissDialogByButtons = true;
     /* access modifiers changed from: private */
-    public Runnable dismissRunnable = new Runnable() {
-        public final void run() {
-            AlertDialog.this.dismiss();
-        }
-    };
+    public Runnable dismissRunnable = new AlertDialog$$ExternalSyntheticLambda6(this);
     /* access modifiers changed from: private */
     public boolean drawBackground;
     private boolean focusable;
@@ -127,11 +122,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     /* access modifiers changed from: private */
     public Drawable shadowDrawable;
     private boolean[] shadowVisibility = new boolean[2];
-    private Runnable showRunnable = new Runnable() {
-        public final void run() {
-            AlertDialog.this.lambda$new$0$AlertDialog();
-        }
-    };
+    private Runnable showRunnable = new AlertDialog$$ExternalSyntheticLambda7(this);
     /* access modifiers changed from: private */
     public CharSequence subtitle;
     /* access modifiers changed from: private */
@@ -163,8 +154,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$AlertDialog() {
+    public /* synthetic */ void lambda$new$0() {
         if (!isShowing()) {
             try {
                 show();
@@ -664,8 +654,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     android.graphics.Point r14 = org.telegram.messenger.AndroidUtilities.displaySize
                     int r14 = r14.x
                     if (r13 == r14) goto L_0x03ab
-                    org.telegram.ui.ActionBar.-$$Lambda$AlertDialog$1$JIrJ56APQSM_xO6XCF5kj8j2lPQ r13 = new org.telegram.ui.ActionBar.-$$Lambda$AlertDialog$1$JIrJ56APQSM_xO6XCF5kj8j2lPQ
-                    r13.<init>()
+                    org.telegram.ui.ActionBar.AlertDialog$1$$ExternalSyntheticLambda1 r13 = new org.telegram.ui.ActionBar.AlertDialog$1$$ExternalSyntheticLambda1
+                    r13.<init>(r12)
                     org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
                 L_0x03ab:
                     return
@@ -674,8 +664,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onMeasure$0 */
-            public /* synthetic */ void lambda$onMeasure$0$AlertDialog$1() {
+            public /* synthetic */ void lambda$onMeasure$0() {
                 int i;
                 int unused = AlertDialog.this.lastScreenWidth = AndroidUtilities.displaySize.x;
                 int dp = AndroidUtilities.displaySize.x - AndroidUtilities.dp(56.0f);
@@ -706,11 +695,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     AlertDialog.this.progressViewContainer.layout(measuredWidth, measuredHeight, AlertDialog.this.progressViewContainer.getMeasuredWidth() + measuredWidth, AlertDialog.this.progressViewContainer.getMeasuredHeight() + measuredHeight);
                 } else if (AlertDialog.this.contentScrollView != null) {
                     if (AlertDialog.this.onScrollChangedListener == null) {
-                        ViewTreeObserver.OnScrollChangedListener unused = AlertDialog.this.onScrollChangedListener = new ViewTreeObserver.OnScrollChangedListener() {
-                            public final void onScrollChanged() {
-                                AlertDialog.AnonymousClass1.this.lambda$onLayout$1$AlertDialog$1();
-                            }
-                        };
+                        ViewTreeObserver.OnScrollChangedListener unused = AlertDialog.this.onScrollChangedListener = new AlertDialog$1$$ExternalSyntheticLambda0(this);
                         AlertDialog.this.contentScrollView.getViewTreeObserver().addOnScrollChangedListener(AlertDialog.this.onScrollChangedListener);
                     }
                     AlertDialog.this.onScrollChangedListener.onScrollChanged();
@@ -718,8 +703,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onLayout$1 */
-            public /* synthetic */ void lambda$onLayout$1$AlertDialog$1() {
+            public /* synthetic */ void lambda$onLayout$1() {
                 AlertDialog alertDialog = AlertDialog.this;
                 boolean z = false;
                 alertDialog.runShadowAnimation(0, alertDialog.titleTextView != null && AlertDialog.this.contentScrollView.getScrollY() > AlertDialog.this.scrollContainer.getTop());
@@ -938,11 +922,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     alertDialogCell.setTag(Integer.valueOf(i6));
                     this.itemViews.add(alertDialogCell);
                     this.scrollContainer.addView(alertDialogCell, LayoutHelper.createLinear(-1, 50));
-                    alertDialogCell.setOnClickListener(new View.OnClickListener() {
-                        public final void onClick(View view) {
-                            AlertDialog.this.lambda$onCreate$1$AlertDialog(view);
-                        }
-                    });
+                    alertDialogCell.setOnClickListener(new AlertDialog$$ExternalSyntheticLambda2(this));
                 }
                 i6++;
             }
@@ -977,7 +957,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 linearLayout2.setOrientation(1);
                 this.buttonsLayout = linearLayout2;
             } else {
-                this.buttonsLayout = new FrameLayout(getContext()) {
+                this.buttonsLayout = new FrameLayout(this, getContext()) {
                     /* access modifiers changed from: protected */
                     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                         int i5;
@@ -1059,7 +1039,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.buttonsLayout.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             r1.addView(this.buttonsLayout, LayoutHelper.createLinear(-1, 52));
             if (this.positiveButtonText != null) {
-                AnonymousClass4 r12 = new TextView(getContext()) {
+                AnonymousClass4 r12 = new TextView(this, getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -1084,14 +1064,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 } else {
                     this.buttonsLayout.addView(r12, LayoutHelper.createFrame(-2, 36, 53));
                 }
-                r12.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        AlertDialog.this.lambda$onCreate$2$AlertDialog(view);
-                    }
-                });
+                r12.setOnClickListener(new AlertDialog$$ExternalSyntheticLambda5(this));
             }
             if (this.negativeButtonText != null) {
-                AnonymousClass5 r13 = new TextView(getContext()) {
+                AnonymousClass5 r13 = new TextView(this, getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -1118,14 +1094,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 } else {
                     this.buttonsLayout.addView(r13, LayoutHelper.createFrame(-2, 36, 53));
                 }
-                r13.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        AlertDialog.this.lambda$onCreate$3$AlertDialog(view);
-                    }
-                });
+                r13.setOnClickListener(new AlertDialog$$ExternalSyntheticLambda4(this));
             }
             if (this.neutralButtonText != null) {
-                AnonymousClass6 r14 = new TextView(getContext()) {
+                AnonymousClass6 r14 = new TextView(this, getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -1160,11 +1132,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 } else {
                     this.buttonsLayout.addView(r14, LayoutHelper.createFrame(-2, 36, 51));
                 }
-                r14.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        AlertDialog.this.lambda$onCreate$4$AlertDialog(view);
-                    }
-                });
+                r14.setOnClickListener(new AlertDialog$$ExternalSyntheticLambda3(this));
             }
             if (this.verticalButtons) {
                 for (int i7 = 1; i7 < this.buttonsLayout.getChildCount(); i7++) {
@@ -1209,8 +1177,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$1 */
-    public /* synthetic */ void lambda$onCreate$1$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$1(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.onClickListener;
         if (onClickListener2 != null) {
             onClickListener2.onClick(this, ((Integer) view.getTag()).intValue());
@@ -1219,8 +1186,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$2 */
-    public /* synthetic */ void lambda$onCreate$2$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$2(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.positiveButtonListener;
         if (onClickListener2 != null) {
             onClickListener2.onClick(this, -1);
@@ -1231,8 +1197,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$3 */
-    public /* synthetic */ void lambda$onCreate$3$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$3(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.negativeButtonListener;
         if (onClickListener2 != null) {
             onClickListener2.onClick(this, -2);
@@ -1243,8 +1208,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$4 */
-    public /* synthetic */ void lambda$onCreate$4$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$4(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.neutralButtonListener;
         if (onClickListener2 != null) {
             onClickListener2.onClick(this, -2);
@@ -1300,16 +1264,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setMessage(LocaleController.getString("StopLoading", NUM));
             builder.setPositiveButton(LocaleController.getString("WaitMore", NUM), (DialogInterface.OnClickListener) null);
-            builder.setNegativeButton(LocaleController.getString("Stop", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    AlertDialog.this.lambda$showCancelAlert$5$AlertDialog(dialogInterface, i);
-                }
-            });
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                public final void onDismiss(DialogInterface dialogInterface) {
-                    AlertDialog.this.lambda$showCancelAlert$6$AlertDialog(dialogInterface);
-                }
-            });
+            builder.setNegativeButton(LocaleController.getString("Stop", NUM), new AlertDialog$$ExternalSyntheticLambda0(this));
+            builder.setOnDismissListener(new AlertDialog$$ExternalSyntheticLambda1(this));
             try {
                 this.cancelDialog = builder.show();
             } catch (Exception unused) {
@@ -1318,8 +1274,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showCancelAlert$5 */
-    public /* synthetic */ void lambda$showCancelAlert$5$AlertDialog(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showCancelAlert$5(DialogInterface dialogInterface, int i) {
         DialogInterface.OnCancelListener onCancelListener2 = this.onCancelListener;
         if (onCancelListener2 != null) {
             onCancelListener2.onCancel(this);
@@ -1328,8 +1283,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showCancelAlert$6 */
-    public /* synthetic */ void lambda$showCancelAlert$6$AlertDialog(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showCancelAlert$6(DialogInterface dialogInterface) {
         this.cancelDialog = null;
     }
 

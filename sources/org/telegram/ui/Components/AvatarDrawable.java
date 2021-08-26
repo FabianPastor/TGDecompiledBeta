@@ -370,6 +370,8 @@ public class AvatarDrawable extends Drawable {
                     }
                 }
                 if (this.textLayout != null) {
+                    float dp2 = f / ((float) AndroidUtilities.dp(50.0f));
+                    canvas.scale(dp2, dp2, f2, f2);
                     canvas.translate(((f - this.textWidth) / 2.0f) - this.textLeft, (f - this.textHeight) / 2.0f);
                     this.textLayout.draw(canvas);
                 }

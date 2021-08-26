@@ -19,6 +19,7 @@ import android.os.Build;
 import android.view.View;
 import java.lang.ref.WeakReference;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 
 public class MotionBackgroundDrawable extends Drawable {
@@ -46,11 +47,13 @@ public class MotionBackgroundDrawable extends Drawable {
     private Rect patternBounds = new Rect();
     private int phase;
     private float posAnimationProgress = 1.0f;
+    private boolean postInvalidateParent;
     private RectF rect = new RectF();
     private boolean rotatingPreview;
     private boolean rotationBack;
     private int roundRadius;
     private int translationY;
+    private Runnable updateAnimationRunnable = new MotionBackgroundDrawable$$ExternalSyntheticLambda0(this);
 
     public int getOpacity() {
         return -2;
@@ -98,6 +101,10 @@ public class MotionBackgroundDrawable extends Drawable {
         invalidateParent();
     }
 
+    public BitmapShader getBitmapShader() {
+        return this.bitmapShader;
+    }
+
     public Bitmap getBitmap() {
         return this.currentBitmap;
     }
@@ -143,6 +150,10 @@ public class MotionBackgroundDrawable extends Drawable {
 
     public int getPhase() {
         return this.phase;
+    }
+
+    public void setPostInvalidateParent(boolean z) {
+        this.postInvalidateParent = z;
     }
 
     public void rotatePreview(boolean z) {
@@ -232,8 +243,14 @@ public class MotionBackgroundDrawable extends Drawable {
 
     private void invalidateParent() {
         WeakReference<View> weakReference = this.parentView;
-        if (weakReference != null && weakReference.get() != null) {
+        if (!(weakReference == null || weakReference.get() == null)) {
             ((View) this.parentView.get()).invalidate();
+        }
+        if (this.postInvalidateParent) {
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.invalidateMotionBackground, new Object[0]);
+            updateAnimation();
+            AndroidUtilities.cancelRunOnUIThread(this.updateAnimationRunnable);
+            AndroidUtilities.runOnUIThread(this.updateAnimationRunnable, 16);
         }
     }
 
@@ -309,480 +326,330 @@ public class MotionBackgroundDrawable extends Drawable {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x02e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:101:0x0304  */
+    public void draw(Canvas canvas) {
+        Rect bounds = getBounds();
+        canvas.save();
+        float f = (float) (this.patternBitmap != null ? bounds.top : this.translationY);
+        int width = this.currentBitmap.getWidth();
+        int height = this.currentBitmap.getHeight();
+        float width2 = (float) bounds.width();
+        float height2 = (float) bounds.height();
+        float f2 = (float) width;
+        float f3 = (float) height;
+        float max = Math.max(width2 / f2, height2 / f3);
+        float f4 = f2 * max;
+        float f5 = f3 * max;
+        float f6 = (width2 - f4) / 2.0f;
+        float f7 = (height2 - f5) / 2.0f;
+        if (this.isPreview) {
+            int i = bounds.left;
+            f6 += (float) i;
+            int i2 = bounds.top;
+            f7 += (float) i2;
+            canvas.clipRect(i, i2, bounds.right, bounds.bottom);
+        }
+        if (this.patternBitmap == null || this.intensity >= 0) {
+            if (this.roundRadius != 0) {
+                this.matrix.reset();
+                this.matrix.setTranslate(f6, f7);
+                float min = 1.0f / Math.min(((float) this.currentBitmap.getWidth()) / ((float) bounds.width()), ((float) this.currentBitmap.getHeight()) / ((float) bounds.height()));
+                this.matrix.preScale(min, min);
+                this.bitmapShader.setLocalMatrix(this.matrix);
+                this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
+                RectF rectF = this.rect;
+                int i3 = this.roundRadius;
+                canvas.drawRoundRect(rectF, (float) i3, (float) i3, this.paint);
+            } else {
+                canvas.translate(0.0f, f);
+                this.rect.set(f6, f7, f4 + f6, f5 + f7);
+                canvas.drawBitmap(this.currentBitmap, (Rect) null, this.rect, this.paint);
+            }
+            Bitmap bitmap = this.patternBitmap;
+            if (bitmap != null) {
+                float width3 = (float) bitmap.getWidth();
+                float height3 = (float) this.patternBitmap.getHeight();
+                float max2 = Math.max(width2 / width3, height2 / height3);
+                float f8 = width3 * max2;
+                float f9 = height3 * max2;
+                float var_ = (width2 - f8) / 2.0f;
+                float var_ = (height2 - f9) / 2.0f;
+                this.rect.set(var_, var_, f8 + var_, f9 + var_);
+                canvas.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
+            }
+        } else {
+            canvas.drawColor(-16777216);
+            Bitmap bitmap2 = this.legacyBitmap;
+            if (bitmap2 != null) {
+                this.rect.set(0.0f, 0.0f, (float) bitmap2.getWidth(), (float) this.legacyBitmap.getHeight());
+                this.legacyCanvas.drawBitmap(this.currentBitmap, (Rect) null, this.rect, this.paint);
+                float width4 = (float) this.patternBitmap.getWidth();
+                float height4 = (float) this.patternBitmap.getHeight();
+                float max3 = Math.max(width2 / width4, height2 / height4);
+                float var_ = width4 * max3;
+                float var_ = height4 * max3;
+                float var_ = (width2 - var_) / 2.0f;
+                float var_ = (height2 - var_) / 2.0f;
+                this.rect.set(var_, var_, var_ + var_, var_ + var_);
+                this.legacyCanvas.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
+                this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
+                canvas.drawBitmap(this.legacyBitmap, (Rect) null, this.rect, this.paint);
+            } else {
+                this.matrix.reset();
+                this.matrix.setTranslate(f6, f7 + f);
+                float min2 = 1.0f / Math.min(((float) this.currentBitmap.getWidth()) / ((float) bounds.width()), ((float) this.currentBitmap.getHeight()) / ((float) bounds.height()));
+                this.matrix.preScale(min2, min2);
+                this.bitmapShader.setLocalMatrix(this.matrix);
+                this.matrix.reset();
+                float width5 = (float) this.patternBitmap.getWidth();
+                float height5 = (float) this.patternBitmap.getHeight();
+                float max4 = Math.max(width2 / width5, height2 / height5);
+                this.matrix.setTranslate((width2 - (width5 * max4)) / 2.0f, ((height2 - (height5 * max4)) / 2.0f) + f);
+                this.matrix.preScale(max4, max4);
+                this.gradientShader.setLocalMatrix(this.matrix);
+                this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
+                RectF rectF2 = this.rect;
+                int i4 = this.roundRadius;
+                canvas.drawRoundRect(rectF2, (float) i4, (float) i4, this.paint2);
+            }
+        }
+        canvas.restore();
+        updateAnimation();
+    }
+
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x00fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0143  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void draw(android.graphics.Canvas r24) {
+    public void updateAnimation() {
         /*
-            r23 = this;
-            r0 = r23
-            r1 = r24
-            android.graphics.Rect r2 = r23.getBounds()
-            r24.save()
-            android.graphics.Bitmap r3 = r0.patternBitmap
-            if (r3 == 0) goto L_0x0012
-            int r3 = r2.top
-            goto L_0x0014
-        L_0x0012:
-            int r3 = r0.translationY
-        L_0x0014:
-            float r3 = (float) r3
-            android.graphics.Bitmap r4 = r0.currentBitmap
-            int r4 = r4.getWidth()
-            android.graphics.Bitmap r5 = r0.currentBitmap
-            int r5 = r5.getHeight()
-            int r6 = r2.width()
-            float r6 = (float) r6
-            int r7 = r2.height()
-            float r7 = (float) r7
-            float r4 = (float) r4
-            float r8 = r6 / r4
-            float r5 = (float) r5
-            float r9 = r7 / r5
-            float r8 = java.lang.Math.max(r8, r9)
-            float r4 = r4 * r8
-            float r5 = r5 * r8
-            float r8 = r6 - r4
-            r9 = 1073741824(0x40000000, float:2.0)
-            float r8 = r8 / r9
-            float r10 = r7 - r5
-            float r10 = r10 / r9
-            boolean r11 = r0.isPreview
-            if (r11 == 0) goto L_0x0054
-            int r11 = r2.left
-            float r12 = (float) r11
-            float r8 = r8 + r12
-            int r12 = r2.top
-            float r13 = (float) r12
-            float r10 = r10 + r13
-            int r13 = r2.right
-            int r14 = r2.bottom
-            r1.clipRect(r11, r12, r13, r14)
-        L_0x0054:
-            android.graphics.Bitmap r11 = r0.patternBitmap
-            r12 = 0
-            r13 = 0
-            r14 = 1065353216(0x3var_, float:1.0)
-            if (r11 == 0) goto L_0x015b
-            int r11 = r0.intensity
-            if (r11 >= 0) goto L_0x015b
-            r4 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r1.drawColor(r4)
-            android.graphics.Bitmap r4 = r0.legacyBitmap
-            if (r4 == 0) goto L_0x00d1
-            android.graphics.RectF r3 = r0.rect
-            int r4 = r4.getWidth()
-            float r4 = (float) r4
-            android.graphics.Bitmap r5 = r0.legacyBitmap
-            int r5 = r5.getHeight()
-            float r5 = (float) r5
-            r3.set(r13, r13, r4, r5)
-            android.graphics.Canvas r3 = r0.legacyCanvas
-            android.graphics.Bitmap r4 = r0.currentBitmap
-            android.graphics.RectF r5 = r0.rect
-            android.graphics.Paint r8 = r0.paint
-            r3.drawBitmap(r4, r12, r5, r8)
-            android.graphics.Bitmap r3 = r0.patternBitmap
-            int r3 = r3.getWidth()
-            android.graphics.Bitmap r4 = r0.patternBitmap
-            int r4 = r4.getHeight()
-            float r3 = (float) r3
-            float r5 = r6 / r3
-            float r4 = (float) r4
-            float r8 = r7 / r4
-            float r5 = java.lang.Math.max(r5, r8)
-            float r3 = r3 * r5
-            float r4 = r4 * r5
-            float r6 = r6 - r3
-            float r6 = r6 / r9
-            float r7 = r7 - r4
-            float r7 = r7 / r9
-            android.graphics.RectF r5 = r0.rect
-            float r3 = r3 + r6
-            float r4 = r4 + r7
-            r5.set(r6, r7, r3, r4)
-            android.graphics.Canvas r3 = r0.legacyCanvas
-            android.graphics.Bitmap r4 = r0.patternBitmap
-            android.graphics.RectF r5 = r0.rect
-            android.graphics.Paint r6 = r0.paint2
-            r3.drawBitmap(r4, r12, r5, r6)
-            android.graphics.RectF r3 = r0.rect
-            int r4 = r2.left
-            float r4 = (float) r4
-            int r5 = r2.top
-            float r5 = (float) r5
-            int r6 = r2.right
-            float r6 = (float) r6
-            int r2 = r2.bottom
-            float r2 = (float) r2
-            r3.set(r4, r5, r6, r2)
-            android.graphics.Bitmap r2 = r0.legacyBitmap
-            android.graphics.RectF r3 = r0.rect
-            android.graphics.Paint r4 = r0.paint
-            r1.drawBitmap(r2, r12, r3, r4)
-            goto L_0x01f5
-        L_0x00d1:
-            android.graphics.Matrix r4 = r0.matrix
-            r4.reset()
-            android.graphics.Matrix r4 = r0.matrix
-            float r10 = r10 + r3
-            r4.setTranslate(r8, r10)
-            android.graphics.Bitmap r4 = r0.currentBitmap
-            int r4 = r4.getWidth()
-            float r4 = (float) r4
-            int r5 = r2.width()
-            float r5 = (float) r5
-            float r4 = r4 / r5
-            android.graphics.Bitmap r5 = r0.currentBitmap
-            int r5 = r5.getHeight()
-            float r5 = (float) r5
-            int r8 = r2.height()
-            float r8 = (float) r8
-            float r5 = r5 / r8
-            float r4 = java.lang.Math.min(r4, r5)
-            float r4 = r14 / r4
-            android.graphics.Matrix r5 = r0.matrix
-            r5.preScale(r4, r4)
-            android.graphics.BitmapShader r4 = r0.bitmapShader
-            android.graphics.Matrix r5 = r0.matrix
-            r4.setLocalMatrix(r5)
-            android.graphics.Matrix r4 = r0.matrix
-            r4.reset()
-            android.graphics.Bitmap r4 = r0.patternBitmap
-            int r4 = r4.getWidth()
-            android.graphics.Bitmap r5 = r0.patternBitmap
-            int r5 = r5.getHeight()
-            float r4 = (float) r4
-            float r8 = r6 / r4
-            float r5 = (float) r5
-            float r10 = r7 / r5
-            float r8 = java.lang.Math.max(r8, r10)
-            float r4 = r4 * r8
-            float r5 = r5 * r8
-            float r6 = r6 - r4
-            float r6 = r6 / r9
-            float r7 = r7 - r5
-            float r7 = r7 / r9
-            android.graphics.Matrix r4 = r0.matrix
-            float r7 = r7 + r3
-            r4.setTranslate(r6, r7)
-            android.graphics.Matrix r3 = r0.matrix
-            r3.preScale(r8, r8)
-            android.graphics.BitmapShader r3 = r0.gradientShader
-            android.graphics.Matrix r4 = r0.matrix
-            r3.setLocalMatrix(r4)
-            android.graphics.RectF r3 = r0.rect
-            int r4 = r2.left
-            float r4 = (float) r4
-            int r5 = r2.top
-            float r5 = (float) r5
-            int r6 = r2.right
-            float r6 = (float) r6
-            int r2 = r2.bottom
-            float r2 = (float) r2
-            r3.set(r4, r5, r6, r2)
-            android.graphics.RectF r2 = r0.rect
-            int r3 = r0.roundRadius
-            float r4 = (float) r3
-            float r3 = (float) r3
-            android.graphics.Paint r5 = r0.paint2
-            r1.drawRoundRect(r2, r4, r3, r5)
-            goto L_0x01f5
-        L_0x015b:
-            int r11 = r0.roundRadius
-            if (r11 == 0) goto L_0x01b2
-            android.graphics.Matrix r3 = r0.matrix
-            r3.reset()
-            android.graphics.Matrix r3 = r0.matrix
-            r3.setTranslate(r8, r10)
-            android.graphics.Bitmap r3 = r0.currentBitmap
-            int r3 = r3.getWidth()
-            float r3 = (float) r3
-            int r4 = r2.width()
-            float r4 = (float) r4
-            float r3 = r3 / r4
-            android.graphics.Bitmap r4 = r0.currentBitmap
-            int r4 = r4.getHeight()
-            float r4 = (float) r4
-            int r5 = r2.height()
-            float r5 = (float) r5
-            float r4 = r4 / r5
-            float r3 = java.lang.Math.min(r3, r4)
-            float r3 = r14 / r3
-            android.graphics.Matrix r4 = r0.matrix
-            r4.preScale(r3, r3)
-            android.graphics.BitmapShader r3 = r0.bitmapShader
-            android.graphics.Matrix r4 = r0.matrix
-            r3.setLocalMatrix(r4)
-            android.graphics.RectF r3 = r0.rect
-            int r4 = r2.left
-            float r4 = (float) r4
-            int r5 = r2.top
-            float r5 = (float) r5
-            int r8 = r2.right
-            float r8 = (float) r8
-            int r2 = r2.bottom
-            float r2 = (float) r2
-            r3.set(r4, r5, r8, r2)
-            android.graphics.RectF r2 = r0.rect
-            int r3 = r0.roundRadius
-            float r4 = (float) r3
-            float r3 = (float) r3
-            android.graphics.Paint r5 = r0.paint
-            r1.drawRoundRect(r2, r4, r3, r5)
-            goto L_0x01c5
-        L_0x01b2:
-            r1.translate(r13, r3)
-            android.graphics.RectF r2 = r0.rect
-            float r4 = r4 + r8
-            float r5 = r5 + r10
-            r2.set(r8, r10, r4, r5)
-            android.graphics.Bitmap r2 = r0.currentBitmap
-            android.graphics.RectF r3 = r0.rect
-            android.graphics.Paint r4 = r0.paint
-            r1.drawBitmap(r2, r12, r3, r4)
-        L_0x01c5:
-            android.graphics.Bitmap r2 = r0.patternBitmap
-            if (r2 == 0) goto L_0x01f5
-            int r2 = r2.getWidth()
-            android.graphics.Bitmap r3 = r0.patternBitmap
-            int r3 = r3.getHeight()
-            float r2 = (float) r2
-            float r4 = r6 / r2
-            float r3 = (float) r3
-            float r5 = r7 / r3
-            float r4 = java.lang.Math.max(r4, r5)
-            float r2 = r2 * r4
-            float r3 = r3 * r4
-            float r6 = r6 - r2
-            float r6 = r6 / r9
-            float r7 = r7 - r3
-            float r7 = r7 / r9
-            android.graphics.RectF r4 = r0.rect
-            float r2 = r2 + r6
-            float r3 = r3 + r7
-            r4.set(r6, r7, r2, r3)
-            android.graphics.Bitmap r2 = r0.patternBitmap
-            android.graphics.RectF r3 = r0.rect
-            android.graphics.Paint r4 = r0.paint2
-            r1.drawBitmap(r2, r12, r3, r4)
-        L_0x01f5:
-            r24.restore()
+            r17 = this;
+            r0 = r17
             long r1 = android.os.SystemClock.elapsedRealtime()
             long r3 = r0.lastUpdateTime
             long r3 = r1 - r3
             r5 = 20
             int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r7 <= 0) goto L_0x0208
+            if (r7 <= 0) goto L_0x0012
             r3 = 17
-        L_0x0208:
+        L_0x0012:
             r0.lastUpdateTime = r1
-            float r1 = r0.posAnimationProgress
-            int r2 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r2 >= 0) goto L_0x034e
-            boolean r2 = r0.rotatingPreview
-            r5 = 2
-            r6 = 7
-            r7 = 0
-            r8 = 1
-            if (r2 == 0) goto L_0x02aa
-            org.telegram.ui.Components.CubicBezierInterpolator r2 = r0.interpolator
-            float r1 = r2.getInterpolation(r1)
-            r2 = 1061158912(0x3var_, float:0.75)
-            r9 = 1056964608(0x3var_, float:0.5)
-            r10 = 1048576000(0x3e800000, float:0.25)
-            int r11 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r11 > 0) goto L_0x022a
-            r1 = 0
-            goto L_0x0237
-        L_0x022a:
-            int r11 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
-            if (r11 > 0) goto L_0x0230
             r1 = 1
-            goto L_0x0237
-        L_0x0230:
-            int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 > 0) goto L_0x0236
+            int r5 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1))
+            if (r5 > 0) goto L_0x001b
+            return
+        L_0x001b:
+            float r1 = r0.posAnimationProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            int r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r5 >= 0) goto L_0x0162
+            boolean r5 = r0.rotatingPreview
+            r6 = 2
+            r7 = 7
+            r8 = 0
+            r9 = 1
+            if (r5 == 0) goto L_0x00bd
+            org.telegram.ui.Components.CubicBezierInterpolator r5 = r0.interpolator
+            float r1 = r5.getInterpolation(r1)
+            r5 = 1061158912(0x3var_, float:0.75)
+            r10 = 1056964608(0x3var_, float:0.5)
+            r11 = 1048576000(0x3e800000, float:0.25)
+            int r12 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
+            if (r12 > 0) goto L_0x003d
+            r1 = 0
+            goto L_0x004a
+        L_0x003d:
+            int r12 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
+            if (r12 > 0) goto L_0x0043
+            r1 = 1
+            goto L_0x004a
+        L_0x0043:
+            int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
+            if (r1 > 0) goto L_0x0049
             r1 = 2
-            goto L_0x0237
-        L_0x0236:
+            goto L_0x004a
+        L_0x0049:
             r1 = 3
-        L_0x0237:
-            float r11 = r0.posAnimationProgress
+        L_0x004a:
+            float r12 = r0.posAnimationProgress
             float r3 = (float) r3
             boolean r4 = r0.rotationBack
-            if (r4 == 0) goto L_0x0241
+            if (r4 == 0) goto L_0x0054
             r4 = 1148846080(0x447a0000, float:1000.0)
-            goto L_0x0243
-        L_0x0241:
+            goto L_0x0056
+        L_0x0054:
             r4 = 1157234688(0x44fa0000, float:2000.0)
-        L_0x0243:
+        L_0x0056:
             float r3 = r3 / r4
-            float r11 = r11 + r3
-            r0.posAnimationProgress = r11
-            int r3 = (r11 > r14 ? 1 : (r11 == r14 ? 0 : -1))
-            if (r3 <= 0) goto L_0x024d
-            r0.posAnimationProgress = r14
-        L_0x024d:
+            float r12 = r12 + r3
+            r0.posAnimationProgress = r12
+            int r3 = (r12 > r2 ? 1 : (r12 == r2 ? 0 : -1))
+            if (r3 <= 0) goto L_0x0060
+            r0.posAnimationProgress = r2
+        L_0x0060:
             org.telegram.ui.Components.CubicBezierInterpolator r3 = r0.interpolator
             float r4 = r0.posAnimationProgress
             float r3 = r3.getInterpolation(r4)
-            if (r1 != 0) goto L_0x025b
+            if (r1 != 0) goto L_0x006e
+            int r4 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
+            if (r4 > 0) goto L_0x007a
+        L_0x006e:
+            if (r1 != r9) goto L_0x0074
             int r4 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-            if (r4 > 0) goto L_0x0267
-        L_0x025b:
-            if (r1 != r8) goto L_0x0261
-            int r4 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r4 > 0) goto L_0x0267
-        L_0x0261:
-            if (r1 != r5) goto L_0x027e
-            int r1 = (r3 > r2 ? 1 : (r3 == r2 ? 0 : -1))
-            if (r1 <= 0) goto L_0x027e
-        L_0x0267:
+            if (r4 > 0) goto L_0x007a
+        L_0x0074:
+            if (r1 != r6) goto L_0x0091
+            int r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r1 <= 0) goto L_0x0091
+        L_0x007a:
             boolean r1 = r0.rotationBack
-            if (r1 == 0) goto L_0x0275
+            if (r1 == 0) goto L_0x0088
             int r1 = r0.phase
-            int r1 = r1 + r8
+            int r1 = r1 + r9
             r0.phase = r1
-            if (r1 <= r6) goto L_0x027e
+            if (r1 <= r7) goto L_0x0091
+            r0.phase = r8
+            goto L_0x0091
+        L_0x0088:
+            int r1 = r0.phase
+            int r1 = r1 - r9
+            r0.phase = r1
+            if (r1 >= 0) goto L_0x0091
             r0.phase = r7
-            goto L_0x027e
-        L_0x0275:
-            int r1 = r0.phase
-            int r1 = r1 - r8
-            r0.phase = r1
-            if (r1 >= 0) goto L_0x027e
-            r0.phase = r6
-        L_0x027e:
+        L_0x0091:
+            int r1 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
+            if (r1 > 0) goto L_0x0097
+        L_0x0095:
+            float r3 = r3 / r11
+            goto L_0x00a5
+        L_0x0097:
             int r1 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-            if (r1 > 0) goto L_0x0284
-        L_0x0282:
-            float r3 = r3 / r10
-            goto L_0x0292
-        L_0x0284:
-            int r1 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r1 > 0) goto L_0x028a
+            if (r1 > 0) goto L_0x009d
+            float r3 = r3 - r11
+            goto L_0x0095
+        L_0x009d:
+            int r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r1 > 0) goto L_0x00a3
             float r3 = r3 - r10
-            goto L_0x0282
-        L_0x028a:
-            int r1 = (r3 > r2 ? 1 : (r3 == r2 ? 0 : -1))
-            if (r1 > 0) goto L_0x0290
-            float r3 = r3 - r9
-            goto L_0x0282
-        L_0x0290:
-            float r3 = r3 - r2
-            goto L_0x0282
-        L_0x0292:
+            goto L_0x0095
+        L_0x00a3:
+            float r3 = r3 - r5
+            goto L_0x0095
+        L_0x00a5:
             boolean r1 = r0.rotationBack
-            if (r1 == 0) goto L_0x02de
-            float r3 = r14 - r3
+            if (r1 == 0) goto L_0x00f1
+            float r3 = r2 - r3
             float r1 = r0.posAnimationProgress
-            int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r1 < 0) goto L_0x02de
+            int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r1 < 0) goto L_0x00f1
             int r1 = r0.phase
-            int r1 = r1 + r8
+            int r1 = r1 + r9
             r0.phase = r1
-            if (r1 <= r6) goto L_0x02a7
-            r0.phase = r7
-        L_0x02a7:
+            if (r1 <= r7) goto L_0x00ba
+            r0.phase = r8
+        L_0x00ba:
             r3 = 1065353216(0x3var_, float:1.0)
-            goto L_0x02de
-        L_0x02aa:
-            float r2 = (float) r3
-            boolean r3 = r0.fastAnimation
-            if (r3 == 0) goto L_0x02b2
-            r3 = 1133903872(0x43960000, float:300.0)
-            goto L_0x02b4
-        L_0x02b2:
-            r3 = 1140457472(0x43fa0000, float:500.0)
-        L_0x02b4:
-            float r2 = r2 / r3
-            float r1 = r1 + r2
+            goto L_0x00f1
+        L_0x00bd:
+            float r3 = (float) r3
+            boolean r4 = r0.fastAnimation
+            if (r4 == 0) goto L_0x00c5
+            r4 = 1133903872(0x43960000, float:300.0)
+            goto L_0x00c7
+        L_0x00c5:
+            r4 = 1140457472(0x43fa0000, float:500.0)
+        L_0x00c7:
+            float r3 = r3 / r4
+            float r1 = r1 + r3
             r0.posAnimationProgress = r1
-            int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r1 <= 0) goto L_0x02be
-            r0.posAnimationProgress = r14
-        L_0x02be:
+            int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r1 <= 0) goto L_0x00d1
+            r0.posAnimationProgress = r2
+        L_0x00d1:
             org.telegram.ui.Components.CubicBezierInterpolator r1 = r0.interpolator
-            float r2 = r0.posAnimationProgress
-            float r3 = r1.getInterpolation(r2)
+            float r3 = r0.posAnimationProgress
+            float r3 = r1.getInterpolation(r3)
             boolean r1 = r0.rotationBack
-            if (r1 == 0) goto L_0x02de
-            float r3 = r14 - r3
+            if (r1 == 0) goto L_0x00f1
+            float r3 = r2 - r3
             float r1 = r0.posAnimationProgress
-            int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r1 < 0) goto L_0x02de
+            int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r1 < 0) goto L_0x00f1
             int r1 = r0.phase
-            int r1 = r1 + r8
+            int r1 = r1 + r9
             r0.phase = r1
-            if (r1 <= r6) goto L_0x02db
-            r0.phase = r7
-        L_0x02db:
-            r18 = 1065353216(0x3var_, float:1.0)
-            goto L_0x02e0
-        L_0x02de:
-            r18 = r3
-        L_0x02e0:
+            if (r1 <= r7) goto L_0x00ee
+            r0.phase = r8
+        L_0x00ee:
+            r12 = 1065353216(0x3var_, float:1.0)
+            goto L_0x00f2
+        L_0x00f1:
+            r12 = r3
+        L_0x00f2:
+            boolean r1 = r0.postInvalidateParent
+            if (r1 != 0) goto L_0x0143
             boolean r1 = r0.rotatingPreview
-            if (r1 == 0) goto L_0x0304
-            android.graphics.Bitmap r15 = r0.currentBitmap
-            r16 = 1
-            int r1 = r0.phase
-            int r19 = r15.getWidth()
-            android.graphics.Bitmap r2 = r0.currentBitmap
-            int r20 = r2.getHeight()
-            android.graphics.Bitmap r2 = r0.currentBitmap
-            int r21 = r2.getRowBytes()
-            int[] r2 = r0.colors
-            r17 = r1
-            r22 = r2
-            org.telegram.messenger.Utilities.generateGradient(r15, r16, r17, r18, r19, r20, r21, r22)
-            goto L_0x034b
-        L_0x0304:
-            int r1 = (r18 > r14 ? 1 : (r18 == r14 ? 0 : -1))
-            if (r1 == 0) goto L_0x0340
-            r1 = 1051372203(0x3eaaaaab, float:0.33333334)
-            float r2 = r18 / r1
-            int r2 = (int) r2
-            if (r2 != 0) goto L_0x0318
-            android.graphics.Canvas r3 = r0.gradientCanvas
-            android.graphics.Bitmap r4 = r0.gradientFromBitmap
-            r3.drawBitmap(r4, r13, r13, r12)
-            goto L_0x0323
-        L_0x0318:
-            android.graphics.Canvas r3 = r0.gradientCanvas
-            android.graphics.Bitmap[] r4 = r0.gradientToBitmap
-            int r5 = r2 + -1
-            r4 = r4[r5]
-            r3.drawBitmap(r4, r13, r13, r12)
-        L_0x0323:
-            float r3 = (float) r2
-            float r3 = r3 * r1
-            float r18 = r18 - r3
-            float r18 = r18 / r1
-            android.graphics.Paint r1 = r0.paint3
-            r3 = 1132396544(0x437var_, float:255.0)
-            float r3 = r3 * r18
+            if (r1 == 0) goto L_0x00fb
+            goto L_0x0143
+        L_0x00fb:
+            r1 = 0
+            int r2 = (r12 > r2 ? 1 : (r12 == r2 ? 0 : -1))
+            if (r2 == 0) goto L_0x0137
+            r2 = 1051372203(0x3eaaaaab, float:0.33333334)
+            float r3 = r12 / r2
             int r3 = (int) r3
-            r1.setAlpha(r3)
-            android.graphics.Canvas r1 = r0.gradientCanvas
+            r4 = 0
+            if (r3 != 0) goto L_0x0111
+            android.graphics.Canvas r5 = r0.gradientCanvas
+            android.graphics.Bitmap r6 = r0.gradientFromBitmap
+            r5.drawBitmap(r6, r1, r1, r4)
+            goto L_0x011c
+        L_0x0111:
+            android.graphics.Canvas r5 = r0.gradientCanvas
+            android.graphics.Bitmap[] r6 = r0.gradientToBitmap
+            int r7 = r3 + -1
+            r6 = r6[r7]
+            r5.drawBitmap(r6, r1, r1, r4)
+        L_0x011c:
+            float r4 = (float) r3
+            float r4 = r4 * r2
+            float r12 = r12 - r4
+            float r12 = r12 / r2
+            android.graphics.Paint r2 = r0.paint3
+            r4 = 1132396544(0x437var_, float:255.0)
+            float r12 = r12 * r4
+            int r4 = (int) r12
+            r2.setAlpha(r4)
+            android.graphics.Canvas r2 = r0.gradientCanvas
+            android.graphics.Bitmap[] r4 = r0.gradientToBitmap
+            r3 = r4[r3]
+            android.graphics.Paint r4 = r0.paint3
+            r2.drawBitmap(r3, r1, r1, r4)
+            goto L_0x015f
+        L_0x0137:
+            android.graphics.Canvas r2 = r0.gradientCanvas
             android.graphics.Bitmap[] r3 = r0.gradientToBitmap
-            r2 = r3[r2]
-            android.graphics.Paint r3 = r0.paint3
-            r1.drawBitmap(r2, r13, r13, r3)
-            goto L_0x034b
-        L_0x0340:
-            android.graphics.Canvas r1 = r0.gradientCanvas
-            android.graphics.Bitmap[] r2 = r0.gradientToBitmap
-            r2 = r2[r5]
-            android.graphics.Paint r3 = r0.paint3
-            r1.drawBitmap(r2, r13, r13, r3)
-        L_0x034b:
-            r23.invalidateParent()
-        L_0x034e:
+            r3 = r3[r6]
+            android.graphics.Paint r4 = r0.paint3
+            r2.drawBitmap(r3, r1, r1, r4)
+            goto L_0x015f
+        L_0x0143:
+            android.graphics.Bitmap r9 = r0.currentBitmap
+            r10 = 1
+            int r11 = r0.phase
+            int r13 = r9.getWidth()
+            android.graphics.Bitmap r1 = r0.currentBitmap
+            int r14 = r1.getHeight()
+            android.graphics.Bitmap r1 = r0.currentBitmap
+            int r15 = r1.getRowBytes()
+            int[] r1 = r0.colors
+            r16 = r1
+            org.telegram.messenger.Utilities.generateGradient(r9, r10, r11, r12, r13, r14, r15, r16)
+        L_0x015f:
+            r17.invalidateParent()
+        L_0x0162:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MotionBackgroundDrawable.draw(android.graphics.Canvas):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MotionBackgroundDrawable.updateAnimation():void");
     }
 
     public void setAlpha(int i) {

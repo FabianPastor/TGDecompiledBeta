@@ -235,7 +235,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r4.<init>(r2)
                 android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
                 r4.setScaleType(r7)
-                r7 = 2131166048(0x7var_, float:1.794633E38)
+                r7 = 2131166053(0x7var_, float:1.794634E38)
                 r4.setImageResource(r7)
                 android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
                 android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
@@ -282,8 +282,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
                 r0.addView(r4, r5)
                 android.widget.ImageView r4 = r0.clearSearchImageView
-                org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$SearchField$yq5LYYDA5BGx-T2krbLhrbiZMXY r5 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$SearchField$yq5LYYDA5BGx-T2krbLhrbiZMXY
-                r5.<init>()
+                org.telegram.ui.Components.StickerMasksAlert$SearchField$$ExternalSyntheticLambda0 r5 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$$ExternalSyntheticLambda0
+                r5.<init>(r0)
                 r4.setOnClickListener(r5)
                 org.telegram.ui.Components.StickerMasksAlert$SearchField$1 r4 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$1
                 r4.<init>(r2, r1)
@@ -311,7 +311,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627377(0x7f0e0d71, float:1.8882017E38)
+                r3 = 2131627397(0x7f0e0d85, float:1.8882057E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -319,7 +319,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627353(0x7f0e0d59, float:1.8881968E38)
+                r3 = 2131627373(0x7f0e0d6d, float:1.8882009E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -328,7 +328,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627368(0x7f0e0d68, float:1.8881998E38)
+                r3 = 2131627388(0x7f0e0d7c, float:1.888204E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -362,8 +362,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$StickerMasksAlert$SearchField(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             this.searchEditText.setText("");
             AndroidUtilities.showKeyboard(this.searchEditText);
         }
@@ -631,20 +630,12 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         StickersGridAdapter stickersGridAdapter2 = new StickersGridAdapter(context);
         this.stickersGridAdapter = stickersGridAdapter2;
         recyclerListView.setAdapter(stickersGridAdapter2);
-        this.gridView.setOnTouchListener(new View.OnTouchListener() {
-            public final boolean onTouch(View view, MotionEvent motionEvent) {
-                return StickerMasksAlert.this.lambda$new$0$StickerMasksAlert(view, motionEvent);
-            }
-        });
-        $$Lambda$StickerMasksAlert$WGeM9Yi9wjvnQLmh89fJcfmX90 r12 = new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                StickerMasksAlert.this.lambda$new$1$StickerMasksAlert(view, i);
-            }
-        };
-        this.stickersOnItemClickListener = r12;
-        this.gridView.setOnItemClickListener((RecyclerListView.OnItemClickListener) r12);
+        this.gridView.setOnTouchListener(new StickerMasksAlert$$ExternalSyntheticLambda2(this));
+        StickerMasksAlert$$ExternalSyntheticLambda3 stickerMasksAlert$$ExternalSyntheticLambda3 = new StickerMasksAlert$$ExternalSyntheticLambda3(this);
+        this.stickersOnItemClickListener = stickerMasksAlert$$ExternalSyntheticLambda3;
+        this.gridView.setOnItemClickListener((RecyclerListView.OnItemClickListener) stickerMasksAlert$$ExternalSyntheticLambda3);
         this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f));
-        this.stickersTab = new ScrollSlidingTabStrip(context) {
+        this.stickersTab = new ScrollSlidingTabStrip(this, context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 if (getParent() != null) {
                     getParent().requestDisallowInterceptTouchEvent(true);
@@ -661,11 +652,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         this.stickersTab.setUnderlineColor(-16053493);
         this.stickersTab.setBackgroundColor(-14342875);
         this.containerView.addView(this.stickersTab, LayoutHelper.createFrame(-1, 48, 51));
-        this.stickersTab.setDelegate(new ScrollSlidingTabStrip.ScrollSlidingTabStripDelegate() {
-            public final void onPageSelected(int i) {
-                StickerMasksAlert.this.lambda$new$2$StickerMasksAlert(i);
-            }
-        });
+        this.stickersTab.setDelegate(new StickerMasksAlert$$ExternalSyntheticLambda4(this));
         this.gridView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -681,7 +668,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         view.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, -1907225));
         this.containerView.addView(view, LayoutHelper.createFrame(-1, 6.0f));
         if (!z) {
-            this.bottomTabContainer = new FrameLayout(context) {
+            this.bottomTabContainer = new FrameLayout(this, context) {
                 public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                     if (getParent() != null) {
                         getParent().requestDisallowInterceptTouchEvent(true);
@@ -700,7 +687,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(0);
             this.bottomTabContainer.addView(linearLayout, LayoutHelper.createFrame(-2, 48, 81));
-            AnonymousClass9 r13 = new ImageView(context) {
+            AnonymousClass9 r12 = new ImageView(this, context) {
                 public void setSelected(boolean z) {
                     super.setSelected(z);
                     Drawable background = getBackground();
@@ -710,8 +697,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     }
                 }
             };
-            this.stickersButton = r13;
-            r13.setScaleType(ImageView.ScaleType.CENTER);
+            this.stickersButton = r12;
+            r12.setScaleType(ImageView.ScaleType.CENTER);
             this.stickersButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, NUM, -1, -9520403));
             int i2 = Build.VERSION.SDK_INT;
             if (i2 >= 21) {
@@ -720,12 +707,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 this.stickersButton.setBackground(rippleDrawable);
             }
             linearLayout.addView(this.stickersButton, LayoutHelper.createLinear(70, 48));
-            this.stickersButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    StickerMasksAlert.this.lambda$new$3$StickerMasksAlert(view);
-                }
-            });
-            AnonymousClass10 r4 = new ImageView(context) {
+            this.stickersButton.setOnClickListener(new StickerMasksAlert$$ExternalSyntheticLambda1(this));
+            AnonymousClass10 r4 = new ImageView(this, context) {
                 public void setSelected(boolean z) {
                     super.setSelected(z);
                     Drawable background = getBackground();
@@ -744,25 +727,19 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 this.masksButton.setBackground(rippleDrawable2);
             }
             linearLayout.addView(this.masksButton, LayoutHelper.createLinear(70, 48));
-            this.masksButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    StickerMasksAlert.this.lambda$new$4$StickerMasksAlert(view);
-                }
-            });
+            this.masksButton.setOnClickListener(new StickerMasksAlert$$ExternalSyntheticLambda0(this));
         }
         checkDocuments(true);
         reloadStickersAdapter();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ boolean lambda$new$0$StickerMasksAlert(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
         return ContentPreviewViewer.getInstance().onTouch(motionEvent, this.gridView, this.containerView.getMeasuredHeight(), this.stickersOnItemClickListener, this.contentPreviewViewerDelegate);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$StickerMasksAlert(View view, int i) {
+    public /* synthetic */ void lambda$new$1(View view, int i) {
         if (view instanceof StickerEmojiCell) {
             ContentPreviewViewer.getInstance().reset();
             StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
@@ -772,8 +749,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$StickerMasksAlert(int i) {
+    public /* synthetic */ void lambda$new$2(int i) {
         int i2;
         if (i == this.recentTabBum) {
             i2 = this.stickersGridAdapter.getPositionForPack("recent");
@@ -802,8 +778,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$StickerMasksAlert(View view) {
+    public /* synthetic */ void lambda$new$3(View view) {
         if (this.currentType != 0) {
             this.currentType = 0;
             updateType();
@@ -811,8 +786,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$StickerMasksAlert(View view) {
+    public /* synthetic */ void lambda$new$4(View view) {
         if (this.currentType != 1) {
             this.currentType = 1;
             updateType();
@@ -1194,7 +1168,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x0042:
                 org.telegram.ui.Components.StickerMasksAlert$StickersGridAdapter$1 r5 = new org.telegram.ui.Components.StickerMasksAlert$StickersGridAdapter$1
                 android.content.Context r0 = r3.context
-                r5.<init>(r0, r4)
+                r5.<init>(r3, r0, r4)
             L_0x0049:
                 r4 = r5
             L_0x004a:
@@ -1668,7 +1642,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     java.lang.String[] r6 = r6.lastSearchKeyboardLanguage
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r7 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     java.lang.String r7 = r7.searchQuery
-                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$CGFCI0mzPD1qQ8Wsn-8OTNv6a_0 r8 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$CGFCI0mzPD1qQ8Wsn-8OTNv6a_0
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda1 r8 = new org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda1
                     r8.<init>(r13, r0, r4)
                     r5.getEmojiSuggestions(r6, r7, r1, r8)
                 L_0x0171:
@@ -1816,7 +1790,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     org.telegram.ui.Components.StickerMasksAlert r5 = org.telegram.ui.Components.StickerMasksAlert.this
                     int r5 = r5.currentAccount
                     org.telegram.tgnet.ConnectionsManager r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r5)
-                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$cwpchkeR_7Y3NsOXzwzO_RjnpXY r6 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$cwpchkeR_7Y3NsOXzwzO_RjnpXY
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda2 r6 = new org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda2
                     r6.<init>(r13, r4, r2, r3)
                     int r2 = r5.sendRequest(r4, r6)
                     int unused = r1.reqId2 = r2
@@ -1855,8 +1829,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$run$0 */
-            public /* synthetic */ void lambda$run$0$StickerMasksAlert$StickersSearchGridAdapter$1(int i, HashMap hashMap, ArrayList arrayList, String str) {
+            public /* synthetic */ void lambda$run$0(int i, HashMap hashMap, ArrayList arrayList, String str) {
                 if (i == StickersSearchGridAdapter.this.emojiSearchId) {
                     int size = arrayList.size();
                     boolean z = false;
@@ -1882,118 +1855,12 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$run$2 */
-            public /* synthetic */ void lambda$run$2$StickerMasksAlert$StickersSearchGridAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, ArrayList arrayList, LongSparseArray longSparseArray, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                AndroidUtilities.runOnUIThread(
-                /*  JADX ERROR: Method code generation error
-                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                      (wrap: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY) = 
-                      (r6v0 'this' org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1 A[THIS])
-                      (r7v0 'tLRPC$TL_messages_getStickers' org.telegram.tgnet.TLRPC$TL_messages_getStickers)
-                      (r10v0 'tLObject' org.telegram.tgnet.TLObject)
-                      (r8v0 'arrayList' java.util.ArrayList)
-                      (r9v0 'longSparseArray' android.util.LongSparseArray)
-                     call: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY.<init>(org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR)
-                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.1.lambda$run$2(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:98)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:480)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	at jadx.core.codegen.ClassGen.addInsnBody(ClassGen.java:437)
-                    	at jadx.core.codegen.ClassGen.addField(ClassGen.java:378)
-                    	at jadx.core.codegen.ClassGen.addFields(ClassGen.java:348)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:226)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY) = 
-                      (r6v0 'this' org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1 A[THIS])
-                      (r7v0 'tLRPC$TL_messages_getStickers' org.telegram.tgnet.TLRPC$TL_messages_getStickers)
-                      (r10v0 'tLObject' org.telegram.tgnet.TLObject)
-                      (r8v0 'arrayList' java.util.ArrayList)
-                      (r9v0 'longSparseArray' android.util.LongSparseArray)
-                     call: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY.<init>(org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR in method: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.1.lambda$run$2(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                    	... 57 more
-                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY, state: NOT_LOADED
-                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	... 63 more
-                    */
-                /*
-                    this = this;
-                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY r11 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY
-                    r0 = r11
-                    r1 = r6
-                    r2 = r7
-                    r3 = r10
-                    r4 = r8
-                    r5 = r9
-                    r0.<init>(r1, r2, r3, r4, r5)
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r11)
-                    return
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.AnonymousClass1.lambda$run$2$StickerMasksAlert$StickersSearchGridAdapter$1(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+            public /* synthetic */ void lambda$run$2(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, ArrayList arrayList, LongSparseArray longSparseArray, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                AndroidUtilities.runOnUIThread(new StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda0(this, tLRPC$TL_messages_getStickers, tLObject, arrayList, longSparseArray));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$run$1 */
-            public /* synthetic */ void lambda$run$1$StickerMasksAlert$StickersSearchGridAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
+            public /* synthetic */ void lambda$run$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
                 if (tLRPC$TL_messages_getStickers.emoticon.equals(StickersSearchGridAdapter.this.searchQuery)) {
                     StickerMasksAlert.this.stickersSearchField.progressDrawable.stopAnimation();
                     int unused = StickersSearchGridAdapter.this.reqId2 = 0;
@@ -2116,7 +1983,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 }
                 return new RecyclerListView.Holder(r13);
             }
-            view = new StickerEmojiCell(this.context, false) {
+            view = new StickerEmojiCell(this, this.context, false) {
                 public void onMeasure(int i, int i2) {
                     super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
                 }

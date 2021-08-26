@@ -588,6 +588,8 @@
     <string name="AwaitingEncryption">Waiting for %s to get online...</string>
     <string name="AwayTo">%1$s away</string>
     <string name="Back">Back</string>
+    <string name="BackgroundAnimate">Animate</string>
+    <string name="BackgroundAnimateInfo">Colors will move when you send messages</string>
     <string name="BackgroundBlurred">Blurred</string>
     <string name="BackgroundBrightness">Brightness</string>
     <string name="BackgroundChoosePattern">Choose pattern</string>
@@ -727,8 +729,8 @@
     <string name="CancelAccountResetInfo2">Somebody with access to **%1$s** has requested to delete your Telegram account and reset your 2-Step Verification password.\10\10If this wasn\'t you, please enter the code we\'ve just sent you via SMS. You can also cancel this by *changing your phone number*.</string>
     <string name="CancelEmailQuestion">Are you sure you want to abort recovery email setup?</string>
     <string name="CancelEmailQuestionTitle">Abort setup</string>
-    <string name="CancelForward">Cancel Forward</string>
-    <string name="CancelForwardMessage">Do you want to cancel forwarding or to forward messages to a different chat?</string>
+    <string name="CancelForwardChat">What would you like to do with %1$s from **%2$s**?</string>
+    <string name="CancelForwardPrivate">What would you like to do with %1$s from your chat with **%2$s**?</string>
     <string name="CancelForwarding">Cancel Forwarding</string>
     <string name="CancelLinkExpired">Link is invalid or expired.</string>
     <string name="CancelLinkSuccess">The deletion process was cancelled for your account %1$s. You may close this window now.</string>
@@ -988,6 +990,7 @@
     <string name="ChooseTheme">Choose theme</string>
     <string name="ChooseYourLanguage">Choose your language</string>
     <string name="ChooseYourLanguageOther">Other</string>
+    <string name="ChoosingSticker">Ch**oo**sing a sticker</string>
     <string name="ChromeCustomTabs">In-App Browser</string>
     <string name="ChromeCustomTabsInfo">Open external links within the app</string>
     <string name="ClearButton">Clear</string>
@@ -1555,9 +1558,11 @@
     <string name="Fade">Fade</string>
     <string name="FakeMessage">FAKE</string>
     <string name="FavoriteStickers">Favorites</string>
+    <string name="FavoriteStickersShort">Favorites</string>
     <string name="FeaturedGifs">Trending GIFs</string>
     <string name="FeaturedStickers">Trending Stickers</string>
     <string name="FeaturedStickersInfo">These stickers are currently trending on Telegram. You can add custom stickers via the @stickers bot.</string>
+    <string name="FeaturedStickersShort">Trendings</string>
     <string name="February">February</string>
     <string name="FileSavedHint">File saved to downloads</string>
     <string name="FileUploadLimit">File size shouldn\'t be greater than %1$s</string>
@@ -1675,6 +1680,7 @@
     <string name="FootsShort">%1$s ft</string>
     <string name="ForgotPassword">Forgot password?</string>
     <string name="Forward">Forward</string>
+    <string name="ForwardAnotherChat">Forward to another chat</string>
     <string name="ForwardTo">Forward to...</string>
     <string name="ForwardedAudio_few">%1$d forwarded voice messages</string>
     <string name="ForwardedAudio_many">%1$d forwarded voice messages</string>
@@ -1850,6 +1856,8 @@
     <string name="HideNewChatsAlertTitle">Hide new chats?</string>
     <string name="HideOnTop">Hide</string>
     <string name="HidePinnedMessages">HIDE PINNED MESSAGES</string>
+    <string name="HideSenderName">Hide senders’ name</string>
+    <string name="HideSendersName">Hide sender’s name</string>
     <string name="Highlights">Highlights</string>
     <string name="HintRead">Read</string>
     <string name="HintSent">Delivered</string>
@@ -1990,6 +1998,7 @@
     <string name="Invited">invited</string>
     <string name="InvoiceCantForwardSecretChat">Sorry, invoices can’t be forwarded to secret chats.</string>
     <string name="InvoiceCantSendSecretChat">Sorry, invoices can’t be sent to secret chats.</string>
+    <string name="IsChoosingSticker">%1$s is ch**oo**sing a sticker</string>
     <string name="IsRecordingAudio">%1$s is recording a voice message...</string>
     <string name="IsRecordingRound">%1$s is recording a video message...</string>
     <string name="IsRecordingVideo">%1$s is recording video...</string>
@@ -2268,6 +2277,12 @@
     <string name="MessageScheduledVote">Voting will become available after the message is published.</string>
     <string name="MessageScheduledVoteResults">Poll results will become available after the message is published.</string>
     <string name="MessageUnpinnedHint">Message unpinned</string>
+    <string name="MessagesBold_few">**%1$d** messages</string>
+    <string name="MessagesBold_many">**%1$d** messages</string>
+    <string name="MessagesBold_one">**%1$d** message</string>
+    <string name="MessagesBold_other">**%1$d** messages</string>
+    <string name="MessagesBold_two">**%1$d** messages</string>
+    <string name="MessagesBold_zero">**%1$d** messages</string>
     <string name="MessagesChartTitle">Messages</string>
     <string name="MessagesDataUsage">Messages and other data</string>
     <string name="MessagesDeletedHint_few">%1$d messages deleted</string>
@@ -2410,7 +2425,7 @@
     <string name="NoGroupsInCommon">No common groups</string>
     <string name="NoHandleAppInstalled">You don\'t have applications that can handle the file type \'%1$s\', please install one to continue</string>
     <string name="NoLimit">No limit</string>
-    <string name="NoMailInstalled">Please send an email describing your problem to sms@stel.com</string>
+    <string name="NoMailInstalled">Please send an email describing your problem to reports@stel.com</string>
     <string name="NoMasks">No masks yet</string>
     <string name="NoMedia">Share photos and videos in this chat and access them on any of your devices.</string>
     <string name="NoMediaAutoDownload">No media</string>
@@ -3244,6 +3259,7 @@
     <string name="RecentFilesAZ">Files A-Z</string>
     <string name="RecentPosts">Recent posts</string>
     <string name="RecentStickers">Recently Used</string>
+    <string name="RecentStickersShort">Recent</string>
     <string name="RecentlyViewed">Recently viewed</string>
     <string name="RecentlyViewedHide">HIDE</string>
     <string name="Recipient_few">%1$d recipients</string>
@@ -3260,6 +3276,8 @@
     <string name="Red">Red</string>
     <string name="RegisterText2">Enter your name and add a profile picture.</string>
     <string name="Regular">Regular</string>
+    <string name="ReleaseToGoNextChannel">Release to go to the next unread channel</string>
+    <string name="ReleaseToGoNextFolder">Release to go to the next unread folder</string>
     <string name="RemindDayAt">\'Remind on\' MMM d \'at\' HH:mm</string>
     <string name="RemindDayYearAt">\'Remind on\' MMM d yyyy \'at\' HH:mm</string>
     <string name="RemindTodayAt">\'Remind today at\' HH:mm</string>
@@ -3485,7 +3503,6 @@
     <string name="SelectFile">Select File</string>
     <string name="SelectFromGallery">Select from gallery</string>
     <string name="SelectImage">Select image</string>
-    <string name="SelectOtherChat">Select another chat</string>
     <string name="SelectingContact">selecting a contact to share...</string>
     <string name="SelectingLocation">selecting a location to share...</string>
     <string name="Send">Send</string>
@@ -3641,6 +3658,8 @@
     <string name="ShowInChat">Show in chat</string>
     <string name="ShowNotificationsFor">Show notifications for</string>
     <string name="ShowNotificationsForInfo">Turn this off if you want to receive notifications only from your active account.</string>
+    <string name="ShowSenderName">Show senders’ name</string>
+    <string name="ShowSendersName">Show sender’s name</string>
     <string name="ShowStickers">Show stickers</string>
     <string name="ShowVotes_few">Show More (%1$d)</string>
     <string name="ShowVotes_many">Show More (%1$d)</string>
@@ -3688,6 +3707,8 @@
     <string name="SpeedSlow">Slow</string>
     <string name="SpeedVeryFast">Very fast</string>
     <string name="SpeedVerySlow">Very slow</string>
+    <string name="SponsoredMessage">sponsored</string>
+    <string name="SponsoredMessageInfo">What are sponsored\10messages?</string>
     <string name="Start">Start</string>
     <string name="StartDayAt">\'Start on\' MMM d \'at\' HH:mm</string>
     <string name="StartDayYearAt">\'Start on\' MMM d yyyy \'at\' HH:mm</string>
@@ -3784,6 +3805,9 @@
     <string name="SwipeSettingsMute">Mute</string>
     <string name="SwipeSettingsPin">Pin</string>
     <string name="SwipeSettingsRead">Read</string>
+    <string name="SwipeToGoNextChannel">Swipe up to go to the next unread channel</string>
+    <string name="SwipeToGoNextChannelEnd">You have no unread channels</string>
+    <string name="SwipeToGoNextFolder">Swipe up to go to the next unread folder</string>
     <string name="SwipeUnmute">Unmute</string>
     <string name="SwipeUnpin">Unpin</string>
     <string name="SyncContacts">Sync Contacts</string>
@@ -4286,6 +4310,7 @@
     <string name="VoipGroupStartNow">Start Now</string>
     <string name="VoipGroupStartRecordingText">Do you want to start recording this chat and save the result into an audio file?\10\10Other members will see that the chat is being recorded.</string>
     <string name="VoipGroupStartRecordingTitle">Start recording</string>
+    <string name="VoipGroupStartRecordingVideoText">Do you want to start recording this chat and save the result into an video file?\10\10Other members will see that the chat is being recorded.</string>
     <string name="VoipGroupStartVoiceChat">Start Voice Chat</string>
     <string name="VoipGroupStopRecordCall">Stop recording</string>
     <string name="VoipGroupStopRecordingText">Do you want to stop recording this voice chat?</string>
@@ -4300,6 +4325,8 @@
     <string name="VoipGroupUserCantNowSpeakForYou">**%1$s** is now muted in this chat for you.</string>
     <string name="VoipGroupUserChanged">Members of this voice chat will now see you as **%1$s**</string>
     <string name="VoipGroupUserRemove">Remove</string>
+    <string name="VoipGroupVideoRecordSaved">Video saved to **Saved Messages**.</string>
+    <string name="VoipGroupVideoRecordStarted">Video recording started.</string>
     <string name="VoipGroupViewVoiceChat">VIEW VOICE CHAT</string>
     <string name="VoipGroupVoiceChat">Voice Chat</string>
     <string name="VoipGroupVolume">Volume</string>
@@ -4348,6 +4375,12 @@
     <string name="VoipQuickRepliesExplain">These quick responses will be available when you respond to an incoming call with a Telegram message. Change them to say anything you like.</string>
     <string name="VoipRateCallAlert">Please rate the quality of your Telegram call</string>
     <string name="VoipReconnecting">Reconnecting</string>
+    <string name="VoipRecordAudio">AUDIO ONLY</string>
+    <string name="VoipRecordLandscape">LANDSCAPE VIDEO</string>
+    <string name="VoipRecordPortrait">PORTRAIT VIDEO</string>
+    <string name="VoipRecordStart">Start Recording</string>
+    <string name="VoipRecordVoiceChat">Record voice chat</string>
+    <string name="VoipRecordVoiceChatInfo">Choose the way to record this chat</string>
     <string name="VoipRequesting">Requesting</string>
     <string name="VoipRinging">Ringing</string>
     <string name="VoipRingtoneInfo">You can customize the ringtone used when this contact calls you on Telegram.</string>
@@ -4429,6 +4462,8 @@
     <string name="YouCreatedBroadcastList">You created a broadcast list</string>
     <string name="YouHaveNewMessage">You have a new message</string>
     <string name="YouLeft">You left this group</string>
+    <string name="YouSenderNameHidden">You (senders’ names hidden)</string>
+    <string name="YouSendersNameHidden">You (sender’s names hidden)</string>
     <string name="YouWereKicked">you were removed</string>
     <string name="YourBioChanged">Bio updated.</string>
     <string name="YourCode">Phone verification</string>

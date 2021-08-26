@@ -65,22 +65,11 @@ public class PhotoEditToolCell extends FrameLayout {
     }
 
     public void setSeekBarDelegate(PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate) {
-        this.seekBar.setDelegate(new PhotoEditorSeekBar.PhotoEditorSeekBarDelegate(photoEditorSeekBarDelegate) {
-            public final /* synthetic */ PhotoEditorSeekBar.PhotoEditorSeekBarDelegate f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onProgressChanged(int i, int i2) {
-                PhotoEditToolCell.this.lambda$setSeekBarDelegate$0$PhotoEditToolCell(this.f$1, i, i2);
-            }
-        });
+        this.seekBar.setDelegate(new PhotoEditToolCell$$ExternalSyntheticLambda0(this, photoEditorSeekBarDelegate));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setSeekBarDelegate$0 */
-    public /* synthetic */ void lambda$setSeekBarDelegate$0$PhotoEditToolCell(PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate, int i, int i2) {
+    public /* synthetic */ void lambda$setSeekBarDelegate$0(PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate, int i, int i2) {
         photoEditorSeekBarDelegate.onProgressChanged(i, i2);
         if (i2 > 0) {
             TextView textView = this.valueTextView;

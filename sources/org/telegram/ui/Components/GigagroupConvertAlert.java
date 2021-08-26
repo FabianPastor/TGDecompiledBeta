@@ -77,7 +77,7 @@ public class GigagroupConvertAlert extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
             r5.<init>(r1)
             r5.setAutoRepeat(r2)
-            r6 = 2131558507(0x7f0d006b, float:1.8742332E38)
+            r6 = 2131558510(0x7f0d006e, float:1.8742338E38)
             r7 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r6, r7, r7)
             r5.playAnimation()
@@ -101,7 +101,7 @@ public class GigagroupConvertAlert extends BottomSheet {
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r5.setTextColor(r6)
             java.lang.String r6 = "GigagroupConvertTitle"
-            r7 = 2131625728(0x7f0e0700, float:1.8878672E38)
+            r7 = 2131625736(0x7f0e0708, float:1.8878688E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r5.setText(r6)
             r7 = -2
@@ -155,7 +155,7 @@ public class GigagroupConvertAlert extends BottomSheet {
             android.graphics.PorterDuff$Mode r13 = android.graphics.PorterDuff.Mode.MULTIPLY
             r10.<init>(r12, r13)
             r9.setColorFilter(r10)
-            r10 = 2131165576(0x7var_, float:1.7945373E38)
+            r10 = 2131165581(0x7var_d, float:1.7945383E38)
             r9.setImageResource(r10)
             android.widget.TextView r10 = new android.widget.TextView
             r10.<init>(r1)
@@ -178,19 +178,19 @@ public class GigagroupConvertAlert extends BottomSheet {
             if (r6 == r7) goto L_0x00fb
             goto L_0x0121
         L_0x00fb:
-            r7 = 2131625726(0x7f0e06fe, float:1.8878668E38)
+            r7 = 2131625734(0x7f0e0706, float:1.8878684E38)
             java.lang.String r11 = "GigagroupConvertInfo3"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             r10.setText(r7)
             goto L_0x0121
         L_0x0108:
-            r7 = 2131625725(0x7f0e06fd, float:1.8878666E38)
+            r7 = 2131625733(0x7f0e0705, float:1.8878682E38)
             java.lang.String r11 = "GigagroupConvertInfo2"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             r10.setText(r7)
             goto L_0x0121
         L_0x0115:
-            r7 = 2131625724(0x7f0e06fc, float:1.8878664E38)
+            r7 = 2131625732(0x7f0e0704, float:1.887868E38)
             java.lang.String r11 = "GigagroupConvertInfo1"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             r10.setText(r7)
@@ -228,14 +228,14 @@ public class GigagroupConvertAlert extends BottomSheet {
             r3.<init>(r1)
             r5 = 0
             r3.setBackground(r5)
-            r5 = 2131625727(0x7f0e06ff, float:1.887867E38)
+            r5 = 2131625735(0x7f0e0707, float:1.8878686E38)
             java.lang.String r6 = "GigagroupConvertProcessButton"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.setText(r5)
             android.view.View r5 = r3.background
-            org.telegram.ui.Components.-$$Lambda$GigagroupConvertAlert$kt77ktBSsuOd-oO8XNnVNm3cDZo r6 = new org.telegram.ui.Components.-$$Lambda$GigagroupConvertAlert$kt77ktBSsuOd-oO8XNnVNm3cDZo
+            org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda2 r6 = new org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda2
             r7 = r20
-            r6.<init>(r1, r7)
+            r6.<init>(r0, r1, r7)
             r5.setOnClickListener(r6)
             r7 = -1
             r8 = 50
@@ -253,7 +253,7 @@ public class GigagroupConvertAlert extends BottomSheet {
             java.lang.String r1 = "dialogTextBlue2"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r3.setTextColor(r1)
-            r1 = 2131625722(0x7f0e06fa, float:1.887866E38)
+            r1 = 2131625730(0x7f0e0702, float:1.8878676E38)
             java.lang.String r2 = "GigagroupConvertCancelButton"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r3.setText(r1)
@@ -268,8 +268,8 @@ public class GigagroupConvertAlert extends BottomSheet {
             r11 = 16
             android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r5, (int) r6, (int) r7, (int) r8, (int) r9, (int) r10, (int) r11)
             r4.addView(r3, r1)
-            org.telegram.ui.Components.-$$Lambda$GigagroupConvertAlert$kliefHjIkU1OPbmSJq1l8-8COjA r1 = new org.telegram.ui.Components.-$$Lambda$GigagroupConvertAlert$kliefHjIkU1OPbmSJq1l8-8COjA
-            r1.<init>()
+            org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda1 r1 = new org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda1
+            r1.<init>(r0)
             r3.setOnClickListener(r1)
             return
         */
@@ -277,30 +277,23 @@ public class GigagroupConvertAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$GigagroupConvertAlert(Context context, BaseFragment baseFragment, View view) {
+    public /* synthetic */ void lambda$new$1(Context context, BaseFragment baseFragment, View view) {
         dismiss();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(LocaleController.getString("GigagroupConvertAlertTitle", NUM));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("GigagroupConvertAlertText", NUM)));
-        builder.setPositiveButton(LocaleController.getString("GigagroupConvertAlertConver", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                GigagroupConvertAlert.this.lambda$new$0$GigagroupConvertAlert(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("GigagroupConvertAlertConver", NUM), new GigagroupConvertAlert$$ExternalSyntheticLambda0(this));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         baseFragment.showDialog(builder.create());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$GigagroupConvertAlert(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$new$0(DialogInterface dialogInterface, int i) {
         onCovert();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$GigagroupConvertAlert(View view) {
+    public /* synthetic */ void lambda$new$2(View view) {
         onCancel();
         dismiss();
     }

@@ -129,17 +129,7 @@ public class YuvConverter {
                 byteBuffer2.limit(i9 + i10);
                 ByteBuffer slice3 = byteBuffer2.slice();
                 textureBuffer2.release();
-                return JavaI420Buffer.wrap(width, height, slice, i2, slice2, i2, slice3, i2, new Runnable(byteBuffer2) {
-                    public final /* synthetic */ ByteBuffer f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void run() {
-                        JniCommon.nativeFreeByteBuffer(this.f$0);
-                    }
-                });
+                return JavaI420Buffer.wrap(width, height, slice, i2, slice2, i2, slice3, i2, new YuvConverter$$ExternalSyntheticLambda0(byteBuffer2));
             }
         } catch (Exception e3) {
             e = e3;
@@ -161,17 +151,7 @@ public class YuvConverter {
             byteBuffer22.limit(i92 + i102);
             ByteBuffer slice32 = byteBuffer22.slice();
             textureBuffer2.release();
-            return JavaI420Buffer.wrap(width, height, slice4, i2, slice22, i2, slice32, i2, new Runnable(byteBuffer22) {
-                public final /* synthetic */ ByteBuffer f$0;
-
-                {
-                    this.f$0 = r1;
-                }
-
-                public final void run() {
-                    JniCommon.nativeFreeByteBuffer(this.f$0);
-                }
-            });
+            return JavaI420Buffer.wrap(width, height, slice4, i2, slice22, i2, slice32, i2, new YuvConverter$$ExternalSyntheticLambda0(byteBuffer22));
         }
         int i722 = (i2 * height) + i;
         int i822 = i2 / 2;
@@ -188,17 +168,7 @@ public class YuvConverter {
         byteBuffer222.limit(i922 + i1022);
         ByteBuffer slice322 = byteBuffer222.slice();
         textureBuffer2.release();
-        return JavaI420Buffer.wrap(width, height, slice42, i2, slice222, i2, slice322, i2, new Runnable(byteBuffer222) {
-            public final /* synthetic */ ByteBuffer f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void run() {
-                JniCommon.nativeFreeByteBuffer(this.f$0);
-            }
-        });
+        return JavaI420Buffer.wrap(width, height, slice42, i2, slice222, i2, slice322, i2, new YuvConverter$$ExternalSyntheticLambda0(byteBuffer222));
     }
 
     public void release() {

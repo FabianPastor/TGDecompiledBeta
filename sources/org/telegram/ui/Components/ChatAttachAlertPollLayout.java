@@ -46,7 +46,6 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.ChatAttachAlert;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -193,7 +192,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         super(chatAttachAlert, context);
         updateRows();
         this.listAdapter = new ListAdapter(context);
-        AnonymousClass1 r1 = new RecyclerListView(context) {
+        AnonymousClass1 r1 = new RecyclerListView(this, context) {
             /* access modifiers changed from: protected */
             public void requestChildOnScreen(View view, View view2) {
                 if (view instanceof PollEditTextCell) {
@@ -262,11 +261,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setPreserveFocusAfterLayout(true);
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ChatAttachAlertPollLayout.this.lambda$new$0$ChatAttachAlertPollLayout(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatAttachAlertPollLayout$$ExternalSyntheticLambda2(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 ChatAttachAlertPollLayout chatAttachAlertPollLayout = ChatAttachAlertPollLayout.this;
@@ -297,8 +292,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ChatAttachAlertPollLayout(View view, int i) {
+    public /* synthetic */ void lambda$new$0(View view, int i) {
         boolean z;
         if (i == this.addAnswerRow) {
             addNewField();
@@ -450,19 +444,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 }
                 ChatActivity chatActivity = (ChatActivity) this.parentAlert.baseFragment;
                 if (chatActivity.isInScheduleMode()) {
-                    AlertsCreator.createScheduleDatePickerDialog(chatActivity.getParentActivity(), chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$TL_messageMediaPoll, hashMap) {
-                        public final /* synthetic */ TLRPC$TL_messageMediaPoll f$1;
-                        public final /* synthetic */ HashMap f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void didSelectDate(boolean z, int i) {
-                            ChatAttachAlertPollLayout.this.lambda$onMenuItemClick$1$ChatAttachAlertPollLayout(this.f$1, this.f$2, z, i);
-                        }
-                    });
+                    AlertsCreator.createScheduleDatePickerDialog(chatActivity.getParentActivity(), chatActivity.getDialogId(), new ChatAttachAlertPollLayout$$ExternalSyntheticLambda1(this, tLRPC$TL_messageMediaPoll, hashMap));
                     return;
                 }
                 this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, true, 0);
@@ -482,8 +464,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onMenuItemClick$1 */
-    public /* synthetic */ void lambda$onMenuItemClick$1$ChatAttachAlertPollLayout(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
+    public /* synthetic */ void lambda$onMenuItemClick$1(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
         this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, z, i);
         this.parentAlert.dismiss();
     }
@@ -796,11 +777,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentAlert.baseFragment.getParentActivity());
             builder.setTitle(LocaleController.getString("CancelPollAlertTitle", NUM));
             builder.setMessage(LocaleController.getString("CancelPollAlertText", NUM));
-            builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ChatAttachAlertPollLayout.this.lambda$checkDiscard$2$ChatAttachAlertPollLayout(dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new ChatAttachAlertPollLayout$$ExternalSyntheticLambda0(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             builder.show();
         }
@@ -808,8 +785,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkDiscard$2 */
-    public /* synthetic */ void lambda$checkDiscard$2$ChatAttachAlertPollLayout(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$2(DialogInterface dialogInterface, int i) {
         this.parentAlert.dismiss();
     }
 
@@ -1052,8 +1028,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             L_0x0007:
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$6 r11 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$6
                 android.content.Context r12 = r10.mContext
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$KNQ7gU60k6g7bRsfSuyq9P8e0LU r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$KNQ7gU60k6g7bRsfSuyq9P8e0LU
-                r0.<init>()
+                org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda0 r0 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda0
+                r0.<init>(r10)
                 r11.<init>(r12, r0)
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$7 r12 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$7
                 r12.<init>(r11)
@@ -1063,11 +1039,11 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 int r0 = r12.getImeOptions()
                 r0 = r0 | 5
                 r12.setImeOptions(r0)
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$HHvA2RH7fkzBL_OTnB56ALzJK20 r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$HHvA2RH7fkzBL_OTnB56ALzJK20
-                r0.<init>(r11)
+                org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda2 r0 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda2
+                r0.<init>(r10, r11)
                 r12.setOnEditorActionListener(r0)
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$3unNk7Tvar_PRVsnwtsEJUGMGsuk r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$3unNk7Tvar_PRVsnwtsEJUGMGsuk
-                r0.<init>()
+                org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda1
+                r0.<init>(r11)
                 r12.setOnKeyListener(r0)
                 goto L_0x00cb
             L_0x003d:
@@ -1122,7 +1098,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
                 android.content.Context r12 = r10.mContext
-                r2 = 2131165443(0x7var_, float:1.7945103E38)
+                r2 = 2131165448(0x7var_, float:1.7945113E38)
                 java.lang.String r3 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r2, (java.lang.String) r3)
                 org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
@@ -1156,8 +1132,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$0 */
-        public /* synthetic */ void lambda$onCreateViewHolder$0$ChatAttachAlertPollLayout$ListAdapter(View view) {
+        public /* synthetic */ void lambda$onCreateViewHolder$0(View view) {
             int adapterPosition;
             if (view.getTag() == null) {
                 view.setTag(1);
@@ -1202,8 +1177,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$1 */
-        public /* synthetic */ boolean lambda$onCreateViewHolder$1$ChatAttachAlertPollLayout$ListAdapter(PollEditTextCell pollEditTextCell, TextView textView, int i, KeyEvent keyEvent) {
+        public /* synthetic */ boolean lambda$onCreateViewHolder$1(PollEditTextCell pollEditTextCell, TextView textView, int i, KeyEvent keyEvent) {
             int adapterPosition;
             if (i != 5) {
                 return false;
@@ -1228,7 +1202,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             return true;
         }
 
-        static /* synthetic */ boolean lambda$onCreateViewHolder$2(PollEditTextCell pollEditTextCell, View view, int i, KeyEvent keyEvent) {
+        /* access modifiers changed from: private */
+        public static /* synthetic */ boolean lambda$onCreateViewHolder$2(PollEditTextCell pollEditTextCell, View view, int i, KeyEvent keyEvent) {
             EditTextBoldCursor editTextBoldCursor = (EditTextBoldCursor) view;
             if (i != 67 || keyEvent.getAction() != 0 || editTextBoldCursor.length() != 0) {
                 return false;

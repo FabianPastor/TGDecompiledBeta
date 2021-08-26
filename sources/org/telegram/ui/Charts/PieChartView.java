@@ -903,17 +903,7 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
                         } else {
                             f3 = this.values[i] / f4;
                         }
-                        ValueAnimator createAnimator = createAnimator(pieChartViewData.drawingPart, f3, new ValueAnimator.AnimatorUpdateListener(pieChartViewData) {
-                            public final /* synthetic */ PieChartViewData f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                PieChartView.this.lambda$updateCharValues$0$PieChartView(this.f$1, valueAnimator);
-                            }
-                        });
+                        ValueAnimator createAnimator = createAnimator(pieChartViewData.drawingPart, f3, new PieChartView$$ExternalSyntheticLambda0(this, pieChartViewData));
                         pieChartViewData.animator = createAnimator;
                         createAnimator.start();
                         i++;
@@ -933,8 +923,7 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateCharValues$0 */
-    public /* synthetic */ void lambda$updateCharValues$0$PieChartView(PieChartViewData pieChartViewData, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateCharValues$0(PieChartViewData pieChartViewData, ValueAnimator valueAnimator) {
         pieChartViewData.drawingPart = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }

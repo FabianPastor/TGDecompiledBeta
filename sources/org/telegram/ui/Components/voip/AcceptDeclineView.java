@@ -230,8 +230,8 @@ public class AcceptDeclineView extends View {
             r0[r1] = r3
             r0[r2] = r4
             android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
-            org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$XEKpzvhtApUfBXFcAbsBBZXtimc r2 = new org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$XEKpzvhtApUfBXFcAbsBBZXtimc
-            r2.<init>()
+            org.telegram.ui.Components.voip.AcceptDeclineView$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Components.voip.AcceptDeclineView$$ExternalSyntheticLambda0
+            r2.<init>(r11)
             r0.addUpdateListener(r2)
             r0.start()
             r11.leftAnimator = r0
@@ -261,8 +261,8 @@ public class AcceptDeclineView extends View {
             r0[r1] = r3
             r0[r2] = r4
             android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
-            org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$lk93wO5tJWrNgRQERin5X2GqM8o r2 = new org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$lk93wO5tJWrNgRQERin5X2GqM8o
-            r2.<init>()
+            org.telegram.ui.Components.voip.AcceptDeclineView$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.Components.voip.AcceptDeclineView$$ExternalSyntheticLambda1
+            r2.<init>(r11)
             r0.addUpdateListener(r2)
             r0.start()
             r11.rightAnimator = r0
@@ -345,16 +345,14 @@ public class AcceptDeclineView extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onTouchEvent$0 */
-    public /* synthetic */ void lambda$onTouchEvent$0$AcceptDeclineView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onTouchEvent$0(ValueAnimator valueAnimator) {
         this.leftOffsetX = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
         this.leftAnimator = null;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onTouchEvent$1 */
-    public /* synthetic */ void lambda$onTouchEvent$1$AcceptDeclineView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onTouchEvent$1(ValueAnimator valueAnimator) {
         this.rigthOffsetX = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
         this.rightAnimator = null;

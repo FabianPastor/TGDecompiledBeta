@@ -10,6 +10,7 @@ public class TLRPC$TL_messages_discussionMessage extends TLObject {
     public ArrayList<TLRPC$Message> messages = new ArrayList<>();
     public int read_inbox_max_id;
     public int read_outbox_max_id;
+    public int unread_count;
     public ArrayList<TLRPC$User> users = new ArrayList<>();
 
     public static TLRPC$TL_messages_discussionMessage TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -49,6 +50,7 @@ public class TLRPC$TL_messages_discussionMessage extends TLObject {
             if ((this.flags & 4) != 0) {
                 this.read_outbox_max_id = abstractSerializedData.readInt32(z);
             }
+            this.unread_count = abstractSerializedData.readInt32(z);
             int readInt323 = abstractSerializedData.readInt32(z);
             if (readInt323 == NUM) {
                 int readInt324 = abstractSerializedData.readInt32(z);
@@ -103,6 +105,7 @@ public class TLRPC$TL_messages_discussionMessage extends TLObject {
         if ((this.flags & 4) != 0) {
             abstractSerializedData.writeInt32(this.read_outbox_max_id);
         }
+        abstractSerializedData.writeInt32(this.unread_count);
         abstractSerializedData.writeInt32(NUM);
         int size2 = this.chats.size();
         abstractSerializedData.writeInt32(size2);

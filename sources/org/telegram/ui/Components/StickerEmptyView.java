@@ -44,7 +44,6 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             stickerEmptyView.progressBar.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
         }
     };
-    private final String stickerSetName = "tg_placeholders";
     private int stickerType;
     public BackupImageView stickerView;
     private LoadingStickerDrawable stubDrawable;
@@ -70,11 +69,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         r0.setOrientation(1);
         BackupImageView backupImageView = new BackupImageView(context);
         this.stickerView = backupImageView;
-        backupImageView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                StickerEmptyView.this.lambda$new$0$StickerEmptyView(view);
-            }
-        });
+        backupImageView.setOnClickListener(new StickerEmptyView$$ExternalSyntheticLambda0(this));
         LoadingStickerDrawable loadingStickerDrawable = new LoadingStickerDrawable(this.stickerView, i == 1 ? "M503.1,302.3c-2-20-21.4-29.8-42.4-30.7CLASSNAME.8-56.8-8.2-121-52.8-164.1CLASSNAME.6,24,190,51.3,131.7,146.2\n\tc-21.2-30.5-65-34.3-91.1-7.6c-30,30.6-18.4,82.7,22.5,97.3c-4.7,2.4-6.4,7.6-5.7,12.4c-14.2,10.5-19,28.5-5.1,42.4\n\tc-5.4,15,13.2,28.8,26.9,18.8CLASSNAME.5,6.9,21,15,27.8,28.8c-17.1,55.3-8.5,79.4,8.5,98.7v0CLASSNAME.5,53.8,235.6,45.3,292.2,11.5\n\tCLASSNAME.6-13.5,39.5-34.6,30.4-96.8CLASSNAME.1,322.1,505.7,328.5,503.1,302.3z M107.4,234c0.1,2.8,0.2,5.8,0.4,8.8c-7-2.5-14-3.6-20.5-3.6\n\tCLASSNAME.4,238.6,101.2,236.9,107.4,234z" : "m418 282.6CLASSNAME.4-21.1 20.2-44.9 20.2-70.8 0-88.3-79.8-175.3-178.9-175.3-100.1 0-178.9 88-178.9 175.3 0 46.6 16.9 73.1 29.1 86.1-19.3 23.4-30.9 52.3-34.6 86.1-2.5 22.7 3.2 41.4 17.4 57.3 14.3 16 51.7 35 148.1 35 41.2 0 119.9-5.3 156.7-18.3 49.5-17.4 59.2-41.1 59.2-76.2 0-41.5-12.9-74.8-38.3-99.2z", AndroidUtilities.dp(130.0f), AndroidUtilities.dp(130.0f));
         this.stubDrawable = loadingStickerDrawable;
         this.stickerView.setImageDrawable(loadingStickerDrawable);
@@ -106,8 +101,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$StickerEmptyView(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         this.stickerView.getImageReceiver().startAnimation();
     }
 

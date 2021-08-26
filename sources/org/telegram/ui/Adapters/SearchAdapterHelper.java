@@ -18,7 +18,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$ChannelParticipant;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -159,25 +158,9 @@ public class SearchAdapterHelper {
             int i7 = this.channelLastReqId + 1;
             this.channelLastReqId = i7;
             ConnectionsManager instance = ConnectionsManager.getInstance(this.currentAccount);
-            $$Lambda$SearchAdapterHelper$8RMFgd_MVod5GyKAdDzoUmKlig r15 = r0;
-            $$Lambda$SearchAdapterHelper$8RMFgd_MVod5GyKAdDzoUmKlig r0 = new RequestDelegate(i7, str, z4, i3) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ String f$2;
-                public final /* synthetic */ boolean f$3;
-                public final /* synthetic */ int f$4;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    SearchAdapterHelper.this.lambda$queryServerSearch$1$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
-                }
-            };
-            this.channelReqId = instance.sendRequest(tLRPC$TL_channels_getParticipants, r15, 2);
+            SearchAdapterHelper$$ExternalSyntheticLambda8 searchAdapterHelper$$ExternalSyntheticLambda8 = r0;
+            SearchAdapterHelper$$ExternalSyntheticLambda8 searchAdapterHelper$$ExternalSyntheticLambda82 = new SearchAdapterHelper$$ExternalSyntheticLambda8(this, i7, str, z4, i3);
+            this.channelReqId = instance.sendRequest(tLRPC$TL_channels_getParticipants, searchAdapterHelper$$ExternalSyntheticLambda8, 2);
         } else {
             this.lastFoundChannel = str.toLowerCase();
         }
@@ -188,32 +171,10 @@ public class SearchAdapterHelper {
                 tLRPC$TL_contacts_search.limit = 50;
                 int i8 = this.lastReqId + 1;
                 this.lastReqId = i8;
-                $$Lambda$SearchAdapterHelper$d_RT9an5_K2u2dcxdohpFvar_SWE r12 = r0;
+                SearchAdapterHelper$$ExternalSyntheticLambda7 searchAdapterHelper$$ExternalSyntheticLambda7 = r0;
                 ConnectionsManager instance2 = ConnectionsManager.getInstance(this.currentAccount);
-                $$Lambda$SearchAdapterHelper$d_RT9an5_K2u2dcxdohpFvar_SWE r02 = new RequestDelegate(i8, i3, z2, z5, z3, z4, str) {
-                    public final /* synthetic */ int f$1;
-                    public final /* synthetic */ int f$2;
-                    public final /* synthetic */ boolean f$3;
-                    public final /* synthetic */ boolean f$4;
-                    public final /* synthetic */ boolean f$5;
-                    public final /* synthetic */ boolean f$6;
-                    public final /* synthetic */ String f$7;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                        this.f$4 = r5;
-                        this.f$5 = r6;
-                        this.f$6 = r7;
-                        this.f$7 = r8;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        SearchAdapterHelper.this.lambda$queryServerSearch$3$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, tLObject, tLRPC$TL_error);
-                    }
-                };
-                this.reqId = instance2.sendRequest(tLRPC$TL_contacts_search, r12, 2);
+                SearchAdapterHelper$$ExternalSyntheticLambda7 searchAdapterHelper$$ExternalSyntheticLambda72 = new SearchAdapterHelper$$ExternalSyntheticLambda7(this, i8, i3, z2, z5, z3, z4, str);
+                this.reqId = instance2.sendRequest(tLRPC$TL_contacts_search, searchAdapterHelper$$ExternalSyntheticLambda7, 2);
             } else {
                 this.globalSearch.clear();
                 this.globalSearchMap.clear();
@@ -252,34 +213,12 @@ public class SearchAdapterHelper {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$queryServerSearch$1 */
-    public /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int i, String str, boolean z, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(i, tLRPC$TL_error, tLObject, str, z, i2) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-            public final /* synthetic */ TLObject f$3;
-            public final /* synthetic */ String f$4;
-            public final /* synthetic */ boolean f$5;
-            public final /* synthetic */ int f$6;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-                this.f$6 = r7;
-            }
-
-            public final void run() {
-                SearchAdapterHelper.this.lambda$queryServerSearch$0$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
-            }
-        });
+    public /* synthetic */ void lambda$queryServerSearch$1(int i, String str, boolean z, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$ExternalSyntheticLambda3(this, i, tLRPC$TL_error, tLObject, str, z, i2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$queryServerSearch$0 */
-    public /* synthetic */ void lambda$queryServerSearch$0$SearchAdapterHelper(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, boolean z, int i2) {
+    public /* synthetic */ void lambda$queryServerSearch$0(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, boolean z, int i2) {
         if (i == this.channelLastReqId) {
             this.channelReqId = 0;
             if (tLRPC$TL_error == null) {
@@ -312,40 +251,12 @@ public class SearchAdapterHelper {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$queryServerSearch$3 */
-    public /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int i, int i2, boolean z, boolean z2, boolean z3, boolean z4, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(i, i2, tLRPC$TL_error, tLObject, z, z2, z3, z4, str) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ int f$2;
-            public final /* synthetic */ TLRPC$TL_error f$3;
-            public final /* synthetic */ TLObject f$4;
-            public final /* synthetic */ boolean f$5;
-            public final /* synthetic */ boolean f$6;
-            public final /* synthetic */ boolean f$7;
-            public final /* synthetic */ boolean f$8;
-            public final /* synthetic */ String f$9;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-                this.f$6 = r7;
-                this.f$7 = r8;
-                this.f$8 = r9;
-                this.f$9 = r10;
-            }
-
-            public final void run() {
-                SearchAdapterHelper.this.lambda$queryServerSearch$2$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
-            }
-        });
+    public /* synthetic */ void lambda$queryServerSearch$3(int i, int i2, boolean z, boolean z2, boolean z3, boolean z4, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$ExternalSyntheticLambda2(this, i, i2, tLRPC$TL_error, tLObject, z, z2, z3, z4, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$queryServerSearch$2 */
-    public /* synthetic */ void lambda$queryServerSearch$2$SearchAdapterHelper(int i, int i2, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, boolean z4, String str) {
+    public /* synthetic */ void lambda$queryServerSearch$2(int i, int i2, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, boolean z4, String str) {
         TLRPC$User tLRPC$User;
         TLRPC$Chat tLRPC$Chat;
         ArrayList<TLRPC$Peer> arrayList;
@@ -486,17 +397,12 @@ public class SearchAdapterHelper {
         if (this.hashtagsLoadedFromDb) {
             return true;
         }
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public final void run() {
-                SearchAdapterHelper.this.lambda$loadRecentHashtags$6$SearchAdapterHelper();
-            }
-        });
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SearchAdapterHelper$$ExternalSyntheticLambda0(this));
         return false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadRecentHashtags$6 */
-    public /* synthetic */ void lambda$loadRecentHashtags$6$SearchAdapterHelper() {
+    public /* synthetic */ void lambda$loadRecentHashtags$6() {
         try {
             SQLiteCursor queryFinalized = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT id, date FROM hashtag_recent_v2 WHERE 1", new Object[0]);
             ArrayList arrayList = new ArrayList();
@@ -509,26 +415,15 @@ public class SearchAdapterHelper {
                 hashMap.put(hashtagObject.hashtag, hashtagObject);
             }
             queryFinalized.dispose();
-            Collections.sort(arrayList, $$Lambda$SearchAdapterHelper$atRj3vW_BV2wtUuARv3hdo2o9dw.INSTANCE);
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList, hashMap) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ HashMap f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    SearchAdapterHelper.this.lambda$loadRecentHashtags$5$SearchAdapterHelper(this.f$1, this.f$2);
-                }
-            });
+            Collections.sort(arrayList, SearchAdapterHelper$$ExternalSyntheticLambda6.INSTANCE);
+            AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$ExternalSyntheticLambda5(this, arrayList, hashMap));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
     }
 
-    static /* synthetic */ int lambda$loadRecentHashtags$4(HashtagObject hashtagObject, HashtagObject hashtagObject2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$loadRecentHashtags$4(HashtagObject hashtagObject, HashtagObject hashtagObject2) {
         int i = hashtagObject.date;
         int i2 = hashtagObject2.date;
         if (i < i2) {
@@ -657,22 +552,11 @@ public class SearchAdapterHelper {
     }
 
     private void putRecentHashtags(ArrayList<HashtagObject> arrayList) {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable(arrayList) {
-            public final /* synthetic */ ArrayList f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                SearchAdapterHelper.this.lambda$putRecentHashtags$7$SearchAdapterHelper(this.f$1);
-            }
-        });
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SearchAdapterHelper$$ExternalSyntheticLambda4(this, arrayList));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$putRecentHashtags$7 */
-    public /* synthetic */ void lambda$putRecentHashtags$7$SearchAdapterHelper(ArrayList arrayList) {
+    public /* synthetic */ void lambda$putRecentHashtags$7(ArrayList arrayList) {
         int i;
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
@@ -750,16 +634,11 @@ public class SearchAdapterHelper {
     public void clearRecentHashtags() {
         this.hashtags = new ArrayList<>();
         this.hashtagsByText = new HashMap<>();
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public final void run() {
-                SearchAdapterHelper.this.lambda$clearRecentHashtags$8$SearchAdapterHelper();
-            }
-        });
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SearchAdapterHelper$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$clearRecentHashtags$8 */
-    public /* synthetic */ void lambda$clearRecentHashtags$8$SearchAdapterHelper() {
+    public /* synthetic */ void lambda$clearRecentHashtags$8() {
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
         } catch (Exception e) {

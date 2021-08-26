@@ -22,6 +22,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,7 +47,6 @@ import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto;
 
 public class PhotoViewerCaptionEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayoutPhoto.SizeNotifierFrameLayoutPhotoDelegate {
-    float animationProgress = 0.0f;
     /* access modifiers changed from: private */
     public NumberTextView captionLimitView;
     /* access modifiers changed from: private */
@@ -75,7 +75,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private int keyboardHeight;
     private int keyboardHeightLand;
     private boolean keyboardVisible;
-    int lastShow;
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
     /* access modifiers changed from: private */
@@ -153,11 +152,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
         this.emojiButton.setAlpha(0.58f);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
-        this.emojiButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoViewerCaptionEnterView.this.lambda$new$0$PhotoViewerCaptionEnterView(view);
-            }
-        });
+        this.emojiButton.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda4(this));
         this.emojiButton.setContentDescription(LocaleController.getString("Emoji", NUM));
         ImageView imageView2 = this.emojiButton;
         ReplaceableIconDrawable replaceableIconDrawable = new ReplaceableIconDrawable(context2);
@@ -230,16 +225,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setHighlightColor(NUM);
         this.messageEditText.setHintTextColor(-NUM);
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 83, 52.0f, 0.0f, 6.0f, 0.0f));
-        this.messageEditText.setOnKeyListener(new View.OnKeyListener() {
-            public final boolean onKey(View view, int i, KeyEvent keyEvent) {
-                return PhotoViewerCaptionEnterView.this.lambda$new$1$PhotoViewerCaptionEnterView(view, i, keyEvent);
-            }
-        });
-        this.messageEditText.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoViewerCaptionEnterView.this.lambda$new$2$PhotoViewerCaptionEnterView(view);
-            }
-        });
+        this.messageEditText.setOnKeyListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda6(this));
+        this.messageEditText.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda3(this));
         this.messageEditText.addTextChangedListener(new TextWatcher() {
             boolean processChange = false;
 
@@ -443,8 +430,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     android.animation.ValueAnimator unused = r11.sendButtonColorAnimator = r0
                     org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
                     android.animation.ValueAnimator r11 = r11.sendButtonColorAnimator
-                    org.telegram.ui.Components.-$$Lambda$PhotoViewerCaptionEnterView$2$Kpzvncy5_cmP5zKv9lNHlpeDwJY r0 = new org.telegram.ui.Components.-$$Lambda$PhotoViewerCaptionEnterView$2$Kpzvncy5_cmP5zKv9lNHlpeDwJY
-                    r0.<init>()
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView$2$$ExternalSyntheticLambda0 r0 = new org.telegram.ui.Components.PhotoViewerCaptionEnterView$2$$ExternalSyntheticLambda0
+                    r0.<init>(r10)
                     r11.addUpdateListener(r0)
                     org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
                     android.animation.ValueAnimator r11 = r11.sendButtonColorAnimator
@@ -458,8 +445,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$afterTextChanged$0 */
-            public /* synthetic */ void lambda$afterTextChanged$0$PhotoViewerCaptionEnterView$2(ValueAnimator valueAnimator) {
+            public /* synthetic */ void lambda$afterTextChanged$0(ValueAnimator valueAnimator) {
                 float unused = PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
                 int color = Theme.getColor("dialogFloatingIcon");
                 Theme.setDrawableColor(PhotoViewerCaptionEnterView.this.checkDrawable, ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * ((PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress * 0.42f) + 0.58f))));
@@ -475,11 +461,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         imageView3.setScaleType(ImageView.ScaleType.CENTER);
         imageView3.setImageDrawable(combinedDrawable);
         linearLayout.addView(imageView3, LayoutHelper.createLinear(48, 48, 80));
-        imageView3.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoViewerCaptionEnterView.this.lambda$new$3$PhotoViewerCaptionEnterView(view);
-            }
-        });
+        imageView3.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda5(this));
         imageView3.setContentDescription(LocaleController.getString("Done", NUM));
         NumberTextView numberTextView = new NumberTextView(context2);
         this.captionLimitView = numberTextView;
@@ -492,8 +474,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$PhotoViewerCaptionEnterView(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         if (this.keyboardVisible || ((AndroidUtilities.isInMultiwindow || AndroidUtilities.usingHardwareInput) && !isPopupShowing())) {
             showPopup(1, false);
         } else {
@@ -502,8 +483,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ boolean lambda$new$1$PhotoViewerCaptionEnterView(View view, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$new$1(View view, int i, KeyEvent keyEvent) {
         if (i == 4) {
             if (this.windowView != null && hideActionMode()) {
                 return true;
@@ -519,16 +499,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$PhotoViewerCaptionEnterView(View view) {
+    public /* synthetic */ void lambda$new$2(View view) {
         if (isPopupShowing()) {
             showPopup((AndroidUtilities.isInMultiwindow || AndroidUtilities.usingHardwareInput) ? 0 : 2, false);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$PhotoViewerCaptionEnterView(View view) {
+    public /* synthetic */ void lambda$new$3(View view) {
         if (this.captionMaxLength - this.codePointCount < 0) {
             AndroidUtilities.shakeView(this.captionLimitView, 2.0f, 0);
             Vibrator vibrator = (Vibrator) this.captionLimitView.getContext().getSystemService("vibrator");
@@ -571,11 +549,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             EditTextCaption editTextCaption = this.messageEditText;
             editTextCaption.setOffsetY(editTextCaption.getOffsetY() - ((float) ((this.messageEditTextPredrawHeigth - this.messageEditText.getMeasuredHeight()) + (this.messageEditTextPredrawScrollY - this.messageEditText.getScrollY()))));
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.messageEditText.getOffsetY(), 0.0f});
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PhotoViewerCaptionEnterView.this.lambda$onDraw$4$PhotoViewerCaptionEnterView(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda1(this));
             ValueAnimator valueAnimator = this.messageEditTextAnimator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
@@ -596,11 +570,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             this.offset = top;
             ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{top, 0.0f});
             this.topBackgroundAnimator = ofFloat2;
-            ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PhotoViewerCaptionEnterView.this.lambda$onDraw$5$PhotoViewerCaptionEnterView(valueAnimator);
-                }
-            });
+            ofFloat2.addUpdateListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda0(this));
             this.topBackgroundAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
             this.topBackgroundAnimator.setDuration(200);
             this.topBackgroundAnimator.start();
@@ -609,14 +579,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDraw$4 */
-    public /* synthetic */ void lambda$onDraw$4$PhotoViewerCaptionEnterView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onDraw$4(ValueAnimator valueAnimator) {
         this.messageEditText.setOffsetY(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDraw$5 */
-    public /* synthetic */ void lambda$onDraw$5$PhotoViewerCaptionEnterView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onDraw$5(ValueAnimator valueAnimator) {
         this.offset = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -705,7 +673,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null);
+            EmojiView emojiView2 = new EmojiView(false, false, AndroidUtilities.findActivity(getContext()), false, (TLRPC$ChatFull) null, (ViewGroup) null);
             this.emojiView = emojiView2;
             emojiView2.setDelegate(new EmojiView.EmojiViewDelegate() {
                 public /* synthetic */ boolean canSchedule() {
@@ -714,6 +682,18 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
                 public /* synthetic */ long getDialogId() {
                     return EmojiView.EmojiViewDelegate.CC.$default$getDialogId(this);
+                }
+
+                public /* synthetic */ float getProgressToSearchOpened() {
+                    return EmojiView.EmojiViewDelegate.CC.$default$getProgressToSearchOpened(this);
+                }
+
+                public /* synthetic */ int getThreadId() {
+                    return EmojiView.EmojiViewDelegate.CC.$default$getThreadId(this);
+                }
+
+                public /* synthetic */ void invalidateEnterView() {
+                    EmojiView.EmojiViewDelegate.CC.$default$invalidateEnterView(this);
                 }
 
                 public /* synthetic */ boolean isExpanded() {
@@ -828,11 +808,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (editTextCaption != null) {
             if (z) {
                 if (!editTextCaption.isFocused()) {
-                    this.messageEditText.postDelayed(new Runnable() {
-                        public final void run() {
-                            PhotoViewerCaptionEnterView.this.lambda$setFieldFocused$6$PhotoViewerCaptionEnterView();
-                        }
-                    }, 600);
+                    this.messageEditText.postDelayed(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda7(this), 600);
                 }
             } else if (editTextCaption.isFocused() && !this.keyboardVisible) {
                 this.messageEditText.clearFocus();
@@ -841,8 +817,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setFieldFocused$6 */
-    public /* synthetic */ void lambda$setFieldFocused$6$PhotoViewerCaptionEnterView() {
+    public /* synthetic */ void lambda$setFieldFocused$6() {
         EditTextCaption editTextCaption = this.messageEditText;
         if (editTextCaption != null) {
             try {
@@ -867,7 +842,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     private void showPopup(int i, boolean z) {
         EmojiView emojiView2;
-        this.lastShow = i;
         if (i == 1) {
             if (this.emojiView == null) {
                 createEmojiView();
@@ -906,17 +880,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{(float) this.emojiPadding, 0.0f});
                 this.popupAnimating = true;
                 this.delegate.onEmojiViewCloseStart();
-                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener((float) this.emojiPadding) {
-                    public final /* synthetic */ float f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        PhotoViewerCaptionEnterView.this.lambda$showPopup$7$PhotoViewerCaptionEnterView(this.f$1, valueAnimator);
-                    }
-                });
+                ofFloat.addUpdateListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda2(this, (float) this.emojiPadding));
                 ofFloat.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         int unused = PhotoViewerCaptionEnterView.this.emojiPadding = 0;
@@ -947,8 +911,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPopup$7 */
-    public /* synthetic */ void lambda$showPopup$7$PhotoViewerCaptionEnterView(float f, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showPopup$7(float f, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.emojiPadding = (int) floatValue;
         float f2 = f - floatValue;

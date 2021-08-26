@@ -81,11 +81,7 @@ public class AudioTrackJNI {
     private void startThread() {
         if (this.thread == null) {
             this.running = true;
-            Thread thread2 = new Thread(new Runnable() {
-                public final void run() {
-                    AudioTrackJNI.this.lambda$startThread$0$AudioTrackJNI();
-                }
-            });
+            Thread thread2 = new Thread(new AudioTrackJNI$$ExternalSyntheticLambda0(this));
             this.thread = thread2;
             thread2.start();
             return;
@@ -94,8 +90,7 @@ public class AudioTrackJNI {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startThread$0 */
-    public /* synthetic */ void lambda$startThread$0$AudioTrackJNI() {
+    public /* synthetic */ void lambda$startThread$0() {
         try {
             this.audioTrack.play();
             ByteBuffer byteBuffer = null;

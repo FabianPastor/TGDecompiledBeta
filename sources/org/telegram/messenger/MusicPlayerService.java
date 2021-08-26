@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.RemoteViews;
 import androidx.core.app.NotificationCompat;
 import java.io.File;
-import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.ui.LaunchActivity;
@@ -82,15 +81,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
         }
         ImageReceiver imageReceiver2 = new ImageReceiver((View) null);
         this.imageReceiver = imageReceiver2;
-        imageReceiver2.setDelegate(new ImageReceiver.ImageReceiverDelegate() {
-            public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-                MusicPlayerService.this.lambda$onCreate$0$MusicPlayerService(imageReceiver, z, z2, z3);
-            }
-
-            public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-                ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
-            }
-        });
+        imageReceiver2.setDelegate(new MusicPlayerService$$ExternalSyntheticLambda1(this));
         if (Build.VERSION.SDK_INT >= 21) {
             this.mediaSession = new MediaSession(this, "telegramAudioPlayer");
             this.playbackState = new PlaybackState.Builder();
@@ -133,8 +124,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$0 */
-    public /* synthetic */ void lambda$onCreate$0$MusicPlayerService(ImageReceiver imageReceiver2, boolean z, boolean z2, boolean z3) {
+    public /* synthetic */ void lambda$onCreate$0(ImageReceiver imageReceiver2, boolean z, boolean z2, boolean z3) {
         if (z && !TextUtils.isEmpty(this.loadingFilePath)) {
             MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
             if (playingMessageObject != null) {
@@ -158,11 +148,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
         }
         MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
         if (playingMessageObject == null) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    MusicPlayerService.this.stopSelf();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new MusicPlayerService$$ExternalSyntheticLambda0(this));
             return 1;
         }
         if (supportLockScreenControls) {

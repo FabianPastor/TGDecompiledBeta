@@ -597,17 +597,7 @@ public class VoIPToggleButton extends FrameLayout {
             }
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.replaceAnimator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(z5) {
-                public final /* synthetic */ boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    VoIPToggleButton.this.lambda$setData$0$VoIPToggleButton(this.f$1, valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new VoIPToggleButton$$ExternalSyntheticLambda1(this, z5));
             this.replaceAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     VoIPToggleButton voIPToggleButton = VoIPToggleButton.this;
@@ -642,8 +632,7 @@ public class VoIPToggleButton extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setData$0 */
-    public /* synthetic */ void lambda$setData$0$VoIPToggleButton(boolean z, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setData$0(boolean z, ValueAnimator valueAnimator) {
         this.replaceProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
         if (z) {
@@ -708,11 +697,7 @@ public class VoIPToggleButton extends FrameLayout {
                     fArr[1] = f;
                     ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
                     this.checkAnimator = ofFloat;
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            VoIPToggleButton.this.lambda$setChecked$1$VoIPToggleButton(valueAnimator);
-                        }
-                    });
+                    ofFloat.addUpdateListener(new VoIPToggleButton$$ExternalSyntheticLambda0(this));
                     this.checkAnimator.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             VoIPToggleButton voIPToggleButton = VoIPToggleButton.this;
@@ -735,8 +720,7 @@ public class VoIPToggleButton extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setChecked$1 */
-    public /* synthetic */ void lambda$setChecked$1$VoIPToggleButton(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setChecked$1(ValueAnimator valueAnimator) {
         this.checkedProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         setBackgroundColor(this.backgroundCheck1, this.backgroundCheck2);
     }

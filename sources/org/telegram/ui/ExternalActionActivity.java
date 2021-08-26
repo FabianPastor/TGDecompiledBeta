@@ -26,7 +26,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_account_authorizationForm;
 import org.telegram.tgnet.TLRPC$TL_account_getAuthorizationForm;
@@ -60,7 +59,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     private int passcodeSaveIntentState;
     private PasscodeView passcodeView;
 
-    static /* synthetic */ void lambda$onCreate$1(View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onCreate$1(View view) {
     }
 
     public boolean needAddFragmentToStack(BaseFragment baseFragment, ActionBarLayout actionBarLayout2) {
@@ -108,7 +108,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             layoutParams.width = -1;
             layoutParams.height = -1;
             relativeLayout.setLayoutParams(layoutParams);
-            AnonymousClass1 r5 = new SizeNotifierFrameLayout(this) {
+            AnonymousClass1 r5 = new SizeNotifierFrameLayout(this, this) {
                 /* access modifiers changed from: protected */
                 public boolean isActionBarVisible() {
                     return false;
@@ -122,12 +122,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             FrameLayout frameLayout = new FrameLayout(this);
             frameLayout.setBackgroundColor(NUM);
             relativeLayout.addView(frameLayout, LayoutHelper.createRelative(-1, -1));
-            frameLayout.setOnTouchListener(new View.OnTouchListener() {
-                public final boolean onTouch(View view, MotionEvent motionEvent) {
-                    return ExternalActionActivity.this.lambda$onCreate$0$ExternalActionActivity(view, motionEvent);
-                }
-            });
-            frameLayout.setOnClickListener($$Lambda$ExternalActionActivity$HxlKnmyzcYvDPSJWMFc9l7KfGCo.INSTANCE);
+            frameLayout.setOnTouchListener(new ExternalActionActivity$$ExternalSyntheticLambda4(this));
+            frameLayout.setOnClickListener(ExternalActionActivity$$ExternalSyntheticLambda3.INSTANCE);
             ActionBarLayout actionBarLayout2 = new ActionBarLayout(this);
             this.layersActionBarLayout = actionBarLayout2;
             actionBarLayout2.setRemoveActionBarExtraHeight(true);
@@ -141,7 +137,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         } else {
             RelativeLayout relativeLayout2 = new RelativeLayout(this);
             this.drawerLayoutContainer.addView(relativeLayout2, LayoutHelper.createFrame(-1, -1.0f));
-            AnonymousClass2 r52 = new SizeNotifierFrameLayout(this) {
+            AnonymousClass2 r52 = new SizeNotifierFrameLayout(this, this) {
                 /* access modifiers changed from: protected */
                 public boolean isActionBarVisible() {
                     return false;
@@ -171,8 +167,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$0 */
-    public /* synthetic */ boolean lambda$onCreate$0$ExternalActionActivity(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$onCreate$0(View view, MotionEvent motionEvent) {
         if (!this.actionBarLayout.fragmentsStack.isEmpty() && motionEvent.getAction() == 1) {
             float x = motionEvent.getX();
             float y = motionEvent.getY();
@@ -208,17 +203,12 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             this.passcodeView.onShow(true, false);
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new PasscodeView.PasscodeViewDelegate() {
-                public final void didAcceptedPassword() {
-                    ExternalActionActivity.this.lambda$showPasscodeActivity$2$ExternalActionActivity();
-                }
-            });
+            this.passcodeView.setDelegate(new ExternalActionActivity$$ExternalSyntheticLambda10(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPasscodeActivity$2 */
-    public /* synthetic */ void lambda$showPasscodeActivity$2$ExternalActionActivity() {
+    public /* synthetic */ void lambda$showPasscodeActivity$2() {
         SharedConfig.isWaitingForPasscodeEnter = false;
         Intent intent = this.passcodeSaveIntent;
         if (intent != null) {
@@ -300,32 +290,10 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                 boolean z4 = z;
                 boolean z5 = z2;
                 if (activatedAccountsCount >= 2) {
-                    AlertDialog createAccountSelectDialog = AlertsCreator.createAccountSelectDialog(this, new AlertsCreator.AccountSelectDelegate(i, intent, z, z2, z3) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ Intent f$2;
-                        public final /* synthetic */ boolean f$3;
-                        public final /* synthetic */ boolean f$4;
-                        public final /* synthetic */ boolean f$5;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                            this.f$5 = r6;
-                        }
-
-                        public final void didSelectAccount(int i) {
-                            ExternalActionActivity.this.lambda$handleIntent$3$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, i);
-                        }
-                    });
+                    AlertDialog createAccountSelectDialog = AlertsCreator.createAccountSelectDialog(this, new ExternalActionActivity$$ExternalSyntheticLambda9(this, i, intent, z, z2, z3));
                     createAccountSelectDialog.show();
                     createAccountSelectDialog.setCanceledOnTouchOutside(false);
-                    createAccountSelectDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        public final void onDismiss(DialogInterface dialogInterface) {
-                            ExternalActionActivity.this.lambda$handleIntent$4$ExternalActionActivity(dialogInterface);
-                        }
-                    });
+                    createAccountSelectDialog.setOnDismissListener(new ExternalActionActivity$$ExternalSyntheticLambda1(this));
                     return true;
                 }
             }
@@ -342,41 +310,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             }
             int[] iArr = {0};
             AlertDialog alertDialog = new AlertDialog(this, 3);
-            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener(i3, iArr) {
-                public final /* synthetic */ int f$0;
-                public final /* synthetic */ int[] f$1;
-
-                {
-                    this.f$0 = r1;
-                    this.f$1 = r2;
-                }
-
-                public final void onCancel(DialogInterface dialogInterface) {
-                    ConnectionsManager.getInstance(this.f$0).cancelRequest(this.f$1[0], true);
-                }
-            });
+            alertDialog.setOnCancelListener(new ExternalActionActivity$$ExternalSyntheticLambda0(i3, iArr));
             alertDialog.show();
-            iArr[0] = ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_getAuthorizationForm, new RequestDelegate(iArr, i, alertDialog, tLRPC$TL_account_getAuthorizationForm, stringExtra2, stringExtra) {
-                public final /* synthetic */ int[] f$1;
-                public final /* synthetic */ int f$2;
-                public final /* synthetic */ AlertDialog f$3;
-                public final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$4;
-                public final /* synthetic */ String f$5;
-                public final /* synthetic */ String f$6;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                    this.f$6 = r7;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ExternalActionActivity.this.lambda$handleIntent$10$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
-                }
-            }, 10);
+            iArr[0] = ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_getAuthorizationForm, new ExternalActionActivity$$ExternalSyntheticLambda8(this, iArr, i, alertDialog, tLRPC$TL_account_getAuthorizationForm, stringExtra2, stringExtra), 10);
         } else {
             if (AndroidUtilities.isTablet()) {
                 if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
@@ -398,8 +334,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$handleIntent$3 */
-    public /* synthetic */ void lambda$handleIntent$3$ExternalActionActivity(int i, Intent intent, boolean z, boolean z2, boolean z3, int i2) {
+    public /* synthetic */ void lambda$handleIntent$3(int i, Intent intent, boolean z, boolean z2, boolean z3, int i2) {
         if (i2 != i) {
             switchToAccount(i2);
         }
@@ -407,87 +342,29 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$handleIntent$4 */
-    public /* synthetic */ void lambda$handleIntent$4$ExternalActionActivity(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$handleIntent$4(DialogInterface dialogInterface) {
         setResult(0);
         finish();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$handleIntent$10 */
-    public /* synthetic */ void lambda$handleIntent$10$ExternalActionActivity(int[] iArr, int i, AlertDialog alertDialog, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$handleIntent$10(int[] iArr, int i, AlertDialog alertDialog, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm = (TLRPC$TL_account_authorizationForm) tLObject;
         if (tLRPC$TL_account_authorizationForm != null) {
-            iArr[0] = ConnectionsManager.getInstance(i).sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate(alertDialog, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2) {
-                public final /* synthetic */ AlertDialog f$1;
-                public final /* synthetic */ int f$2;
-                public final /* synthetic */ TLRPC$TL_account_authorizationForm f$3;
-                public final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$4;
-                public final /* synthetic */ String f$5;
-                public final /* synthetic */ String f$6;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                    this.f$6 = r7;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ExternalActionActivity.this.lambda$handleIntent$7$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
-                }
-            });
+            iArr[0] = ConnectionsManager.getInstance(i).sendRequest(new TLRPC$TL_account_getPassword(), new ExternalActionActivity$$ExternalSyntheticLambda7(this, alertDialog, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2));
             return;
         }
         AlertDialog alertDialog2 = alertDialog;
-        AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error) {
-            public final /* synthetic */ AlertDialog f$1;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                ExternalActionActivity.this.lambda$handleIntent$9$ExternalActionActivity(this.f$1, this.f$2);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ExternalActionActivity$$ExternalSyntheticLambda6(this, alertDialog, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$handleIntent$7 */
-    public /* synthetic */ void lambda$handleIntent$7$ExternalActionActivity(AlertDialog alertDialog, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2) {
-            public final /* synthetic */ AlertDialog f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ int f$3;
-            public final /* synthetic */ TLRPC$TL_account_authorizationForm f$4;
-            public final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$5;
-            public final /* synthetic */ String f$6;
-            public final /* synthetic */ String f$7;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-                this.f$6 = r7;
-                this.f$7 = r8;
-            }
-
-            public final void run() {
-                ExternalActionActivity.this.lambda$handleIntent$6$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
-            }
-        });
+    public /* synthetic */ void lambda$handleIntent$7(AlertDialog alertDialog, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ExternalActionActivity$$ExternalSyntheticLambda5(this, alertDialog, tLObject, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$handleIntent$6 */
-    public /* synthetic */ void lambda$handleIntent$6$ExternalActionActivity(AlertDialog alertDialog, TLObject tLObject, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2) {
+    public /* synthetic */ void lambda$handleIntent$6(AlertDialog alertDialog, TLObject tLObject, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2) {
         TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm2 = tLRPC$TL_account_getAuthorizationForm;
         try {
             alertDialog.dismiss();
@@ -514,24 +391,13 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$handleIntent$9 */
-    public /* synthetic */ void lambda$handleIntent$9$ExternalActionActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$handleIntent$9(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error) {
         try {
             alertDialog.dismiss();
             if ("APP_VERSION_OUTDATED".equals(tLRPC$TL_error.text)) {
                 AlertDialog showUpdateAppAlert = AlertsCreator.showUpdateAppAlert(this, LocaleController.getString("UpdateAppAlert", NUM), true);
                 if (showUpdateAppAlert != null) {
-                    showUpdateAppAlert.setOnDismissListener(new DialogInterface.OnDismissListener(tLRPC$TL_error) {
-                        public final /* synthetic */ TLRPC$TL_error f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void onDismiss(DialogInterface dialogInterface) {
-                            ExternalActionActivity.this.lambda$handleIntent$8$ExternalActionActivity(this.f$1, dialogInterface);
-                        }
-                    });
+                    showUpdateAppAlert.setOnDismissListener(new ExternalActionActivity$$ExternalSyntheticLambda2(this, tLRPC$TL_error));
                     return;
                 }
                 setResult(1, new Intent().putExtra("error", tLRPC$TL_error.text));
@@ -553,8 +419,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$handleIntent$8 */
-    public /* synthetic */ void lambda$handleIntent$8$ExternalActionActivity(TLRPC$TL_error tLRPC$TL_error, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$handleIntent$8(TLRPC$TL_error tLRPC$TL_error, DialogInterface dialogInterface) {
         setResult(1, new Intent().putExtra("error", tLRPC$TL_error.text));
         finish();
     }

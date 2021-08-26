@@ -40,7 +40,7 @@ import org.telegram.ui.PhotoPickerActivity;
 
 public class PhotoPickerSearchActivity extends BaseFragment {
     /* access modifiers changed from: private */
-    public static final Interpolator interpolator = $$Lambda$PhotoPickerSearchActivity$qS8BSeEFoanZMKZ555xPSRdbvYs.INSTANCE;
+    public static final Interpolator interpolator = PhotoPickerSearchActivity$$ExternalSyntheticLambda0.INSTANCE;
     /* access modifiers changed from: private */
     public boolean animatingForward;
     /* access modifiers changed from: private */
@@ -68,7 +68,8 @@ public class PhotoPickerSearchActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public ViewPage[] viewPages = new ViewPage[2];
 
-    static /* synthetic */ float lambda$static$0(float f) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ float lambda$static$0(float f) {
         float f2 = f - 1.0f;
         return (f2 * f2 * f2 * f2 * f2) + 1.0f;
     }

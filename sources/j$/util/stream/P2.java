@@ -1,46 +1,63 @@
 package j$.util.stream;
 
-import java.util.Arrays;
+import j$.util.function.CLASSNAMEb;
+import j$.util.function.Consumer;
+import j$.util.function.j;
+import j$.util.function.k;
+import j$.util.function.u;
+import j$.util.function.y;
 
-final class P2 extends D2 {
-    private int[] c;
-    private int d;
+class P2 extends U2 implements T2, CLASSNAMEl3 {
+    final /* synthetic */ y b;
+    final /* synthetic */ u c;
+    final /* synthetic */ CLASSNAMEb d;
 
-    P2(A2 a2) {
-        super(a2);
+    P2(y yVar, u uVar, CLASSNAMEb bVar) {
+        this.b = yVar;
+        this.c = uVar;
+        this.d = bVar;
+    }
+
+    public /* synthetic */ void accept(double d2) {
+        CLASSNAMEp1.f(this);
+        throw null;
     }
 
     public void accept(int i) {
-        int[] iArr = this.c;
-        int i2 = this.d;
-        this.d = i2 + 1;
-        iArr[i2] = i;
+        this.c.accept(this.a, i);
     }
 
-    public void l() {
-        int i = 0;
-        Arrays.sort(this.c, 0, this.d);
-        this.a.m((long) this.d);
-        if (!this.b) {
-            while (i < this.d) {
-                this.a.accept(this.c[i]);
-                i++;
-            }
-        } else {
-            while (i < this.d && !this.a.o()) {
-                this.a.accept(this.c[i]);
-                i++;
-            }
-        }
-        this.a.l();
-        this.c = null;
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEp1.e(this);
+        throw null;
     }
 
-    public void m(long j) {
-        if (j < NUM) {
-            this.c = new int[((int) j)];
-            return;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    /* renamed from: b */
+    public /* synthetic */ void accept(Integer num) {
+        CLASSNAMEp1.b(this, num);
+    }
+
+    public void h(T2 t2) {
+        this.a = this.d.apply(this.a, ((P2) t2).a);
+    }
+
+    public k l(k kVar) {
+        kVar.getClass();
+        return new j(this, kVar);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b.get();
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

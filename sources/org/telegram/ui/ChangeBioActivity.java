@@ -24,7 +24,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_account_updateProfile;
 import org.telegram.tgnet.TLRPC$TL_error;
@@ -50,7 +49,8 @@ public class ChangeBioActivity extends BaseFragment {
     private EditTextBoldCursor firstNameField;
     private TextView helpTextView;
 
-    static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -76,7 +76,7 @@ public class ChangeBioActivity extends BaseFragment {
         this.fragmentView = linearLayout;
         LinearLayout linearLayout2 = linearLayout;
         linearLayout2.setOrientation(1);
-        this.fragmentView.setOnTouchListener($$Lambda$ChangeBioActivity$DxhKRheu8pWVyqnQEnlye9rLLUE.INSTANCE);
+        this.fragmentView.setOnTouchListener(ChangeBioActivity$$ExternalSyntheticLambda1.INSTANCE);
         FrameLayout frameLayout = new FrameLayout(context2);
         linearLayout2.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
         EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
@@ -119,11 +119,7 @@ public class ChangeBioActivity extends BaseFragment {
         this.firstNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                return ChangeBioActivity.this.lambda$createView$1$ChangeBioActivity(textView, i, keyEvent);
-            }
-        });
+        this.firstNameField.setOnEditorActionListener(new ChangeBioActivity$$ExternalSyntheticLambda2(this));
         this.firstNameField.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
@@ -162,8 +158,7 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ boolean lambda$createView$1$ChangeBioActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createView$1(TextView textView, int i, KeyEvent keyEvent) {
         View view;
         if (i != 6 || (view = this.doneButton) == null) {
             return false;
@@ -197,82 +192,24 @@ public class ChangeBioActivity extends BaseFragment {
             TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile = new TLRPC$TL_account_updateProfile();
             tLRPC$TL_account_updateProfile.about = replace;
             tLRPC$TL_account_updateProfile.flags |= 4;
-            int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateProfile, new RequestDelegate(alertDialog, userFull, replace, tLRPC$TL_account_updateProfile) {
-                public final /* synthetic */ AlertDialog f$1;
-                public final /* synthetic */ TLRPC$UserFull f$2;
-                public final /* synthetic */ String f$3;
-                public final /* synthetic */ TLRPC$TL_account_updateProfile f$4;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ChangeBioActivity.this.lambda$saveName$4$ChangeBioActivity(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
-                }
-            }, 2);
+            int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateProfile, new ChangeBioActivity$$ExternalSyntheticLambda5(this, alertDialog, userFull, replace, tLRPC$TL_account_updateProfile), 2);
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
-            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener(sendRequest) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onCancel(DialogInterface dialogInterface) {
-                    ChangeBioActivity.this.lambda$saveName$5$ChangeBioActivity(this.f$1, dialogInterface);
-                }
-            });
+            alertDialog.setOnCancelListener(new ChangeBioActivity$$ExternalSyntheticLambda0(this, sendRequest));
             alertDialog.show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveName$4 */
-    public /* synthetic */ void lambda$saveName$4$ChangeBioActivity(AlertDialog alertDialog, TLRPC$UserFull tLRPC$UserFull, String str, TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$saveName$4(AlertDialog alertDialog, TLRPC$UserFull tLRPC$UserFull, String str, TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
-            AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$UserFull, str, (TLRPC$User) tLObject) {
-                public final /* synthetic */ AlertDialog f$1;
-                public final /* synthetic */ TLRPC$UserFull f$2;
-                public final /* synthetic */ String f$3;
-                public final /* synthetic */ TLRPC$User f$4;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
-
-                public final void run() {
-                    ChangeBioActivity.this.lambda$saveName$2$ChangeBioActivity(this.f$1, this.f$2, this.f$3, this.f$4);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChangeBioActivity$$ExternalSyntheticLambda4(this, alertDialog, tLRPC$UserFull, str, (TLRPC$User) tLObject));
             return;
         }
-        AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_account_updateProfile) {
-            public final /* synthetic */ AlertDialog f$1;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-            public final /* synthetic */ TLRPC$TL_account_updateProfile f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ChangeBioActivity.this.lambda$saveName$3$ChangeBioActivity(this.f$1, this.f$2, this.f$3);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ChangeBioActivity$$ExternalSyntheticLambda3(this, alertDialog, tLRPC$TL_error, tLRPC$TL_account_updateProfile));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveName$2 */
-    public /* synthetic */ void lambda$saveName$2$ChangeBioActivity(AlertDialog alertDialog, TLRPC$UserFull tLRPC$UserFull, String str, TLRPC$User tLRPC$User) {
+    public /* synthetic */ void lambda$saveName$2(AlertDialog alertDialog, TLRPC$UserFull tLRPC$UserFull, String str, TLRPC$User tLRPC$User) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -284,8 +221,7 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveName$3 */
-    public /* synthetic */ void lambda$saveName$3$ChangeBioActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile) {
+    public /* synthetic */ void lambda$saveName$3(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -295,8 +231,7 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveName$5 */
-    public /* synthetic */ void lambda$saveName$5$ChangeBioActivity(int i, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$saveName$5(int i, DialogInterface dialogInterface) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(i, true);
     }
 

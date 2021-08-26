@@ -97,11 +97,7 @@ public class AvatarsImageView extends FrameLayout {
         this.transitionProgress = 0.0f;
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
         this.transitionProgressAnimator = ofFloat;
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                AvatarsImageView.this.lambda$commitTransition$0$AvatarsImageView(valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new AvatarsImageView$$ExternalSyntheticLambda0(this));
         this.transitionProgressAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 AvatarsImageView avatarsImageView = AvatarsImageView.this;
@@ -128,8 +124,7 @@ public class AvatarsImageView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$commitTransition$0 */
-    public /* synthetic */ void lambda$commitTransition$0$AvatarsImageView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$commitTransition$0(ValueAnimator valueAnimator) {
         this.transitionProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }

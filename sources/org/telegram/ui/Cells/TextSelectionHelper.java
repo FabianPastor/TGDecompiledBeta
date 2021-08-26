@@ -42,7 +42,6 @@ import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ArticleViewer;
-import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Cells.TextSelectionHelper.SelectableView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -515,19 +514,14 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     public void showHandleViews() {
         if (this.handleViewProgress != 1.0f && this.textSelectionOverlay != null) {
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    TextSelectionHelper.this.lambda$showHandleViews$0$TextSelectionHelper(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new TextSelectionHelper$$ExternalSyntheticLambda0(this));
             ofFloat.setDuration(250);
             ofFloat.start();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showHandleViews$0 */
-    public /* synthetic */ void lambda$showHandleViews$0$TextSelectionHelper(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showHandleViews$0(ValueAnimator valueAnimator) {
         this.handleViewProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.textSelectionOverlay.invalidate();
     }
@@ -568,11 +562,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                     actionBarPopupWindowLayout.setPadding(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f));
                     this.popupLayout.setBackgroundDrawable(this.textSelectionOverlay.getContext().getResources().getDrawable(NUM));
                     this.popupLayout.setAnimationEnabled(false);
-                    this.popupLayout.setOnTouchListener(new View.OnTouchListener() {
-                        public final boolean onTouch(View view, MotionEvent motionEvent) {
-                            return TextSelectionHelper.this.lambda$showActions$1$TextSelectionHelper(view, motionEvent);
-                        }
-                    });
+                    this.popupLayout.setOnTouchListener(new TextSelectionHelper$$ExternalSyntheticLambda2(this));
                     this.popupLayout.setShownFromBotton(false);
                     TextView textView = new TextView(this.textSelectionOverlay.getContext());
                     this.deleteView = textView;
@@ -583,11 +573,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                     this.deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                     this.deleteView.setText(this.textSelectionOverlay.getContext().getString(17039361));
                     this.deleteView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
-                    this.deleteView.setOnClickListener(new View.OnClickListener() {
-                        public final void onClick(View view) {
-                            TextSelectionHelper.this.lambda$showActions$2$TextSelectionHelper(view);
-                        }
-                    });
+                    this.deleteView.setOnClickListener(new TextSelectionHelper$$ExternalSyntheticLambda1(this));
                     this.popupLayout.addView(this.deleteView, LayoutHelper.createFrame(-2, 48.0f));
                     ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                     this.popupWindow = actionBarPopupWindow;
@@ -609,8 +595,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showActions$1 */
-    public /* synthetic */ boolean lambda$showActions$1$TextSelectionHelper(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$showActions$1(View view, MotionEvent motionEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (motionEvent.getActionMasked() != 0 || (actionBarPopupWindow = this.popupWindow) == null || !actionBarPopupWindow.isShowing()) {
             return false;
@@ -620,8 +605,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showActions$2 */
-    public /* synthetic */ void lambda$showActions$2$TextSelectionHelper(View view) {
+    public /* synthetic */ void lambda$showActions$2(View view) {
         copyText();
     }
 
@@ -2082,17 +2066,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 animator.cancel();
             }
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(z) {
-                public final /* synthetic */ boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    TextSelectionHelper.ChatListTextSelectionHelper.this.lambda$onTextSelected$0$TextSelectionHelper$ChatListTextSelectionHelper(this.f$1, valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new TextSelectionHelper$ChatListTextSelectionHelper$$ExternalSyntheticLambda1(this, z));
             ofFloat.setDuration(250);
             ofFloat.start();
             this.animatorSparseArray.put(this.selectedCellId, ofFloat);
@@ -2103,8 +2077,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onTextSelected$0 */
-        public /* synthetic */ void lambda$onTextSelected$0$TextSelectionHelper$ChatListTextSelectionHelper(boolean z, ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$onTextSelected$0(boolean z, ValueAnimator valueAnimator) {
             this.enterProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             TextSelectionHelper<Cell>.TextSelectionOverlay textSelectionOverlay = this.textSelectionOverlay;
             if (textSelectionOverlay != null) {
@@ -2297,18 +2270,8 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 }
                 chatMessageCell.setSelectedBackgroundProgress(0.01f);
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.01f, 1.0f});
-                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(id) {
-                    public final /* synthetic */ int f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        TextSelectionHelper.ChatListTextSelectionHelper.lambda$onExitSelectionMode$1(ChatMessageCell.this, this.f$1, valueAnimator);
-                    }
-                });
-                ofFloat.addListener(new AnimatorListenerAdapter() {
+                ofFloat.addUpdateListener(new TextSelectionHelper$ChatListTextSelectionHelper$$ExternalSyntheticLambda0(chatMessageCell, id));
+                ofFloat.addListener(new AnimatorListenerAdapter(this) {
                     public void onAnimationEnd(Animator animator) {
                         chatMessageCell.setSelectedBackgroundProgress(0.0f);
                     }
@@ -2319,7 +2282,8 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             }
         }
 
-        static /* synthetic */ void lambda$onExitSelectionMode$1(ChatMessageCell chatMessageCell, int i, ValueAnimator valueAnimator) {
+        /* access modifiers changed from: private */
+        public static /* synthetic */ void lambda$onExitSelectionMode$1(ChatMessageCell chatMessageCell, int i, ValueAnimator valueAnimator) {
             float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             if (chatMessageCell.getMessageObject() != null && chatMessageCell.getMessageObject().getId() == i) {
                 chatMessageCell.setSelectedBackgroundProgress(floatValue);

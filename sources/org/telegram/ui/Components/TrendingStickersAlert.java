@@ -21,7 +21,6 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
-import org.telegram.ui.Components.TrendingStickersAlert;
 
 public class TrendingStickersAlert extends BottomSheet {
     private final AlertContainerView alertContainerView;
@@ -103,11 +102,7 @@ public class TrendingStickersAlert extends BottomSheet {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         TrendingStickersLayout trendingStickersLayout = this.layout;
         trendingStickersLayout.getClass();
-        trendingStickersLayout.getThemeDescriptions(arrayList, new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                TrendingStickersLayout.this.updateColors();
-            }
-        });
+        trendingStickersLayout.getThemeDescriptions(arrayList, new TrendingStickersAlert$$ExternalSyntheticLambda0(trendingStickersLayout));
         arrayList.add(new ThemeDescription(this.alertContainerView, 0, (Class[]) null, (Paint) null, new Drawable[]{this.shadowDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
         arrayList.add(new ThemeDescription(this.alertContainerView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_sheet_scrollUp"));
         return arrayList;
@@ -151,11 +146,7 @@ public class TrendingStickersAlert extends BottomSheet {
         /* access modifiers changed from: protected */
         public void onConfigurationChanged(Configuration configuration) {
             super.onConfigurationChanged(configuration);
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    TrendingStickersAlert.AlertContainerView.this.requestLayout();
-                }
-            }, 200);
+            AndroidUtilities.runOnUIThread(new TrendingStickersAlert$AlertContainerView$$ExternalSyntheticLambda1(this), 200);
         }
 
         public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -291,11 +282,7 @@ public class TrendingStickersAlert extends BottomSheet {
                         fArr[1] = f;
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
                         this.statusBarAnimator = ofFloat;
-                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                TrendingStickersAlert.AlertContainerView.this.lambda$setStatusBarVisible$0$TrendingStickersAlert$AlertContainerView(valueAnimator);
-                            }
-                        });
+                        ofFloat.addUpdateListener(new TrendingStickersAlert$AlertContainerView$$ExternalSyntheticLambda0(this));
                         this.statusBarAnimator.setDuration(200);
                     } else {
                         float[] fArr2 = new float[2];
@@ -318,8 +305,7 @@ public class TrendingStickersAlert extends BottomSheet {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$setStatusBarVisible$0 */
-        public /* synthetic */ void lambda$setStatusBarVisible$0$TrendingStickersAlert$AlertContainerView(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$setStatusBarVisible$0(ValueAnimator valueAnimator) {
             this.statusBarAlpha = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             invalidate();
         }

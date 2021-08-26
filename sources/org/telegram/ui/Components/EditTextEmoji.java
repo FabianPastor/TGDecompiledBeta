@@ -15,6 +15,7 @@ import android.text.InputFilter;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
@@ -34,7 +35,6 @@ import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
@@ -191,17 +191,12 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         if (Build.VERSION.SDK_INT >= 21) {
             this.emojiButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
         }
-        this.emojiButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                EditTextEmoji.this.lambda$new$0$EditTextEmoji(view);
-            }
-        });
+        this.emojiButton.setOnClickListener(new EditTextEmoji$$ExternalSyntheticLambda2(this));
         this.emojiButton.setContentDescription(LocaleController.getString("Emoji", NUM));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$EditTextEmoji(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         if (this.emojiButton.isEnabled()) {
             AdjustPanLayoutHelper adjustPanLayoutHelper2 = this.adjustPanLayoutHelper;
             if (adjustPanLayoutHelper2 != null && adjustPanLayoutHelper2.animationInProgress()) {
@@ -358,17 +353,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         }
         int measuredHeight = this.emojiView.getMeasuredHeight();
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, (float) measuredHeight});
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(measuredHeight) {
-            public final /* synthetic */ int f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                EditTextEmoji.this.lambda$hidePopup$1$EditTextEmoji(this.f$1, valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new EditTextEmoji$$ExternalSyntheticLambda1(this, measuredHeight));
         this.isAnimatePopupClosing = true;
         ofFloat.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
@@ -384,8 +369,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$hidePopup$1 */
-    public /* synthetic */ void lambda$hidePopup$1$EditTextEmoji(int i, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$hidePopup$1(int i, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.emojiView.setTranslationY(floatValue);
         bottomPanelTranslationY(floatValue - ((float) i));
@@ -463,11 +447,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             }
             if (!this.keyboardVisible && !z && SharedConfig.smoothKeyboard) {
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{(float) this.emojiPadding, 0.0f});
-                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        EditTextEmoji.this.lambda$showPopup$2$EditTextEmoji(valueAnimator);
-                    }
-                });
+                ofFloat.addUpdateListener(new EditTextEmoji$$ExternalSyntheticLambda0(this));
                 ofFloat.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         EditTextEmoji.this.emojiView.setTranslationY(0.0f);
@@ -506,8 +486,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPopup$2 */
-    public /* synthetic */ void lambda$showPopup$2$EditTextEmoji(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showPopup$2(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.emojiView.setTranslationY(floatValue);
         bottomPanelTranslationY(floatValue);
@@ -526,7 +505,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null);
+            EmojiView emojiView2 = new EmojiView(false, false, this.parentFragment.getParentActivity(), false, (TLRPC$ChatFull) null, (ViewGroup) null);
             this.emojiView = emojiView2;
             emojiView2.setVisibility(8);
             if (AndroidUtilities.isTablet()) {
@@ -539,6 +518,18 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
                 public /* synthetic */ long getDialogId() {
                     return EmojiView.EmojiViewDelegate.CC.$default$getDialogId(this);
+                }
+
+                public /* synthetic */ float getProgressToSearchOpened() {
+                    return EmojiView.EmojiViewDelegate.CC.$default$getProgressToSearchOpened(this);
+                }
+
+                public /* synthetic */ int getThreadId() {
+                    return EmojiView.EmojiViewDelegate.CC.$default$getThreadId(this);
+                }
+
+                public /* synthetic */ void invalidateEnterView() {
+                    EmojiView.EmojiViewDelegate.CC.$default$invalidateEnterView(this);
                 }
 
                 public /* synthetic */ boolean isExpanded() {
@@ -625,11 +616,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditTextEmoji.this.getContext());
                     builder.setTitle(LocaleController.getString("AppName", NUM));
                     builder.setMessage(LocaleController.getString("ClearRecentEmoji", NUM));
-                    builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            EditTextEmoji.AnonymousClass5.this.lambda$onClearEmojiRecent$0$EditTextEmoji$5(dialogInterface, i);
-                        }
-                    });
+                    builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new EditTextEmoji$5$$ExternalSyntheticLambda0(this));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     if (EditTextEmoji.this.parentFragment != null) {
                         EditTextEmoji.this.parentFragment.showDialog(builder.create());
@@ -639,8 +626,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$onClearEmojiRecent$0 */
-                public /* synthetic */ void lambda$onClearEmojiRecent$0$EditTextEmoji$5(DialogInterface dialogInterface, int i) {
+                public /* synthetic */ void lambda$onClearEmojiRecent$0(DialogInterface dialogInterface, int i) {
                     EditTextEmoji.this.emojiView.clearRecentEmoji();
                 }
             });

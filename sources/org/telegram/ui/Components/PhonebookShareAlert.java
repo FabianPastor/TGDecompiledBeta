@@ -38,7 +38,6 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 
@@ -94,135 +93,131 @@ public class PhonebookShareAlert extends BottomSheet {
     }
 
     public class UserCell extends LinearLayout {
-        final /* synthetic */ PhonebookShareAlert this$0;
-
         /* JADX WARNING: Illegal instructions before constructor call */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public UserCell(org.telegram.ui.Components.PhonebookShareAlert r18, android.content.Context r19) {
+        public UserCell(org.telegram.ui.Components.PhonebookShareAlert r17, android.content.Context r18) {
             /*
-                r17 = this;
-                r0 = r17
+                r16 = this;
+                r0 = r16
                 r1 = r18
-                r2 = r19
-                r0.this$0 = r1
-                r0.<init>(r2)
-                r3 = 1
-                r0.setOrientation(r3)
-                java.util.ArrayList r4 = r18.phones
-                int r4 = r4.size()
-                r5 = 0
-                if (r4 != r3) goto L_0x0034
-                java.util.ArrayList r4 = r18.other
-                int r4 = r4.size()
-                if (r4 != 0) goto L_0x0034
-                java.util.ArrayList r4 = r18.phones
-                java.lang.Object r4 = r4.get(r5)
-                org.telegram.messenger.AndroidUtilities$VcardItem r4 = (org.telegram.messenger.AndroidUtilities.VcardItem) r4
-                java.lang.String r4 = r4.getValue(r3)
-                r6 = 0
-                goto L_0x0055
-            L_0x0034:
-                org.telegram.tgnet.TLRPC$User r4 = r18.currentUser
-                org.telegram.tgnet.TLRPC$UserStatus r4 = r4.status
-                if (r4 == 0) goto L_0x0053
-                org.telegram.tgnet.TLRPC$User r4 = r18.currentUser
-                org.telegram.tgnet.TLRPC$UserStatus r4 = r4.status
-                int r4 = r4.expires
-                if (r4 == 0) goto L_0x0053
-                int r4 = r18.currentAccount
-                org.telegram.tgnet.TLRPC$User r6 = r18.currentUser
-                java.lang.String r4 = org.telegram.messenger.LocaleController.formatUserStatus(r4, r6)
-                goto L_0x0054
-            L_0x0053:
+                r0.<init>(r1)
+                r2 = 1
+                r0.setOrientation(r2)
+                java.util.ArrayList r3 = r17.phones
+                int r3 = r3.size()
                 r4 = 0
-            L_0x0054:
-                r6 = 1
-            L_0x0055:
-                org.telegram.ui.Components.AvatarDrawable r7 = new org.telegram.ui.Components.AvatarDrawable
-                r7.<init>()
-                r8 = 1106247680(0x41var_, float:30.0)
+                if (r3 != r2) goto L_0x0030
+                java.util.ArrayList r3 = r17.other
+                int r3 = r3.size()
+                if (r3 != 0) goto L_0x0030
+                java.util.ArrayList r3 = r17.phones
+                java.lang.Object r3 = r3.get(r4)
+                org.telegram.messenger.AndroidUtilities$VcardItem r3 = (org.telegram.messenger.AndroidUtilities.VcardItem) r3
+                java.lang.String r3 = r3.getValue(r2)
+                r5 = 0
+                goto L_0x0051
+            L_0x0030:
+                org.telegram.tgnet.TLRPC$User r3 = r17.currentUser
+                org.telegram.tgnet.TLRPC$UserStatus r3 = r3.status
+                if (r3 == 0) goto L_0x004f
+                org.telegram.tgnet.TLRPC$User r3 = r17.currentUser
+                org.telegram.tgnet.TLRPC$UserStatus r3 = r3.status
+                int r3 = r3.expires
+                if (r3 == 0) goto L_0x004f
+                int r3 = r17.currentAccount
+                org.telegram.tgnet.TLRPC$User r5 = r17.currentUser
+                java.lang.String r3 = org.telegram.messenger.LocaleController.formatUserStatus(r3, r5)
+                goto L_0x0050
+            L_0x004f:
+                r3 = 0
+            L_0x0050:
+                r5 = 1
+            L_0x0051:
+                org.telegram.ui.Components.AvatarDrawable r6 = new org.telegram.ui.Components.AvatarDrawable
+                r6.<init>()
+                r7 = 1106247680(0x41var_, float:30.0)
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                r6.setTextSize(r7)
+                org.telegram.tgnet.TLRPC$User r7 = r17.currentUser
+                r6.setInfo((org.telegram.tgnet.TLRPC$User) r7)
+                org.telegram.ui.Components.BackupImageView r7 = new org.telegram.ui.Components.BackupImageView
+                r7.<init>(r1)
+                r8 = 1109393408(0x42200000, float:40.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                r7.setTextSize(r8)
-                org.telegram.tgnet.TLRPC$User r8 = r18.currentUser
-                r7.setInfo((org.telegram.tgnet.TLRPC$User) r8)
-                org.telegram.ui.Components.BackupImageView r8 = new org.telegram.ui.Components.BackupImageView
-                r8.<init>(r2)
-                r9 = 1109393408(0x42200000, float:40.0)
-                int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-                r8.setRoundRadius(r9)
-                org.telegram.tgnet.TLRPC$User r9 = r18.currentUser
-                r8.setForUserOrChat(r9, r7)
+                r7.setRoundRadius(r8)
+                org.telegram.tgnet.TLRPC$User r8 = r17.currentUser
+                r7.setForUserOrChat(r8, r6)
+                r9 = 80
                 r10 = 80
-                r11 = 80
-                r12 = 49
-                r13 = 0
-                r14 = 32
+                r11 = 49
+                r12 = 0
+                r13 = 32
+                r14 = 0
                 r15 = 0
-                r16 = 0
-                android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16)
-                r0.addView(r8, r7)
-                android.widget.TextView r7 = new android.widget.TextView
-                r7.<init>(r2)
-                java.lang.String r8 = "fonts/rmedium.ttf"
-                android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r8)
-                r7.setTypeface(r8)
-                r8 = 1099431936(0x41880000, float:17.0)
-                r7.setTextSize(r3, r8)
-                java.lang.String r8 = "dialogTextBlack"
-                int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-                r7.setTextColor(r8)
-                r7.setSingleLine(r3)
-                android.text.TextUtils$TruncateAt r8 = android.text.TextUtils.TruncateAt.END
-                r7.setEllipsize(r8)
-                org.telegram.tgnet.TLRPC$User r8 = r18.currentUser
-                java.lang.String r8 = r8.first_name
-                org.telegram.tgnet.TLRPC$User r1 = r18.currentUser
-                java.lang.String r1 = r1.last_name
-                java.lang.String r1 = org.telegram.messenger.ContactsController.formatName(r8, r1)
-                r7.setText(r1)
+                android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15)
+                r0.addView(r7, r6)
+                android.widget.TextView r6 = new android.widget.TextView
+                r6.<init>(r1)
+                java.lang.String r7 = "fonts/rmedium.ttf"
+                android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+                r6.setTypeface(r7)
+                r7 = 1099431936(0x41880000, float:17.0)
+                r6.setTextSize(r2, r7)
+                java.lang.String r7 = "dialogTextBlack"
+                int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+                r6.setTextColor(r7)
+                r6.setSingleLine(r2)
+                android.text.TextUtils$TruncateAt r7 = android.text.TextUtils.TruncateAt.END
+                r6.setEllipsize(r7)
+                org.telegram.tgnet.TLRPC$User r7 = r17.currentUser
+                java.lang.String r7 = r7.first_name
+                org.telegram.tgnet.TLRPC$User r8 = r17.currentUser
+                java.lang.String r8 = r8.last_name
+                java.lang.String r7 = org.telegram.messenger.ContactsController.formatName(r7, r8)
+                r6.setText(r7)
                 r8 = -2
                 r9 = -2
                 r10 = 49
                 r11 = 10
                 r12 = 10
                 r13 = 10
-                r1 = 27
-                if (r4 == 0) goto L_0x00d9
+                r7 = 27
+                if (r3 == 0) goto L_0x00d4
                 r14 = 0
-                goto L_0x00db
-            L_0x00d9:
+                goto L_0x00d6
+            L_0x00d4:
                 r14 = 27
-            L_0x00db:
-                android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
-                r0.addView(r7, r5)
-                if (r4 == 0) goto L_0x011b
-                android.widget.TextView r5 = new android.widget.TextView
-                r5.<init>(r2)
-                r2 = 1096810496(0x41600000, float:14.0)
-                r5.setTextSize(r3, r2)
-                java.lang.String r2 = "dialogTextGray3"
-                int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-                r5.setTextColor(r2)
-                r5.setSingleLine(r3)
-                android.text.TextUtils$TruncateAt r2 = android.text.TextUtils.TruncateAt.END
-                r5.setEllipsize(r2)
-                r5.setText(r4)
-                r7 = -2
+            L_0x00d6:
+                android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
+                r0.addView(r6, r4)
+                if (r3 == 0) goto L_0x0116
+                android.widget.TextView r4 = new android.widget.TextView
+                r4.<init>(r1)
+                r1 = 1096810496(0x41600000, float:14.0)
+                r4.setTextSize(r2, r1)
+                java.lang.String r1 = "dialogTextGray3"
+                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+                r4.setTextColor(r1)
+                r4.setSingleLine(r2)
+                android.text.TextUtils$TruncateAt r1 = android.text.TextUtils.TruncateAt.END
+                r4.setEllipsize(r1)
+                r4.setText(r3)
                 r8 = -2
-                r9 = 49
-                r10 = 10
-                r11 = 3
-                r12 = 10
-                if (r6 == 0) goto L_0x0110
-                r13 = 27
-                goto L_0x0114
-            L_0x0110:
-                r1 = 11
-                r13 = 11
-            L_0x0114:
-                android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13)
-                r0.addView(r5, r1)
-            L_0x011b:
+                r9 = -2
+                r10 = 49
+                r11 = 10
+                r12 = 3
+                r13 = 10
+                if (r5 == 0) goto L_0x010b
+                r14 = 27
+                goto L_0x010f
+            L_0x010b:
+                r7 = 11
+                r14 = 11
+            L_0x010f:
+                android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
+                r0.addView(r4, r1)
+            L_0x0116:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhonebookShareAlert.UserCell.<init>(org.telegram.ui.Components.PhonebookShareAlert, android.content.Context):void");
@@ -234,225 +229,222 @@ public class PhonebookShareAlert extends BottomSheet {
         private ImageView imageView;
         private boolean needDivider;
         private TextView textView;
-        final /* synthetic */ PhonebookShareAlert this$0;
         private TextView valueTextView;
 
         /* JADX WARNING: Illegal instructions before constructor call */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public TextCheckBoxCell(org.telegram.ui.Components.PhonebookShareAlert r19, android.content.Context r20) {
+        public TextCheckBoxCell(org.telegram.ui.Components.PhonebookShareAlert r18, android.content.Context r19) {
             /*
-                r18 = this;
-                r0 = r18
+                r17 = this;
+                r0 = r17
                 r1 = r19
-                r2 = r20
-                r0.this$0 = r1
-                r0.<init>(r2)
-                android.widget.TextView r3 = new android.widget.TextView
-                r3.<init>(r2)
-                r0.textView = r3
-                java.lang.String r4 = "windowBackgroundWhiteBlackText"
-                int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-                r3.setTextColor(r4)
-                android.widget.TextView r3 = r0.textView
-                r4 = 1
-                r5 = 1098907648(0x41800000, float:16.0)
-                r3.setTextSize(r4, r5)
-                android.widget.TextView r3 = r0.textView
-                r5 = 0
-                r3.setSingleLine(r5)
-                android.widget.TextView r3 = r0.textView
-                boolean r5 = org.telegram.messenger.LocaleController.isRTL
-                r6 = 5
-                r7 = 3
-                if (r5 == 0) goto L_0x0033
-                r5 = 5
-                goto L_0x0034
-            L_0x0033:
-                r5 = 3
-            L_0x0034:
-                r5 = r5 | 48
-                r3.setGravity(r5)
-                android.widget.TextView r3 = r0.textView
-                android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END
-                r3.setEllipsize(r5)
-                android.widget.TextView r3 = r0.textView
-                r8 = -1
-                r9 = -1082130432(0xffffffffbvar_, float:-1.0)
-                boolean r5 = org.telegram.messenger.LocaleController.isRTL
-                if (r5 == 0) goto L_0x004b
-                r10 = 5
-                goto L_0x004c
-            L_0x004b:
-                r10 = 3
-            L_0x004c:
-                r10 = r10 | 48
-                r15 = 17
-                r16 = 64
-                r17 = 1116733440(0x42900000, float:72.0)
-                if (r5 == 0) goto L_0x0064
-                boolean r5 = r19.isImport
-                if (r5 == 0) goto L_0x005f
-                r5 = 17
-                goto L_0x0061
-            L_0x005f:
-                r5 = 64
-            L_0x0061:
-                float r5 = (float) r5
-                r11 = r5
-                goto L_0x0066
-            L_0x0064:
-                r11 = 1116733440(0x42900000, float:72.0)
-            L_0x0066:
-                r12 = 1092616192(0x41200000, float:10.0)
-                boolean r5 = org.telegram.messenger.LocaleController.isRTL
-                if (r5 == 0) goto L_0x006f
-                r13 = 1116733440(0x42900000, float:72.0)
-                goto L_0x007c
-            L_0x006f:
-                boolean r5 = r19.isImport
-                if (r5 == 0) goto L_0x0078
-                r5 = 17
-                goto L_0x007a
-            L_0x0078:
-                r5 = 64
-            L_0x007a:
-                float r5 = (float) r5
-                r13 = r5
-            L_0x007c:
-                r14 = 0
-                android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
-                r0.addView(r3, r5)
-                android.widget.TextView r3 = new android.widget.TextView
-                r3.<init>(r2)
-                r0.valueTextView = r3
-                java.lang.String r5 = "windowBackgroundWhiteGrayText2"
-                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-                r3.setTextColor(r5)
-                android.widget.TextView r3 = r0.valueTextView
-                r5 = 1095761920(0x41500000, float:13.0)
-                r3.setTextSize(r4, r5)
-                android.widget.TextView r3 = r0.valueTextView
-                r3.setLines(r4)
-                android.widget.TextView r3 = r0.valueTextView
-                r3.setMaxLines(r4)
-                android.widget.TextView r3 = r0.valueTextView
-                r3.setSingleLine(r4)
-                android.widget.TextView r3 = r0.valueTextView
+                r0.<init>(r1)
+                android.widget.TextView r2 = new android.widget.TextView
+                r2.<init>(r1)
+                r0.textView = r2
+                java.lang.String r3 = "windowBackgroundWhiteBlackText"
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+                r2.setTextColor(r3)
+                android.widget.TextView r2 = r0.textView
+                r3 = 1
+                r4 = 1098907648(0x41800000, float:16.0)
+                r2.setTextSize(r3, r4)
+                android.widget.TextView r2 = r0.textView
+                r4 = 0
+                r2.setSingleLine(r4)
+                android.widget.TextView r2 = r0.textView
                 boolean r4 = org.telegram.messenger.LocaleController.isRTL
-                if (r4 == 0) goto L_0x00b2
+                r5 = 5
+                r6 = 3
+                if (r4 == 0) goto L_0x002f
                 r4 = 5
-                goto L_0x00b3
-            L_0x00b2:
+                goto L_0x0030
+            L_0x002f:
                 r4 = 3
-            L_0x00b3:
-                r3.setGravity(r4)
-                android.widget.TextView r3 = r0.valueTextView
-                r8 = -2
-                r9 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            L_0x0030:
+                r4 = r4 | 48
+                r2.setGravity(r4)
+                android.widget.TextView r2 = r0.textView
+                android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END
+                r2.setEllipsize(r4)
+                android.widget.TextView r2 = r0.textView
+                r7 = -1
+                r8 = -1082130432(0xffffffffbvar_, float:-1.0)
                 boolean r4 = org.telegram.messenger.LocaleController.isRTL
-                if (r4 == 0) goto L_0x00c1
-                r10 = 5
-                goto L_0x00c2
-            L_0x00c1:
-                r10 = 3
-            L_0x00c2:
-                if (r4 == 0) goto L_0x00d2
-                boolean r4 = r19.isImport
-                if (r4 == 0) goto L_0x00cd
-                r4 = 17
-                goto L_0x00cf
-            L_0x00cd:
-                r4 = 64
-            L_0x00cf:
-                float r4 = (float) r4
-                r11 = r4
-                goto L_0x00d4
-            L_0x00d2:
-                r11 = 1116733440(0x42900000, float:72.0)
-            L_0x00d4:
-                r12 = 1108082688(0x420CLASSNAME, float:35.0)
-                boolean r4 = org.telegram.messenger.LocaleController.isRTL
-                if (r4 == 0) goto L_0x00dd
-                r13 = 1116733440(0x42900000, float:72.0)
-                goto L_0x00e8
-            L_0x00dd:
-                boolean r4 = r19.isImport
-                if (r4 == 0) goto L_0x00e4
-                goto L_0x00e6
-            L_0x00e4:
+                if (r4 == 0) goto L_0x0047
+                r9 = 5
+                goto L_0x0048
+            L_0x0047:
+                r9 = 3
+            L_0x0048:
+                r9 = r9 | 48
+                r14 = 17
                 r15 = 64
-            L_0x00e6:
-                float r4 = (float) r15
-                r13 = r4
-            L_0x00e8:
-                r14 = 0
-                android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
-                r0.addView(r3, r4)
-                android.widget.ImageView r3 = new android.widget.ImageView
-                r3.<init>(r2)
-                r0.imageView = r3
-                android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
-                r3.setScaleType(r4)
-                android.widget.ImageView r3 = r0.imageView
-                android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
-                java.lang.String r5 = "windowBackgroundWhiteGrayIcon"
-                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-                android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
-                r4.<init>(r5, r8)
-                r3.setColorFilter(r4)
-                android.widget.ImageView r3 = r0.imageView
-                r8 = -2
-                r9 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                r16 = 1116733440(0x42900000, float:72.0)
+                if (r4 == 0) goto L_0x0060
+                boolean r4 = r18.isImport
+                if (r4 == 0) goto L_0x005b
+                r4 = 17
+                goto L_0x005d
+            L_0x005b:
+                r4 = 64
+            L_0x005d:
+                float r4 = (float) r4
+                r10 = r4
+                goto L_0x0062
+            L_0x0060:
+                r10 = 1116733440(0x42900000, float:72.0)
+            L_0x0062:
+                r11 = 1092616192(0x41200000, float:10.0)
                 boolean r4 = org.telegram.messenger.LocaleController.isRTL
-                if (r4 == 0) goto L_0x0119
-                r5 = 5
-                goto L_0x011a
-            L_0x0119:
-                r5 = 3
-            L_0x011a:
-                r10 = r5 | 48
-                r5 = 0
+                if (r4 == 0) goto L_0x006b
+                r12 = 1116733440(0x42900000, float:72.0)
+                goto L_0x0078
+            L_0x006b:
+                boolean r4 = r18.isImport
+                if (r4 == 0) goto L_0x0074
+                r4 = 17
+                goto L_0x0076
+            L_0x0074:
+                r4 = 64
+            L_0x0076:
+                float r4 = (float) r4
+                r12 = r4
+            L_0x0078:
+                r13 = 0
+                android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
+                r0.addView(r2, r4)
+                android.widget.TextView r2 = new android.widget.TextView
+                r2.<init>(r1)
+                r0.valueTextView = r2
+                java.lang.String r4 = "windowBackgroundWhiteGrayText2"
+                int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+                r2.setTextColor(r4)
+                android.widget.TextView r2 = r0.valueTextView
+                r4 = 1095761920(0x41500000, float:13.0)
+                r2.setTextSize(r3, r4)
+                android.widget.TextView r2 = r0.valueTextView
+                r2.setLines(r3)
+                android.widget.TextView r2 = r0.valueTextView
+                r2.setMaxLines(r3)
+                android.widget.TextView r2 = r0.valueTextView
+                r2.setSingleLine(r3)
+                android.widget.TextView r2 = r0.valueTextView
+                boolean r3 = org.telegram.messenger.LocaleController.isRTL
+                if (r3 == 0) goto L_0x00ae
+                r3 = 5
+                goto L_0x00af
+            L_0x00ae:
+                r3 = 3
+            L_0x00af:
+                r2.setGravity(r3)
+                android.widget.TextView r2 = r0.valueTextView
+                r7 = -2
+                r8 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                boolean r3 = org.telegram.messenger.LocaleController.isRTL
+                if (r3 == 0) goto L_0x00bd
+                r9 = 5
+                goto L_0x00be
+            L_0x00bd:
+                r9 = 3
+            L_0x00be:
+                if (r3 == 0) goto L_0x00ce
+                boolean r3 = r18.isImport
+                if (r3 == 0) goto L_0x00c9
+                r3 = 17
+                goto L_0x00cb
+            L_0x00c9:
+                r3 = 64
+            L_0x00cb:
+                float r3 = (float) r3
+                r10 = r3
+                goto L_0x00d0
+            L_0x00ce:
+                r10 = 1116733440(0x42900000, float:72.0)
+            L_0x00d0:
+                r11 = 1108082688(0x420CLASSNAME, float:35.0)
+                boolean r3 = org.telegram.messenger.LocaleController.isRTL
+                if (r3 == 0) goto L_0x00d9
+                r12 = 1116733440(0x42900000, float:72.0)
+                goto L_0x00e4
+            L_0x00d9:
+                boolean r3 = r18.isImport
+                if (r3 == 0) goto L_0x00e0
+                goto L_0x00e2
+            L_0x00e0:
+                r14 = 64
+            L_0x00e2:
+                float r3 = (float) r14
+                r12 = r3
+            L_0x00e4:
+                r13 = 0
+                android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
+                r0.addView(r2, r3)
+                android.widget.ImageView r2 = new android.widget.ImageView
+                r2.<init>(r1)
+                r0.imageView = r2
+                android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
+                r2.setScaleType(r3)
+                android.widget.ImageView r2 = r0.imageView
+                android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
+                java.lang.String r4 = "windowBackgroundWhiteGrayIcon"
+                int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+                android.graphics.PorterDuff$Mode r7 = android.graphics.PorterDuff.Mode.MULTIPLY
+                r3.<init>(r4, r7)
+                r2.setColorFilter(r3)
+                android.widget.ImageView r2 = r0.imageView
+                r7 = -2
+                r8 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                boolean r3 = org.telegram.messenger.LocaleController.isRTL
+                if (r3 == 0) goto L_0x0115
+                r4 = 5
+                goto L_0x0116
+            L_0x0115:
+                r4 = 3
+            L_0x0116:
+                r9 = r4 | 48
+                r4 = 0
+                r10 = 1101004800(0x41a00000, float:20.0)
+                if (r3 == 0) goto L_0x011f
+                r11 = 0
+                goto L_0x0121
+            L_0x011f:
                 r11 = 1101004800(0x41a00000, float:20.0)
-                if (r4 == 0) goto L_0x0123
-                r12 = 0
-                goto L_0x0125
-            L_0x0123:
+            L_0x0121:
                 r12 = 1101004800(0x41a00000, float:20.0)
-            L_0x0125:
-                r13 = 1101004800(0x41a00000, float:20.0)
-                if (r4 == 0) goto L_0x012b
-                r5 = 1101004800(0x41a00000, float:20.0)
-            L_0x012b:
-                r14 = 0
+                if (r3 == 0) goto L_0x0127
+                r4 = 1101004800(0x41a00000, float:20.0)
+            L_0x0127:
+                r13 = 0
+                r10 = r11
                 r11 = r12
-                r12 = r13
-                r13 = r5
-                android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
-                r0.addView(r3, r4)
-                boolean r1 = r19.isImport
-                if (r1 != 0) goto L_0x0166
-                org.telegram.ui.Components.Switch r1 = new org.telegram.ui.Components.Switch
-                r1.<init>(r2)
-                r0.checkBox = r1
-                java.lang.String r2 = "switchTrack"
+                r12 = r4
+                android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
+                r0.addView(r2, r3)
+                boolean r2 = r18.isImport
+                if (r2 != 0) goto L_0x0162
+                org.telegram.ui.Components.Switch r2 = new org.telegram.ui.Components.Switch
+                r2.<init>(r1)
+                r0.checkBox = r2
+                java.lang.String r1 = "switchTrack"
                 java.lang.String r3 = "switchTrackChecked"
                 java.lang.String r4 = "windowBackgroundWhite"
-                r1.setColors(r2, r3, r4, r4)
+                r2.setColors(r1, r3, r4, r4)
                 org.telegram.ui.Components.Switch r1 = r0.checkBox
-                r8 = 37
-                r9 = 1109393408(0x42200000, float:40.0)
+                r7 = 37
+                r8 = 1109393408(0x42200000, float:40.0)
                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                if (r2 == 0) goto L_0x0157
-                r6 = 3
-            L_0x0157:
-                r10 = r6 | 16
-                r11 = 1102053376(0x41b00000, float:22.0)
-                r12 = 0
-                r13 = 1102053376(0x41b00000, float:22.0)
-                r14 = 0
-                android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
+                if (r2 == 0) goto L_0x0153
+                r5 = 3
+            L_0x0153:
+                r9 = r5 | 16
+                r10 = 1102053376(0x41b00000, float:22.0)
+                r11 = 0
+                r12 = 1102053376(0x41b00000, float:22.0)
+                r13 = 0
+                android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
                 r0.addView(r1, r2)
-            L_0x0166:
+            L_0x0162:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhonebookShareAlert.TextCheckBoxCell.<init>(org.telegram.ui.Components.PhonebookShareAlert, android.content.Context):void");
@@ -731,8 +723,8 @@ public class PhonebookShareAlert extends BottomSheet {
             android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createScroll(r8, r8, r7)
             r3.addView((android.view.View) r6, (android.view.ViewGroup.LayoutParams) r7)
             androidx.core.widget.NestedScrollView r3 = r0.scrollView
-            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$oOQ71v9aVIC_vtHhWE2xbFy9JvM r6 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$oOQ71v9aVIC_vtHhWE2xbFy9JvM
-            r6.<init>()
+            org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda4 r6 = new org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda4
+            r6.<init>(r0)
             r3.setOnScrollChangeListener(r6)
             org.telegram.ui.Components.PhonebookShareAlert$ListAdapter r3 = r0.listAdapter
             int r3 = r3.getItemCount()
@@ -757,11 +749,11 @@ public class PhonebookShareAlert extends BottomSheet {
         L_0x01c5:
             android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r4)
             r7.setBackgroundDrawable(r9)
-            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$o6UUiUcuxgbZ9ViFHXa2xYmtVbI r9 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$o6UUiUcuxgbZ9ViFHXa2xYmtVbI
-            r9.<init>(r6, r7)
+            org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda2 r9 = new org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda2
+            r9.<init>(r0, r6, r7)
             r7.setOnClickListener(r9)
-            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$uMgz-fwLgAOcnO1_Ret_ysSyTyI r9 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$uMgz-fwLgAOcnO1_Ret_ysSyTyI
-            r9.<init>(r6, r1)
+            org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda3 r9 = new org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda3
+            r9.<init>(r0, r6, r1)
             r7.setOnLongClickListener(r9)
         L_0x01dc:
             int r6 = r6 + 1
@@ -774,7 +766,7 @@ public class PhonebookShareAlert extends BottomSheet {
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r3.setBackgroundColor(r6)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            r6 = 2131165463(0x7var_, float:1.7945144E38)
+            r6 = 2131165468(0x7var_c, float:1.7945154E38)
             r3.setBackButtonImage(r6)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             java.lang.String r6 = "dialogTextBlack"
@@ -795,7 +787,7 @@ public class PhonebookShareAlert extends BottomSheet {
             boolean r3 = r0.isImport
             r7 = 2131624200(0x7f0e0108, float:1.8875573E38)
             java.lang.String r9 = "AddContactPhonebookTitle"
-            r10 = 2131627514(0x7f0e0dfa, float:1.8882295E38)
+            r10 = 2131627534(0x7f0e0e0e, float:1.8882335E38)
             java.lang.String r11 = "ShareContactTitle"
             if (r3 == 0) goto L_0x0239
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
@@ -913,8 +905,8 @@ public class PhonebookShareAlert extends BottomSheet {
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
             r2.addView(r1, r3)
             android.widget.TextView r1 = r0.buttonTextView
-            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$7Qjf9Nj11gjKRkxpgMMh3cQEq1k r2 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$7Qjf9Nj11gjKRkxpgMMh3cQEq1k
-            r2.<init>()
+            org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda1
+            r2.<init>(r0)
             r1.setOnClickListener(r2)
             return
         */
@@ -922,14 +914,12 @@ public class PhonebookShareAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$PhonebookShareAlert(NestedScrollView nestedScrollView, int i, int i2, int i3, int i4) {
+    public /* synthetic */ void lambda$new$0(NestedScrollView nestedScrollView, int i, int i2, int i3, int i4) {
         updateLayout(!this.inLayout);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$PhonebookShareAlert(int i, View view, View view2) {
+    public /* synthetic */ void lambda$new$2(int i, View view, View view2) {
         AndroidUtilities.VcardItem vcardItem;
         int i2 = this.phoneStartRow;
         if (i < i2 || i >= this.phoneEndRow) {
@@ -960,17 +950,7 @@ public class PhonebookShareAlert extends BottomSheet {
                     Browser.openUrl((Context) this.parentFragment.getParentActivity(), value);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentFragment.getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(vcardItem) {
-                        public final /* synthetic */ AndroidUtilities.VcardItem f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            PhonebookShareAlert.this.lambda$new$1$PhonebookShareAlert(this.f$1, dialogInterface, i);
-                        }
-                    });
+                    builder.setItems(new CharSequence[]{LocaleController.getString("Copy", NUM)}, new PhonebookShareAlert$$ExternalSyntheticLambda0(this, vcardItem));
                     builder.show();
                 }
             } else {
@@ -1001,8 +981,7 @@ public class PhonebookShareAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$PhonebookShareAlert(AndroidUtilities.VcardItem vcardItem, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$new$1(AndroidUtilities.VcardItem vcardItem, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", vcardItem.getValue(false)));
@@ -1014,8 +993,7 @@ public class PhonebookShareAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ boolean lambda$new$3$PhonebookShareAlert(int i, Context context, View view) {
+    public /* synthetic */ boolean lambda$new$3(int i, Context context, View view) {
         AndroidUtilities.VcardItem vcardItem;
         int i2 = this.phoneStartRow;
         if (i < i2 || i >= this.phoneEndRow) {
@@ -1051,8 +1029,7 @@ public class PhonebookShareAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$5 */
-    public /* synthetic */ void lambda$new$5$PhonebookShareAlert(View view) {
+    public /* synthetic */ void lambda$new$5(View view) {
         StringBuilder sb;
         if (this.isImport) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -1361,16 +1338,11 @@ public class PhonebookShareAlert extends BottomSheet {
             dismiss();
             return;
         }
-        AlertsCreator.createScheduleDatePickerDialog(getContext(), ((ChatActivity) this.parentFragment).getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
-            public final void didSelectDate(boolean z, int i) {
-                PhonebookShareAlert.this.lambda$new$4$PhonebookShareAlert(z, i);
-            }
-        });
+        AlertsCreator.createScheduleDatePickerDialog(getContext(), ((ChatActivity) this.parentFragment).getDialogId(), new PhonebookShareAlert$$ExternalSyntheticLambda5(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$PhonebookShareAlert(boolean z, int i) {
+    public /* synthetic */ void lambda$new$4(boolean z, int i) {
         this.delegate.didSelectContact(this.currentUser, z, i);
         dismiss();
     }
@@ -1378,7 +1350,7 @@ public class PhonebookShareAlert extends BottomSheet {
     /* access modifiers changed from: protected */
     public void onStart() {
         super.onStart();
-        Bulletin.addDelegate((FrameLayout) this.containerView, (Bulletin.Delegate) new Bulletin.Delegate() {
+        Bulletin.addDelegate((FrameLayout) this.containerView, (Bulletin.Delegate) new Bulletin.Delegate(this) {
             public /* synthetic */ void onHide(Bulletin bulletin) {
                 Bulletin.Delegate.CC.$default$onHide(this, bulletin);
             }
@@ -1539,26 +1511,14 @@ public class PhonebookShareAlert extends BottomSheet {
 
         public void onBindViewHolder(View view, int i, int i2) {
             AndroidUtilities.VcardItem vcardItem;
+            int i3;
             boolean z = true;
             if (i2 == 1) {
                 TextCheckBoxCell textCheckBoxCell = (TextCheckBoxCell) view;
-                int i3 = NUM;
                 if (i < PhonebookShareAlert.this.phoneStartRow || i >= PhonebookShareAlert.this.phoneEndRow) {
                     vcardItem = (AndroidUtilities.VcardItem) PhonebookShareAlert.this.other.get(i - PhonebookShareAlert.this.vcardStartRow);
                     int i4 = vcardItem.type;
-                    if (i4 == 1) {
-                        i3 = NUM;
-                    } else if (i4 == 2) {
-                        i3 = NUM;
-                    } else if (i4 == 3) {
-                        i3 = NUM;
-                    } else if (i4 == 4) {
-                        i3 = NUM;
-                    } else if (i4 == 5) {
-                        i3 = NUM;
-                    } else if (i4 == 6) {
-                        i3 = "ORG".equalsIgnoreCase(vcardItem.getRawType(true)) ? NUM : NUM;
-                    }
+                    i3 = i4 == 1 ? NUM : i4 == 2 ? NUM : i4 == 3 ? NUM : i4 == 4 ? NUM : i4 == 5 ? NUM : i4 == 6 ? "ORG".equalsIgnoreCase(vcardItem.getRawType(true)) ? NUM : NUM : NUM;
                 } else {
                     vcardItem = (AndroidUtilities.VcardItem) PhonebookShareAlert.this.phones.get(i - PhonebookShareAlert.this.phoneStartRow);
                     i3 = NUM;

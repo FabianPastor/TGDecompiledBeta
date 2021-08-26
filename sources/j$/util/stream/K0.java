@@ -1,21 +1,22 @@
 package j$.util.stream;
 
-import j$.util.function.C;
-import j$.util.function.CLASSNAMEh;
-
-public final /* synthetic */ class K0 implements C {
-    public final /* synthetic */ A2 a;
-
-    public /* synthetic */ K0(A2 a2) {
-        this.a = a2;
+abstract class K0 extends L0 {
+    K0(CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i) {
+        super(cVar, i);
     }
 
-    public final void accept(long j) {
-        this.a.accept(j);
+    /* access modifiers changed from: package-private */
+    public final boolean G0() {
+        return false;
     }
 
-    public C f(C c) {
-        c.getClass();
-        return new CLASSNAMEh(this, c);
+    public /* bridge */ /* synthetic */ M0 parallel() {
+        parallel();
+        return this;
+    }
+
+    public /* bridge */ /* synthetic */ M0 sequential() {
+        sequential();
+        return this;
     }
 }

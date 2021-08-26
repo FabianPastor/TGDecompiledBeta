@@ -196,24 +196,11 @@ public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Ca
         if (i3 == 0 || i3 == 180) {
             i = i2;
         }
-        postOrRun(new Runnable(i4, i) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ int f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                SurfaceViewRenderer.this.lambda$onFrameResolutionChanged$0$SurfaceViewRenderer(this.f$1, this.f$2);
-            }
-        });
+        postOrRun(new SurfaceViewRenderer$$ExternalSyntheticLambda0(this, i4, i));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onFrameResolutionChanged$0 */
-    public /* synthetic */ void lambda$onFrameResolutionChanged$0$SurfaceViewRenderer(int i, int i2) {
+    public /* synthetic */ void lambda$onFrameResolutionChanged$0(int i, int i2) {
         this.rotatedFrameWidth = i;
         this.rotatedFrameHeight = i2;
         updateSurfaceSize();

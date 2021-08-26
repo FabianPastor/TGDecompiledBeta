@@ -91,11 +91,7 @@ public class ActionBarMenu extends LinearLayout {
             }
             addView(actionBarMenuItem, new LinearLayout.LayoutParams(i4, -1));
         }
-        actionBarMenuItem.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ActionBarMenu.this.lambda$addItem$0$ActionBarMenu(view);
-            }
-        });
+        actionBarMenuItem.setOnClickListener(new ActionBarMenu$$ExternalSyntheticLambda0(this));
         if (charSequence2 != null) {
             actionBarMenuItem.setContentDescription(charSequence2);
         }
@@ -103,8 +99,7 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addItem$0 */
-    public /* synthetic */ void lambda$addItem$0$ActionBarMenu(View view) {
+    public /* synthetic */ void lambda$addItem$0(View view) {
         ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) view;
         if (actionBarMenuItem.hasSubMenu()) {
             if (this.parentActionBar.actionBarMenuOnItemClick.canOpenMenu()) {

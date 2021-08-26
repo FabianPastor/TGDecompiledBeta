@@ -109,11 +109,7 @@ public class PlayingGameDrawable extends StatusDrawable {
         if (!NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
             update();
         } else {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    PlayingGameDrawable.this.checkUpdate();
-                }
-            }, 100);
+            AndroidUtilities.runOnUIThread(new PlayingGameDrawable$$ExternalSyntheticLambda0(this), 100);
         }
     }
 

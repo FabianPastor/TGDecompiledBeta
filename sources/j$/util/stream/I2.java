@@ -1,55 +1,66 @@
 package j$.util.stream;
 
-import j$.util.stream.S2;
-import java.util.Arrays;
+import j$.util.Optional;
+import j$.util.function.CLASSNAMEb;
+import j$.util.function.Consumer;
 
-final class I2 extends E2 {
-    private S2.d c;
+class I2 implements T2 {
+    private boolean a;
+    private Object b;
+    final /* synthetic */ CLASSNAMEb c;
 
-    I2(A2 a2) {
-        super(a2);
+    I2(CLASSNAMEb bVar) {
+        this.c = bVar;
     }
 
-    public void accept(long j) {
-        this.c.accept(j);
+    public /* synthetic */ void accept(double d) {
+        CLASSNAMEp1.f(this);
+        throw null;
     }
 
-    public void l() {
-        long[] jArr = (long[]) this.c.e();
-        Arrays.sort(jArr);
-        this.a.m((long) jArr.length);
-        int i = 0;
-        if (!this.b) {
-            int length = jArr.length;
-            while (i < length) {
-                this.a.accept(jArr[i]);
-                i++;
-            }
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEp1.d(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEp1.e(this);
+        throw null;
+    }
+
+    public void accept(Object obj) {
+        if (this.a) {
+            this.a = false;
         } else {
-            int length2 = jArr.length;
-            while (i < length2) {
-                long j = jArr[i];
-                if (this.a.o()) {
-                    break;
-                }
-                this.a.accept(j);
-                i++;
-            }
+            obj = this.c.apply(this.b, obj);
         }
-        this.a.l();
+        this.b = obj;
     }
 
-    public void m(long j) {
-        S2.d dVar;
-        if (j < NUM) {
-            if (j > 0) {
-                int i = (int) j;
-            } else {
-                dVar = new S2.d();
-            }
-            this.c = dVar;
-            return;
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    public Object get() {
+        return this.a ? Optional.empty() : Optional.of(this.b);
+    }
+
+    public void h(T2 t2) {
+        I2 i2 = (I2) t2;
+        if (!i2.a) {
+            accept(i2.b);
         }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = true;
+        this.b = null;
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

@@ -15,10 +15,8 @@ import android.view.Surface;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.webrtc.Camera2Session;
 import org.webrtc.CameraEnumerationAndroid;
 import org.webrtc.CameraSession;
-import org.webrtc.VideoSink;
 
 @TargetApi(21)
 class Camera2Session implements CameraSession {
@@ -154,15 +152,7 @@ class Camera2Session implements CameraSession {
                 chooseFocusMode(createCaptureRequest);
                 createCaptureRequest.addTarget(Camera2Session.this.surface);
                 cameraCaptureSession.setRepeatingRequest(createCaptureRequest.build(), new CameraCaptureCallback(), Camera2Session.this.cameraThreadHandler);
-                Camera2Session.this.surfaceTextureHelper.startListening(new VideoSink() {
-                    public final void onFrame(VideoFrame videoFrame) {
-                        Camera2Session.CaptureSessionCallback.this.lambda$onConfigured$0$Camera2Session$CaptureSessionCallback(videoFrame);
-                    }
-
-                    public /* synthetic */ void setParentSink(VideoSink videoSink) {
-                        VideoSink.CC.$default$setParentSink(this, videoSink);
-                    }
-                });
+                Camera2Session.this.surfaceTextureHelper.startListening(new Camera2Session$CaptureSessionCallback$$ExternalSyntheticLambda0(this));
                 Logging.d("Camera2Session", "Camera device successfully started.");
                 Camera2Session.this.callback.onDone(Camera2Session.this);
             } catch (CameraAccessException e) {
@@ -172,8 +162,7 @@ class Camera2Session implements CameraSession {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onConfigured$0 */
-        public /* synthetic */ void lambda$onConfigured$0$Camera2Session$CaptureSessionCallback(VideoFrame videoFrame) {
+        public /* synthetic */ void lambda$onConfigured$0(VideoFrame videoFrame) {
             Camera2Session.this.checkIsOnCameraThread();
             if (Camera2Session.this.state != SessionState.RUNNING) {
                 Logging.d("Camera2Session", "Texture frame captured but camera is no longer running.");

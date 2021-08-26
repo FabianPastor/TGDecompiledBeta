@@ -1,7 +1,6 @@
 package org.telegram.messenger;
 
 import android.text.TextUtils;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.MessageClient;
@@ -120,17 +119,17 @@ public class WearDataLayerListenerService extends WearableListenerService {
             r6.<init>(r3)     // Catch:{ Exception -> 0x0249 }
             boolean r3 = r4.exists()     // Catch:{ Exception -> 0x0249 }
             if (r3 != 0) goto L_0x00bd
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$8U0-_yHRCazmJqUiYuBHLzQc1Zw r3 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$8U0-_yHRCazmJqUiYuBHLzQc1Zw     // Catch:{ Exception -> 0x0249 }
+            org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda7 r3 = new org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda7     // Catch:{ Exception -> 0x0249 }
             r3.<init>(r4, r6)     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$ydGZBP8a_DgE_oUlcF-P734PK4E r7 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$ydGZBP8a_DgE_oUlcF-P734PK4E     // Catch:{ Exception -> 0x0249 }
-            r7.<init>(r3, r2)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda6 r7 = new org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda6     // Catch:{ Exception -> 0x0249 }
+            r7.<init>(r11, r3, r2)     // Catch:{ Exception -> 0x0249 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)     // Catch:{ Exception -> 0x0249 }
             r7 = 10
             java.util.concurrent.TimeUnit r2 = java.util.concurrent.TimeUnit.SECONDS     // Catch:{ Exception -> 0x00b5 }
             r6.await(r7, r2)     // Catch:{ Exception -> 0x00b5 }
         L_0x00b5:
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$-E3pdqIpzem9HMQdYOOW1Pr-JLY r2 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$-E3pdqIpzem9HMQdYOOW1Pr-JLY     // Catch:{ Exception -> 0x0249 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda4 r2 = new org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda4     // Catch:{ Exception -> 0x0249 }
+            r2.<init>(r11, r3)     // Catch:{ Exception -> 0x0249 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x0249 }
         L_0x00bd:
             boolean r2 = r4.exists()     // Catch:{ Exception -> 0x0249 }
@@ -175,17 +174,17 @@ public class WearDataLayerListenerService extends WearableListenerService {
             r1[r5] = r6     // Catch:{ Exception -> 0x0249 }
             java.util.concurrent.CyclicBarrier r2 = new java.util.concurrent.CyclicBarrier     // Catch:{ Exception -> 0x0249 }
             r2.<init>(r3)     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$TyUn_inIn_bL15Zp21g9ds7kIqo r3 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$TyUn_inIn_bL15Zp21g9ds7kIqo     // Catch:{ Exception -> 0x0249 }
+            org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda8 r3 = new org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda8     // Catch:{ Exception -> 0x0249 }
             r3.<init>(r1, r2)     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$1H-JF3ZpPL0EQHpem6g8cKThkx0 r6 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$1H-JF3ZpPL0EQHpem6g8cKThkx0     // Catch:{ Exception -> 0x0249 }
-            r6.<init>(r3)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda5 r6 = new org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda5     // Catch:{ Exception -> 0x0249 }
+            r6.<init>(r11, r3)     // Catch:{ Exception -> 0x0249 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)     // Catch:{ Exception -> 0x0249 }
             r6 = 30
             java.util.concurrent.TimeUnit r8 = java.util.concurrent.TimeUnit.SECONDS     // Catch:{ Exception -> 0x012e }
             r2.await(r6, r8)     // Catch:{ Exception -> 0x012e }
         L_0x012e:
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$--vZ1ZRAnaS9dH9su4DFTPSXoSU r2 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$--vZ1ZRAnaS9dH9su4DFTPSXoSU     // Catch:{ Exception -> 0x0249 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda3 r2 = new org.telegram.messenger.WearDataLayerListenerService$$ExternalSyntheticLambda3     // Catch:{ Exception -> 0x0249 }
+            r2.<init>(r11, r3)     // Catch:{ Exception -> 0x0249 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x0249 }
             java.io.DataOutputStream r2 = new java.io.DataOutputStream     // Catch:{ Exception -> 0x0249 }
             com.google.android.gms.common.api.PendingResult r3 = r12.getOutputStream(r0)     // Catch:{ Exception -> 0x0249 }
@@ -335,7 +334,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.WearDataLayerListenerService.onChannelOpened(com.google.android.gms.wearable.Channel):void");
     }
 
-    static /* synthetic */ void lambda$onChannelOpened$0(File file, CyclicBarrier cyclicBarrier, int i, int i2, Object[] objArr) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onChannelOpened$0(File file, CyclicBarrier cyclicBarrier, int i, int i2, Object[] objArr) {
         if (i == NotificationCenter.fileLoaded) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("file loaded: " + objArr[0] + " " + objArr[0].getClass().getName());
@@ -353,19 +353,18 @@ public class WearDataLayerListenerService extends WearableListenerService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onChannelOpened$1 */
-    public /* synthetic */ void lambda$onChannelOpened$1$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate, TLRPC$User tLRPC$User) {
+    public /* synthetic */ void lambda$onChannelOpened$1(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate, TLRPC$User tLRPC$User) {
         NotificationCenter.getInstance(this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.fileLoaded);
         FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForUserOrChat(tLRPC$User, 1), tLRPC$User, (String) null, 1, 1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onChannelOpened$2 */
-    public /* synthetic */ void lambda$onChannelOpened$2$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
+    public /* synthetic */ void lambda$onChannelOpened$2(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
         NotificationCenter.getInstance(this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.fileLoaded);
     }
 
-    static /* synthetic */ void lambda$onChannelOpened$3(String[] strArr, CyclicBarrier cyclicBarrier, int i, int i2, Object[] objArr) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onChannelOpened$3(String[] strArr, CyclicBarrier cyclicBarrier, int i, int i2, Object[] objArr) {
         if (i == NotificationCenter.didReceiveNewMessages && objArr[0].longValue() == 777000) {
             ArrayList arrayList = objArr[1];
             if (arrayList.size() > 0) {
@@ -385,28 +384,23 @@ public class WearDataLayerListenerService extends WearableListenerService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onChannelOpened$4 */
-    public /* synthetic */ void lambda$onChannelOpened$4$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
+    public /* synthetic */ void lambda$onChannelOpened$4(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
         NotificationCenter.getInstance(this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.didReceiveNewMessages);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onChannelOpened$5 */
-    public /* synthetic */ void lambda$onChannelOpened$5$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
+    public /* synthetic */ void lambda$onChannelOpened$5(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
         NotificationCenter.getInstance(this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.didReceiveNewMessages);
     }
 
     public void onMessageReceived(MessageEvent messageEvent) {
         if ("/reply".equals(messageEvent.getPath())) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    WearDataLayerListenerService.lambda$onMessageReceived$6(MessageEvent.this);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new WearDataLayerListenerService$$ExternalSyntheticLambda2(messageEvent));
         }
     }
 
-    static /* synthetic */ void lambda$onMessageReceived$6(MessageEvent messageEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onMessageReceived$6(MessageEvent messageEvent) {
         int i;
         try {
             ApplicationLoader.postInitApplication();
@@ -446,22 +440,11 @@ public class WearDataLayerListenerService extends WearableListenerService {
     }
 
     public static void sendMessageToWatch(String str, byte[] bArr, String str2) {
-        Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability(str2, 1).addOnCompleteListener(new OnCompleteListener(str, bArr) {
-            public final /* synthetic */ String f$0;
-            public final /* synthetic */ byte[] f$1;
-
-            {
-                this.f$0 = r1;
-                this.f$1 = r2;
-            }
-
-            public final void onComplete(Task task) {
-                WearDataLayerListenerService.lambda$sendMessageToWatch$7(this.f$0, this.f$1, task);
-            }
-        });
+        Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability(str2, 1).addOnCompleteListener(new WearDataLayerListenerService$$ExternalSyntheticLambda0(str, bArr));
     }
 
-    static /* synthetic */ void lambda$sendMessageToWatch$7(String str, byte[] bArr, Task task) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$sendMessageToWatch$7(String str, byte[] bArr, Task task) {
         CapabilityInfo capabilityInfo = (CapabilityInfo) task.getResult();
         if (capabilityInfo != null) {
             MessageClient messageClient = Wearable.getMessageClient(ApplicationLoader.applicationContext);
@@ -484,12 +467,13 @@ public class WearDataLayerListenerService extends WearableListenerService {
 
     public static void updateWatchConnectionState() {
         try {
-            Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener($$Lambda$WearDataLayerListenerService$OxFnbwNlLoIOEBS2zP2MedWVWRM.INSTANCE);
+            Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener(WearDataLayerListenerService$$ExternalSyntheticLambda1.INSTANCE);
         } catch (Throwable unused) {
         }
     }
 
-    static /* synthetic */ void lambda$updateWatchConnectionState$8(Task task) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$updateWatchConnectionState$8(Task task) {
         watchConnected = false;
         try {
             CapabilityInfo capabilityInfo = (CapabilityInfo) task.getResult();

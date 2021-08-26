@@ -29,7 +29,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC$WebPage;
-import org.telegram.ui.Components.PhotoViewerWebView;
 import org.telegram.ui.PhotoViewer;
 
 public class PhotoViewerWebView extends FrameLayout {
@@ -65,17 +64,12 @@ public class PhotoViewerWebView extends FrameLayout {
         @JavascriptInterface
         public void postEvent(String str, String str2) {
             if ("loaded".equals(str)) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public final void run() {
-                        PhotoViewerWebView.YoutubeProxy.this.lambda$postEvent$0$PhotoViewerWebView$YoutubeProxy();
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new PhotoViewerWebView$YoutubeProxy$$ExternalSyntheticLambda0(this));
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$postEvent$0 */
-        public /* synthetic */ void lambda$postEvent$0$PhotoViewerWebView$YoutubeProxy() {
+        public /* synthetic */ void lambda$postEvent$0() {
             PhotoViewerWebView.this.progressBar.setVisibility(4);
             PhotoViewerWebView.this.progressBarBlackBackground.setVisibility(4);
             if (PhotoViewerWebView.this.setPlaybackSpeed) {

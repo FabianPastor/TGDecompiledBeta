@@ -37,7 +37,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import androidx.core.util.ObjectsCompat$$ExternalSynthetic0;
+import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,17 +47,16 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
-import org.telegram.ui.ActionBar.FloatingToolbar;
 
 @TargetApi(23)
 public final class FloatingToolbar {
-    private static final MenuItem.OnMenuItemClickListener NO_OP_MENUITEM_CLICK_LISTENER = $$Lambda$FloatingToolbar$UGQARNO28FBZ0TeffXeMTHJ8TdA.INSTANCE;
+    private static final MenuItem.OnMenuItemClickListener NO_OP_MENUITEM_CLICK_LISTENER = FloatingToolbar$$ExternalSyntheticLambda0.INSTANCE;
     /* access modifiers changed from: private */
     public int currentStyle;
     private final Rect mContentRect = new Rect();
     private Menu mMenu;
     private MenuItem.OnMenuItemClickListener mMenuItemClickListener = NO_OP_MENUITEM_CLICK_LISTENER;
-    private final Comparator<MenuItem> mMenuItemComparator = $$Lambda$FloatingToolbar$NbZiCM1EM2S6HZEOEjuQwJRChQ.INSTANCE;
+    private final Comparator<MenuItem> mMenuItemComparator = FloatingToolbar$$ExternalSyntheticLambda1.INSTANCE;
     private final View.OnLayoutChangeListener mOrientationChangeHandler = new View.OnLayoutChangeListener() {
         private final Rect mNewRect = new Rect();
         private final Rect mOldRect = new Rect();
@@ -80,11 +79,13 @@ public final class FloatingToolbar {
     public boolean mWidthChanged = true;
     private final View mWindowView;
 
-    static /* synthetic */ boolean lambda$static$0(MenuItem menuItem) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$static$0(MenuItem menuItem) {
         return false;
     }
 
-    static /* synthetic */ int lambda$new$1(MenuItem menuItem, MenuItem menuItem2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$new$1(MenuItem menuItem, MenuItem menuItem2) {
         return menuItem.getOrder() - menuItem2.getOrder();
     }
 
@@ -160,7 +161,7 @@ public final class FloatingToolbar {
         for (int i = 0; i < size; i++) {
             MenuItem menuItem = list.get(i);
             MenuItem menuItem2 = this.mShowingMenuItems.get(i);
-            if (menuItem.getItemId() != menuItem2.getItemId() || !TextUtils.equals(menuItem.getTitle(), menuItem2.getTitle()) || !ObjectsCompat$$ExternalSynthetic0.m0(menuItem.getIcon(), menuItem2.getIcon()) || menuItem.getGroupId() != menuItem2.getGroupId()) {
+            if (menuItem.getItemId() != menuItem2.getItemId() || !TextUtils.equals(menuItem.getTitle(), menuItem2.getTitle()) || !ObjectsCompat$$ExternalSyntheticBackport0.m(menuItem.getIcon(), menuItem2.getIcon()) || menuItem.getGroupId() != menuItem2.getGroupId()) {
                 return false;
             }
         }
@@ -311,278 +312,22 @@ public final class FloatingToolbar {
             this.mShowAnimation = FloatingToolbar.createEnterAnimation(access$600);
             this.mDismissAnimation = FloatingToolbar.createExitAnimation(access$600, 150, new AnimatorListenerAdapter(FloatingToolbar.this) {
                 public void onAnimationEnd(Animator animator) {
-                    NotificationCenter.getInstance(UserConfig.selectedAccount).doOnIdle(
-                    /*  JADX ERROR: Method code generation error
-                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                          (wrap: org.telegram.messenger.NotificationCenter : 0x0002: INVOKE  (r2v2 org.telegram.messenger.NotificationCenter) = 
-                          (wrap: int : 0x0000: SGET  (r2v1 int) =  org.telegram.messenger.UserConfig.selectedAccount int)
-                         org.telegram.messenger.NotificationCenter.getInstance(int):org.telegram.messenger.NotificationCenter type: STATIC)
-                          (wrap: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$3$pBSvnrS-rziRNUbF-br8qwzPw7M : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$3$pBSvnrS-rziRNUbF-br8qwzPw7M) = 
-                          (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$3 A[THIS])
-                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$3$pBSvnrS-rziRNUbF-br8qwzPw7M.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$3):void type: CONSTRUCTOR)
-                         org.telegram.messenger.NotificationCenter.doOnIdle(java.lang.Runnable):void type: VIRTUAL in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.3.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:98)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:480)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.inlineMethod(InsnGen.java:924)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:684)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:429)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$3$pBSvnrS-rziRNUbF-br8qwzPw7M) = 
-                          (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$3 A[THIS])
-                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$3$pBSvnrS-rziRNUbF-br8qwzPw7M.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$3):void type: CONSTRUCTOR in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.3.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	... 89 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$3$pBSvnrS-rziRNUbF-br8qwzPw7M, state: NOT_LOADED
-                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	... 95 more
-                        */
-                    /*
-                        this = this;
-                        int r2 = org.telegram.messenger.UserConfig.selectedAccount
-                        org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
-                        org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$3$pBSvnrS-rziRNUbF-br8qwzPw7M r0 = new org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$3$pBSvnrS-rziRNUbF-br8qwzPw7M
-                        r0.<init>(r1)
-                        r2.doOnIdle(r0)
-                        return
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.AnonymousClass3.onAnimationEnd(android.animation.Animator):void");
+                    NotificationCenter.getInstance(UserConfig.selectedAccount).doOnIdle(new FloatingToolbar$FloatingToolbarPopup$3$$ExternalSyntheticLambda0(this));
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$onAnimationEnd$0 */
-                public /* synthetic */ void lambda$onAnimationEnd$0$FloatingToolbar$FloatingToolbarPopup$3() {
+                public /* synthetic */ void lambda$onAnimationEnd$0() {
                     FloatingToolbarPopup.this.mPopupWindow.dismiss();
                     FloatingToolbarPopup.this.mContentContainer.removeAllViews();
                 }
             });
             this.mHideAnimation = FloatingToolbar.createExitAnimation(access$600, 0, new AnimatorListenerAdapter(FloatingToolbar.this) {
                 public void onAnimationEnd(Animator animator) {
-                    NotificationCenter.getInstance(UserConfig.selectedAccount).doOnIdle(
-                    /*  JADX ERROR: Method code generation error
-                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                          (wrap: org.telegram.messenger.NotificationCenter : 0x0002: INVOKE  (r2v2 org.telegram.messenger.NotificationCenter) = 
-                          (wrap: int : 0x0000: SGET  (r2v1 int) =  org.telegram.messenger.UserConfig.selectedAccount int)
-                         org.telegram.messenger.NotificationCenter.getInstance(int):org.telegram.messenger.NotificationCenter type: STATIC)
-                          (wrap: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$4$04WZJBr6p7nRSa8dZYyRH9-JL2E : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$4$04WZJBr6p7nRSa8dZYyRH9-JL2E) = 
-                          (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$4 A[THIS])
-                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$4$04WZJBr6p7nRSa8dZYyRH9-JL2E.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$4):void type: CONSTRUCTOR)
-                         org.telegram.messenger.NotificationCenter.doOnIdle(java.lang.Runnable):void type: VIRTUAL in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.4.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:98)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:480)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.inlineMethod(InsnGen.java:924)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:684)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:429)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$4$04WZJBr6p7nRSa8dZYyRH9-JL2E) = 
-                          (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$4 A[THIS])
-                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$4$04WZJBr6p7nRSa8dZYyRH9-JL2E.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$4):void type: CONSTRUCTOR in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.4.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	... 89 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$4$04WZJBr6p7nRSa8dZYyRH9-JL2E, state: NOT_LOADED
-                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	... 95 more
-                        */
-                    /*
-                        this = this;
-                        int r2 = org.telegram.messenger.UserConfig.selectedAccount
-                        org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
-                        org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$4$04WZJBr6p7nRSa8dZYyRH9-JL2E r0 = new org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$4$04WZJBr6p7nRSa8dZYyRH9-JL2E
-                        r0.<init>(r1)
-                        r2.doOnIdle(r0)
-                        return
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.AnonymousClass4.onAnimationEnd(android.animation.Animator):void");
+                    NotificationCenter.getInstance(UserConfig.selectedAccount).doOnIdle(new FloatingToolbar$FloatingToolbarPopup$4$$ExternalSyntheticLambda0(this));
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$onAnimationEnd$0 */
-                public /* synthetic */ void lambda$onAnimationEnd$0$FloatingToolbar$FloatingToolbarPopup$4() {
+                public /* synthetic */ void lambda$onAnimationEnd$0() {
                     FloatingToolbarPopup.this.mPopupWindow.dismiss();
                 }
             });
@@ -1187,23 +932,12 @@ public final class FloatingToolbar {
             this.mArrow.setTint(i);
             this.mToArrow.setTint(i);
             this.mToOverflow.setTint(i);
-            imageButton.setOnClickListener(new View.OnClickListener(imageButton) {
-                public final /* synthetic */ ImageButton f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    FloatingToolbar.FloatingToolbarPopup.this.lambda$createOverflowButton$0$FloatingToolbar$FloatingToolbarPopup(this.f$1, view);
-                }
-            });
+            imageButton.setOnClickListener(new FloatingToolbar$FloatingToolbarPopup$$ExternalSyntheticLambda0(this, imageButton));
             return imageButton;
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$createOverflowButton$0 */
-        public /* synthetic */ void lambda$createOverflowButton$0$FloatingToolbar$FloatingToolbarPopup(ImageButton imageButton, View view) {
+        public /* synthetic */ void lambda$createOverflowButton$0(ImageButton imageButton, View view) {
             if (this.mIsOverflowOpen) {
                 imageButton.setImageDrawable(this.mToOverflow);
                 this.mToOverflow.start();
@@ -1216,7 +950,7 @@ public final class FloatingToolbar {
         }
 
         private OverflowPanel createOverflowPanel() {
-            OverflowPanel overflowPanel = new OverflowPanel(this);
+            OverflowPanel overflowPanel = new OverflowPanel(this, this);
             overflowPanel.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
             overflowPanel.setDivider((Drawable) null);
             overflowPanel.setDividerHeight(0);
@@ -1225,23 +959,12 @@ public final class FloatingToolbar {
                     return FloatingToolbarPopup.this.mOverflowPanelViewHelper.getView((MenuItem) getItem(i), FloatingToolbarPopup.this.mOverflowPanelSize.getWidth(), view);
                 }
             });
-            overflowPanel.setOnItemClickListener(new AdapterView.OnItemClickListener(overflowPanel) {
-                public final /* synthetic */ FloatingToolbar.FloatingToolbarPopup.OverflowPanel f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
-                    FloatingToolbar.FloatingToolbarPopup.this.lambda$createOverflowPanel$1$FloatingToolbar$FloatingToolbarPopup(this.f$1, adapterView, view, i, j);
-                }
-            });
+            overflowPanel.setOnItemClickListener(new FloatingToolbar$FloatingToolbarPopup$$ExternalSyntheticLambda1(this, overflowPanel));
             return overflowPanel;
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$createOverflowPanel$1 */
-        public /* synthetic */ void lambda$createOverflowPanel$1$FloatingToolbar$FloatingToolbarPopup(OverflowPanel overflowPanel, AdapterView adapterView, View view, int i, long j) {
+        public /* synthetic */ void lambda$createOverflowPanel$1(OverflowPanel overflowPanel, AdapterView adapterView, View view, int i, long j) {
             MenuItem menuItem = (MenuItem) overflowPanel.getAdapter().getItem(i);
             MenuItem.OnMenuItemClickListener onMenuItemClickListener = this.mOnMenuItemClickListener;
             if (onMenuItemClickListener != null) {
@@ -1271,126 +994,11 @@ public final class FloatingToolbar {
                 }
 
                 public void onAnimationEnd(Animation animation) {
-                    FloatingToolbarPopup.this.mContentContainer.post(
-                    /*  JADX ERROR: Method code generation error
-                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                          (wrap: android.view.ViewGroup : 0x0002: INVOKE  (r2v2 android.view.ViewGroup) = 
-                          (wrap: org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup : 0x0000: IGET  (r2v1 org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup) = 
-                          (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13 A[THIS])
-                         org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.this$1 org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup)
-                         org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.access$400(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup):android.view.ViewGroup type: STATIC)
-                          (wrap: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA) = 
-                          (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13 A[THIS])
-                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13):void type: CONSTRUCTOR)
-                         android.view.ViewGroup.post(java.lang.Runnable):boolean type: VIRTUAL in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.onAnimationEnd(android.view.animation.Animation):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:314)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA) = 
-                          (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13 A[THIS])
-                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13):void type: CONSTRUCTOR in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.onAnimationEnd(android.view.animation.Animation):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	... 74 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA, state: NOT_LOADED
-                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	... 80 more
-                        */
-                    /*
-                        this = this;
-                        org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup r2 = org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.this
-                        android.view.ViewGroup r2 = r2.mContentContainer
-                        org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA r0 = new org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA
-                        r0.<init>(r1)
-                        r2.post(r0)
-                        return
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.AnonymousClass13.onAnimationEnd(android.view.animation.Animation):void");
+                    FloatingToolbarPopup.this.mContentContainer.post(new FloatingToolbar$FloatingToolbarPopup$13$$ExternalSyntheticLambda0(this));
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$onAnimationEnd$0 */
-                public /* synthetic */ void lambda$onAnimationEnd$0$FloatingToolbar$FloatingToolbarPopup$13() {
+                public /* synthetic */ void lambda$onAnimationEnd$0() {
                     FloatingToolbarPopup.this.setPanelsStatesAtRestingPosition();
                     FloatingToolbarPopup.this.setContentAreaAsTouchableSurface();
                 }
@@ -1431,11 +1039,11 @@ public final class FloatingToolbar {
         private final class OverflowPanel extends ListView {
             private final FloatingToolbarPopup mPopup;
 
-            OverflowPanel(FloatingToolbarPopup floatingToolbarPopup) {
-                super(floatingToolbarPopup.mContext);
-                this.mPopup = floatingToolbarPopup;
+            OverflowPanel(FloatingToolbarPopup floatingToolbarPopup, FloatingToolbarPopup floatingToolbarPopup2) {
+                super(floatingToolbarPopup2.mContext);
+                this.mPopup = floatingToolbarPopup2;
                 setVerticalScrollBarEnabled(false);
-                setOutlineProvider(new ViewOutlineProvider(FloatingToolbarPopup.this) {
+                setOutlineProvider(new ViewOutlineProvider(this, floatingToolbarPopup) {
                     public void getOutline(View view, Outline outline) {
                         outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(6.0f));
                     }
@@ -1462,11 +1070,9 @@ public final class FloatingToolbar {
         }
 
         private final class LogAccelerateInterpolator implements Interpolator {
-            private final int BASE;
             private final float LOGS_SCALE;
 
-            private LogAccelerateInterpolator() {
-                this.BASE = 100;
+            private LogAccelerateInterpolator(FloatingToolbarPopup floatingToolbarPopup) {
                 this.LOGS_SCALE = 1.0f / computeLog(1.0f, 100);
             }
 

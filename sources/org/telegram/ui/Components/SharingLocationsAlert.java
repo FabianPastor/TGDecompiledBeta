@@ -147,11 +147,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                 SharingLocationsAlert.this.updateLayout();
             }
         });
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                SharingLocationsAlert.this.lambda$new$0$SharingLocationsAlert(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SharingLocationsAlert$$ExternalSyntheticLambda2(this));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View view = new View(context);
         view.setBackgroundResource(NUM);
@@ -162,26 +158,17 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextRed"));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", NUM));
-        pickerBottomLayout.cancelButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                SharingLocationsAlert.this.lambda$new$1$SharingLocationsAlert(view);
-            }
-        });
+        pickerBottomLayout.cancelButton.setOnClickListener(new SharingLocationsAlert$$ExternalSyntheticLambda1(this));
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", NUM).toUpperCase());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        pickerBottomLayout.doneButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                SharingLocationsAlert.this.lambda$new$2$SharingLocationsAlert(view);
-            }
-        });
+        pickerBottomLayout.doneButton.setOnClickListener(new SharingLocationsAlert$$ExternalSyntheticLambda0(this));
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         this.adapter.notifyDataSetChanged();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$SharingLocationsAlert(View view, int i) {
+    public /* synthetic */ void lambda$new$0(View view, int i) {
         int i2 = i - 1;
         if (i2 >= 0 && i2 < LocationController.getLocationsCount()) {
             this.delegate.didSelectLocation(getLocation(i2));
@@ -190,8 +177,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$SharingLocationsAlert(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         for (int i = 0; i < 3; i++) {
             LocationController.getInstance(i).removeAllLocationSharings();
         }
@@ -199,8 +185,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$SharingLocationsAlert(View view) {
+    public /* synthetic */ void lambda$new$2(View view) {
         dismiss();
     }
 
@@ -280,7 +265,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i != 0) {
-                frameLayout = new FrameLayout(this.context) {
+                frameLayout = new FrameLayout(this, this.context) {
                     /* access modifiers changed from: protected */
                     public void onMeasure(int i, int i2) {
                         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + 1, NUM));

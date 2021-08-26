@@ -93,7 +93,6 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$InputSecureFile;
@@ -176,8 +175,6 @@ import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgress;
 import org.telegram.ui.Components.SlideView;
-import org.telegram.ui.CountrySelectActivity;
-import org.telegram.ui.PassportActivity;
 import org.telegram.ui.PhotoViewer;
 
 public class PassportActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -407,10 +404,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         /* access modifiers changed from: private */
         public TextView valueTextView;
 
-        public TextDetailSecureCell(Context context) {
+        public TextDetailSecureCell(PassportActivity passportActivity, Context context) {
             super(context);
             int i = 21;
-            int i2 = PassportActivity.this.currentActivityType == 8 ? 21 : 51;
+            int i2 = passportActivity.currentActivityType == 8 ? 21 : 51;
             TextView textView2 = new TextView(context);
             this.textView = textView2;
             textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -1134,12 +1131,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (!SharedConfig.isPassportConfigLoaded()) {
                 TLRPC$TL_help_getPassportConfig tLRPC$TL_help_getPassportConfig = new TLRPC$TL_help_getPassportConfig();
                 tLRPC$TL_help_getPassportConfig.hash = SharedConfig.passportConfigHash;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_help_getPassportConfig, $$Lambda$PassportActivity$9GjQRr0FlBpDXah4yw2rWbeS5U.INSTANCE);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_help_getPassportConfig, PassportActivity$$ExternalSyntheticLambda68.INSTANCE);
             }
         }
     }
 
-    static /* synthetic */ void lambda$new$0(TLObject tLObject) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$new$0(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_help_passportConfig) {
             TLRPC$TL_help_passportConfig tLRPC$TL_help_passportConfig = (TLRPC$TL_help_passportConfig) tLObject;
             SharedConfig.setPassportConfig(tLRPC$TL_help_passportConfig.countries_langs.data, tLRPC$TL_help_passportConfig.hash);
@@ -1158,18 +1156,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (this.currentActivityType == 5 && (viewGroupArr = this.inputFieldContainers) != null && viewGroupArr[0] != null && viewGroupArr[0].getVisibility() == 0) {
             this.inputFields[0].requestFocus();
             AndroidUtilities.showKeyboard(this.inputFields[0]);
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    PassportActivity.this.lambda$onResume$2$PassportActivity();
-                }
-            }, 200);
+            AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda50(this), 200);
         }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onResume$2 */
-    public /* synthetic */ void lambda$onResume$2$PassportActivity() {
+    public /* synthetic */ void lambda$onResume$2() {
         ViewGroup[] viewGroupArr = this.inputFieldContainers;
         if (viewGroupArr != null && viewGroupArr[0] != null && viewGroupArr[0].getVisibility() == 0) {
             this.inputFields[0].requestFocus();
@@ -1277,7 +1270,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r1 = org.telegram.ui.PassportActivity.this
                     org.telegram.ui.Components.EditTextBoldCursor[] r1 = r1.inputFields
                     r1 = r1[r12]
-                    r2 = 2131626839(0x7f0e0b57, float:1.8880926E38)
+                    r2 = 2131626856(0x7f0e0b68, float:1.888096E38)
                     java.lang.String r3 = "PassportUseLatinOnly"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                     r1.setErrorText(r2)
@@ -1349,7 +1342,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r0 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r0 = r0.getParentActivity()
                     r13.<init>((android.content.Context) r0)
-                    r0 = 2131626785(0x7f0e0b21, float:1.8880816E38)
+                    r0 = 2131626802(0x7f0e0b32, float:1.888085E38)
                     java.lang.Object[] r1 = new java.lang.Object[r9]
                     r1[r8] = r2
                     r1[r11] = r3
@@ -1361,21 +1354,21 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     java.lang.String r1 = "AppName"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r13.setTitle(r0)
-                    r0 = 2131625250(0x7f0e0522, float:1.8877703E38)
+                    r0 = 2131625255(0x7f0e0527, float:1.8877713E38)
                     java.lang.String r1 = "Done"
                     java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                    org.telegram.ui.-$$Lambda$PassportActivity$3$ncxI1nQh6qvD1Chi9RgN1WB6iuI r15 = new org.telegram.ui.-$$Lambda$PassportActivity$3$ncxI1nQh6qvD1Chi9RgN1WB6iuI
+                    org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda1 r15 = new org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda1
                     r0 = r15
                     r1 = r25
                     r5 = r26
                     r6 = r27
-                    r0.<init>(r2, r3, r4, r5, r6)
+                    r0.<init>(r1, r2, r3, r4, r5, r6)
                     r13.setPositiveButton(r14, r15)
-                    r0 = 2131625252(0x7f0e0524, float:1.8877707E38)
+                    r0 = 2131625257(0x7f0e0529, float:1.8877717E38)
                     java.lang.String r1 = "Edit"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                    org.telegram.ui.-$$Lambda$PassportActivity$3$KwVL_83qCsZr-goHF2MdOvo6dKk r1 = new org.telegram.ui.-$$Lambda$PassportActivity$3$KwVL_83qCsZr-goHF2MdOvo6dKk
-                    r1.<init>(r12)
+                    org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda0 r1 = new org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda0
+                    r1.<init>(r7, r12)
                     r13.setNegativeButton(r0, r1)
                     org.telegram.ui.PassportActivity r0 = org.telegram.ui.PassportActivity.this
                     org.telegram.ui.ActionBar.AlertDialog r1 = r13.create()
@@ -1505,8 +1498,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x035b }
                     java.util.Set r4 = r1.keySet()     // Catch:{ Exception -> 0x035b }
                     r3.<init>(r4)     // Catch:{ Exception -> 0x035b }
-                    org.telegram.ui.-$$Lambda$PassportActivity$3$_8Ffg8aMe49kSZ9YmZQEGt4IYZI r4 = new org.telegram.ui.-$$Lambda$PassportActivity$3$_8Ffg8aMe49kSZ9YmZQEGt4IYZI     // Catch:{ Exception -> 0x035b }
-                    r4.<init>()     // Catch:{ Exception -> 0x035b }
+                    org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda4 r4 = new org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda4     // Catch:{ Exception -> 0x035b }
+                    r4.<init>(r7)     // Catch:{ Exception -> 0x035b }
                     java.util.Collections.sort(r3, r4)     // Catch:{ Exception -> 0x035b }
                     int r4 = r3.size()     // Catch:{ Exception -> 0x035b }
                     r5 = 0
@@ -1571,8 +1564,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ Exception -> 0x0359 }
                     java.util.Set r5 = r1.keySet()     // Catch:{ Exception -> 0x0359 }
                     r4.<init>(r5)     // Catch:{ Exception -> 0x0359 }
-                    org.telegram.ui.-$$Lambda$PassportActivity$3$oxvLr_pj5jY_rUoCc8BIl3nAImE r5 = new org.telegram.ui.-$$Lambda$PassportActivity$3$oxvLr_pj5jY_rUoCc8BIl3nAImE     // Catch:{ Exception -> 0x0359 }
-                    r5.<init>()     // Catch:{ Exception -> 0x0359 }
+                    org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda5 r5 = new org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda5     // Catch:{ Exception -> 0x0359 }
+                    r5.<init>(r7)     // Catch:{ Exception -> 0x0359 }
                     java.util.Collections.sort(r4, r5)     // Catch:{ Exception -> 0x0359 }
                     int r5 = r4.size()     // Catch:{ Exception -> 0x0359 }
                 L_0x0347:
@@ -1656,8 +1649,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onIdentityDone$0 */
-            public /* synthetic */ void lambda$onIdentityDone$0$PassportActivity$3(String str, String str2, String str3, Runnable runnable, ErrorRunnable errorRunnable, DialogInterface dialogInterface, int i) {
+            public /* synthetic */ void lambda$onIdentityDone$0(String str, String str2, String str3, Runnable runnable, ErrorRunnable errorRunnable, DialogInterface dialogInterface, int i) {
                 PassportActivity.this.inputFields[0].setText(str);
                 PassportActivity.this.inputFields[1].setText(str2);
                 PassportActivity.this.inputFields[2].setText(str3);
@@ -1666,15 +1658,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onIdentityDone$1 */
-            public /* synthetic */ void lambda$onIdentityDone$1$PassportActivity$3(int i, DialogInterface dialogInterface, int i2) {
+            public /* synthetic */ void lambda$onIdentityDone$1(int i, DialogInterface dialogInterface, int i2) {
                 PassportActivity passportActivity = PassportActivity.this;
                 passportActivity.onFieldError(passportActivity.inputFields[i]);
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onIdentityDone$2 */
-            public /* synthetic */ int lambda$onIdentityDone$2$PassportActivity$3(String str, String str2) {
+            public /* synthetic */ int lambda$onIdentityDone$2(String str, String str2) {
                 int access$2000 = PassportActivity.this.getFieldCost(str);
                 int access$20002 = PassportActivity.this.getFieldCost(str2);
                 if (access$2000 < access$20002) {
@@ -1684,8 +1674,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onIdentityDone$3 */
-            public /* synthetic */ int lambda$onIdentityDone$3$PassportActivity$3(String str, String str2) {
+            public /* synthetic */ int lambda$onIdentityDone$3(String str, String str2) {
                 int access$2000 = PassportActivity.this.getFieldCost(str);
                 int access$20002 = PassportActivity.this.getFieldCost(str2);
                 if (access$2000 < access$20002) {
@@ -1738,7 +1727,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r2 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r2 = r2.getParentActivity()
                     r1.<init>(r2)
-                    r2 = 2131626729(0x7f0e0ae9, float:1.8880702E38)
+                    r2 = 2131626746(0x7f0e0afa, float:1.8880737E38)
                     java.lang.String r7 = "PassportInfo2"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r7, r2)
                     android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder
@@ -1754,7 +1743,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     int r3 = r9 + 1
                     r7.replace(r9, r3, r8)
                     org.telegram.ui.PassportActivity$3$1 r3 = new org.telegram.ui.PassportActivity$3$1
-                    r8 = 2131626731(0x7f0e0aeb, float:1.8880706E38)
+                    r8 = 2131626748(0x7f0e0afc, float:1.888074E38)
                     java.lang.String r10 = "PassportInfoUrl"
                     java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                     r3.<init>(r8)
@@ -1786,11 +1775,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     android.app.Activity r3 = r3.getParentActivity()
                     r2.<init>((android.content.Context) r3)
                     r2.setView(r1)
-                    r1 = 2131626730(0x7f0e0aea, float:1.8880704E38)
+                    r1 = 2131626747(0x7f0e0afb, float:1.8880739E38)
                     java.lang.String r3 = "PassportInfoTitle"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setTitle(r1)
-                    r1 = 2131624948(0x7f0e03f4, float:1.887709E38)
+                    r1 = 2131624953(0x7f0e03f9, float:1.88771E38)
                     java.lang.String r3 = "Close"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setNegativeButton(r1, r5)
@@ -1820,8 +1809,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     r1.onNextPressed()
                     goto L_0x0367
                 L_0x0118:
-                    org.telegram.ui.-$$Lambda$PassportActivity$3$YVP3SsRbp26mISBBjmwBjOnyfpE r1 = new org.telegram.ui.-$$Lambda$PassportActivity$3$YVP3SsRbp26mISBBjmwBjOnyfpE
-                    r1.<init>()
+                    org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda2
+                    r1.<init>(r0)
                     org.telegram.ui.PassportActivity$3$2 r2 = new org.telegram.ui.PassportActivity$3$2
                     r2.<init>(r1)
                     org.telegram.ui.PassportActivity r7 = org.telegram.ui.PassportActivity.this
@@ -2060,8 +2049,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r4 = org.telegram.ui.PassportActivity.this
                     int r4 = r4.currentAccount
                     org.telegram.tgnet.ConnectionsManager r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4)
-                    org.telegram.ui.-$$Lambda$PassportActivity$3$5SgJhHNmPC0E5O7qOetTJ98TDKE r5 = new org.telegram.ui.-$$Lambda$PassportActivity$3$5SgJhHNmPC0E5O7qOetTJ98TDKE
-                    r5.<init>(r1, r2, r3)
+                    org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda6 r5 = new org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda6
+                    r5.<init>(r0, r1, r2, r3)
                     int r1 = r4.sendRequest(r3, r5)
                     org.telegram.ui.PassportActivity r2 = org.telegram.ui.PassportActivity.this
                     int r2 = r2.currentAccount
@@ -2079,36 +2068,17 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$4 */
-            public /* synthetic */ void lambda$onItemClick$4$PassportActivity$3() {
+            public /* synthetic */ void lambda$onItemClick$4() {
                 PassportActivity.this.finishFragment();
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$6 */
-            public /* synthetic */ void lambda$onItemClick$6$PassportActivity$3(Runnable runnable, ErrorRunnable errorRunnable, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, runnable, errorRunnable, tLRPC$TL_account_verifyEmail) {
-                    public final /* synthetic */ TLRPC$TL_error f$1;
-                    public final /* synthetic */ Runnable f$2;
-                    public final /* synthetic */ PassportActivity.ErrorRunnable f$3;
-                    public final /* synthetic */ TLRPC$TL_account_verifyEmail f$4;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                        this.f$4 = r5;
-                    }
-
-                    public final void run() {
-                        PassportActivity.AnonymousClass3.this.lambda$onItemClick$5$PassportActivity$3(this.f$1, this.f$2, this.f$3, this.f$4);
-                    }
-                });
+            public /* synthetic */ void lambda$onItemClick$6(Runnable runnable, ErrorRunnable errorRunnable, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                AndroidUtilities.runOnUIThread(new PassportActivity$3$$ExternalSyntheticLambda3(this, tLRPC$TL_error, runnable, errorRunnable, tLRPC$TL_account_verifyEmail));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$5 */
-            public /* synthetic */ void lambda$onItemClick$5$PassportActivity$3(TLRPC$TL_error tLRPC$TL_error, Runnable runnable, ErrorRunnable errorRunnable, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail) {
+            public /* synthetic */ void lambda$onItemClick$5(TLRPC$TL_error tLRPC$TL_error, Runnable runnable, ErrorRunnable errorRunnable, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail) {
                 TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
                 if (tLRPC$TL_error2 == null) {
                     PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, (String) PassportActivity.this.currentValues.get("email"), (String) null, (TLRPC$TL_secureRequiredType) null, (String) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (SecureDocument) null, runnable, errorRunnable);
@@ -2147,7 +2117,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.fragmentView = frameLayout;
             FrameLayout frameLayout2 = frameLayout;
             frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-            AnonymousClass5 r02 = new ScrollView(context) {
+            AnonymousClass5 r02 = new ScrollView(this, context) {
                 /* access modifiers changed from: protected */
                 public boolean onRequestFocusInDescendants(int i, Rect rect) {
                     return false;
@@ -2402,32 +2372,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     private void loadPasswordInfo() {
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PassportActivity.this.lambda$loadPasswordInfo$4$PassportActivity(tLObject, tLRPC$TL_error);
-            }
-        }), this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new PassportActivity$$ExternalSyntheticLambda63(this)), this.classGuid);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadPasswordInfo$4 */
-    public /* synthetic */ void lambda$loadPasswordInfo$4$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            public final /* synthetic */ TLObject f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                PassportActivity.this.lambda$loadPasswordInfo$3$PassportActivity(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$loadPasswordInfo$4(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda56(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadPasswordInfo$3 */
-    public /* synthetic */ void lambda$loadPasswordInfo$3$PassportActivity(TLObject tLObject) {
+    public /* synthetic */ void lambda$loadPasswordInfo$3(TLObject tLObject) {
         if (tLObject != null) {
             TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
             this.currentPassword = tLRPC$TL_account_password;
@@ -2476,11 +2430,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
             editTextBoldCursor.setGravity(i2);
             frameLayout.addView(this.inputFields[i], LayoutHelper.createFrame(-1, -2.0f, 51, 21.0f, 12.0f, 21.0f, 6.0f));
-            this.inputFields[i].setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    return PassportActivity.this.lambda$createEmailVerificationInterface$5$PassportActivity(textView, i, keyEvent);
-                }
-            });
+            this.inputFields[i].setOnEditorActionListener(new PassportActivity$$ExternalSyntheticLambda39(this));
             this.inputFields[i].addTextChangedListener(new TextWatcher() {
                 public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                 }
@@ -2503,8 +2453,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createEmailVerificationInterface$5 */
-    public /* synthetic */ boolean lambda$createEmailVerificationInterface$5$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createEmailVerificationInterface$5(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6 && i != 5) {
             return false;
         }
@@ -2575,11 +2524,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.noPasswordSetTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.noPasswordSetTextView.setText(LocaleController.getString("TelegramPassportCreatePassword", NUM));
         this.linearLayout2.addView(this.noPasswordSetTextView, LayoutHelper.createFrame(-1, 24.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 9.0f, 21.0f, 0.0f));
-        this.noPasswordSetTextView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PassportActivity.this.lambda$createPasswordInterface$6$PassportActivity(view);
-            }
-        });
+        this.noPasswordSetTextView.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda15(this));
         this.inputFields = new EditTextBoldCursor[1];
         this.inputFieldContainers = new ViewGroup[1];
         for (int i3 = 0; i3 < 1; i3++) {
@@ -2605,12 +2550,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputFields[i3].setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
             this.inputFields[i3].setGravity(LocaleController.isRTL ? 5 : 3);
             this.inputFieldContainers[i3].addView(this.inputFields[i3], LayoutHelper.createFrame(-1, -2.0f, 51, 21.0f, 12.0f, 21.0f, 6.0f));
-            this.inputFields[i3].setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    return PassportActivity.this.lambda$createPasswordInterface$7$PassportActivity(textView, i, keyEvent);
-                }
-            });
-            this.inputFields[i3].setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            this.inputFields[i3].setOnEditorActionListener(new PassportActivity$$ExternalSyntheticLambda40(this));
+            this.inputFields[i3].setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
                 public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                     return false;
                 }
@@ -2644,25 +2585,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             i2 = 3;
         }
         linearLayout.addView(textView4, LayoutHelper.createLinear(-2, 30, i2 | 48, 21, 0, 21, 0));
-        this.passwordForgotButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PassportActivity.this.lambda$createPasswordInterface$12$PassportActivity(view);
-            }
-        });
+        this.passwordForgotButton.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda14(this));
         updatePasswordInterface();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPasswordInterface$6 */
-    public /* synthetic */ void lambda$createPasswordInterface$6$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createPasswordInterface$6(View view) {
         TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(this.currentAccount, 0, this.currentPassword);
         twoStepVerificationSetupActivity.setCloseAfterSet(true);
         presentFragment(twoStepVerificationSetupActivity);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPasswordInterface$7 */
-    public /* synthetic */ boolean lambda$createPasswordInterface$7$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createPasswordInterface$7(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5 && i != 6) {
             return false;
         }
@@ -2671,23 +2606,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPasswordInterface$12 */
-    public /* synthetic */ void lambda$createPasswordInterface$12$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createPasswordInterface$12(View view) {
         if (this.currentPassword.has_recovery) {
             needShowProgress();
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_auth_requestPasswordRecovery(), new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    PassportActivity.this.lambda$createPasswordInterface$10$PassportActivity(tLObject, tLRPC$TL_error);
-                }
-            }, 10), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_auth_requestPasswordRecovery(), new PassportActivity$$ExternalSyntheticLambda62(this), 10), this.classGuid);
         } else if (getParentActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-            builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$createPasswordInterface$11$PassportActivity(dialogInterface, i);
-                }
-            });
+            builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", NUM), new PassportActivity$$ExternalSyntheticLambda2(this));
             builder.setTitle(LocaleController.getString("RestorePasswordNoEmailTitle", NUM));
             builder.setMessage(LocaleController.getString("RestorePasswordNoEmailText", NUM));
             showDialog(builder.create());
@@ -2695,26 +2621,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPasswordInterface$10 */
-    public /* synthetic */ void lambda$createPasswordInterface$10$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                PassportActivity.this.lambda$createPasswordInterface$9$PassportActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$createPasswordInterface$10(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda59(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPasswordInterface$9 */
-    public /* synthetic */ void lambda$createPasswordInterface$9$PassportActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$createPasswordInterface$9(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         String str;
         needHideProgress();
         if (tLRPC$TL_error == null) {
@@ -2722,17 +2634,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setMessage(LocaleController.formatString("RestoreEmailSent", NUM, tLRPC$TL_auth_passwordRecovery.email_pattern));
             builder.setTitle(LocaleController.getString("RestoreEmailSentTitle", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(tLRPC$TL_auth_passwordRecovery) {
-                public final /* synthetic */ TLRPC$TL_auth_passwordRecovery f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$createPasswordInterface$8$PassportActivity(this.f$1, dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new PassportActivity$$ExternalSyntheticLambda7(this, tLRPC$TL_auth_passwordRecovery));
             Dialog showDialog = showDialog(builder.create());
             if (showDialog != null) {
                 showDialog.setCanceledOnTouchOutside(false);
@@ -2752,16 +2654,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPasswordInterface$8 */
-    public /* synthetic */ void lambda$createPasswordInterface$8$PassportActivity(TLRPC$TL_auth_passwordRecovery tLRPC$TL_auth_passwordRecovery, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createPasswordInterface$8(TLRPC$TL_auth_passwordRecovery tLRPC$TL_auth_passwordRecovery, DialogInterface dialogInterface, int i) {
         TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
         tLRPC$TL_account_password.email_unconfirmed_pattern = tLRPC$TL_auth_passwordRecovery.email_pattern;
         presentFragment(new TwoStepVerificationSetupActivity(this.currentAccount, 4, tLRPC$TL_account_password));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPasswordInterface$11 */
-    public /* synthetic */ void lambda$createPasswordInterface$11$PassportActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createPasswordInterface$11(DialogInterface dialogInterface, int i) {
         Activity parentActivity = getParentActivity();
         Browser.openUrl((Context) parentActivity, "https://telegram.org/deactivate?phone=" + UserConfig.getInstance(this.currentAccount).getClientPhone());
     }
@@ -2779,27 +2679,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
             showEditDoneProgress(true, true);
         }
-        Utilities.globalQueue.postRunnable(new Runnable(z, str) {
-            public final /* synthetic */ boolean f$1;
-            public final /* synthetic */ String f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                PassportActivity.this.lambda$onPasswordDone$13$PassportActivity(this.f$1, this.f$2);
-            }
-        });
+        Utilities.globalQueue.postRunnable(new PassportActivity$$ExternalSyntheticLambda61(this, z, str));
     }
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:10:0x0037  */
     /* JADX WARNING: Removed duplicated region for block: B:15:0x006a  */
-    /* renamed from: lambda$onPasswordDone$13 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$onPasswordDone$13$PassportActivity(boolean r11, java.lang.String r12) {
+    public /* synthetic */ void lambda$onPasswordDone$13(boolean r11, java.lang.String r12) {
         /*
             r10 = this;
             org.telegram.tgnet.TLRPC$TL_account_getPasswordSettings r6 = new org.telegram.tgnet.TLRPC$TL_account_getPasswordSettings
@@ -2867,7 +2754,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x0076:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.lambda$onPasswordDone$13$PassportActivity(boolean, java.lang.String):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.lambda$onPasswordDone$13(boolean, java.lang.String):void");
     }
 
     private boolean isPersonalDocument(TLRPC$SecureValueType tLRPC$SecureValueType) {
@@ -3132,11 +3019,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.bottomLayout = frameLayout3;
         frameLayout3.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor("passport_authorizeBackground"), Theme.getColor("passport_authorizeBackgroundSelected")));
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
-        this.bottomLayout.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PassportActivity.this.lambda$createRequestInterface$16$PassportActivity(view);
-            }
-        });
+        this.bottomLayout.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda28(this));
         TextView textView = new TextView(context2);
         this.acceptTextView = textView;
         textView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
@@ -3157,8 +3040,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createRequestInterface$16 */
-    public /* synthetic */ void lambda$createRequestInterface$16$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createRequestInterface$16(View view) {
         int i;
         ArrayList arrayList;
         TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType;
@@ -3215,7 +3097,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
             HashMap hashMap = this.errorsMap.get(getNameForType(tLRPC$TL_secureRequiredType.type));
             if (hashMap == null || hashMap.isEmpty()) {
-                arrayList2.add(new Object(valueByType, tLRPC$TL_secureRequiredType.selfie_required, tLRPC$TL_secureRequiredType.translation_required) {
+                arrayList2.add(new Object(this, valueByType, tLRPC$TL_secureRequiredType.selfie_required, tLRPC$TL_secureRequiredType.translation_required) {
                     boolean selfie_required;
                     boolean translation_required;
                     TLRPC$TL_secureValue value;
@@ -3389,32 +3271,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_acceptAuthorization, new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PassportActivity.this.lambda$createRequestInterface$15$PassportActivity(tLObject, tLRPC$TL_error);
-            }
-        }), this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_acceptAuthorization, new PassportActivity$$ExternalSyntheticLambda65(this)), this.classGuid);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createRequestInterface$15 */
-    public /* synthetic */ void lambda$createRequestInterface$15$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                PassportActivity.this.lambda$createRequestInterface$14$PassportActivity(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$createRequestInterface$15(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda57(this, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createRequestInterface$14 */
-    public /* synthetic */ void lambda$createRequestInterface$14$PassportActivity(TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$createRequestInterface$14(TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             this.ignoreOnFailure = true;
             callCallback(true);
@@ -3441,19 +3307,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "TelegramPassport"
-            r2 = 2131627762(0x7f0e0ef2, float:1.8882798E38)
+            r2 = 2131627789(0x7f0e0f0d, float:1.8882852E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
             r8 = 1
-            r1 = 2131165986(0x7var_, float:1.7946205E38)
+            r1 = 2131165991(0x7var_, float:1.7946215E38)
             r0.addItem((int) r8, (int) r1)
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r7)
             r6.headerCell = r0
             java.lang.String r1 = "PassportProvidedInformation"
-            r2 = 2131626809(0x7f0e0b39, float:1.8880865E38)
+            r2 = 2131626826(0x7f0e0b4a, float:1.88809E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setText(r1)
             org.telegram.ui.Cells.HeaderCell r0 = r6.headerCell
@@ -3469,7 +3335,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.ShadowSectionCell r0 = new org.telegram.ui.Cells.ShadowSectionCell
             r0.<init>(r7)
             r6.sectionCell = r0
-            r1 = 2131165443(0x7var_, float:1.7945103E38)
+            r1 = 2131165448(0x7var_, float:1.7945113E38)
             java.lang.String r4 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r1, (java.lang.String) r4)
             r0.setBackgroundDrawable(r1)
@@ -3484,7 +3350,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r1)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.addDocumentCell
             java.lang.String r1 = "PassportNoDocumentsAdd"
-            r5 = 2131626792(0x7f0e0b28, float:1.888083E38)
+            r5 = 2131626809(0x7f0e0b39, float:1.8880865E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r1, r5)
             r0.setText(r9, r8)
             android.widget.LinearLayout r0 = r6.linearLayout2
@@ -3492,8 +3358,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r2, r3)
             r0.addView(r9, r10)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.addDocumentCell
-            org.telegram.ui.-$$Lambda$PassportActivity$JzKOSVhz8HJTU9H6pw7E9u6k-Ng r9 = new org.telegram.ui.-$$Lambda$PassportActivity$JzKOSVhz8HJTU9H6pw7E9u6k-Ng
-            r9.<init>()
+            org.telegram.ui.PassportActivity$$ExternalSyntheticLambda17 r9 = new org.telegram.ui.PassportActivity$$ExternalSyntheticLambda17
+            r9.<init>(r6)
             r0.setOnClickListener(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = new org.telegram.ui.Cells.TextSettingsCell
             r0.<init>(r7)
@@ -3506,7 +3372,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
             java.lang.String r9 = "TelegramPassportDelete"
-            r10 = 2131627765(0x7f0e0ef5, float:1.8882804E38)
+            r10 = 2131627792(0x7f0e0var_, float:1.8882858E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r10 = 0
             r0.setText(r9, r10)
@@ -3515,13 +3381,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r2, r3)
             r0.addView(r9, r11)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
-            org.telegram.ui.-$$Lambda$PassportActivity$M27VR-Wg2b6FVbKFRWJ7eI9PtI4 r9 = new org.telegram.ui.-$$Lambda$PassportActivity$M27VR-Wg2b6FVbKFRWJ7eI9PtI4
-            r9.<init>()
+            org.telegram.ui.PassportActivity$$ExternalSyntheticLambda18 r9 = new org.telegram.ui.PassportActivity$$ExternalSyntheticLambda18
+            r9.<init>(r6)
             r0.setOnClickListener(r9)
             org.telegram.ui.Cells.ShadowSectionCell r0 = new org.telegram.ui.Cells.ShadowSectionCell
             r0.<init>(r7)
             r6.addDocumentSectionCell = r0
-            r9 = 2131165444(0x7var_, float:1.7945105E38)
+            r9 = 2131165449(0x7var_, float:1.7945115E38)
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r9, (java.lang.String) r4)
             r0.setBackgroundDrawable(r11)
             android.widget.LinearLayout r0 = r6.linearLayout2
@@ -3564,7 +3430,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.emptyImageView = r0
-            r2 = 2131165873(0x7var_b1, float:1.7945975E38)
+            r2 = 2131165878(0x7var_b6, float:1.7945986E38)
             r0.setImageResource(r2)
             android.widget.ImageView r0 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -3593,7 +3459,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r0.setTypeface(r9)
             android.widget.TextView r0 = r6.emptyTextView1
-            r9 = 2131626791(0x7f0e0b27, float:1.8880828E38)
+            r9 = 2131626808(0x7f0e0b38, float:1.8880863E38)
             java.lang.String r12 = "PassportNoDocuments"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r12, r9)
             r0.setText(r9)
@@ -3624,7 +3490,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.setPadding(r9, r10, r2, r10)
             android.widget.TextView r0 = r6.emptyTextView2
-            r2 = 2131626793(0x7f0e0b29, float:1.8880832E38)
+            r2 = 2131626810(0x7f0e0b3a, float:1.8880867E38)
             java.lang.String r9 = "PassportNoDocumentsInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r0.setText(r2)
@@ -3664,8 +3530,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17)
             r0.addView(r1, r2)
             android.widget.TextView r0 = r6.emptyTextView3
-            org.telegram.ui.-$$Lambda$PassportActivity$Ba1vQ-XPMrKUOQCq9c-7d77eTj0 r1 = new org.telegram.ui.-$$Lambda$PassportActivity$Ba1vQ-XPMrKUOQCq9c-7d77eTj0
-            r1.<init>()
+            org.telegram.ui.PassportActivity$$ExternalSyntheticLambda16 r1 = new org.telegram.ui.PassportActivity$$ExternalSyntheticLambda16
+            r1.<init>(r6)
             r0.setOnClickListener(r1)
             org.telegram.tgnet.TLRPC$TL_account_authorizationForm r0 = r6.currentForm
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r0 = r0.values
@@ -3747,22 +3613,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createManageInterface$17 */
-    public /* synthetic */ void lambda$createManageInterface$17$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createManageInterface$17(View view) {
         openAddDocumentAlert();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createManageInterface$21 */
-    public /* synthetic */ void lambda$createManageInterface$21$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createManageInterface$21(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("TelegramPassportDeleteTitle", NUM));
         builder.setMessage(LocaleController.getString("TelegramPassportDeleteAlert", NUM));
-        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                PassportActivity.this.lambda$createManageInterface$20$PassportActivity(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new PassportActivity$$ExternalSyntheticLambda0(this));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         AlertDialog create = builder.create();
         showDialog(create);
@@ -3773,33 +3633,22 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createManageInterface$20 */
-    public /* synthetic */ void lambda$createManageInterface$20$PassportActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createManageInterface$20(DialogInterface dialogInterface, int i) {
         TLRPC$TL_account_deleteSecureValue tLRPC$TL_account_deleteSecureValue = new TLRPC$TL_account_deleteSecureValue();
         for (int i2 = 0; i2 < this.currentForm.values.size(); i2++) {
             tLRPC$TL_account_deleteSecureValue.types.add(this.currentForm.values.get(i2).type);
         }
         needShowProgress();
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteSecureValue, new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PassportActivity.this.lambda$createManageInterface$19$PassportActivity(tLObject, tLRPC$TL_error);
-            }
-        });
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteSecureValue, new PassportActivity$$ExternalSyntheticLambda64(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createManageInterface$19 */
-    public /* synthetic */ void lambda$createManageInterface$19$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                PassportActivity.this.lambda$createManageInterface$18$PassportActivity();
-            }
-        });
+    public /* synthetic */ void lambda$createManageInterface$19(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda51(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createManageInterface$18 */
-    public /* synthetic */ void lambda$createManageInterface$18$PassportActivity() {
+    public /* synthetic */ void lambda$createManageInterface$18() {
         int i = 0;
         while (i < this.linearLayout2.getChildCount()) {
             View childAt = this.linearLayout2.getChildAt(i);
@@ -3817,8 +3666,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createManageInterface$22 */
-    public /* synthetic */ void lambda$createManageInterface$22$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createManageInterface$22(View view) {
         openAddDocumentAlert();
     }
 
@@ -3916,26 +3764,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (getParentActivity() != null && !arrayList.isEmpty()) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("PassportNoDocumentsAdd", NUM));
-            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), new DialogInterface.OnClickListener(arrayList2) {
-                public final /* synthetic */ ArrayList f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$openAddDocumentAlert$23$PassportActivity(this.f$1, dialogInterface, i);
-                }
-            });
+            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), new PassportActivity$$ExternalSyntheticLambda5(this, arrayList2));
             showDialog(builder.create());
         }
     }
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:17:0x0051  */
-    /* renamed from: lambda$openAddDocumentAlert$23 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$openAddDocumentAlert$23$PassportActivity(java.util.ArrayList r2, android.content.DialogInterface r3, int r4) {
+    public /* synthetic */ void lambda$openAddDocumentAlert$23(java.util.ArrayList r2, android.content.DialogInterface r3, int r4) {
         /*
             r1 = this;
             r3 = 0
@@ -3988,7 +3825,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r1.openTypeActivity(r0, r3, r2, r4)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.lambda$openAddDocumentAlert$23$PassportActivity(java.util.ArrayList, android.content.DialogInterface, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.lambda$openAddDocumentAlert$23(java.util.ArrayList, android.content.DialogInterface, int):void");
     }
 
     private void updateManageVisibility() {
@@ -4046,11 +3883,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             textSettingsCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
             textSettingsCell.setText(LocaleController.formatString("PassportPhoneUseSame", NUM, this.currentEmail), false);
             this.linearLayout2.addView(textSettingsCell, LayoutHelper.createLinear(-1, -2));
-            textSettingsCell.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PassportActivity.this.lambda$createEmailInterface$24$PassportActivity(view);
-                }
-            });
+            textSettingsCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda20(this));
             TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context2);
             this.bottomCell = textInfoPrivacyCell;
             textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
@@ -4089,11 +3922,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputFields[i].setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
             this.inputFields[i].setGravity(LocaleController.isRTL ? 5 : 3);
             frameLayout.addView(this.inputFields[i], LayoutHelper.createFrame(-1, -2.0f, 51, 21.0f, 12.0f, 21.0f, 6.0f));
-            this.inputFields[i].setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    return PassportActivity.this.lambda$createEmailInterface$25$PassportActivity(textView, i, keyEvent);
-                }
-            });
+            this.inputFields[i].setOnEditorActionListener(new PassportActivity$$ExternalSyntheticLambda44(this));
         }
         TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(context2);
         this.bottomCell = textInfoPrivacyCell2;
@@ -4103,16 +3932,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createEmailInterface$24 */
-    public /* synthetic */ void lambda$createEmailInterface$24$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createEmailInterface$24(View view) {
         this.useCurrentValue = true;
         this.doneItem.callOnClick();
         this.useCurrentValue = false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createEmailInterface$25 */
-    public /* synthetic */ boolean lambda$createEmailInterface$25$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createEmailInterface$25(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6 && i != 5) {
             return false;
         }
@@ -4132,7 +3959,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = r25
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
             java.lang.String r3 = "PassportPhone"
-            r4 = 2131626800(0x7f0e0b30, float:1.8880846E38)
+            r4 = 2131626817(0x7f0e0b41, float:1.888088E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r0.setTitle(r3)
             java.util.HashMap r0 = new java.util.HashMap
@@ -4186,7 +4013,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x0078:
             java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
-            org.telegram.ui.-$$Lambda$Ds7dtVnGrflEw4-LvNOxA0cDT4Y r7 = org.telegram.ui.$$Lambda$Ds7dtVnGrflEw4LvNOxA0cDT4Y.INSTANCE
+            org.telegram.ui.ChangePhoneActivity$PhoneView$$ExternalSyntheticLambda6 r7 = org.telegram.ui.ChangePhoneActivity$PhoneView$$ExternalSyntheticLambda6.INSTANCE
             java.util.Collections.sort(r0, r7)
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
@@ -4199,7 +4026,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setTextColor(r8)
             android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
             r7.setBackgroundDrawable(r8)
-            r8 = 2131626804(0x7f0e0b34, float:1.8880855E38)
+            r8 = 2131626821(0x7f0e0b45, float:1.888089E38)
             java.lang.Object[] r9 = new java.lang.Object[r5]
             org.telegram.PhoneFormat.PhoneFormat r10 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -4218,18 +4045,18 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r9 = -2
             android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r8, r9)
             r0.addView(r7, r10)
-            org.telegram.ui.-$$Lambda$PassportActivity$ZLpydY3FQdlllObSHy9jJZsWCAw r0 = new org.telegram.ui.-$$Lambda$PassportActivity$ZLpydY3FQdlllObSHy9jJZsWCAw
-            r0.<init>()
+            org.telegram.ui.PassportActivity$$ExternalSyntheticLambda25 r0 = new org.telegram.ui.PassportActivity$$ExternalSyntheticLambda25
+            r0.<init>(r1)
             r7.setOnClickListener(r0)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r0.<init>(r2)
             r1.bottomCell = r0
-            r7 = 2131165444(0x7var_, float:1.7945105E38)
+            r7 = 2131165449(0x7var_, float:1.7945115E38)
             java.lang.String r10 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r7, (java.lang.String) r10)
             r0.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r11 = 2131626806(0x7f0e0b36, float:1.8880859E38)
+            r11 = 2131626823(0x7f0e0b47, float:1.8880893E38)
             java.lang.String r13 = "PassportPhoneUseSameInfo"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4240,7 +4067,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r2)
             r1.headerCell = r0
-            r11 = 2131626803(0x7f0e0b33, float:1.8880853E38)
+            r11 = 2131626820(0x7f0e0b44, float:1.8880887E38)
             java.lang.String r13 = "PassportPhoneUseOther"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4335,12 +4162,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r0 != 0) goto L_0x0211
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            org.telegram.ui.-$$Lambda$PassportActivity$UFQIIKSJn3CkjdV_3Ag816ilcUc r8 = new org.telegram.ui.-$$Lambda$PassportActivity$UFQIIKSJn3CkjdV_3Ag816ilcUc
-            r8.<init>()
+            org.telegram.ui.PassportActivity$$ExternalSyntheticLambda35 r8 = new org.telegram.ui.PassportActivity$$ExternalSyntheticLambda35
+            r8.<init>(r1)
             r7.setOnTouchListener(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131624906(0x7f0e03ca, float:1.8877005E38)
+            r8 = 2131624910(0x7f0e03ce, float:1.8877013E38)
             java.lang.String r13 = "ChooseCountry"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r8)
             r7.setText(r8)
@@ -4435,7 +4262,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setHintText(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131626901(0x7f0e0b95, float:1.8881051E38)
+            r8 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
             java.lang.String r9 = "PaymentShippingPhoneNumber"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7.setHint(r8)
@@ -4484,14 +4311,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x0330:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            org.telegram.ui.-$$Lambda$PassportActivity$xSwOrzrcqcdvqMcV1h4WRijNrh0 r8 = new org.telegram.ui.-$$Lambda$PassportActivity$xSwOrzrcqcdvqMcV1h4WRijNrh0
-            r8.<init>()
+            org.telegram.ui.PassportActivity$$ExternalSyntheticLambda45 r8 = new org.telegram.ui.PassportActivity$$ExternalSyntheticLambda45
+            r8.<init>(r1)
             r7.setOnEditorActionListener(r8)
             if (r0 != r4) goto L_0x034a
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            org.telegram.ui.-$$Lambda$PassportActivity$SSEze-zMVIbPKw3xzG3VNR8rJtk r8 = new org.telegram.ui.-$$Lambda$PassportActivity$SSEze-zMVIbPKw3xzG3VNR8rJtk
-            r8.<init>()
+            org.telegram.ui.PassportActivity$$ExternalSyntheticLambda32 r8 = new org.telegram.ui.PassportActivity$$ExternalSyntheticLambda32
+            r8.<init>(r1)
             r7.setOnKeyListener(r8)
         L_0x034a:
             if (r0 != 0) goto L_0x036a
@@ -4509,7 +4336,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r15.addView(r7, r8)
         L_0x036a:
             int r0 = r0 + 1
-            r7 = 2131165444(0x7var_, float:1.7945105E38)
+            r7 = 2131165449(0x7var_, float:1.7945115E38)
             r8 = -1
             r9 = -2
             goto L_0x0136
@@ -4549,11 +4376,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r0.<init>(r2)
             r1.bottomCell = r0
-            r3 = 2131165444(0x7var_, float:1.7945105E38)
+            r3 = 2131165449(0x7var_, float:1.7945115E38)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r10)
             r0.setBackgroundDrawable(r2)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r2 = 2131626802(0x7f0e0b32, float:1.888085E38)
+            r2 = 2131626819(0x7f0e0b43, float:1.8880885E38)
             java.lang.String r3 = "PassportPhoneUploadInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -4569,34 +4396,27 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPhoneInterface$26 */
-    public /* synthetic */ void lambda$createPhoneInterface$26$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createPhoneInterface$26(View view) {
         this.useCurrentValue = true;
         this.doneItem.callOnClick();
         this.useCurrentValue = false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPhoneInterface$29 */
-    public /* synthetic */ boolean lambda$createPhoneInterface$29$PassportActivity(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$createPhoneInterface$29(View view, MotionEvent motionEvent) {
         if (getParentActivity() == null) {
             return false;
         }
         if (motionEvent.getAction() == 1) {
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
-            countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
-                public final void didSelectCountry(String str, String str2) {
-                    PassportActivity.this.lambda$createPhoneInterface$28$PassportActivity(str, str2);
-                }
-            });
+            countrySelectActivity.setCountrySelectActivityDelegate(new PassportActivity$$ExternalSyntheticLambda70(this));
             presentFragment(countrySelectActivity);
         }
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPhoneInterface$28 */
-    public /* synthetic */ void lambda$createPhoneInterface$28$PassportActivity(String str, String str2) {
+    public /* synthetic */ void lambda$createPhoneInterface$28(String str, String str2) {
         this.inputFields[0].setText(str);
         if (this.countriesArray.indexOf(str) != -1) {
             this.ignoreOnTextChange = true;
@@ -4606,25 +4426,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputFields[2].setHintText(str4 != null ? str4.replace('X', 8211) : null);
             this.ignoreOnTextChange = false;
         }
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                PassportActivity.this.lambda$createPhoneInterface$27$PassportActivity();
-            }
-        }, 300);
+        AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda48(this), 300);
         this.inputFields[2].requestFocus();
         EditTextBoldCursor[] editTextBoldCursorArr = this.inputFields;
         editTextBoldCursorArr[2].setSelection(editTextBoldCursorArr[2].length());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPhoneInterface$27 */
-    public /* synthetic */ void lambda$createPhoneInterface$27$PassportActivity() {
+    public /* synthetic */ void lambda$createPhoneInterface$27() {
         AndroidUtilities.showKeyboard(this.inputFields[2]);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPhoneInterface$30 */
-    public /* synthetic */ boolean lambda$createPhoneInterface$30$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createPhoneInterface$30(TextView textView, int i, KeyEvent keyEvent) {
         if (i == 5) {
             this.inputFields[2].requestFocus();
             return true;
@@ -4637,8 +4451,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createPhoneInterface$31 */
-    public /* synthetic */ boolean lambda$createPhoneInterface$31$PassportActivity(View view, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createPhoneInterface$31(View view, int i, KeyEvent keyEvent) {
         if (i != 67 || this.inputFields[2].length() != 0) {
             return false;
         }
@@ -4701,11 +4514,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.uploadDocumentCell = textSettingsCell;
             textSettingsCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
             this.linearLayout2.addView(this.uploadDocumentCell, LayoutHelper.createLinear(-1, -2));
-            this.uploadDocumentCell.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PassportActivity.this.lambda$createAddressInterface$32$PassportActivity(view);
-                }
-            });
+            this.uploadDocumentCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda23(this));
             TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(context2);
             this.bottomCell = textInfoPrivacyCell2;
             textInfoPrivacyCell2.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
@@ -4758,11 +4567,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.uploadTranslationCell = textSettingsCell2;
                 textSettingsCell2.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                 this.linearLayout2.addView(this.uploadTranslationCell, LayoutHelper.createLinear(-1, -2));
-                this.uploadTranslationCell.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        PassportActivity.this.lambda$createAddressInterface$33$PassportActivity(view);
-                    }
-                });
+                this.uploadTranslationCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda27(this));
                 TextInfoPrivacyCell textInfoPrivacyCell3 = new TextInfoPrivacyCell(context2);
                 this.bottomCellTranslation = textInfoPrivacyCell3;
                 textInfoPrivacyCell3.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
@@ -4816,7 +4621,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         while (i3 < i2) {
             final EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
             this.inputFields[i3] = editTextBoldCursor;
-            AnonymousClass11 r13 = new FrameLayout(context2) {
+            AnonymousClass11 r13 = new FrameLayout(this, context2) {
                 private StaticLayout errorLayout;
                 float offsetX;
 
@@ -4892,11 +4697,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputFields[i3].setCursorWidth(1.5f);
             this.inputFields[i3].setLineColors(Theme.getColor("windowBackgroundWhiteInputField"), Theme.getColor("windowBackgroundWhiteInputFieldActivated"), Theme.getColor("windowBackgroundWhiteRedText3"));
             if (i3 == 5) {
-                this.inputFields[i3].setOnTouchListener(new View.OnTouchListener() {
-                    public final boolean onTouch(View view, MotionEvent motionEvent) {
-                        return PassportActivity.this.lambda$createAddressInterface$35$PassportActivity(view, motionEvent);
-                    }
-                });
+                this.inputFields[i3].setOnTouchListener(new PassportActivity$$ExternalSyntheticLambda34(this));
                 this.inputFields[i3].setInputType(0);
                 this.inputFields[i3].setFocusable(false);
             } else {
@@ -4985,11 +4786,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
             editTextBoldCursor2.setGravity(i4 | 16);
             r13.addView(this.inputFields[i3], LayoutHelper.createFrame(-1, 64.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
-            this.inputFields[i3].setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    return PassportActivity.this.lambda$createAddressInterface$36$PassportActivity(textView, i, keyEvent);
-                }
-            });
+            this.inputFields[i3].setOnEditorActionListener(new PassportActivity$$ExternalSyntheticLambda42(this));
             i3++;
             i2 = 6;
             i = -2;
@@ -5017,11 +4814,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 textSettingsCell3.setText(LocaleController.getString("PassportDeleteDocument", NUM), false);
             }
             this.linearLayout2.addView(textSettingsCell3, LayoutHelper.createLinear(-1, -2));
-            textSettingsCell3.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PassportActivity.this.lambda$createAddressInterface$37$PassportActivity(view);
-                }
-            });
+            textSettingsCell3.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda13(this));
             ShadowSectionCell shadowSectionCell2 = new ShadowSectionCell(context2);
             this.sectionCell = shadowSectionCell2;
             shadowSectionCell2.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
@@ -5037,47 +4830,38 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createAddressInterface$32 */
-    public /* synthetic */ void lambda$createAddressInterface$32$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createAddressInterface$32(View view) {
         this.uploadingFileType = 0;
         openAttachMenu();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createAddressInterface$33 */
-    public /* synthetic */ void lambda$createAddressInterface$33$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createAddressInterface$33(View view) {
         this.uploadingFileType = 4;
         openAttachMenu();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createAddressInterface$35 */
-    public /* synthetic */ boolean lambda$createAddressInterface$35$PassportActivity(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$createAddressInterface$35(View view, MotionEvent motionEvent) {
         if (getParentActivity() == null) {
             return false;
         }
         if (motionEvent.getAction() == 1) {
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
-            countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
-                public final void didSelectCountry(String str, String str2) {
-                    PassportActivity.this.lambda$createAddressInterface$34$PassportActivity(str, str2);
-                }
-            });
+            countrySelectActivity.setCountrySelectActivityDelegate(new PassportActivity$$ExternalSyntheticLambda71(this));
             presentFragment(countrySelectActivity);
         }
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createAddressInterface$34 */
-    public /* synthetic */ void lambda$createAddressInterface$34$PassportActivity(String str, String str2) {
+    public /* synthetic */ void lambda$createAddressInterface$34(String str, String str2) {
         this.inputFields[5].setText(str);
         this.currentCitizeship = str2;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createAddressInterface$36 */
-    public /* synthetic */ boolean lambda$createAddressInterface$36$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createAddressInterface$36(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -5096,25 +4880,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createAddressInterface$37 */
-    public /* synthetic */ void lambda$createAddressInterface$37$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createAddressInterface$37(View view) {
         createDocumentDeleteAlert();
     }
 
     private void createDocumentDeleteAlert() {
         boolean[] zArr = {true};
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(zArr) {
-            public final /* synthetic */ boolean[] f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                PassportActivity.this.lambda$createDocumentDeleteAlert$38$PassportActivity(this.f$1, dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new PassportActivity$$ExternalSyntheticLambda11(this, zArr));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setTitle(LocaleController.getString("AppName", NUM));
         boolean z = this.documentOnly;
@@ -5137,25 +4910,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
             checkBoxCell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
             frameLayout.addView(checkBoxCell, LayoutHelper.createFrame(-1, 48, 51));
-            checkBoxCell.setOnClickListener(new View.OnClickListener(zArr) {
-                public final /* synthetic */ boolean[] f$0;
-
-                {
-                    this.f$0 = r1;
-                }
-
-                public final void onClick(View view) {
-                    PassportActivity.lambda$createDocumentDeleteAlert$39(this.f$0, view);
-                }
-            });
+            checkBoxCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda31(zArr));
             builder.setView(frameLayout);
         }
         showDialog(builder.create());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createDocumentDeleteAlert$38 */
-    public /* synthetic */ void lambda$createDocumentDeleteAlert$38$PassportActivity(boolean[] zArr, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createDocumentDeleteAlert$38(boolean[] zArr, DialogInterface dialogInterface, int i) {
         if (!this.documentOnly) {
             this.currentValues.clear();
         }
@@ -5164,7 +4926,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         finishFragment();
     }
 
-    static /* synthetic */ void lambda$createDocumentDeleteAlert$39(boolean[] zArr, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$createDocumentDeleteAlert$39(boolean[] zArr, View view) {
         if (view.isEnabled()) {
             zArr[0] = !zArr[0];
             ((CheckBoxCell) view).setChecked(zArr[0], true);
@@ -5719,11 +5482,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.uploadFrontCell = textDetailSettingsCell;
             textDetailSettingsCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
             this.linearLayout2.addView(this.uploadFrontCell, LayoutHelper.createLinear(-1, -2));
-            this.uploadFrontCell.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PassportActivity.this.lambda$createIdentityInterface$40$PassportActivity(view);
-                }
-            });
+            this.uploadFrontCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda22(this));
             LinearLayout linearLayout3 = new LinearLayout(context2);
             this.reverseLayout = linearLayout3;
             linearLayout3.setOrientation(1);
@@ -5734,11 +5493,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             textDetailSettingsCell2.setBackgroundDrawable(Theme.getSelectorDrawable(true));
             this.uploadReverseCell.setTextAndValue(LocaleController.getString("PassportReverseSide", NUM), LocaleController.getString("PassportReverseSideInfo", NUM), z2);
             this.linearLayout2.addView(this.uploadReverseCell, LayoutHelper.createLinear(-1, -2));
-            this.uploadReverseCell.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PassportActivity.this.lambda$createIdentityInterface$41$PassportActivity(view);
-                }
-            });
+            this.uploadReverseCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda24(this));
             if (this.currentDocumentsType.selfie_required) {
                 LinearLayout linearLayout4 = new LinearLayout(context2);
                 this.selfieLayout = linearLayout4;
@@ -5749,11 +5504,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 textDetailSettingsCell3.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                 this.uploadSelfieCell.setTextAndValue(LocaleController.getString("PassportSelfie", NUM), LocaleController.getString("PassportSelfieInfo", NUM), this.currentType.translation_required);
                 this.linearLayout2.addView(this.uploadSelfieCell, LayoutHelper.createLinear(-1, -2));
-                this.uploadSelfieCell.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        PassportActivity.this.lambda$createIdentityInterface$42$PassportActivity(view);
-                    }
-                });
+                this.uploadSelfieCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda21(this));
             }
             TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(context2);
             this.bottomCell = textInfoPrivacyCell2;
@@ -5774,11 +5525,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.uploadTranslationCell = textSettingsCell;
                 textSettingsCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                 this.linearLayout2.addView(this.uploadTranslationCell, LayoutHelper.createLinear(-1, -2));
-                this.uploadTranslationCell.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        PassportActivity.this.lambda$createIdentityInterface$43$PassportActivity(view);
-                    }
-                });
+                this.uploadTranslationCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda12(this));
                 TextInfoPrivacyCell textInfoPrivacyCell3 = new TextInfoPrivacyCell(context2);
                 this.bottomCellTranslation = textInfoPrivacyCell3;
                 textInfoPrivacyCell3.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
@@ -5822,11 +5569,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             textSettingsCell2.setBackgroundDrawable(Theme.getSelectorDrawable(true));
             this.scanDocumentCell.setText(LocaleController.getString("PassportScanPassport", NUM), false);
             this.linearLayout2.addView(this.scanDocumentCell, LayoutHelper.createLinear(-1, -2));
-            this.scanDocumentCell.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PassportActivity.this.lambda$createIdentityInterface$44$PassportActivity(view);
-                }
-            });
+            this.scanDocumentCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda19(this));
             TextInfoPrivacyCell textInfoPrivacyCell4 = new TextInfoPrivacyCell(context2);
             this.bottomCell = textInfoPrivacyCell4;
             textInfoPrivacyCell4.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
@@ -5850,7 +5593,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (i3 < i2) {
                 final EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
                 this.inputFields[i3] = editTextBoldCursor;
-                AnonymousClass15 r4 = new FrameLayout(context2) {
+                AnonymousClass15 r4 = new FrameLayout(this, context2) {
                     private StaticLayout errorLayout;
                     private float offsetX;
 
@@ -5927,32 +5670,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.inputFields[i3].setCursorWidth(1.5f);
                 this.inputFields[i3].setLineColors(Theme.getColor("windowBackgroundWhiteInputField"), Theme.getColor("windowBackgroundWhiteInputFieldActivated"), Theme.getColor("windowBackgroundWhiteRedText3"));
                 if (i3 == 5 || i3 == 6) {
-                    this.inputFields[i3].setOnTouchListener(new View.OnTouchListener() {
-                        public final boolean onTouch(View view, MotionEvent motionEvent) {
-                            return PassportActivity.this.lambda$createIdentityInterface$46$PassportActivity(view, motionEvent);
-                        }
-                    });
+                    this.inputFields[i3].setOnTouchListener(new PassportActivity$$ExternalSyntheticLambda36(this));
                     this.inputFields[i3].setInputType(0);
                 } else if (i3 == 3 || i3 == 8) {
-                    this.inputFields[i3].setOnTouchListener(new View.OnTouchListener(context2) {
-                        public final /* synthetic */ Context f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final boolean onTouch(View view, MotionEvent motionEvent) {
-                            return PassportActivity.this.lambda$createIdentityInterface$49$PassportActivity(this.f$1, view, motionEvent);
-                        }
-                    });
+                    this.inputFields[i3].setOnTouchListener(new PassportActivity$$ExternalSyntheticLambda38(this, context2));
                     this.inputFields[i3].setInputType(0);
                     this.inputFields[i3].setFocusable(false);
                 } else if (i3 == 4) {
-                    this.inputFields[i3].setOnTouchListener(new View.OnTouchListener() {
-                        public final boolean onTouch(View view, MotionEvent motionEvent) {
-                            return PassportActivity.this.lambda$createIdentityInterface$51$PassportActivity(view, motionEvent);
-                        }
-                    });
+                    this.inputFields[i3].setOnTouchListener(new PassportActivity$$ExternalSyntheticLambda37(this));
                     this.inputFields[i3].setInputType(0);
                     this.inputFields[i3].setFocusable(false);
                 } else {
@@ -6079,11 +5804,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.inputFields[i3].setPadding(0, 0, 0, 0);
                 this.inputFields[i3].setGravity((LocaleController.isRTL ? 5 : 3) | 16);
                 r4.addView(this.inputFields[i3], LayoutHelper.createFrame(-1, -1.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
-                this.inputFields[i3].setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                        return PassportActivity.this.lambda$createIdentityInterface$52$PassportActivity(textView, i, keyEvent);
-                    }
-                });
+                this.inputFields[i3].setOnEditorActionListener(new PassportActivity$$ExternalSyntheticLambda43(this));
                 i3++;
                 z = false;
                 i = -1;
@@ -6101,7 +5822,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 while (i6 < i5) {
                     final EditTextBoldCursor editTextBoldCursor2 = new EditTextBoldCursor(context2);
                     this.inputExtraFields[i6] = editTextBoldCursor2;
-                    AnonymousClass18 r7 = new FrameLayout(context2) {
+                    AnonymousClass18 r7 = new FrameLayout(this, context2) {
                         private StaticLayout errorLayout;
                         private float offsetX;
 
@@ -6207,11 +5928,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     this.inputExtraFields[i6].setPadding(0, 0, 0, 0);
                     this.inputExtraFields[i6].setGravity((LocaleController.isRTL ? 5 : 3) | 16);
                     r7.addView(this.inputExtraFields[i6], LayoutHelper.createFrame(-1, -1.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
-                    this.inputExtraFields[i6].setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                        public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                            return PassportActivity.this.lambda$createIdentityInterface$53$PassportActivity(textView, i, keyEvent);
-                        }
-                    });
+                    this.inputExtraFields[i6].setOnEditorActionListener(new PassportActivity$$ExternalSyntheticLambda41(this));
                     i6++;
                     i5 = 3;
                     i4 = 64;
@@ -6246,11 +5963,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         textSettingsCell3.setText(LocaleController.getString("PassportDeleteDocument", NUM), false);
                     }
                     this.linearLayout2.addView(textSettingsCell3, LayoutHelper.createLinear(-1, -2));
-                    textSettingsCell3.setOnClickListener(new View.OnClickListener() {
-                        public final void onClick(View view) {
-                            PassportActivity.this.lambda$createIdentityInterface$54$PassportActivity(view);
-                        }
-                    });
+                    textSettingsCell3.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda26(this));
                     this.nativeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
                     ShadowSectionCell shadowSectionCell2 = new ShadowSectionCell(context2);
                     this.sectionCell = shadowSectionCell2;
@@ -6267,36 +5980,31 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$40 */
-    public /* synthetic */ void lambda$createIdentityInterface$40$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createIdentityInterface$40(View view) {
         this.uploadingFileType = 2;
         openAttachMenu();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$41 */
-    public /* synthetic */ void lambda$createIdentityInterface$41$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createIdentityInterface$41(View view) {
         this.uploadingFileType = 3;
         openAttachMenu();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$42 */
-    public /* synthetic */ void lambda$createIdentityInterface$42$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createIdentityInterface$42(View view) {
         this.uploadingFileType = 1;
         openAttachMenu();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$43 */
-    public /* synthetic */ void lambda$createIdentityInterface$43$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createIdentityInterface$43(View view) {
         this.uploadingFileType = 4;
         openAttachMenu();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$44 */
-    public /* synthetic */ void lambda$createIdentityInterface$44$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createIdentityInterface$44(View view) {
         if (Build.VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.CAMERA") == 0) {
             CameraScanActivity cameraScanActivity = new CameraScanActivity(0);
             cameraScanActivity.setDelegate(new CameraScanActivity.CameraScanActivityDelegate() {
@@ -6350,32 +6058,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$46 */
-    public /* synthetic */ boolean lambda$createIdentityInterface$46$PassportActivity(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$46(View view, MotionEvent motionEvent) {
         if (getParentActivity() == null) {
             return false;
         }
         if (motionEvent.getAction() == 1) {
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
-            countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate(view) {
-                public final /* synthetic */ View f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void didSelectCountry(String str, String str2) {
-                    PassportActivity.this.lambda$createIdentityInterface$45$PassportActivity(this.f$1, str, str2);
-                }
-            });
+            countrySelectActivity.setCountrySelectActivityDelegate(new PassportActivity$$ExternalSyntheticLambda72(this, view));
             presentFragment(countrySelectActivity);
         }
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$45 */
-    public /* synthetic */ void lambda$createIdentityInterface$45$PassportActivity(View view, String str, String str2) {
+    public /* synthetic */ void lambda$createIdentityInterface$45(View view, String str, String str2) {
         int intValue = ((Integer) view.getTag()).intValue();
         EditTextBoldCursor editTextBoldCursor = this.inputFields[intValue];
         if (intValue == 5) {
@@ -6387,8 +6083,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$49 */
-    public /* synthetic */ boolean lambda$createIdentityInterface$49$PassportActivity(Context context, View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$49(Context context, View view, MotionEvent motionEvent) {
         String str;
         int i;
         int i2;
@@ -6430,31 +6125,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     i5 = -1;
                     i4 = -1;
                 }
-                AlertDialog.Builder createDatePickerDialog = AlertsCreator.createDatePickerDialog(context, i3, i2, i, i6, i5, i4, str, intValue == 8, new AlertsCreator.DatePickerDelegate(intValue, editTextBoldCursor) {
-                    public final /* synthetic */ int f$1;
-                    public final /* synthetic */ EditTextBoldCursor f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void didSelectDate(int i, int i2, int i3) {
-                        PassportActivity.this.lambda$createIdentityInterface$47$PassportActivity(this.f$1, this.f$2, i, i2, i3);
-                    }
-                });
+                AlertDialog.Builder createDatePickerDialog = AlertsCreator.createDatePickerDialog(context, i3, i2, i, i6, i5, i4, str, intValue == 8, new PassportActivity$$ExternalSyntheticLambda69(this, intValue, editTextBoldCursor));
                 if (intValue == 8) {
-                    createDatePickerDialog.setNegativeButton(LocaleController.getString("PassportSelectNotExpire", NUM), new DialogInterface.OnClickListener(editTextBoldCursor) {
-                        public final /* synthetic */ EditTextBoldCursor f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            PassportActivity.this.lambda$createIdentityInterface$48$PassportActivity(this.f$1, dialogInterface, i);
-                        }
-                    });
+                    createDatePickerDialog.setNegativeButton(LocaleController.getString("PassportSelectNotExpire", NUM), new PassportActivity$$ExternalSyntheticLambda10(this, editTextBoldCursor));
                 }
                 showDialog(createDatePickerDialog.create());
             } catch (Exception e) {
@@ -6465,8 +6138,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$47 */
-    public /* synthetic */ void lambda$createIdentityInterface$47$PassportActivity(int i, EditTextBoldCursor editTextBoldCursor, int i2, int i3, int i4) {
+    public /* synthetic */ void lambda$createIdentityInterface$47(int i, EditTextBoldCursor editTextBoldCursor, int i2, int i3, int i4) {
         if (i == 8) {
             int[] iArr = this.currentExpireDate;
             iArr[0] = i2;
@@ -6477,8 +6149,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$48 */
-    public /* synthetic */ void lambda$createIdentityInterface$48$PassportActivity(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createIdentityInterface$48(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i) {
         int[] iArr = this.currentExpireDate;
         iArr[2] = 0;
         iArr[1] = 0;
@@ -6487,19 +6158,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$51 */
-    public /* synthetic */ boolean lambda$createIdentityInterface$51$PassportActivity(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$51(View view, MotionEvent motionEvent) {
         if (getParentActivity() == null) {
             return false;
         }
         if (motionEvent.getAction() == 1) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("PassportSelectGender", NUM));
-            builder.setItems(new CharSequence[]{LocaleController.getString("PassportMale", NUM), LocaleController.getString("PassportFemale", NUM)}, new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$createIdentityInterface$50$PassportActivity(dialogInterface, i);
-                }
-            });
+            builder.setItems(new CharSequence[]{LocaleController.getString("PassportMale", NUM), LocaleController.getString("PassportFemale", NUM)}, new PassportActivity$$ExternalSyntheticLambda3(this));
             builder.setPositiveButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             showDialog(builder.create());
         }
@@ -6507,8 +6173,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$50 */
-    public /* synthetic */ void lambda$createIdentityInterface$50$PassportActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createIdentityInterface$50(DialogInterface dialogInterface, int i) {
         if (i == 0) {
             this.currentGender = "male";
             this.inputFields[4].setText(LocaleController.getString("PassportMale", NUM));
@@ -6519,8 +6184,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$52 */
-    public /* synthetic */ boolean lambda$createIdentityInterface$52$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$52(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -6539,8 +6203,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$53 */
-    public /* synthetic */ boolean lambda$createIdentityInterface$53$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$53(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -6559,8 +6222,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createIdentityInterface$54 */
-    public /* synthetic */ void lambda$createIdentityInterface$54$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createIdentityInterface$54(View view) {
         createDocumentDeleteAlert();
     }
 
@@ -6588,9 +6250,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     public void updateUploadText(int r9) {
         /*
             r8 = this;
-            r0 = 2131626835(0x7f0e0b53, float:1.8880917E38)
+            r0 = 2131626852(0x7f0e0b64, float:1.8880952E38)
             java.lang.String r1 = "PassportUploadAdditinalDocument"
-            r2 = 2131626836(0x7f0e0b54, float:1.888092E38)
+            r2 = 2131626853(0x7f0e0b65, float:1.8880954E38)
             java.lang.String r3 = "PassportUploadDocument"
             r4 = 1
             r5 = 0
@@ -6670,19 +6332,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r0 == 0) goto L_0x0092
             goto L_0x00a8
         L_0x0092:
-            r0 = 2131626720(0x7f0e0ae0, float:1.8880684E38)
+            r0 = 2131626737(0x7f0e0af1, float:1.8880719E38)
             java.lang.String r1 = "PassportFrontSide"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626721(0x7f0e0ae1, float:1.8880686E38)
+            r1 = 2131626738(0x7f0e0af2, float:1.888072E38)
             java.lang.String r2 = "PassportFrontSideInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
             goto L_0x00bd
         L_0x00a8:
-            r0 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r0 = 2131626795(0x7f0e0b2b, float:1.8880836E38)
             java.lang.String r1 = "PassportMainPage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626779(0x7f0e0b1b, float:1.8880804E38)
+            r1 = 2131626796(0x7f0e0b2c, float:1.8880838E38)
             java.lang.String r2 = "PassportMainPageInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
@@ -6893,7 +6555,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7[r3] = r5
             r7[r4] = r5
             r7[r5] = r5
-            r7 = 2131626794(0x7f0e0b2a, float:1.8880834E38)
+            r7 = 2131626811(0x7f0e0b3b, float:1.8880869E38)
             java.lang.String r0 = "PassportNoExpireDate"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6903,7 +6565,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00c9
             r6.currentGender = r7
-            r7 = 2131626780(0x7f0e0b1c, float:1.8880806E38)
+            r7 = 2131626797(0x7f0e0b2d, float:1.888084E38)
             java.lang.String r0 = "PassportMale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6913,7 +6575,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00ef
             r6.currentGender = r7
-            r7 = 2131626719(0x7f0e0adf, float:1.8880682E38)
+            r7 = 2131626736(0x7f0e0af0, float:1.8880717E38)
             java.lang.String r0 = "PassportFemale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -7025,40 +6687,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.errorsValues.put(str3, "");
             }
             secureDocumentCell.setTextAndValueAndImage(string, str2, secureDocument);
-            secureDocumentCell.setOnClickListener(new View.OnClickListener(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    PassportActivity.this.lambda$addDocumentView$55$PassportActivity(this.f$1, view);
-                }
-            });
-            secureDocumentCell.setOnLongClickListener(new View.OnLongClickListener(i, secureDocument, secureDocumentCell, str3) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ SecureDocument f$2;
-                public final /* synthetic */ PassportActivity.SecureDocumentCell f$3;
-                public final /* synthetic */ String f$4;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
-
-                public final boolean onLongClick(View view) {
-                    return PassportActivity.this.lambda$addDocumentView$57$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, view);
-                }
-            });
+            secureDocumentCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda29(this, i));
+            secureDocumentCell.setOnLongClickListener(new PassportActivity$$ExternalSyntheticLambda33(this, i, secureDocument, secureDocumentCell, str3));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addDocumentView$55 */
-    public /* synthetic */ void lambda$addDocumentView$55$PassportActivity(int i, View view) {
+    public /* synthetic */ void lambda$addDocumentView$55(int i, View view) {
         this.uploadingFileType = i;
         if (i == 1) {
             this.currentPhotoViewerLayout = this.selfieLayout;
@@ -7097,8 +6732,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addDocumentView$57 */
-    public /* synthetic */ boolean lambda$addDocumentView$57$PassportActivity(int i, SecureDocument secureDocument, SecureDocumentCell secureDocumentCell, String str, View view) {
+    public /* synthetic */ boolean lambda$addDocumentView$57(int i, SecureDocument secureDocument, SecureDocumentCell secureDocumentCell, String str, View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         if (i == 1) {
             builder.setMessage(LocaleController.getString("PassportDeleteSelfie", NUM));
@@ -7107,30 +6741,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(secureDocument, i, secureDocumentCell, str) {
-            public final /* synthetic */ SecureDocument f$1;
-            public final /* synthetic */ int f$2;
-            public final /* synthetic */ PassportActivity.SecureDocumentCell f$3;
-            public final /* synthetic */ String f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                PassportActivity.this.lambda$addDocumentView$56$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new PassportActivity$$ExternalSyntheticLambda6(this, secureDocument, i, secureDocumentCell, str));
         showDialog(builder.create());
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addDocumentView$56 */
-    public /* synthetic */ void lambda$addDocumentView$56$PassportActivity(SecureDocument secureDocument, int i, SecureDocumentCell secureDocumentCell, String str, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$addDocumentView$56(SecureDocument secureDocument, int i, SecureDocumentCell secureDocumentCell, String str, DialogInterface dialogInterface, int i2) {
         this.documentsCells.remove(secureDocument);
         if (i == 1) {
             this.selfieDocument = null;
@@ -7401,7 +7018,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r3 = 0
             r7.languageMap = r3
         L_0x00cb:
-            r5 = 2131626712(0x7f0e0ad8, float:1.8880668E38)
+            r5 = 2131626729(0x7f0e0ae9, float:1.8880702E38)
             java.lang.String r14 = "PassportDocuments"
             if (r9 == 0) goto L_0x010b
             org.telegram.tgnet.TLRPC$SecureValueType r0 = r8.type
@@ -7770,7 +7387,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0395 }
             if (r2 == 0) goto L_0x0360
             java.lang.String r2 = "PassportMale"
-            r4 = 2131626780(0x7f0e0b1c, float:1.8880806E38)
+            r4 = 2131626797(0x7f0e0b2d, float:1.888084E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)     // Catch:{ Exception -> 0x0395 }
             r12.append(r2)     // Catch:{ Exception -> 0x0395 }
             goto L_0x0392
@@ -7779,7 +7396,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0395 }
             if (r2 == 0) goto L_0x0392
             java.lang.String r2 = "PassportFemale"
-            r4 = 2131626719(0x7f0e0adf, float:1.8880682E38)
+            r4 = 2131626736(0x7f0e0af0, float:1.8880717E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)     // Catch:{ Exception -> 0x0395 }
             r12.append(r2)     // Catch:{ Exception -> 0x0395 }
             goto L_0x0392
@@ -7925,7 +7542,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04c5
             if (r11 != 0) goto L_0x046c
-            r0 = 2131626798(0x7f0e0b2e, float:1.8880842E38)
+            r0 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             java.lang.String r1 = "PassportPersonalDetailsInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x0467:
@@ -7937,7 +7554,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = 8
             if (r1 != r2) goto L_0x047c
             r2 = r26
-            r1 = 2131626712(0x7f0e0ad8, float:1.8880668E38)
+            r1 = 2131626729(0x7f0e0ae9, float:1.8880702E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x0467
         L_0x047c:
@@ -7947,33 +7564,33 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r11.type
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassport
             if (r2 == 0) goto L_0x0491
-            r0 = 2131626728(0x7f0e0ae8, float:1.88807E38)
+            r0 = 2131626745(0x7f0e0af9, float:1.8880735E38)
             java.lang.String r1 = "PassportIdentityPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x0491:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeInternalPassport
             if (r2 == 0) goto L_0x049f
-            r0 = 2131626727(0x7f0e0ae7, float:1.8880698E38)
+            r0 = 2131626744(0x7f0e0af8, float:1.8880733E38)
             java.lang.String r1 = "PassportIdentityInternalPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x049f:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeDriverLicense
             if (r2 == 0) goto L_0x04ad
-            r0 = 2131626725(0x7f0e0ae5, float:1.8880694E38)
+            r0 = 2131626742(0x7f0e0af6, float:1.8880729E38)
             java.lang.String r1 = "PassportIdentityDriverLicence"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x04ad:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeIdentityCard
             if (r1 == 0) goto L_0x04c5
-            r0 = 2131626726(0x7f0e0ae6, float:1.8880696E38)
+            r0 = 2131626743(0x7f0e0af7, float:1.888073E38)
             java.lang.String r1 = "PassportIdentityID"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x04bb:
-            r0 = 2131626724(0x7f0e0ae4, float:1.8880692E38)
+            r0 = 2131626741(0x7f0e0af5, float:1.8880727E38)
             java.lang.String r1 = "PassportIdentityDocumentInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
@@ -7988,7 +7605,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04c5
             if (r11 != 0) goto L_0x04e2
-            r0 = 2131626688(0x7f0e0ac0, float:1.888062E38)
+            r0 = 2131626705(0x7f0e0ad1, float:1.8880654E38)
             java.lang.String r1 = "PassportAddressNoUploadInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
@@ -7996,7 +7613,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r1 = r7.currentActivityType
             r4 = 8
             if (r1 != r4) goto L_0x04f1
-            r1 = 2131626712(0x7f0e0ad8, float:1.8880668E38)
+            r1 = 2131626729(0x7f0e0ae9, float:1.8880702E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x0467
         L_0x04f1:
@@ -8005,40 +7622,40 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r11.type
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeRentalAgreement
             if (r3 == 0) goto L_0x0505
-            r0 = 2131626662(0x7f0e0aa6, float:1.8880567E38)
+            r0 = 2131626679(0x7f0e0ab7, float:1.88806E38)
             java.lang.String r1 = "PassportAddAgreementInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0505:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeUtilityBill
             if (r3 == 0) goto L_0x0513
-            r0 = 2131626666(0x7f0e0aaa, float:1.8880575E38)
+            r0 = 2131626683(0x7f0e0abb, float:1.888061E38)
             java.lang.String r1 = "PassportAddBillInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0513:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassportRegistration
             if (r3 == 0) goto L_0x0521
-            r0 = 2131626676(0x7f0e0ab4, float:1.8880595E38)
+            r0 = 2131626693(0x7f0e0ac5, float:1.888063E38)
             java.lang.String r1 = "PassportAddPassportRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0521:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeTemporaryRegistration
             if (r3 == 0) goto L_0x052f
-            r0 = 2131626678(0x7f0e0ab6, float:1.8880599E38)
+            r0 = 2131626695(0x7f0e0ac7, float:1.8880633E38)
             java.lang.String r1 = "PassportAddTemporaryRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x052f:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeBankStatement
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626664(0x7f0e0aa8, float:1.888057E38)
+            r0 = 2131626681(0x7f0e0ab9, float:1.8880605E38)
             java.lang.String r1 = "PassportAddBankInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x053d:
-            r0 = 2131626687(0x7f0e0abf, float:1.8880617E38)
+            r0 = 2131626704(0x7f0e0ad0, float:1.8880652E38)
             java.lang.String r1 = "PassportAddressInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
@@ -8048,7 +7665,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r3 == 0) goto L_0x055c
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626801(0x7f0e0b31, float:1.8880848E38)
+            r0 = 2131626818(0x7f0e0b42, float:1.8880883E38)
             java.lang.String r1 = "PassportPhoneInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
@@ -8057,7 +7674,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r1 == 0) goto L_0x056f
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626715(0x7f0e0adb, float:1.8880674E38)
+            r0 = 2131626732(0x7f0e0aec, float:1.8880709E38)
             java.lang.String r1 = "PassportEmailInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x056f:
@@ -8172,11 +7789,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                 }
                 if (z) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public final void run() {
-                            PassportActivity.this.lambda$checkNativeFields$58$PassportActivity();
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda52(this));
                 }
             } else if (this.nativeInfoCell.getVisibility() != 8) {
                 this.nativeInfoCell.setVisibility(8);
@@ -8200,8 +7813,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkNativeFields$58 */
-    public /* synthetic */ void lambda$checkNativeFields$58$PassportActivity() {
+    public /* synthetic */ void lambda$checkNativeFields$58() {
         EditTextBoldCursor[] editTextBoldCursorArr = this.inputExtraFields;
         if (editTextBoldCursorArr != null) {
             scrollToField(editTextBoldCursorArr[0]);
@@ -8587,65 +8199,17 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             } else {
                 tLRPC$TL_account_deleteSecureValue.types.add(tLRPC$TL_secureRequiredType4.type);
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteSecureValue, new RequestDelegate(errorRunnable, z2, tLRPC$TL_secureRequiredType2, tLRPC$TL_secureRequiredType, z, arrayList, runnable) {
-                public final /* synthetic */ PassportActivity.ErrorRunnable f$1;
-                public final /* synthetic */ boolean f$2;
-                public final /* synthetic */ TLRPC$TL_secureRequiredType f$3;
-                public final /* synthetic */ TLRPC$TL_secureRequiredType f$4;
-                public final /* synthetic */ boolean f$5;
-                public final /* synthetic */ ArrayList f$6;
-                public final /* synthetic */ Runnable f$7;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                    this.f$6 = r7;
-                    this.f$7 = r8;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    PassportActivity.this.lambda$deleteValueInternal$60$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteSecureValue, new PassportActivity$$ExternalSyntheticLambda67(this, errorRunnable, z2, tLRPC$TL_secureRequiredType2, tLRPC$TL_secureRequiredType, z, arrayList, runnable));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$deleteValueInternal$60 */
-    public /* synthetic */ void lambda$deleteValueInternal$60$PassportActivity(ErrorRunnable errorRunnable, boolean z, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, errorRunnable, z, tLRPC$TL_secureRequiredType, tLRPC$TL_secureRequiredType2, z2, arrayList, runnable) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ PassportActivity.ErrorRunnable f$2;
-            public final /* synthetic */ boolean f$3;
-            public final /* synthetic */ TLRPC$TL_secureRequiredType f$4;
-            public final /* synthetic */ TLRPC$TL_secureRequiredType f$5;
-            public final /* synthetic */ boolean f$6;
-            public final /* synthetic */ ArrayList f$7;
-            public final /* synthetic */ Runnable f$8;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-                this.f$6 = r7;
-                this.f$7 = r8;
-                this.f$8 = r9;
-            }
-
-            public final void run() {
-                PassportActivity.this.lambda$deleteValueInternal$59$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
-            }
-        });
+    public /* synthetic */ void lambda$deleteValueInternal$60(ErrorRunnable errorRunnable, boolean z, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda60(this, tLRPC$TL_error, errorRunnable, z, tLRPC$TL_secureRequiredType, tLRPC$TL_secureRequiredType2, z2, arrayList, runnable));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$deleteValueInternal$59 */
-    public /* synthetic */ void lambda$deleteValueInternal$59$PassportActivity(TLRPC$TL_error tLRPC$TL_error, ErrorRunnable errorRunnable, boolean z, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable) {
+    public /* synthetic */ void lambda$deleteValueInternal$59(TLRPC$TL_error tLRPC$TL_error, ErrorRunnable errorRunnable, boolean z, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable) {
         String str;
         TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType3;
         TLRPC$TL_secureData tLRPC$TL_secureData;
@@ -8750,13 +8314,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x0012:
             org.telegram.ui.PassportActivity$TextDetailSecureCell r9 = new org.telegram.ui.PassportActivity$TextDetailSecureCell
             r3 = r17
-            r9.<init>(r3)
+            r9.<init>(r8, r3)
             r3 = 1
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3)
             r9.setBackgroundDrawable(r4)
             org.telegram.tgnet.TLRPC$SecureValueType r4 = r1.type
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
-            r10 = 2131626834(0x7f0e0b52, float:1.8880915E38)
+            r10 = 2131626851(0x7f0e0b63, float:1.888095E38)
             java.lang.String r11 = "PassportTwoDocuments"
             r12 = 2
             java.lang.String r13 = ""
@@ -8792,12 +8356,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x008b
         L_0x0078:
-            r4 = 2131626723(0x7f0e0ae3, float:1.888069E38)
+            r4 = 2131626740(0x7f0e0af4, float:1.8880725E38)
             java.lang.String r5 = "PassportIdentityDocument"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x008b
         L_0x0082:
-            r4 = 2131626797(0x7f0e0b2d, float:1.888084E38)
+            r4 = 2131626814(0x7f0e0b3e, float:1.8880875E38)
             java.lang.String r5 = "PassportPersonalDetails"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x008b:
@@ -8838,12 +8402,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x00f2
         L_0x00df:
-            r4 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
+            r4 = 2131626832(0x7f0e0b50, float:1.8880911E38)
             java.lang.String r5 = "PassportResidentialAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x00f2
         L_0x00e9:
-            r4 = 2131626685(0x7f0e0abd, float:1.8880613E38)
+            r4 = 2131626702(0x7f0e0ace, float:1.8880648E38)
             java.lang.String r5 = "PassportAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x00f2:
@@ -8853,7 +8417,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x00f8:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePhone
             if (r5 == 0) goto L_0x010b
-            r4 = 2131626800(0x7f0e0b30, float:1.8880846E38)
+            r4 = 2131626817(0x7f0e0b41, float:1.888088E38)
             java.lang.String r5 = "PassportPhone"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -8862,7 +8426,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x010b:
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeEmail
             if (r4 == 0) goto L_0x011d
-            r4 = 2131626713(0x7f0e0ad9, float:1.888067E38)
+            r4 = 2131626730(0x7f0e0aea, float:1.8880704E38)
             java.lang.String r5 = "PassportEmail"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -8884,8 +8448,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
             r4.addView(r9, r5)
         L_0x013e:
-            org.telegram.ui.-$$Lambda$PassportActivity$cM9COwU1Tayt1wP1otLjICCCqBc r4 = new org.telegram.ui.-$$Lambda$PassportActivity$cM9COwU1Tayt1wP1otLjICCCqBc
-            r4.<init>(r0, r1, r6)
+            org.telegram.ui.PassportActivity$$ExternalSyntheticLambda30 r4 = new org.telegram.ui.PassportActivity$$ExternalSyntheticLambda30
+            r4.<init>(r8, r0, r1, r6)
             r9.setOnClickListener(r4)
             java.util.HashMap<org.telegram.tgnet.TLRPC$TL_secureRequiredType, org.telegram.ui.PassportActivity$TextDetailSecureCell> r4 = r8.typesViews
             r4.put(r1, r9)
@@ -8989,8 +8553,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addField$64 */
-    public /* synthetic */ void lambda$addField$64$PassportActivity(ArrayList arrayList, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, boolean z, View view) {
+    public /* synthetic */ void lambda$addField$64(ArrayList arrayList, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, boolean z, View view) {
         TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2;
         String str;
         int i;
@@ -9014,19 +8577,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean z2 = tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypePhone;
             if ((z2 || (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypeEmail)) && getValueByType(tLRPC$TL_secureRequiredType, false) != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(tLRPC$TL_secureRequiredType, z) {
-                    public final /* synthetic */ TLRPC$TL_secureRequiredType f$1;
-                    public final /* synthetic */ boolean f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        PassportActivity.this.lambda$addField$63$PassportActivity(this.f$1, this.f$2, dialogInterface, i);
-                    }
-                });
+                builder.setPositiveButton(LocaleController.getString("OK", NUM), new PassportActivity$$ExternalSyntheticLambda9(this, tLRPC$TL_secureRequiredType, z));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 builder.setTitle(LocaleController.getString("AppName", NUM));
                 if (z2) {
@@ -9073,21 +8624,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     arrayList2.add(LocaleController.getString("PassportAddPassportRegistration", NUM));
                 }
             }
-            builder2.setItems((CharSequence[]) arrayList2.toArray(new CharSequence[0]), new DialogInterface.OnClickListener(tLRPC$TL_secureRequiredType, arrayList, z) {
-                public final /* synthetic */ TLRPC$TL_secureRequiredType f$1;
-                public final /* synthetic */ ArrayList f$2;
-                public final /* synthetic */ boolean f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$addField$61$PassportActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
-                }
-            });
+            builder2.setItems((CharSequence[]) arrayList2.toArray(new CharSequence[0]), new PassportActivity$$ExternalSyntheticLambda8(this, tLRPC$TL_secureRequiredType, arrayList, z));
             showDialog(builder2.create());
             return;
         }
@@ -9095,29 +8632,18 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addField$61 */
-    public /* synthetic */ void lambda$addField$61$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$addField$61(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
         openTypeActivity(tLRPC$TL_secureRequiredType, (TLRPC$TL_secureRequiredType) arrayList.get(i), arrayList, z);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addField$63 */
-    public /* synthetic */ void lambda$addField$63$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, boolean z, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$addField$63(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, boolean z, DialogInterface dialogInterface, int i) {
         needShowProgress();
-        deleteValueInternal(tLRPC$TL_secureRequiredType, (TLRPC$TL_secureRequiredType) null, (ArrayList<TLRPC$TL_secureRequiredType>) null, true, new Runnable() {
-            public final void run() {
-                PassportActivity.this.needHideProgress();
-            }
-        }, new ErrorRunnable() {
-            public final void onError(String str, String str2) {
-                PassportActivity.this.lambda$addField$62$PassportActivity(str, str2);
-            }
-        }, z);
+        deleteValueInternal(tLRPC$TL_secureRequiredType, (TLRPC$TL_secureRequiredType) null, (ArrayList<TLRPC$TL_secureRequiredType>) null, true, new PassportActivity$$ExternalSyntheticLambda47(this), new PassportActivity$$ExternalSyntheticLambda73(this), z);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addField$62 */
-    public /* synthetic */ void lambda$addField$62$PassportActivity(String str, String str2) {
+    public /* synthetic */ void lambda$addField$62(String str, String str2) {
         needHideProgress();
     }
 
@@ -9403,50 +8929,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 FileLog.e((Throwable) e);
             }
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_sendVerifyPhoneCode, new RequestDelegate(str, passportActivityDelegate, tLRPC$TL_account_sendVerifyPhoneCode) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ PassportActivity.PassportActivityDelegate f$2;
-            public final /* synthetic */ TLRPC$TL_account_sendVerifyPhoneCode f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PassportActivity.this.lambda$startPhoneVerification$66$PassportActivity(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
-            }
-        }, 2);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_sendVerifyPhoneCode, new PassportActivity$$ExternalSyntheticLambda66(this, str, passportActivityDelegate, tLRPC$TL_account_sendVerifyPhoneCode), 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startPhoneVerification$66 */
-    public /* synthetic */ void lambda$startPhoneVerification$66$PassportActivity(String str, PassportActivityDelegate passportActivityDelegate, TLRPC$TL_account_sendVerifyPhoneCode tLRPC$TL_account_sendVerifyPhoneCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, str, passportActivityDelegate, tLObject, tLRPC$TL_account_sendVerifyPhoneCode) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ String f$2;
-            public final /* synthetic */ PassportActivity.PassportActivityDelegate f$3;
-            public final /* synthetic */ TLObject f$4;
-            public final /* synthetic */ TLRPC$TL_account_sendVerifyPhoneCode f$5;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-            }
-
-            public final void run() {
-                PassportActivity.this.lambda$startPhoneVerification$65$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-            }
-        });
+    public /* synthetic */ void lambda$startPhoneVerification$66(String str, PassportActivityDelegate passportActivityDelegate, TLRPC$TL_account_sendVerifyPhoneCode tLRPC$TL_account_sendVerifyPhoneCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda58(this, tLRPC$TL_error, str, passportActivityDelegate, tLObject, tLRPC$TL_account_sendVerifyPhoneCode));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startPhoneVerification$65 */
-    public /* synthetic */ void lambda$startPhoneVerification$65$PassportActivity(TLRPC$TL_error tLRPC$TL_error, String str, PassportActivityDelegate passportActivityDelegate, TLObject tLObject, TLRPC$TL_account_sendVerifyPhoneCode tLRPC$TL_account_sendVerifyPhoneCode) {
+    public /* synthetic */ void lambda$startPhoneVerification$65(TLRPC$TL_error tLRPC$TL_error, String str, PassportActivityDelegate passportActivityDelegate, TLObject tLObject, TLRPC$TL_account_sendVerifyPhoneCode tLRPC$TL_account_sendVerifyPhoneCode) {
         String str2 = str;
         if (tLRPC$TL_error == null) {
             HashMap hashMap = new HashMap();
@@ -9660,11 +9152,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (this.presentAfterAnimation != null) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    PassportActivity.this.lambda$onTransitionAnimationEnd$67$PassportActivity();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda49(this));
         }
         int i = this.currentActivityType;
         if (i == 5) {
@@ -9697,8 +9185,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onTransitionAnimationEnd$67 */
-    public /* synthetic */ void lambda$onTransitionAnimationEnd$67$PassportActivity() {
+    public /* synthetic */ void lambda$onTransitionAnimationEnd$67() {
         presentFragment(this.presentAfterAnimation, true);
         this.presentAfterAnimation = null;
     }
@@ -9746,11 +9233,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setTitle(LocaleController.getString("AppName", NUM));
                     builder.setMessage(LocaleController.getString("PermissionNoAudioVideo", NUM));
-                    builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            PassportActivity.this.lambda$onRequestPermissionsResultFragment$68$PassportActivity(dialogInterface, i);
-                        }
-                    });
+                    builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new PassportActivity$$ExternalSyntheticLambda4(this));
                     builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
                     builder.show();
                 }
@@ -9765,8 +9248,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onRequestPermissionsResultFragment$68 */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$68$PassportActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$68(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -9850,7 +9332,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
             animatorSet.setDuration(300);
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(slideView, "translationX", new float[]{(float) (-AndroidUtilities.displaySize.x)}), ObjectAnimator.ofFloat(slideView2, "translationX", new float[]{0.0f})});
-            animatorSet.addListener(new AnimatorListenerAdapter() {
+            animatorSet.addListener(new AnimatorListenerAdapter(this) {
                 public void onAnimationStart(Animator animator) {
                     slideView2.setVisibility(0);
                 }
@@ -10120,11 +9602,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             return false;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-        builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                PassportActivity.this.lambda$checkDiscard$69$PassportActivity(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new PassportActivity$$ExternalSyntheticLambda1(this));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setTitle(LocaleController.getString("DiscardChanges", NUM));
         builder.setMessage(LocaleController.getString("PassportDiscardChanges", NUM));
@@ -10133,8 +9611,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkDiscard$69 */
-    public /* synthetic */ void lambda$checkDiscard$69$PassportActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$69(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
 
@@ -10160,27 +9637,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
                 z2 = z;
             }
-            Utilities.globalQueue.postRunnable(new Runnable(arrayList, this.uploadingFileType, z2) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ int f$2;
-                public final /* synthetic */ boolean f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    PassportActivity.this.lambda$processSelectedFiles$72$PassportActivity(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            Utilities.globalQueue.postRunnable(new PassportActivity$$ExternalSyntheticLambda53(this, arrayList, this.uploadingFileType, z2));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedFiles$72 */
-    public /* synthetic */ void lambda$processSelectedFiles$72$PassportActivity(ArrayList arrayList, int i, boolean z) {
+    public /* synthetic */ void lambda$processSelectedFiles$72(ArrayList arrayList, int i, boolean z) {
         TLRPC$PhotoSize scaleAndSaveImage;
         int i2 = i;
         int i3 = this.uploadingFileType;
@@ -10197,35 +9659,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 tLRPC$TL_secureFile.date = (int) (System.currentTimeMillis() / 1000);
                 SecureDocument saveFile = this.delegate.saveFile(tLRPC$TL_secureFile);
                 saveFile.type = i2;
-                AndroidUtilities.runOnUIThread(new Runnable(saveFile, i2) {
-                    public final /* synthetic */ SecureDocument f$1;
-                    public final /* synthetic */ int f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run() {
-                        PassportActivity.this.lambda$processSelectedFiles$70$PassportActivity(this.f$1, this.f$2);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda55(this, saveFile, i2));
                 if (z && !z2) {
                     try {
                         MrzRecognizer.Result recognize = MrzRecognizer.recognize(loadBitmap, this.currentDocumentsType.type instanceof TLRPC$TL_secureValueTypeDriverLicense);
                         if (recognize != null) {
                             try {
-                                AndroidUtilities.runOnUIThread(new Runnable(recognize) {
-                                    public final /* synthetic */ MrzRecognizer.Result f$1;
-
-                                    {
-                                        this.f$1 = r2;
-                                    }
-
-                                    public final void run() {
-                                        PassportActivity.this.lambda$processSelectedFiles$71$PassportActivity(this.f$1);
-                                    }
-                                });
+                                AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda54(this, recognize));
                                 z2 = true;
                             } catch (Throwable th) {
                                 th = th;
@@ -10244,8 +9684,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedFiles$70 */
-    public /* synthetic */ void lambda$processSelectedFiles$70$PassportActivity(SecureDocument secureDocument, int i) {
+    public /* synthetic */ void lambda$processSelectedFiles$70(SecureDocument secureDocument, int i) {
         int i2 = this.uploadingFileType;
         if (i2 == 1) {
             SecureDocument secureDocument2 = this.selfieDocument;
@@ -10290,8 +9729,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedFiles$71 */
-    public /* synthetic */ void lambda$processSelectedFiles$71$PassportActivity(MrzRecognizer.Result result) {
+    public /* synthetic */ void lambda$processSelectedFiles$71(MrzRecognizer.Result result) {
         int i;
         int i2;
         int i3 = result.type;
@@ -10458,7 +9896,6 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         public int codeTime = 15000;
         private Timer codeTimer;
         private TextView confirmTextView;
-        private Bundle currentParams;
         /* access modifiers changed from: private */
         public boolean ignoreOnTextChange;
         /* access modifiers changed from: private */
@@ -10497,7 +9934,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         /* access modifiers changed from: private */
         public boolean waitingForEvent;
 
-        static /* synthetic */ void lambda$onBackPressed$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        /* access modifiers changed from: private */
+        public static /* synthetic */ void lambda$onBackPressed$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         }
 
         public boolean needBackButton() {
@@ -10616,7 +10054,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165922(0x7var_e2, float:1.7946075E38)
+                r14 = 2131165927(0x7var_e7, float:1.7946085E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x00f9
@@ -10684,7 +10122,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166069(0x7var_, float:1.7946373E38)
+                r11 = 2131166074(0x7var_a, float:1.7946383E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -10705,7 +10143,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166067(0x7var_, float:1.7946369E38)
+                r10 = 2131166072(0x7var_, float:1.794638E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10717,7 +10155,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627471(0x7f0e0dcf, float:1.8882207E38)
+                r8 = 2131627491(0x7f0e0de3, float:1.8882248E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10726,7 +10164,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166068(0x7var_, float:1.794637E38)
+                r10 = 2131166073(0x7var_, float:1.7946381E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10745,7 +10183,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627475(0x7f0e0dd3, float:1.8882215E38)
+                r8 = 2131627495(0x7f0e0de7, float:1.8882256E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10781,7 +10219,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r4.setVisibility(r10)
             L_0x022f:
                 org.telegram.ui.PassportActivity$PhoneConfirmationView$1 r4 = new org.telegram.ui.PassportActivity$PhoneConfirmationView$1
-                r4.<init>(r2, r1)
+                r4.<init>(r0, r2, r1)
                 r0.timeText = r4
                 int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
                 r4.setTextColor(r5)
@@ -10842,7 +10280,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0.addView(r4, r11)
             L_0x02af:
                 org.telegram.ui.PassportActivity$PhoneConfirmationView$2 r4 = new org.telegram.ui.PassportActivity$PhoneConfirmationView$2
-                r4.<init>(r2, r1)
+                r4.<init>(r0, r2, r1)
                 r0.problemText = r4
                 java.lang.String r1 = "windowBackgroundWhiteBlueText4"
                 int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
@@ -10863,14 +10301,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 int r1 = r0.verificationType
                 if (r1 != r3) goto L_0x02f5
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625209(0x7f0e04f9, float:1.887762E38)
+                r2 = 2131625214(0x7f0e04fe, float:1.887763E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0303
             L_0x02f5:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625208(0x7f0e04f8, float:1.8877617E38)
+                r2 = 2131625213(0x7f0e04fd, float:1.8877628E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -10880,8 +10318,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r2)
                 r0.addView(r1, r2)
                 android.widget.TextView r1 = r0.problemText
-                org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$0N6Jan8t3ruePJmhUY-t9880R1U r2 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$0N6Jan8t3ruePJmhUY-t9880R1U
-                r2.<init>()
+                org.telegram.ui.PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda2
+                r2.<init>(r0)
                 r1.setOnClickListener(r2)
                 return
             */
@@ -10889,8 +10327,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$PassportActivity$PhoneConfirmationView(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             if (!this.nextPressed) {
                 int i = this.nextType;
                 if (!((i == 4 && this.verificationType == 2) || i == 0)) {
@@ -10902,7 +10339,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     String format = String.format(Locale.US, "%s (%d)", new Object[]{packageInfo.versionName, Integer.valueOf(packageInfo.versionCode)});
                     Intent intent = new Intent("android.intent.action.SENDTO");
                     intent.setData(Uri.parse("mailto:"));
-                    intent.putExtra("android.intent.extra.EMAIL", new String[]{"sms@stel.com"});
+                    intent.putExtra("android.intent.extra.EMAIL", new String[]{"reports@stel.com"});
                     intent.putExtra("android.intent.extra.SUBJECT", "Android registration/login issue " + format + " " + this.phone);
                     intent.putExtra("android.intent.extra.TEXT", "Phone: " + this.phone + "\nApp version: " + format + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + this.lastError);
                     getContext().startActivity(Intent.createChooser(intent, "Send email..."));
@@ -10964,65 +10401,30 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode = new TLRPC$TL_auth_resendCode();
             tLRPC$TL_auth_resendCode.phone_number = this.phone;
             tLRPC$TL_auth_resendCode.phone_code_hash = this.phoneHash;
-            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, new RequestDelegate(bundle, tLRPC$TL_auth_resendCode) {
-                public final /* synthetic */ Bundle f$1;
-                public final /* synthetic */ TLRPC$TL_auth_resendCode f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    PassportActivity.PhoneConfirmationView.this.lambda$resendCode$3$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                }
-            }, 2);
+            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda8(this, bundle, tLRPC$TL_auth_resendCode), 2);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$resendCode$3 */
-        public /* synthetic */ void lambda$resendCode$3$PassportActivity$PhoneConfirmationView(Bundle bundle, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, bundle, tLObject, tLRPC$TL_auth_resendCode) {
-                public final /* synthetic */ TLRPC$TL_error f$1;
-                public final /* synthetic */ Bundle f$2;
-                public final /* synthetic */ TLObject f$3;
-                public final /* synthetic */ TLRPC$TL_auth_resendCode f$4;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
-
-                public final void run() {
-                    PassportActivity.PhoneConfirmationView.this.lambda$resendCode$2$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2, this.f$3, this.f$4);
-                }
-            });
+        public /* synthetic */ void lambda$resendCode$3(Bundle bundle, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda5(this, tLRPC$TL_error, bundle, tLObject, tLRPC$TL_auth_resendCode));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$resendCode$2 */
-        public /* synthetic */ void lambda$resendCode$2$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
+        public /* synthetic */ void lambda$resendCode$2(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
             this.nextPressed = false;
             if (tLRPC$TL_error == null) {
                 this.this$0.fillNextCodeParams(bundle, (TLRPC$TL_auth_sentCode) tLObject, true);
             } else {
                 AlertDialog alertDialog = (AlertDialog) AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_auth_resendCode, new Object[0]);
                 if (alertDialog != null && tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
-                    alertDialog.setPositiveButtonListener(new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            PassportActivity.PhoneConfirmationView.this.lambda$resendCode$1$PassportActivity$PhoneConfirmationView(dialogInterface, i);
-                        }
-                    });
+                    alertDialog.setPositiveButtonListener(new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda0(this));
                 }
             }
             this.this$0.needHideProgress();
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$resendCode$1 */
-        public /* synthetic */ void lambda$resendCode$1$PassportActivity$PhoneConfirmationView(DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$resendCode$1(DialogInterface dialogInterface, int i) {
             onBackPressed(true);
             this.this$0.finishFragment();
         }
@@ -11045,7 +10447,6 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     AndroidUtilities.setWaitingForCall(true);
                     NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
                 }
-                this.currentParams = bundle2;
                 this.phone = bundle2.getString("phone");
                 this.phoneHash = bundle2.getString("phoneHash");
                 int i4 = bundle2.getInt("timeout");
@@ -11129,22 +10530,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 }
                             }
                         });
-                        this.codeField[i8].setOnKeyListener(new View.OnKeyListener(i8) {
-                            public final /* synthetic */ int f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final boolean onKey(View view, int i, KeyEvent keyEvent) {
-                                return PassportActivity.PhoneConfirmationView.this.lambda$setParams$4$PassportActivity$PhoneConfirmationView(this.f$1, view, i, keyEvent);
-                            }
-                        });
-                        this.codeField[i8].setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                                return PassportActivity.PhoneConfirmationView.this.lambda$setParams$5$PassportActivity$PhoneConfirmationView(textView, i, keyEvent);
-                            }
-                        });
+                        this.codeField[i8].setOnKeyListener(new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda3(this, i8));
+                        this.codeField[i8].setOnEditorActionListener(new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda4(this));
                         i8++;
                     }
                 }
@@ -11212,8 +10599,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$setParams$4 */
-        public /* synthetic */ boolean lambda$setParams$4$PassportActivity$PhoneConfirmationView(int i, View view, int i2, KeyEvent keyEvent) {
+        public /* synthetic */ boolean lambda$setParams$4(int i, View view, int i2, KeyEvent keyEvent) {
             if (i2 != 67 || this.codeField[i].length() != 0 || i <= 0) {
                 return false;
             }
@@ -11226,8 +10612,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$setParams$5 */
-        public /* synthetic */ boolean lambda$setParams$5$PassportActivity$PhoneConfirmationView(TextView textView, int i, KeyEvent keyEvent) {
+        public /* synthetic */ boolean lambda$setParams$5(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 5) {
                 return false;
             }
@@ -11243,128 +10628,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.lastCodeTime = (double) System.currentTimeMillis();
                 this.codeTimer.schedule(new TimerTask() {
                     public void run() {
-                        AndroidUtilities.runOnUIThread(
-                        /*  JADX ERROR: Method code generation error
-                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0005: INVOKE  
-                              (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE : 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE) = 
-                              (r1v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$4 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$4):void type: CONSTRUCTOR)
-                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.4.run():void, dex: classes3.dex
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                            	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                            	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                            	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                            	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                            	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                            	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                            	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                            	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE) = 
-                              (r1v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$4 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$4):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.4.run():void, dex: classes3.dex
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                            	... 83 more
-                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE, state: NOT_LOADED
-                            	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                            	... 89 more
-                            */
-                        /*
-                            this = this;
-                            org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE r0 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE
-                            r0.<init>(r1)
-                            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-                            return
-                        */
-                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.PhoneConfirmationView.AnonymousClass4.run():void");
+                        AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$4$$ExternalSyntheticLambda0(this));
                     }
 
                     /* access modifiers changed from: private */
-                    /* renamed from: lambda$run$0 */
-                    public /* synthetic */ void lambda$run$0$PassportActivity$PhoneConfirmationView$4() {
+                    public /* synthetic */ void lambda$run$0() {
                         double currentTimeMillis = (double) System.currentTimeMillis();
                         double access$9900 = PhoneConfirmationView.this.lastCodeTime;
                         Double.isNaN(currentTimeMillis);
@@ -11407,954 +10675,357 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             Double.isNaN(currentTimeMillis);
                             PhoneConfirmationView.access$10626(PhoneConfirmationView.this, currentTimeMillis - access$10500);
                             double unused = PhoneConfirmationView.this.lastCurrentTime = currentTimeMillis;
-                            AndroidUtilities.runOnUIThread(
-                            /*  JADX ERROR: Method code generation error
-                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0028: INVOKE  
-                                  (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk : 0x0025: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
-                                  (r5v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                 call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR)
-                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.run():void, dex: classes3.dex
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                                	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                                	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                                	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                                	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                                	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0025: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
-                                  (r5v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                 call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.run():void, dex: classes3.dex
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                	... 90 more
-                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk, state: NOT_LOADED
-                                	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                	... 96 more
-                                */
-                            /*
-                                this = this;
-                                org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                java.util.Timer r0 = r0.timeTimer
-                                if (r0 != 0) goto L_0x0009
-                                return
-                            L_0x0009:
-                                long r0 = java.lang.System.currentTimeMillis()
-                                double r0 = (double) r0
-                                org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                double r2 = r2.lastCurrentTime
-                                java.lang.Double.isNaN(r0)
-                                double r2 = r0 - r2
-                                org.telegram.ui.PassportActivity$PhoneConfirmationView r4 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                org.telegram.ui.PassportActivity.PhoneConfirmationView.access$10626(r4, r2)
-                                org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                double unused = r2.lastCurrentTime = r0
-                                org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk r0 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk
-                                r0.<init>(r5)
-                                org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-                                return
-                            */
-                            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.PhoneConfirmationView.AnonymousClass5.run():void");
+                            AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$5$$ExternalSyntheticLambda0(this));
                         }
+                    }
 
-                        /* access modifiers changed from: private */
-                        /* renamed from: lambda$run$2 */
-                        public /* synthetic */ void lambda$run$2$PassportActivity$PhoneConfirmationView$5() {
-                            if (PhoneConfirmationView.this.time >= 1000) {
-                                int access$10600 = (PhoneConfirmationView.this.time / 1000) / 60;
-                                int access$106002 = (PhoneConfirmationView.this.time / 1000) - (access$10600 * 60);
-                                if (PhoneConfirmationView.this.nextType == 4 || PhoneConfirmationView.this.nextType == 3) {
-                                    PhoneConfirmationView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(access$10600), Integer.valueOf(access$106002)));
-                                } else if (PhoneConfirmationView.this.nextType == 2) {
-                                    PhoneConfirmationView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(access$10600), Integer.valueOf(access$106002)));
-                                }
-                                if (PhoneConfirmationView.this.progressView != null) {
-                                    PhoneConfirmationView.this.progressView.setProgress(1.0f - (((float) PhoneConfirmationView.this.time) / ((float) PhoneConfirmationView.this.timeout)));
-                                    return;
-                                }
-                                return;
+                    /* access modifiers changed from: private */
+                    public /* synthetic */ void lambda$run$2() {
+                        if (PhoneConfirmationView.this.time >= 1000) {
+                            int access$10600 = (PhoneConfirmationView.this.time / 1000) / 60;
+                            int access$106002 = (PhoneConfirmationView.this.time / 1000) - (access$10600 * 60);
+                            if (PhoneConfirmationView.this.nextType == 4 || PhoneConfirmationView.this.nextType == 3) {
+                                PhoneConfirmationView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(access$10600), Integer.valueOf(access$106002)));
+                            } else if (PhoneConfirmationView.this.nextType == 2) {
+                                PhoneConfirmationView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(access$10600), Integer.valueOf(access$106002)));
                             }
                             if (PhoneConfirmationView.this.progressView != null) {
-                                PhoneConfirmationView.this.progressView.setProgress(1.0f);
-                            }
-                            PhoneConfirmationView.this.destroyTimer();
-                            if (PhoneConfirmationView.this.verificationType == 3) {
-                                AndroidUtilities.setWaitingForCall(false);
-                                NotificationCenter.getGlobalInstance().removeObserver(PhoneConfirmationView.this, NotificationCenter.didReceiveCall);
-                                boolean unused = PhoneConfirmationView.this.waitingForEvent = false;
-                                PhoneConfirmationView.this.destroyCodeTimer();
-                                PhoneConfirmationView.this.resendCode();
-                            } else if (PhoneConfirmationView.this.verificationType != 2 && PhoneConfirmationView.this.verificationType != 4) {
-                            } else {
-                                if (PhoneConfirmationView.this.nextType == 4 || PhoneConfirmationView.this.nextType == 2) {
-                                    if (PhoneConfirmationView.this.nextType == 4) {
-                                        PhoneConfirmationView.this.timeText.setText(LocaleController.getString("Calling", NUM));
-                                    } else {
-                                        PhoneConfirmationView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
-                                    }
-                                    PhoneConfirmationView.this.createCodeTimer();
-                                    TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode = new TLRPC$TL_auth_resendCode();
-                                    tLRPC$TL_auth_resendCode.phone_number = PhoneConfirmationView.this.phone;
-                                    tLRPC$TL_auth_resendCode.phone_code_hash = PhoneConfirmationView.this.phoneHash;
-                                    ConnectionsManager.getInstance(PhoneConfirmationView.this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, 
-                                    /*  JADX ERROR: Method code generation error
-                                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x017d: INVOKE  
-                                          (wrap: org.telegram.tgnet.ConnectionsManager : 0x0174: INVOKE  (r1v8 org.telegram.tgnet.ConnectionsManager) = 
-                                          (wrap: int : 0x0170: INVOKE  (r1v7 int) = 
-                                          (wrap: org.telegram.ui.PassportActivity : 0x016e: IGET  (r1v6 org.telegram.ui.PassportActivity) = 
-                                          (wrap: org.telegram.ui.PassportActivity$PhoneConfirmationView : 0x016c: IGET  (r1v5 org.telegram.ui.PassportActivity$PhoneConfirmationView) = 
-                                          (r9v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                         org.telegram.ui.PassportActivity.PhoneConfirmationView.5.this$1 org.telegram.ui.PassportActivity$PhoneConfirmationView)
-                                         org.telegram.ui.PassportActivity.PhoneConfirmationView.this$0 org.telegram.ui.PassportActivity)
-                                         org.telegram.ui.PassportActivity.access$11700(org.telegram.ui.PassportActivity):int type: STATIC)
-                                         org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
-                                          (r0v14 'tLRPC$TL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
-                                          (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c : 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c) = 
-                                          (r9v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR)
-                                          (2 int)
-                                         org.telegram.tgnet.ConnectionsManager.sendRequest(org.telegram.tgnet.TLObject, org.telegram.tgnet.RequestDelegate, int):int type: VIRTUAL in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$2():void, dex: classes3.dex
-                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:156)
-                                        	at jadx.core.codegen.RegionGen.connectElseIf(RegionGen.java:175)
-                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:152)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c) = 
-                                          (r9v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$2():void, dex: classes3.dex
-                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                        	... 99 more
-                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c, state: NOT_LOADED
-                                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                        	... 105 more
-                                        */
-                                    /*
-                                        this = this;
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r0 = r0.time
-                                        r1 = 1065353216(0x3var_, float:1.0)
-                                        r2 = 3
-                                        r3 = 1000(0x3e8, float:1.401E-42)
-                                        r4 = 4
-                                        r5 = 0
-                                        r6 = 2
-                                        if (r0 < r3) goto L_0x00a1
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r0 = r0.time
-                                        int r0 = r0 / r3
-                                        int r0 = r0 / 60
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r7 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r7 = r7.time
-                                        int r7 = r7 / r3
-                                        int r3 = r0 * 60
-                                        int r7 = r7 - r3
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r3 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r3 = r3.nextType
-                                        r8 = 1
-                                        if (r3 == r4) goto L_0x005e
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r3 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r3 = r3.nextType
-                                        if (r3 != r2) goto L_0x0035
-                                        goto L_0x005e
-                                    L_0x0035:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r2 = r2.nextType
-                                        if (r2 != r6) goto L_0x007e
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627606(0x7f0e0e56, float:1.8882481E38)
-                                        java.lang.Object[] r4 = new java.lang.Object[r6]
-                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-                                        r4[r5] = r0
-                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r7)
-                                        r4[r8] = r0
-                                        java.lang.String r0 = "SmsText"
-                                        java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
-                                        r2.setText(r0)
-                                        goto L_0x007e
-                                    L_0x005e:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624642(0x7f0e02c2, float:1.887647E38)
-                                        java.lang.Object[] r4 = new java.lang.Object[r6]
-                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-                                        r4[r5] = r0
-                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r7)
-                                        r4[r8] = r0
-                                        java.lang.String r0 = "CallText"
-                                        java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
-                                        r2.setText(r0)
-                                    L_0x007e:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        org.telegram.ui.PassportActivity$ProgressView r0 = r0.progressView
-                                        if (r0 == 0) goto L_0x0180
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        org.telegram.ui.PassportActivity$ProgressView r0 = r0.progressView
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r2 = r2.time
-                                        float r2 = (float) r2
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r3 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r3 = r3.timeout
-                                        float r3 = (float) r3
-                                        float r2 = r2 / r3
-                                        float r1 = r1 - r2
-                                        r0.setProgress(r1)
-                                        goto L_0x0180
-                                    L_0x00a1:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        org.telegram.ui.PassportActivity$ProgressView r0 = r0.progressView
-                                        if (r0 == 0) goto L_0x00b2
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        org.telegram.ui.PassportActivity$ProgressView r0 = r0.progressView
-                                        r0.setProgress(r1)
-                                    L_0x00b2:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        r0.destroyTimer()
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r0 = r0.verificationType
-                                        if (r0 != r2) goto L_0x00de
-                                        org.telegram.messenger.AndroidUtilities.setWaitingForCall(r5)
-                                        org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r1 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r2 = org.telegram.messenger.NotificationCenter.didReceiveCall
-                                        r0.removeObserver(r1, r2)
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        boolean unused = r0.waitingForEvent = r5
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        r0.destroyCodeTimer()
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        r0.resendCode()
-                                        goto L_0x0180
-                                    L_0x00de:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r0 = r0.verificationType
-                                        if (r0 == r6) goto L_0x00ee
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r0 = r0.verificationType
-                                        if (r0 != r4) goto L_0x0180
-                                    L_0x00ee:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r0 = r0.nextType
-                                        if (r0 == r4) goto L_0x0125
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r0 = r0.nextType
-                                        if (r0 != r6) goto L_0x00ff
-                                        goto L_0x0125
-                                    L_0x00ff:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r0 = r0.nextType
-                                        if (r0 != r2) goto L_0x0180
-                                        org.telegram.messenger.AndroidUtilities.setWaitingForSms(r5)
-                                        org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r1 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r2 = org.telegram.messenger.NotificationCenter.didReceiveSmsCode
-                                        r0.removeObserver(r1, r2)
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        boolean unused = r0.waitingForEvent = r5
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        r0.destroyCodeTimer()
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        r0.resendCode()
-                                        goto L_0x0180
-                                    L_0x0125:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        int r0 = r0.nextType
-                                        if (r0 != r4) goto L_0x0140
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624647(0x7f0e02c7, float:1.887648E38)
-                                        java.lang.String r2 = "Calling"
-                                        java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                                        r0.setText(r1)
-                                        goto L_0x0152
-                                    L_0x0140:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131627467(0x7f0e0dcb, float:1.88822E38)
-                                        java.lang.String r2 = "SendingSms"
-                                        java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                                        r0.setText(r1)
-                                    L_0x0152:
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        r0.createCodeTimer()
-                                        org.telegram.tgnet.TLRPC$TL_auth_resendCode r0 = new org.telegram.tgnet.TLRPC$TL_auth_resendCode
-                                        r0.<init>()
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r1 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        java.lang.String r1 = r1.phone
-                                        r0.phone_number = r1
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r1 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        java.lang.String r1 = r1.phoneHash
-                                        r0.phone_code_hash = r1
-                                        org.telegram.ui.PassportActivity$PhoneConfirmationView r1 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                        org.telegram.ui.PassportActivity r1 = r1.this$0
-                                        int r1 = r1.currentAccount
-                                        org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
-                                        org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c r2 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c
-                                        r2.<init>(r9)
-                                        r1.sendRequest(r0, r2, r6)
-                                    L_0x0180:
-                                        return
-                                    */
-                                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.PhoneConfirmationView.AnonymousClass5.lambda$run$2$PassportActivity$PhoneConfirmationView$5():void");
-                                }
-
-                                /* access modifiers changed from: private */
-                                /* renamed from: lambda$run$1 */
-                                public /* synthetic */ void lambda$run$1$PassportActivity$PhoneConfirmationView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                    if (tLRPC$TL_error != null && tLRPC$TL_error.text != null) {
-                                        AndroidUtilities.runOnUIThread(
-                                        /*  JADX ERROR: Method code generation error
-                                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                                              (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI) = 
-                                              (r0v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                              (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
-                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
-                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                            	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                            	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                            	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                                            	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                                            	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                                            	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                                            	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                                            	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI) = 
-                                              (r0v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                              (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
-                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                            	... 90 more
-                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI, state: NOT_LOADED
-                                            	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                            	... 96 more
-                                            */
-                                        /*
-                                            this = this;
-                                            if (r2 == 0) goto L_0x000e
-                                            java.lang.String r1 = r2.text
-                                            if (r1 == 0) goto L_0x000e
-                                            org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI r1 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI
-                                            r1.<init>(r0, r2)
-                                            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
-                                        L_0x000e:
-                                            return
-                                        */
-                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.PhoneConfirmationView.AnonymousClass5.lambda$run$1$PassportActivity$PhoneConfirmationView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
-                                    }
-
-                                    /* access modifiers changed from: private */
-                                    /* renamed from: lambda$run$0 */
-                                    public /* synthetic */ void lambda$run$0$PassportActivity$PhoneConfirmationView$5(TLRPC$TL_error tLRPC$TL_error) {
-                                        String unused = PhoneConfirmationView.this.lastError = tLRPC$TL_error.text;
-                                    }
-                                }, 0, 1000);
-                            }
-                        }
-
-                        /* access modifiers changed from: private */
-                        public void destroyTimer() {
-                            try {
-                                synchronized (this.timerSync) {
-                                    Timer timer = this.timeTimer;
-                                    if (timer != null) {
-                                        timer.cancel();
-                                        this.timeTimer = null;
-                                    }
-                                }
-                            } catch (Exception e) {
-                                FileLog.e((Throwable) e);
-                            }
-                        }
-
-                        /* access modifiers changed from: private */
-                        public String getCode() {
-                            if (this.codeField == null) {
-                                return "";
-                            }
-                            StringBuilder sb = new StringBuilder();
-                            int i = 0;
-                            while (true) {
-                                EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-                                if (i >= editTextBoldCursorArr.length) {
-                                    return sb.toString();
-                                }
-                                sb.append(PhoneFormat.stripExceptNumbers(editTextBoldCursorArr[i].getText().toString()));
-                                i++;
-                            }
-                        }
-
-                        public void onNextPressed() {
-                            if (!this.nextPressed) {
-                                String code = getCode();
-                                if (TextUtils.isEmpty(code)) {
-                                    AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
-                                    return;
-                                }
-                                this.nextPressed = true;
-                                int i = this.verificationType;
-                                if (i == 2) {
-                                    AndroidUtilities.setWaitingForSms(false);
-                                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
-                                } else if (i == 3) {
-                                    AndroidUtilities.setWaitingForCall(false);
-                                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
-                                }
-                                this.waitingForEvent = false;
-                                this.this$0.showEditDoneProgress(true, true);
-                                TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone = new TLRPC$TL_account_verifyPhone();
-                                tLRPC$TL_account_verifyPhone.phone_number = this.phone;
-                                tLRPC$TL_account_verifyPhone.phone_code = code;
-                                tLRPC$TL_account_verifyPhone.phone_code_hash = this.phoneHash;
-                                destroyTimer();
-                                this.this$0.needShowProgress();
-                                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_verifyPhone, new RequestDelegate(tLRPC$TL_account_verifyPhone) {
-                                    public final /* synthetic */ TLRPC$TL_account_verifyPhone f$1;
-
-                                    {
-                                        this.f$1 = r2;
-                                    }
-
-                                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                        PassportActivity.PhoneConfirmationView.this.lambda$onNextPressed$7$PassportActivity$PhoneConfirmationView(this.f$1, tLObject, tLRPC$TL_error);
-                                    }
-                                }, 2);
-                            }
-                        }
-
-                        /* access modifiers changed from: private */
-                        /* renamed from: lambda$onNextPressed$7 */
-                        public /* synthetic */ void lambda$onNextPressed$7$PassportActivity$PhoneConfirmationView(TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLRPC$TL_account_verifyPhone) {
-                                public final /* synthetic */ TLRPC$TL_error f$1;
-                                public final /* synthetic */ TLRPC$TL_account_verifyPhone f$2;
-
-                                {
-                                    this.f$1 = r2;
-                                    this.f$2 = r3;
-                                }
-
-                                public final void run() {
-                                    PassportActivity.PhoneConfirmationView.this.lambda$onNextPressed$6$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2);
-                                }
-                            });
-                        }
-
-                        /* access modifiers changed from: private */
-                        /* renamed from: lambda$onNextPressed$6 */
-                        public /* synthetic */ void lambda$onNextPressed$6$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone) {
-                            int i;
-                            int i2;
-                            this.this$0.needHideProgress();
-                            this.nextPressed = false;
-                            if (tLRPC$TL_error == null) {
-                                destroyTimer();
-                                destroyCodeTimer();
-                                this.this$0.delegate.saveValue(this.this$0.currentType, (String) this.this$0.currentValues.get("phone"), (String) null, (TLRPC$TL_secureRequiredType) null, (String) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (SecureDocument) null, new Runnable() {
-                                    public final void run() {
-                                        PassportActivity.this.finishFragment();
-                                    }
-                                }, (ErrorRunnable) null);
+                                PhoneConfirmationView.this.progressView.setProgress(1.0f - (((float) PhoneConfirmationView.this.time) / ((float) PhoneConfirmationView.this.timeout)));
                                 return;
                             }
-                            this.lastError = tLRPC$TL_error.text;
-                            int i3 = this.verificationType;
-                            if ((i3 == 3 && ((i2 = this.nextType) == 4 || i2 == 2)) || ((i3 == 2 && ((i = this.nextType) == 4 || i == 3)) || (i3 == 4 && this.nextType == 2))) {
-                                createTimer();
-                            }
-                            int i4 = this.verificationType;
-                            if (i4 == 2) {
-                                AndroidUtilities.setWaitingForSms(true);
-                                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveSmsCode);
-                            } else if (i4 == 3) {
-                                AndroidUtilities.setWaitingForCall(true);
-                                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
-                            }
-                            this.waitingForEvent = true;
-                            if (this.verificationType != 3) {
-                                AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_account_verifyPhone, new Object[0]);
-                            }
-                            this.this$0.showEditDoneProgress(true, false);
-                            if (tLRPC$TL_error.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error.text.contains("PHONE_CODE_INVALID")) {
-                                int i5 = 0;
-                                while (true) {
-                                    EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-                                    if (i5 < editTextBoldCursorArr.length) {
-                                        editTextBoldCursorArr[i5].setText("");
-                                        i5++;
-                                    } else {
-                                        editTextBoldCursorArr[0].requestFocus();
-                                        return;
-                                    }
-                                }
-                            } else if (tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
-                                onBackPressed(true);
-                                this.this$0.setPage(0, true, (Bundle) null);
-                            }
+                            return;
                         }
-
-                        public boolean onBackPressed(boolean z) {
-                            if (!z) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.this$0.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", NUM));
-                                builder.setMessage(LocaleController.getString("StopVerification", NUM));
-                                builder.setPositiveButton(LocaleController.getString("Continue", NUM), (DialogInterface.OnClickListener) null);
-                                builder.setNegativeButton(LocaleController.getString("Stop", NUM), new DialogInterface.OnClickListener() {
-                                    public final void onClick(DialogInterface dialogInterface, int i) {
-                                        PassportActivity.PhoneConfirmationView.this.lambda$onBackPressed$8$PassportActivity$PhoneConfirmationView(dialogInterface, i);
-                                    }
-                                });
-                                this.this$0.showDialog(builder.create());
-                                return false;
-                            }
-                            TLRPC$TL_auth_cancelCode tLRPC$TL_auth_cancelCode = new TLRPC$TL_auth_cancelCode();
-                            tLRPC$TL_auth_cancelCode.phone_number = this.phone;
-                            tLRPC$TL_auth_cancelCode.phone_code_hash = this.phoneHash;
-                            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_cancelCode, $$Lambda$PassportActivity$PhoneConfirmationView$X8GN5IHsg2faXLHa_dxkaMl41M.INSTANCE, 2);
-                            destroyTimer();
-                            destroyCodeTimer();
-                            this.currentParams = null;
-                            int i = this.verificationType;
-                            if (i == 2) {
+                        if (PhoneConfirmationView.this.progressView != null) {
+                            PhoneConfirmationView.this.progressView.setProgress(1.0f);
+                        }
+                        PhoneConfirmationView.this.destroyTimer();
+                        if (PhoneConfirmationView.this.verificationType == 3) {
+                            AndroidUtilities.setWaitingForCall(false);
+                            NotificationCenter.getGlobalInstance().removeObserver(PhoneConfirmationView.this, NotificationCenter.didReceiveCall);
+                            boolean unused = PhoneConfirmationView.this.waitingForEvent = false;
+                            PhoneConfirmationView.this.destroyCodeTimer();
+                            PhoneConfirmationView.this.resendCode();
+                        } else if (PhoneConfirmationView.this.verificationType != 2 && PhoneConfirmationView.this.verificationType != 4) {
+                        } else {
+                            if (PhoneConfirmationView.this.nextType == 4 || PhoneConfirmationView.this.nextType == 2) {
+                                if (PhoneConfirmationView.this.nextType == 4) {
+                                    PhoneConfirmationView.this.timeText.setText(LocaleController.getString("Calling", NUM));
+                                } else {
+                                    PhoneConfirmationView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
+                                }
+                                PhoneConfirmationView.this.createCodeTimer();
+                                TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode = new TLRPC$TL_auth_resendCode();
+                                tLRPC$TL_auth_resendCode.phone_number = PhoneConfirmationView.this.phone;
+                                tLRPC$TL_auth_resendCode.phone_code_hash = PhoneConfirmationView.this.phoneHash;
+                                ConnectionsManager.getInstance(PhoneConfirmationView.this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, new PassportActivity$PhoneConfirmationView$5$$ExternalSyntheticLambda2(this), 2);
+                            } else if (PhoneConfirmationView.this.nextType == 3) {
                                 AndroidUtilities.setWaitingForSms(false);
-                                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
-                            } else if (i == 3) {
-                                AndroidUtilities.setWaitingForCall(false);
-                                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
-                            }
-                            this.waitingForEvent = false;
-                            return true;
-                        }
-
-                        /* access modifiers changed from: private */
-                        /* renamed from: lambda$onBackPressed$8 */
-                        public /* synthetic */ void lambda$onBackPressed$8$PassportActivity$PhoneConfirmationView(DialogInterface dialogInterface, int i) {
-                            onBackPressed(true);
-                            this.this$0.setPage(0, true, (Bundle) null);
-                        }
-
-                        public void onDestroyActivity() {
-                            super.onDestroyActivity();
-                            int i = this.verificationType;
-                            if (i == 2) {
-                                AndroidUtilities.setWaitingForSms(false);
-                                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
-                            } else if (i == 3) {
-                                AndroidUtilities.setWaitingForCall(false);
-                                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
-                            }
-                            this.waitingForEvent = false;
-                            destroyTimer();
-                            destroyCodeTimer();
-                        }
-
-                        public void onShow() {
-                            super.onShow();
-                            LinearLayout linearLayout = this.codeFieldContainer;
-                            if (linearLayout != null && linearLayout.getVisibility() == 0) {
-                                for (int length2 = this.codeField.length - 1; length2 >= 0; length2--) {
-                                    if (length2 == 0 || this.codeField[length2].length() != 0) {
-                                        this.codeField[length2].requestFocus();
-                                        EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-                                        editTextBoldCursorArr[length2].setSelection(editTextBoldCursorArr[length2].length());
-                                        AndroidUtilities.showKeyboard(this.codeField[length2]);
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-
-                        public void didReceivedNotification(int i, int i2, Object... objArr) {
-                            EditTextBoldCursor[] editTextBoldCursorArr;
-                            if (this.waitingForEvent && (editTextBoldCursorArr = this.codeField) != null) {
-                                if (i == NotificationCenter.didReceiveSmsCode) {
-                                    editTextBoldCursorArr[0].setText("" + objArr[0]);
-                                    onNextPressed();
-                                } else if (i == NotificationCenter.didReceiveCall) {
-                                    String str = "" + objArr[0];
-                                    if (AndroidUtilities.checkPhonePattern(this.pattern, str)) {
-                                        this.ignoreOnTextChange = true;
-                                        this.codeField[0].setText(str);
-                                        this.ignoreOnTextChange = false;
-                                        onNextPressed();
-                                    }
-                                }
+                                NotificationCenter.getGlobalInstance().removeObserver(PhoneConfirmationView.this, NotificationCenter.didReceiveSmsCode);
+                                boolean unused2 = PhoneConfirmationView.this.waitingForEvent = false;
+                                PhoneConfirmationView.this.destroyCodeTimer();
+                                PhoneConfirmationView.this.resendCode();
                             }
                         }
                     }
 
-                    public ArrayList<ThemeDescription> getThemeDescriptions() {
-                        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-                        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
-                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-                        arrayList.add(new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
-                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
-                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
-                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearch"));
-                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearchPlaceholder"));
-                        arrayList.add(new ThemeDescription(this.linearLayout2, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-                        arrayList.add(new ThemeDescription(this.extraBackgroundView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-                        if (this.extraBackgroundView2 != null) {
-                            arrayList.add(new ThemeDescription(this.extraBackgroundView2, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+                    /* access modifiers changed from: private */
+                    public /* synthetic */ void lambda$run$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                        if (tLRPC$TL_error != null && tLRPC$TL_error.text != null) {
+                            AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$5$$ExternalSyntheticLambda1(this, tLRPC$TL_error));
                         }
-                        for (int i = 0; i < this.dividers.size(); i++) {
-                            arrayList.add(new ThemeDescription(this.dividers.get(i), ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-                        }
-                        for (Map.Entry<SecureDocument, SecureDocumentCell> value : this.documentsCells.entrySet()) {
-                            SecureDocumentCell secureDocumentCell = (SecureDocumentCell) value.getValue();
-                            arrayList.add(new ThemeDescription(secureDocumentCell, ThemeDescription.FLAG_SELECTORWHITE, new Class[]{SecureDocumentCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-                            arrayList.add(new ThemeDescription((View) secureDocumentCell, 0, new Class[]{SecureDocumentCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                            arrayList.add(new ThemeDescription((View) secureDocumentCell, 0, new Class[]{SecureDocumentCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
-                        }
-                        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_SELECTORWHITE, new Class[]{TextDetailSettingsCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-                        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
-                        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_SELECTORWHITE, new Class[]{TextSettingsCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-                        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"));
-                        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
-                        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_SELECTORWHITE, new Class[]{TextDetailSecureCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-                        arrayList.add(new ThemeDescription((View) this.linearLayout2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextDetailSecureCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextDetailSecureCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-                        arrayList.add(new ThemeDescription((View) this.linearLayout2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextDetailSecureCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
-                        arrayList.add(new ThemeDescription((View) this.linearLayout2, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{TextDetailSecureCell.class}, new String[]{"checkImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addedIcon"));
-                        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-                        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
-                        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
-                        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
-                        if (this.inputFields != null) {
-                            for (int i2 = 0; i2 < this.inputFields.length; i2++) {
-                                arrayList.add(new ThemeDescription((View) this.inputFields[i2].getParent(), ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-                                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
-                                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_HINTTEXTCOLOR | ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
-                                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
-                                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
-                                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_PROGRESSBAR | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText3"));
-                            }
-                        } else {
-                            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
-                            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_PROGRESSBAR | ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
-                            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
-                            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
-                            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText3"));
-                        }
-                        if (this.inputExtraFields != null) {
-                            for (int i3 = 0; i3 < this.inputExtraFields.length; i3++) {
-                                arrayList.add(new ThemeDescription((View) this.inputExtraFields[i3].getParent(), ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-                                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
-                                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_HINTTEXTCOLOR | ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
-                                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
-                                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
-                                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_PROGRESSBAR | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText3"));
-                            }
-                        }
-                        arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
-                        arrayList.add(new ThemeDescription(this.noPasswordImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_messagePanelIcons"));
-                        arrayList.add(new ThemeDescription(this.noPasswordTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
-                        arrayList.add(new ThemeDescription(this.noPasswordSetTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText5"));
-                        arrayList.add(new ThemeDescription(this.passwordForgotButton, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
-                        arrayList.add(new ThemeDescription(this.plusTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                        arrayList.add(new ThemeDescription(this.acceptTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "passport_authorizeText"));
-                        arrayList.add(new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "passport_authorizeBackground"));
-                        arrayList.add(new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "passport_authorizeBackgroundSelected"));
-                        arrayList.add(new ThemeDescription(this.progressView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressInner2"));
-                        arrayList.add(new ThemeDescription(this.progressView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressOuter2"));
-                        arrayList.add(new ThemeDescription(this.progressViewButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressInner2"));
-                        arrayList.add(new ThemeDescription(this.progressViewButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressOuter2"));
-                        arrayList.add(new ThemeDescription(this.emptyImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sessions_devicesImage"));
-                        arrayList.add(new ThemeDescription(this.emptyTextView1, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
-                        arrayList.add(new ThemeDescription(this.emptyTextView2, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
-                        arrayList.add(new ThemeDescription(this.emptyTextView3, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
-                        return arrayList;
+                    }
+
+                    /* access modifiers changed from: private */
+                    public /* synthetic */ void lambda$run$0(TLRPC$TL_error tLRPC$TL_error) {
+                        String unused = PhoneConfirmationView.this.lastError = tLRPC$TL_error.text;
+                    }
+                }, 0, 1000);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public void destroyTimer() {
+            try {
+                synchronized (this.timerSync) {
+                    Timer timer = this.timeTimer;
+                    if (timer != null) {
+                        timer.cancel();
+                        this.timeTimer = null;
                     }
                 }
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public String getCode() {
+            if (this.codeField == null) {
+                return "";
+            }
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            while (true) {
+                EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                if (i >= editTextBoldCursorArr.length) {
+                    return sb.toString();
+                }
+                sb.append(PhoneFormat.stripExceptNumbers(editTextBoldCursorArr[i].getText().toString()));
+                i++;
+            }
+        }
+
+        public void onNextPressed() {
+            if (!this.nextPressed) {
+                String code = getCode();
+                if (TextUtils.isEmpty(code)) {
+                    AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
+                    return;
+                }
+                this.nextPressed = true;
+                int i = this.verificationType;
+                if (i == 2) {
+                    AndroidUtilities.setWaitingForSms(false);
+                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+                } else if (i == 3) {
+                    AndroidUtilities.setWaitingForCall(false);
+                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+                }
+                this.waitingForEvent = false;
+                this.this$0.showEditDoneProgress(true, true);
+                TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone = new TLRPC$TL_account_verifyPhone();
+                tLRPC$TL_account_verifyPhone.phone_number = this.phone;
+                tLRPC$TL_account_verifyPhone.phone_code = code;
+                tLRPC$TL_account_verifyPhone.phone_code_hash = this.phoneHash;
+                destroyTimer();
+                this.this$0.needShowProgress();
+                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_verifyPhone, new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda9(this, tLRPC$TL_account_verifyPhone), 2);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$7(TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda6(this, tLRPC$TL_error, tLRPC$TL_account_verifyPhone));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$6(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone) {
+            int i;
+            int i2;
+            this.this$0.needHideProgress();
+            this.nextPressed = false;
+            if (tLRPC$TL_error == null) {
+                destroyTimer();
+                destroyCodeTimer();
+                this.this$0.delegate.saveValue(this.this$0.currentType, (String) this.this$0.currentValues.get("phone"), (String) null, (TLRPC$TL_secureRequiredType) null, (String) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (SecureDocument) null, new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda7(this.this$0), (ErrorRunnable) null);
+                return;
+            }
+            this.lastError = tLRPC$TL_error.text;
+            int i3 = this.verificationType;
+            if ((i3 == 3 && ((i2 = this.nextType) == 4 || i2 == 2)) || ((i3 == 2 && ((i = this.nextType) == 4 || i == 3)) || (i3 == 4 && this.nextType == 2))) {
+                createTimer();
+            }
+            int i4 = this.verificationType;
+            if (i4 == 2) {
+                AndroidUtilities.setWaitingForSms(true);
+                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveSmsCode);
+            } else if (i4 == 3) {
+                AndroidUtilities.setWaitingForCall(true);
+                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
+            }
+            this.waitingForEvent = true;
+            if (this.verificationType != 3) {
+                AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_account_verifyPhone, new Object[0]);
+            }
+            this.this$0.showEditDoneProgress(true, false);
+            if (tLRPC$TL_error.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error.text.contains("PHONE_CODE_INVALID")) {
+                int i5 = 0;
+                while (true) {
+                    EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                    if (i5 < editTextBoldCursorArr.length) {
+                        editTextBoldCursorArr[i5].setText("");
+                        i5++;
+                    } else {
+                        editTextBoldCursorArr[0].requestFocus();
+                        return;
+                    }
+                }
+            } else if (tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
+                onBackPressed(true);
+                this.this$0.setPage(0, true, (Bundle) null);
+            }
+        }
+
+        public boolean onBackPressed(boolean z) {
+            if (!z) {
+                AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.this$0.getParentActivity());
+                builder.setTitle(LocaleController.getString("AppName", NUM));
+                builder.setMessage(LocaleController.getString("StopVerification", NUM));
+                builder.setPositiveButton(LocaleController.getString("Continue", NUM), (DialogInterface.OnClickListener) null);
+                builder.setNegativeButton(LocaleController.getString("Stop", NUM), new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda1(this));
+                this.this$0.showDialog(builder.create());
+                return false;
+            }
+            TLRPC$TL_auth_cancelCode tLRPC$TL_auth_cancelCode = new TLRPC$TL_auth_cancelCode();
+            tLRPC$TL_auth_cancelCode.phone_number = this.phone;
+            tLRPC$TL_auth_cancelCode.phone_code_hash = this.phoneHash;
+            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_cancelCode, PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda10.INSTANCE, 2);
+            destroyTimer();
+            destroyCodeTimer();
+            int i = this.verificationType;
+            if (i == 2) {
+                AndroidUtilities.setWaitingForSms(false);
+                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+            } else if (i == 3) {
+                AndroidUtilities.setWaitingForCall(false);
+                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+            }
+            this.waitingForEvent = false;
+            return true;
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onBackPressed$8(DialogInterface dialogInterface, int i) {
+            onBackPressed(true);
+            this.this$0.setPage(0, true, (Bundle) null);
+        }
+
+        public void onDestroyActivity() {
+            super.onDestroyActivity();
+            int i = this.verificationType;
+            if (i == 2) {
+                AndroidUtilities.setWaitingForSms(false);
+                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+            } else if (i == 3) {
+                AndroidUtilities.setWaitingForCall(false);
+                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+            }
+            this.waitingForEvent = false;
+            destroyTimer();
+            destroyCodeTimer();
+        }
+
+        public void onShow() {
+            super.onShow();
+            LinearLayout linearLayout = this.codeFieldContainer;
+            if (linearLayout != null && linearLayout.getVisibility() == 0) {
+                for (int length2 = this.codeField.length - 1; length2 >= 0; length2--) {
+                    if (length2 == 0 || this.codeField[length2].length() != 0) {
+                        this.codeField[length2].requestFocus();
+                        EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                        editTextBoldCursorArr[length2].setSelection(editTextBoldCursorArr[length2].length());
+                        AndroidUtilities.showKeyboard(this.codeField[length2]);
+                        return;
+                    }
+                }
+            }
+        }
+
+        public void didReceivedNotification(int i, int i2, Object... objArr) {
+            EditTextBoldCursor[] editTextBoldCursorArr;
+            if (this.waitingForEvent && (editTextBoldCursorArr = this.codeField) != null) {
+                if (i == NotificationCenter.didReceiveSmsCode) {
+                    editTextBoldCursorArr[0].setText("" + objArr[0]);
+                    onNextPressed();
+                } else if (i == NotificationCenter.didReceiveCall) {
+                    String str = "" + objArr[0];
+                    if (AndroidUtilities.checkPhonePattern(this.pattern, str)) {
+                        this.ignoreOnTextChange = true;
+                        this.codeField[0].setText(str);
+                        this.ignoreOnTextChange = false;
+                        onNextPressed();
+                    }
+                }
+            }
+        }
+    }
+
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearch"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearchPlaceholder"));
+        arrayList.add(new ThemeDescription(this.linearLayout2, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
+        arrayList.add(new ThemeDescription(this.extraBackgroundView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        if (this.extraBackgroundView2 != null) {
+            arrayList.add(new ThemeDescription(this.extraBackgroundView2, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        }
+        for (int i = 0; i < this.dividers.size(); i++) {
+            arrayList.add(new ThemeDescription(this.dividers.get(i), ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
+        }
+        for (Map.Entry<SecureDocument, SecureDocumentCell> value : this.documentsCells.entrySet()) {
+            SecureDocumentCell secureDocumentCell = (SecureDocumentCell) value.getValue();
+            arrayList.add(new ThemeDescription(secureDocumentCell, ThemeDescription.FLAG_SELECTORWHITE, new Class[]{SecureDocumentCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+            arrayList.add(new ThemeDescription((View) secureDocumentCell, 0, new Class[]{SecureDocumentCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+            arrayList.add(new ThemeDescription((View) secureDocumentCell, 0, new Class[]{SecureDocumentCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        }
+        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_SELECTORWHITE, new Class[]{TextDetailSettingsCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_SELECTORWHITE, new Class[]{TextSettingsCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"));
+        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_SELECTORWHITE, new Class[]{TextDetailSecureCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) this.linearLayout2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextDetailSecureCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextDetailSecureCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
+        arrayList.add(new ThemeDescription((View) this.linearLayout2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextDetailSecureCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription((View) this.linearLayout2, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{TextDetailSecureCell.class}, new String[]{"checkImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addedIcon"));
+        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+        arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription((View) this.linearLayout2, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
+        if (this.inputFields != null) {
+            for (int i2 = 0; i2 < this.inputFields.length; i2++) {
+                arrayList.add(new ThemeDescription((View) this.inputFields[i2].getParent(), ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_HINTTEXTCOLOR | ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_PROGRESSBAR | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText3"));
+            }
+        } else {
+            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
+            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_PROGRESSBAR | ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
+            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText3"));
+        }
+        if (this.inputExtraFields != null) {
+            for (int i3 = 0; i3 < this.inputExtraFields.length; i3++) {
+                arrayList.add(new ThemeDescription((View) this.inputExtraFields[i3].getParent(), ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
+                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_HINTTEXTCOLOR | ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
+                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                arrayList.add(new ThemeDescription(this.inputExtraFields[i3], ThemeDescription.FLAG_PROGRESSBAR | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText3"));
+            }
+        }
+        arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
+        arrayList.add(new ThemeDescription(this.noPasswordImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_messagePanelIcons"));
+        arrayList.add(new ThemeDescription(this.noPasswordTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
+        arrayList.add(new ThemeDescription(this.noPasswordSetTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText5"));
+        arrayList.add(new ThemeDescription(this.passwordForgotButton, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+        arrayList.add(new ThemeDescription(this.plusTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.acceptTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "passport_authorizeText"));
+        arrayList.add(new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "passport_authorizeBackground"));
+        arrayList.add(new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "passport_authorizeBackgroundSelected"));
+        arrayList.add(new ThemeDescription(this.progressView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressInner2"));
+        arrayList.add(new ThemeDescription(this.progressView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressOuter2"));
+        arrayList.add(new ThemeDescription(this.progressViewButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressInner2"));
+        arrayList.add(new ThemeDescription(this.progressViewButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressOuter2"));
+        arrayList.add(new ThemeDescription(this.emptyImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sessions_devicesImage"));
+        arrayList.add(new ThemeDescription(this.emptyTextView1, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription(this.emptyTextView2, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription(this.emptyTextView3, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+        return arrayList;
+    }
+}

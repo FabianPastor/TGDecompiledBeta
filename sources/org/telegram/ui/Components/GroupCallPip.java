@@ -29,7 +29,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
-import org.telegram.ui.Components.GroupCallPip;
 import org.telegram.ui.GroupCallActivity;
 
 public class GroupCallPip implements NotificationCenter.NotificationCenterDelegate {
@@ -104,7 +103,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
         this.currentAccount = i;
         final float scaledTouchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
         AnonymousClass3 r0 = new FrameLayout(context) {
-            Runnable micRunnable = $$Lambda$GroupCallPip$3$Tfg_uc9uCyCLASSNAMEHbGaVoTLHS8RO0.INSTANCE;
+            Runnable micRunnable = GroupCallPip$3$$ExternalSyntheticLambda0.INSTANCE;
             AnimatorSet moveToBoundsAnimator;
             boolean pressed;
             Runnable pressedRunnable = new Runnable() {
@@ -120,11 +119,11 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     }
                 }
             };
-            long startTime;
             float startX;
             float startY;
 
-            static /* synthetic */ void lambda$$0() {
+            /* access modifiers changed from: private */
+            public static /* synthetic */ void lambda$$0() {
                 if (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute()) {
                     VoIPService.getSharedInstance().setMicMute(false, true, false);
                 }
@@ -153,7 +152,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             }
 
             /* JADX WARNING: Code restructure failed: missing block: B:8:0x0022, code lost:
-                if (r4 != 3) goto L_0x0302;
+                if (r4 != 3) goto L_0x02ff;
              */
             /* JADX WARNING: Removed duplicated region for block: B:19:0x0064  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -177,7 +176,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     if (r4 == r5) goto L_0x011b
                     if (r4 == r8) goto L_0x0026
                     if (r4 == r6) goto L_0x011b
-                    goto L_0x0302
+                    goto L_0x02ff
                 L_0x0026:
                     float r13 = r12.startX
                     float r13 = r0 - r13
@@ -212,7 +211,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                 L_0x005e:
                     org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
                     boolean r3 = r13.moving
-                    if (r3 == 0) goto L_0x0302
+                    if (r3 == 0) goto L_0x02ff
                     float r3 = r13.windowX
                     float r3 = r3 + r7
                     r13.windowX = r3
@@ -310,7 +309,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     r0.pinnedToCenter(r1)
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
                     r0.prepareToRemove(r13)
-                    goto L_0x0302
+                    goto L_0x02ff
                 L_0x011b:
                     java.lang.Runnable r0 = r12.micRunnable
                     org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
@@ -511,7 +510,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
                     r13.moving = r1
                     r13.showRemoveTooltip(r1)
-                    goto L_0x0302
+                    goto L_0x02ff
                 L_0x02c1:
                     org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
                     int[] r13 = r13.location
@@ -531,8 +530,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     r13.windowOffsetTop = r1
                     r12.startX = r0
                     r12.startY = r2
-                    long r0 = java.lang.System.currentTimeMillis()
-                    r12.startTime = r0
+                    java.lang.System.currentTimeMillis()
                     java.lang.Runnable r13 = r12.pressedRunnable
                     r0 = 300(0x12c, double:1.48E-321)
                     org.telegram.messenger.AndroidUtilities.runOnUIThread(r13, r0)
@@ -546,7 +544,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     r13.windowY = r0
                     r13.pressedState = r5
                     r13.checkButtonAlpha()
-                L_0x0302:
+                L_0x02ff:
                     return r5
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupCallPip.AnonymousClass3.onTouchEvent(android.view.MotionEvent):boolean");
@@ -569,11 +567,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
         avatarsImageView2.setStyle(5);
         this.avatarsImageView.setCentered(true);
         this.avatarsImageView.setVisibility(8);
-        this.avatarsImageView.setDelegate(new Runnable() {
-            public final void run() {
-                GroupCallPip.this.lambda$new$0$GroupCallPip();
-            }
-        });
+        this.avatarsImageView.setDelegate(new GroupCallPip$$ExternalSyntheticLambda2(this));
         updateAvatars(false);
         this.windowView.addView(this.avatarsImageView, LayoutHelper.createFrame(108, 36, 49));
         this.windowRemoveTooltipView = new FrameLayout(context) {
@@ -686,11 +680,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             }
         };
         this.alertContainer = r132;
-        r132.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                GroupCallPip.this.lambda$new$1$GroupCallPip(view);
-            }
-        });
+        r132.setOnClickListener(new GroupCallPip$$ExternalSyntheticLambda1(this));
         this.alertContainer.setClipChildren(false);
         FrameLayout frameLayout = this.alertContainer;
         GroupCallPipAlertView groupCallPipAlertView = new GroupCallPipAlertView(context, this.currentAccount);
@@ -699,14 +689,12 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$GroupCallPip() {
+    public /* synthetic */ void lambda$new$0() {
         updateAvatars(true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$GroupCallPip(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         showAlert(false);
     }
 
@@ -865,7 +853,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             ofFloat3.setStartDelay((long) (0.7f * f));
             ofFloat3.setDuration((long) (f * 0.3f));
             animatorSet.playTogether(new Animator[]{ofFloat3});
-            AndroidUtilities.runOnUIThread($$Lambda$GroupCallPip$xgZsLWasbbNg91cOicWH8iHQb88.INSTANCE, 370);
+            AndroidUtilities.runOnUIThread(GroupCallPip$$ExternalSyntheticLambda3.INSTANCE, 370);
             long j2 = 350 + j + 180;
             ObjectAnimator ofFloat4 = ObjectAnimator.ofFloat(this.removeTooltipView, View.SCALE_X, new float[]{1.0f, 1.05f});
             ofFloat4.setDuration(j2);
@@ -904,28 +892,11 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             final FrameLayout frameLayout8 = frameLayout4;
             animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
-                    NotificationCenter.getInstance(GroupCallPip.this.currentAccount).doOnIdle(new Runnable(frameLayout5, frameLayout6, windowManager3, frameLayout7, frameLayout8) {
-                        public final /* synthetic */ View f$0;
-                        public final /* synthetic */ View f$1;
-                        public final /* synthetic */ WindowManager f$2;
-                        public final /* synthetic */ View f$3;
-                        public final /* synthetic */ View f$4;
-
-                        {
-                            this.f$0 = r1;
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                        }
-
-                        public final void run() {
-                            GroupCallPip.AnonymousClass9.lambda$onAnimationEnd$0(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4);
-                        }
-                    });
+                    NotificationCenter.getInstance(GroupCallPip.this.currentAccount).doOnIdle(new GroupCallPip$9$$ExternalSyntheticLambda0(frameLayout5, frameLayout6, windowManager3, frameLayout7, frameLayout8));
                 }
 
-                static /* synthetic */ void lambda$onAnimationEnd$0(View view, View view2, WindowManager windowManager, View view3, View view4) {
+                /* access modifiers changed from: private */
+                public static /* synthetic */ void lambda$onAnimationEnd$0(View view, View view2, WindowManager windowManager, View view3, View view4) {
                     view.setVisibility(8);
                     view2.setVisibility(8);
                     windowManager.removeView(view);
@@ -1163,11 +1134,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             fArr[1] = z ? 1.0f : 0.0f;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
             this.pinAnimator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    GroupCallPip.this.lambda$pinnedToCenter$3$GroupCallPip(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new GroupCallPip$$ExternalSyntheticLambda0(this));
             this.pinAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     GroupCallPip groupCallPip = GroupCallPip.this;
@@ -1192,8 +1159,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$pinnedToCenter$3 */
-    public /* synthetic */ void lambda$pinnedToCenter$3$GroupCallPip(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$pinnedToCenter$3(ValueAnimator valueAnimator) {
         if (!this.removed) {
             float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             this.pinnedProgress = floatValue;

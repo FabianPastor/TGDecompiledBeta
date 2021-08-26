@@ -8,18 +8,9 @@ import android.graphics.RectF;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
-import j$.lang.Iterable;
-import j$.util.Collection;
-import j$.util.List;
-import j$.util.Spliterator;
-import j$.util.function.Consumer;
-import j$.util.function.Predicate;
-import j$.util.function.UnaryOperator;
-import j$.util.stream.Stream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
@@ -39,7 +30,7 @@ public class TableLayout extends View {
         }
 
         public Bounds getBounds() {
-            return new Bounds() {
+            return new Bounds(this) {
                 private int size;
 
                 /* access modifiers changed from: protected */
@@ -66,17 +57,6 @@ public class TableLayout extends View {
             };
         }
     };
-    public static final Alignment BOTTOM;
-    public static final Alignment CENTER = new Alignment() {
-        public int getAlignmentValue(Child child, int i) {
-            return i >> 1;
-        }
-
-        /* access modifiers changed from: package-private */
-        public int getGravityOffset(Child child, int i) {
-            return i >> 1;
-        }
-    };
     public static final Alignment END;
     public static final Alignment FILL = new Alignment() {
         public int getAlignmentValue(Child child, int i) {
@@ -93,10 +73,7 @@ public class TableLayout extends View {
         }
     };
     private static final Alignment LEADING;
-    public static final Alignment LEFT;
-    public static final Alignment RIGHT;
     public static final Alignment START;
-    public static final Alignment TOP;
     private static final Alignment TRAILING;
     static final Alignment UNDEFINED_ALIGNMENT = new Alignment() {
         public int getAlignmentValue(Child child, int i) {
@@ -109,9 +86,9 @@ public class TableLayout extends View {
         }
     };
     /* access modifiers changed from: private */
-    public Path backgroundPath = new Path();
+    public Path backgroundPath;
     private ArrayList<Child> cellsToFixHeight = new ArrayList<>();
-    private ArrayList<Child> childrens = new ArrayList<>();
+    private ArrayList<Child> childrens;
     private int colCount;
     /* access modifiers changed from: private */
     public TableLayoutDelegate delegate;
@@ -124,7 +101,6 @@ public class TableLayout extends View {
     public int itemPaddingLeft = AndroidUtilities.dp(8.0f);
     /* access modifiers changed from: private */
     public int itemPaddingTop = AndroidUtilities.dp(7.0f);
-    private Path linePath = new Path();
     private int mAlignmentMode = 1;
     private int mDefaultGap;
     private final Axis mHorizontalAxis = new Axis(true);
@@ -133,9 +109,9 @@ public class TableLayout extends View {
     private boolean mUseDefaultMargins = false;
     private final Axis mVerticalAxis = new Axis(false);
     /* access modifiers changed from: private */
-    public float[] radii = new float[8];
+    public float[] radii;
     /* access modifiers changed from: private */
-    public RectF rect = new RectF();
+    public RectF rect;
     private ArrayList<Point> rowSpans = new ArrayList<>();
     /* access modifiers changed from: private */
     public TextSelectionHelper.ArticleTextSelectionHelper textSelectionHelper;
@@ -632,6 +608,11 @@ public class TableLayout extends View {
 
     public TableLayout(Context context, TableLayoutDelegate tableLayoutDelegate, TextSelectionHelper.ArticleTextSelectionHelper articleTextSelectionHelper) {
         super(context);
+        new Path();
+        this.backgroundPath = new Path();
+        this.rect = new RectF();
+        this.radii = new float[8];
+        this.childrens = new ArrayList<>();
         this.textSelectionHelper = articleTextSelectionHelper;
         setRowCount(Integer.MIN_VALUE);
         setColumnCount(Integer.MIN_VALUE);
@@ -1725,14 +1706,13 @@ public class TableLayout extends View {
 
     public static class LayoutParams extends ViewGroup.MarginLayoutParams {
         private static final Interval DEFAULT_SPAN;
-        private static final int DEFAULT_SPAN_SIZE;
         public Spec columnSpec;
         public Spec rowSpec;
 
         static {
             Interval interval = new Interval(Integer.MIN_VALUE, -NUM);
             DEFAULT_SPAN = interval;
-            DEFAULT_SPAN_SIZE = interval.size();
+            interval.size();
         }
 
         private LayoutParams(int i, int i2, int i3, int i4, int i5, int i6, Spec spec, Spec spec2) {
@@ -1814,37 +1794,9 @@ public class TableLayout extends View {
         }
     }
 
-    static final class Assoc<K, V> extends ArrayList<Pair<K, V>> implements j$.util.List {
+    static final class Assoc<K, V> extends ArrayList<Pair<K, V>> {
         private final Class<K> keyType;
         private final Class<V> valueType;
-
-        public /* synthetic */ void forEach(Consumer consumer) {
-            Iterable.CC.$default$forEach(this, consumer);
-        }
-
-        public /* synthetic */ Stream parallelStream() {
-            return Collection.CC.$default$parallelStream(this);
-        }
-
-        public /* synthetic */ boolean removeIf(Predicate predicate) {
-            return Collection.CC.$default$removeIf(this, predicate);
-        }
-
-        public /* synthetic */ void replaceAll(UnaryOperator unaryOperator) {
-            List.CC.$default$replaceAll(this, unaryOperator);
-        }
-
-        public /* synthetic */ void sort(Comparator comparator) {
-            List.CC.$default$sort(this, comparator);
-        }
-
-        public /* synthetic */ Spliterator spliterator() {
-            return List.CC.$default$spliterator(this);
-        }
-
-        public /* synthetic */ Stream stream() {
-            return Collection.CC.$default$stream(this);
-        }
 
         private Assoc(Class<K> cls, Class<V> cls2) {
             this.keyType = cls;
@@ -2107,12 +2059,20 @@ public class TableLayout extends View {
             }
         };
         TRAILING = r1;
-        TOP = r0;
-        BOTTOM = r1;
         START = r0;
         END = r1;
-        LEFT = createSwitchingAlignment(r0);
-        RIGHT = createSwitchingAlignment(r1);
+        createSwitchingAlignment(r0);
+        createSwitchingAlignment(r1);
+        new Alignment() {
+            public int getAlignmentValue(Child child, int i) {
+                return i >> 1;
+            }
+
+            /* access modifiers changed from: package-private */
+            public int getGravityOffset(Child child, int i) {
+                return i >> 1;
+            }
+        };
     }
 
     private static Alignment createSwitchingAlignment(final Alignment alignment) {

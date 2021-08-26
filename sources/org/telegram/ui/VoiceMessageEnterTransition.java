@@ -58,17 +58,7 @@ public class VoiceMessageEnterTransition implements MessageEnterTransitionContai
         messageEnterTransitionContainer.addTransition(this);
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
         this.animator = ofFloat;
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(messageEnterTransitionContainer) {
-            public final /* synthetic */ MessageEnterTransitionContainer f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                VoiceMessageEnterTransition.this.lambda$new$0$VoiceMessageEnterTransition(this.f$1, valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new VoiceMessageEnterTransition$$ExternalSyntheticLambda0(this, messageEnterTransitionContainer));
         ofFloat.setInterpolator(new LinearInterpolator());
         ofFloat.setDuration(220);
         ofFloat.addListener(new AnimatorListenerAdapter() {
@@ -81,8 +71,7 @@ public class VoiceMessageEnterTransition implements MessageEnterTransitionContai
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$VoiceMessageEnterTransition(MessageEnterTransitionContainer messageEnterTransitionContainer, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$0(MessageEnterTransitionContainer messageEnterTransitionContainer, ValueAnimator valueAnimator) {
         this.progress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         messageEnterTransitionContainer.invalidate();
     }

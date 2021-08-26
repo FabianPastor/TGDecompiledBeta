@@ -28,7 +28,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestTimeDelegate;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -41,7 +40,6 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.ProxyListActivity;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
@@ -52,7 +50,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     public int connectionsHeaderRow;
     /* access modifiers changed from: private */
     public int currentConnectionState;
-    private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     /* access modifiers changed from: private */
@@ -119,17 +116,12 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             this.checkImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.checkImageView.setContentDescription(LocaleController.getString("Edit", NUM));
             addView(this.checkImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 3 : i) | 48, 8.0f, 8.0f, 8.0f, 0.0f));
-            this.checkImageView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    ProxyListActivity.TextDetailProxyCell.this.lambda$new$0$ProxyListActivity$TextDetailProxyCell(view);
-                }
-            });
+            this.checkImageView.setOnClickListener(new ProxyListActivity$TextDetailProxyCell$$ExternalSyntheticLambda0(this));
             setWillNotDraw(false);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ProxyListActivity$TextDetailProxyCell(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             ProxyListActivity.this.presentFragment(new ProxySettingsActivity(this.currentInfo));
         }
 
@@ -264,28 +256,16 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         this.listView = recyclerListView;
         ((DefaultItemAnimator) recyclerListView.getItemAnimator()).setDelayAnimations(false);
         this.listView.setVerticalScrollBarEnabled(false);
-        RecyclerListView recyclerListView2 = this.listView;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
-        this.layoutManager = linearLayoutManager;
-        recyclerListView2.setLayoutManager(linearLayoutManager);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ProxyListActivity.this.lambda$createView$0$ProxyListActivity(view, i);
-            }
-        });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return ProxyListActivity.this.lambda$createView$2$ProxyListActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ProxyListActivity$$ExternalSyntheticLambda3(this));
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ProxyListActivity$$ExternalSyntheticLambda4(this));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$ProxyListActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$0(View view, int i) {
         if (i == this.useProxyRow) {
             if (SharedConfig.currentProxy == null) {
                 if (!SharedConfig.proxyList.isEmpty()) {
@@ -380,8 +360,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ boolean lambda$createView$2$ProxyListActivity(View view, int i) {
+    public /* synthetic */ boolean lambda$createView$2(View view, int i) {
         int i2 = this.proxyStartRow;
         if (i < i2 || i >= this.proxyEndRow) {
             return false;
@@ -390,26 +369,13 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         builder.setMessage(LocaleController.getString("DeleteProxy", NUM));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(SharedConfig.proxyList.get(i - i2), i) {
-            public final /* synthetic */ SharedConfig.ProxyInfo f$1;
-            public final /* synthetic */ int f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                ProxyListActivity.this.lambda$createView$1$ProxyListActivity(this.f$1, this.f$2, dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new ProxyListActivity$$ExternalSyntheticLambda0(this, SharedConfig.proxyList.get(i - i2), i));
         showDialog(builder.create());
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$ProxyListActivity(SharedConfig.ProxyInfo proxyInfo, int i, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$createView$1(SharedConfig.ProxyInfo proxyInfo, int i, DialogInterface dialogInterface, int i2) {
         SharedConfig.deleteProxy(proxyInfo);
         if (SharedConfig.currentProxy == null) {
             this.useProxyForCalls = false;
@@ -497,26 +463,13 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             SharedConfig.ProxyInfo proxyInfo = SharedConfig.proxyList.get(i);
             if (!proxyInfo.checking && SystemClock.elapsedRealtime() - proxyInfo.availableCheckTime >= 120000) {
                 proxyInfo.checking = true;
-                proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(this.currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, new RequestTimeDelegate() {
-                    public final void run(long j) {
-                        AndroidUtilities.runOnUIThread(new Runnable(j) {
-                            public final /* synthetic */ long f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void run() {
-                                ProxyListActivity.lambda$checkProxyList$3(SharedConfig.ProxyInfo.this, this.f$1);
-                            }
-                        });
-                    }
-                });
+                proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(this.currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, new ProxyListActivity$$ExternalSyntheticLambda2(proxyInfo));
             }
         }
     }
 
-    static /* synthetic */ void lambda$checkProxyList$3(SharedConfig.ProxyInfo proxyInfo, long j) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$checkProxyList$3(SharedConfig.ProxyInfo proxyInfo, long j) {
         proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
         proxyInfo.checking = false;
         if (j == -1) {

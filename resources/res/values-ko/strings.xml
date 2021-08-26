@@ -723,8 +723,6 @@
     <string name="CancelAccountResetInfo2">**%1$s**에 접근이 가능한 누군가가 회원님의 텔레그램 계정삭제 및 2단계 인증 초기화를 요청했습니다.\10\10만약 이것을 요청 하신게 아니라면, 저희가 방금 보낸 SMS 코드를 입력해주세요. 또한 *전화번호를 변경을 하여* 취소를 할 수 있습니다.</string>
     <string name="CancelEmailQuestion">정말 복구 이메일 설정을 중단하시겠습니까?</string>
     <string name="CancelEmailQuestionTitle">설치 중단</string>
-    <string name="CancelForward">전달 취소</string>
-    <string name="CancelForwardMessage">전달을 취소하거나 다른 대화로 전달하겠습니까?</string>
     <string name="CancelForwarding">전달 취소하기</string>
     <string name="CancelLinkExpired">링크가 폐기되거나 만료되었습니다.</string>
     <string name="CancelLinkSuccess">%1$s 계정 탈퇴 작업이 취소되었습니다. 이제 이 창을 닫으셔도 좋습니다.</string>
@@ -2384,7 +2382,7 @@
     <string name="NoGroupsInCommon">공통 그룹이 없습니다</string>
     <string name="NoHandleAppInstalled">\'%1$s\' 파일 유형을 처리할 수 있는 응용 프로그램이 없습니다. 계속하려면 프로그램을 설치해 주세요</string>
     <string name="NoLimit">제한 없음</string>
-    <string name="NoMailInstalled">발생한 문제를 자세히 적어 sms@stel.com으로 이메일을 보내 주세요.</string>
+    <string name="NoMailInstalled">발생한 문제를 자세히 적어 reports@stel.com으로 이메일을 보내 주세요.</string>
     <string name="NoMasks">마스크 없음</string>
     <string name="NoMedia">사진과 동영상을 이 대화방에 공유하여\10어느 기기에서나 열람해 보세요.</string>
     <string name="NoMediaAutoDownload">다운로드하지 않음</string>
@@ -3445,7 +3443,6 @@
     <string name="SelectFile">파일 선택</string>
     <string name="SelectFromGallery">갤러리</string>
     <string name="SelectImage">이미지 선택</string>
-    <string name="SelectOtherChat">다른 대화 선택</string>
     <string name="Send">보내기</string>
     <string name="SendAnonymously">익명으로 보내기</string>
     <string name="SendAsFile">파일로 보내기</string>

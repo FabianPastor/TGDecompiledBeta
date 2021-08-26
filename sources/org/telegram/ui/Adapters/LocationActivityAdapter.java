@@ -20,7 +20,6 @@ import org.telegram.tgnet.TLRPC$TL_channelLocation;
 import org.telegram.tgnet.TLRPC$TL_geoPoint;
 import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.LocationActivityAdapter;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.LocationCell;
@@ -236,8 +235,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreateViewHolder$0 */
-    public /* synthetic */ void lambda$onCreateViewHolder$0$LocationActivityAdapter(View view) {
+    public /* synthetic */ void lambda$onCreateViewHolder$0(View view) {
         onDirectionClick();
     }
 
@@ -250,18 +248,13 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                     public ViewPropertyAnimator animate() {
                         ViewPropertyAnimator animate = super.animate();
                         if (Build.VERSION.SDK_INT >= 19) {
-                            animate.setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    LocationActivityAdapter.AnonymousClass1.this.lambda$animate$0$LocationActivityAdapter$1(valueAnimator);
-                                }
-                            });
+                            animate.setUpdateListener(new LocationActivityAdapter$1$$ExternalSyntheticLambda0(this));
                         }
                         return animate;
                     }
 
                     /* access modifiers changed from: private */
-                    /* renamed from: lambda$animate$0 */
-                    public /* synthetic */ void lambda$animate$0$LocationActivityAdapter$1(ValueAnimator valueAnimator) {
+                    public /* synthetic */ void lambda$animate$0(ValueAnimator valueAnimator) {
                         if (LocationActivityAdapter.this.updateRunnable != null) {
                             LocationActivityAdapter.this.updateRunnable.run();
                         }
@@ -295,11 +288,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 break;
             case 8:
                 LocationDirectionCell locationDirectionCell = new LocationDirectionCell(this.mContext);
-                locationDirectionCell.setOnButtonClick(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        LocationActivityAdapter.this.lambda$onCreateViewHolder$0$LocationActivityAdapter(view);
-                    }
-                });
+                locationDirectionCell.setOnButtonClick(new LocationActivityAdapter$$ExternalSyntheticLambda0(this));
                 shadowSectionCell = locationDirectionCell;
                 break;
             case 9:

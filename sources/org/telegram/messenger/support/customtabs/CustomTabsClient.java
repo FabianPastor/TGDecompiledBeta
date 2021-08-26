@@ -36,7 +36,7 @@ public class CustomTabsClient {
     }
 
     public CustomTabsSession newSession(final CustomTabsCallback customTabsCallback) {
-        AnonymousClass2 r0 = new ICustomTabsCallback.Stub() {
+        AnonymousClass2 r0 = new ICustomTabsCallback.Stub(this) {
             private Handler mHandler = new Handler(Looper.getMainLooper());
 
             public void onNavigationEvent(final int i, final Bundle bundle) {

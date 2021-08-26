@@ -87,6 +87,7 @@ public class SvgHelper {
         /* access modifiers changed from: private */
         public static Runnable shiftRunnable;
         private static float totalTranslation;
+        private boolean aspectFill = true;
         private Bitmap backgroundBitmap;
         private Canvas backgroundCanvas;
         private Shader backgroundGradient;
@@ -117,22 +118,32 @@ public class SvgHelper {
             return this.height;
         }
 
+        public void setAspectFill(boolean z) {
+            this.aspectFill = z;
+        }
+
         public void draw(Canvas canvas) {
+            Canvas canvas2 = canvas;
             String str = this.currentColorKey;
             if (str != null) {
                 setupGradient(str, this.colorAlpha);
             }
             Rect bounds = getBounds();
-            float max = Math.max(((float) bounds.width()) / ((float) this.width), ((float) bounds.height()) / ((float) this.height));
+            float width2 = ((float) bounds.width()) / ((float) this.width);
+            float height2 = ((float) bounds.height()) / ((float) this.height);
+            float max = this.aspectFill ? Math.max(width2, height2) : Math.min(width2, height2);
             canvas.save();
-            canvas.translate((float) bounds.left, (float) bounds.top);
-            canvas.scale(max, max);
+            canvas2.translate((float) bounds.left, (float) bounds.top);
+            if (!this.aspectFill) {
+                canvas2.translate((((float) bounds.width()) - (((float) this.width) * max)) / 2.0f, (((float) bounds.height()) - (((float) this.height) * max)) / 2.0f);
+            }
+            canvas2.scale(max, max);
             int size = this.commands.size();
             for (int i = 0; i < size; i++) {
                 Object obj = this.commands.get(i);
                 if (obj instanceof Matrix) {
                     canvas.save();
-                    canvas.concat((Matrix) obj);
+                    canvas2.concat((Matrix) obj);
                 } else if (obj == null) {
                     canvas.restore();
                 } else {
@@ -140,24 +151,24 @@ public class SvgHelper {
                     int alpha = paint.getAlpha();
                     paint.setAlpha((int) (this.crossfadeAlpha * ((float) alpha)));
                     if (obj instanceof Path) {
-                        canvas.drawPath((Path) obj, paint);
+                        canvas2.drawPath((Path) obj, paint);
                     } else if (obj instanceof Rect) {
-                        canvas.drawRect((Rect) obj, paint);
+                        canvas2.drawRect((Rect) obj, paint);
                     } else if (obj instanceof RectF) {
-                        canvas.drawRect((RectF) obj, paint);
+                        canvas2.drawRect((RectF) obj, paint);
                     } else if (obj instanceof Line) {
                         Line line = (Line) obj;
                         canvas.drawLine(line.x1, line.y1, line.x2, line.y2, paint);
                     } else if (obj instanceof Circle) {
                         Circle circle = (Circle) obj;
-                        canvas.drawCircle(circle.x1, circle.y1, circle.rad, paint);
+                        canvas2.drawCircle(circle.x1, circle.y1, circle.rad, paint);
                     } else if (obj instanceof Oval) {
-                        canvas.drawOval(((Oval) obj).rect, paint);
+                        canvas2.drawOval(((Oval) obj).rect, paint);
                     } else if (obj instanceof RoundRect) {
                         RoundRect roundRect = (RoundRect) obj;
                         RectF rectF = roundRect.rect;
                         float f = roundRect.rx;
-                        canvas.drawRoundRect(rectF, f, f, paint);
+                        canvas2.drawRoundRect(rectF, f, f, paint);
                     }
                     paint.setAlpha(alpha);
                 }
@@ -185,9 +196,9 @@ public class SvgHelper {
                     if (runnable != null) {
                         AndroidUtilities.cancelRunOnUIThread(runnable);
                     }
-                    $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw r15 = $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw.INSTANCE;
-                    shiftRunnable = r15;
-                    AndroidUtilities.runOnUIThread(r15, (long) (((int) (1000.0f / AndroidUtilities.screenRefreshRate)) - 1));
+                    SvgHelper$SvgDrawable$$ExternalSyntheticLambda0 svgHelper$SvgDrawable$$ExternalSyntheticLambda0 = SvgHelper$SvgDrawable$$ExternalSyntheticLambda0.INSTANCE;
+                    shiftRunnable = svgHelper$SvgDrawable$$ExternalSyntheticLambda0;
+                    AndroidUtilities.runOnUIThread(svgHelper$SvgDrawable$$ExternalSyntheticLambda0, (long) (((int) (1000.0f / AndroidUtilities.screenRefreshRate)) - 1));
                 }
                 ImageReceiver imageReceiver = this.parentImageReceiver;
                 if (imageReceiver != null) {

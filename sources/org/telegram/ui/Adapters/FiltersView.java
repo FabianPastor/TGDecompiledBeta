@@ -126,7 +126,7 @@ public class FiltersView extends RecyclerListView {
         r0.setOrientation(0);
         setLayoutManager(this.layoutManager);
         setAdapter(new Adapter());
-        addItemDecoration(new RecyclerView.ItemDecoration() {
+        addItemDecoration(new RecyclerView.ItemDecoration(this) {
             public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                 super.getItemOffsets(rect, view, recyclerView, state);
                 int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
@@ -139,9 +139,7 @@ public class FiltersView extends RecyclerListView {
                 }
             }
         });
-        setItemAnimator(new DefaultItemAnimator() {
-            private final float scaleFrom = 0.0f;
-
+        setItemAnimator(new DefaultItemAnimator(this) {
             /* access modifiers changed from: protected */
             public long getAddAnimationDelay(long j, long j2, long j3) {
                 return 0;
@@ -575,7 +573,7 @@ public class FiltersView extends RecyclerListView {
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            ViewHolder viewHolder = new ViewHolder(new FilterView(viewGroup.getContext()));
+            ViewHolder viewHolder = new ViewHolder(FiltersView.this, new FilterView(viewGroup.getContext()));
             RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(-2, AndroidUtilities.dp(32.0f));
             layoutParams.topMargin = AndroidUtilities.dp(6.0f);
             viewHolder.itemView.setLayoutParams(layoutParams);
@@ -671,7 +669,7 @@ public class FiltersView extends RecyclerListView {
     private class ViewHolder extends RecyclerView.ViewHolder {
         FilterView filterView;
 
-        public ViewHolder(FilterView filterView2) {
+        public ViewHolder(FiltersView filtersView, FilterView filterView2) {
             super(filterView2);
             this.filterView = filterView2;
         }
@@ -682,13 +680,11 @@ public class FiltersView extends RecyclerListView {
         public DateData dateData;
         public final TLRPC$MessagesFilter filter;
         public final int filterType;
-        public final int iconRes;
         public final int iconResFilled;
         public boolean removable = true;
         public final String title;
 
         public MediaFilterData(int i, int i2, String str, TLRPC$MessagesFilter tLRPC$MessagesFilter, int i3) {
-            this.iconRes = i;
             this.iconResFilled = i2;
             this.title = str;
             this.filter = tLRPC$MessagesFilter;

@@ -1,47 +1,64 @@
 package j$.util.stream;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import j$.util.function.Consumer;
+import j$.util.function.n;
+import j$.util.function.o;
+import j$.util.function.p;
 
-final class R2<T> extends F2<T> {
-    private Object[] d;
-    private int e;
+class R2 implements T2, CLASSNAMEm3 {
+    private long a;
+    final /* synthetic */ long b;
+    final /* synthetic */ n c;
 
-    R2(A2 a2, Comparator comparator) {
-        super(a2, comparator);
+    R2(long j, n nVar) {
+        this.b = j;
+        this.c = nVar;
     }
 
-    public void accept(Object obj) {
-        Object[] objArr = this.d;
-        int i = this.e;
-        this.e = i + 1;
-        objArr[i] = obj;
+    public /* synthetic */ void accept(double d) {
+        CLASSNAMEp1.f(this);
+        throw null;
     }
 
-    public void l() {
-        int i = 0;
-        Arrays.sort(this.d, 0, this.e, this.b);
-        this.a.m((long) this.e);
-        if (!this.c) {
-            while (i < this.e) {
-                this.a.accept(this.d[i]);
-                i++;
-            }
-        } else {
-            while (i < this.e && !this.a.o()) {
-                this.a.accept(this.d[i]);
-                i++;
-            }
-        }
-        this.a.l();
-        this.d = null;
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEp1.d(this);
+        throw null;
     }
 
-    public void m(long j) {
-        if (j < NUM) {
-            this.d = new Object[((int) j)];
-            return;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    public void accept(long j) {
+        this.a = this.c.applyAsLong(this.a, j);
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    /* renamed from: b */
+    public /* synthetic */ void accept(Long l) {
+        CLASSNAMEp1.c(this, l);
+    }
+
+    public p f(p pVar) {
+        pVar.getClass();
+        return new o(this, pVar);
+    }
+
+    public Object get() {
+        return Long.valueOf(this.a);
+    }
+
+    public void h(T2 t2) {
+        accept(((R2) t2).a);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b;
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

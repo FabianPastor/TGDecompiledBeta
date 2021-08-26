@@ -22,12 +22,10 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -46,7 +44,6 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.ManageChatTextCell;
 import org.telegram.ui.Cells.ManageChatUserCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
-import org.telegram.ui.ChatLinkActivity;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.EmptyTextProgressView;
@@ -246,7 +243,6 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
     public View createView(Context context) {
         this.searching = false;
-        this.searchWas = false;
         this.actionBar.setBackButtonImage(NUM);
         int i = 1;
         this.actionBar.setAllowOverlayTitle(true);
@@ -324,18 +320,13 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         }
         recyclerListView3.setVerticalScrollbarPosition(i);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ChatLinkActivity.this.lambda$createView$6$ChatLinkActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatLinkActivity$$ExternalSyntheticLambda18(this));
         updateRows();
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$6 */
-    public /* synthetic */ void lambda$createView$6$ChatLinkActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$6(View view, int i) {
         TLRPC$Chat tLRPC$Chat;
         String str;
         String str2;
@@ -390,11 +381,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     }
                     builder.setTitle(str2);
                     builder.setMessage(AndroidUtilities.replaceTags(str));
-                    builder.setPositiveButton(LocaleController.getString("DiscussionUnlink", NUM), new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ChatLinkActivity.this.lambda$createView$5$ChatLinkActivity(dialogInterface, i);
-                        }
-                    });
+                    builder.setPositiveButton(LocaleController.getString("DiscussionUnlink", NUM), new ChatLinkActivity$$ExternalSyntheticLambda3(this));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     AlertDialog create = builder.create();
                     showDialog(create);
@@ -408,8 +395,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$5 */
-    public /* synthetic */ void lambda$createView$5$ChatLinkActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$5(DialogInterface dialogInterface, int i) {
         if (!this.isChannel || this.info.linked_chat_id != 0) {
             AlertDialog[] alertDialogArr = {new AlertDialog(getParentActivity(), 3)};
             TLRPC$TL_channels_setDiscussionGroup tLRPC$TL_channels_setDiscussionGroup = new TLRPC$TL_channels_setDiscussionGroup();
@@ -420,51 +406,17 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 tLRPC$TL_channels_setDiscussionGroup.broadcast = new TLRPC$TL_inputChannelEmpty();
                 tLRPC$TL_channels_setDiscussionGroup.group = MessagesController.getInputChannel(this.currentChat);
             }
-            AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, getConnectionsManager().sendRequest(tLRPC$TL_channels_setDiscussionGroup, new RequestDelegate(alertDialogArr) {
-                public final /* synthetic */ AlertDialog[] f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ChatLinkActivity.this.lambda$createView$2$ChatLinkActivity(this.f$1, tLObject, tLRPC$TL_error);
-                }
-            })) {
-                public final /* synthetic */ AlertDialog[] f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ChatLinkActivity.this.lambda$createView$4$ChatLinkActivity(this.f$1, this.f$2);
-                }
-            }, 500);
+            AndroidUtilities.runOnUIThread(new ChatLinkActivity$$ExternalSyntheticLambda10(this, alertDialogArr, getConnectionsManager().sendRequest(tLRPC$TL_channels_setDiscussionGroup, new ChatLinkActivity$$ExternalSyntheticLambda15(this, alertDialogArr))), 500);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$ChatLinkActivity(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr) {
-            public final /* synthetic */ AlertDialog[] f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ChatLinkActivity.this.lambda$createView$1$ChatLinkActivity(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$createView$2(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChatLinkActivity$$ExternalSyntheticLambda9(this, alertDialogArr));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$ChatLinkActivity(AlertDialog[] alertDialogArr) {
+    public /* synthetic */ void lambda$createView$1(AlertDialog[] alertDialogArr) {
         try {
             alertDialogArr[0].dismiss();
         } catch (Throwable unused) {
@@ -475,44 +427,27 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         int i = NotificationCenter.chatInfoDidLoad;
         Boolean bool = Boolean.FALSE;
         instance.postNotificationName(i, this.info, 0, bool, bool);
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                ChatLinkActivity.this.lambda$createView$0$ChatLinkActivity();
-            }
-        }, 1000);
+        AndroidUtilities.runOnUIThread(new ChatLinkActivity$$ExternalSyntheticLambda6(this), 1000);
         if (!this.isChannel) {
             finishFragment();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$ChatLinkActivity() {
+    public /* synthetic */ void lambda$createView$0() {
         getMessagesController().loadFullChat(this.currentChatId, 0, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$ChatLinkActivity(AlertDialog[] alertDialogArr, int i) {
+    public /* synthetic */ void lambda$createView$4(AlertDialog[] alertDialogArr, int i) {
         if (alertDialogArr[0] != null) {
-            alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onCancel(DialogInterface dialogInterface) {
-                    ChatLinkActivity.this.lambda$createView$3$ChatLinkActivity(this.f$1, dialogInterface);
-                }
-            });
+            alertDialogArr[0].setOnCancelListener(new ChatLinkActivity$$ExternalSyntheticLambda2(this, i));
             showDialog(alertDialogArr[0]);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$ChatLinkActivity(int i, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$createView$3(int i, DialogInterface dialogInterface) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(i, true);
     }
 
@@ -565,56 +500,33 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 24.0f, 57.0f, 24.0f, 9.0f));
             avatarDrawable.setInfo(tLRPC$Chat2);
             backupImageView.setForUserOrChat(tLRPC$Chat2, avatarDrawable);
-            builder.setPositiveButton(LocaleController.getString("DiscussionLinkGroup", NUM), new DialogInterface.OnClickListener(chatFull, tLRPC$Chat2) {
-                public final /* synthetic */ TLRPC$ChatFull f$1;
-                public final /* synthetic */ TLRPC$Chat f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ChatLinkActivity.this.lambda$showLinkAlert$9$ChatLinkActivity(this.f$1, this.f$2, dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("DiscussionLinkGroup", NUM), new ChatLinkActivity$$ExternalSyntheticLambda4(this, chatFull, tLRPC$Chat2));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             showDialog(builder.create());
         } else if (z) {
             getMessagesController().loadFullChat(tLRPC$Chat2.id, 0, true);
             this.waitingForFullChat = tLRPC$Chat2;
             this.waitingForFullChatProgressAlert = new AlertDialog(getParentActivity(), 3);
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    ChatLinkActivity.this.lambda$showLinkAlert$8$ChatLinkActivity();
-                }
-            }, 500);
+            AndroidUtilities.runOnUIThread(new ChatLinkActivity$$ExternalSyntheticLambda5(this), 500);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showLinkAlert$8 */
-    public /* synthetic */ void lambda$showLinkAlert$8$ChatLinkActivity() {
+    public /* synthetic */ void lambda$showLinkAlert$8() {
         AlertDialog alertDialog = this.waitingForFullChatProgressAlert;
         if (alertDialog != null) {
-            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public final void onCancel(DialogInterface dialogInterface) {
-                    ChatLinkActivity.this.lambda$showLinkAlert$7$ChatLinkActivity(dialogInterface);
-                }
-            });
+            alertDialog.setOnCancelListener(new ChatLinkActivity$$ExternalSyntheticLambda0(this));
             showDialog(this.waitingForFullChatProgressAlert);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showLinkAlert$7 */
-    public /* synthetic */ void lambda$showLinkAlert$7$ChatLinkActivity(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showLinkAlert$7(DialogInterface dialogInterface) {
         this.waitingForFullChat = null;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showLinkAlert$9 */
-    public /* synthetic */ void lambda$showLinkAlert$9$ChatLinkActivity(TLRPC$ChatFull tLRPC$ChatFull, TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showLinkAlert$9(TLRPC$ChatFull tLRPC$ChatFull, TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
         if (tLRPC$ChatFull.hidden_prehistory) {
             MessagesController.getInstance(this.currentAccount).toogleChannelInvitesHistory(tLRPC$Chat.id, false);
         }
@@ -626,17 +538,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         AlertDialog alertDialog;
         if (tLRPC$Chat != null) {
             if (!ChatObject.isChannel(tLRPC$Chat)) {
-                MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), tLRPC$Chat.id, this, new MessagesStorage.IntCallback(baseFragment) {
-                    public final /* synthetic */ BaseFragment f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run(int i) {
-                        ChatLinkActivity.this.lambda$linkChat$10$ChatLinkActivity(this.f$1, i);
-                    }
-                });
+                MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), tLRPC$Chat.id, this, new ChatLinkActivity$$ExternalSyntheticLambda13(this, baseFragment));
                 return;
             }
             AlertDialog[] alertDialogArr = new AlertDialog[1];
@@ -649,39 +551,12 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             TLRPC$TL_channels_setDiscussionGroup tLRPC$TL_channels_setDiscussionGroup = new TLRPC$TL_channels_setDiscussionGroup();
             tLRPC$TL_channels_setDiscussionGroup.broadcast = MessagesController.getInputChannel(this.currentChat);
             tLRPC$TL_channels_setDiscussionGroup.group = MessagesController.getInputChannel(tLRPC$Chat);
-            AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, getConnectionsManager().sendRequest(tLRPC$TL_channels_setDiscussionGroup, new RequestDelegate(alertDialogArr, tLRPC$Chat, baseFragment) {
-                public final /* synthetic */ AlertDialog[] f$1;
-                public final /* synthetic */ TLRPC$Chat f$2;
-                public final /* synthetic */ BaseFragment f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ChatLinkActivity.this.lambda$linkChat$13$ChatLinkActivity(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
-                }
-            }, 64)) {
-                public final /* synthetic */ AlertDialog[] f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ChatLinkActivity.this.lambda$linkChat$15$ChatLinkActivity(this.f$1, this.f$2);
-                }
-            }, 500);
+            AndroidUtilities.runOnUIThread(new ChatLinkActivity$$ExternalSyntheticLambda11(this, alertDialogArr, getConnectionsManager().sendRequest(tLRPC$TL_channels_setDiscussionGroup, new ChatLinkActivity$$ExternalSyntheticLambda16(this, alertDialogArr, tLRPC$Chat, baseFragment), 64)), 500);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$linkChat$10 */
-    public /* synthetic */ void lambda$linkChat$10$ChatLinkActivity(BaseFragment baseFragment, int i) {
+    public /* synthetic */ void lambda$linkChat$10(BaseFragment baseFragment, int i) {
         if (i != 0) {
             MessagesController.getInstance(this.currentAccount).toogleChannelInvitesHistory(i, false);
             linkChat(getMessagesController().getChat(Integer.valueOf(i)), baseFragment);
@@ -689,28 +564,12 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$linkChat$13 */
-    public /* synthetic */ void lambda$linkChat$13$ChatLinkActivity(AlertDialog[] alertDialogArr, TLRPC$Chat tLRPC$Chat, BaseFragment baseFragment, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, tLRPC$Chat, baseFragment) {
-            public final /* synthetic */ AlertDialog[] f$1;
-            public final /* synthetic */ TLRPC$Chat f$2;
-            public final /* synthetic */ BaseFragment f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ChatLinkActivity.this.lambda$linkChat$12$ChatLinkActivity(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$linkChat$13(AlertDialog[] alertDialogArr, TLRPC$Chat tLRPC$Chat, BaseFragment baseFragment, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChatLinkActivity$$ExternalSyntheticLambda12(this, alertDialogArr, tLRPC$Chat, baseFragment));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$linkChat$12 */
-    public /* synthetic */ void lambda$linkChat$12$ChatLinkActivity(AlertDialog[] alertDialogArr, TLRPC$Chat tLRPC$Chat, BaseFragment baseFragment) {
+    public /* synthetic */ void lambda$linkChat$12(AlertDialog[] alertDialogArr, TLRPC$Chat tLRPC$Chat, BaseFragment baseFragment) {
         if (alertDialogArr[0] != null) {
             try {
                 alertDialogArr[0].dismiss();
@@ -723,11 +582,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         int i = NotificationCenter.chatInfoDidLoad;
         Boolean bool = Boolean.FALSE;
         instance.postNotificationName(i, this.info, 0, bool, bool);
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                ChatLinkActivity.this.lambda$linkChat$11$ChatLinkActivity();
-            }
-        }, 1000);
+        AndroidUtilities.runOnUIThread(new ChatLinkActivity$$ExternalSyntheticLambda7(this), 1000);
         if (baseFragment != null) {
             removeSelfFromStack();
             baseFragment.finishFragment();
@@ -737,33 +592,20 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$linkChat$11 */
-    public /* synthetic */ void lambda$linkChat$11$ChatLinkActivity() {
+    public /* synthetic */ void lambda$linkChat$11() {
         getMessagesController().loadFullChat(this.currentChatId, 0, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$linkChat$15 */
-    public /* synthetic */ void lambda$linkChat$15$ChatLinkActivity(AlertDialog[] alertDialogArr, int i) {
+    public /* synthetic */ void lambda$linkChat$15(AlertDialog[] alertDialogArr, int i) {
         if (alertDialogArr[0] != null) {
-            alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onCancel(DialogInterface dialogInterface) {
-                    ChatLinkActivity.this.lambda$linkChat$14$ChatLinkActivity(this.f$1, dialogInterface);
-                }
-            });
+            alertDialogArr[0].setOnCancelListener(new ChatLinkActivity$$ExternalSyntheticLambda1(this, i));
             showDialog(alertDialogArr[0]);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$linkChat$14 */
-    public /* synthetic */ void lambda$linkChat$14$ChatLinkActivity(int i, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$linkChat$14(int i, DialogInterface dialogInterface) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(i, true);
     }
 
@@ -785,33 +627,17 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         }
         if (!this.loadingChats && this.isChannel && this.info.linked_chat_id == 0) {
             this.loadingChats = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_channels_getGroupsForDiscussion(), new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ChatLinkActivity.this.lambda$loadChats$17$ChatLinkActivity(tLObject, tLRPC$TL_error);
-                }
-            });
+            getConnectionsManager().sendRequest(new TLRPC$TL_channels_getGroupsForDiscussion(), new ChatLinkActivity$$ExternalSyntheticLambda14(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadChats$17 */
-    public /* synthetic */ void lambda$loadChats$17$ChatLinkActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            public final /* synthetic */ TLObject f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ChatLinkActivity.this.lambda$loadChats$16$ChatLinkActivity(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$loadChats$17(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChatLinkActivity$$ExternalSyntheticLambda8(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadChats$16 */
-    public /* synthetic */ void lambda$loadChats$16$ChatLinkActivity(TLObject tLObject) {
+    public /* synthetic */ void lambda$loadChats$16(TLObject tLObject) {
         if (tLObject instanceof TLRPC$messages_Chats) {
             TLRPC$messages_Chats tLRPC$messages_Chats = (TLRPC$messages_Chats) tLObject;
             getMessagesController().putChats(tLRPC$messages_Chats.chats, false);
@@ -834,7 +660,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         private EmptyView emptyView;
         private TextView messageTextView;
 
-        public HintInnerCell(Context context) {
+        public HintInnerCell(ChatLinkActivity chatLinkActivity, Context context) {
             super(context);
             EmptyView emptyView2 = new EmptyView(context);
             this.emptyView = emptyView2;
@@ -844,15 +670,15 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             textView.setTextColor(Theme.getColor("chats_message"));
             this.messageTextView.setTextSize(1, 14.0f);
             this.messageTextView.setGravity(17);
-            if (!ChatLinkActivity.this.isChannel) {
-                TLRPC$Chat chat = ChatLinkActivity.this.getMessagesController().getChat(Integer.valueOf(ChatLinkActivity.this.info.linked_chat_id));
+            if (!chatLinkActivity.isChannel) {
+                TLRPC$Chat chat = chatLinkActivity.getMessagesController().getChat(Integer.valueOf(chatLinkActivity.info.linked_chat_id));
                 if (chat != null) {
                     this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionGroupHelp", NUM, chat.title)));
                 }
-            } else if (ChatLinkActivity.this.info == null || ChatLinkActivity.this.info.linked_chat_id == 0) {
+            } else if (chatLinkActivity.info == null || chatLinkActivity.info.linked_chat_id == 0) {
                 this.messageTextView.setText(LocaleController.getString("DiscussionChannelHelp3", NUM));
             } else {
-                TLRPC$Chat chat2 = ChatLinkActivity.this.getMessagesController().getChat(Integer.valueOf(ChatLinkActivity.this.info.linked_chat_id));
+                TLRPC$Chat chat2 = chatLinkActivity.getMessagesController().getChat(Integer.valueOf(chatLinkActivity.info.linked_chat_id));
                 if (chat2 != null) {
                     this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionChannelGroupSetHelp2", NUM, chat2.title)));
                 }
@@ -892,54 +718,21 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 return;
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$ChatLinkActivity$SearchAdapter$AeN3jJGEx7BkjLqHqB1ik9jxgH0 r1 = new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ChatLinkActivity.SearchAdapter.this.lambda$searchDialogs$0$ChatLinkActivity$SearchAdapter(this.f$1);
-                }
-            };
-            this.searchRunnable = r1;
-            dispatchQueue.postRunnable(r1, 300);
+            ChatLinkActivity$SearchAdapter$$ExternalSyntheticLambda0 chatLinkActivity$SearchAdapter$$ExternalSyntheticLambda0 = new ChatLinkActivity$SearchAdapter$$ExternalSyntheticLambda0(this, str);
+            this.searchRunnable = chatLinkActivity$SearchAdapter$$ExternalSyntheticLambda0;
+            dispatchQueue.postRunnable(chatLinkActivity$SearchAdapter$$ExternalSyntheticLambda0, 300);
         }
 
         /* access modifiers changed from: private */
         /* renamed from: processSearch */
         public void lambda$searchDialogs$0(String str) {
-            AndroidUtilities.runOnUIThread(new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ChatLinkActivity.SearchAdapter.this.lambda$processSearch$2$ChatLinkActivity$SearchAdapter(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChatLinkActivity$SearchAdapter$$ExternalSyntheticLambda1(this, str));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$processSearch$2 */
-        public /* synthetic */ void lambda$processSearch$2$ChatLinkActivity$SearchAdapter(String str) {
+        public /* synthetic */ void lambda$processSearch$2(String str) {
             this.searchRunnable = null;
-            Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ChatLinkActivity.this.chats)) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ ArrayList f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ChatLinkActivity.SearchAdapter.this.lambda$processSearch$1$ChatLinkActivity$SearchAdapter(this.f$1, this.f$2);
-                }
-            });
+            Utilities.searchQueue.postRunnable(new ChatLinkActivity$SearchAdapter$$ExternalSyntheticLambda2(this, str, new ArrayList(ChatLinkActivity.this.chats)));
         }
 
         /* access modifiers changed from: private */
@@ -948,9 +741,8 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
          */
         /* JADX WARNING: Removed duplicated region for block: B:44:0x00fd A[LOOP:1: B:23:0x0073->B:44:0x00fd, LOOP_END] */
         /* JADX WARNING: Removed duplicated region for block: B:53:0x00c1 A[SYNTHETIC] */
-        /* renamed from: lambda$processSearch$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$processSearch$1$ChatLinkActivity$SearchAdapter(java.lang.String r18, java.util.ArrayList r19) {
+        public /* synthetic */ void lambda$processSearch$1(java.lang.String r18, java.util.ArrayList r19) {
             /*
                 r17 = this;
                 r0 = r17
@@ -1085,28 +877,15 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 r0.updateSearchResults(r1, r2)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatLinkActivity.SearchAdapter.lambda$processSearch$1$ChatLinkActivity$SearchAdapter(java.lang.String, java.util.ArrayList):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatLinkActivity.SearchAdapter.lambda$processSearch$1(java.lang.String, java.util.ArrayList):void");
         }
 
         private void updateSearchResults(ArrayList<TLRPC$Chat> arrayList, ArrayList<CharSequence> arrayList2) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ ArrayList f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ChatLinkActivity.SearchAdapter.this.lambda$updateSearchResults$3$ChatLinkActivity$SearchAdapter(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChatLinkActivity$SearchAdapter$$ExternalSyntheticLambda3(this, arrayList, arrayList2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$3 */
-        public /* synthetic */ void lambda$updateSearchResults$3$ChatLinkActivity$SearchAdapter(ArrayList arrayList, ArrayList arrayList2) {
+        public /* synthetic */ void lambda$updateSearchResults$3(ArrayList arrayList, ArrayList arrayList2) {
             if (ChatLinkActivity.this.searching) {
                 this.searchResult = arrayList;
                 this.searchResultNames = arrayList2;
@@ -1190,7 +969,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     view = new TextInfoPrivacyCell(this.mContext);
                     view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                 } else if (i != 2) {
-                    view = new HintInnerCell(this.mContext);
+                    view = new HintInnerCell(ChatLinkActivity.this, this.mContext);
                 } else {
                     view2 = new ManageChatTextCell(this.mContext);
                     view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
@@ -1265,11 +1044,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ChatLinkActivity$jubpI8kTXy_mWVCqIOnFQ5var_A r11 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                ChatLinkActivity.this.lambda$getThemeDescriptions$18$ChatLinkActivity();
-            }
-        };
+        ChatLinkActivity$$ExternalSyntheticLambda17 chatLinkActivity$$ExternalSyntheticLambda17 = new ChatLinkActivity$$ExternalSyntheticLambda17(this);
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ManageChatUserCell.class, ManageChatTextCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
@@ -1283,18 +1058,18 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$ChatLinkActivity$jubpI8kTXy_mWVCqIOnFQ5var_A r9 = r11;
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
+        ChatLinkActivity$$ExternalSyntheticLambda17 chatLinkActivity$$ExternalSyntheticLambda172 = chatLinkActivity$$ExternalSyntheticLambda17;
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) chatLinkActivity$$ExternalSyntheticLambda172, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) chatLinkActivity$$ExternalSyntheticLambda172, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$ChatLinkActivity$jubpI8kTXy_mWVCqIOnFQ5var_A r8 = r11;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        ChatLinkActivity$$ExternalSyntheticLambda17 chatLinkActivity$$ExternalSyntheticLambda173 = chatLinkActivity$$ExternalSyntheticLambda17;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatLinkActivity$$ExternalSyntheticLambda173, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatLinkActivity$$ExternalSyntheticLambda173, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatLinkActivity$$ExternalSyntheticLambda173, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatLinkActivity$$ExternalSyntheticLambda173, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatLinkActivity$$ExternalSyntheticLambda173, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatLinkActivity$$ExternalSyntheticLambda173, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatLinkActivity$$ExternalSyntheticLambda173, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HintInnerCell.class}, new String[]{"messageTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_message"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
@@ -1304,8 +1079,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$18 */
-    public /* synthetic */ void lambda$getThemeDescriptions$18$ChatLinkActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$18() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

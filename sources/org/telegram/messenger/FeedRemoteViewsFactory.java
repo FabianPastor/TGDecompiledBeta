@@ -116,11 +116,7 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
             this.messages.clear();
             return;
         }
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                FeedRemoteViewsFactory.this.lambda$onDataSetChanged$0$FeedRemoteViewsFactory();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new FeedRemoteViewsFactory$$ExternalSyntheticLambda0(this));
         try {
             this.countDownLatch.await();
         } catch (Exception e) {
@@ -129,8 +125,7 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDataSetChanged$0 */
-    public /* synthetic */ void lambda$onDataSetChanged$0$FeedRemoteViewsFactory() {
+    public /* synthetic */ void lambda$onDataSetChanged$0() {
         this.accountInstance.getNotificationCenter().addObserver(this, NotificationCenter.messagesDidLoad);
         if (this.classGuid == 0) {
             this.classGuid = ConnectionsManager.generateClassGuid();

@@ -30,7 +30,6 @@ public class WallpaperUpdater {
     /* access modifiers changed from: private */
     public Activity parentActivity;
     private BaseFragment parentFragment;
-    private File picturePath = null;
 
     public interface WallpaperUpdaterDelegate {
         void didSelectWallpaper(File file, Bitmap bitmap, boolean z);
@@ -59,23 +58,12 @@ public class WallpaperUpdater {
             charSequenceArr = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("SelectFromGallery", NUM)};
             iArr = new int[]{NUM, NUM};
         }
-        builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener(z) {
-            public final /* synthetic */ boolean f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                WallpaperUpdater.this.lambda$showAlert$0$WallpaperUpdater(this.f$1, dialogInterface, i);
-            }
-        });
+        builder.setItems(charSequenceArr, iArr, new WallpaperUpdater$$ExternalSyntheticLambda0(this, z));
         builder.show();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showAlert$0 */
-    public /* synthetic */ void lambda$showAlert$0$WallpaperUpdater(boolean z, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showAlert$0(boolean z, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             try {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");

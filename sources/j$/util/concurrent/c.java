@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import sun.misc.Unsafe;
 
-final class c {
+abstract class c {
     private static final Unsafe a;
 
     static {

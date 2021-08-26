@@ -48,7 +48,6 @@ public class PullForegroundDrawable {
     public float outCx;
     public float outCy;
     public float outImageSize;
-    public float outOverScroll;
     public float outProgress;
     public float outRadius;
     private final Paint paintBackgroundAccent = new Paint(1);
@@ -80,8 +79,7 @@ public class PullForegroundDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$PullForegroundDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
         this.textSwappingProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         View view = this.cell;
         if (view != null) {
@@ -90,8 +88,7 @@ public class PullForegroundDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$PullForegroundDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$1(ValueAnimator valueAnimator) {
         this.textInProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         View view = this.cell;
         if (view != null) {
@@ -102,22 +99,14 @@ public class PullForegroundDrawable {
     public PullForegroundDrawable(String str, String str2) {
         TextPaint textPaint = new TextPaint(1);
         this.tooltipTextPaint = textPaint;
-        this.arrowDrawable = new ArrowDrawable();
+        this.arrowDrawable = new ArrowDrawable(this);
         this.circleClipPath = new Path();
         this.textSwappingProgress = 1.0f;
         this.arrowRotateProgress = 1.0f;
         this.accentRevalProgress = 1.0f;
         this.accentRevalProgressOut = 1.0f;
-        this.textSwappingUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                PullForegroundDrawable.this.lambda$new$0$PullForegroundDrawable(valueAnimator);
-            }
-        };
-        this.textInUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                PullForegroundDrawable.this.lambda$new$1$PullForegroundDrawable(valueAnimator);
-            }
-        };
+        this.textSwappingUpdateListener = new PullForegroundDrawable$$ExternalSyntheticLambda0(this);
+        this.textInUpdateListener = new PullForegroundDrawable$$ExternalSyntheticLambda5(this);
         this.textInRunnable = new Runnable() {
             public void run() {
                 boolean unused = PullForegroundDrawable.this.animateToTextIn = true;
@@ -429,11 +418,7 @@ public class PullForegroundDrawable {
             fArr2[1] = f2;
             ValueAnimator ofFloat2 = ValueAnimator.ofFloat(fArr2);
             this.arrowRotateAnimator = ofFloat2;
-            ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PullForegroundDrawable.this.lambda$updateTextProgress$2$PullForegroundDrawable(valueAnimator);
-                }
-            });
+            ofFloat2.addUpdateListener(new PullForegroundDrawable$$ExternalSyntheticLambda2(this));
             this.arrowRotateAnimator.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
             this.arrowRotateAnimator.setDuration(250);
             this.arrowRotateAnimator.start();
@@ -441,8 +426,7 @@ public class PullForegroundDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateTextProgress$2 */
-    public /* synthetic */ void lambda$updateTextProgress$2$PullForegroundDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateTextProgress$2(ValueAnimator valueAnimator) {
         this.arrowRotateProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         View view = this.cell;
         if (view != null) {
@@ -462,11 +446,7 @@ public class PullForegroundDrawable {
                 this.accentRevalProgress = 0.0f;
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                 this.accentRevalAnimatorIn = ofFloat;
-                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        PullForegroundDrawable.this.lambda$colorize$3$PullForegroundDrawable(valueAnimator);
-                    }
-                });
+                ofFloat.addUpdateListener(new PullForegroundDrawable$$ExternalSyntheticLambda1(this));
                 this.accentRevalAnimatorIn.setInterpolator(AndroidUtilities.accelerateInterpolator);
                 this.accentRevalAnimatorIn.setDuration(230);
                 this.accentRevalAnimatorIn.start();
@@ -480,11 +460,7 @@ public class PullForegroundDrawable {
             this.accentRevalProgressOut = 0.0f;
             ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.accentRevalAnimatorOut = ofFloat2;
-            ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PullForegroundDrawable.this.lambda$colorize$4$PullForegroundDrawable(valueAnimator);
-                }
-            });
+            ofFloat2.addUpdateListener(new PullForegroundDrawable$$ExternalSyntheticLambda3(this));
             this.accentRevalAnimatorOut.setInterpolator(AndroidUtilities.accelerateInterpolator);
             this.accentRevalAnimatorOut.setDuration(230);
             this.accentRevalAnimatorOut.start();
@@ -492,8 +468,7 @@ public class PullForegroundDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$colorize$3 */
-    public /* synthetic */ void lambda$colorize$3$PullForegroundDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$colorize$3(ValueAnimator valueAnimator) {
         this.accentRevalProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         View view = this.cell;
         if (view != null) {
@@ -506,8 +481,7 @@ public class PullForegroundDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$colorize$4 */
-    public /* synthetic */ void lambda$colorize$4$PullForegroundDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$colorize$4(ValueAnimator valueAnimator) {
         this.accentRevalProgressOut = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         View view = this.cell;
         if (view != null) {
@@ -543,30 +517,19 @@ public class PullForegroundDrawable {
             this.animateOut = true;
             this.bounceIn = true;
             this.bounceProgress = 0.0f;
-            this.outOverScroll = this.listView.getTranslationY() / ((float) AndroidUtilities.dp(100.0f));
+            this.listView.getTranslationY();
+            AndroidUtilities.dp(100.0f);
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PullForegroundDrawable.this.lambda$startOutAnimation$5$PullForegroundDrawable(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new PullForegroundDrawable$$ExternalSyntheticLambda6(this));
             ofFloat.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
             ofFloat.setDuration(250);
             ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PullForegroundDrawable.this.lambda$startOutAnimation$6$PullForegroundDrawable(valueAnimator);
-                }
-            });
+            ofFloat2.addUpdateListener(new PullForegroundDrawable$$ExternalSyntheticLambda4(this));
             CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.EASE_BOTH;
             ofFloat2.setInterpolator(cubicBezierInterpolator);
             ofFloat2.setDuration(150);
             ValueAnimator ofFloat3 = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
-            ofFloat3.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PullForegroundDrawable.this.lambda$startOutAnimation$7$PullForegroundDrawable(valueAnimator);
-                }
-            });
+            ofFloat3.addUpdateListener(new PullForegroundDrawable$$ExternalSyntheticLambda7(this));
             ofFloat3.setInterpolator(cubicBezierInterpolator);
             ofFloat3.setDuration(135);
             AnimatorSet animatorSet2 = new AnimatorSet();
@@ -585,8 +548,7 @@ public class PullForegroundDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startOutAnimation$5 */
-    public /* synthetic */ void lambda$startOutAnimation$5$PullForegroundDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$startOutAnimation$5(ValueAnimator valueAnimator) {
         setOutProgress(((Float) valueAnimator.getAnimatedValue()).floatValue());
         View view = this.cell;
         if (view != null) {
@@ -595,8 +557,7 @@ public class PullForegroundDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startOutAnimation$6 */
-    public /* synthetic */ void lambda$startOutAnimation$6$PullForegroundDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$startOutAnimation$6(ValueAnimator valueAnimator) {
         this.bounceProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.bounceIn = true;
         View view = this.cell;
@@ -606,8 +567,7 @@ public class PullForegroundDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startOutAnimation$7 */
-    public /* synthetic */ void lambda$startOutAnimation$7$PullForegroundDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$startOutAnimation$7(ValueAnimator valueAnimator) {
         this.bounceProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.bounceIn = false;
         View view = this.cell;
@@ -706,7 +666,7 @@ public class PullForegroundDrawable {
         public void setColorFilter(ColorFilter colorFilter) {
         }
 
-        public ArrowDrawable() {
+        public ArrowDrawable(PullForegroundDrawable pullForegroundDrawable) {
             updatePath();
         }
 

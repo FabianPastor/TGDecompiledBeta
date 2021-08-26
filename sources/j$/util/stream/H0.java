@@ -1,15 +1,12 @@
 package j$.util.stream;
 
-import j$.util.function.J;
-import j$.util.l;
-
-public final /* synthetic */ class H0 implements J {
-    public static final /* synthetic */ H0 a = new H0();
-
-    private /* synthetic */ H0() {
+class H0 extends K0 {
+    H0(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i) {
+        super(cVar, f4Var, i);
     }
 
-    public final Object get() {
-        return new l();
+    /* access modifiers changed from: package-private */
+    public CLASSNAMEn3 H0(int i, CLASSNAMEn3 n3Var) {
+        return n3Var;
     }
 }

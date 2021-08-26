@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.util.Base64;
-import java.io.File;
 import java.util.Arrays;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC$TL_account_tmpPassword;
@@ -100,28 +99,11 @@ public class UserConfig extends BaseController {
     }
 
     public void saveConfig(boolean z) {
-        saveConfig(z, (File) null);
-    }
-
-    public void saveConfig(boolean z, File file) {
-        NotificationCenter.getInstance(this.currentAccount).doOnIdle(new Runnable(z, file) {
-            public final /* synthetic */ boolean f$1;
-            public final /* synthetic */ File f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                UserConfig.this.lambda$saveConfig$0$UserConfig(this.f$1, this.f$2);
-            }
-        });
+        NotificationCenter.getInstance(this.currentAccount).doOnIdle(new UserConfig$$ExternalSyntheticLambda0(this, z));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveConfig$0 */
-    public /* synthetic */ void lambda$saveConfig$0$UserConfig(boolean z, File file) {
+    public /* synthetic */ void lambda$saveConfig$0(boolean z) {
         synchronized (this.sync) {
             try {
                 SharedPreferences.Editor edit = getPreferences().edit();
@@ -188,9 +170,6 @@ public class UserConfig extends BaseController {
                     serializedData3.cleanup();
                 }
                 edit.commit();
-                if (file != null) {
-                    file.delete();
-                }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }

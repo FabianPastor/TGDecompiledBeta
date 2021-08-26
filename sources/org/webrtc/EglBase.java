@@ -60,6 +60,10 @@ public interface EglBase {
 
     /* renamed from: org.webrtc.EglBase$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
+        static {
+            Object obj = EglBase.lock;
+        }
+
         public static ConfigBuilder configBuilder() {
             return new ConfigBuilder();
         }

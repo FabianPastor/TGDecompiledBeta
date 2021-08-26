@@ -71,32 +71,22 @@ public class SettingsSuggestionCell extends LinearLayout {
             linearLayout.addView(textView4, LayoutHelper.createLinear(0, 40, 0.5f, i == 0 ? 0 : 4, 0, i == 0 ? 4 : 0, 0));
             if (i == 0) {
                 this.yesButton = textView4;
-                textView4.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        SettingsSuggestionCell.this.lambda$new$0$SettingsSuggestionCell(view);
-                    }
-                });
+                textView4.setOnClickListener(new SettingsSuggestionCell$$ExternalSyntheticLambda1(this));
             } else {
                 this.noButton = textView4;
-                textView4.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        SettingsSuggestionCell.this.lambda$new$1$SettingsSuggestionCell(view);
-                    }
-                });
+                textView4.setOnClickListener(new SettingsSuggestionCell$$ExternalSyntheticLambda0(this));
             }
             i++;
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$SettingsSuggestionCell(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         onYesClick(this.currentType);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$SettingsSuggestionCell(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         onNoClick(this.currentType);
     }
 

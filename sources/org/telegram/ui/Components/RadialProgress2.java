@@ -14,7 +14,6 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.MediaActionDrawable;
 
 public class RadialProgress2 {
     private int backgroundStroke;
@@ -57,30 +56,10 @@ public class RadialProgress2 {
         MediaActionDrawable mediaActionDrawable2 = new MediaActionDrawable();
         this.mediaActionDrawable = mediaActionDrawable2;
         view.getClass();
-        mediaActionDrawable2.setDelegate(new MediaActionDrawable.MediaActionDrawableDelegate(view) {
-            public final /* synthetic */ View f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void invalidate() {
-                this.f$0.invalidate();
-            }
-        });
+        mediaActionDrawable2.setDelegate(new RadialProgress2$$ExternalSyntheticLambda0(view));
         MediaActionDrawable mediaActionDrawable3 = new MediaActionDrawable();
         this.miniMediaActionDrawable = mediaActionDrawable3;
-        mediaActionDrawable3.setDelegate(new MediaActionDrawable.MediaActionDrawableDelegate(view) {
-            public final /* synthetic */ View f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void invalidate() {
-                this.f$0.invalidate();
-            }
-        });
+        mediaActionDrawable3.setDelegate(new RadialProgress2$$ExternalSyntheticLambda0(view));
         this.miniMediaActionDrawable.setMini(true);
         this.miniMediaActionDrawable.setIcon(4, false);
         int dp = AndroidUtilities.dp(22.0f);

@@ -52,7 +52,6 @@ import org.telegram.ui.Cells.StickerEmojiCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.ContentPreviewViewer;
 
 public class ContentPreviewViewer {
     @SuppressLint({"StaticFieldLeak"})
@@ -159,26 +158,10 @@ public class ContentPreviewViewer {
                         for (int i2 = 0; i2 < arrayList3.size(); i2++) {
                             iArr[i2] = ((Integer) arrayList3.get(i2)).intValue();
                         }
-                        builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), iArr, new DialogInterface.OnClickListener(arrayList2, isStickerInFavorites) {
-                            public final /* synthetic */ ArrayList f$1;
-                            public final /* synthetic */ boolean f$2;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                            }
-
-                            public final void onClick(DialogInterface dialogInterface, int i) {
-                                ContentPreviewViewer.AnonymousClass1.this.lambda$run$1$ContentPreviewViewer$1(this.f$1, this.f$2, dialogInterface, i);
-                            }
-                        });
+                        builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), iArr, new ContentPreviewViewer$1$$ExternalSyntheticLambda1(this, arrayList2, isStickerInFavorites));
                         builder.setDimBehind(false);
                         BottomSheet unused = ContentPreviewViewer.this.visibleDialog = builder.create();
-                        ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            public final void onDismiss(DialogInterface dialogInterface) {
-                                ContentPreviewViewer.AnonymousClass1.this.lambda$run$2$ContentPreviewViewer$1(dialogInterface);
-                            }
-                        });
+                        ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new ContentPreviewViewer$1$$ExternalSyntheticLambda3(this));
                         ContentPreviewViewer.this.visibleDialog.show();
                         ContentPreviewViewer.this.containerView.performHapticFeedback(0);
                         if (ContentPreviewViewer.this.delegate != null && ContentPreviewViewer.this.delegate.needRemove()) {
@@ -240,23 +223,9 @@ public class ContentPreviewViewer {
                     for (int i3 = 0; i3 < arrayList6.size(); i3++) {
                         iArr2[i3] = ((Integer) arrayList6.get(i3)).intValue();
                     }
-                    ContentPreviewViewer.this.visibleDialog.setItems((CharSequence[]) arrayList4.toArray(new CharSequence[0]), iArr2, new DialogInterface.OnClickListener(arrayList5) {
-                        public final /* synthetic */ ArrayList f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ContentPreviewViewer.AnonymousClass1.this.lambda$run$4$ContentPreviewViewer$1(this.f$1, dialogInterface, i);
-                        }
-                    });
+                    ContentPreviewViewer.this.visibleDialog.setItems((CharSequence[]) arrayList4.toArray(new CharSequence[0]), iArr2, new ContentPreviewViewer$1$$ExternalSyntheticLambda0(this, arrayList5));
                     ContentPreviewViewer.this.visibleDialog.setDimBehind(false);
-                    ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        public final void onDismiss(DialogInterface dialogInterface) {
-                            ContentPreviewViewer.AnonymousClass1.this.lambda$run$5$ContentPreviewViewer$1(dialogInterface);
-                        }
-                    });
+                    ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new ContentPreviewViewer$1$$ExternalSyntheticLambda2(this));
                     ContentPreviewViewer.this.visibleDialog.show();
                     ContentPreviewViewer.this.containerView.performHapticFeedback(0);
                     if (z) {
@@ -267,8 +236,7 @@ public class ContentPreviewViewer {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$run$1 */
-        public /* synthetic */ void lambda$run$1$ContentPreviewViewer$1(ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$run$1(ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
             if (ContentPreviewViewer.this.parentActivity != null) {
                 if (((Integer) arrayList.get(i)).intValue() == 0) {
                     if (ContentPreviewViewer.this.delegate != null) {
@@ -285,21 +253,7 @@ public class ContentPreviewViewer {
                     Object access$1600 = ContentPreviewViewer.this.parentObject;
                     String access$1700 = ContentPreviewViewer.this.currentQuery;
                     ContentPreviewViewerDelegate access$500 = ContentPreviewViewer.this.delegate;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(access$300, access$1700, access$1600) {
-                        public final /* synthetic */ TLRPC$Document f$1;
-                        public final /* synthetic */ String f$2;
-                        public final /* synthetic */ Object f$3;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                        }
-
-                        public final void didSelectDate(boolean z, int i) {
-                            ContentPreviewViewer.ContentPreviewViewerDelegate.this.sendSticker(this.f$1, this.f$2, this.f$3, z, i);
-                        }
-                    });
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new ContentPreviewViewer$1$$ExternalSyntheticLambda4(access$500, access$300, access$1700, access$1600));
                 } else if (((Integer) arrayList.get(i)).intValue() == 4) {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(0, ContentPreviewViewer.this.parentObject, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), true);
                 } else if (((Integer) arrayList.get(i)).intValue() == 5) {
@@ -309,15 +263,13 @@ public class ContentPreviewViewer {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$run$2 */
-        public /* synthetic */ void lambda$run$2$ContentPreviewViewer$1(DialogInterface dialogInterface) {
+        public /* synthetic */ void lambda$run$2(DialogInterface dialogInterface) {
             BottomSheet unused = ContentPreviewViewer.this.visibleDialog = null;
             ContentPreviewViewer.this.close();
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$run$4 */
-        public /* synthetic */ void lambda$run$4$ContentPreviewViewer$1(ArrayList arrayList, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$run$4(ArrayList arrayList, DialogInterface dialogInterface, int i) {
             if (ContentPreviewViewer.this.parentActivity != null) {
                 if (((Integer) arrayList.get(i)).intValue() == 0) {
                     ContentPreviewViewer.this.delegate.sendGif(ContentPreviewViewer.this.currentDocument != null ? ContentPreviewViewer.this.currentDocument : ContentPreviewViewer.this.inlineResult, ContentPreviewViewer.this.parentObject, true, 0);
@@ -333,29 +285,16 @@ public class ContentPreviewViewer {
                     TLRPC$BotInlineResult access$1500 = ContentPreviewViewer.this.inlineResult;
                     Object access$1600 = ContentPreviewViewer.this.parentObject;
                     ContentPreviewViewerDelegate access$500 = ContentPreviewViewer.this.delegate;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(access$300, access$1500, access$1600) {
-                        public final /* synthetic */ TLRPC$Document f$1;
-                        public final /* synthetic */ TLRPC$BotInlineResult f$2;
-                        public final /* synthetic */ Object f$3;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                        }
-
-                        public final void didSelectDate(boolean z, int i) {
-                            ContentPreviewViewer.AnonymousClass1.lambda$run$3(ContentPreviewViewer.ContentPreviewViewerDelegate.this, this.f$1, this.f$2, this.f$3, z, i);
-                        }
-                    });
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new ContentPreviewViewer$1$$ExternalSyntheticLambda5(access$500, access$300, access$1500, access$1600));
                 }
             }
         }
 
         /* JADX WARNING: type inference failed for: r2v0, types: [org.telegram.tgnet.TLRPC$BotInlineResult] */
+        /* access modifiers changed from: private */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        static /* synthetic */ void lambda$run$3(org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r0, org.telegram.tgnet.TLRPC$Document r1, org.telegram.tgnet.TLRPC$BotInlineResult r2, java.lang.Object r3, boolean r4, int r5) {
+        public static /* synthetic */ void lambda$run$3(org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r0, org.telegram.tgnet.TLRPC$Document r1, org.telegram.tgnet.TLRPC$BotInlineResult r2, java.lang.Object r3, boolean r4, int r5) {
             /*
                 if (r1 == 0) goto L_0x0003
                 goto L_0x0004
@@ -369,8 +308,7 @@ public class ContentPreviewViewer {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$run$5 */
-        public /* synthetic */ void lambda$run$5$ContentPreviewViewer$1(DialogInterface dialogInterface) {
+        public /* synthetic */ void lambda$run$5(DialogInterface dialogInterface) {
             BottomSheet unused = ContentPreviewViewer.this.visibleDialog = null;
             ContentPreviewViewer.this.close();
         }
@@ -442,11 +380,6 @@ public class ContentPreviewViewer {
         void sendGif(Object obj, Object obj2, boolean z, int i);
 
         void sendSticker(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i);
-    }
-
-    public /* synthetic */ WindowInsets lambda$setParentActivity$2$ContentPreviewViewer(View view, WindowInsets windowInsets) {
-        lambda$setParentActivity$2(view, windowInsets);
-        return windowInsets;
     }
 
     private class FrameLayoutDrawer extends FrameLayout {
@@ -819,9 +752,9 @@ public class ContentPreviewViewer {
             r9.openPreviewRunnable = r3
             goto L_0x0282
         L_0x0240:
-            org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ r1 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ
+            org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda2
             r4 = r18
-            r1.<init>(r4)
+            r1.<init>(r0, r4)
             r4 = 150(0x96, double:7.4E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r4)
             java.lang.Runnable r0 = r9.openPreviewRunnable
@@ -859,7 +792,8 @@ public class ContentPreviewViewer {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onTouch(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, java.lang.Object, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate):boolean");
     }
 
-    static /* synthetic */ void lambda$onTouch$0(RecyclerListView recyclerListView, Object obj) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onTouch$0(RecyclerListView recyclerListView, Object obj) {
         if (recyclerListView instanceof RecyclerListView) {
             recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) obj);
         }
@@ -962,8 +896,8 @@ public class ContentPreviewViewer {
             r8.startX = r12
             r8.startY = r9
             r8.currentPreviewCell = r3
-            org.telegram.ui.-$$Lambda$ContentPreviewViewer$q4aGtLHXd-C3gffx-LweW1TuH58 r9 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$q4aGtLHXd-C3gffx-LweW1TuH58
-            r9.<init>(r10, r11, r1)
+            org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda4 r9 = new org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda4
+            r9.<init>(r8, r10, r11, r1)
             r8.openPreviewRunnable = r9
             r10 = 200(0xc8, double:9.9E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r9, r10)
@@ -978,8 +912,7 @@ public class ContentPreviewViewer {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onInterceptTouchEvent$1 */
-    public /* synthetic */ void lambda$onInterceptTouchEvent$1$ContentPreviewViewer(RecyclerListView recyclerListView, int i, int i2) {
+    public /* synthetic */ void lambda$onInterceptTouchEvent$1(RecyclerListView recyclerListView, int i, int i2) {
         if (this.openPreviewRunnable != null) {
             String str = null;
             recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
@@ -1041,22 +974,13 @@ public class ContentPreviewViewer {
             int i2 = Build.VERSION.SDK_INT;
             if (i2 >= 21) {
                 this.windowView.setFitsSystemWindows(true);
-                this.windowView.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-                    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-                        ContentPreviewViewer.this.lambda$setParentActivity$2$ContentPreviewViewer(view, windowInsets);
-                        return windowInsets;
-                    }
-                });
+                this.windowView.setOnApplyWindowInsetsListener(new ContentPreviewViewer$$ExternalSyntheticLambda0(this));
             }
             FrameLayoutDrawer frameLayoutDrawer = new FrameLayoutDrawer(activity);
             this.containerView = frameLayoutDrawer;
             frameLayoutDrawer.setFocusable(false);
             this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
-            this.containerView.setOnTouchListener(new View.OnTouchListener() {
-                public final boolean onTouch(View view, MotionEvent motionEvent) {
-                    return ContentPreviewViewer.this.lambda$setParentActivity$3$ContentPreviewViewer(view, motionEvent);
-                }
-            });
+            this.containerView.setOnTouchListener(new ContentPreviewViewer$$ExternalSyntheticLambda1(this));
             WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
             this.windowLayoutParams = layoutParams;
             layoutParams.height = -1;
@@ -1075,14 +999,14 @@ public class ContentPreviewViewer {
         }
     }
 
-    private /* synthetic */ WindowInsets lambda$setParentActivity$2(View view, WindowInsets windowInsets) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ WindowInsets lambda$setParentActivity$2(View view, WindowInsets windowInsets) {
         this.lastInsets = windowInsets;
         return windowInsets;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$3 */
-    public /* synthetic */ boolean lambda$setParentActivity$3$ContentPreviewViewer(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$setParentActivity$3(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == 1 || motionEvent.getAction() == 6 || motionEvent.getAction() == 3) {
             close();
         }
@@ -1369,11 +1293,7 @@ public class ContentPreviewViewer {
                 if (this.showProgress == 0.0f) {
                     this.centerImage.setImageBitmap((Drawable) null);
                     AndroidUtilities.unlockOrientation(this.parentActivity);
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public final void run() {
-                            ContentPreviewViewer.this.lambda$onDraw$4$ContentPreviewViewer();
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new ContentPreviewViewer$$ExternalSyntheticLambda3(this));
                     try {
                         if (this.windowView.getParent() != null) {
                             ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
@@ -1387,8 +1307,7 @@ public class ContentPreviewViewer {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDraw$4 */
-    public /* synthetic */ void lambda$onDraw$4$ContentPreviewViewer() {
+    public /* synthetic */ void lambda$onDraw$4() {
         this.centerImage.setImageBitmap((Bitmap) null);
     }
 }

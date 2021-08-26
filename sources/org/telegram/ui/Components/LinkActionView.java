@@ -31,7 +31,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
 import org.telegram.tgnet.TLRPC$TL_error;
@@ -69,7 +68,6 @@ public class LinkActionView extends LinearLayout {
     /* access modifiers changed from: private */
     public QRCodeBottomSheet qrCodeBottomSheet;
     private final TextView removeView;
-    private boolean revoked;
     private final TextView shareView;
     /* access modifiers changed from: private */
     public int usersCount;
@@ -172,63 +170,13 @@ public class LinkActionView extends LinearLayout {
         AvatarsContainer avatarsContainer2 = new AvatarsContainer(context2);
         this.avatarsContainer = avatarsContainer2;
         addView(avatarsContainer2, LayoutHelper.createLinear(-1, 44, 0.0f, 12.0f, 0.0f, 0.0f));
-        textView2.setOnClickListener(new View.OnClickListener(bottomSheet2, baseFragment2) {
-            public final /* synthetic */ BottomSheet f$1;
-            public final /* synthetic */ BaseFragment f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void onClick(View view) {
-                LinkActionView.this.lambda$new$0$LinkActionView(this.f$1, this.f$2, view);
-            }
-        });
+        textView2.setOnClickListener(new LinkActionView$$ExternalSyntheticLambda9(this, bottomSheet2, baseFragment2));
         if (z) {
-            avatarsContainer2.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    LinkActionView.this.lambda$new$1$LinkActionView(view);
-                }
-            });
+            avatarsContainer2.setOnClickListener(new LinkActionView$$ExternalSyntheticLambda3(this));
         }
-        textView3.setOnClickListener(new View.OnClickListener(baseFragment2) {
-            public final /* synthetic */ BaseFragment f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                LinkActionView.this.lambda$new$2$LinkActionView(this.f$1, view);
-            }
-        });
-        textView4.setOnClickListener(new View.OnClickListener(baseFragment2) {
-            public final /* synthetic */ BaseFragment f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                LinkActionView.this.lambda$new$4$LinkActionView(this.f$1, view);
-            }
-        });
-        this.optionsView.setOnClickListener(new View.OnClickListener(context2, bottomSheet2, baseFragment2) {
-            public final /* synthetic */ Context f$1;
-            public final /* synthetic */ BottomSheet f$2;
-            public final /* synthetic */ BaseFragment f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void onClick(View view) {
-                LinkActionView.this.lambda$new$9$LinkActionView(this.f$1, this.f$2, this.f$3, view);
-            }
-        });
+        textView3.setOnClickListener(new LinkActionView$$ExternalSyntheticLambda7(this, baseFragment2));
+        textView4.setOnClickListener(new LinkActionView$$ExternalSyntheticLambda8(this, baseFragment2));
+        this.optionsView.setOnClickListener(new LinkActionView$$ExternalSyntheticLambda6(this, context2, bottomSheet2, baseFragment2));
         frameLayout3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 LinkActionView.this.copyView.callOnClick();
@@ -238,8 +186,7 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$LinkActionView(BottomSheet bottomSheet, BaseFragment baseFragment, View view) {
+    public /* synthetic */ void lambda$new$0(BottomSheet bottomSheet, BaseFragment baseFragment, View view) {
         try {
             if (this.link != null) {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.link));
@@ -255,14 +202,12 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$LinkActionView(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         this.delegate.showUsersForPermanentLink();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$LinkActionView(BaseFragment baseFragment, View view) {
+    public /* synthetic */ void lambda$new$2(BaseFragment baseFragment, View view) {
         try {
             if (this.link != null) {
                 Intent intent = new Intent("android.intent.action.SEND");
@@ -276,23 +221,17 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$LinkActionView(BaseFragment baseFragment, View view) {
+    public /* synthetic */ void lambda$new$4(BaseFragment baseFragment, View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
         builder.setTitle(LocaleController.getString("DeleteLink", NUM));
         builder.setMessage(LocaleController.getString("DeleteLinkHelp", NUM));
-        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                LinkActionView.this.lambda$new$3$LinkActionView(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new LinkActionView$$ExternalSyntheticLambda0(this));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         baseFragment.showDialog(builder.create());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$LinkActionView(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$new$3(DialogInterface dialogInterface, int i) {
         Delegate delegate2 = this.delegate;
         if (delegate2 != null) {
             delegate2.removeLink();
@@ -300,8 +239,7 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$9 */
-    public /* synthetic */ void lambda$new$9$LinkActionView(Context context, BottomSheet bottomSheet, BaseFragment baseFragment, View view) {
+    public /* synthetic */ void lambda$new$9(Context context, BottomSheet bottomSheet, BaseFragment baseFragment, View view) {
         final FrameLayout frameLayout2;
         if (this.actionBarPopupWindow == null) {
             ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context);
@@ -309,29 +247,17 @@ public class LinkActionView extends LinearLayout {
                 ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(context, true, false);
                 actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("Edit", NUM), NUM);
                 actionBarPopupWindowLayout.addView(actionBarMenuSubItem, LayoutHelper.createLinear(-1, 48));
-                actionBarMenuSubItem.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        LinkActionView.this.lambda$new$5$LinkActionView(view);
-                    }
-                });
+                actionBarMenuSubItem.setOnClickListener(new LinkActionView$$ExternalSyntheticLambda4(this));
             }
             ActionBarMenuSubItem actionBarMenuSubItem2 = new ActionBarMenuSubItem(context, true, false);
             actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("GetQRCode", NUM), NUM);
             actionBarPopupWindowLayout.addView(actionBarMenuSubItem2, LayoutHelper.createLinear(-1, 48));
-            actionBarMenuSubItem2.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    LinkActionView.this.lambda$new$6$LinkActionView(view);
-                }
-            });
+            actionBarMenuSubItem2.setOnClickListener(new LinkActionView$$ExternalSyntheticLambda5(this));
             if (!this.hideRevokeOption) {
                 ActionBarMenuSubItem actionBarMenuSubItem3 = new ActionBarMenuSubItem(context, false, true);
                 actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("RevokeLink", NUM), NUM);
                 actionBarMenuSubItem3.setColors(Theme.getColor("windowBackgroundWhiteRedText"), Theme.getColor("windowBackgroundWhiteRedText"));
-                actionBarMenuSubItem3.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        LinkActionView.this.lambda$new$7$LinkActionView(view);
-                    }
-                });
+                actionBarMenuSubItem3.setOnClickListener(new LinkActionView$$ExternalSyntheticLambda2(this));
                 actionBarPopupWindowLayout.addView(actionBarMenuSubItem3, LayoutHelper.createLinear(-1, 48));
             }
             if (bottomSheet == null) {
@@ -359,7 +285,7 @@ public class LinkActionView extends LinearLayout {
                         canvas.restore();
                     }
                 };
-                final AnonymousClass2 r8 = new ViewTreeObserver.OnPreDrawListener() {
+                final AnonymousClass2 r8 = new ViewTreeObserver.OnPreDrawListener(this) {
                     public boolean onPreDraw() {
                         r0.invalidate();
                         return true;
@@ -394,11 +320,7 @@ public class LinkActionView extends LinearLayout {
                 this.actionBarPopupWindow.setAnimationStyle(NUM);
                 this.actionBarPopupWindow.setInputMethodMode(2);
                 this.actionBarPopupWindow.setSoftInputMode(0);
-                actionBarPopupWindowLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
-                    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        LinkActionView.this.lambda$new$8$LinkActionView(keyEvent);
-                    }
-                });
+                actionBarPopupWindowLayout.setDispatchKeyEventListener(new LinkActionView$$ExternalSyntheticLambda12(this));
                 if (AndroidUtilities.isTablet()) {
                     f += (float) frameLayout2.getPaddingTop();
                     f2 = 0.0f - ((float) frameLayout2.getPaddingLeft());
@@ -409,8 +331,7 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$5 */
-    public /* synthetic */ void lambda$new$5$LinkActionView(View view) {
+    public /* synthetic */ void lambda$new$5(View view) {
         ActionBarPopupWindow actionBarPopupWindow2 = this.actionBarPopupWindow;
         if (actionBarPopupWindow2 != null) {
             actionBarPopupWindow2.dismiss();
@@ -419,14 +340,12 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$6 */
-    public /* synthetic */ void lambda$new$6$LinkActionView(View view) {
+    public /* synthetic */ void lambda$new$6(View view) {
         showQrCode();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$7 */
-    public /* synthetic */ void lambda$new$7$LinkActionView(View view) {
+    public /* synthetic */ void lambda$new$7(View view) {
         ActionBarPopupWindow actionBarPopupWindow2 = this.actionBarPopupWindow;
         if (actionBarPopupWindow2 != null) {
             actionBarPopupWindow2.dismiss();
@@ -435,8 +354,7 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$8 */
-    public /* synthetic */ void lambda$new$8$LinkActionView(KeyEvent keyEvent) {
+    public /* synthetic */ void lambda$new$8(KeyEvent keyEvent) {
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && this.actionBarPopupWindow.isShowing()) {
             this.actionBarPopupWindow.dismiss(true);
         }
@@ -520,7 +438,6 @@ public class LinkActionView extends LinearLayout {
     }
 
     public void setRevoke(boolean z) {
-        this.revoked = z;
         if (z) {
             this.optionsView.setVisibility(8);
             this.shareView.setVisibility(8);
@@ -575,19 +492,14 @@ public class LinkActionView extends LinearLayout {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
             builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
             builder.setTitle(LocaleController.getString("RevokeLink", NUM));
-            builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    LinkActionView.this.lambda$revokeLink$10$LinkActionView(dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new LinkActionView$$ExternalSyntheticLambda1(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             builder.show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$revokeLink$10 */
-    public /* synthetic */ void lambda$revokeLink$10$LinkActionView(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$revokeLink$10(DialogInterface dialogInterface, int i) {
         Delegate delegate2 = this.delegate;
         if (delegate2 != null) {
             delegate2.revokeLink();
@@ -635,43 +547,17 @@ public class LinkActionView extends LinearLayout {
             tLRPC$TL_messages_getChatInviteImporters.offset_user = new TLRPC$TL_inputUserEmpty();
             tLRPC$TL_messages_getChatInviteImporters.limit = Math.min(tLRPC$TL_chatInviteExported.usage, 3);
             this.loadingImporters = true;
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_getChatInviteImporters, new RequestDelegate(tLRPC$TL_chatInviteExported) {
-                public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    LinkActionView.this.lambda$loadUsers$12$LinkActionView(this.f$1, tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_getChatInviteImporters, new LinkActionView$$ExternalSyntheticLambda11(this, tLRPC$TL_chatInviteExported));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadUsers$12 */
-    public /* synthetic */ void lambda$loadUsers$12$LinkActionView(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_chatInviteExported) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ TLRPC$TL_chatInviteExported f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                LinkActionView.this.lambda$loadUsers$11$LinkActionView(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$loadUsers$12(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new LinkActionView$$ExternalSyntheticLambda10(this, tLRPC$TL_error, tLObject, tLRPC$TL_chatInviteExported));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadUsers$11 */
-    public /* synthetic */ void lambda$loadUsers$11$LinkActionView(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
+    public /* synthetic */ void lambda$loadUsers$11(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
         this.loadingImporters = false;
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_chatInviteImporters tLRPC$TL_messages_chatInviteImporters = (TLRPC$TL_messages_chatInviteImporters) tLObject;

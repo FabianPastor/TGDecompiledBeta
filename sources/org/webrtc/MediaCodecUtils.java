@@ -44,7 +44,7 @@ class MediaCodecUtils {
                     Logging.e("MediaCodecUtils", "Cannot retrieve codec info", e);
                 }
             }
-            Collections.sort(arrayList, $$Lambda$MediaCodecUtils$2a7tPlee9qsf_7lHzR8WPINZSpo.INSTANCE);
+            Collections.sort(arrayList, MediaCodecUtils$$ExternalSyntheticLambda0.INSTANCE);
         } catch (Exception e2) {
             FileLog.e((Throwable) e2);
         }

@@ -15,21 +15,12 @@ import org.telegram.tgnet.TLRPC$WebPage;
 public class GoogleVoiceClientService extends SearchActionVerificationClientService {
     public void performAction(Intent intent, boolean z, Bundle bundle) {
         if (z) {
-            AndroidUtilities.runOnUIThread(new Runnable(intent) {
-                public final /* synthetic */ Intent f$0;
-
-                {
-                    this.f$0 = r1;
-                }
-
-                public final void run() {
-                    GoogleVoiceClientService.lambda$performAction$0(this.f$0);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new GoogleVoiceClientService$$ExternalSyntheticLambda0(intent));
         }
     }
 
-    static /* synthetic */ void lambda$performAction$0(Intent intent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$performAction$0(Intent intent) {
         Intent intent2 = intent;
         try {
             int i = UserConfig.selectedAccount;

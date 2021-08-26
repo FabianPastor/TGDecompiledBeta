@@ -2,7 +2,6 @@ package org.telegram.messenger.browser;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -13,7 +12,6 @@ import java.util.List;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.support.customtabs.CustomTabsCallback;
 import org.telegram.messenger.support.customtabs.CustomTabsClient;
 import org.telegram.messenger.support.customtabs.CustomTabsServiceConnection;
@@ -21,20 +19,18 @@ import org.telegram.messenger.support.customtabs.CustomTabsSession;
 import org.telegram.messenger.support.customtabsclient.shared.CustomTabsHelper;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnection;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnectionCallback;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.AlertDialog;
 
 public class Browser {
     private static WeakReference<Activity> currentCustomTabsActivity;
     /* access modifiers changed from: private */
     public static CustomTabsClient customTabsClient;
-    private static WeakReference<CustomTabsSession> customTabsCurrentSession;
     private static String customTabsPackageToBind;
     private static CustomTabsServiceConnection customTabsServiceConnection;
     private static CustomTabsSession customTabsSession;
 
     private static void setCurrentSession(CustomTabsSession customTabsSession2) {
-        customTabsCurrentSession = new WeakReference<>(customTabsSession2);
+        new WeakReference(customTabsSession2);
     }
 
     private static CustomTabsSession getSession() {
@@ -211,7 +207,7 @@ public class Browser {
             r6.message = r1     // Catch:{ Exception -> 0x0083 }
             int r1 = org.telegram.messenger.UserConfig.selectedAccount     // Catch:{ Exception -> 0x0083 }
             org.telegram.tgnet.ConnectionsManager r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)     // Catch:{ Exception -> 0x0083 }
-            org.telegram.messenger.browser.-$$Lambda$Browser$_zN60Kb3XuLRe7fnfkBX1uzUNj0 r4 = new org.telegram.messenger.browser.-$$Lambda$Browser$_zN60Kb3XuLRe7fnfkBX1uzUNj0     // Catch:{ Exception -> 0x0083 }
+            org.telegram.messenger.browser.Browser$$ExternalSyntheticLambda3 r4 = new org.telegram.messenger.browser.Browser$$ExternalSyntheticLambda3     // Catch:{ Exception -> 0x0083 }
             r1 = r4
             r2 = r0
             r3 = r10
@@ -223,7 +219,7 @@ public class Browser {
             r6 = r18
             r1.<init>(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0083 }
             int r1 = r13.sendRequest(r15, r11)     // Catch:{ Exception -> 0x0083 }
-            org.telegram.messenger.browser.-$$Lambda$Browser$a6Dg6G-glg3khQ9JuF9Le4Oec2o r2 = new org.telegram.messenger.browser.-$$Lambda$Browser$a6Dg6G-glg3khQ9JuF9Le4Oec2o     // Catch:{ Exception -> 0x0083 }
+            org.telegram.messenger.browser.Browser$$ExternalSyntheticLambda1 r2 = new org.telegram.messenger.browser.Browser$$ExternalSyntheticLambda1     // Catch:{ Exception -> 0x0083 }
             r2.<init>(r0, r1)     // Catch:{ Exception -> 0x0083 }
             r0 = 1000(0x3e8, double:4.94E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2, r0)     // Catch:{ Exception -> 0x0083 }
@@ -489,7 +485,7 @@ public class Browser {
             org.telegram.messenger.support.customtabs.CustomTabsSession r3 = getSession()     // Catch:{ Exception -> 0x0309 }
             r2.<init>(r3)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r3 = "CopyLink"
-            r4 = 2131625033(0x7f0e0449, float:1.8877263E38)
+            r4 = 2131625038(0x7f0e044e, float:1.8877273E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0309 }
             r2.addMenuItem(r3, r1)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r1 = "actionBarBrowser"
@@ -501,7 +497,7 @@ public class Browser {
             r3 = 2131165243(0x7var_b, float:1.7944698E38)
             android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131627515(0x7f0e0dfb, float:1.8882297E38)
+            r4 = 2131627535(0x7f0e0e0f, float:1.8882337E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0309 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0309 }
             r5 = 0
@@ -543,10 +539,11 @@ public class Browser {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.browser.Browser.openUrl(android.content.Context, android.net.Uri, boolean, boolean):void");
     }
 
+    /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:13:0x0036  */
     /* JADX WARNING: Removed duplicated region for block: B:15:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$openUrl$0(org.telegram.ui.ActionBar.AlertDialog[] r3, org.telegram.tgnet.TLObject r4, int r5, android.net.Uri r6, android.content.Context r7, boolean r8) {
+    public static /* synthetic */ void lambda$openUrl$0(org.telegram.ui.ActionBar.AlertDialog[] r3, org.telegram.tgnet.TLObject r4, int r5, android.net.Uri r6, android.content.Context r7, boolean r8) {
         /*
             r0 = 0
             r1 = r3[r0]     // Catch:{ all -> 0x0007 }
@@ -586,20 +583,11 @@ public class Browser {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.browser.Browser.lambda$openUrl$0(org.telegram.ui.ActionBar.AlertDialog[], org.telegram.tgnet.TLObject, int, android.net.Uri, android.content.Context, boolean):void");
     }
 
-    static /* synthetic */ void lambda$openUrl$3(AlertDialog[] alertDialogArr, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$openUrl$3(AlertDialog[] alertDialogArr, int i) {
         if (alertDialogArr[0] != null) {
             try {
-                alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i) {
-                    public final /* synthetic */ int f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void onCancel(DialogInterface dialogInterface) {
-                        ConnectionsManager.getInstance(UserConfig.selectedAccount).cancelRequest(this.f$0, true);
-                    }
-                });
+                alertDialogArr[0].setOnCancelListener(new Browser$$ExternalSyntheticLambda0(i));
                 alertDialogArr[0].show();
             } catch (Exception unused) {
             }

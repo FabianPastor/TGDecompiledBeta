@@ -11,14 +11,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import j$.util.Comparator;
-import j$.util.function.Function;
-import j$.util.function.ToDoubleFunction;
-import j$.util.function.ToIntFunction;
-import j$.util.function.ToLongFunction;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
@@ -73,8 +67,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     public View createView(Context context) {
-        this.searching = false;
-        this.searchWas = false;
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("Language", NUM));
@@ -130,16 +122,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setAdapter(this.listAdapter);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                LanguageSelectActivity.this.lambda$createView$0$LanguageSelectActivity(view, i);
-            }
-        });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return LanguageSelectActivity.this.lambda$createView$2$LanguageSelectActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new LanguageSelectActivity$$ExternalSyntheticLambda4(this));
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new LanguageSelectActivity$$ExternalSyntheticLambda5(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -151,8 +135,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$LanguageSelectActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$0(View view, int i) {
         if (getParentActivity() != null && this.parentLayout != null && (view instanceof LanguageCell)) {
             LocaleController.LocaleInfo currentLocale = ((LanguageCell) view).getCurrentLocale();
             if (currentLocale != null) {
@@ -164,8 +147,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ boolean lambda$createView$2$LanguageSelectActivity(View view, int i) {
+    public /* synthetic */ boolean lambda$createView$2(View view, int i) {
         LocaleController.LocaleInfo currentLocale;
         if (getParentActivity() == null || this.parentLayout == null || !(view instanceof LanguageCell) || (currentLocale = ((LanguageCell) view).getCurrentLocale()) == null || currentLocale.pathToFile == null || (currentLocale.isRemote() && currentLocale.serverIndex != Integer.MAX_VALUE)) {
             return false;
@@ -173,17 +155,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", NUM));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", NUM, currentLocale.name)));
-        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(currentLocale) {
-            public final /* synthetic */ LocaleController.LocaleInfo f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                LanguageSelectActivity.this.lambda$createView$1$LanguageSelectActivity(this.f$1, dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new LanguageSelectActivity$$ExternalSyntheticLambda0(this, currentLocale));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         AlertDialog create = builder.create();
         showDialog(create);
@@ -195,8 +167,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$LanguageSelectActivity(LocaleController.LocaleInfo localeInfo, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$1(LocaleController.LocaleInfo localeInfo, DialogInterface dialogInterface, int i) {
         if (LocaleController.getInstance().deleteLanguage(localeInfo, this.currentAccount)) {
             fillLanguages();
             ArrayList<LocaleController.LocaleInfo> arrayList = this.searchResult;
@@ -222,39 +193,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     private void fillLanguages() {
-        $$Lambda$LanguageSelectActivity$dTXpukxSSqBqzlmU6LajY5KHaow r1 = new Object() {
-            public final int compare(Object obj, Object obj2) {
-                return LanguageSelectActivity.lambda$fillLanguages$3(LocaleController.LocaleInfo.this, (LocaleController.LocaleInfo) obj, (LocaleController.LocaleInfo) obj2);
-            }
-
-            public /* synthetic */ Comparator reversed() {
-                return Comparator.CC.$default$reversed(this);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparing(Function function) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
-                return Comparator.CC.$default$thenComparing(this, function, comparator);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
-                return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
-                return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
-                return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
-            }
-        };
+        LanguageSelectActivity$$ExternalSyntheticLambda3 languageSelectActivity$$ExternalSyntheticLambda3 = new LanguageSelectActivity$$ExternalSyntheticLambda3(LocaleController.getInstance().getCurrentLocaleInfo());
         this.sortedLanguages = new ArrayList<>();
         this.unofficialLanguages = new ArrayList<>(LocaleController.getInstance().unofficialLanguages);
         ArrayList<LocaleController.LocaleInfo> arrayList = LocaleController.getInstance().languages;
@@ -267,11 +206,12 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 this.unofficialLanguages.add(localeInfo);
             }
         }
-        Collections.sort(this.sortedLanguages, r1);
-        Collections.sort(this.unofficialLanguages, r1);
+        Collections.sort(this.sortedLanguages, languageSelectActivity$$ExternalSyntheticLambda3);
+        Collections.sort(this.unofficialLanguages, languageSelectActivity$$ExternalSyntheticLambda3);
     }
 
-    static /* synthetic */ int lambda$fillLanguages$3(LocaleController.LocaleInfo localeInfo, LocaleController.LocaleInfo localeInfo2, LocaleController.LocaleInfo localeInfo3) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$fillLanguages$3(LocaleController.LocaleInfo localeInfo, LocaleController.LocaleInfo localeInfo2, LocaleController.LocaleInfo localeInfo3) {
         if (localeInfo2 == localeInfo) {
             return -1;
         }
@@ -330,22 +270,11 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
     /* access modifiers changed from: private */
     public void processSearch(String str) {
-        Utilities.searchQueue.postRunnable(new Runnable(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                LanguageSelectActivity.this.lambda$processSearch$4$LanguageSelectActivity(this.f$1);
-            }
-        });
+        Utilities.searchQueue.postRunnable(new LanguageSelectActivity$$ExternalSyntheticLambda1(this, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSearch$4 */
-    public /* synthetic */ void lambda$processSearch$4$LanguageSelectActivity(String str) {
+    public /* synthetic */ void lambda$processSearch$4(String str) {
         if (str.trim().toLowerCase().length() == 0) {
             updateSearchResults(new ArrayList());
             return;
@@ -370,22 +299,11 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     private void updateSearchResults(ArrayList<LocaleController.LocaleInfo> arrayList) {
-        AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-            public final /* synthetic */ ArrayList f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                LanguageSelectActivity.this.lambda$updateSearchResults$5$LanguageSelectActivity(this.f$1);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new LanguageSelectActivity$$ExternalSyntheticLambda2(this, arrayList));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateSearchResults$5 */
-    public /* synthetic */ void lambda$updateSearchResults$5$LanguageSelectActivity(ArrayList arrayList) {
+    public /* synthetic */ void lambda$updateSearchResults$5(ArrayList arrayList) {
         this.searchResult = arrayList;
         this.searchListViewAdapter.notifyDataSetChanged();
     }
@@ -462,13 +380,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r8 != r0) goto L_0x0037
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165443(0x7var_, float:1.7945103E38)
+                r0 = 2131165448(0x7var_, float:1.7945113E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0108
             L_0x0037:
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165444(0x7var_, float:1.7945105E38)
+                r0 = 2131165449(0x7var_, float:1.7945115E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0108
@@ -541,7 +459,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625964(0x7f0e07ec, float:1.887915E38)
+                r4 = 2131625975(0x7f0e07f7, float:1.8879173E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4

@@ -24,7 +24,6 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -45,7 +44,6 @@ import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.TooManyCommunitiesActivity;
 
 public class TooManyCommunitiesActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -69,16 +67,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     public ArrayList<String> inactiveChatsSignatures = new ArrayList<>();
     /* access modifiers changed from: private */
     public RecyclerListView listView;
-    RecyclerListView.OnItemClickListener onItemClickListener = new RecyclerListView.OnItemClickListener() {
-        public final void onItemClick(View view, int i) {
-            TooManyCommunitiesActivity.this.lambda$new$0$TooManyCommunitiesActivity(view, i);
-        }
-    };
-    RecyclerListView.OnItemLongClickListener onItemLongClickListener = new RecyclerListView.OnItemLongClickListener() {
-        public final boolean onItemClick(View view, int i) {
-            return TooManyCommunitiesActivity.this.lambda$new$1$TooManyCommunitiesActivity(view, i);
-        }
-    };
+    RecyclerListView.OnItemClickListener onItemClickListener = new TooManyCommunitiesActivity$$ExternalSyntheticLambda5(this);
+    RecyclerListView.OnItemLongClickListener onItemLongClickListener = new TooManyCommunitiesActivity$$ExternalSyntheticLambda6(this);
     protected RadialProgressView progressBar;
     /* access modifiers changed from: private */
     public SearchAdapter searchAdapter;
@@ -97,8 +87,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     int type;
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$TooManyCommunitiesActivity(View view, int i) {
+    public /* synthetic */ void lambda$new$0(View view, int i) {
         if (view instanceof GroupCreateUserCell) {
             GroupCreateUserCell groupCreateUserCell = (GroupCreateUserCell) view;
             TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) groupCreateUserCell.getObject();
@@ -122,8 +111,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ boolean lambda$new$1$TooManyCommunitiesActivity(View view, int i) {
+    public /* synthetic */ boolean lambda$new$1(View view, int i) {
         this.onItemClickListener.onItemClick(view, i);
         return true;
     }
@@ -238,7 +226,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         frameLayout.addView(this.searchViewContainer);
         loadInactiveChannels();
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        AnonymousClass5 r3 = new FrameLayout(context) {
+        AnonymousClass5 r3 = new FrameLayout(this, context) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
@@ -258,17 +246,12 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         this.buttonLayout.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.buttonLayout.addView(this.buttonTextView, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, 12.0f, 16.0f, 12.0f));
         this.buttonLayout.setVisibility(8);
-        this.buttonTextView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                TooManyCommunitiesActivity.this.lambda$createView$2$TooManyCommunitiesActivity(view);
-            }
-        });
+        this.buttonTextView.setOnClickListener(new TooManyCommunitiesActivity$$ExternalSyntheticLambda1(this));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$TooManyCommunitiesActivity(View view) {
+    public /* synthetic */ void lambda$createView$2(View view) {
         if (!this.selectedIds.isEmpty()) {
             TLRPC$User user = getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId()));
             ArrayList arrayList = new ArrayList();
@@ -335,16 +318,11 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         this.adapter.notifyDataSetChanged();
         this.enterProgress = 0.0f;
         AndroidUtilities.runOnUIThread(this.showProgressRunnable, 500);
-        getConnectionsManager().sendRequest(new TLRPC$TL_channels_getInactiveChannels(), new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                TooManyCommunitiesActivity.this.lambda$loadInactiveChannels$5$TooManyCommunitiesActivity(tLObject, tLRPC$TL_error);
-            }
-        });
+        getConnectionsManager().sendRequest(new TLRPC$TL_channels_getInactiveChannels(), new TooManyCommunitiesActivity$$ExternalSyntheticLambda3(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadInactiveChannels$5 */
-    public /* synthetic */ void lambda$loadInactiveChannels$5$TooManyCommunitiesActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadInactiveChannels$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         String str;
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_inactiveChats tLRPC$TL_messages_inactiveChats = (TLRPC$TL_messages_inactiveChats) tLObject;
@@ -367,25 +345,12 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                     arrayList.add(LocaleController.formatString("InactiveChatSignature", NUM, LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count), str));
                 }
             }
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList, tLRPC$TL_messages_inactiveChats) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ TLRPC$TL_messages_inactiveChats f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    TooManyCommunitiesActivity.this.lambda$loadInactiveChannels$4$TooManyCommunitiesActivity(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new TooManyCommunitiesActivity$$ExternalSyntheticLambda2(this, arrayList, tLRPC$TL_messages_inactiveChats));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadInactiveChannels$4 */
-    public /* synthetic */ void lambda$loadInactiveChannels$4$TooManyCommunitiesActivity(ArrayList arrayList, TLRPC$TL_messages_inactiveChats tLRPC$TL_messages_inactiveChats) {
+    public /* synthetic */ void lambda$loadInactiveChannels$4(ArrayList arrayList, TLRPC$TL_messages_inactiveChats tLRPC$TL_messages_inactiveChats) {
         this.inactiveChatsSignatures.clear();
         this.inactiveChats.clear();
         this.inactiveChatsSignatures.addAll(arrayList);
@@ -394,11 +359,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         if (this.listView.getMeasuredHeight() > 0) {
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.enterAnimator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    TooManyCommunitiesActivity.this.lambda$loadInactiveChannels$3$TooManyCommunitiesActivity(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new TooManyCommunitiesActivity$$ExternalSyntheticLambda0(this));
             this.enterAnimator.setDuration(100);
             this.enterAnimator.start();
         } else {
@@ -415,8 +376,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadInactiveChannels$3 */
-    public /* synthetic */ void lambda$loadInactiveChannels$3$TooManyCommunitiesActivity(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$loadInactiveChannels$3(ValueAnimator valueAnimator) {
         this.enterProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         int childCount = this.listView.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -523,7 +483,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625871(0x7f0e078f, float:1.8878962E38)
+                r8 = 2131625881(0x7f0e0799, float:1.8878982E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
@@ -533,7 +493,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 android.content.Context r1 = r8.getContext()
                 r9.<init>(r1)
                 android.content.Context r8 = r8.getContext()
-                r1 = 2131165443(0x7var_, float:1.7945103E38)
+                r1 = 2131165448(0x7var_, float:1.7945113E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -556,18 +516,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x009e
-                r8 = 2131627856(0x7f0e0var_, float:1.8882988E38)
+                r8 = 2131627883(0x7f0e0f6b, float:1.8883043E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x009e:
                 if (r8 != r0) goto L_0x00aa
-                r8 = 2131627855(0x7f0e0f4f, float:1.8882986E38)
+                r8 = 2131627882(0x7f0e0f6a, float:1.888304E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x00aa:
-                r8 = 2131627854(0x7f0e0f4e, float:1.8882984E38)
+                r8 = 2131627881(0x7f0e0var_, float:1.8883039E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b3:
@@ -687,43 +647,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             int i = this.lastSearchId + 1;
             this.lastSearchId = i;
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$TooManyCommunitiesActivity$SearchAdapter$NALjgMe5j1stSE7XJm8IHpXBYRk r2 = new Runnable(str, i) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    TooManyCommunitiesActivity.SearchAdapter.this.lambda$search$0$TooManyCommunitiesActivity$SearchAdapter(this.f$1, this.f$2);
-                }
-            };
-            this.searchRunnable = r2;
-            dispatchQueue.postRunnable(r2, 300);
+            TooManyCommunitiesActivity$SearchAdapter$$ExternalSyntheticLambda1 tooManyCommunitiesActivity$SearchAdapter$$ExternalSyntheticLambda1 = new TooManyCommunitiesActivity$SearchAdapter$$ExternalSyntheticLambda1(this, str, i);
+            this.searchRunnable = tooManyCommunitiesActivity$SearchAdapter$$ExternalSyntheticLambda1;
+            dispatchQueue.postRunnable(tooManyCommunitiesActivity$SearchAdapter$$ExternalSyntheticLambda1, 300);
         }
 
         /* renamed from: processSearch */
         public void lambda$search$0(String str, int i) {
-            Utilities.searchQueue.postRunnable(new Runnable(str, i) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    TooManyCommunitiesActivity.SearchAdapter.this.lambda$processSearch$1$TooManyCommunitiesActivity$SearchAdapter(this.f$1, this.f$2);
-                }
-            });
+            Utilities.searchQueue.postRunnable(new TooManyCommunitiesActivity$SearchAdapter$$ExternalSyntheticLambda2(this, str, i));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$processSearch$1 */
-        public /* synthetic */ void lambda$processSearch$1$TooManyCommunitiesActivity$SearchAdapter(String str, int i) {
+        public /* synthetic */ void lambda$processSearch$1(String str, int i) {
             int i2 = i;
             String lowerCase = str.trim().toLowerCase();
             String str2 = null;
@@ -782,26 +717,11 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         }
 
         private void updateSearchResults(ArrayList<TLRPC$Chat> arrayList, ArrayList<String> arrayList2, int i) {
-            AndroidUtilities.runOnUIThread(new Runnable(i, arrayList, arrayList2) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ ArrayList f$2;
-                public final /* synthetic */ ArrayList f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    TooManyCommunitiesActivity.SearchAdapter.this.lambda$updateSearchResults$2$TooManyCommunitiesActivity$SearchAdapter(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new TooManyCommunitiesActivity$SearchAdapter$$ExternalSyntheticLambda0(this, i, arrayList, arrayList2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$2 */
-        public /* synthetic */ void lambda$updateSearchResults$2$TooManyCommunitiesActivity$SearchAdapter(int i, ArrayList arrayList, ArrayList arrayList2) {
+        public /* synthetic */ void lambda$updateSearchResults$2(int i, ArrayList arrayList, ArrayList arrayList2) {
             if (i == this.lastSearchId) {
                 this.searchResults.clear();
                 this.searchResultsSignatures.clear();
@@ -821,11 +741,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$TooManyCommunitiesActivity$Pl18edBo1WNKDP94DRDqgOgQpuk r10 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                TooManyCommunitiesActivity.this.lambda$getThemeDescriptions$6$TooManyCommunitiesActivity();
-            }
-        };
+        TooManyCommunitiesActivity$$ExternalSyntheticLambda4 tooManyCommunitiesActivity$$ExternalSyntheticLambda4 = new TooManyCommunitiesActivity$$ExternalSyntheticLambda4(this);
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
@@ -855,25 +771,24 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         arrayList.add(new ThemeDescription((View) this.searchListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.searchListView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
         arrayList.add(new ThemeDescription(this.searchListView, 0, new Class[]{GroupCreateUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$TooManyCommunitiesActivity$Pl18edBo1WNKDP94DRDqgOgQpuk r8 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        TooManyCommunitiesActivity$$ExternalSyntheticLambda4 tooManyCommunitiesActivity$$ExternalSyntheticLambda42 = tooManyCommunitiesActivity$$ExternalSyntheticLambda4;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"));
-        arrayList.add(new ThemeDescription(this.buttonTextView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "featuredStickers_addButton"));
-        arrayList.add(new ThemeDescription(this.buttonTextView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "featuredStickers_addButtonPressed"));
-        arrayList.add(new ThemeDescription(this.progressBar, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "featuredStickers_addButtonPressed"));
+        arrayList.add(new ThemeDescription(this.buttonTextView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "featuredStickers_addButton"));
+        arrayList.add(new ThemeDescription(this.buttonTextView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "featuredStickers_addButtonPressed"));
+        arrayList.add(new ThemeDescription(this.progressBar, 0, (Class[]) null, (Paint) null, (Drawable[]) null, tooManyCommunitiesActivity$$ExternalSyntheticLambda42, "featuredStickers_addButtonPressed"));
         arrayList.add(new ThemeDescription((View) this.hintCell, 0, new Class[]{TooManyCommunitiesHintCell.class}, new String[]{"imageLayout"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogRedIcon"));
         return arrayList;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$6 */
-    public /* synthetic */ void lambda$getThemeDescriptions$6$TooManyCommunitiesActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$6() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

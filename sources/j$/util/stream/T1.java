@@ -1,40 +1,58 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import j$.util.function.x;
-import j$.util.stream.R1;
+import j$.util.function.Consumer;
+import j$.util.function.l;
+import j$.util.y;
 
-abstract class T1<P_OUT> {
-    T1() {
+final class T1 extends D1 {
+    T1(B1 b1, B1 b12) {
+        super(b1, b12);
     }
 
-    /* access modifiers changed from: package-private */
-    public abstract void m0(A2 a2, Spliterator spliterator);
+    public void forEach(Consumer consumer) {
+        this.a.forEach(consumer);
+        this.b.forEach(consumer);
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract void n0(A2 a2, Spliterator spliterator);
+    public void i(Object[] objArr, int i) {
+        objArr.getClass();
+        this.a.i(objArr, i);
+        this.b.i(objArr, i + ((int) this.a.count()));
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract R1 o0(Spliterator spliterator, boolean z, x xVar);
+    public Object[] q(l lVar) {
+        long count = count();
+        if (count < NUM) {
+            Object[] objArr = (Object[]) lVar.apply((int) count);
+            i(objArr, 0);
+            return objArr;
+        }
+        throw new IllegalArgumentException("Stream size exceeds max array size");
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract long p0(Spliterator spliterator);
+    public B1 r(long j, long j2, l lVar) {
+        if (j == 0 && j2 == count()) {
+            return this;
+        }
+        long count = this.a.count();
+        if (j >= count) {
+            return this.b.r(j - count, j2 - count, lVar);
+        }
+        if (j2 <= count) {
+            return this.a.r(j, j2, lVar);
+        }
+        l lVar2 = lVar;
+        return CLASSNAMEy2.i(CLASSNAMEf4.REFERENCE, this.a.r(j, count, lVar2), this.b.r(0, j2 - count, lVar2));
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract U2 q0();
+    public y spliterator() {
+        return new CLASSNAMEk2(this);
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract int r0();
-
-    /* access modifiers changed from: package-private */
-    public abstract R1.a s0(long j, x xVar);
-
-    /* access modifiers changed from: package-private */
-    public abstract A2 t0(A2 a2, Spliterator spliterator);
-
-    /* access modifiers changed from: package-private */
-    public abstract A2 u0(A2 a2);
-
-    /* access modifiers changed from: package-private */
-    public abstract Spliterator v0(Spliterator spliterator);
+    public String toString() {
+        if (count() < 32) {
+            return String.format("ConcNode[%s.%s]", new Object[]{this.a, this.b});
+        }
+        return String.format("ConcNode[size=%d]", new Object[]{Long.valueOf(count())});
+    }
 }

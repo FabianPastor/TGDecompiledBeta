@@ -35,7 +35,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
@@ -50,7 +49,6 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.ContextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ShareAlert;
-import org.telegram.ui.WebviewActivity;
 
 public class WebviewActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -95,22 +93,11 @@ public class WebviewActivity extends BaseFragment {
 
         @JavascriptInterface
         public void postEvent(String str, String str2) {
-            AndroidUtilities.runOnUIThread(new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    WebviewActivity.TelegramWebviewProxy.this.lambda$postEvent$0$WebviewActivity$TelegramWebviewProxy(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new WebviewActivity$TelegramWebviewProxy$$ExternalSyntheticLambda0(this, str));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$postEvent$0 */
-        public /* synthetic */ void lambda$postEvent$0$WebviewActivity$TelegramWebviewProxy(String str) {
+        public /* synthetic */ void lambda$postEvent$0(String str) {
             if (WebviewActivity.this.getParentActivity() != null) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d(str);
@@ -334,33 +321,17 @@ public class WebviewActivity extends BaseFragment {
             }
             tLRPC$TL_messages_getStatsURL.params = str;
             tLRPC$TL_messages_getStatsURL.dark = Theme.getCurrentTheme().isDark();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStatsURL, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    WebviewActivity.this.lambda$reloadStats$1$WebviewActivity(tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStatsURL, new WebviewActivity$$ExternalSyntheticLambda1(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$reloadStats$1 */
-    public /* synthetic */ void lambda$reloadStats$1$WebviewActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            public final /* synthetic */ TLObject f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                WebviewActivity.this.lambda$reloadStats$0$WebviewActivity(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$reloadStats$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new WebviewActivity$$ExternalSyntheticLambda0(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$reloadStats$0 */
-    public /* synthetic */ void lambda$reloadStats$0$WebviewActivity(TLObject tLObject) {
+    public /* synthetic */ void lambda$reloadStats$0(TLObject tLObject) {
         this.loadStats = false;
         if (tLObject != null) {
             WebView webView2 = this.webView;

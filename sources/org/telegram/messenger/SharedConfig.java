@@ -375,7 +375,7 @@ public class SharedConfig {
             if (r1 < 0) goto L_0x0170
         L_0x0164:
             pendingAppUpdate = r5     // Catch:{ Exception -> 0x016c }
-            org.telegram.messenger.-$$Lambda$Asg0fcNSacZ9T9S6FLG0fzEhclY r1 = org.telegram.messenger.$$Lambda$Asg0fcNSacZ9T9S6FLG0fzEhclY.INSTANCE     // Catch:{ Exception -> 0x016c }
+            org.telegram.messenger.SharedConfig$$ExternalSyntheticLambda3 r1 = org.telegram.messenger.SharedConfig$$ExternalSyntheticLambda3.INSTANCE     // Catch:{ Exception -> 0x016c }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x016c }
             goto L_0x0170
         L_0x016c:
@@ -820,22 +820,13 @@ public class SharedConfig {
             int currentTimeMillis = (int) (System.currentTimeMillis() / 1000);
             if (Math.abs(currentTimeMillis - lastLogsCheckTime) >= 3600) {
                 lastLogsCheckTime = currentTimeMillis;
-                Utilities.cacheClearQueue.postRunnable(new Runnable(currentTimeMillis) {
-                    public final /* synthetic */ int f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void run() {
-                        SharedConfig.lambda$checkLogsToDelete$0(this.f$0);
-                    }
-                });
+                Utilities.cacheClearQueue.postRunnable(new SharedConfig$$ExternalSyntheticLambda0(currentTimeMillis));
             }
         }
     }
 
-    static /* synthetic */ void lambda$checkLogsToDelete$0(int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$checkLogsToDelete$0(int i) {
         long j = (long) (i - 864000);
         try {
             File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir((String) null);
@@ -852,23 +843,12 @@ public class SharedConfig {
         int currentTimeMillis = (int) (System.currentTimeMillis() / 1000);
         if (Math.abs(currentTimeMillis - lastKeepMediaCheckTime) >= 3600) {
             lastKeepMediaCheckTime = currentTimeMillis;
-            Utilities.cacheClearQueue.postRunnable(new Runnable(currentTimeMillis, FileLoader.checkDirectory(4)) {
-                public final /* synthetic */ int f$0;
-                public final /* synthetic */ File f$1;
-
-                {
-                    this.f$0 = r1;
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    SharedConfig.lambda$checkKeepMedia$1(this.f$0, this.f$1);
-                }
-            });
+            Utilities.cacheClearQueue.postRunnable(new SharedConfig$$ExternalSyntheticLambda1(currentTimeMillis, FileLoader.checkDirectory(4)));
         }
     }
 
-    static /* synthetic */ void lambda$checkKeepMedia$1(int i, File file) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$checkKeepMedia$1(int i, File file) {
         int i2 = keepMedia;
         if (i2 != 2) {
             long j = (long) (i - ((i2 == 0 ? 7 : i2 == 1 ? 30 : 3) * 86400));
@@ -1219,10 +1199,11 @@ public class SharedConfig {
     }
 
     public static void checkSaveToGalleryFiles() {
-        Utilities.globalQueue.postRunnable($$Lambda$SharedConfig$WtKrEMvWhflILeb19kJG2qAkvWc.INSTANCE);
+        Utilities.globalQueue.postRunnable(SharedConfig$$ExternalSyntheticLambda2.INSTANCE);
     }
 
-    static /* synthetic */ void lambda$checkSaveToGalleryFiles$2() {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$checkSaveToGalleryFiles$2() {
         try {
             File file = new File(Environment.getExternalStorageDirectory(), "Telegram");
             File file2 = new File(file, "Telegram Images");

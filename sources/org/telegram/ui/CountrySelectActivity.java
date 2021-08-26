@@ -34,7 +34,6 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.CountrySelectActivity;
 
 public class CountrySelectActivity extends BaseFragment {
     private CountrySelectActivityDelegate delegate;
@@ -135,11 +134,7 @@ public class CountrySelectActivity extends BaseFragment {
         }
         recyclerListView2.setVerticalScrollbarPosition(i);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                CountrySelectActivity.this.lambda$createView$0$CountrySelectActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new CountrySelectActivity$$ExternalSyntheticLambda0(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -151,8 +146,7 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$CountrySelectActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$0(View view, int i) {
         Country country;
         CountrySelectActivityDelegate countrySelectActivityDelegate;
         if (!this.searching || !this.searchWas) {
@@ -221,9 +215,9 @@ public class CountrySelectActivity extends BaseFragment {
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
-            Collections.sort(this.sortedCountries, $$Lambda$Ds7dtVnGrflEw4LvNOxA0cDT4Y.INSTANCE);
+            Collections.sort(this.sortedCountries, ChangePhoneActivity$PhoneView$$ExternalSyntheticLambda6.INSTANCE);
             for (ArrayList<Country> sort : this.countries.values()) {
-                Collections.sort(sort, $$Lambda$CountrySelectActivity$CountryAdapter$dKjgdmEaEdtVLx1pfz_Hpxo_gOU.INSTANCE);
+                Collections.sort(sort, CountrySelectActivity$CountryAdapter$$ExternalSyntheticLambda0.INSTANCE);
             }
         }
 
@@ -384,22 +378,11 @@ public class CountrySelectActivity extends BaseFragment {
 
         /* access modifiers changed from: private */
         public void processSearch(String str) {
-            Utilities.searchQueue.postRunnable(new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    CountrySelectActivity.CountrySearchAdapter.this.lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter(this.f$1);
-                }
-            });
+            Utilities.searchQueue.postRunnable(new CountrySelectActivity$CountrySearchAdapter$$ExternalSyntheticLambda0(this, str));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$processSearch$0 */
-        public /* synthetic */ void lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter(String str) {
+        public /* synthetic */ void lambda$processSearch$0(String str) {
             if (str.trim().toLowerCase().length() == 0) {
                 updateSearchResults(new ArrayList());
                 return;
@@ -419,22 +402,11 @@ public class CountrySelectActivity extends BaseFragment {
         }
 
         private void updateSearchResults(ArrayList<Country> arrayList) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-                public final /* synthetic */ ArrayList f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    CountrySelectActivity.CountrySearchAdapter.this.lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new CountrySelectActivity$CountrySearchAdapter$$ExternalSyntheticLambda1(this, arrayList));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$1 */
-        public /* synthetic */ void lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter(ArrayList arrayList) {
+        public /* synthetic */ void lambda$updateSearchResults$1(ArrayList arrayList) {
             if (CountrySelectActivity.this.searching) {
                 this.searchResult = arrayList;
                 if (!(!CountrySelectActivity.this.searchWas || CountrySelectActivity.this.listView == null || CountrySelectActivity.this.listView.getAdapter() == CountrySelectActivity.this.searchListViewAdapter)) {

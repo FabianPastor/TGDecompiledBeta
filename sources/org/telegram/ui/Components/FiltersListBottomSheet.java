@@ -321,11 +321,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
                 FiltersListBottomSheet.this.updateLayout();
             }
         });
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                FiltersListBottomSheet.this.lambda$new$0$FiltersListBottomSheet(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new FiltersListBottomSheet$$ExternalSyntheticLambda0(this));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
         TextView textView = new TextView(parentActivity);
         this.titleTextView = textView;
@@ -345,8 +341,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$FiltersListBottomSheet(View view, int i) {
+    public /* synthetic */ void lambda$new$0(View view, int i) {
         this.delegate.didSelectFilter(this.adapter.getItem(i));
         dismiss();
     }

@@ -723,8 +723,6 @@
     <string name="CancelAccountResetInfo2">Qualcuno con accesso a **%1$s** ha richiesto l\'eliminazione del tuo account Telegram e il ripristino della password della verifica in due passaggi.\10\10Se non sei stato tu, per favore inserisci il codice che abbiamo appena inviato tramite SMS. Puoi anche annullare *cambiando il tuo numero di telefono*.</string>
     <string name="CancelEmailQuestion">Sei sicuro di voler interrompere la configurazione dell\'email di recupero?</string>
     <string name="CancelEmailQuestionTitle">Interrompi configurazione</string>
-    <string name="CancelForward">Annulla inoltro</string>
-    <string name="CancelForwardMessage">Vuoi annullare l\'inoltro o inviare i messaggi in un\'altra chat?</string>
     <string name="CancelForwarding">Annulla inoltro</string>
     <string name="CancelLinkExpired">Link non valido o scaduto.</string>
     <string name="CancelLinkSuccess">Il processo di eliminazione per il tuo account %1$s è stato annullato. Puoi chiudere questa finestra ora.</string>
@@ -2384,7 +2382,7 @@
     <string name="NoGroupsInCommon">Nessun gruppo in comune</string>
     <string name="NoHandleAppInstalled">Non hai applicazioni che possono gestire il tipo di file \'%1$s\': installane una per proseguire</string>
     <string name="NoLimit">∞</string>
-    <string name="NoMailInstalled">Per favore invia un’email descrivendo il problema a sms@stel.com</string>
+    <string name="NoMailInstalled">Per favore invia un’email descrivendo il problema a reports@stel.com</string>
     <string name="NoMasks">Ancora nessuna maschera</string>
     <string name="NoMedia">Condividi foto e video in questa chat e accedi ad essi da ogni tuo dispositivo.</string>
     <string name="NoMediaAutoDownload">Nessun media</string>
@@ -3445,7 +3443,6 @@
     <string name="SelectFile">Seleziona file</string>
     <string name="SelectFromGallery">Seleziona dalla galleria</string>
     <string name="SelectImage">Seleziona immagine</string>
-    <string name="SelectOtherChat">Scegli un\'altra chat</string>
     <string name="Send">Invia</string>
     <string name="SendAnonymously">Invia anonimamente</string>
     <string name="SendAsFile">Invia come file</string>

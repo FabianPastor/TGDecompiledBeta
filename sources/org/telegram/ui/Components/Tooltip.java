@@ -13,16 +13,11 @@ import org.telegram.ui.ActionBar.Theme;
 public class Tooltip extends TextView {
     private View anchor;
     private ViewPropertyAnimator animator;
-    Runnable dismissRunnable = new Runnable() {
-        public final void run() {
-            Tooltip.this.lambda$new$0$Tooltip();
-        }
-    };
+    Runnable dismissRunnable = new Tooltip$$ExternalSyntheticLambda0(this);
     private boolean showing;
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$Tooltip() {
+    public /* synthetic */ void lambda$new$0() {
         ViewPropertyAnimator duration = animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 Tooltip.this.setVisibility(8);

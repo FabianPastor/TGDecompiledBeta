@@ -86,7 +86,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         this.backgroundPaint = new Paint(1);
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         if (Build.VERSION.SDK_INT >= 21) {
-            setOutlineProvider(new ViewOutlineProvider() {
+            setOutlineProvider(new ViewOutlineProvider(this) {
                 public void getOutline(View view, Outline outline) {
                     outline.setRoundRect(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), view.getMeasuredWidth() - AndroidUtilities.dp(1.0f), view.getMeasuredHeight() - AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(6.0f));
                 }

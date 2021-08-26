@@ -72,17 +72,7 @@ public class JavaI420Buffer implements VideoFrame.I420Buffer {
         ByteBuffer slice2 = nativeAllocateByteBuffer.slice();
         nativeAllocateByteBuffer.position(i8);
         nativeAllocateByteBuffer.limit(i8 + i7);
-        return new JavaI420Buffer(i, i2, slice, i, slice2, i4, nativeAllocateByteBuffer.slice(), i4, new Runnable(nativeAllocateByteBuffer) {
-            public final /* synthetic */ ByteBuffer f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void run() {
-                JniCommon.nativeFreeByteBuffer(this.f$0);
-            }
-        });
+        return new JavaI420Buffer(i, i2, slice, i, slice2, i4, nativeAllocateByteBuffer.slice(), i4, new JavaI420Buffer$$ExternalSyntheticLambda0(nativeAllocateByteBuffer));
     }
 
     public int getWidth() {
@@ -149,11 +139,7 @@ public class JavaI420Buffer implements VideoFrame.I420Buffer {
             dataU2.position((i420Buffer.getStrideU() * i10) + i9);
             dataV2.position(i9 + (i10 * i420Buffer.getStrideV()));
             i420Buffer.retain();
-            return wrap(i5, i6, dataY2.slice(), i420Buffer.getStrideY(), dataU2.slice(), i420Buffer.getStrideU(), dataV2.slice(), i420Buffer.getStrideV(), new Runnable() {
-                public final void run() {
-                    VideoFrame.I420Buffer.this.release();
-                }
-            });
+            return wrap(i5, i6, dataY2.slice(), i420Buffer.getStrideY(), dataU2.slice(), i420Buffer.getStrideU(), dataV2.slice(), i420Buffer.getStrideV(), new JavaI420Buffer$$ExternalSyntheticLambda1(i420Buffer));
         } else {
             VideoFrame.I420Buffer i420Buffer3 = i420Buffer;
         }

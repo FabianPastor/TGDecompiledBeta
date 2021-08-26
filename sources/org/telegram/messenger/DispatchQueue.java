@@ -7,7 +7,9 @@ import android.os.SystemClock;
 import java.util.concurrent.CountDownLatch;
 
 public class DispatchQueue extends Thread {
+    private static int indexPointer;
     private volatile Handler handler;
+    public final int index;
     private long lastTaskTime;
     private CountDownLatch syncLatch;
 
@@ -21,6 +23,9 @@ public class DispatchQueue extends Thread {
     public DispatchQueue(String str, boolean z) {
         this.handler = null;
         this.syncLatch = new CountDownLatch(1);
+        int i = indexPointer;
+        indexPointer = i + 1;
+        this.index = i;
         setName(str);
         if (z) {
             start();

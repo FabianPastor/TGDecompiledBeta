@@ -1,5 +1,7 @@
 package j$.util.function;
 
 public interface p {
-    double applyAsDouble(double d, double d2);
+    void accept(long j);
+
+    p f(p pVar);
 }

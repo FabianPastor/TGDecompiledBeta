@@ -40,7 +40,6 @@ import org.webrtc.RendererCommon;
 
 @TargetApi(21)
 public abstract class PrivateVideoPreviewDialog extends FrameLayout implements VoIPService.StateListener {
-    private ActionBar actionBar;
     private boolean cameraReady;
     /* access modifiers changed from: private */
     public int currentPage;
@@ -151,20 +150,19 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         this.textureView.renderer.setRotateTextureWitchScreen(true);
         this.textureView.renderer.setUseCameraRotation(true);
         addView(this.textureView, LayoutHelper.createFrame(-1, -1.0f));
-        ActionBar actionBar2 = new ActionBar(context2);
-        this.actionBar = actionBar2;
-        actionBar2.setBackButtonDrawable(new BackDrawable(false));
-        this.actionBar.setBackgroundColor(0);
-        this.actionBar.setItemsColor(Theme.getColor("voipgroup_actionBarItems"), false);
-        this.actionBar.setOccupyStatusBar(true);
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+        ActionBar actionBar = new ActionBar(context2);
+        actionBar.setBackButtonDrawable(new BackDrawable(false));
+        actionBar.setBackgroundColor(0);
+        actionBar.setItemsColor(Theme.getColor("voipgroup_actionBarItems"), false);
+        actionBar.setOccupyStatusBar(true);
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
                     PrivateVideoPreviewDialog.this.dismiss(false, false);
                 }
             }
         });
-        addView(this.actionBar);
+        addView(actionBar);
         AnonymousClass3 r2 = new TextView(getContext()) {
             private Paint[] gradientPaint;
 
@@ -300,11 +298,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             this.positiveButton.setForeground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_nameText"), 76)));
         }
         this.positiveButton.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f));
-        this.positiveButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PrivateVideoPreviewDialog.this.lambda$new$0$PrivateVideoPreviewDialog(view);
-            }
-        });
+        this.positiveButton.setOnClickListener(new PrivateVideoPreviewDialog$$ExternalSyntheticLambda0(this));
         addView(this.positiveButton, LayoutHelper.createFrame(-1, 48.0f, 80, 0.0f, 0.0f, 0.0f, 64.0f));
         LinearLayout linearLayout = new LinearLayout(context2);
         this.titlesLayout = linearLayout;
@@ -330,17 +324,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             } else {
                 this.titles[i].setText(LocaleController.getString("VoipBackCamera", NUM));
             }
-            this.titles[i].setOnClickListener(new View.OnClickListener(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    PrivateVideoPreviewDialog.this.lambda$new$1$PrivateVideoPreviewDialog(this.f$1, view);
-                }
-            });
+            this.titles[i].setOnClickListener(new PrivateVideoPreviewDialog$$ExternalSyntheticLambda1(this, i));
             i++;
         }
         setAlpha(0.0f);
@@ -350,7 +334,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             this.textureView.renderer.setMirror(sharedInstance.isFrontFaceCamera());
-            this.textureView.renderer.init(VideoCapturerDevice.getEglBase().getEglBaseContext(), new RendererCommon.RendererEvents() {
+            this.textureView.renderer.init(VideoCapturerDevice.getEglBase().getEglBaseContext(), new RendererCommon.RendererEvents(this) {
                 public void onFirstFrameRendered() {
                 }
 
@@ -370,24 +354,13 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             this.micIconView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             this.micEnabled = true;
             rLottieDrawable.setCurrentFrame(69);
-            this.micIconView.setOnClickListener(new View.OnClickListener(rLottieDrawable) {
-                public final /* synthetic */ RLottieDrawable f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    PrivateVideoPreviewDialog.this.lambda$new$2$PrivateVideoPreviewDialog(this.f$1, view);
-                }
-            });
+            this.micIconView.setOnClickListener(new PrivateVideoPreviewDialog$$ExternalSyntheticLambda2(this, rLottieDrawable));
             addView(this.micIconView, LayoutHelper.createFrame(48, 48.0f, 83, 24.0f, 0.0f, 0.0f, 136.0f));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$PrivateVideoPreviewDialog(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         if (!this.isDismissed) {
             if (this.currentPage != 0 || !this.needScreencast) {
                 dismiss(false, true);
@@ -398,14 +371,12 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$PrivateVideoPreviewDialog(int i, View view) {
+    public /* synthetic */ void lambda$new$1(int i, View view) {
         this.viewPager.setCurrentItem(i, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$PrivateVideoPreviewDialog(RLottieDrawable rLottieDrawable, View view) {
+    public /* synthetic */ void lambda$new$2(RLottieDrawable rLottieDrawable, View view) {
         boolean z = !this.micEnabled;
         this.micEnabled = z;
         if (z) {
@@ -638,8 +609,8 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
 
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v1, resolved type: android.widget.ImageView} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v3, resolved type: android.widget.ImageView} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v9, resolved type: android.widget.FrameLayout} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v10, resolved type: android.widget.ImageView} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v10, resolved type: android.widget.FrameLayout} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v11, resolved type: android.widget.ImageView} */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public java.lang.Object instantiateItem(android.view.ViewGroup r11, int r12) {
@@ -669,7 +640,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 r0.<init>(r2)
                 android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
                 r0.setScaleType(r2)
-                r2 = 2131166005(0x7var_, float:1.7946243E38)
+                r2 = 2131166010(0x7var_a, float:1.7946253E38)
                 r0.setImageResource(r2)
                 r3 = 82
                 r4 = 1118044160(0x42a40000, float:82.0)
@@ -684,7 +655,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r2 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this
                 android.content.Context r2 = r2.getContext()
                 r0.<init>(r2)
-                r2 = 2131628306(0x7f0e1112, float:1.88839E38)
+                r2 = 2131628342(0x7f0e1136, float:1.8883974E38)
                 java.lang.String r3 = "VoipVideoPrivateScreenSharing"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -710,58 +681,57 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 r7 = 1101529088(0x41a80000, float:21.0)
                 android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8)
                 r12.addView(r0, r1)
-                goto L_0x0100
+                goto L_0x00fd
             L_0x00a1:
                 android.widget.ImageView r0 = new android.widget.ImageView
                 org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r2 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this
                 android.content.Context r2 = r2.getContext()
                 r0.<init>(r2)
-                r2 = 2131165523(0x7var_, float:1.7945266E38)
-                r0.setImageResource(r2)
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r12)
-                r0.setTag(r3)
-                r3 = 0
-                java.io.File r4 = new java.io.File     // Catch:{ all -> 0x00f0 }
-                java.io.File r5 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x00f0 }
-                java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ all -> 0x00f0 }
-                r6.<init>()     // Catch:{ all -> 0x00f0 }
-                java.lang.String r7 = "cthumb"
-                r6.append(r7)     // Catch:{ all -> 0x00f0 }
-                if (r12 == 0) goto L_0x00d8
-                if (r12 != r1) goto L_0x00d7
-                org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r12 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this     // Catch:{ all -> 0x00f0 }
-                boolean r12 = r12.needScreencast     // Catch:{ all -> 0x00f0 }
-                if (r12 == 0) goto L_0x00d7
-                goto L_0x00d8
-            L_0x00d7:
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r12)
+                r0.setTag(r2)
+                r2 = 0
+                java.io.File r3 = new java.io.File     // Catch:{ all -> 0x00ea }
+                java.io.File r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x00ea }
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x00ea }
+                r5.<init>()     // Catch:{ all -> 0x00ea }
+                java.lang.String r6 = "cthumb"
+                r5.append(r6)     // Catch:{ all -> 0x00ea }
+                if (r12 == 0) goto L_0x00d2
+                if (r12 != r1) goto L_0x00d1
+                org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r12 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this     // Catch:{ all -> 0x00ea }
+                boolean r12 = r12.needScreencast     // Catch:{ all -> 0x00ea }
+                if (r12 == 0) goto L_0x00d1
+                goto L_0x00d2
+            L_0x00d1:
                 r1 = 2
-            L_0x00d8:
-                r6.append(r1)     // Catch:{ all -> 0x00f0 }
+            L_0x00d2:
+                r5.append(r1)     // Catch:{ all -> 0x00ea }
                 java.lang.String r12 = ".jpg"
-                r6.append(r12)     // Catch:{ all -> 0x00f0 }
-                java.lang.String r12 = r6.toString()     // Catch:{ all -> 0x00f0 }
-                r4.<init>(r5, r12)     // Catch:{ all -> 0x00f0 }
-                java.lang.String r12 = r4.getAbsolutePath()     // Catch:{ all -> 0x00f0 }
-                android.graphics.Bitmap r3 = android.graphics.BitmapFactory.decodeFile(r12)     // Catch:{ all -> 0x00f0 }
-                goto L_0x00f1
-            L_0x00f0:
+                r5.append(r12)     // Catch:{ all -> 0x00ea }
+                java.lang.String r12 = r5.toString()     // Catch:{ all -> 0x00ea }
+                r3.<init>(r4, r12)     // Catch:{ all -> 0x00ea }
+                java.lang.String r12 = r3.getAbsolutePath()     // Catch:{ all -> 0x00ea }
+                android.graphics.Bitmap r2 = android.graphics.BitmapFactory.decodeFile(r12)     // Catch:{ all -> 0x00ea }
+                goto L_0x00eb
+            L_0x00ea:
+            L_0x00eb:
+                if (r2 == 0) goto L_0x00f1
+                r0.setImageBitmap(r2)
+                goto L_0x00f7
             L_0x00f1:
-                if (r3 == 0) goto L_0x00f7
-                r0.setImageBitmap(r3)
-                goto L_0x00fa
+                r12 = 2131165528(0x7var_, float:1.7945276E38)
+                r0.setImageResource(r12)
             L_0x00f7:
-                r0.setImageResource(r2)
-            L_0x00fa:
                 android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.FIT_XY
                 r0.setScaleType(r12)
                 r12 = r0
-            L_0x0100:
+            L_0x00fd:
                 android.view.ViewParent r0 = r12.getParent()
-                if (r0 == 0) goto L_0x010f
+                if (r0 == 0) goto L_0x010c
                 android.view.ViewParent r0 = r12.getParent()
                 android.view.ViewGroup r0 = (android.view.ViewGroup) r0
                 r0.removeView(r12)
-            L_0x010f:
+            L_0x010c:
                 r0 = 0
                 r11.addView(r12, r0)
                 return r12

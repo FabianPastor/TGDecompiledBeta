@@ -36,7 +36,6 @@ public class VoIPTextureView extends FrameLayout {
     public static int SCALE_TYPE_FIT = 1;
     public static int SCALE_TYPE_NONE = 3;
     int animateFromHeight;
-    float animateFromRendererH;
     float animateFromRendererW;
     float animateFromThumbScale;
     int animateFromWidth;
@@ -62,7 +61,6 @@ public class VoIPTextureView extends FrameLayout {
     float currentThumbScale;
     boolean ignoreLayout;
     public final ImageView imageView;
-    final boolean isCamera;
     public final TextureViewRenderer renderer;
     float roundRadius;
     public float scaleTextureToFill;
@@ -86,29 +84,27 @@ public class VoIPTextureView extends FrameLayout {
     public VoIPTextureView(Context context, boolean z, boolean z2, boolean z3, boolean z4) {
         super(context);
         Context context2 = context;
-        boolean z5 = z;
-        boolean z6 = z2;
+        boolean z5 = z2;
         this.stubVisibleProgress = 1.0f;
         this.animateOnNextLayoutAnimations = new ArrayList<>();
         this.aninateFromScale = 1.0f;
         this.aninateFromScaleBlur = 1.0f;
         this.animateFromThumbScale = 1.0f;
-        this.isCamera = z5;
-        this.applyRotation = z6;
+        this.applyRotation = z5;
         ImageView imageView2 = new ImageView(context2);
         this.imageView = imageView2;
-        AnonymousClass1 r6 = new TextureViewRenderer(context2) {
+        AnonymousClass1 r5 = new TextureViewRenderer(context2) {
             public void onFirstFrameRendered() {
                 super.onFirstFrameRendered();
                 VoIPTextureView.this.onFirstFrameRendered();
             }
         };
-        this.renderer = r6;
-        r6.setFpsReduction(30.0f);
-        r6.setOpaque(false);
-        r6.setEnableHardwareScaler(true);
-        r6.setIsCamera(!z6);
-        if (!z5 && z6) {
+        this.renderer = r5;
+        r5.setFpsReduction(30.0f);
+        r5.setOpaque(false);
+        r5.setEnableHardwareScaler(true);
+        r5.setIsCamera(!z5);
+        if (!z && z5) {
             View view = new View(context2);
             this.backgroundView = view;
             view.setBackgroundColor(-14999773);
@@ -118,22 +114,22 @@ public class VoIPTextureView extends FrameLayout {
                 this.blurRenderer = textureView;
                 addView(textureView, LayoutHelper.createFrame(-1, -2, 17));
             }
-            r6.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
-            addView(r6, LayoutHelper.createFrame(-1, -2, 17));
-        } else if (!z5) {
+            r5.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
+            addView(r5, LayoutHelper.createFrame(-1, -2, 17));
+        } else if (!z) {
             if (z4) {
                 TextureView textureView2 = new TextureView(context2);
                 this.blurRenderer = textureView2;
                 addView(textureView2, LayoutHelper.createFrame(-1, -2, 17));
             }
-            addView(r6, LayoutHelper.createFrame(-1, -2, 17));
+            addView(r5, LayoutHelper.createFrame(-1, -2, 17));
         } else {
             if (z4) {
                 TextureView textureView3 = new TextureView(context2);
                 this.blurRenderer = textureView3;
                 addView(textureView3, LayoutHelper.createFrame(-1, -2, 17));
             }
-            addView(r6);
+            addView(r5);
         }
         addView(imageView2);
         TextureView textureView4 = this.blurRenderer;
@@ -177,7 +173,7 @@ public class VoIPTextureView extends FrameLayout {
             });
             setClipToOutline(true);
         }
-        if (z5 && this.cameraLastBitmap == null) {
+        if (z && this.cameraLastBitmap == null) {
             try {
                 Bitmap decodeFile = BitmapFactory.decodeFile(new File(ApplicationLoader.getFilesDirFixed(), "voip_icthumb.jpg").getAbsolutePath());
                 this.cameraLastBitmap = decodeFile;
@@ -189,7 +185,7 @@ public class VoIPTextureView extends FrameLayout {
             } catch (Throwable unused) {
             }
         }
-        if (!z6) {
+        if (!z5) {
             this.renderer.setScreenRotation(((WindowManager) getContext().getSystemService("window")).getDefaultDisplay().getRotation());
         }
     }
@@ -315,7 +311,7 @@ public class VoIPTextureView extends FrameLayout {
             this.aninateFromScaleBlur = this.scaleTextureToFillBlur;
             this.animateFromThumbScale = this.scaleThumb;
             this.animateFromRendererW = (float) this.renderer.getMeasuredWidth();
-            this.animateFromRendererH = (float) this.renderer.getMeasuredHeight();
+            this.renderer.getMeasuredHeight();
             this.animateOnNextLayout = true;
             requestLayout();
         }
@@ -448,25 +444,7 @@ public class VoIPTextureView extends FrameLayout {
             float f7 = this.animateFromThumbScale;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
             this.currentAnimation = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(f5, f6, f4, f3, f7) {
-                public final /* synthetic */ float f$1;
-                public final /* synthetic */ float f$2;
-                public final /* synthetic */ float f$3;
-                public final /* synthetic */ float f$4;
-                public final /* synthetic */ float f$5;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    VoIPTextureView.this.lambda$onLayout$0$VoIPTextureView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new VoIPTextureView$$ExternalSyntheticLambda0(this, f5, f6, f4, f3, f7));
             long j = this.animateNextDuration;
             if (j != 0) {
                 this.currentAnimation.setDuration(j);
@@ -517,8 +495,7 @@ public class VoIPTextureView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onLayout$0 */
-    public /* synthetic */ void lambda$onLayout$0$VoIPTextureView(float f, float f2, float f3, float f4, float f5, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onLayout$0(float f, float f2, float f3, float f4, float f5, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         float f6 = 1.0f - floatValue;
         this.animationProgress = f6;

@@ -18,7 +18,8 @@ public class EmptyTextProgressView extends FrameLayout {
     private int showAtPos;
     private TextView textView;
 
-    static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -49,7 +50,7 @@ public class EmptyTextProgressView extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
         AndroidUtilities.updateViewVisibilityAnimated(this.textView, false, 2.0f, false);
         AndroidUtilities.updateViewVisibilityAnimated(view, false, 1.0f, false);
-        setOnTouchListener($$Lambda$EmptyTextProgressView$8nH8zAnzG_iOQz8u5LEx8EcAeaI.INSTANCE);
+        setOnTouchListener(EmptyTextProgressView$$ExternalSyntheticLambda0.INSTANCE);
     }
 
     public void showProgress() {

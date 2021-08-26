@@ -5,8 +5,6 @@ import java.util.StringTokenizer;
 import org.aspectj.lang.Signature;
 
 abstract class SignatureImpl implements Signature {
-    static Class[] EMPTY_CLASS_ARRAY = new Class[0];
-    static String[] EMPTY_STRING_ARRAY = new String[0];
     private static boolean useCache = true;
     Class declaringType;
     String declaringTypeName;

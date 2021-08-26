@@ -199,39 +199,17 @@ public class Input {
             this.lastRemainder = 0.0d;
         }
         path.remainder = this.lastRemainder;
-        this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Runnable(path) {
-            public final /* synthetic */ Path f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                Input.this.lambda$paintPath$1$Input(this.f$1);
-            }
-        });
+        this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Input$$ExternalSyntheticLambda1(this, path));
         this.clearBuffer = false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$paintPath$0 */
-    public /* synthetic */ void lambda$paintPath$0$Input(Path path) {
+    public /* synthetic */ void lambda$paintPath$0(Path path) {
         this.lastRemainder = path.remainder;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$paintPath$1 */
-    public /* synthetic */ void lambda$paintPath$1$Input(Path path) {
-        AndroidUtilities.runOnUIThread(new Runnable(path) {
-            public final /* synthetic */ Path f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                Input.this.lambda$paintPath$0$Input(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$paintPath$1(Path path) {
+        AndroidUtilities.runOnUIThread(new Input$$ExternalSyntheticLambda0(this, path));
     }
 }

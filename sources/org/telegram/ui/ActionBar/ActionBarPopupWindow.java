@@ -33,7 +33,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarPopupWindow extends PopupWindow {
-    private static final ViewTreeObserver.OnScrollChangedListener NOP = $$Lambda$ActionBarPopupWindow$y7Ge_B8A6xMy5V21XZB4h9NMbPQ.INSTANCE;
+    private static final ViewTreeObserver.OnScrollChangedListener NOP = ActionBarPopupWindow$$ExternalSyntheticLambda0.INSTANCE;
     /* access modifiers changed from: private */
     public static final boolean allowAnimation = (Build.VERSION.SDK_INT >= 18);
     /* access modifiers changed from: private */
@@ -59,7 +59,8 @@ public class ActionBarPopupWindow extends PopupWindow {
         void onDispatchKeyEvent(KeyEvent keyEvent);
     }
 
-    static /* synthetic */ void lambda$static$0() {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$static$0() {
     }
 
     static {
@@ -83,9 +84,9 @@ public class ActionBarPopupWindow extends PopupWindow {
         /* access modifiers changed from: private */
         public boolean fitItems;
         /* access modifiers changed from: private */
-        public int gapEndY = Integer.MIN_VALUE;
+        public int gapEndY = -1000000;
         /* access modifiers changed from: private */
-        public int gapStartY = Integer.MIN_VALUE;
+        public int gapStartY = -1000000;
         /* access modifiers changed from: private */
         public ArrayList<AnimatorSet> itemAnimators;
         /* access modifiers changed from: private */
@@ -120,8 +121,8 @@ public class ActionBarPopupWindow extends PopupWindow {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     if (ActionBarPopupWindowLayout.this.fitItems) {
-                        int unused = ActionBarPopupWindowLayout.this.gapStartY = Integer.MIN_VALUE;
-                        int unused2 = ActionBarPopupWindowLayout.this.gapEndY = Integer.MIN_VALUE;
+                        int unused = ActionBarPopupWindowLayout.this.gapStartY = -1000000;
+                        int unused2 = ActionBarPopupWindowLayout.this.gapEndY = -1000000;
                         int childCount = getChildCount();
                         ArrayList arrayList = null;
                         int i3 = 0;
@@ -327,7 +328,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 int i = 0;
                 while (i < 2) {
                     if (i != 1 || scrollY >= (-AndroidUtilities.dp(16.0f))) {
-                        if (this.gapStartY != Integer.MIN_VALUE) {
+                        if (this.gapStartY != -1000000) {
                             canvas.save();
                             canvas.clipRect(0, this.bgPaddings.top, getMeasuredWidth(), getMeasuredHeight());
                         }
@@ -338,9 +339,15 @@ public class ActionBarPopupWindow extends PopupWindow {
                         } else if (scrollY > (-AndroidUtilities.dp(16.0f))) {
                             int measuredHeight2 = (int) (((float) getMeasuredHeight()) * this.backScaleY);
                             if (i == 0) {
-                                this.backgroundDrawable.setBounds(0, -this.scrollView.getScrollY(), (int) (((float) getMeasuredWidth()) * this.backScaleX), Math.min(measuredHeight2, AndroidUtilities.dp(16.0f) + scrollY));
+                                Drawable drawable = this.backgroundDrawable;
+                                int dp = (-this.scrollView.getScrollY()) + (this.gapStartY != -1000000 ? AndroidUtilities.dp(1.0f) : 0);
+                                int measuredWidth = (int) (((float) getMeasuredWidth()) * this.backScaleX);
+                                if (this.gapStartY != -1000000) {
+                                    measuredHeight2 = Math.min(measuredHeight2, AndroidUtilities.dp(16.0f) + scrollY);
+                                }
+                                drawable.setBounds(0, dp, measuredWidth, measuredHeight2);
                             } else if (measuredHeight2 < scrollY2) {
-                                if (this.gapStartY != Integer.MIN_VALUE) {
+                                if (this.gapStartY != -1000000) {
                                     canvas.restore();
                                 }
                                 i++;
@@ -351,7 +358,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                             this.backgroundDrawable.setBounds(0, this.gapStartY < 0 ? 0 : -AndroidUtilities.dp(16.0f), (int) (((float) getMeasuredWidth()) * this.backScaleX), (int) (((float) getMeasuredHeight()) * this.backScaleY));
                         }
                         this.backgroundDrawable.draw(canvas);
-                        if (this.gapStartY != Integer.MIN_VALUE) {
+                        if (this.gapStartY != -1000000) {
                             canvas.restore();
                         }
                         i++;

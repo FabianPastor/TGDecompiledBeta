@@ -41,7 +41,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -84,12 +83,11 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ScrollSlidingTextTabStrip;
 import org.telegram.ui.Components.SharedMediaLayout;
 import org.telegram.ui.Components.StickerEmptyView;
-import org.telegram.ui.MediaActivity;
 import org.telegram.ui.PhotoViewer;
 
 public class MediaActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
-    public static final Interpolator interpolator = $$Lambda$MediaActivity$dLEyJDEPsBVzy5sSUyNaqOU6ddc.INSTANCE;
+    public static final Interpolator interpolator = MediaActivity$$ExternalSyntheticLambda2.INSTANCE;
     public final Property<MediaActivity, Float> SCROLL_Y = new AnimationProperties.FloatProperty<MediaActivity>("animationValue") {
         public void setValue(MediaActivity mediaActivity, float f) {
             mediaActivity.setScrollY(f);
@@ -268,17 +266,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (z) {
                 BottomSheet.Builder builder = new BottomSheet.Builder(MediaActivity.this.getParentActivity());
                 builder.setTitle(str);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(str) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        MediaActivity.AnonymousClass15.this.lambda$onLinkPress$0$MediaActivity$15(this.f$1, dialogInterface, i);
-                    }
-                });
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new MediaActivity$15$$ExternalSyntheticLambda0(this, str));
                 MediaActivity.this.showDialog(builder.create());
                 return;
             }
@@ -286,8 +274,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onLinkPress$0 */
-        public /* synthetic */ void lambda$onLinkPress$0$MediaActivity$15(String str, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$onLinkPress$0(String str, DialogInterface dialogInterface, int i) {
             if (i == 0) {
                 MediaActivity.this.openUrl(str);
             } else if (i == 1) {
@@ -310,15 +297,18 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
     public boolean tabsAnimationInProgress;
     private SharedDocumentsAdapter voiceAdapter;
 
-    static /* synthetic */ boolean lambda$createView$1(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$1(View view, MotionEvent motionEvent) {
         return true;
     }
 
-    static /* synthetic */ boolean lambda$createView$4(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$4(View view, MotionEvent motionEvent) {
         return true;
     }
 
-    static /* synthetic */ float lambda$static$0(float f) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ float lambda$static$0(float f) {
         float f2 = f - 1.0f;
         return (f2 * f2 * f2 * f2 * f2) + 1.0f;
     }
@@ -465,7 +455,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r1 = r0.self
             if (r1 == 0) goto L_0x0081
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+            r1 = 2131627357(0x7f0e0d5d, float:1.8881976E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -515,7 +505,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = android.text.TextUtils.isEmpty(r0)
             if (r0 == 0) goto L_0x00f7
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131627537(0x7f0e0e11, float:1.8882341E38)
+            r1 = 2131627557(0x7f0e0e25, float:1.8882382E38)
             java.lang.String r3 = "SharedContentTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -531,7 +521,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.<init>()
             r0.setActionBarMenuOnItemClick(r1)
             android.content.res.Resources r0 = r27.getResources()
-            r1 = 2131165940(0x7var_f4, float:1.7946111E38)
+            r1 = 2131165945(0x7var_f9, float:1.7946121E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             r6.pinnedHeaderShadowDrawable = r0
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -578,7 +568,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0.clear()
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165473(0x7var_, float:1.7945164E38)
+            r1 = 2131165478(0x7var_, float:1.7945174E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r8, (int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setIsSearchField(r9)
             org.telegram.ui.MediaActivity$6 r1 = new org.telegram.ui.MediaActivity$6
@@ -586,7 +576,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setActionBarMenuItemSearchListener(r1)
             r6.searchItem = r0
             java.lang.String r1 = "Search"
-            r3 = 2131627349(0x7f0e0d55, float:1.888196E38)
+            r3 = 2131627369(0x7f0e0d69, float:1.8882E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r1, r3)
             r0.setSearchFieldHint(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -635,7 +625,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             r1.setTextColor(r3)
             org.telegram.ui.Components.NumberTextView r1 = r6.selectedMessagesCountTextView
-            org.telegram.ui.-$$Lambda$MediaActivity$1CPGTk7X9vrpdYDpnSoEXZ91qUY r3 = org.telegram.ui.$$Lambda$MediaActivity$1CPGTk7X9vrpdYDpnSoEXZ91qUY.INSTANCE
+            org.telegram.ui.MediaActivity$$ExternalSyntheticLambda0 r3 = org.telegram.ui.MediaActivity$$ExternalSyntheticLambda0.INSTANCE
             r1.setOnTouchListener(r3)
             org.telegram.ui.Components.NumberTextView r1 = r6.selectedMessagesCountTextView
             r12 = 0
@@ -654,7 +644,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (r1 == 0) goto L_0x026e
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
             r5 = 7
-            r12 = 2131165770(0x7var_a, float:1.7945766E38)
+            r12 = 2131165775(0x7var_f, float:1.7945777E38)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r14 = 2131623978(0x7f0e002a, float:1.8875123E38)
             java.lang.String r15 = "AccDescrGoToMessage"
@@ -663,18 +653,18 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r6.gotoItem = r5
             r1.add(r5)
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165742(0x7var_e, float:1.794571E38)
+            r5 = 2131165747(0x7var_, float:1.794572E38)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r13 = 2131625611(0x7f0e068b, float:1.8878435E38)
+            r13 = 2131625618(0x7f0e0692, float:1.887845E38)
             java.lang.String r14 = "Forward"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.addItemWithWidth(r3, r5, r12, r13)
             r1.add(r5)
         L_0x026e:
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165730(0x7var_, float:1.7945685E38)
+            r5 = 2131165735(0x7var_, float:1.7945696E38)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r12 = 2131625128(0x7f0e04a8, float:1.8877455E38)
+            r12 = 2131625133(0x7f0e04ad, float:1.8877465E38)
             java.lang.String r13 = "Delete"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItemWithWidth(r2, r5, r4, r12)
@@ -812,8 +802,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
             r1 = r1[r14]
             org.telegram.ui.Components.RecyclerListView r1 = r1.listView
-            org.telegram.ui.-$$Lambda$MediaActivity$InzucTHMHVuL-E3Lu7yqmoQ1PuA r4 = new org.telegram.ui.-$$Lambda$MediaActivity$InzucTHMHVuL-E3Lu7yqmoQ1PuA
-            r4.<init>(r3)
+            org.telegram.ui.MediaActivity$$ExternalSyntheticLambda4 r4 = new org.telegram.ui.MediaActivity$$ExternalSyntheticLambda4
+            r4.<init>(r6, r3)
             r1.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r4)
             org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
             r1 = r1[r14]
@@ -824,8 +814,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
             r1 = r1[r14]
             org.telegram.ui.Components.RecyclerListView r1 = r1.listView
-            org.telegram.ui.-$$Lambda$MediaActivity$VybcyTS7UbDtepFP2PfNG6KuZEQ r4 = new org.telegram.ui.-$$Lambda$MediaActivity$VybcyTS7UbDtepFP2PfNG6KuZEQ
-            r4.<init>(r3)
+            org.telegram.ui.MediaActivity$$ExternalSyntheticLambda5 r4 = new org.telegram.ui.MediaActivity$$ExternalSyntheticLambda5
+            r4.<init>(r6, r3)
             r1.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r4)
             if (r14 != 0) goto L_0x03e0
             r1 = -1
@@ -842,7 +832,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r4 = r6.mediaPages
             r4 = r4[r14]
             org.telegram.ui.MediaActivity$12 r10 = new org.telegram.ui.MediaActivity$12
-            r10.<init>(r7, r0)
+            r10.<init>(r6, r7, r0)
             org.telegram.ui.Components.ClippingImageView unused = r4.animatingImageView = r10
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
@@ -902,7 +892,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
             org.telegram.ui.Components.StickerEmptyView r0 = r0.emptyView
-            org.telegram.ui.-$$Lambda$MediaActivity$kZ4r8ROED1qURDTVb06yaTkPst8 r2 = org.telegram.ui.$$Lambda$MediaActivity$kZ4r8ROED1qURDTVb06yaTkPst8.INSTANCE
+            org.telegram.ui.MediaActivity$$ExternalSyntheticLambda1 r2 = org.telegram.ui.MediaActivity$$ExternalSyntheticLambda1.INSTANCE
             r0.setOnTouchListener(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
@@ -912,7 +902,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0 = r0[r14]
             org.telegram.ui.Components.StickerEmptyView r0 = r0.emptyView
             android.widget.TextView r0 = r0.title
-            r2 = 2131626371(0x7f0e0983, float:1.8879976E38)
+            r2 = 2131626388(0x7f0e0994, float:1.888001E38)
             java.lang.String r3 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -920,7 +910,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0 = r0[r14]
             org.telegram.ui.Components.StickerEmptyView r0 = r0.emptyView
             android.widget.TextView r0 = r0.subtitle
-            r2 = 2131627354(0x7f0e0d5a, float:1.888197E38)
+            r2 = 2131627374(0x7f0e0d6e, float:1.888201E38)
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -987,8 +977,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$MediaActivity(MediaPage mediaPage, View view, int i) {
+    public /* synthetic */ void lambda$createView$2(MediaPage mediaPage, View view, int i) {
         if (mediaPage.selectedType == 1 && (view instanceof SharedDocumentCell)) {
             onItemClick(i, view, ((SharedDocumentCell) view).getMessage(), 0, mediaPage.selectedType);
         } else if (mediaPage.selectedType == 3 && (view instanceof SharedLinkCell)) {
@@ -999,8 +988,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ boolean lambda$createView$3$MediaActivity(MediaPage mediaPage, View view, int i) {
+    public /* synthetic */ boolean lambda$createView$3(MediaPage mediaPage, View view, int i) {
         if (this.actionBar.isActionModeShowed()) {
             mediaPage.listView.getOnItemClickListener().onItemClick(view, i);
             return true;
@@ -1778,7 +1766,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x00ac
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r1 = 2131627544(0x7f0e0e18, float:1.8882355E38)
+            r1 = 2131627564(0x7f0e0e2c, float:1.8882396E38)
             java.lang.String r3 = "SharedMediaTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r2, r1)
@@ -1790,14 +1778,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x00c8
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r1 = 2131627538(0x7f0e0e12, float:1.8882343E38)
+            r1 = 2131627558(0x7f0e0e26, float:1.8882384E38)
             java.lang.String r3 = "SharedFilesTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r7, r1)
         L_0x00c8:
             long r0 = r10.dialog_id
             int r1 = (int) r0
-            r0 = 2131627546(0x7f0e0e1a, float:1.888236E38)
+            r0 = 2131627566(0x7f0e0e2e, float:1.88824E38)
             java.lang.String r3 = "SharedMusicTab2"
             if (r1 == 0) goto L_0x0106
             int[] r1 = r10.hasMedia
@@ -1807,7 +1795,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r1 = r1.hasTab(r4)
             if (r1 != 0) goto L_0x00ee
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r1 = r10.scrollSlidingTextTabStrip
-            r8 = 2131627542(0x7f0e0e16, float:1.8882351E38)
+            r8 = 2131627562(0x7f0e0e2a, float:1.8882392E38)
             java.lang.String r9 = "SharedLinksTab2"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r1.addTextTab(r4, r8)
@@ -1840,7 +1828,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r5)
             if (r0 != 0) goto L_0x0139
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r1 = 2131627550(0x7f0e0e1e, float:1.8882368E38)
+            r1 = 2131627570(0x7f0e0e32, float:1.8882408E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r5, r1)
@@ -2993,27 +2981,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                     int i4 = this.lastReqId + 1;
                     this.lastReqId = i4;
                     this.searchesInProgress++;
-                    this.reqId = ConnectionsManager.getInstance(MediaActivity.this.currentAccount).sendRequest(tLRPC$TL_messages_search, new RequestDelegate(i, i4) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ int f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            MediaActivity.MediaSearchAdapter.this.lambda$queryServerSearch$1$MediaActivity$MediaSearchAdapter(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                        }
-                    }, 2);
+                    this.reqId = ConnectionsManager.getInstance(MediaActivity.this.currentAccount).sendRequest(tLRPC$TL_messages_search, new MediaActivity$MediaSearchAdapter$$ExternalSyntheticLambda4(this, i, i4), 2);
                     ConnectionsManager.getInstance(MediaActivity.this.currentAccount).bindRequestToGuid(this.reqId, MediaActivity.this.classGuid);
                 }
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$queryServerSearch$1 */
-        public /* synthetic */ void lambda$queryServerSearch$1$MediaActivity$MediaSearchAdapter(int i, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        public /* synthetic */ void lambda$queryServerSearch$1(int i, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             ArrayList arrayList = new ArrayList();
             if (tLRPC$TL_error == null) {
                 TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
@@ -3024,24 +2999,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                     }
                 }
             }
-            AndroidUtilities.runOnUIThread(new Runnable(i2, arrayList) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ ArrayList f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    MediaActivity.MediaSearchAdapter.this.lambda$queryServerSearch$0$MediaActivity$MediaSearchAdapter(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new MediaActivity$MediaSearchAdapter$$ExternalSyntheticLambda0(this, i2, arrayList));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$queryServerSearch$0 */
-        public /* synthetic */ void lambda$queryServerSearch$0$MediaActivity$MediaSearchAdapter(int i, ArrayList arrayList) {
+        public /* synthetic */ void lambda$queryServerSearch$0(int i, ArrayList arrayList) {
             if (this.reqId != 0) {
                 if (i == this.lastReqId) {
                     this.globalSearch = arrayList;
@@ -3088,25 +3050,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                         MediaActivity.this.mediaPages[i].emptyView.showProgress(true, true);
                     }
                 }
-                $$Lambda$MediaActivity$MediaSearchAdapter$07YsZWgZU7J8BxWNJhLtmG2LMSs r0 = new Runnable(str) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        MediaActivity.MediaSearchAdapter.this.lambda$search$3$MediaActivity$MediaSearchAdapter(this.f$1);
-                    }
-                };
-                this.searchRunnable = r0;
-                AndroidUtilities.runOnUIThread(r0, 300);
+                MediaActivity$MediaSearchAdapter$$ExternalSyntheticLambda1 mediaActivity$MediaSearchAdapter$$ExternalSyntheticLambda1 = new MediaActivity$MediaSearchAdapter$$ExternalSyntheticLambda1(this, str);
+                this.searchRunnable = mediaActivity$MediaSearchAdapter$$ExternalSyntheticLambda1;
+                AndroidUtilities.runOnUIThread(mediaActivity$MediaSearchAdapter$$ExternalSyntheticLambda1, 300);
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$search$3 */
-        public /* synthetic */ void lambda$search$3$MediaActivity$MediaSearchAdapter(String str) {
+        public /* synthetic */ void lambda$search$3(String str) {
             int i;
             if (!MediaActivity.this.sharedMediaData[this.currentType].messages.isEmpty() && ((i = this.currentType) == 1 || i == 4)) {
                 MessageObject messageObject = MediaActivity.this.sharedMediaData[this.currentType].messages.get(MediaActivity.this.sharedMediaData[this.currentType].messages.size() - 1);
@@ -3118,25 +3069,12 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (i2 == 1 || i2 == 4) {
                 ArrayList arrayList = new ArrayList(MediaActivity.this.sharedMediaData[this.currentType].messages);
                 this.searchesInProgress++;
-                Utilities.searchQueue.postRunnable(new Runnable(str, arrayList) {
-                    public final /* synthetic */ String f$1;
-                    public final /* synthetic */ ArrayList f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run() {
-                        MediaActivity.MediaSearchAdapter.this.lambda$search$2$MediaActivity$MediaSearchAdapter(this.f$1, this.f$2);
-                    }
-                });
+                Utilities.searchQueue.postRunnable(new MediaActivity$MediaSearchAdapter$$ExternalSyntheticLambda2(this, str, arrayList));
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$search$2 */
-        public /* synthetic */ void lambda$search$2$MediaActivity$MediaSearchAdapter(String str, ArrayList arrayList) {
+        public /* synthetic */ void lambda$search$2(String str, ArrayList arrayList) {
             TLRPC$Document tLRPC$Document;
             boolean z;
             String str2;
@@ -3207,22 +3145,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         }
 
         private void updateSearchResults(ArrayList<MessageObject> arrayList) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-                public final /* synthetic */ ArrayList f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    MediaActivity.MediaSearchAdapter.this.lambda$updateSearchResults$4$MediaActivity$MediaSearchAdapter(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new MediaActivity$MediaSearchAdapter$$ExternalSyntheticLambda3(this, arrayList));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$4 */
-        public /* synthetic */ void lambda$updateSearchResults$4$MediaActivity$MediaSearchAdapter(ArrayList arrayList) {
+        public /* synthetic */ void lambda$updateSearchResults$4(ArrayList arrayList) {
             if (MediaActivity.this.searching) {
                 this.searchesInProgress--;
                 this.searchResult = arrayList;
@@ -3341,7 +3268,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (view != null) {
                 recyclerListView.removeView(view);
             }
-            recyclerListView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            recyclerListView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener(this) {
                 public boolean onPreDraw() {
                     recyclerListView.getViewTreeObserver().removeOnPreDrawListener(this);
                     int childCount = recyclerListView.getChildCount();
@@ -3410,17 +3337,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabUnactiveText"));
         arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{TextView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabSelector"));
         for (int i = 0; i < this.mediaPages.length; i++) {
-            $$Lambda$MediaActivity$VmhmobY0bDIl7DOSGhSpKbHpmdg r3 = new ThemeDescription.ThemeDescriptionDelegate(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void didSetColor() {
-                    MediaActivity.this.lambda$getThemeDescriptions$5$MediaActivity(this.f$1);
-                }
-            };
+            MediaActivity$$ExternalSyntheticLambda3 mediaActivity$$ExternalSyntheticLambda3 = new MediaActivity$$ExternalSyntheticLambda3(this, i);
             arrayList.add(new ThemeDescription(this.mediaPages[i].emptyView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
             arrayList.add(new ThemeDescription(this.mediaPages[i].progressView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
             arrayList.add(new ThemeDescription(this.mediaPages[i].listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -3452,9 +3369,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             arrayList.add(new ThemeDescription((View) this.mediaPages[i].listView, ThemeDescription.FLAG_SECTIONS, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
             arrayList.add(new ThemeDescription((View) this.mediaPages[i].listView, 0, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
             arrayList.add(new ThemeDescription((View) this.mediaPages[i].listView, 0, new Class[]{SharedPhotoVideoCell.class}, new String[]{"backgroundPaint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "sharedMedia_photoPlaceholder"));
-            $$Lambda$MediaActivity$VmhmobY0bDIl7DOSGhSpKbHpmdg r10 = r3;
-            arrayList.add(new ThemeDescription(this.mediaPages[i].listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedPhotoVideoCell.class}, (Paint) null, (Drawable[]) null, r10, "checkbox"));
-            arrayList.add(new ThemeDescription(this.mediaPages[i].listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedPhotoVideoCell.class}, (Paint) null, (Drawable[]) null, r10, "checkboxCheck"));
+            MediaActivity$$ExternalSyntheticLambda3 mediaActivity$$ExternalSyntheticLambda32 = mediaActivity$$ExternalSyntheticLambda3;
+            arrayList.add(new ThemeDescription(this.mediaPages[i].listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedPhotoVideoCell.class}, (Paint) null, (Drawable[]) null, mediaActivity$$ExternalSyntheticLambda32, "checkbox"));
+            arrayList.add(new ThemeDescription(this.mediaPages[i].listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedPhotoVideoCell.class}, (Paint) null, (Drawable[]) null, mediaActivity$$ExternalSyntheticLambda32, "checkboxCheck"));
             arrayList.add(new ThemeDescription(this.mediaPages[i].listView, 0, (Class[]) null, (Paint) null, new Drawable[]{this.pinnedHeaderShadowDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
             arrayList.add(new ThemeDescription(this.mediaPages[i].emptyView.title, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
             arrayList.add(new ThemeDescription(this.mediaPages[i].emptyView.subtitle, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
@@ -3463,8 +3380,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$5 */
-    public /* synthetic */ void lambda$getThemeDescriptions$5$MediaActivity(int i) {
+    public /* synthetic */ void lambda$getThemeDescriptions$5(int i) {
         if (this.mediaPages[i].listView != null) {
             int childCount = this.mediaPages[i].listView.getChildCount();
             for (int i2 = 0; i2 < childCount; i2++) {

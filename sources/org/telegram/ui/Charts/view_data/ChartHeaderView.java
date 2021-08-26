@@ -66,17 +66,12 @@ public class ChartHeaderView extends FrameLayout {
         this.back.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
         this.back.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f));
         this.back.setBackground(Theme.getRoundRectSelectorDrawable(Theme.getColor("featuredStickers_removeButtonText")));
-        this.datesTmp.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            public final void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
-                ChartHeaderView.this.lambda$new$0$ChartHeaderView(view, i, i2, i3, i4, i5, i6, i7, i8);
-            }
-        });
+        this.datesTmp.addOnLayoutChangeListener(new ChartHeaderView$$ExternalSyntheticLambda0(this));
         recolor();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ChartHeaderView(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+    public /* synthetic */ void lambda$new$0(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
         TextView textView = this.datesTmp;
         textView.setPivotX(((float) textView.getMeasuredWidth()) * 0.7f);
         TextView textView2 = this.dates;

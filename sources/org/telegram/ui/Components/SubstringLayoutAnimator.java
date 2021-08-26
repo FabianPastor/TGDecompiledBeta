@@ -81,11 +81,7 @@ public class SubstringLayoutAnimator {
             this.hintProgress = 0.0f;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.valueAnimator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    SubstringLayoutAnimator.this.lambda$create$0$SubstringLayoutAnimator(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new SubstringLayoutAnimator$$ExternalSyntheticLambda0(this));
             this.valueAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     SubstringLayoutAnimator.this.animateTextChange = false;
@@ -98,8 +94,7 @@ public class SubstringLayoutAnimator {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$create$0 */
-    public /* synthetic */ void lambda$create$0$SubstringLayoutAnimator(ValueAnimator valueAnimator2) {
+    public /* synthetic */ void lambda$create$0(ValueAnimator valueAnimator2) {
         this.hintProgress = ((Float) valueAnimator2.getAnimatedValue()).floatValue();
         this.parentView.invalidate();
     }

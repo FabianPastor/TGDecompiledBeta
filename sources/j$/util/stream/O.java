@@ -1,16 +1,29 @@
 package j$.util.stream;
 
-import j$.util.function.I;
+class O extends S {
+    public final /* synthetic */ int l = 1;
 
-public final /* synthetic */ class O implements I {
-    public static final /* synthetic */ O a = new O();
-
-    private /* synthetic */ O() {
+    public O(T t, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i) {
+        super(cVar, f4Var, i);
     }
 
-    public final void accept(Object obj, long j) {
-        long[] jArr = (long[]) obj;
-        jArr[0] = jArr[0] + 1;
-        jArr[1] = jArr[1] + j;
+    /* access modifiers changed from: package-private */
+    public CLASSNAMEn3 H0(int i, CLASSNAMEn3 n3Var) {
+        switch (this.l) {
+            case 0:
+                return n3Var;
+            case 1:
+                return new F0(this, n3Var);
+            default:
+                return new CLASSNAMEa1(this, n3Var);
+        }
+    }
+
+    public O(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i) {
+        super(cVar, f4Var, i);
+    }
+
+    public O(CLASSNAMEe1 e1Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i) {
+        super(cVar, f4Var, i);
     }
 }

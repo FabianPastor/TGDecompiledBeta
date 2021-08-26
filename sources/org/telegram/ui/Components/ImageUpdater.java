@@ -66,7 +66,6 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     private ImageReceiver imageReceiver;
     private boolean openWithFrontfaceCamera;
     public BaseFragment parentFragment;
-    private File picturePath = null;
     private boolean searchAvailable;
     private boolean showingFromDialog;
     private TLRPC$PhotoSize smallPhoto;
@@ -176,19 +175,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             for (int i = 0; i < size; i++) {
                 iArr[i] = ((Integer) arrayList2.get(i)).intValue();
             }
-            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), iArr, new DialogInterface.OnClickListener(arrayList3, runnable) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ Runnable f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ImageUpdater.this.lambda$openMenu$0$ImageUpdater(this.f$1, this.f$2, dialogInterface, i);
-                }
-            });
+            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), iArr, new ImageUpdater$$ExternalSyntheticLambda0(this, arrayList3, runnable));
             BottomSheet create = builder.create();
             create.setOnHideListener(onDismissListener);
             this.parentFragment.showDialog(create);
@@ -199,8 +186,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openMenu$0 */
-    public /* synthetic */ void lambda$openMenu$0$ImageUpdater(ArrayList arrayList, Runnable runnable, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$openMenu$0(ArrayList arrayList, Runnable runnable, DialogInterface dialogInterface, int i) {
         int intValue = ((Integer) arrayList.get(i)).intValue();
         if (intValue == 0) {
             openCamera();
@@ -350,9 +336,6 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     BaseFragment baseFragment = ImageUpdater.this.parentFragment;
                     if (baseFragment != null && baseFragment.getParentActivity() != null && ImageUpdater.this.chatAttachAlert != null) {
                         if (i == 8 || i == 7) {
-                            if (i != 8) {
-                                ImageUpdater.this.chatAttachAlert.dismiss();
-                            }
                             HashMap<Object, Object> selectedPhotos = ImageUpdater.this.chatAttachAlert.getPhotoLayout().getSelectedPhotos();
                             ArrayList<Object> selectedPhotosOrder = ImageUpdater.this.chatAttachAlert.getPhotoLayout().getSelectedPhotosOrder();
                             ArrayList arrayList = new ArrayList();
@@ -407,6 +390,10 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                                 }
                             }
                             ImageUpdater.this.didSelectPhotos(arrayList);
+                            if (i != 8) {
+                                ImageUpdater.this.chatAttachAlert.dismiss();
+                                return;
+                            }
                             return;
                         }
                         ImageUpdater.this.chatAttachAlert.dismissWithButtonClick(i);
@@ -600,24 +587,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     }
 
     private void startCrop(String str, Uri uri) {
-        AndroidUtilities.runOnUIThread(new Runnable(str, uri) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ Uri f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                ImageUpdater.this.lambda$startCrop$1$ImageUpdater(this.f$1, this.f$2);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ImageUpdater$$ExternalSyntheticLambda1(this, str, uri));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startCrop$1 */
-    public /* synthetic */ void lambda$startCrop$1$ImageUpdater(String str, Uri uri) {
+    public /* synthetic */ void lambda$startCrop$1(String str, Uri uri) {
         try {
             LaunchActivity launchActivity = (LaunchActivity) this.parentFragment.getParentActivity();
             if (launchActivity != null) {

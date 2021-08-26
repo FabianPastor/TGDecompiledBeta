@@ -56,6 +56,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
             case -1441072131:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionSetMessagesTTL();
                 break;
+            case -1434950843:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionSetChatTheme();
+                break;
             case -1410748418:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionBotAllowed();
                 break;

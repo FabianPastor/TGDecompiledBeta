@@ -209,8 +209,8 @@ public class VideoPlayerRewinder {
             if (r0 == 0) goto L_0x007f
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
         L_0x007f:
-            org.telegram.messenger.video.-$$Lambda$VideoPlayerRewinder$aqzxa_dQGinaE7NZE428KdxXqPU r0 = new org.telegram.messenger.video.-$$Lambda$VideoPlayerRewinder$aqzxa_dQGinaE7NZE428KdxXqPU
-            r0.<init>()
+            org.telegram.messenger.video.VideoPlayerRewinder$$ExternalSyntheticLambda0 r0 = new org.telegram.messenger.video.VideoPlayerRewinder$$ExternalSyntheticLambda0
+            r0.<init>(r4)
             r4.updateRewindRunnable = r0
             r1 = 2000(0x7d0, double:9.88E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
@@ -221,8 +221,7 @@ public class VideoPlayerRewinder {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$incrementRewindCount$0 */
-    public /* synthetic */ void lambda$incrementRewindCount$0$VideoPlayerRewinder() {
+    public /* synthetic */ void lambda$incrementRewindCount$0() {
         this.updateRewindRunnable = null;
         incrementRewindCount();
     }

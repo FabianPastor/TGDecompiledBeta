@@ -42,7 +42,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.QuickAckDelegate;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$ChannelParticipant;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -109,7 +108,6 @@ import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.PeopleNearbyActivity;
-import org.telegram.ui.StatisticActivity;
 
 public class StatisticActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
@@ -249,8 +247,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         L_0x0038:
             r3 = r0
             org.telegram.tgnet.ConnectionsManager r2 = r11.getConnectionsManager()
-            org.telegram.ui.-$$Lambda$StatisticActivity$jJBfM1L5th1MS2e7_Vgn-FGf6xU r4 = new org.telegram.ui.-$$Lambda$StatisticActivity$jJBfM1L5th1MS2e7_Vgn-FGf6xU
-            r4.<init>()
+            org.telegram.ui.StatisticActivity$$ExternalSyntheticLambda5 r4 = new org.telegram.ui.StatisticActivity$$ExternalSyntheticLambda5
+            r4.<init>(r11)
             r5 = 0
             r6 = 0
             r7 = 0
@@ -269,8 +267,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onFragmentCreate$2 */
-    public /* synthetic */ void lambda$onFragmentCreate$2$StatisticActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$onFragmentCreate$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         TLObject tLObject2 = tLObject;
         if (tLObject2 instanceof TLRPC$TL_stats_broadcastStats) {
             TLRPC$TL_stats_broadcastStats tLRPC$TL_stats_broadcastStats = (TLRPC$TL_stats_broadcastStats) tLObject2;
@@ -293,17 +290,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 int i2 = this.recentPostsAll.get(0).counters.msg_id;
                 getMessagesStorage().getMessages((long) (-this.chat.id), 0, false, this.recentPostsAll.size(), i2, 0, 0, this.classGuid, 0, true, false, 0, 0, true);
             }
-            AndroidUtilities.runOnUIThread(new Runnable(chartViewDataArr) {
-                public final /* synthetic */ StatisticActivity.ChartViewData[] f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    StatisticActivity.this.lambda$onFragmentCreate$0$StatisticActivity(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new StatisticActivity$$ExternalSyntheticLambda2(this, chartViewDataArr));
         }
         if (tLObject2 instanceof TLRPC$TL_stats_megagroupStats) {
             TLRPC$TL_stats_megagroupStats tLRPC$TL_stats_megagroupStats = (TLRPC$TL_stats_megagroupStats) tLObject2;
@@ -344,23 +331,12 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     this.topInviters.add(MemberData.from(tLRPC$TL_stats_megagroupStats.top_inviters.get(i5), tLRPC$TL_stats_megagroupStats.users));
                 }
             }
-            AndroidUtilities.runOnUIThread(new Runnable(chartViewDataArr2) {
-                public final /* synthetic */ StatisticActivity.ChartViewData[] f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    StatisticActivity.this.lambda$onFragmentCreate$1$StatisticActivity(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new StatisticActivity$$ExternalSyntheticLambda3(this, chartViewDataArr2));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onFragmentCreate$0 */
-    public /* synthetic */ void lambda$onFragmentCreate$0$StatisticActivity(ChartViewData[] chartViewDataArr) {
+    public /* synthetic */ void lambda$onFragmentCreate$0(ChartViewData[] chartViewDataArr) {
         this.ivInteractionsData = chartViewDataArr[0];
         this.followersData = chartViewDataArr[1];
         this.topHoursData = chartViewDataArr[2];
@@ -374,8 +350,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onFragmentCreate$1 */
-    public /* synthetic */ void lambda$onFragmentCreate$1$StatisticActivity(ChartViewData[] chartViewDataArr) {
+    public /* synthetic */ void lambda$onFragmentCreate$1(ChartViewData[] chartViewDataArr) {
         this.growthData = chartViewDataArr[0];
         this.groupMembersData = chartViewDataArr[1];
         this.newMembersBySourceData = chartViewDataArr[2];
@@ -516,7 +491,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2);
         this.layoutManager = linearLayoutManager;
         this.recyclerListView.setLayoutManager(linearLayoutManager);
-        this.animator = new DefaultItemAnimator() {
+        this.animator = new DefaultItemAnimator(this) {
             /* access modifiers changed from: protected */
             public long getAddAnimationDelay(long j, long j2, long j3) {
                 return j;
@@ -530,16 +505,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
             }
         });
-        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                StatisticActivity.this.lambda$createView$3$StatisticActivity(view, i);
-            }
-        });
-        this.recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return StatisticActivity.this.lambda$createView$5$StatisticActivity(view, i);
-            }
-        });
+        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new StatisticActivity$$ExternalSyntheticLambda7(this));
+        this.recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new StatisticActivity$$ExternalSyntheticLambda8(this));
         frameLayout.addView(this.recyclerListView);
         ChatAvatarContainer chatAvatarContainer = new ChatAvatarContainer(context2, (ChatActivity) null, false);
         this.avatarContainer = chatAvatarContainer;
@@ -575,8 +542,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$StatisticActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$3(View view, int i) {
         Adapter adapter2 = this.adapter;
         int i2 = adapter2.recentPostsStartRow;
         if (i < i2 || i > adapter2.recentPostsEndRow) {
@@ -612,8 +578,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$5 */
-    public /* synthetic */ boolean lambda$createView$5$StatisticActivity(View view, int i) {
+    public /* synthetic */ boolean lambda$createView$5(View view, int i) {
         Adapter adapter2 = this.adapter;
         int i2 = adapter2.recentPostsStartRow;
         if (i < i2 || i > adapter2.recentPostsEndRow) {
@@ -646,25 +611,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             arrayList2.add(1);
             arrayList3.add(NUM);
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[arrayList2.size()]), AndroidUtilities.toIntArray(arrayList3), new DialogInterface.OnClickListener(messageObject) {
-                public final /* synthetic */ MessageObject f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    StatisticActivity.this.lambda$createView$4$StatisticActivity(this.f$1, dialogInterface, i);
-                }
-            });
+            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[arrayList2.size()]), AndroidUtilities.toIntArray(arrayList3), new StatisticActivity$$ExternalSyntheticLambda0(this, messageObject));
             showDialog(builder.create());
         }
         return false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$StatisticActivity(MessageObject messageObject, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$4(MessageObject messageObject, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             presentFragment(new MessageStatisticActivity(messageObject));
         } else if (i == 1) {
@@ -875,7 +829,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 android.content.Context r5 = r5.getContext()
                 org.telegram.ui.StatisticActivity r2 = org.telegram.ui.StatisticActivity.this
                 org.telegram.ui.Charts.BaseChartView$SharedUiComponents r2 = r2.sharedUi
-                r1.<init>(r5, r6, r2)
+                r1.<init>(r4, r5, r6, r2)
                 r1.setWillNotDraw(r0)
                 goto L_0x00be
             L_0x001a:
@@ -885,7 +839,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 android.content.Context r5 = r5.getContext()
                 org.telegram.ui.StatisticActivity r6 = org.telegram.ui.StatisticActivity.this
                 org.telegram.tgnet.TLRPC$ChatFull r6 = r6.chat
-                r1.<init>(r5, r6)
+                r1.<init>(r4, r5, r6)
                 r1.setWillNotDraw(r0)
                 goto L_0x00be
             L_0x0032:
@@ -912,7 +866,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 if (r6 != r3) goto L_0x0084
                 org.telegram.ui.StatisticActivity$Adapter$3 r1 = new org.telegram.ui.StatisticActivity$Adapter$3
                 android.content.Context r5 = r5.getContext()
-                r1.<init>(r5)
+                r1.<init>(r4, r5)
                 r1.setWillNotDraw(r0)
                 int r5 = r1.getPaddingLeft()
                 r6 = 1098907648(0x41800000, float:16.0)
@@ -1440,27 +1394,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                         ZoomCancelable unused = statisticActivity.lastCancelable = zoomCancelable;
                         zoomCancelable.adapterPosition = StatisticActivity.this.recyclerListView.getChildAdapterPosition(this);
                         this.chartView.legendSignatureView.showProgress(true, false);
-                        ConnectionsManager.getInstance(StatisticActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(StatisticActivity.this.currentAccount).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate(str, zoomCancelable) {
-                            public final /* synthetic */ String f$1;
-                            public final /* synthetic */ StatisticActivity.ZoomCancelable f$2;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                            }
-
-                            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                StatisticActivity.ChartCell.this.lambda$onZoomed$1$StatisticActivity$ChartCell(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                            }
-                        }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, StatisticActivity.this.chat.stats_dc, 1, true), StatisticActivity.this.classGuid);
+                        ConnectionsManager.getInstance(StatisticActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(StatisticActivity.this.currentAccount).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new StatisticActivity$ChartCell$$ExternalSyntheticLambda1(this, str, zoomCancelable), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, StatisticActivity.this.chat.stats_dc, 1, true), StatisticActivity.this.classGuid);
                     }
                 }
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onZoomed$1 */
-        public /* synthetic */ void lambda$onZoomed$1$StatisticActivity$ChartCell(String str, ZoomCancelable zoomCancelable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        public /* synthetic */ void lambda$onZoomed$1(String str, ZoomCancelable zoomCancelable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             boolean z = true;
             ChartData chartData = null;
             if (tLObject instanceof TLRPC$TL_statsGraph) {
@@ -1478,26 +1419,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             } else if (tLObject instanceof TLRPC$TL_statsGraphError) {
                 Toast.makeText(getContext(), ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
             }
-            AndroidUtilities.runOnUIThread(new Runnable(chartData, str, zoomCancelable) {
-                public final /* synthetic */ ChartData f$1;
-                public final /* synthetic */ String f$2;
-                public final /* synthetic */ StatisticActivity.ZoomCancelable f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    StatisticActivity.ChartCell.this.lambda$onZoomed$0$StatisticActivity$ChartCell(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new StatisticActivity$ChartCell$$ExternalSyntheticLambda0(this, chartData, str, zoomCancelable));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onZoomed$0 */
-        public /* synthetic */ void lambda$onZoomed$0$StatisticActivity$ChartCell(ChartData chartData, String str, ZoomCancelable zoomCancelable) {
+        public /* synthetic */ void lambda$onZoomed$0(ChartData chartData, String str, ZoomCancelable zoomCancelable) {
             if (chartData != null) {
                 StatisticActivity.this.childDataCache.put(str, chartData);
             }
@@ -1543,7 +1469,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.chartType = i;
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(1);
-            this.checkboxContainer = new FrameLayout(context) {
+            this.checkboxContainer = new FrameLayout(this, context) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     super.onMeasure(i, i2);
@@ -1579,11 +1505,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             ChartHeaderView chartHeaderView2 = new ChartHeaderView(getContext());
             this.chartHeaderView = chartHeaderView2;
             chartHeaderView2.back.setOnTouchListener(new RecyclerListView.FoucsableOnTouchListener());
-            this.chartHeaderView.back.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    StatisticActivity.BaseChartCell.this.lambda$new$0$StatisticActivity$BaseChartCell(view);
-                }
-            });
+            this.chartHeaderView.back.setOnClickListener(new StatisticActivity$BaseChartCell$$ExternalSyntheticLambda3(this));
             if (i == 1) {
                 this.chartView = new DoubleLinearChartView(getContext());
                 DoubleLinearChartView doubleLinearChartView = new DoubleLinearChartView(getContext());
@@ -1625,23 +1547,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             frameLayout.addView(this.errorTextView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 30.0f));
             this.progressView.setVisibility(8);
             this.errorTextView.setTextColor(Theme.getColor("dialogTextGray4"));
-            this.chartView.setDateSelectionListener(new BaseChartView.DateSelectionListener() {
-                public final void onDateSelected(long j) {
-                    StatisticActivity.BaseChartCell.this.lambda$new$1$StatisticActivity$BaseChartCell(j);
-                }
-            });
+            this.chartView.setDateSelectionListener(new StatisticActivity$BaseChartCell$$ExternalSyntheticLambda5(this));
             this.chartView.legendSignatureView.showProgress(false, false);
             this.chartView.legendSignatureView.setOnTouchListener(new RecyclerListView.FoucsableOnTouchListener());
-            this.chartView.legendSignatureView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    StatisticActivity.BaseChartCell.this.lambda$new$2$StatisticActivity$BaseChartCell(view);
-                }
-            });
-            this.zoomedChartView.legendSignatureView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    StatisticActivity.BaseChartCell.this.lambda$new$3$StatisticActivity$BaseChartCell(view);
-                }
-            });
+            this.chartView.legendSignatureView.setOnClickListener(new StatisticActivity$BaseChartCell$$ExternalSyntheticLambda2(this));
+            this.zoomedChartView.legendSignatureView.setOnClickListener(new StatisticActivity$BaseChartCell$$ExternalSyntheticLambda4(this));
             this.chartView.setVisibility(0);
             this.zoomedChartView.setVisibility(4);
             this.chartView.setHeader(this.chartHeaderView);
@@ -1658,27 +1568,23 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$StatisticActivity$BaseChartCell(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             zoomOut(true);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$1 */
-        public /* synthetic */ void lambda$new$1$StatisticActivity$BaseChartCell(long j) {
+        public /* synthetic */ void lambda$new$1(long j) {
             zoomCanceled();
             this.chartView.legendSignatureView.showProgress(false, false);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$2 */
-        public /* synthetic */ void lambda$new$2$StatisticActivity$BaseChartCell(View view) {
+        public /* synthetic */ void lambda$new$2(View view) {
             onZoomed();
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$3 */
-        public /* synthetic */ void lambda$new$3$StatisticActivity$BaseChartCell(View view) {
+        public /* synthetic */ void lambda$new$3(View view) {
             this.zoomedChartView.animateLegend(false);
         }
 
@@ -1838,7 +1744,6 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             ChartPickerDelegate chartPickerDelegate = this.chartView.pickerDelegate;
             transitionParams.pickerEndOut = chartPickerDelegate.pickerEnd;
             transitionParams.pickerStartOut = chartPickerDelegate.pickerStart;
-            transitionParams.date = j;
             int binarySearch = Arrays.binarySearch(this.data.chartData.x, j);
             if (binarySearch < 0) {
                 binarySearch = this.data.chartData.x.length - 1;
@@ -1871,27 +1776,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             }
             fArr[1] = f4;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(transitionParams, f3) {
-                public final /* synthetic */ TransitionParams f$1;
-                public final /* synthetic */ float f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    StatisticActivity.BaseChartCell.this.lambda$createTransitionAnimator$4$StatisticActivity$BaseChartCell(this.f$1, this.f$2, valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new StatisticActivity$BaseChartCell$$ExternalSyntheticLambda1(this, transitionParams, f3));
             ofFloat.setDuration(400);
             ofFloat.setInterpolator(new FastOutSlowInInterpolator());
             return ofFloat;
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$createTransitionAnimator$4 */
-        public /* synthetic */ void lambda$createTransitionAnimator$4$StatisticActivity$BaseChartCell(TransitionParams transitionParams, float f, ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$createTransitionAnimator$4(TransitionParams transitionParams, float f, ValueAnimator valueAnimator) {
             BaseChartView baseChartView = this.chartView;
             float f2 = baseChartView.chartWidth;
             ChartPickerDelegate chartPickerDelegate = baseChartView.pickerDelegate;
@@ -1912,7 +1804,6 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 this.chartHeaderView.setTitle(chartViewData.title);
                 boolean z2 = getContext().getResources().getConfiguration().orientation == 2;
                 this.chartView.setLandscape(z2);
-                chartViewData.viewShowed = true;
                 this.zoomedChartView.setLandscape(z2);
                 this.data = chartViewData;
                 if (chartViewData.isEmpty || chartViewData.isError) {
@@ -1969,11 +1860,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                         this.chartView.transitionParams = new TransitionParams();
                         this.chartView.transitionParams.progress = 0.0f;
-                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                StatisticActivity.BaseChartCell.this.lambda$updateData$5$StatisticActivity$BaseChartCell(valueAnimator);
-                            }
-                        });
+                        ofFloat.addUpdateListener(new StatisticActivity$BaseChartCell$$ExternalSyntheticLambda0(this));
                         ofFloat.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 BaseChartCell baseChartCell = BaseChartCell.this;
@@ -1994,8 +1881,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateData$5 */
-        public /* synthetic */ void lambda$updateData$5$StatisticActivity$BaseChartCell(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$updateData$5(ValueAnimator valueAnimator) {
             float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             this.progressView.setAlpha(1.0f - floatValue);
             this.chartView.transitionParams.progress = floatValue;
@@ -2053,127 +1939,12 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 this.checkBox.setText(lineViewData.line.name);
                 this.checkBox.setChecked(lineViewData.enabled, false);
                 this.checkBox.setOnTouchListener(new RecyclerListView.FoucsableOnTouchListener());
-                this.checkBox.setOnClickListener(
-                /*  JADX ERROR: Method code generation error
-                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0024: INVOKE  
-                      (wrap: org.telegram.ui.Components.FlatCheckBox : 0x001d: IGET  (r0v3 org.telegram.ui.Components.FlatCheckBox) = 
-                      (r3v0 'this' org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder A[THIS])
-                     org.telegram.ui.StatisticActivity.BaseChartCell.CheckBoxHolder.checkBox org.telegram.ui.Components.FlatCheckBox)
-                      (wrap: org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8 : 0x0021: CONSTRUCTOR  (r1v4 org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8) = 
-                      (r3v0 'this' org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder A[THIS])
-                      (r4v0 'lineViewData' org.telegram.ui.Charts.view_data.LineViewData)
-                     call: org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8.<init>(org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder, org.telegram.ui.Charts.view_data.LineViewData):void type: CONSTRUCTOR)
-                     android.view.View.setOnClickListener(android.view.View$OnClickListener):void type: VIRTUAL in method: org.telegram.ui.StatisticActivity.BaseChartCell.CheckBoxHolder.setData(org.telegram.ui.Charts.view_data.LineViewData):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0021: CONSTRUCTOR  (r1v4 org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8) = 
-                      (r3v0 'this' org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder A[THIS])
-                      (r4v0 'lineViewData' org.telegram.ui.Charts.view_data.LineViewData)
-                     call: org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8.<init>(org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder, org.telegram.ui.Charts.view_data.LineViewData):void type: CONSTRUCTOR in method: org.telegram.ui.StatisticActivity.BaseChartCell.CheckBoxHolder.setData(org.telegram.ui.Charts.view_data.LineViewData):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                    	... 59 more
-                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8, state: NOT_LOADED
-                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	... 65 more
-                    */
-                /*
-                    this = this;
-                    r3.line = r4
-                    org.telegram.ui.Components.FlatCheckBox r0 = r3.checkBox
-                    org.telegram.ui.Charts.data.ChartData$Line r1 = r4.line
-                    java.lang.String r1 = r1.name
-                    r0.setText(r1)
-                    org.telegram.ui.Components.FlatCheckBox r0 = r3.checkBox
-                    boolean r1 = r4.enabled
-                    r2 = 0
-                    r0.setChecked(r1, r2)
-                    org.telegram.ui.Components.FlatCheckBox r0 = r3.checkBox
-                    org.telegram.ui.Components.RecyclerListView$FoucsableOnTouchListener r1 = new org.telegram.ui.Components.RecyclerListView$FoucsableOnTouchListener
-                    r1.<init>()
-                    r0.setOnTouchListener(r1)
-                    org.telegram.ui.Components.FlatCheckBox r0 = r3.checkBox
-                    org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8 r1 = new org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8
-                    r1.<init>(r3, r4)
-                    r0.setOnClickListener(r1)
-                    org.telegram.ui.Components.FlatCheckBox r0 = r3.checkBox
-                    org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$gUN4c8CJkK3nanoFAjLqsmgvpYE r1 = new org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$gUN4c8CJkK3nanoFAjLqsmgvpYE
-                    r1.<init>(r3, r4)
-                    r0.setOnLongClickListener(r1)
-                    return
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.BaseChartCell.CheckBoxHolder.setData(org.telegram.ui.Charts.view_data.LineViewData):void");
+                this.checkBox.setOnClickListener(new StatisticActivity$BaseChartCell$CheckBoxHolder$$ExternalSyntheticLambda0(this, lineViewData));
+                this.checkBox.setOnLongClickListener(new StatisticActivity$BaseChartCell$CheckBoxHolder$$ExternalSyntheticLambda1(this, lineViewData));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$setData$0 */
-            public /* synthetic */ void lambda$setData$0$StatisticActivity$BaseChartCell$CheckBoxHolder(LineViewData lineViewData, View view) {
+            public /* synthetic */ void lambda$setData$0(LineViewData lineViewData, View view) {
                 if (this.checkBox.enabled) {
                     int size = BaseChartCell.this.checkBoxes.size();
                     boolean z = false;
@@ -2207,8 +1978,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$setData$1 */
-            public /* synthetic */ boolean lambda$setData$1$StatisticActivity$BaseChartCell$CheckBoxHolder(LineViewData lineViewData, View view) {
+            public /* synthetic */ boolean lambda$setData$1(LineViewData lineViewData, View view) {
                 if (!this.checkBox.enabled) {
                     return false;
                 }
@@ -2268,7 +2038,6 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         String token;
         boolean useHourFormat;
         boolean useWeekFormat;
-        public boolean viewShowed;
         String zoomToken;
 
         public ChartViewData(String str, int i) {
@@ -2281,27 +2050,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 this.loading = true;
                 TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph = new TLRPC$TL_stats_loadAsyncGraph();
                 tLRPC$TL_stats_loadAsyncGraph.token = this.token;
-                ConnectionsManager.getInstance(i).bindRequestToGuid(ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate(recyclerListView, diffUtilsCallback) {
-                    public final /* synthetic */ RecyclerListView f$1;
-                    public final /* synthetic */ StatisticActivity.DiffUtilsCallback f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        StatisticActivity.ChartViewData.this.lambda$load$1$StatisticActivity$ChartViewData(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                    }
-                }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, i3, 1, true), i2);
+                ConnectionsManager.getInstance(i).bindRequestToGuid(ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new StatisticActivity$ChartViewData$$ExternalSyntheticLambda1(this, recyclerListView, diffUtilsCallback), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, i3, 1, true), i2);
             }
         }
 
         /* access modifiers changed from: private */
         /* JADX WARNING: Removed duplicated region for block: B:25:0x004e  */
-        /* renamed from: lambda$load$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView r9, org.telegram.ui.StatisticActivity.DiffUtilsCallback r10, org.telegram.tgnet.TLObject r11, org.telegram.tgnet.TLRPC$TL_error r12) {
+        public /* synthetic */ void lambda$load$1(org.telegram.ui.Components.RecyclerListView r9, org.telegram.ui.StatisticActivity.DiffUtilsCallback r10, org.telegram.tgnet.TLObject r11, org.telegram.tgnet.TLRPC$TL_error r12) {
             /*
                 r8 = this;
                 r0 = 0
@@ -2371,21 +2127,20 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r3 = r0
                 r4 = r3
             L_0x005e:
-                org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$NV2AIojOcHRSkIyCilelTPcF2mQ r11 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$NV2AIojOcHRSkIyCilelTPcF2mQ
+                org.telegram.ui.StatisticActivity$ChartViewData$$ExternalSyntheticLambda0 r11 = new org.telegram.ui.StatisticActivity$ChartViewData$$ExternalSyntheticLambda0
                 r1 = r11
                 r2 = r8
                 r5 = r9
                 r6 = r10
-                r1.<init>(r3, r4, r5, r6)
+                r1.<init>(r2, r3, r4, r5, r6)
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r11)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.ChartViewData.lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView, org.telegram.ui.StatisticActivity$DiffUtilsCallback, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.ChartViewData.lambda$load$1(org.telegram.ui.Components.RecyclerListView, org.telegram.ui.StatisticActivity$DiffUtilsCallback, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$load$0 */
-        public /* synthetic */ void lambda$load$0$StatisticActivity$ChartViewData(ChartData chartData2, String str, RecyclerListView recyclerListView, DiffUtilsCallback diffUtilsCallback) {
+        public /* synthetic */ void lambda$load$0(ChartData chartData2, String str, RecyclerListView recyclerListView, DiffUtilsCallback diffUtilsCallback) {
             boolean z = false;
             this.loading = false;
             this.chartData = chartData2;
@@ -2431,16 +2186,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
         tLRPC$TL_channels_getMessages.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chat.id);
         this.messagesIsLoading = true;
-        getConnectionsManager().sendRequest(tLRPC$TL_channels_getMessages, new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                StatisticActivity.this.lambda$loadMessages$7$StatisticActivity(tLObject, tLRPC$TL_error);
-            }
-        });
+        getConnectionsManager().sendRequest(tLRPC$TL_channels_getMessages, new StatisticActivity$$ExternalSyntheticLambda4(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadMessages$7 */
-    public /* synthetic */ void lambda$loadMessages$7$StatisticActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadMessages$7(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ArrayList arrayList = new ArrayList();
         if (tLObject instanceof TLRPC$messages_Messages) {
             ArrayList<TLRPC$Message> arrayList2 = ((TLRPC$messages_Messages) tLObject).messages;
@@ -2449,22 +2199,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             }
             getMessagesStorage().putMessages(arrayList2, false, true, true, 0, false);
         }
-        AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-            public final /* synthetic */ ArrayList f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                StatisticActivity.this.lambda$loadMessages$6$StatisticActivity(this.f$1);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new StatisticActivity$$ExternalSyntheticLambda1(this, arrayList));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadMessages$6 */
-    public /* synthetic */ void lambda$loadMessages$6$StatisticActivity(ArrayList arrayList) {
+    public /* synthetic */ void lambda$loadMessages$6(ArrayList arrayList) {
         int i = 0;
         this.messagesIsLoading = false;
         if (!arrayList.isEmpty()) {
@@ -2703,11 +2442,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ChartViewData chartViewData;
         ChartViewData chartViewData2;
-        $$Lambda$StatisticActivity$VpcjJTXNn3WzMqwBOthTUcl_jE8 r10 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                StatisticActivity.this.lambda$getThemeDescriptions$8$StatisticActivity();
-            }
-        };
+        StatisticActivity$$ExternalSyntheticLambda6 statisticActivity$$ExternalSyntheticLambda6 = new StatisticActivity$$ExternalSyntheticLambda6(this);
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{StatisticPostInfoCell.class}, new String[]{"message"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
@@ -2715,23 +2450,23 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{StatisticPostInfoCell.class}, new String[]{"shares"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));
         arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{StatisticPostInfoCell.class}, new String[]{"date"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));
         arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{ChartHeaderView.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
-        $$Lambda$StatisticActivity$VpcjJTXNn3WzMqwBOthTUcl_jE8 r8 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "dialogTextBlack"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "statisticChartSignature"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "statisticChartSignatureAlpha"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "statisticChartHintLine"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "statisticChartActiveLine"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "statisticChartInactivePickerChart"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "statisticChartActivePickerChart"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "dialogBackground"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText2"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "actionBarActionModeDefaultSelector"));
-        $$Lambda$StatisticActivity$VpcjJTXNn3WzMqwBOthTUcl_jE8 r7 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundGray"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundGrayShadow"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteGreenText2"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteRedText5"));
+        StatisticActivity$$ExternalSyntheticLambda6 statisticActivity$$ExternalSyntheticLambda62 = statisticActivity$$ExternalSyntheticLambda6;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "dialogTextBlack"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "statisticChartSignature"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "statisticChartSignatureAlpha"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "statisticChartHintLine"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "statisticChartActiveLine"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "statisticChartInactivePickerChart"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "statisticChartActivePickerChart"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "dialogBackground"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) statisticActivity$$ExternalSyntheticLambda62, "actionBarActionModeDefaultSelector"));
+        StatisticActivity$$ExternalSyntheticLambda6 statisticActivity$$ExternalSyntheticLambda63 = statisticActivity$$ExternalSyntheticLambda6;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, statisticActivity$$ExternalSyntheticLambda63, "windowBackgroundGray"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, statisticActivity$$ExternalSyntheticLambda63, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, statisticActivity$$ExternalSyntheticLambda63, "windowBackgroundWhiteGreenText2"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, statisticActivity$$ExternalSyntheticLambda63, "windowBackgroundWhiteRedText5"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         ChatAvatarContainer chatAvatarContainer = this.avatarContainer;
         SimpleTextView simpleTextView = null;
@@ -2741,7 +2476,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             simpleTextView = chatAvatarContainer2.getSubtitleTextView();
         }
         arrayList.add(new ThemeDescription((View) simpleTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarSubtitle", (Object) null));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r10, "statisticChartLineEmpty"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, statisticActivity$$ExternalSyntheticLambda6, "statisticChartLineEmpty"));
         arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
         arrayList.add(new ThemeDescription((View) this.recyclerListView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueButton"));
@@ -2764,7 +2499,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 } else {
                     chartViewData2 = this.actionsData;
                 }
-                putColorFromData(chartViewData2, arrayList, r10);
+                putColorFromData(chartViewData2, arrayList, statisticActivity$$ExternalSyntheticLambda6);
             }
         } else {
             for (int i2 = 0; i2 < 9; i2++) {
@@ -2787,15 +2522,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 } else {
                     chartViewData = this.languagesData;
                 }
-                putColorFromData(chartViewData, arrayList, r10);
+                putColorFromData(chartViewData, arrayList, statisticActivity$$ExternalSyntheticLambda6);
             }
         }
         return arrayList;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$8 */
-    public /* synthetic */ void lambda$getThemeDescriptions$8$StatisticActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$8() {
         RecyclerListView recyclerListView2 = this.recyclerListView;
         if (recyclerListView2 != null) {
             int childCount = recyclerListView2.getChildCount();
@@ -3442,21 +3176,21 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r11 = r6
                 r12 = r11
             L_0x0064:
-                r9 = 2131627643(0x7f0e0e7b, float:1.8882556E38)
+                r9 = 2131627667(0x7f0e0e93, float:1.8882605E38)
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165672(0x7var_e8, float:1.7945568E38)
+                r9 = 2131165677(0x7var_ed, float:1.7945578E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 2
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r2.add(r9)
-                r9 = 2131627645(0x7f0e0e7d, float:1.888256E38)
+                r9 = 2131627669(0x7f0e0e95, float:1.8882609E38)
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165634(0x7var_c2, float:1.794549E38)
+                r9 = 2131165639(0x7var_c7, float:1.79455E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 1
@@ -3488,8 +3222,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r1.participant = r2
                 int r2 = org.telegram.messenger.UserConfig.selectedAccount
                 org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
-                org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$tiUirra-Hnquw9Aq6SGDK2g7O6w r4 = new org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$tiUirra-Hnquw9Aq6SGDK2g7O6w
-                r4.<init>(r8, r0, r3)
+                org.telegram.ui.StatisticActivity$MemberData$$ExternalSyntheticLambda4 r4 = new org.telegram.ui.StatisticActivity$MemberData$$ExternalSyntheticLambda4
+                r4.<init>(r7, r8, r0, r3)
                 r2.sendRequest(r1, r4)
                 return
             L_0x00e9:
@@ -3521,8 +3255,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r1.participant = r2
                 int r2 = org.telegram.messenger.UserConfig.selectedAccount
                 org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
-                org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$X8qJ6CLASSNAMEfH9aef1NN7BGJsbKK6w r4 = new org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$X8qJ6CLASSNAMEfH9aef1NN7BGJsbKK6w
-                r4.<init>(r8, r0, r3)
+                org.telegram.ui.StatisticActivity$MemberData$$ExternalSyntheticLambda3 r4 = new org.telegram.ui.StatisticActivity$MemberData$$ExternalSyntheticLambda3
+                r4.<init>(r7, r8, r0, r3)
                 r2.sendRequest(r1, r4)
                 return
             L_0x013b:
@@ -3566,11 +3300,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 0
             L_0x0176:
                 if (r9 == 0) goto L_0x017e
-                r0 = 2131627484(0x7f0e0ddc, float:1.8882234E38)
+                r0 = 2131627504(0x7f0e0df0, float:1.8882274E38)
                 java.lang.String r6 = "SetAsAdmin"
                 goto L_0x0183
             L_0x017e:
-                r0 = 2131625272(0x7f0e0538, float:1.8877747E38)
+                r0 = 2131625277(0x7f0e053d, float:1.8877757E38)
                 java.lang.String r6 = "EditAdminRights"
             L_0x0183:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
@@ -3598,14 +3332,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r12 = r0
                 java.lang.CharSequence[] r12 = (java.lang.CharSequence[]) r12
                 int[] r13 = org.telegram.messenger.AndroidUtilities.toIntArray(r5)
-                org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$EREEQzH71DTu4ZQbVr0BWMKqPRU r14 = new org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$EREEQzH71DTu4ZQbVr0BWMKqPRU
+                org.telegram.ui.StatisticActivity$MemberData$$ExternalSyntheticLambda0 r14 = new org.telegram.ui.StatisticActivity$MemberData$$ExternalSyntheticLambda0
                 r0 = r14
                 r1 = r16
                 r3 = r17
                 r4 = r11
                 r5 = r9
                 r6 = r18
-                r0.<init>(r2, r3, r4, r5, r6)
+                r0.<init>(r1, r2, r3, r4, r5, r6)
                 r10.setItems(r12, r13, r14)
                 org.telegram.ui.ActionBar.AlertDialog r0 = r10.create()
                 r8.showDialog(r0)
@@ -3615,32 +3349,12 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onLongClick$1 */
-        public /* synthetic */ void lambda$onLongClick$1$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$ChatFull tLRPC$ChatFull, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new Runnable(statisticActivity, alertDialogArr, tLRPC$TL_error, tLObject, tLRPC$ChatFull) {
-                public final /* synthetic */ StatisticActivity f$1;
-                public final /* synthetic */ AlertDialog[] f$2;
-                public final /* synthetic */ TLRPC$TL_error f$3;
-                public final /* synthetic */ TLObject f$4;
-                public final /* synthetic */ TLRPC$ChatFull f$5;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                }
-
-                public final void run() {
-                    StatisticActivity.MemberData.this.lambda$onLongClick$0$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-                }
-            });
+        public /* synthetic */ void lambda$onLongClick$1(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$ChatFull tLRPC$ChatFull, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new StatisticActivity$MemberData$$ExternalSyntheticLambda2(this, statisticActivity, alertDialogArr, tLRPC$TL_error, tLObject, tLRPC$ChatFull));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onLongClick$0 */
-        public /* synthetic */ void lambda$onLongClick$0$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
+        public /* synthetic */ void lambda$onLongClick$0(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
             if (!statisticActivity.isFinishing() && statisticActivity.getFragmentView() != null && alertDialogArr[0] != null) {
                 if (tLRPC$TL_error == null) {
                     TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant = new TLRPC$TL_chatChannelParticipant();
@@ -3655,32 +3369,12 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onLongClick$3 */
-        public /* synthetic */ void lambda$onLongClick$3$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$ChatFull tLRPC$ChatFull, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new Runnable(statisticActivity, alertDialogArr, tLRPC$TL_error, tLObject, tLRPC$ChatFull) {
-                public final /* synthetic */ StatisticActivity f$1;
-                public final /* synthetic */ AlertDialog[] f$2;
-                public final /* synthetic */ TLRPC$TL_error f$3;
-                public final /* synthetic */ TLObject f$4;
-                public final /* synthetic */ TLRPC$ChatFull f$5;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                }
-
-                public final void run() {
-                    StatisticActivity.MemberData.this.lambda$onLongClick$2$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-                }
-            });
+        public /* synthetic */ void lambda$onLongClick$3(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$ChatFull tLRPC$ChatFull, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new StatisticActivity$MemberData$$ExternalSyntheticLambda1(this, statisticActivity, alertDialogArr, tLRPC$TL_error, tLObject, tLRPC$ChatFull));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onLongClick$2 */
-        public /* synthetic */ void lambda$onLongClick$2$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
+        public /* synthetic */ void lambda$onLongClick$2(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
             if (!statisticActivity.isFinishing() && statisticActivity.getFragmentView() != null && alertDialogArr[0] != null) {
                 if (tLRPC$TL_error == null) {
                     TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant = new TLRPC$TL_chatChannelParticipant();
@@ -3695,8 +3389,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onLongClick$4 */
-        public /* synthetic */ void lambda$onLongClick$4$StatisticActivity$MemberData(ArrayList arrayList, TLRPC$ChatFull tLRPC$ChatFull, TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant, boolean z, StatisticActivity statisticActivity, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$onLongClick$4(ArrayList arrayList, TLRPC$ChatFull tLRPC$ChatFull, TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant, boolean z, StatisticActivity statisticActivity, DialogInterface dialogInterface, int i) {
             ArrayList arrayList2 = arrayList;
             TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
             final TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant2 = tLRPC$TL_chatChannelParticipant;
@@ -3726,7 +3419,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     }
                 };
                 final boolean z2 = z;
-                AnonymousClass2 r02 = new ChatRightsEditActivity.ChatRightsEditActivityDelegate() {
+                AnonymousClass2 r02 = new ChatRightsEditActivity.ChatRightsEditActivityDelegate(this) {
                     public void didChangeOwner(TLRPC$User tLRPC$User) {
                     }
 

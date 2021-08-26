@@ -85,18 +85,13 @@ public class ManageChatUserCell extends FrameLayout {
             this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
             this.optionsButton.setScaleType(ImageView.ScaleType.CENTER);
             addView(this.optionsButton, LayoutHelper.createFrame(60, 64, (LocaleController.isRTL ? 3 : i3) | 48));
-            this.optionsButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    ManageChatUserCell.this.lambda$new$0$ManageChatUserCell(view);
-                }
-            });
+            this.optionsButton.setOnClickListener(new ManageChatUserCell$$ExternalSyntheticLambda0(this));
             this.optionsButton.setContentDescription(LocaleController.getString("AccDescrUserOptions", NUM));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ManageChatUserCell(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         this.delegate.onOptionsButtonCheck(this, true);
     }
 
@@ -364,14 +359,14 @@ public class ManageChatUserCell extends FrameLayout {
             goto L_0x00ce
         L_0x00bf:
             org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-            r2 = 2131624600(0x7f0e0298, float:1.8876384E38)
+            r2 = 2131624602(0x7f0e029a, float:1.8876388E38)
             java.lang.String r3 = "BotStatusCantRead"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r12.setText(r2)
             goto L_0x013a
         L_0x00ce:
             org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-            r2 = 2131624601(0x7f0e0299, float:1.8876386E38)
+            r2 = 2131624603(0x7f0e029b, float:1.887639E38)
             java.lang.String r3 = "BotStatusRead"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r12.setText(r2)
@@ -412,7 +407,7 @@ public class ManageChatUserCell extends FrameLayout {
             int r2 = r11.statusOnlineColor
             r12.setTextColor(r2)
             org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-            r2 = 2131626579(0x7f0e0a53, float:1.8880398E38)
+            r2 = 2131626596(0x7f0e0a64, float:1.8880433E38)
             java.lang.String r3 = "Online"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r12.setText(r2)
@@ -530,7 +525,7 @@ public class ManageChatUserCell extends FrameLayout {
             boolean r12 = r0.has_geo
             if (r12 == 0) goto L_0x0207
             org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-            r2 = 2131626145(0x7f0e08a1, float:1.8879518E38)
+            r2 = 2131626156(0x7f0e08ac, float:1.887954E38)
             java.lang.String r3 = "MegaLocation"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r12.setText(r2)
@@ -540,14 +535,14 @@ public class ManageChatUserCell extends FrameLayout {
             boolean r12 = android.text.TextUtils.isEmpty(r12)
             if (r12 == 0) goto L_0x021e
             org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-            r2 = 2131626146(0x7f0e08a2, float:1.887952E38)
+            r2 = 2131626157(0x7f0e08ad, float:1.8879542E38)
             java.lang.String r3 = "MegaPrivate"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r12.setText(r2)
             goto L_0x022c
         L_0x021e:
             org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-            r2 = 2131626149(0x7f0e08a5, float:1.8879526E38)
+            r2 = 2131626160(0x7f0e08b0, float:1.8879548E38)
             java.lang.String r3 = "MegaPublic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r12.setText(r2)

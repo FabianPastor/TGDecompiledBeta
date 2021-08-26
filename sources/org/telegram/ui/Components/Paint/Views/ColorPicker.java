@@ -66,21 +66,13 @@ public class ColorPicker extends FrameLayout {
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.settingsButton.setImageResource(NUM);
         addView(this.settingsButton, LayoutHelper.createFrame(46, 52.0f));
-        this.settingsButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ColorPicker.this.lambda$new$0$ColorPicker(view);
-            }
-        });
+        this.settingsButton.setOnClickListener(new ColorPicker$$ExternalSyntheticLambda0(this));
         ImageView imageView2 = new ImageView(context);
         this.undoButton = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.undoButton.setImageResource(NUM);
         addView(this.undoButton, LayoutHelper.createFrame(46, 52.0f));
-        this.undoButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ColorPicker.this.lambda$new$1$ColorPicker(view);
-            }
-        });
+        this.undoButton.setOnClickListener(new ColorPicker$$ExternalSyntheticLambda1(this));
         SharedPreferences sharedPreferences = context.getSharedPreferences("paint", 0);
         this.location = sharedPreferences.getFloat("last_color_location", 1.0f);
         setWeight(sharedPreferences.getFloat("last_color_weight", 0.016773745f));
@@ -88,8 +80,7 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ColorPicker(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         ColorPickerDelegate colorPickerDelegate = this.delegate;
         if (colorPickerDelegate != null) {
             colorPickerDelegate.onSettingsPressed();
@@ -97,8 +88,7 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$ColorPicker(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         ColorPickerDelegate colorPickerDelegate = this.delegate;
         if (colorPickerDelegate != null) {
             colorPickerDelegate.onUndoPressed();

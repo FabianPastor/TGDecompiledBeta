@@ -33,7 +33,6 @@ import org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.Components.CircularViewPager;
-import org.telegram.ui.Components.ProfileGalleryView;
 import org.telegram.ui.PinchToZoomHelper;
 import org.telegram.ui.ProfileActivity;
 
@@ -1093,7 +1092,6 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         public final ArrayList<BackupImageView> imageViews = new ArrayList<>();
         /* access modifiers changed from: private */
         public final ArrayList<Item> objects = new ArrayList<>();
-        private final ActionBar parentActionBar;
         /* access modifiers changed from: private */
         public BackupImageView parentAvatarImageView;
         private final Paint placeholderPaint;
@@ -1101,7 +1099,6 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         public ViewPagerAdapter(Context context2, ProfileActivity.AvatarImageView avatarImageView, ActionBar actionBar) {
             this.context = context2;
             this.parentAvatarImageView = avatarImageView;
-            this.parentActionBar = actionBar;
             Paint paint = new Paint(1);
             this.placeholderPaint = paint;
             paint.setColor(-16777216);
@@ -1157,7 +1154,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                 org.telegram.ui.Components.ProfileGalleryView$TextureStubView r2 = new org.telegram.ui.Components.ProfileGalleryView$TextureStubView
                 org.telegram.ui.Components.ProfileGalleryView r4 = org.telegram.ui.Components.ProfileGalleryView.this
                 android.content.Context r5 = r0.context
-                r2.<init>(r5)
+                r2.<init>(r4, r5)
                 android.view.View unused = r3.textureViewStubView = r2
             L_0x0031:
                 android.view.View r2 = r3.textureViewStubView
@@ -1699,11 +1696,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                         ofFloat.setStartDelay(j);
                         this.radialProgressHideAnimator.setDuration((long) (this.radialProgressHideAnimatorStartValue * 250.0f));
                         this.radialProgressHideAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                        this.radialProgressHideAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                ProfileGalleryView.AvatarImageView.this.lambda$onDraw$0$ProfileGalleryView$AvatarImageView(valueAnimator);
-                            }
-                        });
+                        this.radialProgressHideAnimator.addUpdateListener(new ProfileGalleryView$AvatarImageView$$ExternalSyntheticLambda0(this));
                         this.radialProgressHideAnimator.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 RadialProgress2 unused = AvatarImageView.this.radialProgress = null;
@@ -1741,8 +1734,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onDraw$0 */
-        public /* synthetic */ void lambda$onDraw$0$ProfileGalleryView$AvatarImageView(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$onDraw$0(ValueAnimator valueAnimator) {
             this.radialProgress.setOverrideAlpha(AndroidUtilities.lerp(this.radialProgressHideAnimatorStartValue, 0.0f, valueAnimator.getAnimatedFraction()));
         }
 
@@ -1763,7 +1755,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     private class TextureStubView extends View {
-        public TextureStubView(Context context) {
+        public TextureStubView(ProfileGalleryView profileGalleryView, Context context) {
             super(context);
         }
     }

@@ -63,7 +63,6 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Keep;
@@ -102,7 +101,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Document;
@@ -188,7 +186,6 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ArticleViewer;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.AlertsCreator;
@@ -287,7 +284,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public static Paint webpageSearchPaint;
     /* access modifiers changed from: private */
     public static Paint webpageUrlPaint;
-    private final String BOTTOM_SHEET_VIEW_TAG = "bottomSheet";
     /* access modifiers changed from: private */
     public WebpageAdapter[] adapter;
     /* access modifiers changed from: private */
@@ -445,7 +441,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: private */
     public WindowView windowView;
 
-    static /* synthetic */ boolean lambda$setParentActivity$20(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$setParentActivity$20(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -525,7 +522,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public TLRPC$TL_pageBlockList pageBlockList;
 
-        private TL_pageBlockListParent() {
+        private TL_pageBlockListParent(ArticleViewer articleViewer) {
             this.items = new ArrayList<>();
         }
     }
@@ -544,7 +541,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public TLRPC$RichText textItem;
 
-        private TL_pageBlockListItem() {
+        private TL_pageBlockListItem(ArticleViewer articleViewer) {
             this.index = Integer.MAX_VALUE;
         }
     }
@@ -563,7 +560,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public TLRPC$TL_pageBlockOrderedList pageBlockOrderedList;
 
-        private TL_pageBlockOrderedListParent() {
+        private TL_pageBlockOrderedListParent(ArticleViewer articleViewer) {
             this.items = new ArrayList<>();
         }
     }
@@ -582,7 +579,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public TLRPC$RichText textItem;
 
-        private TL_pageBlockOrderedListItem() {
+        private TL_pageBlockOrderedListItem(ArticleViewer articleViewer) {
             this.index = Integer.MAX_VALUE;
         }
     }
@@ -1448,24 +1445,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
             builder.setTitle(str);
-            builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ArticleViewer.this.lambda$showCopyPopup$0$ArticleViewer(this.f$1, dialogInterface, i);
-                }
-            });
+            builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new ArticleViewer$$ExternalSyntheticLambda1(this, str));
             showDialog(builder.create());
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showCopyPopup$0 */
-    public /* synthetic */ void lambda$showCopyPopup$0$ArticleViewer(String str, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showCopyPopup$0(String str, DialogInterface dialogInterface, int i) {
         String str2;
         String str3;
         if (this.parentActivity != null) {
@@ -1515,16 +1501,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 actionBarPopupWindowLayout.setPadding(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f));
                 this.popupLayout.setBackgroundDrawable(this.parentActivity.getResources().getDrawable(NUM));
                 this.popupLayout.setAnimationEnabled(false);
-                this.popupLayout.setOnTouchListener(new View.OnTouchListener() {
-                    public final boolean onTouch(View view, MotionEvent motionEvent) {
-                        return ArticleViewer.this.lambda$showPopup$1$ArticleViewer(view, motionEvent);
-                    }
-                });
-                this.popupLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
-                    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        ArticleViewer.this.lambda$showPopup$2$ArticleViewer(keyEvent);
-                    }
-                });
+                this.popupLayout.setOnTouchListener(new ArticleViewer$$ExternalSyntheticLambda12(this));
+                this.popupLayout.setDispatchKeyEventListener(new ArticleViewer$$ExternalSyntheticLambda38(this));
                 this.popupLayout.setShownFromBotton(false);
                 TextView textView = new TextView(this.parentActivity);
                 this.deleteView = textView;
@@ -1534,11 +1512,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.deleteView.setTextSize(1, 15.0f);
                 this.deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.deleteView.setText(LocaleController.getString("Copy", NUM).toUpperCase());
-                this.deleteView.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        ArticleViewer.this.lambda$showPopup$3$ArticleViewer(view);
-                    }
-                });
+                this.deleteView.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda4(this));
                 this.popupLayout.addView(this.deleteView, LayoutHelper.createFrame(-2, 48.0f));
                 ActionBarPopupWindow actionBarPopupWindow2 = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                 this.popupWindow = actionBarPopupWindow2;
@@ -1549,11 +1523,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.popupWindow.setInputMethodMode(2);
                 this.popupWindow.setSoftInputMode(0);
                 this.popupWindow.getContentView().setFocusableInTouchMode(true);
-                this.popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    public final void onDismiss() {
-                        ArticleViewer.this.lambda$showPopup$4$ArticleViewer();
-                    }
-                });
+                this.popupWindow.setOnDismissListener(new ArticleViewer$$ExternalSyntheticLambda14(this));
             }
             this.deleteView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
             ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout2 = this.popupLayout;
@@ -1570,8 +1540,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPopup$1 */
-    public /* synthetic */ boolean lambda$showPopup$1$ArticleViewer(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$showPopup$1(View view, MotionEvent motionEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (motionEvent.getActionMasked() != 0 || (actionBarPopupWindow = this.popupWindow) == null || !actionBarPopupWindow.isShowing()) {
             return false;
@@ -1585,8 +1554,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPopup$2 */
-    public /* synthetic */ void lambda$showPopup$2$ArticleViewer(KeyEvent keyEvent) {
+    public /* synthetic */ void lambda$showPopup$2(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.popupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.popupWindow.dismiss();
@@ -1594,8 +1562,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPopup$3 */
-    public /* synthetic */ void lambda$showPopup$3$ArticleViewer(View view) {
+    public /* synthetic */ void lambda$showPopup$3(View view) {
         DrawingText drawingText = this.pressedLinkOwnerLayout;
         if (drawingText != null) {
             AndroidUtilities.addToClipboard(drawingText.getText());
@@ -1608,8 +1575,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPopup$4 */
-    public /* synthetic */ void lambda$showPopup$4$ArticleViewer() {
+    public /* synthetic */ void lambda$showPopup$4() {
         View view = this.pressedLinkOwnerView;
         if (view != null) {
             this.pressedLinkOwnerLayout = null;
@@ -2189,7 +2155,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                 });
-                AnonymousClass4 r3 = new TextView(this.parentActivity) {
+                AnonymousClass4 r3 = new TextView(this, this.parentActivity) {
                     /* access modifiers changed from: protected */
                     public void onDraw(Canvas canvas) {
                         canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), ArticleViewer.dividerPaint);
@@ -3011,8 +2977,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (tLRPC$RichText instanceof TLRPC$TL_textPhone) {
                 return getPlainText(((TLRPC$TL_textPhone) tLRPC$RichText).text);
             }
-            if (tLRPC$RichText instanceof TLRPC$TL_textImage) {
-            }
+            boolean z = tLRPC$RichText instanceof TLRPC$TL_textImage;
             return "";
         }
     }
@@ -4134,48 +4099,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage = new TLRPC$TL_messages_getWebPage();
         tLRPC$TL_messages_getWebPage.url = str;
         tLRPC$TL_messages_getWebPage.hash = 0;
-        this.openUrlReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getWebPage, new RequestDelegate(i, str2, tLRPC$TL_messages_getWebPage) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ String f$2;
-            public final /* synthetic */ TLRPC$TL_messages_getWebPage f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ArticleViewer.this.lambda$openWebpageUrl$6$ArticleViewer(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
-            }
-        });
+        this.openUrlReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getWebPage, new ArticleViewer$$ExternalSyntheticLambda33(this, i, str2, tLRPC$TL_messages_getWebPage));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openWebpageUrl$6 */
-    public /* synthetic */ void lambda$openWebpageUrl$6$ArticleViewer(int i, String str, TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(i, tLObject, str, tLRPC$TL_messages_getWebPage) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ String f$3;
-            public final /* synthetic */ TLRPC$TL_messages_getWebPage f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void run() {
-                ArticleViewer.this.lambda$openWebpageUrl$5$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
-            }
-        });
+    public /* synthetic */ void lambda$openWebpageUrl$6(int i, String str, TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda24(this, i, tLObject, str, tLRPC$TL_messages_getWebPage));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openWebpageUrl$5 */
-    public /* synthetic */ void lambda$openWebpageUrl$5$ArticleViewer(int i, TLObject tLObject, String str, TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage) {
+    public /* synthetic */ void lambda$openWebpageUrl$5(int i, TLObject tLObject, String str, TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage) {
         if (this.openUrlReqId != 0 && i == this.lastReqId) {
             this.openUrlReqId = 0;
             showProgressView(true, false);
@@ -4630,7 +4563,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.windowView.addView(r0, LayoutHelper.createFrame(-1, -1, 51));
         if (Build.VERSION.SDK_INT >= 21) {
             this.windowView.setFitsSystemWindows(true);
-            this.containerView.setOnApplyWindowInsetsListener($$Lambda$ArticleViewer$MrG0DY2G_kHKw3iS8TOtt00Oo1o.INSTANCE);
+            this.containerView.setOnApplyWindowInsetsListener(ArticleViewer$$ExternalSyntheticLambda3.INSTANCE);
         }
         FrameLayout frameLayout = new FrameLayout(activity2);
         this.fullscreenVideoContainer = frameLayout;
@@ -4711,22 +4644,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.listView[i2].setPadding(0, AndroidUtilities.dp(56.0f), 0, 0);
             this.listView[i2].setTopGlowOffset(AndroidUtilities.dp(56.0f));
             this.containerView.addView(this.listView[i2], LayoutHelper.createFrame(-1, -1.0f));
-            this.listView[i2].setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-                public final boolean onItemClick(View view, int i) {
-                    return ArticleViewer.this.lambda$setParentActivity$8$ArticleViewer(view, i);
-                }
-            });
-            this.listView[i2].setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended(webpageAdapter) {
-                public final /* synthetic */ ArticleViewer.WebpageAdapter f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onItemClick(View view, int i, float f, float f2) {
-                    ArticleViewer.this.lambda$setParentActivity$11$ArticleViewer(this.f$1, view, i, f, f2);
-                }
-            });
+            this.listView[i2].setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ArticleViewer$$ExternalSyntheticLambda40(this));
+            this.listView[i2].setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new ArticleViewer$$ExternalSyntheticLambda39(this, webpageAdapter));
             this.listView[i2].setOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                     if (i == 0) {
@@ -4782,11 +4701,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.headerView = r02;
         r02.setWillNotDraw(false);
         this.containerView.addView(this.headerView, LayoutHelper.createFrame(-1, 56.0f));
-        this.headerView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ArticleViewer.this.lambda$setParentActivity$12$ArticleViewer(view);
-            }
-        });
+        this.headerView.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda10(this));
         SimpleTextView simpleTextView = new SimpleTextView(activity2);
         this.titleTextView = simpleTextView;
         simpleTextView.setGravity(19);
@@ -4802,11 +4717,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.lineProgressView.setPivotX(0.0f);
         this.lineProgressView.setPivotY((float) AndroidUtilities.dp(2.0f));
         this.headerView.addView(this.lineProgressView, LayoutHelper.createFrame(-1, 2.0f, 83, 0.0f, 0.0f, 0.0f, 1.0f));
-        this.lineProgressTickRunnable = new Runnable() {
-            public final void run() {
-                ArticleViewer.this.lambda$setParentActivity$13$ArticleViewer();
-            }
-        };
+        this.lineProgressTickRunnable = new ArticleViewer$$ExternalSyntheticLambda19(this);
         FrameLayout frameLayout2 = new FrameLayout(activity2);
         this.menuContainer = frameLayout2;
         this.headerView.addView(frameLayout2, LayoutHelper.createFrame(48, 56, 53));
@@ -4824,7 +4735,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.searchContainer.setAlpha(0.0f);
         }
         this.headerView.addView(this.searchContainer, LayoutHelper.createFrame(-1, 56.0f));
-        AnonymousClass11 r03 = new EditTextBoldCursor(this.parentActivity) {
+        AnonymousClass11 r03 = new EditTextBoldCursor(this, this.parentActivity) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
                     clearFocus();
@@ -4845,7 +4756,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.searchField.setPadding(0, 0, 0, 0);
         this.searchField.setInputType(this.searchField.getInputType() | 524288);
         if (i3 < 23) {
-            this.searchField.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            this.searchField.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
                 public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                     return false;
                 }
@@ -4862,11 +4773,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
             });
         }
-        this.searchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                return ArticleViewer.this.lambda$setParentActivity$14$ArticleViewer(textView, i, keyEvent);
-            }
-        });
+        this.searchField.setOnEditorActionListener(new ArticleViewer$$ExternalSyntheticLambda15(this));
         this.searchField.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable editable) {
             }
@@ -4888,11 +4795,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         ArticleViewer.this.clearButton.setTag((Object) null);
                         ArticleViewer.this.clearButton.clearAnimation();
                         if (ArticleViewer.this.animateClear) {
-                            ArticleViewer.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new Runnable() {
-                                public final void run() {
-                                    ArticleViewer.AnonymousClass13.this.lambda$onTextChanged$0$ArticleViewer$13();
-                                }
-                            }).start();
+                            ArticleViewer.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new ArticleViewer$13$$ExternalSyntheticLambda0(this)).start();
                             return;
                         }
                         ArticleViewer.this.clearButton.setAlpha(0.0f);
@@ -4919,8 +4822,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onTextChanged$0 */
-            public /* synthetic */ void lambda$onTextChanged$0$ArticleViewer$13() {
+            public /* synthetic */ void lambda$onTextChanged$0() {
                 ArticleViewer.this.clearButton.setVisibility(4);
             }
         });
@@ -4954,11 +4856,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.clearButton.setRotation(45.0f);
         this.clearButton.setScaleX(0.0f);
         this.clearButton.setScaleY(0.0f);
-        this.clearButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ArticleViewer.this.lambda$setParentActivity$15$ArticleViewer(view);
-            }
-        });
+        this.clearButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda11(this));
         this.clearButton.setContentDescription(LocaleController.getString("ClearButton", NUM));
         this.searchContainer.addView(this.clearButton, LayoutHelper.createFrame(48, -1, 21));
         ImageView imageView = new ImageView(activity2);
@@ -4973,11 +4871,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.backButton.setImageDrawable(this.backDrawable);
         this.backButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.headerView.addView(this.backButton, LayoutHelper.createFrame(54, 56.0f));
-        this.backButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ArticleViewer.this.lambda$setParentActivity$16$ArticleViewer(view);
-            }
-        });
+        this.backButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda8(this));
         this.backButton.setContentDescription(LocaleController.getString("AccDescrGoBack", NUM));
         AnonymousClass15 r05 = new ActionBarMenuItem(this.parentActivity, (ActionBarMenu) null, NUM, -5000269) {
             public void toggleSubMenu() {
@@ -5002,17 +4896,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.progressView = contextProgressView;
         contextProgressView.setVisibility(8);
         this.menuContainer.addView(this.progressView, LayoutHelper.createFrame(48, 56.0f));
-        this.menuButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ArticleViewer.this.lambda$setParentActivity$17$ArticleViewer(view);
-            }
-        });
-        this.menuButton.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() {
-            public final void onItemClick(int i) {
-                ArticleViewer.this.lambda$setParentActivity$19$ArticleViewer(i);
-            }
-        });
-        AnonymousClass16 r06 = new FrameLayout(this.parentActivity) {
+        this.menuButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda5(this));
+        this.menuButton.setDelegate(new ArticleViewer$$ExternalSyntheticLambda37(this));
+        AnonymousClass16 r06 = new FrameLayout(this, this.parentActivity) {
             public void onDraw(Canvas canvas) {
                 int intrinsicHeight = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 Theme.chat_composeShadowDrawable.setBounds(0, 0, getMeasuredWidth(), intrinsicHeight);
@@ -5021,7 +4907,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
         };
         this.searchPanel = r06;
-        r06.setOnTouchListener($$Lambda$ArticleViewer$Kuuu2Ox0hGcNV7t5kbpR3N2L418.INSTANCE);
+        r06.setOnTouchListener(ArticleViewer$$ExternalSyntheticLambda13.INSTANCE);
         this.searchPanel.setWillNotDraw(false);
         this.searchPanel.setVisibility(4);
         this.searchPanel.setFocusable(true);
@@ -5036,11 +4922,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.searchUpButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
         this.searchUpButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("actionBarActionModeDefaultSelector"), 1));
         this.searchPanel.addView(this.searchUpButton, LayoutHelper.createFrame(48, 48.0f, 53, 0.0f, 0.0f, 48.0f, 0.0f));
-        this.searchUpButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ArticleViewer.this.lambda$setParentActivity$21$ArticleViewer(view);
-            }
-        });
+        this.searchUpButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda7(this));
         this.searchUpButton.setContentDescription(LocaleController.getString("AccDescrSearchNext", NUM));
         ImageView imageView3 = new ImageView(this.parentActivity);
         this.searchDownButton = imageView3;
@@ -5049,11 +4931,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.searchDownButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
         this.searchDownButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("actionBarActionModeDefaultSelector"), 1));
         this.searchPanel.addView(this.searchDownButton, LayoutHelper.createFrame(48, 48.0f, 53, 0.0f, 0.0f, 0.0f, 0.0f));
-        this.searchDownButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ArticleViewer.this.lambda$setParentActivity$22$ArticleViewer(view);
-            }
-        });
+        this.searchDownButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda9(this));
         this.searchDownButton.setContentDescription(LocaleController.getString("AccDescrSearchPrev", NUM));
         SimpleTextView simpleTextView2 = new SimpleTextView(this.parentActivity);
         this.searchCountText = simpleTextView2;
@@ -5120,7 +4998,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         updatePaintColors();
     }
 
-    static /* synthetic */ WindowInsets lambda$setParentActivity$7(View view, WindowInsets windowInsets) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ WindowInsets lambda$setParentActivity$7(View view, WindowInsets windowInsets) {
         if (Build.VERSION.SDK_INT >= 30) {
             return WindowInsets.CONSUMED;
         }
@@ -5128,8 +5007,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$8 */
-    public /* synthetic */ boolean lambda$setParentActivity$8$ArticleViewer(View view, int i) {
+    public /* synthetic */ boolean lambda$setParentActivity$8(View view, int i) {
         if (!(view instanceof BlockRelatedArticlesCell)) {
             return false;
         }
@@ -5139,8 +5017,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$11 */
-    public /* synthetic */ void lambda$setParentActivity$11$ArticleViewer(WebpageAdapter webpageAdapter, View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$setParentActivity$11(WebpageAdapter webpageAdapter, View view, int i, float f, float f2) {
         TextSelectionHelper.ArticleTextSelectionHelper articleTextSelectionHelper = this.textSelectionHelper;
         if (articleTextSelectionHelper != null) {
             if (articleTextSelectionHelper.isSelectionMode()) {
@@ -5165,19 +5042,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 showProgressView(true, true);
                 TLRPC$TL_contacts_resolveUsername tLRPC$TL_contacts_resolveUsername = new TLRPC$TL_contacts_resolveUsername();
                 tLRPC$TL_contacts_resolveUsername.username = "previews";
-                this.previewsReqId = ConnectionsManager.getInstance(i2).sendRequest(tLRPC$TL_contacts_resolveUsername, new RequestDelegate(i2, j) {
-                    public final /* synthetic */ int f$1;
-                    public final /* synthetic */ long f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        ArticleViewer.this.lambda$setParentActivity$10$ArticleViewer(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                    }
-                });
+                this.previewsReqId = ConnectionsManager.getInstance(i2).sendRequest(tLRPC$TL_contacts_resolveUsername, new ArticleViewer$$ExternalSyntheticLambda32(this, i2, j));
             }
         } else if (i >= 0 && i < webpageAdapter.localBlocks.size()) {
             TLRPC$PageBlock tLRPC$PageBlock = (TLRPC$PageBlock) webpageAdapter.localBlocks.get(i);
@@ -5220,28 +5085,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$10 */
-    public /* synthetic */ void lambda$setParentActivity$10$ArticleViewer(int i, long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject, i, j) {
-            public final /* synthetic */ TLObject f$1;
-            public final /* synthetic */ int f$2;
-            public final /* synthetic */ long f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ArticleViewer.this.lambda$setParentActivity$9$ArticleViewer(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$setParentActivity$10(int i, long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda28(this, tLObject, i, j));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$9 */
-    public /* synthetic */ void lambda$setParentActivity$9$ArticleViewer(TLObject tLObject, int i, long j) {
+    public /* synthetic */ void lambda$setParentActivity$9(TLObject tLObject, int i, long j) {
         if (this.previewsReqId != 0) {
             this.previewsReqId = 0;
             showProgressView(true, false);
@@ -5257,14 +5106,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$12 */
-    public /* synthetic */ void lambda$setParentActivity$12$ArticleViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$12(View view) {
         this.listView[0].smoothScrollToPosition(0);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$13 */
-    public /* synthetic */ void lambda$setParentActivity$13$ArticleViewer() {
+    public /* synthetic */ void lambda$setParentActivity$13() {
         float currentProgress = 0.7f - this.lineProgressView.getCurrentProgress();
         if (currentProgress > 0.0f) {
             float f = currentProgress < 0.25f ? 0.01f : 0.02f;
@@ -5275,8 +5122,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$14 */
-    public /* synthetic */ boolean lambda$setParentActivity$14$ArticleViewer(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$setParentActivity$14(TextView textView, int i, KeyEvent keyEvent) {
         if (keyEvent == null) {
             return false;
         }
@@ -5288,8 +5134,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$15 */
-    public /* synthetic */ void lambda$setParentActivity$15$ArticleViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$15(View view) {
         if (this.searchField.length() != 0) {
             this.searchField.setText("");
         }
@@ -5298,8 +5143,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$16 */
-    public /* synthetic */ void lambda$setParentActivity$16$ArticleViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$16(View view) {
         if (this.searchContainer.getTag() != null) {
             showSearch(false);
         } else {
@@ -5308,14 +5152,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$17 */
-    public /* synthetic */ void lambda$setParentActivity$17$ArticleViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$17(View view) {
         this.menuButton.toggleSubMenu();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$19 */
-    public /* synthetic */ void lambda$setParentActivity$19$ArticleViewer(int i) {
+    public /* synthetic */ void lambda$setParentActivity$19(int i) {
         Activity activity;
         String str;
         if (this.adapter[0].currentPage != null && (activity = this.parentActivity) != null) {
@@ -5353,11 +5195,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                     this.fontCells[i2].select(i2 == this.selectedFont, false);
                     this.fontCells[i2].setTag(Integer.valueOf(i2));
-                    this.fontCells[i2].setOnClickListener(new View.OnClickListener() {
-                        public final void onClick(View view) {
-                            ArticleViewer.this.lambda$setParentActivity$18$ArticleViewer(view);
-                        }
-                    });
+                    this.fontCells[i2].setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda6(this));
                     linearLayout.addView(this.fontCells[i2], LayoutHelper.createLinear(-1, 50));
                     i2++;
                 }
@@ -5370,8 +5208,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$18 */
-    public /* synthetic */ void lambda$setParentActivity$18$ArticleViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$18(View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         this.selectedFont = intValue;
         int i = 0;
@@ -5386,14 +5223,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$21 */
-    public /* synthetic */ void lambda$setParentActivity$21$ArticleViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$21(View view) {
         scrollToSearchIndex(this.currentSearchIndex - 1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setParentActivity$22 */
-    public /* synthetic */ void lambda$setParentActivity$22$ArticleViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$22(View view) {
         scrollToSearchIndex(this.currentSearchIndex + 1);
     }
 
@@ -5487,11 +5322,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         return;
                     }
                     this.runAfterKeyboardClose = animatorSet;
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public final void run() {
-                            ArticleViewer.this.lambda$showSearch$23$ArticleViewer();
-                        }
-                    }, 300);
+                    AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda22(this), 300);
                     return;
                 }
                 this.searchContainer.setAlpha(z ? 1.0f : 0.0f);
@@ -5515,8 +5346,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showSearch$23 */
-    public /* synthetic */ void lambda$showSearch$23$ArticleViewer() {
+    public /* synthetic */ void lambda$showSearch$23() {
         AnimatorSet animatorSet = this.runAfterKeyboardClose;
         if (animatorSet != null) {
             animatorSet.start();
@@ -5581,46 +5411,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
         int i = this.lastSearchIndex + 1;
         this.lastSearchIndex = i;
-        $$Lambda$ArticleViewer$EfVhDedJc7X00LkU4TPk0iGiljA r1 = new Runnable(str, i) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ int f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                ArticleViewer.this.lambda$processSearch$26$ArticleViewer(this.f$1, this.f$2);
-            }
-        };
-        this.searchRunnable = r1;
-        AndroidUtilities.runOnUIThread(r1, 400);
+        ArticleViewer$$ExternalSyntheticLambda26 articleViewer$$ExternalSyntheticLambda26 = new ArticleViewer$$ExternalSyntheticLambda26(this, str, i);
+        this.searchRunnable = articleViewer$$ExternalSyntheticLambda26;
+        AndroidUtilities.runOnUIThread(articleViewer$$ExternalSyntheticLambda26, 400);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSearch$26 */
-    public /* synthetic */ void lambda$processSearch$26$ArticleViewer(String str, int i) {
+    public /* synthetic */ void lambda$processSearch$26(String str, int i) {
         HashMap hashMap = new HashMap(this.adapter[0].textToBlocks);
         ArrayList arrayList = new ArrayList(this.adapter[0].textBlocks);
         this.searchRunnable = null;
-        Utilities.searchQueue.postRunnable(new Runnable(arrayList, hashMap, str, i) {
-            public final /* synthetic */ ArrayList f$1;
-            public final /* synthetic */ HashMap f$2;
-            public final /* synthetic */ String f$3;
-            public final /* synthetic */ int f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void run() {
-                ArticleViewer.this.lambda$processSearch$25$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
-            }
-        });
+        Utilities.searchQueue.postRunnable(new ArticleViewer$$ExternalSyntheticLambda27(this, arrayList, hashMap, str, i));
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v2, resolved type: org.telegram.ui.ArticleViewer$1} */
@@ -5635,9 +5436,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:12:0x005e  */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x0093 A[SYNTHETIC] */
-    /* renamed from: lambda$processSearch$25 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$processSearch$25$ArticleViewer(java.util.ArrayList r19, java.util.HashMap r20, java.lang.String r21, int r22) {
+    public /* synthetic */ void lambda$processSearch$25(java.util.ArrayList r19, java.util.HashMap r20, java.lang.String r21, int r22) {
         /*
             r18 = this;
             r7 = r18
@@ -5722,18 +5522,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r11 = 0
             goto L_0x000f
         L_0x0098:
-            org.telegram.ui.-$$Lambda$ArticleViewer$NIy3LK1emPSrg7YATwbNpfR0J_4 r0 = new org.telegram.ui.-$$Lambda$ArticleViewer$NIy3LK1emPSrg7YATwbNpfR0J_4
+            org.telegram.ui.ArticleViewer$$ExternalSyntheticLambda23 r0 = new org.telegram.ui.ArticleViewer$$ExternalSyntheticLambda23
             r1 = r22
-            r0.<init>(r1, r9, r8)
+            r0.<init>(r7, r1, r9, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.lambda$processSearch$25$ArticleViewer(java.util.ArrayList, java.util.HashMap, java.lang.String, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.lambda$processSearch$25(java.util.ArrayList, java.util.HashMap, java.lang.String, int):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSearch$24 */
-    public /* synthetic */ void lambda$processSearch$24$ArticleViewer(int i, ArrayList arrayList, String str) {
+    public /* synthetic */ void lambda$processSearch$24(int i, ArrayList arrayList, String str) {
         if (i == this.lastSearchIndex) {
             this.searchPanel.setAlpha(1.0f);
             this.searchPanel.setVisibility(0);
@@ -5932,18 +5731,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         if (this.currentHeaderHeight != AndroidUtilities.dp(56.0f)) {
             ValueAnimator duration = ValueAnimator.ofObject(new IntEvaluator(), new Object[]{Integer.valueOf(this.currentHeaderHeight), Integer.valueOf(AndroidUtilities.dp(56.0f))}).setDuration(180);
             duration.setInterpolator(new DecelerateInterpolator());
-            duration.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ArticleViewer.this.lambda$checkScrollAnimated$27$ArticleViewer(valueAnimator);
-                }
-            });
+            duration.addUpdateListener(new ArticleViewer$$ExternalSyntheticLambda0(this));
             duration.start();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkScrollAnimated$27 */
-    public /* synthetic */ void lambda$checkScrollAnimated$27$ArticleViewer(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$checkScrollAnimated$27(ValueAnimator valueAnimator) {
         setCurrentHeaderHeight(((Integer) valueAnimator.getAnimatedValue()).intValue());
     }
 
@@ -6181,11 +5975,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x0109:
             int r9 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.tgnet.ConnectionsManager r15 = org.telegram.tgnet.ConnectionsManager.getInstance(r9)
-            org.telegram.ui.-$$Lambda$ArticleViewer$4AfJkJkz0NK508Ebn15gbIP5gKQ r2 = new org.telegram.ui.-$$Lambda$ArticleViewer$4AfJkJkz0NK508Ebn15gbIP5gKQ
+            org.telegram.ui.ArticleViewer$$ExternalSyntheticLambda34 r2 = new org.telegram.ui.ArticleViewer$$ExternalSyntheticLambda34
             r5 = r2
             r6 = r11
             r8 = r12
-            r5.<init>(r7, r8, r9, r10)
+            r5.<init>(r6, r7, r8, r9, r10)
             r15.sendRequest(r14, r2)
         L_0x011a:
             r11.lastInsets = r3
@@ -6267,8 +6061,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             android.animation.ObjectAnimator r13 = android.animation.ObjectAnimator.ofFloat(r15, r2, r6)
             r14[r5] = r13
             r12.playTogether(r14)
-            org.telegram.ui.-$$Lambda$ArticleViewer$I5Tcq0ejNA7CLASSNAMEZOWpwXmOVuVYw r13 = new org.telegram.ui.-$$Lambda$ArticleViewer$I5Tcq0ejNA7CLASSNAMEZOWpwXmOVuVYw
-            r13.<init>()
+            org.telegram.ui.ArticleViewer$$ExternalSyntheticLambda20 r13 = new org.telegram.ui.ArticleViewer$$ExternalSyntheticLambda20
+            r13.<init>(r11)
             r11.animationEndRunnable = r13
             r13 = 150(0x96, double:7.4E-322)
             r12.setDuration(r13)
@@ -6279,8 +6073,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r12.addListener(r13)
             long r13 = java.lang.System.currentTimeMillis()
             r11.transitionAnimationStartTime = r13
-            org.telegram.ui.-$$Lambda$ArticleViewer$rsbqU7H-DmovNgxBJ2nvyERXU04 r13 = new org.telegram.ui.-$$Lambda$ArticleViewer$rsbqU7H-DmovNgxBJ2nvyERXU04
-            r13.<init>(r12)
+            org.telegram.ui.ArticleViewer$$ExternalSyntheticLambda25 r13 = new org.telegram.ui.ArticleViewer$$ExternalSyntheticLambda25
+            r13.<init>(r11, r12)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
             int r12 = android.os.Build.VERSION.SDK_INT
             r13 = 18
@@ -6296,32 +6090,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$open$29 */
-    public /* synthetic */ void lambda$open$29$ArticleViewer(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject, tLRPC$WebPage, messageObject, i, str) {
-            public final /* synthetic */ TLObject f$1;
-            public final /* synthetic */ TLRPC$WebPage f$2;
-            public final /* synthetic */ MessageObject f$3;
-            public final /* synthetic */ int f$4;
-            public final /* synthetic */ String f$5;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-            }
-
-            public final void run() {
-                ArticleViewer.this.lambda$open$28$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-            }
-        });
+    public /* synthetic */ void lambda$open$29(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda29(this, tLObject, tLRPC$WebPage, messageObject, i, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$open$28 */
-    public /* synthetic */ void lambda$open$28$ArticleViewer(TLObject tLObject, TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str) {
+    public /* synthetic */ void lambda$open$28(TLObject tLObject, TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str) {
         TLRPC$Page tLRPC$Page;
         int i2;
         RecyclerView.ViewHolder findViewHolderForAdapterPosition;
@@ -6378,8 +6152,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$open$30 */
-    public /* synthetic */ void lambda$open$30$ArticleViewer() {
+    public /* synthetic */ void lambda$open$30() {
         FrameLayout frameLayout = this.containerView;
         if (frameLayout != null && this.windowView != null) {
             if (Build.VERSION.SDK_INT >= 18) {
@@ -6391,8 +6164,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$open$31 */
-    public /* synthetic */ void lambda$open$31$ArticleViewer(AnimatorSet animatorSet) {
+    public /* synthetic */ void lambda$open$31(AnimatorSet animatorSet) {
         this.allowAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.allowAnimationIndex, new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
         animatorSet.start();
     }
@@ -6564,11 +6336,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.windowView, View.TRANSLATION_X, new float[]{0.0f, (float) AndroidUtilities.dp(56.0f)})});
                     this.animationInProgress = 2;
-                    this.animationEndRunnable = new Runnable() {
-                        public final void run() {
-                            ArticleViewer.this.lambda$close$34$ArticleViewer();
-                        }
-                    };
+                    this.animationEndRunnable = new ArticleViewer$$ExternalSyntheticLambda18(this);
                     animatorSet.setDuration(150);
                     animatorSet.setInterpolator(this.interpolator);
                     animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -6590,8 +6358,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$close$34 */
-    public /* synthetic */ void lambda$close$34$ArticleViewer() {
+    public /* synthetic */ void lambda$close$34() {
         FrameLayout frameLayout = this.containerView;
         if (frameLayout != null) {
             if (Build.VERSION.SDK_INT >= 18) {
@@ -6616,16 +6383,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         for (int i2 = 0; i2 < this.createdWebViews.size(); i2++) {
             this.createdWebViews.get(i2).destroyWebView(false);
         }
-        this.containerView.post(new Runnable() {
-            public final void run() {
-                ArticleViewer.this.lambda$onClosed$35$ArticleViewer();
-            }
-        });
+        this.containerView.post(new ArticleViewer$$ExternalSyntheticLambda21(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onClosed$35 */
-    public /* synthetic */ void lambda$onClosed$35$ArticleViewer() {
+    public /* synthetic */ void lambda$onClosed$35() {
         try {
             if (this.windowView.getParent() != null) {
                 ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
@@ -6642,51 +6404,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             TLRPC$TL_contacts_resolveUsername tLRPC$TL_contacts_resolveUsername = new TLRPC$TL_contacts_resolveUsername();
             tLRPC$TL_contacts_resolveUsername.username = tLRPC$Chat.username;
             int i = UserConfig.selectedAccount;
-            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_contacts_resolveUsername, new RequestDelegate(webpageAdapter, i, blockChannelCell) {
-                public final /* synthetic */ ArticleViewer.WebpageAdapter f$1;
-                public final /* synthetic */ int f$2;
-                public final /* synthetic */ ArticleViewer.BlockChannelCell f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ArticleViewer.this.lambda$loadChannel$37$ArticleViewer(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_contacts_resolveUsername, new ArticleViewer$$ExternalSyntheticLambda36(this, webpageAdapter, i, blockChannelCell));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadChannel$37 */
-    public /* synthetic */ void lambda$loadChannel$37$ArticleViewer(WebpageAdapter webpageAdapter, int i, BlockChannelCell blockChannelCell, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(webpageAdapter, tLRPC$TL_error, tLObject, i, blockChannelCell) {
-            public final /* synthetic */ ArticleViewer.WebpageAdapter f$1;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-            public final /* synthetic */ TLObject f$3;
-            public final /* synthetic */ int f$4;
-            public final /* synthetic */ ArticleViewer.BlockChannelCell f$5;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-            }
-
-            public final void run() {
-                ArticleViewer.this.lambda$loadChannel$36$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-            }
-        });
+    public /* synthetic */ void lambda$loadChannel$37(WebpageAdapter webpageAdapter, int i, BlockChannelCell blockChannelCell, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda31(this, webpageAdapter, tLRPC$TL_error, tLObject, i, blockChannelCell));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadChannel$36 */
-    public /* synthetic */ void lambda$loadChannel$36$ArticleViewer(WebpageAdapter webpageAdapter, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i, BlockChannelCell blockChannelCell) {
+    public /* synthetic */ void lambda$loadChannel$36(WebpageAdapter webpageAdapter, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i, BlockChannelCell blockChannelCell) {
         this.loadingChannel = false;
         if (this.parentFragment != null && !webpageAdapter.blocks.isEmpty()) {
             if (tLRPC$TL_error == null) {
@@ -6716,47 +6444,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel = new TLRPC$TL_channels_joinChannel();
         tLRPC$TL_channels_joinChannel.channel = MessagesController.getInputChannel(tLRPC$Chat);
         int i = UserConfig.selectedAccount;
-        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_channels_joinChannel, new RequestDelegate(blockChannelCell, i, tLRPC$TL_channels_joinChannel, tLRPC$Chat) {
-            public final /* synthetic */ ArticleViewer.BlockChannelCell f$1;
-            public final /* synthetic */ int f$2;
-            public final /* synthetic */ TLRPC$TL_channels_joinChannel f$3;
-            public final /* synthetic */ TLRPC$Chat f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ArticleViewer.this.lambda$joinChannel$41$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
-            }
-        });
+        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_channels_joinChannel, new ArticleViewer$$ExternalSyntheticLambda35(this, blockChannelCell, i, tLRPC$TL_channels_joinChannel, tLRPC$Chat));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$joinChannel$41 */
-    public /* synthetic */ void lambda$joinChannel$41$ArticleViewer(BlockChannelCell blockChannelCell, int i, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel, TLRPC$Chat tLRPC$Chat, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$joinChannel$41(BlockChannelCell blockChannelCell, int i, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel, TLRPC$Chat tLRPC$Chat, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         boolean z;
         if (tLRPC$TL_error != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(blockChannelCell, i, tLRPC$TL_error, tLRPC$TL_channels_joinChannel) {
-                public final /* synthetic */ ArticleViewer.BlockChannelCell f$1;
-                public final /* synthetic */ int f$2;
-                public final /* synthetic */ TLRPC$TL_error f$3;
-                public final /* synthetic */ TLRPC$TL_channels_joinChannel f$4;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
-
-                public final void run() {
-                    ArticleViewer.this.lambda$joinChannel$38$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda30(this, blockChannelCell, i, tLRPC$TL_error, tLRPC$TL_channels_joinChannel));
             return;
         }
         TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
@@ -6777,30 +6472,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         if (!z) {
             MessagesController.getInstance(i).generateJoinMessage(tLRPC$Chat.id, true);
         }
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                ArticleViewer.BlockChannelCell.this.setState(2, false);
-            }
-        });
-        AndroidUtilities.runOnUIThread(new Runnable(i, tLRPC$Chat) {
-            public final /* synthetic */ int f$0;
-            public final /* synthetic */ TLRPC$Chat f$1;
-
-            {
-                this.f$0 = r1;
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                MessagesController.getInstance(this.f$0).loadFullChat(this.f$1.id, 0, true);
-            }
-        }, 1000);
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda17(blockChannelCell));
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda16(i, tLRPC$Chat), 1000);
         MessagesStorage.getInstance(i).updateDialogsWithDeletedMessages(new ArrayList(), (ArrayList<Long>) null, true, tLRPC$Chat.id);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$joinChannel$38 */
-    public /* synthetic */ void lambda$joinChannel$38$ArticleViewer(BlockChannelCell blockChannelCell, int i, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel) {
+    public /* synthetic */ void lambda$joinChannel$38(BlockChannelCell blockChannelCell, int i, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel) {
         blockChannelCell.setState(0, false);
         AlertsCreator.processError(i, tLRPC$TL_error, this.parentFragment, tLRPC$TL_channels_joinChannel, Boolean.TRUE);
     }
@@ -6864,11 +6542,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             try {
                 this.visibleDialog = dialog;
                 dialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    public final void onDismiss(DialogInterface dialogInterface) {
-                        ArticleViewer.this.lambda$showDialog$42$ArticleViewer(dialogInterface);
-                    }
-                });
+                this.visibleDialog.setOnDismissListener(new ArticleViewer$$ExternalSyntheticLambda2(this));
                 dialog.show();
             } catch (Exception e2) {
                 FileLog.e((Throwable) e2);
@@ -6877,8 +6551,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showDialog$42 */
-    public /* synthetic */ void lambda$showDialog$42$ArticleViewer(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showDialog$42(DialogInterface dialogInterface) {
         this.visibleDialog = null;
     }
 
@@ -9336,20 +9009,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
             SeekBar seekBar2 = new SeekBar(this);
             this.seekBar = seekBar2;
-            seekBar2.setDelegate(new SeekBar.SeekBarDelegate() {
-                public /* synthetic */ void onSeekBarContinuousDrag(float f) {
-                    SeekBar.SeekBarDelegate.CC.$default$onSeekBarContinuousDrag(this, f);
-                }
-
-                public final void onSeekBarDrag(float f) {
-                    ArticleViewer.BlockAudioCell.this.lambda$new$0$ArticleViewer$BlockAudioCell(f);
-                }
-            });
+            seekBar2.setDelegate(new ArticleViewer$BlockAudioCell$$ExternalSyntheticLambda0(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ArticleViewer$BlockAudioCell(float f) {
+        public /* synthetic */ void lambda$new$0(float f) {
             MessageObject messageObject = this.currentMessageObject;
             if (messageObject != null) {
                 messageObject.audioProgress = f;
@@ -10129,108 +9793,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             @JavascriptInterface
             public void postEvent(String str, String str2) {
-                AndroidUtilities.runOnUIThread(
-                /*  JADX ERROR: Method code generation error
-                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0005: INVOKE  
-                      (wrap: org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$IHjeoOiOuEa6rDeLfMlKacw1zGc : 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$IHjeoOiOuEa6rDeLfMlKacw1zGc) = 
-                      (r1v0 'this' org.telegram.ui.ArticleViewer$BlockEmbedCell$TelegramWebviewProxy A[THIS])
-                      (r2v0 'str' java.lang.String)
-                      (r3v0 'str2' java.lang.String)
-                     call: org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$IHjeoOiOuEa6rDeLfMlKacw1zGc.<init>(org.telegram.ui.ArticleViewer$BlockEmbedCell$TelegramWebviewProxy, java.lang.String, java.lang.String):void type: CONSTRUCTOR)
-                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.ArticleViewer.BlockEmbedCell.TelegramWebviewProxy.postEvent(java.lang.String, java.lang.String):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$IHjeoOiOuEa6rDeLfMlKacw1zGc) = 
-                      (r1v0 'this' org.telegram.ui.ArticleViewer$BlockEmbedCell$TelegramWebviewProxy A[THIS])
-                      (r2v0 'str' java.lang.String)
-                      (r3v0 'str2' java.lang.String)
-                     call: org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$IHjeoOiOuEa6rDeLfMlKacw1zGc.<init>(org.telegram.ui.ArticleViewer$BlockEmbedCell$TelegramWebviewProxy, java.lang.String, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.ArticleViewer.BlockEmbedCell.TelegramWebviewProxy.postEvent(java.lang.String, java.lang.String):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                    	... 59 more
-                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$IHjeoOiOuEa6rDeLfMlKacw1zGc, state: NOT_LOADED
-                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	... 65 more
-                    */
-                /*
-                    this = this;
-                    org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$IHjeoOiOuEa6rDeLfMlKacw1zGc r0 = new org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$IHjeoOiOuEa6rDeLfMlKacw1zGc
-                    r0.<init>(r1, r2, r3)
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-                    return
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.BlockEmbedCell.TelegramWebviewProxy.postEvent(java.lang.String, java.lang.String):void");
+                AndroidUtilities.runOnUIThread(new ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$$ExternalSyntheticLambda0(this, str, str2));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$postEvent$0 */
-            public /* synthetic */ void lambda$postEvent$0$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy(String str, String str2) {
+            public /* synthetic */ void lambda$postEvent$0(String str, String str2) {
                 if ("resize_frame".equals(str)) {
                     try {
                         int unused = BlockEmbedCell.this.exactWebViewHeight = Utilities.parseInt(new JSONObject(str2).getString("height")).intValue();
@@ -10373,140 +9940,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                     View unused = ArticleViewer.this.customView = view;
                     WebChromeClient.CustomViewCallback unused2 = ArticleViewer.this.customViewCallback = customViewCallback;
-                    AndroidUtilities.runOnUIThread(
-                    /*  JADX ERROR: Method code generation error
-                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0023: INVOKE  
-                          (wrap: org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$2$85g4whAE3OUh7JtZTCXxDPPKGEY : 0x001e: CONSTRUCTOR  (r3v3 org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$2$85g4whAE3OUh7JtZTCXxDPPKGEY) = 
-                          (r2v0 'this' org.telegram.ui.ArticleViewer$BlockEmbedCell$2 A[THIS])
-                         call: org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$2$85g4whAE3OUh7JtZTCXxDPPKGEY.<init>(org.telegram.ui.ArticleViewer$BlockEmbedCell$2):void type: CONSTRUCTOR)
-                          (100 long)
-                         org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable, long):void type: STATIC in method: org.telegram.ui.ArticleViewer.BlockEmbedCell.2.onShowCustomView(android.view.View, android.webkit.WebChromeClient$CustomViewCallback):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x001e: CONSTRUCTOR  (r3v3 org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$2$85g4whAE3OUh7JtZTCXxDPPKGEY) = 
-                          (r2v0 'this' org.telegram.ui.ArticleViewer$BlockEmbedCell$2 A[THIS])
-                         call: org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$2$85g4whAE3OUh7JtZTCXxDPPKGEY.<init>(org.telegram.ui.ArticleViewer$BlockEmbedCell$2):void type: CONSTRUCTOR in method: org.telegram.ui.ArticleViewer.BlockEmbedCell.2.onShowCustomView(android.view.View, android.webkit.WebChromeClient$CustomViewCallback):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	... 80 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$2$85g4whAE3OUh7JtZTCXxDPPKGEY, state: NOT_LOADED
-                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	... 86 more
-                        */
-                    /*
-                        this = this;
-                        org.telegram.ui.ArticleViewer$BlockEmbedCell r0 = org.telegram.ui.ArticleViewer.BlockEmbedCell.this
-                        org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
-                        android.view.View r0 = r0.customView
-                        if (r0 == 0) goto L_0x000e
-                        r4.onCustomViewHidden()
-                        return
-                    L_0x000e:
-                        org.telegram.ui.ArticleViewer$BlockEmbedCell r0 = org.telegram.ui.ArticleViewer.BlockEmbedCell.this
-                        org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
-                        android.view.View unused = r0.customView = r3
-                        org.telegram.ui.ArticleViewer$BlockEmbedCell r3 = org.telegram.ui.ArticleViewer.BlockEmbedCell.this
-                        org.telegram.ui.ArticleViewer r3 = org.telegram.ui.ArticleViewer.this
-                        android.webkit.WebChromeClient.CustomViewCallback unused = r3.customViewCallback = r4
-                        org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$2$85g4whAE3OUh7JtZTCXxDPPKGEY r3 = new org.telegram.ui.-$$Lambda$ArticleViewer$BlockEmbedCell$2$85g4whAE3OUh7JtZTCXxDPPKGEY
-                        r3.<init>(r2)
-                        r0 = 100
-                        org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r0)
-                        return
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.BlockEmbedCell.AnonymousClass2.onShowCustomView(android.view.View, android.webkit.WebChromeClient$CustomViewCallback):void");
+                    AndroidUtilities.runOnUIThread(new ArticleViewer$BlockEmbedCell$2$$ExternalSyntheticLambda0(this), 100);
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$onShowCustomView$0 */
-                public /* synthetic */ void lambda$onShowCustomView$0$ArticleViewer$BlockEmbedCell$2() {
+                public /* synthetic */ void lambda$onShowCustomView$0() {
                     if (ArticleViewer.this.customView != null) {
                         ArticleViewer.this.fullscreenVideoContainer.addView(ArticleViewer.this.customView, LayoutHelper.createFrame(-1, -1.0f));
                         ArticleViewer.this.fullscreenVideoContainer.setVisibility(0);
@@ -11205,7 +10643,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private int textY;
 
         public class GroupedMessages {
-            public boolean hasSibling;
             private int maxSizeWidth = 1000;
             public ArrayList<MessageObject.GroupedMessagePosition> posArray = new ArrayList<>();
             public HashMap<TLObject, MessageObject.GroupedMessagePosition> positions = new HashMap<>();
@@ -11217,17 +10654,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 public float[] heights;
                 public int[] lineCounts;
 
-                public MessageGroupedLayoutAttempt(int i, int i2, float f, float f2) {
+                public MessageGroupedLayoutAttempt(GroupedMessages groupedMessages, int i, int i2, float f, float f2) {
                     this.lineCounts = new int[]{i, i2};
                     this.heights = new float[]{f, f2};
                 }
 
-                public MessageGroupedLayoutAttempt(int i, int i2, int i3, float f, float f2, float f3) {
+                public MessageGroupedLayoutAttempt(GroupedMessages groupedMessages, int i, int i2, int i3, float f, float f2, float f3) {
                     this.lineCounts = new int[]{i, i2, i3};
                     this.heights = new float[]{f, f2, f3};
                 }
 
-                public MessageGroupedLayoutAttempt(int i, int i2, int i3, int i4, float f, float f2, float f3, float f4) {
+                public MessageGroupedLayoutAttempt(GroupedMessages groupedMessages, int i, int i2, int i3, int i4, float f, float f2, float f3, float f4) {
                     this.lineCounts = new int[]{i, i2, i3, i4};
                     this.heights = new float[]{f, f2, f3, f4};
                 }
@@ -11262,7 +10699,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int size = BlockCollageCell.this.currentBlock.items.size();
                 if (size > 1) {
                     StringBuilder sb = new StringBuilder();
-                    this.hasSibling = false;
                     int i11 = 0;
                     float f3 = 1.0f;
                     boolean z = false;
@@ -11330,7 +10766,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             int i16 = size2 - i15;
                             if (i15 <= 3 && i16 <= 3) {
                                 MessageGroupedLayoutAttempt messageGroupedLayoutAttempt = r0;
-                                MessageGroupedLayoutAttempt messageGroupedLayoutAttempt2 = new MessageGroupedLayoutAttempt(i15, i16, multiHeight(fArr, 0, i15), multiHeight(fArr, i15, size2));
+                                MessageGroupedLayoutAttempt messageGroupedLayoutAttempt2 = new MessageGroupedLayoutAttempt(this, i15, i16, multiHeight(fArr, 0, i15), multiHeight(fArr, i15, size2));
                                 arrayList.add(messageGroupedLayoutAttempt);
                             }
                         }
@@ -11349,7 +10785,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                         MessageGroupedLayoutAttempt messageGroupedLayoutAttempt3 = r0;
                                         i10 = i18;
                                         i9 = i17;
-                                        MessageGroupedLayoutAttempt messageGroupedLayoutAttempt4 = new MessageGroupedLayoutAttempt(i17, i18, i20, multiHeight(fArr, 0, i17), multiHeight(fArr, i17, i21), multiHeight(fArr, i21, size2));
+                                        MessageGroupedLayoutAttempt messageGroupedLayoutAttempt4 = new MessageGroupedLayoutAttempt(this, i17, i18, i20, multiHeight(fArr, 0, i17), multiHeight(fArr, i17, i21), multiHeight(fArr, i21, size2));
                                         arrayList.add(messageGroupedLayoutAttempt3);
                                         i18 = i10 + 1;
                                         i17 = i9;
@@ -11406,7 +10842,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                         float f9 = multiHeight3;
                                         i5 = size;
                                         i8 = dp2;
-                                        MessageGroupedLayoutAttempt messageGroupedLayoutAttempt6 = new MessageGroupedLayoutAttempt(i22, i30, i31, i27, f7, f8, f9, multiHeight4);
+                                        MessageGroupedLayoutAttempt messageGroupedLayoutAttempt6 = new MessageGroupedLayoutAttempt(this, i22, i30, i31, i27, f7, f8, f9, multiHeight4);
                                         arrayList.add(messageGroupedLayoutAttempt5);
                                     }
                                     i25 = i3 + 1;
@@ -11568,7 +11004,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                 groupedMessagePosition6.siblingHeights = new float[]{var_, var_};
                                 groupedMessagePosition7.spanSize = i53 - round3;
                                 groupedMessagePosition8.leftSpanOffset = round3;
-                                this.hasSibling = true;
                             } else {
                                 float round4 = ((float) Math.round(Math.min(((float) this.maxSizeWidth) / groupedMessagePosition6.aspectRatio, 537.24005f))) / 814.0f;
                                 groupedMessagePosition6.set(0, 1, 0, 0, this.maxSizeWidth, round4, 7);
@@ -11616,7 +11051,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                 groupedMessagePosition11.leftSpanOffset = round7;
                                 groupedMessagePosition12.leftSpanOffset = round7;
                                 groupedMessagePosition9.siblingHeights = new float[]{min5, min6, var_};
-                                this.hasSibling = true;
                             }
                         }
                         i = size;
@@ -11686,8 +11120,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                 }
             });
-            final ArticleViewer articleViewer = ArticleViewer.this;
-            AnonymousClass3 r1 = new GridLayoutManagerFixed(context, 1000, 1, true) {
+            AnonymousClass3 r1 = new GridLayoutManagerFixed(context, 1000, 1, true, ArticleViewer.this) {
                 public boolean shouldLayoutChildFromOpositeSide(View view) {
                     return false;
                 }
@@ -11962,7 +11395,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     /* access modifiers changed from: private */
                     public View view;
 
-                    ObjectContainer() {
+                    ObjectContainer(AnonymousClass3 r1) {
                     }
                 }
 
@@ -12023,7 +11456,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     L_0x0046:
                         r6.addView(r0)
                         org.telegram.ui.ArticleViewer$BlockSlideshowCell$3$ObjectContainer r6 = new org.telegram.ui.ArticleViewer$BlockSlideshowCell$3$ObjectContainer
-                        r6.<init>()
+                        r6.<init>(r5)
                         android.view.View unused = r6.view = r0
                         org.telegram.tgnet.TLRPC$PageBlock unused = r6.block = r7
                         return r6
@@ -13351,7 +12784,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    private class BlockDetailsCell extends View implements Drawable.Callback, TextSelectionHelper.ArticleSelectableView {
+    private class BlockDetailsCell extends View implements TextSelectionHelper.ArticleSelectableView {
         /* access modifiers changed from: private */
         public AnimatedArrowDrawable arrow;
         private TLRPC$TL_pageBlockDetails currentBlock;
@@ -13436,10 +12869,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private static class BlockDetailsBottomCell extends View {
-        private RectF rect = new RectF();
-
         public BlockDetailsBottomCell(Context context) {
             super(context);
+            new RectF();
         }
 
         /* access modifiers changed from: protected */
@@ -15387,11 +14819,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.textView.setText(LocaleController.getString("ChannelJoin", NUM));
             this.textView.setGravity(19);
             addView(this.textView, LayoutHelper.createFrame(-2, 39, 53));
-            this.textView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    ArticleViewer.BlockChannelCell.this.lambda$new$0$ArticleViewer$BlockChannelCell(view);
-                }
-            });
+            this.textView.setOnClickListener(new ArticleViewer$BlockChannelCell$$ExternalSyntheticLambda0(this));
             ImageView imageView2 = new ImageView(context);
             this.imageView = imageView2;
             imageView2.setImageResource(NUM);
@@ -15403,8 +14831,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ArticleViewer$BlockChannelCell(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             if (this.currentState == 0) {
                 setState(1, true);
                 ArticleViewer articleViewer = ArticleViewer.this;
@@ -16115,18 +15542,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             layoutParams.topMargin = dp2;
             this.scrollView.addView(this.textContainer, layoutParams);
             if (Build.VERSION.SDK_INT >= 23) {
-                this.scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                    public final void onScrollChange(View view, int i, int i2, int i3, int i4) {
-                        ArticleViewer.BlockPreformattedCell.this.lambda$new$0$ArticleViewer$BlockPreformattedCell(view, i, i2, i3, i4);
-                    }
-                });
+                this.scrollView.setOnScrollChangeListener(new ArticleViewer$BlockPreformattedCell$$ExternalSyntheticLambda0(this));
             }
             setWillNotDraw(false);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ArticleViewer$BlockPreformattedCell(View view, int i, int i2, int i3, int i4) {
+        public /* synthetic */ void lambda$new$0(View view, int i, int i2, int i3, int i4) {
             TextSelectionHelper.ArticleTextSelectionHelper articleTextSelectionHelper = ArticleViewer.this.textSelectionHelper;
             if (articleTextSelectionHelper != null && articleTextSelectionHelper.isSelectionMode()) {
                 ArticleViewer.this.textSelectionHelper.invalidate();

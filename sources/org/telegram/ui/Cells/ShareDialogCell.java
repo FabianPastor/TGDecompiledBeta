@@ -20,7 +20,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
-import org.telegram.ui.Components.CheckBoxBase;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ShareDialogCell extends FrameLayout {
@@ -61,17 +60,12 @@ public class ShareDialogCell extends FrameLayout {
         checkBox2.setColor("dialogRoundCheckBox", i == 1 ? "voipgroup_inviteMembersBackground" : "dialogBackground", "dialogRoundCheckBoxCheck");
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(4);
-        this.checkBox.setProgressDelegate(new CheckBoxBase.ProgressDelegate() {
-            public final void setProgress(float f) {
-                ShareDialogCell.this.lambda$new$0$ShareDialogCell(f);
-            }
-        });
+        this.checkBox.setProgressDelegate(new ShareDialogCell$$ExternalSyntheticLambda0(this));
         addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 49, 19.0f, this.currentType == 2 ? -40.0f : 42.0f, 0.0f, 0.0f));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ShareDialogCell(float f) {
+    public /* synthetic */ void lambda$new$0(float f) {
         float progress = 1.0f - (this.checkBox.getProgress() * 0.143f);
         this.imageView.setScaleX(progress);
         this.imageView.setScaleY(progress);

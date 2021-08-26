@@ -37,7 +37,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.RecyclerListView;
 
 public class RecyclerListView extends RecyclerView {
     private static int[] attributes;
@@ -161,7 +160,6 @@ public class RecyclerListView extends RecyclerView {
     private int sectionsType;
     /* access modifiers changed from: private */
     public Runnable selectChildRunnable;
-    HashSet<Integer> selectedPositions;
     protected Drawable selectorDrawable;
     protected int selectorPosition;
     private int selectorRadius;
@@ -1025,19 +1023,7 @@ public class RecyclerListView extends RecyclerView {
                 } else {
                     float x3 = motionEvent.getX();
                     float y3 = motionEvent.getY();
-                    Runnable unused7 = RecyclerListView.this.selectChildRunnable = new Runnable(x3, y3) {
-                        public final /* synthetic */ float f$1;
-                        public final /* synthetic */ float f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run() {
-                            RecyclerListView.RecyclerListViewItemClickListener.this.lambda$onInterceptTouchEvent$0$RecyclerListView$RecyclerListViewItemClickListener(this.f$1, this.f$2);
-                        }
-                    };
+                    Runnable unused7 = RecyclerListView.this.selectChildRunnable = new RecyclerListView$RecyclerListViewItemClickListener$$ExternalSyntheticLambda0(this, x3, y3);
                     AndroidUtilities.runOnUIThread(RecyclerListView.this.selectChildRunnable, (long) ViewConfiguration.getTapTimeout());
                     if (RecyclerListView.this.currentChildView.isEnabled()) {
                         RecyclerListView recyclerListView2 = RecyclerListView.this;
@@ -1083,8 +1069,7 @@ public class RecyclerListView extends RecyclerView {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onInterceptTouchEvent$0 */
-        public /* synthetic */ void lambda$onInterceptTouchEvent$0$RecyclerListView$RecyclerListViewItemClickListener(float f, float f2) {
+        public /* synthetic */ void lambda$onInterceptTouchEvent$0(float f, float f2) {
             if (RecyclerListView.this.selectChildRunnable != null && RecyclerListView.this.currentChildView != null) {
                 RecyclerListView recyclerListView = RecyclerListView.this;
                 recyclerListView.onChildPressed(recyclerListView.currentChildView, f, f2, true);
@@ -1626,21 +1611,16 @@ public class RecyclerListView extends RecyclerView {
             if (drawable2 != null && drawable2.isStateful() && this.selectorDrawable.setState(getDrawableStateForSelector())) {
                 invalidateDrawable(this.selectorDrawable);
             }
-            $$Lambda$RecyclerListView$FIDzdliHuJQ2ZOY8_z7qt7Dt8F0 r3 = new Runnable() {
-                public final void run() {
-                    RecyclerListView.this.lambda$highlightRowInternal$0$RecyclerListView();
-                }
-            };
-            this.removeHighlighSelectionRunnable = r3;
-            AndroidUtilities.runOnUIThread(r3, 700);
+            RecyclerListView$$ExternalSyntheticLambda0 recyclerListView$$ExternalSyntheticLambda0 = new RecyclerListView$$ExternalSyntheticLambda0(this);
+            this.removeHighlighSelectionRunnable = recyclerListView$$ExternalSyntheticLambda0;
+            AndroidUtilities.runOnUIThread(recyclerListView$$ExternalSyntheticLambda0, 700);
         } else if (z) {
             this.pendingHighlightPosition = intReturnCallback;
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$highlightRowInternal$0 */
-    public /* synthetic */ void lambda$highlightRowInternal$0$RecyclerListView() {
+    public /* synthetic */ void lambda$highlightRowInternal$0() {
         this.removeHighlighSelectionRunnable = null;
         this.pendingHighlightPosition = null;
         Drawable drawable = this.selectorDrawable;
@@ -2202,7 +2182,7 @@ public class RecyclerListView extends RecyclerView {
     public void startMultiselect(int i, boolean z, onMultiSelectionChanged onmultiselectionchanged) {
         if (!this.multiSelectionGesture) {
             this.listPaddings = new int[2];
-            this.selectedPositions = new HashSet<>();
+            new HashSet();
             getParent().requestDisallowInterceptTouchEvent(true);
             this.multiSelectionListener = onmultiselectionchanged;
             this.multiSelectionGesture = true;
@@ -2323,5 +2303,9 @@ public class RecyclerListView extends RecyclerView {
             AndroidUtilities.cancelRunOnUIThread(this.scroller);
             AndroidUtilities.runOnUIThread(this.scroller);
         }
+    }
+
+    public boolean isMultiselect() {
+        return this.multiSelectionGesture;
     }
 }

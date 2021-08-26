@@ -20,7 +20,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$ChannelParticipant;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -232,13 +231,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             java.lang.String r4 = "fonts/rmedium.ttf"
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r1.setTypeface(r4)
-            r1 = 2131625903(0x7f0e07af, float:1.8879027E38)
+            r1 = 2131625913(0x7f0e07b9, float:1.8879047E38)
             java.lang.String r4 = "InviteLink"
             if (r5 != 0) goto L_0x0150
             boolean r5 = r2.expired
             if (r5 == 0) goto L_0x0131
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131625484(0x7f0e060c, float:1.8878177E38)
+            r4 = 2131625489(0x7f0e0611, float:1.8878187E38)
             java.lang.String r5 = "ExpiredLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -247,7 +246,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             boolean r5 = r2.revoked
             if (r5 == 0) goto L_0x0144
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131627322(0x7f0e0d3a, float:1.8881905E38)
+            r4 = 2131627342(0x7f0e0d4e, float:1.8881946E38)
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -382,16 +381,11 @@ public class InviteLinkBottomSheet extends BottomSheet {
     private void loadCreator() {
         TLRPC$TL_users_getUsers tLRPC$TL_users_getUsers = new TLRPC$TL_users_getUsers();
         tLRPC$TL_users_getUsers.id.add(MessagesController.getInstance(UserConfig.selectedAccount).getInputUser(this.invite.admin_id));
-        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_users_getUsers, new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                InviteLinkBottomSheet.this.lambda$loadCreator$0$InviteLinkBottomSheet(tLObject, tLRPC$TL_error);
-            }
-        });
+        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_users_getUsers, new InviteLinkBottomSheet$$ExternalSyntheticLambda2(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadCreator$0 */
-    public /* synthetic */ void lambda$loadCreator$0$InviteLinkBottomSheet(final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadCreator$0(final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 if (tLRPC$TL_error == null) {
@@ -562,12 +556,12 @@ public class InviteLinkBottomSheet extends BottomSheet {
             L_0x0043:
                 org.telegram.ui.Components.InviteLinkBottomSheet$EmptyHintRow r10 = new org.telegram.ui.Components.InviteLinkBottomSheet$EmptyHintRow
                 org.telegram.ui.Components.InviteLinkBottomSheet r11 = org.telegram.ui.Components.InviteLinkBottomSheet.this
-                r10.<init>(r1)
+                r10.<init>(r11, r1)
                 goto L_0x00dd
             L_0x004c:
                 org.telegram.ui.Cells.ShadowSectionCell r11 = new org.telegram.ui.Cells.ShadowSectionCell
                 r11.<init>(r1, r2)
-                r2 = 2131165444(0x7var_, float:1.7945105E38)
+                r2 = 2131165449(0x7var_, float:1.7945115E38)
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r2, (java.lang.String) r10)
                 android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
@@ -579,7 +573,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 goto L_0x00a6
             L_0x006d:
                 org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$2 r10 = new org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$2
-                r10.<init>(r1)
+                r10.<init>(r9, r1)
                 goto L_0x00dd
             L_0x0073:
                 org.telegram.ui.Components.FlickerLoadingView r10 = new org.telegram.ui.Components.FlickerLoadingView
@@ -597,7 +591,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 android.graphics.drawable.ColorDrawable r4 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r4.<init>(r0)
-                r0 = 2131165443(0x7var_, float:1.7945103E38)
+                r0 = 2131165448(0x7var_, float:1.7945113E38)
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r0, (java.lang.String) r10)
                 r2.<init>(r4, r10)
                 r2.setFullsize(r3)
@@ -899,35 +893,17 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 tLRPC$TL_messages_getChatInviteImporters.offset_date = tLRPC$TL_chatInviteImporter.date;
             }
             this.usersLoading = true;
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_getChatInviteImporters, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    InviteLinkBottomSheet.this.lambda$loadUsers$2$InviteLinkBottomSheet(tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_getChatInviteImporters, new InviteLinkBottomSheet$$ExternalSyntheticLambda1(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadUsers$2 */
-    public /* synthetic */ void lambda$loadUsers$2$InviteLinkBottomSheet(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                InviteLinkBottomSheet.this.lambda$loadUsers$1$InviteLinkBottomSheet(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$loadUsers$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new InviteLinkBottomSheet$$ExternalSyntheticLambda0(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadUsers$1 */
-    public /* synthetic */ void lambda$loadUsers$1$InviteLinkBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$loadUsers$1(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_chatInviteImporters tLRPC$TL_messages_chatInviteImporters = (TLRPC$TL_messages_chatInviteImporters) tLObject;
             this.invitedUsers.addAll(tLRPC$TL_messages_chatInviteImporters.importers);
@@ -989,7 +965,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
     private class EmptyHintRow extends FrameLayout {
         TextView textView;
 
-        public EmptyHintRow(Context context) {
+        public EmptyHintRow(InviteLinkBottomSheet inviteLinkBottomSheet, Context context) {
             super(context);
             TextView textView2 = new TextView(context);
             this.textView = textView2;

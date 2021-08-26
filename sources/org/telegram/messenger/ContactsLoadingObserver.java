@@ -32,19 +32,14 @@ public final class ContactsLoadingObserver {
         this.callback = callback2;
         int i = UserConfig.selectedAccount;
         this.currentAccount = i;
-        this.releaseRunnable = new Runnable() {
-            public final void run() {
-                ContactsLoadingObserver.this.lambda$new$0$ContactsLoadingObserver();
-            }
-        };
+        this.releaseRunnable = new ContactsLoadingObserver$$ExternalSyntheticLambda0(this);
         this.contactsController = ContactsController.getInstance(i);
         this.notificationCenter = NotificationCenter.getInstance(i);
         this.handler = new Handler(Looper.myLooper());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ContactsLoadingObserver() {
+    public /* synthetic */ void lambda$new$0() {
         onContactsLoadingStateUpdated(this.currentAccount, true);
     }
 

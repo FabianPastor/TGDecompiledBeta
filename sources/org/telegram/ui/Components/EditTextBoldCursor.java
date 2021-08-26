@@ -89,9 +89,7 @@ public class EditTextBoldCursor extends EditText {
             }
         }
     };
-    int lastOffset = -1;
     private int lastSize;
-    CharSequence lastText;
     private long lastUpdateTime;
     private int lineColor;
     private Paint linePaint;
@@ -290,7 +288,7 @@ public class EditTextBoldCursor extends EditText {
         L_0x00d3:
             java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00e1 }
             if (r0 == 0) goto L_0x00e1
-            r1 = 2131165395(0x7var_d3, float:1.7945006E38)
+            r1 = 2131165400(0x7var_d8, float:1.7945016E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00e1 }
             r0.set(r8, r1)     // Catch:{ all -> 0x00e1 }
         L_0x00e1:
@@ -322,17 +320,7 @@ public class EditTextBoldCursor extends EditText {
                 }
                 ViewTreeObserver.OnPreDrawListener onPreDrawListener = this.listenerFixer;
                 onPreDrawListener.getClass();
-                AndroidUtilities.runOnUIThread(new Runnable(onPreDrawListener) {
-                    public final /* synthetic */ ViewTreeObserver.OnPreDrawListener f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void run() {
-                        this.f$0.onPreDraw();
-                    }
-                }, 500);
+                AndroidUtilities.runOnUIThread(new EditTextBoldCursor$$ExternalSyntheticLambda1(onPreDrawListener), 500);
             } catch (Throwable unused) {
             }
             this.fixed = true;
@@ -625,9 +613,9 @@ public class EditTextBoldCursor extends EditText {
             float lineWidth = this.hintLayout.getLineWidth(0);
             int i5 = lineLeft != 0.0f ? (int) (((float) 0) - lineLeft) : 0;
             if (!this.supportRtlHint || !LocaleController.isRTL) {
-                canvas2.translate((float) (i5 + getScrollX()), (this.lineY - ((float) this.hintLayout.getHeight())) - ((float) AndroidUtilities.dp(6.0f)));
+                canvas2.translate((float) (i5 + getScrollX()), (this.lineY - ((float) this.hintLayout.getHeight())) - ((float) AndroidUtilities.dp2(7.0f)));
             } else {
-                canvas2.translate(((float) (i5 + getScrollX())) + (((float) getMeasuredWidth()) - lineWidth), (this.lineY - ((float) this.hintLayout.getHeight())) - ((float) AndroidUtilities.dp(6.0f)));
+                canvas2.translate(((float) (i5 + getScrollX())) + (((float) getMeasuredWidth()) - lineWidth), (this.lineY - ((float) this.hintLayout.getHeight())) - ((float) AndroidUtilities.dp(7.0f)));
             }
             if (this.transformHintToHeader) {
                 float f6 = 1.0f - (this.headerAnimationProgress * 0.3f);
@@ -921,8 +909,7 @@ public class EditTextBoldCursor extends EditText {
         int selectionStart = getSelectionStart();
         int lineForOffset = layout.getLineForOffset(selectionStart);
         updateCursorPosition(layout.getLineTop(lineForOffset), layout.getLineTop(lineForOffset + 1), layout.getPrimaryHorizontal(selectionStart));
-        this.lastText = layout.getText();
-        this.lastOffset = selectionStart;
+        layout.getText();
         return true;
     }
 
@@ -1013,13 +1000,9 @@ public class EditTextBoldCursor extends EditText {
             view = this.attachedToWindow;
         }
         this.floatingToolbar = new FloatingToolbar(context, view, getActionModeStyle());
-        FloatingActionMode floatingActionMode3 = new FloatingActionMode(getContext(), new ActionModeCallback2Wrapper(callback), this, this.floatingToolbar);
-        this.floatingActionMode = floatingActionMode3;
-        this.floatingToolbarPreDrawListener = new ViewTreeObserver.OnPreDrawListener() {
-            public final boolean onPreDraw() {
-                return EditTextBoldCursor.this.lambda$startActionMode$0$EditTextBoldCursor();
-            }
-        };
+        this.floatingActionMode = new FloatingActionMode(getContext(), new ActionModeCallback2Wrapper(callback), this, this.floatingToolbar);
+        this.floatingToolbarPreDrawListener = new EditTextBoldCursor$$ExternalSyntheticLambda0(this);
+        FloatingActionMode floatingActionMode3 = this.floatingActionMode;
         callback.onCreateActionMode(floatingActionMode3, floatingActionMode3.getMenu());
         FloatingActionMode floatingActionMode4 = this.floatingActionMode;
         extendActionMode(floatingActionMode4, floatingActionMode4.getMenu());
@@ -1030,8 +1013,7 @@ public class EditTextBoldCursor extends EditText {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startActionMode$0 */
-    public /* synthetic */ boolean lambda$startActionMode$0$EditTextBoldCursor() {
+    public /* synthetic */ boolean lambda$startActionMode$0() {
         FloatingActionMode floatingActionMode2 = this.floatingActionMode;
         if (floatingActionMode2 == null) {
             return true;

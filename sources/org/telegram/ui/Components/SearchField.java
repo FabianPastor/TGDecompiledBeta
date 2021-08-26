@@ -86,11 +86,7 @@ public class SearchField extends FrameLayout {
             layoutParams3 = LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f);
         }
         addView(this.clearSearchImageView, layoutParams3);
-        this.clearSearchImageView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                SearchField.this.lambda$new$0$SearchField(view);
-            }
-        });
+        this.clearSearchImageView.setOnClickListener(new SearchField$$ExternalSyntheticLambda0(this));
         AnonymousClass1 r0 = new EditTextBoldCursor(context) {
             public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                 SearchField.this.processTouchEvent(motionEvent);
@@ -157,23 +153,17 @@ public class SearchField extends FrameLayout {
                 searchField.onTextChange(searchField.searchEditText.getText().toString());
             }
         });
-        this.searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                return SearchField.this.lambda$new$1$SearchField(textView, i, keyEvent);
-            }
-        });
+        this.searchEditText.setOnEditorActionListener(new SearchField$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$SearchField(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         this.searchEditText.setText("");
         AndroidUtilities.showKeyboard(this.searchEditText);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ boolean lambda$new$1$SearchField(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$new$1(TextView textView, int i, KeyEvent keyEvent) {
         if (keyEvent == null) {
             return false;
         }

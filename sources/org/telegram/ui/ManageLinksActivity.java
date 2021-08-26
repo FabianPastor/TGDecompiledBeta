@@ -40,7 +40,6 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -81,7 +80,6 @@ import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.TimerParticles;
 import org.telegram.ui.LinkEditActivity;
-import org.telegram.ui.ManageLinksActivity;
 
 public class ManageLinksActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -251,23 +249,12 @@ public class ManageLinksActivity extends BaseFragment {
         this.linkEditActivityCallback = new LinkEditActivity.Callback() {
             public void onLinkCreated(TLObject tLObject) {
                 if (tLObject instanceof TLRPC$TL_chatInviteExported) {
-                    AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-                        public final /* synthetic */ TLObject f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void run() {
-                            ManageLinksActivity.AnonymousClass6.this.lambda$onLinkCreated$0$ManageLinksActivity$6(this.f$1);
-                        }
-                    }, 200);
+                    AndroidUtilities.runOnUIThread(new ManageLinksActivity$6$$ExternalSyntheticLambda0(this, tLObject), 200);
                 }
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onLinkCreated$0 */
-            public /* synthetic */ void lambda$onLinkCreated$0$ManageLinksActivity$6(TLObject tLObject) {
+            public /* synthetic */ void lambda$onLinkCreated$0(TLObject tLObject) {
                 DiffCallback access$4300 = ManageLinksActivity.this.saveListState();
                 ManageLinksActivity.this.invites.add(0, (TLRPC$TL_chatInviteExported) tLObject);
                 ManageLinksActivity.this.updateRecyclerViewAnimated(access$4300);
@@ -361,28 +348,12 @@ public class ManageLinksActivity extends BaseFragment {
                 tLRPC$TL_messages_getExportedChatInvites.offset_date = arrayList4.get(arrayList4.size() - 1).date;
             }
             this.linksLoading = true;
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getExportedChatInvites, new RequestDelegate(this.isPublic ? null : this.invite, z2) {
-                public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-                public final /* synthetic */ boolean f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ManageLinksActivity.this.lambda$loadLinks$5$ManageLinksActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                }
-            }), getClassGuid());
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getExportedChatInvites, new ManageLinksActivity$$ExternalSyntheticLambda14(this, this.isPublic ? null : this.invite, z2)), getClassGuid());
         } else {
             this.linksLoading = true;
             TLRPC$TL_messages_getAdminsWithInvites tLRPC$TL_messages_getAdminsWithInvites = new TLRPC$TL_messages_getAdminsWithInvites();
             tLRPC$TL_messages_getAdminsWithInvites.peer = getMessagesController().getInputPeer(-this.currentChatId);
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getAdminsWithInvites, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ManageLinksActivity.this.lambda$loadLinks$2$ManageLinksActivity(tLObject, tLRPC$TL_error);
-                }
-            }), getClassGuid());
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getAdminsWithInvites, new ManageLinksActivity$$ExternalSyntheticLambda9(this)), getClassGuid());
         }
         if (z) {
             updateRows(true);
@@ -390,44 +361,17 @@ public class ManageLinksActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadLinks$2 */
-    public /* synthetic */ void lambda$loadLinks$2$ManageLinksActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                ManageLinksActivity.this.lambda$loadLinks$1$ManageLinksActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$loadLinks$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ManageLinksActivity$$ExternalSyntheticLambda5(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadLinks$1 */
-    public /* synthetic */ void lambda$loadLinks$1$ManageLinksActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
-        getNotificationCenter().doOnIdle(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                ManageLinksActivity.this.lambda$loadLinks$0$ManageLinksActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$loadLinks$1(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+        getNotificationCenter().doOnIdle(new ManageLinksActivity$$ExternalSyntheticLambda4(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadLinks$0 */
-    public /* synthetic */ void lambda$loadLinks$0$ManageLinksActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$loadLinks$0(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         RecyclerItemsEnterAnimator recyclerItemsEnterAnimator2;
         this.linksLoading = false;
         if (tLRPC$TL_error == null) {
@@ -461,8 +405,7 @@ public class ManageLinksActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadLinks$5 */
-    public /* synthetic */ void lambda$loadLinks$5$ManageLinksActivity(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadLinks$5(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported2;
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_exportedChatInvites tLRPC$TL_messages_exportedChatInvites = (TLRPC$TL_messages_exportedChatInvites) tLObject;
@@ -478,74 +421,24 @@ public class ManageLinksActivity extends BaseFragment {
                         i++;
                     }
                 }
-                AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_chatInviteExported2, tLRPC$TL_error, tLObject, z) {
-                    public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-                    public final /* synthetic */ TLRPC$TL_error f$2;
-                    public final /* synthetic */ TLObject f$3;
-                    public final /* synthetic */ boolean f$4;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                        this.f$4 = r5;
-                    }
-
-                    public final void run() {
-                        ManageLinksActivity.this.lambda$loadLinks$4$ManageLinksActivity(this.f$1, this.f$2, this.f$3, this.f$4);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new ManageLinksActivity$$ExternalSyntheticLambda1(this, tLRPC$TL_chatInviteExported2, tLRPC$TL_error, tLObject, z));
             }
         }
         tLRPC$TL_chatInviteExported2 = null;
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_chatInviteExported2, tLRPC$TL_error, tLObject, z) {
-            public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-            public final /* synthetic */ TLObject f$3;
-            public final /* synthetic */ boolean f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void run() {
-                ManageLinksActivity.this.lambda$loadLinks$4$ManageLinksActivity(this.f$1, this.f$2, this.f$3, this.f$4);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ManageLinksActivity$$ExternalSyntheticLambda1(this, tLRPC$TL_chatInviteExported2, tLRPC$TL_error, tLObject, z));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadLinks$4 */
-    public /* synthetic */ void lambda$loadLinks$4$ManageLinksActivity(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
-        getNotificationCenter().doOnIdle(new Runnable(tLRPC$TL_chatInviteExported, tLRPC$TL_error, tLObject, z) {
-            public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-            public final /* synthetic */ TLObject f$3;
-            public final /* synthetic */ boolean f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void run() {
-                ManageLinksActivity.this.lambda$loadLinks$3$ManageLinksActivity(this.f$1, this.f$2, this.f$3, this.f$4);
-            }
-        });
+    public /* synthetic */ void lambda$loadLinks$4(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
+        getNotificationCenter().doOnIdle(new ManageLinksActivity$$ExternalSyntheticLambda2(this, tLRPC$TL_chatInviteExported, tLRPC$TL_error, tLObject, z));
     }
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:78:0x0156  */
     /* JADX WARNING: Removed duplicated region for block: B:84:0x0167  */
     /* JADX WARNING: Removed duplicated region for block: B:85:0x016b  */
-    /* renamed from: lambda$loadLinks$3 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$loadLinks$3$ManageLinksActivity(org.telegram.tgnet.TLRPC$TL_chatInviteExported r6, org.telegram.tgnet.TLRPC$TL_error r7, org.telegram.tgnet.TLObject r8, boolean r9) {
+    public /* synthetic */ void lambda$loadLinks$3(org.telegram.tgnet.TLRPC$TL_chatInviteExported r6, org.telegram.tgnet.TLRPC$TL_error r7, org.telegram.tgnet.TLObject r8, boolean r9) {
         /*
             r5 = this;
             r0 = 0
@@ -747,7 +640,7 @@ public class ManageLinksActivity extends BaseFragment {
         L_0x016e:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ManageLinksActivity.lambda$loadLinks$3$ManageLinksActivity(org.telegram.tgnet.TLRPC$TL_chatInviteExported, org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ManageLinksActivity.lambda$loadLinks$3(org.telegram.tgnet.TLRPC$TL_chatInviteExported, org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, boolean):void");
     }
 
     /* access modifiers changed from: private */
@@ -951,22 +844,8 @@ public class ManageLinksActivity extends BaseFragment {
         this.listView.setItemAnimator(defaultItemAnimator);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(context) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onItemClick(View view, int i) {
-                ManageLinksActivity.this.lambda$createView$9$ManageLinksActivity(this.f$1, view, i);
-            }
-        });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return ManageLinksActivity.this.lambda$createView$10$ManageLinksActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ManageLinksActivity$$ExternalSyntheticLambda16(this, context));
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ManageLinksActivity$$ExternalSyntheticLambda17(this));
         this.linkIcon = ContextCompat.getDrawable(context, NUM);
         this.linkIconRevoked = ContextCompat.getDrawable(context, NUM);
         this.linkIcon.setColorFilter(new PorterDuffColorFilter(-1, PorterDuff.Mode.MULTIPLY));
@@ -976,8 +855,7 @@ public class ManageLinksActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$9 */
-    public /* synthetic */ void lambda$createView$9$ManageLinksActivity(Context context, View view, int i) {
+    public /* synthetic */ void lambda$createView$9(Context context, View view, int i) {
         if (i == this.creatorRow) {
             TLRPC$User tLRPC$User = this.users.get(Integer.valueOf(this.invite.admin_id));
             if (tLRPC$User != null) {
@@ -1013,11 +891,7 @@ public class ManageLinksActivity extends BaseFragment {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setTitle(LocaleController.getString("DeleteAllRevokedLinks", NUM));
                     builder.setMessage(LocaleController.getString("DeleteAllRevokedLinkHelp", NUM));
-                    builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ManageLinksActivity.this.lambda$createView$8$ManageLinksActivity(dialogInterface, i);
-                        }
-                    });
+                    builder.setPositiveButton(LocaleController.getString("Delete", NUM), new ManageLinksActivity$$ExternalSyntheticLambda0(this));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     showDialog(builder.create());
                 }
@@ -1031,8 +905,7 @@ public class ManageLinksActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$8 */
-    public /* synthetic */ void lambda$createView$8$ManageLinksActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$8(DialogInterface dialogInterface, int i) {
         TLRPC$TL_messages_deleteRevokedExportedChatInvites tLRPC$TL_messages_deleteRevokedExportedChatInvites = new TLRPC$TL_messages_deleteRevokedExportedChatInvites();
         tLRPC$TL_messages_deleteRevokedExportedChatInvites.peer = getMessagesController().getInputPeer(-this.currentChatId);
         if (this.adminId == getUserConfig().getClientUserId()) {
@@ -1041,32 +914,16 @@ public class ManageLinksActivity extends BaseFragment {
             tLRPC$TL_messages_deleteRevokedExportedChatInvites.admin_id = getMessagesController().getInputUser(this.adminId);
         }
         this.deletingRevokedLinks = true;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteRevokedExportedChatInvites, new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ManageLinksActivity.this.lambda$createView$7$ManageLinksActivity(tLObject, tLRPC$TL_error);
-            }
-        });
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteRevokedExportedChatInvites, new ManageLinksActivity$$ExternalSyntheticLambda10(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$7 */
-    public /* synthetic */ void lambda$createView$7$ManageLinksActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ManageLinksActivity.this.lambda$createView$6$ManageLinksActivity(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$createView$7(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ManageLinksActivity$$ExternalSyntheticLambda3(this, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$6 */
-    public /* synthetic */ void lambda$createView$6$ManageLinksActivity(TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$createView$6(TLRPC$TL_error tLRPC$TL_error) {
         this.deletingRevokedLinks = false;
         if (tLRPC$TL_error == null) {
             DiffCallback saveListState = saveListState();
@@ -1076,8 +933,7 @@ public class ManageLinksActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$10 */
-    public /* synthetic */ boolean lambda$createView$10$ManageLinksActivity(View view, int i) {
+    public /* synthetic */ boolean lambda$createView$10(View view, int i) {
         if ((i < this.linksStartRow || i >= this.linksEndRow) && (i < this.revokedLinksStartRow || i >= this.revokedLinksEndRow)) {
             return false;
         }
@@ -1105,7 +961,7 @@ public class ManageLinksActivity extends BaseFragment {
         private EmptyView emptyView;
         private TextView messageTextView;
 
-        public HintInnerCell(Context context) {
+        public HintInnerCell(ManageLinksActivity manageLinksActivity, Context context) {
             super(context);
             int i;
             String str;
@@ -1118,7 +974,7 @@ public class ManageLinksActivity extends BaseFragment {
             this.messageTextView.setTextSize(1, 14.0f);
             this.messageTextView.setGravity(17);
             TextView textView2 = this.messageTextView;
-            if (ManageLinksActivity.this.isChannel) {
+            if (manageLinksActivity.isChannel) {
                 i = NUM;
                 str = "PrimaryLinkHelpChannel";
             } else {
@@ -1196,7 +1052,7 @@ public class ManageLinksActivity extends BaseFragment {
                 java.lang.String r12 = "windowBackgroundGrayShadow"
                 r0 = 1
                 r1 = 0
-                r2 = 2131165444(0x7var_, float:1.7945105E38)
+                r2 = 2131165449(0x7var_, float:1.7945115E38)
                 java.lang.String r3 = "windowBackgroundWhite"
                 switch(r13) {
                     case 1: goto L_0x00ec;
@@ -1215,7 +1071,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity$HintInnerCell r12 = new org.telegram.ui.ManageLinksActivity$HintInnerCell
                 org.telegram.ui.ManageLinksActivity r13 = org.telegram.ui.ManageLinksActivity.this
                 android.content.Context r0 = r11.mContext
-                r12.<init>(r0)
+                r12.<init>(r13, r0)
                 android.content.Context r13 = r11.mContext
                 android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r13, (int) r2, (java.lang.String) r3)
                 r12.setBackgroundDrawable(r13)
@@ -1233,7 +1089,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.Cells.TextInfoPrivacyCell r13 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r0 = r11.mContext
                 r13.<init>(r0)
-                r0 = 2131625051(0x7f0e045b, float:1.88773E38)
+                r0 = 2131625056(0x7f0e0460, float:1.887731E38)
                 java.lang.String r1 = "CreateNewLinkHelp"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setText(r0)
@@ -1247,7 +1103,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r12.<init>(r13)
                 int r13 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r12.setBackgroundColor(r13)
-                r13 = 2131625140(0x7f0e04b4, float:1.887748E38)
+                r13 = 2131625145(0x7f0e04b9, float:1.887749E38)
                 java.lang.String r0 = "DeleteAllRevokedLinks"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13, r1)
@@ -1453,11 +1309,11 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity$TextCell r6 = (org.telegram.ui.ManageLinksActivity.TextCell) r6
                 android.content.Context r7 = r5.mContext
                 android.content.res.Resources r7 = r7.getResources()
-                r0 = 2131165964(0x7var_c, float:1.794616E38)
+                r0 = 2131165969(0x7var_, float:1.794617E38)
                 android.graphics.drawable.Drawable r7 = r7.getDrawable(r0)
                 android.content.Context r0 = r5.mContext
                 android.content.res.Resources r0 = r0.getResources()
-                r2 = 2131165965(0x7var_d, float:1.7946162E38)
+                r2 = 2131165970(0x7var_, float:1.7946172E38)
                 android.graphics.drawable.Drawable r0 = r0.getDrawable(r2)
                 android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
                 java.lang.String r3 = "switchTrackChecked"
@@ -1473,7 +1329,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r0.setColorFilter(r2)
                 org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
                 r2.<init>(r7, r0)
-                r7 = 2131625050(0x7f0e045a, float:1.8877297E38)
+                r7 = 2131625055(0x7f0e045f, float:1.8877307E38)
                 java.lang.String r0 = "CreateNewLink"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
@@ -1563,7 +1419,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.messenger.UserConfig r0 = r0.getUserConfig()
                 int r0 = r0.clientUserId
                 if (r7 != r0) goto L_0x0214
-                r7 = 2131627138(0x7f0e0CLASSNAME, float:1.8881532E38)
+                r7 = 2131627155(0x7f0e0CLASSNAME, float:1.8881566E38)
                 java.lang.String r0 = "PublicLink"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1576,13 +1432,13 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.messenger.UserConfig r0 = r0.getUserConfig()
                 int r0 = r0.clientUserId
                 if (r7 != r0) goto L_0x0235
-                r7 = 2131624734(0x7f0e031e, float:1.8876656E38)
+                r7 = 2131624738(0x7f0e0322, float:1.8876664E38)
                 java.lang.String r0 = "ChannelInviteLinkTitle"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x0280
             L_0x0235:
-                r7 = 2131626944(0x7f0e0bc0, float:1.8881138E38)
+                r7 = 2131626961(0x7f0e0bd1, float:1.8881173E38)
                 java.lang.String r0 = "PermanentLinkForThisAdmin"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1591,7 +1447,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.revokedHeader
                 if (r7 != r0) goto L_0x0257
-                r7 = 2131627323(0x7f0e0d3b, float:1.8881907E38)
+                r7 = 2131627343(0x7f0e0d4f, float:1.8881948E38)
                 java.lang.String r0 = "RevokedLinks"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1600,7 +1456,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.linksHeaderRow
                 if (r7 != r0) goto L_0x026c
-                r7 = 2131626030(0x7f0e082e, float:1.8879285E38)
+                r7 = 2131626041(0x7f0e0839, float:1.8879307E38)
                 java.lang.String r0 = "LinksCreatedByThisAdmin"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1609,7 +1465,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.adminsHeaderRow
                 if (r7 != r0) goto L_0x0280
-                r7 = 2131626029(0x7f0e082d, float:1.8879283E38)
+                r7 = 2131626040(0x7f0e0838, float:1.8879305E38)
                 java.lang.String r0 = "LinksCreatedByOtherAdmins"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1679,17 +1535,7 @@ public class ManageLinksActivity extends BaseFragment {
             TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = this.invite;
             this.invite = null;
             this.info.exported_invite = null;
-            int sendRequest = getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate(tLRPC$TL_chatInviteExported) {
-                public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ManageLinksActivity.this.lambda$revokePermanent$12$ManageLinksActivity(this.f$1, tLObject, tLRPC$TL_error);
-                }
-            });
+            int sendRequest = getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new ManageLinksActivity$$ExternalSyntheticLambda11(this, tLRPC$TL_chatInviteExported));
             AndroidUtilities.updateVisibleRows(this.listView);
             getConnectionsManager().bindRequestToGuid(sendRequest, this.classGuid);
             return;
@@ -1698,28 +1544,12 @@ public class ManageLinksActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$revokePermanent$12 */
-    public /* synthetic */ void lambda$revokePermanent$12$ManageLinksActivity(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_chatInviteExported) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ TLRPC$TL_chatInviteExported f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ManageLinksActivity.this.lambda$revokePermanent$11$ManageLinksActivity(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$revokePermanent$12(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ManageLinksActivity$$ExternalSyntheticLambda7(this, tLRPC$TL_error, tLObject, tLRPC$TL_chatInviteExported));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$revokePermanent$11 */
-    public /* synthetic */ void lambda$revokePermanent$11$ManageLinksActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
+    public /* synthetic */ void lambda$revokePermanent$11(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported2 = (TLRPC$TL_chatInviteExported) tLObject;
             this.invite = tLRPC$TL_chatInviteExported2;
@@ -1845,11 +1675,7 @@ public class ManageLinksActivity extends BaseFragment {
             imageView.setImageDrawable(ContextCompat.getDrawable(context, NUM));
             this.optionsView.setScaleType(ImageView.ScaleType.CENTER);
             this.optionsView.setColorFilter(Theme.getColor("stickers_menu"));
-            this.optionsView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    ManageLinksActivity.LinkCell.this.lambda$new$3$ManageLinksActivity$LinkCell(view);
-                }
-            });
+            this.optionsView.setOnClickListener(new ManageLinksActivity$LinkCell$$ExternalSyntheticLambda3(this));
             this.optionsView.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 1));
             addView(this.optionsView, LayoutHelper.createFrame(40, 48, 21));
             setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
@@ -1859,9 +1685,8 @@ public class ManageLinksActivity extends BaseFragment {
         /* access modifiers changed from: private */
         /* JADX WARNING: Removed duplicated region for block: B:18:0x00fd  */
         /* JADX WARNING: Removed duplicated region for block: B:20:? A[RETURN, SYNTHETIC] */
-        /* renamed from: lambda$new$3 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$new$3$ManageLinksActivity$LinkCell(android.view.View r8) {
+        public /* synthetic */ void lambda$new$3(android.view.View r8) {
             /*
                 r7 = this;
                 org.telegram.tgnet.TLRPC$TL_chatInviteExported r8 = r7.invite
@@ -1876,11 +1701,11 @@ public class ManageLinksActivity extends BaseFragment {
                 r1.<init>()
                 org.telegram.tgnet.TLRPC$TL_chatInviteExported r2 = r7.invite
                 boolean r2 = r2.revoked
-                r3 = 2131165730(0x7var_, float:1.7945685E38)
+                r3 = 2131165735(0x7var_, float:1.7945696E38)
                 r4 = 0
                 r5 = 1
                 if (r2 == 0) goto L_0x003d
-                r2 = 2131625128(0x7f0e04a8, float:1.8877455E38)
+                r2 = 2131625133(0x7f0e04ad, float:1.8877465E38)
                 java.lang.String r6 = "Delete"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1893,20 +1718,20 @@ public class ManageLinksActivity extends BaseFragment {
                 r2 = 1
                 goto L_0x00c9
             L_0x003d:
-                r2 = 2131625033(0x7f0e0449, float:1.8877263E38)
+                r2 = 2131625038(0x7f0e044e, float:1.8877273E38)
                 java.lang.String r6 = "CopyLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
-                r2 = 2131165728(0x7var_, float:1.7945681E38)
+                r2 = 2131165733(0x7var_, float:1.7945691E38)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
                 r1.add(r2)
-                r2 = 2131627516(0x7f0e0dfc, float:1.8882299E38)
+                r2 = 2131627536(0x7f0e0e10, float:1.888234E38)
                 java.lang.String r6 = "ShareLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
-                r2 = 2131165824(0x7var_, float:1.7945876E38)
+                r2 = 2131165829(0x7var_, float:1.7945886E38)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r5)
@@ -1917,11 +1742,11 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00a3
-                r2 = 2131625290(0x7f0e054a, float:1.8877784E38)
+                r2 = 2131625295(0x7f0e054f, float:1.8877794E38)
                 java.lang.String r6 = "EditLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
-                r2 = 2131165739(0x7var_b, float:1.7945704E38)
+                r2 = 2131165744(0x7var_, float:1.7945714E38)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 r0.add(r2)
                 r2 = 2
@@ -1931,7 +1756,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00c8
-                r2 = 2131627318(0x7f0e0d36, float:1.8881897E38)
+                r2 = 2131627338(0x7f0e0d4a, float:1.8881938E38)
                 java.lang.String r6 = "RevokeLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1952,10 +1777,10 @@ public class ManageLinksActivity extends BaseFragment {
                 java.lang.Object[] r4 = r8.toArray(r4)
                 java.lang.CharSequence[] r4 = (java.lang.CharSequence[]) r4
                 int[] r0 = org.telegram.messenger.AndroidUtilities.toIntArray(r0)
-                org.telegram.ui.-$$Lambda$ManageLinksActivity$LinkCell$6WOTWE2QlARDKBPxMERVDFywqN8 r6 = new org.telegram.ui.-$$Lambda$ManageLinksActivity$LinkCell$6WOTWE2QlARDKBPxMERVDFywqN8
-                r6.<init>(r1)
+                org.telegram.ui.ManageLinksActivity$LinkCell$$ExternalSyntheticLambda0 r6 = new org.telegram.ui.ManageLinksActivity$LinkCell$$ExternalSyntheticLambda0
+                r6.<init>(r7, r1)
                 r3.setItems(r4, r0, r6)
-                r0 = 2131625903(0x7f0e07af, float:1.8879027E38)
+                r0 = 2131625913(0x7f0e07b9, float:1.8879047E38)
                 java.lang.String r1 = "InviteLink"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r3.setTitle(r0)
@@ -1972,12 +1797,11 @@ public class ManageLinksActivity extends BaseFragment {
             L_0x0111:
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ManageLinksActivity.LinkCell.lambda$new$3$ManageLinksActivity$LinkCell(android.view.View):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ManageLinksActivity.LinkCell.lambda$new$3(android.view.View):void");
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$2 */
-        public /* synthetic */ void lambda$new$2$ManageLinksActivity$LinkCell(ArrayList arrayList, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$new$2(ArrayList arrayList, DialogInterface dialogInterface, int i) {
             int intValue = ((Integer) arrayList.get(i)).intValue();
             if (intValue == 0) {
                 try {
@@ -2006,17 +1830,7 @@ public class ManageLinksActivity extends BaseFragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) ManageLinksActivity.this.getParentActivity());
                 builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
                 builder.setTitle(LocaleController.getString("RevokeLink", NUM));
-                builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener(tLRPC$TL_chatInviteExported) {
-                    public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        ManageLinksActivity.LinkCell.this.lambda$new$0$ManageLinksActivity$LinkCell(this.f$1, dialogInterface, i);
-                    }
-                });
+                builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new ManageLinksActivity$LinkCell$$ExternalSyntheticLambda1(this, tLRPC$TL_chatInviteExported));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 ManageLinksActivity.this.showDialog(builder.create());
             } else if (intValue == 4) {
@@ -2024,31 +1838,19 @@ public class ManageLinksActivity extends BaseFragment {
                 AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) ManageLinksActivity.this.getParentActivity());
                 builder2.setTitle(LocaleController.getString("DeleteLink", NUM));
                 builder2.setMessage(LocaleController.getString("DeleteLinkHelp", NUM));
-                builder2.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(tLRPC$TL_chatInviteExported2) {
-                    public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        ManageLinksActivity.LinkCell.this.lambda$new$1$ManageLinksActivity$LinkCell(this.f$1, dialogInterface, i);
-                    }
-                });
+                builder2.setPositiveButton(LocaleController.getString("Delete", NUM), new ManageLinksActivity$LinkCell$$ExternalSyntheticLambda2(this, tLRPC$TL_chatInviteExported2));
                 builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 ManageLinksActivity.this.showDialog(builder2.create());
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ManageLinksActivity$LinkCell(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$new$0(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, DialogInterface dialogInterface, int i) {
             ManageLinksActivity.this.revokeLink(tLRPC$TL_chatInviteExported);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$1 */
-        public /* synthetic */ void lambda$new$1$ManageLinksActivity$LinkCell(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$new$1(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, DialogInterface dialogInterface, int i) {
             ManageLinksActivity.this.deleteLink(tLRPC$TL_chatInviteExported);
         }
 
@@ -2504,40 +2306,16 @@ public class ManageLinksActivity extends BaseFragment {
         TLRPC$TL_messages_deleteExportedChatInvite tLRPC$TL_messages_deleteExportedChatInvite = new TLRPC$TL_messages_deleteExportedChatInvite();
         tLRPC$TL_messages_deleteExportedChatInvite.link = tLRPC$TL_chatInviteExported.link;
         tLRPC$TL_messages_deleteExportedChatInvite.peer = getMessagesController().getInputPeer(-this.currentChatId);
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteExportedChatInvite, new RequestDelegate(tLRPC$TL_chatInviteExported) {
-            public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ManageLinksActivity.this.lambda$deleteLink$14$ManageLinksActivity(this.f$1, tLObject, tLRPC$TL_error);
-            }
-        });
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteExportedChatInvite, new ManageLinksActivity$$ExternalSyntheticLambda13(this, tLRPC$TL_chatInviteExported));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$deleteLink$14 */
-    public /* synthetic */ void lambda$deleteLink$14$ManageLinksActivity(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLRPC$TL_chatInviteExported) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLRPC$TL_chatInviteExported f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                ManageLinksActivity.this.lambda$deleteLink$13$ManageLinksActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$deleteLink$14(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ManageLinksActivity$$ExternalSyntheticLambda8(this, tLRPC$TL_error, tLRPC$TL_chatInviteExported));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$deleteLink$13 */
-    public /* synthetic */ void lambda$deleteLink$13$ManageLinksActivity(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
+    public /* synthetic */ void lambda$deleteLink$13(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
         if (tLRPC$TL_error == null) {
             this.linkEditActivityCallback.onLinkRemoved(tLRPC$TL_chatInviteExported);
         }
@@ -2555,42 +2333,16 @@ public class ManageLinksActivity extends BaseFragment {
         tLRPC$TL_messages_editExportedChatInvite.link = tLRPC$TL_chatInviteExported.link;
         tLRPC$TL_messages_editExportedChatInvite.revoked = true;
         tLRPC$TL_messages_editExportedChatInvite.peer = getMessagesController().getInputPeer(-this.currentChatId);
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_editExportedChatInvite, new RequestDelegate(tLRPC$TL_chatInviteExported) {
-            public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ManageLinksActivity.this.lambda$revokeLink$16$ManageLinksActivity(this.f$1, tLObject, tLRPC$TL_error);
-            }
-        });
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_editExportedChatInvite, new ManageLinksActivity$$ExternalSyntheticLambda12(this, tLRPC$TL_chatInviteExported));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$revokeLink$16 */
-    public /* synthetic */ void lambda$revokeLink$16$ManageLinksActivity(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_chatInviteExported) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ TLRPC$TL_chatInviteExported f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ManageLinksActivity.this.lambda$revokeLink$15$ManageLinksActivity(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$revokeLink$16(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ManageLinksActivity$$ExternalSyntheticLambda6(this, tLRPC$TL_error, tLObject, tLRPC$TL_chatInviteExported));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$revokeLink$15 */
-    public /* synthetic */ void lambda$revokeLink$15$ManageLinksActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
+    public /* synthetic */ void lambda$revokeLink$15(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
         if (tLRPC$TL_error == null) {
             if (tLObject instanceof TLRPC$TL_messages_exportedChatInviteReplaced) {
                 TLRPC$TL_messages_exportedChatInviteReplaced tLRPC$TL_messages_exportedChatInviteReplaced = (TLRPC$TL_messages_exportedChatInviteReplaced) tLObject;
@@ -2761,11 +2513,7 @@ public class ManageLinksActivity extends BaseFragment {
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ManageLinksActivity$qcjO18qpwUV4GqkS6UuogTVHJg r11 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                ManageLinksActivity.this.lambda$getThemeDescriptions$17$ManageLinksActivity();
-            }
-        };
+        ManageLinksActivity$$ExternalSyntheticLambda15 manageLinksActivity$$ExternalSyntheticLambda15 = new ManageLinksActivity$$ExternalSyntheticLambda15(this);
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextCell.class, LinkActionView.class, LinkCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
@@ -2779,18 +2527,18 @@ public class ManageLinksActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$ManageLinksActivity$qcjO18qpwUV4GqkS6UuogTVHJg r9 = r11;
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
+        ManageLinksActivity$$ExternalSyntheticLambda15 manageLinksActivity$$ExternalSyntheticLambda152 = manageLinksActivity$$ExternalSyntheticLambda15;
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) manageLinksActivity$$ExternalSyntheticLambda152, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) manageLinksActivity$$ExternalSyntheticLambda152, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$ManageLinksActivity$qcjO18qpwUV4GqkS6UuogTVHJg r8 = r11;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        ManageLinksActivity$$ExternalSyntheticLambda15 manageLinksActivity$$ExternalSyntheticLambda153 = manageLinksActivity$$ExternalSyntheticLambda15;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, manageLinksActivity$$ExternalSyntheticLambda153, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, manageLinksActivity$$ExternalSyntheticLambda153, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, manageLinksActivity$$ExternalSyntheticLambda153, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, manageLinksActivity$$ExternalSyntheticLambda153, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, manageLinksActivity$$ExternalSyntheticLambda153, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, manageLinksActivity$$ExternalSyntheticLambda153, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, manageLinksActivity$$ExternalSyntheticLambda153, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HintInnerCell.class}, new String[]{"messageTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_message"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounterMuted"));
@@ -2807,8 +2555,7 @@ public class ManageLinksActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$17 */
-    public /* synthetic */ void lambda$getThemeDescriptions$17$ManageLinksActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$17() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

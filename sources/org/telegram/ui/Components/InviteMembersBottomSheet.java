@@ -24,7 +24,6 @@ import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
@@ -34,7 +33,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -51,7 +49,6 @@ import org.telegram.ui.Cells.GroupCreateSectionCell;
 import org.telegram.ui.Cells.GroupCreateUserCell;
 import org.telegram.ui.Cells.ManageChatTextCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.InviteMembersBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UsersAlertBase;
 import org.telegram.ui.GroupCreateActivity;
@@ -169,7 +166,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             org.telegram.ui.Components.UsersAlertBase$SearchField r1 = r6.searchView
             org.telegram.ui.Components.EditTextBoldCursor r1 = r1.searchEditText
             java.lang.String r2 = "SearchForChats"
-            r5 = 2131627362(0x7f0e0d62, float:1.8881986E38)
+            r5 = 2131627382(0x7f0e0d76, float:1.8882027E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r5)
             r1.setHint(r2)
             android.view.ViewConfiguration r1 = android.view.ViewConfiguration.get(r17)
@@ -216,18 +213,18 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r11.<init>(r7)
             r6.spansContainer = r11
             org.telegram.ui.Components.RecyclerListView r12 = r6.listView
-            org.telegram.ui.Components.-$$Lambda$InviteMembersBottomSheet$tJp7DJpqc9cQCLdo1RRC6TrRzuc r13 = new org.telegram.ui.Components.-$$Lambda$InviteMembersBottomSheet$tJp7DJpqc9cQCLdo1RRC6TrRzuc
+            org.telegram.ui.Components.InviteMembersBottomSheet$$ExternalSyntheticLambda8 r13 = new org.telegram.ui.Components.InviteMembersBottomSheet$$ExternalSyntheticLambda8
             r0 = r13
             r1 = r16
             r2 = r20
             r3 = r21
             r4 = r19
             r5 = r17
-            r0.<init>(r2, r3, r4, r5)
+            r0.<init>(r1, r2, r3, r4, r5)
             r12.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r13)
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView
             org.telegram.ui.Components.InviteMembersBottomSheet$ItemAnimator r1 = new org.telegram.ui.Components.InviteMembersBottomSheet$ItemAnimator
-            r1.<init>()
+            r1.<init>(r6)
             r0.setItemAnimator(r1)
             r16.updateRows()
             org.telegram.ui.Components.InviteMembersBottomSheet$2 r0 = new org.telegram.ui.Components.InviteMembersBottomSheet$2
@@ -255,7 +252,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r4 = 21
             if (r3 >= r4) goto L_0x012b
             android.content.res.Resources r5 = r17.getResources()
-            r11 = 2131165413(0x7var_e5, float:1.7945042E38)
+            r11 = 2131165418(0x7var_ea, float:1.7945053E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r11)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
@@ -277,7 +274,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
             r1.<init>(r2, r5)
             r0.setColorFilter(r1)
-            r1 = 2131165410(0x7var_e2, float:1.7945036E38)
+            r1 = 2131165415(0x7var_e7, float:1.7945046E38)
             r0.setImageResource(r1)
             r1 = 1082130432(0x40800000, float:4.0)
             if (r3 < r4) goto L_0x01a0
@@ -315,18 +312,18 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r2.addState(r11, r4)
             r0.setStateListAnimator(r2)
             org.telegram.ui.Components.InviteMembersBottomSheet$3 r2 = new org.telegram.ui.Components.InviteMembersBottomSheet$3
-            r2.<init>()
+            r2.<init>(r6)
             r0.setOutlineProvider(r2)
         L_0x01a0:
-            org.telegram.ui.Components.-$$Lambda$InviteMembersBottomSheet$ZVa7HisfLOZuqzYh66iAfBnuBs0 r2 = new org.telegram.ui.Components.-$$Lambda$InviteMembersBottomSheet$ZVa7HisfLOZuqzYh66iAfBnuBs0
-            r2.<init>(r7, r8)
+            org.telegram.ui.Components.InviteMembersBottomSheet$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.Components.InviteMembersBottomSheet$$ExternalSyntheticLambda2
+            r2.<init>(r6, r7, r8)
             r0.setOnClickListener(r2)
             r2 = 4
             r0.setVisibility(r2)
             r0.setScaleX(r10)
             r0.setScaleY(r10)
             r0.setAlpha(r10)
-            r2 = 2131626318(0x7f0e094e, float:1.8879869E38)
+            r2 = 2131626335(0x7f0e095f, float:1.8879903E38)
             java.lang.String r4 = "Next"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setContentDescription(r2)
@@ -378,9 +375,8 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v8, resolved type: org.telegram.tgnet.TLObject} */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* renamed from: lambda$new$0 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$new$0$InviteMembersBottomSheet(int r4, org.telegram.ui.ActionBar.BaseFragment r5, android.util.SparseArray r6, android.content.Context r7, android.view.View r8, int r9) {
+    public /* synthetic */ void lambda$new$0(int r4, org.telegram.ui.ActionBar.BaseFragment r5, android.util.SparseArray r6, android.content.Context r7, android.view.View r8, int r9) {
         /*
             r3 = this;
             org.telegram.ui.Components.RecyclerListView r8 = r3.listView
@@ -547,12 +543,11 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         L_0x0156:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteMembersBottomSheet.lambda$new$0$InviteMembersBottomSheet(int, org.telegram.ui.ActionBar.BaseFragment, android.util.SparseArray, android.content.Context, android.view.View, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteMembersBottomSheet.lambda$new$0(int, org.telegram.ui.ActionBar.BaseFragment, android.util.SparseArray, android.content.Context, android.view.View, int):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$InviteMembersBottomSheet(Context context, int i, View view) {
+    public /* synthetic */ void lambda$new$2(Context context, int i, View view) {
         Activity findActivity;
         if ((this.dialogsDelegate != null || this.selectedContacts.size() != 0) && (findActivity = AndroidUtilities.findActivity(context)) != null) {
             if (this.dialogsDelegate != null) {
@@ -594,11 +589,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             } else {
                 builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", NUM, sb, chat.title)));
             }
-            builder.setPositiveButton(LocaleController.getString("Add", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    InviteMembersBottomSheet.this.lambda$new$1$InviteMembersBottomSheet(dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("Add", NUM), new InviteMembersBottomSheet$$ExternalSyntheticLambda1(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             builder.create();
             builder.show();
@@ -606,8 +597,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$InviteMembersBottomSheet(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$new$1(DialogInterface dialogInterface, int i) {
         onAddToGroupDone(0);
     }
 
@@ -825,11 +815,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 fArr[1] = z2 ? 1.0f : 0.0f;
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
                 this.spansEnterAnimator = ofFloat;
-                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        InviteMembersBottomSheet.this.lambda$spansCountChanged$3$InviteMembersBottomSheet(valueAnimator);
-                    }
-                });
+                ofFloat.addUpdateListener(new InviteMembersBottomSheet$$ExternalSyntheticLambda0(this));
                 this.spansEnterAnimator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         float unused = InviteMembersBottomSheet.this.spansEnterProgress = z2 ? 1.0f : 0.0f;
@@ -893,8 +879,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$spansCountChanged$3 */
-    public /* synthetic */ void lambda$spansCountChanged$3$InviteMembersBottomSheet(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$spansCountChanged$3(ValueAnimator valueAnimator) {
         this.spansEnterProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.containerView.invalidate();
     }
@@ -971,7 +956,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 manageChatTextCell2.setColors("dialogTextBlue2", "dialogTextBlue2");
                 manageChatTextCell = manageChatTextCell2;
             } else {
-                AnonymousClass2 r11 = new StickerEmptyView(context, (View) null, 0) {
+                AnonymousClass2 r11 = new StickerEmptyView(this, context, (View) null, 0) {
                     /* access modifiers changed from: protected */
                     public void onAttachedToWindow() {
                         super.onAttachedToWindow();
@@ -1078,32 +1063,11 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         public SearchAdapter() {
             SearchAdapterHelper searchAdapterHelper2 = new SearchAdapterHelper(false);
             this.searchAdapterHelper = searchAdapterHelper2;
-            searchAdapterHelper2.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
-                public /* synthetic */ boolean canApplySearchResults(int i) {
-                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
-                }
-
-                public /* synthetic */ SparseArray getExcludeCallParticipants() {
-                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeCallParticipants(this);
-                }
-
-                public /* synthetic */ SparseArray getExcludeUsers() {
-                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
-                }
-
-                public final void onDataSetChanged(int i) {
-                    InviteMembersBottomSheet.SearchAdapter.this.lambda$new$0$InviteMembersBottomSheet$SearchAdapter(i);
-                }
-
-                public /* synthetic */ void onSetHashtags(ArrayList arrayList, HashMap hashMap) {
-                    SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$onSetHashtags(this, arrayList, hashMap);
-                }
-            });
+            searchAdapterHelper2.setDelegate(new InviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda4(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$InviteMembersBottomSheet$SearchAdapter(int i) {
+        public /* synthetic */ void lambda$new$0(int i) {
             InviteMembersBottomSheet.this.showItemsAnimated(this.currentItemsCount - 1);
             if (this.searchRunnable == null && !this.searchAdapterHelper.isSearchInProgress() && getItemCount() <= 2) {
                 InviteMembersBottomSheet.this.emptyView.showProgress(false, true);
@@ -1346,7 +1310,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             L_0x016a:
                 android.view.View r10 = r10.itemView
                 org.telegram.ui.Cells.GroupCreateSectionCell r10 = (org.telegram.ui.Cells.GroupCreateSectionCell) r10
-                r11 = 2131625733(0x7f0e0705, float:1.8878682E38)
+                r11 = 2131625741(0x7f0e070d, float:1.8878699E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 r10.setText(r11)
@@ -1383,24 +1347,11 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         }
 
         private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ ArrayList f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    InviteMembersBottomSheet.SearchAdapter.this.lambda$updateSearchResults$1$InviteMembersBottomSheet$SearchAdapter(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new InviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda3(this, arrayList, arrayList2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$1 */
-        public /* synthetic */ void lambda$updateSearchResults$1$InviteMembersBottomSheet$SearchAdapter(ArrayList arrayList, ArrayList arrayList2) {
+        public /* synthetic */ void lambda$updateSearchResults$1(ArrayList arrayList, ArrayList arrayList2) {
             this.searchRunnable = null;
             this.searchResult = arrayList;
             this.searchResultNames = arrayList2;
@@ -1431,19 +1382,9 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 }
                 InviteMembersBottomSheet.this.emptyView.showProgress(true, false);
                 DispatchQueue dispatchQueue = Utilities.searchQueue;
-                $$Lambda$InviteMembersBottomSheet$SearchAdapter$rwum13fsQVQVMYIaG_EbsYL3_I8 r1 = new Runnable(str) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        InviteMembersBottomSheet.SearchAdapter.this.lambda$searchDialogs$4$InviteMembersBottomSheet$SearchAdapter(this.f$1);
-                    }
-                };
-                this.searchRunnable = r1;
-                dispatchQueue.postRunnable(r1, 300);
+                InviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda2 inviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda2 = new InviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda2(this, str);
+                this.searchRunnable = inviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda2;
+                dispatchQueue.postRunnable(inviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda2, 300);
                 return;
             }
             RecyclerView.Adapter adapter2 = InviteMembersBottomSheet.this.listView.getAdapter();
@@ -1455,39 +1396,17 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$searchDialogs$4 */
-        public /* synthetic */ void lambda$searchDialogs$4$InviteMembersBottomSheet$SearchAdapter(String str) {
-            AndroidUtilities.runOnUIThread(new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    InviteMembersBottomSheet.SearchAdapter.this.lambda$searchDialogs$3$InviteMembersBottomSheet$SearchAdapter(this.f$1);
-                }
-            });
+        public /* synthetic */ void lambda$searchDialogs$4(String str) {
+            AndroidUtilities.runOnUIThread(new InviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda1(this, str));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$searchDialogs$3 */
-        public /* synthetic */ void lambda$searchDialogs$3$InviteMembersBottomSheet$SearchAdapter(String str) {
+        public /* synthetic */ void lambda$searchDialogs$3(String str) {
             this.searchAdapterHelper.queryServerSearch(str, true, InviteMembersBottomSheet.this.dialogsDelegate != null, true, InviteMembersBottomSheet.this.dialogsDelegate != null, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$InviteMembersBottomSheet$SearchAdapter$DtNcYZC_najqt4zHP7wplZfIWLM r1 = new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    InviteMembersBottomSheet.SearchAdapter.this.lambda$searchDialogs$2$InviteMembersBottomSheet$SearchAdapter(this.f$1);
-                }
-            };
-            this.searchRunnable = r1;
-            dispatchQueue.postRunnable(r1);
+            InviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda0 inviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda0 = new InviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda0(this, str);
+            this.searchRunnable = inviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda0;
+            dispatchQueue.postRunnable(inviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda0);
         }
 
         /* access modifiers changed from: private */
@@ -1496,9 +1415,8 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
          */
         /* JADX WARNING: Removed duplicated region for block: B:51:0x0130 A[LOOP:1: B:27:0x0094->B:51:0x0130, LOOP_END] */
         /* JADX WARNING: Removed duplicated region for block: B:60:0x00e0 A[SYNTHETIC] */
-        /* renamed from: lambda$searchDialogs$2 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$searchDialogs$2$InviteMembersBottomSheet$SearchAdapter(java.lang.String r18) {
+        public /* synthetic */ void lambda$searchDialogs$2(java.lang.String r18) {
             /*
                 r17 = this;
                 r0 = r17
@@ -1666,7 +1584,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 r0.updateSearchResults(r1, r2)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteMembersBottomSheet.SearchAdapter.lambda$searchDialogs$2$InviteMembersBottomSheet$SearchAdapter(java.lang.String):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteMembersBottomSheet.SearchAdapter.lambda$searchDialogs$2(java.lang.String):void");
         }
     }
 
@@ -1684,45 +1602,25 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             if (baseFragment instanceof ChatActivity) {
                 boolean needEnterText = ((ChatActivity) baseFragment).needEnterText();
                 this.enterEventSent = true;
-                AndroidUtilities.runOnUIThread(new Runnable(editTextBoldCursor) {
-                    public final /* synthetic */ EditTextBoldCursor f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        InviteMembersBottomSheet.this.lambda$onSearchViewTouched$5$InviteMembersBottomSheet(this.f$1);
-                    }
-                }, needEnterText ? 200 : 0);
+                AndroidUtilities.runOnUIThread(new InviteMembersBottomSheet$$ExternalSyntheticLambda6(this, editTextBoldCursor), needEnterText ? 200 : 0);
                 return;
             }
             this.enterEventSent = true;
             setFocusable(true);
             editTextBoldCursor.requestFocus();
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    AndroidUtilities.showKeyboard(EditTextBoldCursor.this);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new InviteMembersBottomSheet$$ExternalSyntheticLambda4(editTextBoldCursor));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onSearchViewTouched$5 */
-    public /* synthetic */ void lambda$onSearchViewTouched$5$InviteMembersBottomSheet(EditTextBoldCursor editTextBoldCursor) {
+    public /* synthetic */ void lambda$onSearchViewTouched$5(EditTextBoldCursor editTextBoldCursor) {
         setFocusable(true);
         editTextBoldCursor.requestFocus();
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                AndroidUtilities.showKeyboard(EditTextBoldCursor.this);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new InviteMembersBottomSheet$$ExternalSyntheticLambda3(editTextBoldCursor));
     }
 
     private class SpansContainer extends ViewGroup {
         boolean addAnimation;
-        private int animationIndex = -1;
         /* access modifiers changed from: private */
         public boolean animationStarted;
         private ArrayList<Animator> animators = new ArrayList<>();
@@ -1802,37 +1700,13 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             int min = Math.min(InviteMembersBottomSheet.this.maxSize, dp6);
             if (InviteMembersBottomSheet.this.scrollViewH != min) {
                 ValueAnimator ofInt = ValueAnimator.ofInt(new int[]{InviteMembersBottomSheet.this.scrollViewH, min});
-                ofInt.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        InviteMembersBottomSheet.SpansContainer.this.lambda$onMeasure$0$InviteMembersBottomSheet$SpansContainer(valueAnimator);
-                    }
-                });
+                ofInt.addUpdateListener(new InviteMembersBottomSheet$SpansContainer$$ExternalSyntheticLambda0(this));
                 this.animators.add(ofInt);
             }
             if (this.addAnimation && dp6 > InviteMembersBottomSheet.this.maxSize) {
-                AndroidUtilities.runOnUIThread(new Runnable(dp6) {
-                    public final /* synthetic */ int f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        InviteMembersBottomSheet.SpansContainer.this.lambda$onMeasure$1$InviteMembersBottomSheet$SpansContainer(this.f$1);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new InviteMembersBottomSheet$SpansContainer$$ExternalSyntheticLambda1(this, dp6));
             } else if (!this.addAnimation && InviteMembersBottomSheet.this.spansScrollView.getScrollY() + InviteMembersBottomSheet.this.spansScrollView.getMeasuredHeight() > dp6) {
-                AndroidUtilities.runOnUIThread(new Runnable(dp6) {
-                    public final /* synthetic */ int f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        InviteMembersBottomSheet.SpansContainer.this.lambda$onMeasure$2$InviteMembersBottomSheet$SpansContainer(this.f$1);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new InviteMembersBottomSheet$SpansContainer$$ExternalSyntheticLambda2(this, dp6));
             }
             if (!this.animationStarted && InviteMembersBottomSheet.this.currentAnimation != null) {
                 InviteMembersBottomSheet.this.currentAnimation.playTogether(this.animators);
@@ -1854,21 +1728,18 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onMeasure$0 */
-        public /* synthetic */ void lambda$onMeasure$0$InviteMembersBottomSheet$SpansContainer(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$onMeasure$0(ValueAnimator valueAnimator) {
             int unused = InviteMembersBottomSheet.this.scrollViewH = ((Integer) valueAnimator.getAnimatedValue()).intValue();
             InviteMembersBottomSheet.this.containerView.invalidate();
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onMeasure$1 */
-        public /* synthetic */ void lambda$onMeasure$1$InviteMembersBottomSheet$SpansContainer(int i) {
+        public /* synthetic */ void lambda$onMeasure$1(int i) {
             InviteMembersBottomSheet.this.spansScrollView.smoothScrollTo(0, i - InviteMembersBottomSheet.this.maxSize);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onMeasure$2 */
-        public /* synthetic */ void lambda$onMeasure$2$InviteMembersBottomSheet$SpansContainer(int i) {
+        public /* synthetic */ void lambda$onMeasure$2(int i) {
             InviteMembersBottomSheet.this.spansScrollView.smoothScrollTo(0, i - InviteMembersBottomSheet.this.maxSize);
         }
 
@@ -2024,12 +1895,12 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
     }
 
     private class ItemAnimator extends DefaultItemAnimator {
-        public ItemAnimator() {
+        public ItemAnimator(InviteMembersBottomSheet inviteMembersBottomSheet) {
             this.translationInterpolator = CubicBezierInterpolator.DEFAULT;
             setMoveDuration(150);
             setAddDuration(150);
             setRemoveDuration(150);
-            InviteMembersBottomSheet.this.setShowWithoutAnimation(false);
+            inviteMembersBottomSheet.setShowWithoutAnimation(false);
         }
     }
 
@@ -2053,35 +1924,17 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
             tLRPC$TL_messages_exportChatInvite.legacy_revoke_permanent = true;
             tLRPC$TL_messages_exportChatInvite.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chatId);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    InviteMembersBottomSheet.this.lambda$generateLink$8$InviteMembersBottomSheet(tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_exportChatInvite, new InviteMembersBottomSheet$$ExternalSyntheticLambda7(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$generateLink$8 */
-    public /* synthetic */ void lambda$generateLink$8$InviteMembersBottomSheet(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                InviteMembersBottomSheet.this.lambda$generateLink$7$InviteMembersBottomSheet(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$generateLink$8(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new InviteMembersBottomSheet$$ExternalSyntheticLambda5(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$generateLink$7 */
-    public /* synthetic */ void lambda$generateLink$7$InviteMembersBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$generateLink$7(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             this.invite = (TLRPC$TL_chatInviteExported) tLObject;
             TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(this.chatId);

@@ -28,7 +28,6 @@ public class AvatarPreviewPagerIndicator extends View implements ProfileGalleryV
     private final Paint barPaint;
     private final GradientDrawable bottomOverlayGradient;
     private final Rect bottomOverlayRect = new Rect();
-    private float currentAnimationValue;
     private int currentLoadingAnimationDirection = 1;
     private float currentLoadingAnimationProgress;
     private float currentProgress;
@@ -50,7 +49,6 @@ public class AvatarPreviewPagerIndicator extends View implements ProfileGalleryV
     RectF rectF = new RectF();
     private final Paint selectedBarPaint;
     private int selectedPosition;
-    private final int statusBarHeight = 0;
     TextPaint textPaint;
     String title;
     private final GradientDrawable topOverlayGradient;
@@ -87,11 +85,7 @@ public class AvatarPreviewPagerIndicator extends View implements ProfileGalleryV
         this.animator = ofFloat;
         ofFloat.setDuration(250);
         ofFloat.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                AvatarPreviewPagerIndicator.this.lambda$new$0$AvatarPreviewPagerIndicator(valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new AvatarPreviewPagerIndicator$$ExternalSyntheticLambda0(this));
         ofFloat.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (!AvatarPreviewPagerIndicator.this.isOverlaysVisible) {
@@ -112,12 +106,8 @@ public class AvatarPreviewPagerIndicator extends View implements ProfileGalleryV
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$AvatarPreviewPagerIndicator(ValueAnimator valueAnimator) {
-        float[] fArr = this.animatorValues;
-        float animatedFraction = valueAnimator.getAnimatedFraction();
-        this.currentAnimationValue = animatedFraction;
-        setAlphaValue(AndroidUtilities.lerp(fArr, animatedFraction), true);
+    public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
+        setAlphaValue(AndroidUtilities.lerp(this.animatorValues, valueAnimator.getAnimatedFraction()), true);
     }
 
     public void saveCurrentPageProgress() {
@@ -138,9 +128,6 @@ public class AvatarPreviewPagerIndicator extends View implements ProfileGalleryV
             this.alpha = f;
         } else {
             setAlpha(f);
-        }
-        if (!z) {
-            this.currentAnimationValue = f;
         }
         invalidate();
     }

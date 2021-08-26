@@ -458,17 +458,7 @@ class HardwareVideoEncoder implements VideoEncoder {
                     frameType = EncodedImage.FrameType.VideoFrameDelta;
                 }
                 this.outputBuffersBusyCount.increment();
-                EncodedImage createEncodedImage = this.outputBuilders.poll().setBuffer(byteBuffer, new Runnable(dequeueOutputBuffer) {
-                    public final /* synthetic */ int f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        HardwareVideoEncoder.this.lambda$deliverEncodedImage$0$HardwareVideoEncoder(this.f$1);
-                    }
-                }).setFrameType(frameType).createEncodedImage();
+                EncodedImage createEncodedImage = this.outputBuilders.poll().setBuffer(byteBuffer, new HardwareVideoEncoder$$ExternalSyntheticLambda0(this, dequeueOutputBuffer)).setFrameType(frameType).createEncodedImage();
                 this.callback.onEncodedFrame(createEncodedImage, new VideoEncoder.CodecSpecificInfo());
                 createEncodedImage.release();
             } else if (dequeueOutputBuffer == -3) {
@@ -481,8 +471,7 @@ class HardwareVideoEncoder implements VideoEncoder {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$deliverEncodedImage$0 */
-    public /* synthetic */ void lambda$deliverEncodedImage$0$HardwareVideoEncoder(int i) {
+    public /* synthetic */ void lambda$deliverEncodedImage$0(int i) {
         try {
             this.codec.releaseOutputBuffer(i, false);
         } catch (Exception e) {

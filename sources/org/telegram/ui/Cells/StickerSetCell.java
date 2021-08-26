@@ -251,29 +251,9 @@ public class StickerSetCell extends FrameLayout {
                 this.reorderButton.setVisibility(0);
                 ViewPropertyAnimator duration = this.reorderButton.animate().alpha(fArr[0]).scaleX(fArr2[0]).scaleY(fArr2[0]).setDuration(200);
                 Interpolator interpolator = Easings.easeOutSine;
-                duration.setInterpolator(interpolator).withEndAction(new Runnable(z) {
-                    public final /* synthetic */ boolean f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        StickerSetCell.this.lambda$setReorderable$0$StickerSetCell(this.f$1);
-                    }
-                }).start();
+                duration.setInterpolator(interpolator).withEndAction(new StickerSetCell$$ExternalSyntheticLambda1(this, z)).start();
                 this.optionsButton.setVisibility(0);
-                this.optionsButton.animate().alpha(fArr[1]).scaleX(fArr2[1]).scaleY(fArr2[1]).setDuration(200).setInterpolator(interpolator).withEndAction(new Runnable(z) {
-                    public final /* synthetic */ boolean f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        StickerSetCell.this.lambda$setReorderable$1$StickerSetCell(this.f$1);
-                    }
-                }).start();
+                this.optionsButton.animate().alpha(fArr[1]).scaleX(fArr2[1]).scaleY(fArr2[1]).setDuration(200).setInterpolator(interpolator).withEndAction(new StickerSetCell$$ExternalSyntheticLambda0(this, z)).start();
                 return;
             }
             this.reorderButton.setVisibility(z ? 0 : 8);
@@ -292,16 +272,14 @@ public class StickerSetCell extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setReorderable$0 */
-    public /* synthetic */ void lambda$setReorderable$0$StickerSetCell(boolean z) {
+    public /* synthetic */ void lambda$setReorderable$0(boolean z) {
         if (!z) {
             this.reorderButton.setVisibility(8);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setReorderable$1 */
-    public /* synthetic */ void lambda$setReorderable$1$StickerSetCell(boolean z) {
+    public /* synthetic */ void lambda$setReorderable$1(boolean z) {
         if (z) {
             this.optionsButton.setVisibility(8);
         }

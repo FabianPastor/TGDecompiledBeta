@@ -35,19 +35,19 @@ public class QRCodeBottomSheet extends BottomSheet {
             r2 = 0
             r0.<init>(r1, r2)
             java.lang.String r3 = "InviteByQRCode"
-            r4 = 2131625899(0x7f0e07ab, float:1.8879019E38)
+            r4 = 2131625909(0x7f0e07b5, float:1.887904E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r4 = 1
             r0.setTitle(r3, r4)
             org.telegram.ui.Components.QRCodeBottomSheet$1 r3 = new org.telegram.ui.Components.QRCodeBottomSheet$1
-            r3.<init>(r1)
+            r3.<init>(r0, r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.FIT_XY
             r3.setScaleType(r5)
             int r5 = android.os.Build.VERSION.SDK_INT
             r6 = 21
             if (r5 < r6) goto L_0x0030
             org.telegram.ui.Components.QRCodeBottomSheet$2 r5 = new org.telegram.ui.Components.QRCodeBottomSheet$2
-            r5.<init>()
+            r5.<init>(r0)
             r3.setOutlineProvider(r5)
             r3.setClipToOutline(r4)
         L_0x0030:
@@ -122,12 +122,12 @@ public class QRCodeBottomSheet extends BottomSheet {
             java.lang.String r2 = "fonts/rmedium.ttf"
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r3.setTypeface(r2)
-            r2 = 2131627524(0x7f0e0e04, float:1.8882315E38)
+            r2 = 2131627544(0x7f0e0e18, float:1.8882355E38)
             java.lang.String r4 = "ShareQrCode"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r3.setText(r2)
-            org.telegram.ui.Components.-$$Lambda$QRCodeBottomSheet$2sIpc-sdD8tZ_UiJm7HWacIETqc r2 = new org.telegram.ui.Components.-$$Lambda$QRCodeBottomSheet$2sIpc-sdD8tZ_UiJm7HWacIETqc
-            r2.<init>(r1)
+            org.telegram.ui.Components.QRCodeBottomSheet$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Components.QRCodeBottomSheet$$ExternalSyntheticLambda0
+            r2.<init>(r0, r1)
             r3.setOnClickListener(r2)
             r6 = -1
             r7 = 48
@@ -149,8 +149,7 @@ public class QRCodeBottomSheet extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$QRCodeBottomSheet(Context context, View view) {
+    public /* synthetic */ void lambda$new$0(Context context, View view) {
         Uri imageUri = getImageUri(this.qrCode);
         if (imageUri != null) {
             Intent intent = new Intent("android.intent.action.SEND");

@@ -30,7 +30,6 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$TL_account_checkUsername;
@@ -62,9 +61,9 @@ public class ChangeUsernameActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public CharSequence infoText;
     private String lastCheckName;
-    private boolean lastNameAvailable;
 
-    static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -134,7 +133,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.fragmentView = linearLayout;
         LinearLayout linearLayout2 = linearLayout;
         linearLayout2.setOrientation(1);
-        this.fragmentView.setOnTouchListener($$Lambda$ChangeUsernameActivity$ABMV2_ht_K_hijM217Y7RTPB_1U.INSTANCE);
+        this.fragmentView.setOnTouchListener(ChangeUsernameActivity$$ExternalSyntheticLambda1.INSTANCE);
         EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
         this.firstNameField = editTextBoldCursor;
         editTextBoldCursor.setTextSize(1, 18.0f);
@@ -152,11 +151,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.firstNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                return ChangeUsernameActivity.this.lambda$createView$1$ChangeUsernameActivity(textView, i, keyEvent);
-            }
-        });
+        this.firstNameField.setOnEditorActionListener(new ChangeUsernameActivity$$ExternalSyntheticLambda2(this));
         this.firstNameField.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
@@ -218,8 +213,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ boolean lambda$createView$1$ChangeUsernameActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createView$1(TextView textView, int i, KeyEvent keyEvent) {
         View view;
         if (i != 6 || (view = this.doneButton) == null) {
             return false;
@@ -258,7 +252,6 @@ public class ChangeUsernameActivity extends BaseFragment {
                 ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkReqId, true);
             }
         }
-        this.lastNameAvailable = false;
         if (str != null) {
             if (str.startsWith("_") || str.endsWith("_")) {
                 this.checkTextView.setText(LocaleController.getString("UsernameInvalid", NUM));
@@ -326,65 +319,28 @@ public class ChangeUsernameActivity extends BaseFragment {
                 this.checkTextView.setTag("windowBackgroundWhiteGrayText8");
                 this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
                 this.lastCheckName = str;
-                $$Lambda$ChangeUsernameActivity$jNXFbw32hujTskxAUoS5u4uLZwA r11 = new Runnable(str) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        ChangeUsernameActivity.this.lambda$checkUserName$4$ChangeUsernameActivity(this.f$1);
-                    }
-                };
-                this.checkRunnable = r11;
-                AndroidUtilities.runOnUIThread(r11, 300);
+                ChangeUsernameActivity$$ExternalSyntheticLambda3 changeUsernameActivity$$ExternalSyntheticLambda3 = new ChangeUsernameActivity$$ExternalSyntheticLambda3(this, str);
+                this.checkRunnable = changeUsernameActivity$$ExternalSyntheticLambda3;
+                AndroidUtilities.runOnUIThread(changeUsernameActivity$$ExternalSyntheticLambda3, 300);
             }
             return true;
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkUserName$4 */
-    public /* synthetic */ void lambda$checkUserName$4$ChangeUsernameActivity(String str) {
+    public /* synthetic */ void lambda$checkUserName$4(String str) {
         TLRPC$TL_account_checkUsername tLRPC$TL_account_checkUsername = new TLRPC$TL_account_checkUsername();
         tLRPC$TL_account_checkUsername.username = str;
-        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_checkUsername, new RequestDelegate(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChangeUsernameActivity.this.lambda$checkUserName$3$ChangeUsernameActivity(this.f$1, tLObject, tLRPC$TL_error);
-            }
-        }, 2);
+        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_checkUsername, new ChangeUsernameActivity$$ExternalSyntheticLambda7(this, str), 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkUserName$3 */
-    public /* synthetic */ void lambda$checkUserName$3$ChangeUsernameActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-            public final /* synthetic */ TLObject f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ChangeUsernameActivity.this.lambda$checkUserName$2$ChangeUsernameActivity(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$checkUserName$3(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChangeUsernameActivity$$ExternalSyntheticLambda4(this, str, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkUserName$2 */
-    public /* synthetic */ void lambda$checkUserName$2$ChangeUsernameActivity(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$checkUserName$2(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 != null && str2.equals(str)) {
@@ -392,13 +348,11 @@ public class ChangeUsernameActivity extends BaseFragment {
                 this.checkTextView.setText(LocaleController.getString("UsernameInUse", NUM));
                 this.checkTextView.setTag("windowBackgroundWhiteRedText4");
                 this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
-                this.lastNameAvailable = false;
                 return;
             }
             this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", NUM, str));
             this.checkTextView.setTag("windowBackgroundWhiteGreenText");
             this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
-            this.lastNameAvailable = true;
         }
     }
 
@@ -423,75 +377,25 @@ public class ChangeUsernameActivity extends BaseFragment {
                 TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername = new TLRPC$TL_account_updateUsername();
                 tLRPC$TL_account_updateUsername.username = obj;
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, 1);
-                int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateUsername, new RequestDelegate(alertDialog, tLRPC$TL_account_updateUsername) {
-                    public final /* synthetic */ AlertDialog f$1;
-                    public final /* synthetic */ TLRPC$TL_account_updateUsername f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        ChangeUsernameActivity.this.lambda$saveName$7$ChangeUsernameActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                    }
-                }, 2);
+                int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateUsername, new ChangeUsernameActivity$$ExternalSyntheticLambda8(this, alertDialog, tLRPC$TL_account_updateUsername), 2);
                 ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
-                alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener(sendRequest) {
-                    public final /* synthetic */ int f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onCancel(DialogInterface dialogInterface) {
-                        ChangeUsernameActivity.this.lambda$saveName$8$ChangeUsernameActivity(this.f$1, dialogInterface);
-                    }
-                });
+                alertDialog.setOnCancelListener(new ChangeUsernameActivity$$ExternalSyntheticLambda0(this, sendRequest));
                 alertDialog.show();
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveName$7 */
-    public /* synthetic */ void lambda$saveName$7$ChangeUsernameActivity(AlertDialog alertDialog, TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$saveName$7(AlertDialog alertDialog, TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
-            AndroidUtilities.runOnUIThread(new Runnable(alertDialog, (TLRPC$User) tLObject) {
-                public final /* synthetic */ AlertDialog f$1;
-                public final /* synthetic */ TLRPC$User f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ChangeUsernameActivity.this.lambda$saveName$5$ChangeUsernameActivity(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChangeUsernameActivity$$ExternalSyntheticLambda6(this, alertDialog, (TLRPC$User) tLObject));
         } else {
-            AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_account_updateUsername) {
-                public final /* synthetic */ AlertDialog f$1;
-                public final /* synthetic */ TLRPC$TL_error f$2;
-                public final /* synthetic */ TLRPC$TL_account_updateUsername f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    ChangeUsernameActivity.this.lambda$saveName$6$ChangeUsernameActivity(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChangeUsernameActivity$$ExternalSyntheticLambda5(this, alertDialog, tLRPC$TL_error, tLRPC$TL_account_updateUsername));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveName$5 */
-    public /* synthetic */ void lambda$saveName$5$ChangeUsernameActivity(AlertDialog alertDialog, TLRPC$User tLRPC$User) {
+    public /* synthetic */ void lambda$saveName$5(AlertDialog alertDialog, TLRPC$User tLRPC$User) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -506,8 +410,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveName$6 */
-    public /* synthetic */ void lambda$saveName$6$ChangeUsernameActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername) {
+    public /* synthetic */ void lambda$saveName$6(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -517,8 +420,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveName$8 */
-    public /* synthetic */ void lambda$saveName$8$ChangeUsernameActivity(int i, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$saveName$8(int i, DialogInterface dialogInterface) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(i, true);
     }
 

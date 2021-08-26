@@ -18,11 +18,11 @@ public interface Iterator<E> {
         }
     }
 
-    void forEachRemaining(Consumer consumer);
+    void forEachRemaining(Consumer<? super E> consumer);
 
     boolean hasNext();
 
-    Object next();
+    E next();
 
     void remove();
 }

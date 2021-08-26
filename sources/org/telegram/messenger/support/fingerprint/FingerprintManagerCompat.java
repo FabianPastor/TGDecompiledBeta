@@ -109,10 +109,7 @@ public final class FingerprintManagerCompat {
     }
 
     public static final class AuthenticationResult {
-        private CryptoObject mCryptoObject;
-
         public AuthenticationResult(CryptoObject cryptoObject) {
-            this.mCryptoObject = cryptoObject;
         }
     }
 

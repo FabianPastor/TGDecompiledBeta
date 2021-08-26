@@ -255,26 +255,8 @@ public class LinkEditActivity extends BaseFragment {
         this.timeEditText.setGravity(16);
         this.timeEditText.setTextSize(1, 16.0f);
         this.timeEditText.setHint(LocaleController.getString("TimeLimitHint", NUM));
-        this.timeEditText.setOnClickListener(new View.OnClickListener(context) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                LinkEditActivity.this.lambda$createView$1$LinkEditActivity(this.f$1, view);
-            }
-        });
-        this.timeChooseView.setCallback(new SlideChooseView.Callback() {
-            public final void onOptionSelected(int i) {
-                LinkEditActivity.this.lambda$createView$2$LinkEditActivity(i);
-            }
-
-            public /* synthetic */ void onTouchEnd() {
-                SlideChooseView.Callback.CC.$default$onTouchEnd(this);
-            }
-        });
+        this.timeEditText.setOnClickListener(new LinkEditActivity$$ExternalSyntheticLambda2(this, context));
+        this.timeChooseView.setCallback(new LinkEditActivity$$ExternalSyntheticLambda10(this));
         resetDates();
         r2.addView(this.timeEditText, LayoutHelper.createLinear(-1, 50));
         TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context);
@@ -287,18 +269,10 @@ public class LinkEditActivity extends BaseFragment {
         r2.addView(this.usesHeaderCell);
         SlideChooseView slideChooseView2 = new SlideChooseView(context);
         this.usesChooseView = slideChooseView2;
-        slideChooseView2.setCallback(new SlideChooseView.Callback() {
-            public final void onOptionSelected(int i) {
-                LinkEditActivity.this.lambda$createView$3$LinkEditActivity(i);
-            }
-
-            public /* synthetic */ void onTouchEnd() {
-                SlideChooseView.Callback.CC.$default$onTouchEnd(this);
-            }
-        });
+        slideChooseView2.setCallback(new LinkEditActivity$$ExternalSyntheticLambda9(this));
         resetUses();
         r2.addView(this.usesChooseView);
-        AnonymousClass4 r3 = new EditText(context) {
+        AnonymousClass4 r3 = new EditText(this, context) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 1) {
                     setCursorVisible(true);
@@ -350,11 +324,7 @@ public class LinkEditActivity extends BaseFragment {
             textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             this.revokeLink.setText(LocaleController.getString("RevokeLink", NUM), false);
             this.revokeLink.setTextColor(Theme.getColor("windowBackgroundWhiteRedText5"));
-            this.revokeLink.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    LinkEditActivity.this.lambda$createView$5$LinkEditActivity(view);
-                }
-            });
+            this.revokeLink.setOnClickListener(new LinkEditActivity$$ExternalSyntheticLambda1(this));
             r2.addView(this.revokeLink);
         }
         r0.addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f));
@@ -366,17 +336,7 @@ public class LinkEditActivity extends BaseFragment {
         this.usesChooseView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.usesEditText.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         r0.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        this.buttonTextView.setOnClickListener(new View.OnClickListener(context) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                LinkEditActivity.this.lambda$createView$10$LinkEditActivity(this.f$1, view);
-            }
-        });
+        this.buttonTextView.setOnClickListener(new LinkEditActivity$$ExternalSyntheticLambda3(this, context));
         this.buttonTextView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.dividerUses.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
         this.divider.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
@@ -394,24 +354,17 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$LinkEditActivity(Context context, View view) {
-        AlertsCreator.createDatePickerDialog(context, -1, new AlertsCreator.ScheduleDatePickerDelegate() {
-            public final void didSelectDate(boolean z, int i) {
-                LinkEditActivity.this.lambda$createView$0$LinkEditActivity(z, i);
-            }
-        });
+    public /* synthetic */ void lambda$createView$1(Context context, View view) {
+        AlertsCreator.createDatePickerDialog(context, -1, new LinkEditActivity$$ExternalSyntheticLambda8(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$LinkEditActivity(boolean z, int i) {
+    public /* synthetic */ void lambda$createView$0(boolean z, int i) {
         chooseDate(i);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$LinkEditActivity(int i) {
+    public /* synthetic */ void lambda$createView$2(int i) {
         if (i < this.dispalyedDates.size()) {
             this.timeEditText.setText(LocaleController.formatDateAudio((long) (this.dispalyedDates.get(i).intValue() + getConnectionsManager().getCurrentTime()), false));
             return;
@@ -420,8 +373,7 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$LinkEditActivity(int i) {
+    public /* synthetic */ void lambda$createView$3(int i) {
         this.usesEditText.clearFocus();
         this.ignoreSet = true;
         if (i < this.dispalyedUses.size()) {
@@ -433,23 +385,17 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$5 */
-    public /* synthetic */ void lambda$createView$5$LinkEditActivity(View view) {
+    public /* synthetic */ void lambda$createView$5(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
         builder.setTitle(LocaleController.getString("RevokeLink", NUM));
-        builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                LinkEditActivity.this.lambda$createView$4$LinkEditActivity(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new LinkEditActivity$$ExternalSyntheticLambda0(this));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         showDialog(builder.create());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$LinkEditActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$4(DialogInterface dialogInterface, int i) {
         this.callback.revokeLink(this.inviteToEdit);
         finishFragment();
     }
@@ -459,9 +405,8 @@ public class LinkEditActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:43:0x016f  */
     /* JADX WARNING: Removed duplicated region for block: B:48:0x0181  */
     /* JADX WARNING: Removed duplicated region for block: B:54:? A[RETURN, SYNTHETIC] */
-    /* renamed from: lambda$createView$10 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$10$LinkEditActivity(android.content.Context r6, android.view.View r7) {
+    public /* synthetic */ void lambda$createView$10(android.content.Context r6, android.view.View r7) {
         /*
             r5 = this;
             boolean r7 = r5.loading
@@ -553,8 +498,8 @@ public class LinkEditActivity extends BaseFragment {
             r6.usage_limit = r1
         L_0x00c0:
             org.telegram.tgnet.ConnectionsManager r7 = r5.getConnectionsManager()
-            org.telegram.ui.-$$Lambda$LinkEditActivity$LeKBmbU5RzyLob0O1xwaQ8dCkFE r0 = new org.telegram.ui.-$$Lambda$LinkEditActivity$LeKBmbU5RzyLob0O1xwaQ8dCkFE
-            r0.<init>()
+            org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda7 r0 = new org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda7
+            r0.<init>(r5)
             r7.sendRequest(r6, r0)
             goto L_0x018d
         L_0x00ce:
@@ -646,36 +591,22 @@ public class LinkEditActivity extends BaseFragment {
         L_0x017f:
             if (r4 == 0) goto L_0x018d
             org.telegram.tgnet.ConnectionsManager r7 = r5.getConnectionsManager()
-            org.telegram.ui.-$$Lambda$LinkEditActivity$E4DW8ayNvaC2ijk5vHkt_SnenOI r0 = new org.telegram.ui.-$$Lambda$LinkEditActivity$E4DW8ayNvaC2ijk5vHkt_SnenOI
-            r0.<init>()
+            org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda6 r0 = new org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda6
+            r0.<init>(r5)
             r7.sendRequest(r6, r0)
         L_0x018d:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LinkEditActivity.lambda$createView$10$LinkEditActivity(android.content.Context, android.view.View):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LinkEditActivity.lambda$createView$10(android.content.Context, android.view.View):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$7 */
-    public /* synthetic */ void lambda$createView$7$LinkEditActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                LinkEditActivity.this.lambda$createView$6$LinkEditActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$createView$7(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new LinkEditActivity$$ExternalSyntheticLambda5(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$6 */
-    public /* synthetic */ void lambda$createView$6$LinkEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$createView$6(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         AlertDialog alertDialog = this.progressDialog;
         if (alertDialog != null) {
@@ -693,26 +624,12 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$9 */
-    public /* synthetic */ void lambda$createView$9$LinkEditActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                LinkEditActivity.this.lambda$createView$8$LinkEditActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$createView$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new LinkEditActivity$$ExternalSyntheticLambda4(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$8 */
-    public /* synthetic */ void lambda$createView$8$LinkEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$createView$8(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         AlertDialog alertDialog = this.progressDialog;
         if (alertDialog != null) {

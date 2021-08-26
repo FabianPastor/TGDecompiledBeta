@@ -1,42 +1,14 @@
 package j$.util.stream;
 
-import j$.time.a;
-import j$.util.function.Consumer;
+import j$.util.function.q;
 
-abstract class M1<T> implements A2<T> {
-    boolean a;
-    boolean b;
+public final /* synthetic */ class M1 implements q {
+    public static final /* synthetic */ M1 a = new M1();
 
-    M1(N1 n1) {
-        this.b = !n1.c;
+    private /* synthetic */ M1() {
     }
 
-    public /* synthetic */ void accept(double d) {
-        a.c(this);
-        throw null;
-    }
-
-    public /* synthetic */ void accept(int i) {
-        a.a(this);
-        throw null;
-    }
-
-    public /* synthetic */ void accept(long j) {
-        a.b(this);
-        throw null;
-    }
-
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
-    }
-
-    public void l() {
-    }
-
-    public void m(long j) {
-    }
-
-    public boolean o() {
-        return this.a;
+    public final Object apply(long j) {
+        return CLASSNAMEy2.q(j);
     }
 }

@@ -180,11 +180,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             this.passwordEditText.setCursorSize(AndroidUtilities.dp(20.0f));
             this.passwordEditText.setCursorWidth(1.5f);
             frameLayout2.addView(this.passwordEditText, LayoutHelper.createFrame(-1, 36.0f, 51, 40.0f, 90.0f, 40.0f, 0.0f));
-            this.passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    return PasscodeActivity.this.lambda$createView$0$PasscodeActivity(textView, i, keyEvent);
-                }
-            });
+            this.passwordEditText.setOnEditorActionListener(new PasscodeActivity$$ExternalSyntheticLambda2(this));
             this.passwordEditText.addTextChangedListener(new TextWatcher() {
                 public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                 }
@@ -208,7 +204,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             });
-            this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
                 public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                     return false;
                 }
@@ -232,11 +228,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 this.dropDownContainer.addSubItem(2, LocaleController.getString("PasscodePIN", NUM));
                 this.dropDownContainer.addSubItem(3, LocaleController.getString("PasscodePassword", NUM));
                 this.actionBar.addView(this.dropDownContainer, LayoutHelper.createFrame(-2, -1.0f, 51, AndroidUtilities.isTablet() ? 64.0f : 56.0f, 0.0f, 40.0f, 0.0f));
-                this.dropDownContainer.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        PasscodeActivity.this.lambda$createView$1$PasscodeActivity(view);
-                    }
-                });
+                this.dropDownContainer.setOnClickListener(new PasscodeActivity$$ExternalSyntheticLambda1(this));
                 TextView textView2 = new TextView(context2);
                 this.dropDown = textView2;
                 textView2.setGravity(3);
@@ -263,7 +255,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             frameLayout2.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
             RecyclerListView recyclerListView = new RecyclerListView(context2);
             this.listView = recyclerListView;
-            recyclerListView.setLayoutManager(new LinearLayoutManager(context2, 1, false) {
+            recyclerListView.setLayoutManager(new LinearLayoutManager(this, context2, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
@@ -276,18 +268,13 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             ListAdapter listAdapter2 = new ListAdapter(context2);
             this.listAdapter = listAdapter2;
             recyclerListView2.setAdapter(listAdapter2);
-            this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-                public final void onItemClick(View view, int i) {
-                    PasscodeActivity.this.lambda$createView$4$PasscodeActivity(view, i);
-                }
-            });
+            this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new PasscodeActivity$$ExternalSyntheticLambda5(this));
         }
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ boolean lambda$createView$0$PasscodeActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createView$0(TextView textView, int i, KeyEvent keyEvent) {
         int i2 = this.passcodeSetStep;
         if (i2 == 0) {
             processNext();
@@ -301,14 +288,12 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$PasscodeActivity(View view) {
+    public /* synthetic */ void lambda$createView$1(View view) {
         this.dropDownContainer.toggleSubMenu();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$PasscodeActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$4(View view, int i) {
         if (view.isEnabled()) {
             boolean z = true;
             if (i == this.changePasscodeRow) {
@@ -360,21 +345,9 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     } else if (i3 == 18000) {
                         numberPicker.setValue(4);
                     }
-                    numberPicker.setFormatter($$Lambda$PasscodeActivity$RmeDUwQaD0qWwj5uTjtR_ocrqs.INSTANCE);
+                    numberPicker.setFormatter(PasscodeActivity$$ExternalSyntheticLambda4.INSTANCE);
                     builder.setView(numberPicker);
-                    builder.setNegativeButton(LocaleController.getString("Done", NUM), new DialogInterface.OnClickListener(numberPicker, i) {
-                        public final /* synthetic */ NumberPicker f$1;
-                        public final /* synthetic */ int f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            PasscodeActivity.this.lambda$createView$3$PasscodeActivity(this.f$1, this.f$2, dialogInterface, i);
-                        }
-                    });
+                    builder.setNegativeButton(LocaleController.getString("Done", NUM), new PasscodeActivity$$ExternalSyntheticLambda0(this, numberPicker, i));
                     showDialog(builder.create());
                 }
             } else if (i == this.fingerprintRow) {
@@ -393,7 +366,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    static /* synthetic */ String lambda$createView$2(int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ String lambda$createView$2(int i) {
         if (i == 0) {
             return LocaleController.getString("AutoLockDisabled", NUM);
         }
@@ -411,8 +385,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$PasscodeActivity(NumberPicker numberPicker, int i, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$createView$3(NumberPicker numberPicker, int i, DialogInterface dialogInterface, int i2) {
         int value = numberPicker.getValue();
         if (value == 0) {
             SharedConfig.autoLockIn = 0;
@@ -436,18 +409,13 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             listAdapter2.notifyDataSetChanged();
         }
         if (this.type != 0) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    PasscodeActivity.this.lambda$onResume$5$PasscodeActivity();
-                }
-            }, 200);
+            AndroidUtilities.runOnUIThread(new PasscodeActivity$$ExternalSyntheticLambda3(this), 200);
         }
         fixLayoutInternal();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onResume$5 */
-    public /* synthetic */ void lambda$onResume$5$PasscodeActivity() {
+    public /* synthetic */ void lambda$onResume$5() {
         EditTextBoldCursor editTextBoldCursor = this.passwordEditText;
         if (editTextBoldCursor != null) {
             editTextBoldCursor.requestFocus();

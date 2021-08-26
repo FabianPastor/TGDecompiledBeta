@@ -103,7 +103,7 @@ public class LegendSignatureView extends FrameLayout {
         this.content.removeAllViews();
         this.holdes = new Holder[i];
         for (int i2 = 0; i2 < i; i2++) {
-            this.holdes[i2] = new Holder();
+            this.holdes[i2] = new Holder(this);
             this.content.addView(this.holdes[i2].root);
         }
     }
@@ -241,12 +241,12 @@ public class LegendSignatureView extends FrameLayout {
         final TextView signature;
         final TextView value;
 
-        Holder() {
-            LinearLayout linearLayout = new LinearLayout(LegendSignatureView.this.getContext());
+        Holder(LegendSignatureView legendSignatureView) {
+            LinearLayout linearLayout = new LinearLayout(legendSignatureView.getContext());
             this.root = linearLayout;
             linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(2.0f));
-            if (LegendSignatureView.this.showPercentage) {
-                TextView textView = new TextView(LegendSignatureView.this.getContext());
+            if (legendSignatureView.showPercentage) {
+                TextView textView = new TextView(legendSignatureView.getContext());
                 this.percentage = textView;
                 linearLayout.addView(textView);
                 this.percentage.getLayoutParams().width = AndroidUtilities.dp(36.0f);
@@ -254,11 +254,11 @@ public class LegendSignatureView extends FrameLayout {
                 this.percentage.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.percentage.setTextSize(1, 13.0f);
             }
-            TextView textView2 = new TextView(LegendSignatureView.this.getContext());
+            TextView textView2 = new TextView(legendSignatureView.getContext());
             this.signature = textView2;
             linearLayout.addView(textView2);
-            textView2.getLayoutParams().width = AndroidUtilities.dp(LegendSignatureView.this.showPercentage ? 80.0f : 96.0f);
-            TextView textView3 = new TextView(LegendSignatureView.this.getContext());
+            textView2.getLayoutParams().width = AndroidUtilities.dp(legendSignatureView.showPercentage ? 80.0f : 96.0f);
+            TextView textView3 = new TextView(legendSignatureView.getContext());
             this.value = textView3;
             linearLayout.addView(textView3, LayoutHelper.createLinear(-1, -2));
             textView2.setGravity(8388611);

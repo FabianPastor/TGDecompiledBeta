@@ -28,7 +28,8 @@ public class SideMenultItemAnimator extends SimpleItemAnimator {
     private RecyclerListView parentRecyclerView;
     private boolean shouldClipChildren;
 
-    static /* synthetic */ int lambda$new$0(int i, int i2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$new$0(int i, int i2) {
         if (i2 == i - 1) {
             return 0;
         }
@@ -83,7 +84,7 @@ public class SideMenultItemAnimator extends SimpleItemAnimator {
 
     public SideMenultItemAnimator(RecyclerListView recyclerListView) {
         this.parentRecyclerView = recyclerListView;
-        recyclerListView.setChildDrawingOrderCallback($$Lambda$SideMenultItemAnimator$3zsexel4aNKW4snpNImcgrRLPEo.INSTANCE);
+        recyclerListView.setChildDrawingOrderCallback(SideMenultItemAnimator$$ExternalSyntheticLambda0.INSTANCE);
     }
 
     public void runPendingAnimations() {

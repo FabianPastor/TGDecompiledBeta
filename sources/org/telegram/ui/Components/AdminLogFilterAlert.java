@@ -234,11 +234,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                 AdminLogFilterAlert.this.updateLayout();
             }
         });
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                AdminLogFilterAlert.this.lambda$new$0$AdminLogFilterAlert(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new AdminLogFilterAlert$$ExternalSyntheticLambda1(this));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View view = new View(context);
         view.setBackgroundResource(NUM);
@@ -248,18 +244,13 @@ public class AdminLogFilterAlert extends BottomSheet {
         bottomSheetCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         this.saveButton.setTextAndIcon((CharSequence) LocaleController.getString("Save", NUM).toUpperCase(), 0);
         this.saveButton.setTextColor(Theme.getColor("dialogTextBlue2"));
-        this.saveButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                AdminLogFilterAlert.this.lambda$new$1$AdminLogFilterAlert(view);
-            }
-        });
+        this.saveButton.setOnClickListener(new AdminLogFilterAlert$$ExternalSyntheticLambda0(this));
         this.containerView.addView(this.saveButton, LayoutHelper.createFrame(-1, 48, 83));
         this.adapter.notifyDataSetChanged();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$AdminLogFilterAlert(View view, int i) {
+    public /* synthetic */ void lambda$new$0(View view, int i) {
         if (view instanceof CheckBoxCell) {
             CheckBoxCell checkBoxCell = (CheckBoxCell) view;
             boolean isChecked = checkBoxCell.isChecked();
@@ -411,8 +402,7 @@ public class AdminLogFilterAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$AdminLogFilterAlert(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         this.delegate.didSelectRights(this.currentFilter, this.selectedAdmins);
         dismiss();
     }

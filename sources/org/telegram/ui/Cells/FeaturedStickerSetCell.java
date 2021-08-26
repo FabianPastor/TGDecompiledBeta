@@ -132,7 +132,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.textView.setText(this.stickersSet.set.title);
         TLRPC$Document tLRPC$Document = null;
         if (z2) {
-            AnonymousClass1 r2 = new Drawable() {
+            AnonymousClass1 r2 = new Drawable(this) {
                 Paint paint = new Paint(1);
 
                 public int getOpacity() {

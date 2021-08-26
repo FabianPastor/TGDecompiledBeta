@@ -39,7 +39,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Keep;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -60,7 +59,6 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageMedia;
-import org.telegram.tgnet.TLRPC$ReplyMarkup;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -71,8 +69,6 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AudioPlayerAlert;
-import org.telegram.ui.Components.FragmentContextView;
-import org.telegram.ui.Components.SharingLocationsAlert;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.GroupCallActivity;
@@ -336,11 +332,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             this.playButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("inappPlayerPlayPause") & NUM, 1, AndroidUtilities.dp(14.0f)));
         }
         addView(this.playButton, LayoutHelper.createFrame(36, 36, 51));
-        this.playButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$0$FragmentContextView(view);
-            }
-        });
+        this.playButton.setOnClickListener(new FragmentContextView$$ExternalSyntheticLambda3(this));
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
         this.importingImageView = rLottieImageView;
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -379,7 +371,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         };
         this.titleTextView = r6;
         addView(r6, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
-        AnonymousClass5 r62 = new AudioPlayerAlert.ClippingTextViewSwitcher(context2) {
+        AnonymousClass5 r62 = new AudioPlayerAlert.ClippingTextViewSwitcher(this, context2) {
             /* access modifiers changed from: protected */
             public TextView createTextView() {
                 TextView textView = new TextView(context2);
@@ -405,22 +397,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.joinButton.setGravity(17);
         this.joinButton.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
         addView(this.joinButton, LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 10.0f, 14.0f, 0.0f));
-        this.joinButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$1$FragmentContextView(view);
-            }
-        });
+        this.joinButton.setOnClickListener(new FragmentContextView$$ExternalSyntheticLambda2(this));
         if (!z2) {
             ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context2, (ActionBarMenu) null, 0, Theme.getColor("dialogTextBlack"));
             this.playbackSpeedButton = actionBarMenuItem;
             actionBarMenuItem.setLongClickEnabled(false);
             this.playbackSpeedButton.setShowSubmenuByMove(false);
             this.playbackSpeedButton.setContentDescription(LocaleController.getString("AccDescrPlayerSpeed", NUM));
-            this.playbackSpeedButton.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() {
-                public final void onItemClick(int i) {
-                    FragmentContextView.this.lambda$new$2$FragmentContextView(i);
-                }
-            });
+            this.playbackSpeedButton.setDelegate(new FragmentContextView$$ExternalSyntheticLambda10(this));
             this.speedItems[0] = this.playbackSpeedButton.addSubItem(1, NUM, LocaleController.getString("SpeedSlow", NUM));
             this.speedItems[1] = this.playbackSpeedButton.addSubItem(2, NUM, LocaleController.getString("SpeedNormal", NUM));
             this.speedItems[2] = this.playbackSpeedButton.addSubItem(3, NUM, LocaleController.getString("SpeedFast", NUM));
@@ -430,45 +414,24 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             this.playbackSpeedButton.setAdditionalXOffset(AndroidUtilities.dp(8.0f));
             addView(this.playbackSpeedButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, 0.0f, 36.0f, 0.0f));
-            this.playbackSpeedButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    FragmentContextView.this.lambda$new$3$FragmentContextView(view);
-                }
-            });
-            this.playbackSpeedButton.setOnLongClickListener(new View.OnLongClickListener() {
-                public final boolean onLongClick(View view) {
-                    return FragmentContextView.this.lambda$new$4$FragmentContextView(view);
-                }
-            });
+            this.playbackSpeedButton.setOnClickListener(new FragmentContextView$$ExternalSyntheticLambda4(this));
+            this.playbackSpeedButton.setOnLongClickListener(new FragmentContextView$$ExternalSyntheticLambda8(this));
             updatePlaybackButton();
         }
         AvatarsImageView avatarsImageView = new AvatarsImageView(context2, false);
         this.avatars = avatarsImageView;
-        avatarsImageView.setDelegate(new Runnable() {
-            public final void run() {
-                FragmentContextView.this.lambda$new$5$FragmentContextView();
-            }
-        });
+        avatarsImageView.setDelegate(new FragmentContextView$$ExternalSyntheticLambda9(this));
         this.avatars.setVisibility(8);
         addView(this.avatars, LayoutHelper.createFrame(108, 36, 51));
         this.muteDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(16.0f), AndroidUtilities.dp(20.0f), true, (int[]) null);
         AnonymousClass6 r4 = new RLottieImageView(context2) {
-            private final Runnable pressRunnable = new Runnable() {
-                public final void run() {
-                    FragmentContextView.AnonymousClass6.this.lambda$$1$FragmentContextView$6();
-                }
-            };
+            private final Runnable pressRunnable = new FragmentContextView$6$$ExternalSyntheticLambda0(this);
             boolean pressed;
             boolean scheduled;
-            private final Runnable toggleMicRunnable = new Runnable() {
-                public final void run() {
-                    FragmentContextView.AnonymousClass6.this.lambda$$0$FragmentContextView$6();
-                }
-            };
+            private final Runnable toggleMicRunnable = new FragmentContextView$6$$ExternalSyntheticLambda1(this);
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$$0 */
-            public /* synthetic */ void lambda$$0$FragmentContextView$6() {
+            public /* synthetic */ void lambda$$0() {
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().setMicMute(false, true, false);
                     if (FragmentContextView.this.muteDrawable.setCustomEndFrame(FragmentContextView.this.isMuted ? 15 : 29)) {
@@ -484,8 +447,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$$1 */
-            public /* synthetic */ void lambda$$1$FragmentContextView$6() {
+            public /* synthetic */ void lambda$$1() {
                 if (this.scheduled && VoIPService.getSharedInstance() != null) {
                     this.scheduled = false;
                     this.pressed = true;
@@ -564,11 +526,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.muteButton.setScaleType(ImageView.ScaleType.CENTER);
         this.muteButton.setVisibility(8);
         addView(this.muteButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, 0.0f, 2.0f, 0.0f));
-        this.muteButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$6$FragmentContextView(view);
-            }
-        });
+        this.muteButton.setOnClickListener(new FragmentContextView$$ExternalSyntheticLambda5(this));
         ImageView imageView3 = new ImageView(context2);
         this.closeButton = imageView3;
         imageView3.setImageResource(NUM);
@@ -578,27 +536,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         this.closeButton.setScaleType(ImageView.ScaleType.CENTER);
         addView(this.closeButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, 0.0f, 2.0f, 0.0f));
-        this.closeButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$8$FragmentContextView(view);
-            }
-        });
-        setOnClickListener(new View.OnClickListener(baseFragment2) {
-            public final /* synthetic */ BaseFragment f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$10$FragmentContextView(this.f$1, view);
-            }
-        });
+        this.closeButton.setOnClickListener(new FragmentContextView$$ExternalSyntheticLambda6(this));
+        setOnClickListener(new FragmentContextView$$ExternalSyntheticLambda7(this, baseFragment2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$FragmentContextView(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         if (this.currentStyle != 0) {
             return;
         }
@@ -610,14 +553,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$FragmentContextView(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         callOnClick();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$FragmentContextView(int i) {
+    public /* synthetic */ void lambda$new$2(int i) {
         float playbackSpeed = MediaController.getInstance().getPlaybackSpeed(this.isMusic);
         if (i == 1) {
             MediaController.getInstance().setPlaybackSpeed(this.isMusic, 0.5f);
@@ -636,8 +577,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$FragmentContextView(View view) {
+    public /* synthetic */ void lambda$new$3(View view) {
         float f = 1.0f;
         if (Math.abs(MediaController.getInstance().getPlaybackSpeed(this.isMusic) - 1.0f) > 0.001f) {
             MediaController.getInstance().setPlaybackSpeed(this.isMusic, 1.0f);
@@ -652,21 +592,18 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ boolean lambda$new$4$FragmentContextView(View view) {
+    public /* synthetic */ boolean lambda$new$4(View view) {
         this.playbackSpeedButton.toggleSubMenu();
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$5 */
-    public /* synthetic */ void lambda$new$5$FragmentContextView() {
+    public /* synthetic */ void lambda$new$5() {
         updateAvatars(true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$6 */
-    public /* synthetic */ void lambda$new$6$FragmentContextView(View view) {
+    public /* synthetic */ void lambda$new$6(View view) {
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             if (sharedInstance.groupCall != null) {
@@ -695,8 +632,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$8 */
-    public /* synthetic */ void lambda$new$8$FragmentContextView(View view) {
+    public /* synthetic */ void lambda$new$8(View view) {
         if (this.currentStyle == 2) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
             builder.setTitle(LocaleController.getString("StopLiveLocationAlertToTitle", NUM));
@@ -715,11 +651,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     builder.setMessage(LocaleController.getString("AreYouSure", NUM));
                 }
             }
-            builder.setPositiveButton(LocaleController.getString("Stop", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    FragmentContextView.this.lambda$new$7$FragmentContextView(dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("Stop", NUM), new FragmentContextView$$ExternalSyntheticLambda0(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             AlertDialog create = builder.create();
             builder.show();
@@ -734,8 +666,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$7 */
-    public /* synthetic */ void lambda$new$7$FragmentContextView(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$new$7(DialogInterface dialogInterface, int i) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment instanceof DialogsActivity) {
             for (int i2 = 0; i2 < 3; i2++) {
@@ -747,8 +678,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$10 */
-    public /* synthetic */ void lambda$new$10$FragmentContextView(BaseFragment baseFragment, View view) {
+    public /* synthetic */ void lambda$new$10(BaseFragment baseFragment, View view) {
         ChatActivity chatActivity;
         ChatObject.Call groupCall;
         long j;
@@ -815,11 +745,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (j != 0) {
                 openSharingLocation(LocationController.getInstance(i).getSharingLocationInfo(j));
             } else {
-                this.fragment.showDialog(new SharingLocationsAlert(getContext(), new SharingLocationsAlert.SharingLocationsAlertDelegate() {
-                    public final void didSelectLocation(LocationController.SharingLocationInfo sharingLocationInfo) {
-                        FragmentContextView.this.openSharingLocation(sharingLocationInfo);
-                    }
-                }));
+                this.fragment.showDialog(new SharingLocationsAlert(getContext(), new FragmentContextView$$ExternalSyntheticLambda11(this)));
             }
         } else if (i2 == 3) {
             if (VoIPService.getSharedInstance() != null && (getContext() instanceof LaunchActivity)) {
@@ -834,19 +760,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
         } else if (i2 == 5 && baseFragment.getSendMessagesHelper().getImportingHistory(((ChatActivity) baseFragment).getDialogId()) != null) {
             ImportingAlert importingAlert = new ImportingAlert(getContext(), (String) null, (ChatActivity) this.fragment);
-            importingAlert.setOnHideListener(new DialogInterface.OnDismissListener() {
-                public final void onDismiss(DialogInterface dialogInterface) {
-                    FragmentContextView.this.lambda$new$9$FragmentContextView(dialogInterface);
-                }
-            });
+            importingAlert.setOnHideListener(new FragmentContextView$$ExternalSyntheticLambda1(this));
             this.fragment.showDialog(importingAlert);
             checkImport(false);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$9 */
-    public /* synthetic */ void lambda$new$9$FragmentContextView(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$new$9(DialogInterface dialogInterface) {
         checkImport(false);
     }
 
@@ -896,17 +817,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             launchActivity.switchToAccount(sharingLocationInfo.messageObject.currentAccount, true);
             LocationActivity locationActivity = new LocationActivity(2);
             locationActivity.setMessageObject(sharingLocationInfo.messageObject);
-            locationActivity.setDelegate(new LocationActivity.LocationActivityDelegate(sharingLocationInfo.messageObject.getDialogId()) {
-                public final /* synthetic */ long f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-                    SendMessagesHelper.getInstance(LocationController.SharingLocationInfo.this.messageObject.currentAccount).sendMessage(tLRPC$MessageMedia, this.f$1, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
-                }
-            });
+            locationActivity.setDelegate(new FragmentContextView$$ExternalSyntheticLambda12(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
             launchActivity.lambda$runLinkRequest$43(locationActivity);
         }
     }
@@ -2215,7 +2126,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             goto L_0x01fb
         L_0x01ed:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628209(0x7f0e10b1, float:1.8883704E38)
+            r9 = 2131628236(0x7f0e10cc, float:1.8883759E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2237,7 +2148,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             android.widget.TextView r6 = r0.joinButton
             r6.setVisibility(r5)
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628238(0x7f0e10ce, float:1.8883763E38)
+            r9 = 2131628268(0x7f0e10ec, float:1.8883824E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2245,7 +2156,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r4 = r4.participants_count
             if (r4 != 0) goto L_0x023f
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r4 = r0.subtitleTextView
-            r6 = 2131626167(0x7f0e08b7, float:1.8879563E38)
+            r6 = 2131626178(0x7f0e08c2, float:1.8879585E38)
             java.lang.String r9 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r4.setText(r6, r5)

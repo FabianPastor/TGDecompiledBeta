@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatInvite;
@@ -218,14 +217,14 @@ public class JoinGroupAlert extends BottomSheet {
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r1.setTextColor(r7)
             android.widget.TextView r1 = r5.cancelButton
-            r7 = 2131624658(0x7f0e02d2, float:1.8876502E38)
+            r7 = 2131624660(0x7f0e02d4, float:1.8876506E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             java.lang.String r7 = r7.toUpperCase()
             r1.setText(r7)
             android.widget.TextView r1 = r5.cancelButton
-            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$AseK4-oUXkiQDAchBqaTq60CJa0 r7 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$AseK4-oUXkiQDAchBqaTq60CJa0
-            r7.<init>()
+            org.telegram.ui.Components.JoinGroupAlert$$ExternalSyntheticLambda0 r7 = new org.telegram.ui.Components.JoinGroupAlert$$ExternalSyntheticLambda0
+            r7.<init>(r0)
             r1.setOnClickListener(r7)
             android.widget.LinearLayout r1 = r5.doneButton
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -252,7 +251,7 @@ public class JoinGroupAlert extends BottomSheet {
             if (r1 != 0) goto L_0x0213
         L_0x0200:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131627112(0x7f0e0CLASSNAME, float:1.888148E38)
+            r2 = 2131627129(0x7f0e0CLASSNAME, float:1.8881514E38)
             java.lang.String r3 = "ProfileJoinChannel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -260,14 +259,14 @@ public class JoinGroupAlert extends BottomSheet {
             goto L_0x0221
         L_0x0213:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131625946(0x7f0e07da, float:1.8879114E38)
+            r2 = 2131625957(0x7f0e07e5, float:1.8879137E38)
             java.lang.String r3 = "JoinGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
         L_0x0221:
             android.widget.LinearLayout r1 = r5.doneButton
-            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$lV5gzJCFdYlzirjF_v5fq8Kw-ug r2 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$lV5gzJCFdYlzirjF_v5fq8Kw-ug
-            r2.<init>()
+            org.telegram.ui.Components.JoinGroupAlert$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.Components.JoinGroupAlert$$ExternalSyntheticLambda1
+            r2.<init>(r0)
             r1.setOnClickListener(r2)
             return
         */
@@ -275,56 +274,28 @@ public class JoinGroupAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$JoinGroupAlert(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         dismiss();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$JoinGroupAlert(View view) {
+    public /* synthetic */ void lambda$new$3(View view) {
         dismiss();
         TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite = new TLRPC$TL_messages_importChatInvite();
         tLRPC$TL_messages_importChatInvite.hash = this.hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_importChatInvite, new RequestDelegate(tLRPC$TL_messages_importChatInvite) {
-            public final /* synthetic */ TLRPC$TL_messages_importChatInvite f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                JoinGroupAlert.this.lambda$new$2$JoinGroupAlert(this.f$1, tLObject, tLRPC$TL_error);
-            }
-        }, 2);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_importChatInvite, new JoinGroupAlert$$ExternalSyntheticLambda3(this, tLRPC$TL_messages_importChatInvite), 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$JoinGroupAlert(TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$new$2(TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$Updates) tLObject, false);
         }
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_messages_importChatInvite) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ TLRPC$TL_messages_importChatInvite f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                JoinGroupAlert.this.lambda$new$1$JoinGroupAlert(this.f$1, this.f$2, this.f$3);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new JoinGroupAlert$$ExternalSyntheticLambda2(this, tLRPC$TL_error, tLObject, tLRPC$TL_messages_importChatInvite));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$JoinGroupAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
+    public /* synthetic */ void lambda$new$1(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             if (tLRPC$TL_error == null) {

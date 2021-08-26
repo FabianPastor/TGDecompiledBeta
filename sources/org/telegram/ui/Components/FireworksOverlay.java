@@ -304,17 +304,12 @@ public class FireworksOverlay extends View {
         }
         this.started = false;
         if (Build.VERSION.SDK_INT >= 18) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    FireworksOverlay.this.lambda$onDraw$0$FireworksOverlay();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new FireworksOverlay$$ExternalSyntheticLambda0(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDraw$0 */
-    public /* synthetic */ void lambda$onDraw$0$FireworksOverlay() {
+    public /* synthetic */ void lambda$onDraw$0() {
         if (!this.started) {
             setLayerType(0, (Paint) null);
         }

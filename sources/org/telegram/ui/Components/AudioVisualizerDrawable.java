@@ -11,7 +11,6 @@ public class AudioVisualizerDrawable {
     public int ALPHA = 61;
     public float ANIMATION_DURATION = 120.0f;
     public float IDLE_RADIUS = (((float) AndroidUtilities.dp(6.0f)) * 0.33f);
-    final int MAX_SAMPLE_SUM = 6;
     public float WAVE_RADIUS = (((float) AndroidUtilities.dp(12.0f)) * 0.36f);
     private final float[] animateTo = new float[8];
     private final float[] current = new float[8];

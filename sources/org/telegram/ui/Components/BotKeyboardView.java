@@ -119,11 +119,7 @@ public class BotKeyboardView extends LinearLayout {
                     textView.setText(Emoji.replaceEmoji(tLRPC$KeyboardButton.text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), z));
                     TextView textView2 = textView;
                     linearLayout.addView(textView2, LayoutHelper.createLinear(0, -1, size, 0, 0, i3 != tLRPC$TL_keyboardButtonRow.buttons.size() - 1 ? 10 : 0, 0));
-                    textView2.setOnClickListener(new View.OnClickListener() {
-                        public final void onClick(View view) {
-                            BotKeyboardView.this.lambda$setButtons$0$BotKeyboardView(view);
-                        }
-                    });
+                    textView2.setOnClickListener(new BotKeyboardView$$ExternalSyntheticLambda0(this));
                     this.buttonViews.add(textView2);
                     i3++;
                     z = false;
@@ -135,8 +131,7 @@ public class BotKeyboardView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setButtons$0 */
-    public /* synthetic */ void lambda$setButtons$0$BotKeyboardView(View view) {
+    public /* synthetic */ void lambda$setButtons$0(View view) {
         this.delegate.didPressedButton((TLRPC$KeyboardButton) view.getTag());
     }
 

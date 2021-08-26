@@ -125,26 +125,11 @@ public class Painting {
     }
 
     public void paintStroke(Path path, boolean z, Runnable runnable) {
-        this.renderView.performInContext(new Runnable(path, z, runnable) {
-            public final /* synthetic */ Path f$1;
-            public final /* synthetic */ boolean f$2;
-            public final /* synthetic */ Runnable f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                Painting.this.lambda$paintStroke$0$Painting(this.f$1, this.f$2, this.f$3);
-            }
-        });
+        this.renderView.performInContext(new Painting$$ExternalSyntheticLambda3(this, path, z, runnable));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$paintStroke$0 */
-    public /* synthetic */ void lambda$paintStroke$0$Painting(Path path, boolean z, Runnable runnable) {
+    public /* synthetic */ void lambda$paintStroke$0(Path path, boolean z, Runnable runnable) {
         RectF rectF;
         this.activePath = path;
         GLES20.glBindFramebuffer(36160, getReusableFramebuffer());
@@ -197,22 +182,11 @@ public class Painting {
     }
 
     public void commitStroke(int i) {
-        this.renderView.performInContext(new Runnable(i) {
-            public final /* synthetic */ int f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                Painting.this.lambda$commitStroke$1$Painting(this.f$1);
-            }
-        });
+        this.renderView.performInContext(new Painting$$ExternalSyntheticLambda1(this, i));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$commitStroke$1 */
-    public /* synthetic */ void lambda$commitStroke$1$Painting(int i) {
+    public /* synthetic */ void lambda$commitStroke$1(int i) {
         PaintingDelegate paintingDelegate;
         registerUndo(this.activeStrokeBounds);
         beginSuppressingChanges();
@@ -250,16 +224,11 @@ public class Painting {
     }
 
     public void clearStroke() {
-        this.renderView.performInContext(new Runnable() {
-            public final void run() {
-                Painting.this.lambda$clearStroke$2$Painting();
-            }
-        });
+        this.renderView.performInContext(new Painting$$ExternalSyntheticLambda0(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$clearStroke$2 */
-    public /* synthetic */ void lambda$clearStroke$2$Painting() {
+    public /* synthetic */ void lambda$clearStroke$2() {
         GLES20.glBindFramebuffer(36160, getReusableFramebuffer());
         GLES20.glFramebufferTexture2D(36160, 36064, 3553, getPaintTexture(), 0);
         Utils.HasGLError();
@@ -281,39 +250,18 @@ public class Painting {
 
     private void registerUndo(RectF rectF) {
         if (rectF != null && rectF.setIntersect(rectF, getBounds())) {
-            this.delegate.requestUndoStore().registerUndo(UUID.randomUUID(), new Runnable(new Slice(getPaintingData(rectF, true).data, rectF, this.delegate.requestDispatchQueue())) {
-                public final /* synthetic */ Slice f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    Painting.this.lambda$registerUndo$3$Painting(this.f$1);
-                }
-            });
+            this.delegate.requestUndoStore().registerUndo(UUID.randomUUID(), new Painting$$ExternalSyntheticLambda4(this, new Slice(getPaintingData(rectF, true).data, rectF, this.delegate.requestDispatchQueue())));
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: restoreSlice */
     public void lambda$registerUndo$3(Slice slice) {
-        this.renderView.performInContext(new Runnable(slice) {
-            public final /* synthetic */ Slice f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                Painting.this.lambda$restoreSlice$4$Painting(this.f$1);
-            }
-        });
+        this.renderView.performInContext(new Painting$$ExternalSyntheticLambda5(this, slice));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$restoreSlice$4 */
-    public /* synthetic */ void lambda$restoreSlice$4$Painting(Slice slice) {
+    public /* synthetic */ void lambda$restoreSlice$4(Slice slice) {
         PaintingDelegate paintingDelegate;
         ByteBuffer data = slice.getData();
         GLES20.glBindTexture(3553, getTexture());
@@ -456,22 +404,11 @@ public class Painting {
     }
 
     public void onPause(Runnable runnable) {
-        this.renderView.performInContext(new Runnable(runnable) {
-            public final /* synthetic */ Runnable f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                Painting.this.lambda$onPause$5$Painting(this.f$1);
-            }
-        });
+        this.renderView.performInContext(new Painting$$ExternalSyntheticLambda2(this, runnable));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onPause$5 */
-    public /* synthetic */ void lambda$onPause$5$Painting(Runnable runnable) {
+    public /* synthetic */ void lambda$onPause$5(Runnable runnable) {
         this.paused = true;
         this.backupSlice = new Slice(getPaintingData(getBounds(), true).data, getBounds(), this.delegate.requestDispatchQueue());
         cleanResources(false);

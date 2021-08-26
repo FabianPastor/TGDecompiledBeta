@@ -159,8 +159,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$AnimatedFileDrawable() {
+    public /* synthetic */ void lambda$new$0() {
         View view;
         if (!this.secondParentViews.isEmpty()) {
             int size = this.secondParentViews.size();
@@ -174,8 +173,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$AnimatedFileDrawable() {
+    public /* synthetic */ void lambda$new$1() {
         View view;
         if (!this.secondParentViews.isEmpty()) {
             int size = this.secondParentViews.size();
@@ -213,11 +211,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         this.scaleFactor = 1.0f;
         this.secondParentViews = new ArrayList<>();
         this.invalidatePath = true;
-        this.mInvalidateTask = new Runnable() {
-            public final void run() {
-                AnimatedFileDrawable.this.lambda$new$0$AnimatedFileDrawable();
-            }
-        };
+        this.mInvalidateTask = new AnimatedFileDrawable$$ExternalSyntheticLambda0(this);
         this.uiRunnableNoFrame = new Runnable() {
             public void run() {
                 if (AnimatedFileDrawable.this.destroyWhenDone && AnimatedFileDrawable.this.nativePtr != 0) {
@@ -383,11 +377,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                 AndroidUtilities.runOnUIThread(AnimatedFileDrawable.this.uiRunnable);
             }
         };
-        this.mStartTask = new Runnable() {
-            public final void run() {
-                AnimatedFileDrawable.this.lambda$new$1$AnimatedFileDrawable();
-            }
-        };
+        this.mStartTask = new AnimatedFileDrawable$$ExternalSyntheticLambda1(this);
         this.path = file;
         this.streamFileSize = j4;
         this.currentAccount = i;

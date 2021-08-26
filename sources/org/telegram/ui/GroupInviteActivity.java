@@ -21,7 +21,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
@@ -126,17 +125,12 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                GroupInviteActivity.this.lambda$createView$1$GroupInviteActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new GroupInviteActivity$$ExternalSyntheticLambda3(this));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$GroupInviteActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$1(View view, int i) {
         if (getParentActivity() != null) {
             if (i == this.copyLinkRow || i == this.linkRow) {
                 if (this.invite != null) {
@@ -162,11 +156,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                 builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
                 builder.setTitle(LocaleController.getString("RevokeLink", NUM));
-                builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        GroupInviteActivity.this.lambda$createView$0$GroupInviteActivity(dialogInterface, i);
-                    }
-                });
+                builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new GroupInviteActivity$$ExternalSyntheticLambda0(this));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 showDialog(builder.create());
             }
@@ -174,8 +164,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$GroupInviteActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$0(DialogInterface dialogInterface, int i) {
         generateLink(true);
     }
 
@@ -210,17 +199,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         this.loading = true;
         TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
         tLRPC$TL_messages_exportChatInvite.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chat_id);
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate(z) {
-            public final /* synthetic */ boolean f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                GroupInviteActivity.this.lambda$generateLink$3$GroupInviteActivity(this.f$1, tLObject, tLRPC$TL_error);
-            }
-        }), this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_exportChatInvite, new GroupInviteActivity$$ExternalSyntheticLambda2(this, z)), this.classGuid);
         ListAdapter listAdapter2 = this.listAdapter;
         if (listAdapter2 != null) {
             listAdapter2.notifyDataSetChanged();
@@ -228,28 +207,12 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$generateLink$3 */
-    public /* synthetic */ void lambda$generateLink$3$GroupInviteActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, z) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ boolean f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                GroupInviteActivity.this.lambda$generateLink$2$GroupInviteActivity(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$generateLink$3(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new GroupInviteActivity$$ExternalSyntheticLambda1(this, tLRPC$TL_error, tLObject, z));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$generateLink$2 */
-    public /* synthetic */ void lambda$generateLink$2$GroupInviteActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
+    public /* synthetic */ void lambda$generateLink$2(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         if (tLRPC$TL_error == null) {
             this.invite = (TLRPC$TL_chatInviteExported) tLObject;
             if (z) {

@@ -149,7 +149,7 @@ public class PaintingOverlay extends FrameLayout {
                         imageReceiver.setAllowDecodeSingleFrame(true);
                         imageReceiver.setAllowStartLottieAnimation(false);
                         if (z2) {
-                            imageReceiver.setDelegate($$Lambda$PaintingOverlay$y_8jID_HHjHQkiS8U9VB2FHG3GM.INSTANCE);
+                            imageReceiver.setDelegate(PaintingOverlay$$ExternalSyntheticLambda0.INSTANCE);
                         }
                     }
                     imageReceiver.setImage(ImageLocation.getForDocument(mediaEntity.document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(mediaEntity.document.thumbs, 90), mediaEntity.document), (String) null, "webp", mediaEntity.parentObject, 1);
@@ -158,7 +158,7 @@ public class PaintingOverlay extends FrameLayout {
                     }
                     mediaEntity.view = backupImageView;
                 } else if (b == 1) {
-                    AnonymousClass1 r5 = new EditTextOutline(getContext()) {
+                    AnonymousClass1 r5 = new EditTextOutline(this, getContext()) {
                         public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                             return false;
                         }
@@ -209,7 +209,8 @@ public class PaintingOverlay extends FrameLayout {
         }
     }
 
-    static /* synthetic */ void lambda$setEntities$0(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setEntities$0(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
         RLottieDrawable lottieAnimation;
         if (z && !z2 && (lottieAnimation = imageReceiver.getLottieAnimation()) != null) {
             lottieAnimation.start();

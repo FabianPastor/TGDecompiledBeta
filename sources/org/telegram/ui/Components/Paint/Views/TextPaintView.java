@@ -106,16 +106,11 @@ public class TextPaintView extends EntityView {
         this.editText.requestFocus();
         EditTextOutline editTextOutline = this.editText;
         editTextOutline.setSelection(editTextOutline.getText().length());
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                TextPaintView.this.lambda$beginEditing$0$TextPaintView();
-            }
-        }, 300);
+        AndroidUtilities.runOnUIThread(new TextPaintView$$ExternalSyntheticLambda0(this), 300);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$beginEditing$0 */
-    public /* synthetic */ void lambda$beginEditing$0$TextPaintView() {
+    public /* synthetic */ void lambda$beginEditing$0() {
         AndroidUtilities.showKeyboard(this.editText);
     }
 
@@ -179,11 +174,11 @@ public class TextPaintView extends EntityView {
 
     /* access modifiers changed from: protected */
     public TextViewSelectionView createSelectionView() {
-        return new TextViewSelectionView(getContext());
+        return new TextViewSelectionView(this, getContext());
     }
 
     public class TextViewSelectionView extends EntityView.SelectionView {
-        public TextViewSelectionView(Context context) {
+        public TextViewSelectionView(TextPaintView textPaintView, Context context) {
             super(context);
         }
 

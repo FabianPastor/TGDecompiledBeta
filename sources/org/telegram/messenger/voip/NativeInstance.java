@@ -38,7 +38,7 @@ public class NativeInstance {
     }
 
     public interface RequestBroadcastPartCallback {
-        void run(long j, long j2);
+        void run(long j, long j2, int i, int i2);
     }
 
     public static class SsrcGroup {
@@ -94,7 +94,7 @@ public class NativeInstance {
 
     public native void onSignalingDataReceive(byte[] bArr);
 
-    public native void onStreamPartAvailable(long j, ByteBuffer byteBuffer, int i, long j2);
+    public native void onStreamPartAvailable(long j, ByteBuffer byteBuffer, int i, long j2, int i2, int i3);
 
     public native void prepareForStream();
 
@@ -213,110 +213,56 @@ public class NativeInstance {
 
     private void onNetworkStateUpdated(boolean z, boolean z2) {
         if (this.onStateUpdatedListener != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(z, z2) {
-                public final /* synthetic */ boolean f$1;
-                public final /* synthetic */ boolean f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    NativeInstance.this.lambda$onNetworkStateUpdated$0$NativeInstance(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new NativeInstance$$ExternalSyntheticLambda2(this, z, z2));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onNetworkStateUpdated$0 */
-    public /* synthetic */ void lambda$onNetworkStateUpdated$0$NativeInstance(boolean z, boolean z2) {
+    public /* synthetic */ void lambda$onNetworkStateUpdated$0(boolean z, boolean z2) {
         this.onStateUpdatedListener.onStateUpdated(z ? 1 : 0, z2);
     }
 
     private void onAudioLevelsUpdated(int[] iArr, float[] fArr, boolean[] zArr) {
         if (!this.isGroup || iArr == null || iArr.length != 0) {
-            AndroidUtilities.runOnUIThread(new Runnable(iArr, fArr, zArr) {
-                public final /* synthetic */ int[] f$1;
-                public final /* synthetic */ float[] f$2;
-                public final /* synthetic */ boolean[] f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    NativeInstance.this.lambda$onAudioLevelsUpdated$1$NativeInstance(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new NativeInstance$$ExternalSyntheticLambda3(this, iArr, fArr, zArr));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onAudioLevelsUpdated$1 */
-    public /* synthetic */ void lambda$onAudioLevelsUpdated$1$NativeInstance(int[] iArr, float[] fArr, boolean[] zArr) {
+    public /* synthetic */ void lambda$onAudioLevelsUpdated$1(int[] iArr, float[] fArr, boolean[] zArr) {
         this.audioLevelsCallback.run(iArr, fArr, zArr);
     }
 
     private void onParticipantDescriptionsRequired(long j, int[] iArr) {
         if (this.unknownParticipantsCallback != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(j, iArr) {
-                public final /* synthetic */ long f$1;
-                public final /* synthetic */ int[] f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r4;
-                }
-
-                public final void run() {
-                    NativeInstance.this.lambda$onParticipantDescriptionsRequired$2$NativeInstance(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new NativeInstance$$ExternalSyntheticLambda1(this, j, iArr));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onParticipantDescriptionsRequired$2 */
-    public /* synthetic */ void lambda$onParticipantDescriptionsRequired$2$NativeInstance(long j, int[] iArr) {
+    public /* synthetic */ void lambda$onParticipantDescriptionsRequired$2(long j, int[] iArr) {
         this.unknownParticipantsCallback.run(j, iArr);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onEmitJoinPayload$3 */
-    public /* synthetic */ void lambda$onEmitJoinPayload$3$NativeInstance(int i, String str) {
+    public /* synthetic */ void lambda$onEmitJoinPayload$3(int i, String str) {
         this.payloadCallback.run(i, str);
     }
 
     private void onEmitJoinPayload(String str, int i) {
         try {
-            AndroidUtilities.runOnUIThread(new Runnable(i, str) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ String f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    NativeInstance.this.lambda$onEmitJoinPayload$3$NativeInstance(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new NativeInstance$$ExternalSyntheticLambda0(this, i, str));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
     }
 
-    private void onRequestBroadcastPart(long j, long j2) {
-        this.requestBroadcastPartCallback.run(j, j2);
+    private void onRequestBroadcastPart(long j, long j2, int i, int i2) {
+        this.requestBroadcastPartCallback.run(j, j2, i, i2);
     }
 
-    private void onCancelRequestBroadcastPart(long j) {
-        this.cancelRequestBroadcastPartCallback.run(j, 0);
+    private void onCancelRequestBroadcastPart(long j, int i, int i2) {
+        this.cancelRequestBroadcastPartCallback.run(j, 0, 0, 0);
     }
 
     private void onStop(Instance.FinalState finalState2) {

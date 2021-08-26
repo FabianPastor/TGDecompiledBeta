@@ -3,9 +3,7 @@ package org.webrtc;
 import android.graphics.Matrix;
 import android.os.Handler;
 import java.nio.ByteBuffer;
-import java.util.concurrent.Callable;
 import org.telegram.messenger.FileLog;
-import org.webrtc.TextureBufferImpl;
 import org.webrtc.VideoFrame;
 
 public class TextureBufferImpl implements VideoFrame.TextureBuffer {
@@ -68,23 +66,12 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
         this.transformMatrix = matrix;
         this.toI420Handler = handler;
         this.yuvConverter = yuvConverter2;
-        this.refCountDelegate = new RefCountDelegate(new Runnable(refCountMonitor2) {
-            public final /* synthetic */ TextureBufferImpl.RefCountMonitor f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                TextureBufferImpl.this.lambda$new$0$TextureBufferImpl(this.f$1);
-            }
-        });
+        this.refCountDelegate = new RefCountDelegate(new TextureBufferImpl$$ExternalSyntheticLambda1(this, refCountMonitor2));
         this.refCountMonitor = refCountMonitor2;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$TextureBufferImpl(RefCountMonitor refCountMonitor2) {
+    public /* synthetic */ void lambda$new$0(RefCountMonitor refCountMonitor2) {
         refCountMonitor2.onDestroy(this);
     }
 
@@ -110,11 +97,7 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
 
     public VideoFrame.I420Buffer toI420() {
         try {
-            return (VideoFrame.I420Buffer) ThreadUtils.invokeAtFrontUninterruptibly(this.toI420Handler, new Callable() {
-                public final Object call() {
-                    return TextureBufferImpl.this.lambda$toI420$1$TextureBufferImpl();
-                }
-            });
+            return (VideoFrame.I420Buffer) ThreadUtils.invokeAtFrontUninterruptibly(this.toI420Handler, new TextureBufferImpl$$ExternalSyntheticLambda2(this));
         } catch (Throwable th) {
             FileLog.e(th);
             int width2 = getWidth();
@@ -138,23 +121,12 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
             ByteBuffer slice2 = nativeAllocateByteBuffer.slice();
             nativeAllocateByteBuffer.position(i6);
             nativeAllocateByteBuffer.limit(i6 + i7);
-            return JavaI420Buffer.wrap(width2, height2, slice, i, slice2, i, nativeAllocateByteBuffer.slice(), i, new Runnable(nativeAllocateByteBuffer) {
-                public final /* synthetic */ ByteBuffer f$0;
-
-                {
-                    this.f$0 = r1;
-                }
-
-                public final void run() {
-                    JniCommon.nativeFreeByteBuffer(this.f$0);
-                }
-            });
+            return JavaI420Buffer.wrap(width2, height2, slice, i, slice2, i, nativeAllocateByteBuffer.slice(), i, new TextureBufferImpl$$ExternalSyntheticLambda0(nativeAllocateByteBuffer));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$toI420$1 */
-    public /* synthetic */ VideoFrame.I420Buffer lambda$toI420$1$TextureBufferImpl() throws Exception {
+    public /* synthetic */ VideoFrame.I420Buffer lambda$toI420$1() throws Exception {
         return this.yuvConverter.convert(this);
     }
 

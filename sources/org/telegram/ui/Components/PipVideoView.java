@@ -26,7 +26,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.Components.PipVideoView;
 import org.telegram.ui.PhotoViewer;
 
 public class PipVideoView {
@@ -36,7 +35,6 @@ public class PipVideoView {
     public View controlsView;
     private DecelerateInterpolator decelerateInterpolator;
     private boolean isInAppOnly;
-    private Activity parentActivity;
     /* access modifiers changed from: private */
     public EmbedBottomSheet parentSheet;
     /* access modifiers changed from: private */
@@ -57,11 +55,7 @@ public class PipVideoView {
         public float bufferedPosition;
         /* access modifiers changed from: private */
         public AnimatorSet currentAnimation;
-        private Runnable hideRunnable = new Runnable() {
-            public final void run() {
-                PipVideoView.MiniControlsView.this.lambda$new$0$PipVideoView$MiniControlsView();
-            }
-        };
+        private Runnable hideRunnable = new PipVideoView$MiniControlsView$$ExternalSyntheticLambda3(this);
         /* access modifiers changed from: private */
         public boolean isCompleted;
         private boolean isVisible = true;
@@ -84,13 +78,13 @@ public class PipVideoView {
             }
         };
 
-        static /* synthetic */ boolean lambda$new$3(View view, MotionEvent motionEvent) {
+        /* access modifiers changed from: private */
+        public static /* synthetic */ boolean lambda$new$3(View view, MotionEvent motionEvent) {
             return true;
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$PipVideoView$MiniControlsView() {
+        public /* synthetic */ void lambda$new$0() {
             show(false, true);
         }
 
@@ -100,11 +94,7 @@ public class PipVideoView {
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             imageView.setImageResource(NUM);
             addView(imageView, LayoutHelper.createFrame(56, 48, 53));
-            imageView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PipVideoView.MiniControlsView.this.lambda$new$1$PipVideoView$MiniControlsView(view);
-                }
-            });
+            imageView.setOnClickListener(new PipVideoView$MiniControlsView$$ExternalSyntheticLambda0(this));
             if (z) {
                 Paint paint = new Paint();
                 this.progressPaint = paint;
@@ -117,20 +107,15 @@ public class PipVideoView {
                 this.playButton = imageView2;
                 imageView2.setScaleType(ImageView.ScaleType.CENTER);
                 addView(this.playButton, LayoutHelper.createFrame(48, 48, 17));
-                this.playButton.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        PipVideoView.MiniControlsView.this.lambda$new$2$PipVideoView$MiniControlsView(view);
-                    }
-                });
+                this.playButton.setOnClickListener(new PipVideoView$MiniControlsView$$ExternalSyntheticLambda1(this));
             }
-            setOnTouchListener($$Lambda$PipVideoView$MiniControlsView$NkdbSeh9_SnYhkZFW0B81I8XUV8.INSTANCE);
+            setOnTouchListener(PipVideoView$MiniControlsView$$ExternalSyntheticLambda2.INSTANCE);
             updatePlayButton();
             show(false, false);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$1 */
-        public /* synthetic */ void lambda$new$1$PipVideoView$MiniControlsView(View view) {
+        public /* synthetic */ void lambda$new$1(View view) {
             if (PipVideoView.this.parentSheet != null) {
                 PipVideoView.this.parentSheet.exitFromPip();
             } else if (PipVideoView.this.photoViewer != null) {
@@ -139,8 +124,7 @@ public class PipVideoView {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$2 */
-        public /* synthetic */ void lambda$new$2$PipVideoView$MiniControlsView(View view) {
+        public /* synthetic */ void lambda$new$2(View view) {
             VideoPlayer videoPlayer;
             if (PipVideoView.this.photoViewer != null && (videoPlayer = PipVideoView.this.photoViewer.getVideoPlayer()) != null) {
                 if (videoPlayer.isPlaying()) {
@@ -290,7 +274,6 @@ public class PipVideoView {
     public TextureView show(Activity activity, PhotoViewer photoViewer2, EmbedBottomSheet embedBottomSheet, View view, float f, int i, WebView webView) {
         TextureView textureView;
         this.parentSheet = embedBottomSheet;
-        this.parentActivity = activity;
         this.photoViewer = photoViewer2;
         this.windowView = new FrameLayout(activity) {
             private boolean dragging;
@@ -483,7 +466,6 @@ public class PipVideoView {
         }
         this.parentSheet = null;
         this.photoViewer = null;
-        this.parentActivity = null;
     }
 
     public void onConfigurationChanged() {

@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileUploadOperation;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$ChatPhoto;
@@ -198,19 +197,7 @@ public class FileLoader extends BaseController {
     public void setLoadingVideo(TLRPC$Document tLRPC$Document, boolean z, boolean z2) {
         if (tLRPC$Document != null) {
             if (z2) {
-                AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Document, z) {
-                    public final /* synthetic */ TLRPC$Document f$1;
-                    public final /* synthetic */ boolean f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run() {
-                        FileLoader.this.lambda$setLoadingVideo$0$FileLoader(this.f$1, this.f$2);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new FileLoader$$ExternalSyntheticLambda4(this, tLRPC$Document, z));
             } else {
                 lambda$setLoadingVideo$0(tLRPC$Document, z);
             }
@@ -253,19 +240,7 @@ public class FileLoader extends BaseController {
     public void removeLoadingVideo(TLRPC$Document tLRPC$Document, boolean z, boolean z2) {
         if (tLRPC$Document != null) {
             if (z2) {
-                AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Document, z) {
-                    public final /* synthetic */ TLRPC$Document f$1;
-                    public final /* synthetic */ boolean f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run() {
-                        FileLoader.this.lambda$removeLoadingVideo$1$FileLoader(this.f$1, this.f$2);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new FileLoader$$ExternalSyntheticLambda5(this, tLRPC$Document, z));
             } else {
                 lambda$removeLoadingVideo$1(tLRPC$Document, z);
             }
@@ -290,29 +265,16 @@ public class FileLoader extends BaseController {
     }
 
     public void cancelFileUpload(String str, boolean z) {
-        fileLoaderQueue.postRunnable(new Runnable(z, str) {
-            public final /* synthetic */ boolean f$1;
-            public final /* synthetic */ String f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                FileLoader.this.lambda$cancelFileUpload$2$FileLoader(this.f$1, this.f$2);
-            }
-        });
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda8(this, z, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$cancelFileUpload$2 */
-    public /* synthetic */ void lambda$cancelFileUpload$2$FileLoader(boolean z, String str) {
+    public /* synthetic */ void lambda$cancelFileUpload$2(boolean z, String str) {
         FileUploadOperation fileUploadOperation;
         if (!z) {
-            fileUploadOperation = (FileUploadOperation) this.uploadOperationPaths.get(str);
+            fileUploadOperation = this.uploadOperationPaths.get(str);
         } else {
-            fileUploadOperation = (FileUploadOperation) this.uploadOperationPathsEnc.get(str);
+            fileUploadOperation = this.uploadOperationPathsEnc.get(str);
         }
         this.uploadSizes.remove(str);
         if (fileUploadOperation != null) {
@@ -324,33 +286,16 @@ public class FileLoader extends BaseController {
     }
 
     public void checkUploadNewDataAvailable(String str, boolean z, long j, long j2) {
-        fileLoaderQueue.postRunnable(new Runnable(z, str, j, j2) {
-            public final /* synthetic */ boolean f$1;
-            public final /* synthetic */ String f$2;
-            public final /* synthetic */ long f$3;
-            public final /* synthetic */ long f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r6;
-            }
-
-            public final void run() {
-                FileLoader.this.lambda$checkUploadNewDataAvailable$3$FileLoader(this.f$1, this.f$2, this.f$3, this.f$4);
-            }
-        });
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda10(this, z, str, j, j2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkUploadNewDataAvailable$3 */
-    public /* synthetic */ void lambda$checkUploadNewDataAvailable$3$FileLoader(boolean z, String str, long j, long j2) {
+    public /* synthetic */ void lambda$checkUploadNewDataAvailable$3(boolean z, String str, long j, long j2) {
         FileUploadOperation fileUploadOperation;
         if (z) {
-            fileUploadOperation = (FileUploadOperation) this.uploadOperationPathsEnc.get(str);
+            fileUploadOperation = this.uploadOperationPathsEnc.get(str);
         } else {
-            fileUploadOperation = (FileUploadOperation) this.uploadOperationPaths.get(str);
+            fileUploadOperation = this.uploadOperationPaths.get(str);
         }
         if (fileUploadOperation != null) {
             fileUploadOperation.checkNewDataAvailable(j, j2);
@@ -360,26 +305,15 @@ public class FileLoader extends BaseController {
     }
 
     public void onNetworkChanged(boolean z) {
-        fileLoaderQueue.postRunnable(new Runnable(z) {
-            public final /* synthetic */ boolean f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                FileLoader.this.lambda$onNetworkChanged$4$FileLoader(this.f$1);
-            }
-        });
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda7(this, z));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onNetworkChanged$4 */
-    public /* synthetic */ void lambda$onNetworkChanged$4$FileLoader(boolean z) {
-        for (Map.Entry value : this.uploadOperationPaths.entrySet()) {
+    public /* synthetic */ void lambda$onNetworkChanged$4(boolean z) {
+        for (Map.Entry<String, FileUploadOperation> value : this.uploadOperationPaths.entrySet()) {
             ((FileUploadOperation) value.getValue()).onNetworkChanged(z);
         }
-        for (Map.Entry value2 : this.uploadOperationPathsEnc.entrySet()) {
+        for (Map.Entry<String, FileUploadOperation> value2 : this.uploadOperationPathsEnc.entrySet()) {
             ((FileUploadOperation) value2.getValue()).onNetworkChanged(z);
         }
     }
@@ -390,33 +324,12 @@ public class FileLoader extends BaseController {
 
     public void uploadFile(String str, boolean z, boolean z2, int i, int i2, boolean z3) {
         if (str != null) {
-            fileLoaderQueue.postRunnable(new Runnable(z, str, i, i2, z3, z2) {
-                public final /* synthetic */ boolean f$1;
-                public final /* synthetic */ String f$2;
-                public final /* synthetic */ int f$3;
-                public final /* synthetic */ int f$4;
-                public final /* synthetic */ boolean f$5;
-                public final /* synthetic */ boolean f$6;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                    this.f$6 = r7;
-                }
-
-                public final void run() {
-                    FileLoader.this.lambda$uploadFile$5$FileLoader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
-                }
-            });
+            fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda9(this, z, str, i, i2, z3, z2));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$uploadFile$5 */
-    public /* synthetic */ void lambda$uploadFile$5$FileLoader(final boolean z, final String str, int i, int i2, boolean z2, boolean z3) {
+    public /* synthetic */ void lambda$uploadFile$5(final boolean z, final String str, int i, int i2, boolean z2, boolean z3) {
         int i3;
         boolean z4 = z;
         String str2 = str;
@@ -450,36 +363,11 @@ public class FileLoader extends BaseController {
         }
         fileUploadOperation.setDelegate(new FileUploadOperation.FileUploadOperationDelegate() {
             public void didFinishUploadingFile(FileUploadOperation fileUploadOperation, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2) {
-                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z5, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, fileUploadOperation) {
-                    public final /* synthetic */ boolean f$1;
-                    public final /* synthetic */ String f$2;
-                    public final /* synthetic */ boolean f$3;
-                    public final /* synthetic */ TLRPC$InputFile f$4;
-                    public final /* synthetic */ TLRPC$InputEncryptedFile f$5;
-                    public final /* synthetic */ byte[] f$6;
-                    public final /* synthetic */ byte[] f$7;
-                    public final /* synthetic */ FileUploadOperation f$8;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                        this.f$4 = r5;
-                        this.f$5 = r6;
-                        this.f$6 = r7;
-                        this.f$7 = r8;
-                        this.f$8 = r9;
-                    }
-
-                    public final void run() {
-                        FileLoader.AnonymousClass1.this.lambda$didFinishUploadingFile$0$FileLoader$1(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
-                    }
-                });
+                FileLoader.fileLoaderQueue.postRunnable(new FileLoader$1$$ExternalSyntheticLambda1(this, z, str, z5, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, fileUploadOperation));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$didFinishUploadingFile$0 */
-            public /* synthetic */ void lambda$didFinishUploadingFile$0$FileLoader$1(boolean z, String str, boolean z2, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, FileUploadOperation fileUploadOperation) {
+            public /* synthetic */ void lambda$didFinishUploadingFile$0(boolean z, String str, boolean z2, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, FileUploadOperation fileUploadOperation) {
                 FileUploadOperation fileUploadOperation2;
                 FileUploadOperation fileUploadOperation3;
                 String str2 = str;
@@ -507,26 +395,11 @@ public class FileLoader extends BaseController {
             }
 
             public void didFailedUploadingFile(FileUploadOperation fileUploadOperation) {
-                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z5) {
-                    public final /* synthetic */ boolean f$1;
-                    public final /* synthetic */ String f$2;
-                    public final /* synthetic */ boolean f$3;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                    }
-
-                    public final void run() {
-                        FileLoader.AnonymousClass1.this.lambda$didFailedUploadingFile$1$FileLoader$1(this.f$1, this.f$2, this.f$3);
-                    }
-                });
+                FileLoader.fileLoaderQueue.postRunnable(new FileLoader$1$$ExternalSyntheticLambda0(this, z, str, z5));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$didFailedUploadingFile$1 */
-            public /* synthetic */ void lambda$didFailedUploadingFile$1$FileLoader$1(boolean z, String str, boolean z2) {
+            public /* synthetic */ void lambda$didFailedUploadingFile$1(boolean z, String str, boolean z2) {
                 FileUploadOperation fileUploadOperation;
                 FileUploadOperation fileUploadOperation2;
                 if (z) {
@@ -608,28 +481,15 @@ public class FileLoader extends BaseController {
 
     public void setForceStreamLoadingFile(TLRPC$FileLocation tLRPC$FileLocation, String str) {
         if (tLRPC$FileLocation != null) {
-            fileLoaderQueue.postRunnable(new Runnable(tLRPC$FileLocation, str) {
-                public final /* synthetic */ TLRPC$FileLocation f$1;
-                public final /* synthetic */ String f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    FileLoader.this.lambda$setForceStreamLoadingFile$6$FileLoader(this.f$1, this.f$2);
-                }
-            });
+            fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda6(this, tLRPC$FileLocation, str));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setForceStreamLoadingFile$6 */
-    public /* synthetic */ void lambda$setForceStreamLoadingFile$6$FileLoader(TLRPC$FileLocation tLRPC$FileLocation, String str) {
+    public /* synthetic */ void lambda$setForceStreamLoadingFile$6(TLRPC$FileLocation tLRPC$FileLocation, String str) {
         String attachFileName = getAttachFileName(tLRPC$FileLocation, str);
         this.forceLoadingFile = attachFileName;
-        FileLoadOperation fileLoadOperation = (FileLoadOperation) this.loadOperationPaths.get(attachFileName);
+        FileLoadOperation fileLoadOperation = this.loadOperationPaths.get(attachFileName);
         if (fileLoadOperation != null) {
             if (fileLoadOperation.isPreloadVideoOperation()) {
                 fileLoadOperation.setIsPreloadVideoOperation(false);
@@ -715,37 +575,24 @@ public class FileLoader extends BaseController {
                 str2 = getAttachFileName(webFile);
             }
             this.loadOperationPathsUI.remove(str2);
-            fileLoaderQueue.postRunnable(new Runnable(str2, z) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ boolean f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    FileLoader.this.lambda$cancelLoadFile$7$FileLoader(this.f$1, this.f$2);
-                }
-            });
+            fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda2(this, str2, z));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$cancelLoadFile$7 */
-    public /* synthetic */ void lambda$cancelLoadFile$7$FileLoader(String str, boolean z) {
-        FileLoadOperation fileLoadOperation = (FileLoadOperation) this.loadOperationPaths.remove(str);
-        if (fileLoadOperation != null) {
-            int queueType = fileLoadOperation.getQueueType();
-            int datacenterId = fileLoadOperation.getDatacenterId();
-            if (!getLoadOperationQueue(datacenterId, queueType).remove(fileLoadOperation)) {
+    public /* synthetic */ void lambda$cancelLoadFile$7(String str, boolean z) {
+        FileLoadOperation remove = this.loadOperationPaths.remove(str);
+        if (remove != null) {
+            int queueType = remove.getQueueType();
+            int datacenterId = remove.getDatacenterId();
+            if (!getLoadOperationQueue(datacenterId, queueType).remove(remove)) {
                 SparseIntArray loadOperationCount = getLoadOperationCount(queueType);
                 loadOperationCount.put(datacenterId, loadOperationCount.get(datacenterId) - 1);
             }
             if (queueType == 0) {
-                this.activeFileLoadOperation.remove(fileLoadOperation);
+                this.activeFileLoadOperation.remove(remove);
             }
-            fileLoadOperation.cancel(z);
+            remove.cancel(z);
         }
     }
 
@@ -755,7 +602,7 @@ public class FileLoader extends BaseController {
 
     public float getBufferedProgressFromPosition(float f, String str) {
         FileLoadOperation fileLoadOperation;
-        if (!TextUtils.isEmpty(str) && (fileLoadOperation = (FileLoadOperation) this.loadOperationPaths.get(str)) != null) {
+        if (!TextUtils.isEmpty(str) && (fileLoadOperation = this.loadOperationPaths.get(str)) != null) {
             return fileLoadOperation.getDownloadedLengthFromOffset(f);
         }
         return 0.0f;
@@ -1174,40 +1021,11 @@ public class FileLoader extends BaseController {
         if (i3 != 10 && !TextUtils.isEmpty(str2) && !str2.contains("-NUM")) {
             this.loadOperationPathsUI.put(str2, Boolean.TRUE);
         }
-        fileLoaderQueue.postRunnable(new Runnable(tLRPC$Document, secureDocument, webFile, tLRPC$TL_fileLocationToBeDeprecated, imageLocation, obj, str, i, i2, i3) {
-            public final /* synthetic */ TLRPC$Document f$1;
-            public final /* synthetic */ int f$10;
-            public final /* synthetic */ SecureDocument f$2;
-            public final /* synthetic */ WebFile f$3;
-            public final /* synthetic */ TLRPC$TL_fileLocationToBeDeprecated f$4;
-            public final /* synthetic */ ImageLocation f$5;
-            public final /* synthetic */ Object f$6;
-            public final /* synthetic */ String f$7;
-            public final /* synthetic */ int f$8;
-            public final /* synthetic */ int f$9;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-                this.f$6 = r7;
-                this.f$7 = r8;
-                this.f$8 = r9;
-                this.f$9 = r10;
-                this.f$10 = r11;
-            }
-
-            public final void run() {
-                FileLoader.this.lambda$loadFile$8$FileLoader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
-            }
-        });
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda3(this, tLRPC$Document, secureDocument, webFile, tLRPC$TL_fileLocationToBeDeprecated, imageLocation, obj, str, i, i2, i3));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadFile$8 */
-    public /* synthetic */ void lambda$loadFile$8$FileLoader(TLRPC$Document tLRPC$Document, SecureDocument secureDocument, WebFile webFile, TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated, ImageLocation imageLocation, Object obj, String str, int i, int i2, int i3) {
+    public /* synthetic */ void lambda$loadFile$8(TLRPC$Document tLRPC$Document, SecureDocument secureDocument, WebFile webFile, TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated, ImageLocation imageLocation, Object obj, String str, int i, int i2, int i3) {
         loadFileInternal(tLRPC$Document, secureDocument, webFile, tLRPC$TL_fileLocationToBeDeprecated, imageLocation, obj, str, i, i2, (FileLoadOperationStream) null, 0, false, i3);
     }
 
@@ -1215,31 +1033,7 @@ public class FileLoader extends BaseController {
     public FileLoadOperation loadStreamFile(FileLoadOperationStream fileLoadOperationStream, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, int i, boolean z) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         FileLoadOperation[] fileLoadOperationArr = new FileLoadOperation[1];
-        fileLoaderQueue.postRunnable(new Runnable(fileLoadOperationArr, tLRPC$Document, imageLocation, obj, fileLoadOperationStream, i, z, countDownLatch) {
-            public final /* synthetic */ FileLoadOperation[] f$1;
-            public final /* synthetic */ TLRPC$Document f$2;
-            public final /* synthetic */ ImageLocation f$3;
-            public final /* synthetic */ Object f$4;
-            public final /* synthetic */ FileLoadOperationStream f$5;
-            public final /* synthetic */ int f$6;
-            public final /* synthetic */ boolean f$7;
-            public final /* synthetic */ CountDownLatch f$8;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-                this.f$6 = r7;
-                this.f$7 = r8;
-                this.f$8 = r9;
-            }
-
-            public final void run() {
-                FileLoader.this.lambda$loadStreamFile$9$FileLoader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
-            }
-        });
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda11(this, fileLoadOperationArr, tLRPC$Document, imageLocation, obj, fileLoadOperationStream, i, z, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -1249,8 +1043,7 @@ public class FileLoader extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadStreamFile$9 */
-    public /* synthetic */ void lambda$loadStreamFile$9$FileLoader(FileLoadOperation[] fileLoadOperationArr, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, FileLoadOperationStream fileLoadOperationStream, int i, boolean z, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$loadStreamFile$9(FileLoadOperation[] fileLoadOperationArr, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, FileLoadOperationStream fileLoadOperationStream, int i, boolean z, CountDownLatch countDownLatch) {
         ImageLocation imageLocation2 = imageLocation;
         String str = null;
         TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated = (tLRPC$Document != null || imageLocation2 == null) ? null : imageLocation2.location;
@@ -1263,21 +1056,7 @@ public class FileLoader extends BaseController {
 
     /* access modifiers changed from: private */
     public void checkDownloadQueue(int i, int i2, String str) {
-        fileLoaderQueue.postRunnable(new Runnable(str, i, i2) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ int f$2;
-            public final /* synthetic */ int f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                FileLoader.this.lambda$checkDownloadQueue$10$FileLoader(this.f$1, this.f$2, this.f$3);
-            }
-        });
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda1(this, str, i, i2));
     }
 
     /* access modifiers changed from: private */
@@ -1289,9 +1068,8 @@ public class FileLoader extends BaseController {
      */
     /* JADX WARNING: Removed duplicated region for block: B:23:0x005a  */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x007d A[SYNTHETIC] */
-    /* renamed from: lambda$checkDownloadQueue$10 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$checkDownloadQueue$10$FileLoader(java.lang.String r7, int r8, int r9) {
+    public /* synthetic */ void lambda$checkDownloadQueue$10(java.lang.String r7, int r8, int r9) {
         /*
             r6 = this;
             j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.messenger.FileLoadOperation> r0 = r6.loadOperationPaths
@@ -1358,7 +1136,7 @@ public class FileLoader extends BaseController {
         L_0x007d:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoader.lambda$checkDownloadQueue$10$FileLoader(java.lang.String, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoader.lambda$checkDownloadQueue$10(java.lang.String, int, int):void");
     }
 
     public void setDelegate(FileLoaderDelegate fileLoaderDelegate) {
@@ -1863,23 +1641,12 @@ public class FileLoader extends BaseController {
 
     public void deleteFiles(ArrayList<File> arrayList, int i) {
         if (arrayList != null && !arrayList.isEmpty()) {
-            fileLoaderQueue.postRunnable(new Runnable(arrayList, i) {
-                public final /* synthetic */ ArrayList f$0;
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$0 = r1;
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    FileLoader.lambda$deleteFiles$11(this.f$0, this.f$1);
-                }
-            });
+            fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda0(arrayList, i));
         }
     }
 
-    static /* synthetic */ void lambda$deleteFiles$11(ArrayList arrayList, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$deleteFiles$11(ArrayList arrayList, int i) {
         for (int i2 = 0; i2 < arrayList.size(); i2++) {
             File file = (File) arrayList.get(i2);
             File file2 = new File(file.getAbsolutePath() + ".enc");

@@ -37,18 +37,8 @@ import org.telegram.ui.Cells.GroupCallTextCell;
 import org.telegram.ui.Cells.GroupCallUserCell;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.UsersAlertBase;
 
 public class UsersAlertBase extends BottomSheet {
-    public static final Property<UsersAlertBase, Float> COLOR_PROGRESS = new AnimationProperties.FloatProperty<UsersAlertBase>("colorProgress") {
-        public void setValue(UsersAlertBase usersAlertBase, float f) {
-            usersAlertBase.setColorProgress(f);
-        }
-
-        public Float get(UsersAlertBase usersAlertBase) {
-            return Float.valueOf(usersAlertBase.getColorProgress());
-        }
-    };
     /* access modifiers changed from: private */
     public int backgroundColor;
     private float colorProgress;
@@ -131,7 +121,7 @@ public class UsersAlertBase extends BottomSheet {
         this.emptyView.showProgress(true, false);
         this.emptyView.setColors(this.keyNameText, this.keyLastSeenText, this.keyInviteMembersBackground, this.keySearchBackground);
         this.containerView.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 62.0f, 0.0f, 0.0f));
-        AnonymousClass1 r14 = new RecyclerListView(context) {
+        AnonymousClass1 r14 = new RecyclerListView(this, context) {
             /* access modifiers changed from: protected */
             public boolean allowSelectChildAtPosition(float f, float f2) {
                 return f2 >= ((float) (AndroidUtilities.dp(58.0f) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
@@ -229,11 +219,7 @@ public class UsersAlertBase extends BottomSheet {
             imageView2.setAlpha(0.0f);
             imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(UsersAlertBase.this.keySearchPlaceholder), PorterDuff.Mode.MULTIPLY));
             addView(imageView2, LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f));
-            imageView2.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    UsersAlertBase.SearchField.this.lambda$new$0$UsersAlertBase$SearchField(view);
-                }
-            });
+            imageView2.setOnClickListener(new UsersAlertBase$SearchField$$ExternalSyntheticLambda0(this));
             AnonymousClass1 r0 = new EditTextBoldCursor(context, UsersAlertBase.this) {
                 public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                     MotionEvent obtain = MotionEvent.obtain(motionEvent);
@@ -303,23 +289,17 @@ public class UsersAlertBase extends BottomSheet {
                     UsersAlertBase.this.flickerLoadingView.setVisibility(0);
                 }
             });
-            this.searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    return UsersAlertBase.SearchField.this.lambda$new$1$UsersAlertBase$SearchField(textView, i, keyEvent);
-                }
-            });
+            this.searchEditText.setOnEditorActionListener(new UsersAlertBase$SearchField$$ExternalSyntheticLambda1(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$UsersAlertBase$SearchField(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             this.searchEditText.setText("");
             AndroidUtilities.showKeyboard(this.searchEditText);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$1 */
-        public /* synthetic */ boolean lambda$new$1$UsersAlertBase$SearchField(TextView textView, int i, KeyEvent keyEvent) {
+        public /* synthetic */ boolean lambda$new$1(TextView textView, int i, KeyEvent keyEvent) {
             if (keyEvent == null) {
                 return false;
             }
@@ -339,6 +319,18 @@ public class UsersAlertBase extends BottomSheet {
             this.clearSearchImageView.callOnClick();
             AndroidUtilities.hideKeyboard(this.searchEditText);
         }
+    }
+
+    static {
+        new AnimationProperties.FloatProperty<UsersAlertBase>("colorProgress") {
+            public void setValue(UsersAlertBase usersAlertBase, float f) {
+                usersAlertBase.setColorProgress(f);
+            }
+
+            public Float get(UsersAlertBase usersAlertBase) {
+                return Float.valueOf(usersAlertBase.getColorProgress());
+            }
+        };
     }
 
     /* access modifiers changed from: private */
@@ -510,11 +502,7 @@ public class UsersAlertBase extends BottomSheet {
                     }
                     ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.snapToTopOffset, 0.0f});
                     this.valueAnimator = ofFloat;
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            UsersAlertBase.ContainerView.this.lambda$onMeasure$0$UsersAlertBase$ContainerView(valueAnimator);
-                        }
-                    });
+                    ofFloat.addUpdateListener(new UsersAlertBase$ContainerView$$ExternalSyntheticLambda0(this));
                     this.valueAnimator.setDuration(250);
                     this.valueAnimator.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
                     this.valueAnimator.addListener(new AnimatorListenerAdapter() {
@@ -543,8 +531,7 @@ public class UsersAlertBase extends BottomSheet {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onMeasure$0 */
-        public /* synthetic */ void lambda$onMeasure$0$UsersAlertBase$ContainerView(ValueAnimator valueAnimator2) {
+        public /* synthetic */ void lambda$onMeasure$0(ValueAnimator valueAnimator2) {
             float floatValue = ((Float) valueAnimator2.getAnimatedValue()).floatValue();
             this.snapToTopOffset = floatValue;
             setTranslationY(floatValue);

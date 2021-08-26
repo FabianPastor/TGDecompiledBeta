@@ -34,7 +34,6 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SlideChooseView;
-import org.telegram.ui.DataAutoDownloadActivity;
 
 public class DataAutoDownloadActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -55,7 +54,6 @@ public class DataAutoDownloadActivity extends BaseFragment {
     private String key;
     /* access modifiers changed from: private */
     public String key2;
-    private LinearLayoutManager layoutManager;
     /* access modifiers changed from: private */
     public ListAdapter listAdapter;
     /* access modifiers changed from: private */
@@ -151,17 +149,10 @@ public class DataAutoDownloadActivity extends BaseFragment {
         this.listView = recyclerListView;
         recyclerListView.setVerticalScrollBarEnabled(false);
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
-        RecyclerListView recyclerListView2 = this.listView;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
-        this.layoutManager = linearLayoutManager;
-        recyclerListView2.setLayoutManager(linearLayoutManager);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
-            public final void onItemClick(View view, int i, float f, float f2) {
-                DataAutoDownloadActivity.this.lambda$createView$4$DataAutoDownloadActivity(view, i, f, f2);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new DataAutoDownloadActivity$$ExternalSyntheticLambda5(this));
         return this.fragmentView;
     }
 
@@ -175,9 +166,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:26:0x0085  */
     /* JADX WARNING: Removed duplicated region for block: B:29:0x00b4  */
     /* JADX WARNING: Removed duplicated region for block: B:30:0x00bf  */
-    /* renamed from: lambda$createView$4 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$4$DataAutoDownloadActivity(android.view.View r30, int r31, float r32, float r33) {
+    public /* synthetic */ void lambda$createView$4(android.view.View r30, int r31, float r32, float r33) {
         /*
             r29 = this;
             r12 = r29
@@ -624,7 +614,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
             r0.setBackgroundDrawable(r10)
             r10 = r9[r14]
-            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$TATOZfFIhZjnKeWYDPb170Pyk4E r15 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$TATOZfFIhZjnKeWYDPb170Pyk4E
+            org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda1 r15 = new org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda1
             r1 = r22
             r0 = r15
             r22 = r23
@@ -641,7 +631,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r6 = r23
             r28 = r7
             r7 = r13
-            r0.<init>(r2, r3, r4, r5, r6, r7)
+            r0.<init>(r1, r2, r3, r4, r5, r6, r7)
             r10.setOnClickListener(r15)
             r0 = r9[r14]
             r1 = 1112014848(0x42480000, float:50.0)
@@ -710,11 +700,11 @@ public class DataAutoDownloadActivity extends BaseFragment {
             android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r3)
             r7.addView(r1, r3)
             r1 = r6[r0]
-            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$EV-b22BuW_PQvp-wkdrK47840LY r0 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$EV-b22BuW_PQvp-wkdrK47840LY
+            org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda3 r0 = new org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda3
             r0.<init>(r6)
             r1.setOnClickListener(r0)
             android.app.Activity r0 = r29.getParentActivity()
-            r1 = 2131165443(0x7var_, float:1.7945103E38)
+            r1 = 2131165448(0x7var_, float:1.7945113E38)
             java.lang.String r3 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r3)
             org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -848,7 +838,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             java.lang.String r5 = "fonts/rmedium.ttf"
             android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r1.setTypeface(r7)
-            r7 = 2131624658(0x7f0e02d2, float:1.8876502E38)
+            r7 = 2131624660(0x7f0e02d4, float:1.8876506E38)
             java.lang.String r10 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -863,9 +853,9 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r13 = -2
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r11, r10)
             r0.addView(r1, r10)
-            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$R96XOf-rVS0YOv_R2I4PywLbCLASSNAME r10 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$R96XOf-rVS0YOv_R2I4PywLbCLASSNAME
+            org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda0 r10 = new org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda0
             r13 = r25
-            r10.<init>()
+            r10.<init>(r13)
             r1.setOnClickListener(r10)
             android.widget.TextView r14 = new android.widget.TextView
             android.app.Activity r1 = r29.getParentActivity()
@@ -877,7 +867,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r14.setGravity(r4)
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r14.setTypeface(r1)
-            r1 = 2131627327(0x7f0e0d3f, float:1.8881915E38)
+            r1 = 2131627347(0x7f0e0d53, float:1.8881956E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -890,7 +880,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r2 = -2
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r11, r1)
             r0.addView(r14, r1)
-            org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$Aaje1_7nDkNeMDeAP-0Si1Gc9-8 r15 = new org.telegram.ui.-$$Lambda$DataAutoDownloadActivity$Aaje1_7nDkNeMDeAP-0Si1Gc9-8
+            org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda2 r15 = new org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda2
             r0 = r15
             r1 = r29
             r2 = r9
@@ -902,19 +892,18 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r9 = r26
             r10 = r13
             r11 = r30
-            r0.<init>(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
+            r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
             r14.setOnClickListener(r15)
             org.telegram.ui.ActionBar.BottomSheet r0 = r13.create()
             r12.showDialog(r0)
         L_0x05c3:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DataAutoDownloadActivity.lambda$createView$4$DataAutoDownloadActivity(android.view.View, int, float, float):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DataAutoDownloadActivity.lambda$createView$4(android.view.View, int, float, float):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$DataAutoDownloadActivity(TextCheckBoxCell textCheckBoxCell, TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, TextCheckCell[] textCheckCellArr, final AnimatorSet[] animatorSetArr, View view) {
+    public /* synthetic */ void lambda$createView$0(TextCheckBoxCell textCheckBoxCell, TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, TextCheckCell[] textCheckCellArr, final AnimatorSet[] animatorSetArr, View view) {
         if (view.isEnabled()) {
             boolean z = true;
             textCheckBoxCell.setChecked(!textCheckBoxCell.isChecked());
@@ -941,7 +930,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 }
                 animatorSetArr[0] = new AnimatorSet();
                 animatorSetArr[0].playTogether(arrayList);
-                animatorSetArr[0].addListener(new AnimatorListenerAdapter() {
+                animatorSetArr[0].addListener(new AnimatorListenerAdapter(this) {
                     public void onAnimationEnd(Animator animator) {
                         if (animator.equals(animatorSetArr[0])) {
                             animatorSetArr[0] = null;
@@ -955,8 +944,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$DataAutoDownloadActivity(TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, int i2, TextCheckCell[] textCheckCellArr, int i3, String str, String str2, BottomSheet.Builder builder, View view, View view2) {
+    public /* synthetic */ void lambda$createView$3(TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, int i2, TextCheckCell[] textCheckCellArr, int i3, String str, String str2, BottomSheet.Builder builder, View view, View view2) {
         int i4 = i3;
         int i5 = this.currentPresetNum;
         if (i5 != 3) {
@@ -1037,7 +1025,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         if (!this.typePreset.equals(this.lowPreset) && !this.typePreset.equals(this.mediumPreset) && !this.typePreset.equals(this.highPreset)) {
             this.presets.add(this.typePreset);
         }
-        Collections.sort(this.presets, $$Lambda$DataAutoDownloadActivity$e5C5DySGqIY6buMbuIOPcYfhJow.INSTANCE);
+        Collections.sort(this.presets, DataAutoDownloadActivity$$ExternalSyntheticLambda4.INSTANCE);
         int i = this.currentPresetNum;
         if (i == 0 || (i == 3 && this.typePreset.equals(this.lowPreset))) {
             this.selectedPreset = this.presets.indexOf(this.lowPreset);
@@ -1068,7 +1056,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
         }
     }
 
-    static /* synthetic */ int lambda$fillPresets$5(DownloadController.Preset preset, DownloadController.Preset preset2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$fillPresets$5(DownloadController.Preset preset, DownloadController.Preset preset2) {
         int typeToIndex = DownloadController.typeToIndex(4);
         int typeToIndex2 = DownloadController.typeToIndex(8);
         int i = 0;
@@ -1207,7 +1196,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.Cells.TextInfoPrivacyCell r1 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r1
                 org.telegram.ui.DataAutoDownloadActivity r3 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r3 = r3.typeSectionRow
-                r7 = 2131165443(0x7var_, float:1.7945103E38)
+                r7 = 2131165448(0x7var_, float:1.7945113E38)
                 java.lang.String r9 = "windowBackgroundGrayShadow"
                 if (r2 != r3) goto L_0x004a
                 r2 = 2131624451(0x7f0e0203, float:1.8876082E38)
@@ -1229,7 +1218,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 r3 = -1
                 if (r2 != r3) goto L_0x00aa
                 android.content.Context r2 = r0.mContext
-                r3 = 2131165444(0x7var_, float:1.7945105E38)
+                r3 = 2131165449(0x7var_, float:1.7945115E38)
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r9)
                 r1.setBackgroundDrawable(r2)
                 org.telegram.ui.DataAutoDownloadActivity r2 = org.telegram.ui.DataAutoDownloadActivity.this
@@ -1550,8 +1539,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$0 */
-        public /* synthetic */ void lambda$onCreateViewHolder$0$DataAutoDownloadActivity$ListAdapter(int i) {
+        public /* synthetic */ void lambda$onCreateViewHolder$0(int i) {
             DownloadController.Preset preset = (DownloadController.Preset) DataAutoDownloadActivity.this.presets.get(i);
             if (preset == DataAutoDownloadActivity.this.lowPreset) {
                 int unused = DataAutoDownloadActivity.this.currentPresetNum = 0;
@@ -1598,15 +1586,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 textInfoPrivacyCell = headerCell;
             } else if (i == 3) {
                 SlideChooseView slideChooseView = new SlideChooseView(this.mContext);
-                slideChooseView.setCallback(new SlideChooseView.Callback() {
-                    public final void onOptionSelected(int i) {
-                        DataAutoDownloadActivity.ListAdapter.this.lambda$onCreateViewHolder$0$DataAutoDownloadActivity$ListAdapter(i);
-                    }
-
-                    public /* synthetic */ void onTouchEnd() {
-                        SlideChooseView.Callback.CC.$default$onTouchEnd(this);
-                    }
-                });
+                slideChooseView.setCallback(new DataAutoDownloadActivity$ListAdapter$$ExternalSyntheticLambda0(this));
                 slideChooseView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 textInfoPrivacyCell = slideChooseView;
             } else if (i == 4) {

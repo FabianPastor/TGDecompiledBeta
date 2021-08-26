@@ -79,7 +79,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPService.S
         setOrientation(1);
         this.currentAccount = i;
         this.paint.setAlpha(234);
-        AnonymousClass1 r2 = new FrameLayout(context2) {
+        AnonymousClass1 r2 = new FrameLayout(this, context2) {
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
                 if (Build.VERSION.SDK_INT >= 21) {
@@ -94,11 +94,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPService.S
         backupImageView.setRoundRadius(AndroidUtilities.dp(22.0f));
         this.groupInfoContainer.addView(this.avatarImageView, LayoutHelper.createFrame(44, 44.0f));
         this.groupInfoContainer.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(-1, 76)));
-        this.groupInfoContainer.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                GroupCallPipAlertView.this.lambda$new$0$GroupCallPipAlertView(view);
-            }
-        });
+        this.groupInfoContainer.setOnClickListener(new GroupCallPipAlertView$$ExternalSyntheticLambda0(this));
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
         TextView textView = new TextView(context2);
@@ -119,48 +115,18 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPService.S
         VoIPToggleButton voIPToggleButton = new VoIPToggleButton(context2, 44.0f);
         this.soundButton = voIPToggleButton;
         voIPToggleButton.setTextSize(12);
-        this.soundButton.setOnClickListener(new View.OnClickListener(context2) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                GroupCallPipAlertView.this.lambda$new$1$GroupCallPipAlertView(this.f$1, view);
-            }
-        });
+        this.soundButton.setOnClickListener(new GroupCallPipAlertView$$ExternalSyntheticLambda1(this, context2));
         this.soundButton.setCheckable(true);
         this.soundButton.setBackgroundColor(ColorUtils.setAlphaComponent(-1, 38), ColorUtils.setAlphaComponent(-1, 76));
         VoIPToggleButton voIPToggleButton2 = new VoIPToggleButton(context2, 44.0f);
         this.muteButton = voIPToggleButton2;
         voIPToggleButton2.setTextSize(12);
-        this.muteButton.setOnClickListener(new View.OnClickListener(context2) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                GroupCallPipAlertView.this.lambda$new$2$GroupCallPipAlertView(this.f$1, view);
-            }
-        });
+        this.muteButton.setOnClickListener(new GroupCallPipAlertView$$ExternalSyntheticLambda2(this, context2));
         VoIPToggleButton voIPToggleButton3 = new VoIPToggleButton(context2, 44.0f);
         this.leaveButton = voIPToggleButton3;
         voIPToggleButton3.setTextSize(12);
         this.leaveButton.setData(NUM, -1, -3257782, 0.3f, false, LocaleController.getString("VoipGroupLeave", NUM), false, false);
-        this.leaveButton.setOnClickListener(new View.OnClickListener(context2) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                GroupCallPipAlertView.this.lambda$new$4$GroupCallPipAlertView(this.f$1, view);
-            }
-        });
+        this.leaveButton.setOnClickListener(new GroupCallPipAlertView$$ExternalSyntheticLambda3(this, context2));
         VoIPButtonsLayout voIPButtonsLayout = new VoIPButtonsLayout(context2);
         voIPButtonsLayout.setChildSize(68);
         voIPButtonsLayout.setUseStartPadding(false);
@@ -172,8 +138,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPService.S
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$GroupCallPipAlertView(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         if (VoIPService.getSharedInstance() != null) {
             Intent action = new Intent(getContext(), LaunchActivity.class).setAction("voip_chat");
             action.putExtra("currentAccount", VoIPService.getSharedInstance().getAccount());
@@ -182,16 +147,14 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPService.S
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$GroupCallPipAlertView(Context context, View view) {
+    public /* synthetic */ void lambda$new$1(Context context, View view) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().toggleSpeakerphoneOrShowRouteSheet(getContext(), Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$GroupCallPipAlertView(Context context, View view) {
+    public /* synthetic */ void lambda$new$2(Context context, View view) {
         if (VoIPService.getSharedInstance() == null) {
             return;
         }
@@ -211,19 +174,8 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPService.S
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$GroupCallPipAlertView(Context context, View view) {
-        GroupCallActivity.onLeaveClick(getContext(), new Runnable(context) {
-            public final /* synthetic */ Context f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void run() {
-                GroupCallPip.updateVisibility(this.f$0);
-            }
-        }, Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context));
+    public /* synthetic */ void lambda$new$4(Context context, View view) {
+        GroupCallActivity.onLeaveClick(getContext(), new GroupCallPipAlertView$$ExternalSyntheticLambda4(context), Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context));
     }
 
     /* access modifiers changed from: protected */

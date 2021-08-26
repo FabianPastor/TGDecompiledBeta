@@ -74,23 +74,12 @@ public class ChatGreetingsView extends LinearLayout {
             } else {
                 this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document), (String) null, 0, (Object) tLRPC$Document);
             }
-            this.stickerToSendView.setOnClickListener(new View.OnClickListener(tLRPC$Document) {
-                public final /* synthetic */ TLRPC$Document f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    ChatGreetingsView.this.lambda$setSticker$0$ChatGreetingsView(this.f$1, view);
-                }
-            });
+            this.stickerToSendView.setOnClickListener(new ChatGreetingsView$$ExternalSyntheticLambda0(this, tLRPC$Document));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setSticker$0 */
-    public /* synthetic */ void lambda$setSticker$0$ChatGreetingsView(TLRPC$Document tLRPC$Document, View view) {
+    public /* synthetic */ void lambda$setSticker$0(TLRPC$Document tLRPC$Document, View view) {
         Listener listener2 = this.listener;
         if (listener2 != null) {
             listener2.onGreetings(tLRPC$Document);

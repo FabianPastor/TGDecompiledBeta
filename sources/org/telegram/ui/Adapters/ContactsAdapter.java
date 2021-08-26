@@ -8,14 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import androidx.recyclerview.widget.RecyclerView;
-import j$.util.Comparator;
-import j$.util.function.Function;
-import j$.util.function.ToDoubleFunction;
-import j$.util.function.ToIntFunction;
-import j$.util.function.ToLongFunction;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
@@ -103,45 +97,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         if (this.onlineContacts != null) {
             try {
                 int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                Collections.sort(this.onlineContacts, new Object(currentTime) {
-                    public final /* synthetic */ int f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final int compare(Object obj, Object obj2) {
-                        return ContactsAdapter.lambda$sortOnlineContacts$0(MessagesController.this, this.f$1, (TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
-                    }
-
-                    public /* synthetic */ Comparator reversed() {
-                        return Comparator.CC.$default$reversed(this);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparing(Function function) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
-                        return Comparator.CC.$default$thenComparing(this, function, comparator);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
-                        return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
-                        return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
-                        return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
-                    }
-                });
+                Collections.sort(this.onlineContacts, new ContactsAdapter$$ExternalSyntheticLambda0(MessagesController.getInstance(this.currentAccount), currentTime));
                 notifyDataSetChanged();
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
@@ -149,13 +105,14 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         }
     }
 
+    /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:10:0x002b  */
     /* JADX WARNING: Removed duplicated region for block: B:19:0x003d A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x0048 A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0053 A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:38:0x005c A[ADDED_TO_REGION] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ int lambda$sortOnlineContacts$0(org.telegram.messenger.MessagesController r2, int r3, org.telegram.tgnet.TLRPC$TL_contact r4, org.telegram.tgnet.TLRPC$TL_contact r5) {
+    public static /* synthetic */ int lambda$sortOnlineContacts$0(org.telegram.messenger.MessagesController r2, int r3, org.telegram.tgnet.TLRPC$TL_contact r4, org.telegram.tgnet.TLRPC$TL_contact r5) {
         /*
             int r5 = r5.user_id
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)

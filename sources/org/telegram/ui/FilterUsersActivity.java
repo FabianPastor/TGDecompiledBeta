@@ -34,7 +34,6 @@ import androidx.annotation.Keep;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DispatchQueue;
@@ -60,7 +59,6 @@ import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.GroupCreateSpan;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.FilterUsersActivity;
 
 public class FilterUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, View.OnClickListener {
     /* access modifiers changed from: private */
@@ -488,11 +486,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         SpansContainer spansContainer2 = new SpansContainer(context);
         this.spansContainer = spansContainer2;
         this.scrollView.addView(spansContainer2, LayoutHelper.createFrame(-1, -2.0f));
-        this.spansContainer.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                FilterUsersActivity.this.lambda$createView$0$FilterUsersActivity(view);
-            }
-        });
+        this.spansContainer.setOnClickListener(new FilterUsersActivity$$ExternalSyntheticLambda1(this));
         AnonymousClass4 r42 = new EditTextBoldCursor(context) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (FilterUsersActivity.this.currentDeletingSpan != null) {
@@ -524,7 +518,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         this.editText.setHintText(LocaleController.getString("SearchForPeopleAndGroups", NUM));
-        this.editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+        this.editText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 return false;
             }
@@ -626,11 +620,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         this.listView.addItemDecoration(new ItemDecoration());
         viewGroup.addView(this.listView);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                FilterUsersActivity.this.lambda$createView$1$FilterUsersActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new FilterUsersActivity$$ExternalSyntheticLambda3(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -660,7 +650,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(imageView2, property, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, property, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.floatingButton.setStateListAnimator(stateListAnimator);
-            this.floatingButton.setOutlineProvider(new ViewOutlineProvider() {
+            this.floatingButton.setOutlineProvider(new ViewOutlineProvider(this) {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -668,11 +658,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             });
         }
         viewGroup.addView(this.floatingButton);
-        this.floatingButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                FilterUsersActivity.this.lambda$createView$2$FilterUsersActivity(view);
-            }
-        });
+        this.floatingButton.setOnClickListener(new FilterUsersActivity$$ExternalSyntheticLambda0(this));
         this.floatingButton.setContentDescription(LocaleController.getString("Next", NUM));
         if (!this.isInclude) {
             i2 = 3;
@@ -733,16 +719,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$FilterUsersActivity(View view) {
+    public /* synthetic */ void lambda$createView$0(View view) {
         this.editText.clearFocus();
         this.editText.requestFocus();
         AndroidUtilities.showKeyboard(this.editText);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$FilterUsersActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$1(View view, int i) {
         int i2;
         int i3;
         if (view instanceof GroupCreateUserCell) {
@@ -817,8 +801,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$FilterUsersActivity(View view) {
+    public /* synthetic */ void lambda$createView$2(View view) {
         onDonePressed(true);
     }
 
@@ -1059,32 +1042,11 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             SearchAdapterHelper searchAdapterHelper2 = new SearchAdapterHelper(false);
             this.searchAdapterHelper = searchAdapterHelper2;
             searchAdapterHelper2.setAllowGlobalResults(false);
-            this.searchAdapterHelper.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
-                public /* synthetic */ boolean canApplySearchResults(int i) {
-                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
-                }
-
-                public /* synthetic */ SparseArray getExcludeCallParticipants() {
-                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeCallParticipants(this);
-                }
-
-                public /* synthetic */ SparseArray getExcludeUsers() {
-                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
-                }
-
-                public final void onDataSetChanged(int i) {
-                    FilterUsersActivity.GroupCreateAdapter.this.lambda$new$0$FilterUsersActivity$GroupCreateAdapter(i);
-                }
-
-                public /* synthetic */ void onSetHashtags(ArrayList arrayList, HashMap hashMap) {
-                    SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$onSetHashtags(this, arrayList, hashMap);
-                }
-            });
+            this.searchAdapterHelper.setDelegate(new FilterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda4(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$FilterUsersActivity$GroupCreateAdapter(int i) {
+        public /* synthetic */ void lambda$new$0(int i) {
             if (this.searchRunnable == null && !this.searchAdapterHelper.isSearchInProgress()) {
                 FilterUsersActivity.this.emptyView.showTextView();
             }
@@ -1148,13 +1110,13 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 android.view.View r12 = r12.itemView
                 org.telegram.ui.Cells.GraySectionCell r12 = (org.telegram.ui.Cells.GraySectionCell) r12
                 if (r13 != 0) goto L_0x0020
-                r13 = 2131625528(0x7f0e0638, float:1.8878266E38)
+                r13 = 2131625535(0x7f0e063f, float:1.887828E38)
                 java.lang.String r0 = "FilterChatTypes"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
                 goto L_0x022d
             L_0x0020:
-                r13 = 2131625529(0x7f0e0639, float:1.8878269E38)
+                r13 = 2131625536(0x7f0e0640, float:1.8878283E38)
                 java.lang.String r0 = "FilterChats"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
@@ -1281,7 +1243,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 boolean r0 = r0.isInclude
                 if (r0 == 0) goto L_0x0175
                 if (r13 != r2) goto L_0x0135
-                r13 = 2131625534(0x7f0e063e, float:1.8878279E38)
+                r13 = 2131625541(0x7f0e0645, float:1.8878293E38)
                 java.lang.String r0 = "FilterContacts"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
@@ -1289,7 +1251,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01a2
             L_0x0135:
                 if (r13 != r1) goto L_0x0145
-                r13 = 2131625564(0x7f0e065c, float:1.887834E38)
+                r13 = 2131625571(0x7f0e0663, float:1.8878354E38)
                 java.lang.String r0 = "FilterNonContacts"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
@@ -1298,7 +1260,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             L_0x0145:
                 r0 = 3
                 if (r13 != r0) goto L_0x0156
-                r13 = 2131625551(0x7f0e064f, float:1.8878313E38)
+                r13 = 2131625558(0x7f0e0656, float:1.8878327E38)
                 java.lang.String r0 = "FilterGroups"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
@@ -1307,14 +1269,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             L_0x0156:
                 r0 = 4
                 if (r13 != r0) goto L_0x0167
-                r13 = 2131625525(0x7f0e0635, float:1.887826E38)
+                r13 = 2131625532(0x7f0e063c, float:1.8878275E38)
                 java.lang.String r0 = "FilterChannels"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
                 java.lang.String r1 = "channels"
                 goto L_0x01a2
             L_0x0167:
-                r13 = 2131625524(0x7f0e0634, float:1.8878258E38)
+                r13 = 2131625531(0x7f0e063b, float:1.8878273E38)
                 java.lang.String r0 = "FilterBots"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
@@ -1322,7 +1284,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01a2
             L_0x0175:
                 if (r13 != r2) goto L_0x0185
-                r13 = 2131625554(0x7f0e0652, float:1.887832E38)
+                r13 = 2131625561(0x7f0e0659, float:1.8878333E38)
                 java.lang.String r0 = "FilterMuted"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
@@ -1330,14 +1292,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01a2
             L_0x0185:
                 if (r13 != r1) goto L_0x0195
-                r13 = 2131625565(0x7f0e065d, float:1.8878342E38)
+                r13 = 2131625572(0x7f0e0664, float:1.8878356E38)
                 java.lang.String r0 = "FilterRead"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
                 java.lang.String r1 = "read"
                 goto L_0x01a2
             L_0x0195:
-                r13 = 2131625521(0x7f0e0631, float:1.8878252E38)
+                r13 = 2131625528(0x7f0e0638, float:1.8878266E38)
                 java.lang.String r0 = "FilterArchived"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
@@ -1470,60 +1432,27 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 return;
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$FilterUsersActivity$GroupCreateAdapter$WpsDt72XjbKzaIwsRMVb8QyieVA r1 = new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    FilterUsersActivity.GroupCreateAdapter.this.lambda$searchDialogs$3$FilterUsersActivity$GroupCreateAdapter(this.f$1);
-                }
-            };
-            this.searchRunnable = r1;
-            dispatchQueue.postRunnable(r1, 300);
+            FilterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda2 filterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda2 = new FilterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda2(this, str);
+            this.searchRunnable = filterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda2;
+            dispatchQueue.postRunnable(filterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda2, 300);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$searchDialogs$3 */
-        public /* synthetic */ void lambda$searchDialogs$3$FilterUsersActivity$GroupCreateAdapter(String str) {
-            AndroidUtilities.runOnUIThread(new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    FilterUsersActivity.GroupCreateAdapter.this.lambda$searchDialogs$2$FilterUsersActivity$GroupCreateAdapter(this.f$1);
-                }
-            });
+        public /* synthetic */ void lambda$searchDialogs$3(String str) {
+            AndroidUtilities.runOnUIThread(new FilterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda0(this, str));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$searchDialogs$2 */
-        public /* synthetic */ void lambda$searchDialogs$2$FilterUsersActivity$GroupCreateAdapter(String str) {
+        public /* synthetic */ void lambda$searchDialogs$2(String str) {
             this.searchAdapterHelper.queryServerSearch(str, true, true, true, true, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$FilterUsersActivity$GroupCreateAdapter$OndldZf4zNeunzZGHDDinq5l7S4 r1 = new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    FilterUsersActivity.GroupCreateAdapter.this.lambda$searchDialogs$1$FilterUsersActivity$GroupCreateAdapter(this.f$1);
-                }
-            };
-            this.searchRunnable = r1;
-            dispatchQueue.postRunnable(r1);
+            FilterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda1 filterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda1 = new FilterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda1(this, str);
+            this.searchRunnable = filterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda1;
+            dispatchQueue.postRunnable(filterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda1);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$searchDialogs$1 */
-        public /* synthetic */ void lambda$searchDialogs$1$FilterUsersActivity$GroupCreateAdapter(String str) {
+        public /* synthetic */ void lambda$searchDialogs$1(String str) {
             String str2;
             int i;
             String str3;
@@ -1638,24 +1567,11 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         }
 
         private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ ArrayList f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    FilterUsersActivity.GroupCreateAdapter.this.lambda$updateSearchResults$4$FilterUsersActivity$GroupCreateAdapter(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new FilterUsersActivity$GroupCreateAdapter$$ExternalSyntheticLambda3(this, arrayList, arrayList2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$4 */
-        public /* synthetic */ void lambda$updateSearchResults$4$FilterUsersActivity$GroupCreateAdapter(ArrayList arrayList, ArrayList arrayList2) {
+        public /* synthetic */ void lambda$updateSearchResults$4(ArrayList arrayList, ArrayList arrayList2) {
             if (this.searching) {
                 this.searchRunnable = null;
                 this.searchResult = arrayList;
@@ -1671,11 +1587,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$FilterUsersActivity$b9VaH2b6cApvvdsidx2kD4VbZc r10 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                FilterUsersActivity.this.lambda$getThemeDescriptions$3$FilterUsersActivity();
-            }
-        };
+        FilterUsersActivity$$ExternalSyntheticLambda2 filterUsersActivity$$ExternalSyntheticLambda2 = new FilterUsersActivity$$ExternalSyntheticLambda2(this);
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -1702,14 +1614,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$FilterUsersActivity$b9VaH2b6cApvvdsidx2kD4VbZc r8 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        FilterUsersActivity$$ExternalSyntheticLambda2 filterUsersActivity$$ExternalSyntheticLambda22 = filterUsersActivity$$ExternalSyntheticLambda2;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterUsersActivity$$ExternalSyntheticLambda22, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterUsersActivity$$ExternalSyntheticLambda22, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterUsersActivity$$ExternalSyntheticLambda22, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterUsersActivity$$ExternalSyntheticLambda22, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterUsersActivity$$ExternalSyntheticLambda22, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterUsersActivity$$ExternalSyntheticLambda22, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterUsersActivity$$ExternalSyntheticLambda22, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanBackground"));
         arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanText"));
         arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanDelete"));
@@ -1718,8 +1630,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$3 */
-    public /* synthetic */ void lambda$getThemeDescriptions$3$FilterUsersActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$3() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

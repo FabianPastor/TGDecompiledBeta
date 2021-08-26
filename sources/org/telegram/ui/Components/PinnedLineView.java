@@ -89,11 +89,7 @@ public class PinnedLineView extends View {
             invalidate();
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.animator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PinnedLineView.this.lambda$selectPosition$0$PinnedLineView(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new PinnedLineView$$ExternalSyntheticLambda0(this));
             this.animator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     PinnedLineView pinnedLineView = PinnedLineView.this;
@@ -114,8 +110,7 @@ public class PinnedLineView extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$selectPosition$0 */
-    public /* synthetic */ void lambda$selectPosition$0$PinnedLineView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$selectPosition$0(ValueAnimator valueAnimator) {
         this.animationProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -279,11 +274,7 @@ public class PinnedLineView extends View {
             invalidate();
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.animator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PinnedLineView.this.lambda$set$1$PinnedLineView(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new PinnedLineView$$ExternalSyntheticLambda1(this));
             this.animator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     PinnedLineView pinnedLineView = PinnedLineView.this;
@@ -306,8 +297,7 @@ public class PinnedLineView extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$set$1 */
-    public /* synthetic */ void lambda$set$1$PinnedLineView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$set$1(ValueAnimator valueAnimator) {
         this.animationProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }

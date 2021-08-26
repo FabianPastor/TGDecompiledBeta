@@ -1,17 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.Consumer;
+import j$.util.function.m;
 
-public final /* synthetic */ class E0 implements Consumer {
+public final /* synthetic */ class E0 implements m {
     public static final /* synthetic */ E0 a = new E0();
 
     private /* synthetic */ E0() {
     }
 
-    public final void accept(Object obj) {
-    }
-
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
+    public final long applyAsLong(int i) {
+        return 1;
     }
 }

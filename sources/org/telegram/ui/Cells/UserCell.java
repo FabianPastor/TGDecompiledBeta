@@ -42,7 +42,6 @@ public class UserCell extends FrameLayout {
     private CharSequence currentName;
     private Object currentObject;
     private CharSequence currentStatus;
-    private TLRPC$EncryptedChat encryptedChat;
     private ImageView imageView;
     private TLRPC$FileLocation lastAvatar;
     private String lastName;
@@ -247,7 +246,6 @@ public class UserCell extends FrameLayout {
             this.avatarImageView.setImageDrawable((Drawable) null);
             return;
         }
-        this.encryptedChat = tLRPC$EncryptedChat;
         this.currentStatus = charSequence2;
         this.currentName = charSequence;
         this.currentObject = obj;
@@ -293,9 +291,9 @@ public class UserCell extends FrameLayout {
         int i3 = (int) j;
         int i4 = (int) (j >> 32);
         if (i3 == 0) {
-            TLRPC$EncryptedChat encryptedChat2 = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(i4));
-            if (encryptedChat2 != null && (user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat2.user_id))) != null) {
-                setData(user, encryptedChat2, charSequence, str2, 0, false);
+            TLRPC$EncryptedChat encryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(i4));
+            if (encryptedChat != null && (user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id))) != null) {
+                setData(user, encryptedChat, charSequence, str2, 0, false);
             }
         } else if (i3 > 0) {
             TLRPC$User user2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i3));
@@ -653,7 +651,7 @@ public class UserCell extends FrameLayout {
             boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r1)
             if (r5 == 0) goto L_0x01a2
             org.telegram.ui.ActionBar.SimpleTextView r2 = r0.nameTextView
-            r4 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+            r4 = 2131627357(0x7f0e0d5d, float:1.8881976E38)
             java.lang.String r5 = "SavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.setText(r4, r6)
@@ -754,14 +752,14 @@ public class UserCell extends FrameLayout {
             goto L_0x023e
         L_0x022f:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131624600(0x7f0e0298, float:1.8876384E38)
+            r6 = 2131624602(0x7f0e029a, float:1.8876388E38)
             java.lang.String r7 = "BotStatusCantRead"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
             goto L_0x02aa
         L_0x023e:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131624601(0x7f0e0299, float:1.8876386E38)
+            r6 = 2131624603(0x7f0e029b, float:1.887639E38)
             java.lang.String r7 = "BotStatusRead"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
@@ -802,7 +800,7 @@ public class UserCell extends FrameLayout {
             int r6 = r0.statusOnlineColor
             r3.setTextColor(r6)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131626579(0x7f0e0a53, float:1.8880398E38)
+            r6 = 2131626596(0x7f0e0a64, float:1.8880433E38)
             java.lang.String r7 = "Online"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)

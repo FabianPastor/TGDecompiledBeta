@@ -35,7 +35,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
@@ -255,11 +254,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.eraseImageView.setPadding(AndroidUtilities.dp(16.0f), 0, 0, 0);
         this.eraseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText3"), PorterDuff.Mode.MULTIPLY));
         this.eraseImageView.setVisibility(4);
-        this.eraseImageView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                GroupStickersActivity.this.lambda$createView$0$GroupStickersActivity(view);
-            }
-        });
+        this.eraseImageView.setOnClickListener(new GroupStickersActivity$$ExternalSyntheticLambda0(this));
         this.nameContainer.addView(this.eraseImageView, LayoutHelper.createLinear(42, 42, 0.0f));
         TLRPC$ChatFull tLRPC$ChatFull = this.info;
         if (!(tLRPC$ChatFull == null || (tLRPC$StickerSet = tLRPC$ChatFull.stickerset) == null)) {
@@ -279,7 +274,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         recyclerListView.setFocusable(true);
         this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
         this.listView.setLayoutAnimation((LayoutAnimationController) null);
-        AnonymousClass4 r4 = new LinearLayoutManager(context2) {
+        AnonymousClass4 r4 = new LinearLayoutManager(this, context2) {
             public boolean requestChildRectangleOnScreen(RecyclerView recyclerView, View view, Rect rect, boolean z, boolean z2) {
                 return false;
             }
@@ -293,11 +288,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.listView.setLayoutManager(this.layoutManager);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                GroupStickersActivity.this.lambda$createView$1$GroupStickersActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new GroupStickersActivity$$ExternalSyntheticLambda7(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
             }
@@ -312,8 +303,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$GroupStickersActivity(View view) {
+    public /* synthetic */ void lambda$createView$0(View view) {
         this.searchWas = false;
         this.selectedStickerSet = null;
         this.usernameTextView.setText("");
@@ -321,8 +311,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$GroupStickersActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$1(View view, int i) {
         if (getParentActivity() != null) {
             int i2 = this.selectedStickerRow;
             if (i == i2) {
@@ -420,57 +409,30 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.searching = false;
                 return;
             }
-            $$Lambda$GroupStickersActivity$LE0Hkmgdmlll6CmITp9ssUUozs r1 = new Runnable(obj) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    GroupStickersActivity.this.lambda$resolveStickerSet$4$GroupStickersActivity(this.f$1);
-                }
-            };
-            this.queryRunnable = r1;
-            AndroidUtilities.runOnUIThread(r1, 500);
+            GroupStickersActivity$$ExternalSyntheticLambda2 groupStickersActivity$$ExternalSyntheticLambda2 = new GroupStickersActivity$$ExternalSyntheticLambda2(this, obj);
+            this.queryRunnable = groupStickersActivity$$ExternalSyntheticLambda2;
+            AndroidUtilities.runOnUIThread(groupStickersActivity$$ExternalSyntheticLambda2, 500);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$resolveStickerSet$4 */
-    public /* synthetic */ void lambda$resolveStickerSet$4$GroupStickersActivity(String str) {
+    public /* synthetic */ void lambda$resolveStickerSet$4(String str) {
         if (this.queryRunnable != null) {
             TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
             TLRPC$TL_inputStickerSetShortName tLRPC$TL_inputStickerSetShortName = new TLRPC$TL_inputStickerSetShortName();
             tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetShortName;
             tLRPC$TL_inputStickerSetShortName.short_name = str;
-            this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickerSet, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    GroupStickersActivity.this.lambda$resolveStickerSet$3$GroupStickersActivity(tLObject, tLRPC$TL_error);
-                }
-            });
+            this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickerSet, new GroupStickersActivity$$ExternalSyntheticLambda6(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$resolveStickerSet$3 */
-    public /* synthetic */ void lambda$resolveStickerSet$3$GroupStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            public final /* synthetic */ TLObject f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                GroupStickersActivity.this.lambda$resolveStickerSet$2$GroupStickersActivity(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$resolveStickerSet$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new GroupStickersActivity$$ExternalSyntheticLambda3(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$resolveStickerSet$2 */
-    public /* synthetic */ void lambda$resolveStickerSet$2$GroupStickersActivity(TLObject tLObject) {
+    public /* synthetic */ void lambda$resolveStickerSet$2(TLObject tLObject) {
         this.searching = false;
         if (tLObject instanceof TLRPC$TL_messages_stickerSet) {
             this.selectedStickerSet = (TLRPC$TL_messages_stickerSet) tLObject;
@@ -502,17 +464,12 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    GroupStickersActivity.this.lambda$onTransitionAnimationEnd$5$GroupStickersActivity();
-                }
-            }, 100);
+            AndroidUtilities.runOnUIThread(new GroupStickersActivity$$ExternalSyntheticLambda1(this), 100);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onTransitionAnimationEnd$5 */
-    public /* synthetic */ void lambda$onTransitionAnimationEnd$5$GroupStickersActivity() {
+    public /* synthetic */ void lambda$onTransitionAnimationEnd$5() {
         EditTextBoldCursor editTextBoldCursor = this.usernameTextView;
         if (editTextBoldCursor != null) {
             editTextBoldCursor.requestFocus();
@@ -543,32 +500,16 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet2.id;
             tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet2.access_hash;
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_channels_setStickers, new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                GroupStickersActivity.this.lambda$saveStickerSet$7$GroupStickersActivity(tLObject, tLRPC$TL_error);
-            }
-        });
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_channels_setStickers, new GroupStickersActivity$$ExternalSyntheticLambda5(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveStickerSet$7 */
-    public /* synthetic */ void lambda$saveStickerSet$7$GroupStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                GroupStickersActivity.this.lambda$saveStickerSet$6$GroupStickersActivity(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$saveStickerSet$7(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new GroupStickersActivity$$ExternalSyntheticLambda4(this, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveStickerSet$6 */
-    public /* synthetic */ void lambda$saveStickerSet$6$GroupStickersActivity(TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$saveStickerSet$6(TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.selectedStickerSet;
             if (tLRPC$TL_messages_stickerSet == null) {

@@ -1,14 +1,23 @@
 package j$.util.stream;
 
-import j$.util.stream.CLASSNAMEz1;
+import j$.util.function.Consumer;
+import j$.util.function.l;
+import j$.util.y;
 
-class B1 extends CLASSNAMEz1.k<Integer> {
-    B1(CLASSNAMEz1 z1Var, CLASSNAMEh1 h1Var, U2 u2, int i) {
-        super(h1Var, u2, i);
-    }
+interface B1 {
+    B1 b(int i);
 
-    /* access modifiers changed from: package-private */
-    public A2 G0(int i, A2 a2) {
-        return a2;
-    }
+    long count();
+
+    void forEach(Consumer consumer);
+
+    void i(Object[] objArr, int i);
+
+    int p();
+
+    Object[] q(l lVar);
+
+    B1 r(long j, long j2, l lVar);
+
+    y spliterator();
 }

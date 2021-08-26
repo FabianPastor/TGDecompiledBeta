@@ -11,16 +11,12 @@ class JoinPointImpl implements JoinPoint {
     Object target;
 
     static class StaticPartImpl implements JoinPoint.StaticPart {
-        private int id;
         String kind;
         Signature signature;
-        SourceLocation sourceLocation;
 
-        public StaticPartImpl(int i, String str, Signature signature2, SourceLocation sourceLocation2) {
+        public StaticPartImpl(int i, String str, Signature signature2, SourceLocation sourceLocation) {
             this.kind = str;
             this.signature = signature2;
-            this.sourceLocation = sourceLocation2;
-            this.id = i;
         }
 
         public String getKind() {

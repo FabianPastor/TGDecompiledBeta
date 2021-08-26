@@ -59,7 +59,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     public LinearLayout linearLayout1;
     private TextView textView;
 
-    static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -106,7 +107,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        this.fragmentView.setOnTouchListener($$Lambda$IdenticonActivity$zplM1XIK58D7qXS3s_vxkpkm9Dw.INSTANCE);
+        this.fragmentView.setOnTouchListener(IdenticonActivity$$ExternalSyntheticLambda0.INSTANCE);
         LinearLayout linearLayout2 = new LinearLayout(context);
         this.linearLayout = linearLayout2;
         linearLayout2.setOrientation(1);

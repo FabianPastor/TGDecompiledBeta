@@ -11,10 +11,8 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.BlurBehindDrawable;
 
 public class BlurBehindDrawable {
-    private final float DOWN_SCALE = 6.0f;
     /* access modifiers changed from: private */
     public Bitmap[] backgroundBitmap;
     /* access modifiers changed from: private */
@@ -117,11 +115,7 @@ public class BlurBehindDrawable {
                                 this.blurCanvas[i] = new Canvas(this.blurredBitmapTmp[i]);
                             } catch (Exception e) {
                                 FileLog.e((Throwable) e);
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public final void run() {
-                                        BlurBehindDrawable.this.lambda$draw$0$BlurBehindDrawable();
-                                    }
-                                });
+                                AndroidUtilities.runOnUIThread(new BlurBehindDrawable$$ExternalSyntheticLambda0(this));
                                 return;
                             }
                         }
@@ -170,8 +164,7 @@ public class BlurBehindDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$draw$0 */
-    public /* synthetic */ void lambda$draw$0$BlurBehindDrawable() {
+    public /* synthetic */ void lambda$draw$0() {
         this.error = true;
         this.parentView.invalidate();
     }
@@ -191,17 +184,12 @@ public class BlurBehindDrawable {
         DispatchQueue dispatchQueue = this.queue;
         if (dispatchQueue != null) {
             dispatchQueue.cleanupQueue();
-            this.queue.postRunnable(new Runnable() {
-                public final void run() {
-                    BlurBehindDrawable.this.lambda$clear$2$BlurBehindDrawable();
-                }
-            });
+            this.queue.postRunnable(new BlurBehindDrawable$$ExternalSyntheticLambda1(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$clear$2 */
-    public /* synthetic */ void lambda$clear$2$BlurBehindDrawable() {
+    public /* synthetic */ void lambda$clear$2() {
         Bitmap[] bitmapArr = this.renderingBitmap;
         if (bitmapArr != null) {
             if (bitmapArr[0] != null) {
@@ -226,16 +214,11 @@ public class BlurBehindDrawable {
         }
         this.renderingBitmapCanvas = null;
         this.skipDraw = false;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                BlurBehindDrawable.this.lambda$clear$1$BlurBehindDrawable();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new BlurBehindDrawable$$ExternalSyntheticLambda2(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$clear$1 */
-    public /* synthetic */ void lambda$clear$1$BlurBehindDrawable() {
+    public /* synthetic */ void lambda$clear$1() {
         DispatchQueue dispatchQueue = this.queue;
         if (dispatchQueue != null) {
             dispatchQueue.recycle();
@@ -362,16 +345,11 @@ public class BlurBehindDrawable {
                     return;
                 }
             }
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    BlurBehindDrawable.BlurBackgroundTask.this.lambda$run$0$BlurBehindDrawable$BlurBackgroundTask();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new BlurBehindDrawable$BlurBackgroundTask$$ExternalSyntheticLambda0(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$run$0 */
-        public /* synthetic */ void lambda$run$0$BlurBehindDrawable$BlurBackgroundTask() {
+        public /* synthetic */ void lambda$run$0() {
             if (!this.canceled) {
                 Bitmap[] access$500 = BlurBehindDrawable.this.renderingBitmap;
                 Canvas[] access$600 = BlurBehindDrawable.this.renderingBitmapCanvas;

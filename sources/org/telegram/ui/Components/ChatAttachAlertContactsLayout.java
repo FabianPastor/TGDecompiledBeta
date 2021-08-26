@@ -36,7 +36,6 @@ import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.ChatAttachAlert;
-import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -66,7 +65,6 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     public static class UserCell extends FrameLayout {
         private AvatarDrawable avatarDrawable = new AvatarDrawable();
         private BackupImageView avatarImageView;
-        private int currentAccount = UserConfig.selectedAccount;
         private int currentId;
         private CharSequence currentName;
         private CharSequence currentStatus;
@@ -84,12 +82,13 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         public UserCell(Context context) {
             super(context);
+            int i = UserConfig.selectedAccount;
             BackupImageView backupImageView = new BackupImageView(context);
             this.avatarImageView = backupImageView;
             backupImageView.setRoundRadius(AndroidUtilities.dp(23.0f));
             BackupImageView backupImageView2 = this.avatarImageView;
             boolean z = LocaleController.isRTL;
-            int i = 5;
+            int i2 = 5;
             addView(backupImageView2, LayoutHelper.createFrame(46, 46.0f, (z ? 5 : 3) | 48, z ? 0.0f : 14.0f, 9.0f, z ? 14.0f : 0.0f, 0.0f));
             SimpleTextView simpleTextView = new SimpleTextView(context);
             this.nameTextView = simpleTextView;
@@ -107,7 +106,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             SimpleTextView simpleTextView4 = this.statusTextView;
             boolean z3 = LocaleController.isRTL;
-            addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (!z3 ? 3 : i) | 48, z3 ? 28.0f : 72.0f, 36.0f, z3 ? 72.0f : 28.0f, 0.0f));
+            addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (!z3 ? 3 : i2) | 48, z3 ? 28.0f : 72.0f, 36.0f, z3 ? 72.0f : 28.0f, 0.0f));
         }
 
         public void setCurrentId(int i) {
@@ -286,7 +285,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 boolean r12 = android.text.TextUtils.isEmpty(r12)
                 if (r12 == 0) goto L_0x00e6
                 org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-                r0 = 2131626573(0x7f0e0a4d, float:1.8880386E38)
+                r0 = 2131626590(0x7f0e0a5e, float:1.888042E38)
                 java.lang.String r1 = "NumberUnknown"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r12.setText(r0)
@@ -417,11 +416,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         this.listAdapter = shareAdapter;
         recyclerListView2.setAdapter(shareAdapter);
         this.listView.setGlowColor(Theme.getColor("dialogScrollGlow"));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ChatAttachAlertContactsLayout.this.lambda$new$1$ChatAttachAlertContactsLayout(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatAttachAlertContactsLayout$$ExternalSyntheticLambda2(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 ChatAttachAlertContactsLayout chatAttachAlertContactsLayout = ChatAttachAlertContactsLayout.this;
@@ -443,8 +438,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$ChatAttachAlertContactsLayout(View view, int i) {
+    public /* synthetic */ void lambda$new$1(View view, int i) {
         Object obj;
         String str;
         String str2;
@@ -492,18 +486,13 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 str = str6;
             }
             PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(this.parentAlert.baseFragment, contact, (TLRPC$User) null, (Uri) null, (File) null, str2, str);
-            phonebookShareAlert.setDelegate(new PhonebookShareAlertDelegate() {
-                public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-                    ChatAttachAlertContactsLayout.this.lambda$new$0$ChatAttachAlertContactsLayout(tLRPC$User, z, i);
-                }
-            });
+            phonebookShareAlert.setDelegate(new ChatAttachAlertContactsLayout$$ExternalSyntheticLambda1(this));
             phonebookShareAlert.show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ChatAttachAlertContactsLayout(TLRPC$User tLRPC$User, boolean z, int i) {
+    public /* synthetic */ void lambda$new$0(TLRPC$User tLRPC$User, boolean z, int i) {
         this.parentAlert.dismiss();
         this.delegate.didSelectContact(tLRPC$User, z, i);
     }
@@ -823,64 +812,21 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             int i = this.lastSearchId + 1;
             this.lastSearchId = i;
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$ChatAttachAlertContactsLayout$ShareSearchAdapter$Dmr8UAUAZo2vhJGsb4WjN1mn8B4 r2 = new Runnable(str, i) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ChatAttachAlertContactsLayout.ShareSearchAdapter.this.lambda$search$0$ChatAttachAlertContactsLayout$ShareSearchAdapter(this.f$1, this.f$2);
-                }
-            };
-            this.searchRunnable = r2;
-            dispatchQueue.postRunnable(r2, 300);
+            ChatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda1 chatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda1 = new ChatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda1(this, str, i);
+            this.searchRunnable = chatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda1;
+            dispatchQueue.postRunnable(chatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda1, 300);
         }
 
         /* access modifiers changed from: private */
         /* renamed from: processSearch */
         public void lambda$search$0(String str, int i) {
-            AndroidUtilities.runOnUIThread(new Runnable(str, i) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ChatAttachAlertContactsLayout.ShareSearchAdapter.this.lambda$processSearch$2$ChatAttachAlertContactsLayout$ShareSearchAdapter(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda2(this, str, i));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$processSearch$2 */
-        public /* synthetic */ void lambda$processSearch$2$ChatAttachAlertContactsLayout$ShareSearchAdapter(String str, int i) {
+        public /* synthetic */ void lambda$processSearch$2(String str, int i) {
             int i2 = UserConfig.selectedAccount;
-            Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ContactsController.getInstance(i2).contactsBook.values()), new ArrayList(ContactsController.getInstance(i2).contacts), i2, i) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ ArrayList f$2;
-                public final /* synthetic */ ArrayList f$3;
-                public final /* synthetic */ int f$4;
-                public final /* synthetic */ int f$5;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                }
-
-                public final void run() {
-                    ChatAttachAlertContactsLayout.ShareSearchAdapter.this.lambda$processSearch$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-                }
-            });
+            Utilities.searchQueue.postRunnable(new ChatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda3(this, str, new ArrayList(ContactsController.getInstance(i2).contactsBook.values()), new ArrayList(ContactsController.getInstance(i2).contacts), i2, i));
         }
 
         /* JADX WARNING: type inference failed for: r1v4 */
@@ -907,9 +853,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         /* JADX WARNING: Removed duplicated region for block: B:116:0x0234 A[SYNTHETIC] */
         /* JADX WARNING: Removed duplicated region for block: B:70:0x018c A[LOOP:1: B:27:0x00a5->B:70:0x018c, LOOP_END] */
         /* JADX WARNING: Unknown variable types count: 1 */
-        /* renamed from: lambda$processSearch$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$processSearch$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String r19, java.util.ArrayList r20, java.util.ArrayList r21, int r22, int r23) {
+        public /* synthetic */ void lambda$processSearch$1(java.lang.String r19, java.util.ArrayList r20, java.util.ArrayList r21, int r22, int r23) {
             /*
                 r18 = this;
                 r0 = r18
@@ -1217,30 +1162,15 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r0.updateSearchResults(r4, r2, r3, r5)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertContactsLayout.ShareSearchAdapter.lambda$processSearch$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList, int, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertContactsLayout.ShareSearchAdapter.lambda$processSearch$1(java.lang.String, java.util.ArrayList, java.util.ArrayList, int, int):void");
         }
 
         private void updateSearchResults(String str, ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2, int i) {
-            AndroidUtilities.runOnUIThread(new Runnable(i, arrayList, arrayList2) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ ArrayList f$2;
-                public final /* synthetic */ ArrayList f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    ChatAttachAlertContactsLayout.ShareSearchAdapter.this.lambda$updateSearchResults$3$ChatAttachAlertContactsLayout$ShareSearchAdapter(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda0(this, i, arrayList, arrayList2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$3 */
-        public /* synthetic */ void lambda$updateSearchResults$3$ChatAttachAlertContactsLayout$ShareSearchAdapter(int i, ArrayList arrayList, ArrayList arrayList2) {
+        public /* synthetic */ void lambda$updateSearchResults$3(int i, ArrayList arrayList, ArrayList arrayList2) {
             if (i == this.lastSearchId) {
                 if (!(i == -1 || ChatAttachAlertContactsLayout.this.listView.getAdapter() == ChatAttachAlertContactsLayout.this.searchAdapter)) {
                     ChatAttachAlertContactsLayout.this.listView.setAdapter(ChatAttachAlertContactsLayout.this.searchAdapter);
@@ -1317,11 +1247,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        $$Lambda$ChatAttachAlertContactsLayout$sH6JAkCaTUdJUCOTKbttLI9Ll8 r10 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                ChatAttachAlertContactsLayout.this.lambda$getThemeDescriptions$2$ChatAttachAlertContactsLayout();
-            }
-        };
+        ChatAttachAlertContactsLayout$$ExternalSyntheticLambda0 chatAttachAlertContactsLayout$$ExternalSyntheticLambda0 = new ChatAttachAlertContactsLayout$$ExternalSyntheticLambda0(this);
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         arrayList.add(new ThemeDescription(this.frameLayout, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
         arrayList.add(new ThemeDescription(this.shadow, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogShadowLine"));
@@ -1337,22 +1263,21 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextGray2"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r10, "dialogTextGray2"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) chatAttachAlertContactsLayout$$ExternalSyntheticLambda0, "dialogTextGray2"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$ChatAttachAlertContactsLayout$sH6JAkCaTUdJUCOTKbttLI9Ll8 r7 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"));
+        ChatAttachAlertContactsLayout$$ExternalSyntheticLambda0 chatAttachAlertContactsLayout$$ExternalSyntheticLambda02 = chatAttachAlertContactsLayout$$ExternalSyntheticLambda0;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatAttachAlertContactsLayout$$ExternalSyntheticLambda02, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatAttachAlertContactsLayout$$ExternalSyntheticLambda02, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatAttachAlertContactsLayout$$ExternalSyntheticLambda02, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatAttachAlertContactsLayout$$ExternalSyntheticLambda02, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatAttachAlertContactsLayout$$ExternalSyntheticLambda02, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatAttachAlertContactsLayout$$ExternalSyntheticLambda02, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatAttachAlertContactsLayout$$ExternalSyntheticLambda02, "avatar_backgroundPink"));
         return arrayList;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$2 */
-    public /* synthetic */ void lambda$getThemeDescriptions$2$ChatAttachAlertContactsLayout() {
+    public /* synthetic */ void lambda$getThemeDescriptions$2() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

@@ -282,7 +282,7 @@ public class PhoneFormat {
                     if (i == i3) {
                         return "";
                     }
-                    return new String(this.data, i, i3);
+                    return new String(bArr, i, i3);
                 }
                 i2++;
             } catch (Exception e) {
@@ -296,7 +296,6 @@ public class PhoneFormat {
         Integer num;
         int i;
         byte[] bArr;
-        boolean z;
         PhoneFormat phoneFormat = this;
         String str2 = str;
         CallingCodeInfo callingCodeInfo = phoneFormat.callingCodeData.get(str2);
@@ -307,7 +306,7 @@ public class PhoneFormat {
         int intValue = num.intValue();
         CallingCodeInfo callingCodeInfo2 = new CallingCodeInfo();
         callingCodeInfo2.callingCode = str2;
-        callingCodeInfo2.countries = phoneFormat.callingCodeCountries.get(str2);
+        ArrayList arrayList = phoneFormat.callingCodeCountries.get(str2);
         phoneFormat.callingCodeData.put(str2, callingCodeInfo2);
         short value16 = phoneFormat.value16(intValue);
         int i2 = 2;
@@ -316,28 +315,28 @@ public class PhoneFormat {
         int i4 = i3 + 2 + 2;
         short value163 = phoneFormat.value16(i4);
         int i5 = i4 + 2 + 2;
-        ArrayList<String> arrayList = new ArrayList<>(5);
+        ArrayList<String> arrayList2 = new ArrayList<>(5);
         while (true) {
             String valueString = phoneFormat.valueString(i5);
             if (valueString.length() == 0) {
                 break;
             }
-            arrayList.add(valueString);
+            arrayList2.add(valueString);
             i5 += valueString.length() + 1;
         }
-        callingCodeInfo2.trunkPrefixes = arrayList;
+        callingCodeInfo2.trunkPrefixes = arrayList2;
         int i6 = i5 + 1;
-        ArrayList<String> arrayList2 = new ArrayList<>(5);
+        ArrayList<String> arrayList3 = new ArrayList<>(5);
         while (true) {
             String valueString2 = phoneFormat.valueString(i6);
             if (valueString2.length() == 0) {
                 break;
             }
-            arrayList2.add(valueString2);
+            arrayList3.add(valueString2);
             i6 += valueString2.length() + 1;
         }
-        callingCodeInfo2.intlPrefixes = arrayList2;
-        ArrayList<RuleSet> arrayList3 = new ArrayList<>(value163);
+        callingCodeInfo2.intlPrefixes = arrayList3;
+        ArrayList<RuleSet> arrayList4 = new ArrayList<>(value163);
         int i7 = intValue + value16;
         int i8 = i7;
         int i9 = 0;
@@ -347,7 +346,7 @@ public class PhoneFormat {
             int i10 = i8 + i2;
             short value164 = phoneFormat.value16(i10);
             i8 = i10 + i2;
-            ArrayList<PhoneRule> arrayList4 = new ArrayList<>(value164);
+            ArrayList<PhoneRule> arrayList5 = new ArrayList<>(value164);
             int i11 = 0;
             while (i11 < value164) {
                 PhoneRule phoneRule = new PhoneRule();
@@ -356,17 +355,17 @@ public class PhoneFormat {
                 phoneRule.maxVal = phoneFormat.value32(i12);
                 int i13 = i12 + 4;
                 int i14 = i13 + 1;
-                phoneRule.byte8 = bArr2[i13];
+                byte b = bArr2[i13];
                 int i15 = i14 + 1;
                 phoneRule.maxLen = bArr2[i14];
                 int i16 = i15 + 1;
-                phoneRule.otherFlag = bArr2[i15];
+                byte b2 = bArr2[i15];
                 int i17 = i16 + 1;
-                phoneRule.prefixLen = bArr2[i16];
+                byte b3 = bArr2[i16];
                 int i18 = i17 + 1;
                 phoneRule.flag12 = bArr2[i17];
                 int i19 = i18 + 1;
-                phoneRule.flag13 = bArr2[i18];
+                byte b4 = bArr2[i18];
                 short value165 = phoneFormat.value16(i19);
                 i8 = i19 + i2;
                 String valueString3 = phoneFormat.valueString(i7 + value162 + value165);
@@ -376,34 +375,26 @@ public class PhoneFormat {
                     bArr = bArr2;
                     i = i7;
                     i2 = 2;
-                    z = true;
                     phoneRule.format = String.format("%s%s", new Object[]{phoneRule.format.substring(0, indexOf), phoneRule.format.substring(phoneRule.format.indexOf("]]") + 2)});
                 } else {
                     bArr = bArr2;
                     i = i7;
-                    z = true;
                     i2 = 2;
                 }
-                arrayList4.add(phoneRule);
-                if (phoneRule.hasIntlPrefix) {
-                    ruleSet.hasRuleWithIntlPrefix = z;
-                }
-                if (phoneRule.hasTrunkPrefix) {
-                    ruleSet.hasRuleWithTrunkPrefix = z;
-                }
+                arrayList5.add(phoneRule);
                 i11++;
                 phoneFormat = this;
                 bArr2 = bArr;
                 i7 = i;
             }
             byte[] bArr3 = bArr2;
-            ruleSet.rules = arrayList4;
-            arrayList3.add(ruleSet);
+            ruleSet.rules = arrayList5;
+            arrayList4.add(ruleSet);
             i9++;
             phoneFormat = this;
             i7 = i7;
         }
-        callingCodeInfo2.ruleSets = arrayList3;
+        callingCodeInfo2.ruleSets = arrayList4;
         return callingCodeInfo2;
     }
 

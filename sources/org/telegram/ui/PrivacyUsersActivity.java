@@ -157,16 +157,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView4.setVerticalScrollbarPosition(i2);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                PrivacyUsersActivity.this.lambda$createView$1$PrivacyUsersActivity(view, i);
-            }
-        });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return PrivacyUsersActivity.this.lambda$createView$2$PrivacyUsersActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new PrivacyUsersActivity$$ExternalSyntheticLambda2(this));
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new PrivacyUsersActivity$$ExternalSyntheticLambda3(this));
         if (this.currentType == 1) {
             this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrolled(RecyclerView recyclerView, int i, int i2) {
@@ -190,8 +182,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$PrivacyUsersActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$1(View view, int i) {
         if (i == this.blockUserRow) {
             if (this.currentType == 1) {
                 presentFragment(new DialogOrContactPickerActivity());
@@ -205,11 +196,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 bundle.putInt("chatAddType", 2);
             }
             GroupCreateActivity groupCreateActivity = new GroupCreateActivity(bundle);
-            groupCreateActivity.setDelegate((GroupCreateActivity.GroupCreateActivityDelegate) new GroupCreateActivity.GroupCreateActivityDelegate() {
-                public final void didSelectUsers(ArrayList arrayList) {
-                    PrivacyUsersActivity.this.lambda$createView$0$PrivacyUsersActivity(arrayList);
-                }
-            });
+            groupCreateActivity.setDelegate((GroupCreateActivity.GroupCreateActivityDelegate) new PrivacyUsersActivity$$ExternalSyntheticLambda4(this));
             presentFragment(groupCreateActivity);
         } else if (i >= this.usersStartRow && i < this.usersEndRow) {
             if (this.currentType == 1) {
@@ -230,8 +217,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$PrivacyUsersActivity(ArrayList arrayList) {
+    public /* synthetic */ void lambda$createView$0(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             Integer num = (Integer) it.next();
@@ -247,8 +233,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ boolean lambda$createView$2$PrivacyUsersActivity(View view, int i) {
+    public /* synthetic */ boolean lambda$createView$2(View view, int i) {
         int i2 = this.usersStartRow;
         if (i < i2 || i >= this.usersEndRow) {
             return false;
@@ -269,24 +254,13 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     public void showUnblockAlert(Integer num) {
         if (getParentActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            builder.setItems(this.currentType == 1 ? new CharSequence[]{LocaleController.getString("Unblock", NUM)} : new CharSequence[]{LocaleController.getString("Delete", NUM)}, new DialogInterface.OnClickListener(num) {
-                public final /* synthetic */ Integer f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    PrivacyUsersActivity.this.lambda$showUnblockAlert$3$PrivacyUsersActivity(this.f$1, dialogInterface, i);
-                }
-            });
+            builder.setItems(this.currentType == 1 ? new CharSequence[]{LocaleController.getString("Unblock", NUM)} : new CharSequence[]{LocaleController.getString("Delete", NUM)}, new PrivacyUsersActivity$$ExternalSyntheticLambda0(this, num));
             showDialog(builder.create());
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showUnblockAlert$3 */
-    public /* synthetic */ void lambda$showUnblockAlert$3$PrivacyUsersActivity(Integer num, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showUnblockAlert$3(Integer num, DialogInterface dialogInterface, int i) {
         if (i != 0) {
             return;
         }
@@ -400,8 +374,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$0 */
-        public /* synthetic */ boolean lambda$onCreateViewHolder$0$PrivacyUsersActivity$ListAdapter(ManageChatUserCell manageChatUserCell, boolean z) {
+        public /* synthetic */ boolean lambda$onCreateViewHolder$0(ManageChatUserCell manageChatUserCell, boolean z) {
             if (!z) {
                 return true;
             }
@@ -461,8 +434,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 r9.<init>(r1, r2, r3, r8)
                 int r8 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r9.setBackgroundColor(r8)
-                org.telegram.ui.-$$Lambda$PrivacyUsersActivity$ListAdapter$DXME1vB3-IQoSUDKei0-QZteOpY r8 = new org.telegram.ui.-$$Lambda$PrivacyUsersActivity$ListAdapter$DXME1vB3-IQoSUDKei0-QZteOpY
-                r8.<init>()
+                org.telegram.ui.PrivacyUsersActivity$ListAdapter$$ExternalSyntheticLambda0 r8 = new org.telegram.ui.PrivacyUsersActivity$ListAdapter$$ExternalSyntheticLambda0
+                r8.<init>(r7)
                 r9.setDelegate(r8)
                 r8 = r9
             L_0x0056:
@@ -576,11 +549,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$PrivacyUsersActivity$vCBpiDFJOzWGbDBCPdotWbJOUg r11 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                PrivacyUsersActivity.this.lambda$getThemeDescriptions$4$PrivacyUsersActivity();
-            }
-        };
+        PrivacyUsersActivity$$ExternalSyntheticLambda1 privacyUsersActivity$$ExternalSyntheticLambda1 = new PrivacyUsersActivity$$ExternalSyntheticLambda1(this);
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ManageChatUserCell.class, ManageChatTextCell.class, HeaderCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -593,18 +562,18 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$PrivacyUsersActivity$vCBpiDFJOzWGbDBCPdotWbJOUg r9 = r11;
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
+        PrivacyUsersActivity$$ExternalSyntheticLambda1 privacyUsersActivity$$ExternalSyntheticLambda12 = privacyUsersActivity$$ExternalSyntheticLambda1;
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) privacyUsersActivity$$ExternalSyntheticLambda12, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) privacyUsersActivity$$ExternalSyntheticLambda12, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$PrivacyUsersActivity$vCBpiDFJOzWGbDBCPdotWbJOUg r8 = r11;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        PrivacyUsersActivity$$ExternalSyntheticLambda1 privacyUsersActivity$$ExternalSyntheticLambda13 = privacyUsersActivity$$ExternalSyntheticLambda1;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, privacyUsersActivity$$ExternalSyntheticLambda13, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, privacyUsersActivity$$ExternalSyntheticLambda13, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, privacyUsersActivity$$ExternalSyntheticLambda13, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, privacyUsersActivity$$ExternalSyntheticLambda13, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, privacyUsersActivity$$ExternalSyntheticLambda13, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, privacyUsersActivity$$ExternalSyntheticLambda13, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, privacyUsersActivity$$ExternalSyntheticLambda13, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
@@ -614,8 +583,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$4 */
-    public /* synthetic */ void lambda$getThemeDescriptions$4$PrivacyUsersActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$4() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

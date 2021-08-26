@@ -723,8 +723,6 @@
     <string name="CancelAccountResetInfo2">Jemand mit Zugang zu deiner Telefonnummer **%1$s** hat die Kontolöschung und Zurücksetzung der zweistufige Bestätigung beantragt.\10\10Wenn du das nicht selbst gewesen bist, tippe den Code der SMS ein, den wir dir gerade gesendet haben oder **ändere deine Telefonnummer**.</string>
     <string name="CancelEmailQuestion">Wirklich die E-Mail-Einrichtung abbrechen?</string>
     <string name="CancelEmailQuestionTitle">Einrichtung abbrechen</string>
-    <string name="CancelForward">Weiterleitung abbrechen</string>
-    <string name="CancelForwardMessage">Weiterleitung abbrechen oder möchtest du Nachrichten an einen anderen Chat senden?</string>
     <string name="CancelForwarding">Weiterleitung abbrechen</string>
     <string name="CancelLinkExpired">Link ist ungültig oder abgelaufen.</string>
     <string name="CancelLinkSuccess">Löschvorgang für dein Konto %1$s wurde abgebrochen. Du kannst das Fenster nun schließen.</string>
@@ -2384,7 +2382,7 @@
     <string name="NoGroupsInCommon">Keine gemeinsamen Gruppen</string>
     <string name="NoHandleAppInstalled">Du hast keine Applikationen, die den Dateityp \'%1$s\' öffnen könnten. Bitte installiere eine entsprechende Anwendung um fortzufahren.</string>
     <string name="NoLimit">Kein Limit</string>
-    <string name="NoMailInstalled">Bitte sende eine E-Mail an sms@stel.com mit einer Beschreibung des Problems.</string>
+    <string name="NoMailInstalled">Bitte sende eine E-Mail an reports@stel.com mit einer Beschreibung des Problems.</string>
     <string name="NoMasks">Noch keine Masken</string>
     <string name="NoMedia">Die hier geteilten Bilder und Videos kannst du von jedem deiner Geräte aufrufen.</string>
     <string name="NoMediaAutoDownload">kein automatischer Download</string>
@@ -3445,7 +3443,6 @@
     <string name="SelectFile">Datei auswählen</string>
     <string name="SelectFromGallery">Aus der Galerie wählen</string>
     <string name="SelectImage">Bild auswählen</string>
-    <string name="SelectOtherChat">Anderen Chat wählen</string>
     <string name="Send">Senden</string>
     <string name="SendAnonymously">Anonym senden</string>
     <string name="SendAsFile">Als Datei</string>

@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.Map;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$Photo;
@@ -78,7 +77,8 @@ public class DownloadController extends BaseController implements NotificationCe
         void onSuccessDownload(String str);
     }
 
-    static /* synthetic */ void lambda$savePresetToServer$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$savePresetToServer$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     public static int typeToIndex(int i) {
@@ -331,11 +331,7 @@ public class DownloadController extends BaseController implements NotificationCe
             edit.putInt(str2, 3);
             edit.commit();
         }
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                DownloadController.this.lambda$new$0$DownloadController();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda0(this));
         ApplicationLoader.applicationContext.registerReceiver(new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
                 DownloadController.this.checkAutodownloadSettings();
@@ -347,8 +343,7 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$DownloadController() {
+    public /* synthetic */ void lambda$new$0() {
         getNotificationCenter().addObserver(this, NotificationCenter.fileLoadFailed);
         getNotificationCenter().addObserver(this, NotificationCenter.fileLoaded);
         getNotificationCenter().addObserver(this, NotificationCenter.fileLoadProgressChanged);
@@ -364,33 +359,17 @@ public class DownloadController extends BaseController implements NotificationCe
         }
         if (z || Math.abs(System.currentTimeMillis() - getUserConfig().autoDownloadConfigLoadTime) >= 86400000) {
             this.loadingAutoDownloadConfig = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_account_getAutoDownloadSettings(), new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    DownloadController.this.lambda$loadAutoDownloadConfig$2$DownloadController(tLObject, tLRPC$TL_error);
-                }
-            });
+            getConnectionsManager().sendRequest(new TLRPC$TL_account_getAutoDownloadSettings(), new DownloadController$$ExternalSyntheticLambda2(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadAutoDownloadConfig$2 */
-    public /* synthetic */ void lambda$loadAutoDownloadConfig$2$DownloadController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            public final /* synthetic */ TLObject f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                DownloadController.this.lambda$loadAutoDownloadConfig$1$DownloadController(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$loadAutoDownloadConfig$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda1(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadAutoDownloadConfig$1 */
-    public /* synthetic */ void lambda$loadAutoDownloadConfig$1$DownloadController(TLObject tLObject) {
+    public /* synthetic */ void lambda$loadAutoDownloadConfig$1(TLObject tLObject) {
         Preset preset;
         this.loadingAutoDownloadConfig = false;
         getUserConfig().autoDownloadConfigLoadTime = System.currentTimeMillis();
@@ -948,7 +927,7 @@ public class DownloadController extends BaseController implements NotificationCe
             i2 = preset.sizes[2];
         }
         tLRPC$TL_autoDownloadSettings2.file_size_max = i2;
-        getConnectionsManager().sendRequest(tLRPC$TL_account_saveAutoDownloadSettings, $$Lambda$DownloadController$X8Qr0DXt6tSy5F0hlLtJCLASSNAMEVYJ0.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_account_saveAutoDownloadSettings, DownloadController$$ExternalSyntheticLambda3.INSTANCE);
     }
 
     /* access modifiers changed from: protected */

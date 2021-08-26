@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -105,11 +104,13 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         void didFindQr(String str);
     }
 
-    static /* synthetic */ boolean lambda$createView$1(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$1(View view, MotionEvent motionEvent) {
         return true;
     }
 
-    static /* synthetic */ void lambda$new$0() {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$new$0() {
     }
 
     public static ActionBarLayout[] showAsSheet(BaseFragment baseFragment, boolean z, CameraScanActivityDelegate cameraScanActivityDelegate) {
@@ -151,11 +152,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 this.containerView = r4[0];
                 setApplyBottomPadding(false);
                 setApplyBottomPadding(false);
-                setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    public final void onDismiss(DialogInterface dialogInterface) {
-                        CameraScanActivity.this.onFragmentDestroy();
-                    }
-                });
+                setOnDismissListener(new CameraScanActivity$1$$ExternalSyntheticLambda0(r3));
             }
 
             public void onBackPressed() {
@@ -176,7 +173,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     public CameraScanActivity(int i) {
-        CameraController.getInstance().initCamera($$Lambda$CameraScanActivity$QF3NoU541KxQDk6UhF1lau9N6Bc.INSTANCE);
+        CameraController.getInstance().initCamera(CameraScanActivity$$ExternalSyntheticLambda9.INSTANCE);
         this.currentType = i;
         if (i == 1) {
             this.qrReader = new QRCodeReader();
@@ -324,7 +321,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 return z;
             }
         };
-        r0.setOnTouchListener($$Lambda$CameraScanActivity$s2SMU_1hrvLmURqE7dRM15kjdps.INSTANCE);
+        r0.setOnTouchListener(CameraScanActivity$$ExternalSyntheticLambda3.INSTANCE);
         this.fragmentView = r0;
         CameraView cameraView2 = new CameraView(context, false);
         this.cameraView = cameraView2;
@@ -390,11 +387,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 this.galleryButton.setImageResource(NUM);
                 this.galleryButton.setBackgroundDrawable(Theme.createSelectorDrawableFromDrawables(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM), Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM)));
                 r0.addView(this.galleryButton);
-                this.galleryButton.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        CameraScanActivity.this.lambda$createView$2$CameraScanActivity(view);
-                    }
-                });
+                this.galleryButton.setOnClickListener(new CameraScanActivity$$ExternalSyntheticLambda1(this));
             }
             ImageView imageView2 = new ImageView(context);
             this.flashButton = imageView2;
@@ -402,11 +395,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             this.flashButton.setImageResource(NUM);
             this.flashButton.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM));
             r0.addView(this.flashButton);
-            this.flashButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    CameraScanActivity.this.lambda$createView$4$CameraScanActivity(view);
-                }
-            });
+            this.flashButton.setOnClickListener(new CameraScanActivity$$ExternalSyntheticLambda2(this));
         }
         if (getParentActivity() != null) {
             getParentActivity().setRequestedOrientation(1);
@@ -416,8 +405,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$CameraScanActivity(View view) {
+    public /* synthetic */ void lambda$createView$2(View view) {
         if (getParentActivity() != null) {
             if (Build.VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(PhotoAlbumPickerActivity.SELECT_TYPE_QR, false, false, (ChatActivity) null);
@@ -462,8 +450,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$CameraScanActivity(View view) {
+    public /* synthetic */ void lambda$createView$4(View view) {
         CameraSession cameraSession = this.cameraView.getCameraSession();
         if (cameraSession != null) {
             ShapeDrawable shapeDrawable = (ShapeDrawable) this.flashButton.getBackground();
@@ -477,11 +464,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             int[] iArr = new int[1];
             iArr[0] = this.flashButton.getTag() == null ? 68 : 34;
             ObjectAnimator ofInt = ObjectAnimator.ofInt(shapeDrawable, property, iArr);
-            ofInt.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    CameraScanActivity.this.lambda$createView$3$CameraScanActivity(valueAnimator);
-                }
-            });
+            ofInt.addUpdateListener(new CameraScanActivity$$ExternalSyntheticLambda0(this));
             this.flashAnimator.playTogether(new Animator[]{ofInt});
             this.flashAnimator.setDuration(200);
             this.flashAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
@@ -502,8 +485,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$CameraScanActivity(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$createView$3(ValueAnimator valueAnimator) {
         this.flashButton.invalidate();
     }
 
@@ -553,16 +535,11 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     private void onNoQrFound() {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                CameraScanActivity.this.lambda$onNoQrFound$5$CameraScanActivity();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda5(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onNoQrFound$5 */
-    public /* synthetic */ void lambda$onNoQrFound$5$CameraScanActivity() {
+    public /* synthetic */ void lambda$onNoQrFound$5() {
         if (this.recognizedMrzView.getTag() != null) {
             this.recognizedMrzView.setTag((Object) null);
             this.recognizedMrzView.animate().setDuration(200).alpha(0.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
@@ -570,24 +547,11 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     public void onPreviewFrame(byte[] bArr, Camera camera) {
-        this.handler.post(new Runnable(bArr, camera) {
-            public final /* synthetic */ byte[] f$1;
-            public final /* synthetic */ Camera f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                CameraScanActivity.this.lambda$onPreviewFrame$8$CameraScanActivity(this.f$1, this.f$2);
-            }
-        });
+        this.handler.post(new CameraScanActivity$$ExternalSyntheticLambda8(this, bArr, camera));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onPreviewFrame$8 */
-    public /* synthetic */ void lambda$onPreviewFrame$8$CameraScanActivity(byte[] bArr, Camera camera) {
+    public /* synthetic */ void lambda$onPreviewFrame$8(byte[] bArr, Camera camera) {
         try {
             Size previewSize = this.cameraView.getPreviewSize();
             if (this.currentType == 0) {
@@ -596,17 +560,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     if ((recognize.expiryDay != 0 || recognize.doesNotExpire) && recognize.gender != 0) {
                         this.recognized = true;
                         camera.stopPreview();
-                        AndroidUtilities.runOnUIThread(new Runnable(recognize) {
-                            public final /* synthetic */ MrzRecognizer.Result f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void run() {
-                                CameraScanActivity.this.lambda$onPreviewFrame$6$CameraScanActivity(this.f$1);
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda7(this, recognize));
                         return;
                     }
                     return;
@@ -619,17 +573,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             if (tryReadQr != null) {
                 this.recognized = true;
                 camera.stopPreview();
-                AndroidUtilities.runOnUIThread(new Runnable(tryReadQr) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        CameraScanActivity.this.lambda$onPreviewFrame$7$CameraScanActivity(this.f$1);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda6(this, tryReadQr));
             }
         } catch (Throwable unused) {
             onNoQrFound();
@@ -637,24 +581,18 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onPreviewFrame$6 */
-    public /* synthetic */ void lambda$onPreviewFrame$6$CameraScanActivity(MrzRecognizer.Result result) {
+    public /* synthetic */ void lambda$onPreviewFrame$6(MrzRecognizer.Result result) {
         this.recognizedMrzView.setText(result.rawMRZ);
         this.recognizedMrzView.animate().setDuration(200).alpha(1.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
         if (cameraScanActivityDelegate != null) {
             cameraScanActivityDelegate.didFindMrzInfo(result);
         }
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                CameraScanActivity.this.finishFragment();
-            }
-        }, 1200);
+        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda4(this), 1200);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onPreviewFrame$7 */
-    public /* synthetic */ void lambda$onPreviewFrame$7$CameraScanActivity(String str) {
+    public /* synthetic */ void lambda$onPreviewFrame$7(String str) {
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
         if (cameraScanActivityDelegate != null) {
             cameraScanActivityDelegate.didFindQr(str);

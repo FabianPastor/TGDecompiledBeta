@@ -7,11 +7,12 @@ import android.content.Intent;
 public class AppStartReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent != null && "android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
-            AndroidUtilities.runOnUIThread($$Lambda$AppStartReceiver$3RTLFR4jSsD6NQ_SSfyeDDSMWuU.INSTANCE);
+            AndroidUtilities.runOnUIThread(AppStartReceiver$$ExternalSyntheticLambda0.INSTANCE);
         }
     }
 
-    static /* synthetic */ void lambda$onReceive$0() {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onReceive$0() {
         SharedConfig.loadConfig();
         if (SharedConfig.passcodeHash.length() > 0) {
             SharedConfig.appLocked = true;

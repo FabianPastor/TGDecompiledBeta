@@ -43,7 +43,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -96,11 +95,7 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public boolean disableScroll;
     /* access modifiers changed from: private */
-    public Runnable dismissRunnable = new Runnable() {
-        public final void run() {
-            BottomSheet.this.dismiss();
-        }
-    };
+    public Runnable dismissRunnable = new BottomSheet$$ExternalSyntheticLambda3(this);
     /* access modifiers changed from: private */
     public boolean dismissed;
     protected boolean drawNavigationBar;
@@ -166,7 +161,8 @@ public class BottomSheet extends Dialog {
         void onOpenAnimationEnd();
     }
 
-    static /* synthetic */ boolean lambda$onCreate$1(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$onCreate$1(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -794,8 +790,8 @@ public class BottomSheet extends Dialog {
                 android.animation.ValueAnimator unused = r5.keyboardContentAnimator = r6
                 org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
                 android.animation.ValueAnimator r5 = r5.keyboardContentAnimator
-                org.telegram.ui.ActionBar.-$$Lambda$BottomSheet$ContainerView$Vx5MsKKO92sZml4EfbA66LWaEck r6 = new org.telegram.ui.ActionBar.-$$Lambda$BottomSheet$ContainerView$Vx5MsKKO92sZml4EfbA66LWaEck
-                r6.<init>()
+                org.telegram.ui.ActionBar.BottomSheet$ContainerView$$ExternalSyntheticLambda0 r6 = new org.telegram.ui.ActionBar.BottomSheet$ContainerView$$ExternalSyntheticLambda0
+                r6.<init>(r0)
                 r5.addUpdateListener(r6)
                 org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
                 android.animation.ValueAnimator r5 = r5.keyboardContentAnimator
@@ -945,8 +941,7 @@ public class BottomSheet extends Dialog {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onLayout$0 */
-        public /* synthetic */ void lambda$onLayout$0$BottomSheet$ContainerView(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$onLayout$0(ValueAnimator valueAnimator) {
             BottomSheet.this.containerView.setTranslationY(((Float) valueAnimator.getAnimatedValue()).floatValue());
             invalidate();
         }
@@ -1234,11 +1229,7 @@ public class BottomSheet extends Dialog {
         this.focusable = z;
         if (i >= 21) {
             this.container.setFitsSystemWindows(true);
-            this.container.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-                public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-                    return BottomSheet.this.lambda$new$0$BottomSheet(view, windowInsets);
-                }
-            });
+            this.container.setOnApplyWindowInsetsListener(new BottomSheet$$ExternalSyntheticLambda0(this));
             if (i >= 30) {
                 this.container.setSystemUiVisibility(1792);
             } else {
@@ -1249,8 +1240,7 @@ public class BottomSheet extends Dialog {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ WindowInsets lambda$new$0$BottomSheet(View view, WindowInsets windowInsets) {
+    public /* synthetic */ WindowInsets lambda$new$0(View view, WindowInsets windowInsets) {
         int i;
         int systemWindowInsetTop = windowInsets.getSystemWindowInsetTop();
         if (!((systemWindowInsetTop == 0 && !AndroidUtilities.isInMultiwindow) || (i = this.statusBarHeight) == 0 || i == systemWindowInsetTop)) {
@@ -1313,7 +1303,7 @@ public class BottomSheet extends Dialog {
             this.titleView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             this.titleView.setGravity(16);
             this.containerView.addView(this.titleView, LayoutHelper.createFrame(-1, 48.0f));
-            this.titleView.setOnTouchListener($$Lambda$BottomSheet$trMYiBYKZEsSZf_EBiGuVqT0ic8.INSTANCE);
+            this.titleView.setOnTouchListener(BottomSheet$$ExternalSyntheticLambda2.INSTANCE);
             i = 48;
         } else {
             i = 0;
@@ -1339,11 +1329,7 @@ public class BottomSheet extends Dialog {
                     this.containerView.addView(bottomSheetCell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) i, 0.0f, 0.0f));
                     i += 48;
                     bottomSheetCell.setTag(Integer.valueOf(i2));
-                    bottomSheetCell.setOnClickListener(new View.OnClickListener() {
-                        public final void onClick(View view) {
-                            BottomSheet.this.lambda$onCreate$2$BottomSheet(view);
-                        }
-                    });
+                    bottomSheetCell.setOnClickListener(new BottomSheet$$ExternalSyntheticLambda1(this));
                     this.itemViews.add(bottomSheetCell);
                 }
                 i2++;
@@ -1375,8 +1361,7 @@ public class BottomSheet extends Dialog {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$2 */
-    public /* synthetic */ void lambda$onCreate$2$BottomSheet(View view) {
+    public /* synthetic */ void lambda$onCreate$2(View view) {
         dismissWithButtonClick(((Integer) view.getTag()).intValue());
     }
 
@@ -1648,18 +1633,13 @@ public class BottomSheet extends Dialog {
                         if (bottomSheet.onClickListener != null) {
                             BottomSheet.this.onClickListener.onClick(BottomSheet.this, i);
                         }
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public final void run() {
-                                BottomSheet.AnonymousClass6.this.lambda$onAnimationEnd$0$BottomSheet$6();
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new BottomSheet$6$$ExternalSyntheticLambda0(this));
                     }
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$onAnimationEnd$0 */
-                public /* synthetic */ void lambda$onAnimationEnd$0$BottomSheet$6() {
+                public /* synthetic */ void lambda$onAnimationEnd$0() {
                     try {
                         BottomSheet.super.dismiss();
                     } catch (Exception e) {
@@ -1721,18 +1701,13 @@ public class BottomSheet extends Dialog {
                             BottomSheet bottomSheet = BottomSheet.this;
                             bottomSheet.currentSheetAnimation = null;
                             bottomSheet.currentSheetAnimationType = 0;
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public final void run() {
-                                    BottomSheet.AnonymousClass7.this.lambda$onAnimationEnd$0$BottomSheet$7();
-                                }
-                            });
+                            AndroidUtilities.runOnUIThread(new BottomSheet$7$$ExternalSyntheticLambda0(this));
                         }
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
                     }
 
                     /* access modifiers changed from: private */
-                    /* renamed from: lambda$onAnimationEnd$0 */
-                    public /* synthetic */ void lambda$onAnimationEnd$0$BottomSheet$7() {
+                    public /* synthetic */ void lambda$onAnimationEnd$0() {
                         try {
                             BottomSheet.this.dismissInternal();
                         } catch (Exception e) {

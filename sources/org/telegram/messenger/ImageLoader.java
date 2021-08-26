@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
 import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.ImageLoader;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$FileLocation;
@@ -173,43 +172,17 @@ public class ImageLoader {
                 }
             }
             this.lastProgressTime = elapsedRealtime;
-            Utilities.stageQueue.postRunnable(new Runnable(j, j2) {
-                public final /* synthetic */ long f$1;
-                public final /* synthetic */ long f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r4;
-                }
-
-                public final void run() {
-                    ImageLoader.HttpFileTask.this.lambda$reportProgress$1$ImageLoader$HttpFileTask(this.f$1, this.f$2);
-                }
-            });
+            Utilities.stageQueue.postRunnable(new ImageLoader$HttpFileTask$$ExternalSyntheticLambda0(this, j, j2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$reportProgress$1 */
-        public /* synthetic */ void lambda$reportProgress$1$ImageLoader$HttpFileTask(long j, long j2) {
+        public /* synthetic */ void lambda$reportProgress$1(long j, long j2) {
             ImageLoader.this.fileProgresses.put(this.url, new long[]{j, j2});
-            AndroidUtilities.runOnUIThread(new Runnable(j, j2) {
-                public final /* synthetic */ long f$1;
-                public final /* synthetic */ long f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r4;
-                }
-
-                public final void run() {
-                    ImageLoader.HttpFileTask.this.lambda$reportProgress$0$ImageLoader$HttpFileTask(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ImageLoader$HttpFileTask$$ExternalSyntheticLambda1(this, j, j2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$reportProgress$0 */
-        public /* synthetic */ void lambda$reportProgress$0$ImageLoader$HttpFileTask(long j, long j2) {
+        public /* synthetic */ void lambda$reportProgress$0(long j, long j2) {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.fileLoadProgressChanged, this.url, Long.valueOf(j), Long.valueOf(j2));
         }
 
@@ -469,35 +442,35 @@ public class ImageLoader {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:105:0x012a A[Catch:{ all -> 0x012e }] */
-        /* JADX WARNING: Removed duplicated region for block: B:108:0x0131 A[SYNTHETIC, Splitter:B:108:0x0131] */
-        /* JADX WARNING: Removed duplicated region for block: B:113:0x013b A[SYNTHETIC, Splitter:B:113:0x013b] */
-        /* JADX WARNING: Removed duplicated region for block: B:129:0x0155 A[SYNTHETIC, Splitter:B:129:0x0155] */
-        /* JADX WARNING: Removed duplicated region for block: B:85:0x00f4 A[Catch:{ all -> 0x013f, all -> 0x0148, all -> 0x014f }] */
-        /* JADX WARNING: Removed duplicated region for block: B:88:0x00fd A[Catch:{ all -> 0x013f, all -> 0x0148, all -> 0x014f }] */
+        /* JADX WARNING: Removed duplicated region for block: B:104:0x0129 A[Catch:{ all -> 0x012d }] */
+        /* JADX WARNING: Removed duplicated region for block: B:107:0x0130 A[SYNTHETIC, Splitter:B:107:0x0130] */
+        /* JADX WARNING: Removed duplicated region for block: B:112:0x013a A[SYNTHETIC, Splitter:B:112:0x013a] */
+        /* JADX WARNING: Removed duplicated region for block: B:128:0x0154 A[SYNTHETIC, Splitter:B:128:0x0154] */
+        /* JADX WARNING: Removed duplicated region for block: B:84:0x00f3 A[Catch:{ all -> 0x013e, all -> 0x0147, all -> 0x014e }] */
+        /* JADX WARNING: Removed duplicated region for block: B:87:0x00fc A[Catch:{ all -> 0x013e, all -> 0x0147, all -> 0x014e }] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public java.lang.String doInBackground(java.lang.Void... r8) {
             /*
                 r7 = this;
                 r8 = 0
                 r0 = 0
-                org.telegram.messenger.ImageLoader$CacheImage r1 = r7.cacheImage     // Catch:{ all -> 0x00ed }
-                org.telegram.messenger.ImageLocation r1 = r1.imageLocation     // Catch:{ all -> 0x00ed }
-                java.lang.String r1 = r1.path     // Catch:{ all -> 0x00ed }
-                java.net.URL r2 = new java.net.URL     // Catch:{ all -> 0x00ed }
+                org.telegram.messenger.ImageLoader$CacheImage r1 = r7.cacheImage     // Catch:{ all -> 0x00ec }
+                org.telegram.messenger.ImageLocation r1 = r1.imageLocation     // Catch:{ all -> 0x00ec }
+                java.lang.String r1 = r1.path     // Catch:{ all -> 0x00ec }
+                java.net.URL r2 = new java.net.URL     // Catch:{ all -> 0x00ec }
                 java.lang.String r3 = "athumb://"
                 java.lang.String r4 = "https://"
-                java.lang.String r1 = r1.replace(r3, r4)     // Catch:{ all -> 0x00ed }
-                r2.<init>(r1)     // Catch:{ all -> 0x00ed }
-                java.net.URLConnection r1 = r2.openConnection()     // Catch:{ all -> 0x00ed }
-                java.net.HttpURLConnection r1 = (java.net.HttpURLConnection) r1     // Catch:{ all -> 0x00ed }
-                r7.httpConnection = r1     // Catch:{ all -> 0x00ed }
+                java.lang.String r1 = r1.replace(r3, r4)     // Catch:{ all -> 0x00ec }
+                r2.<init>(r1)     // Catch:{ all -> 0x00ec }
+                java.net.URLConnection r1 = r2.openConnection()     // Catch:{ all -> 0x00ec }
+                java.net.HttpURLConnection r1 = (java.net.HttpURLConnection) r1     // Catch:{ all -> 0x00ec }
+                r7.httpConnection = r1     // Catch:{ all -> 0x00ec }
                 r2 = 5000(0x1388, float:7.006E-42)
-                r1.setConnectTimeout(r2)     // Catch:{ all -> 0x00ed }
-                java.net.HttpURLConnection r1 = r7.httpConnection     // Catch:{ all -> 0x00ed }
-                r1.setReadTimeout(r2)     // Catch:{ all -> 0x00ed }
-                java.net.HttpURLConnection r1 = r7.httpConnection     // Catch:{ all -> 0x00ed }
-                r1.connect()     // Catch:{ all -> 0x00ed }
+                r1.setConnectTimeout(r2)     // Catch:{ all -> 0x00ec }
+                java.net.HttpURLConnection r1 = r7.httpConnection     // Catch:{ all -> 0x00ec }
+                r1.setReadTimeout(r2)     // Catch:{ all -> 0x00ec }
+                java.net.HttpURLConnection r1 = r7.httpConnection     // Catch:{ all -> 0x00ec }
+                r1.connect()     // Catch:{ all -> 0x00ec }
                 java.net.HttpURLConnection r1 = r7.httpConnection     // Catch:{ Exception -> 0x0043 }
                 if (r1 == 0) goto L_0x0047
                 int r1 = r1.getResponseCode()     // Catch:{ Exception -> 0x0043 }
@@ -511,180 +484,178 @@ public class ImageLoader {
                 goto L_0x0047
             L_0x0043:
                 r1 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x00ed }
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x00ec }
             L_0x0047:
-                java.net.HttpURLConnection r1 = r7.httpConnection     // Catch:{ all -> 0x00ed }
-                java.io.InputStream r1 = r1.getInputStream()     // Catch:{ all -> 0x00ed }
-                java.io.ByteArrayOutputStream r2 = new java.io.ByteArrayOutputStream     // Catch:{ all -> 0x00e7 }
-                r2.<init>()     // Catch:{ all -> 0x00e7 }
+                java.net.HttpURLConnection r1 = r7.httpConnection     // Catch:{ all -> 0x00ec }
+                java.io.InputStream r1 = r1.getInputStream()     // Catch:{ all -> 0x00ec }
+                java.io.ByteArrayOutputStream r2 = new java.io.ByteArrayOutputStream     // Catch:{ all -> 0x00e6 }
+                r2.<init>()     // Catch:{ all -> 0x00e6 }
                 r3 = 32768(0x8000, float:4.5918E-41)
-                byte[] r3 = new byte[r3]     // Catch:{ all -> 0x00e1 }
+                byte[] r3 = new byte[r3]     // Catch:{ all -> 0x00e0 }
             L_0x0057:
-                boolean r4 = r7.isCancelled()     // Catch:{ all -> 0x00e1 }
+                boolean r4 = r7.isCancelled()     // Catch:{ all -> 0x00e0 }
                 if (r4 == 0) goto L_0x005e
-                goto L_0x0069
+                goto L_0x0068
             L_0x005e:
-                int r4 = r1.read(r3)     // Catch:{ all -> 0x00e1 }
+                int r4 = r1.read(r3)     // Catch:{ all -> 0x00e0 }
                 if (r4 <= 0) goto L_0x0068
-                r2.write(r3, r0, r4)     // Catch:{ all -> 0x00e1 }
+                r2.write(r3, r0, r4)     // Catch:{ all -> 0x00e0 }
                 goto L_0x0057
             L_0x0068:
-                r3 = -1
-            L_0x0069:
-                r7.canRetry = r0     // Catch:{ all -> 0x00e1 }
-                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ all -> 0x00e1 }
-                java.lang.String r4 = new java.lang.String     // Catch:{ all -> 0x00e1 }
-                byte[] r5 = r2.toByteArray()     // Catch:{ all -> 0x00e1 }
-                r4.<init>(r5)     // Catch:{ all -> 0x00e1 }
-                r3.<init>(r4)     // Catch:{ all -> 0x00e1 }
+                r7.canRetry = r0     // Catch:{ all -> 0x00e0 }
+                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ all -> 0x00e0 }
+                java.lang.String r4 = new java.lang.String     // Catch:{ all -> 0x00e0 }
+                byte[] r5 = r2.toByteArray()     // Catch:{ all -> 0x00e0 }
+                r4.<init>(r5)     // Catch:{ all -> 0x00e0 }
+                r3.<init>(r4)     // Catch:{ all -> 0x00e0 }
                 java.lang.String r4 = "results"
-                org.json.JSONArray r3 = r3.getJSONArray(r4)     // Catch:{ all -> 0x00e1 }
-                int r4 = r3.length()     // Catch:{ all -> 0x00e1 }
-                if (r4 <= 0) goto L_0x00c9
-                org.json.JSONObject r3 = r3.getJSONObject(r0)     // Catch:{ all -> 0x00e1 }
+                org.json.JSONArray r3 = r3.getJSONArray(r4)     // Catch:{ all -> 0x00e0 }
+                int r4 = r3.length()     // Catch:{ all -> 0x00e0 }
+                if (r4 <= 0) goto L_0x00c8
+                org.json.JSONObject r3 = r3.getJSONObject(r0)     // Catch:{ all -> 0x00e0 }
                 java.lang.String r4 = "artworkUrl100"
-                java.lang.String r3 = r3.getString(r4)     // Catch:{ all -> 0x00e1 }
-                boolean r4 = r7.small     // Catch:{ all -> 0x00e1 }
-                if (r4 == 0) goto L_0x00aa
-                java.net.HttpURLConnection r8 = r7.httpConnection     // Catch:{ all -> 0x009b }
-                if (r8 == 0) goto L_0x009c
-                r8.disconnect()     // Catch:{ all -> 0x009b }
-                goto L_0x009c
+                java.lang.String r3 = r3.getString(r4)     // Catch:{ all -> 0x00e0 }
+                boolean r4 = r7.small     // Catch:{ all -> 0x00e0 }
+                if (r4 == 0) goto L_0x00a9
+                java.net.HttpURLConnection r8 = r7.httpConnection     // Catch:{ all -> 0x009a }
+                if (r8 == 0) goto L_0x009b
+                r8.disconnect()     // Catch:{ all -> 0x009a }
+                goto L_0x009b
+            L_0x009a:
             L_0x009b:
-            L_0x009c:
-                if (r1 == 0) goto L_0x00a6
-                r1.close()     // Catch:{ all -> 0x00a2 }
-                goto L_0x00a6
-            L_0x00a2:
+                if (r1 == 0) goto L_0x00a5
+                r1.close()     // Catch:{ all -> 0x00a1 }
+                goto L_0x00a5
+            L_0x00a1:
                 r8 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-            L_0x00a6:
-                r2.close()     // Catch:{ Exception -> 0x00a9 }
-            L_0x00a9:
+            L_0x00a5:
+                r2.close()     // Catch:{ Exception -> 0x00a8 }
+            L_0x00a8:
                 return r3
-            L_0x00aa:
+            L_0x00a9:
                 java.lang.String r4 = "100x100"
                 java.lang.String r5 = "600x600"
-                java.lang.String r8 = r3.replace(r4, r5)     // Catch:{ all -> 0x00e1 }
-                java.net.HttpURLConnection r0 = r7.httpConnection     // Catch:{ all -> 0x00ba }
-                if (r0 == 0) goto L_0x00bb
-                r0.disconnect()     // Catch:{ all -> 0x00ba }
-                goto L_0x00bb
+                java.lang.String r8 = r3.replace(r4, r5)     // Catch:{ all -> 0x00e0 }
+                java.net.HttpURLConnection r0 = r7.httpConnection     // Catch:{ all -> 0x00b9 }
+                if (r0 == 0) goto L_0x00ba
+                r0.disconnect()     // Catch:{ all -> 0x00b9 }
+                goto L_0x00ba
+            L_0x00b9:
             L_0x00ba:
-            L_0x00bb:
-                if (r1 == 0) goto L_0x00c5
-                r1.close()     // Catch:{ all -> 0x00c1 }
-                goto L_0x00c5
-            L_0x00c1:
+                if (r1 == 0) goto L_0x00c4
+                r1.close()     // Catch:{ all -> 0x00c0 }
+                goto L_0x00c4
+            L_0x00c0:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x00c5:
-                r2.close()     // Catch:{ Exception -> 0x00c8 }
-            L_0x00c8:
+            L_0x00c4:
+                r2.close()     // Catch:{ Exception -> 0x00c7 }
+            L_0x00c7:
                 return r8
-            L_0x00c9:
-                java.net.HttpURLConnection r0 = r7.httpConnection     // Catch:{ all -> 0x00d1 }
-                if (r0 == 0) goto L_0x00d2
-                r0.disconnect()     // Catch:{ all -> 0x00d1 }
-                goto L_0x00d2
+            L_0x00c8:
+                java.net.HttpURLConnection r0 = r7.httpConnection     // Catch:{ all -> 0x00d0 }
+                if (r0 == 0) goto L_0x00d1
+                r0.disconnect()     // Catch:{ all -> 0x00d0 }
+                goto L_0x00d1
+            L_0x00d0:
             L_0x00d1:
-            L_0x00d2:
-                if (r1 == 0) goto L_0x00dc
-                r1.close()     // Catch:{ all -> 0x00d8 }
-                goto L_0x00dc
-            L_0x00d8:
+                if (r1 == 0) goto L_0x00db
+                r1.close()     // Catch:{ all -> 0x00d7 }
+                goto L_0x00db
+            L_0x00d7:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x00dc:
-                r2.close()     // Catch:{ Exception -> 0x013e }
-                goto L_0x013e
-            L_0x00e1:
+            L_0x00db:
+                r2.close()     // Catch:{ Exception -> 0x013d }
+                goto L_0x013d
+            L_0x00e0:
                 r3 = move-exception
                 r6 = r2
                 r2 = r1
                 r1 = r3
                 r3 = r6
-                goto L_0x00f0
-            L_0x00e7:
+                goto L_0x00ef
+            L_0x00e6:
                 r2 = move-exception
                 r3 = r8
                 r6 = r2
                 r2 = r1
                 r1 = r6
-                goto L_0x00f0
-            L_0x00ed:
+                goto L_0x00ef
+            L_0x00ec:
                 r1 = move-exception
                 r2 = r8
                 r3 = r2
-            L_0x00f0:
-                boolean r4 = r1 instanceof java.net.SocketTimeoutException     // Catch:{ all -> 0x013f }
-                if (r4 == 0) goto L_0x00fd
-                boolean r4 = org.telegram.messenger.ApplicationLoader.isNetworkOnline()     // Catch:{ all -> 0x013f }
-                if (r4 == 0) goto L_0x0123
-                r7.canRetry = r0     // Catch:{ all -> 0x013f }
-                goto L_0x0123
-            L_0x00fd:
-                boolean r4 = r1 instanceof java.net.UnknownHostException     // Catch:{ all -> 0x013f }
-                if (r4 == 0) goto L_0x0104
-                r7.canRetry = r0     // Catch:{ all -> 0x013f }
-                goto L_0x0123
-            L_0x0104:
-                boolean r4 = r1 instanceof java.net.SocketException     // Catch:{ all -> 0x013f }
-                if (r4 == 0) goto L_0x011d
-                java.lang.String r4 = r1.getMessage()     // Catch:{ all -> 0x013f }
-                if (r4 == 0) goto L_0x0123
-                java.lang.String r4 = r1.getMessage()     // Catch:{ all -> 0x013f }
+            L_0x00ef:
+                boolean r4 = r1 instanceof java.net.SocketTimeoutException     // Catch:{ all -> 0x013e }
+                if (r4 == 0) goto L_0x00fc
+                boolean r4 = org.telegram.messenger.ApplicationLoader.isNetworkOnline()     // Catch:{ all -> 0x013e }
+                if (r4 == 0) goto L_0x0122
+                r7.canRetry = r0     // Catch:{ all -> 0x013e }
+                goto L_0x0122
+            L_0x00fc:
+                boolean r4 = r1 instanceof java.net.UnknownHostException     // Catch:{ all -> 0x013e }
+                if (r4 == 0) goto L_0x0103
+                r7.canRetry = r0     // Catch:{ all -> 0x013e }
+                goto L_0x0122
+            L_0x0103:
+                boolean r4 = r1 instanceof java.net.SocketException     // Catch:{ all -> 0x013e }
+                if (r4 == 0) goto L_0x011c
+                java.lang.String r4 = r1.getMessage()     // Catch:{ all -> 0x013e }
+                if (r4 == 0) goto L_0x0122
+                java.lang.String r4 = r1.getMessage()     // Catch:{ all -> 0x013e }
                 java.lang.String r5 = "ECONNRESET"
-                boolean r4 = r4.contains(r5)     // Catch:{ all -> 0x013f }
-                if (r4 == 0) goto L_0x0123
-                r7.canRetry = r0     // Catch:{ all -> 0x013f }
-                goto L_0x0123
-            L_0x011d:
-                boolean r4 = r1 instanceof java.io.FileNotFoundException     // Catch:{ all -> 0x013f }
-                if (r4 == 0) goto L_0x0123
-                r7.canRetry = r0     // Catch:{ all -> 0x013f }
-            L_0x0123:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x013f }
-                java.net.HttpURLConnection r0 = r7.httpConnection     // Catch:{ all -> 0x012e }
-                if (r0 == 0) goto L_0x012f
-                r0.disconnect()     // Catch:{ all -> 0x012e }
-                goto L_0x012f
+                boolean r4 = r4.contains(r5)     // Catch:{ all -> 0x013e }
+                if (r4 == 0) goto L_0x0122
+                r7.canRetry = r0     // Catch:{ all -> 0x013e }
+                goto L_0x0122
+            L_0x011c:
+                boolean r4 = r1 instanceof java.io.FileNotFoundException     // Catch:{ all -> 0x013e }
+                if (r4 == 0) goto L_0x0122
+                r7.canRetry = r0     // Catch:{ all -> 0x013e }
+            L_0x0122:
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x013e }
+                java.net.HttpURLConnection r0 = r7.httpConnection     // Catch:{ all -> 0x012d }
+                if (r0 == 0) goto L_0x012e
+                r0.disconnect()     // Catch:{ all -> 0x012d }
+                goto L_0x012e
+            L_0x012d:
             L_0x012e:
-            L_0x012f:
-                if (r2 == 0) goto L_0x0139
-                r2.close()     // Catch:{ all -> 0x0135 }
-                goto L_0x0139
-            L_0x0135:
+                if (r2 == 0) goto L_0x0138
+                r2.close()     // Catch:{ all -> 0x0134 }
+                goto L_0x0138
+            L_0x0134:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0139:
-                if (r3 == 0) goto L_0x013e
-                r3.close()     // Catch:{ Exception -> 0x013e }
-            L_0x013e:
+            L_0x0138:
+                if (r3 == 0) goto L_0x013d
+                r3.close()     // Catch:{ Exception -> 0x013d }
+            L_0x013d:
                 return r8
-            L_0x013f:
+            L_0x013e:
                 r8 = move-exception
-                java.net.HttpURLConnection r0 = r7.httpConnection     // Catch:{ all -> 0x0148 }
-                if (r0 == 0) goto L_0x0149
-                r0.disconnect()     // Catch:{ all -> 0x0148 }
-                goto L_0x0149
+                java.net.HttpURLConnection r0 = r7.httpConnection     // Catch:{ all -> 0x0147 }
+                if (r0 == 0) goto L_0x0148
+                r0.disconnect()     // Catch:{ all -> 0x0147 }
+                goto L_0x0148
+            L_0x0147:
             L_0x0148:
-            L_0x0149:
-                if (r2 == 0) goto L_0x0153
-                r2.close()     // Catch:{ all -> 0x014f }
-                goto L_0x0153
-            L_0x014f:
+                if (r2 == 0) goto L_0x0152
+                r2.close()     // Catch:{ all -> 0x014e }
+                goto L_0x0152
+            L_0x014e:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0153:
-                if (r3 == 0) goto L_0x0158
-                r3.close()     // Catch:{ Exception -> 0x0158 }
-            L_0x0158:
-                goto L_0x015a
-            L_0x0159:
-                throw r8
-            L_0x015a:
+            L_0x0152:
+                if (r3 == 0) goto L_0x0157
+                r3.close()     // Catch:{ Exception -> 0x0157 }
+            L_0x0157:
                 goto L_0x0159
+            L_0x0158:
+                throw r8
+            L_0x0159:
+                goto L_0x0158
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.ArtworkLoadTask.doInBackground(java.lang.Void[]):java.lang.String");
         }
@@ -692,30 +663,15 @@ public class ImageLoader {
         /* access modifiers changed from: protected */
         public void onPostExecute(String str) {
             if (str != null) {
-                ImageLoader.this.imageLoadQueue.postRunnable(new Runnable(str) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        ImageLoader.ArtworkLoadTask.this.lambda$onPostExecute$0$ImageLoader$ArtworkLoadTask(this.f$1);
-                    }
-                });
+                ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$ArtworkLoadTask$$ExternalSyntheticLambda2(this, str));
             } else if (this.canRetry) {
                 ImageLoader.this.artworkLoadError(this.cacheImage.url);
             }
-            ImageLoader.this.imageLoadQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    ImageLoader.ArtworkLoadTask.this.lambda$onPostExecute$1$ImageLoader$ArtworkLoadTask();
-                }
-            });
+            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$ArtworkLoadTask$$ExternalSyntheticLambda0(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onPostExecute$0 */
-        public /* synthetic */ void lambda$onPostExecute$0$ImageLoader$ArtworkLoadTask(String str) {
+        public /* synthetic */ void lambda$onPostExecute$0(String str) {
             CacheImage cacheImage2 = this.cacheImage;
             cacheImage2.httpTask = new HttpImageTask(cacheImage2, 0, str);
             ImageLoader.this.httpTasks.add(this.cacheImage.httpTask);
@@ -723,24 +679,18 @@ public class ImageLoader {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onPostExecute$1 */
-        public /* synthetic */ void lambda$onPostExecute$1$ImageLoader$ArtworkLoadTask() {
+        public /* synthetic */ void lambda$onPostExecute$1() {
             ImageLoader.this.runArtworkTasks(true);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCancelled$2 */
-        public /* synthetic */ void lambda$onCancelled$2$ImageLoader$ArtworkLoadTask() {
+        public /* synthetic */ void lambda$onCancelled$2() {
             ImageLoader.this.runArtworkTasks(true);
         }
 
         /* access modifiers changed from: protected */
         public void onCancelled() {
-            ImageLoader.this.imageLoadQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    ImageLoader.ArtworkLoadTask.this.lambda$onCancelled$2$ImageLoader$ArtworkLoadTask();
-                }
-            });
+            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$ArtworkLoadTask$$ExternalSyntheticLambda1(this));
         }
     }
 
@@ -755,7 +705,8 @@ public class ImageLoader {
         private long lastProgressTime;
         private String overrideUrl;
 
-        static /* synthetic */ void lambda$doInBackground$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        /* access modifiers changed from: private */
+        public static /* synthetic */ void lambda$doInBackground$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         }
 
         public HttpImageTask(CacheImage cacheImage2, int i) {
@@ -778,43 +729,17 @@ public class ImageLoader {
                 }
             }
             this.lastProgressTime = elapsedRealtime;
-            Utilities.stageQueue.postRunnable(new Runnable(j, j2) {
-                public final /* synthetic */ long f$1;
-                public final /* synthetic */ long f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r4;
-                }
-
-                public final void run() {
-                    ImageLoader.HttpImageTask.this.lambda$reportProgress$1$ImageLoader$HttpImageTask(this.f$1, this.f$2);
-                }
-            });
+            Utilities.stageQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda4(this, j, j2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$reportProgress$1 */
-        public /* synthetic */ void lambda$reportProgress$1$ImageLoader$HttpImageTask(long j, long j2) {
+        public /* synthetic */ void lambda$reportProgress$1(long j, long j2) {
             ImageLoader.this.fileProgresses.put(this.cacheImage.url, new long[]{j, j2});
-            AndroidUtilities.runOnUIThread(new Runnable(j, j2) {
-                public final /* synthetic */ long f$1;
-                public final /* synthetic */ long f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r4;
-                }
-
-                public final void run() {
-                    ImageLoader.HttpImageTask.this.lambda$reportProgress$0$ImageLoader$HttpImageTask(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda5(this, j, j2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$reportProgress$0 */
-        public /* synthetic */ void lambda$reportProgress$0$ImageLoader$HttpImageTask(long j, long j2) {
+        public /* synthetic */ void lambda$reportProgress$0(long j, long j2) {
             NotificationCenter.getInstance(this.cacheImage.currentAccount).postNotificationName(NotificationCenter.fileLoadProgressChanged, this.cacheImage.url, Long.valueOf(j), Long.valueOf(j2));
         }
 
@@ -894,7 +819,7 @@ public class ImageLoader {
                 org.telegram.messenger.ImageLoader$CacheImage r3 = r11.cacheImage     // Catch:{ all -> 0x00a5 }
                 int r3 = r3.currentAccount     // Catch:{ all -> 0x00a5 }
                 org.telegram.tgnet.ConnectionsManager r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3)     // Catch:{ all -> 0x00a5 }
-                org.telegram.messenger.-$$Lambda$ImageLoader$HttpImageTask$XSVT2vTgbXXcvgcr720eEC0zjMc r5 = org.telegram.messenger.$$Lambda$ImageLoader$HttpImageTask$XSVT2vTgbXXcvgcr720eEC0zjMc.INSTANCE     // Catch:{ all -> 0x00a5 }
+                org.telegram.messenger.ImageLoader$HttpImageTask$$ExternalSyntheticLambda8 r5 = org.telegram.messenger.ImageLoader$HttpImageTask$$ExternalSyntheticLambda8.INSTANCE     // Catch:{ all -> 0x00a5 }
                 r3.sendRequest(r4, r5)     // Catch:{ all -> 0x00a5 }
             L_0x0057:
                 java.net.URL r3 = new java.net.URL     // Catch:{ all -> 0x00a5 }
@@ -1115,44 +1040,18 @@ public class ImageLoader {
             } else {
                 ImageLoader.this.httpFileLoadError(this.cacheImage.url);
             }
-            Utilities.stageQueue.postRunnable(new Runnable(bool) {
-                public final /* synthetic */ Boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ImageLoader.HttpImageTask.this.lambda$onPostExecute$4$ImageLoader$HttpImageTask(this.f$1);
-                }
-            });
-            ImageLoader.this.imageLoadQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    ImageLoader.HttpImageTask.this.lambda$onPostExecute$5$ImageLoader$HttpImageTask();
-                }
-            });
+            Utilities.stageQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda6(this, bool));
+            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda0(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onPostExecute$4 */
-        public /* synthetic */ void lambda$onPostExecute$4$ImageLoader$HttpImageTask(Boolean bool) {
+        public /* synthetic */ void lambda$onPostExecute$4(Boolean bool) {
             ImageLoader.this.fileProgresses.remove(this.cacheImage.url);
-            AndroidUtilities.runOnUIThread(new Runnable(bool) {
-                public final /* synthetic */ Boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ImageLoader.HttpImageTask.this.lambda$onPostExecute$3$ImageLoader$HttpImageTask(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda7(this, bool));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onPostExecute$3 */
-        public /* synthetic */ void lambda$onPostExecute$3$ImageLoader$HttpImageTask(Boolean bool) {
+        public /* synthetic */ void lambda$onPostExecute$3(Boolean bool) {
             if (bool.booleanValue()) {
                 NotificationCenter instance = NotificationCenter.getInstance(this.cacheImage.currentAccount);
                 int i = NotificationCenter.fileLoaded;
@@ -1164,45 +1063,29 @@ public class ImageLoader {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onPostExecute$5 */
-        public /* synthetic */ void lambda$onPostExecute$5$ImageLoader$HttpImageTask() {
+        public /* synthetic */ void lambda$onPostExecute$5() {
             ImageLoader.this.runHttpTasks(true);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCancelled$6 */
-        public /* synthetic */ void lambda$onCancelled$6$ImageLoader$HttpImageTask() {
+        public /* synthetic */ void lambda$onCancelled$6() {
             ImageLoader.this.runHttpTasks(true);
         }
 
         /* access modifiers changed from: protected */
         public void onCancelled() {
-            ImageLoader.this.imageLoadQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    ImageLoader.HttpImageTask.this.lambda$onCancelled$6$ImageLoader$HttpImageTask();
-                }
-            });
-            Utilities.stageQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    ImageLoader.HttpImageTask.this.lambda$onCancelled$8$ImageLoader$HttpImageTask();
-                }
-            });
+            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda2(this));
+            Utilities.stageQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda3(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCancelled$8 */
-        public /* synthetic */ void lambda$onCancelled$8$ImageLoader$HttpImageTask() {
+        public /* synthetic */ void lambda$onCancelled$8() {
             ImageLoader.this.fileProgresses.remove(this.cacheImage.url);
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    ImageLoader.HttpImageTask.this.lambda$onCancelled$7$ImageLoader$HttpImageTask();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda1(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCancelled$7 */
-        public /* synthetic */ void lambda$onCancelled$7$ImageLoader$HttpImageTask() {
+        public /* synthetic */ void lambda$onCancelled$7() {
             NotificationCenter.getInstance(this.cacheImage.currentAccount).postNotificationName(NotificationCenter.fileLoadFailed, this.cacheImage.url, 1);
         }
     }
@@ -1221,23 +1104,12 @@ public class ImageLoader {
         private void removeTask() {
             ThumbGenerateInfo thumbGenerateInfo = this.info;
             if (thumbGenerateInfo != null) {
-                ImageLoader.this.imageLoadQueue.postRunnable(new Runnable(FileLoader.getAttachFileName(thumbGenerateInfo.parentDocument)) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        ImageLoader.ThumbGenerateTask.this.lambda$removeTask$0$ImageLoader$ThumbGenerateTask(this.f$1);
-                    }
-                });
+                ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$ThumbGenerateTask$$ExternalSyntheticLambda0(this, FileLoader.getAttachFileName(thumbGenerateInfo.parentDocument)));
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$removeTask$0 */
-        public /* synthetic */ void lambda$removeTask$0$ImageLoader$ThumbGenerateTask(String str) {
+        public /* synthetic */ void lambda$removeTask$0(String str) {
             ImageLoader.this.thumbGenerateTasks.remove(str);
         }
 
@@ -1306,23 +1178,7 @@ public class ImageLoader {
                                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, this.info.big ? 83 : 60, fileOutputStream);
                                 fileOutputStream.close();
-                                AndroidUtilities.runOnUIThread(new Runnable(str, new ArrayList(this.info.imageReceiverArray), new BitmapDrawable(bitmap), new ArrayList(this.info.imageReceiverGuidsArray)) {
-                                    public final /* synthetic */ String f$1;
-                                    public final /* synthetic */ ArrayList f$2;
-                                    public final /* synthetic */ BitmapDrawable f$3;
-                                    public final /* synthetic */ ArrayList f$4;
-
-                                    {
-                                        this.f$1 = r2;
-                                        this.f$2 = r3;
-                                        this.f$3 = r4;
-                                        this.f$4 = r5;
-                                    }
-
-                                    public final void run() {
-                                        ImageLoader.ThumbGenerateTask.this.lambda$run$1$ImageLoader$ThumbGenerateTask(this.f$1, this.f$2, this.f$3, this.f$4);
-                                    }
-                                });
+                                AndroidUtilities.runOnUIThread(new ImageLoader$ThumbGenerateTask$$ExternalSyntheticLambda1(this, str, new ArrayList(this.info.imageReceiverArray), new BitmapDrawable(bitmap), new ArrayList(this.info.imageReceiverGuidsArray)));
                                 return;
                             }
                         }
@@ -1340,8 +1196,7 @@ public class ImageLoader {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$run$1 */
-        public /* synthetic */ void lambda$run$1$ImageLoader$ThumbGenerateTask(String str, ArrayList arrayList, BitmapDrawable bitmapDrawable, ArrayList arrayList2) {
+        public /* synthetic */ void lambda$run$1(String str, ArrayList arrayList, BitmapDrawable bitmapDrawable, ArrayList arrayList2) {
             removeTask();
             if (this.info.filter != null) {
                 str = str + "@" + this.info.filter;
@@ -3197,24 +3052,13 @@ public class ImageLoader {
         }
 
         private void onPostExecute(Drawable drawable) {
-            AndroidUtilities.runOnUIThread(new Runnable(drawable) {
-                public final /* synthetic */ Drawable f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ImageLoader.CacheOutTask.this.lambda$onPostExecute$1$ImageLoader$CacheOutTask(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ImageLoader$CacheOutTask$$ExternalSyntheticLambda0(this, drawable));
         }
 
         /* access modifiers changed from: private */
         /* JADX WARNING: Failed to insert additional move for type inference */
-        /* renamed from: lambda$onPostExecute$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$onPostExecute$1$ImageLoader$CacheOutTask(android.graphics.drawable.Drawable r4) {
+        public /* synthetic */ void lambda$onPostExecute$1(android.graphics.drawable.Drawable r4) {
             /*
                 r3 = this;
                 boolean r0 = r4 instanceof org.telegram.ui.Components.RLottieDrawable
@@ -3285,17 +3129,16 @@ public class ImageLoader {
             L_0x007f:
                 org.telegram.messenger.ImageLoader r0 = org.telegram.messenger.ImageLoader.this
                 org.telegram.messenger.DispatchQueue r0 = r0.imageLoadQueue
-                org.telegram.messenger.-$$Lambda$ImageLoader$CacheOutTask$V7hKOVkk5COLV1ZMNaDhgrjTr5Y r2 = new org.telegram.messenger.-$$Lambda$ImageLoader$CacheOutTask$V7hKOVkk5COLV1ZMNaDhgrjTr5Y
-                r2.<init>(r4, r1)
+                org.telegram.messenger.ImageLoader$CacheOutTask$$ExternalSyntheticLambda1 r2 = new org.telegram.messenger.ImageLoader$CacheOutTask$$ExternalSyntheticLambda1
+                r2.<init>(r3, r4, r1)
                 r0.postRunnable(r2)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.CacheOutTask.lambda$onPostExecute$1$ImageLoader$CacheOutTask(android.graphics.drawable.Drawable):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.CacheOutTask.lambda$onPostExecute$1(android.graphics.drawable.Drawable):void");
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onPostExecute$0 */
-        public /* synthetic */ void lambda$onPostExecute$0$ImageLoader$CacheOutTask(Drawable drawable, String str) {
+        public /* synthetic */ void lambda$onPostExecute$0(Drawable drawable, String str) {
             this.cacheImage.setImageAndClear(drawable, str);
         }
 
@@ -3480,23 +3323,7 @@ public class ImageLoader {
 
         public void setImageAndClear(Drawable drawable, String str) {
             if (drawable != null) {
-                AndroidUtilities.runOnUIThread(new Runnable(drawable, new ArrayList(this.imageReceiverArray), new ArrayList(this.imageReceiverGuidsArray), str) {
-                    public final /* synthetic */ Drawable f$1;
-                    public final /* synthetic */ ArrayList f$2;
-                    public final /* synthetic */ ArrayList f$3;
-                    public final /* synthetic */ String f$4;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                        this.f$4 = r5;
-                    }
-
-                    public final void run() {
-                        ImageLoader.CacheImage.this.lambda$setImageAndClear$0$ImageLoader$CacheImage(this.f$1, this.f$2, this.f$3, this.f$4);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new ImageLoader$CacheImage$$ExternalSyntheticLambda0(this, drawable, new ArrayList(this.imageReceiverArray), new ArrayList(this.imageReceiverGuidsArray), str));
             }
             for (int i = 0; i < this.imageReceiverArray.size(); i++) {
                 ImageLoader.this.imageLoadingByTag.remove(this.imageReceiverArray.get(i).getTag(this.type));
@@ -3512,8 +3339,7 @@ public class ImageLoader {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$setImageAndClear$0 */
-        public /* synthetic */ void lambda$setImageAndClear$0$ImageLoader$CacheImage(Drawable drawable, ArrayList arrayList, ArrayList arrayList2, String str) {
+        public /* synthetic */ void lambda$setImageAndClear$0(Drawable drawable, ArrayList arrayList, ArrayList arrayList2, String str) {
             AnimatedFileDrawable animatedFileDrawable;
             int i = 0;
             if (drawable instanceof AnimatedFileDrawable) {
@@ -3635,146 +3461,37 @@ public class ImageLoader {
                     long j3 = fileUploadOperation2.lastProgressUpdateTime;
                     if (j3 == 0 || j3 < elapsedRealtime - 100 || j == j2) {
                         fileUploadOperation2.lastProgressUpdateTime = elapsedRealtime;
-                        AndroidUtilities.runOnUIThread(new Runnable(i, str, j, j2, z) {
-                            public final /* synthetic */ int f$0;
-                            public final /* synthetic */ String f$1;
-                            public final /* synthetic */ long f$2;
-                            public final /* synthetic */ long f$3;
-                            public final /* synthetic */ boolean f$4;
-
-                            {
-                                this.f$0 = r1;
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                                this.f$3 = r5;
-                                this.f$4 = r7;
-                            }
-
-                            public final void run() {
-                                NotificationCenter.getInstance(this.f$0).postNotificationName(NotificationCenter.fileUploadProgressChanged, this.f$1, Long.valueOf(this.f$2), Long.valueOf(this.f$3), Boolean.valueOf(this.f$4));
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new ImageLoader$3$$ExternalSyntheticLambda1(i, str, j, j2, z));
                     }
                 }
 
                 public void fileDidUploaded(String str, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, long j) {
-                    Utilities.stageQueue.postRunnable(new Runnable(i, str, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, j) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ String f$2;
-                        public final /* synthetic */ TLRPC$InputFile f$3;
-                        public final /* synthetic */ TLRPC$InputEncryptedFile f$4;
-                        public final /* synthetic */ byte[] f$5;
-                        public final /* synthetic */ byte[] f$6;
-                        public final /* synthetic */ long f$7;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                            this.f$5 = r6;
-                            this.f$6 = r7;
-                            this.f$7 = r8;
-                        }
-
-                        public final void run() {
-                            ImageLoader.AnonymousClass3.this.lambda$fileDidUploaded$2$ImageLoader$3(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
-                        }
-                    });
+                    Utilities.stageQueue.postRunnable(new ImageLoader$3$$ExternalSyntheticLambda4(this, i, str, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, j));
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$fileDidUploaded$2 */
-                public /* synthetic */ void lambda$fileDidUploaded$2$ImageLoader$3(int i, String str, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, long j) {
-                    AndroidUtilities.runOnUIThread(new Runnable(i, str, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, j) {
-                        public final /* synthetic */ int f$0;
-                        public final /* synthetic */ String f$1;
-                        public final /* synthetic */ TLRPC$InputFile f$2;
-                        public final /* synthetic */ TLRPC$InputEncryptedFile f$3;
-                        public final /* synthetic */ byte[] f$4;
-                        public final /* synthetic */ byte[] f$5;
-                        public final /* synthetic */ long f$6;
-
-                        {
-                            this.f$0 = r1;
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                            this.f$5 = r6;
-                            this.f$6 = r7;
-                        }
-
-                        public final void run() {
-                            NotificationCenter.getInstance(this.f$0).postNotificationName(NotificationCenter.fileUploaded, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, Long.valueOf(this.f$6));
-                        }
-                    });
+                public /* synthetic */ void lambda$fileDidUploaded$2(int i, String str, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, long j) {
+                    AndroidUtilities.runOnUIThread(new ImageLoader$3$$ExternalSyntheticLambda2(i, str, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, j));
                     ImageLoader.this.fileProgresses.remove(str);
                 }
 
                 public void fileDidFailedUpload(String str, boolean z) {
-                    Utilities.stageQueue.postRunnable(new Runnable(i, str, z) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ String f$2;
-                        public final /* synthetic */ boolean f$3;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                        }
-
-                        public final void run() {
-                            ImageLoader.AnonymousClass3.this.lambda$fileDidFailedUpload$4$ImageLoader$3(this.f$1, this.f$2, this.f$3);
-                        }
-                    });
+                    Utilities.stageQueue.postRunnable(new ImageLoader$3$$ExternalSyntheticLambda5(this, i, str, z));
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$fileDidFailedUpload$4 */
-                public /* synthetic */ void lambda$fileDidFailedUpload$4$ImageLoader$3(int i, String str, boolean z) {
-                    AndroidUtilities.runOnUIThread(new Runnable(i, str, z) {
-                        public final /* synthetic */ int f$0;
-                        public final /* synthetic */ String f$1;
-                        public final /* synthetic */ boolean f$2;
-
-                        {
-                            this.f$0 = r1;
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run() {
-                            NotificationCenter.getInstance(this.f$0).postNotificationName(NotificationCenter.fileUploadFailed, this.f$1, Boolean.valueOf(this.f$2));
-                        }
-                    });
+                public /* synthetic */ void lambda$fileDidFailedUpload$4(int i, String str, boolean z) {
+                    AndroidUtilities.runOnUIThread(new ImageLoader$3$$ExternalSyntheticLambda3(i, str, z));
                     ImageLoader.this.fileProgresses.remove(str);
                 }
 
                 public void fileDidLoaded(String str, File file, int i) {
                     ImageLoader.this.fileProgresses.remove(str);
-                    AndroidUtilities.runOnUIThread(new Runnable(file, str, i, i) {
-                        public final /* synthetic */ File f$1;
-                        public final /* synthetic */ String f$2;
-                        public final /* synthetic */ int f$3;
-                        public final /* synthetic */ int f$4;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                        }
-
-                        public final void run() {
-                            ImageLoader.AnonymousClass3.this.lambda$fileDidLoaded$5$ImageLoader$3(this.f$1, this.f$2, this.f$3, this.f$4);
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new ImageLoader$3$$ExternalSyntheticLambda6(this, file, str, i, i));
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$fileDidLoaded$5 */
-                public /* synthetic */ void lambda$fileDidLoaded$5$ImageLoader$3(File file, String str, int i, int i2) {
+                public /* synthetic */ void lambda$fileDidLoaded$5(File file, String str, int i, int i2) {
                     if (SharedConfig.saveToGallery && ImageLoader.this.telegramPath != null && file != null && ((str.endsWith(".mp4") || str.endsWith(".jpg")) && file.toString().startsWith(ImageLoader.this.telegramPath.toString()))) {
                         AndroidUtilities.addMediaToGallery(file.toString());
                     }
@@ -3784,26 +3501,11 @@ public class ImageLoader {
 
                 public void fileDidFailedLoad(String str, int i) {
                     ImageLoader.this.fileProgresses.remove(str);
-                    AndroidUtilities.runOnUIThread(new Runnable(str, i, i) {
-                        public final /* synthetic */ String f$1;
-                        public final /* synthetic */ int f$2;
-                        public final /* synthetic */ int f$3;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                        }
-
-                        public final void run() {
-                            ImageLoader.AnonymousClass3.this.lambda$fileDidFailedLoad$6$ImageLoader$3(this.f$1, this.f$2, this.f$3);
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new ImageLoader$3$$ExternalSyntheticLambda7(this, str, i, i));
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$fileDidFailedLoad$6 */
-                public /* synthetic */ void lambda$fileDidFailedLoad$6$ImageLoader$3(String str, int i, int i2) {
+                public /* synthetic */ void lambda$fileDidFailedLoad$6(String str, int i, int i2) {
                     ImageLoader.this.fileDidFailedLoad(str, i);
                     NotificationCenter.getInstance(i2).postNotificationName(NotificationCenter.fileLoadFailed, str, Integer.valueOf(i));
                 }
@@ -3816,23 +3518,7 @@ public class ImageLoader {
                     long j3 = fileLoadOperation2.lastProgressUpdateTime;
                     if (j3 == 0 || j3 < elapsedRealtime - 500 || j == 0) {
                         fileLoadOperation2.lastProgressUpdateTime = elapsedRealtime;
-                        AndroidUtilities.runOnUIThread(new Runnable(i, str, j, j2) {
-                            public final /* synthetic */ int f$0;
-                            public final /* synthetic */ String f$1;
-                            public final /* synthetic */ long f$2;
-                            public final /* synthetic */ long f$3;
-
-                            {
-                                this.f$0 = r1;
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                                this.f$3 = r5;
-                            }
-
-                            public final void run() {
-                                NotificationCenter.getInstance(this.f$0).postNotificationName(NotificationCenter.fileLoadProgressChanged, this.f$1, Long.valueOf(this.f$2), Long.valueOf(this.f$3));
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new ImageLoader$3$$ExternalSyntheticLambda0(i, str, j, j2));
                     }
                 }
             });
@@ -3843,21 +3529,16 @@ public class ImageLoader {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("file system changed");
                 }
-                $$Lambda$ImageLoader$4$r3N3jDWk7v1nvZU58OCVS6Esw8Y r3 = new Runnable() {
-                    public final void run() {
-                        ImageLoader.AnonymousClass4.this.lambda$onReceive$0$ImageLoader$4();
-                    }
-                };
+                ImageLoader$4$$ExternalSyntheticLambda0 imageLoader$4$$ExternalSyntheticLambda0 = new ImageLoader$4$$ExternalSyntheticLambda0(this);
                 if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
-                    AndroidUtilities.runOnUIThread(r3, 1000);
+                    AndroidUtilities.runOnUIThread(imageLoader$4$$ExternalSyntheticLambda0, 1000);
                 } else {
-                    r3.run();
+                    imageLoader$4$$ExternalSyntheticLambda0.run();
                 }
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onReceive$0 */
-            public /* synthetic */ void lambda$onReceive$0$ImageLoader$4() {
+            public /* synthetic */ void lambda$onReceive$0() {
                 ImageLoader.this.checkMediaPaths();
             }
         };
@@ -3880,27 +3561,12 @@ public class ImageLoader {
     }
 
     public void checkMediaPaths() {
-        this.cacheOutQueue.postRunnable(new Runnable() {
-            public final void run() {
-                ImageLoader.this.lambda$checkMediaPaths$1$ImageLoader();
-            }
-        });
+        this.cacheOutQueue.postRunnable(new ImageLoader$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkMediaPaths$1 */
-    public /* synthetic */ void lambda$checkMediaPaths$1$ImageLoader() {
-        AndroidUtilities.runOnUIThread(new Runnable(createMediaPaths()) {
-            public final /* synthetic */ SparseArray f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void run() {
-                FileLoader.setMediaDirs(this.f$0);
-            }
-        });
+    public /* synthetic */ void lambda$checkMediaPaths$1() {
+        AndroidUtilities.runOnUIThread(new ImageLoader$$ExternalSyntheticLambda0(createMediaPaths()));
     }
 
     public void addTestWebFile(String str, WebFile webFile) {
@@ -3928,8 +3594,8 @@ public class ImageLoader {
         L_0x000d:
             java.nio.file.Path r1 = r1.toPath()     // Catch:{ Exception -> 0x002c }
             java.util.stream.Stream r1 = java.nio.file.Files.list(r1)     // Catch:{ Exception -> 0x002c }
-            j$.util.stream.Stream r1 = j$.C$r8$wrapper$java$util$stream$Stream$VWRP.convert(r1)     // Catch:{ Exception -> 0x002c }
-            org.telegram.messenger.-$$Lambda$ImageLoader$nvS1PGh6JAGAk9sstmlzPfbuLmY r0 = new org.telegram.messenger.-$$Lambda$ImageLoader$nvS1PGh6JAGAk9sstmlzPfbuLmY     // Catch:{ all -> 0x0025 }
+            j$.util.stream.Stream r1 = j$.wrappers.C$r8$wrapper$java$util$stream$Stream$VWRP.convert(r1)     // Catch:{ Exception -> 0x002c }
+            org.telegram.messenger.ImageLoader$$ExternalSyntheticLambda13 r0 = new org.telegram.messenger.ImageLoader$$ExternalSyntheticLambda13     // Catch:{ all -> 0x0025 }
             r0.<init>(r2)     // Catch:{ all -> 0x0025 }
             r1.forEach(r0)     // Catch:{ all -> 0x0025 }
             r1.close()     // Catch:{ Exception -> 0x002c }
@@ -3949,7 +3615,8 @@ public class ImageLoader {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.moveDirectory(java.io.File, java.io.File):void");
     }
 
-    static /* synthetic */ void lambda$moveDirectory$2(File file, Path path) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$moveDirectory$2(File file, Path path) {
         File file2 = new File(file, path.getFileName().toString());
         if (Files.isDirectory(path, new LinkOption[0])) {
             moveDirectory(path.toFile(), file2);
@@ -4175,7 +3842,7 @@ public class ImageLoader {
 
     public Float getFileProgress(String str) {
         long[] jArr;
-        if (str == null || (jArr = (long[]) this.fileProgresses.get(str)) == null) {
+        if (str == null || (jArr = this.fileProgresses.get(str)) == null) {
             return null;
         }
         if (jArr[1] == 0) {
@@ -4188,7 +3855,7 @@ public class ImageLoader {
         if (str == null) {
             return null;
         }
-        return (long[]) this.fileProgresses.get(str);
+        return this.fileProgresses.get(str);
     }
 
     public String getReplacedKey(String str) {
@@ -4289,25 +3956,12 @@ public class ImageLoader {
 
     public void cancelLoadingForImageReceiver(ImageReceiver imageReceiver, boolean z) {
         if (imageReceiver != null) {
-            this.imageLoadQueue.postRunnable(new Runnable(z, imageReceiver) {
-                public final /* synthetic */ boolean f$1;
-                public final /* synthetic */ ImageReceiver f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ImageLoader.this.lambda$cancelLoadingForImageReceiver$3$ImageLoader(this.f$1, this.f$2);
-                }
-            });
+            this.imageLoadQueue.postRunnable(new ImageLoader$$ExternalSyntheticLambda12(this, z, imageReceiver));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$cancelLoadingForImageReceiver$3 */
-    public /* synthetic */ void lambda$cancelLoadingForImageReceiver$3$ImageLoader(boolean z, ImageReceiver imageReceiver) {
+    public /* synthetic */ void lambda$cancelLoadingForImageReceiver$3(boolean z, ImageReceiver imageReceiver) {
         int i = 0;
         while (true) {
             int i2 = 3;
@@ -4392,21 +4046,7 @@ public class ImageLoader {
 
     public void replaceImageInCache(String str, String str2, ImageLocation imageLocation, boolean z) {
         if (z) {
-            AndroidUtilities.runOnUIThread(new Runnable(str, str2, imageLocation) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ String f$2;
-                public final /* synthetic */ ImageLocation f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    ImageLoader.this.lambda$replaceImageInCache$4$ImageLoader(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ImageLoader$$ExternalSyntheticLambda9(this, str, str2, imageLocation));
         } else {
             lambda$replaceImageInCache$4(str, str2, imageLocation);
         }
@@ -4427,23 +4067,12 @@ public class ImageLoader {
     public void cancelForceLoadingForImageReceiver(ImageReceiver imageReceiver) {
         String imageKey;
         if (imageReceiver != null && (imageKey = imageReceiver.getImageKey()) != null) {
-            this.imageLoadQueue.postRunnable(new Runnable(imageKey) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ImageLoader.this.lambda$cancelForceLoadingForImageReceiver$5$ImageLoader(this.f$1);
-                }
-            });
+            this.imageLoadQueue.postRunnable(new ImageLoader$$ExternalSyntheticLambda4(this, imageKey));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$cancelForceLoadingForImageReceiver$5 */
-    public /* synthetic */ void lambda$cancelForceLoadingForImageReceiver$5$ImageLoader(String str) {
+    public /* synthetic */ void lambda$cancelForceLoadingForImageReceiver$5(String str) {
         this.forceLoadingImages.remove(str);
     }
 
@@ -4468,58 +4097,10 @@ public class ImageLoader {
             boolean isShouldGenerateQualityThumb = imageReceiver.isShouldGenerateQualityThumb();
             int currentAccount = imageReceiver.getCurrentAccount();
             boolean z = i6 == 0 && imageReceiver.isCurrentKeyQuality();
-            $$Lambda$ImageLoader$oUTznkFdUrNxWMM3s5IY5lQUTRM r20 = r0;
+            ImageLoader$$ExternalSyntheticLambda2 imageLoader$$ExternalSyntheticLambda2 = r0;
             DispatchQueue dispatchQueue = this.imageLoadQueue;
-            $$Lambda$ImageLoader$oUTznkFdUrNxWMM3s5IY5lQUTRM r0 = new Runnable(this, i4, str2, str, i8, imageReceiver, i5, str4, i3, imageLocation, z, parentObject, qulityThumbDocument, isNeedsQualityThumb, isShouldGenerateQualityThumb, str3, i2, i, currentAccount) {
-                public final /* synthetic */ ImageLoader f$0;
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ boolean f$10;
-                public final /* synthetic */ Object f$11;
-                public final /* synthetic */ TLRPC$Document f$12;
-                public final /* synthetic */ boolean f$13;
-                public final /* synthetic */ boolean f$14;
-                public final /* synthetic */ String f$15;
-                public final /* synthetic */ int f$16;
-                public final /* synthetic */ int f$17;
-                public final /* synthetic */ int f$18;
-                public final /* synthetic */ String f$2;
-                public final /* synthetic */ String f$3;
-                public final /* synthetic */ int f$4;
-                public final /* synthetic */ ImageReceiver f$5;
-                public final /* synthetic */ int f$6;
-                public final /* synthetic */ String f$7;
-                public final /* synthetic */ int f$8;
-                public final /* synthetic */ ImageLocation f$9;
-
-                {
-                    this.f$0 = r3;
-                    this.f$1 = r4;
-                    this.f$2 = r5;
-                    this.f$3 = r6;
-                    this.f$4 = r7;
-                    this.f$5 = r8;
-                    this.f$6 = r9;
-                    this.f$7 = r10;
-                    this.f$8 = r11;
-                    this.f$9 = r12;
-                    this.f$10 = r13;
-                    this.f$11 = r14;
-                    this.f$12 = r15;
-                    this.f$13 = r16;
-                    this.f$14 = r17;
-                    this.f$15 = r18;
-                    this.f$16 = r19;
-                    this.f$17 = r20;
-                    this.f$18 = r21;
-                }
-
-                public final void run() {
-                    ImageLoader imageLoader = this.f$0;
-                    ImageLoader imageLoader2 = imageLoader;
-                    imageLoader2.lambda$createLoadOperationForImageReceiver$6$ImageLoader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, this.f$16, this.f$17, this.f$18);
-                }
-            };
-            dispatchQueue.postRunnable(r20);
+            ImageLoader$$ExternalSyntheticLambda2 imageLoader$$ExternalSyntheticLambda22 = new ImageLoader$$ExternalSyntheticLambda2(this, i4, str2, str, i8, imageReceiver, i5, str4, i3, imageLocation, z, parentObject, qulityThumbDocument, isNeedsQualityThumb, isShouldGenerateQualityThumb, str3, i2, i, currentAccount);
+            dispatchQueue.postRunnable(imageLoader$$ExternalSyntheticLambda2);
         }
     }
 
@@ -4541,9 +4122,8 @@ public class ImageLoader {
     /* JADX WARNING: Removed duplicated region for block: B:73:0x019f  */
     /* JADX WARNING: Removed duplicated region for block: B:83:0x01ee  */
     /* JADX WARNING: Removed duplicated region for block: B:88:0x01fe  */
-    /* renamed from: lambda$createLoadOperationForImageReceiver$6 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createLoadOperationForImageReceiver$6$ImageLoader(int r22, java.lang.String r23, java.lang.String r24, int r25, org.telegram.messenger.ImageReceiver r26, int r27, java.lang.String r28, int r29, org.telegram.messenger.ImageLocation r30, boolean r31, java.lang.Object r32, org.telegram.tgnet.TLRPC$Document r33, boolean r34, boolean r35, java.lang.String r36, int r37, int r38, int r39) {
+    public /* synthetic */ void lambda$createLoadOperationForImageReceiver$6(int r22, java.lang.String r23, java.lang.String r24, int r25, org.telegram.messenger.ImageReceiver r26, int r27, java.lang.String r28, int r29, org.telegram.messenger.ImageLocation r30, boolean r31, java.lang.Object r32, org.telegram.tgnet.TLRPC$Document r33, boolean r34, boolean r35, java.lang.String r36, int r37, int r38, int r39) {
         /*
             r21 = this;
             r0 = r21
@@ -5400,26 +4980,15 @@ public class ImageLoader {
         L_0x0607:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.lambda$createLoadOperationForImageReceiver$6$ImageLoader(int, java.lang.String, java.lang.String, int, org.telegram.messenger.ImageReceiver, int, java.lang.String, int, org.telegram.messenger.ImageLocation, boolean, java.lang.Object, org.telegram.tgnet.TLRPC$Document, boolean, boolean, java.lang.String, int, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.lambda$createLoadOperationForImageReceiver$6(int, java.lang.String, java.lang.String, int, org.telegram.messenger.ImageReceiver, int, java.lang.String, int, org.telegram.messenger.ImageLocation, boolean, java.lang.Object, org.telegram.tgnet.TLRPC$Document, boolean, boolean, java.lang.String, int, int, int):void");
     }
 
     public void preloadArtwork(String str) {
-        this.imageLoadQueue.postRunnable(new Runnable(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ImageLoader.this.lambda$preloadArtwork$7$ImageLoader(this.f$1);
-            }
-        });
+        this.imageLoadQueue.postRunnable(new ImageLoader$$ExternalSyntheticLambda7(this, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$preloadArtwork$7 */
-    public /* synthetic */ void lambda$preloadArtwork$7$ImageLoader(String str) {
+    public /* synthetic */ void lambda$preloadArtwork$7(String str) {
         String httpUrlExtension = getHttpUrlExtension(str, "jpg");
         String str2 = Utilities.MD5(str) + "." + httpUrlExtension;
         File file = new File(FileLoader.getDirectory(4), str2);
@@ -6163,22 +5732,11 @@ public class ImageLoader {
 
     /* access modifiers changed from: private */
     public void httpFileLoadError(String str) {
-        this.imageLoadQueue.postRunnable(new Runnable(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ImageLoader.this.lambda$httpFileLoadError$8$ImageLoader(this.f$1);
-            }
-        });
+        this.imageLoadQueue.postRunnable(new ImageLoader$$ExternalSyntheticLambda6(this, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$httpFileLoadError$8 */
-    public /* synthetic */ void lambda$httpFileLoadError$8$ImageLoader(String str) {
+    public /* synthetic */ void lambda$httpFileLoadError$8(String str) {
         CacheImage cacheImage = this.imageLoadingByUrl.get(str);
         if (cacheImage != null) {
             HttpImageTask httpImageTask = cacheImage.httpTask;
@@ -6193,22 +5751,11 @@ public class ImageLoader {
 
     /* access modifiers changed from: private */
     public void artworkLoadError(String str) {
-        this.imageLoadQueue.postRunnable(new Runnable(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ImageLoader.this.lambda$artworkLoadError$9$ImageLoader(this.f$1);
-            }
-        });
+        this.imageLoadQueue.postRunnable(new ImageLoader$$ExternalSyntheticLambda5(this, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$artworkLoadError$9 */
-    public /* synthetic */ void lambda$artworkLoadError$9$ImageLoader(String str) {
+    public /* synthetic */ void lambda$artworkLoadError$9(String str) {
         CacheImage cacheImage = this.imageLoadingByUrl.get(str);
         if (cacheImage != null) {
             ArtworkLoadTask artworkLoadTask = cacheImage.artworkTask;
@@ -6223,26 +5770,11 @@ public class ImageLoader {
 
     /* access modifiers changed from: private */
     public void fileDidLoaded(String str, File file, int i) {
-        this.imageLoadQueue.postRunnable(new Runnable(str, i, file) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ int f$2;
-            public final /* synthetic */ File f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ImageLoader.this.lambda$fileDidLoaded$10$ImageLoader(this.f$1, this.f$2, this.f$3);
-            }
-        });
+        this.imageLoadQueue.postRunnable(new ImageLoader$$ExternalSyntheticLambda8(this, str, i, file));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$fileDidLoaded$10 */
-    public /* synthetic */ void lambda$fileDidLoaded$10$ImageLoader(String str, int i, File file) {
+    public /* synthetic */ void lambda$fileDidLoaded$10(String str, int i, File file) {
         ThumbGenerateInfo thumbGenerateInfo = this.waitingForQualityThumb.get(str);
         if (!(thumbGenerateInfo == null || thumbGenerateInfo.parentDocument == null)) {
             generateThumb(i, file, thumbGenerateInfo);
@@ -6292,23 +5824,12 @@ public class ImageLoader {
     /* access modifiers changed from: private */
     public void fileDidFailedLoad(String str, int i) {
         if (i != 1) {
-            this.imageLoadQueue.postRunnable(new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ImageLoader.this.lambda$fileDidFailedLoad$11$ImageLoader(this.f$1);
-                }
-            });
+            this.imageLoadQueue.postRunnable(new ImageLoader$$ExternalSyntheticLambda3(this, str));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$fileDidFailedLoad$11 */
-    public /* synthetic */ void lambda$fileDidFailedLoad$11$ImageLoader(String str) {
+    public /* synthetic */ void lambda$fileDidFailedLoad$11(String str) {
         CacheImage cacheImage = this.imageLoadingByUrl.get(str);
         if (cacheImage != null) {
             cacheImage.setImageAndClear((Drawable) null, (String) null);
@@ -6387,43 +5908,20 @@ public class ImageLoader {
 
     /* access modifiers changed from: private */
     public void runHttpFileLoadTasks(HttpFileTask httpFileTask, int i) {
-        AndroidUtilities.runOnUIThread(new Runnable(httpFileTask, i) {
-            public final /* synthetic */ ImageLoader.HttpFileTask f$1;
-            public final /* synthetic */ int f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                ImageLoader.this.lambda$runHttpFileLoadTasks$13$ImageLoader(this.f$1, this.f$2);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ImageLoader$$ExternalSyntheticLambda11(this, httpFileTask, i));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$runHttpFileLoadTasks$13 */
-    public /* synthetic */ void lambda$runHttpFileLoadTasks$13$ImageLoader(HttpFileTask httpFileTask, int i) {
+    public /* synthetic */ void lambda$runHttpFileLoadTasks$13(HttpFileTask httpFileTask, int i) {
         if (httpFileTask != null) {
             this.currentHttpFileLoadTasksCount--;
         }
         if (httpFileTask != null) {
             if (i == 1) {
                 if (httpFileTask.canRetry) {
-                    $$Lambda$ImageLoader$kbgbKT7PpwzYtyw8AOpkH2BTjf4 r3 = new Runnable(new HttpFileTask(httpFileTask.url, httpFileTask.tempFile, httpFileTask.ext, httpFileTask.currentAccount)) {
-                        public final /* synthetic */ ImageLoader.HttpFileTask f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void run() {
-                            ImageLoader.this.lambda$runHttpFileLoadTasks$12$ImageLoader(this.f$1);
-                        }
-                    };
-                    this.retryHttpsTasks.put(httpFileTask.url, r3);
-                    AndroidUtilities.runOnUIThread(r3, 1000);
+                    ImageLoader$$ExternalSyntheticLambda10 imageLoader$$ExternalSyntheticLambda10 = new ImageLoader$$ExternalSyntheticLambda10(this, new HttpFileTask(httpFileTask.url, httpFileTask.tempFile, httpFileTask.ext, httpFileTask.currentAccount));
+                    this.retryHttpsTasks.put(httpFileTask.url, imageLoader$$ExternalSyntheticLambda10);
+                    AndroidUtilities.runOnUIThread(imageLoader$$ExternalSyntheticLambda10, 1000);
                 } else {
                     this.httpFileLoadTasksByKeys.remove(httpFileTask.url);
                     NotificationCenter.getInstance(httpFileTask.currentAccount).postNotificationName(NotificationCenter.httpFileDidFailedLoad, httpFileTask.url, 0);
@@ -6444,8 +5942,7 @@ public class ImageLoader {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$runHttpFileLoadTasks$12 */
-    public /* synthetic */ void lambda$runHttpFileLoadTasks$12$ImageLoader(HttpFileTask httpFileTask) {
+    public /* synthetic */ void lambda$runHttpFileLoadTasks$12(HttpFileTask httpFileTask) {
         this.httpFileLoadTasks.add(httpFileTask);
         runHttpFileLoadTasks((HttpFileTask) null, 0);
     }

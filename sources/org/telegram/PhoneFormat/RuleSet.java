@@ -7,8 +7,6 @@ import java.util.regex.Pattern;
 
 public class RuleSet {
     public static Pattern pattern = Pattern.compile("[0-9]+");
-    public boolean hasRuleWithIntlPrefix;
-    public boolean hasRuleWithTrunkPrefix;
     public int matchLen;
     public ArrayList<PhoneRule> rules = new ArrayList<>();
 

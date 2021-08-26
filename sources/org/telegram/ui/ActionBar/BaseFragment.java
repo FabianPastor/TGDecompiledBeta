@@ -559,17 +559,7 @@ public abstract class BaseFragment {
             try {
                 this.visibleDialog = dialog;
                 dialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener(onDismissListener) {
-                    public final /* synthetic */ DialogInterface.OnDismissListener f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onDismiss(DialogInterface dialogInterface) {
-                        BaseFragment.this.lambda$showDialog$0$BaseFragment(this.f$1, dialogInterface);
-                    }
-                });
+                this.visibleDialog.setOnDismissListener(new BaseFragment$$ExternalSyntheticLambda0(this, onDismissListener));
                 this.visibleDialog.show();
                 return this.visibleDialog;
             } catch (Exception e2) {
@@ -580,8 +570,7 @@ public abstract class BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showDialog$0 */
-    public /* synthetic */ void lambda$showDialog$0$BaseFragment(DialogInterface.OnDismissListener onDismissListener, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showDialog$0(DialogInterface.OnDismissListener onDismissListener, DialogInterface dialogInterface) {
         if (onDismissListener != null) {
             onDismissListener.onDismiss(dialogInterface);
         }
@@ -684,7 +673,7 @@ public abstract class BaseFragment {
             return null;
         }
         ActionBarLayout[] actionBarLayoutArr = {new ActionBarLayout(getParentActivity())};
-        AnonymousClass1 r1 = new BottomSheet(getParentActivity(), true, actionBarLayoutArr, baseFragment) {
+        AnonymousClass1 r1 = new BottomSheet(this, getParentActivity(), true, actionBarLayoutArr, baseFragment) {
             final /* synthetic */ ActionBarLayout[] val$actionBarLayout;
             final /* synthetic */ BaseFragment val$fragment;
 
@@ -705,11 +694,7 @@ public abstract class BaseFragment {
                 this.containerView = r4[0];
                 setApplyBottomPadding(false);
                 setApplyBottomPadding(false);
-                setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    public final void onDismiss(DialogInterface dialogInterface) {
-                        BaseFragment.this.onFragmentDestroy();
-                    }
-                });
+                setOnDismissListener(new BaseFragment$1$$ExternalSyntheticLambda0(r5));
             }
 
             public void onBackPressed() {

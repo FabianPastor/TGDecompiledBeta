@@ -54,16 +54,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import j$.util.Comparator;
-import j$.util.function.Function;
-import j$.util.function.ToDoubleFunction;
-import j$.util.function.ToIntFunction;
-import j$.util.function.ToLongFunction;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -83,14 +77,12 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$BotInfo;
@@ -198,7 +190,6 @@ import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.GroupCreateActivity;
 import org.telegram.ui.NotificationsSettingsActivity;
 import org.telegram.ui.PhotoViewer;
-import org.telegram.ui.ProfileActivity;
 
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate, ImageUpdater.ImageUpdaterDelegate {
     private Property<ActionBar, Float> ACTIONBAR_HEADER_PROGRESS;
@@ -783,11 +774,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             this.animator = ofFloat;
             ofFloat.setDuration(250);
             ofFloat.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ProfileActivity.OverlaysView.this.lambda$new$0$ProfileActivity$OverlaysView(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new ProfileActivity$OverlaysView$$ExternalSyntheticLambda0(this));
             ofFloat.addListener(new AnimatorListenerAdapter(ProfileActivity.this) {
                 public void onAnimationEnd(Animator animator) {
                     if (!OverlaysView.this.isOverlaysVisible) {
@@ -802,8 +789,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ProfileActivity$OverlaysView(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
             float[] fArr = this.animatorValues;
             float animatedFraction = valueAnimator.getAnimatedFraction();
             this.currentAnimationValue = animatedFraction;
@@ -1490,13 +1476,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.animator = ofFloat;
             ofFloat.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ProfileActivity.PagerIndicatorView.this.lambda$new$0$ProfileActivity$PagerIndicatorView(valueAnimator);
+            ofFloat.addUpdateListener(new ProfileActivity$PagerIndicatorView$$ExternalSyntheticLambda0(this));
+            ofFloat.addListener(new AnimatorListenerAdapter(ProfileActivity.this, ProfileActivity.this.expandPhoto) {
+                final /* synthetic */ boolean val$expanded;
+
+                {
+                    this.val$expanded = r3;
                 }
-            });
-            final boolean access$2400 = ProfileActivity.this.expandPhoto;
-            ofFloat.addListener(new AnimatorListenerAdapter(ProfileActivity.this) {
+
                 public void onAnimationEnd(Animator animator) {
                     if (PagerIndicatorView.this.isIndicatorVisible) {
                         if (ProfileActivity.this.searchItem != null) {
@@ -1518,7 +1505,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
 
                 public void onAnimationStart(Animator animator) {
-                    if (ProfileActivity.this.searchItem != null && !access$2400) {
+                    if (ProfileActivity.this.searchItem != null && !this.val$expanded) {
                         ProfileActivity.this.searchItem.setVisibility(0);
                     }
                     if (ProfileActivity.this.editItemVisible) {
@@ -1563,8 +1550,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ProfileActivity$PagerIndicatorView(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
             float lerp = AndroidUtilities.lerp(this.animatorValues, valueAnimator.getAnimatedFraction());
             if (ProfileActivity.this.searchItem != null && !ProfileActivity.this.isPulledDown) {
                 float f = 1.0f - lerp;
@@ -1612,11 +1598,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         public void updateAvatarItems() {
             if (ProfileActivity.this.imageUpdater != null) {
                 if (ProfileActivity.this.otherItem.isSubMenuShowing()) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public final void run() {
-                            ProfileActivity.PagerIndicatorView.this.updateAvatarItemsInternal();
-                        }
-                    }, 500);
+                    AndroidUtilities.runOnUIThread(new ProfileActivity$PagerIndicatorView$$ExternalSyntheticLambda1(this), 500);
                 } else {
                     updateAvatarItemsInternal();
                 }
@@ -1886,17 +1868,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             this.currentChat = chat;
             if (chat == null) {
                 CountDownLatch countDownLatch = new CountDownLatch(1);
-                getMessagesStorage().getStorageQueue().postRunnable(new Runnable(countDownLatch) {
-                    public final /* synthetic */ CountDownLatch f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        ProfileActivity.this.lambda$onFragmentCreate$0$ProfileActivity(this.f$1);
-                    }
-                });
+                getMessagesStorage().getStorageQueue().postRunnable(new ProfileActivity$$ExternalSyntheticLambda17(this, countDownLatch));
                 try {
                     countDownLatch.await();
                 } catch (Exception e) {
@@ -1946,8 +1918,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onFragmentCreate$0 */
-    public /* synthetic */ void lambda$onFragmentCreate$0$ProfileActivity(CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$onFragmentCreate$0(CountDownLatch countDownLatch) {
         this.currentChat = getMessagesStorage().getChat(this.chat_id);
         countDownLatch.countDown();
     }
@@ -2135,7 +2106,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 8
             if (r1 == 0) goto L_0x00e0
             r1 = 32
-            r3 = 2131165473(0x7var_, float:1.7945164E38)
+            r3 = 2131165478(0x7var_, float:1.7945174E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setIsSearchField(r15)
             org.telegram.ui.ProfileActivity$6 r3 = new org.telegram.ui.ProfileActivity$6
@@ -2143,7 +2114,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setActionBarMenuItemSearchListener(r3)
             r11.searchItem = r1
             java.lang.String r3 = "SearchInSettings"
-            r4 = 2131627372(0x7f0e0d6c, float:1.8882007E38)
+            r4 = 2131627392(0x7f0e0d80, float:1.8882047E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r1.setContentDescription(r5)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r11.searchItem
@@ -2158,43 +2129,43 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r1.setVisibility(r2)
         L_0x00e0:
             r1 = 16
-            r3 = 2131165991(0x7var_, float:1.7946215E38)
+            r3 = 2131165996(0x7var_c, float:1.7946225E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
             r11.videoCallItem = r1
-            r3 = 2131628038(0x7f0e1006, float:1.8883357E38)
+            r3 = 2131628065(0x7f0e1021, float:1.8883412E38)
             java.lang.String r4 = "VideoCall"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setContentDescription(r3)
             int r1 = r11.chat_id
             r3 = 15
             if (r1 == 0) goto L_0x0113
-            r1 = 2131165863(0x7var_a7, float:1.7945955E38)
+            r1 = 2131165868(0x7var_ac, float:1.7945965E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r3, (int) r1)
             r11.callItem = r1
-            r3 = 2131628238(0x7f0e10ce, float:1.8883763E38)
+            r3 = 2131628268(0x7f0e10ec, float:1.8883824E38)
             java.lang.String r4 = "VoipGroupVoiceChat"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setContentDescription(r3)
             goto L_0x0128
         L_0x0113:
-            r1 = 2131165483(0x7var_b, float:1.7945184E38)
+            r1 = 2131165488(0x7var_, float:1.7945195E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r3, (int) r1)
             r11.callItem = r1
-            r3 = 2131624619(0x7f0e02ab, float:1.8876423E38)
+            r3 = 2131624621(0x7f0e02ad, float:1.8876427E38)
             java.lang.String r4 = "Call"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setContentDescription(r3)
         L_0x0128:
             r1 = 12
-            r3 = 2131165453(0x7var_d, float:1.7945124E38)
+            r3 = 2131165458(0x7var_, float:1.7945134E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
             r11.editItem = r1
-            r3 = 2131625252(0x7f0e0524, float:1.8877707E38)
+            r3 = 2131625257(0x7f0e0529, float:1.8877717E38)
             java.lang.String r4 = "Edit"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setContentDescription(r3)
             r1 = 10
-            r3 = 2131165470(0x7var_e, float:1.7945158E38)
+            r3 = 2131165475(0x7var_, float:1.7945168E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r1, (int) r3)
             r11.otherItem = r0
             r1 = 2131623987(0x7f0e0033, float:1.887514E38)
@@ -2275,9 +2246,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r1)
             r8.addView(r0, r3)
             org.telegram.ui.Components.RecyclerListView r0 = r11.listView
-            org.telegram.ui.-$$Lambda$ProfileActivity$3YTUEsV_9oH2zUH8lXHul2mUsNg r3 = new org.telegram.ui.-$$Lambda$ProfileActivity$3YTUEsV_9oH2zUH8lXHul2mUsNg
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda33 r3 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda33
             r4 = r22
-            r3.<init>(r4)
+            r3.<init>(r11, r4)
             r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended) r3)
             org.telegram.ui.Components.RecyclerListView r0 = r11.listView
             org.telegram.ui.ProfileActivity$11 r3 = new org.telegram.ui.ProfileActivity$11
@@ -2315,12 +2286,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r1)
             r8.addView(r0, r5)
             org.telegram.ui.Components.RecyclerListView r0 = r11.searchListView
-            org.telegram.ui.-$$Lambda$ProfileActivity$c_H9oU9_xOmcJdt-y089Vxj31tI r5 = new org.telegram.ui.-$$Lambda$ProfileActivity$c_H9oU9_xOmcJdt-y089Vxj31tI
-            r5.<init>()
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda32 r5 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda32
+            r5.<init>(r11)
             r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r5)
             org.telegram.ui.Components.RecyclerListView r0 = r11.searchListView
-            org.telegram.ui.-$$Lambda$ProfileActivity$oElgoAeRCtpeE-keMvHSx5ux8C8 r5 = new org.telegram.ui.-$$Lambda$ProfileActivity$oElgoAeRCtpeE-keMvHSx5ux8C8
-            r5.<init>()
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda34 r5 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda34
+            r5.<init>(r11)
             r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r5)
             org.telegram.ui.Components.RecyclerListView r0 = r11.searchListView
             org.telegram.ui.ProfileActivity$12 r5 = new org.telegram.ui.ProfileActivity$12
@@ -2361,18 +2332,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer((int) r5)
             r2.participant = r4
             org.telegram.tgnet.ConnectionsManager r4 = r30.getConnectionsManager()
-            org.telegram.ui.-$$Lambda$ProfileActivity$JIvt10ClV36JH8Lt1CzjI6KYZzQ r5 = new org.telegram.ui.-$$Lambda$ProfileActivity$JIvt10ClV36JH8Lt1CzjI6KYZzQ
-            r5.<init>()
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda28 r5 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda28
+            r5.<init>(r11)
             r4.sendRequest(r2, r5)
         L_0x02db:
             org.telegram.ui.ProfileActivity$13 r2 = new org.telegram.ui.ProfileActivity$13
-            r2.<init>(r12)
+            r2.<init>(r11, r12)
             r2.setWillNotDraw(r13)
             r4 = 83
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r1, r4)
             r8.addView(r2, r4)
-            org.telegram.ui.-$$Lambda$ProfileActivity$4kx0pgMr44m_HMdk2p0o0tBPVjw r4 = new org.telegram.ui.-$$Lambda$ProfileActivity$4kx0pgMr44m_HMdk2p0o0tBPVjw
-            r4.<init>(r0)
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda13 r4 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda13
+            r4.<init>(r11, r0)
             r2.setOnClickListener(r4)
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r12)
@@ -2385,7 +2356,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.setGravity(r4)
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r17)
             r0.setTypeface(r4)
-            r4 = 2131624549(0x7f0e0265, float:1.887628E38)
+            r4 = 2131624551(0x7f0e0267, float:1.8876285E38)
             java.lang.String r5 = "BanFromTheGroup"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setText(r4)
@@ -2447,7 +2418,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
             r0.addView(r2, r3)
             org.telegram.ui.ProfileActivity$16 r0 = new org.telegram.ui.ProfileActivity$16
-            r0.<init>(r12)
+            r0.<init>(r11, r12)
             r11.avatarImage = r0
             org.telegram.messenger.ImageReceiver r0 = r0.getImageReceiver()
             r0.setAllowDecodeSingleFrame(r15)
@@ -2464,12 +2435,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r6)
             r0.addView(r2, r3)
             org.telegram.ui.ProfileActivity$AvatarImageView r0 = r11.avatarImage
-            org.telegram.ui.-$$Lambda$ProfileActivity$YjKZ12VFQcJlJ-2lWStDoKh0EUs r2 = new org.telegram.ui.-$$Lambda$ProfileActivity$YjKZ12VFQcJlJ-2lWStDoKh0EUs
-            r2.<init>()
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda12 r2 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda12
+            r2.<init>(r11)
             r0.setOnClickListener(r2)
             org.telegram.ui.ProfileActivity$AvatarImageView r0 = r11.avatarImage
-            org.telegram.ui.-$$Lambda$ProfileActivity$jCfEV0hn5c5R6FjFwEiJp3C0gn4 r2 = new org.telegram.ui.-$$Lambda$ProfileActivity$jCfEV0hn5c5R6FjFwEiJp3C0gn4
-            r2.<init>()
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda14 r2 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda14
+            r2.<init>(r11)
             r0.setOnLongClickListener(r2)
             org.telegram.ui.ProfileActivity$17 r0 = new org.telegram.ui.ProfileActivity$17
             r0.<init>(r12)
@@ -2723,7 +2694,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             goto L_0x057d
         L_0x05e4:
             org.telegram.ui.ProfileActivity$18 r0 = new org.telegram.ui.ProfileActivity$18
-            r0.<init>(r12, r12)
+            r0.<init>(r11, r12, r12)
             r11.mediaCounterTextView = r0
             r0.setAlpha(r3)
             android.widget.FrameLayout r0 = r11.avatarContainer2
@@ -2742,7 +2713,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.<init>(r12)
             r11.writeButton = r0
             android.content.res.Resources r0 = r31.getResources()
-            r2 = 2131165414(0x7var_e6, float:1.7945044E38)
+            r2 = 2131165419(0x7var_eb, float:1.7945055E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r2)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -2796,7 +2767,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             goto L_0x06cd
         L_0x06a0:
             org.telegram.ui.Components.RLottieImageView r0 = r11.writeButton
-            r2 = 2131165988(0x7var_, float:1.7946209E38)
+            r2 = 2131165993(0x7var_, float:1.7946219E38)
             r0.setImageResource(r2)
             org.telegram.ui.Components.RLottieImageView r0 = r11.writeButton
             r2 = 2131624001(0x7f0e0041, float:1.887517E38)
@@ -2806,10 +2777,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             goto L_0x06cd
         L_0x06b7:
             org.telegram.ui.Components.RLottieImageView r0 = r11.writeButton
-            r2 = 2131165984(0x7var_, float:1.79462E38)
+            r2 = 2131165989(0x7var_, float:1.794621E38)
             r0.setImageResource(r2)
             org.telegram.ui.Components.RLottieImageView r0 = r11.writeButton
-            r2 = 2131628070(0x7f0e1026, float:1.8883422E38)
+            r2 = 2131628097(0x7f0e1041, float:1.8883477E38)
             java.lang.String r4 = "ViewDiscussion"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setContentDescription(r2)
@@ -2835,8 +2806,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
             r1.addView(r0, r2)
             org.telegram.ui.Components.RLottieImageView r0 = r11.writeButton
-            org.telegram.ui.-$$Lambda$ProfileActivity$UJPIQLJnlPvpuaHK6bxzezN2-bI r2 = new org.telegram.ui.-$$Lambda$ProfileActivity$UJPIQLJnlPvpuaHK6bxzezN2-bI
-            r2.<init>()
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda11 r2 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda11
+            r2.<init>(r11)
             r0.setOnClickListener(r2)
             r0 = 0
             r11.needLayout(r0)
@@ -2874,8 +2845,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0 = {0, NUM} // fill-array
             android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
             r11.expandAnimator = r0
-            org.telegram.ui.-$$Lambda$ProfileActivity$JmVDeoGw87pdTan3PtsPlD_GwA0 r2 = new org.telegram.ui.-$$Lambda$ProfileActivity$JmVDeoGw87pdTan3PtsPlD_GwA0
-            r2.<init>()
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda0
+            r2.<init>(r11)
             r0.addUpdateListener(r2)
             android.animation.ValueAnimator r0 = r11.expandAnimator
             org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
@@ -2914,8 +2885,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$ProfileActivity(long j, View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$createView$3(long j, View view, int i, float f, float f2) {
         TLRPC$ChatParticipant tLRPC$ChatParticipant;
         long j2 = j;
         int i2 = i;
@@ -2928,11 +2898,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 showDialog(AlertsCreator.createTTLAlert(getParentActivity(), this.currentEncryptedChat).create());
             } else if (i2 == this.notificationsRow) {
                 if ((!LocaleController.isRTL || f > ((float) AndroidUtilities.dp(76.0f))) && (LocaleController.isRTL || f < ((float) (view.getMeasuredWidth() - AndroidUtilities.dp(76.0f))))) {
-                    AlertsCreator.showCustomNotificationsDialog(this, j, -1, (ArrayList<NotificationsSettingsActivity.NotificationException>) null, this.currentAccount, new MessagesStorage.IntCallback() {
-                        public final void run(int i) {
-                            ProfileActivity.this.lambda$createView$1$ProfileActivity(i);
-                        }
-                    });
+                    AlertsCreator.showCustomNotificationsDialog(this, j, -1, (ArrayList<NotificationsSettingsActivity.NotificationException>) null, this.currentAccount, new ProfileActivity$$ExternalSyntheticLambda27(this));
                     return;
                 }
                 NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) view;
@@ -3070,11 +3036,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setMessage(LocaleController.getString("AreYouSure", NUM));
                     builder.setTitle(LocaleController.getString("AppName", NUM));
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ProfileActivity.this.lambda$createView$2$ProfileActivity(dialogInterface, i);
-                        }
-                    });
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new ProfileActivity$$ExternalSyntheticLambda3(this));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     showDialog(builder.create());
                 }
@@ -3097,14 +3059,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$ProfileActivity(int i) {
+    public /* synthetic */ void lambda$createView$1(int i) {
         this.listAdapter.notifyItemChanged(this.notificationsRow);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$ProfileActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$2(DialogInterface dialogInterface, int i) {
         SharedConfig.pushAuthKey = null;
         SharedConfig.pushAuthKeyId = null;
         SharedConfig.saveConfig();
@@ -3114,9 +3074,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x00a2  */
     /* JADX WARNING: Removed duplicated region for block: B:28:0x00a9  */
-    /* renamed from: lambda$createView$4 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$4$ProfileActivity(android.view.View r8, int r9) {
+    public /* synthetic */ void lambda$createView$4(android.view.View r8, int r9) {
         /*
             r7 = this;
             if (r9 >= 0) goto L_0x0003
@@ -3217,61 +3176,42 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x00d3:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.lambda$createView$4$ProfileActivity(android.view.View, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.lambda$createView$4(android.view.View, int):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$6 */
-    public /* synthetic */ boolean lambda$createView$6$ProfileActivity(View view, int i) {
+    public /* synthetic */ boolean lambda$createView$6(View view, int i) {
         if (this.searchAdapter.isSearchWas() || this.searchAdapter.recentSearches.isEmpty()) {
             return false;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setMessage(LocaleController.getString("ClearSearch", NUM));
-        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                ProfileActivity.this.lambda$createView$5$ProfileActivity(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new ProfileActivity$$ExternalSyntheticLambda4(this));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         showDialog(builder.create());
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$5 */
-    public /* synthetic */ void lambda$createView$5$ProfileActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$5(DialogInterface dialogInterface, int i) {
         this.searchAdapter.clearRecent();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$7 */
-    public /* synthetic */ void lambda$createView$7$ProfileActivity(TLObject tLObject) {
+    public /* synthetic */ void lambda$createView$7(TLObject tLObject) {
         this.currentChannelParticipant = ((TLRPC$TL_channels_channelParticipant) tLObject).participant;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$8 */
-    public /* synthetic */ void lambda$createView$8$ProfileActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$createView$8(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-                public final /* synthetic */ TLObject f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ProfileActivity.this.lambda$createView$7$ProfileActivity(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ProfileActivity$$ExternalSyntheticLambda18(this, tLObject));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$9 */
-    public /* synthetic */ void lambda$createView$9$ProfileActivity(TLRPC$Chat tLRPC$Chat, View view) {
+    public /* synthetic */ void lambda$createView$9(TLRPC$Chat tLRPC$Chat, View view) {
         int i = this.user_id;
         int i2 = this.banFromGroup;
         TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights = tLRPC$Chat.default_banned_rights;
@@ -3290,8 +3230,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$10 */
-    public /* synthetic */ void lambda$createView$10$ProfileActivity(View view) {
+    public /* synthetic */ void lambda$createView$10(View view) {
         RecyclerView.ViewHolder findContainingViewHolder;
         Integer num;
         if (this.avatarBig == null) {
@@ -3321,8 +3260,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$11 */
-    public /* synthetic */ boolean lambda$createView$11$ProfileActivity(View view) {
+    public /* synthetic */ boolean lambda$createView$11(View view) {
         if (this.avatarBig != null) {
             return false;
         }
@@ -3331,16 +3269,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$12 */
-    public /* synthetic */ void lambda$createView$12$ProfileActivity(View view) {
+    public /* synthetic */ void lambda$createView$12(View view) {
         if (this.writeButton.getTag() == null) {
             onWriteButtonClick();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$13 */
-    public /* synthetic */ void lambda$createView$13$ProfileActivity(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$createView$13(ValueAnimator valueAnimator) {
         int i;
         int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0);
         float[] fArr = this.expandAnimatorValues;
@@ -3540,15 +3476,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_big == null || (tLRPC$UserProfilePhoto instanceof TLRPC$TL_userProfilePhotoEmpty)) {
                         z = false;
                     }
-                    imageUpdater2.openMenu(z, new Runnable() {
-                        public final void run() {
-                            ProfileActivity.this.lambda$onWriteButtonClick$14$ProfileActivity();
-                        }
-                    }, new DialogInterface.OnDismissListener() {
-                        public final void onDismiss(DialogInterface dialogInterface) {
-                            ProfileActivity.this.lambda$onWriteButtonClick$15$ProfileActivity(dialogInterface);
-                        }
-                    });
+                    imageUpdater2.openMenu(z, new ProfileActivity$$ExternalSyntheticLambda16(this), new ProfileActivity$$ExternalSyntheticLambda10(this));
                     this.cameraDrawable.setCurrentFrame(0);
                     this.cameraDrawable.setCustomEndFrame(43);
                     this.writeButton.playAnimation();
@@ -3595,17 +3523,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onWriteButtonClick$14 */
-    public /* synthetic */ void lambda$onWriteButtonClick$14$ProfileActivity() {
+    public /* synthetic */ void lambda$onWriteButtonClick$14() {
         MessagesController.getInstance(this.currentAccount).deleteUserPhoto((TLRPC$InputPhoto) null);
         this.cameraDrawable.setCurrentFrame(0);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onWriteButtonClick$15 */
-    public /* synthetic */ void lambda$onWriteButtonClick$15$ProfileActivity(DialogInterface dialogInterface) {
-        this.cameraDrawable.setCustomEndFrame(86);
-        this.writeButton.playAnimation();
+    public /* synthetic */ void lambda$onWriteButtonClick$15(DialogInterface dialogInterface) {
+        if (!this.imageUpdater.isUploadingImage()) {
+            this.cameraDrawable.setCustomEndFrame(86);
+            this.writeButton.playAnimation();
+            return;
+        }
+        this.cameraDrawable.setCurrentFrame(0, false);
     }
 
     /* access modifiers changed from: private */
@@ -3718,25 +3648,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), AndroidUtilities.toIntArray(arrayList2), new DialogInterface.OnClickListener(arrayList3, tLRPC$ChatParticipant, tLRPC$ChannelParticipant, user, z3) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ TLRPC$ChatParticipant f$2;
-                public final /* synthetic */ TLRPC$ChannelParticipant f$3;
-                public final /* synthetic */ TLRPC$User f$4;
-                public final /* synthetic */ boolean f$5;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ProfileActivity.this.lambda$onMemberClick$17$ProfileActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogInterface, i);
-                }
-            });
+            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), AndroidUtilities.toIntArray(arrayList2), new ProfileActivity$$ExternalSyntheticLambda7(this, arrayList3, tLRPC$ChatParticipant, tLRPC$ChannelParticipant, user, z3));
             AlertDialog create = builder.create();
             showDialog(create);
             if (z7) {
@@ -3754,8 +3666,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onMemberClick$17 */
-    public /* synthetic */ void lambda$onMemberClick$17$ProfileActivity(ArrayList arrayList, TLRPC$ChatParticipant tLRPC$ChatParticipant, TLRPC$ChannelParticipant tLRPC$ChannelParticipant, TLRPC$User tLRPC$User, boolean z, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onMemberClick$17(ArrayList arrayList, TLRPC$ChatParticipant tLRPC$ChatParticipant, TLRPC$ChannelParticipant tLRPC$ChannelParticipant, TLRPC$User tLRPC$User, boolean z, DialogInterface dialogInterface, int i) {
         if (((Integer) arrayList.get(i)).intValue() == 2) {
             kickUser(this.selectedUser, tLRPC$ChatParticipant);
             return;
@@ -3765,25 +3676,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setMessage(LocaleController.formatString("AdminWillBeRemoved", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name)));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(tLRPC$ChannelParticipant, intValue, tLRPC$User, tLRPC$ChatParticipant, z) {
-                public final /* synthetic */ TLRPC$ChannelParticipant f$1;
-                public final /* synthetic */ int f$2;
-                public final /* synthetic */ TLRPC$User f$3;
-                public final /* synthetic */ TLRPC$ChatParticipant f$4;
-                public final /* synthetic */ boolean f$5;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ProfileActivity.this.lambda$onMemberClick$16$ProfileActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new ProfileActivity$$ExternalSyntheticLambda9(this, tLRPC$ChannelParticipant, intValue, tLRPC$User, tLRPC$ChatParticipant, z));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             showDialog(builder.create());
         } else if (tLRPC$ChannelParticipant != null) {
@@ -3794,8 +3687,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onMemberClick$16 */
-    public /* synthetic */ void lambda$onMemberClick$16$ProfileActivity(TLRPC$ChannelParticipant tLRPC$ChannelParticipant, int i, TLRPC$User tLRPC$User, TLRPC$ChatParticipant tLRPC$ChatParticipant, boolean z, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$onMemberClick$16(TLRPC$ChannelParticipant tLRPC$ChannelParticipant, int i, TLRPC$User tLRPC$User, TLRPC$ChatParticipant tLRPC$ChatParticipant, boolean z, DialogInterface dialogInterface, int i2) {
         TLRPC$ChannelParticipant tLRPC$ChannelParticipant2 = tLRPC$ChannelParticipant;
         if (tLRPC$ChannelParticipant2 != null) {
             openRightsEdit(i, tLRPC$User, tLRPC$ChatParticipant, tLRPC$ChannelParticipant2.admin_rights, tLRPC$ChannelParticipant2.banned_rights, tLRPC$ChannelParticipant2.rank, z);
@@ -3930,17 +3822,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ProfileActivity.this.lambda$processOnClickOrPress$18$ProfileActivity(this.f$1, dialogInterface, i);
-                }
-            });
+            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", NUM)}, new ProfileActivity$$ExternalSyntheticLambda6(this, str));
             showDialog(builder.create());
             return true;
         } else if (i == this.phoneRow || i == this.numberRow) {
@@ -3966,19 +3848,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             arrayList.add(LocaleController.getString("Copy", NUM));
             arrayList2.add(1);
-            builder2.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), new DialogInterface.OnClickListener(arrayList2, user2) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ TLRPC$User f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ProfileActivity.this.lambda$processOnClickOrPress$19$ProfileActivity(this.f$1, this.f$2, dialogInterface, i);
-                }
-            });
+            builder2.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), new ProfileActivity$$ExternalSyntheticLambda8(this, arrayList2, user2));
             showDialog(builder2.create());
             return true;
         } else if (i != this.channelInfoRow && i != this.userInfoRow && i != this.locationRow && i != this.bioRow) {
@@ -3988,25 +3858,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             AlertDialog.Builder builder3 = new AlertDialog.Builder((Context) getParentActivity());
-            builder3.setItems(new CharSequence[]{LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ProfileActivity.this.lambda$processOnClickOrPress$20$ProfileActivity(this.f$1, dialogInterface, i);
-                }
-            });
+            builder3.setItems(new CharSequence[]{LocaleController.getString("Copy", NUM)}, new ProfileActivity$$ExternalSyntheticLambda5(this, i));
             showDialog(builder3.create());
             return true;
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processOnClickOrPress$18 */
-    public /* synthetic */ void lambda$processOnClickOrPress$18$ProfileActivity(String str, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$processOnClickOrPress$18(String str, DialogInterface dialogInterface, int i) {
         String str2;
         if (i == 0) {
             try {
@@ -4026,8 +3885,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processOnClickOrPress$19 */
-    public /* synthetic */ void lambda$processOnClickOrPress$19$ProfileActivity(ArrayList arrayList, TLRPC$User tLRPC$User, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$processOnClickOrPress$19(ArrayList arrayList, TLRPC$User tLRPC$User, DialogInterface dialogInterface, int i) {
         int intValue = ((Integer) arrayList.get(i)).intValue();
         if (intValue == 0) {
             try {
@@ -4052,8 +3910,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processOnClickOrPress$20 */
-    public /* synthetic */ void lambda$processOnClickOrPress$20$ProfileActivity(int i, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$processOnClickOrPress$20(int i, DialogInterface dialogInterface, int i2) {
         try {
             String str = null;
             if (i == this.locationRow) {
@@ -4090,16 +3947,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     /* access modifiers changed from: private */
     public void leaveChatPressed() {
-        AlertsCreator.createClearOrDeleteDialogAlert(this, false, this.currentChat, (TLRPC$User) null, false, true, new MessagesStorage.BooleanCallback() {
-            public final void run(boolean z) {
-                ProfileActivity.this.lambda$leaveChatPressed$21$ProfileActivity(z);
-            }
-        });
+        AlertsCreator.createClearOrDeleteDialogAlert(this, false, this.currentChat, (TLRPC$User) null, false, true, new ProfileActivity$$ExternalSyntheticLambda26(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$leaveChatPressed$21 */
-    public /* synthetic */ void lambda$leaveChatPressed$21$ProfileActivity(boolean z) {
+    public /* synthetic */ void lambda$leaveChatPressed$21(boolean z) {
         this.playProfileAnimation = 0;
         NotificationCenter notificationCenter = getNotificationCenter();
         int i = NotificationCenter.closeChats;
@@ -4124,45 +3976,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             tLRPC$TL_channels_getParticipants.offset = i;
             tLRPC$TL_channels_getParticipants.limit = 200;
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_channels_getParticipants, new RequestDelegate(tLRPC$TL_channels_getParticipants, i2) {
-                public final /* synthetic */ TLRPC$TL_channels_getParticipants f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ProfileActivity.this.lambda$getChannelParticipants$23$ProfileActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                }
-            }), this.classGuid);
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_channels_getParticipants, new ProfileActivity$$ExternalSyntheticLambda30(this, tLRPC$TL_channels_getParticipants, i2)), this.classGuid);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getChannelParticipants$23 */
-    public /* synthetic */ void lambda$getChannelParticipants$23$ProfileActivity(TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_channels_getParticipants) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ TLRPC$TL_channels_getParticipants f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ProfileActivity.this.lambda$getChannelParticipants$22$ProfileActivity(this.f$1, this.f$2, this.f$3);
-            }
-        }, (long) i);
+    public /* synthetic */ void lambda$getChannelParticipants$23(TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ProfileActivity$$ExternalSyntheticLambda21(this, tLRPC$TL_error, tLObject, tLRPC$TL_channels_getParticipants), (long) i);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getChannelParticipants$22 */
-    public /* synthetic */ void lambda$getChannelParticipants$22$ProfileActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants) {
+    public /* synthetic */ void lambda$getChannelParticipants$22(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
             getMessagesController().putUsers(tLRPC$TL_channels_channelParticipants.users, false);
@@ -4357,21 +4181,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             groupCreateActivity.setIgnoreUsers(sparseArray);
         }
-        groupCreateActivity.setDelegate((GroupCreateActivity.ContactsAddActivityDelegate) new GroupCreateActivity.ContactsAddActivityDelegate() {
-            public final void didSelectUsers(ArrayList arrayList, int i) {
-                ProfileActivity.this.lambda$openAddMember$24$ProfileActivity(arrayList, i);
-            }
-
-            public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {
-                GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, tLRPC$User);
-            }
-        });
+        groupCreateActivity.setDelegate((GroupCreateActivity.ContactsAddActivityDelegate) new ProfileActivity$$ExternalSyntheticLambda35(this));
         presentFragment(groupCreateActivity);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openAddMember$24 */
-    public /* synthetic */ void lambda$openAddMember$24$ProfileActivity(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$openAddMember$24(ArrayList arrayList, int i) {
         HashSet hashSet = new HashSet();
         if (this.chatInfo.participants.participants != null) {
             for (int i2 = 0; i2 < this.chatInfo.participants.participants.size(); i2++) {
@@ -5030,17 +4845,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             createActionBarMenu(true);
         } else if (i == NotificationCenter.encryptedChatCreated) {
             if (this.creatingChat) {
-                AndroidUtilities.runOnUIThread(new Runnable(objArr) {
-                    public final /* synthetic */ Object[] f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        ProfileActivity.this.lambda$didReceivedNotification$25$ProfileActivity(this.f$1);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new ProfileActivity$$ExternalSyntheticLambda24(this, objArr));
             }
         } else if (i == NotificationCenter.encryptedChatUpdated) {
             TLRPC$EncryptedChat tLRPC$EncryptedChat = objArr[0];
@@ -5145,28 +4950,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 updateTimeItem();
             }
         } else if (i == NotificationCenter.didReceiveNewMessages) {
-            if (!objArr[2].booleanValue()) {
-                long dialogId = getDialogId();
-                if (dialogId == objArr[0].longValue()) {
-                    int i7 = (int) dialogId;
-                    ArrayList arrayList = objArr[1];
-                    while (i5 < arrayList.size()) {
-                        MessageObject messageObject = (MessageObject) arrayList.get(i5);
-                        if (this.currentEncryptedChat != null) {
-                            TLRPC$MessageAction tLRPC$MessageAction = messageObject.messageOwner.action;
-                            if (tLRPC$MessageAction instanceof TLRPC$TL_messageEncryptedAction) {
-                                TLRPC$DecryptedMessageAction tLRPC$DecryptedMessageAction = tLRPC$MessageAction.encryptedAction;
-                                if (tLRPC$DecryptedMessageAction instanceof TLRPC$TL_decryptedMessageActionSetMessageTTL) {
-                                    TLRPC$TL_decryptedMessageActionSetMessageTTL tLRPC$TL_decryptedMessageActionSetMessageTTL = (TLRPC$TL_decryptedMessageActionSetMessageTTL) tLRPC$DecryptedMessageAction;
-                                    ListAdapter listAdapter2 = this.listAdapter;
-                                    if (listAdapter2 != null) {
-                                        listAdapter2.notifyDataSetChanged();
-                                    }
+            if (!objArr[2].booleanValue() && getDialogId() == objArr[0].longValue()) {
+                ArrayList arrayList = objArr[1];
+                while (i5 < arrayList.size()) {
+                    MessageObject messageObject = (MessageObject) arrayList.get(i5);
+                    if (this.currentEncryptedChat != null) {
+                        TLRPC$MessageAction tLRPC$MessageAction = messageObject.messageOwner.action;
+                        if (tLRPC$MessageAction instanceof TLRPC$TL_messageEncryptedAction) {
+                            TLRPC$DecryptedMessageAction tLRPC$DecryptedMessageAction = tLRPC$MessageAction.encryptedAction;
+                            if (tLRPC$DecryptedMessageAction instanceof TLRPC$TL_decryptedMessageActionSetMessageTTL) {
+                                TLRPC$TL_decryptedMessageActionSetMessageTTL tLRPC$TL_decryptedMessageActionSetMessageTTL = (TLRPC$TL_decryptedMessageActionSetMessageTTL) tLRPC$DecryptedMessageAction;
+                                ListAdapter listAdapter2 = this.listAdapter;
+                                if (listAdapter2 != null) {
+                                    listAdapter2.notifyDataSetChanged();
                                 }
                             }
                         }
-                        i5++;
                     }
+                    i5++;
                 }
             }
         } else if (i == NotificationCenter.emojiLoaded) {
@@ -5175,10 +4976,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 recyclerListView3.invalidateViews();
             }
         } else if (i == NotificationCenter.reloadInterface) {
-            int i8 = this.emptyRow;
+            int i7 = this.emptyRow;
             updateRowsIds();
             ListAdapter listAdapter3 = this.listAdapter;
-            if (listAdapter3 != null && i8 != (i3 = this.emptyRow)) {
+            if (listAdapter3 != null && i7 != (i3 = this.emptyRow)) {
                 if (i3 == -1) {
                     listAdapter3.notifyItemRemoved(i3);
                 } else {
@@ -5186,18 +4987,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         } else if (i == NotificationCenter.newSuggestionsAvailable) {
-            int i9 = this.passwordSuggestionRow;
-            int i10 = this.phoneSuggestionRow;
+            int i8 = this.passwordSuggestionRow;
+            int i9 = this.phoneSuggestionRow;
             updateRowsIds();
-            if (i9 != this.passwordSuggestionRow || i10 != this.phoneSuggestionRow) {
+            if (i8 != this.passwordSuggestionRow || i9 != this.phoneSuggestionRow) {
                 this.listAdapter.notifyDataSetChanged();
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$25 */
-    public /* synthetic */ void lambda$didReceivedNotification$25$ProfileActivity(Object[] objArr) {
+    public /* synthetic */ void lambda$didReceivedNotification$25(Object[] objArr) {
         NotificationCenter notificationCenter = getNotificationCenter();
         int i = NotificationCenter.closeChats;
         notificationCenter.removeObserver(this, i);
@@ -5548,7 +5348,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r6 != 0) goto L_0x0048
             org.telegram.ui.ActionBar.ActionBarMenuItem r6 = r12.animatingItem
             if (r6 != 0) goto L_0x0048
-            r6 = 2131165470(0x7var_e, float:1.7945158E38)
+            r6 = 2131165475(0x7var_, float:1.7945168E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r3.addItem((int) r5, (int) r6)
             r12.animatingItem = r3
         L_0x0048:
@@ -6053,8 +5853,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             float[] r13 = new float[r4]
             r13 = {0, NUM} // fill-array
             android.animation.ValueAnimator r13 = android.animation.ValueAnimator.ofFloat(r13)
-            org.telegram.ui.-$$Lambda$ProfileActivity$e56V8oCpQkT0aHhv4sdWCRFNdVg r1 = new org.telegram.ui.-$$Lambda$ProfileActivity$e56V8oCpQkT0aHhv4sdWCRFNdVg
-            r1.<init>()
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda1 r1 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda1
+            r1.<init>(r12)
             r13.addUpdateListener(r1)
             android.animation.Animator[] r1 = new android.animation.Animator[r8]
             r1[r7] = r13
@@ -6071,7 +5871,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r13.<init>()
         L_0x048f:
             r0.setInterpolator(r13)
-            org.telegram.ui.-$$Lambda$Zvar_QPJypVY-GBQtLFFT_795rFY r13 = new org.telegram.ui.-$$Lambda$Zvar_QPJypVY-GBQtLFFT_795rFY
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda15 r13 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda15
             r13.<init>(r0)
             r1 = 50
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r13, r1)
@@ -6083,8 +5883,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCustomTransitionAnimation$26 */
-    public /* synthetic */ void lambda$onCustomTransitionAnimation$26$ProfileActivity(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onCustomTransitionAnimation$26(ValueAnimator valueAnimator) {
         this.fragmentView.invalidate();
     }
 
@@ -6104,45 +5903,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 this.sortedUsers.add(Integer.valueOf(i));
             }
             try {
-                Collections.sort(this.sortedUsers, new Object(currentTime) {
-                    public final /* synthetic */ int f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final int compare(Object obj, Object obj2) {
-                        return ProfileActivity.this.lambda$updateOnlineCount$27$ProfileActivity(this.f$1, (Integer) obj, (Integer) obj2);
-                    }
-
-                    public /* synthetic */ Comparator reversed() {
-                        return Comparator.CC.$default$reversed(this);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparing(Function function) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
-                        return Comparator.CC.$default$thenComparing(this, function, comparator);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
-                        return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
-                        return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
-                        return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
-                    }
-                });
+                Collections.sort(this.sortedUsers, new ProfileActivity$$ExternalSyntheticLambda25(this, currentTime));
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
@@ -6165,9 +5926,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARNING: Removed duplicated region for block: B:31:0x007f A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:38:0x008a A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:43:0x0093 A[ADDED_TO_REGION] */
-    /* renamed from: lambda$updateOnlineCount$27 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ int lambda$updateOnlineCount$27$ProfileActivity(int r5, java.lang.Integer r6, java.lang.Integer r7) {
+    public /* synthetic */ int lambda$updateOnlineCount$27(int r5, java.lang.Integer r6, java.lang.Integer r7) {
         /*
             r4 = this;
             org.telegram.messenger.MessagesController r0 = r4.getMessagesController()
@@ -6268,7 +6028,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x009a:
             return r2
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.lambda$updateOnlineCount$27$ProfileActivity(int, java.lang.Integer, java.lang.Integer):int");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.lambda$updateOnlineCount$27(int, java.lang.Integer, java.lang.Integer):int");
     }
 
     public void setChatInfo(TLRPC$ChatFull tLRPC$ChatFull) {
@@ -7151,27 +6911,27 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131628320(0x7f0e1120, float:1.888393E38)
+            r1 = 2131628356(0x7f0e1144, float:1.8884002E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
         L_0x0022:
             if (r1 != r4) goto L_0x002e
-            r1 = 2131625001(0x7f0e0429, float:1.8877198E38)
+            r1 = 2131625006(0x7f0e042e, float:1.8877208E38)
             java.lang.String r5 = "Connecting"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
         L_0x002e:
             r5 = 5
             if (r1 != r5) goto L_0x003b
-            r1 = 2131627935(0x7f0e0f9f, float:1.8883148E38)
+            r1 = 2131627962(0x7f0e0fba, float:1.8883203E38)
             java.lang.String r5 = "Updating"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
         L_0x003b:
             r5 = 4
             if (r1 != r5) goto L_0x0048
-            r1 = 2131625003(0x7f0e042b, float:1.8877202E38)
+            r1 = 2131625008(0x7f0e0430, float:1.8877212E38)
             java.lang.String r5 = "ConnectingToProxy"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7262,7 +7022,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.messenger.UserConfig r10 = r24.getUserConfig()
             int r10 = r10.getClientUserId()
             if (r9 != r10) goto L_0x00eb
-            r9 = 2131626579(0x7f0e0a53, float:1.8880398E38)
+            r9 = 2131626596(0x7f0e0a64, float:1.8880433E38)
             java.lang.String r10 = "Online"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             goto L_0x0158
@@ -7278,14 +7038,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x00fd:
             boolean r9 = org.telegram.messenger.MessagesController.isSupportUser(r5)
             if (r9 == 0) goto L_0x010d
-            r9 = 2131627709(0x7f0e0ebd, float:1.888269E38)
+            r9 = 2131627733(0x7f0e0ed5, float:1.8882739E38)
             java.lang.String r10 = "SupportStatus"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             goto L_0x0158
         L_0x010d:
             boolean r9 = r0.isBot
             if (r9 == 0) goto L_0x011b
-            r9 = 2131624586(0x7f0e028a, float:1.8876356E38)
+            r9 = 2131624588(0x7f0e028c, float:1.887636E38)
             java.lang.String r10 = "Bot"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             goto L_0x0158
@@ -7317,7 +7077,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r10.setTextColor(r11)
             goto L_0x0158
         L_0x014f:
-            r9 = 2131627477(0x7f0e0dd5, float:1.888222E38)
+            r9 = 2131627497(0x7f0e0de9, float:1.888226E38)
             java.lang.String r10 = "ServiceNotifications"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
         L_0x0158:
@@ -7529,7 +7289,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r2 != 0) goto L_0x0332
             boolean r2 = r5.has_geo
             if (r2 == 0) goto L_0x0310
-            r2 = 2131626145(0x7f0e08a1, float:1.8879518E38)
+            r2 = 2131626156(0x7f0e08ac, float:1.887954E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r14, r2)
             java.lang.String r7 = r3.toLowerCase()
             goto L_0x03b9
@@ -7537,12 +7297,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r2 = r5.username
             boolean r2 = android.text.TextUtils.isEmpty(r2)
             if (r2 != 0) goto L_0x0325
-            r2 = 2131626149(0x7f0e08a5, float:1.8879526E38)
+            r2 = 2131626160(0x7f0e08b0, float:1.8879548E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r2)
             java.lang.String r7 = r3.toLowerCase()
             goto L_0x03b9
         L_0x0325:
-            r2 = 2131626146(0x7f0e08a2, float:1.887952E38)
+            r2 = 2131626157(0x7f0e08ad, float:1.8879542E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r12, r2)
             java.lang.String r7 = r3.toLowerCase()
             goto L_0x03b9
@@ -7582,7 +7342,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.tgnet.TLRPC$Chat r2 = r0.currentChat
             boolean r2 = r2.megagroup
             if (r2 == 0) goto L_0x0388
-            r2 = 2131626043(0x7f0e083b, float:1.8879311E38)
+            r2 = 2131626054(0x7f0e0846, float:1.8879333E38)
             java.lang.String r3 = "Loading"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r7 = r2.toLowerCase()
@@ -7591,13 +7351,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r2 = r5.flags
             r2 = r2 & 64
             if (r2 == 0) goto L_0x039c
-            r2 = 2131624776(0x7f0e0348, float:1.8876741E38)
+            r2 = 2131624780(0x7f0e034c, float:1.887675E38)
             java.lang.String r3 = "ChannelPublic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r7 = r2.toLowerCase()
             goto L_0x03b9
         L_0x039c:
-            r2 = 2131624773(0x7f0e0345, float:1.8876735E38)
+            r2 = 2131624777(0x7f0e0349, float:1.8876743E38)
             java.lang.String r3 = "ChannelPrivate"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r7 = r2.toLowerCase()
@@ -7605,7 +7365,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03aa:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r5)
             if (r2 == 0) goto L_0x03bb
-            r2 = 2131628366(0x7f0e114e, float:1.8884023E38)
+            r2 = 2131628404(0x7f0e1174, float:1.88841E38)
             java.lang.String r3 = "YouWereKicked"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x03b9:
@@ -7614,7 +7374,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03bb:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r5)
             if (r2 == 0) goto L_0x03cb
-            r2 = 2131628365(0x7f0e114d, float:1.888402E38)
+            r2 = 2131628401(0x7f0e1171, float:1.8884094E38)
             java.lang.String r3 = "YouLeft"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x03b9
@@ -7656,7 +7416,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r20 = r6
             r21 = r7
         L_0x040e:
-            r17 = 2131626146(0x7f0e08a2, float:1.887952E38)
+            r17 = 2131626157(0x7f0e08ad, float:1.8879542E38)
             goto L_0x05a9
         L_0x0413:
             java.lang.String r15 = r5.title
@@ -7785,7 +7545,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r4 == 0) goto L_0x0509
             org.telegram.ui.ActionBar.SimpleTextView[] r4 = r0.onlineTextView
             r4 = r4[r3]
-            r6 = 2131626145(0x7f0e08a1, float:1.8879518E38)
+            r6 = 2131626156(0x7f0e08ac, float:1.887954E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r14, r6)
             java.lang.String r7 = r7.toLowerCase()
             r4.setText(r7)
@@ -7794,29 +7554,29 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r23 = r2
             goto L_0x040e
         L_0x0509:
-            r6 = 2131626145(0x7f0e08a1, float:1.8879518E38)
+            r6 = 2131626156(0x7f0e08ac, float:1.887954E38)
             java.lang.String r4 = r5.username
             boolean r4 = android.text.TextUtils.isEmpty(r4)
             if (r4 != 0) goto L_0x0527
             org.telegram.ui.ActionBar.SimpleTextView[] r4 = r0.onlineTextView
             r4 = r4[r3]
-            r15 = 2131626149(0x7f0e08a5, float:1.8879526E38)
+            r15 = 2131626160(0x7f0e08b0, float:1.8879548E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r15)
             java.lang.String r7 = r7.toLowerCase()
             r4.setText(r7)
             goto L_0x0503
         L_0x0527:
-            r15 = 2131626149(0x7f0e08a5, float:1.8879526E38)
+            r15 = 2131626160(0x7f0e08b0, float:1.8879548E38)
             org.telegram.ui.ActionBar.SimpleTextView[] r4 = r0.onlineTextView
             r4 = r4[r3]
-            r7 = 2131626146(0x7f0e08a2, float:1.887952E38)
+            r7 = 2131626157(0x7f0e08ad, float:1.8879542E38)
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r12, r7)
             java.lang.String r13 = r13.toLowerCase()
             r4.setText(r13)
             goto L_0x0503
         L_0x053d:
-            r15 = 2131626149(0x7f0e08a5, float:1.8879526E38)
-            r17 = 2131626146(0x7f0e08a2, float:1.887952E38)
+            r15 = 2131626160(0x7f0e08b0, float:1.8879548E38)
+            r17 = 2131626157(0x7f0e08ad, float:1.8879542E38)
             org.telegram.ui.ActionBar.SimpleTextView[] r6 = r0.onlineTextView
             r6 = r6[r3]
             r18 = 0
@@ -7836,7 +7596,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x056a:
             r22 = r1
             r23 = r2
-            r17 = 2131626146(0x7f0e08a2, float:1.887952E38)
+            r17 = 2131626157(0x7f0e08ad, float:1.8879542E38)
             r18 = 0
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r0.onlineTextView
             r1 = r1[r3]
@@ -7854,7 +7614,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x0594:
             r22 = r1
             r23 = r2
-            r17 = 2131626146(0x7f0e08a2, float:1.887952E38)
+            r17 = 2131626157(0x7f0e08ad, float:1.8879542E38)
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r0.onlineTextView
             r1 = r1[r3]
             if (r3 != 0) goto L_0x05a4
@@ -7990,9 +7750,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.videoCallItemVisible = r1
             r0.canSearchMembers = r1
             int r2 = r0.user_id
-            r3 = 2131165730(0x7var_, float:1.7945685E38)
-            r4 = 2131165824(0x7var_, float:1.7945876E38)
-            r5 = 2131165755(0x7var_b, float:1.7945736E38)
+            r3 = 2131165735(0x7var_, float:1.7945696E38)
+            r4 = 2131165829(0x7var_, float:1.7945886E38)
+            r5 = 2131165760(0x7var_, float:1.7945746E38)
             r6 = 1
             if (r2 == 0) goto L_0x01cf
             org.telegram.messenger.MessagesController r2 = r16.getMessagesController()
@@ -8003,11 +7763,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return
         L_0x003f:
             boolean r7 = org.telegram.messenger.UserObject.isUserSelf(r2)
-            r8 = 2131165739(0x7var_b, float:1.7945704E38)
+            r8 = 2131165744(0x7var_, float:1.7945714E38)
             if (r7 == 0) goto L_0x005a
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r4 = 30
-            r7 = 2131625301(0x7f0e0555, float:1.8877806E38)
+            r7 = 2131625306(0x7f0e055a, float:1.8877816E38)
             java.lang.String r9 = "EditName"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r2.addSubItem(r4, r8, r7)
@@ -8031,9 +7791,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.videoCallItemVisible = r7
         L_0x0073:
             boolean r7 = r0.isBot
-            r9 = 2131627897(0x7f0e0var_, float:1.8883071E38)
+            r9 = 2131627924(0x7f0e0var_, float:1.8883126E38)
             java.lang.String r10 = "Unblock"
-            r11 = 2131165714(0x7var_, float:1.7945653E38)
+            r11 = 2131165719(0x7var_, float:1.7945663E38)
             r12 = 2
             if (r7 != 0) goto L_0x00e1
             org.telegram.messenger.ContactsController r7 = r16.getContactsController()
@@ -8049,7 +7809,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r6 != 0) goto L_0x00aa
             org.telegram.ui.ActionBar.ActionBarMenuItem r6 = r0.otherItem
             r7 = 3
-            r13 = 2131627513(0x7f0e0df9, float:1.8882293E38)
+            r13 = 2131627533(0x7f0e0e0d, float:1.8882333E38)
             java.lang.String r14 = "ShareContact"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r6.addSubItem(r7, r4, r13)
@@ -8057,7 +7817,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.otherItem
             boolean r6 = r0.userBlocked
             if (r6 != 0) goto L_0x00ba
-            r6 = 2131624561(0x7f0e0271, float:1.8876305E38)
+            r6 = 2131624563(0x7f0e0273, float:1.887631E38)
             java.lang.String r7 = "BlockContact"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00be
@@ -8067,13 +7827,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r4.addSubItem(r12, r11, r6)
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.otherItem
             r6 = 4
-            r7 = 2131625289(0x7f0e0549, float:1.8877782E38)
+            r7 = 2131625294(0x7f0e054e, float:1.8877792E38)
             java.lang.String r9 = "EditContact"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r4.addSubItem(r6, r8, r7)
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.otherItem
             r6 = 5
-            r7 = 2131625157(0x7f0e04c5, float:1.8877514E38)
+            r7 = 2131625162(0x7f0e04ca, float:1.8877524E38)
             java.lang.String r8 = "DeleteContact"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r4.addSubItem(r6, r3, r7)
@@ -8094,22 +7854,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r6 != 0) goto L_0x0111
             org.telegram.ui.ActionBar.ActionBarMenuItem r6 = r0.otherItem
             r7 = 9
-            r8 = 2131165705(0x7var_, float:1.7945635E38)
-            r13 = 2131624590(0x7f0e028e, float:1.8876364E38)
+            r8 = 2131165710(0x7var_e, float:1.7945645E38)
+            r13 = 2131624592(0x7f0e0290, float:1.8876368E38)
             java.lang.String r14 = "BotInvite"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r6.addSubItem(r7, r8, r13)
         L_0x0111:
             org.telegram.ui.ActionBar.ActionBarMenuItem r6 = r0.otherItem
             r7 = 10
-            r8 = 2131624598(0x7f0e0296, float:1.887638E38)
+            r8 = 2131624600(0x7f0e0298, float:1.8876384E38)
             java.lang.String r13 = "BotShare"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r8)
             r6.addSubItem(r7, r4, r8)
             goto L_0x0133
         L_0x0122:
             org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.otherItem
-            r8 = 2131165706(0x7var_a, float:1.7945637E38)
+            r8 = 2131165711(0x7var_f, float:1.7945647E38)
             r13 = 2131624196(0x7f0e0104, float:1.8875565E38)
             java.lang.String r14 = "AddContact"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
@@ -8120,7 +7880,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r6 != 0) goto L_0x014a
             org.telegram.ui.ActionBar.ActionBarMenuItem r6 = r0.otherItem
             r7 = 3
-            r8 = 2131627513(0x7f0e0df9, float:1.8882293E38)
+            r8 = 2131627533(0x7f0e0e0d, float:1.8882333E38)
             java.lang.String r13 = "ShareContact"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r8)
             r6.addSubItem(r7, r4, r8)
@@ -8132,14 +7892,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r6 != 0) goto L_0x0155
             goto L_0x0158
         L_0x0155:
-            r11 = 2131165810(0x7var_, float:1.7945848E38)
+            r11 = 2131165815(0x7var_, float:1.7945858E38)
         L_0x0158:
             if (r6 != 0) goto L_0x0160
-            r6 = 2131624602(0x7f0e029a, float:1.8876388E38)
+            r6 = 2131624604(0x7f0e029c, float:1.8876392E38)
             java.lang.String r7 = "BotStop"
             goto L_0x0165
         L_0x0160:
-            r6 = 2131624596(0x7f0e0294, float:1.8876376E38)
+            r6 = 2131624598(0x7f0e0296, float:1.887638E38)
             java.lang.String r7 = "BotRestart"
         L_0x0165:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -8149,7 +7909,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.otherItem
             boolean r6 = r0.userBlocked
             if (r6 != 0) goto L_0x017d
-            r6 = 2131624561(0x7f0e0271, float:1.8876305E38)
+            r6 = 2131624563(0x7f0e0273, float:1.887631E38)
             java.lang.String r7 = "BlockContact"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x0181
@@ -8175,15 +7935,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r2 == r4) goto L_0x01ba
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r4 = 20
-            r6 = 2131165833(0x7var_, float:1.7945894E38)
-            r7 = 2131627628(0x7f0e0e6c, float:1.8882526E38)
+            r6 = 2131165838(0x7var_e, float:1.7945904E38)
+            r7 = 2131627652(0x7f0e0e84, float:1.8882574E38)
             java.lang.String r8 = "StartEncryptedChat"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r2.addSubItem(r4, r6, r7)
         L_0x01ba:
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r4 = 14
-            r6 = 2131165750(0x7var_, float:1.7945726E38)
+            r6 = 2131165755(0x7var_b, float:1.7945736E38)
             r7 = 2131624218(0x7f0e011a, float:1.887561E38)
             java.lang.String r8 = "AddShortcut"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
@@ -8218,8 +7978,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r7 != 0) goto L_0x0221
             org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.otherItem
             r9 = 15
-            r10 = 2131165862(0x7var_a6, float:1.7945953E38)
-            r11 = 2131627636(0x7f0e0e74, float:1.8882542E38)
+            r10 = 2131165867(0x7var_ab, float:1.7945963E38)
+            r11 = 2131627660(0x7f0e0e8c, float:1.888259E38)
             java.lang.String r12 = "StartVoipChat"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r7.addSubItem(r9, r10, r11)
@@ -8230,8 +7990,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r7 == 0) goto L_0x023a
             org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.otherItem
             r9 = 19
-            r10 = 2131165834(0x7var_a, float:1.7945896E38)
-            r11 = 2131627647(0x7f0e0e7f, float:1.8882564E38)
+            r10 = 2131165839(0x7var_f, float:1.7945906E38)
+            r11 = 2131627671(0x7f0e0e97, float:1.8882613E38)
             java.lang.String r12 = "Statistics"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r7.addSubItem(r9, r10, r11)
@@ -8252,8 +8012,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.canSearchMembers = r6
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.otherItem
             r6 = 17
-            r7 = 2131165821(0x7var_d, float:1.794587E38)
-            r9 = 2131627373(0x7f0e0d6d, float:1.8882009E38)
+            r7 = 2131165826(0x7var_, float:1.794588E38)
+            r9 = 2131627393(0x7f0e0d81, float:1.888205E38)
             java.lang.String r10 = "SearchMembers"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r4.addSubItem(r6, r7, r9)
@@ -8264,7 +8024,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             boolean r2 = r2.kicked
             if (r2 != 0) goto L_0x033d
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
-            r4 = 2131625996(0x7f0e080c, float:1.8879216E38)
+            r4 = 2131626007(0x7f0e0817, float:1.8879238E38)
             java.lang.String r6 = "LeaveMegaMenu"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r2.addSubItem(r8, r5, r4)
@@ -8275,7 +8035,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r2 != 0) goto L_0x0298
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r6 = 10
-            r7 = 2131624598(0x7f0e0296, float:1.887638E38)
+            r7 = 2131624600(0x7f0e0298, float:1.8876384E38)
             java.lang.String r9 = "BotShare"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r2.addSubItem(r6, r4, r7)
@@ -8286,8 +8046,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r2 == 0) goto L_0x02b3
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r4 = 22
-            r6 = 2131165733(0x7var_, float:1.7945691E38)
-            r7 = 2131628070(0x7f0e1026, float:1.8883422E38)
+            r6 = 2131165738(0x7var_a, float:1.7945702E38)
+            r7 = 2131628097(0x7f0e1041, float:1.8883477E38)
             java.lang.String r9 = "ViewDiscussion"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r2.addSubItem(r4, r6, r7)
@@ -8300,7 +8060,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             boolean r2 = r2.kicked
             if (r2 != 0) goto L_0x033d
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
-            r4 = 2131625994(0x7f0e080a, float:1.8879212E38)
+            r4 = 2131626005(0x7f0e0815, float:1.8879234E38)
             java.lang.String r6 = "LeaveChannelMenu"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r2.addSubItem(r8, r5, r4)
@@ -8315,8 +8075,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r4 != 0) goto L_0x02f5
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.otherItem
             r7 = 15
-            r9 = 2131165862(0x7var_a6, float:1.7945953E38)
-            r10 = 2131627636(0x7f0e0e74, float:1.8882542E38)
+            r9 = 2131165867(0x7var_ab, float:1.7945963E38)
+            r10 = 2131627660(0x7f0e0e8c, float:1.888259E38)
             java.lang.String r11 = "StartVoipChat"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r4.addSubItem(r7, r9, r10)
@@ -8344,21 +8104,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.canSearchMembers = r6
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r4 = 17
-            r6 = 2131165821(0x7var_d, float:1.794587E38)
-            r7 = 2131627373(0x7f0e0d6d, float:1.8882009E38)
+            r6 = 2131165826(0x7var_, float:1.794588E38)
+            r7 = 2131627393(0x7f0e0d81, float:1.888205E38)
             java.lang.String r9 = "SearchMembers"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r2.addSubItem(r4, r6, r7)
         L_0x032f:
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
-            r4 = 2131625141(0x7f0e04b5, float:1.8877482E38)
+            r4 = 2131625146(0x7f0e04ba, float:1.8877492E38)
             java.lang.String r6 = "DeleteAndExit"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r2.addSubItem(r8, r5, r4)
         L_0x033d:
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r4 = 14
-            r6 = 2131165750(0x7var_, float:1.7945726E38)
+            r6 = 2131165755(0x7var_b, float:1.7945736E38)
             r7 = 2131624218(0x7f0e011a, float:1.887561E38)
             java.lang.String r8 = "AddShortcut"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
@@ -8370,20 +8130,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r4 = 35
             r7 = 33
             r8 = 36
-            r9 = 2131627334(0x7f0e0d46, float:1.888193E38)
+            r9 = 2131627354(0x7f0e0d5a, float:1.888197E38)
             java.lang.String r10 = "SaveToGallery"
-            r11 = 2131165743(0x7var_f, float:1.7945712E38)
+            r11 = 2131165748(0x7var_, float:1.7945722E38)
             r12 = 21
             if (r2 == 0) goto L_0x039f
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
-            r13 = 2131165708(0x7var_c, float:1.794564E38)
+            r13 = 2131165713(0x7var_, float:1.794565E38)
             r14 = 2131624215(0x7f0e0117, float:1.8875603E38)
             java.lang.String r15 = "AddPhoto"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r2.addSubItem(r8, r13, r14)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
-            r13 = 2131165672(0x7var_e8, float:1.7945568E38)
-            r14 = 2131627485(0x7f0e0ddd, float:1.8882236E38)
+            r13 = 2131165677(0x7var_ed, float:1.7945578E38)
+            r14 = 2131627505(0x7f0e0df1, float:1.8882276E38)
             java.lang.String r15 = "SetAsMain"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r2.addSubItem(r7, r13, r14)
@@ -8391,7 +8151,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r2.addSubItem(r12, r11, r9)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
-            r9 = 2131625128(0x7f0e04a8, float:1.8877455E38)
+            r9 = 2131625133(0x7f0e04ad, float:1.8877465E38)
             java.lang.String r10 = "Delete"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r2.addSubItem(r4, r3, r9)
@@ -8404,7 +8164,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r6 == 0) goto L_0x03ba
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r3 = 31
-            r6 = 2131626067(0x7f0e0853, float:1.887936E38)
+            r6 = 2131626078(0x7f0e085e, float:1.8879382E38)
             java.lang.String r9 = "LogOut"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r2.addSubItem(r3, r5, r6)
@@ -8674,21 +8434,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         searchContainer.setVisibility(i);
         this.searchListView.setEmptyView(this.emptyView);
         this.avatarContainer.setClickable(false);
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(ofFloat, f, z) {
-            public final /* synthetic */ ValueAnimator f$1;
-            public final /* synthetic */ float f$2;
-            public final /* synthetic */ boolean f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                ProfileActivity.this.lambda$searchExpandTransition$28$ProfileActivity(this.f$1, this.f$2, this.f$3, valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new ProfileActivity$$ExternalSyntheticLambda2(this, ofFloat, f, z));
         ofFloat.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 ProfileActivity.this.updateSearchViewState(z);
@@ -8720,8 +8466,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchExpandTransition$28 */
-    public /* synthetic */ void lambda$searchExpandTransition$28$ProfileActivity(ValueAnimator valueAnimator, float f, boolean z, ValueAnimator valueAnimator2) {
+    public /* synthetic */ void lambda$searchExpandTransition$28(ValueAnimator valueAnimator, float f, boolean z, ValueAnimator valueAnimator2) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.searchTransitionProgress = floatValue;
         float f2 = (floatValue - 0.5f) / 0.5f;
@@ -8830,52 +8575,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$InputFile2, d, str, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
-            public final /* synthetic */ TLRPC$InputFile f$1;
-            public final /* synthetic */ TLRPC$InputFile f$2;
-            public final /* synthetic */ double f$3;
-            public final /* synthetic */ String f$4;
-            public final /* synthetic */ TLRPC$PhotoSize f$5;
-            public final /* synthetic */ TLRPC$PhotoSize f$6;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r6;
-                this.f$5 = r7;
-                this.f$6 = r8;
-            }
-
-            public final void run() {
-                ProfileActivity.this.lambda$didUploadPhoto$31$ProfileActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ProfileActivity$$ExternalSyntheticLambda19(this, tLRPC$InputFile, tLRPC$InputFile2, d, str, tLRPC$PhotoSize2, tLRPC$PhotoSize));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didUploadPhoto$30 */
-    public /* synthetic */ void lambda$didUploadPhoto$30$ProfileActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, str) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ String f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ProfileActivity.this.lambda$didUploadPhoto$29$ProfileActivity(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$didUploadPhoto$30(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ProfileActivity$$ExternalSyntheticLambda20(this, tLRPC$TL_error, tLObject, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didUploadPhoto$29 */
-    public /* synthetic */ void lambda$didUploadPhoto$29$ProfileActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str) {
+    public /* synthetic */ void lambda$didUploadPhoto$29(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str) {
         this.avatarsViewPager.removeUploadingImage(this.uploadingImageLocation);
         if (tLRPC$TL_error == null) {
             TLRPC$User user = getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId()));
@@ -8930,8 +8639,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didUploadPhoto$31 */
-    public /* synthetic */ void lambda$didUploadPhoto$31$ProfileActivity(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
+    public /* synthetic */ void lambda$didUploadPhoto$31(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         if (tLRPC$InputFile == null && tLRPC$InputFile2 == null) {
             TLRPC$FileLocation tLRPC$FileLocation = tLRPC$PhotoSize.location;
             this.avatar = tLRPC$FileLocation;
@@ -8963,17 +8671,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 tLRPC$TL_photos_uploadProfilePhoto.video_start_ts = d;
                 tLRPC$TL_photos_uploadProfilePhoto.flags = i | 4;
             }
-            getConnectionsManager().sendRequest(tLRPC$TL_photos_uploadProfilePhoto, new RequestDelegate(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ProfileActivity.this.lambda$didUploadPhoto$30$ProfileActivity(this.f$1, tLObject, tLRPC$TL_error);
-                }
-            });
+            getConnectionsManager().sendRequest(tLRPC$TL_photos_uploadProfilePhoto, new ProfileActivity$$ExternalSyntheticLambda29(this, str));
         }
         this.actionBar.createMenu().requestLayout();
     }
@@ -9047,19 +8745,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
             alertDialog.setCanCacnel(false);
             alertDialog.show();
-            Utilities.globalQueue.postRunnable(new Runnable(z, alertDialog) {
-                public final /* synthetic */ boolean f$1;
-                public final /* synthetic */ AlertDialog f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    ProfileActivity.this.lambda$sendLogs$33$ProfileActivity(this.f$1, this.f$2);
-                }
-            });
+            Utilities.globalQueue.postRunnable(new ProfileActivity$$ExternalSyntheticLambda23(this, z, alertDialog));
         }
     }
 
@@ -9068,9 +8754,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARNING: Removed duplicated region for block: B:43:0x00b2 A[Catch:{ Exception -> 0x00d1 }] */
     /* JADX WARNING: Removed duplicated region for block: B:51:0x00c5 A[Catch:{ Exception -> 0x00c9 }] */
     /* JADX WARNING: Removed duplicated region for block: B:55:0x00cd A[Catch:{ Exception -> 0x00c9 }] */
-    /* renamed from: lambda$sendLogs$33 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$sendLogs$33$ProfileActivity(boolean r18, org.telegram.ui.ActionBar.AlertDialog r19) {
+    public /* synthetic */ void lambda$sendLogs$33(boolean r18, org.telegram.ui.ActionBar.AlertDialog r19) {
         /*
             r17 = this;
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00d1 }
@@ -9172,10 +8857,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r8 == 0) goto L_0x00b3
             goto L_0x009b
         L_0x00b3:
-            org.telegram.ui.-$$Lambda$ProfileActivity$Be-OZnN7FUZoQfCOHUCTqaq-LYE r0 = new org.telegram.ui.-$$Lambda$ProfileActivity$Be-OZnN7FUZoQfCOHUCTqaq-LYE     // Catch:{ Exception -> 0x00d1 }
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda22 r0 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda22     // Catch:{ Exception -> 0x00d1 }
             r2 = r17
             r1 = r19
-            r0.<init>(r1, r4, r3)     // Catch:{ Exception -> 0x00c9 }
+            r0.<init>(r2, r1, r4, r3)     // Catch:{ Exception -> 0x00c9 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x00c9 }
             goto L_0x00d7
         L_0x00c0:
@@ -9201,12 +8886,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x00d7:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.lambda$sendLogs$33$ProfileActivity(boolean, org.telegram.ui.ActionBar.AlertDialog):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.lambda$sendLogs$33(boolean, org.telegram.ui.ActionBar.AlertDialog):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$sendLogs$32 */
-    public /* synthetic */ void lambda$sendLogs$32$ProfileActivity(AlertDialog alertDialog, boolean[] zArr, File file) {
+    public /* synthetic */ void lambda$sendLogs$32(AlertDialog alertDialog, boolean[] zArr, File file) {
         Uri uri;
         try {
             alertDialog.dismiss();
@@ -9375,7 +9059,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r7 = r4.toString()     // Catch:{ Exception -> 0x00c7 }
             L_0x009e:
                 java.lang.String r4 = "TelegramVersion"
-                r5 = 2131627768(0x7f0e0ef8, float:1.888281E38)
+                r5 = 2131627795(0x7f0e0var_, float:1.8882865E38)
                 java.lang.Object[] r8 = new java.lang.Object[r2]     // Catch:{ Exception -> 0x00c7 }
                 java.util.Locale r9 = java.util.Locale.US     // Catch:{ Exception -> 0x00c7 }
                 java.lang.String r10 = "v%s (%d) %s"
@@ -9402,7 +9086,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                 r1.setPadding(r3, r4, r3, r2)
                 android.content.Context r1 = r12.mContext
-                r2 = 2131165444(0x7var_, float:1.7945105E38)
+                r2 = 2131165449(0x7var_, float:1.7945115E38)
                 java.lang.String r3 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r2, (java.lang.String) r3)
                 r0.setBackgroundDrawable(r1)
@@ -9435,7 +9119,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             L_0x0126:
                 org.telegram.ui.ProfileActivity$ListAdapter$2 r1 = new org.telegram.ui.ProfileActivity$ListAdapter$2
                 android.content.Context r0 = r12.mContext
-                r1.<init>(r0)
+                r1.<init>(r12, r0)
                 goto L_0x018f
             L_0x012e:
                 org.telegram.ui.Cells.UserCell r1 = new org.telegram.ui.Cells.UserCell
@@ -9528,13 +9212,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r0 = r20
                 r2 = r21
                 int r3 = r20.getItemViewType()
-                r4 = 2131624744(0x7f0e0328, float:1.8876676E38)
+                r4 = 2131624748(0x7f0e032c, float:1.8876684E38)
                 java.lang.String r5 = "ChannelMembers"
                 r6 = -1
                 r7 = 1
                 if (r3 == r7) goto L_0x09bc
                 r8 = 2
-                r9 = 2131627962(0x7f0e0fba, float:1.8883203E38)
+                r9 = 2131627989(0x7f0e0fd5, float:1.8883258E38)
                 java.lang.String r10 = "UserBio"
                 r11 = 0
                 r12 = 0
@@ -9621,28 +9305,28 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             L_0x00b8:
                 boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
                 if (r4 == 0) goto L_0x00c6
-                r3 = 2131624723(0x7f0e0313, float:1.8876634E38)
+                r3 = 2131624727(0x7f0e0317, float:1.8876642E38)
                 java.lang.String r4 = "ChannelCreator"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 goto L_0x00b6
             L_0x00c6:
                 boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
                 if (r3 == 0) goto L_0x00ef
-                r3 = 2131624705(0x7f0e0301, float:1.8876597E38)
+                r3 = 2131624709(0x7f0e0305, float:1.8876605E38)
                 java.lang.String r4 = "ChannelAdmin"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 goto L_0x00b6
             L_0x00d4:
                 boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantCreator
                 if (r3 == 0) goto L_0x00e2
-                r3 = 2131624723(0x7f0e0313, float:1.8876634E38)
+                r3 = 2131624727(0x7f0e0317, float:1.8876642E38)
                 java.lang.String r4 = "ChannelCreator"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 goto L_0x00ef
             L_0x00e2:
                 boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantAdmin
                 if (r3 == 0) goto L_0x00ef
-                r3 = 2131624705(0x7f0e0301, float:1.8876597E38)
+                r3 = 2131624709(0x7f0e0305, float:1.8876605E38)
                 java.lang.String r4 = "ChannelAdmin"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r4, r3)
             L_0x00ef:
@@ -9705,13 +9389,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x0184
             L_0x0176:
                 android.content.Context r2 = r1.mContext
-                r3 = 2131165443(0x7var_, float:1.7945103E38)
+                r3 = 2131165448(0x7var_, float:1.7945113E38)
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r4)
                 r0.setBackgroundDrawable(r2)
                 goto L_0x0a64
             L_0x0184:
                 android.content.Context r2 = r1.mContext
-                r3 = 2131165444(0x7var_, float:1.7945105E38)
+                r3 = 2131165449(0x7var_, float:1.7945115E38)
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r4)
                 r0.setBackgroundDrawable(r2)
                 goto L_0x0a64
@@ -9782,12 +9466,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r2 = r2 - r3
                 if (r2 > 0) goto L_0x0250
                 if (r5 == 0) goto L_0x0244
-                r2 = 2131626526(0x7f0e0a1e, float:1.888029E38)
+                r2 = 2131626543(0x7f0e0a2f, float:1.8880325E38)
                 java.lang.String r3 = "NotificationsCustom"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 goto L_0x024d
             L_0x0244:
-                r2 = 2131626554(0x7f0e0a3a, float:1.8880347E38)
+                r2 = 2131626571(0x7f0e0a4b, float:1.8880382E38)
                 java.lang.String r3 = "NotificationsOn"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             L_0x024d:
@@ -9795,7 +9479,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02e0
             L_0x0250:
                 r3 = 3600(0xe10, float:5.045E-42)
-                r4 = 2131628347(0x7f0e113b, float:1.8883984E38)
+                r4 = 2131628383(0x7f0e115f, float:1.8884057E38)
                 java.lang.String r5 = "WillUnmuteIn"
                 if (r2 >= r3) goto L_0x026c
                 java.lang.Object[] r3 = new java.lang.Object[r7]
@@ -9857,28 +9541,28 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             L_0x02bf:
                 if (r7 == 0) goto L_0x02cd
                 if (r5 == 0) goto L_0x02cd
-                r2 = 2131626526(0x7f0e0a1e, float:1.888029E38)
+                r2 = 2131626543(0x7f0e0a2f, float:1.8880325E38)
                 java.lang.String r3 = "NotificationsCustom"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 goto L_0x02e0
             L_0x02cd:
                 if (r7 == 0) goto L_0x02d5
-                r2 = 2131626554(0x7f0e0a3a, float:1.8880347E38)
+                r2 = 2131626571(0x7f0e0a4b, float:1.8880382E38)
                 java.lang.String r3 = "NotificationsOn"
                 goto L_0x02da
             L_0x02d5:
-                r2 = 2131626552(0x7f0e0a38, float:1.8880343E38)
+                r2 = 2131626569(0x7f0e0a49, float:1.8880378E38)
                 java.lang.String r3 = "NotificationsOff"
             L_0x02da:
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 goto L_0x024d
             L_0x02e0:
                 if (r11 != 0) goto L_0x02eb
-                r2 = 2131626552(0x7f0e0a38, float:1.8880343E38)
+                r2 = 2131626569(0x7f0e0a49, float:1.8880378E38)
                 java.lang.String r3 = "NotificationsOff"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r3, r2)
             L_0x02eb:
-                r2 = 2131626520(0x7f0e0a18, float:1.8880279E38)
+                r2 = 2131626537(0x7f0e0a29, float:1.8880313E38)
                 java.lang.String r3 = "Notifications"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setTextAndValueAndCheck(r2, r11, r7, r12)
@@ -9904,14 +9588,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.tgnet.TLRPC$EncryptedChat r2 = r2.getEncryptedChat(r3)
                 int r2 = r2.ttl
                 if (r2 != 0) goto L_0x0335
-                r2 = 2131627568(0x7f0e0e30, float:1.8882404E38)
+                r2 = 2131627588(0x7f0e0e44, float:1.8882445E38)
                 java.lang.String r3 = "ShortMessageLifetimeForever"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 goto L_0x0339
             L_0x0335:
                 java.lang.String r2 = org.telegram.messenger.LocaleController.formatTTLString(r2)
             L_0x0339:
-                r3 = 2131626183(0x7f0e08c7, float:1.8879595E38)
+                r3 = 2131626194(0x7f0e08d2, float:1.8879617E38)
                 java.lang.String r4 = "MessageLifetime"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r0.setTextAndValue(r3, r2, r12)
@@ -9921,7 +9605,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r3 = r3.unblockRow
                 java.lang.String r9 = "windowBackgroundWhiteRedText5"
                 if (r2 != r3) goto L_0x0362
-                r2 = 2131627897(0x7f0e0var_, float:1.8883071E38)
+                r2 = 2131627924(0x7f0e0var_, float:1.8883126E38)
                 java.lang.String r3 = "Unblock"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2, r12)
@@ -9942,7 +9626,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r5)
                 org.telegram.tgnet.TLRPC$EncryptedChat r3 = r3.getEncryptedChat(r4)
                 r2.setEncryptedChat(r3)
-                r3 = 2131625343(0x7f0e057f, float:1.8877891E38)
+                r3 = 2131625348(0x7f0e0584, float:1.8877901E38)
                 java.lang.String r4 = "EncryptionKey"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r0.setTextAndValueDrawable(r3, r2, r12)
@@ -9957,13 +9641,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.tgnet.TLRPC$Chat r2 = r2.currentChat
                 boolean r2 = r2.megagroup
                 if (r2 == 0) goto L_0x03bb
-                r2 = 2131627113(0x7f0e0CLASSNAME, float:1.8881481E38)
+                r2 = 2131627130(0x7f0e0c7a, float:1.8881516E38)
                 java.lang.String r3 = "ProfileJoinGroup"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2, r12)
                 goto L_0x0a64
             L_0x03bb:
-                r2 = 2131627112(0x7f0e0CLASSNAME, float:1.888148E38)
+                r2 = 2131627129(0x7f0e0CLASSNAME, float:1.8881514E38)
                 java.lang.String r3 = "ProfileJoinChannel"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2, r12)
@@ -9985,7 +9669,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.tgnet.TLRPC$Chat r3 = r3.currentChat
                 boolean r3 = r3.megagroup
                 if (r3 != 0) goto L_0x0421
-                r3 = 2131624790(0x7f0e0356, float:1.887677E38)
+                r3 = 2131624794(0x7f0e035a, float:1.8876778E38)
                 java.lang.String r4 = "ChannelSubscribers"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 java.lang.Object[] r4 = new java.lang.Object[r7]
@@ -10033,7 +9717,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.tgnet.TLRPC$Chat r3 = r3.currentChat
                 boolean r3 = r3.megagroup
                 if (r3 != 0) goto L_0x0478
-                r3 = 2131624790(0x7f0e0356, float:1.887677E38)
+                r3 = 2131624794(0x7f0e035a, float:1.8876778E38)
                 java.lang.String r4 = "ChannelSubscribers"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 org.telegram.ui.ProfileActivity r4 = org.telegram.ui.ProfileActivity.this
@@ -10065,7 +9749,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 org.telegram.tgnet.TLRPC$ChatFull r3 = r3.chatInfo
                 if (r3 == 0) goto L_0x04cc
-                r3 = 2131624707(0x7f0e0303, float:1.8876601E38)
+                r3 = 2131624711(0x7f0e0307, float:1.887661E38)
                 java.lang.String r4 = "ChannelAdministrators"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 java.lang.Object[] r4 = new java.lang.Object[r7]
@@ -10087,7 +9771,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r0.setTextAndValueAndIcon(r3, r4, r5, r7)
                 goto L_0x0a64
             L_0x04cc:
-                r3 = 2131624707(0x7f0e0303, float:1.8876601E38)
+                r3 = 2131624711(0x7f0e0307, float:1.887661E38)
                 java.lang.String r4 = "ChannelAdministrators"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r4 = 2131165247(0x7var_f, float:1.7944706E38)
@@ -10108,7 +9792,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 org.telegram.tgnet.TLRPC$ChatFull r3 = r3.chatInfo
                 if (r3 == 0) goto L_0x0534
-                r3 = 2131624712(0x7f0e0308, float:1.8876611E38)
+                r3 = 2131624716(0x7f0e030c, float:1.887662E38)
                 java.lang.String r4 = "ChannelBlacklist"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 java.lang.Object[] r4 = new java.lang.Object[r7]
@@ -10134,7 +9818,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r0.setTextAndValueAndIcon(r3, r4, r5, r7)
                 goto L_0x0a64
             L_0x0534:
-                r3 = 2131624712(0x7f0e0308, float:1.8876611E38)
+                r3 = 2131624716(0x7f0e030c, float:1.887662E38)
                 java.lang.String r4 = "ChannelBlacklist"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r4 = 2131165255(0x7var_, float:1.7944722E38)
@@ -10172,7 +9856,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.sendMessageRow
                 if (r2 != r3) goto L_0x0590
-                r2 = 2131627448(0x7f0e0db8, float:1.888216E38)
+                r2 = 2131627468(0x7f0e0dcc, float:1.8882201E38)
                 java.lang.String r3 = "SendMessageLocation"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2, r7)
@@ -10181,7 +9865,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.reportRow
                 if (r2 != r3) goto L_0x05a9
-                r2 = 2131627260(0x7f0e0cfc, float:1.888178E38)
+                r2 = 2131627280(0x7f0e0d10, float:1.888182E38)
                 java.lang.String r3 = "ReportUserLocation"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2, r12)
@@ -10191,60 +9875,60 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.languageRow
                 if (r2 != r3) goto L_0x05c2
-                r2 = 2131625961(0x7f0e07e9, float:1.8879145E38)
+                r2 = 2131625972(0x7f0e07f4, float:1.8879167E38)
                 java.lang.String r3 = "Language"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165659(0x7var_db, float:1.7945541E38)
+                r3 = 2131165664(0x7var_e0, float:1.7945551E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r12)
                 goto L_0x0a64
             L_0x05c2:
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.notificationRow
                 if (r2 != r3) goto L_0x05db
-                r2 = 2131626522(0x7f0e0a1a, float:1.8880283E38)
+                r2 = 2131626539(0x7f0e0a2b, float:1.8880317E38)
                 java.lang.String r3 = "NotificationsAndSounds"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165667(0x7var_e3, float:1.7945558E38)
+                r3 = 2131165672(0x7var_e8, float:1.7945568E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r7)
                 goto L_0x0a64
             L_0x05db:
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.privacyRow
                 if (r2 != r3) goto L_0x05f4
-                r2 = 2131627108(0x7f0e0CLASSNAME, float:1.8881471E38)
+                r2 = 2131627125(0x7f0e0CLASSNAME, float:1.8881506E38)
                 java.lang.String r3 = "PrivacySettings"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165677(0x7var_ed, float:1.7945578E38)
+                r3 = 2131165682(0x7var_f2, float:1.7945588E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r7)
                 goto L_0x0a64
             L_0x05f4:
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.dataRow
                 if (r2 != r3) goto L_0x060d
-                r2 = 2131625075(0x7f0e0473, float:1.8877348E38)
+                r2 = 2131625080(0x7f0e0478, float:1.8877358E38)
                 java.lang.String r3 = "DataSettings"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165642(0x7var_ca, float:1.7945507E38)
+                r3 = 2131165647(0x7var_cf, float:1.7945517E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r7)
                 goto L_0x0a64
             L_0x060d:
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.chatRow
                 if (r2 != r3) goto L_0x0626
-                r2 = 2131624849(0x7f0e0391, float:1.887689E38)
+                r2 = 2131624853(0x7f0e0395, float:1.8876897E38)
                 java.lang.String r3 = "ChatSettings"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165634(0x7var_c2, float:1.794549E38)
+                r3 = 2131165639(0x7var_c7, float:1.79455E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r7)
                 goto L_0x0a64
             L_0x0626:
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.filtersRow
                 if (r2 != r3) goto L_0x063f
-                r2 = 2131625589(0x7f0e0675, float:1.887839E38)
+                r2 = 2131625596(0x7f0e067c, float:1.8878404E38)
                 java.lang.String r3 = "Filters"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165646(0x7var_ce, float:1.7945515E38)
+                r3 = 2131165651(0x7var_d3, float:1.7945525E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r7)
                 goto L_0x0a64
             L_0x063f:
@@ -10254,34 +9938,34 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r2 = 2131624379(0x7f0e01bb, float:1.8875936E38)
                 java.lang.String r3 = "AskAQuestion"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165689(0x7var_f9, float:1.7945602E38)
+                r3 = 2131165694(0x7var_fe, float:1.7945612E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r7)
                 goto L_0x0a64
             L_0x0658:
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.faqRow
                 if (r2 != r3) goto L_0x0671
-                r2 = 2131627757(0x7f0e0eed, float:1.8882787E38)
+                r2 = 2131627784(0x7f0e0var_, float:1.8882842E38)
                 java.lang.String r3 = "TelegramFAQ"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165651(0x7var_d3, float:1.7945525E38)
+                r3 = 2131165656(0x7var_d8, float:1.7945535E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r7)
                 goto L_0x0a64
             L_0x0671:
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.policyRow
                 if (r2 != r3) goto L_0x068a
-                r2 = 2131627101(0x7f0e0c5d, float:1.8881457E38)
+                r2 = 2131627118(0x7f0e0c6e, float:1.8881491E38)
                 java.lang.String r3 = "PrivacyPolicy"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165671(0x7var_e7, float:1.7945566E38)
+                r3 = 2131165676(0x7var_ec, float:1.7945576E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r12)
                 goto L_0x0a64
             L_0x068a:
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.sendLogsRow
                 if (r2 != r3) goto L_0x06a0
-                r2 = 2131625121(0x7f0e04a1, float:1.887744E38)
+                r2 = 2131625126(0x7f0e04a6, float:1.8877451E38)
                 java.lang.String r3 = "DebugSendLogs"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2, r7)
@@ -10290,7 +9974,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.sendLastLogsRow
                 if (r2 != r3) goto L_0x06b6
-                r2 = 2131625120(0x7f0e04a0, float:1.8877439E38)
+                r2 = 2131625125(0x7f0e04a5, float:1.887745E38)
                 java.lang.String r3 = "DebugSendLastLogs"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2, r7)
@@ -10299,7 +9983,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.clearLogsRow
                 if (r2 != r3) goto L_0x06d6
-                r2 = 2131625102(0x7f0e048e, float:1.8877402E38)
+                r2 = 2131625107(0x7f0e0493, float:1.8877413E38)
                 java.lang.String r3 = "DebugClearLogs"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
@@ -10322,10 +10006,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.devicesRow
                 if (r2 != r3) goto L_0x06fe
-                r2 = 2131625203(0x7f0e04f3, float:1.8877607E38)
+                r2 = 2131625208(0x7f0e04f8, float:1.8877617E38)
                 java.lang.String r3 = "Devices"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165644(0x7var_cc, float:1.794551E38)
+                r3 = 2131165649(0x7var_d1, float:1.7945521E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r7)
                 goto L_0x0a64
             L_0x06fe:
@@ -10335,10 +10019,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r2 = "windowBackgroundWhiteBlueIcon"
                 java.lang.String r3 = "windowBackgroundWhiteBlueButton"
                 r0.setColors(r2, r3)
-                r2 = 2131627490(0x7f0e0de2, float:1.8882246E38)
+                r2 = 2131627510(0x7f0e0df6, float:1.8882286E38)
                 java.lang.String r3 = "SetProfilePhoto"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165708(0x7var_c, float:1.794564E38)
+                r3 = 2131165713(0x7var_, float:1.794565E38)
                 r0.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r12)
                 goto L_0x0a64
             L_0x071e:
@@ -10410,11 +10094,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r2 = r3.format(r2)
                 goto L_0x07ca
             L_0x07c1:
-                r2 = 2131626961(0x7f0e0bd1, float:1.8881173E38)
+                r2 = 2131626978(0x7f0e0be2, float:1.8881207E38)
                 java.lang.String r3 = "PhoneHidden"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             L_0x07ca:
-                r3 = 2131626964(0x7f0e0bd4, float:1.888118E38)
+                r3 = 2131626981(0x7f0e0be5, float:1.8881214E38)
                 java.lang.String r4 = "PhoneMobile"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r0.setTextAndValue(r2, r3, r12)
@@ -10448,7 +10132,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             L_0x081c:
                 java.lang.String r2 = "-"
             L_0x081e:
-                r3 = 2131628000(0x7f0e0fe0, float:1.888328E38)
+                r3 = 2131628027(0x7f0e0ffb, float:1.8883335E38)
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
                 r0.setTextAndValue(r2, r3, r12)
                 goto L_0x0a64
@@ -10473,7 +10157,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r2 = r2.username
                 r3.append(r2)
                 java.lang.String r2 = r3.toString()
-                r3 = 2131625903(0x7f0e07af, float:1.8879027E38)
+                r3 = 2131625913(0x7f0e07b9, float:1.8879047E38)
                 java.lang.String r4 = "InviteLink"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r0.setTextAndValue(r2, r3, r12)
@@ -10523,11 +10207,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r2 = r3.format(r2)
                 goto L_0x08ed
             L_0x08e4:
-                r2 = 2131626573(0x7f0e0a4d, float:1.8880386E38)
+                r2 = 2131626590(0x7f0e0a5e, float:1.888042E38)
                 java.lang.String r3 = "NumberUnknown"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             L_0x08ed:
-                r3 = 2131627742(0x7f0e0ede, float:1.8882757E38)
+                r3 = 2131627769(0x7f0e0ef9, float:1.8882812E38)
                 java.lang.String r4 = "TapToChangePhone"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r0.setTextAndValue(r2, r3, r7)
@@ -10554,11 +10238,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r2 = r3.toString()
                 goto L_0x093b
             L_0x0932:
-                r2 = 2131628004(0x7f0e0fe4, float:1.8883288E38)
+                r2 = 2131628031(0x7f0e0fff, float:1.8883343E38)
                 java.lang.String r3 = "UsernameEmpty"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             L_0x093b:
-                r3 = 2131628000(0x7f0e0fe0, float:1.888328E38)
+                r3 = 2131628027(0x7f0e0ffb, float:1.8883335E38)
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
                 r0.setTextAndValue(r2, r3, r7)
                 r0.setContentDescriptionValueFirst(r7)
@@ -10578,7 +10262,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x0983
             L_0x0969:
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r10, r9)
-                r3 = 2131627963(0x7f0e0fbb, float:1.8883205E38)
+                r3 = 2131627990(0x7f0e0fd6, float:1.888326E38)
                 java.lang.String r4 = "UserBioDetail"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r0.setTextAndValue(r2, r3, r12)
@@ -10590,7 +10274,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 org.telegram.tgnet.TLRPC$UserFull r2 = r2.userInfo
                 if (r2 != 0) goto L_0x0995
-                r2 = 2131626043(0x7f0e083b, float:1.8879311E38)
+                r2 = 2131626054(0x7f0e0846, float:1.8879333E38)
                 java.lang.String r3 = "Loading"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 goto L_0x099d
@@ -10628,13 +10312,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.channelInfoRow
                 if (r2 == r6) goto L_0x09f4
-                r2 = 2131627230(0x7f0e0cde, float:1.8881719E38)
+                r2 = 2131627250(0x7f0e0cf2, float:1.888176E38)
                 java.lang.String r3 = "ReportChatDescription"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
                 goto L_0x0a64
             L_0x09f4:
-                r2 = 2131625875(0x7f0e0793, float:1.887897E38)
+                r2 = 2131625885(0x7f0e079d, float:1.887899E38)
                 java.lang.String r3 = "Info"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -10650,7 +10334,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.settingsSectionRow2
                 if (r2 != r3) goto L_0x0a26
-                r2 = 2131627324(0x7f0e0d3c, float:1.888191E38)
+                r2 = 2131627344(0x7f0e0d50, float:1.888195E38)
                 java.lang.String r3 = "SETTINGS"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -10668,7 +10352,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.helpHeaderRow
                 if (r2 != r3) goto L_0x0a50
-                r2 = 2131627506(0x7f0e0df2, float:1.8882278E38)
+                r2 = 2131627526(0x7f0e0e06, float:1.8882319E38)
                 java.lang.String r3 = "SettingsHelp"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -10677,7 +10361,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r3 = org.telegram.ui.ProfileActivity.this
                 int r3 = r3.debugHeaderRow
                 if (r2 != r3) goto L_0x0a64
-                r2 = 2131627504(0x7f0e0df0, float:1.8882274E38)
+                r2 = 2131627524(0x7f0e0e04, float:1.8882315E38)
                 java.lang.String r3 = "SettingsDebug"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -10837,20 +10521,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$0() {
             this.this$0.presentFragment(new ChangeNameActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$1 */
-        public /* synthetic */ void lambda$new$1$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$1() {
             this.this$0.presentFragment(new ActionIntroActivity(3));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$2 */
-        public /* synthetic */ void lambda$new$2$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$2() {
             int i = 0;
             while (true) {
                 if (i >= 3) {
@@ -10868,485 +10549,405 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$3 */
-        public /* synthetic */ void lambda$new$3$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$3() {
             if (this.this$0.userInfo != null) {
                 this.this$0.presentFragment(new ChangeBioActivity());
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$4 */
-        public /* synthetic */ void lambda$new$4$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$4() {
             this.this$0.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$5 */
-        public /* synthetic */ void lambda$new$5$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$5() {
             this.this$0.presentFragment(new NotificationsCustomSettingsActivity(1, new ArrayList(), true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$6 */
-        public /* synthetic */ void lambda$new$6$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$6() {
             this.this$0.presentFragment(new NotificationsCustomSettingsActivity(0, new ArrayList(), true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$7 */
-        public /* synthetic */ void lambda$new$7$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$7() {
             this.this$0.presentFragment(new NotificationsCustomSettingsActivity(2, new ArrayList(), true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$8 */
-        public /* synthetic */ void lambda$new$8$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$8() {
             this.this$0.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$9 */
-        public /* synthetic */ void lambda$new$9$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$9() {
             this.this$0.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$10 */
-        public /* synthetic */ void lambda$new$10$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$10() {
             this.this$0.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$11 */
-        public /* synthetic */ void lambda$new$11$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$11() {
             this.this$0.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$12 */
-        public /* synthetic */ void lambda$new$12$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$12() {
             this.this$0.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$13 */
-        public /* synthetic */ void lambda$new$13$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$13() {
             this.this$0.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$14 */
-        public /* synthetic */ void lambda$new$14$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$14() {
             this.this$0.presentFragment(new PrivacySettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$15 */
-        public /* synthetic */ void lambda$new$15$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$15() {
             this.this$0.presentFragment(new PrivacyUsersActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$16 */
-        public /* synthetic */ void lambda$new$16$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$16() {
             this.this$0.presentFragment(new PrivacyControlActivity(6, true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$17 */
-        public /* synthetic */ void lambda$new$17$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$17() {
             this.this$0.presentFragment(new PrivacyControlActivity(0, true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$18 */
-        public /* synthetic */ void lambda$new$18$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$18() {
             this.this$0.presentFragment(new PrivacyControlActivity(4, true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$19 */
-        public /* synthetic */ void lambda$new$19$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$19() {
             this.this$0.presentFragment(new PrivacyControlActivity(5, true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$20 */
-        public /* synthetic */ void lambda$new$20$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$20() {
             this.this$0.presentFragment(new PrivacyControlActivity(3, true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$21 */
-        public /* synthetic */ void lambda$new$21$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$21() {
             this.this$0.presentFragment(new PrivacyControlActivity(2, true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$22 */
-        public /* synthetic */ void lambda$new$22$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$22() {
             this.this$0.presentFragment(new PrivacyControlActivity(1, true));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$23 */
-        public /* synthetic */ void lambda$new$23$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$23() {
             this.this$0.presentFragment(new PasscodeActivity(SharedConfig.passcodeHash.length() > 0 ? 2 : 0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$24 */
-        public /* synthetic */ void lambda$new$24$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$24() {
             this.this$0.presentFragment(new TwoStepVerificationActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$25 */
-        public /* synthetic */ void lambda$new$25$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$25() {
             this.this$0.presentFragment(new SessionsActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$26 */
-        public /* synthetic */ void lambda$new$26$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$26() {
             this.this$0.presentFragment(new PrivacySettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$27 */
-        public /* synthetic */ void lambda$new$27$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$27() {
             this.this$0.presentFragment(new PrivacySettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$28 */
-        public /* synthetic */ void lambda$new$28$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$28() {
             this.this$0.presentFragment(new PrivacySettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$29 */
-        public /* synthetic */ void lambda$new$29$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$29() {
             this.this$0.presentFragment(new SessionsActivity(1));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$30 */
-        public /* synthetic */ void lambda$new$30$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$30() {
             this.this$0.presentFragment(new PrivacySettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$31 */
-        public /* synthetic */ void lambda$new$31$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$31() {
             this.this$0.presentFragment(new PrivacySettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$32 */
-        public /* synthetic */ void lambda$new$32$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$32() {
             this.this$0.presentFragment(new PrivacySettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$33 */
-        public /* synthetic */ void lambda$new$33$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$33() {
             this.this$0.presentFragment(new PrivacySettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$34 */
-        public /* synthetic */ void lambda$new$34$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$34() {
             this.this$0.presentFragment(new PrivacySettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$35 */
-        public /* synthetic */ void lambda$new$35$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$35() {
             this.this$0.presentFragment(new SessionsActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$36 */
-        public /* synthetic */ void lambda$new$36$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$36() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$37 */
-        public /* synthetic */ void lambda$new$37$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$37() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$38 */
-        public /* synthetic */ void lambda$new$38$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$38() {
             this.this$0.presentFragment(new CacheControlActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$39 */
-        public /* synthetic */ void lambda$new$39$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$39() {
             this.this$0.presentFragment(new CacheControlActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$40 */
-        public /* synthetic */ void lambda$new$40$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$40() {
             this.this$0.presentFragment(new CacheControlActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$41 */
-        public /* synthetic */ void lambda$new$41$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$41() {
             this.this$0.presentFragment(new CacheControlActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$42 */
-        public /* synthetic */ void lambda$new$42$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$42() {
             this.this$0.presentFragment(new DataUsageActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$43 */
-        public /* synthetic */ void lambda$new$43$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$43() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$44 */
-        public /* synthetic */ void lambda$new$44$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$44() {
             this.this$0.presentFragment(new DataAutoDownloadActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$45 */
-        public /* synthetic */ void lambda$new$45$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$45() {
             this.this$0.presentFragment(new DataAutoDownloadActivity(1));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$46 */
-        public /* synthetic */ void lambda$new$46$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$46() {
             this.this$0.presentFragment(new DataAutoDownloadActivity(2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$47 */
-        public /* synthetic */ void lambda$new$47$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$47() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$48 */
-        public /* synthetic */ void lambda$new$48$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$48() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$49 */
-        public /* synthetic */ void lambda$new$49$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$49() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$50 */
-        public /* synthetic */ void lambda$new$50$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$50() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$51 */
-        public /* synthetic */ void lambda$new$51$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$51() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$52 */
-        public /* synthetic */ void lambda$new$52$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$52() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$53 */
-        public /* synthetic */ void lambda$new$53$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$53() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$54 */
-        public /* synthetic */ void lambda$new$54$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$54() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$55 */
-        public /* synthetic */ void lambda$new$55$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$55() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$56 */
-        public /* synthetic */ void lambda$new$56$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$56() {
             this.this$0.presentFragment(new ProxyListActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$57 */
-        public /* synthetic */ void lambda$new$57$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$57() {
             this.this$0.presentFragment(new ProxyListActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$58 */
-        public /* synthetic */ void lambda$new$58$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$58() {
             this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$59 */
-        public /* synthetic */ void lambda$new$59$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$59() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$60 */
-        public /* synthetic */ void lambda$new$60$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$60() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$61 */
-        public /* synthetic */ void lambda$new$61$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$61() {
             this.this$0.presentFragment(new WallpapersListActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$62 */
-        public /* synthetic */ void lambda$new$62$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$62() {
             this.this$0.presentFragment(new WallpapersListActivity(1));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$63 */
-        public /* synthetic */ void lambda$new$63$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$63() {
             this.this$0.presentFragment(new WallpapersListActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$64 */
-        public /* synthetic */ void lambda$new$64$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$64() {
             this.this$0.presentFragment(new ThemeActivity(1));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$65 */
-        public /* synthetic */ void lambda$new$65$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$65() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$66 */
-        public /* synthetic */ void lambda$new$66$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$66() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$67 */
-        public /* synthetic */ void lambda$new$67$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$67() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$68 */
-        public /* synthetic */ void lambda$new$68$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$68() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$69 */
-        public /* synthetic */ void lambda$new$69$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$69() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$70 */
-        public /* synthetic */ void lambda$new$70$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$70() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$71 */
-        public /* synthetic */ void lambda$new$71$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$71() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$72 */
-        public /* synthetic */ void lambda$new$72$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$72() {
             this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$73 */
-        public /* synthetic */ void lambda$new$73$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$73() {
             this.this$0.presentFragment(new StickersActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$74 */
-        public /* synthetic */ void lambda$new$74$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$74() {
             this.this$0.presentFragment(new StickersActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$75 */
-        public /* synthetic */ void lambda$new$75$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$75() {
             this.this$0.presentFragment(new FeaturedStickersActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$76 */
-        public /* synthetic */ void lambda$new$76$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$76() {
             this.this$0.presentFragment(new StickersActivity(1));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$77 */
-        public /* synthetic */ void lambda$new$77$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$77() {
             this.this$0.presentFragment(new ArchivedStickersActivity(0));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$78 */
-        public /* synthetic */ void lambda$new$78$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$78() {
             this.this$0.presentFragment(new ArchivedStickersActivity(1));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$79 */
-        public /* synthetic */ void lambda$new$79$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$79() {
             this.this$0.presentFragment(new LanguageSelectActivity());
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$80 */
-        public /* synthetic */ void lambda$new$80$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$80() {
             ProfileActivity profileActivity = this.this$0;
             profileActivity.showDialog(AlertsCreator.createSupportAlert(profileActivity));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$81 */
-        public /* synthetic */ void lambda$new$81$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$81() {
             Browser.openUrl((Context) this.this$0.getParentActivity(), LocaleController.getString("TelegramFaqUrl", NUM));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$82 */
-        public /* synthetic */ void lambda$new$82$ProfileActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$82() {
             Browser.openUrl((Context) this.this$0.getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", NUM));
         }
 
@@ -11355,427 +10956,95 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             String[] strArr;
             this.this$0 = profileActivity;
             SearchResult[] searchResultArr = new SearchResult[83];
-            searchResultArr[0] = new SearchResult(this, 500, LocaleController.getString("EditName", NUM), 0, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$0$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[1] = new SearchResult(this, 501, LocaleController.getString("ChangePhoneNumber", NUM), 0, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$1$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[2] = new SearchResult(this, 502, LocaleController.getString("AddAnotherAccount", NUM), 0, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$2$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[3] = new SearchResult(this, 503, LocaleController.getString("UserBio", NUM), 0, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$3$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[4] = new SearchResult(this, 1, LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$4$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[5] = new SearchResult(this, 2, LocaleController.getString("NotificationsPrivateChats", NUM), LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$5$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[6] = new SearchResult(this, 3, LocaleController.getString("NotificationsGroups", NUM), LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$6$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[7] = new SearchResult(this, 4, LocaleController.getString("NotificationsChannels", NUM), LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$7$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[8] = new SearchResult(this, 5, LocaleController.getString("VoipNotificationSettings", NUM), "callsSectionRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$8$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[9] = new SearchResult(this, 6, LocaleController.getString("BadgeNumber", NUM), "badgeNumberSection", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$9$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[10] = new SearchResult(this, 7, LocaleController.getString("InAppNotifications", NUM), "inappSectionRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$10$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[11] = new SearchResult(this, 8, LocaleController.getString("ContactJoined", NUM), "contactJoinedRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$11$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[12] = new SearchResult(this, 9, LocaleController.getString("PinnedMessages", NUM), "pinnedMessageRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$12$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[13] = new SearchResult(this, 10, LocaleController.getString("ResetAllNotifications", NUM), "resetNotificationsRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$13$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[14] = new SearchResult(this, 100, LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$14$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[15] = new SearchResult(this, 101, LocaleController.getString("BlockedUsers", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$15$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[16] = new SearchResult(this, 105, LocaleController.getString("PrivacyPhone", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$16$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[17] = new SearchResult(this, 102, LocaleController.getString("PrivacyLastSeen", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$17$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[18] = new SearchResult(this, 103, LocaleController.getString("PrivacyProfilePhoto", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$18$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[19] = new SearchResult(this, 104, LocaleController.getString("PrivacyForwards", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$19$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[20] = new SearchResult(this, 105, LocaleController.getString("PrivacyP2P", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$20$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[21] = new SearchResult(this, 106, LocaleController.getString("Calls", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$21$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[22] = new SearchResult(this, 107, LocaleController.getString("GroupsAndChannels", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$22$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[23] = new SearchResult(this, 108, LocaleController.getString("Passcode", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$23$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[24] = new SearchResult(this, 109, LocaleController.getString("TwoStepVerification", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$24$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[25] = new SearchResult(this, 110, LocaleController.getString("SessionsTitle", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$25$ProfileActivity$SearchAdapter();
-                }
-            });
+            searchResultArr[0] = new SearchResult(this, 500, LocaleController.getString("EditName", NUM), 0, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda10(this));
+            searchResultArr[1] = new SearchResult(this, 501, LocaleController.getString("ChangePhoneNumber", NUM), 0, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda11(this));
+            searchResultArr[2] = new SearchResult(this, 502, LocaleController.getString("AddAnotherAccount", NUM), 0, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda32(this));
+            searchResultArr[3] = new SearchResult(this, 503, LocaleController.getString("UserBio", NUM), 0, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda62(this));
+            searchResultArr[4] = new SearchResult(this, 1, LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda18(this));
+            searchResultArr[5] = new SearchResult(this, 2, LocaleController.getString("NotificationsPrivateChats", NUM), LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda7(this));
+            searchResultArr[6] = new SearchResult(this, 3, LocaleController.getString("NotificationsGroups", NUM), LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda22(this));
+            searchResultArr[7] = new SearchResult(this, 4, LocaleController.getString("NotificationsChannels", NUM), LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda41(this));
+            searchResultArr[8] = new SearchResult(this, 5, LocaleController.getString("VoipNotificationSettings", NUM), "callsSectionRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda0(this));
+            searchResultArr[9] = new SearchResult(this, 6, LocaleController.getString("BadgeNumber", NUM), "badgeNumberSection", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda3(this));
+            searchResultArr[10] = new SearchResult(this, 7, LocaleController.getString("InAppNotifications", NUM), "inappSectionRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda63(this));
+            searchResultArr[11] = new SearchResult(this, 8, LocaleController.getString("ContactJoined", NUM), "contactJoinedRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda51(this));
+            searchResultArr[12] = new SearchResult(this, 9, LocaleController.getString("PinnedMessages", NUM), "pinnedMessageRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda61(this));
+            searchResultArr[13] = new SearchResult(this, 10, LocaleController.getString("ResetAllNotifications", NUM), "resetNotificationsRow", LocaleController.getString("NotificationsAndSounds", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda13(this));
+            searchResultArr[14] = new SearchResult(this, 100, LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda24(this));
+            searchResultArr[15] = new SearchResult(this, 101, LocaleController.getString("BlockedUsers", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda74(this));
+            searchResultArr[16] = new SearchResult(this, 105, LocaleController.getString("PrivacyPhone", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda71(this));
+            searchResultArr[17] = new SearchResult(this, 102, LocaleController.getString("PrivacyLastSeen", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda26(this));
+            searchResultArr[18] = new SearchResult(this, 103, LocaleController.getString("PrivacyProfilePhoto", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda54(this));
+            searchResultArr[19] = new SearchResult(this, 104, LocaleController.getString("PrivacyForwards", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda77(this));
+            searchResultArr[20] = new SearchResult(this, 105, LocaleController.getString("PrivacyP2P", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda60(this));
+            searchResultArr[21] = new SearchResult(this, 106, LocaleController.getString("Calls", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda5(this));
+            searchResultArr[22] = new SearchResult(this, 107, LocaleController.getString("GroupsAndChannels", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda29(this));
+            searchResultArr[23] = new SearchResult(this, 108, LocaleController.getString("Passcode", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda23(this));
+            searchResultArr[24] = new SearchResult(this, 109, LocaleController.getString("TwoStepVerification", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda69(this));
+            searchResultArr[25] = new SearchResult(this, 110, LocaleController.getString("SessionsTitle", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda35(this));
             if (profileActivity.getMessagesController().autoarchiveAvailable) {
-                searchResult = new SearchResult(this, 121, LocaleController.getString("ArchiveAndMute", NUM), "newChatsRow", LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                    public final void run() {
-                        ProfileActivity.SearchAdapter.this.lambda$new$26$ProfileActivity$SearchAdapter();
-                    }
-                });
+                searchResult = new SearchResult(this, 121, LocaleController.getString("ArchiveAndMute", NUM), "newChatsRow", LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda17(this));
             } else {
                 searchResult = null;
             }
             searchResultArr[26] = searchResult;
-            searchResultArr[27] = new SearchResult(this, 112, LocaleController.getString("DeleteAccountIfAwayFor2", NUM), "deleteAccountRow", LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$27$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[28] = new SearchResult(this, 113, LocaleController.getString("PrivacyPaymentsClear", NUM), "paymentsClearRow", LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$28$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[29] = new SearchResult(this, 114, LocaleController.getString("WebSessionsTitle", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$29$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[30] = new SearchResult(this, 115, LocaleController.getString("SyncContactsDelete", NUM), "contactsDeleteRow", LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$30$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[31] = new SearchResult(this, 116, LocaleController.getString("SyncContacts", NUM), "contactsSyncRow", LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$31$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[32] = new SearchResult(this, 117, LocaleController.getString("SuggestContacts", NUM), "contactsSuggestRow", LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$32$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[33] = new SearchResult(this, 118, LocaleController.getString("MapPreviewProvider", NUM), "secretMapRow", LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$33$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[34] = new SearchResult(this, 119, LocaleController.getString("SecretWebPage", NUM), "secretWebpageRow", LocaleController.getString("PrivacySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$34$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[35] = new SearchResult(this, 120, LocaleController.getString("Devices", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$35$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[36] = new SearchResult(this, 200, LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$36$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[37] = new SearchResult(this, 201, LocaleController.getString("DataUsage", NUM), "usageSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$37$ProfileActivity$SearchAdapter();
-                }
-            });
+            searchResultArr[27] = new SearchResult(this, 112, LocaleController.getString("DeleteAccountIfAwayFor2", NUM), "deleteAccountRow", LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda45(this));
+            searchResultArr[28] = new SearchResult(this, 113, LocaleController.getString("PrivacyPaymentsClear", NUM), "paymentsClearRow", LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda78(this));
+            searchResultArr[29] = new SearchResult(this, 114, LocaleController.getString("WebSessionsTitle", NUM), LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda76(this));
+            searchResultArr[30] = new SearchResult(this, 115, LocaleController.getString("SyncContactsDelete", NUM), "contactsDeleteRow", LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda57(this));
+            searchResultArr[31] = new SearchResult(this, 116, LocaleController.getString("SyncContacts", NUM), "contactsSyncRow", LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda19(this));
+            searchResultArr[32] = new SearchResult(this, 117, LocaleController.getString("SuggestContacts", NUM), "contactsSuggestRow", LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda73(this));
+            searchResultArr[33] = new SearchResult(this, 118, LocaleController.getString("MapPreviewProvider", NUM), "secretMapRow", LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda55(this));
+            searchResultArr[34] = new SearchResult(this, 119, LocaleController.getString("SecretWebPage", NUM), "secretWebpageRow", LocaleController.getString("PrivacySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda40(this));
+            searchResultArr[35] = new SearchResult(this, 120, LocaleController.getString("Devices", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda8(this));
+            searchResultArr[36] = new SearchResult(this, 200, LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda6(this));
+            searchResultArr[37] = new SearchResult(this, 201, LocaleController.getString("DataUsage", NUM), "usageSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda46(this));
             String str = "StorageUsage";
-            searchResultArr[38] = new SearchResult(this, 202, LocaleController.getString("StorageUsage", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$38$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[39] = new SearchResult(203, LocaleController.getString("KeepMedia", NUM), "keepMediaRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString(str, NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$39$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[40] = new SearchResult(204, LocaleController.getString("ClearMediaCache", NUM), "cacheRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString(str, NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$40$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[41] = new SearchResult(205, LocaleController.getString("LocalDatabase", NUM), "databaseRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString(str, NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$41$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[42] = new SearchResult(this, 206, LocaleController.getString("NetworkUsage", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$42$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[43] = new SearchResult(this, 207, LocaleController.getString("AutomaticMediaDownload", NUM), "mediaDownloadSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$43$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[44] = new SearchResult(this, 208, LocaleController.getString("WhenUsingMobileData", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$44$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[45] = new SearchResult(this, 209, LocaleController.getString("WhenConnectedOnWiFi", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$45$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[46] = new SearchResult(this, 210, LocaleController.getString("WhenRoaming", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$46$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[47] = new SearchResult(this, 211, LocaleController.getString("ResetAutomaticMediaDownload", NUM), "resetDownloadRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$47$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[48] = new SearchResult(this, 212, LocaleController.getString("AutoplayMedia", NUM), "autoplayHeaderRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$48$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[49] = new SearchResult(this, 213, LocaleController.getString("AutoplayGIF", NUM), "autoplayGifsRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$49$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[50] = new SearchResult(this, 214, LocaleController.getString("AutoplayVideo", NUM), "autoplayVideoRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$50$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[51] = new SearchResult(this, 215, LocaleController.getString("Streaming", NUM), "streamSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$51$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[52] = new SearchResult(this, 216, LocaleController.getString("EnableStreaming", NUM), "enableStreamRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$52$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[53] = new SearchResult(this, 217, LocaleController.getString("Calls", NUM), "callsSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$53$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[54] = new SearchResult(this, 218, LocaleController.getString("VoipUseLessData", NUM), "useLessDataForCallsRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$54$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[55] = new SearchResult(this, 219, LocaleController.getString("VoipQuickReplies", NUM), "quickRepliesRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$55$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[56] = new SearchResult(this, 220, LocaleController.getString("ProxySettings", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$56$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[57] = new SearchResult(221, LocaleController.getString("UseProxyForCalls", NUM), "callsRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString("ProxySettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$57$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[58] = new SearchResult(this, 111, LocaleController.getString("PrivacyDeleteCloudDrafts", NUM), "clearDraftsRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$58$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[59] = new SearchResult(this, 300, LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$59$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[60] = new SearchResult(this, 301, LocaleController.getString("TextSizeHeader", NUM), "textSizeHeaderRow", LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$60$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[61] = new SearchResult(this, 302, LocaleController.getString("ChatBackground", NUM), LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$61$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[62] = new SearchResult(303, LocaleController.getString("SetColor", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("ChatBackground", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$62$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[63] = new SearchResult(304, LocaleController.getString("ResetChatBackgrounds", NUM), "resetRow", LocaleController.getString("ChatSettings", NUM), LocaleController.getString("ChatBackground", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$63$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[64] = new SearchResult(this, 305, LocaleController.getString("AutoNightTheme", NUM), LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$64$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[65] = new SearchResult(this, 306, LocaleController.getString("ColorTheme", NUM), "themeHeaderRow", LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$65$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[66] = new SearchResult(this, 307, LocaleController.getString("ChromeCustomTabs", NUM), "customTabsRow", LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$66$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[67] = new SearchResult(this, 308, LocaleController.getString("DirectShare", NUM), "directShareRow", LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$67$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[68] = new SearchResult(this, 309, LocaleController.getString("EnableAnimations", NUM), "enableAnimationsRow", LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$68$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[69] = new SearchResult(this, 310, LocaleController.getString("RaiseToSpeak", NUM), "raiseToSpeakRow", LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$69$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[70] = new SearchResult(this, 311, LocaleController.getString("SendByEnter", NUM), "sendByEnterRow", LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$70$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[71] = new SearchResult(this, 312, LocaleController.getString("SaveToGallerySettings", NUM), "saveToGalleryRow", LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$71$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[72] = new SearchResult(this, 312, LocaleController.getString("DistanceUnits", NUM), "distanceRow", LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$72$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[73] = new SearchResult(this, 313, LocaleController.getString("StickersAndMasks", NUM), LocaleController.getString("ChatSettings", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$73$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[74] = new SearchResult(314, LocaleController.getString("SuggestStickers", NUM), "suggestRow", LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$74$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[75] = new SearchResult(315, LocaleController.getString("FeaturedStickers", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$75$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[76] = new SearchResult(316, LocaleController.getString("Masks", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$76$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[77] = new SearchResult(317, LocaleController.getString("ArchivedStickers", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$77$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[78] = new SearchResult(317, LocaleController.getString("ArchivedMasks", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$78$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[79] = new SearchResult(this, 400, LocaleController.getString("Language", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$79$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[80] = new SearchResult(this, 402, LocaleController.getString("AskAQuestion", NUM), LocaleController.getString("SettingsHelp", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$80$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[81] = new SearchResult(this, 403, LocaleController.getString("TelegramFAQ", NUM), LocaleController.getString("SettingsHelp", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$81$ProfileActivity$SearchAdapter();
-                }
-            });
-            searchResultArr[82] = new SearchResult(this, 404, LocaleController.getString("PrivacyPolicy", NUM), LocaleController.getString("SettingsHelp", NUM), NUM, new Runnable() {
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$82$ProfileActivity$SearchAdapter();
-                }
-            });
+            searchResultArr[38] = new SearchResult(this, 202, LocaleController.getString("StorageUsage", NUM), LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda27(this));
+            searchResultArr[39] = new SearchResult(203, LocaleController.getString("KeepMedia", NUM), "keepMediaRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString(str, NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda64(this));
+            searchResultArr[40] = new SearchResult(204, LocaleController.getString("ClearMediaCache", NUM), "cacheRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString(str, NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda15(this));
+            searchResultArr[41] = new SearchResult(205, LocaleController.getString("LocalDatabase", NUM), "databaseRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString(str, NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda1(this));
+            searchResultArr[42] = new SearchResult(this, 206, LocaleController.getString("NetworkUsage", NUM), LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda75(this));
+            searchResultArr[43] = new SearchResult(this, 207, LocaleController.getString("AutomaticMediaDownload", NUM), "mediaDownloadSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda48(this));
+            searchResultArr[44] = new SearchResult(this, 208, LocaleController.getString("WhenUsingMobileData", NUM), LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda21(this));
+            searchResultArr[45] = new SearchResult(this, 209, LocaleController.getString("WhenConnectedOnWiFi", NUM), LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda16(this));
+            searchResultArr[46] = new SearchResult(this, 210, LocaleController.getString("WhenRoaming", NUM), LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda28(this));
+            searchResultArr[47] = new SearchResult(this, 211, LocaleController.getString("ResetAutomaticMediaDownload", NUM), "resetDownloadRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda65(this));
+            searchResultArr[48] = new SearchResult(this, 212, LocaleController.getString("AutoplayMedia", NUM), "autoplayHeaderRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda2(this));
+            searchResultArr[49] = new SearchResult(this, 213, LocaleController.getString("AutoplayGIF", NUM), "autoplayGifsRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda39(this));
+            searchResultArr[50] = new SearchResult(this, 214, LocaleController.getString("AutoplayVideo", NUM), "autoplayVideoRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda59(this));
+            searchResultArr[51] = new SearchResult(this, 215, LocaleController.getString("Streaming", NUM), "streamSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda70(this));
+            searchResultArr[52] = new SearchResult(this, 216, LocaleController.getString("EnableStreaming", NUM), "enableStreamRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda4(this));
+            searchResultArr[53] = new SearchResult(this, 217, LocaleController.getString("Calls", NUM), "callsSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda52(this));
+            searchResultArr[54] = new SearchResult(this, 218, LocaleController.getString("VoipUseLessData", NUM), "useLessDataForCallsRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda43(this));
+            searchResultArr[55] = new SearchResult(this, 219, LocaleController.getString("VoipQuickReplies", NUM), "quickRepliesRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda44(this));
+            searchResultArr[56] = new SearchResult(this, 220, LocaleController.getString("ProxySettings", NUM), LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda33(this));
+            searchResultArr[57] = new SearchResult(221, LocaleController.getString("UseProxyForCalls", NUM), "callsRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString("ProxySettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda36(this));
+            searchResultArr[58] = new SearchResult(this, 111, LocaleController.getString("PrivacyDeleteCloudDrafts", NUM), "clearDraftsRow", LocaleController.getString("DataSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda80(this));
+            searchResultArr[59] = new SearchResult(this, 300, LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda20(this));
+            searchResultArr[60] = new SearchResult(this, 301, LocaleController.getString("TextSizeHeader", NUM), "textSizeHeaderRow", LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda14(this));
+            searchResultArr[61] = new SearchResult(this, 302, LocaleController.getString("ChatBackground", NUM), LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda81(this));
+            searchResultArr[62] = new SearchResult(303, LocaleController.getString("SetColor", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("ChatBackground", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda12(this));
+            searchResultArr[63] = new SearchResult(304, LocaleController.getString("ResetChatBackgrounds", NUM), "resetRow", LocaleController.getString("ChatSettings", NUM), LocaleController.getString("ChatBackground", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda53(this));
+            searchResultArr[64] = new SearchResult(this, 305, LocaleController.getString("AutoNightTheme", NUM), LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda50(this));
+            searchResultArr[65] = new SearchResult(this, 306, LocaleController.getString("ColorTheme", NUM), "themeHeaderRow", LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda56(this));
+            searchResultArr[66] = new SearchResult(this, 307, LocaleController.getString("ChromeCustomTabs", NUM), "customTabsRow", LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda34(this));
+            searchResultArr[67] = new SearchResult(this, 308, LocaleController.getString("DirectShare", NUM), "directShareRow", LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda49(this));
+            searchResultArr[68] = new SearchResult(this, 309, LocaleController.getString("EnableAnimations", NUM), "enableAnimationsRow", LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda9(this));
+            searchResultArr[69] = new SearchResult(this, 310, LocaleController.getString("RaiseToSpeak", NUM), "raiseToSpeakRow", LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda38(this));
+            searchResultArr[70] = new SearchResult(this, 311, LocaleController.getString("SendByEnter", NUM), "sendByEnterRow", LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda82(this));
+            searchResultArr[71] = new SearchResult(this, 312, LocaleController.getString("SaveToGallerySettings", NUM), "saveToGalleryRow", LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda79(this));
+            searchResultArr[72] = new SearchResult(this, 312, LocaleController.getString("DistanceUnits", NUM), "distanceRow", LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda25(this));
+            searchResultArr[73] = new SearchResult(this, 313, LocaleController.getString("StickersAndMasks", NUM), LocaleController.getString("ChatSettings", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda58(this));
+            searchResultArr[74] = new SearchResult(314, LocaleController.getString("SuggestStickers", NUM), "suggestRow", LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda37(this));
+            searchResultArr[75] = new SearchResult(315, LocaleController.getString("FeaturedStickers", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda30(this));
+            searchResultArr[76] = new SearchResult(316, LocaleController.getString("Masks", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda68(this));
+            searchResultArr[77] = new SearchResult(317, LocaleController.getString("ArchivedStickers", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda66(this));
+            searchResultArr[78] = new SearchResult(317, LocaleController.getString("ArchivedMasks", NUM), (String) null, LocaleController.getString("ChatSettings", NUM), LocaleController.getString("StickersAndMasks", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda72(this));
+            searchResultArr[79] = new SearchResult(this, 400, LocaleController.getString("Language", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda67(this));
+            searchResultArr[80] = new SearchResult(this, 402, LocaleController.getString("AskAQuestion", NUM), LocaleController.getString("SettingsHelp", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda47(this));
+            searchResultArr[81] = new SearchResult(this, 403, LocaleController.getString("TelegramFAQ", NUM), LocaleController.getString("SettingsHelp", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda42(this));
+            searchResultArr[82] = new SearchResult(this, 404, LocaleController.getString("PrivacyPolicy", NUM), LocaleController.getString("SettingsHelp", NUM), NUM, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda31(this));
             this.searchArray = searchResultArr;
             this.faqSearchArray = new ArrayList<>();
             this.resultNames = new ArrayList<>();
@@ -11834,44 +11103,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                 }
             }
-            Collections.sort(this.recentSearches, new Object() {
-                public final int compare(Object obj, Object obj2) {
-                    return ProfileActivity.SearchAdapter.this.lambda$new$83$ProfileActivity$SearchAdapter(obj, obj2);
-                }
-
-                public /* synthetic */ java.util.Comparator reversed() {
-                    return Comparator.CC.$default$reversed(this);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparing(Function function) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
-                    return Comparator.CC.$default$thenComparing(this, function, comparator);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
-                    return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
-                    return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
-                    return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
-                }
-            });
+            Collections.sort(this.recentSearches, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda86(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$83 */
-        public /* synthetic */ int lambda$new$83$ProfileActivity$SearchAdapter(Object obj, Object obj2) {
+        public /* synthetic */ int lambda$new$83(Object obj, Object obj2) {
             int num = getNum(obj);
             int num2 = getNum(obj2);
             if (num < num2) {
@@ -11892,17 +11128,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage = new TLRPC$TL_messages_getWebPage();
                 tLRPC$TL_messages_getWebPage.url = LocaleController.getString("TelegramFaqUrl", NUM);
                 tLRPC$TL_messages_getWebPage.hash = 0;
-                this.this$0.getConnectionsManager().sendRequest(tLRPC$TL_messages_getWebPage, new RequestDelegate() {
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        ProfileActivity.SearchAdapter.this.lambda$loadFaqWebPage$85$ProfileActivity$SearchAdapter(tLObject, tLRPC$TL_error);
-                    }
-                });
+                this.this$0.getConnectionsManager().sendRequest(tLRPC$TL_messages_getWebPage, new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda87(this));
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$loadFaqWebPage$85 */
-        public /* synthetic */ void lambda$loadFaqWebPage$85$ProfileActivity$SearchAdapter(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        public /* synthetic */ void lambda$loadFaqWebPage$85(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             if (tLObject instanceof TLRPC$WebPage) {
                 ArrayList arrayList = new ArrayList();
                 TLRPC$WebPage tLRPC$WebPage = (TLRPC$WebPage) tLObject;
@@ -11938,24 +11169,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                     this.faqWebPage = tLRPC$WebPage;
                 }
-                AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-                    public final /* synthetic */ ArrayList f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        ProfileActivity.SearchAdapter.this.lambda$loadFaqWebPage$84$ProfileActivity$SearchAdapter(this.f$1);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda85(this, arrayList));
             }
             this.loadingFaqPage = false;
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$loadFaqWebPage$84 */
-        public /* synthetic */ void lambda$loadFaqWebPage$84$ProfileActivity$SearchAdapter(ArrayList arrayList) {
+        public /* synthetic */ void lambda$loadFaqWebPage$84(ArrayList arrayList) {
             this.faqSearchArray.addAll(arrayList);
             this.this$0.getMessagesController().faqSearchArray = arrayList;
             this.this$0.getMessagesController().faqWebPage = this.faqWebPage;
@@ -12142,24 +11362,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return;
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$ProfileActivity$SearchAdapter$GljfJTfxfMnyTtz5iII2fCyNwVU r1 = new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$search$87$ProfileActivity$SearchAdapter(this.f$1);
-                }
-            };
-            this.searchRunnable = r1;
-            dispatchQueue.postRunnable(r1, 300);
+            ProfileActivity$SearchAdapter$$ExternalSyntheticLambda83 profileActivity$SearchAdapter$$ExternalSyntheticLambda83 = new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda83(this, str);
+            this.searchRunnable = profileActivity$SearchAdapter$$ExternalSyntheticLambda83;
+            dispatchQueue.postRunnable(profileActivity$SearchAdapter$$ExternalSyntheticLambda83, 300);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$search$87 */
-        public /* synthetic */ void lambda$search$87$ProfileActivity$SearchAdapter(String str) {
+        public /* synthetic */ void lambda$search$87(String str) {
             SpannableStringBuilder spannableStringBuilder;
             int i;
             String str2;
@@ -12286,28 +11495,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     size = size;
                 }
             }
-            AndroidUtilities.runOnUIThread(new Runnable(str, arrayList, arrayList2, arrayList3) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ ArrayList f$2;
-                public final /* synthetic */ ArrayList f$3;
-                public final /* synthetic */ ArrayList f$4;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
-
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$search$86$ProfileActivity$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ProfileActivity$SearchAdapter$$ExternalSyntheticLambda84(this, str, arrayList, arrayList2, arrayList3));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$search$86 */
-        public /* synthetic */ void lambda$search$86$ProfileActivity$SearchAdapter(String str, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
+        public /* synthetic */ void lambda$search$86(String str, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
             if (str.equals(this.lastSearchString)) {
                 if (!this.searchWas) {
                     this.this$0.emptyView.stickerView.getImageReceiver().startAnimation();
@@ -12328,11 +11520,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        $$Lambda$ProfileActivity$Ej91zEX2QJ13OnYunMfq0v8rZ2M r10 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                ProfileActivity.this.lambda$getThemeDescriptions$34$ProfileActivity();
-            }
-        };
+        ProfileActivity$$ExternalSyntheticLambda31 profileActivity$$ExternalSyntheticLambda31 = new ProfileActivity$$ExternalSyntheticLambda31(this);
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         SharedMediaLayout sharedMediaLayout2 = this.sharedMediaLayout;
         if (sharedMediaLayout2 != null) {
@@ -12344,19 +11532,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuBackground"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItem"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItemIcon"));
-        $$Lambda$ProfileActivity$Ej91zEX2QJ13OnYunMfq0v8rZ2M r7 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "actionBarDefaultIcon"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_actionBarSelectorBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "chat_lockIcon"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_subtitleInProfileBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundActionBarBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "profile_title"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "profile_status"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_subtitleInProfileBlue"));
+        ProfileActivity$$ExternalSyntheticLambda31 profileActivity$$ExternalSyntheticLambda312 = profileActivity$$ExternalSyntheticLambda31;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda312, "actionBarDefaultIcon"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda312, "avatar_actionBarSelectorBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda312, "chat_lockIcon"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda312, "avatar_subtitleInProfileBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda312, "avatar_backgroundActionBarBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda312, "profile_title"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda312, "profile_status"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda312, "avatar_subtitleInProfileBlue"));
         if (this.mediaCounterTextView != null) {
-            $$Lambda$ProfileActivity$Ej91zEX2QJ13OnYunMfq0v8rZ2M r72 = r10;
-            arrayList.add(new ThemeDescription(this.mediaCounterTextView.getTextView(), ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, r72, "player_actionBarSubtitle"));
-            arrayList.add(new ThemeDescription(this.mediaCounterTextView.getNextTextView(), ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, r72, "player_actionBarSubtitle"));
+            ProfileActivity$$ExternalSyntheticLambda31 profileActivity$$ExternalSyntheticLambda313 = profileActivity$$ExternalSyntheticLambda31;
+            arrayList.add(new ThemeDescription(this.mediaCounterTextView.getTextView(), ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda313, "player_actionBarSubtitle"));
+            arrayList.add(new ThemeDescription(this.mediaCounterTextView.getNextTextView(), ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda313, "player_actionBarSubtitle"));
         }
         arrayList.add(new ThemeDescription(this.topView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_backgroundActionBarBlue"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
@@ -12393,18 +11581,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{UserCell.class}, new String[]{"adminTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "profile_creatorIcon"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$ProfileActivity$Ej91zEX2QJ13OnYunMfq0v8rZ2M r8 = r10;
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteBlueText"));
+        ProfileActivity$$ExternalSyntheticLambda31 profileActivity$$ExternalSyntheticLambda314 = profileActivity$$ExternalSyntheticLambda31;
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) profileActivity$$ExternalSyntheticLambda314, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) profileActivity$$ExternalSyntheticLambda314, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$ProfileActivity$Ej91zEX2QJ13OnYunMfq0v8rZ2M r73 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "avatar_backgroundPink"));
+        ProfileActivity$$ExternalSyntheticLambda31 profileActivity$$ExternalSyntheticLambda315 = profileActivity$$ExternalSyntheticLambda31;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda315, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda315, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda315, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda315, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda315, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda315, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileActivity$$ExternalSyntheticLambda315, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription(this.undoView, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_background"));
         arrayList.add(new ThemeDescription((View) this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_cancelColor"));
         arrayList.add(new ThemeDescription((View) this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_cancelColor"));
@@ -12439,8 +11627,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$34 */
-    public /* synthetic */ void lambda$getThemeDescriptions$34$ProfileActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$34() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

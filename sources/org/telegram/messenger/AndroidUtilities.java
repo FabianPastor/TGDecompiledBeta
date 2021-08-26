@@ -169,7 +169,7 @@ public class AndroidUtilities {
     public static int roundMessageSize;
     private static Paint roundPaint;
     public static int roundPlayingMessageSize;
-    public static final Linkify.MatchFilter sUrlMatchFilter = $$Lambda$AndroidUtilities$7u2C_VzyCOR_g29g_gFE94u3hQ.INSTANCE;
+    public static final Linkify.MatchFilter sUrlMatchFilter = AndroidUtilities$$ExternalSyntheticLambda2.INSTANCE;
     public static float screenRefreshRate = 60.0f;
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
@@ -424,7 +424,8 @@ public class AndroidUtilities {
         }
     }
 
-    static /* synthetic */ boolean lambda$static$0(CharSequence charSequence, int i, int i2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$static$0(CharSequence charSequence, int i, int i2) {
         return i == 0 || charSequence.charAt(i - 1) != '@';
     }
 
@@ -467,7 +468,7 @@ public class AndroidUtilities {
 
     private static void pruneOverlaps(ArrayList<LinkSpec> arrayList) {
         int i;
-        Collections.sort(arrayList, $$Lambda$AndroidUtilities$4i4JBH81JuUypGnQlUP0ZWEqgo.INSTANCE);
+        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda6.INSTANCE);
         int size = arrayList.size();
         int i2 = 0;
         while (i2 < size - 1) {
@@ -488,7 +489,8 @@ public class AndroidUtilities {
         }
     }
 
-    static /* synthetic */ int lambda$pruneOverlaps$1(LinkSpec linkSpec, LinkSpec linkSpec2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$pruneOverlaps$1(LinkSpec linkSpec, LinkSpec linkSpec2) {
         int i;
         int i2;
         int i3 = linkSpec.start;
@@ -733,18 +735,15 @@ public class AndroidUtilities {
             }
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
             builder.setMessage(LocaleController.getString("InstallGoogleMaps", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    AndroidUtilities.lambda$isGoogleMapsInstalled$2(BaseFragment.this, dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new AndroidUtilities$$ExternalSyntheticLambda1(baseFragment));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             baseFragment.showDialog(builder.create());
             return false;
         }
     }
 
-    static /* synthetic */ void lambda$isGoogleMapsInstalled$2(BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$isGoogleMapsInstalled$2(BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
         try {
             baseFragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
         } catch (Exception e) {
@@ -1037,7 +1036,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625005(0x7f0e042d, float:1.8877206E38)
+                r0 = 2131625010(0x7f0e0432, float:1.8877216E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1049,12 +1048,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625006(0x7f0e042e, float:1.8877208E38)
+                r0 = 2131625011(0x7f0e0433, float:1.8877218E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625007(0x7f0e042f, float:1.887721E38)
+                r0 = 2131625012(0x7f0e0434, float:1.887722E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1172,27 +1171,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131626971(0x7f0e0bdb, float:1.8881193E38)
+                r0 = 2131626988(0x7f0e0bec, float:1.8881228E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131626972(0x7f0e0bdc, float:1.8881195E38)
+                r0 = 2131626989(0x7f0e0bed, float:1.888123E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131626963(0x7f0e0bd3, float:1.8881177E38)
+                r0 = 2131626980(0x7f0e0be4, float:1.8881212E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131626962(0x7f0e0bd2, float:1.8881175E38)
+                r0 = 2131626979(0x7f0e0be3, float:1.888121E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131626964(0x7f0e0bd4, float:1.888118E38)
+                r0 = 2131626981(0x7f0e0be5, float:1.8881214E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -1740,7 +1739,7 @@ public class AndroidUtilities {
             waitingForSms = z;
             if (z) {
                 try {
-                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener($$Lambda$AndroidUtilities$hKLaMXCU8yErbTT06VTsVrEeIVM.INSTANCE);
+                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(AndroidUtilities$$ExternalSyntheticLambda5.INSTANCE);
                 } catch (Throwable th) {
                     FileLog.e(th);
                 }
@@ -1748,7 +1747,8 @@ public class AndroidUtilities {
         }
     }
 
-    static /* synthetic */ void lambda$setWaitingForSms$3(Void voidR) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setWaitingForSms$3(Void voidR) {
         if (BuildVars.DEBUG_VERSION) {
             FileLog.d("sms listener registered");
         }
@@ -3272,7 +3272,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626574(0x7f0e0a4e, float:1.8880388E38)
+            r7 = 2131626591(0x7f0e0a5f, float:1.8880423E38)
             java.lang.String r8 = "OK"
             r9 = 2131624285(0x7f0e015d, float:1.8875745E38)
             java.lang.String r10 = "AppName"
@@ -3295,7 +3295,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625874(0x7f0e0792, float:1.8878968E38)
+            r1 = 2131625884(0x7f0e079c, float:1.8878989E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3379,7 +3379,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626345(0x7f0e0969, float:1.8879924E38)
+            r1 = 2131626362(0x7f0e097a, float:1.8879958E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3461,13 +3461,13 @@ public class AndroidUtilities {
             java.lang.String r8 = "ApkRestricted"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setMessage(r7)
-            r7 = 2131626956(0x7f0e0bcc, float:1.8881163E38)
+            r7 = 2131626973(0x7f0e0bdd, float:1.8881197E38)
             java.lang.String r8 = "PermissionOpenSettings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
-            org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r8 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY
+            org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0 r8 = new org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0
             r8.<init>(r9)
             r6.setPositiveButton(r7, r8)
-            r7 = 2131624658(0x7f0e02d2, float:1.8876502E38)
+            r7 = 2131624660(0x7f0e02d4, float:1.8876506E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setNegativeButton(r7, r5)
@@ -3524,7 +3524,8 @@ public class AndroidUtilities {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openForView(java.io.File, java.lang.String, java.lang.String, android.app.Activity):boolean");
     }
 
-    static /* synthetic */ void lambda$openForView$4(Activity activity, DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$openForView$4(Activity activity, DialogInterface dialogInterface, int i) {
         try {
             activity.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + activity.getPackageName())));
         } catch (Exception e) {
@@ -3974,46 +3975,17 @@ public class AndroidUtilities {
         pickerBottomLayout.cancelButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new View.OnClickListener(dismissRunnable) {
-            public final /* synthetic */ Runnable f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void onClick(View view) {
-                this.f$0.run();
-            }
-        });
+        pickerBottomLayout.cancelButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda3(dismissRunnable));
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", NUM).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(new View.OnClickListener(str, str2, str5, str4, str3, dismissRunnable) {
-            public final /* synthetic */ String f$0;
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ String f$2;
-            public final /* synthetic */ String f$3;
-            public final /* synthetic */ String f$4;
-            public final /* synthetic */ Runnable f$5;
-
-            {
-                this.f$0 = r1;
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-            }
-
-            public final void onClick(View view) {
-                AndroidUtilities.lambda$showProxyAlert$6(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
-            }
-        });
+        pickerBottomLayout.doneButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda4(str, str2, str5, str4, str3, dismissRunnable));
         builder.show();
     }
 
-    static /* synthetic */ void lambda$showProxyAlert$6(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showProxyAlert$6(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
         SharedConfig.ProxyInfo proxyInfo;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("proxy_enabled", true);
@@ -4486,26 +4458,15 @@ public class AndroidUtilities {
                 Field declaredField = baseFragment.getClass().getDeclaredField("listView");
                 declaredField.setAccessible(true);
                 RecyclerListView recyclerListView = (RecyclerListView) declaredField.get(baseFragment);
-                recyclerListView.highlightRow(new RecyclerListView.IntReturnCallback(str, recyclerListView) {
-                    public final /* synthetic */ String f$1;
-                    public final /* synthetic */ RecyclerListView f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final int run() {
-                        return AndroidUtilities.lambda$scrollToFragmentRow$7(BaseFragment.this, this.f$1, this.f$2);
-                    }
-                });
+                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda7(baseFragment, str, recyclerListView));
                 declaredField.setAccessible(false);
             } catch (Throwable unused) {
             }
         }
     }
 
-    static /* synthetic */ int lambda$scrollToFragmentRow$7(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$scrollToFragmentRow$7(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
         int i = -1;
         try {
             Field declaredField = baseFragment.getClass().getDeclaredField(str);
@@ -4547,32 +4508,7 @@ public class AndroidUtilities {
             z2 = false;
         }
         int i2 = null;
-        if (z && view.getTag() == null) {
-            view.animate().setListener((Animator.AnimatorListener) null).cancel();
-            if (z2) {
-                if (view.getVisibility() != 0) {
-                    view.setVisibility(0);
-                    view.setAlpha(0.0f);
-                    view.setScaleX(f);
-                    view.setScaleY(f);
-                }
-                view.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
-            } else {
-                view.setVisibility(0);
-                view.setAlpha(1.0f);
-                view.setScaleX(1.0f);
-                view.setScaleY(1.0f);
-            }
-            view.setTag(1);
-        } else if (!z && view.getTag() != null) {
-            view.animate().setListener((Animator.AnimatorListener) null).cancel();
-            if (z2) {
-                view.animate().alpha(0.0f).scaleY(f).scaleX(f).setListener(new HideViewAfterAnimation(view)).setDuration(150).start();
-            } else {
-                view.setVisibility(8);
-            }
-            view.setTag((Object) null);
-        } else if (!z2) {
+        if (!z2) {
             view.animate().setListener((Animator.AnimatorListener) null).cancel();
             if (!z) {
                 i = 8;
@@ -4585,6 +4521,20 @@ public class AndroidUtilities {
             view.setAlpha(1.0f);
             view.setScaleX(1.0f);
             view.setScaleY(1.0f);
+        } else if (z && view.getTag() == null) {
+            view.animate().setListener((Animator.AnimatorListener) null).cancel();
+            if (view.getVisibility() != 0) {
+                view.setVisibility(0);
+                view.setAlpha(0.0f);
+                view.setScaleX(f);
+                view.setScaleY(f);
+            }
+            view.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
+            view.setTag(1);
+        } else if (!z && view.getTag() != null) {
+            view.animate().setListener((Animator.AnimatorListener) null).cancel();
+            view.animate().alpha(0.0f).scaleY(f).scaleX(f).setListener(new HideViewAfterAnimation(view)).setDuration(150).start();
+            view.setTag((Object) null);
         }
     }
 }

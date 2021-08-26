@@ -1,15 +1,22 @@
 package j$.util.stream;
 
-import j$.util.function.x;
+import j$.util.CLASSNAMEh;
+import j$.util.concurrent.a;
+import j$.util.function.BiConsumer;
 
 /* renamed from: j$.util.stream.s0  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEs0 implements x {
+public final /* synthetic */ class CLASSNAMEs0 implements BiConsumer {
     public static final /* synthetic */ CLASSNAMEs0 a = new CLASSNAMEs0();
 
     private /* synthetic */ CLASSNAMEs0() {
     }
 
-    public final Object apply(int i) {
-        return new Integer[i];
+    public final void accept(Object obj, Object obj2) {
+        ((CLASSNAMEh) obj).b((CLASSNAMEh) obj2);
+    }
+
+    public BiConsumer c(BiConsumer biConsumer) {
+        biConsumer.getClass();
+        return new a((BiConsumer) this, biConsumer);
     }
 }

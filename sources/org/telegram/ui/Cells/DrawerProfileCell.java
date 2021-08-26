@@ -126,11 +126,7 @@ public class DrawerProfileCell extends FrameLayout {
             rLottieImageView.setBackgroundDrawable(Theme.createSelectorDrawable(color2, 1, AndroidUtilities.dp(17.0f)));
             Theme.setRippleDrawableForceSoftware((RippleDrawable) this.darkThemeView.getBackground());
         }
-        this.darkThemeView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                DrawerProfileCell.this.lambda$new$0$DrawerProfileCell(view);
-            }
-        });
+        this.darkThemeView.setOnClickListener(new DrawerProfileCell$$ExternalSyntheticLambda0(this));
         addView(this.darkThemeView, LayoutHelper.createFrame(48, 48.0f, 85, 0.0f, 0.0f, 6.0f, 90.0f));
         if (Theme.getEventType() == 0) {
             SnowflakesEffect snowflakesEffect2 = new SnowflakesEffect();
@@ -143,9 +139,8 @@ public class DrawerProfileCell extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:22:0x005b  */
     /* JADX WARNING: Removed duplicated region for block: B:23:0x0067  */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x0079  */
-    /* renamed from: lambda$new$0 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$new$0$DrawerProfileCell(android.view.View r7) {
+    public /* synthetic */ void lambda$new$0(android.view.View r7) {
         /*
             r6 = this;
             boolean r7 = switchingTheme
@@ -220,7 +215,7 @@ public class DrawerProfileCell extends FrameLayout {
             r6.switchTheme(r0, r7)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DrawerProfileCell.lambda$new$0$DrawerProfileCell(android.view.View):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DrawerProfileCell.lambda$new$0(android.view.View):void");
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v1, resolved type: java.lang.Object[]} */

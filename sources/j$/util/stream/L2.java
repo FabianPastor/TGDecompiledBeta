@@ -1,28 +1,55 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import j$.util.function.x;
-import j$.util.stream.D1;
-import j$.util.stream.R1;
-import j$.util.stream.S1;
-import java.util.Arrays;
+import j$.util.function.BiConsumer;
+import j$.util.function.Consumer;
+import j$.util.function.y;
 
-final class L2 extends D1.h<Long> {
-    L2(CLASSNAMEh1 h1Var) {
-        super(h1Var, U2.LONG_VALUE, T2.l | T2.j);
+class L2 extends U2 implements T2 {
+    final /* synthetic */ y b;
+    final /* synthetic */ BiConsumer c;
+    final /* synthetic */ BiConsumer d;
+
+    L2(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
+        this.b = yVar;
+        this.c = biConsumer;
+        this.d = biConsumer2;
     }
 
-    public R1 D0(T1 t1, Spliterator spliterator, x xVar) {
-        if (T2.SORTED.d(t1.r0())) {
-            return t1.o0(spliterator, false, xVar);
-        }
-        long[] jArr = (long[]) ((R1.d) t1.o0(spliterator, true, xVar)).e();
-        Arrays.sort(jArr);
-        return new S1.p(jArr);
+    public /* synthetic */ void accept(double d2) {
+        CLASSNAMEp1.f(this);
+        throw null;
     }
 
-    public A2 G0(int i, A2 a2) {
-        a2.getClass();
-        return T2.SORTED.d(i) ? a2 : T2.SIZED.d(i) ? new Q2(a2) : new I2(a2);
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEp1.d(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEp1.e(this);
+        throw null;
+    }
+
+    public void accept(Object obj) {
+        this.c.accept(this.a, obj);
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    public void h(T2 t2) {
+        this.d.accept(this.a, ((L2) t2).a);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b.get();
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

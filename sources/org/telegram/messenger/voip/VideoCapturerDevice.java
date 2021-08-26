@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.webrtc.Camera1Enumerator;
 import org.webrtc.Camera2Enumerator;
 import org.webrtc.CameraEnumerator;
@@ -57,26 +56,15 @@ public class VideoCapturerDevice {
         if (Build.VERSION.SDK_INT >= 18) {
             Logging.enableLogToDebugOutput(Logging.Severity.LS_INFO);
             Logging.d("VideoCapturerDevice", "device model = " + Build.MANUFACTURER + Build.MODEL);
-            AndroidUtilities.runOnUIThread(new Runnable(z) {
-                public final /* synthetic */ boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    VideoCapturerDevice.this.lambda$new$0$VideoCapturerDevice(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda9(this, z));
         }
     }
 
     /* JADX WARNING: type inference failed for: r3v0, types: [boolean] */
     /* access modifiers changed from: private */
     /* JADX WARNING: Unknown variable types count: 1 */
-    /* renamed from: lambda$new$0 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$new$0$VideoCapturerDevice(boolean r3) {
+    public /* synthetic */ void lambda$new$0(boolean r3) {
         /*
             r2 = this;
             org.webrtc.EglBase r0 = eglBase
@@ -100,7 +88,7 @@ public class VideoCapturerDevice {
             r2.handler = r3
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VideoCapturerDevice.lambda$new$0$VideoCapturerDevice(boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VideoCapturerDevice.lambda$new$0(boolean):void");
     }
 
     public static void checkScreenCapturerSize() {
@@ -112,22 +100,13 @@ public class VideoCapturerDevice {
             if (i != i2 || videoCapturerDeviceArr[1].currentHeight != screenCaptureSize.y) {
                 videoCapturerDeviceArr[1].currentWidth = i2;
                 videoCapturerDeviceArr[1].currentHeight = screenCaptureSize.y;
-                videoCapturerDeviceArr[1].handler.post(new Runnable(screenCaptureSize) {
-                    public final /* synthetic */ Point f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        VideoCapturerDevice.lambda$checkScreenCapturerSize$1(VideoCapturerDevice.this, this.f$1);
-                    }
-                });
+                videoCapturerDeviceArr[1].handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda7(videoCapturerDeviceArr[1], screenCaptureSize));
             }
         }
     }
 
-    static /* synthetic */ void lambda$checkScreenCapturerSize$1(VideoCapturerDevice videoCapturerDevice, Point point) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$checkScreenCapturerSize$1(VideoCapturerDevice videoCapturerDevice, Point point) {
         VideoCapturer videoCapturer2 = videoCapturerDevice.videoCapturer;
         if (videoCapturer2 != null) {
             videoCapturer2.changeCaptureFormat(point.x, point.y, 30);
@@ -186,25 +165,12 @@ public class VideoCapturerDevice {
 
     private void init(long j, String str) {
         if (Build.VERSION.SDK_INT >= 18) {
-            AndroidUtilities.runOnUIThread(new Runnable(j, str) {
-                public final /* synthetic */ long f$1;
-                public final /* synthetic */ String f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r4;
-                }
-
-                public final void run() {
-                    VideoCapturerDevice.this.lambda$init$5$VideoCapturerDevice(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda5(this, j, str));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$init$5 */
-    public /* synthetic */ void lambda$init$5$VideoCapturerDevice(long j, String str) {
+    public /* synthetic */ void lambda$init$5(long j, String str) {
         if (eglBase != null) {
             this.nativePtr = j;
             if (!"screen".equals(str)) {
@@ -241,42 +207,30 @@ public class VideoCapturerDevice {
                             }
 
                             public void onFirstFrameAvailable() {
-                                AndroidUtilities.runOnUIThread($$Lambda$VideoCapturerDevice$2$gGum1UL86zhpmQ75hwsQ00gpU.INSTANCE);
+                                AndroidUtilities.runOnUIThread(VideoCapturerDevice$2$$ExternalSyntheticLambda0.INSTANCE);
                             }
 
-                            static /* synthetic */ void lambda$onFirstFrameAvailable$0() {
+                            /* access modifiers changed from: private */
+                            public static /* synthetic */ void lambda$onFirstFrameAvailable$0() {
                                 if (VoIPService.getSharedInstance() != null) {
                                     VoIPService.getSharedInstance().onCameraFirstFrameAvailable();
                                 }
                             }
                         });
                         this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.getEglBaseContext());
-                        this.handler.post(new Runnable() {
-                            public final void run() {
-                                VideoCapturerDevice.this.lambda$init$3$VideoCapturerDevice();
-                            }
-                        });
+                        this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda0(this));
                         return;
                     }
-                    this.handler.post(new Runnable(str2) {
-                        public final /* synthetic */ String f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void run() {
-                            VideoCapturerDevice.this.lambda$init$4$VideoCapturerDevice(this.f$1);
-                        }
-                    });
+                    this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda8(this, str2));
                 }
             } else if (Build.VERSION.SDK_INT >= 21 && this.videoCapturer == null) {
                 this.videoCapturer = new ScreenCapturerAndroid(mediaProjectionPermissionResultData, new MediaProjection.Callback() {
                     public void onStop() {
-                        AndroidUtilities.runOnUIThread($$Lambda$VideoCapturerDevice$1$aL545guBvVZ5g5tMcj3HggeIM8U.INSTANCE);
+                        AndroidUtilities.runOnUIThread(VideoCapturerDevice$1$$ExternalSyntheticLambda0.INSTANCE);
                     }
 
-                    static /* synthetic */ void lambda$onStop$0() {
+                    /* access modifiers changed from: private */
+                    public static /* synthetic */ void lambda$onStop$0() {
                         if (VoIPService.getSharedInstance() != null) {
                             VoIPService.getSharedInstance().stopScreenCapture();
                         }
@@ -286,24 +240,13 @@ public class VideoCapturerDevice {
                 this.currentWidth = screenCaptureSize.x;
                 this.currentHeight = screenCaptureSize.y;
                 this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("ScreenCapturerThread", eglBase.getEglBaseContext());
-                this.handler.post(new Runnable(screenCaptureSize) {
-                    public final /* synthetic */ Point f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        VideoCapturerDevice.this.lambda$init$2$VideoCapturerDevice(this.f$1);
-                    }
-                });
+                this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda6(this, screenCaptureSize));
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$init$2 */
-    public /* synthetic */ void lambda$init$2$VideoCapturerDevice(Point point) {
+    public /* synthetic */ void lambda$init$2(Point point) {
         if (this.videoCapturerSurfaceTextureHelper != null) {
             long j = this.nativePtr;
             if (j != 0) {
@@ -319,8 +262,7 @@ public class VideoCapturerDevice {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$init$3 */
-    public /* synthetic */ void lambda$init$3$VideoCapturerDevice() {
+    public /* synthetic */ void lambda$init$3() {
         if (this.videoCapturerSurfaceTextureHelper != null) {
             this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
             this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
@@ -329,27 +271,17 @@ public class VideoCapturerDevice {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$init$4 */
-    public /* synthetic */ void lambda$init$4$VideoCapturerDevice(String str) {
+    public /* synthetic */ void lambda$init$4(String str) {
         ((CameraVideoCapturer) this.videoCapturer).switchCamera(new CameraVideoCapturer.CameraSwitchHandler() {
             public void onCameraSwitchError(String str) {
             }
 
             public void onCameraSwitchDone(boolean z) {
-                AndroidUtilities.runOnUIThread(new Runnable(z) {
-                    public final /* synthetic */ boolean f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void run() {
-                        VideoCapturerDevice.AnonymousClass3.lambda$onCameraSwitchDone$0(this.f$0);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new VideoCapturerDevice$3$$ExternalSyntheticLambda0(z));
             }
 
-            static /* synthetic */ void lambda$onCameraSwitchDone$0(boolean z) {
+            /* access modifiers changed from: private */
+            public static /* synthetic */ void lambda$onCameraSwitchDone$0(boolean z) {
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().setSwitchingCamera(false, z);
                 }
@@ -367,43 +299,19 @@ public class VideoCapturerDevice {
 
     private void onStateChanged(long j, int i) {
         if (Build.VERSION.SDK_INT >= 18) {
-            AndroidUtilities.runOnUIThread(new Runnable(j, i) {
-                public final /* synthetic */ long f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r4;
-                }
-
-                public final void run() {
-                    VideoCapturerDevice.this.lambda$onStateChanged$7$VideoCapturerDevice(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda4(this, j, i));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onStateChanged$7 */
-    public /* synthetic */ void lambda$onStateChanged$7$VideoCapturerDevice(long j, int i) {
+    public /* synthetic */ void lambda$onStateChanged$7(long j, int i) {
         if (this.nativePtr == j) {
-            this.handler.post(new Runnable(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    VideoCapturerDevice.this.lambda$onStateChanged$6$VideoCapturerDevice(this.f$1);
-                }
-            });
+            this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda3(this, i));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onStateChanged$6 */
-    public /* synthetic */ void lambda$onStateChanged$6$VideoCapturerDevice(int i) {
+    public /* synthetic */ void lambda$onStateChanged$6(int i) {
         VideoCapturer videoCapturer2 = this.videoCapturer;
         if (videoCapturer2 != null) {
             if (i == 2) {
@@ -421,17 +329,12 @@ public class VideoCapturerDevice {
     private void onDestroy() {
         if (Build.VERSION.SDK_INT >= 18) {
             this.nativePtr = 0;
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    VideoCapturerDevice.this.lambda$onDestroy$9$VideoCapturerDevice();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda1(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDestroy$9 */
-    public /* synthetic */ void lambda$onDestroy$9$VideoCapturerDevice() {
+    public /* synthetic */ void lambda$onDestroy$9() {
         int i = 0;
         while (true) {
             VideoCapturerDevice[] videoCapturerDeviceArr = instance;
@@ -444,11 +347,7 @@ public class VideoCapturerDevice {
                 i++;
             }
         }
-        this.handler.post(new Runnable() {
-            public final void run() {
-                VideoCapturerDevice.this.lambda$onDestroy$8$VideoCapturerDevice();
-            }
-        });
+        this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda2(this));
         try {
             this.thread.quitSafely();
         } catch (Exception e) {
@@ -457,8 +356,7 @@ public class VideoCapturerDevice {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDestroy$8 */
-    public /* synthetic */ void lambda$onDestroy$8$VideoCapturerDevice() {
+    public /* synthetic */ void lambda$onDestroy$8() {
         WebRtcAudioRecord webRtcAudioRecord;
         if ((this.videoCapturer instanceof ScreenCapturerAndroid) && (webRtcAudioRecord = WebRtcAudioRecord.Instance) != null) {
             webRtcAudioRecord.stopDeviceAudioRecord();

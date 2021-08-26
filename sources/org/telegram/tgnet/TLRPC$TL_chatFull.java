@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -53,6 +53,9 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         if ((this.flags & 32768) != 0) {
             this.groupcall_default_join_as = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
+        if ((this.flags & 65536) != 0) {
+            this.theme_emoticon = abstractSerializedData.readString(z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -94,6 +97,9 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         }
         if ((this.flags & 32768) != 0) {
             this.groupcall_default_join_as.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 65536) != 0) {
+            abstractSerializedData.writeString(this.theme_emoticon);
         }
     }
 }

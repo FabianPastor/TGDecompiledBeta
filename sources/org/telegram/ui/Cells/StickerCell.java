@@ -26,7 +26,6 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class StickerCell extends FrameLayout {
-    private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
     private boolean clearsInputField;
     private BackupImageView imageView;
     private long lastUpdateTime;
@@ -34,7 +33,10 @@ public class StickerCell extends FrameLayout {
     private float scale;
     private boolean scaled;
     private TLRPC$Document sticker;
-    private long time = 0;
+
+    static {
+        new AccelerateInterpolator(0.5f);
+    }
 
     public StickerCell(Context context) {
         super(context);
@@ -67,9 +69,8 @@ public class StickerCell extends FrameLayout {
         return this.clearsInputField;
     }
 
-    public void setSticker(TLRPC$Document tLRPC$Document, Object obj, int i) {
+    public void setSticker(TLRPC$Document tLRPC$Document, Object obj) {
         TLRPC$Document tLRPC$Document2 = tLRPC$Document;
-        int i2 = i;
         this.parentObject = obj;
         if (tLRPC$Document2 != null) {
             TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
@@ -91,19 +92,6 @@ public class StickerCell extends FrameLayout {
             }
         }
         this.sticker = tLRPC$Document2;
-        if (i2 == -1) {
-            setBackgroundResource(NUM);
-            setPadding(AndroidUtilities.dp(7.0f), 0, 0, 0);
-        } else if (i2 == 0) {
-            setBackgroundResource(NUM);
-            setPadding(0, 0, 0, 0);
-        } else if (i2 == 1) {
-            setBackgroundResource(NUM);
-            setPadding(0, 0, AndroidUtilities.dp(7.0f), 0);
-        } else if (i2 == 2) {
-            setBackgroundResource(NUM);
-            setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
-        }
         Drawable background = getBackground();
         if (background != null) {
             background.setAlpha(230);

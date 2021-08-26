@@ -1,19 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEg;
-import j$.util.function.w;
+import j$.util.function.l;
 
-public final /* synthetic */ class C0 implements w {
+public final /* synthetic */ class C0 implements l {
     public static final /* synthetic */ C0 a = new C0();
 
     private /* synthetic */ C0() {
     }
 
-    public final void accept(int i) {
-    }
-
-    public w k(w wVar) {
-        wVar.getClass();
-        return new CLASSNAMEg(this, wVar);
+    public final Object apply(int i) {
+        return Integer.valueOf(i);
     }
 }

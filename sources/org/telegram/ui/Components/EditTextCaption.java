@@ -47,7 +47,6 @@ public class EditTextCaption extends EditTextBoldCursor {
     private float offsetY;
     private int selectionEnd = -1;
     private int selectionStart = -1;
-    private int triesCount = 0;
     private int userNameLength;
     private int xOffset;
     private int yOffset;
@@ -138,7 +137,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         int i;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(LocaleController.getString("CreateLink", NUM));
-        AnonymousClass2 r1 = new EditTextBoldCursor(getContext()) {
+        AnonymousClass2 r1 = new EditTextBoldCursor(this, getContext()) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f), NUM));
@@ -166,27 +165,9 @@ public class EditTextCaption extends EditTextBoldCursor {
             this.selectionEnd = -1;
             this.selectionStart = -1;
         }
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(i2, i, r1) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ int f$2;
-            public final /* synthetic */ EditTextBoldCursor f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                EditTextCaption.this.lambda$makeSelectedUrl$0$EditTextCaption(this.f$1, this.f$2, this.f$3, dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new EditTextCaption$$ExternalSyntheticLambda0(this, i2, i, r1));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        builder.show().setOnShowListener(new DialogInterface.OnShowListener() {
-            public final void onShow(DialogInterface dialogInterface) {
-                EditTextCaption.lambda$makeSelectedUrl$1(EditTextBoldCursor.this, dialogInterface);
-            }
-        });
+        builder.show().setOnShowListener(new EditTextCaption$$ExternalSyntheticLambda1(r1));
         ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) r1.getLayoutParams();
         if (marginLayoutParams != null) {
             if (marginLayoutParams instanceof FrameLayout.LayoutParams) {
@@ -202,8 +183,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$makeSelectedUrl$0 */
-    public /* synthetic */ void lambda$makeSelectedUrl$0$EditTextCaption(int i, int i2, EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i3) {
+    public /* synthetic */ void lambda$makeSelectedUrl$0(int i, int i2, EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i3) {
         Editable text = getText();
         CharacterStyle[] characterStyleArr = (CharacterStyle[]) text.getSpans(i, i2, CharacterStyle.class);
         if (characterStyleArr != null && characterStyleArr.length > 0) {
@@ -229,7 +209,8 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
     }
 
-    static /* synthetic */ void lambda$makeSelectedUrl$1(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$makeSelectedUrl$1(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface) {
         editTextBoldCursor.requestFocus();
         AndroidUtilities.showKeyboard(editTextBoldCursor);
     }
@@ -298,7 +279,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 callback.onDestroyActionMode(actionMode);
             }
         };
-        return Build.VERSION.SDK_INT >= 23 ? new ActionMode.Callback2() {
+        return Build.VERSION.SDK_INT >= 23 ? new ActionMode.Callback2(this) {
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 return r0.onCreateActionMode(actionMode, menu);
             }

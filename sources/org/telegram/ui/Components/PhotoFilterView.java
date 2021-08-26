@@ -131,11 +131,6 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         public float[] cachedDataPoints;
         public float highlightsLevel = 75.0f;
         public float midtonesLevel = 50.0f;
-        public float previousBlacksLevel = 0.0f;
-        public float previousHighlightsLevel = 75.0f;
-        public float previousMidtonesLevel = 50.0f;
-        public float previousShadowsLevel = 25.0f;
-        public float previousWhitesLevel = 100.0f;
         public float shadowsLevel = 25.0f;
         public float whitesLevel = 100.0f;
 
@@ -407,8 +402,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r3 = 51
             if (r2 == 0) goto L_0x011d
             r0.textureView = r2
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$q8bSXenPFKmAiLet4nYY0FG6QUI r4 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$q8bSXenPFKmAiLet4nYY0FG6QUI
-            r4.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda9 r4 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda9
+            r4.<init>(r0)
             r2.setDelegate(r4)
             goto L_0x013c
         L_0x011d:
@@ -433,15 +428,15 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r7, r3)
             r0.addView(r4, r10)
             org.telegram.ui.Components.PhotoFilterBlurControl r4 = r0.blurControl
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$GCGCchbOZkYFd7FKnH3pWJ5bURo r10 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$GCGCchbOZkYFd7FKnH3pWJ5bURo
-            r10.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda7 r10 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda7
+            r10.<init>(r0)
             r4.setDelegate(r10)
             org.telegram.ui.Components.PhotoFilterCurvesControl r4 = new org.telegram.ui.Components.PhotoFilterCurvesControl
             org.telegram.ui.Components.PhotoFilterView$CurvesToolValue r10 = r0.curvesToolValue
             r4.<init>(r1, r10)
             r0.curvesControl = r4
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$KvuUyjS3o6sxpmVQlMBz4wjgbsE r10 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$KvuUyjS3o6sxpmVQlMBz4wjgbsE
-            r10.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda8 r10 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda8
+            r10.<init>(r0)
             r4.setDelegate(r10)
             org.telegram.ui.Components.PhotoFilterCurvesControl r4 = r0.curvesControl
             r4.setVisibility(r5)
@@ -483,7 +478,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r10.setPadding(r5, r6, r9, r6)
             android.widget.TextView r5 = r0.cancelTextView
-            r9 = 2131624658(0x7f0e02d2, float:1.8876502E38)
+            r9 = 2131624660(0x7f0e02d4, float:1.8876506E38)
             java.lang.String r10 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             java.lang.String r9 = r9.toUpperCase()
@@ -514,7 +509,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r5.setPadding(r11, r6, r12, r6)
             android.widget.TextView r5 = r0.doneTextView
-            r11 = 2131625250(0x7f0e0522, float:1.8877703E38)
+            r11 = 2131625255(0x7f0e0527, float:1.8877713E38)
             java.lang.String r12 = "Done"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             java.lang.String r11 = r11.toUpperCase()
@@ -536,7 +531,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.ImageView$ScaleType r9 = android.widget.ImageView.ScaleType.CENTER
             r4.setScaleType(r9)
             android.widget.ImageView r4 = r0.tuneItem
-            r9 = 2131165933(0x7var_ed, float:1.7946097E38)
+            r9 = 2131165938(0x7var_f2, float:1.7946107E38)
             r4.setImageResource(r9)
             android.widget.ImageView r4 = r0.tuneItem
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
@@ -555,8 +550,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12)
             r5.addView(r4, r13)
             android.widget.ImageView r4 = r0.tuneItem
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$AAjp9rbnsUw8tN4hNxe43Bd_GGk r12 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$AAjp9rbnsUw8tN4hNxe43Bd_GGk
-            r12.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda0 r12 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda0
+            r12.<init>(r0)
             r4.setOnClickListener(r12)
             android.widget.ImageView r4 = new android.widget.ImageView
             r4.<init>(r1)
@@ -564,7 +559,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
             r4.setScaleType(r12)
             android.widget.ImageView r4 = r0.blurItem
-            r12 = 2131166106(0x7var_a, float:1.7946448E38)
+            r12 = 2131166111(0x7var_f, float:1.7946458E38)
             r4.setImageResource(r12)
             android.widget.ImageView r4 = r0.blurItem
             android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
@@ -574,8 +569,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12)
             r5.addView(r4, r13)
             android.widget.ImageView r4 = r0.blurItem
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$MBKBy8Yjpk6c7p81zuBtyfNt1Ew r12 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$MBKBy8Yjpk6c7p81zuBtyfNt1Ew
-            r12.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda3 r12 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda3
+            r12.<init>(r0)
             r4.setOnClickListener(r12)
             if (r2 == 0) goto L_0x02df
             android.widget.ImageView r2 = r0.blurItem
@@ -588,7 +583,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.curveItem
-            r4 = 2131166108(0x7var_c, float:1.7946452E38)
+            r4 = 2131166113(0x7var_a1, float:1.7946462E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.curveItem
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
@@ -598,8 +593,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r4)
             r5.addView(r2, r4)
             android.widget.ImageView r2 = r0.curveItem
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$v62bzBhXcMHOnVhW5Ioiq6WiHJw r4 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$v62bzBhXcMHOnVhW5Ioiq6WiHJw
-            r4.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda4 r4 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda4
+            r4.<init>(r0)
             r2.setOnClickListener(r4)
             org.telegram.ui.Components.RecyclerListView r2 = new org.telegram.ui.Components.RecyclerListView
             r2.<init>(r1)
@@ -675,7 +670,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r9 = 16
             r5.setGravity(r9)
             if (r3 != 0) goto L_0x03fa
-            r9 = 2131625063(0x7f0e0467, float:1.8877323E38)
+            r9 = 2131625068(0x7f0e046c, float:1.8877334E38)
             java.lang.String r10 = "CurvesAll"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
@@ -697,7 +692,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             goto L_0x04ac
         L_0x03fa:
             if (r3 != r8) goto L_0x0435
-            r9 = 2131625066(0x7f0e046a, float:1.887733E38)
+            r9 = 2131625071(0x7f0e046f, float:1.887734E38)
             java.lang.String r10 = "CurvesRed"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
@@ -719,7 +714,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         L_0x0435:
             r9 = 2
             if (r3 != r9) goto L_0x0471
-            r10 = 2131625065(0x7f0e0469, float:1.8877327E38)
+            r10 = 2131625070(0x7f0e046e, float:1.8877338E38)
             java.lang.String r11 = "CurvesGreen"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -741,7 +736,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         L_0x0471:
             r10 = 3
             if (r3 != r10) goto L_0x04ac
-            r10 = 2131625064(0x7f0e0468, float:1.8877325E38)
+            r10 = 2131625069(0x7f0e046d, float:1.8877336E38)
             java.lang.String r11 = "CurvesBlue"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -795,8 +790,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r30 = r14
             android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r25, r26, r27, r28, r29, r30)
             r2.addView(r4, r5)
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$L1-qn-kj-rboPLqJmUeYGRY74A4 r5 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$L1-qn-kj-rboPLqJmUeYGRY74A4
-            r5.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda2 r5 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda2
+            r5.<init>(r0)
             r4.setOnClickListener(r5)
             int r3 = r3 + 1
             goto L_0x037d
@@ -836,7 +831,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.TextView r2 = r0.blurOffButton
             r2.setGravity(r8)
             android.widget.TextView r2 = r0.blurOffButton
-            r5 = 2131624583(0x7f0e0287, float:1.887635E38)
+            r5 = 2131624585(0x7f0e0289, float:1.8876354E38)
             java.lang.String r6 = "BlurOff"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r2.setText(r5)
@@ -847,8 +842,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7)
             r2.addView(r5, r6)
             android.widget.TextView r2 = r0.blurOffButton
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$E33gxsLr1bFb2cfvLoCrPut1UWo r5 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$E33gxsLr1bFb2cfvLoCrPut1UWo
-            r5.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda1 r5 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda1
+            r5.<init>(r0)
             r2.setOnClickListener(r5)
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
@@ -860,7 +855,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.TextView r2 = r0.blurRadialButton
             r2.setGravity(r8)
             android.widget.TextView r2 = r0.blurRadialButton
-            r5 = 2131624584(0x7f0e0288, float:1.8876352E38)
+            r5 = 2131624586(0x7f0e028a, float:1.8876356E38)
             java.lang.String r6 = "BlurRadial"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r2.setText(r5)
@@ -882,8 +877,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
             r2.addView(r5, r6)
             android.widget.TextView r2 = r0.blurRadialButton
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$zNRLY59SFYMJR9OCVQC_Z36k4Hw r5 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$zNRLY59SFYMJR9OCVQC_Z36k4Hw
-            r5.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda6 r5 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda6
+            r5.<init>(r0)
             r2.setOnClickListener(r5)
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
@@ -895,7 +890,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.TextView r1 = r0.blurLinearButton
             r1.setGravity(r8)
             android.widget.TextView r1 = r0.blurLinearButton
-            r2 = 2131624582(0x7f0e0286, float:1.8876348E38)
+            r2 = 2131624584(0x7f0e0288, float:1.8876352E38)
             java.lang.String r3 = "BlurLinear"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -918,8 +913,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
             r1.addView(r2, r3)
             android.widget.TextView r1 = r0.blurLinearButton
-            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$zH0YZYnMNX3qKUvaCWEop484aQo r2 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$zH0YZYnMNX3qKUvaCWEop484aQo
-            r2.<init>()
+            org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda5 r2 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda5
+            r2.<init>(r0)
             r1.setOnClickListener(r2)
             r23.updateSelectedBlurType()
             int r1 = android.os.Build.VERSION.SDK_INT
@@ -947,15 +942,13 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$PhotoFilterView(FilterGLThread filterGLThread) {
+    public /* synthetic */ void lambda$new$0(FilterGLThread filterGLThread) {
         this.eglThread = filterGLThread;
         filterGLThread.setFilterGLThreadDelegate(this);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$PhotoFilterView(Point point, float f, float f2, float f3) {
+    public /* synthetic */ void lambda$new$1(Point point, float f, float f2, float f3) {
         this.blurExcludeSize = f2;
         this.blurExcludePoint = point;
         this.blurExcludeBlurSize = f;
@@ -967,8 +960,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$PhotoFilterView() {
+    public /* synthetic */ void lambda$new$2() {
         FilterGLThread filterGLThread = this.eglThread;
         if (filterGLThread != null) {
             filterGLThread.requestRender(false);
@@ -976,8 +968,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$PhotoFilterView(View view) {
+    public /* synthetic */ void lambda$new$3(View view) {
         this.selectedTool = 0;
         this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
         this.blurItem.setColorFilter((ColorFilter) null);
@@ -986,8 +977,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$PhotoFilterView(View view) {
+    public /* synthetic */ void lambda$new$4(View view) {
         this.selectedTool = 1;
         this.tuneItem.setColorFilter((ColorFilter) null);
         this.blurItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
@@ -996,8 +986,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$5 */
-    public /* synthetic */ void lambda$new$5$PhotoFilterView(View view) {
+    public /* synthetic */ void lambda$new$5(View view) {
         this.selectedTool = 2;
         this.tuneItem.setColorFilter((ColorFilter) null);
         this.blurItem.setColorFilter((ColorFilter) null);
@@ -1006,8 +995,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$6 */
-    public /* synthetic */ void lambda$new$6$PhotoFilterView(View view) {
+    public /* synthetic */ void lambda$new$6(View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         this.curvesToolValue.activeType = intValue;
         int i = 0;
@@ -1019,8 +1007,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$7 */
-    public /* synthetic */ void lambda$new$7$PhotoFilterView(View view) {
+    public /* synthetic */ void lambda$new$7(View view) {
         this.blurType = 0;
         updateSelectedBlurType();
         this.blurControl.setVisibility(4);
@@ -1031,8 +1018,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$8 */
-    public /* synthetic */ void lambda$new$8$PhotoFilterView(View view) {
+    public /* synthetic */ void lambda$new$8(View view) {
         this.blurType = 1;
         updateSelectedBlurType();
         this.blurControl.setVisibility(0);
@@ -1044,8 +1030,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$9 */
-    public /* synthetic */ void lambda$new$9$PhotoFilterView(View view) {
+    public /* synthetic */ void lambda$new$9(View view) {
         this.blurType = 2;
         updateSelectedBlurType();
         this.blurControl.setVisibility(0);
@@ -1479,16 +1464,16 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
                 org.telegram.ui.Cells.PhotoEditToolCell r1 = new org.telegram.ui.Cells.PhotoEditToolCell
                 android.content.Context r2 = r0.mContext
                 r1.<init>(r2)
-                org.telegram.ui.Components.-$$Lambda$PhotoFilterView$ToolsAdapter$EOKeFucSDUYP_lu9dSpbDzFOUJQ r2 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$ToolsAdapter$EOKeFucSDUYP_lu9dSpbDzFOUJQ
-                r2.<init>()
+                org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$$ExternalSyntheticLambda1
+                r2.<init>(r0)
                 r1.setSeekBarDelegate(r2)
                 goto L_0x0021
             L_0x0012:
                 org.telegram.ui.Cells.PhotoEditRadioCell r1 = new org.telegram.ui.Cells.PhotoEditRadioCell
                 android.content.Context r2 = r0.mContext
                 r1.<init>(r2)
-                org.telegram.ui.Components.-$$Lambda$PhotoFilterView$ToolsAdapter$0krgHb7WblSm-Pbun4oy6OZgkWI r2 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$ToolsAdapter$0krgHb7WblSm-Pbun4oy6OZgkWI
-                r2.<init>()
+                org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$$ExternalSyntheticLambda0
+                r2.<init>(r0)
                 r1.setOnClickListener(r2)
             L_0x0021:
                 org.telegram.ui.Components.RecyclerListView$Holder r2 = new org.telegram.ui.Components.RecyclerListView$Holder
@@ -1499,8 +1484,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$0 */
-        public /* synthetic */ void lambda$onCreateViewHolder$0$PhotoFilterView$ToolsAdapter(int i, int i2) {
+        public /* synthetic */ void lambda$onCreateViewHolder$0(int i, int i2) {
             if (i == PhotoFilterView.this.enhanceTool) {
                 float unused = PhotoFilterView.this.enhanceValue = (float) i2;
             } else if (i == PhotoFilterView.this.highlightsTool) {
@@ -1532,8 +1516,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$1 */
-        public /* synthetic */ void lambda$onCreateViewHolder$1$PhotoFilterView$ToolsAdapter(View view) {
+        public /* synthetic */ void lambda$onCreateViewHolder$1(View view) {
             PhotoEditRadioCell photoEditRadioCell = (PhotoEditRadioCell) view;
             if (((Integer) photoEditRadioCell.getTag()).intValue() == PhotoFilterView.this.tintShadowsTool) {
                 int unused = PhotoFilterView.this.tintShadowsColor = photoEditRadioCell.getCurrentColor();

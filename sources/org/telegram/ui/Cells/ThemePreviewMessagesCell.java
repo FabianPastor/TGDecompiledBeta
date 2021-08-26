@@ -37,11 +37,6 @@ public class ThemePreviewMessagesCell extends LinearLayout {
     private Drawable backgroundDrawable;
     private BackgroundGradientDrawable.Disposable backgroundGradientDisposable;
     private ChatMessageCell[] cells = new ChatMessageCell[2];
-    private final Runnable invalidateRunnable = new Runnable() {
-        public final void run() {
-            ThemePreviewMessagesCell.this.invalidate();
-        }
-    };
     private Drawable oldBackgroundDrawable;
     private BackgroundGradientDrawable.Disposable oldBackgroundGradientDisposable;
     private ActionBarLayout parentLayout;
@@ -67,6 +62,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
     public ThemePreviewMessagesCell(Context context, ActionBarLayout actionBarLayout, int i) {
         super(context);
         Context context2 = context;
+        new ThemePreviewMessagesCell$$ExternalSyntheticLambda0(this);
         this.parentLayout = actionBarLayout;
         setWillNotDraw(false);
         setOrientation(1);
@@ -160,7 +156,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             ChatMessageCell[] chatMessageCellArr = this.cells;
             if (i3 < chatMessageCellArr.length) {
                 chatMessageCellArr[i3] = new ChatMessageCell(context2);
-                this.cells[i3].setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
+                this.cells[i3].setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this) {
                     public /* synthetic */ boolean canPerformActions() {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canPerformActions(this);
                     }

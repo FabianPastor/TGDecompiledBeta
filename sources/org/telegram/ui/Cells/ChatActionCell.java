@@ -162,11 +162,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         if (this.wasLayout) {
             buildLayout();
         } else if (z) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    ChatActionCell.this.requestLayout();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChatActionCell$$ExternalSyntheticLambda0(this));
         } else {
             requestLayout();
         }

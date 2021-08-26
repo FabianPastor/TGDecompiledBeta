@@ -53,7 +53,6 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.NotificationsSettingsActivity;
-import org.telegram.ui.ProfileNotificationsActivity;
 
 public class ProfileNotificationsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
@@ -432,7 +431,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         recyclerListView2.setAdapter(listAdapter);
         this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
         this.listView.setLayoutAnimation((LayoutAnimationController) null);
-        this.listView.setLayoutManager(new LinearLayoutManager(context) {
+        this.listView.setLayoutManager(new LinearLayoutManager(this, context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
@@ -492,11 +491,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }
                     } else if (i == ProfileNotificationsActivity.this.vibrateRow) {
                         ProfileNotificationsActivity profileNotificationsActivity3 = ProfileNotificationsActivity.this;
-                        profileNotificationsActivity3.showDialog(AlertsCreator.createVibrationSelectDialog(profileNotificationsActivity3.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new Runnable() {
-                            public final void run() {
-                                ProfileNotificationsActivity.AnonymousClass3.this.lambda$onItemClick$0$ProfileNotificationsActivity$3();
-                            }
-                        }));
+                        profileNotificationsActivity3.showDialog(AlertsCreator.createVibrationSelectDialog(profileNotificationsActivity3.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new ProfileNotificationsActivity$3$$ExternalSyntheticLambda1(this)));
                     } else if (i == ProfileNotificationsActivity.this.enableRow) {
                         TextCheckCell textCheckCell = (TextCheckCell) view;
                         boolean unused3 = ProfileNotificationsActivity.this.notificationsEnabled = !textCheckCell.isChecked();
@@ -511,18 +506,10 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         ProfileNotificationsActivity profileNotificationsActivity4 = ProfileNotificationsActivity.this;
                         Activity parentActivity = profileNotificationsActivity4.getParentActivity();
                         long access$400 = ProfileNotificationsActivity.this.dialog_id;
-                        profileNotificationsActivity4.showDialog(AlertsCreator.createVibrationSelectDialog(parentActivity, access$400, "calls_vibrate_" + ProfileNotificationsActivity.this.dialog_id, new Runnable() {
-                            public final void run() {
-                                ProfileNotificationsActivity.AnonymousClass3.this.lambda$onItemClick$1$ProfileNotificationsActivity$3();
-                            }
-                        }));
+                        profileNotificationsActivity4.showDialog(AlertsCreator.createVibrationSelectDialog(parentActivity, access$400, "calls_vibrate_" + ProfileNotificationsActivity.this.dialog_id, new ProfileNotificationsActivity$3$$ExternalSyntheticLambda2(this)));
                     } else if (i == ProfileNotificationsActivity.this.priorityRow) {
                         ProfileNotificationsActivity profileNotificationsActivity5 = ProfileNotificationsActivity.this;
-                        profileNotificationsActivity5.showDialog(AlertsCreator.createPrioritySelectDialog(profileNotificationsActivity5.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, -1, new Runnable() {
-                            public final void run() {
-                                ProfileNotificationsActivity.AnonymousClass3.this.lambda$onItemClick$2$ProfileNotificationsActivity$3();
-                            }
-                        }));
+                        profileNotificationsActivity5.showDialog(AlertsCreator.createPrioritySelectDialog(profileNotificationsActivity5.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, -1, new ProfileNotificationsActivity$3$$ExternalSyntheticLambda3(this)));
                     } else if (i == ProfileNotificationsActivity.this.smartRow) {
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
                             final Activity parentActivity2 = ProfileNotificationsActivity.this.getParentActivity();
@@ -536,7 +523,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             RecyclerListView recyclerListView = new RecyclerListView(ProfileNotificationsActivity.this.getParentActivity());
                             recyclerListView.setLayoutManager(new LinearLayoutManager(context, 1, false));
                             recyclerListView.setClipToPadding(true);
-                            recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() {
+                            recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter(this) {
                                 public int getItemCount() {
                                     return 100;
                                 }
@@ -546,7 +533,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 }
 
                                 public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                                    AnonymousClass1 r3 = new TextView(parentActivity2) {
+                                    AnonymousClass1 r3 = new TextView(this, parentActivity2) {
                                         /* access modifiers changed from: protected */
                                         public void onMeasure(int i, int i2) {
                                             super.onMeasure(View.MeasureSpec.makeMeasureSpec(i, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
@@ -567,30 +554,18 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 }
                             });
                             recyclerListView.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(8.0f));
-                            recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-                                public final void onItemClick(View view, int i) {
-                                    ProfileNotificationsActivity.AnonymousClass3.this.lambda$onItemClick$3$ProfileNotificationsActivity$3(view, i);
-                                }
-                            });
+                            recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ProfileNotificationsActivity$3$$ExternalSyntheticLambda5(this));
                             AlertDialog.Builder builder = new AlertDialog.Builder((Context) ProfileNotificationsActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("SmartNotificationsAlert", NUM));
                             builder.setView(recyclerListView);
                             builder.setPositiveButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-                            builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", NUM), new DialogInterface.OnClickListener() {
-                                public final void onClick(DialogInterface dialogInterface, int i) {
-                                    ProfileNotificationsActivity.AnonymousClass3.this.lambda$onItemClick$4$ProfileNotificationsActivity$3(dialogInterface, i);
-                                }
-                            });
+                            builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", NUM), new ProfileNotificationsActivity$3$$ExternalSyntheticLambda0(this));
                             ProfileNotificationsActivity.this.showDialog(builder.create());
                         }
                     } else if (i == ProfileNotificationsActivity.this.colorRow) {
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
                             ProfileNotificationsActivity profileNotificationsActivity6 = ProfileNotificationsActivity.this;
-                            profileNotificationsActivity6.showDialog(AlertsCreator.createColorSelectDialog(profileNotificationsActivity6.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, -1, new Runnable() {
-                                public final void run() {
-                                    ProfileNotificationsActivity.AnonymousClass3.this.lambda$onItemClick$5$ProfileNotificationsActivity$3();
-                                }
-                            }));
+                            profileNotificationsActivity6.showDialog(AlertsCreator.createColorSelectDialog(profileNotificationsActivity6.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, -1, new ProfileNotificationsActivity$3$$ExternalSyntheticLambda4(this)));
                         }
                     } else if (i == ProfileNotificationsActivity.this.popupEnabledRow) {
                         SharedPreferences.Editor edit3 = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount).edit();
@@ -613,32 +588,28 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$0 */
-            public /* synthetic */ void lambda$onItemClick$0$ProfileNotificationsActivity$3() {
+            public /* synthetic */ void lambda$onItemClick$0() {
                 if (ProfileNotificationsActivity.this.adapter != null) {
                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.vibrateRow);
                 }
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$1 */
-            public /* synthetic */ void lambda$onItemClick$1$ProfileNotificationsActivity$3() {
+            public /* synthetic */ void lambda$onItemClick$1() {
                 if (ProfileNotificationsActivity.this.adapter != null) {
                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.callsVibrateRow);
                 }
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$2 */
-            public /* synthetic */ void lambda$onItemClick$2$ProfileNotificationsActivity$3() {
+            public /* synthetic */ void lambda$onItemClick$2() {
                 if (ProfileNotificationsActivity.this.adapter != null) {
                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.priorityRow);
                 }
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$3 */
-            public /* synthetic */ void lambda$onItemClick$3$ProfileNotificationsActivity$3(View view, int i) {
+            public /* synthetic */ void lambda$onItemClick$3(View view, int i) {
                 if (i >= 0 && i < 100) {
                     SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
                     SharedPreferences.Editor edit = notificationsSettings.edit();
@@ -653,8 +624,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$4 */
-            public /* synthetic */ void lambda$onItemClick$4$ProfileNotificationsActivity$3(DialogInterface dialogInterface, int i) {
+            public /* synthetic */ void lambda$onItemClick$4(DialogInterface dialogInterface, int i) {
                 SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount).edit();
                 edit.putInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, 0).commit();
                 if (ProfileNotificationsActivity.this.adapter != null) {
@@ -664,8 +634,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$5 */
-            public /* synthetic */ void lambda$onItemClick$5$ProfileNotificationsActivity$3() {
+            public /* synthetic */ void lambda$onItemClick$5() {
                 if (ProfileNotificationsActivity.this.adapter != null) {
                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.colorRow);
                 }
@@ -1212,11 +1181,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ProfileNotificationsActivity$wdkiUreQfi0m_HnbGYNjjCSZFo r11 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                ProfileNotificationsActivity.this.lambda$getThemeDescriptions$0$ProfileNotificationsActivity();
-            }
-        };
+        ProfileNotificationsActivity$$ExternalSyntheticLambda0 profileNotificationsActivity$$ExternalSyntheticLambda0 = new ProfileNotificationsActivity$$ExternalSyntheticLambda0(this);
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextSettingsCell.class, TextColorCell.class, RadioCell.class, UserCell2.class, TextCheckCell.class, TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -1241,18 +1206,18 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$ProfileNotificationsActivity$wdkiUreQfi0m_HnbGYNjjCSZFo r9 = r11;
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
+        ProfileNotificationsActivity$$ExternalSyntheticLambda0 profileNotificationsActivity$$ExternalSyntheticLambda02 = profileNotificationsActivity$$ExternalSyntheticLambda0;
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) profileNotificationsActivity$$ExternalSyntheticLambda02, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) profileNotificationsActivity$$ExternalSyntheticLambda02, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$ProfileNotificationsActivity$wdkiUreQfi0m_HnbGYNjjCSZFo r8 = r11;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        ProfileNotificationsActivity$$ExternalSyntheticLambda0 profileNotificationsActivity$$ExternalSyntheticLambda03 = profileNotificationsActivity$$ExternalSyntheticLambda0;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileNotificationsActivity$$ExternalSyntheticLambda03, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileNotificationsActivity$$ExternalSyntheticLambda03, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileNotificationsActivity$$ExternalSyntheticLambda03, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileNotificationsActivity$$ExternalSyntheticLambda03, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileNotificationsActivity$$ExternalSyntheticLambda03, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileNotificationsActivity$$ExternalSyntheticLambda03, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, profileNotificationsActivity$$ExternalSyntheticLambda03, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckBoxCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareUnchecked"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareDisabled"));
@@ -1262,8 +1227,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$0 */
-    public /* synthetic */ void lambda$getThemeDescriptions$0$ProfileNotificationsActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$0() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

@@ -24,7 +24,6 @@ import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Cells.AboutLinkCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
@@ -47,27 +46,14 @@ public class AboutLinkCell extends FrameLayout {
                 ClickableSpan access$000 = AboutLinkCell.this.pressedLink;
                 BottomSheet.Builder builder = new BottomSheet.Builder(AboutLinkCell.this.parentFragment.getParentActivity());
                 builder.setTitle(str);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(access$000, str) {
-                    public final /* synthetic */ ClickableSpan f$1;
-                    public final /* synthetic */ String f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        AboutLinkCell.AnonymousClass1.this.lambda$run$0$AboutLinkCell$1(this.f$1, this.f$2, dialogInterface, i);
-                    }
-                });
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new AboutLinkCell$1$$ExternalSyntheticLambda0(this, access$000, str));
                 builder.show();
                 AboutLinkCell.this.resetPressedLink();
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$run$0 */
-        public /* synthetic */ void lambda$run$0$AboutLinkCell$1(ClickableSpan clickableSpan, String str, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$run$0(ClickableSpan clickableSpan, String str, DialogInterface dialogInterface, int i) {
             if (i == 0) {
                 AboutLinkCell.this.onLinkClick(clickableSpan);
             } else if (i == 1) {

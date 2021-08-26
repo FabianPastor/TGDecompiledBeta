@@ -259,17 +259,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
             textView.setSingleLine(true);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
-            textView.setOnClickListener(new View.OnClickListener(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    ScrollSlidingTextTabStrip.this.lambda$addTextTab$0$ScrollSlidingTextTabStrip(this.f$1, view);
-                }
-            });
+            textView.setOnClickListener(new ScrollSlidingTextTabStrip$$ExternalSyntheticLambda1(this, i));
         }
         textView.setText(charSequence);
         int ceil = ((int) Math.ceil((double) textView.getPaint().measureText(charSequence, 0, charSequence.length()))) + textView.getPaddingLeft() + textView.getPaddingRight();
@@ -279,8 +269,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addTextTab$0 */
-    public /* synthetic */ void lambda$addTextTab$0$ScrollSlidingTextTabStrip(int i, View view) {
+    public /* synthetic */ void lambda$addTextTab$0(int i, View view) {
         ScrollSlidingTabStripDelegate scrollSlidingTabStripDelegate;
         int indexOfChild = this.tabsContainer.indexOfChild(view);
         if (indexOfChild >= 0) {
@@ -451,19 +440,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
                 if (i9 > 0 && (i5 = this.animateFromIndicatorWidth) > 0) {
                     if (!(i9 == i8 && i5 == i7)) {
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
-                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(i9 - i8, i5 - i7) {
-                            public final /* synthetic */ int f$1;
-                            public final /* synthetic */ int f$2;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                            }
-
-                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                ScrollSlidingTextTabStrip.this.lambda$onLayout$1$ScrollSlidingTextTabStrip(this.f$1, this.f$2, valueAnimator);
-                            }
-                        });
+                        ofFloat.addUpdateListener(new ScrollSlidingTextTabStrip$$ExternalSyntheticLambda0(this, i9 - i8, i5 - i7));
                         ofFloat.setDuration(200);
                         ofFloat.setInterpolator(CubicBezierInterpolator.DEFAULT);
                         ofFloat.start();
@@ -476,8 +453,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onLayout$1 */
-    public /* synthetic */ void lambda$onLayout$1$ScrollSlidingTextTabStrip(int i, int i2, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onLayout$1(int i, int i2, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.indicatorXAnimationDx = ((float) i) * floatValue;
         this.indicatorWidthAnimationDx = ((float) i2) * floatValue;

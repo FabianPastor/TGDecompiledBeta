@@ -33,7 +33,6 @@ import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.voip.VoIPPiPView;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.VoIPFragment;
 import org.webrtc.EglBase;
@@ -47,17 +46,12 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
     public static VoIPPiPView instance = null;
     public static boolean switchingToPip = false;
     public static int topInset;
-    int animationIndex = -1;
     ValueAnimator animatorToCameraMini;
-    ValueAnimator.AnimatorUpdateListener animatorToCameraMiniUpdater = new ValueAnimator.AnimatorUpdateListener() {
-        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-            VoIPPiPView.this.lambda$new$0$VoIPPiPView(valueAnimator);
-        }
-    };
+    ValueAnimator.AnimatorUpdateListener animatorToCameraMiniUpdater = new VoIPPiPView$$ExternalSyntheticLambda0(this);
     boolean callingUserIsVideo;
     public final VoIPTextureView callingUserTextureView;
     ImageView closeIcon;
-    Runnable collapseRunnable = new Runnable() {
+    Runnable collapseRunnable = new Runnable(this) {
         public void run() {
             if (VoIPPiPView.instance != null) {
                 VoIPPiPView.instance.floatingView.expand(false);
@@ -131,8 +125,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$VoIPPiPView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
         this.progressToCameraMini = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.floatingView.invalidate();
     }
@@ -315,18 +308,8 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
             this.enlargeIcon.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             this.enlargeIcon.setContentDescription(LocaleController.getString("Open", NUM));
             this.floatingView.addView(this.enlargeIcon, LayoutHelper.createFrame(40, 40.0f, 51, 4.0f, 4.0f, 4.0f, 0.0f));
-            this.closeIcon.setOnClickListener($$Lambda$VoIPPiPView$MEYxxqPwmNN1zowModgP4kq3s9A.INSTANCE);
-            this.enlargeIcon.setOnClickListener(new View.OnClickListener(context) {
-                public final /* synthetic */ Context f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    VoIPPiPView.this.lambda$new$2$VoIPPiPView(this.f$1, view);
-                }
-            });
+            this.closeIcon.setOnClickListener(VoIPPiPView$$ExternalSyntheticLambda2.INSTANCE);
+            this.enlargeIcon.setOnClickListener(new VoIPPiPView$$ExternalSyntheticLambda1(this, context));
         }
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
@@ -335,7 +318,8 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
         updateViewState();
     }
 
-    static /* synthetic */ void lambda$new$1(View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$new$1(View view) {
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             sharedInstance.hangUp();
@@ -345,8 +329,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$VoIPPiPView(Context context, View view) {
+    public /* synthetic */ void lambda$new$2(Context context, View view) {
         boolean z = context instanceof LaunchActivity;
         if (z && !ApplicationLoader.mainInterfacePaused) {
             VoIPFragment.show((Activity) context, this.currentAccount);
@@ -381,7 +364,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
 
     public void onStateChanged(int i) {
         if (i == 11 || i == 17 || i == 4 || i == 10) {
-            AndroidUtilities.runOnUIThread($$Lambda$NKsCQZEaYu8U2hXDux7RXQqeP2M.INSTANCE, 200);
+            AndroidUtilities.runOnUIThread(VoIPPiPView$$ExternalSyntheticLambda3.INSTANCE, 200);
         }
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance == null) {
@@ -487,7 +470,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
             super(context);
             this.touchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
             if (Build.VERSION.SDK_INT >= 21) {
-                setOutlineProvider(new ViewOutlineProvider(VoIPPiPView.this) {
+                setOutlineProvider(new ViewOutlineProvider(this, VoIPPiPView.this) {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
                         outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (1.0f / view.getScaleX()) * ((float) AndroidUtilities.dp(4.0f)));
@@ -885,19 +868,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
                     VoIPPiPView.expandedInstance.topShadow.setAlpha(0.0f);
                     VoIPPiPView.expandedInstance.closeIcon.setAlpha(0.0f);
                     VoIPPiPView.expandedInstance.enlargeIcon.setAlpha(0.0f);
-                    AndroidUtilities.runOnUIThread(new Runnable(scaleX, voIPPiPView4) {
-                        public final /* synthetic */ float f$1;
-                        public final /* synthetic */ VoIPPiPView f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run() {
-                            VoIPPiPView.FloatingView.this.lambda$expand$1$VoIPPiPView$FloatingView(this.f$1, this.f$2);
-                        }
-                    }, 64);
+                    AndroidUtilities.runOnUIThread(new VoIPPiPView$FloatingView$$ExternalSyntheticLambda2(this, scaleX, voIPPiPView4), 64);
                 } else if (VoIPPiPView.expandedInstance != null) {
                     VoIPPiPView.expandedInstance.floatingView.getRelativePosition(VoIPPiPView.this.point);
                     float[] fArr2 = VoIPPiPView.this.point;
@@ -909,17 +880,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
                     VoIPPiPView.expandedInstance.floatingView.setPivotY(f8 * ((float) VoIPPiPView.this.parentHeight) * 0.4f);
                     showUi(false);
                     ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(VoIPPiPView.this.floatingView.getScaleX() * 0.625f) {
-                        public final /* synthetic */ float f$0;
-
-                        {
-                            this.f$0 = r1;
-                        }
-
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            VoIPPiPView.FloatingView.lambda$expand$2(this.f$0, valueAnimator);
-                        }
-                    });
+                    ofFloat.addUpdateListener(new VoIPPiPView$FloatingView$$ExternalSyntheticLambda0(VoIPPiPView.this.floatingView.getScaleX() * 0.625f));
                     ofFloat.setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT);
                     ofFloat.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
@@ -927,285 +888,115 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
                                 FloatingView.this.swapRender(VoIPPiPView.expandedInstance, VoIPPiPView.instance);
                                 VoIPPiPView.instance.windowView.setAlpha(1.0f);
                                 VoIPPiPView.this.windowManager.addView(VoIPPiPView.instance.windowView, VoIPPiPView.instance.windowLayoutParams);
-                                AndroidUtilities.runOnUIThread(
-                                /*  JADX ERROR: Method code generation error
-                                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x003f: INVOKE  
-                                      (wrap: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ : 0x003a: CONSTRUCTOR  (r0v4 org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ) = 
-                                      (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
-                                      (wrap: boolean : 0x0036: IGET  (r4v8 boolean) = 
-                                      (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
-                                     org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.val$expanded boolean)
-                                     call: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ.<init>(org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3, boolean):void type: CONSTRUCTOR)
-                                      (64 long)
-                                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable, long):void type: STATIC in method: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
-                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                    	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                    	at jadx.core.codegen.RegionGen.connectElseIf(RegionGen.java:175)
-                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:152)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x003a: CONSTRUCTOR  (r0v4 org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ) = 
-                                      (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
-                                      (wrap: boolean : 0x0036: IGET  (r4v8 boolean) = 
-                                      (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
-                                     org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.val$expanded boolean)
-                                     call: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ.<init>(org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3, boolean):void type: CONSTRUCTOR in method: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
-                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                    	... 95 more
-                                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ, state: NOT_LOADED
-                                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                    	... 101 more
-                                    */
-                                /*
-                                    this = this;
-                                    org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.expandedInstance
-                                    if (r4 != 0) goto L_0x0007
-                                    return
-                                L_0x0007:
-                                    org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r4 = org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.this
-                                    org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.expandedInstance
-                                    org.telegram.ui.Components.voip.VoIPPiPView r1 = org.telegram.ui.Components.voip.VoIPPiPView.instance
-                                    r4.swapRender(r0, r1)
-                                    org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.instance
-                                    android.widget.FrameLayout r4 = r4.windowView
-                                    r0 = 1065353216(0x3var_, float:1.0)
-                                    r4.setAlpha(r0)
-                                    org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r4 = org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.this
-                                    org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                                    android.view.WindowManager r4 = r4.windowManager
-                                    org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.instance
-                                    android.widget.FrameLayout r0 = r0.windowView
-                                    org.telegram.ui.Components.voip.VoIPPiPView r1 = org.telegram.ui.Components.voip.VoIPPiPView.instance
-                                    android.view.WindowManager$LayoutParams r1 = r1.windowLayoutParams
-                                    r4.addView(r0, r1)
-                                    boolean r4 = r13
-                                    org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ r0 = new org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ
-                                    r0.<init>(r3, r4)
-                                    r1 = 64
-                                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
-                                    return
-                                */
-                                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.AnonymousClass3.onAnimationEnd(android.animation.Animator):void");
+                                AndroidUtilities.runOnUIThread(new VoIPPiPView$FloatingView$3$$ExternalSyntheticLambda0(this, z), 64);
                             }
+                        }
 
-                            /* access modifiers changed from: private */
-                            /* renamed from: lambda$onAnimationEnd$0 */
-                            public /* synthetic */ void lambda$onAnimationEnd$0$VoIPPiPView$FloatingView$3(boolean z) {
-                                if (VoIPPiPView.instance != null && VoIPPiPView.expandedInstance != null) {
-                                    VoIPPiPView.expandedInstance.windowView.setAlpha(0.0f);
-                                    VoIPPiPView.expandedInstance.finishInternal();
-                                    boolean unused = VoIPPiPView.this.expandedAnimationInProgress = false;
-                                    if (z) {
-                                        AndroidUtilities.runOnUIThread(VoIPPiPView.this.collapseRunnable, 3000);
-                                    }
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onAnimationEnd$0(boolean z) {
+                            if (VoIPPiPView.instance != null && VoIPPiPView.expandedInstance != null) {
+                                VoIPPiPView.expandedInstance.windowView.setAlpha(0.0f);
+                                VoIPPiPView.expandedInstance.finishInternal();
+                                boolean unused = VoIPPiPView.this.expandedAnimationInProgress = false;
+                                if (z) {
+                                    AndroidUtilities.runOnUIThread(VoIPPiPView.this.collapseRunnable, 3000);
                                 }
                             }
-                        });
-                        ofFloat.start();
-                        VoIPPiPView.this.expandAnimator = ofFloat;
-                    }
-                }
-            }
-
-            /* access modifiers changed from: private */
-            /* renamed from: lambda$expand$1 */
-            public /* synthetic */ void lambda$expand$1$VoIPPiPView$FloatingView(float f, VoIPPiPView voIPPiPView) {
-                if (VoIPPiPView.expandedInstance != null) {
-                    VoIPPiPView.this.windowView.setAlpha(0.0f);
-                    try {
-                        VoIPPiPView.this.windowManager.removeView(VoIPPiPView.this.windowView);
-                    } catch (Throwable th) {
-                        FileLog.e(th);
-                    }
-                    animate().cancel();
-                    showUi(true);
-                    ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(f, 1.0f, voIPPiPView) {
-                        public final /* synthetic */ float f$0;
-                        public final /* synthetic */ float f$1;
-                        public final /* synthetic */ VoIPPiPView f$2;
-
-                        {
-                            this.f$0 = r1;
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            VoIPPiPView.FloatingView.lambda$expand$0(this.f$0, this.f$1, this.f$2, valueAnimator);
                         }
                     });
-                    ofFloat.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animator) {
-                            super.onAnimationEnd(animator);
-                            boolean unused = VoIPPiPView.this.expandedAnimationInProgress = false;
-                        }
-                    });
-                    ofFloat.setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT);
                     ofFloat.start();
                     VoIPPiPView.this.expandAnimator = ofFloat;
                 }
             }
+        }
 
-            static /* synthetic */ void lambda$expand$0(float f, float f2, VoIPPiPView voIPPiPView, ValueAnimator valueAnimator) {
-                float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-                float f3 = (f * (1.0f - floatValue)) + (f2 * floatValue);
-                voIPPiPView.floatingView.setScaleX(f3);
-                voIPPiPView.floatingView.setScaleY(f3);
-                voIPPiPView.floatingView.invalidate();
-                voIPPiPView.windowView.invalidate();
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$expand$1(float f, VoIPPiPView voIPPiPView) {
+            if (VoIPPiPView.expandedInstance != null) {
+                VoIPPiPView.this.windowView.setAlpha(0.0f);
+                try {
+                    VoIPPiPView.this.windowManager.removeView(VoIPPiPView.this.windowView);
+                } catch (Throwable th) {
+                    FileLog.e(th);
+                }
+                animate().cancel();
+                showUi(true);
+                ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                ofFloat.addUpdateListener(new VoIPPiPView$FloatingView$$ExternalSyntheticLambda1(f, 1.0f, voIPPiPView));
+                ofFloat.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        super.onAnimationEnd(animator);
+                        boolean unused = VoIPPiPView.this.expandedAnimationInProgress = false;
+                    }
+                });
+                ofFloat.setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT);
+                ofFloat.start();
+                VoIPPiPView.this.expandAnimator = ofFloat;
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public static /* synthetic */ void lambda$expand$0(float f, float f2, VoIPPiPView voIPPiPView, ValueAnimator valueAnimator) {
+            float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+            float f3 = (f * (1.0f - floatValue)) + (f2 * floatValue);
+            voIPPiPView.floatingView.setScaleX(f3);
+            voIPPiPView.floatingView.setScaleY(f3);
+            voIPPiPView.floatingView.invalidate();
+            voIPPiPView.windowView.invalidate();
+            if (Build.VERSION.SDK_INT >= 21) {
+                voIPPiPView.floatingView.invalidateOutline();
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public static /* synthetic */ void lambda$expand$2(float f, ValueAnimator valueAnimator) {
+            float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+            float f2 = (1.0f - floatValue) + (f * floatValue);
+            if (VoIPPiPView.expandedInstance != null) {
+                VoIPPiPView.expandedInstance.floatingView.setScaleX(f2);
+                VoIPPiPView.expandedInstance.floatingView.setScaleY(f2);
+                VoIPPiPView.expandedInstance.floatingView.invalidate();
                 if (Build.VERSION.SDK_INT >= 21) {
-                    voIPPiPView.floatingView.invalidateOutline();
+                    VoIPPiPView.expandedInstance.floatingView.invalidateOutline();
                 }
+                VoIPPiPView.expandedInstance.windowView.invalidate();
             }
+        }
 
-            static /* synthetic */ void lambda$expand$2(float f, ValueAnimator valueAnimator) {
-                float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-                float f2 = (1.0f - floatValue) + (f * floatValue);
-                if (VoIPPiPView.expandedInstance != null) {
-                    VoIPPiPView.expandedInstance.floatingView.setScaleX(f2);
-                    VoIPPiPView.expandedInstance.floatingView.setScaleY(f2);
-                    VoIPPiPView.expandedInstance.floatingView.invalidate();
-                    if (Build.VERSION.SDK_INT >= 21) {
-                        VoIPPiPView.expandedInstance.floatingView.invalidateOutline();
-                    }
-                    VoIPPiPView.expandedInstance.windowView.invalidate();
+        private void showUi(boolean z) {
+            if (VoIPPiPView.expandedInstance != null) {
+                float f = 0.0f;
+                if (z) {
+                    VoIPPiPView.expandedInstance.topShadow.setAlpha(0.0f);
+                    VoIPPiPView.expandedInstance.closeIcon.setAlpha(0.0f);
+                    VoIPPiPView.expandedInstance.enlargeIcon.setAlpha(0.0f);
                 }
-            }
-
-            private void showUi(boolean z) {
-                if (VoIPPiPView.expandedInstance != null) {
-                    float f = 0.0f;
-                    if (z) {
-                        VoIPPiPView.expandedInstance.topShadow.setAlpha(0.0f);
-                        VoIPPiPView.expandedInstance.closeIcon.setAlpha(0.0f);
-                        VoIPPiPView.expandedInstance.enlargeIcon.setAlpha(0.0f);
-                    }
-                    ViewPropertyAnimator duration = VoIPPiPView.expandedInstance.topShadow.animate().alpha(z ? 1.0f : 0.0f).setDuration(300);
-                    CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
-                    duration.setInterpolator(cubicBezierInterpolator).start();
-                    VoIPPiPView.expandedInstance.closeIcon.animate().alpha(z ? 1.0f : 0.0f).setDuration(300).setInterpolator(cubicBezierInterpolator).start();
-                    ViewPropertyAnimator animate = VoIPPiPView.expandedInstance.enlargeIcon.animate();
-                    if (z) {
-                        f = 1.0f;
-                    }
-                    animate.alpha(f).setDuration(300).setInterpolator(cubicBezierInterpolator).start();
+                ViewPropertyAnimator duration = VoIPPiPView.expandedInstance.topShadow.animate().alpha(z ? 1.0f : 0.0f).setDuration(300);
+                CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
+                duration.setInterpolator(cubicBezierInterpolator).start();
+                VoIPPiPView.expandedInstance.closeIcon.animate().alpha(z ? 1.0f : 0.0f).setDuration(300).setInterpolator(cubicBezierInterpolator).start();
+                ViewPropertyAnimator animate = VoIPPiPView.expandedInstance.enlargeIcon.animate();
+                if (z) {
+                    f = 1.0f;
                 }
+                animate.alpha(f).setDuration(300).setInterpolator(cubicBezierInterpolator).start();
             }
+        }
 
-            /* access modifiers changed from: private */
-            public void swapRender(VoIPPiPView voIPPiPView, VoIPPiPView voIPPiPView2) {
-                voIPPiPView2.currentUserTextureView.setStub(voIPPiPView.currentUserTextureView);
-                voIPPiPView2.callingUserTextureView.setStub(voIPPiPView.callingUserTextureView);
-                voIPPiPView.currentUserTextureView.renderer.release();
-                voIPPiPView.callingUserTextureView.renderer.release();
-                EglBase eglBase = VideoCapturerDevice.eglBase;
-                if (eglBase != null) {
-                    voIPPiPView2.currentUserTextureView.renderer.init(eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
-                    voIPPiPView2.callingUserTextureView.renderer.init(VideoCapturerDevice.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
-                    if (VoIPService.getSharedInstance() != null) {
-                        VoIPService.getSharedInstance().setSinks(voIPPiPView2.currentUserTextureView.renderer, voIPPiPView2.callingUserTextureView.renderer);
-                    }
+        /* access modifiers changed from: private */
+        public void swapRender(VoIPPiPView voIPPiPView, VoIPPiPView voIPPiPView2) {
+            voIPPiPView2.currentUserTextureView.setStub(voIPPiPView.currentUserTextureView);
+            voIPPiPView2.callingUserTextureView.setStub(voIPPiPView.callingUserTextureView);
+            voIPPiPView.currentUserTextureView.renderer.release();
+            voIPPiPView.callingUserTextureView.renderer.release();
+            EglBase eglBase = VideoCapturerDevice.eglBase;
+            if (eglBase != null) {
+                voIPPiPView2.currentUserTextureView.renderer.init(eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
+                voIPPiPView2.callingUserTextureView.renderer.init(VideoCapturerDevice.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
+                if (VoIPService.getSharedInstance() != null) {
+                    VoIPService.getSharedInstance().setSinks(voIPPiPView2.currentUserTextureView.renderer, voIPPiPView2.callingUserTextureView.renderer);
                 }
             }
         }
     }
+}

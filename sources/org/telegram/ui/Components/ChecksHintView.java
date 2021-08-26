@@ -15,7 +15,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
-import org.telegram.ui.Components.ChecksHintView;
 
 public class ChecksHintView extends FrameLayout {
     /* access modifiers changed from: private */
@@ -28,7 +27,6 @@ public class ChecksHintView extends FrameLayout {
     private RLottieImageView[] imageView = new RLottieImageView[2];
     /* access modifiers changed from: private */
     public ChatMessageCell messageCell;
-    private long showingDuration = 2000;
     /* access modifiers changed from: private */
     public TextView[] textView = new TextView[2];
     private float translationY;
@@ -125,7 +123,6 @@ public class ChecksHintView extends FrameLayout {
         }
         setPivotX(left2);
         setPivotY((float) getMeasuredHeight());
-        this.messageCell = chatMessageCell;
         AnimatorSet animatorSet2 = this.animatorSet;
         if (animatorSet2 != null) {
             animatorSet2.cancel();
@@ -140,16 +137,11 @@ public class ChecksHintView extends FrameLayout {
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     AnimatorSet unused = ChecksHintView.this.animatorSet = null;
-                    AndroidUtilities.runOnUIThread(ChecksHintView.this.hideRunnable = new Runnable() {
-                        public final void run() {
-                            ChecksHintView.AnonymousClass1.this.lambda$onAnimationEnd$0$ChecksHintView$1();
-                        }
-                    }, 3000);
+                    AndroidUtilities.runOnUIThread(ChecksHintView.this.hideRunnable = new ChecksHintView$1$$ExternalSyntheticLambda0(this), 3000);
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$onAnimationEnd$0 */
-                public /* synthetic */ void lambda$onAnimationEnd$0$ChecksHintView$1() {
+                public /* synthetic */ void lambda$onAnimationEnd$0() {
                     ChecksHintView.this.hide();
                 }
             });

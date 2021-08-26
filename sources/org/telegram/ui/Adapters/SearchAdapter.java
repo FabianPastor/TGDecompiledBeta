@@ -132,22 +132,11 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
 
     /* access modifiers changed from: private */
     public void processSearch(String str) {
-        AndroidUtilities.runOnUIThread(new Runnable(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                SearchAdapter.this.lambda$processSearch$1$SearchAdapter(this.f$1);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new SearchAdapter$$ExternalSyntheticLambda1(this, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSearch$1 */
-    public /* synthetic */ void lambda$processSearch$1$SearchAdapter(String str) {
+    public /* synthetic */ void lambda$processSearch$1(String str) {
         if (this.allowUsernameSearch) {
             this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, -1, 1);
         }
@@ -157,28 +146,11 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         int i2 = this.searchPointer;
         this.searchPointer = i2 + 1;
         this.searchReqId = i2;
-        Utilities.searchQueue.postRunnable(new Runnable(str, i2, arrayList, i) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ int f$2;
-            public final /* synthetic */ ArrayList f$3;
-            public final /* synthetic */ int f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void run() {
-                SearchAdapter.this.lambda$processSearch$0$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4);
-            }
-        });
+        Utilities.searchQueue.postRunnable(new SearchAdapter$$ExternalSyntheticLambda2(this, str, i2, arrayList, i));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSearch$0 */
-    public /* synthetic */ void lambda$processSearch$0$SearchAdapter(String str, int i, ArrayList arrayList, int i2) {
+    public /* synthetic */ void lambda$processSearch$0(String str, int i, ArrayList arrayList, int i2) {
         int i3;
         String str2;
         SparseArray<TLRPC$User> sparseArray;
@@ -292,26 +264,11 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     private void updateSearchResults(int i, ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
-        AndroidUtilities.runOnUIThread(new Runnable(i, arrayList, arrayList2) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ ArrayList f$2;
-            public final /* synthetic */ ArrayList f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                SearchAdapter.this.lambda$updateSearchResults$2$SearchAdapter(this.f$1, this.f$2, this.f$3);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new SearchAdapter$$ExternalSyntheticLambda0(this, i, arrayList, arrayList2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateSearchResults$2 */
-    public /* synthetic */ void lambda$updateSearchResults$2$SearchAdapter(int i, ArrayList arrayList, ArrayList arrayList2) {
+    public /* synthetic */ void lambda$updateSearchResults$2(int i, ArrayList arrayList, ArrayList arrayList2) {
         if (i == this.searchReqId) {
             this.searchResult = arrayList;
             this.searchResultNames = arrayList2;

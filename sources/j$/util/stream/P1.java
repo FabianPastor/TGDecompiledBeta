@@ -1,40 +1,40 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
+import j$.util.function.Consumer;
+import j$.util.function.l;
+import j$.util.x;
+import j$.util.y;
 
-final class P1<P_IN, P_OUT> extends CLASSNAMEi1<P_IN, P_OUT, Boolean, P1<P_IN, P_OUT>> {
-    private final O1 j;
-
-    P1(O1 o1, T1 t1, Spliterator spliterator) {
-        super(t1, spliterator);
-        this.j = o1;
+final class P1 extends S1 implements CLASSNAMEv1 {
+    P1(CLASSNAMEv1 v1Var, CLASSNAMEv1 v1Var2) {
+        super(v1Var, v1Var2);
     }
 
-    P1(P1 p1, Spliterator spliterator) {
-        super((CLASSNAMEi1) p1, spliterator);
-        this.j = p1.j;
+    /* renamed from: a */
+    public /* synthetic */ void i(Double[] dArr, int i) {
+        CLASSNAMEp1.h(this, dArr, i);
     }
 
-    /* access modifiers changed from: protected */
-    public Object a() {
-        T1 t1 = this.b;
-        M1 m1 = (M1) this.j.c.get();
-        t1.t0(m1, this.c);
-        boolean z = m1.b;
-        if (z != this.j.b.c) {
-            return null;
-        }
-        l(Boolean.valueOf(z));
-        return null;
+    /* renamed from: f */
+    public double[] c(int i) {
+        return new double[i];
     }
 
-    /* access modifiers changed from: protected */
-    public CLASSNAMEk1 f(Spliterator spliterator) {
-        return new P1(this, spliterator);
+    public /* synthetic */ void forEach(Consumer consumer) {
+        CLASSNAMEp1.k(this, consumer);
     }
 
-    /* access modifiers changed from: protected */
-    public Object k() {
-        return Boolean.valueOf(!this.j.b.c);
+    /* renamed from: h */
+    public /* synthetic */ CLASSNAMEv1 r(long j, long j2, l lVar) {
+        return CLASSNAMEp1.n(this, j, j2, lVar);
+    }
+
+    public x spliterator() {
+        return new CLASSNAMEg2(this);
+    }
+
+    /* renamed from: spliterator  reason: collision with other method in class */
+    public y m1spliterator() {
+        return new CLASSNAMEg2(this);
     }
 }

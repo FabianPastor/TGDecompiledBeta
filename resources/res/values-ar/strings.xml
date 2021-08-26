@@ -723,8 +723,6 @@
     <string name="CancelAccountResetInfo2">شخص ما لديه حق الوصول إلى **%1$s** طلب حذف حسابك في تيليجرام وإعادة تعيين كلمة مرور التحقق بخطوتين.\10\10 إن لم يكن أنت؛ فيرجى إدخال الرمز الذي أرسلناه إليك للتو عبر الرسائل النصية SMS.\10يمكنك أيضًا إلغاء حذف الحساب عن طريق *تغيير رقم هاتفك*.</string>
     <string name="CancelEmailQuestion">هل ترغب حقًا في إلغاء عملية إعداد بريد الاسترداد؟</string>
     <string name="CancelEmailQuestionTitle">إلغاء عملية الإعداد</string>
-    <string name="CancelForward">إلغاء التحويل</string>
-    <string name="CancelForwardMessage">هل تريد إلغاء التحويل أم تحويل الرسائل إلى محادثة أخرى؟</string>
     <string name="CancelForwarding">إلغاء التحويل</string>
     <string name="CancelLinkExpired">رابط غير صحيح أو منتهي الصلاحية.</string>
     <string name="CancelLinkSuccess">تم إلغاء عملية حذف حسابك %1$s. يمكنك الآن إغلاق هذه النافذة.</string>
@@ -2384,7 +2382,7 @@
     <string name="NoGroupsInCommon">ما من مجموعات مشتركة</string>
     <string name="NoHandleAppInstalled">لا تملك تطبيقًا يمكنه فتح صيغة الملفات \'%1$s\'، يرجى تنزيل تطبيق مناسب للاستمرار</string>
     <string name="NoLimit">بلا حد</string>
-    <string name="NoMailInstalled">يرجى مراسلتنا عبر البريد الإلكتروني sms@stel.com لإخبارنا بمشكلتك.</string>
+    <string name="NoMailInstalled">يرجى مراسلتنا عبر البريد الإلكتروني reports@stel.com لإخبارنا بمشكلتك.</string>
     <string name="NoMasks">لا توجد أقنعة بعد</string>
     <string name="NoMedia">شارك الصور والمقاطع المرئية في هذه المحادثة للوصول إليها عبر أي جهاز من أجهزتك.</string>
     <string name="NoMediaAutoDownload">لا وسائط</string>
@@ -3445,7 +3443,6 @@
     <string name="SelectFile">اختر ملفًا</string>
     <string name="SelectFromGallery">اختيار من المعرض</string>
     <string name="SelectImage">تحديد صورة</string>
-    <string name="SelectOtherChat">اختيار محادثة أخرى</string>
     <string name="Send">إرسال</string>
     <string name="SendAnonymously">الإرسال متخفيًا</string>
     <string name="SendAsFile">إرسال كملف</string>

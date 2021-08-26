@@ -84,13 +84,9 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
                 progressButton2.setOutlineProvider((ViewOutlineProvider) null);
             }
             addView(progressButton2, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
-            $$Lambda$ArchivedStickerSetCell$ljI0DywNcbiAZ0Wm4HX0phKY86M r0 = new View.OnClickListener() {
-                public final void onClick(View view) {
-                    ArchivedStickerSetCell.this.lambda$new$0$ArchivedStickerSetCell(view);
-                }
-            };
-            progressButton.setOnClickListener(r0);
-            progressButton2.setOnClickListener(r0);
+            ArchivedStickerSetCell$$ExternalSyntheticLambda0 archivedStickerSetCell$$ExternalSyntheticLambda0 = new ArchivedStickerSetCell$$ExternalSyntheticLambda0(this);
+            progressButton.setOnClickListener(archivedStickerSetCell$$ExternalSyntheticLambda0);
+            progressButton2.setOnClickListener(archivedStickerSetCell$$ExternalSyntheticLambda0);
             syncButtons(false);
         } else {
             this.addButton = null;
@@ -123,8 +119,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ArchivedStickerSetCell(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         toggle();
     }
 

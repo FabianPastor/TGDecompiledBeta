@@ -120,17 +120,12 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
             this.passcodeView.onShow(true, false);
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new PasscodeView.PasscodeViewDelegate() {
-                public final void didAcceptedPassword() {
-                    BubbleActivity.this.lambda$showPasscodeActivity$0$BubbleActivity();
-                }
-            });
+            this.passcodeView.setDelegate(new BubbleActivity$$ExternalSyntheticLambda1(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPasscodeActivity$0 */
-    public /* synthetic */ void lambda$showPasscodeActivity$0$BubbleActivity() {
+    public /* synthetic */ void lambda$showPasscodeActivity$0() {
         SharedConfig.isWaitingForPasscodeEnter = false;
         Intent intent = this.passcodeSaveIntent;
         if (intent != null) {
@@ -309,18 +304,13 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setMessage(str);
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                BubbleActivity.this.lambda$showPermissionErrorAlert$1$BubbleActivity(dialogInterface, i);
-            }
-        });
+        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new BubbleActivity$$ExternalSyntheticLambda0(this));
         builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
         builder.show();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPermissionErrorAlert$1 */
-    public /* synthetic */ void lambda$showPermissionErrorAlert$1$BubbleActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showPermissionErrorAlert$1(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));

@@ -29,10 +29,8 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$InputCheckPasswordSRP;
@@ -65,7 +63,6 @@ import org.telegram.ui.Cells.UserCell2;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.TwoStepVerificationActivity;
 
 public class ChatRightsEditActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -158,10 +155,12 @@ public class ChatRightsEditActivity extends BaseFragment {
         void didSetRights(int i, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, String str);
     }
 
-    static /* synthetic */ void lambda$createView$1(DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$createView$1(DialogInterface dialogInterface, int i) {
     }
 
-    static /* synthetic */ void lambda$createView$3(DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$createView$3(DialogInterface dialogInterface, int i) {
     }
 
     public ChatRightsEditActivity(int i, int i2, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights2, String str, int i3, boolean z, boolean z2) {
@@ -377,23 +376,12 @@ public class ChatRightsEditActivity extends BaseFragment {
                 }
             }
         });
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(context) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onItemClick(View view, int i) {
-                ChatRightsEditActivity.this.lambda$createView$6$ChatRightsEditActivity(this.f$1, view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatRightsEditActivity$$ExternalSyntheticLambda17(this, context));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$6 */
-    public /* synthetic */ void lambda$createView$6$ChatRightsEditActivity(Context context, View view, int i) {
+    public /* synthetic */ void lambda$createView$6(Context context, View view, int i) {
         String str;
         if (!this.canEdit && (!this.currentChat.creator || this.currentType != 0 || i != this.anonymousRow)) {
             return;
@@ -463,17 +451,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     }
                     bottomSheetCellArr[i3].setTextAndIcon((CharSequence) str, 0);
                     linearLayout2.addView(bottomSheetCellArr[i3], LayoutHelper.createLinear(-1, -2));
-                    bottomSheetCellArr[i3].setOnClickListener(new View.OnClickListener(builder) {
-                        public final /* synthetic */ BottomSheet.Builder f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void onClick(View view) {
-                            ChatRightsEditActivity.this.lambda$createView$5$ChatRightsEditActivity(this.f$1, view);
-                        }
-                    });
+                    bottomSheetCellArr[i3].setOnClickListener(new ChatRightsEditActivity$$ExternalSyntheticLambda9(this, builder));
                 }
                 builder.setCustomView(linearLayout);
                 showDialog(builder.create());
@@ -617,8 +595,7 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$5 */
-    public /* synthetic */ void lambda$createView$5$ChatRightsEditActivity(BottomSheet.Builder builder, View view) {
+    public /* synthetic */ void lambda$createView$5(BottomSheet.Builder builder, View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         if (intValue == 0) {
             this.bannedRights.until_date = 0;
@@ -635,11 +612,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         } else if (intValue == 4) {
             Calendar instance = Calendar.getInstance();
             try {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getParentActivity(), new DatePickerDialog.OnDateSetListener() {
-                    public final void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
-                        ChatRightsEditActivity.this.lambda$createView$2$ChatRightsEditActivity(datePicker, i, i2, i3);
-                    }
-                }, instance.get(1), instance.get(2), instance.get(5));
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getParentActivity(), new ChatRightsEditActivity$$ExternalSyntheticLambda0(this), instance.get(1), instance.get(2), instance.get(5));
                 DatePicker datePicker = datePickerDialog.getDatePicker();
                 Calendar instance2 = Calendar.getInstance();
                 instance2.setTimeInMillis(System.currentTimeMillis());
@@ -655,19 +628,9 @@ public class ChatRightsEditActivity extends BaseFragment {
                 instance2.set(14, instance2.getMaximum(14));
                 datePicker.setMaxDate(instance2.getTimeInMillis());
                 datePickerDialog.setButton(-1, LocaleController.getString("Set", NUM), datePickerDialog);
-                datePickerDialog.setButton(-2, LocaleController.getString("Cancel", NUM), $$Lambda$ChatRightsEditActivity$QNSCir05BR7MQk6rsQsXjUwcNM.INSTANCE);
+                datePickerDialog.setButton(-2, LocaleController.getString("Cancel", NUM), ChatRightsEditActivity$$ExternalSyntheticLambda7.INSTANCE);
                 if (Build.VERSION.SDK_INT >= 21) {
-                    datePickerDialog.setOnShowListener(new DialogInterface.OnShowListener(datePicker) {
-                        public final /* synthetic */ DatePicker f$0;
-
-                        {
-                            this.f$0 = r1;
-                        }
-
-                        public final void onShow(DialogInterface dialogInterface) {
-                            ChatRightsEditActivity.lambda$createView$4(this.f$0, dialogInterface);
-                        }
-                    });
+                    datePickerDialog.setOnShowListener(new ChatRightsEditActivity$$ExternalSyntheticLambda8(datePicker));
                 }
                 showDialog(datePickerDialog);
             } catch (Exception e) {
@@ -678,25 +641,14 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$ChatRightsEditActivity(DatePicker datePicker, int i, int i2, int i3) {
+    public /* synthetic */ void lambda$createView$2(DatePicker datePicker, int i, int i2, int i3) {
         Calendar instance = Calendar.getInstance();
         instance.clear();
         instance.set(i, i2, i3);
         try {
-            TimePickerDialog timePickerDialog = new TimePickerDialog(getParentActivity(), new TimePickerDialog.OnTimeSetListener((int) (instance.getTime().getTime() / 1000)) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onTimeSet(TimePicker timePicker, int i, int i2) {
-                    ChatRightsEditActivity.this.lambda$createView$0$ChatRightsEditActivity(this.f$1, timePicker, i, i2);
-                }
-            }, 0, 0, true);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(getParentActivity(), new ChatRightsEditActivity$$ExternalSyntheticLambda1(this, (int) (instance.getTime().getTime() / 1000)), 0, 0, true);
             timePickerDialog.setButton(-1, LocaleController.getString("Set", NUM), timePickerDialog);
-            timePickerDialog.setButton(-2, LocaleController.getString("Cancel", NUM), $$Lambda$ChatRightsEditActivity$Sg0CLASSNAMEV9cMM9jcdAbLtVcuUA88.INSTANCE);
+            timePickerDialog.setButton(-2, LocaleController.getString("Cancel", NUM), ChatRightsEditActivity$$ExternalSyntheticLambda6.INSTANCE);
             showDialog(timePickerDialog);
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -704,13 +656,13 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$ChatRightsEditActivity(int i, TimePicker timePicker, int i2, int i3) {
+    public /* synthetic */ void lambda$createView$0(int i, TimePicker timePicker, int i2, int i3) {
         this.bannedRights.until_date = i + (i2 * 3600) + (i3 * 60);
         this.listViewAdapter.notifyItemChanged(this.untilDateRow);
     }
 
-    static /* synthetic */ void lambda$createView$4(DatePicker datePicker, DialogInterface dialogInterface) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$createView$4(DatePicker datePicker, DialogInterface dialogInterface) {
         int childCount = datePicker.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View childAt = datePicker.getChildAt(i);
@@ -773,42 +725,15 @@ public class ChatRightsEditActivity extends BaseFragment {
                 }
                 tLRPC$TL_channels_editCreator.password = tLRPC$InputCheckPasswordSRP2;
                 tLRPC$TL_channels_editCreator.user_id = getMessagesController().getInputUser(this.currentUser);
-                getConnectionsManager().sendRequest(tLRPC$TL_channels_editCreator, new RequestDelegate(tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity, tLRPC$TL_channels_editCreator) {
-                    public final /* synthetic */ TLRPC$InputCheckPasswordSRP f$1;
-                    public final /* synthetic */ TwoStepVerificationActivity f$2;
-                    public final /* synthetic */ TLRPC$TL_channels_editCreator f$3;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        ChatRightsEditActivity.this.lambda$initTransfer$14$ChatRightsEditActivity(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
-                    }
-                });
+                getConnectionsManager().sendRequest(tLRPC$TL_channels_editCreator, new ChatRightsEditActivity$$ExternalSyntheticLambda14(this, tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity, tLRPC$TL_channels_editCreator));
                 return;
             }
-            MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), this.chatId, this, new MessagesStorage.IntCallback(tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity) {
-                public final /* synthetic */ TLRPC$InputCheckPasswordSRP f$1;
-                public final /* synthetic */ TwoStepVerificationActivity f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run(int i) {
-                    ChatRightsEditActivity.this.lambda$initTransfer$7$ChatRightsEditActivity(this.f$1, this.f$2, i);
-                }
-            });
+            MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), this.chatId, this, new ChatRightsEditActivity$$ExternalSyntheticLambda13(this, tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initTransfer$7 */
-    public /* synthetic */ void lambda$initTransfer$7$ChatRightsEditActivity(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, int i) {
+    public /* synthetic */ void lambda$initTransfer$7(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, int i) {
         if (i != 0) {
             this.chatId = i;
             this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
@@ -817,30 +742,12 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initTransfer$14 */
-    public /* synthetic */ void lambda$initTransfer$14$ChatRightsEditActivity(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity, tLRPC$TL_channels_editCreator) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLRPC$InputCheckPasswordSRP f$2;
-            public final /* synthetic */ TwoStepVerificationActivity f$3;
-            public final /* synthetic */ TLRPC$TL_channels_editCreator f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void run() {
-                ChatRightsEditActivity.this.lambda$initTransfer$13$ChatRightsEditActivity(this.f$1, this.f$2, this.f$3, this.f$4);
-            }
-        });
+    public /* synthetic */ void lambda$initTransfer$14(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChatRightsEditActivity$$ExternalSyntheticLambda11(this, tLRPC$TL_error, tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity, tLRPC$TL_channels_editCreator));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initTransfer$13 */
-    public /* synthetic */ void lambda$initTransfer$13$ChatRightsEditActivity(TLRPC$TL_error tLRPC$TL_error, TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator) {
+    public /* synthetic */ void lambda$initTransfer$13(TLRPC$TL_error tLRPC$TL_error, TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator) {
         int i;
         TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
         TwoStepVerificationActivity twoStepVerificationActivity2 = twoStepVerificationActivity;
@@ -855,11 +762,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                             builder.setTitle(LocaleController.getString("EditAdminGroupTransfer", NUM));
                         }
                         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferReadyAlertText", NUM, this.currentChat.title, UserObject.getFirstName(this.currentUser))));
-                        builder.setPositiveButton(LocaleController.getString("EditAdminTransferChangeOwner", NUM), new DialogInterface.OnClickListener() {
-                            public final void onClick(DialogInterface dialogInterface, int i) {
-                                ChatRightsEditActivity.this.lambda$initTransfer$9$ChatRightsEditActivity(dialogInterface, i);
-                            }
-                        });
+                        builder.setPositiveButton(LocaleController.getString("EditAdminTransferChangeOwner", NUM), new ChatRightsEditActivity$$ExternalSyntheticLambda3(this));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                         showDialog(builder.create());
                     }
@@ -924,11 +827,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         linearLayout3.addView(textView3, LayoutHelper.createLinear(-1, -2));
                     }
                     if ("PASSWORD_MISSING".equals(tLRPC$TL_error2.text)) {
-                        builder2.setPositiveButton(LocaleController.getString("EditAdminTransferSetPassword", NUM), new DialogInterface.OnClickListener() {
-                            public final void onClick(DialogInterface dialogInterface, int i) {
-                                ChatRightsEditActivity.this.lambda$initTransfer$10$ChatRightsEditActivity(dialogInterface, i);
-                            }
-                        });
+                        builder2.setPositiveButton(LocaleController.getString("EditAdminTransferSetPassword", NUM), new ChatRightsEditActivity$$ExternalSyntheticLambda4(this));
                         builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     } else {
                         TextView textView4 = new TextView(getParentActivity());
@@ -944,17 +843,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     }
                     showDialog(builder2.create());
                 } else if ("SRP_ID_INVALID".equals(tLRPC$TL_error2.text)) {
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate(twoStepVerificationActivity2) {
-                        public final /* synthetic */ TwoStepVerificationActivity f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            ChatRightsEditActivity.this.lambda$initTransfer$12$ChatRightsEditActivity(this.f$1, tLObject, tLRPC$TL_error);
-                        }
-                    }, 8);
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new ChatRightsEditActivity$$ExternalSyntheticLambda15(this, twoStepVerificationActivity2), 8);
                 } else if (tLRPC$TL_error2.text.equals("CHANNELS_TOO_MUCH")) {
                     presentFragment(new TooManyCommunitiesActivity(1));
                 } else {
@@ -974,52 +863,24 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initTransfer$9 */
-    public /* synthetic */ void lambda$initTransfer$9$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$initTransfer$9(DialogInterface dialogInterface, int i) {
         TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
-        twoStepVerificationActivity.setDelegate(new TwoStepVerificationActivity.TwoStepVerificationActivityDelegate(twoStepVerificationActivity) {
-            public final /* synthetic */ TwoStepVerificationActivity f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void didEnterPassword(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP) {
-                ChatRightsEditActivity.this.lambda$initTransfer$8$ChatRightsEditActivity(this.f$1, tLRPC$InputCheckPasswordSRP);
-            }
-        });
+        twoStepVerificationActivity.setDelegate(new ChatRightsEditActivity$$ExternalSyntheticLambda18(this, twoStepVerificationActivity));
         presentFragment(twoStepVerificationActivity);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initTransfer$10 */
-    public /* synthetic */ void lambda$initTransfer$10$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$initTransfer$10(DialogInterface dialogInterface, int i) {
         presentFragment(new TwoStepVerificationSetupActivity(6, (TLRPC$TL_account_password) null));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initTransfer$12 */
-    public /* synthetic */ void lambda$initTransfer$12$ChatRightsEditActivity(TwoStepVerificationActivity twoStepVerificationActivity, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, twoStepVerificationActivity) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ TwoStepVerificationActivity f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                ChatRightsEditActivity.this.lambda$initTransfer$11$ChatRightsEditActivity(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$initTransfer$12(TwoStepVerificationActivity twoStepVerificationActivity, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChatRightsEditActivity$$ExternalSyntheticLambda10(this, tLRPC$TL_error, tLObject, twoStepVerificationActivity));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initTransfer$11 */
-    public /* synthetic */ void lambda$initTransfer$11$ChatRightsEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TwoStepVerificationActivity twoStepVerificationActivity) {
+    public /* synthetic */ void lambda$initTransfer$11(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TwoStepVerificationActivity twoStepVerificationActivity) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
             twoStepVerificationActivity.setCurrentPasswordInfo((byte[]) null, tLRPC$TL_account_password);
@@ -1251,8 +1112,8 @@ public class ChatRightsEditActivity extends BaseFragment {
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             android.app.Activity r1 = r13.getParentActivity()
             int r2 = r13.chatId
-            org.telegram.ui.-$$Lambda$ChatRightsEditActivity$7a0DOThQxR2X-lrnp1var__FJGQ r3 = new org.telegram.ui.-$$Lambda$ChatRightsEditActivity$7a0DOThQxR2X-lrnp1var__FJGQ
-            r3.<init>()
+            org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda12 r3 = new org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda12
+            r3.<init>(r13)
             r0.convertToMegaGroup(r1, r2, r13, r3)
             return
         L_0x003e:
@@ -1409,8 +1270,7 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDonePressed$15 */
-    public /* synthetic */ void lambda$onDonePressed$15$ChatRightsEditActivity(int i) {
+    public /* synthetic */ void lambda$onDonePressed$15(int i) {
         if (i != 0) {
             this.chatId = i;
             this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
@@ -1436,29 +1296,19 @@ public class ChatRightsEditActivity extends BaseFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", NUM));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("UserRestrictionsApplyChangesText", NUM, MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId)).title)));
-        builder.setPositiveButton(LocaleController.getString("ApplyTheme", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                ChatRightsEditActivity.this.lambda$checkDiscard$16$ChatRightsEditActivity(dialogInterface, i);
-            }
-        });
-        builder.setNegativeButton(LocaleController.getString("PassportDiscard", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                ChatRightsEditActivity.this.lambda$checkDiscard$17$ChatRightsEditActivity(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("ApplyTheme", NUM), new ChatRightsEditActivity$$ExternalSyntheticLambda5(this));
+        builder.setNegativeButton(LocaleController.getString("PassportDiscard", NUM), new ChatRightsEditActivity$$ExternalSyntheticLambda2(this));
         showDialog(builder.create());
         return false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkDiscard$16 */
-    public /* synthetic */ void lambda$checkDiscard$16$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$16(DialogInterface dialogInterface, int i) {
         onDonePressed();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkDiscard$17 */
-    public /* synthetic */ void lambda$checkDiscard$17$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$17(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
 
@@ -1630,7 +1480,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
                 android.content.Context r7 = r6.mContext
-                r0 = 2131165444(0x7var_, float:1.7945105E38)
+                r0 = 2131165449(0x7var_, float:1.7945115E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r7)
@@ -1921,11 +1771,7 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ChatRightsEditActivity$nOHhknqJMaLPYV9we9mrKmqq3M r11 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                ChatRightsEditActivity.this.lambda$getThemeDescriptions$18$ChatRightsEditActivity();
-            }
-        };
+        ChatRightsEditActivity$$ExternalSyntheticLambda16 chatRightsEditActivity$$ExternalSyntheticLambda16 = new ChatRightsEditActivity$$ExternalSyntheticLambda16(this);
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{UserCell2.class, TextSettingsCell.class, TextCheckCell2.class, HeaderCell.class, TextDetailCell.class, PollEditTextCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -1954,18 +1800,18 @@ public class ChatRightsEditActivity extends BaseFragment {
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{PollEditTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_HINTTEXTCOLOR, new Class[]{PollEditTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$ChatRightsEditActivity$nOHhknqJMaLPYV9we9mrKmqq3M r9 = r11;
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
+        ChatRightsEditActivity$$ExternalSyntheticLambda16 chatRightsEditActivity$$ExternalSyntheticLambda162 = chatRightsEditActivity$$ExternalSyntheticLambda16;
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) chatRightsEditActivity$$ExternalSyntheticLambda162, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) chatRightsEditActivity$$ExternalSyntheticLambda162, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$ChatRightsEditActivity$nOHhknqJMaLPYV9we9mrKmqq3M r8 = r11;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        ChatRightsEditActivity$$ExternalSyntheticLambda16 chatRightsEditActivity$$ExternalSyntheticLambda163 = chatRightsEditActivity$$ExternalSyntheticLambda16;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatRightsEditActivity$$ExternalSyntheticLambda163, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatRightsEditActivity$$ExternalSyntheticLambda163, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatRightsEditActivity$$ExternalSyntheticLambda163, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatRightsEditActivity$$ExternalSyntheticLambda163, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatRightsEditActivity$$ExternalSyntheticLambda163, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatRightsEditActivity$$ExternalSyntheticLambda163, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatRightsEditActivity$$ExternalSyntheticLambda163, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription((View) null, 0, new Class[]{DialogRadioCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
         arrayList.add(new ThemeDescription((View) null, 0, new Class[]{DialogRadioCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextGray2"));
         arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_CHECKBOX, new Class[]{DialogRadioCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogRadioBackground"));
@@ -1974,8 +1820,7 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$18 */
-    public /* synthetic */ void lambda$getThemeDescriptions$18$ChatRightsEditActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$18() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

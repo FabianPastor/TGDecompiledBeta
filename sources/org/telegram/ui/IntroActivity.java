@@ -26,7 +26,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
-import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
@@ -37,7 +36,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$LangPackString;
 import org.telegram.tgnet.TLRPC$TL_error;
@@ -49,7 +47,6 @@ import org.telegram.ui.Components.BottomPagesView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.voip.CellFlickerDrawable;
-import org.telegram.ui.IntroActivity;
 
 public class IntroActivity extends Activity implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
@@ -131,17 +128,12 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 if (IntroActivity.this.eglThread == null && surfaceTexture != null) {
                     EGLThread unused = IntroActivity.this.eglThread = new EGLThread(surfaceTexture);
                     IntroActivity.this.eglThread.setSurfaceTextureSize(i, i2);
-                    IntroActivity.this.eglThread.postRunnable(new Runnable() {
-                        public final void run() {
-                            IntroActivity.AnonymousClass2.this.lambda$onSurfaceTextureAvailable$0$IntroActivity$2();
-                        }
-                    });
+                    IntroActivity.this.eglThread.postRunnable(new IntroActivity$2$$ExternalSyntheticLambda0(this));
                 }
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onSurfaceTextureAvailable$0 */
-            public /* synthetic */ void lambda$onSurfaceTextureAvailable$0$IntroActivity$2() {
+            public /* synthetic */ void lambda$onSurfaceTextureAvailable$0() {
                 IntroActivity.this.eglThread.drawRunnable.run();
             }
 
@@ -196,7 +188,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 }
             }
         });
-        AnonymousClass4 r7 = new TextView(this) {
+        AnonymousClass4 r7 = new TextView(this, this) {
             CellFlickerDrawable cellFlickerDrawable;
 
             /* access modifiers changed from: protected */
@@ -233,11 +225,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         this.startMessagingButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), -11491093, -12346402));
         this.startMessagingButton.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
         r4.addView(this.startMessagingButton, LayoutHelper.createFrame(-1, 42.0f, 81, 36.0f, 0.0f, 36.0f, 76.0f));
-        this.startMessagingButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                IntroActivity.this.lambda$onCreate$0$IntroActivity(view);
-            }
-        });
+        this.startMessagingButton.setOnClickListener(new IntroActivity$$ExternalSyntheticLambda1(this));
         BottomPagesView bottomPagesView = new BottomPagesView(this, this.viewPager, 6);
         this.bottomPages = bottomPagesView;
         r4.addView(bottomPagesView, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
@@ -247,15 +235,11 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         this.textView.setGravity(17);
         this.textView.setTextSize(1, 16.0f);
         r4.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
-        this.textView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                IntroActivity.this.lambda$onCreate$1$IntroActivity(view);
-            }
-        });
+        this.textView.setOnClickListener(new IntroActivity$$ExternalSyntheticLambda0(this));
         if (AndroidUtilities.isTablet()) {
             FrameLayout frameLayout3 = new FrameLayout(this);
             setContentView(frameLayout3);
-            AnonymousClass5 r42 = new SizeNotifierFrameLayout(this) {
+            AnonymousClass5 r42 = new SizeNotifierFrameLayout(this, this) {
                 /* access modifiers changed from: protected */
                 public boolean isActionBarVisible() {
                     return false;
@@ -281,8 +265,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$0 */
-    public /* synthetic */ void lambda$onCreate$0$IntroActivity(View view) {
+    public /* synthetic */ void lambda$onCreate$0(View view) {
         if (!this.startPressed) {
             this.startPressed = true;
             Intent intent = new Intent(this, LaunchActivity.class);
@@ -294,8 +277,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$1 */
-    public /* synthetic */ void lambda$onCreate$1$IntroActivity(View view) {
+    public /* synthetic */ void lambda$onCreate$1(View view) {
         if (!this.startPressed && this.localeInfo != null) {
             LocaleController.getInstance().applyLanguage(this.localeInfo, true, false, this.currentAccount);
             this.startPressed = true;
@@ -366,49 +348,25 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 this.localeInfo = localeInfo2;
             }
             tLRPC$TL_langpack_getStrings.keys.add("ContinueOnThisLanguage");
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_langpack_getStrings, new RequestDelegate(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    IntroActivity.this.lambda$checkContinueText$3$IntroActivity(this.f$1, tLObject, tLRPC$TL_error);
-                }
-            }, 8);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_langpack_getStrings, new IntroActivity$$ExternalSyntheticLambda3(this, str), 8);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkContinueText$3 */
-    public /* synthetic */ void lambda$checkContinueText$3$IntroActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$checkContinueText$3(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
             if (!tLRPC$Vector.objects.isEmpty()) {
                 TLRPC$LangPackString tLRPC$LangPackString = (TLRPC$LangPackString) tLRPC$Vector.objects.get(0);
                 if (tLRPC$LangPackString instanceof TLRPC$TL_langPackString) {
-                    AndroidUtilities.runOnUIThread(new Runnable(tLRPC$LangPackString, str) {
-                        public final /* synthetic */ TLRPC$LangPackString f$1;
-                        public final /* synthetic */ String f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run() {
-                            IntroActivity.this.lambda$checkContinueText$2$IntroActivity(this.f$1, this.f$2);
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new IntroActivity$$ExternalSyntheticLambda2(this, tLRPC$LangPackString, str));
                 }
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkContinueText$2 */
-    public /* synthetic */ void lambda$checkContinueText$2$IntroActivity(TLRPC$LangPackString tLRPC$LangPackString, String str) {
+    public /* synthetic */ void lambda$checkContinueText$2(TLRPC$LangPackString tLRPC$LangPackString, String str) {
         if (!this.destroyed) {
             this.textView.setText(tLRPC$LangPackString.value);
             MessagesController.getGlobalMainSettings().edit().putString("language_showed2", str.toLowerCase()).commit();
@@ -439,7 +397,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         public Object instantiateItem(ViewGroup viewGroup, int i) {
             final TextView textView = new TextView(viewGroup.getContext());
             final TextView textView2 = new TextView(viewGroup.getContext());
-            AnonymousClass1 r2 = new FrameLayout(viewGroup.getContext()) {
+            AnonymousClass1 r2 = new FrameLayout(this, viewGroup.getContext()) {
                 /* access modifiers changed from: protected */
                 public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                     int dp = (((((i4 - i2) / 4) * 3) - AndroidUtilities.dp(275.0f)) / 2) + AndroidUtilities.dp(166.0f);
@@ -491,380 +449,201 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                         Intro.setDate(((float) (System.currentTimeMillis() - IntroActivity.this.currentDate)) / 1000.0f);
                         Intro.onDrawFrame();
                         EGLThread.this.egl10.eglSwapBuffers(EGLThread.this.eglDisplay, EGLThread.this.eglSurface);
-                        EGLThread.this.postRunnable(
-                        /*  JADX ERROR: Method code generation error
-                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00c2: INVOKE  
-                              (wrap: org.telegram.ui.IntroActivity$EGLThread : 0x00b9: IGET  (r0v11 org.telegram.ui.IntroActivity$EGLThread) = 
-                              (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
-                             org.telegram.ui.IntroActivity.EGLThread.1.this$1 org.telegram.ui.IntroActivity$EGLThread)
-                              (wrap: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY : 0x00bd: CONSTRUCTOR  (r1v9 org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY) = 
-                              (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR)
-                              (16 long)
-                             org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable, long):boolean type: VIRTUAL in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes3.dex
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                            	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:98)
-                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:480)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                            	at jadx.core.codegen.ClassGen.addInsnBody(ClassGen.java:437)
-                            	at jadx.core.codegen.ClassGen.addField(ClassGen.java:378)
-                            	at jadx.core.codegen.ClassGen.addFields(ClassGen.java:348)
-                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:226)
-                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                            	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                            	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                            	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                            	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                            	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                            	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                            	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00bd: CONSTRUCTOR  (r1v9 org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY) = 
-                              (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes3.dex
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                            	... 67 more
-                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY, state: NOT_LOADED
-                            	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                            	... 73 more
-                            */
-                        /*
-                            this = this;
-                            org.telegram.ui.IntroActivity$EGLThread r0 = org.telegram.ui.IntroActivity.EGLThread.this
-                            boolean r0 = r0.initied
-                            if (r0 != 0) goto L_0x0009
-                            return
-                        L_0x0009:
-                            org.telegram.ui.IntroActivity$EGLThread r0 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGLContext r0 = r0.eglContext
-                            org.telegram.ui.IntroActivity$EGLThread r1 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGL10 r1 = r1.egl10
-                            javax.microedition.khronos.egl.EGLContext r1 = r1.eglGetCurrentContext()
-                            boolean r0 = r0.equals(r1)
-                            if (r0 == 0) goto L_0x0037
-                            org.telegram.ui.IntroActivity$EGLThread r0 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGLSurface r0 = r0.eglSurface
-                            org.telegram.ui.IntroActivity$EGLThread r1 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGL10 r1 = r1.egl10
-                            r2 = 12377(0x3059, float:1.7344E-41)
-                            javax.microedition.khronos.egl.EGLSurface r1 = r1.eglGetCurrentSurface(r2)
-                            boolean r0 = r0.equals(r1)
-                            if (r0 != 0) goto L_0x0082
-                        L_0x0037:
-                            org.telegram.ui.IntroActivity$EGLThread r0 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGL10 r0 = r0.egl10
-                            org.telegram.ui.IntroActivity$EGLThread r1 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGLDisplay r1 = r1.eglDisplay
-                            org.telegram.ui.IntroActivity$EGLThread r2 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGLSurface r2 = r2.eglSurface
-                            org.telegram.ui.IntroActivity$EGLThread r3 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGLSurface r3 = r3.eglSurface
-                            org.telegram.ui.IntroActivity$EGLThread r4 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGLContext r4 = r4.eglContext
-                            boolean r0 = r0.eglMakeCurrent(r1, r2, r3, r4)
-                            if (r0 != 0) goto L_0x0082
-                            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-                            if (r0 == 0) goto L_0x0081
-                            java.lang.StringBuilder r0 = new java.lang.StringBuilder
-                            r0.<init>()
-                            java.lang.String r1 = "eglMakeCurrent failed "
-                            r0.append(r1)
-                            org.telegram.ui.IntroActivity$EGLThread r1 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGL10 r1 = r1.egl10
-                            int r1 = r1.eglGetError()
-                            java.lang.String r1 = android.opengl.GLUtils.getEGLErrorString(r1)
-                            r0.append(r1)
-                            java.lang.String r0 = r0.toString()
-                            org.telegram.messenger.FileLog.e((java.lang.String) r0)
-                        L_0x0081:
-                            return
-                        L_0x0082:
-                            long r0 = java.lang.System.currentTimeMillis()
-                            org.telegram.ui.IntroActivity$EGLThread r2 = org.telegram.ui.IntroActivity.EGLThread.this
-                            org.telegram.ui.IntroActivity r2 = org.telegram.ui.IntroActivity.this
-                            long r2 = r2.currentDate
-                            long r0 = r0 - r2
-                            float r0 = (float) r0
-                            r1 = 1148846080(0x447a0000, float:1000.0)
-                            float r0 = r0 / r1
-                            org.telegram.ui.IntroActivity$EGLThread r1 = org.telegram.ui.IntroActivity.EGLThread.this
-                            org.telegram.ui.IntroActivity r1 = org.telegram.ui.IntroActivity.this
-                            int r1 = r1.currentViewPagerPage
-                            org.telegram.messenger.Intro.setPage(r1)
-                            org.telegram.messenger.Intro.setDate(r0)
-                            org.telegram.messenger.Intro.onDrawFrame()
-                            org.telegram.ui.IntroActivity$EGLThread r0 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGL10 r0 = r0.egl10
-                            org.telegram.ui.IntroActivity$EGLThread r1 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGLDisplay r1 = r1.eglDisplay
-                            org.telegram.ui.IntroActivity$EGLThread r2 = org.telegram.ui.IntroActivity.EGLThread.this
-                            javax.microedition.khronos.egl.EGLSurface r2 = r2.eglSurface
-                            r0.eglSwapBuffers(r1, r2)
-                            org.telegram.ui.IntroActivity$EGLThread r0 = org.telegram.ui.IntroActivity.EGLThread.this
-                            org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY r1 = new org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY
-                            r1.<init>(r5)
-                            r2 = 16
-                            r0.postRunnable(r1, r2)
-                            return
-                        */
-                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.IntroActivity.EGLThread.AnonymousClass1.run():void");
+                        EGLThread.this.postRunnable(new IntroActivity$EGLThread$1$$ExternalSyntheticLambda0(this), 16);
+                    } else if (BuildVars.LOGS_ENABLED) {
+                        FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
                     }
-
-                    /* access modifiers changed from: private */
-                    /* renamed from: lambda$run$0 */
-                    public /* synthetic */ void lambda$run$0$IntroActivity$EGLThread$1() {
-                        EGLThread.this.drawRunnable.run();
-                    }
-                };
-                /* access modifiers changed from: private */
-                public EGL10 egl10;
-                private EGLConfig eglConfig;
-                /* access modifiers changed from: private */
-                public EGLContext eglContext;
-                /* access modifiers changed from: private */
-                public EGLDisplay eglDisplay;
-                /* access modifiers changed from: private */
-                public EGLSurface eglSurface;
-                private GL gl;
-                /* access modifiers changed from: private */
-                public boolean initied;
-                private SurfaceTexture surfaceTexture;
-                private int[] textures = new int[23];
-
-                public EGLThread(SurfaceTexture surfaceTexture2) {
-                    super("EGLThread");
-                    this.surfaceTexture = surfaceTexture2;
-                }
-
-                private boolean initGL() {
-                    EGL10 egl102 = (EGL10) EGLContext.getEGL();
-                    this.egl10 = egl102;
-                    EGLDisplay eglGetDisplay = egl102.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-                    this.eglDisplay = eglGetDisplay;
-                    if (eglGetDisplay == EGL10.EGL_NO_DISPLAY) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                        }
-                        finish();
-                        return false;
-                    }
-                    if (!this.egl10.eglInitialize(eglGetDisplay, new int[2])) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                        }
-                        finish();
-                        return false;
-                    }
-                    int[] iArr = new int[1];
-                    EGLConfig[] eGLConfigArr = new EGLConfig[1];
-                    if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 24, 12326, 0, 12338, 1, 12337, 2, 12344}, eGLConfigArr, 1, iArr)) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                        }
-                        finish();
-                        return false;
-                    } else if (iArr[0] > 0) {
-                        EGLConfig eGLConfig = eGLConfigArr[0];
-                        this.eglConfig = eGLConfig;
-                        EGLContext eglCreateContext = this.egl10.eglCreateContext(this.eglDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
-                        this.eglContext = eglCreateContext;
-                        if (eglCreateContext == null) {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                            }
-                            finish();
-                            return false;
-                        }
-                        SurfaceTexture surfaceTexture2 = this.surfaceTexture;
-                        if (surfaceTexture2 instanceof SurfaceTexture) {
-                            EGLSurface eglCreateWindowSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
-                            this.eglSurface = eglCreateWindowSurface;
-                            if (eglCreateWindowSurface == null || eglCreateWindowSurface == EGL10.EGL_NO_SURFACE) {
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                                }
-                                finish();
-                                return false;
-                            } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eglCreateWindowSurface, eglCreateWindowSurface, this.eglContext)) {
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                                }
-                                finish();
-                                return false;
-                            } else {
-                                this.gl = this.eglContext.getGL();
-                                GLES20.glGenTextures(23, this.textures, 0);
-                                loadTexture(NUM, 0);
-                                loadTexture(NUM, 1);
-                                loadTexture(NUM, 2);
-                                loadTexture(NUM, 3);
-                                loadTexture(NUM, 4);
-                                loadTexture(NUM, 5);
-                                loadTexture(NUM, 6);
-                                loadTexture(NUM, 7);
-                                loadTexture(NUM, 8);
-                                loadTexture(NUM, 9);
-                                loadTexture(NUM, 10);
-                                loadTexture(NUM, 11);
-                                loadTexture(NUM, 12);
-                                loadTexture(NUM, 13);
-                                loadTexture(NUM, 14);
-                                loadTexture(NUM, 15);
-                                loadTexture(NUM, 16);
-                                loadTexture(NUM, 17);
-                                loadTexture(NUM, 18);
-                                loadTexture(NUM, 19);
-                                loadTexture(NUM, 20);
-                                loadTexture(NUM, 21);
-                                loadTexture(NUM, 22);
-                                int[] iArr2 = this.textures;
-                                Intro.setTelegramTextures(iArr2[22], iArr2[21]);
-                                int[] iArr3 = this.textures;
-                                Intro.setPowerfulTextures(iArr3[17], iArr3[18], iArr3[16], iArr3[15]);
-                                int[] iArr4 = this.textures;
-                                Intro.setPrivateTextures(iArr4[19], iArr4[20]);
-                                int[] iArr5 = this.textures;
-                                Intro.setFreeTextures(iArr5[14], iArr5[13]);
-                                int[] iArr6 = this.textures;
-                                Intro.setFastTextures(iArr6[2], iArr6[3], iArr6[1], iArr6[0]);
-                                int[] iArr7 = this.textures;
-                                Intro.setIcTextures(iArr7[4], iArr7[5], iArr7[6], iArr7[7], iArr7[8], iArr7[9], iArr7[10], iArr7[11], iArr7[12]);
-                                Intro.onSurfaceCreated();
-                                long unused = IntroActivity.this.currentDate = System.currentTimeMillis() - 1000;
-                                return true;
-                            }
-                        } else {
-                            finish();
-                            return false;
-                        }
-                    } else {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.e("eglConfig not initialized");
-                        }
-                        finish();
-                        return false;
-                    }
-                }
-
-                public void finish() {
-                    if (this.eglSurface != null) {
-                        EGL10 egl102 = this.egl10;
-                        EGLDisplay eGLDisplay = this.eglDisplay;
-                        EGLSurface eGLSurface = EGL10.EGL_NO_SURFACE;
-                        egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
-                        this.egl10.eglDestroySurface(this.eglDisplay, this.eglSurface);
-                        this.eglSurface = null;
-                    }
-                    EGLContext eGLContext = this.eglContext;
-                    if (eGLContext != null) {
-                        this.egl10.eglDestroyContext(this.eglDisplay, eGLContext);
-                        this.eglContext = null;
-                    }
-                    EGLDisplay eGLDisplay2 = this.eglDisplay;
-                    if (eGLDisplay2 != null) {
-                        this.egl10.eglTerminate(eGLDisplay2);
-                        this.eglDisplay = null;
-                    }
-                }
-
-                private void loadTexture(int i, int i2) {
-                    Drawable drawable = IntroActivity.this.getResources().getDrawable(i);
-                    if (drawable instanceof BitmapDrawable) {
-                        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                        GLES20.glBindTexture(3553, this.textures[i2]);
-                        GLES20.glTexParameteri(3553, 10241, 9729);
-                        GLES20.glTexParameteri(3553, 10240, 9729);
-                        GLES20.glTexParameteri(3553, 10242, 33071);
-                        GLES20.glTexParameteri(3553, 10243, 33071);
-                        GLUtils.texImage2D(3553, 0, bitmap, 0);
-                    }
-                }
-
-                public void shutdown() {
-                    postRunnable(new Runnable() {
-                        public final void run() {
-                            IntroActivity.EGLThread.this.lambda$shutdown$0$IntroActivity$EGLThread();
-                        }
-                    });
-                }
-
-                /* access modifiers changed from: private */
-                /* renamed from: lambda$shutdown$0 */
-                public /* synthetic */ void lambda$shutdown$0$IntroActivity$EGLThread() {
-                    finish();
-                    Looper myLooper = Looper.myLooper();
-                    if (myLooper != null) {
-                        myLooper.quit();
-                    }
-                }
-
-                public void setSurfaceTextureSize(int i, int i2) {
-                    Intro.onSurfaceChanged(i, i2, Math.min(((float) i) / 150.0f, ((float) i2) / 150.0f), 0);
-                }
-
-                public void run() {
-                    this.initied = initGL();
-                    super.run();
                 }
             }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$run$0() {
+                EGLThread.this.drawRunnable.run();
+            }
+        };
+        /* access modifiers changed from: private */
+        public EGL10 egl10;
+        private EGLConfig eglConfig;
+        /* access modifiers changed from: private */
+        public EGLContext eglContext;
+        /* access modifiers changed from: private */
+        public EGLDisplay eglDisplay;
+        /* access modifiers changed from: private */
+        public EGLSurface eglSurface;
+        /* access modifiers changed from: private */
+        public boolean initied;
+        private SurfaceTexture surfaceTexture;
+        private int[] textures = new int[23];
+
+        public EGLThread(SurfaceTexture surfaceTexture2) {
+            super("EGLThread");
+            this.surfaceTexture = surfaceTexture2;
         }
+
+        private boolean initGL() {
+            EGL10 egl102 = (EGL10) EGLContext.getEGL();
+            this.egl10 = egl102;
+            EGLDisplay eglGetDisplay = egl102.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+            this.eglDisplay = eglGetDisplay;
+            if (eglGetDisplay == EGL10.EGL_NO_DISPLAY) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                }
+                finish();
+                return false;
+            }
+            if (!this.egl10.eglInitialize(eglGetDisplay, new int[2])) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                }
+                finish();
+                return false;
+            }
+            int[] iArr = new int[1];
+            EGLConfig[] eGLConfigArr = new EGLConfig[1];
+            if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 24, 12326, 0, 12338, 1, 12337, 2, 12344}, eGLConfigArr, 1, iArr)) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                }
+                finish();
+                return false;
+            } else if (iArr[0] > 0) {
+                EGLConfig eGLConfig = eGLConfigArr[0];
+                this.eglConfig = eGLConfig;
+                EGLContext eglCreateContext = this.egl10.eglCreateContext(this.eglDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+                this.eglContext = eglCreateContext;
+                if (eglCreateContext == null) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    }
+                    finish();
+                    return false;
+                }
+                SurfaceTexture surfaceTexture2 = this.surfaceTexture;
+                if (surfaceTexture2 instanceof SurfaceTexture) {
+                    EGLSurface eglCreateWindowSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
+                    this.eglSurface = eglCreateWindowSurface;
+                    if (eglCreateWindowSurface == null || eglCreateWindowSurface == EGL10.EGL_NO_SURFACE) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        }
+                        finish();
+                        return false;
+                    } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eglCreateWindowSurface, eglCreateWindowSurface, this.eglContext)) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        }
+                        finish();
+                        return false;
+                    } else {
+                        this.eglContext.getGL();
+                        GLES20.glGenTextures(23, this.textures, 0);
+                        loadTexture(NUM, 0);
+                        loadTexture(NUM, 1);
+                        loadTexture(NUM, 2);
+                        loadTexture(NUM, 3);
+                        loadTexture(NUM, 4);
+                        loadTexture(NUM, 5);
+                        loadTexture(NUM, 6);
+                        loadTexture(NUM, 7);
+                        loadTexture(NUM, 8);
+                        loadTexture(NUM, 9);
+                        loadTexture(NUM, 10);
+                        loadTexture(NUM, 11);
+                        loadTexture(NUM, 12);
+                        loadTexture(NUM, 13);
+                        loadTexture(NUM, 14);
+                        loadTexture(NUM, 15);
+                        loadTexture(NUM, 16);
+                        loadTexture(NUM, 17);
+                        loadTexture(NUM, 18);
+                        loadTexture(NUM, 19);
+                        loadTexture(NUM, 20);
+                        loadTexture(NUM, 21);
+                        loadTexture(NUM, 22);
+                        int[] iArr2 = this.textures;
+                        Intro.setTelegramTextures(iArr2[22], iArr2[21]);
+                        int[] iArr3 = this.textures;
+                        Intro.setPowerfulTextures(iArr3[17], iArr3[18], iArr3[16], iArr3[15]);
+                        int[] iArr4 = this.textures;
+                        Intro.setPrivateTextures(iArr4[19], iArr4[20]);
+                        int[] iArr5 = this.textures;
+                        Intro.setFreeTextures(iArr5[14], iArr5[13]);
+                        int[] iArr6 = this.textures;
+                        Intro.setFastTextures(iArr6[2], iArr6[3], iArr6[1], iArr6[0]);
+                        int[] iArr7 = this.textures;
+                        Intro.setIcTextures(iArr7[4], iArr7[5], iArr7[6], iArr7[7], iArr7[8], iArr7[9], iArr7[10], iArr7[11], iArr7[12]);
+                        Intro.onSurfaceCreated();
+                        long unused = IntroActivity.this.currentDate = System.currentTimeMillis() - 1000;
+                        return true;
+                    }
+                } else {
+                    finish();
+                    return false;
+                }
+            } else {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglConfig not initialized");
+                }
+                finish();
+                return false;
+            }
+        }
+
+        public void finish() {
+            if (this.eglSurface != null) {
+                EGL10 egl102 = this.egl10;
+                EGLDisplay eGLDisplay = this.eglDisplay;
+                EGLSurface eGLSurface = EGL10.EGL_NO_SURFACE;
+                egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
+                this.egl10.eglDestroySurface(this.eglDisplay, this.eglSurface);
+                this.eglSurface = null;
+            }
+            EGLContext eGLContext = this.eglContext;
+            if (eGLContext != null) {
+                this.egl10.eglDestroyContext(this.eglDisplay, eGLContext);
+                this.eglContext = null;
+            }
+            EGLDisplay eGLDisplay2 = this.eglDisplay;
+            if (eGLDisplay2 != null) {
+                this.egl10.eglTerminate(eGLDisplay2);
+                this.eglDisplay = null;
+            }
+        }
+
+        private void loadTexture(int i, int i2) {
+            Drawable drawable = IntroActivity.this.getResources().getDrawable(i);
+            if (drawable instanceof BitmapDrawable) {
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                GLES20.glBindTexture(3553, this.textures[i2]);
+                GLES20.glTexParameteri(3553, 10241, 9729);
+                GLES20.glTexParameteri(3553, 10240, 9729);
+                GLES20.glTexParameteri(3553, 10242, 33071);
+                GLES20.glTexParameteri(3553, 10243, 33071);
+                GLUtils.texImage2D(3553, 0, bitmap, 0);
+            }
+        }
+
+        public void shutdown() {
+            postRunnable(new IntroActivity$EGLThread$$ExternalSyntheticLambda0(this));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$shutdown$0() {
+            finish();
+            Looper myLooper = Looper.myLooper();
+            if (myLooper != null) {
+                myLooper.quit();
+            }
+        }
+
+        public void setSurfaceTextureSize(int i, int i2) {
+            Intro.onSurfaceChanged(i, i2, Math.min(((float) i) / 150.0f, ((float) i2) / 150.0f), 0);
+        }
+
+        public void run() {
+            this.initied = initGL();
+            super.run();
+        }
+    }
+}

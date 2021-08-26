@@ -29,7 +29,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.QuickAckDelegate;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -258,7 +257,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r0 = r20
             r1 = r21
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 2131165463(0x7var_, float:1.7945144E38)
+            r3 = 2131165468(0x7var_c, float:1.7945154E38)
             r2.setBackButtonImage(r3)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
@@ -272,7 +271,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.<init>(r1)
             r0.emptyView = r3
             java.lang.String r4 = "NoResult"
-            r5 = 2131626371(0x7f0e0983, float:1.8879976E38)
+            r5 = 2131626388(0x7f0e0994, float:1.888001E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r3.setText(r4)
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
@@ -288,7 +287,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r0.imageView = r3
             r3.setAutoRepeat(r5)
             org.telegram.ui.Components.RLottieImageView r3 = r0.imageView
-            r6 = 2131558483(0x7f0d0053, float:1.8742283E38)
+            r6 = 2131558486(0x7f0d0056, float:1.874229E38)
             r7 = 120(0x78, float:1.68E-43)
             r3.setAnimation(r6, r7, r7)
             org.telegram.ui.Components.RLottieImageView r3 = r0.imageView
@@ -305,7 +304,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.setTextColor(r7)
             r3.setTag(r6)
             java.lang.String r7 = "LoadingStats"
-            r8 = 2131626045(0x7f0e083d, float:1.8879315E38)
+            r8 = 2131626056(0x7f0e0848, float:1.8879337E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
             r3.setText(r7)
             r3.setGravity(r5)
@@ -318,7 +317,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r7.setTextColor(r9)
             r7.setTag(r8)
             java.lang.String r9 = "LoadingStatsDescription"
-            r10 = 2131626046(0x7f0e083e, float:1.8879317E38)
+            r10 = 2131626057(0x7f0e0849, float:1.887934E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r7.setText(r9)
             r7.setGravity(r5)
@@ -385,8 +384,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         L_0x012c:
             r3.setVerticalScrollbarPosition(r9)
             org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            org.telegram.ui.-$$Lambda$MessageStatisticActivity$Ky0VtRlsC1WIfR2bZGAK8obuLKU r9 = new org.telegram.ui.-$$Lambda$MessageStatisticActivity$Ky0VtRlsC1WIfR2bZGAK8obuLKU
-            r9.<init>()
+            org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda9 r9 = new org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda9
+            r9.<init>(r0)
             r3.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r9)
             org.telegram.ui.Components.RecyclerListView r3 = r0.listView
             org.telegram.ui.MessageStatisticActivity$3 r9 = new org.telegram.ui.MessageStatisticActivity$3
@@ -658,8 +657,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setBackgroundColor(r2)
             org.telegram.ui.Components.ChatAvatarContainer r1 = r0.avatarContainer
-            org.telegram.ui.-$$Lambda$MessageStatisticActivity$VYOvV2JHOA9lhRHpvnHNpNV2VlU r2 = new org.telegram.ui.-$$Lambda$MessageStatisticActivity$VYOvV2JHOA9lhRHpvnHNpNV2VlU
-            r2.<init>()
+            org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda0
+            r2.<init>(r0)
             r1.setOnClickListener(r2)
             r20.updateMenu()
             android.view.View r1 = r0.fragmentView
@@ -669,8 +668,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$MessageStatisticActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$0(View view, int i) {
         int i2 = this.startRow;
         if (i >= i2 && i < this.endRow) {
             TLRPC$Message tLRPC$Message = this.messages.get(i - i2);
@@ -690,8 +688,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$MessageStatisticActivity(View view) {
+    public /* synthetic */ void lambda$createView$1(View view) {
         if (getParentLayout().fragmentsStack.size() > 1) {
             BaseFragment baseFragment = getParentLayout().fragmentsStack.get(getParentLayout().fragmentsStack.size() - 2);
             if ((baseFragment instanceof ChatActivity) && ((ChatActivity) baseFragment).getCurrentChat().id == this.chatId) {
@@ -743,35 +740,17 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             } else {
                 tLRPC$TL_stats_getMessagePublicForwards.offset_peer = new TLRPC$TL_inputPeerEmpty();
             }
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessagePublicForwards, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    MessageStatisticActivity.this.lambda$loadChats$3$MessageStatisticActivity(tLObject, tLRPC$TL_error);
-                }
-            }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true), this.classGuid);
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessagePublicForwards, new MessageStatisticActivity$$ExternalSyntheticLambda5(this), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true), this.classGuid);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadChats$3 */
-    public /* synthetic */ void lambda$loadChats$3$MessageStatisticActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                MessageStatisticActivity.this.lambda$loadChats$2$MessageStatisticActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$loadChats$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new MessageStatisticActivity$$ExternalSyntheticLambda3(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadChats$2 */
-    public /* synthetic */ void lambda$loadChats$2$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$loadChats$2(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             if ((tLRPC$messages_Messages.flags & 1) != 0) {
@@ -808,34 +787,16 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             tLRPC$TL_stats_getMessageStats.msg_id = messageObject2.getId();
             tLRPC$TL_stats_getMessageStats.channel = getMessagesController().getInputChannel((int) (-this.messageObject.getDialogId()));
         }
-        getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessageStats, new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                MessageStatisticActivity.this.lambda$loadStat$8$MessageStatisticActivity(tLObject, tLRPC$TL_error);
-            }
-        }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true);
+        getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessageStats, new MessageStatisticActivity$$ExternalSyntheticLambda6(this), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadStat$8 */
-    public /* synthetic */ void lambda$loadStat$8$MessageStatisticActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                MessageStatisticActivity.this.lambda$loadStat$7$MessageStatisticActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$loadStat$8(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new MessageStatisticActivity$$ExternalSyntheticLambda2(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadStat$7 */
-    public /* synthetic */ void lambda$loadStat$7$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$loadStat$7(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.statsLoaded = true;
         if (tLRPC$TL_error != null) {
             updateRows();
@@ -854,24 +815,11 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         long[] jArr = chartViewData.chartData.x;
         tLRPC$TL_stats_loadAsyncGraph.x = jArr[jArr.length - 1];
         tLRPC$TL_stats_loadAsyncGraph.flags |= 1;
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate(this.interactionsViewData.zoomToken + "_" + tLRPC$TL_stats_loadAsyncGraph.x, tLRPC$TL_stats_loadAsyncGraph) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ TLRPC$TL_stats_loadAsyncGraph f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                MessageStatisticActivity.this.lambda$loadStat$6$MessageStatisticActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-            }
-        }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true), this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new MessageStatisticActivity$$ExternalSyntheticLambda7(this, this.interactionsViewData.zoomToken + "_" + tLRPC$TL_stats_loadAsyncGraph.x, tLRPC$TL_stats_loadAsyncGraph), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true), this.classGuid);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadStat$6 */
-    public /* synthetic */ void lambda$loadStat$6$MessageStatisticActivity(String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadStat$6(String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ChartData chartData = null;
         if (tLObject instanceof TLRPC$TL_statsGraph) {
             try {
@@ -880,48 +828,20 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 e.printStackTrace();
             }
         } else if (tLObject instanceof TLRPC$TL_statsGraphError) {
-            AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-                public final /* synthetic */ TLObject f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    MessageStatisticActivity.this.lambda$loadStat$4$MessageStatisticActivity(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new MessageStatisticActivity$$ExternalSyntheticLambda1(this, tLObject));
         }
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, chartData, str, tLRPC$TL_stats_loadAsyncGraph) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ ChartData f$2;
-            public final /* synthetic */ String f$3;
-            public final /* synthetic */ TLRPC$TL_stats_loadAsyncGraph f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void run() {
-                MessageStatisticActivity.this.lambda$loadStat$5$MessageStatisticActivity(this.f$1, this.f$2, this.f$3, this.f$4);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new MessageStatisticActivity$$ExternalSyntheticLambda4(this, tLRPC$TL_error, chartData, str, tLRPC$TL_stats_loadAsyncGraph));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadStat$4 */
-    public /* synthetic */ void lambda$loadStat$4$MessageStatisticActivity(TLObject tLObject) {
+    public /* synthetic */ void lambda$loadStat$4(TLObject tLObject) {
         if (getParentActivity() != null) {
             Toast.makeText(getParentActivity(), ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadStat$5 */
-    public /* synthetic */ void lambda$loadStat$5$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, ChartData chartData, String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph) {
+    public /* synthetic */ void lambda$loadStat$5(TLRPC$TL_error tLRPC$TL_error, ChartData chartData, String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph) {
         this.statsLoaded = true;
         if (tLRPC$TL_error != null || chartData == null) {
             updateRows();
@@ -1214,11 +1134,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$MessageStatisticActivity$H3SqTZnAvbSMyfnIBLg6N8s3vU r11 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                MessageStatisticActivity.this.lambda$getThemeDescriptions$9$MessageStatisticActivity();
-            }
-        };
+        MessageStatisticActivity$$ExternalSyntheticLambda8 messageStatisticActivity$$ExternalSyntheticLambda8 = new MessageStatisticActivity$$ExternalSyntheticLambda8(this);
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, ManageChatUserCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
@@ -1230,35 +1146,34 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             simpleTextView = chatAvatarContainer2.getSubtitleTextView();
         }
         arrayList.add(new ThemeDescription((View) simpleTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarSubtitle", (Object) null));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r11, "statisticChartLineEmpty"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda8, "statisticChartLineEmpty"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$MessageStatisticActivity$H3SqTZnAvbSMyfnIBLg6N8s3vU r9 = r11;
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
+        MessageStatisticActivity$$ExternalSyntheticLambda8 messageStatisticActivity$$ExternalSyntheticLambda82 = messageStatisticActivity$$ExternalSyntheticLambda8;
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) messageStatisticActivity$$ExternalSyntheticLambda82, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) messageStatisticActivity$$ExternalSyntheticLambda82, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$MessageStatisticActivity$H3SqTZnAvbSMyfnIBLg6N8s3vU r8 = r11;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        MessageStatisticActivity$$ExternalSyntheticLambda8 messageStatisticActivity$$ExternalSyntheticLambda83 = messageStatisticActivity$$ExternalSyntheticLambda8;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuBackground"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItem"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItemIcon"));
-        StatisticActivity.putColorFromData(this.interactionsViewData, arrayList, r11);
+        StatisticActivity.putColorFromData(this.interactionsViewData, arrayList, messageStatisticActivity$$ExternalSyntheticLambda8);
         return arrayList;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$9 */
-    public /* synthetic */ void lambda$getThemeDescriptions$9$MessageStatisticActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$9() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

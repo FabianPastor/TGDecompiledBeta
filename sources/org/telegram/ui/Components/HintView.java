@@ -15,7 +15,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
-import org.telegram.ui.Components.HintView;
 
 public class HintView extends FrameLayout {
     /* access modifiers changed from: private */
@@ -217,7 +216,7 @@ public class HintView extends FrameLayout {
             r14 = -1
             if (r2 != r14) goto L_0x009f
             android.widget.TextView r2 = r0.textView
-            r10 = 2131627054(0x7f0e0c2e, float:1.8881362E38)
+            r10 = 2131627071(0x7f0e0c3f, float:1.8881396E38)
             java.lang.String r14 = "PollSelectOption"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r2.setText(r10)
@@ -229,7 +228,7 @@ public class HintView extends FrameLayout {
             int r2 = r10.intValue()
             if (r2 != 0) goto L_0x00be
             android.widget.TextView r2 = r0.textView
-            r10 = 2131626387(0x7f0e0993, float:1.8880009E38)
+            r10 = 2131626404(0x7f0e09a4, float:1.8880043E38)
             java.lang.String r14 = "NoVotesQuiz"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r2.setText(r10)
@@ -245,7 +244,7 @@ public class HintView extends FrameLayout {
             int r2 = r10.intValue()
             if (r2 != 0) goto L_0x00e3
             android.widget.TextView r2 = r0.textView
-            r10 = 2131626386(0x7f0e0992, float:1.8880007E38)
+            r10 = 2131626403(0x7f0e09a3, float:1.8880041E38)
             java.lang.String r14 = "NoVotes"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r2.setText(r10)
@@ -267,7 +266,7 @@ public class HintView extends FrameLayout {
             java.lang.String r10 = r0.overrideText
             if (r10 != 0) goto L_0x0118
             android.widget.TextView r10 = r0.textView
-            r14 = 2131625780(0x7f0e0734, float:1.8878778E38)
+            r14 = 2131625788(0x7f0e073c, float:1.8878794E38)
             java.lang.String r15 = "HidAccount"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r10.setText(r14)
@@ -499,16 +498,11 @@ public class HintView extends FrameLayout {
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     AnimatorSet unused = HintView.this.animatorSet = null;
-                    AndroidUtilities.runOnUIThread(HintView.this.hideRunnable = new Runnable() {
-                        public final void run() {
-                            HintView.AnonymousClass2.this.lambda$onAnimationEnd$0$HintView$2();
-                        }
-                    }, HintView.this.showingDuration);
+                    AndroidUtilities.runOnUIThread(HintView.this.hideRunnable = new HintView$2$$ExternalSyntheticLambda0(this), HintView.this.showingDuration);
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$onAnimationEnd$0 */
-                public /* synthetic */ void lambda$onAnimationEnd$0$HintView$2() {
+                public /* synthetic */ void lambda$onAnimationEnd$0() {
                     HintView.this.hide();
                 }
             });

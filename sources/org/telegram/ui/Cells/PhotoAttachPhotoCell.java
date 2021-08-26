@@ -73,7 +73,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         this.container.addView(backupImageView, LayoutHelper.createFrame(-1, -1.0f));
-        AnonymousClass1 r2 = new FrameLayout(context) {
+        AnonymousClass1 r2 = new FrameLayout(this, context) {
             private RectF rect = new RectF();
 
             /* access modifiers changed from: protected */

@@ -723,8 +723,6 @@
     <string name="CancelAccountResetInfo2">Alguém com acesso ao número **%1$s** solicitou excluir a sua conta do Telegram e redefinir a sua senha de Verificação em Duas Etapas.\10\10Se não foi você, digite o código que acabamos de enviar via SMS. Você também pode cancelar isso *alterando o seu número de telefone*.</string>
     <string name="CancelEmailQuestion">Deseja mesmo desistir de configurar o email de recuperação?</string>
     <string name="CancelEmailQuestionTitle">Desistir da configuração</string>
-    <string name="CancelForward">Cancelar Encaminhamento</string>
-    <string name="CancelForwardMessage">Deseja cancelar o encaminhamento ou enviar as mensagens para um chat diferente?</string>
     <string name="CancelForwarding">Cancelar</string>
     <string name="CancelLinkExpired">O link expirou ou está inválido.</string>
     <string name="CancelLinkSuccess">O processo de exclusão da sua conta %1$s foi cancelado. Você pode fechar esta janela agora.</string>
@@ -2384,7 +2382,7 @@
     <string name="NoGroupsInCommon">Nenhum grupo em comum</string>
     <string name="NoHandleAppInstalled">Você não possui um aplicativo que suporte o tipo de arquivo \'%1$s\', por favor instale um para continuar</string>
     <string name="NoLimit">Sem limite</string>
-    <string name="NoMailInstalled">Por favor, envie um email descrevendo o problema para sms@stel.com.</string>
+    <string name="NoMailInstalled">Por favor, envie um email descrevendo o problema para reports@stel.com.</string>
     <string name="NoMasks">Nenhuma máscara</string>
     <string name="NoMedia">Compartilhe fotos e vídeos neste chat e use qualquer um de seus dispositivos para acessá-las.</string>
     <string name="NoMediaAutoDownload">Sem mídia</string>
@@ -3445,7 +3443,6 @@
     <string name="SelectFile">Selecionar Arquivo</string>
     <string name="SelectFromGallery">Selecionar da Galeria</string>
     <string name="SelectImage">Selecionar imagem</string>
-    <string name="SelectOtherChat">Selecionar outro chat</string>
     <string name="Send">Enviar</string>
     <string name="SendAnonymously">Envio anônimo</string>
     <string name="SendAsFile">Enviar arquivo</string>

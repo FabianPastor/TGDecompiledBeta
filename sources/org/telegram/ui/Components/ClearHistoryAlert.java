@@ -152,7 +152,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r0.newTimer = r7
         L_0x005e:
             android.content.res.Resources r6 = r27.getResources()
-            r9 = 2131166036(0x7var_, float:1.7946306E38)
+            r9 = 2131166041(0x7var_, float:1.7946316E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r9)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -234,7 +234,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r14.setTextSize(r8, r5)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r17)
             r14.setTextColor(r12)
-            r12 = 2131624931(0x7f0e03e3, float:1.8877056E38)
+            r12 = 2131624936(0x7f0e03e8, float:1.8877066E38)
             java.lang.String r5 = "ClearHistory"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r12)
             r14.setText(r5)
@@ -335,7 +335,7 @@ public class ClearHistoryAlert extends BottomSheet {
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r4)
             r3.setBackgroundDrawable(r5)
             org.telegram.ui.Cells.CheckBoxCell r3 = r0.cell
-            r5 = 2131624933(0x7f0e03e5, float:1.887706E38)
+            r5 = 2131624938(0x7f0e03ea, float:1.887707E38)
             java.lang.Object[] r9 = new java.lang.Object[r8]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r28)
             r9[r4] = r2
@@ -372,7 +372,7 @@ public class ClearHistoryAlert extends BottomSheet {
             android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r19, (int) r20, (int) r21, (int) r22, (int) r23, (int) r24, (int) r25)
             r2.addView(r3, r5)
             org.telegram.ui.Cells.CheckBoxCell r2 = r0.cell
-            org.telegram.ui.Components.-$$Lambda$ClearHistoryAlert$ozw5NBuDvAMeaemvo5DJ_10xH2A r3 = new org.telegram.ui.Components.-$$Lambda$ClearHistoryAlert$ozw5NBuDvAMeaemvo5DJ_10xH2A
+            org.telegram.ui.Components.ClearHistoryAlert$$ExternalSyntheticLambda2 r3 = new org.telegram.ui.Components.ClearHistoryAlert$$ExternalSyntheticLambda2
             r3.<init>(r11)
             r2.setOnClickListener(r3)
         L_0x0260:
@@ -385,8 +385,8 @@ public class ClearHistoryAlert extends BottomSheet {
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
             android.view.View r3 = r2.background
-            org.telegram.ui.Components.-$$Lambda$ClearHistoryAlert$PNvP59zQz0nepiY5Y7nSccm5u8s r5 = new org.telegram.ui.Components.-$$Lambda$ClearHistoryAlert$PNvP59zQz0nepiY5Y7nSccm5u8s
-            r5.<init>()
+            org.telegram.ui.Components.ClearHistoryAlert$$ExternalSyntheticLambda1 r5 = new org.telegram.ui.Components.ClearHistoryAlert$$ExternalSyntheticLambda1
+            r5.<init>(r0)
             r3.setOnClickListener(r5)
             android.widget.LinearLayout r3 = r0.linearLayout
             r19 = -1
@@ -400,7 +400,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r3.addView(r2, r5)
             org.telegram.ui.Cells.ShadowSectionCell r2 = new org.telegram.ui.Cells.ShadowSectionCell
             r2.<init>(r1)
-            r3 = 2131165443(0x7var_, float:1.7945103E38)
+            r3 = 2131165448(0x7var_, float:1.7945113E38)
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r3, (java.lang.String) r7)
             org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r9 = new android.graphics.drawable.ColorDrawable
@@ -440,7 +440,7 @@ public class ClearHistoryAlert extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
             r5.<init>(r1)
             r5.setAutoRepeat(r4)
-            r9 = 2131558508(0x7f0d006c, float:1.8742334E38)
+            r9 = 2131558511(0x7f0d006f, float:1.874234E38)
             r11 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r9, r11, r11)
             r9 = 1101004800(0x41a00000, float:20.0)
@@ -557,7 +557,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r3.addView(r2, r5)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
-            r3 = 2131165444(0x7var_, float:1.7945105E38)
+            r3 = 2131165449(0x7var_, float:1.7945115E38)
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r3, (java.lang.String) r7)
             org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r6 = new android.graphics.drawable.ColorDrawable
@@ -596,7 +596,7 @@ public class ClearHistoryAlert extends BottomSheet {
             int r1 = r0.currentTimer
             if (r1 != 0) goto L_0x048b
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
-            r3 = 2131625330(0x7f0e0572, float:1.8877865E38)
+            r3 = 2131625335(0x7f0e0577, float:1.8877875E38)
             java.lang.String r5 = "EnableAutoDelete"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r1.setText(r3)
@@ -610,8 +610,8 @@ public class ClearHistoryAlert extends BottomSheet {
         L_0x0499:
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
             android.view.View r1 = r1.background
-            org.telegram.ui.Components.-$$Lambda$ClearHistoryAlert$FJH2Cqqib5uRwfEXJ2e1hdCaX58 r3 = new org.telegram.ui.Components.-$$Lambda$ClearHistoryAlert$FJH2Cqqib5uRwfEXJ2e1hdCaX58
-            r3.<init>()
+            org.telegram.ui.Components.ClearHistoryAlert$$ExternalSyntheticLambda0 r3 = new org.telegram.ui.Components.ClearHistoryAlert$$ExternalSyntheticLambda0
+            r3.<init>(r0)
             r1.setOnClickListener(r3)
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
             r2.addView(r1)
@@ -621,14 +621,14 @@ public class ClearHistoryAlert extends BottomSheet {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ClearHistoryAlert.<init>(android.content.Context, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, boolean):void");
     }
 
-    static /* synthetic */ void lambda$new$0(boolean[] zArr, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$new$0(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$ClearHistoryAlert(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         if (!this.dismissedDelayed) {
             ClearHistoryAlertDelegate clearHistoryAlertDelegate = this.delegate;
             CheckBoxCell checkBoxCell = this.cell;
@@ -638,8 +638,7 @@ public class ClearHistoryAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$ClearHistoryAlert(View view) {
+    public /* synthetic */ void lambda$new$2(View view) {
         int i;
         if (!this.dismissedDelayed) {
             int i2 = this.newTimer;
@@ -659,11 +658,7 @@ public class ClearHistoryAlert extends BottomSheet {
                 this.delegate.onAutoDeleteHistory(i, i3);
             }
             if (this.dismissedDelayed) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public final void run() {
-                        ClearHistoryAlert.this.dismiss();
-                    }
-                }, 200);
+                AndroidUtilities.runOnUIThread(new ClearHistoryAlert$$ExternalSyntheticLambda3(this), 200);
             } else {
                 dismiss();
             }

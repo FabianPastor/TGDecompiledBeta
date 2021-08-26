@@ -15,7 +15,6 @@ import android.view.View;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.StorageDiagramView;
 
 public class StorageDiagramView extends View {
     private float[] animateToPercentage;
@@ -299,18 +298,8 @@ public class StorageDiagramView extends View {
             }
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.valueAnimator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(clearViewDataArr) {
-                public final /* synthetic */ StorageDiagramView.ClearViewData[] f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    StorageDiagramView.this.lambda$update$0$StorageDiagramView(this.f$1, valueAnimator);
-                }
-            });
-            this.valueAnimator.addListener(new AnimatorListenerAdapter() {
+            ofFloat.addUpdateListener(new StorageDiagramView$$ExternalSyntheticLambda0(this, clearViewDataArr));
+            this.valueAnimator.addListener(new AnimatorListenerAdapter(this) {
                 public void onAnimationEnd(Animator animator) {
                     int i = 0;
                     while (true) {
@@ -333,8 +322,7 @@ public class StorageDiagramView extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$update$0 */
-    public /* synthetic */ void lambda$update$0$StorageDiagramView(ClearViewData[] clearViewDataArr, ValueAnimator valueAnimator2) {
+    public /* synthetic */ void lambda$update$0(ClearViewData[] clearViewDataArr, ValueAnimator valueAnimator2) {
         float floatValue = ((Float) valueAnimator2.getAnimatedValue()).floatValue();
         for (int i = 0; i < clearViewDataArr.length; i++) {
             this.drawingPercentage[i] = (this.startFromPercentage[i] * (1.0f - floatValue)) + (this.animateToPercentage[i] * floatValue);

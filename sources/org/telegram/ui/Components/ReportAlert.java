@@ -79,7 +79,7 @@ public class ReportAlert extends BottomSheet {
             r5.addView(r6, r7)
             org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
             r5.<init>(r1)
-            r7 = 2131558474(0x7f0d004a, float:1.8742265E38)
+            r7 = 2131558477(0x7f0d004d, float:1.874227E38)
             r8 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r7, r8, r8)
             r5.playAnimation()
@@ -105,14 +105,14 @@ public class ReportAlert extends BottomSheet {
             r7 = 5
             r8 = 3
             if (r2 != 0) goto L_0x007d
-            r9 = 2131627255(0x7f0e0cf7, float:1.888177E38)
+            r9 = 2131627275(0x7f0e0d0b, float:1.888181E38)
             java.lang.String r10 = "ReportTitleSpam"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
             goto L_0x00c9
         L_0x007d:
             if (r2 != r3) goto L_0x008c
-            r9 = 2131627253(0x7f0e0cf5, float:1.8881765E38)
+            r9 = 2131627273(0x7f0e0d09, float:1.8881806E38)
             java.lang.String r10 = "ReportTitleFake"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
@@ -120,14 +120,14 @@ public class ReportAlert extends BottomSheet {
         L_0x008c:
             r9 = 2
             if (r2 != r9) goto L_0x009c
-            r9 = 2131627256(0x7f0e0cf8, float:1.8881771E38)
+            r9 = 2131627276(0x7f0e0d0c, float:1.8881812E38)
             java.lang.String r10 = "ReportTitleViolence"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
             goto L_0x00c9
         L_0x009c:
             if (r2 != r8) goto L_0x00ab
-            r9 = 2131627252(0x7f0e0cf4, float:1.8881763E38)
+            r9 = 2131627272(0x7f0e0d08, float:1.8881804E38)
             java.lang.String r10 = "ReportTitleChild"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
@@ -135,14 +135,14 @@ public class ReportAlert extends BottomSheet {
         L_0x00ab:
             r9 = 4
             if (r2 != r9) goto L_0x00bb
-            r9 = 2131627254(0x7f0e0cf6, float:1.8881767E38)
+            r9 = 2131627274(0x7f0e0d0a, float:1.8881808E38)
             java.lang.String r10 = "ReportTitlePornography"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
             goto L_0x00c9
         L_0x00bb:
             if (r2 != r7) goto L_0x00c9
-            r9 = 2131627228(0x7f0e0cdc, float:1.8881715E38)
+            r9 = 2131627248(0x7f0e0cf0, float:1.8881755E38)
             java.lang.String r10 = "ReportChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
@@ -164,7 +164,7 @@ public class ReportAlert extends BottomSheet {
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r5.setTextColor(r9)
             r5.setGravity(r3)
-            r9 = 2131627238(0x7f0e0ce6, float:1.8881735E38)
+            r9 = 2131627258(0x7f0e0cfa, float:1.8881775E38)
             java.lang.String r10 = "ReportInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
@@ -214,7 +214,7 @@ public class ReportAlert extends BottomSheet {
             r5 = 6
             r4.setImeOptions(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            r5 = 2131627237(0x7f0e0ce5, float:1.8881733E38)
+            r5 = 2131627257(0x7f0e0cf9, float:1.8881773E38)
             java.lang.String r7 = "ReportHint"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r4.setHint(r5)
@@ -229,8 +229,8 @@ public class ReportAlert extends BottomSheet {
             r5 = 1069547520(0x3fCLASSNAME, float:1.5)
             r4.setCursorWidth(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            org.telegram.ui.Components.-$$Lambda$ReportAlert$AstKiJUdJqth6BECMQAvxwrJRIg r5 = new org.telegram.ui.Components.-$$Lambda$ReportAlert$AstKiJUdJqth6BECMQAvxwrJRIg
-            r5.<init>()
+            org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda1 r5 = new org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda1
+            r5.<init>(r0)
             r4.setOnEditorActionListener(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
             r7 = -1
@@ -248,14 +248,14 @@ public class ReportAlert extends BottomSheet {
             r1 = 0
             r4.setBackground(r1)
             org.telegram.ui.Components.ReportAlert$BottomSheetCell r1 = r0.clearButton
-            r4 = 2131627242(0x7f0e0cea, float:1.8881743E38)
+            r4 = 2131627262(0x7f0e0cfe, float:1.8881783E38)
             java.lang.String r5 = "ReportSend"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
             org.telegram.ui.Components.ReportAlert$BottomSheetCell r1 = r0.clearButton
             android.view.View r1 = r1.background
-            org.telegram.ui.Components.-$$Lambda$ReportAlert$PciE8F7tTe4un-49oesSgLmsVNI r4 = new org.telegram.ui.Components.-$$Lambda$ReportAlert$PciE8F7tTe4un-49oesSgLmsVNI
-            r4.<init>(r2)
+            org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda0 r4 = new org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda0
+            r4.<init>(r0, r2)
             r1.setOnClickListener(r4)
             org.telegram.ui.Components.ReportAlert$BottomSheetCell r1 = r0.clearButton
             r8 = 1112014848(0x42480000, float:50.0)
@@ -271,8 +271,7 @@ public class ReportAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ boolean lambda$new$0$ReportAlert(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$new$0(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
         }
@@ -281,8 +280,7 @@ public class ReportAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$ReportAlert(int i, View view) {
+    public /* synthetic */ void lambda$new$1(int i, View view) {
         AndroidUtilities.hideKeyboard(this.editText);
         onSend(i, this.editText.getText().toString());
         dismiss();

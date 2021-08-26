@@ -42,7 +42,6 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_updateDialogFiltersOrder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
-import org.telegram.ui.Components.FilterTabsView;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class FilterTabsView extends FrameLayout {
@@ -191,7 +190,8 @@ public class FilterTabsView extends FrameLayout {
         void onSamePageSelected();
     }
 
-    static /* synthetic */ void lambda$setIsEditing$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setIsEditing$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     static /* synthetic */ float access$2316(FilterTabsView filterTabsView, float f) {
@@ -244,7 +244,6 @@ public class FilterTabsView extends FrameLayout {
 
     public class TabView extends View {
         public boolean animateChange;
-        public boolean animateCounterChange;
         private float animateFromCountWidth;
         private float animateFromCounterWidth;
         int animateFromTabCount;
@@ -273,7 +272,6 @@ public class FilterTabsView extends FrameLayout {
         private float lastTabWidth;
         float lastTextX;
         String lastTitle;
-        StaticLayout lastTitleLayout;
         private int lastTitleWidth;
         private float lastWidth;
         StaticLayout outCounter;
@@ -310,7 +308,6 @@ public class FilterTabsView extends FrameLayout {
             super.onDetachedFromWindow();
             this.animateChange = false;
             this.animateTabCounter = false;
-            this.animateCounterChange = false;
             this.animateTextChange = false;
             this.animateTextX = false;
             this.animateTabWidth = false;
@@ -1266,8 +1263,6 @@ public class FilterTabsView extends FrameLayout {
                 org.telegram.ui.Components.FilterTabsView$Tab r1 = r0.currentTab
                 int r3 = r1.counter
                 r0.lastTabCount = r3
-                android.text.StaticLayout r3 = r0.textLayout
-                r0.lastTitleLayout = r3
                 java.lang.String r3 = r0.currentText
                 r0.lastTitle = r3
                 int r1 = r1.titleWidth
@@ -1419,7 +1414,6 @@ public class FilterTabsView extends FrameLayout {
         public void clearTransitionParams() {
             this.animateChange = false;
             this.animateTabCounter = false;
-            this.animateCounterChange = false;
             this.animateTextChange = false;
             this.animateTextX = false;
             this.animateTabWidth = false;
@@ -1475,11 +1469,7 @@ public class FilterTabsView extends FrameLayout {
                 boolean z4 = !this.mPendingAdditions.isEmpty();
                 if (z || z2 || z4 || z3) {
                     ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.1f});
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            FilterTabsView.AnonymousClass4.this.lambda$runPendingAnimations$0$FilterTabsView$4(valueAnimator);
-                        }
-                    });
+                    ofFloat.addUpdateListener(new FilterTabsView$4$$ExternalSyntheticLambda0(this));
                     ofFloat.setDuration(getMoveDuration());
                     ofFloat.start();
                 }
@@ -1487,8 +1477,7 @@ public class FilterTabsView extends FrameLayout {
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$runPendingAnimations$0 */
-            public /* synthetic */ void lambda$runPendingAnimations$0$FilterTabsView$4(ValueAnimator valueAnimator) {
+            public /* synthetic */ void lambda$runPendingAnimations$0(ValueAnimator valueAnimator) {
                 FilterTabsView.this.listView.invalidate();
                 FilterTabsView.this.invalidate();
             }
@@ -1538,12 +1527,8 @@ public class FilterTabsView extends FrameLayout {
                             tabView.changeAnimator.cancel();
                         }
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                FilterTabsView.AnonymousClass4.lambda$animateMoveImpl$1(FilterTabsView.TabView.this, valueAnimator);
-                            }
-                        });
-                        ofFloat.addListener(new AnimatorListenerAdapter() {
+                        ofFloat.addUpdateListener(new FilterTabsView$4$$ExternalSyntheticLambda1(tabView));
+                        ofFloat.addListener(new AnimatorListenerAdapter(this) {
                             public void onAnimationEnd(Animator animator) {
                                 tabView.clearTransitionParams();
                             }
@@ -1555,7 +1540,8 @@ public class FilterTabsView extends FrameLayout {
                 }
             }
 
-            static /* synthetic */ void lambda$animateMoveImpl$1(TabView tabView, ValueAnimator valueAnimator) {
+            /* access modifiers changed from: private */
+            public static /* synthetic */ void lambda$animateMoveImpl$1(TabView tabView, ValueAnimator valueAnimator) {
                 tabView.changeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
                 tabView.invalidate();
             }
@@ -1627,16 +1613,8 @@ public class FilterTabsView extends FrameLayout {
         this.adapter = listAdapter;
         listAdapter.setHasStableIds(true);
         this.listView.setAdapter(this.adapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
-            public final void onItemClick(View view, int i, float f, float f2) {
-                FilterTabsView.this.lambda$new$0$FilterTabsView(view, i, f, f2);
-            }
-        });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return FilterTabsView.this.lambda$new$1$FilterTabsView(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new FilterTabsView$$ExternalSyntheticLambda1(this));
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new FilterTabsView$$ExternalSyntheticLambda2(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 FilterTabsView.this.invalidate();
@@ -1646,8 +1624,7 @@ public class FilterTabsView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$FilterTabsView(View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$new$0(View view, int i, float f, float f2) {
         FilterTabsViewDelegate filterTabsViewDelegate;
         if (this.delegate.canPerformActions()) {
             TabView tabView = (TabView) view;
@@ -1667,8 +1644,7 @@ public class FilterTabsView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ boolean lambda$new$1$FilterTabsView(View view, int i) {
+    public /* synthetic */ boolean lambda$new$1(View view, int i) {
         if (this.delegate.canPerformActions() && !this.isEditing) {
             if (this.delegate.didSelectTab((TabView) view, i == this.currentPosition)) {
                 this.listView.hideSelector(true);
@@ -2210,7 +2186,7 @@ public class FilterTabsView extends FrameLayout {
                 MessagesController.DialogFilter dialogFilter = arrayList.get(i);
                 tLRPC$TL_messages_updateDialogFiltersOrder.order.add(Integer.valueOf(arrayList.get(i).id));
             }
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, $$Lambda$FilterTabsView$0gw0M2Mpnl7SUImCutpjvb1JvBw.INSTANCE);
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, FilterTabsView$$ExternalSyntheticLambda0.INSTANCE);
             this.orderChanged = false;
         }
     }

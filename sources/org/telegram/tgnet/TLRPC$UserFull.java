@@ -16,6 +16,7 @@ public abstract class TLRPC$UserFull extends TLObject {
     public int pinned_msg_id;
     public TLRPC$Photo profile_photo;
     public TLRPC$TL_peerSettings settings;
+    public String theme_emoticon;
     public int ttl_period;
     public TLRPC$User user;
     public boolean video_calls_available;
@@ -26,11 +27,14 @@ public abstract class TLRPC$UserFull extends TLObject {
             case -1901811583:
                 tLRPC$UserFull = new TLRPC$TL_userFull_layer98();
                 break;
+            case -694681851:
+                tLRPC$UserFull = new TLRPC$TL_userFull();
+                break;
             case -302941166:
                 tLRPC$UserFull = new TLRPC$TL_userFull_layer123();
                 break;
             case 328899191:
-                tLRPC$UserFull = new TLRPC$TL_userFull();
+                tLRPC$UserFull = new TLRPC$TL_userFull_layer131();
                 break;
             case 1951750604:
                 tLRPC$UserFull = new TLRPC$TL_userFull_layer101();
