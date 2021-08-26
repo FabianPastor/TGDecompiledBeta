@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 7.0.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: jpft7GNvmw0/HJWkqC86hzgyZjs=
+SHA1-Digest: Slm1DZPVk+bJrnTQoDmrf8+7dtw=
 
 Name: META-INF/androidx.annotation_annotation-experimental.version
 SHA1-Digest: BeF7ZGqBckDCBhhvlPj0xwl01dw=
@@ -10524,7 +10524,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: 6pc0YUT+QjS9SpqWHWZXQ2OLWXQ=
+SHA1-Digest: 7QmJ9fVO4RYwr6m/r2bBTcr//2s=
 
 Name: classes2.dex
 SHA1-Digest: msn6e5ORoAyTrb/qIv0F3bl5Gmw=

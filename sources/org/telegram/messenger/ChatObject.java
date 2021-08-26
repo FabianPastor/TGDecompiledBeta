@@ -1187,7 +1187,7 @@ public class ChatObject {
             int selfId = getSelfId();
             VoIPService.getSharedInstance();
             TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = this.participants.get(selfId);
-            this.canStreamVideo = (tLRPC$TL_groupCallParticipant2 != null && tLRPC$TL_groupCallParticipant2.video_joined) || BuildVars.DEBUG_PRIVATE_VERSION;
+            this.canStreamVideo = true;
             this.activeVideos = 0;
             int size2 = this.sortedParticipants.size();
             boolean z = false;
