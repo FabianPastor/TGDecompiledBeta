@@ -43,6 +43,9 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case -115071790:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionParticipantMute();
                 break;
+            case -26672755:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeTheme();
+                break;
             case 241923758:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeLocation();
                 break;

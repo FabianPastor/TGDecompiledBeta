@@ -3,14 +3,13 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_sponsoredMessage extends TLObject {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
     public ArrayList<TLRPC$MessageEntity> entities = new ArrayList<>();
     public int flags;
     public TLRPC$Peer from_id;
-    public TLRPC$MessageMedia media;
     public String message;
-    public TLRPC$Peer peer_id;
     public byte[] random_id;
+    public String start_param;
 
     public static TLRPC$TL_sponsoredMessage TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         if (constructor == i) {
@@ -27,12 +26,11 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.random_id = abstractSerializedData.readByteArray(z);
-        this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.from_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.message = abstractSerializedData.readString(z);
         if ((this.flags & 1) != 0) {
-            this.media = TLRPC$MessageMedia.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.start_param = abstractSerializedData.readString(z);
         }
+        this.message = abstractSerializedData.readString(z);
         if ((this.flags & 2) != 0) {
             int readInt32 = abstractSerializedData.readInt32(z);
             int i = 0;
@@ -57,12 +55,11 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);
         abstractSerializedData.writeByteArray(this.random_id);
-        this.peer_id.serializeToStream(abstractSerializedData);
         this.from_id.serializeToStream(abstractSerializedData);
-        abstractSerializedData.writeString(this.message);
         if ((this.flags & 1) != 0) {
-            this.media.serializeToStream(abstractSerializedData);
+            abstractSerializedData.writeString(this.start_param);
         }
+        abstractSerializedData.writeString(this.message);
         if ((this.flags & 2) != 0) {
             abstractSerializedData.writeInt32(NUM);
             int size = this.entities.size();

@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.ActionBar.Theme;
 
 public class StickerTabView extends FrameLayout {
@@ -22,8 +23,11 @@ public class StickerTabView extends FrameLayout {
     ImageView iconView;
     BackupImageView imageView;
     public final int index;
+    public boolean inited;
     boolean isIcon;
     float lastLeft;
+    boolean roundImage;
+    public SvgHelper.SvgDrawable svgThumb;
     TextView textView;
     View visibleView;
 
@@ -70,6 +74,9 @@ public class StickerTabView extends FrameLayout {
         }
         layoutParams.height = AndroidUtilities.dp(f);
         this.textView.setVisibility(z ? 0 : 8);
+        if (!this.isIcon && this.roundImage) {
+            this.imageView.setRoundRadius(AndroidUtilities.dp(((float) this.visibleView.getLayoutParams().width) / 2.0f));
+        }
     }
 
     public void updateExpandProgress(float f) {
@@ -131,5 +138,9 @@ public class StickerTabView extends FrameLayout {
             this.dragOffsetAnimator.start();
         }
         this.hasSavedLeft = false;
+    }
+
+    public void setRoundImage() {
+        this.roundImage = true;
     }
 }

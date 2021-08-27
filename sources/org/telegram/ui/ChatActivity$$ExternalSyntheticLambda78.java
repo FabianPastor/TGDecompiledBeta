@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda78 imple
     }
 
     public final void run() {
-        this.f$0.showChecksHint();
+        this.f$0.destroyTextureView();
     }
 }

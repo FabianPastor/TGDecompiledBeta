@@ -264,11 +264,20 @@ public class ConnectionsManager extends BaseController {
         }
         String str9 = str4.trim().length() == 0 ? "SDK Unknown" : str4;
         getUserConfig().loadConfig();
-        String str10 = SharedConfig.pushString;
-        if (TextUtils.isEmpty(str10) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
-            str10 = SharedConfig.pushStringStatus;
+        init(BuildVars.BUILD_VERSION, 132, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), getRegId(), AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+    }
+
+    private String getRegId() {
+        String str = SharedConfig.pushString;
+        if (TextUtils.isEmpty(str) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
+            str = SharedConfig.pushStringStatus;
         }
-        init(BuildVars.BUILD_VERSION, 132, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), str10, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        if (!TextUtils.isEmpty(str)) {
+            return str;
+        }
+        String str2 = "__FIREBASE_GENERATING_SINCE_" + getCurrentTime() + "__";
+        SharedConfig.pushStringStatus = str2;
+        return str2;
     }
 
     public boolean isPushConnectionEnabled() {
@@ -487,6 +496,10 @@ public class ConnectionsManager extends BaseController {
     public static void setRegId(String str, String str2) {
         if (TextUtils.isEmpty(str) && !TextUtils.isEmpty(str2)) {
             str = str2;
+        }
+        if (TextUtils.isEmpty(str)) {
+            str = "__FIREBASE_GENERATING_SINCE_" + getInstance(0).getCurrentTime() + "__";
+            SharedConfig.pushStringStatus = str;
         }
         for (int i = 0; i < 3; i++) {
             native_setRegId(i, str);

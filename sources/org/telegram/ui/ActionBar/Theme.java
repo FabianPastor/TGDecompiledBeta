@@ -526,6 +526,7 @@ public class Theme {
         private int currentGradientColor3;
         private int[] currentShadowDrawableRadius = {-1, -1, -1, -1};
         private int currentType;
+        private boolean drawFullBubble;
         private Shader gradientShader;
         private boolean isBottomNear;
         private final boolean isOut;
@@ -1180,10 +1181,10 @@ public class Theme {
             draw(canvas, (Paint) null);
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:107:0x04d7  */
-        /* JADX WARNING: Removed duplicated region for block: B:53:0x0216  */
-        /* JADX WARNING: Removed duplicated region for block: B:61:0x0267  */
-        /* JADX WARNING: Removed duplicated region for block: B:99:0x0485  */
+        /* JADX WARNING: Removed duplicated region for block: B:110:0x049d  */
+        /* JADX WARNING: Removed duplicated region for block: B:118:0x04ef  */
+        /* JADX WARNING: Removed duplicated region for block: B:58:0x0220  */
+        /* JADX WARNING: Removed duplicated region for block: B:66:0x0271  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void draw(android.graphics.Canvas r20, android.graphics.Paint r21) {
             /*
@@ -1252,29 +1253,31 @@ public class Theme {
                 r15 = 1119092736(0x42b40000, float:90.0)
                 r10 = 1
                 r3 = 1090519040(0x41000000, float:8.0)
-                if (r13 == 0) goto L_0x02ee
+                if (r13 == 0) goto L_0x02fc
+                boolean r13 = r0.drawFullBubble
+                if (r13 != 0) goto L_0x00c2
                 int r13 = r0.currentType
-                if (r13 == r7) goto L_0x00be
-                if (r21 != 0) goto L_0x00be
-                int r7 = r0.topY
-                int r12 = r2.bottom
-                int r7 = r7 + r12
-                int r7 = r7 - r5
-                int r12 = r0.currentBackgroundHeight
-                if (r7 >= r12) goto L_0x0097
-                goto L_0x00be
-            L_0x0097:
-                android.graphics.Path r7 = r0.path
-                int r12 = r2.right
-                int r13 = r0.dp(r3)
-                int r12 = r12 - r13
-                float r12 = (float) r12
+                if (r13 == r7) goto L_0x00c2
+                if (r21 != 0) goto L_0x00c2
                 int r13 = r0.topY
-                int r13 = r11 - r13
-                int r14 = r0.currentBackgroundHeight
-                int r13 = r13 + r14
+                int r7 = r2.bottom
+                int r13 = r13 + r7
+                int r13 = r13 - r5
+                int r7 = r0.currentBackgroundHeight
+                if (r13 >= r7) goto L_0x009b
+                goto L_0x00c2
+            L_0x009b:
+                android.graphics.Path r7 = r0.path
+                int r13 = r2.right
+                int r14 = r0.dp(r3)
+                int r13 = r13 - r14
                 float r13 = (float) r13
-                r7.moveTo(r12, r13)
+                int r14 = r0.topY
+                int r14 = r11 - r14
+                int r12 = r0.currentBackgroundHeight
+                int r14 = r14 + r12
+                float r12 = (float) r14
+                r7.moveTo(r13, r12)
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.left
                 int r12 = r12 + r4
@@ -1285,9 +1288,10 @@ public class Theme {
                 int r13 = r13 + r14
                 float r13 = (float) r13
                 r7.lineTo(r12, r13)
-                goto L_0x0113
-            L_0x00be:
-                if (r13 != r10) goto L_0x00d3
+                goto L_0x0119
+            L_0x00c2:
+                int r7 = r0.currentType
+                if (r7 != r10) goto L_0x00d9
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.right
                 int r13 = r0.dp(r3)
@@ -1298,8 +1302,8 @@ public class Theme {
                 int r13 = r13 - r4
                 float r13 = (float) r13
                 r7.moveTo(r12, r13)
-                goto L_0x00e4
-            L_0x00d3:
+                goto L_0x00ea
+            L_0x00d9:
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.right
                 int r13 = r0.dp(r14)
@@ -1309,7 +1313,7 @@ public class Theme {
                 int r13 = r13 - r4
                 float r13 = (float) r13
                 r7.moveTo(r12, r13)
-            L_0x00e4:
+            L_0x00ea:
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.left
                 int r12 = r12 + r4
@@ -1338,17 +1342,19 @@ public class Theme {
                 android.graphics.RectF r7 = r0.rect
                 r12 = 0
                 r3.arcTo(r7, r15, r15, r12)
-            L_0x0113:
+            L_0x0119:
+                boolean r3 = r0.drawFullBubble
+                if (r3 != 0) goto L_0x0177
                 int r3 = r0.currentType
                 r7 = 2
-                if (r3 == r7) goto L_0x016d
-                if (r21 != 0) goto L_0x016d
+                if (r3 == r7) goto L_0x0177
+                if (r21 != 0) goto L_0x0177
                 int r3 = r0.topY
                 int r7 = r5 * 2
                 int r7 = r7 + r3
-                if (r7 < 0) goto L_0x0122
-                goto L_0x016d
-            L_0x0122:
+                if (r7 < 0) goto L_0x012c
+                goto L_0x0177
+            L_0x012c:
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.left
                 int r12 = r12 + r4
@@ -1360,7 +1366,7 @@ public class Theme {
                 float r3 = (float) r3
                 r7.lineTo(r12, r3)
                 int r3 = r0.currentType
-                if (r3 != r10) goto L_0x0150
+                if (r3 != r10) goto L_0x015a
                 android.graphics.Path r3 = r0.path
                 int r7 = r2.right
                 int r7 = r7 - r4
@@ -1372,8 +1378,8 @@ public class Theme {
                 int r12 = r12 - r13
                 float r12 = (float) r12
                 r3.lineTo(r7, r12)
-                goto L_0x0211
-            L_0x0150:
+                goto L_0x021b
+            L_0x015a:
                 android.graphics.Path r3 = r0.path
                 int r7 = r2.right
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1387,8 +1393,8 @@ public class Theme {
                 int r12 = r12 - r13
                 float r12 = (float) r12
                 r3.lineTo(r7, r12)
-                goto L_0x0211
-            L_0x016d:
+                goto L_0x021b
+            L_0x0177:
                 android.graphics.Path r3 = r0.path
                 int r7 = r2.left
                 int r7 = r7 + r4
@@ -1419,14 +1425,14 @@ public class Theme {
                 r13 = 0
                 r3.arcTo(r7, r12, r15, r13)
                 boolean r3 = r0.isTopNear
-                if (r3 == 0) goto L_0x01a4
+                if (r3 == 0) goto L_0x01ae
                 r3 = r8
-                goto L_0x01a5
-            L_0x01a4:
+                goto L_0x01af
+            L_0x01ae:
                 r3 = r5
-            L_0x01a5:
+            L_0x01af:
                 int r7 = r0.currentType
-                if (r7 != r10) goto L_0x01d0
+                if (r7 != r10) goto L_0x01da
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.right
                 int r12 = r12 - r4
@@ -1452,8 +1458,8 @@ public class Theme {
                 int r14 = r14 + r3
                 float r3 = (float) r14
                 r7.set(r13, r10, r12, r3)
-                goto L_0x0207
-            L_0x01d0:
+                goto L_0x0211
+            L_0x01da:
                 android.graphics.Path r7 = r0.path
                 int r10 = r2.right
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1485,25 +1491,25 @@ public class Theme {
                 int r14 = r14 + r3
                 float r3 = (float) r14
                 r7.set(r10, r13, r12, r3)
-            L_0x0207:
+            L_0x0211:
                 android.graphics.Path r3 = r0.path
                 android.graphics.RectF r7 = r0.rect
                 r10 = 1132920832(0x43870000, float:270.0)
                 r12 = 0
                 r3.arcTo(r7, r10, r15, r12)
-            L_0x0211:
+            L_0x021b:
                 int r3 = r0.currentType
                 r7 = 1
-                if (r3 != r7) goto L_0x0267
-                if (r21 != 0) goto L_0x0231
+                if (r3 != r7) goto L_0x0271
+                if (r21 != 0) goto L_0x023b
                 int r3 = r0.topY
                 int r6 = r2.bottom
                 int r6 = r6 + r3
                 int r6 = r6 - r5
                 int r7 = r0.currentBackgroundHeight
-                if (r6 >= r7) goto L_0x0223
-                goto L_0x0231
-            L_0x0223:
+                if (r6 >= r7) goto L_0x022d
+                goto L_0x023b
+            L_0x022d:
                 android.graphics.Path r5 = r0.path
                 int r2 = r2.right
                 int r2 = r2 - r4
@@ -1512,12 +1518,12 @@ public class Theme {
                 int r11 = r11 + r7
                 float r3 = (float) r11
                 r5.lineTo(r2, r3)
-                goto L_0x055a
-            L_0x0231:
+                goto L_0x0576
+            L_0x023b:
                 boolean r3 = r0.isBottomNear
-                if (r3 == 0) goto L_0x0236
+                if (r3 == 0) goto L_0x0240
                 r5 = r8
-            L_0x0236:
+            L_0x0240:
                 android.graphics.Path r3 = r0.path
                 int r6 = r2.right
                 int r6 = r6 - r4
@@ -1548,20 +1554,22 @@ public class Theme {
                 r4 = 0
                 r5 = 0
                 r2.arcTo(r3, r4, r15, r5)
-                goto L_0x055a
-            L_0x0267:
+                goto L_0x0576
+            L_0x0271:
+                boolean r5 = r0.drawFullBubble
+                if (r5 != 0) goto L_0x029f
                 r5 = 2
-                if (r3 == r5) goto L_0x0291
-                if (r21 != 0) goto L_0x0291
+                if (r3 == r5) goto L_0x029f
+                if (r21 != 0) goto L_0x029f
                 int r3 = r0.topY
                 int r5 = r2.bottom
                 int r3 = r3 + r5
                 int r5 = r6 * 2
                 int r3 = r3 - r5
                 int r5 = r0.currentBackgroundHeight
-                if (r3 >= r5) goto L_0x0279
-                goto L_0x0291
-            L_0x0279:
+                if (r3 >= r5) goto L_0x0287
+                goto L_0x029f
+            L_0x0287:
                 android.graphics.Path r3 = r0.path
                 int r2 = r2.right
                 r4 = 1090519040(0x41000000, float:8.0)
@@ -1574,8 +1582,8 @@ public class Theme {
                 int r11 = r11 + r4
                 float r4 = (float) r11
                 r3.lineTo(r2, r4)
-                goto L_0x055a
-            L_0x0291:
+                goto L_0x0576
+            L_0x029f:
                 android.graphics.Path r3 = r0.path
                 int r5 = r2.right
                 r7 = 1090519040(0x41000000, float:8.0)
@@ -1624,21 +1632,23 @@ public class Theme {
                 r5 = 1127481344(0x43340000, float:180.0)
                 r6 = 0
                 r2.arcTo(r3, r5, r4, r6)
-                goto L_0x055a
-            L_0x02ee:
-                int r3 = r0.currentType
+                goto L_0x0576
+            L_0x02fc:
+                boolean r3 = r0.drawFullBubble
                 r7 = -1028390912(0xffffffffc2b40000, float:-90.0)
+                if (r3 != 0) goto L_0x033d
+                int r3 = r0.currentType
                 r10 = 2
-                if (r3 == r10) goto L_0x032b
-                if (r21 != 0) goto L_0x032b
-                int r10 = r0.topY
-                int r12 = r2.bottom
-                int r10 = r10 + r12
-                int r10 = r10 - r5
-                int r12 = r0.currentBackgroundHeight
-                if (r10 >= r12) goto L_0x0302
-                goto L_0x032b
-            L_0x0302:
+                if (r3 == r10) goto L_0x033d
+                if (r21 != 0) goto L_0x033d
+                int r3 = r0.topY
+                int r10 = r2.bottom
+                int r3 = r3 + r10
+                int r3 = r3 - r5
+                int r10 = r0.currentBackgroundHeight
+                if (r3 >= r10) goto L_0x0314
+                goto L_0x033d
+            L_0x0314:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1661,10 +1671,11 @@ public class Theme {
                 int r12 = r12 + r13
                 float r12 = (float) r12
                 r3.lineTo(r10, r12)
-                goto L_0x0382
-            L_0x032b:
+                goto L_0x0396
+            L_0x033d:
+                int r3 = r0.currentType
                 r10 = 1
-                if (r3 != r10) goto L_0x0343
+                if (r3 != r10) goto L_0x0357
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1676,8 +1687,8 @@ public class Theme {
                 int r12 = r12 - r4
                 float r12 = (float) r12
                 r3.moveTo(r10, r12)
-                goto L_0x0354
-            L_0x0343:
+                goto L_0x0368
+            L_0x0357:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 int r12 = r0.dp(r14)
@@ -1687,7 +1698,7 @@ public class Theme {
                 int r12 = r12 - r4
                 float r12 = (float) r12
                 r3.moveTo(r10, r12)
-            L_0x0354:
+            L_0x0368:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.right
                 int r10 = r10 - r4
@@ -1716,17 +1727,19 @@ public class Theme {
                 android.graphics.RectF r10 = r0.rect
                 r12 = 0
                 r3.arcTo(r10, r15, r7, r12)
-            L_0x0382:
+            L_0x0396:
+                boolean r3 = r0.drawFullBubble
+                if (r3 != 0) goto L_0x03f5
                 int r3 = r0.currentType
                 r10 = 2
-                if (r3 == r10) goto L_0x03dd
-                if (r21 != 0) goto L_0x03dd
+                if (r3 == r10) goto L_0x03f5
+                if (r21 != 0) goto L_0x03f5
                 int r3 = r0.topY
                 int r10 = r5 * 2
                 int r10 = r10 + r3
-                if (r10 < 0) goto L_0x0391
-                goto L_0x03dd
-            L_0x0391:
+                if (r10 < 0) goto L_0x03a9
+                goto L_0x03f5
+            L_0x03a9:
                 android.graphics.Path r10 = r0.path
                 int r12 = r2.right
                 int r12 = r12 - r4
@@ -1739,7 +1752,7 @@ public class Theme {
                 r10.lineTo(r12, r3)
                 int r3 = r0.currentType
                 r10 = 1
-                if (r3 != r10) goto L_0x03c0
+                if (r3 != r10) goto L_0x03d8
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 int r10 = r10 + r4
@@ -1751,8 +1764,8 @@ public class Theme {
                 int r12 = r12 - r13
                 float r12 = (float) r12
                 r3.lineTo(r10, r12)
-                goto L_0x0480
-            L_0x03c0:
+                goto L_0x0498
+            L_0x03d8:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1766,8 +1779,8 @@ public class Theme {
                 int r12 = r12 - r13
                 float r12 = (float) r12
                 r3.lineTo(r10, r12)
-                goto L_0x0480
-            L_0x03dd:
+                goto L_0x0498
+            L_0x03f5:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.right
                 int r10 = r10 - r4
@@ -1798,15 +1811,15 @@ public class Theme {
                 r13 = 0
                 r3.arcTo(r10, r12, r7, r13)
                 boolean r3 = r0.isTopNear
-                if (r3 == 0) goto L_0x0411
+                if (r3 == 0) goto L_0x0429
                 r3 = r8
-                goto L_0x0412
-            L_0x0411:
+                goto L_0x042a
+            L_0x0429:
                 r3 = r5
-            L_0x0412:
+            L_0x042a:
                 int r10 = r0.currentType
                 r12 = 1
-                if (r10 != r12) goto L_0x043f
+                if (r10 != r12) goto L_0x0457
                 android.graphics.Path r10 = r0.path
                 int r12 = r2.left
                 int r12 = r12 + r4
@@ -1832,8 +1845,8 @@ public class Theme {
                 int r14 = r14 + r3
                 float r3 = (float) r14
                 r10.set(r13, r15, r12, r3)
-                goto L_0x0476
-            L_0x043f:
+                goto L_0x048e
+            L_0x0457:
                 android.graphics.Path r10 = r0.path
                 int r12 = r2.left
                 r13 = 1090519040(0x41000000, float:8.0)
@@ -1865,25 +1878,25 @@ public class Theme {
                 int r15 = r15 + r3
                 float r3 = (float) r15
                 r10.set(r12, r14, r13, r3)
-            L_0x0476:
+            L_0x048e:
                 android.graphics.Path r3 = r0.path
                 android.graphics.RectF r10 = r0.rect
                 r12 = 1132920832(0x43870000, float:270.0)
                 r13 = 0
                 r3.arcTo(r10, r12, r7, r13)
-            L_0x0480:
+            L_0x0498:
                 int r3 = r0.currentType
                 r10 = 1
-                if (r3 != r10) goto L_0x04d7
-                if (r21 != 0) goto L_0x04a0
+                if (r3 != r10) goto L_0x04ef
+                if (r21 != 0) goto L_0x04b8
                 int r3 = r0.topY
                 int r6 = r2.bottom
                 int r6 = r6 + r3
                 int r6 = r6 - r5
                 int r10 = r0.currentBackgroundHeight
-                if (r6 >= r10) goto L_0x0492
-                goto L_0x04a0
-            L_0x0492:
+                if (r6 >= r10) goto L_0x04aa
+                goto L_0x04b8
+            L_0x04aa:
                 android.graphics.Path r5 = r0.path
                 int r2 = r2.left
                 int r2 = r2 + r4
@@ -1892,12 +1905,12 @@ public class Theme {
                 int r11 = r11 + r10
                 float r3 = (float) r11
                 r5.lineTo(r2, r3)
-                goto L_0x055a
-            L_0x04a0:
+                goto L_0x0576
+            L_0x04b8:
                 boolean r3 = r0.isBottomNear
-                if (r3 == 0) goto L_0x04a5
+                if (r3 == 0) goto L_0x04bd
                 r5 = r8
-            L_0x04a5:
+            L_0x04bd:
                 android.graphics.Path r3 = r0.path
                 int r6 = r2.left
                 int r6 = r6 + r4
@@ -1928,20 +1941,22 @@ public class Theme {
                 r4 = 1127481344(0x43340000, float:180.0)
                 r5 = 0
                 r2.arcTo(r3, r4, r7, r5)
-                goto L_0x055a
-            L_0x04d7:
+                goto L_0x0576
+            L_0x04ef:
+                boolean r5 = r0.drawFullBubble
+                if (r5 != 0) goto L_0x051c
                 r5 = 2
-                if (r3 == r5) goto L_0x0500
-                if (r21 != 0) goto L_0x0500
+                if (r3 == r5) goto L_0x051c
+                if (r21 != 0) goto L_0x051c
                 int r3 = r0.topY
                 int r5 = r2.bottom
                 int r3 = r3 + r5
                 int r5 = r6 * 2
                 int r3 = r3 - r5
                 int r5 = r0.currentBackgroundHeight
-                if (r3 >= r5) goto L_0x04e9
-                goto L_0x0500
-            L_0x04e9:
+                if (r3 >= r5) goto L_0x0505
+                goto L_0x051c
+            L_0x0505:
                 android.graphics.Path r3 = r0.path
                 int r2 = r2.left
                 r4 = 1090519040(0x41000000, float:8.0)
@@ -1954,8 +1969,8 @@ public class Theme {
                 int r11 = r11 + r4
                 float r4 = (float) r11
                 r3.lineTo(r2, r4)
-                goto L_0x055a
-            L_0x0500:
+                goto L_0x0576
+            L_0x051c:
                 android.graphics.Path r3 = r0.path
                 int r5 = r2.left
                 r7 = 1090519040(0x41000000, float:8.0)
@@ -2004,16 +2019,16 @@ public class Theme {
                 r5 = 0
                 r6 = 0
                 r2.arcTo(r3, r5, r4, r6)
-            L_0x055a:
+            L_0x0576:
                 android.graphics.Path r2 = r0.path
                 r2.close()
                 android.graphics.Path r2 = r0.path
                 r1.drawPath(r2, r9)
                 android.graphics.Shader r2 = r0.gradientShader
-                if (r2 == 0) goto L_0x0591
+                if (r2 == 0) goto L_0x05ad
                 boolean r2 = r0.isSelected
-                if (r2 == 0) goto L_0x0591
-                if (r21 != 0) goto L_0x0591
+                if (r2 == 0) goto L_0x05ad
+                if (r21 != 0) goto L_0x05ad
                 java.lang.String r2 = "chat_outBubbleGradientSelectedOverlay"
                 int r2 = r0.getColor(r2)
                 android.graphics.Paint r3 = r0.selectedPaint
@@ -2029,10 +2044,14 @@ public class Theme {
                 android.graphics.Path r2 = r0.path
                 android.graphics.Paint r3 = r0.selectedPaint
                 r1.drawPath(r2, r3)
-            L_0x0591:
+            L_0x05ad:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.MessageDrawable.draw(android.graphics.Canvas, android.graphics.Paint):void");
+        }
+
+        public void setDrawFullBubble(boolean z) {
+            this.drawFullBubble = z;
         }
 
         public void setAlpha(int i) {
@@ -9777,7 +9796,7 @@ public class Theme {
         L_0x005f:
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r0 = r0.getResources()
-            r1 = 2131165876(0x7var_b4, float:1.7945981E38)
+            r1 = 2131165879(0x7var_b7, float:1.7945988E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             dialogs_holidayDrawable = r0
             r0 = 1077936128(0x40400000, float:3.0)
@@ -12622,26 +12641,26 @@ public class Theme {
             r33 = r25
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0675 }
             android.content.res.Resources r0 = r0.getResources()     // Catch:{ all -> 0x0675 }
-            r4 = 2131165980(0x7var_c, float:1.7946192E38)
+            r4 = 2131165983(0x7var_f, float:1.7946199E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r4)     // Catch:{ all -> 0x0675 }
             android.graphics.drawable.Drawable r4 = r0.mutate()     // Catch:{ all -> 0x0675 }
             r10 = r20
             setDrawableColor(r4, r10)     // Catch:{ all -> 0x0675 }
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0675 }
             android.content.res.Resources r0 = r0.getResources()     // Catch:{ all -> 0x0675 }
-            r11 = 2131165982(0x7var_e, float:1.7946196E38)
+            r11 = 2131165985(0x7var_, float:1.7946203E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r11)     // Catch:{ all -> 0x0675 }
             android.graphics.drawable.Drawable r15 = r0.mutate()     // Catch:{ all -> 0x0675 }
             setDrawableColor(r15, r10)     // Catch:{ all -> 0x0675 }
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0675 }
             android.content.res.Resources r0 = r0.getResources()     // Catch:{ all -> 0x0675 }
-            r10 = 2131165985(0x7var_, float:1.7946203E38)
+            r10 = 2131165988(0x7var_, float:1.7946209E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r10)     // Catch:{ all -> 0x0675 }
             android.graphics.drawable.Drawable r14 = r0.mutate()     // Catch:{ all -> 0x0675 }
             setDrawableColor(r14, r12)     // Catch:{ all -> 0x0675 }
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0675 }
             android.content.res.Resources r0 = r0.getResources()     // Catch:{ all -> 0x0675 }
-            r10 = 2131165983(0x7var_f, float:1.7946199E38)
+            r10 = 2131165986(0x7var_, float:1.7946205E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r10)     // Catch:{ all -> 0x0675 }
             android.graphics.drawable.Drawable r13 = r0.mutate()     // Catch:{ all -> 0x0675 }
             setDrawableColor(r13, r12)     // Catch:{ all -> 0x0675 }
@@ -13801,7 +13820,7 @@ public class Theme {
             org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = chat_msgInDrawable
             if (r4 != 0) goto L_0x0a8b
             android.content.res.Resources r4 = r17.getResources()
-            r5 = 2131166131(0x7var_b3, float:1.7946499E38)
+            r5 = 2131166134(0x7var_b6, float:1.7946505E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_msgNoSoundDrawable = r5
             org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
@@ -13888,19 +13907,19 @@ public class Theme {
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgStickerCheckDrawable = r5
-            r5 = 2131165752(0x7var_, float:1.794573E38)
+            r5 = 2131165755(0x7var_b, float:1.7945736E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutHalfCheckDrawable = r5
-            r5 = 2131165752(0x7var_, float:1.794573E38)
+            r5 = 2131165755(0x7var_b, float:1.7945736E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutHalfCheckSelectedDrawable = r5
-            r5 = 2131165753(0x7var_, float:1.7945732E38)
+            r5 = 2131165756(0x7var_c, float:1.7945738E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgMediaHalfCheckDrawable = r5
-            r5 = 2131165753(0x7var_, float:1.7945732E38)
+            r5 = 2131165756(0x7var_c, float:1.7945738E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgStickerHalfCheckDrawable = r5
@@ -13922,7 +13941,7 @@ public class Theme {
             org.telegram.ui.Components.MsgClockDrawable r5 = new org.telegram.ui.Components.MsgClockDrawable
             r5.<init>()
             chat_msgStickerClockDrawable = r5
-            r5 = 2131165859(0x7var_a3, float:1.7945947E38)
+            r5 = 2131165862(0x7var_a6, float:1.7945953E38)
             android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             chat_msgInViewsDrawable = r8
@@ -13935,7 +13954,7 @@ public class Theme {
             android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             chat_msgOutViewsSelectedDrawable = r8
-            r8 = 2131165806(0x7var_e, float:1.794584E38)
+            r8 = 2131165809(0x7var_, float:1.7945846E38)
             android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
             android.graphics.drawable.Drawable r9 = r9.mutate()
             chat_msgInRepliesDrawable = r9
@@ -13948,7 +13967,7 @@ public class Theme {
             android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
             android.graphics.drawable.Drawable r9 = r9.mutate()
             chat_msgOutRepliesSelectedDrawable = r9
-            r9 = 2131165798(0x7var_, float:1.7945823E38)
+            r9 = 2131165801(0x7var_, float:1.794583E38)
             android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
             android.graphics.drawable.Drawable r10 = r10.mutate()
             chat_msgInPinnedDrawable = r10
@@ -13995,18 +14014,18 @@ public class Theme {
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutMenuSelectedDrawable = r5
-            r5 = 2131166124(0x7var_ac, float:1.7946484E38)
+            r5 = 2131166127(0x7var_af, float:1.794649E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_msgMediaMenuDrawable = r5
-            r5 = 2131165757(0x7var_d, float:1.794574E38)
+            r5 = 2131165760(0x7var_, float:1.7945746E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgInInstantDrawable = r5
-            r5 = 2131165757(0x7var_d, float:1.794574E38)
+            r5 = 2131165760(0x7var_, float:1.7945746E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutInstantDrawable = r5
-            r5 = 2131165870(0x7var_ae, float:1.794597E38)
+            r5 = 2131165873(0x7var_b1, float:1.7945975E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_msgErrorDrawable = r5
             r5 = 2131165584(0x7var_, float:1.794539E38)
@@ -14080,22 +14099,22 @@ public class Theme {
         L_0x033f:
             if (r5 >= r3) goto L_0x0380
             android.graphics.drawable.Drawable[] r8 = chat_pollCheckDrawable
-            r9 = 2131165973(0x7var_, float:1.7946178E38)
+            r9 = 2131165976(0x7var_, float:1.7946184E38)
             android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
             android.graphics.drawable.Drawable r9 = r9.mutate()
             r8[r5] = r9
             android.graphics.drawable.Drawable[] r8 = chat_pollCrossDrawable
-            r9 = 2131165974(0x7var_, float:1.794618E38)
+            r9 = 2131165977(0x7var_, float:1.7946186E38)
             android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
             android.graphics.drawable.Drawable r9 = r9.mutate()
             r8[r5] = r9
             android.graphics.drawable.Drawable[] r8 = chat_pollHintDrawable
-            r9 = 2131166058(0x7var_a, float:1.794635E38)
+            r9 = 2131166061(0x7var_d, float:1.7946357E38)
             android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
             android.graphics.drawable.Drawable r9 = r9.mutate()
             r8[r5] = r9
             android.graphics.drawable.Drawable[] r8 = chat_psaHelpDrawable
-            r9 = 2131165800(0x7var_, float:1.7945827E38)
+            r9 = 2131165803(0x7var_b, float:1.7945833E38)
             android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
             android.graphics.drawable.Drawable r9 = r9.mutate()
             r8[r5] = r9
@@ -14144,10 +14163,10 @@ public class Theme {
             r5 = 2131165293(0x7var_d, float:1.79448E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_botCardDrawalbe = r5
-            r5 = 2131165781(0x7var_, float:1.7945789E38)
+            r5 = 2131165784(0x7var_, float:1.7945795E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_commentDrawable = r5
-            r5 = 2131165782(0x7var_, float:1.794579E38)
+            r5 = 2131165785(0x7var_, float:1.7945797E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_commentStickerDrawable = r5
             r5 = 2131165716(0x7var_, float:1.7945657E38)
@@ -14209,10 +14228,10 @@ public class Theme {
             r8.<init>(r12, r14, r13, r10)
             r10 = 5
             r5[r10] = r8
-            r5 = 2131165883(0x7var_bb, float:1.7945996E38)
+            r5 = 2131165886(0x7var_be, float:1.7946002E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_attachEmptyDrawable = r5
-            r5 = 2131166039(0x7var_, float:1.7946312E38)
+            r5 = 2131166042(0x7var_a, float:1.7946318E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_shareIconDrawable = r5
@@ -14270,7 +14289,7 @@ public class Theme {
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
             r5 = r5[r11]
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r13 = 2131166128(0x7var_b0, float:1.7946493E38)
+            r13 = 2131166131(0x7var_b3, float:1.7946499E38)
             org.telegram.ui.Components.CombinedDrawable r12 = createCircleDrawableWithIcon(r12, r13)
             r5[r6] = r12
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
@@ -14281,13 +14300,13 @@ public class Theme {
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
             r5 = r5[r10]
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r13 = 2131166129(0x7var_b1, float:1.7946495E38)
+            r13 = 2131166132(0x7var_b4, float:1.79465E38)
             org.telegram.ui.Components.CombinedDrawable r12 = createCircleDrawableWithIcon(r12, r13)
             r5[r6] = r12
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
             r5 = r5[r10]
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r12 = 2131166129(0x7var_b1, float:1.7946495E38)
+            r12 = 2131166132(0x7var_b4, float:1.79465E38)
             org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
             r5[r7] = r8
             r5 = 1073741824(0x40000000, float:2.0)
@@ -14444,7 +14463,7 @@ public class Theme {
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_flameIcon = r5
-            r5 = 2131165818(0x7var_a, float:1.7945864E38)
+            r5 = 2131165821(0x7var_d, float:1.794587E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_gifIcon = r5
@@ -14452,7 +14471,7 @@ public class Theme {
             r5 = r5[r6]
             r8 = 1110441984(0x42300000, float:44.0)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r12 = 2131165821(0x7var_d, float:1.794587E38)
+            r12 = 2131165824(0x7var_, float:1.7945876E38)
             org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r12)
             r5[r6] = r10
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
@@ -14463,7 +14482,7 @@ public class Theme {
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r7]
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r13 = 2131165820(0x7var_c, float:1.7945868E38)
+            r13 = 2131165823(0x7var_f, float:1.7945874E38)
             org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r13)
             r5[r6] = r10
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
@@ -14474,7 +14493,7 @@ public class Theme {
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r3]
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r13 = 2131165819(0x7var_b, float:1.7945866E38)
+            r13 = 2131165822(0x7var_e, float:1.7945872E38)
             org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r13)
             r5[r6] = r10
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
@@ -14485,7 +14504,7 @@ public class Theme {
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r9]
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r14 = 2131165817(0x7var_, float:1.7945862E38)
+            r14 = 2131165820(0x7var_c, float:1.7945868E38)
             org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r14)
             r5[r6] = r10
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
@@ -14496,7 +14515,7 @@ public class Theme {
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r11]
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r14 = 2131165816(0x7var_, float:1.794586E38)
+            r14 = 2131165819(0x7var_b, float:1.7945866E38)
             org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r14)
             r5[r6] = r10
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
@@ -14519,7 +14538,7 @@ public class Theme {
             r10 = 6
             r5 = r5[r10]
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r15 = 2131165820(0x7var_c, float:1.7945868E38)
+            r15 = 2131165823(0x7var_f, float:1.7945874E38)
             org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r15)
             r5[r6] = r10
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
@@ -14544,7 +14563,7 @@ public class Theme {
             r10 = 8
             r5 = r5[r10]
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r15 = 2131165817(0x7var_, float:1.7945862E38)
+            r15 = 2131165820(0x7var_c, float:1.7945868E38)
             org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r15)
             r5[r6] = r10
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
@@ -14589,13 +14608,13 @@ public class Theme {
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
             r5 = r5[r3]
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r1 = 2131165818(0x7var_a, float:1.7945864E38)
+            r1 = 2131165821(0x7var_d, float:1.794587E38)
             org.telegram.ui.Components.CombinedDrawable r1 = createCircleDrawableWithIcon(r15, r1)
             r5[r6] = r1
             android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
             r1 = r1[r3]
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r15 = 2131165818(0x7var_a, float:1.7945864E38)
+            r15 = 2131165821(0x7var_d, float:1.794587E38)
             org.telegram.ui.Components.CombinedDrawable r5 = createCircleDrawableWithIcon(r5, r15)
             r1[r7] = r5
             android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
@@ -14628,7 +14647,7 @@ public class Theme {
             r5 = r1[r5]
             r9 = 6
             r1 = r1[r9]
-            r9 = 2131165943(0x7var_f7, float:1.7946117E38)
+            r9 = 2131165946(0x7var_fa, float:1.7946123E38)
             android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
             r1[r7] = r9
             r5[r6] = r9
@@ -14719,12 +14738,12 @@ public class Theme {
             org.telegram.ui.Components.CombinedDrawable r5 = createCircleDrawableWithIcon(r5, r8)
             r1[r7] = r5
             android.graphics.drawable.Drawable[] r1 = chat_locationDrawable
-            r5 = 2131165765(0x7var_, float:1.7945756E38)
+            r5 = 2131165768(0x7var_, float:1.7945762E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             r1[r6] = r5
             android.graphics.drawable.Drawable[] r1 = chat_locationDrawable
-            r5 = 2131165765(0x7var_, float:1.7945756E38)
+            r5 = 2131165768(0x7var_, float:1.7945762E38)
             android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r4 = r4.mutate()
             r1[r7] = r4
@@ -14734,7 +14753,7 @@ public class Theme {
             android.graphics.drawable.Drawable r1 = r1.mutate()
             chat_composeShadowDrawable = r1
             android.content.res.Resources r1 = r17.getResources()
-            r4 = 2131166041(0x7var_, float:1.7946316E38)
+            r4 = 2131166044(0x7var_c, float:1.7946322E38)
             android.graphics.drawable.Drawable r1 = r1.getDrawable(r4)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             chat_composeShadowRoundDrawable = r1

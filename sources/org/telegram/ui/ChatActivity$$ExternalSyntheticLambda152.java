@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda152 impl
     }
 
     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$createMenu$111(keyEvent);
+        this.f$0.lambda$createMenu$110(keyEvent);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda154 impl
     }
 
     public final void needChangePanelVisibility(boolean z) {
-        this.f$0.lambda$initStickers$64(z);
+        this.f$0.lambda$initStickers$63(z);
     }
 }

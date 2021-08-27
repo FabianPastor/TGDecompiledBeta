@@ -307,6 +307,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: private */
     public ImageView clearButton;
     /* access modifiers changed from: private */
+    public boolean closeAnimationInProgress;
+    /* access modifiers changed from: private */
     public boolean collapsed;
     /* access modifiers changed from: private */
     public FrameLayout containerView;
@@ -839,8 +841,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private int bX;
         private int bY;
         private final Paint blackPaint = new Paint();
-        /* access modifiers changed from: private */
-        public boolean closeAnimationInProgress;
         private float innerTranslationX;
         private boolean maybeStartTracking;
         /* access modifiers changed from: private */
@@ -1068,7 +1068,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         public boolean handleTouchEvent(MotionEvent motionEvent) {
-            if (ArticleViewer.this.pageSwitchAnimation != null || this.closeAnimationInProgress || ArticleViewer.this.fullscreenVideoContainer.getVisibility() == 0 || ArticleViewer.this.textSelectionHelper.isSelectionMode()) {
+            if (ArticleViewer.this.pageSwitchAnimation != null || ArticleViewer.this.closeAnimationInProgress || ArticleViewer.this.fullscreenVideoContainer.getVisibility() == 0 || ArticleViewer.this.textSelectionHelper.isSelectionMode()) {
                 return false;
             }
             if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
@@ -1159,11 +1159,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             }
                             boolean unused = WindowView.this.movingPage = false;
                             boolean unused2 = WindowView.this.startedTracking = false;
-                            boolean unused3 = WindowView.this.closeAnimationInProgress = false;
+                            boolean unused3 = ArticleViewer.this.closeAnimationInProgress = false;
                         }
                     });
                     animatorSet.start();
-                    this.closeAnimationInProgress = true;
+                    boolean unused3 = ArticleViewer.this.closeAnimationInProgress = true;
                 } else {
                     this.maybeStartTracking = false;
                     this.startedTracking = false;
@@ -6285,7 +6285,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void close(boolean z, boolean z2) {
-        if (this.parentActivity != null && this.isVisible && !checkAnimation()) {
+        if (this.parentActivity != null && !this.closeAnimationInProgress && this.isVisible && !checkAnimation()) {
             if (this.fullscreenVideoContainer.getVisibility() == 0) {
                 if (this.customView != null) {
                     this.fullscreenVideoContainer.setVisibility(4);

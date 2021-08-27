@@ -152,7 +152,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r0.newTimer = r7
         L_0x005e:
             android.content.res.Resources r6 = r27.getResources()
-            r9 = 2131166041(0x7var_, float:1.7946316E38)
+            r9 = 2131166044(0x7var_c, float:1.7946322E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r9)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -234,7 +234,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r14.setTextSize(r8, r5)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r17)
             r14.setTextColor(r12)
-            r12 = 2131624936(0x7f0e03e8, float:1.8877066E38)
+            r12 = 2131624937(0x7f0e03e9, float:1.8877068E38)
             java.lang.String r5 = "ClearHistory"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r12)
             r14.setText(r5)
@@ -335,7 +335,7 @@ public class ClearHistoryAlert extends BottomSheet {
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r4)
             r3.setBackgroundDrawable(r5)
             org.telegram.ui.Cells.CheckBoxCell r3 = r0.cell
-            r5 = 2131624938(0x7f0e03ea, float:1.887707E38)
+            r5 = 2131624939(0x7f0e03eb, float:1.8877072E38)
             java.lang.Object[] r9 = new java.lang.Object[r8]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r28)
             r9[r4] = r2
@@ -596,7 +596,7 @@ public class ClearHistoryAlert extends BottomSheet {
             int r1 = r0.currentTimer
             if (r1 != 0) goto L_0x048b
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
-            r3 = 2131625335(0x7f0e0577, float:1.8877875E38)
+            r3 = 2131625336(0x7f0e0578, float:1.8877877E38)
             java.lang.String r5 = "EnableAutoDelete"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r1.setText(r3)

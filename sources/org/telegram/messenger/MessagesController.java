@@ -5601,7 +5601,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (this.currentDeletingTaskMedia) {
             getMessagesStorage().emptyMessagesMedia(arrayList);
         } else {
-            deleteMessages(arrayList, (ArrayList<Long>) null, (TLRPC$EncryptedChat) null, 0, 0, false, false, !arrayList.isEmpty() && ((Integer) arrayList.get(0)).intValue() > 0);
+            deleteMessages(arrayList, (ArrayList<Long>) null, (TLRPC$EncryptedChat) null, 0, 0, true, false, !arrayList.isEmpty() && ((Integer) arrayList.get(0)).intValue() > 0);
         }
         Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda92(this, arrayList));
     }
@@ -24342,18 +24342,14 @@ public class MessagesController extends BaseController implements NotificationCe
                         tLRPC$TL_message.entities = tLRPC$TL_sponsoredMessage.entities;
                         tLRPC$TL_message.flags |= 128;
                     }
-                    tLRPC$TL_message.peer_id = tLRPC$TL_sponsoredMessage.peer_id;
+                    tLRPC$TL_message.peer_id = getPeer((int) j);
                     tLRPC$TL_message.from_id = tLRPC$TL_sponsoredMessage.from_id;
                     tLRPC$TL_message.flags |= 256;
                     tLRPC$TL_message.date = getConnectionsManager().getCurrentTime();
-                    TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$TL_sponsoredMessage.media;
-                    if (tLRPC$MessageMedia != null) {
-                        tLRPC$TL_message.media = tLRPC$MessageMedia;
-                        tLRPC$TL_message.flags |= 512;
-                    }
                     tLRPC$TL_message.id = i4;
                     MessageObject messageObject = new MessageObject(this.currentAccount, (TLRPC$Message) tLRPC$TL_message, (SparseArray<TLRPC$User>) sparseArray, (SparseArray<TLRPC$Chat>) sparseArray2, true, true);
-                    messageObject.sponsoredId = Utilities.bytesToHex(tLRPC$TL_sponsoredMessage.random_id);
+                    messageObject.sponsoredId = tLRPC$TL_sponsoredMessage.random_id;
+                    messageObject.botStartParam = tLRPC$TL_sponsoredMessage.start_param;
                     arrayList.add(messageObject);
                     i++;
                     i4--;

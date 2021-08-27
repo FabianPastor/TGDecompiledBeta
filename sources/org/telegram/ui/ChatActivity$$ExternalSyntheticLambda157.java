@@ -15,6 +15,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 impl
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$processSelectedOption$138(this.f$1, this.f$2, z, i);
+        this.f$0.lambda$processSelectedOption$137(this.f$1, this.f$2, z, i);
     }
 }

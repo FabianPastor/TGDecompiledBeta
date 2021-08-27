@@ -23,6 +23,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda25 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didPressMessageUrl$160(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogInterface, i);
+        this.f$0.lambda$didPressMessageUrl$159(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogInterface, i);
     }
 }

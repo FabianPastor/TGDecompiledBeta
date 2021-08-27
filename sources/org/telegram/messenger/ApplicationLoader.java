@@ -232,6 +232,7 @@ public class ApplicationLoader extends Application {
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$initPlayServices$1() {
         try {
+            SharedConfig.pushStringGetTimeStart = SystemClock.elapsedRealtime();
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(ApplicationLoader$$ExternalSyntheticLambda0.INSTANCE);
         } catch (Throwable th) {
             FileLog.e(th);
@@ -240,6 +241,7 @@ public class ApplicationLoader extends Application {
 
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$initPlayServices$0(Task task) {
+        SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();
         if (!task.isSuccessful()) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("Failed to get regid");

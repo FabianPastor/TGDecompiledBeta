@@ -1061,10 +1061,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.util.HashSet r4 = new java.util.HashSet
             r4.<init>()
             boolean r0 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
-            r5 = 2131625891(0x7f0e07a3, float:1.8879003E38)
+            r5 = 2131625904(0x7f0e07b0, float:1.887903E38)
             java.lang.String r6 = "InternalFolderInfo"
             r7 = 2131165406(0x7var_de, float:1.7945028E38)
-            r8 = 2131625892(0x7f0e07a4, float:1.8879005E38)
+            r8 = 2131625905(0x7f0e07b1, float:1.8879031E38)
             java.lang.String r9 = "InternalStorage"
             if (r0 != 0) goto L_0x003f
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
@@ -1083,10 +1083,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r10 = android.os.Environment.getExternalStorageState()
             java.lang.String r11 = "mounted"
             boolean r11 = r10.equals(r11)
-            r12 = 2131625492(0x7f0e0614, float:1.8878193E38)
+            r12 = 2131625496(0x7f0e0618, float:1.8878202E38)
             java.lang.String r13 = "ExternalFolderInfo"
             r14 = 2131165404(0x7var_dc, float:1.7945024E38)
-            r15 = 2131627368(0x7f0e0d68, float:1.8881998E38)
+            r15 = 2131627449(0x7f0e0db9, float:1.8882163E38)
             java.lang.String r5 = "SdCard"
             if (r11 != 0) goto L_0x0068
             java.lang.String r11 = "mounted_ro"
@@ -1107,7 +1107,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r10.title = r8
             r10.icon = r7
-            r7 = 2131625891(0x7f0e07a3, float:1.8879003E38)
+            r7 = 2131625904(0x7f0e07b0, float:1.887903E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10.subtitle = r6
         L_0x0093:
@@ -1197,7 +1197,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             goto L_0x016c
         L_0x0161:
             java.lang.String r8 = "ExternalStorage"
-            r9 = 2131625493(0x7f0e0615, float:1.8878196E38)
+            r9 = 2131625497(0x7f0e0619, float:1.8878204E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0182 }
             r0.title = r8     // Catch:{ Exception -> 0x0182 }
         L_0x016c:
@@ -1261,11 +1261,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         L_0x01d4:
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            r2 = 2131625714(0x7f0e06f2, float:1.8878644E38)
+            r2 = 2131625725(0x7f0e06fd, float:1.8878666E38)
             java.lang.String r4 = "Gallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.title = r2
-            r2 = 2131625715(0x7f0e06f3, float:1.8878646E38)
+            r2 = 2131625726(0x7f0e06fe, float:1.8878668E38)
             java.lang.String r4 = "GalleryInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.subtitle = r2
@@ -1282,7 +1282,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r4 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.title = r2
-            r2 = 2131626286(0x7f0e092e, float:1.8879804E38)
+            r2 = 2131626299(0x7f0e093b, float:1.887983E38)
             java.lang.String r4 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.subtitle = r2

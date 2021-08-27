@@ -409,6 +409,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         }
                         scaleX.scaleY(f2).start();
                     }
+                    if (!TextUtils.isEmpty(SearchField.this.searchEditText.getText())) {
+                        ShareAlert.this.checkCurrentList(false);
+                    }
                     if (ShareAlert.this.updateSearchAdapter) {
                         String obj = SearchField.this.searchEditText.getText().toString();
                         if (obj.length() != 0) {
@@ -416,13 +419,13 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                                 ShareAlert.this.searchEmptyView.setText(LocaleController.getString("NoResult", NUM));
                             }
                         } else if (ShareAlert.this.gridView.getAdapter() != ShareAlert.this.listAdapter) {
-                            int access$1200 = ShareAlert.this.getCurrentTop();
+                            int access$1300 = ShareAlert.this.getCurrentTop();
                             ShareAlert.this.searchEmptyView.setText(LocaleController.getString("NoChats", NUM));
                             ShareAlert.this.searchEmptyView.showTextView();
                             ShareAlert.this.checkCurrentList(false);
                             ShareAlert.this.listAdapter.notifyDataSetChanged();
-                            if (access$1200 > 0) {
-                                ShareAlert.this.layoutManager.scrollToPositionWithOffset(0, -access$1200);
+                            if (access$1300 > 0) {
+                                ShareAlert.this.layoutManager.scrollToPositionWithOffset(0, -access$1300);
                             }
                         }
                         if (ShareAlert.this.searchAdapter != null) {
@@ -523,7 +526,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r7 = r26
             r0.parentFragment = r7
             android.content.res.Resources r7 = r25.getResources()
-            r8 = 2131166041(0x7var_, float:1.7946316E38)
+            r8 = 2131166044(0x7var_c, float:1.7946322E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r8)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             r0.shadowDrawable = r7
@@ -793,7 +796,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r6 = 2131626345(0x7f0e0969, float:1.8879924E38)
+            r6 = 2131626358(0x7f0e0976, float:1.887995E38)
             java.lang.String r7 = "NoChats"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
@@ -955,7 +958,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = r3[r5]
             if (r3 == 0) goto L_0x0425
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 2131628187(0x7f0e109b, float:1.888366E38)
+            r7 = 2131628271(0x7f0e10ef, float:1.888383E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -963,7 +966,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             goto L_0x0437
         L_0x0425:
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 2131625038(0x7f0e044e, float:1.8877273E38)
+            r7 = 2131625039(0x7f0e044f, float:1.8877275E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -1032,7 +1035,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r7.setOnClickListener(r11)
             android.widget.ImageView r7 = new android.widget.ImageView
             r7.<init>(r1)
-            r11 = 2131166039(0x7var_, float:1.7946312E38)
+            r11 = 2131166042(0x7var_a, float:1.7946318E38)
             r7.setImageResource(r11)
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
             boolean r12 = r0.darkTheme
@@ -1127,7 +1130,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r2.setTextColor(r3)
         L_0x059b:
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131627532(0x7f0e0e0c, float:1.8882331E38)
+            r3 = 2131627613(0x7f0e0e5d, float:1.8882495E38)
             java.lang.String r4 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setHint(r3)
@@ -1410,7 +1413,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
                             SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
                         }
-                        SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2, false, true, 0);
+                        SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2, false, false, true, 0);
                         i++;
                     }
                     onSend(this.selectedDialogs, this.sendingMessageObjects.size());
@@ -2709,35 +2712,37 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 int i2 = i + 1;
                 this.itemsCount = i2;
                 this.firstEmptyViewCell = i;
-                int i3 = i2 + 1;
-                this.itemsCount = i3;
+                this.itemsCount = i2 + 1;
                 this.hintsCell = i2;
-                int i4 = i3 + 1;
-                this.itemsCount = i4;
-                this.resentTitleCell = i3;
-                this.recentDialogsStartRow = i4;
-                int size = i4 + ShareAlert.this.recentSearchObjects.size();
-                this.itemsCount = size;
-                int i5 = size + 1;
-                this.itemsCount = i5;
-                this.lastFilledItem = size;
-                return i5;
+                if (ShareAlert.this.recentSearchObjects.size() > 0) {
+                    int i3 = this.itemsCount;
+                    int i4 = i3 + 1;
+                    this.itemsCount = i4;
+                    this.resentTitleCell = i3;
+                    this.recentDialogsStartRow = i4;
+                    this.itemsCount = i4 + ShareAlert.this.recentSearchObjects.size();
+                }
+                int i5 = this.itemsCount;
+                int i6 = i5 + 1;
+                this.itemsCount = i6;
+                this.lastFilledItem = i5;
+                return i6;
             }
-            int i6 = this.itemsCount;
-            int i7 = i6 + 1;
-            this.itemsCount = i7;
-            this.firstEmptyViewCell = i6;
-            int size2 = i7 + this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size();
-            this.itemsCount = size2;
-            if (size2 == 1) {
+            int i7 = this.itemsCount;
+            int i8 = i7 + 1;
+            this.itemsCount = i8;
+            this.firstEmptyViewCell = i7;
+            int size = i8 + this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size();
+            this.itemsCount = size;
+            if (size == 1) {
                 this.firstEmptyViewCell = -1;
                 return 0;
             }
-            int i8 = size2 + 1;
-            this.itemsCount = i8;
-            this.lastFilledItem = size2;
-            this.lastItemCont = i8;
-            return i8;
+            int i9 = size + 1;
+            this.itemsCount = i9;
+            this.lastFilledItem = size;
+            this.lastItemCont = i9;
+            return i9;
         }
 
         public TLRPC$Dialog getItem(int i) {
@@ -2775,7 +2780,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         }
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-            return viewHolder.getItemViewType() != 1;
+            return (viewHolder.getItemViewType() == 1 || viewHolder.getItemViewType() == 4) ? false : true;
         }
 
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v1, resolved type: org.telegram.ui.Cells.ShareDialogCell} */
@@ -2829,7 +2834,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r4 = r3.context
                 r5.<init>(r4)
-                r4 = 2131627193(0x7f0e0cb9, float:1.8881644E38)
+                r4 = 2131627273(0x7f0e0d09, float:1.8881806E38)
                 java.lang.String r0 = "Recent"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)

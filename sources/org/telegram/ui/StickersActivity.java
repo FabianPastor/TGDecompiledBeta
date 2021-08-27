@@ -32,6 +32,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
@@ -64,6 +65,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ReorderingBulletinLayout;
+import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.TrendingStickersAlert;
 import org.telegram.ui.Components.TrendingStickersLayout;
@@ -206,7 +208,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     if (StickersActivity.this.onBackPressed()) {
                         StickersActivity.this.finishFragment();
                     }
-                } else if (i != 0 && i != 1) {
+                } else if (i != 0 && i != 1 && i != 2) {
                 } else {
                     if (StickersActivity.this.needReorder) {
                         StickersActivity.this.sendReorder();
@@ -224,6 +226,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         this.selectedCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
         createActionMode.addView(this.selectedCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
         this.selectedCountTextView.setOnTouchListener(StickersActivity$$ExternalSyntheticLambda1.INSTANCE);
+        createActionMode.addItemWithWidth(2, NUM, AndroidUtilities.dp(54.0f));
         createActionMode.addItemWithWidth(0, NUM, AndroidUtilities.dp(54.0f));
         this.deleteMenuItem = createActionMode.addItemWithWidth(1, NUM, AndroidUtilities.dp(54.0f));
         this.listAdapter = new ListAdapter(context, MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType));
@@ -576,29 +579,55 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         public void processSelectionMenu(int i) {
             String str;
             TextView textView;
-            if (i == 0 || i == 1) {
-                ArrayList arrayList = new ArrayList(this.selectedItems.size());
+            int i2 = 0;
+            if (i == 2) {
+                StringBuilder sb = new StringBuilder();
                 int size = this.stickerSets.size();
-                int i2 = 0;
-                for (int i3 = 0; i3 < size; i3++) {
+                while (i2 < size) {
+                    TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSets.get(i2);
+                    if (this.selectedItems.get(tLRPC$TL_messages_stickerSet.set.id, Boolean.FALSE).booleanValue()) {
+                        if (sb.length() != 0) {
+                            sb.append("\n");
+                        }
+                        sb.append(StickersActivity.this.getLinkForSet(tLRPC$TL_messages_stickerSet));
+                    }
+                    i2++;
+                }
+                String sb2 = sb.toString();
+                ShareAlert createShareAlert = ShareAlert.createShareAlert(StickersActivity.this.fragmentView.getContext(), (MessageObject) null, sb2, false, sb2, false);
+                createShareAlert.setDelegate(new ShareAlert.ShareAlertDelegate() {
+                    public void didShare() {
+                        ListAdapter.this.clearSelected();
+                    }
+
+                    public boolean didCopy() {
+                        ListAdapter.this.clearSelected();
+                        return true;
+                    }
+                });
+                createShareAlert.show();
+            } else if (i == 0 || i == 1) {
+                ArrayList arrayList = new ArrayList(this.selectedItems.size());
+                int size2 = this.stickerSets.size();
+                for (int i3 = 0; i3 < size2; i3++) {
                     TLRPC$StickerSet tLRPC$StickerSet = this.stickerSets.get(i3).set;
                     if (this.selectedItems.get(tLRPC$StickerSet.id, Boolean.FALSE).booleanValue()) {
                         arrayList.add(tLRPC$StickerSet);
                     }
                 }
-                int size2 = arrayList.size();
-                if (size2 == 0) {
+                int size3 = arrayList.size();
+                if (size3 == 0) {
                     return;
                 }
-                if (size2 != 1) {
+                if (size3 != 1) {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) StickersActivity.this.getParentActivity());
                     if (i == 1) {
-                        builder.setTitle(LocaleController.formatString("DeleteStickerSetsAlertTitle", NUM, LocaleController.formatPluralString("StickerSets", size2)));
-                        builder.setMessage(LocaleController.formatString("DeleteStickersAlertMessage", NUM, Integer.valueOf(size2)));
+                        builder.setTitle(LocaleController.formatString("DeleteStickerSetsAlertTitle", NUM, LocaleController.formatPluralString("StickerSets", size3)));
+                        builder.setMessage(LocaleController.formatString("DeleteStickersAlertMessage", NUM, Integer.valueOf(size3)));
                         str = LocaleController.getString("Delete", NUM);
                     } else {
-                        builder.setTitle(LocaleController.formatString("ArchiveStickerSetsAlertTitle", NUM, LocaleController.formatPluralString("StickerSets", size2)));
-                        builder.setMessage(LocaleController.formatString("ArchiveStickersAlertMessage", NUM, Integer.valueOf(size2)));
+                        builder.setTitle(LocaleController.formatString("ArchiveStickerSetsAlertTitle", NUM, LocaleController.formatPluralString("StickerSets", size3)));
+                        builder.setMessage(LocaleController.formatString("ArchiveStickersAlertMessage", NUM, Integer.valueOf(size3)));
                         str = LocaleController.getString("Archive", NUM);
                     }
                     builder.setPositiveButton(str, new StickersActivity$ListAdapter$$ExternalSyntheticLambda0(this, arrayList, i));
@@ -611,14 +640,14 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     }
                     return;
                 }
-                int size3 = this.stickerSets.size();
+                int size4 = this.stickerSets.size();
                 while (true) {
-                    if (i2 >= size3) {
+                    if (i2 >= size4) {
                         break;
                     }
-                    TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSets.get(i2);
-                    if (this.selectedItems.get(tLRPC$TL_messages_stickerSet.set.id, Boolean.FALSE).booleanValue()) {
-                        processSelectionOption(i, tLRPC$TL_messages_stickerSet);
+                    TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = this.stickerSets.get(i2);
+                    if (this.selectedItems.get(tLRPC$TL_messages_stickerSet2.set.id, Boolean.FALSE).booleanValue()) {
+                        processSelectionOption(i, tLRPC$TL_messages_stickerSet2);
                         break;
                     }
                     i2++;
@@ -643,16 +672,15 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 try {
                     Intent intent = new Intent("android.intent.action.SEND");
                     intent.setType("text/plain");
-                    Locale locale = Locale.US;
-                    intent.putExtra("android.intent.extra.TEXT", String.format(locale, "https://" + MessagesController.getInstance(StickersActivity.this.currentAccount).linkPrefix + "/addstickers/%s", new Object[]{tLRPC$TL_messages_stickerSet.set.short_name}));
+                    intent.putExtra("android.intent.extra.TEXT", StickersActivity.this.getLinkForSet(tLRPC$TL_messages_stickerSet));
                     StickersActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("StickersShare", NUM)), 500);
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
             } else if (i == 3) {
                 try {
-                    Locale locale2 = Locale.US;
-                    ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", String.format(locale2, "https://" + MessagesController.getInstance(StickersActivity.this.currentAccount).linkPrefix + "/addstickers/%s", new Object[]{tLRPC$TL_messages_stickerSet.set.short_name})));
+                    Locale locale = Locale.US;
+                    ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", String.format(locale, "https://" + MessagesController.getInstance(StickersActivity.this.currentAccount).linkPrefix + "/addstickers/%s", new Object[]{tLRPC$TL_messages_stickerSet.set.short_name})));
                     BulletinFactory.createCopyLinkBulletin((BaseFragment) StickersActivity.this).show();
                 } catch (Exception e2) {
                     FileLog.e((Throwable) e2);
@@ -975,6 +1003,12 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
             return str;
         }
+    }
+
+    /* access modifiers changed from: private */
+    public String getLinkForSet(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+        Locale locale = Locale.US;
+        return String.format(locale, "https://" + MessagesController.getInstance(this.currentAccount).linkPrefix + "/addstickers/%s", new Object[]{tLRPC$TL_messages_stickerSet.set.short_name});
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {

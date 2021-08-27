@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda170 impl
     }
 
     public final void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
-        this.f$0.lambda$openPollCreate$68(tLRPC$TL_messageMediaPoll, hashMap, z, i);
+        this.f$0.lambda$openPollCreate$67(tLRPC$TL_messageMediaPoll, hashMap, z, i);
     }
 }

@@ -761,6 +761,9 @@
     <public type="drawable" name="msg_endcall" id="NUM" />
     <public type="drawable" name="msg_fave" id="NUM" />
     <public type="drawable" name="msg_forward" id="NUM" />
+    <public type="drawable" name="msg_forward_check" id="NUM" />
+    <public type="drawable" name="msg_forward_replace" id="NUM" />
+    <public type="drawable" name="msg_forward_send" id="NUM" />
     <public type="drawable" name="msg_gallery" id="NUM" />
     <public type="drawable" name="msg_gif" id="NUM" />
     <public type="drawable" name="msg_go_down" id="NUM" />
@@ -2377,6 +2380,7 @@
     <public type="string" name="ChangePhoneNumberInfo" id="NUM" />
     <public type="string" name="ChangePhoneNumberOccupied" id="NUM" />
     <public type="string" name="ChangePublicLimitReached" id="NUM" />
+    <public type="string" name="ChangeRecipient" id="NUM" />
     <public type="string" name="ChangeRecoveryEmail" id="NUM" />
     <public type="string" name="ChangeWallpaperToColor" id="NUM" />
     <public type="string" name="ChannelAddAdmin" id="NUM" />
@@ -3069,10 +3073,12 @@
     <public type="string" name="EventLogEditedCaption" id="NUM" />
     <public type="string" name="EventLogEditedChannelDescription" id="NUM" />
     <public type="string" name="EventLogEditedChannelPhoto" id="NUM" />
+    <public type="string" name="EventLogEditedChannelTheme" id="NUM" />
     <public type="string" name="EventLogEditedChannelTitle" id="NUM" />
     <public type="string" name="EventLogEditedChannelVideo" id="NUM" />
     <public type="string" name="EventLogEditedGroupDescription" id="NUM" />
     <public type="string" name="EventLogEditedGroupPhoto" id="NUM" />
+    <public type="string" name="EventLogEditedGroupTheme" id="NUM" />
     <public type="string" name="EventLogEditedGroupTitle" id="NUM" />
     <public type="string" name="EventLogEditedGroupVideo" id="NUM" />
     <public type="string" name="EventLogEditedMedia" id="NUM" />
@@ -3106,6 +3112,7 @@
     <public type="string" name="EventLogOriginalMessages" id="NUM" />
     <public type="string" name="EventLogPinnedMessages" id="NUM" />
     <public type="string" name="EventLogPreviousGroupDescription" id="NUM" />
+    <public type="string" name="EventLogPreviousGroupTheme" id="NUM" />
     <public type="string" name="EventLogPreviousLink" id="NUM" />
     <public type="string" name="EventLogPromoted" id="NUM" />
     <public type="string" name="EventLogPromotedAddAdmins" id="NUM" />
@@ -3297,6 +3304,11 @@
     <public type="string" name="ForgotPassword" id="NUM" />
     <public type="string" name="Forward" id="NUM" />
     <public type="string" name="ForwardAnotherChat" id="NUM" />
+    <public type="string" name="ForwardPreviewSendersNameHidden" id="NUM" />
+    <public type="string" name="ForwardPreviewSendersNameHiddenGroup" id="NUM" />
+    <public type="string" name="ForwardPreviewSendersNameVisible" id="NUM" />
+    <public type="string" name="ForwardPreviewSendersNameVisibleGroup" id="NUM" />
+    <public type="string" name="ForwardSendMessages" id="NUM" />
     <public type="string" name="ForwardTo" id="NUM" />
     <public type="string" name="ForwardedAudio_few" id="NUM" />
     <public type="string" name="ForwardedAudio_many" id="NUM" />
@@ -3365,6 +3377,8 @@
     <public type="string" name="ForwardedVideo_other" id="NUM" />
     <public type="string" name="ForwardedVideo_two" id="NUM" />
     <public type="string" name="ForwardedVideo_zero" id="NUM" />
+    <public type="string" name="ForwardingFromNameAndMessage" id="NUM" />
+    <public type="string" name="ForwardingFromNames" id="NUM" />
     <public type="string" name="FreeOfTotal" id="NUM" />
     <public type="string" name="From" id="NUM" />
     <public type="string" name="FromCamera" id="NUM" />
@@ -3467,7 +3481,9 @@
     <public type="string" name="Hashtags" id="NUM" />
     <public type="string" name="HidAccount" id="NUM" />
     <public type="string" name="HiddenName" id="NUM" />
+    <public type="string" name="HiddenSendersNameDescription" id="NUM" />
     <public type="string" name="HideAboveTheList" id="NUM" />
+    <public type="string" name="HideCaption" id="NUM" />
     <public type="string" name="HideNewChatsAlertText" id="NUM" />
     <public type="string" name="HideNewChatsAlertTitle" id="NUM" />
     <public type="string" name="HideOnTop" id="NUM" />
@@ -4285,6 +4301,7 @@
     <public type="string" name="OnlyWhenScreenOn" id="NUM" />
     <public type="string" name="Open" id="NUM" />
     <public type="string" name="OpenBackground" id="NUM" />
+    <public type="string" name="OpenBot" id="NUM" />
     <public type="string" name="OpenChannel" id="NUM" />
     <public type="string" name="OpenChannel2" id="NUM" />
     <public type="string" name="OpenFile" id="NUM" />
@@ -4757,6 +4774,72 @@
     <public type="string" name="PopupNotification" id="NUM" />
     <public type="string" name="PostingMembers" id="NUM" />
     <public type="string" name="PreviewFeedback2" id="NUM" />
+    <public type="string" name="PreviewForwardAudio_few" id="NUM" />
+    <public type="string" name="PreviewForwardAudio_many" id="NUM" />
+    <public type="string" name="PreviewForwardAudio_one" id="NUM" />
+    <public type="string" name="PreviewForwardAudio_other" id="NUM" />
+    <public type="string" name="PreviewForwardAudio_two" id="NUM" />
+    <public type="string" name="PreviewForwardAudio_zero" id="NUM" />
+    <public type="string" name="PreviewForwardContact_few" id="NUM" />
+    <public type="string" name="PreviewForwardContact_many" id="NUM" />
+    <public type="string" name="PreviewForwardContact_one" id="NUM" />
+    <public type="string" name="PreviewForwardContact_other" id="NUM" />
+    <public type="string" name="PreviewForwardContact_two" id="NUM" />
+    <public type="string" name="PreviewForwardContact_zero" id="NUM" />
+    <public type="string" name="PreviewForwardFile_few" id="NUM" />
+    <public type="string" name="PreviewForwardFile_many" id="NUM" />
+    <public type="string" name="PreviewForwardFile_one" id="NUM" />
+    <public type="string" name="PreviewForwardFile_other" id="NUM" />
+    <public type="string" name="PreviewForwardFile_two" id="NUM" />
+    <public type="string" name="PreviewForwardFile_zero" id="NUM" />
+    <public type="string" name="PreviewForwardLocation_few" id="NUM" />
+    <public type="string" name="PreviewForwardLocation_many" id="NUM" />
+    <public type="string" name="PreviewForwardLocation_one" id="NUM" />
+    <public type="string" name="PreviewForwardLocation_other" id="NUM" />
+    <public type="string" name="PreviewForwardLocation_two" id="NUM" />
+    <public type="string" name="PreviewForwardLocation_zero" id="NUM" />
+    <public type="string" name="PreviewForwardMessagesCount_few" id="NUM" />
+    <public type="string" name="PreviewForwardMessagesCount_many" id="NUM" />
+    <public type="string" name="PreviewForwardMessagesCount_one" id="NUM" />
+    <public type="string" name="PreviewForwardMessagesCount_other" id="NUM" />
+    <public type="string" name="PreviewForwardMessagesCount_two" id="NUM" />
+    <public type="string" name="PreviewForwardMessagesCount_zero" id="NUM" />
+    <public type="string" name="PreviewForwardMusic_few" id="NUM" />
+    <public type="string" name="PreviewForwardMusic_many" id="NUM" />
+    <public type="string" name="PreviewForwardMusic_one" id="NUM" />
+    <public type="string" name="PreviewForwardMusic_other" id="NUM" />
+    <public type="string" name="PreviewForwardMusic_two" id="NUM" />
+    <public type="string" name="PreviewForwardMusic_zero" id="NUM" />
+    <public type="string" name="PreviewForwardPhoto_few" id="NUM" />
+    <public type="string" name="PreviewForwardPhoto_many" id="NUM" />
+    <public type="string" name="PreviewForwardPhoto_one" id="NUM" />
+    <public type="string" name="PreviewForwardPhoto_two" id="NUM" />
+    <public type="string" name="PreviewForwardPhoto_zero" id="NUM" />
+    <public type="string" name="PreviewForwardPoll_few" id="NUM" />
+    <public type="string" name="PreviewForwardPoll_many" id="NUM" />
+    <public type="string" name="PreviewForwardPoll_one" id="NUM" />
+    <public type="string" name="PreviewForwardPoll_other" id="NUM" />
+    <public type="string" name="PreviewForwardPoll_two" id="NUM" />
+    <public type="string" name="PreviewForwardPoll_zero" id="NUM" />
+    <public type="string" name="PreviewForwardRound_few" id="NUM" />
+    <public type="string" name="PreviewForwardRound_many" id="NUM" />
+    <public type="string" name="PreviewForwardRound_one" id="NUM" />
+    <public type="string" name="PreviewForwardRound_other" id="NUM" />
+    <public type="string" name="PreviewForwardRound_two" id="NUM" />
+    <public type="string" name="PreviewForwardRound_zero" id="NUM" />
+    <public type="string" name="PreviewForwardSticker_few" id="NUM" />
+    <public type="string" name="PreviewForwardSticker_many" id="NUM" />
+    <public type="string" name="PreviewForwardSticker_one" id="NUM" />
+    <public type="string" name="PreviewForwardSticker_other" id="NUM" />
+    <public type="string" name="PreviewForwardSticker_two" id="NUM" />
+    <public type="string" name="PreviewForwardSticker_zero" id="NUM" />
+    <public type="string" name="PreviewForwardVideo_few" id="NUM" />
+    <public type="string" name="PreviewForwardVideo_many" id="NUM" />
+    <public type="string" name="PreviewForwardVideo_one" id="NUM" />
+    <public type="string" name="PreviewForwardVideo_other" id="NUM" />
+    <public type="string" name="PreviewForwardVideo_two" id="NUM" />
+    <public type="string" name="PreviewForwardVideo_zero" id="NUM" />
+    <public type="string" name="PreviewPhoto_other" id="NUM" />
     <public type="string" name="PreviousPinnedMessage" id="NUM" />
     <public type="string" name="PrimaryLinkHelp" id="NUM" />
     <public type="string" name="PrimaryLinkHelpChannel" id="NUM" />
@@ -4892,6 +4975,7 @@
     <public type="string" name="Red" id="NUM" />
     <public type="string" name="RegisterText2" id="NUM" />
     <public type="string" name="Regular" id="NUM" />
+    <public type="string" name="ReleaseToGoNextArchive" id="NUM" />
     <public type="string" name="ReleaseToGoNextChannel" id="NUM" />
     <public type="string" name="ReleaseToGoNextFolder" id="NUM" />
     <public type="string" name="RemindDayAt" id="NUM" />
@@ -5271,6 +5355,8 @@
     <public type="string" name="ShowAllThemes" id="NUM" />
     <public type="string" name="ShowAsGrid" id="NUM" />
     <public type="string" name="ShowAsList" id="NUM" />
+    <public type="string" name="ShowCaption" id="NUM" />
+    <public type="string" name="ShowForwardingOptions" id="NUM" />
     <public type="string" name="ShowInChat" id="NUM" />
     <public type="string" name="ShowNotificationsFor" id="NUM" />
     <public type="string" name="ShowNotificationsForInfo" id="NUM" />
@@ -5421,6 +5507,7 @@
     <public type="string" name="SwipeSettingsMute" id="NUM" />
     <public type="string" name="SwipeSettingsPin" id="NUM" />
     <public type="string" name="SwipeSettingsRead" id="NUM" />
+    <public type="string" name="SwipeToGoNextArchive" id="NUM" />
     <public type="string" name="SwipeToGoNextChannel" id="NUM" />
     <public type="string" name="SwipeToGoNextChannelEnd" id="NUM" />
     <public type="string" name="SwipeToGoNextFolder" id="NUM" />

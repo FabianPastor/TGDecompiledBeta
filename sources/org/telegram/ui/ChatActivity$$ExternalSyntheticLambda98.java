@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda98 imple
     }
 
     public final void run() {
-        this.f$0.lambda$processNewMessages$94(this.f$1);
+        this.f$0.lambda$processNewMessages$93(this.f$1);
     }
 }

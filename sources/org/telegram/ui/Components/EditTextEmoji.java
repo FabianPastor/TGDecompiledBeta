@@ -505,7 +505,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            EmojiView emojiView2 = new EmojiView(false, false, this.parentFragment.getParentActivity(), false, (TLRPC$ChatFull) null, (ViewGroup) null);
+            EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null);
             this.emojiView = emojiView2;
             emojiView2.setVisibility(8);
             if (AndroidUtilities.isTablet()) {
