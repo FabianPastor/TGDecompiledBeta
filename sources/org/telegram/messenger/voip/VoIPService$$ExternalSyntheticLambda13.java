@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda13 implem
     }
 
     public final void run() {
-        this.f$0.lambda$loadResources$75();
+        this.f$0.lambda$onConnectionStateChanged$81();
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda50 implem
     }
 
     public final void run() {
-        this.f$0.lambda$startGroupCall$27(this.f$1);
+        this.f$0.lambda$startGroupCall$21(this.f$1);
     }
 }

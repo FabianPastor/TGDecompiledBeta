@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda1 impleme
     }
 
     public final void onPrepared(MediaPlayer mediaPlayer) {
-        this.f$0.lambda$startRingtoneAndVibration$62(mediaPlayer);
+        this.f$0.lambda$startRingtoneAndVibration$61(mediaPlayer);
     }
 }

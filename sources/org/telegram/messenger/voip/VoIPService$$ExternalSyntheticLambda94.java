@@ -11,6 +11,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda94 implem
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        VoIPService.lambda$callFailed$79(tLObject, tLRPC$TL_error);
+        VoIPService.lambda$callFailed$78(tLObject, tLRPC$TL_error);
     }
 }

@@ -1,20 +1,15 @@
 package org.telegram.messenger.voip;
 
-import java.util.ArrayList;
-import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.voip.Instance;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda64 implements ChatObject.Call.OnParticipantsLoad {
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda64 implements Instance.OnRemoteMediaStateUpdatedListener {
     public final /* synthetic */ VoIPService f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int[] f$2;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda64(VoIPService voIPService, long j, int[] iArr) {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda64(VoIPService voIPService) {
         this.f$0 = voIPService;
-        this.f$1 = j;
-        this.f$2 = iArr;
     }
 
-    public final void onLoad(ArrayList arrayList) {
-        this.f$0.lambda$createGroupInstance$39(this.f$1, this.f$2, arrayList);
+    public final void onMediaStateUpdated(int i, int i2) {
+        this.f$0.lambda$initiateActualEncryptedCall$55(i, i2);
     }
 }

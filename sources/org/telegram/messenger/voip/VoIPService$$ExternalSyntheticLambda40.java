@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda40 implem
     }
 
     public final void run() {
-        this.f$0.lambda$updateConnectionState$50(this.f$1);
+        this.f$0.lambda$onConnectionStateChanged$83(this.f$1);
     }
 }
