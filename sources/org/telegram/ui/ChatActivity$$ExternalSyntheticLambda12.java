@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda12 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showGigagroupConvertAlert$90(dialogInterface, i);
+        this.f$0.lambda$createView$31(dialogInterface, i);
     }
 }

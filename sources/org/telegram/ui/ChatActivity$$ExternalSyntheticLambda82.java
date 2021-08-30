@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda82 imple
     }
 
     public final void run() {
-        this.f$0.showChecksHint();
+        this.f$0.lambda$scrollToMessageId$80();
     }
 }

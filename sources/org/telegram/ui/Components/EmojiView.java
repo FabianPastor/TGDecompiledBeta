@@ -2423,20 +2423,23 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 }
                 scrollSlidingTabStrip.setVisibility(i2);
                 this.stickersGridView.setVisibility(8);
+                this.stickersTab.setVisibility(8);
             } else if (i == 1) {
                 this.emojiGridView.setVisibility(8);
                 this.gifGridView.setVisibility(0);
                 this.gifTabs.setVisibility(0);
-                RecyclerListView recyclerListView = this.stickersGridView;
+                this.stickersGridView.setVisibility(f == 0.0f ? 8 : 0);
+                ScrollSlidingTabStrip scrollSlidingTabStrip2 = this.stickersTab;
                 if (f == 0.0f) {
                     i2 = 8;
                 }
-                recyclerListView.setVisibility(i2);
+                scrollSlidingTabStrip2.setVisibility(i2);
             } else if (i == 2) {
                 this.emojiGridView.setVisibility(8);
                 this.gifGridView.setVisibility(8);
                 this.gifTabs.setVisibility(8);
                 this.stickersGridView.setVisibility(0);
+                this.stickersTab.setVisibility(0);
             }
         }
     }
@@ -2808,7 +2811,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
         int currentItem = this.pager.getCurrentItem();
         int i = 2;
-        if (currentItem == 2 && j2 != -1 && (stickerSetById = MediaDataController.getInstance(this.currentAccount).getStickerSetById(j2)) != null && (positionForPack = this.stickersGridAdapter.getPositionForPack(stickerSetById)) >= 0) {
+        if (currentItem == 2 && j2 != -1 && (stickerSetById = MediaDataController.getInstance(this.currentAccount).getStickerSetById(j2)) != null && (positionForPack = this.stickersGridAdapter.getPositionForPack(stickerSetById)) >= 0 && positionForPack < this.stickersGridAdapter.getItemCount()) {
             scrollStickersToPosition(positionForPack, AndroidUtilities.dp(60.0f));
         }
         GifAdapter gifAdapter2 = this.gifSearchAdapter;
@@ -3723,17 +3726,15 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         this.gifTrendingTabNum = i;
         this.gifTabs.addIconTab(1, this.gifIcons[1]).setContentDescription(LocaleController.getString("FeaturedGifs", NUM));
         this.gifFirstEmojiTabNum = i + 1;
-        int dp = AndroidUtilities.dp(13.0f);
-        int dp2 = AndroidUtilities.dp(11.0f);
+        AndroidUtilities.dp(13.0f);
+        AndroidUtilities.dp(11.0f);
         ArrayList<String> arrayList = MessagesController.getInstance(this.currentAccount).gifSearchEmojies;
         int size = arrayList.size();
         for (int i3 = 0; i3 < size; i3++) {
             String str = arrayList.get(i3);
-            if (Emoji.getEmojiDrawable(str) != null) {
-                TLRPC$Document emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(str);
-                View addStickerTab = this.gifTabs.addStickerTab(emojiAnimatedSticker, emojiAnimatedSticker, (TLRPC$TL_messages_stickerSet) null);
-                addStickerTab.setPadding(dp, dp2, dp, dp2);
-                addStickerTab.setContentDescription(str);
+            Emoji.EmojiDrawable emojiDrawable = Emoji.getEmojiDrawable(str);
+            if (emojiDrawable != null) {
+                this.gifTabs.addEmojiTab(i3 + 3, emojiDrawable, MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(str)).setContentDescription(str);
             }
         }
         this.gifTabs.commitUpdate();

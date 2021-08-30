@@ -3,10 +3,10 @@ package org.telegram.ui.Components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -33,6 +33,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ForwardingMessagesParams;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$KeyboardButton;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
@@ -87,6 +88,9 @@ public class ForwardingPreviewView extends FrameLayout {
     boolean showing;
     float yOffset;
 
+    private void updateColors() {
+    }
+
     /* access modifiers changed from: protected */
     public void didSendPressed() {
     }
@@ -101,7 +105,8 @@ public class ForwardingPreviewView extends FrameLayout {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public ForwardingPreviewView(Context context, ForwardingMessagesParams forwardingMessagesParams2, TLRPC$User tLRPC$User) {
+    @SuppressLint({"ClickableViewAccessibility"})
+    public ForwardingPreviewView(Context context, ForwardingMessagesParams forwardingMessagesParams2, TLRPC$User tLRPC$User, int i) {
         super(context);
         Context context2 = context;
         final ForwardingMessagesParams forwardingMessagesParams3 = forwardingMessagesParams2;
@@ -115,7 +120,7 @@ public class ForwardingPreviewView extends FrameLayout {
             this.chatPreviewContainer.setOutlineProvider(new ViewOutlineProvider() {
                 @TargetApi(21)
                 public void getOutline(View view, Outline outline) {
-                    outline.setRoundRect(0, ForwardingPreviewView.this.currentTopOffset, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(6.0f));
+                    outline.setRoundRect(0, ForwardingPreviewView.this.currentTopOffset + 1, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(6.0f));
                 }
             });
             this.chatPreviewContainer.setClipToOutline(true);
@@ -136,31 +141,30 @@ public class ForwardingPreviewView extends FrameLayout {
                 canvas.save();
                 canvas.translate(chatMessageCell.getX(), chatMessageCell.getY());
                 chatMessageCell.drawMessageText(canvas, chatMessageCell.getMessageObject().textLayoutBlocks, true, 1.0f, false);
+                if (chatMessageCell.getCurrentMessagesGroup() != null || chatMessageCell.getTransitionParams().animateBackgroundBoundsInner) {
+                    chatMessageCell.drawNamesLayout(canvas, 1.0f);
+                }
+                if ((chatMessageCell.getCurrentPosition() != null && chatMessageCell.getCurrentPosition().last) || chatMessageCell.getTransitionParams().animateBackgroundBoundsInner) {
+                    chatMessageCell.drawTime(canvas, 1.0f, true);
+                }
+                if ((chatMessageCell.getCurrentPosition() != null && chatMessageCell.getCurrentPosition().last) || chatMessageCell.getCurrentPosition() == null) {
+                    chatMessageCell.drawCaptionLayout(canvas, false, 1.0f);
+                }
+                chatMessageCell.getTransitionParams().recordDrawingStatePreview();
                 canvas.restore();
                 return drawChild;
             }
 
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
-                drawChatBackgroundElements(canvas);
-                super.dispatchDraw(canvas);
                 for (int i = 0; i < getChildCount(); i++) {
                     View childAt = getChildAt(i);
                     if (childAt instanceof ChatMessageCell) {
-                        ChatMessageCell chatMessageCell = (ChatMessageCell) childAt;
-                        chatMessageCell.setParentViewSize(ForwardingPreviewView.this.chatPreviewContainer.getMeasuredWidth(), ForwardingPreviewView.this.chatPreviewContainer.getBackgroundSizeY());
-                        canvas.save();
-                        canvas.translate(chatMessageCell.getX(), chatMessageCell.getY());
-                        if (chatMessageCell.getCurrentMessagesGroup() != null || chatMessageCell.getTransitionParams().animateBackgroundBoundsInner) {
-                            chatMessageCell.drawNamesLayout(canvas, 1.0f);
-                        }
-                        if ((chatMessageCell.getCurrentPosition() != null && chatMessageCell.getCurrentPosition().last) || chatMessageCell.getTransitionParams().animateBackgroundBoundsInner) {
-                            chatMessageCell.drawTime(canvas, 1.0f, true);
-                        }
-                        chatMessageCell.drawCaptionLayout(canvas, false, 1.0f);
-                        canvas.restore();
+                        ((ChatMessageCell) childAt).setParentViewSize(ForwardingPreviewView.this.chatPreviewContainer.getMeasuredWidth(), ForwardingPreviewView.this.chatPreviewContainer.getBackgroundSizeY());
                     }
                 }
+                drawChatBackgroundElements(canvas);
+                super.dispatchDraw(canvas);
             }
 
             /* access modifiers changed from: protected */
@@ -176,210 +180,205 @@ public class ForwardingPreviewView extends FrameLayout {
                 MessageObject.GroupedMessages currentMessagesGroup;
                 ChatMessageCell chatMessageCell;
                 MessageObject.GroupedMessages currentMessagesGroup2;
-                int i3;
-                Canvas canvas2 = canvas;
                 int childCount = getChildCount();
+                boolean z2 = false;
+                int i3 = 0;
                 MessageObject.GroupedMessages groupedMessages = null;
-                int i4 = 0;
                 while (true) {
                     i = 2;
-                    if (i4 >= childCount) {
+                    if (i3 >= childCount) {
                         break;
                     }
-                    View childAt = getChildAt(i4);
+                    View childAt = getChildAt(i3);
                     if ((childAt instanceof ChatMessageCell) && ((currentMessagesGroup2 = chatMessageCell.getCurrentMessagesGroup()) == null || currentMessagesGroup2 != groupedMessages)) {
                         MessageObject.GroupedMessagePosition currentPosition = (chatMessageCell = (ChatMessageCell) childAt).getCurrentPosition();
-                        MessageBackgroundDrawable backgroundDrawable = chatMessageCell.getBackgroundDrawable();
-                        if ((backgroundDrawable.isAnimationInProgress() || chatMessageCell.isDrawingSelectionBackground()) && (currentPosition == null || (currentPosition.flags & 2) != 0)) {
-                            if (!chatMessageCell.isHighlighted() && !chatMessageCell.isHighlightedAnimated()) {
-                                backgroundDrawable.setColor(Theme.getColor("chat_selectedBackground"));
-                                int y = (int) chatMessageCell.getY();
-                                canvas.save();
-                                if (currentPosition == null) {
-                                    i3 = chatMessageCell.getMeasuredHeight();
-                                } else {
-                                    int measuredHeight = chatMessageCell.getMeasuredHeight() + y;
-                                    long j = 0;
-                                    float f = 0.0f;
-                                    float f2 = 0.0f;
-                                    for (int i5 = 0; i5 < childCount; i5++) {
-                                        View childAt2 = getChildAt(i5);
-                                        if (childAt2 instanceof ChatMessageCell) {
-                                            ChatMessageCell chatMessageCell2 = (ChatMessageCell) childAt2;
-                                            if (chatMessageCell2.getCurrentMessagesGroup() == currentMessagesGroup2) {
-                                                MessageBackgroundDrawable backgroundDrawable2 = chatMessageCell2.getBackgroundDrawable();
-                                                y = Math.min(y, (int) chatMessageCell2.getY());
-                                                measuredHeight = Math.max(measuredHeight, ((int) chatMessageCell2.getY()) + chatMessageCell2.getMeasuredHeight());
-                                                long lastTouchTime = backgroundDrawable2.getLastTouchTime();
-                                                if (lastTouchTime > j) {
-                                                    f = backgroundDrawable2.getTouchX() + chatMessageCell2.getX();
-                                                    f2 = backgroundDrawable2.getTouchY() + chatMessageCell2.getY();
-                                                    j = lastTouchTime;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    backgroundDrawable.setTouchCoordsOverride(f, f2 - ((float) y));
-                                    i3 = measuredHeight - y;
-                                }
-                                canvas2.clipRect(0, y, getMeasuredWidth(), y + i3);
-                                canvas2.translate(0.0f, (float) y);
-                                backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), i3);
-                                backgroundDrawable.draw(canvas2);
-                                canvas.restore();
-                            } else if (currentPosition == null) {
-                                int alpha = Color.alpha(Theme.getColor("chat_selectedBackground"));
-                                canvas.save();
-                                canvas2.translate(0.0f, chatMessageCell.getTranslationY());
-                                Theme.chat_replyLinePaint.setColor(Theme.getColor("chat_selectedBackground"));
-                                Theme.chat_replyLinePaint.setAlpha((int) (((float) alpha) * chatMessageCell.getHightlightAlpha() * chatMessageCell.getAlpha()));
-                                canvas.drawRect(0.0f, (float) chatMessageCell.getTop(), (float) getMeasuredWidth(), (float) chatMessageCell.getBottom(), Theme.chat_replyLinePaint);
-                                canvas.restore();
-                            }
+                        if ((chatMessageCell.getBackgroundDrawable().isAnimationInProgress() || chatMessageCell.isDrawingSelectionBackground()) && ((currentPosition == null || (currentPosition.flags & 2) != 0) && !chatMessageCell.isHighlighted())) {
+                            chatMessageCell.isHighlightedAnimated();
                         }
                         groupedMessages = currentMessagesGroup2;
                     }
-                    i4++;
+                    i3++;
                 }
-                int i6 = 0;
-                while (i6 < 3) {
+                int i4 = 0;
+                while (i4 < 3) {
                     ForwardingPreviewView.this.drawingGroups.clear();
-                    if (i6 != i || ForwardingPreviewView.this.chatListView.isFastScrollAnimationRunning()) {
-                        int i7 = 0;
+                    if (i4 != i || ForwardingPreviewView.this.chatListView.isFastScrollAnimationRunning()) {
+                        int i5 = 0;
                         while (true) {
                             z = true;
-                            if (i7 >= childCount) {
+                            if (i5 >= childCount) {
                                 break;
                             }
-                            View childAt3 = ForwardingPreviewView.this.chatListView.getChildAt(i7);
-                            if (childAt3 instanceof ChatMessageCell) {
-                                ChatMessageCell chatMessageCell3 = (ChatMessageCell) childAt3;
-                                if (childAt3.getY() <= ((float) ForwardingPreviewView.this.chatListView.getHeight())) {
-                                    if (childAt3.getY() + ((float) childAt3.getHeight()) >= 0.0f && (currentMessagesGroup = chatMessageCell3.getCurrentMessagesGroup()) != null && (!(i6 == 0 && currentMessagesGroup.messages.size() == 1) && ((i6 != 1 || currentMessagesGroup.transitionParams.drawBackgroundForDeletedItems) && ((i6 != 0 || !chatMessageCell3.getMessageObject().deleted) && ((i6 != 1 || chatMessageCell3.getMessageObject().deleted) && ((i6 != i || chatMessageCell3.willRemovedAfterAnimation()) && (i6 == i || !chatMessageCell3.willRemovedAfterAnimation()))))))) {
-                                        if (!ForwardingPreviewView.this.drawingGroups.contains(currentMessagesGroup)) {
-                                            MessageObject.GroupedMessages.TransitionParams transitionParams = currentMessagesGroup.transitionParams;
-                                            transitionParams.left = 0;
-                                            transitionParams.top = 0;
-                                            transitionParams.right = 0;
-                                            transitionParams.bottom = 0;
-                                            transitionParams.pinnedBotton = false;
-                                            transitionParams.pinnedTop = false;
-                                            transitionParams.cell = chatMessageCell3;
-                                            ForwardingPreviewView.this.drawingGroups.add(currentMessagesGroup);
-                                        }
-                                        currentMessagesGroup.transitionParams.pinnedTop = chatMessageCell3.isPinnedTop();
-                                        currentMessagesGroup.transitionParams.pinnedBotton = chatMessageCell3.isPinnedBottom();
-                                        int left = chatMessageCell3.getLeft() + chatMessageCell3.getBackgroundDrawableLeft();
-                                        int left2 = chatMessageCell3.getLeft() + chatMessageCell3.getBackgroundDrawableRight();
-                                        int top = chatMessageCell3.getTop() + chatMessageCell3.getBackgroundDrawableTop();
-                                        int top2 = chatMessageCell3.getTop() + chatMessageCell3.getBackgroundDrawableBottom();
-                                        if ((chatMessageCell3.getCurrentPosition().flags & 4) == 0) {
-                                            top -= AndroidUtilities.dp(10.0f);
-                                        }
-                                        if ((chatMessageCell3.getCurrentPosition().flags & 8) == 0) {
-                                            top2 += AndroidUtilities.dp(10.0f);
-                                        }
-                                        if (chatMessageCell3.willRemovedAfterAnimation()) {
-                                            currentMessagesGroup.transitionParams.cell = chatMessageCell3;
-                                        }
-                                        MessageObject.GroupedMessages.TransitionParams transitionParams2 = currentMessagesGroup.transitionParams;
-                                        int i8 = transitionParams2.top;
-                                        if (i8 == 0 || top < i8) {
-                                            transitionParams2.top = top;
-                                        }
-                                        int i9 = transitionParams2.bottom;
-                                        if (i9 == 0 || top2 > i9) {
-                                            transitionParams2.bottom = top2;
-                                        }
-                                        int i10 = transitionParams2.left;
-                                        if (i10 == 0 || left < i10) {
-                                            transitionParams2.left = left;
-                                        }
-                                        int i11 = transitionParams2.right;
-                                        if (i11 == 0 || left2 > i11) {
-                                            transitionParams2.right = left2;
-                                            i7++;
-                                        } else {
-                                            i7++;
-                                        }
-                                    } else {
-                                        i7++;
+                            View childAt2 = ForwardingPreviewView.this.chatListView.getChildAt(i5);
+                            if (childAt2 instanceof ChatMessageCell) {
+                                ChatMessageCell chatMessageCell2 = (ChatMessageCell) childAt2;
+                                if (childAt2.getY() <= ((float) ForwardingPreviewView.this.chatListView.getHeight()) && childAt2.getY() + ((float) childAt2.getHeight()) >= 0.0f && (currentMessagesGroup = chatMessageCell2.getCurrentMessagesGroup()) != null && (!(i4 == 0 && currentMessagesGroup.messages.size() == 1) && ((i4 != 1 || currentMessagesGroup.transitionParams.drawBackgroundForDeletedItems) && ((i4 != 0 || !chatMessageCell2.getMessageObject().deleted) && ((i4 != 1 || chatMessageCell2.getMessageObject().deleted) && ((i4 != i || chatMessageCell2.willRemovedAfterAnimation()) && (i4 == i || !chatMessageCell2.willRemovedAfterAnimation()))))))) {
+                                    if (!ForwardingPreviewView.this.drawingGroups.contains(currentMessagesGroup)) {
+                                        MessageObject.GroupedMessages.TransitionParams transitionParams = currentMessagesGroup.transitionParams;
+                                        transitionParams.left = z2 ? 1 : 0;
+                                        transitionParams.top = z2;
+                                        transitionParams.right = z2;
+                                        transitionParams.bottom = z2;
+                                        transitionParams.pinnedBotton = z2;
+                                        transitionParams.pinnedTop = z2;
+                                        transitionParams.cell = chatMessageCell2;
+                                        ForwardingPreviewView.this.drawingGroups.add(currentMessagesGroup);
+                                    }
+                                    currentMessagesGroup.transitionParams.pinnedTop = chatMessageCell2.isPinnedTop();
+                                    currentMessagesGroup.transitionParams.pinnedBotton = chatMessageCell2.isPinnedBottom();
+                                    int left = chatMessageCell2.getLeft() + chatMessageCell2.getBackgroundDrawableLeft();
+                                    int left2 = chatMessageCell2.getLeft() + chatMessageCell2.getBackgroundDrawableRight();
+                                    int top = chatMessageCell2.getTop() + chatMessageCell2.getBackgroundDrawableTop();
+                                    int top2 = chatMessageCell2.getTop() + chatMessageCell2.getBackgroundDrawableBottom();
+                                    if ((chatMessageCell2.getCurrentPosition().flags & 4) == 0) {
+                                        top -= AndroidUtilities.dp(10.0f);
+                                    }
+                                    if ((chatMessageCell2.getCurrentPosition().flags & 8) == 0) {
+                                        top2 += AndroidUtilities.dp(10.0f);
+                                    }
+                                    if (chatMessageCell2.willRemovedAfterAnimation()) {
+                                        currentMessagesGroup.transitionParams.cell = chatMessageCell2;
+                                    }
+                                    MessageObject.GroupedMessages.TransitionParams transitionParams2 = currentMessagesGroup.transitionParams;
+                                    int i6 = transitionParams2.top;
+                                    if (i6 == 0 || top < i6) {
+                                        transitionParams2.top = top;
+                                    }
+                                    int i7 = transitionParams2.bottom;
+                                    if (i7 == 0 || top2 > i7) {
+                                        transitionParams2.bottom = top2;
+                                    }
+                                    int i8 = transitionParams2.left;
+                                    if (i8 == 0 || left < i8) {
+                                        transitionParams2.left = left;
+                                    }
+                                    int i9 = transitionParams2.right;
+                                    if (i9 == 0 || left2 > i9) {
+                                        transitionParams2.right = left2;
                                     }
                                 }
                             }
-                            i7++;
+                            i5++;
                         }
-                        int i12 = 0;
-                        while (i12 < ForwardingPreviewView.this.drawingGroups.size()) {
-                            MessageObject.GroupedMessages groupedMessages2 = (MessageObject.GroupedMessages) ForwardingPreviewView.this.drawingGroups.get(i12);
+                        int i10 = 0;
+                        while (i10 < ForwardingPreviewView.this.drawingGroups.size()) {
+                            MessageObject.GroupedMessages groupedMessages2 = (MessageObject.GroupedMessages) ForwardingPreviewView.this.drawingGroups.get(i10);
                             if (groupedMessages2 == null) {
-                                i2 = i12;
+                                i2 = i4;
                             } else {
                                 float nonAnimationTranslationX = groupedMessages2.transitionParams.cell.getNonAnimationTranslationX(z);
                                 MessageObject.GroupedMessages.TransitionParams transitionParams3 = groupedMessages2.transitionParams;
-                                float f3 = ((float) transitionParams3.left) + nonAnimationTranslationX + transitionParams3.offsetLeft;
-                                float f4 = ((float) transitionParams3.top) + transitionParams3.offsetTop;
-                                float f5 = ((float) transitionParams3.right) + nonAnimationTranslationX + transitionParams3.offsetRight;
-                                float f6 = ((float) transitionParams3.bottom) + transitionParams3.offsetBottom;
+                                float f = ((float) transitionParams3.left) + nonAnimationTranslationX + transitionParams3.offsetLeft;
+                                float f2 = ((float) transitionParams3.top) + transitionParams3.offsetTop;
+                                float f3 = ((float) transitionParams3.right) + nonAnimationTranslationX + transitionParams3.offsetRight;
+                                float f4 = ((float) transitionParams3.bottom) + transitionParams3.offsetBottom;
                                 if (!transitionParams3.backgroundChangeBounds) {
-                                    f4 += transitionParams3.cell.getTranslationY();
-                                    f6 += groupedMessages2.transitionParams.cell.getTranslationY();
+                                    f2 += transitionParams3.cell.getTranslationY();
+                                    f4 += groupedMessages2.transitionParams.cell.getTranslationY();
                                 }
-                                if (f4 < ((float) (-AndroidUtilities.dp(20.0f)))) {
-                                    f4 = (float) (-AndroidUtilities.dp(20.0f));
+                                if (f2 < ((float) (-AndroidUtilities.dp(20.0f)))) {
+                                    f2 = (float) (-AndroidUtilities.dp(20.0f));
                                 }
-                                float f7 = f4;
-                                if (f6 > ((float) (ForwardingPreviewView.this.chatListView.getMeasuredHeight() + AndroidUtilities.dp(20.0f)))) {
-                                    f6 = (float) (ForwardingPreviewView.this.chatListView.getMeasuredHeight() + AndroidUtilities.dp(20.0f));
+                                if (f4 > ((float) (ForwardingPreviewView.this.chatListView.getMeasuredHeight() + AndroidUtilities.dp(20.0f)))) {
+                                    f4 = (float) (ForwardingPreviewView.this.chatListView.getMeasuredHeight() + AndroidUtilities.dp(20.0f));
                                 }
-                                float f8 = f6;
-                                boolean z2 = (groupedMessages2.transitionParams.cell.getScaleX() == 1.0f && groupedMessages2.transitionParams.cell.getScaleY() == 1.0f) ? false : true;
-                                if (z2) {
+                                boolean z3 = (groupedMessages2.transitionParams.cell.getScaleX() == 1.0f && groupedMessages2.transitionParams.cell.getScaleY() == 1.0f) ? false : true;
+                                if (z3) {
                                     canvas.save();
-                                    canvas2.scale(groupedMessages2.transitionParams.cell.getScaleX(), groupedMessages2.transitionParams.cell.getScaleY(), f3 + ((f5 - f3) / 2.0f), f7 + ((f8 - f7) / 2.0f));
+                                    canvas.scale(groupedMessages2.transitionParams.cell.getScaleX(), groupedMessages2.transitionParams.cell.getScaleY(), f + ((f3 - f) / 2.0f), f2 + ((f4 - f2) / 2.0f));
+                                } else {
+                                    Canvas canvas2 = canvas;
                                 }
                                 MessageObject.GroupedMessages.TransitionParams transitionParams4 = groupedMessages2.transitionParams;
-                                float f9 = f8;
-                                float var_ = f7;
-                                float var_ = f5;
-                                float var_ = f3;
-                                MessageObject.GroupedMessages groupedMessages3 = groupedMessages2;
-                                i2 = i12;
-                                transitionParams4.cell.drawBackground(canvas, (int) f3, (int) f7, (int) f5, (int) f8, transitionParams4.pinnedTop, transitionParams4.pinnedBotton, false);
-                                MessageObject.GroupedMessages.TransitionParams transitionParams5 = groupedMessages3.transitionParams;
+                                i2 = i4;
+                                transitionParams4.cell.drawBackground(canvas, (int) f, (int) f2, (int) f3, (int) f4, transitionParams4.pinnedTop, transitionParams4.pinnedBotton, false, 0);
+                                MessageObject.GroupedMessages.TransitionParams transitionParams5 = groupedMessages2.transitionParams;
                                 transitionParams5.cell = null;
-                                transitionParams5.drawCaptionLayout = groupedMessages3.hasCaption;
-                                if (z2) {
+                                transitionParams5.drawCaptionLayout = groupedMessages2.hasCaption;
+                                if (z3) {
                                     canvas.restore();
-                                    for (int i13 = 0; i13 < childCount; i13++) {
-                                        View childAt4 = ForwardingPreviewView.this.chatListView.getChildAt(i13);
-                                        if (childAt4 instanceof ChatMessageCell) {
-                                            ChatMessageCell chatMessageCell4 = (ChatMessageCell) childAt4;
-                                            if (chatMessageCell4.getCurrentMessagesGroup() == groupedMessages3) {
-                                                int left3 = chatMessageCell4.getLeft();
-                                                int top3 = chatMessageCell4.getTop();
-                                                childAt4.setPivotX((var_ - ((float) left3)) + ((var_ - var_) / 2.0f));
-                                                childAt4.setPivotY((var_ - ((float) top3)) + ((f9 - var_) / 2.0f));
+                                    for (int i11 = 0; i11 < childCount; i11++) {
+                                        View childAt3 = ForwardingPreviewView.this.chatListView.getChildAt(i11);
+                                        if (childAt3 instanceof ChatMessageCell) {
+                                            ChatMessageCell chatMessageCell3 = (ChatMessageCell) childAt3;
+                                            if (chatMessageCell3.getCurrentMessagesGroup() == groupedMessages2) {
+                                                int left3 = chatMessageCell3.getLeft();
+                                                int top3 = chatMessageCell3.getTop();
+                                                childAt3.setPivotX((f - ((float) left3)) + ((f3 - f) / 2.0f));
+                                                childAt3.setPivotY((f2 - ((float) top3)) + ((f4 - f2) / 2.0f));
                                             }
                                         }
                                     }
                                 }
                             }
-                            i12 = i2 + 1;
+                            i10++;
+                            i4 = i2;
                             z = true;
                         }
                     }
-                    i6++;
+                    i4++;
+                    z2 = false;
                     i = 2;
                 }
             }
         };
         this.chatListView = r0;
+        final int i2 = i;
         AnonymousClass4 r2 = new ChatListItemAnimator((ChatActivity) null, this.chatListView) {
+            Runnable finishRunnable;
+            int scrollAnimationIndex = -1;
+
             public void onAnimationStart() {
                 super.onAnimationStart();
                 AndroidUtilities.cancelRunOnUIThread(ForwardingPreviewView.this.changeBoundsRunnable);
                 ForwardingPreviewView.this.changeBoundsRunnable.run();
+                if (this.scrollAnimationIndex == -1) {
+                    this.scrollAnimationIndex = NotificationCenter.getInstance(i2).setAnimationInProgress(this.scrollAnimationIndex, (int[]) null, false);
+                }
+                Runnable runnable = this.finishRunnable;
+                if (runnable != null) {
+                    AndroidUtilities.cancelRunOnUIThread(runnable);
+                    this.finishRunnable = null;
+                }
+            }
+
+            /* access modifiers changed from: protected */
+            public void onAllAnimationsDone() {
+                super.onAllAnimationsDone();
+                Runnable runnable = this.finishRunnable;
+                if (runnable != null) {
+                    AndroidUtilities.cancelRunOnUIThread(runnable);
+                }
+                ForwardingPreviewView$4$$ExternalSyntheticLambda0 forwardingPreviewView$4$$ExternalSyntheticLambda0 = new ForwardingPreviewView$4$$ExternalSyntheticLambda0(this, i2);
+                this.finishRunnable = forwardingPreviewView$4$$ExternalSyntheticLambda0;
+                AndroidUtilities.runOnUIThread(forwardingPreviewView$4$$ExternalSyntheticLambda0);
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onAllAnimationsDone$0(int i) {
+                if (this.scrollAnimationIndex != -1) {
+                    NotificationCenter.getInstance(i).onAnimationFinish(this.scrollAnimationIndex);
+                    this.scrollAnimationIndex = -1;
+                }
+            }
+
+            public void endAnimations() {
+                super.endAnimations();
+                Runnable runnable = this.finishRunnable;
+                if (runnable != null) {
+                    AndroidUtilities.cancelRunOnUIThread(runnable);
+                }
+                ForwardingPreviewView$4$$ExternalSyntheticLambda1 forwardingPreviewView$4$$ExternalSyntheticLambda1 = new ForwardingPreviewView$4$$ExternalSyntheticLambda1(this, i2);
+                this.finishRunnable = forwardingPreviewView$4$$ExternalSyntheticLambda1;
+                AndroidUtilities.runOnUIThread(forwardingPreviewView$4$$ExternalSyntheticLambda1);
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$endAnimations$1(int i) {
+                if (this.scrollAnimationIndex != -1) {
+                    NotificationCenter.getInstance(i).onAnimationFinish(this.scrollAnimationIndex);
+                    this.scrollAnimationIndex = -1;
+                }
             }
         };
         this.itemAnimator = r2;
@@ -603,7 +602,7 @@ public class ForwardingPreviewView extends FrameLayout {
         this.buttonsLayout = linearLayout2;
         linearLayout2.setOrientation(1);
         Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
-        mutate.setColorFilter(new PorterDuffColorFilter(-1, PorterDuff.Mode.MULTIPLY));
+        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         this.buttonsLayout.setBackground(mutate);
         this.menuContainer.addView(this.buttonsLayout, LayoutHelper.createFrame(-1, -2.0f));
         ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(context2, true, true, false);
@@ -640,9 +639,9 @@ public class ForwardingPreviewView extends FrameLayout {
         this.buttonsLayout2 = linearLayout3;
         linearLayout3.setOrientation(1);
         Drawable mutate2 = getContext().getResources().getDrawable(NUM).mutate();
-        mutate2.setColorFilter(new PorterDuffColorFilter(-1, PorterDuff.Mode.MULTIPLY));
+        mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         this.buttonsLayout2.setBackground(mutate2);
-        this.menuContainer.addView(this.buttonsLayout2, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, -8.0f, 0.0f, 0.0f));
+        this.menuContainer.addView(this.buttonsLayout2, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, this.forwardingMessagesParams.hasSenders ? -8.0f : 0.0f, 0.0f, 0.0f));
         ActionBarMenuSubItem actionBarMenuSubItem5 = new ActionBarMenuSubItem(context2, true, false);
         this.changeRecipientView = actionBarMenuSubItem5;
         this.buttonsLayout2.addView(actionBarMenuSubItem5, LayoutHelper.createFrame(-1, 48.0f));
@@ -651,11 +650,13 @@ public class ForwardingPreviewView extends FrameLayout {
         this.sendMessagesView = actionBarMenuSubItem6;
         this.buttonsLayout2.addView(actionBarMenuSubItem6, LayoutHelper.createFrame(-1, 48.0f));
         this.sendMessagesView.setTextAndIcon(LocaleController.getString("ForwardSendMessages", NUM), NUM);
-        this.actionItems.add(this.showSendersNameView);
-        this.actionItems.add(this.hideSendersNameView);
-        if (forwardingMessagesParams3.hasCaption) {
-            this.actionItems.add(this.showCaptionView);
-            this.actionItems.add(this.hideCaptionView);
+        if (this.forwardingMessagesParams.hasSenders) {
+            this.actionItems.add(this.showSendersNameView);
+            this.actionItems.add(this.hideSendersNameView);
+            if (forwardingMessagesParams3.hasCaption) {
+                this.actionItems.add(this.showCaptionView);
+                this.actionItems.add(this.hideCaptionView);
+            }
         }
         this.actionItems.add(this.changeRecipientView);
         this.actionItems.add(this.sendMessagesView);
@@ -671,16 +672,21 @@ public class ForwardingPreviewView extends FrameLayout {
             this.showCaptionView.setChecked(!forwardingMessagesParams3.hideCaption);
             this.hideCaptionView.setChecked(forwardingMessagesParams3.hideCaption);
         }
+        if (!forwardingMessagesParams3.hasSenders) {
+            this.buttonsLayout.setVisibility(8);
+        }
         this.sendMessagesView.setOnClickListener(new ForwardingPreviewView$$ExternalSyntheticLambda1(this));
         this.changeRecipientView.setOnClickListener(new ForwardingPreviewView$$ExternalSyntheticLambda2(this));
         updateMessages();
         this.actionBar.setTitle(LocaleController.formatPluralString("PreviewForwardMessagesCount", forwardingMessagesParams3.selectedIds.size()));
+        this.menuScrollView.setOnTouchListener(new ForwardingPreviewView$$ExternalSyntheticLambda8(this));
         setOnTouchListener(new ForwardingPreviewView$$ExternalSyntheticLambda7(this));
         this.showing = true;
         setAlpha(0.0f);
         setScaleX(0.95f);
         setScaleY(0.95f);
         animate().alpha(1.0f).scaleX(1.0f).setDuration(250).setInterpolator(ChatListItemAnimator.DEFAULT_INTERPOLATOR).scaleY(1.0f);
+        updateColors();
     }
 
     /* access modifiers changed from: private */
@@ -750,6 +756,14 @@ public class ForwardingPreviewView extends FrameLayout {
         return true;
     }
 
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$new$7(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == 1) {
+            dismiss();
+        }
+        return true;
+    }
+
     public void dismiss() {
         if (this.showing) {
             this.showing = false;
@@ -768,19 +782,32 @@ public class ForwardingPreviewView extends FrameLayout {
         for (int i = 0; i < this.forwardingMessagesParams.previewMessages.size(); i++) {
             MessageObject messageObject = this.forwardingMessagesParams.previewMessages.get(i);
             messageObject.forceUpdate = true;
-            if (!this.forwardingMessagesParams.hideForwardSendersName) {
+            ForwardingMessagesParams forwardingMessagesParams2 = this.forwardingMessagesParams;
+            if (!forwardingMessagesParams2.hideForwardSendersName) {
                 messageObject.messageOwner.flags |= 4;
-                TLRPC$User tLRPC$User = this.currentUser;
-                if (tLRPC$User != null) {
-                    this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameVisible", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name)));
-                } else {
-                    this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleGroup", NUM));
+                if (forwardingMessagesParams2.hasSenders) {
+                    TLRPC$User tLRPC$User = this.currentUser;
+                    if (tLRPC$User != null) {
+                        this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameVisible", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name)));
+                    } else {
+                        this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleGroup", NUM));
+                    }
                 }
             } else {
                 messageObject.messageOwner.flags &= -5;
-                TLRPC$User tLRPC$User2 = this.currentUser;
-                if (tLRPC$User2 != null) {
-                    this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameHidden", NUM, ContactsController.formatName(tLRPC$User2.first_name, tLRPC$User2.last_name)));
+                if (forwardingMessagesParams2.hasSenders) {
+                    TLRPC$User tLRPC$User2 = this.currentUser;
+                    if (tLRPC$User2 != null) {
+                        this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameHidden", NUM, ContactsController.formatName(tLRPC$User2.first_name, tLRPC$User2.last_name)));
+                    } else {
+                        this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenGroup", NUM));
+                    }
+                }
+            }
+            if (!this.forwardingMessagesParams.hasSenders) {
+                TLRPC$User tLRPC$User3 = this.currentUser;
+                if (tLRPC$User3 != null) {
+                    this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameHidden", NUM, ContactsController.formatName(tLRPC$User3.first_name, tLRPC$User3.last_name)));
                 } else {
                     this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenGroup", NUM));
                 }
@@ -790,9 +817,16 @@ public class ForwardingPreviewView extends FrameLayout {
             } else {
                 messageObject.generateCaption();
             }
+            if (messageObject.isPoll()) {
+                ForwardingMessagesParams.PreviewMediaPoll previewMediaPoll = (ForwardingMessagesParams.PreviewMediaPoll) messageObject.messageOwner.media;
+                previewMediaPoll.results.total_voters = this.forwardingMessagesParams.hideCaption ? 0 : previewMediaPoll.totalVotersCached;
+            }
         }
-        for (int i2 = 0; i2 < this.forwardingMessagesParams.groupedMessagesMap.size(); i2++) {
-            this.itemAnimator.groupWillChanged(this.forwardingMessagesParams.groupedMessagesMap.valueAt(i2));
+        for (int i2 = 0; i2 < this.forwardingMessagesParams.pollChoosenAnswers.size(); i2++) {
+            this.forwardingMessagesParams.pollChoosenAnswers.get(i2).chosen = !this.forwardingMessagesParams.hideForwardSendersName;
+        }
+        for (int i3 = 0; i3 < this.forwardingMessagesParams.groupedMessagesMap.size(); i3++) {
+            this.itemAnimator.groupWillChanged(this.forwardingMessagesParams.groupedMessagesMap.valueAt(i3));
         }
         this.adapter.notifyItemRangeChanged(0, this.forwardingMessagesParams.previewMessages.size());
     }
@@ -835,17 +869,24 @@ public class ForwardingPreviewView extends FrameLayout {
             this.chatPreviewContainer.getLayoutParams().width = -1;
             this.menuScrollView.getLayoutParams().height = View.MeasureSpec.getSize(i2) - this.chatPreviewContainer.getLayoutParams().height;
         }
+        int size2 = (View.MeasureSpec.getSize(i) + View.MeasureSpec.getSize(i2)) << 16;
+        if (this.lastSize != size2) {
+            for (int i6 = 0; i6 < this.forwardingMessagesParams.previewMessages.size(); i6++) {
+                this.forwardingMessagesParams.previewMessages.get(i6).forceUpdate = true;
+                Adapter adapter2 = this.adapter;
+                if (adapter2 != null) {
+                    adapter2.notifyDataSetChanged();
+                }
+            }
+            this.firstLayout = true;
+        }
+        this.lastSize = size2;
         super.onMeasure(i, i2);
     }
 
     /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
-        int measuredWidth = (getMeasuredWidth() + getMeasuredHeight()) << 16;
-        if (this.lastSize != measuredWidth) {
-            this.firstLayout = true;
-        }
-        this.lastSize = measuredWidth;
         updatePositions();
         this.firstLayout = false;
     }
@@ -873,8 +914,8 @@ public class ForwardingPreviewView extends FrameLayout {
             }
             float dp2 = (((float) AndroidUtilities.dp(8.0f)) + ((((float) (getMeasuredHeight() - AndroidUtilities.dp(16.0f))) - ((float) (((this.buttonsLayout.getMeasuredHeight() + this.buttonsLayout2.getMeasuredHeight()) - AndroidUtilities.dp(8.0f)) + (this.chatPreviewContainer.getMeasuredHeight() - this.chatTopOffset)))) / 2.0f)) - ((float) this.chatTopOffset);
             this.yOffset = dp2;
-            if (dp2 < 0.0f) {
-                this.yOffset = 0.0f;
+            if (dp2 > ((float) AndroidUtilities.dp(8.0f))) {
+                this.yOffset = (float) AndroidUtilities.dp(8.0f);
             }
             this.menuScrollView.setTranslationX((float) (getMeasuredWidth() - this.menuScrollView.getMeasuredWidth()));
         } else {
@@ -914,7 +955,7 @@ public class ForwardingPreviewView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updatePositions$7(int i, float f, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updatePositions$8(int i, float f, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         float f2 = 1.0f - floatValue;
         int i2 = (int) ((((float) i) * f2) + (((float) this.chatTopOffset) * floatValue));

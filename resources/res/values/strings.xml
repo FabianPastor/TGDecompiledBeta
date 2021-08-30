@@ -3194,6 +3194,7 @@
     <string name="PreviewForwardPhoto_few">Forward %1$d photos</string>
     <string name="PreviewForwardPhoto_many">Forward %1$d photos</string>
     <string name="PreviewForwardPhoto_one">Forward photo</string>
+    <string name="PreviewForwardPhoto_other">Forward %1$d photos</string>
     <string name="PreviewForwardPhoto_two">Forward %1$d photos</string>
     <string name="PreviewForwardPhoto_zero">Forward %1$d photos</string>
     <string name="PreviewForwardPoll_few">Forward %1$d polls</string>
@@ -3220,7 +3221,6 @@
     <string name="PreviewForwardVideo_other">Forward %1$d videos</string>
     <string name="PreviewForwardVideo_two">Forward %1$d videos</string>
     <string name="PreviewForwardVideo_zero">Forward %1$d videos</string>
-    <string name="PreviewPhoto_other">Forward %1$d photos</string>
     <string name="PreviousPinnedMessage">Previous Message</string>
     <string name="PrimaryLinkHelp">Anyone on Telegram will be able to join your group by following this link.</string>
     <string name="PrimaryLinkHelpChannel">Anyone on Telegram will be able to join your channel by following this link.</string>
@@ -3904,6 +3904,7 @@
     <string name="SyncContactsOff">Contacts from this device will not be added to this account.</string>
     <string name="SyncContactsOn">Contacts from this device will be added to this account.</string>
     <string name="SystemRoot">System Root</string>
+    <string name="TapForForwardingOptions">Tap here for forwarding options</string>
     <string name="TapForVideo">Tap for photo, hold for video</string>
     <string name="TapHereGifs">Tap here to access saved GIFs</string>
     <string name="TapOnThePencil">Tap on the pencil to start a new chat</string>

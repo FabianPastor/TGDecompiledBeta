@@ -958,7 +958,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = r3[r5]
             if (r3 == 0) goto L_0x0425
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 2131628271(0x7f0e10ef, float:1.888383E38)
+            r7 = 2131628272(0x7f0e10f0, float:1.8883832E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             java.lang.String r7 = r7.toUpperCase()

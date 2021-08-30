@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda76 imple
     }
 
     public final void run() {
-        this.f$0.lambda$applyDraftMaybe$106();
+        this.f$0.destroyTextureView();
     }
 }

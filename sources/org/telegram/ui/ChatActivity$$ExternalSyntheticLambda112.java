@@ -1,22 +1,21 @@
 package org.telegram.ui;
 
-import java.util.concurrent.CountDownLatch;
-import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.MessagesController;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda112 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessagesStorage f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ CountDownLatch f$3;
+    public final /* synthetic */ MessagesController f$1;
+    public final /* synthetic */ CharSequence f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda112(ChatActivity chatActivity, MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda112(ChatActivity chatActivity, MessagesController messagesController, CharSequence charSequence, boolean z) {
         this.f$0 = chatActivity;
-        this.f$1 = messagesStorage;
-        this.f$2 = i;
-        this.f$3 = countDownLatch;
+        this.f$1 = messagesController;
+        this.f$2 = charSequence;
+        this.f$3 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$onFragmentCreate$4(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$searchLinks$71(this.f$1, this.f$2, this.f$3);
     }
 }

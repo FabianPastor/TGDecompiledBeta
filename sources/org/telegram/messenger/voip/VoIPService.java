@@ -1636,59 +1636,15 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         return ssrcGroupArr;
     }
 
-    /* JADX WARNING: type inference failed for: r5v0, types: [boolean] */
-    /* JADX WARNING: Unknown variable types count: 1 */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void requestFullScreen(org.telegram.tgnet.TLRPC$TL_groupCallParticipant r4, boolean r5) {
-        /*
-            r3 = this;
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r0 = r3.currentBackgroundSink
-            r1 = r0[r5]
-            r2 = 0
-            if (r1 == 0) goto L_0x000c
-            r0 = r0[r5]
-            r0.setBackground(r2)
-        L_0x000c:
-            if (r4 != 0) goto L_0x0017
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r4 = r3.currentBackgroundSink
-            r4[r5] = r2
-            java.lang.String[] r4 = r3.currentBackgroundEndpointId
-            r4[r5] = r2
-            return
-        L_0x0017:
-            if (r5 == 0) goto L_0x001c
-            java.lang.String r0 = r4.presentationEndpoint
-            goto L_0x001e
-        L_0x001c:
-            java.lang.String r0 = r4.videoEndpoint
-        L_0x001e:
-            if (r0 != 0) goto L_0x0021
-            return
-        L_0x0021:
-            java.util.HashMap<java.lang.String, org.telegram.messenger.voip.VoIPService$ProxyVideoSink> r1 = r3.remoteSinks
-            java.lang.Object r1 = r1.get(r0)
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink r1 = (org.telegram.messenger.voip.VoIPService.ProxyVideoSink) r1
-            if (r1 != 0) goto L_0x002f
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink r1 = r3.addRemoteSink(r4, r5, r2, r2)
-        L_0x002f:
-            if (r1 == 0) goto L_0x0041
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r4 = r3.remoteSink
-            r4 = r4[r5]
-            r1.setBackground(r4)
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r4 = r3.currentBackgroundSink
-            r4[r5] = r1
-            java.lang.String[] r4 = r3.currentBackgroundEndpointId
-            r4[r5] = r0
-            goto L_0x0049
-        L_0x0041:
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink[] r4 = r3.currentBackgroundSink
-            r4[r5] = r2
-            java.lang.String[] r4 = r3.currentBackgroundEndpointId
-            r4[r5] = r2
-        L_0x0049:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.requestFullScreen(org.telegram.tgnet.TLRPC$TL_groupCallParticipant, boolean):void");
+    public void requestFullScreen(TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, boolean z, boolean z2) {
+        String str = z2 ? tLRPC$TL_groupCallParticipant.presentationEndpoint : tLRPC$TL_groupCallParticipant.videoEndpoint;
+        if (str != null) {
+            if (z) {
+                this.tgVoip[0].setVideoEndpointQuality(str, 2);
+            } else {
+                this.tgVoip[0].setVideoEndpointQuality(str, 1);
+            }
+        }
     }
 
     public void removeRemoteSink(TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, boolean z) {
@@ -5143,9 +5099,9 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131628360(0x7f0e1148, float:1.888401E38)
+            r6 = 2131628361(0x7f0e1149, float:1.8884013E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131628358(0x7f0e1146, float:1.8884006E38)
+            r8 = 2131628359(0x7f0e1147, float:1.8884008E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002a
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -5291,7 +5247,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131628240(0x7f0e10d0, float:1.8883767E38)
+            r7 = 2131628241(0x7f0e10d1, float:1.888377E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a7
@@ -5326,7 +5282,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131628214(0x7f0e10b6, float:1.8883714E38)
+            r13 = 2131628215(0x7f0e10b7, float:1.8883716E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01fc
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -5406,7 +5362,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02af
-            r12 = 2131628361(0x7f0e1149, float:1.8884013E38)
+            r12 = 2131628362(0x7f0e114a, float:1.8884015E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5418,7 +5374,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             goto L_0x02c5
         L_0x02af:
             r14 = 0
-            r12 = 2131628359(0x7f0e1147, float:1.8884008E38)
+            r12 = 2131628360(0x7f0e1148, float:1.888401E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5432,11 +5388,11 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x02c9:
             if (r22 == 0) goto L_0x02d1
             r10 = r17
-            r0 = 2131628360(0x7f0e1148, float:1.888401E38)
+            r0 = 2131628361(0x7f0e1149, float:1.8884013E38)
             goto L_0x02d6
         L_0x02d1:
             r10 = r16
-            r0 = 2131628358(0x7f0e1146, float:1.8884006E38)
+            r0 = 2131628359(0x7f0e1147, float:1.8884008E38)
         L_0x02d6:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -5448,7 +5404,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131628215(0x7f0e10b7, float:1.8883716E38)
+            r10 = 2131628216(0x7f0e10b8, float:1.8883718E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5470,7 +5426,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230803(0x7var_, float:1.807767E38)
-            r8 = 2131628240(0x7f0e10d0, float:1.8883767E38)
+            r8 = 2131628241(0x7f0e10d1, float:1.888377E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
             r3 = 2131230883(0x7var_a3, float:1.8077831E38)

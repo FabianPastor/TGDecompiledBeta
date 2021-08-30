@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda72 imple
     }
 
     public final void run() {
-        this.f$0.lambda$startMessageUnselect$78();
+        this.f$0.lambda$performHistoryClear$62();
     }
 }

@@ -1695,7 +1695,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r7 = "@"
                 boolean r6 = r6.startsWith(r7)
                 if (r6 == 0) goto L_0x0166
-                r6 = 2131628114(0x7f0e1052, float:1.8883512E38)
+                r6 = 2131628115(0x7f0e1053, float:1.8883514E38)
                 java.lang.String r7 = "UsernameCopied"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 goto L_0x016f
@@ -15242,7 +15242,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             long r9 = (long) r7
             r20 = 1000(0x3e8, double:4.94E-321)
             long r9 = r9 * r20
-            r7 = 2131628561(0x7f0e1211, float:1.8884418E38)
+            r7 = 2131628562(0x7f0e1212, float:1.888442E38)
             r14 = 2
             java.lang.Object[] r6 = new java.lang.Object[r14]
             org.telegram.messenger.LocaleController r14 = org.telegram.messenger.LocaleController.getInstance()
@@ -20314,7 +20314,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                     if (r3 == 0) goto L_0x0035
                                     org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                                     java.lang.Runnable r0 = r0.animationEndRunnable
-                                    r3.lambda$openDiscussionMessageChat$146(r0)
+                                    r3.lambda$openDiscussionMessageChat$147(r0)
                                     goto L_0x0044
                                 L_0x0035:
                                     org.telegram.ui.PhotoViewer r3 = org.telegram.ui.PhotoViewer.this

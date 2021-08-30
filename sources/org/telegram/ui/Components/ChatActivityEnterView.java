@@ -9813,7 +9813,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             });
             SizeNotifierFrameLayout sizeNotifierFrameLayout = this.sizeNotifierLayout;
-            sizeNotifierFrameLayout.addView(this.emojiView, sizeNotifierFrameLayout.getChildCount() - 1);
+            sizeNotifierFrameLayout.addView(this.emojiView, sizeNotifierFrameLayout.getChildCount() - 5);
             checkChannelRights();
         }
     }
@@ -9886,7 +9886,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (i6 == 0) {
                     if (this.emojiView.getParent() == null) {
                         SizeNotifierFrameLayout sizeNotifierFrameLayout = this.sizeNotifierLayout;
-                        sizeNotifierFrameLayout.addView(this.emojiView, sizeNotifierFrameLayout.getChildCount() - 1);
+                        sizeNotifierFrameLayout.addView(this.emojiView, sizeNotifierFrameLayout.getChildCount() - 5);
                     }
                     if (this.emojiViewVisible) {
                         int visibility = this.emojiView.getVisibility();
@@ -10359,7 +10359,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     f = 0.0f;
                 }
                 this.searchToOpenProgress = f;
-                this.emojiView.searchProgressChanged();
+                EmojiView emojiView2 = this.emojiView;
+                if (emojiView2 != null) {
+                    emojiView2.searchProgressChanged();
+                }
             } else {
                 float[] fArr = new float[2];
                 fArr[0] = this.searchToOpenProgress;
@@ -10373,7 +10376,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.searchAnimator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         float unused = ChatActivityEnterView.this.searchToOpenProgress = z2 ? 1.0f : 0.0f;
-                        ChatActivityEnterView.this.emojiView.searchProgressChanged();
+                        if (ChatActivityEnterView.this.emojiView != null) {
+                            ChatActivityEnterView.this.emojiView.searchProgressChanged();
+                        }
                     }
                 });
                 this.searchAnimator.setDuration(220);
@@ -10387,7 +10392,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$setSearchingTypeInternal$37(ValueAnimator valueAnimator) {
         this.searchToOpenProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-        this.emojiView.searchProgressChanged();
+        EmojiView emojiView2 = this.emojiView;
+        if (emojiView2 != null) {
+            emojiView2.searchProgressChanged();
+        }
     }
 
     /* access modifiers changed from: private */

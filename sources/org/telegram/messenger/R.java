@@ -4952,6 +4952,7 @@ public final class R {
         public static final int PreviewForwardPhoto_few = NUM;
         public static final int PreviewForwardPhoto_many = NUM;
         public static final int PreviewForwardPhoto_one = NUM;
+        public static final int PreviewForwardPhoto_other = NUM;
         public static final int PreviewForwardPhoto_two = NUM;
         public static final int PreviewForwardPhoto_zero = NUM;
         public static final int PreviewForwardPoll_few = NUM;
@@ -4978,7 +4979,6 @@ public final class R {
         public static final int PreviewForwardVideo_other = NUM;
         public static final int PreviewForwardVideo_two = NUM;
         public static final int PreviewForwardVideo_zero = NUM;
-        public static final int PreviewPhoto_other = NUM;
         public static final int PreviousPinnedMessage = NUM;
         public static final int PrimaryLinkHelp = NUM;
         public static final int PrimaryLinkHelpChannel = NUM;
@@ -5662,6 +5662,7 @@ public final class R {
         public static final int SyncContactsOff = NUM;
         public static final int SyncContactsOn = NUM;
         public static final int SystemRoot = NUM;
+        public static final int TapForForwardingOptions = NUM;
         public static final int TapForVideo = NUM;
         public static final int TapHereGifs = NUM;
         public static final int TapOnThePencil = NUM;

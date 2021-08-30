@@ -4813,6 +4813,7 @@
     <public type="string" name="PreviewForwardPhoto_few" id="NUM" />
     <public type="string" name="PreviewForwardPhoto_many" id="NUM" />
     <public type="string" name="PreviewForwardPhoto_one" id="NUM" />
+    <public type="string" name="PreviewForwardPhoto_other" id="NUM" />
     <public type="string" name="PreviewForwardPhoto_two" id="NUM" />
     <public type="string" name="PreviewForwardPhoto_zero" id="NUM" />
     <public type="string" name="PreviewForwardPoll_few" id="NUM" />
@@ -4839,7 +4840,6 @@
     <public type="string" name="PreviewForwardVideo_other" id="NUM" />
     <public type="string" name="PreviewForwardVideo_two" id="NUM" />
     <public type="string" name="PreviewForwardVideo_zero" id="NUM" />
-    <public type="string" name="PreviewPhoto_other" id="NUM" />
     <public type="string" name="PreviousPinnedMessage" id="NUM" />
     <public type="string" name="PrimaryLinkHelp" id="NUM" />
     <public type="string" name="PrimaryLinkHelpChannel" id="NUM" />
@@ -5523,6 +5523,7 @@
     <public type="string" name="SyncContactsOff" id="NUM" />
     <public type="string" name="SyncContactsOn" id="NUM" />
     <public type="string" name="SystemRoot" id="NUM" />
+    <public type="string" name="TapForForwardingOptions" id="NUM" />
     <public type="string" name="TapForVideo" id="NUM" />
     <public type="string" name="TapHereGifs" id="NUM" />
     <public type="string" name="TapOnThePencil" id="NUM" />

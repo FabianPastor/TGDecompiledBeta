@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda164 impl
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$33(view, i);
+        this.f$0.lambda$createView$30(view, i);
     }
 }

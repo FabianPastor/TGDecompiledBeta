@@ -13,6 +13,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class BlurBehindDrawable {
+    private boolean animateAlpha;
     /* access modifiers changed from: private */
     public Bitmap[] backgroundBitmap;
     /* access modifiers changed from: private */
@@ -55,7 +56,7 @@ public class BlurBehindDrawable {
 
     public void draw(Canvas canvas) {
         Bitmap[] bitmapArr = this.renderingBitmap;
-        if (bitmapArr != null || this.error) {
+        if ((bitmapArr != null || this.error) && this.animateAlpha) {
             boolean z = this.show;
             if (z) {
                 float f = this.blurAlpha;
@@ -80,10 +81,15 @@ public class BlurBehindDrawable {
                 }
             }
         }
+        float f5 = this.animateAlpha ? this.blurAlpha : 1.0f;
         if (bitmapArr != null || !this.error) {
-            canvas.saveLayerAlpha(0.0f, 0.0f, (float) this.parentView.getMeasuredWidth(), (float) this.parentView.getMeasuredHeight(), (int) (this.blurAlpha * 255.0f), 31);
+            if (f5 == 1.0f) {
+                canvas.save();
+            } else {
+                canvas.saveLayerAlpha(0.0f, 0.0f, (float) this.parentView.getMeasuredWidth(), (float) this.parentView.getMeasuredHeight(), (int) (f5 * 255.0f), 31);
+            }
             if (bitmapArr != null) {
-                this.emptyPaint.setAlpha((int) (this.blurAlpha * 255.0f));
+                this.emptyPaint.setAlpha((int) (f5 * 255.0f));
                 canvas.drawBitmap(bitmapArr[1], 0.0f, 0.0f, (Paint) null);
                 canvas.save();
                 canvas.translate(0.0f, this.panTranslationY);
@@ -159,7 +165,7 @@ public class BlurBehindDrawable {
             }
             return;
         }
-        this.errorBlackoutPaint.setAlpha((int) (this.blurAlpha * 50.0f));
+        this.errorBlackoutPaint.setAlpha((int) (f5 * 50.0f));
         canvas.drawPaint(this.errorBlackoutPaint);
     }
 
@@ -235,7 +241,7 @@ public class BlurBehindDrawable {
     }
 
     public boolean isFullyDrawing() {
-        return !this.skipDraw && this.wasDraw && this.blurAlpha == 1.0f && this.show;
+        return !this.skipDraw && this.wasDraw && this.blurAlpha == 1.0f && this.show && this.parentView.getAlpha() == 1.0f;
     }
 
     public void checkSizes() {
@@ -297,6 +303,10 @@ public class BlurBehindDrawable {
 
     public void show(boolean z) {
         this.show = z;
+    }
+
+    public void setAnimateAlpha(boolean z) {
+        this.animateAlpha = z;
     }
 
     public void onPanTranslationUpdate(float f) {

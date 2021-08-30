@@ -523,7 +523,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         for (int i5 = 0; i5 < arrayList.size(); i5++) {
             TLRPC$Dialog tLRPC$Dialog = arrayList.get(i5);
             TLRPC$Chat chat = messagesController.getChat(Integer.valueOf(-((int) tLRPC$Dialog.id)));
-            if (chat != null && tLRPC$Dialog.id != j && tLRPC$Dialog.unread_count > 0 && DialogObject.isChannel(tLRPC$Dialog) && !chat.megagroup) {
+            if (chat != null && tLRPC$Dialog.id != j && tLRPC$Dialog.unread_count > 0 && DialogObject.isChannel(tLRPC$Dialog) && !chat.megagroup && !messagesController.isPromoDialog(tLRPC$Dialog.id, false)) {
                 return tLRPC$Dialog;
             }
         }

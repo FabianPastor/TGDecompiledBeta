@@ -991,10 +991,10 @@ public class GroupCallRenderersContainer extends FrameLayout {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.GroupCallRenderersContainer.dispatchDraw(android.graphics.Canvas):void");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x0191  */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x0198  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x019f  */
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x01c2  */
+    /* JADX WARNING: Removed duplicated region for block: B:89:0x01ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x01b4  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x01bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x01de  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void requestFullscreen(org.telegram.messenger.ChatObject.VideoParticipant r17) {
         /*
@@ -1029,114 +1029,128 @@ public class GroupCallRenderersContainer extends FrameLayout {
             if (r4 == 0) goto L_0x0030
             r4.cancel()
         L_0x0030:
+            org.telegram.messenger.voip.VoIPService r4 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            if (r4 == 0) goto L_0x0041
+            org.telegram.messenger.ChatObject$VideoParticipant r5 = r0.fullscreenParticipant
+            if (r5 == 0) goto L_0x0041
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r6 = r5.participant
+            boolean r5 = r5.presentation
+            r4.requestFullScreen(r6, r2, r5)
+        L_0x0041:
             r0.fullscreenParticipant = r1
+            r5 = 1
+            if (r4 == 0) goto L_0x004f
+            if (r1 == 0) goto L_0x004f
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r6 = r1.participant
+            boolean r7 = r1.presentation
+            r4.requestFullScreen(r6, r5, r7)
+        L_0x004f:
             r0.fullscreenPeerId = r3
             boolean r3 = r0.inFullscreenMode
-            long r4 = java.lang.System.currentTimeMillis()
-            r0.lastUpdateTime = r4
-            r4 = 350(0x15e, double:1.73E-321)
-            r6 = 1065353216(0x3var_, float:1.0)
-            r7 = 2
-            r8 = 0
+            long r6 = java.lang.System.currentTimeMillis()
+            r0.lastUpdateTime = r6
+            r6 = 350(0x15e, double:1.73E-321)
+            r4 = 1065353216(0x3var_, float:1.0)
+            r8 = 2
             r9 = 0
-            r10 = 1
-            if (r1 != 0) goto L_0x00b8
+            r10 = 0
+            if (r1 != 0) goto L_0x00d4
             boolean r1 = r0.inFullscreenMode
-            if (r1 == 0) goto L_0x00af
+            if (r1 == 0) goto L_0x00cb
             android.animation.ValueAnimator r1 = r0.fullscreenAnimator
-            if (r1 == 0) goto L_0x0051
+            if (r1 == 0) goto L_0x006d
             r1.cancel()
-        L_0x0051:
+        L_0x006d:
             r0.inFullscreenMode = r2
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             org.telegram.ui.Components.voip.GroupCallGridCell r11 = r1.primaryView
-            if (r11 != 0) goto L_0x0061
+            if (r11 != 0) goto L_0x007d
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r11 = r1.secondaryView
-            if (r11 != 0) goto L_0x0061
+            if (r11 != 0) goto L_0x007d
             org.telegram.ui.Components.voip.GroupCallGridCell r11 = r1.tabletGridView
-            if (r11 == 0) goto L_0x006f
-        L_0x0061:
+            if (r11 == 0) goto L_0x008b
+        L_0x007d:
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r1.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r11 = r1.participant
             boolean r1 = r1.presentation
             org.telegram.messenger.ChatObject$Call r12 = r0.call
             boolean r1 = org.telegram.messenger.ChatObject.Call.videoIsActive(r11, r1, r12)
-            if (r1 != 0) goto L_0x00aa
-        L_0x006f:
+            if (r1 != 0) goto L_0x00c6
+        L_0x008b:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
-            r1.forceDetach(r10)
+            r1.forceDetach(r5)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             org.telegram.ui.Components.voip.GroupCallGridCell r1 = r1.primaryView
-            if (r1 == 0) goto L_0x007d
-            r1.setRenderer(r9)
-        L_0x007d:
+            if (r1 == 0) goto L_0x0099
+            r1.setRenderer(r10)
+        L_0x0099:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r1 = r1.secondaryView
-            if (r1 == 0) goto L_0x0086
-            r1.setRenderer(r9)
-        L_0x0086:
+            if (r1 == 0) goto L_0x00a2
+            r1.setRenderer(r10)
+        L_0x00a2:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             org.telegram.ui.Components.voip.GroupCallGridCell r1 = r1.tabletGridView
-            if (r1 == 0) goto L_0x008f
-            r1.setRenderer(r9)
-        L_0x008f:
+            if (r1 == 0) goto L_0x00ab
+            r1.setRenderer(r10)
+        L_0x00ab:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             android.view.ViewPropertyAnimator r11 = r1.animate()
-            android.view.ViewPropertyAnimator r11 = r11.alpha(r8)
+            android.view.ViewPropertyAnimator r11 = r11.alpha(r9)
             org.telegram.ui.Components.voip.GroupCallRenderersContainer$7 r12 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$7
             r12.<init>(r1)
             android.view.ViewPropertyAnimator r1 = r11.setListener(r12)
-            android.view.ViewPropertyAnimator r1 = r1.setDuration(r4)
+            android.view.ViewPropertyAnimator r1 = r1.setDuration(r6)
             r1.start()
-            goto L_0x00af
-        L_0x00aa:
+            goto L_0x00cb
+        L_0x00c6:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
-            r1.setShowingInFullscreen(r2, r10)
-        L_0x00af:
+            r1.setShowingInFullscreen(r2, r5)
+        L_0x00cb:
             android.widget.ImageView r1 = r0.backButton
             r1.setEnabled(r2)
             r0.hasPinnedVideo = r2
-            goto L_0x02f0
-        L_0x00b8:
+            goto L_0x030c
+        L_0x00d4:
             r11 = 0
-        L_0x00b9:
+        L_0x00d5:
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r12 = r0.attachedRenderers
             int r12 = r12.size()
-            if (r11 >= r12) goto L_0x00dd
+            if (r11 >= r12) goto L_0x00f9
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r12 = r0.attachedRenderers
             java.lang.Object r12 = r12.get(r11)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r12 = (org.telegram.ui.Components.voip.GroupCallMiniTextureView) r12
             org.telegram.messenger.ChatObject$VideoParticipant r12 = r12.participant
             boolean r12 = r12.equals(r1)
-            if (r12 == 0) goto L_0x00da
+            if (r12 == 0) goto L_0x00f6
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r12 = r0.attachedRenderers
             java.lang.Object r11 = r12.get(r11)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r11 = (org.telegram.ui.Components.voip.GroupCallMiniTextureView) r11
-            goto L_0x00de
-        L_0x00da:
+            goto L_0x00fa
+        L_0x00f6:
             int r11 = r11 + 1
-            goto L_0x00b9
-        L_0x00dd:
-            r11 = r9
-        L_0x00de:
+            goto L_0x00d5
+        L_0x00f9:
+            r11 = r10
+        L_0x00fa:
             r12 = 1056964608(0x3var_, float:0.5)
-            if (r11 == 0) goto L_0x01e2
+            if (r11 == 0) goto L_0x01fe
             android.animation.ValueAnimator r1 = r0.fullscreenAnimator
-            if (r1 == 0) goto L_0x00e9
+            if (r1 == 0) goto L_0x0105
             r1.cancel()
-        L_0x00e9:
+        L_0x0105:
             boolean r1 = r0.inFullscreenMode
-            if (r1 != 0) goto L_0x0103
-            r0.inFullscreenMode = r10
+            if (r1 != 0) goto L_0x011f
+            r0.inFullscreenMode = r5
             r16.clearCurrentFullscreenTextureView()
             r0.fullscreenTextureView = r11
-            r11.setShowingInFullscreen(r10, r10)
+            r11.setShowingInFullscreen(r5, r5)
             r16.invalidate()
             org.telegram.ui.Components.CrossOutDrawable r1 = r0.pinDrawable
             boolean r11 = r0.hasPinnedVideo
             r1.setCrossOut(r11, r2)
-            goto L_0x02eb
-        L_0x0103:
+            goto L_0x0307
+        L_0x011f:
             r0.hasPinnedVideo = r2
             org.telegram.ui.Components.CrossOutDrawable r1 = r0.pinDrawable
             r1.setCrossOut(r2, r2)
@@ -1144,15 +1158,15 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r1.forceDetach(r2)
             r11.forceDetach(r2)
             boolean r1 = r0.isTablet
-            if (r1 != 0) goto L_0x015e
+            if (r1 != 0) goto L_0x017a
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             org.telegram.ui.Components.voip.GroupCallGridCell r13 = r1.primaryView
-            if (r13 != 0) goto L_0x0124
+            if (r13 != 0) goto L_0x0140
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r13 = r1.secondaryView
-            if (r13 != 0) goto L_0x0124
+            if (r13 != 0) goto L_0x0140
             org.telegram.ui.Components.voip.GroupCallGridCell r1 = r1.tabletGridView
-            if (r1 == 0) goto L_0x015e
-        L_0x0124:
+            if (r1 == 0) goto L_0x017a
+        L_0x0140:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r13 = r0.attachedRenderers
             org.telegram.messenger.ChatObject$Call r14 = r0.call
@@ -1168,223 +1182,223 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r1.updateAttachState(r2)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r13 = r0.fullscreenTextureView
             org.telegram.ui.Components.voip.GroupCallGridCell r13 = r13.primaryView
-            if (r13 == 0) goto L_0x014b
+            if (r13 == 0) goto L_0x0167
             r13.setRenderer(r1)
-        L_0x014b:
+        L_0x0167:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r13 = r0.fullscreenTextureView
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r13 = r13.secondaryView
-            if (r13 == 0) goto L_0x0154
+            if (r13 == 0) goto L_0x0170
             r13.setRenderer(r1)
-        L_0x0154:
+        L_0x0170:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r13 = r0.fullscreenTextureView
             org.telegram.ui.Components.voip.GroupCallGridCell r13 = r13.tabletGridView
-            if (r13 == 0) goto L_0x015f
+            if (r13 == 0) goto L_0x017b
             r13.setRenderer(r1)
-            goto L_0x015f
-        L_0x015e:
-            r1 = r9
-        L_0x015f:
+            goto L_0x017b
+        L_0x017a:
+            r1 = r10
+        L_0x017b:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r13 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r14 = r0.attachedRenderers
             org.telegram.messenger.ChatObject$Call r15 = r0.call
-            org.telegram.ui.GroupCallActivity r4 = r0.groupCallActivity
-            r13.<init>(r0, r14, r15, r4)
-            org.telegram.messenger.ChatObject$VideoParticipant r4 = r11.participant
-            r13.participant = r4
-            org.telegram.ui.Components.voip.GroupCallGridCell r4 = r11.primaryView
-            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r5 = r11.secondaryView
+            org.telegram.ui.GroupCallActivity r6 = r0.groupCallActivity
+            r13.<init>(r0, r14, r15, r6)
+            org.telegram.messenger.ChatObject$VideoParticipant r6 = r11.participant
+            r13.participant = r6
+            org.telegram.ui.Components.voip.GroupCallGridCell r6 = r11.primaryView
+            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r7 = r11.secondaryView
             org.telegram.ui.Components.voip.GroupCallGridCell r14 = r11.tabletGridView
-            r13.setViews(r4, r5, r14)
-            boolean r4 = r0.inFullscreenMode
-            r13.setFullscreenMode(r4, r2)
+            r13.setViews(r6, r7, r14)
+            boolean r6 = r0.inFullscreenMode
+            r13.setFullscreenMode(r6, r2)
             r13.updateAttachState(r2)
-            org.telegram.ui.Components.voip.VoIPTextureView r4 = r13.textureView
-            org.webrtc.TextureViewRenderer r4 = r4.renderer
-            r4.setAlpha(r6)
-            org.telegram.ui.Components.voip.VoIPTextureView r4 = r13.textureView
-            android.view.TextureView r4 = r4.blurRenderer
-            r4.setAlpha(r6)
-            org.telegram.ui.Components.voip.GroupCallGridCell r4 = r11.primaryView
-            if (r4 == 0) goto L_0x0194
-            r4.setRenderer(r13)
-        L_0x0194:
-            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r4 = r11.secondaryView
-            if (r4 == 0) goto L_0x019b
-            r4.setRenderer(r13)
-        L_0x019b:
-            org.telegram.ui.Components.voip.GroupCallGridCell r4 = r11.tabletGridView
-            if (r4 == 0) goto L_0x01a2
-            r4.setRenderer(r13)
-        L_0x01a2:
-            r13.animateEnter = r10
-            r13.setAlpha(r8)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = r0.fullscreenTextureView
-            r0.outFullscreenTextureView = r4
-            android.util.Property r4 = android.view.View.ALPHA
-            float[] r5 = new float[r7]
-            r5 = {0, NUM} // fill-array
-            android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofFloat(r13, r4, r5)
-            r0.replaceFullscreenViewAnimator = r4
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer$8 r5 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$8
-            r5.<init>(r13, r11)
-            r4.addListener(r5)
-            if (r1 == 0) goto L_0x01cd
-            r1.setAlpha(r8)
+            org.telegram.ui.Components.voip.VoIPTextureView r6 = r13.textureView
+            org.webrtc.TextureViewRenderer r6 = r6.renderer
+            r6.setAlpha(r4)
+            org.telegram.ui.Components.voip.VoIPTextureView r6 = r13.textureView
+            android.view.TextureView r6 = r6.blurRenderer
+            r6.setAlpha(r4)
+            org.telegram.ui.Components.voip.GroupCallGridCell r6 = r11.primaryView
+            if (r6 == 0) goto L_0x01b0
+            r6.setRenderer(r13)
+        L_0x01b0:
+            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r6 = r11.secondaryView
+            if (r6 == 0) goto L_0x01b7
+            r6.setRenderer(r13)
+        L_0x01b7:
+            org.telegram.ui.Components.voip.GroupCallGridCell r6 = r11.tabletGridView
+            if (r6 == 0) goto L_0x01be
+            r6.setRenderer(r13)
+        L_0x01be:
+            r13.animateEnter = r5
+            r13.setAlpha(r9)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r6 = r0.fullscreenTextureView
+            r0.outFullscreenTextureView = r6
+            android.util.Property r6 = android.view.View.ALPHA
+            float[] r7 = new float[r8]
+            r7 = {0, NUM} // fill-array
+            android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r13, r6, r7)
+            r0.replaceFullscreenViewAnimator = r6
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$8 r7 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$8
+            r7.<init>(r13, r11)
+            r6.addListener(r7)
+            if (r1 == 0) goto L_0x01e9
+            r1.setAlpha(r9)
             r1.setScaleX(r12)
             r1.setScaleY(r12)
-            r1.animateEnter = r10
-        L_0x01cd:
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8 r4 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8
-            r4.<init>(r0, r11, r1)
-            r13.runOnFrameRendered(r4)
+            r1.animateEnter = r5
+        L_0x01e9:
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8 r6 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8
+            r6.<init>(r0, r11, r1)
+            r13.runOnFrameRendered(r6)
             r16.clearCurrentFullscreenTextureView()
             r0.fullscreenTextureView = r13
-            r13.setShowingInFullscreen(r10, r2)
+            r13.setShowingInFullscreen(r5, r2)
             r16.update()
-            goto L_0x02eb
-        L_0x01e2:
-            boolean r4 = r0.inFullscreenMode
-            if (r4 == 0) goto L_0x02a2
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = r0.fullscreenTextureView
-            org.telegram.ui.Components.voip.GroupCallGridCell r5 = r4.primaryView
-            if (r5 != 0) goto L_0x0202
-            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r5 = r4.secondaryView
-            if (r5 == 0) goto L_0x01f2
-            r5 = 1
-            goto L_0x01f3
-        L_0x01f2:
-            r5 = 0
-        L_0x01f3:
-            org.telegram.ui.Components.voip.GroupCallGridCell r11 = r4.tabletGridView
-            if (r11 == 0) goto L_0x01f9
-            r11 = 1
-            goto L_0x01fa
-        L_0x01f9:
-            r11 = 0
-        L_0x01fa:
-            r5 = r5 | r11
-            if (r5 == 0) goto L_0x01fe
-            goto L_0x0202
+            goto L_0x0307
         L_0x01fe:
-            r4.forceDetach(r10)
-            goto L_0x0251
-        L_0x0202:
-            r4.forceDetach(r2)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView
-            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r5 = r0.attachedRenderers
+            boolean r6 = r0.inFullscreenMode
+            if (r6 == 0) goto L_0x02be
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r6 = r0.fullscreenTextureView
+            org.telegram.ui.Components.voip.GroupCallGridCell r7 = r6.primaryView
+            if (r7 != 0) goto L_0x021e
+            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r7 = r6.secondaryView
+            if (r7 == 0) goto L_0x020e
+            r7 = 1
+            goto L_0x020f
+        L_0x020e:
+            r7 = 0
+        L_0x020f:
+            org.telegram.ui.Components.voip.GroupCallGridCell r11 = r6.tabletGridView
+            if (r11 == 0) goto L_0x0215
+            r11 = 1
+            goto L_0x0216
+        L_0x0215:
+            r11 = 0
+        L_0x0216:
+            r7 = r7 | r11
+            if (r7 == 0) goto L_0x021a
+            goto L_0x021e
+        L_0x021a:
+            r6.forceDetach(r5)
+            goto L_0x026d
+        L_0x021e:
+            r6.forceDetach(r2)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r6 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView
+            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r7 = r0.attachedRenderers
             org.telegram.messenger.ChatObject$Call r11 = r0.call
             org.telegram.ui.GroupCallActivity r13 = r0.groupCallActivity
-            r4.<init>(r0, r5, r11, r13)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r5 = r0.fullscreenTextureView
-            org.telegram.ui.Components.voip.GroupCallGridCell r11 = r5.primaryView
-            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r13 = r5.secondaryView
-            org.telegram.ui.Components.voip.GroupCallGridCell r5 = r5.tabletGridView
-            r4.setViews(r11, r13, r5)
-            boolean r5 = r0.inFullscreenMode
-            r4.setFullscreenMode(r5, r2)
-            r4.updateAttachState(r2)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r5 = r0.fullscreenTextureView
-            org.telegram.ui.Components.voip.GroupCallGridCell r5 = r5.primaryView
-            if (r5 == 0) goto L_0x022c
-            r5.setRenderer(r4)
-        L_0x022c:
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r5 = r0.fullscreenTextureView
-            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r5 = r5.secondaryView
-            if (r5 == 0) goto L_0x0235
-            r5.setRenderer(r4)
-        L_0x0235:
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r5 = r0.fullscreenTextureView
-            org.telegram.ui.Components.voip.GroupCallGridCell r5 = r5.tabletGridView
-            if (r5 == 0) goto L_0x023e
-            r5.setRenderer(r4)
-        L_0x023e:
-            r4.setAlpha(r8)
-            r4.setScaleX(r12)
-            r4.setScaleY(r12)
-            r4.animateEnter = r10
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda7 r5 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda7
-            r5.<init>(r0, r4)
-            r4.runOnFrameRendered(r5)
+            r6.<init>(r0, r7, r11, r13)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r7 = r0.fullscreenTextureView
+            org.telegram.ui.Components.voip.GroupCallGridCell r11 = r7.primaryView
+            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r13 = r7.secondaryView
+            org.telegram.ui.Components.voip.GroupCallGridCell r7 = r7.tabletGridView
+            r6.setViews(r11, r13, r7)
+            boolean r7 = r0.inFullscreenMode
+            r6.setFullscreenMode(r7, r2)
+            r6.updateAttachState(r2)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r7 = r0.fullscreenTextureView
+            org.telegram.ui.Components.voip.GroupCallGridCell r7 = r7.primaryView
+            if (r7 == 0) goto L_0x0248
+            r7.setRenderer(r6)
+        L_0x0248:
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r7 = r0.fullscreenTextureView
+            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r7 = r7.secondaryView
+            if (r7 == 0) goto L_0x0251
+            r7.setRenderer(r6)
         L_0x0251:
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView
-            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r5 = r0.attachedRenderers
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r7 = r0.fullscreenTextureView
+            org.telegram.ui.Components.voip.GroupCallGridCell r7 = r7.tabletGridView
+            if (r7 == 0) goto L_0x025a
+            r7.setRenderer(r6)
+        L_0x025a:
+            r6.setAlpha(r9)
+            r6.setScaleX(r12)
+            r6.setScaleY(r12)
+            r6.animateEnter = r5
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda7 r7 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda7
+            r7.<init>(r0, r6)
+            r6.runOnFrameRendered(r7)
+        L_0x026d:
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r6 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView
+            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r7 = r0.attachedRenderers
             org.telegram.messenger.ChatObject$Call r11 = r0.call
             org.telegram.ui.GroupCallActivity r12 = r0.groupCallActivity
-            r4.<init>(r0, r5, r11, r12)
-            r4.participant = r1
+            r6.<init>(r0, r7, r11, r12)
+            r6.participant = r1
             boolean r1 = r0.inFullscreenMode
-            r4.setFullscreenMode(r1, r2)
-            r4.setShowingInFullscreen(r10, r2)
-            r4.animateEnter = r10
-            r4.setAlpha(r8)
+            r6.setFullscreenMode(r1, r2)
+            r6.setShowingInFullscreen(r5, r2)
+            r6.animateEnter = r5
+            r6.setAlpha(r9)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             r0.outFullscreenTextureView = r1
-            float[] r1 = new float[r7]
+            float[] r1 = new float[r8]
             r1 = {0, NUM} // fill-array
             android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
             r0.replaceFullscreenViewAnimator = r1
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda3 r5 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda3
-            r5.<init>(r0, r4)
-            r1.addUpdateListener(r5)
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda3 r7 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda3
+            r7.<init>(r0, r6)
+            r1.addUpdateListener(r7)
             android.animation.ValueAnimator r1 = r0.replaceFullscreenViewAnimator
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer$12 r5 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$12
-            r5.<init>(r4)
-            r1.addListener(r5)
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$12 r7 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$12
+            r7.<init>(r6)
+            r1.addListener(r7)
             android.animation.ValueAnimator r1 = r0.replaceFullscreenViewAnimator
             r1.start()
             r16.clearCurrentFullscreenTextureView()
-            r0.fullscreenTextureView = r4
-            r4.setShowingInFullscreen(r10, r2)
+            r0.fullscreenTextureView = r6
+            r6.setShowingInFullscreen(r5, r2)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             r1.updateAttachState(r2)
             r16.update()
-            goto L_0x02eb
-        L_0x02a2:
-            r0.inFullscreenMode = r10
+            goto L_0x0307
+        L_0x02be:
+            r0.inFullscreenMode = r5
             r16.clearCurrentFullscreenTextureView()
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView
-            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r5 = r0.attachedRenderers
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r6 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView
+            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r7 = r0.attachedRenderers
             org.telegram.messenger.ChatObject$Call r11 = r0.call
             org.telegram.ui.GroupCallActivity r12 = r0.groupCallActivity
-            r4.<init>(r0, r5, r11, r12)
-            r0.fullscreenTextureView = r4
-            r4.participant = r1
+            r6.<init>(r0, r7, r11, r12)
+            r0.fullscreenTextureView = r6
+            r6.participant = r1
             boolean r1 = r0.inFullscreenMode
-            r4.setFullscreenMode(r1, r2)
+            r6.setFullscreenMode(r1, r2)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
-            r1.setShowingInFullscreen(r10, r2)
+            r1.setShowingInFullscreen(r5, r2)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
-            r1.setShowingInFullscreen(r10, r2)
+            r1.setShowingInFullscreen(r5, r2)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
-            android.util.Property r4 = android.view.View.ALPHA
-            float[] r5 = new float[r7]
-            r5 = {0, NUM} // fill-array
-            android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofFloat(r1, r4, r5)
+            android.util.Property r6 = android.view.View.ALPHA
+            float[] r7 = new float[r8]
+            r7 = {0, NUM} // fill-array
+            android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofFloat(r1, r6, r7)
             r0.replaceFullscreenViewAnimator = r1
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer$13 r4 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$13
-            r4.<init>()
-            r1.addListener(r4)
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$13 r6 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$13
+            r6.<init>()
+            r1.addListener(r6)
             android.animation.ValueAnimator r1 = r0.replaceFullscreenViewAnimator
             r1.start()
             r16.invalidate()
             org.telegram.ui.Components.CrossOutDrawable r1 = r0.pinDrawable
-            boolean r4 = r0.hasPinnedVideo
-            r1.setCrossOut(r4, r2)
-        L_0x02eb:
+            boolean r6 = r0.hasPinnedVideo
+            r1.setCrossOut(r6, r2)
+        L_0x0307:
             android.widget.ImageView r1 = r0.backButton
-            r1.setEnabled(r10)
-        L_0x02f0:
+            r1.setEnabled(r5)
+        L_0x030c:
             boolean r1 = r0.inFullscreenMode
-            if (r3 == r1) goto L_0x0373
-            if (r1 != 0) goto L_0x0305
-            r0.setUiVisible(r10)
+            if (r3 == r1) goto L_0x038f
+            if (r1 != 0) goto L_0x0321
+            r0.setUiVisible(r5)
             boolean r1 = r0.hideUiRunnableIsScheduled
-            if (r1 == 0) goto L_0x0319
+            if (r1 == 0) goto L_0x0335
             r0.hideUiRunnableIsScheduled = r2
             java.lang.Runnable r1 = r0.hideUiRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1)
-            goto L_0x0319
-        L_0x0305:
+            goto L_0x0335
+        L_0x0321:
             android.widget.ImageView r1 = r0.backButton
             r1.setVisibility(r2)
             android.widget.ImageView r1 = r0.pinButton
@@ -1393,37 +1407,37 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r1.setVisibility(r2)
             android.view.View r1 = r0.pinContainer
             r1.setVisibility(r2)
-        L_0x0319:
-            r0.onFullScreenModeChanged(r10)
-            float[] r1 = new float[r7]
+        L_0x0335:
+            r0.onFullScreenModeChanged(r5)
+            float[] r1 = new float[r8]
             float r3 = r0.progressToFullscreenMode
             r1[r2] = r3
             boolean r3 = r0.inFullscreenMode
-            if (r3 == 0) goto L_0x0327
-            goto L_0x0328
-        L_0x0327:
-            r6 = 0
-        L_0x0328:
-            r1[r10] = r6
+            if (r3 == 0) goto L_0x0343
+            goto L_0x0344
+        L_0x0343:
+            r4 = 0
+        L_0x0344:
+            r1[r5] = r4
             android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
             r0.fullscreenAnimator = r1
             org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda0 r3 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda0
             r3.<init>(r0)
             r1.addUpdateListener(r3)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
-            r1.animateToFullscreen = r10
+            r1.animateToFullscreen = r5
             org.telegram.ui.GroupCallActivity r3 = r0.groupCallActivity
             int r3 = r3.getCurrentAccount()
             boolean r4 = r0.swipeToBackGesture
             r0.swipedBack = r4
             org.telegram.messenger.NotificationCenter r4 = org.telegram.messenger.NotificationCenter.getInstance(r3)
-            int r5 = r0.animationIndex
-            int r4 = r4.setAnimationInProgress(r5, r9)
+            int r6 = r0.animationIndex
+            int r4 = r4.setAnimationInProgress(r6, r10)
             r0.animationIndex = r4
             android.animation.ValueAnimator r4 = r0.fullscreenAnimator
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer$14 r5 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$14
-            r5.<init>(r3, r1)
-            r4.addListener(r5)
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$14 r6 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$14
+            r6.<init>(r3, r1)
+            r4.addListener(r6)
             android.animation.ValueAnimator r1 = r0.fullscreenAnimator
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
             r1.setInterpolator(r3)
@@ -1434,11 +1448,11 @@ public class GroupCallRenderersContainer extends FrameLayout {
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r1.textureView
             android.animation.ValueAnimator r3 = r0.fullscreenAnimator
             r1.synchOrRunAnimation(r3)
-        L_0x0373:
+        L_0x038f:
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.fullscreenParticipant
-            if (r1 != 0) goto L_0x0378
+            if (r1 != 0) goto L_0x0394
             r2 = 1
-        L_0x0378:
+        L_0x0394:
             r0.animateSwipeToBack(r2)
             return
         */

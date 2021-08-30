@@ -1905,18 +1905,18 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r2 == 0) goto L_0x00b8
             boolean r2 = r2.has_password
             if (r2 == 0) goto L_0x00b8
-            r2 = 2131628503(0x7f0e11d7, float:1.88843E38)
+            r2 = 2131628504(0x7f0e11d8, float:1.8884303E38)
             java.lang.String r3 = "YourEmailSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
             goto L_0x00c4
         L_0x00b8:
-            r2 = 2131628508(0x7f0e11dc, float:1.888431E38)
+            r2 = 2131628509(0x7f0e11dd, float:1.8884313E38)
             java.lang.String r3 = "YourPasswordChangedSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
         L_0x00c4:
-            r2 = 2131628513(0x7f0e11e1, float:1.888432E38)
+            r2 = 2131628514(0x7f0e11e2, float:1.8884323E38)
             java.lang.String r3 = "YourPasswordSuccess"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setTitle(r2)

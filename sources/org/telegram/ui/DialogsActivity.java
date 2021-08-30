@@ -7437,9 +7437,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$performSelectedDialogsAction$24(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
-        ArrayList arrayList2 = new ArrayList(arrayList);
-        getUndoView().showWithAction((ArrayList<Long>) arrayList2, i == 102 ? 27 : 26, (Object) null, (Object) null, (Runnable) new DialogsActivity$$ExternalSyntheticLambda29(this, i, arrayList2), (Runnable) null);
-        hideActionMode(i == 103);
+        if (!arrayList.isEmpty()) {
+            ArrayList arrayList2 = new ArrayList(arrayList);
+            getUndoView().showWithAction((ArrayList<Long>) arrayList2, i == 102 ? 27 : 26, (Object) null, (Object) null, (Runnable) new DialogsActivity$$ExternalSyntheticLambda29(this, i, arrayList2), (Runnable) null);
+            hideActionMode(i == 103);
+        }
     }
 
     /* access modifiers changed from: private */
