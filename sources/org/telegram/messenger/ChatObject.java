@@ -1594,6 +1594,10 @@ public class ChatObject {
         return (tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden);
     }
 
+    public static boolean isChannelOrGiga(TLRPC$Chat tLRPC$Chat) {
+        return ((tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden)) && (!tLRPC$Chat.megagroup || tLRPC$Chat.gigagroup);
+    }
+
     public static boolean isMegagroup(TLRPC$Chat tLRPC$Chat) {
         return ((tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden)) && tLRPC$Chat.megagroup;
     }

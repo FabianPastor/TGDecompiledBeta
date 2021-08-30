@@ -1276,7 +1276,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
             boolean r2 = r2.masks
-            r3 = 2131627303(0x7f0e0d27, float:1.8881867E38)
+            r3 = 2131627311(0x7f0e0d2f, float:1.8881883E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r2 == 0) goto L_0x00d1
             java.lang.Object[] r2 = new java.lang.Object[r6]
@@ -1313,7 +1313,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x0103:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r3 = r0.set
-            r7 = 2131624220(0x7f0e011c, float:1.8875614E38)
+            r7 = 2131624223(0x7f0e011f, float:1.887562E38)
             java.lang.String r8 = "AddStickersCount"
             if (r3 == 0) goto L_0x0129
             boolean r3 = r3.masks
@@ -1360,7 +1360,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (r0 == 0) goto L_0x0171
             goto L_0x0189
         L_0x0171:
-            r0 = 2131625877(0x7f0e0795, float:1.8878974E38)
+            r0 = 2131625885(0x7f0e079d, float:1.887899E38)
             java.lang.String r1 = "ImportStickersProcessing"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1372,7 +1372,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x0189:
             org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda10 r0 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda10
             r0.<init>(r12)
-            r1 = 2131625864(0x7f0e0788, float:1.8878948E38)
+            r1 = 2131625872(0x7f0e0790, float:1.8878964E38)
             java.lang.Object[] r3 = new java.lang.Object[r6]
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
             if (r7 == 0) goto L_0x0198
@@ -1391,7 +1391,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.setEnabled(r6)
             goto L_0x01cc
         L_0x01b7:
-            r0 = 2131624954(0x7f0e03fa, float:1.8877102E38)
+            r0 = 2131624957(0x7f0e03fd, float:1.8877108E38)
             java.lang.String r1 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()

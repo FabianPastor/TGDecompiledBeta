@@ -5,14 +5,14 @@ import android.graphics.Canvas;
 import android.view.View;
 
 public class BluredView extends View {
-    BlurBehindDrawable drawable;
+    public final BlurBehindDrawable drawable;
 
     public BluredView(Context context, View view) {
         super(context);
-        BlurBehindDrawable blurBehindDrawable = new BlurBehindDrawable(view, this);
+        BlurBehindDrawable blurBehindDrawable = new BlurBehindDrawable(view, this, 1);
         this.drawable = blurBehindDrawable;
         blurBehindDrawable.setAnimateAlpha(false);
-        this.drawable.show(true);
+        blurBehindDrawable.show(true);
     }
 
     /* access modifiers changed from: protected */
@@ -28,5 +28,9 @@ public class BluredView extends View {
 
     public void update() {
         this.drawable.invalidate();
+    }
+
+    public boolean fullyDrawing() {
+        return this.drawable.isFullyDrawing() && getVisibility() == 0;
     }
 }

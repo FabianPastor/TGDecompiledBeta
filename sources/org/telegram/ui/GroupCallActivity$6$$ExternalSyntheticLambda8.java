@@ -1,18 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.GroupCallActivity;
+import android.content.DialogInterface;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.Components.EditTextBoldCursor;
 
-public final /* synthetic */ class GroupCallActivity$6$$ExternalSyntheticLambda8 implements RequestDelegate {
-    public final /* synthetic */ GroupCallActivity.AnonymousClass6 f$0;
+public final /* synthetic */ class GroupCallActivity$6$$ExternalSyntheticLambda8 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ EditTextBoldCursor f$0;
 
-    public /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda8(GroupCallActivity.AnonymousClass6 r1) {
-        this.f$0 = r1;
+    public /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda8(EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = editTextBoldCursor;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onItemClick$0(tLObject, tLRPC$TL_error);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        AndroidUtilities.hideKeyboard(this.f$0);
     }
 }

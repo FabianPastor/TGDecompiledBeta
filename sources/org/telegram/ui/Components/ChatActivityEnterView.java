@@ -260,6 +260,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* access modifiers changed from: private */
     public Paint dotPaint;
     private CharSequence draftMessage;
+    private boolean draftSearchWebpage;
     private boolean editingCaption;
     /* access modifiers changed from: private */
     public MessageObject editingMessageObject;
@@ -2894,7 +2895,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         return false;
                     }
                 }
-                if (!inputContentInfoCompat.getDescription().hasMimeType("image/gif")) {
+                boolean contains = inputContentInfoCompat.getContentUri().getPathSegments().contains("sticker");
+                if (!inputContentInfoCompat.getDescription().hasMimeType("image/gif") && !contains) {
                     editPhoto(inputContentInfoCompat.getContentUri(), inputContentInfoCompat.getDescription().getMimeType(0));
                 } else if (ChatActivityEnterView.this.isInScheduleMode()) {
                     AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), new ChatActivityEnterView$11$$ExternalSyntheticLambda4(this, inputContentInfoCompat));
@@ -3054,6 +3056,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         photoEntry.reset();
                         this.sending = true;
                         SendMessagesHelper.prepareSendingMedia(ChatActivityEnterView.this.accountInstance, arrayList, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), (InputContentInfoCompat) null, false, false, ChatActivityEnterView.this.editingMessageObject, z, i2);
+                        if (ChatActivityEnterView.this.delegate != null) {
+                            ChatActivityEnterView.this.delegate.onMessageSend((CharSequence) null, true, i2);
+                        }
                     }
 
                     public void willHidePhotoViewer() {
@@ -5294,7 +5299,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.hideKeyboardRunnable = null;
         }
         getVisibility();
-        if (this.showKeyboardOnResume) {
+        if (this.showKeyboardOnResume && this.parentFragment.isLastFragment()) {
             this.showKeyboardOnResume = false;
             if (this.searchingType == 0) {
                 this.messageEditText.requestFocus();
@@ -8519,7 +8524,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 if (this.draftMessage == null && !z2) {
                     this.draftMessage = this.messageEditText.length() > 0 ? this.messageEditText.getText() : null;
+                    this.draftSearchWebpage = this.messageWebPageSearch;
                 }
+                this.messageWebPageSearch = this.editingMessageObject.messageOwner.media instanceof TLRPC$TL_messageMediaWebPage;
                 if (!this.keyboardVisible) {
                     ChatActivityEnterView$$ExternalSyntheticLambda33 chatActivityEnterView$$ExternalSyntheticLambda33 = new ChatActivityEnterView$$ExternalSyntheticLambda33(this, charSequence2);
                     this.setTextFieldRunnable = chatActivityEnterView$$ExternalSyntheticLambda33;
@@ -8612,6 +8619,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.scheduledButton.setVisibility(0);
                 }
                 this.messageEditText.setText(this.draftMessage);
+                this.messageWebPageSearch = this.draftSearchWebpage;
                 EditTextCaption editTextCaption = this.messageEditText;
                 editTextCaption.setSelection(editTextCaption.length());
                 if (getVisibility() == 0) {

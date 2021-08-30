@@ -1875,7 +1875,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x0209:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131627616(0x7f0e0e60, float:1.8882501E38)
+            r3 = 2131627624(0x7f0e0e68, float:1.8882518E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -1911,9 +1911,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131626604(0x7f0e0a6c, float:1.8880449E38)
+            r2 = 2131626612(0x7f0e0a74, float:1.8880465E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624285(0x7f0e015d, float:1.8875745E38)
+            r4 = 2131624288(0x7f0e0160, float:1.8875751E38)
             java.lang.String r5 = "AppName"
             if (r1 == 0) goto L_0x02ea
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
@@ -1961,7 +1961,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625897(0x7f0e07a9, float:1.8879015E38)
+            r1 = 2131625905(0x7f0e07b1, float:1.8879031E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -1990,7 +1990,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625896(0x7f0e07a8, float:1.8879013E38)
+            r1 = 2131625904(0x7f0e07b0, float:1.887903E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)

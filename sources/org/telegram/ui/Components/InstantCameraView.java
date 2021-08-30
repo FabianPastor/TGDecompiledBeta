@@ -201,9 +201,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         return f2;
     }
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     @SuppressLint({"ClickableViewAccessibility"})
     public InstantCameraView(Context context, ChatActivity chatActivity) {
         super(context);
+        Context context2 = context;
         this.aspectRatio = SharedConfig.roundCamera16to9 ? new Size(16, 9) : new Size(4, 3);
         this.mMVPMatrix = new float[16];
         this.mSTMatrix = new float[16];
@@ -213,20 +215,20 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.baseFragment = chatActivity;
         this.recordingGuid = chatActivity.getClassGuid();
         this.isSecretChat = this.baseFragment.getCurrentEncryptedChat() != null;
-        AnonymousClass1 r15 = new Paint(1) {
+        AnonymousClass1 r6 = new Paint(1) {
             public void setAlpha(int i) {
                 super.setAlpha(i);
                 InstantCameraView.this.invalidate();
             }
         };
-        this.paint = r15;
-        r15.setStyle(Paint.Style.STROKE);
+        this.paint = r6;
+        r6.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeCap(Paint.Cap.ROUND);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         this.paint.setColor(-1);
         this.rect = new RectF();
         if (Build.VERSION.SDK_INT >= 21) {
-            AnonymousClass2 r152 = new InstantViewCameraContainer(context) {
+            AnonymousClass2 r3 = new InstantViewCameraContainer(context2) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     InstantCameraView.this.invalidate();
@@ -237,8 +239,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     InstantCameraView.this.invalidate();
                 }
             };
-            this.cameraContainer = r152;
-            r152.setOutlineProvider(new ViewOutlineProvider() {
+            this.cameraContainer = r3;
+            r3.setOutlineProvider(new ViewOutlineProvider() {
                 @TargetApi(21)
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, InstantCameraView.this.textureViewSize, InstantCameraView.this.textureViewSize);
@@ -251,7 +253,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             final Paint paint2 = new Paint(1);
             paint2.setColor(-16777216);
             paint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-            AnonymousClass4 r6 = new InstantViewCameraContainer(context) {
+            AnonymousClass4 r9 = new InstantViewCameraContainer(context2) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     InstantCameraView.this.invalidate();
@@ -275,20 +277,20 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
                 }
             };
-            this.cameraContainer = r6;
-            r6.setWillNotDraw(false);
+            this.cameraContainer = r9;
+            r9.setWillNotDraw(false);
             this.cameraContainer.setLayerType(2, (Paint) null);
         }
         InstantViewCameraContainer instantViewCameraContainer = this.cameraContainer;
         int i = AndroidUtilities.roundPlayingMessageSize;
         addView(instantViewCameraContainer, new FrameLayout.LayoutParams(i, i, 17));
-        ImageView imageView = new ImageView(context);
+        ImageView imageView = new ImageView(context2);
         this.switchCameraButton = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.switchCameraButton.setContentDescription(LocaleController.getString("AccDescrSwitchCamera", NUM));
         addView(this.switchCameraButton, LayoutHelper.createFrame(62, 62.0f, 83, 8.0f, 0.0f, 0.0f, 0.0f));
         this.switchCameraButton.setOnClickListener(new InstantCameraView$$ExternalSyntheticLambda2(this));
-        ImageView imageView2 = new ImageView(context);
+        ImageView imageView2 = new ImageView(context2);
         this.muteImageView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.muteImageView.setImageResource(NUM);
@@ -296,7 +298,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         addView(this.muteImageView, LayoutHelper.createFrame(48, 48, 17));
         final Paint paint3 = new Paint(1);
         paint3.setColor(ColorUtils.setAlphaComponent(-16777216, 40));
-        AnonymousClass6 r153 = new BackupImageView(getContext()) {
+        AnonymousClass6 r2 = new BackupImageView(getContext()) {
             CellFlickerDrawable flickerDrawable = new CellFlickerDrawable();
 
             /* access modifiers changed from: protected */
@@ -314,11 +316,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
             }
         };
-        this.textureOverlayView = r153;
+        this.textureOverlayView = r2;
         int i2 = AndroidUtilities.roundPlayingMessageSize;
-        addView(r153, new FrameLayout.LayoutParams(i2, i2, 17));
+        addView(r2, new FrameLayout.LayoutParams(i2, i2, 17));
         setVisibility(4);
-        this.blurBehindDrawable = new BlurBehindDrawable(this.parentView, this);
+        this.blurBehindDrawable = new BlurBehindDrawable(this.parentView, this, 0);
     }
 
     /* access modifiers changed from: private */

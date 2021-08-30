@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda166 impl
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$initStickers$64(view, i);
+        this.f$0.lambda$createView$33(view, i);
     }
 }

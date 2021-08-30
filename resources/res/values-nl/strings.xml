@@ -183,10 +183,8 @@
     <string name="ActionDeletedInviteLinkClickable">un1 deleted invite link un2</string>
     <string name="ActionEditedInviteLinkClickable">un1 edited invite link un2 to un3</string>
     <string name="ActionEditedInviteLinkToSameClickable">un1 edited invite link un2</string>
-    <string name="ActionGroupCallEnded">Spraakchat beëindigd (%s)</string>
     <string name="ActionGroupCallInvited">un1 nodigde un2 uit voor de spraakchat</string>
     <string name="ActionGroupCallInvitedYou">un1 heeft je uitgenodigd voor de spraakchat</string>
-    <string name="ActionGroupCallJustStarted">Voice chat started</string>
     <string name="ActionGroupCallScheduled">Voice chat scheduled on %1$s</string>
     <string name="ActionGroupCallStarted">un1 startte een spraakchat</string>
     <string name="ActionGroupCallStartedByYou">Je startte een spraakchat</string>
@@ -4058,7 +4056,6 @@
     <string name="VideoDoesNotSupportStreaming">Deze video is niet geoptimaliseerd om te streamen, een volledige download kan nodig zijn om deze af te spelen.</string>
     <string name="VideoMessagesAutodownload">Videoberichten</string>
     <string name="VideoPreview">Video Preview</string>
-    <string name="VideoPreviewDesrciption">Video from your camera will be shared with other members of this voice chat</string>
     <string name="VideoQualityIsTooLow">Videokwaliteit is te laag om de compressie-instellingen te wijzigen.</string>
     <string name="VideoSavedHint">Video opgeslagen in galerij</string>
     <string name="VideoSavedToDownloadsHint">Video opgeslagen in downloads</string>
@@ -4178,20 +4175,17 @@
     <string name="VoipGroupEndAlertText">Weet je zeker dat je deze spraakchat wilt beëindigen?</string>
     <string name="VoipGroupEndAlertTitle">Spraakchat beëindigen</string>
     <string name="VoipGroupEndChat">Spraakchat beëindigen</string>
-    <string name="VoipGroupEndedStartNew">Spraakchat beëindigt. Een nieuwe starten?</string>
     <string name="VoipGroupInviteAlreadyParticipant">De geselecteerde gebruiker is al in deze spraakchat.</string>
     <string name="VoipGroupInviteCanSpeak">Can speak</string>
     <string name="VoipGroupInviteListenOnly">Listen only</string>
     <string name="VoipGroupInviteMember">Leden uitnodigen</string>
     <string name="VoipGroupInviteText">Hoi! Neem deel aan onze spraakchat: %1$s</string>
-    <string name="VoipGroupInvitedToVoiceChat">un1 nodigde un2 uit voor de spraakchat</string>
     <string name="VoipGroupInvitedUser">Je hebt **%1$s** uitgenodigd voor de spraakchat</string>
     <string name="VoipGroupJoinAnonymousAdmin">Sorry, je kan niet deelnemen aan spraakchats als een anonieme beheerder.</string>
     <string name="VoipGroupJoinAnonymouseAlert">Are sure you want to appear in this voice chat as your personal account?</string>
     <string name="VoipGroupJoinAs">Join Voice Chat as...</string>
     <string name="VoipGroupJoinAsLinstener">JOIN AS LISTENER</string>
     <string name="VoipGroupJoinAsSpeaker">JOIN AS SPEAKER</string>
-    <string name="VoipGroupJoinCall">Deelnemen aan spraakchat</string>
     <string name="VoipGroupJoinVoiceChatUrl">Join Voice Chat</string>
     <string name="VoipGroupLeave">Verlaten</string>
     <string name="VoipGroupLeaveAlertEndChat">Spraakchat beëindigen</string>
@@ -4199,7 +4193,6 @@
     <string name="VoipGroupLeaveAlertTitle">Spraakchat verlaten</string>
     <string name="VoipGroupMute">Dempen</string>
     <string name="VoipGroupMuteForMe">Voor mij dempen</string>
-    <string name="VoipGroupMuteMemberAlertText">Weet je zeker dat je **%1$s** wilt dempen in deze spraakchat?</string>
     <string name="VoipGroupMuteMemberAlertTitle">Microfoon dempen</string>
     <string name="VoipGroupMutedForMe">Gedempt voor mij</string>
     <string name="VoipGroupOffline">Je bent momenteel offline. Maak verbinding met het internet om deel te nemen aan spraakchats.</string>
@@ -4227,7 +4220,6 @@
     <string name="VoipGroupSoundMuted">Voice chat sound muted.</string>
     <string name="VoipGroupSoundUnmuted">Voice chat sound unmuted.</string>
     <string name="VoipGroupStart2">Members of this group will be notified once you start the voice chat.</string>
-    <string name="VoipGroupStartAs">Start Voice Chat as...</string>
     <string name="VoipGroupStartAsInfo">Choose whether you want to be displayed as your personal account or as your channel.</string>
     <string name="VoipGroupStartAsInfoGroup">Choose whether you want to be displayed as your personal account, this group, or one of your channels.</string>
     <string name="VoipGroupStartNow">Start Now</string>

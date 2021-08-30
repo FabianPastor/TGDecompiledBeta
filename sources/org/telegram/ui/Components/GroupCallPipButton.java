@@ -655,6 +655,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     }
 
     public void setState(int i) {
+        String str;
         WeavingState weavingState = this.currentState;
         if (weavingState == null || weavingState.currentState != i) {
             WeavingState weavingState2 = this.currentState;
@@ -675,15 +676,20 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
                 }
                 this.wavesEnter = f;
             }
-            String string = LocaleController.getString("VoipGroupVoiceChat", NUM);
-            if (i == 0) {
-                string = string + ", " + LocaleController.getString("VoipTapToMute", NUM);
-            } else if (i == 2) {
-                string = string + ", " + LocaleController.getString("Connecting", NUM);
-            } else if (i == 3) {
-                string = string + ", " + LocaleController.getString("VoipMutedByAdmin", NUM);
+            VoIPService sharedInstance = VoIPService.getSharedInstance();
+            if (sharedInstance == null || !ChatObject.isChannelOrGiga(sharedInstance.getChat())) {
+                str = LocaleController.getString("VoipGroupVoiceChat", NUM);
+            } else {
+                str = LocaleController.getString("VoipChannelVoiceChat", NUM);
             }
-            setContentDescription(string);
+            if (i == 0) {
+                str = str + ", " + LocaleController.getString("VoipTapToMute", NUM);
+            } else if (i == 2) {
+                str = str + ", " + LocaleController.getString("Connecting", NUM);
+            } else if (i == 3) {
+                str = str + ", " + LocaleController.getString("VoipMutedByAdmin", NUM);
+            }
+            setContentDescription(str);
             invalidate();
         }
     }

@@ -183,10 +183,8 @@
     <string name="ActionDeletedInviteLinkClickable">un1 apagou o link de convite un2</string>
     <string name="ActionEditedInviteLinkClickable">un1 editou o link de convite un2 para un3</string>
     <string name="ActionEditedInviteLinkToSameClickable">un1 editou o link de convite un2</string>
-    <string name="ActionGroupCallEnded">Chat de voz encerrado (%s)</string>
     <string name="ActionGroupCallInvited">un1 convidou un2 para o chat de voz</string>
     <string name="ActionGroupCallInvitedYou">un1 convidou você para o chat de voz</string>
-    <string name="ActionGroupCallJustStarted">Chat de voz iniciado</string>
     <string name="ActionGroupCallScheduled">Chat de voz agendado para %1$s</string>
     <string name="ActionGroupCallStarted">un1 iniciou um chat de voz</string>
     <string name="ActionGroupCallStartedByYou">Você iniciou um chat de voz</string>
@@ -4058,7 +4056,6 @@
     <string name="VideoDoesNotSupportStreaming">Vídeo não otimizado para streaming. Talvez você precise baixá-lo inteiro para assistir.</string>
     <string name="VideoMessagesAutodownload">Mensagens de vídeo</string>
     <string name="VideoPreview">Prévia do Vídeo</string>
-    <string name="VideoPreviewDesrciption">O vídeo da sua câmera será compartilhado com outros membros deste chat de voz</string>
     <string name="VideoQualityIsTooLow">A qualidade do vídeo é muito baixa para mudar a compressão.</string>
     <string name="VideoSavedHint">Vídeo salvo na galeria</string>
     <string name="VideoSavedToDownloadsHint">Vídeo salvo em downloads</string>
@@ -4178,20 +4175,17 @@
     <string name="VoipGroupEndAlertText">Deseja mesmo encerrar este chat de voz?</string>
     <string name="VoipGroupEndAlertTitle">Encerrar chat de voz</string>
     <string name="VoipGroupEndChat">Encerrar chat de voz</string>
-    <string name="VoipGroupEndedStartNew">Chat de voz encerrado. Começar um novo?</string>
     <string name="VoipGroupInviteAlreadyParticipant">O usuário selecionado já está no chat de voz.</string>
     <string name="VoipGroupInviteCanSpeak">Pode falar</string>
     <string name="VoipGroupInviteListenOnly">Apenas ouvir</string>
     <string name="VoipGroupInviteMember">Convidar Membros</string>
     <string name="VoipGroupInviteText">Olá! Junte-se ao nosso chat de voz: %1$s</string>
-    <string name="VoipGroupInvitedToVoiceChat">un1 convidou un2 para o chat de voz</string>
     <string name="VoipGroupInvitedUser">Você convidou **%1$s** para o chat de voz.</string>
     <string name="VoipGroupJoinAnonymousAdmin">Desculpe, admins anônimos não podem participar de chats de voz.</string>
     <string name="VoipGroupJoinAnonymouseAlert">Deseja mesmo aparecer neste Chat de Voz como sua conta pessoal?</string>
     <string name="VoipGroupJoinAs">Entrar no Chat de Voz como...</string>
     <string name="VoipGroupJoinAsLinstener">ENTRAR COMO OUVINTE</string>
     <string name="VoipGroupJoinAsSpeaker">ENTRAR COMO LOCUTOR</string>
-    <string name="VoipGroupJoinCall">Entrar no chat de voz</string>
     <string name="VoipGroupJoinVoiceChatUrl">Entrar no Chat de Voz</string>
     <string name="VoipGroupLeave">Sair</string>
     <string name="VoipGroupLeaveAlertEndChat">Encerrar chat de voz</string>
@@ -4199,7 +4193,6 @@
     <string name="VoipGroupLeaveAlertTitle">Sair do chat de voz</string>
     <string name="VoipGroupMute">Silenciar</string>
     <string name="VoipGroupMuteForMe">Silenciar para mim</string>
-    <string name="VoipGroupMuteMemberAlertText">Deseja mesmo silenciar **%1$s** neste chat de voz?</string>
     <string name="VoipGroupMuteMemberAlertTitle">Silenciar microfone</string>
     <string name="VoipGroupMutedForMe">Silenciado para mim</string>
     <string name="VoipGroupOffline">Você está offline no momento. Por favor, conecte-se à Internet para participar de chats de voz.</string>
@@ -4227,7 +4220,6 @@
     <string name="VoipGroupSoundMuted">Som do chat de voz desativado.</string>
     <string name="VoipGroupSoundUnmuted">Som do chat de voz reativado.</string>
     <string name="VoipGroupStart2">Os membros deste grupo serão notificados assim que você iniciar o chat de voz.</string>
-    <string name="VoipGroupStartAs">Iniciar Chat de Voz como...</string>
     <string name="VoipGroupStartAsInfo">Escolha se deseja aparecer como a sua conta pessoal ou o seu canal.</string>
     <string name="VoipGroupStartAsInfoGroup">Escolha se deseja aparecer como sua conta pessoal, este grupo ou um dos seus canais.</string>
     <string name="VoipGroupStartNow">Iniciar Agora</string>

@@ -183,10 +183,8 @@
     <string name="ActionDeletedInviteLinkClickable">un1님이 초대링크를 삭제했습니다 un2</string>
     <string name="ActionEditedInviteLinkClickable">un1님이 초대링크 un2 을 un3로 수정했습니다.</string>
     <string name="ActionEditedInviteLinkToSameClickable">un1님이 초대링크를 수정했습니다 un2</string>
-    <string name="ActionGroupCallEnded">음성 대화 종료됨 (%s)</string>
     <string name="ActionGroupCallInvited">un1님이 un2님을 음성 대화에 초대했습니다</string>
     <string name="ActionGroupCallInvitedYou">un1 님이 음성 대화에 초대했습니다</string>
-    <string name="ActionGroupCallJustStarted">음성 대화가 시작되었습니다</string>
     <string name="ActionGroupCallScheduled">음성 대화를 %1$s에 예약함</string>
     <string name="ActionGroupCallStarted">un1 님이 음성 대화를 시작했습니다</string>
     <string name="ActionGroupCallStartedByYou">음성 대화를 시작했습니다</string>
@@ -4058,7 +4056,6 @@
     <string name="VideoDoesNotSupportStreaming">동영상이 스트리밍에 최적화되어 있지 않습니다. 재생하려면 완전히 다운로드하셔야 합니다.</string>
     <string name="VideoMessagesAutodownload">동영상 메시지</string>
     <string name="VideoPreview">영상 미리보기</string>
-    <string name="VideoPreviewDesrciption">음성 대화에 참여중인 다른 참가자들에게 내 카메라 영상이 공유 됩니다</string>
     <string name="VideoQualityIsTooLow">압축 설정을 바꾸기엔 동영상 품질이 너무 낮습니다.</string>
     <string name="VideoSavedHint">갤러리로 영상이 저장됐습니다</string>
     <string name="VideoSavedToDownloadsHint">다운로드로 동영상이 저장됐습니다</string>
@@ -4178,20 +4175,17 @@
     <string name="VoipGroupEndAlertText">정말 이 음성 대화를 종료하시겠습니까?</string>
     <string name="VoipGroupEndAlertTitle">음성 대화 종료</string>
     <string name="VoipGroupEndChat">음성 대화 종료</string>
-    <string name="VoipGroupEndedStartNew">음성 대화가 종료되었습니다. 새로운 음성 대화를 시작하겠습니까?</string>
     <string name="VoipGroupInviteAlreadyParticipant">선택한 사용자는 이미 음성 대화에 참여 중입니다.</string>
     <string name="VoipGroupInviteCanSpeak">발언 가능</string>
     <string name="VoipGroupInviteListenOnly">듣기 전용</string>
     <string name="VoipGroupInviteMember">참가자 초대</string>
     <string name="VoipGroupInviteText">안녕하세요! 음성 대화에 참여해보세요: %1$s</string>
-    <string name="VoipGroupInvitedToVoiceChat">음성 대화에 un1님이 un2님을 초대했습니다</string>
     <string name="VoipGroupInvitedUser">**%1$s**님을 음성 대화에 초대했습니다</string>
     <string name="VoipGroupJoinAnonymousAdmin">죄송하지만, 익명 관리자로 음성 대화에 참여할 수 없습니다.</string>
     <string name="VoipGroupJoinAnonymouseAlert">정말 개인 계정으로 음성 대화에 표시가 되길 원하십니까?</string>
     <string name="VoipGroupJoinAs">음성 대화를 다음으로 참가...</string>
     <string name="VoipGroupJoinAsLinstener">청취자로 들어가기</string>
     <string name="VoipGroupJoinAsSpeaker">발언자로 들어가기</string>
-    <string name="VoipGroupJoinCall">음성 대화 참여</string>
     <string name="VoipGroupJoinVoiceChatUrl">음성 대화 들어가기</string>
     <string name="VoipGroupLeave">나가기</string>
     <string name="VoipGroupLeaveAlertEndChat">음성 대화 종료</string>
@@ -4199,7 +4193,6 @@
     <string name="VoipGroupLeaveAlertTitle">음성 대화 나가기</string>
     <string name="VoipGroupMute">마이크 끄기</string>
     <string name="VoipGroupMuteForMe">나에게 음소거</string>
-    <string name="VoipGroupMuteMemberAlertText">정말 **%1$s**님을 음성 대화에서 음소거 하겠습니까?</string>
     <string name="VoipGroupMuteMemberAlertTitle">마이크 음소거</string>
     <string name="VoipGroupMutedForMe">나에게 음소거됨</string>
     <string name="VoipGroupOffline">현재 오프라인입니다. 음성 대화에 참여하려면 인터넷에 연결 해주세요.</string>
@@ -4227,7 +4220,6 @@
     <string name="VoipGroupSoundMuted">음성 대화가 음소거됨.</string>
     <string name="VoipGroupSoundUnmuted">음성 대화가 음소거 해제됨.</string>
     <string name="VoipGroupStart2">음성 대화 시작시 이 그룹 참가자들에게 알림이 가게 됩니다.</string>
-    <string name="VoipGroupStartAs">다음으로 음성 대화를 시작...</string>
     <string name="VoipGroupStartAsInfo">개인 계정 혹은 소유하고 있는 채널로 표시될지 선택해주세요.</string>
     <string name="VoipGroupStartAsInfoGroup">개인 계정, 이 그룹 혹은 소유하고 있는 채널 중 한 개로 표시될지 선택해주세요.</string>
     <string name="VoipGroupStartNow">지금 시작</string>

@@ -3948,18 +3948,19 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         if (this.groupCall != null) {
             action.putExtra("currentAccount", this.currentAccount);
         }
-        Notification.Builder builder = new Notification.Builder(this);
+        Notification.Builder contentIntent = new Notification.Builder(this).setContentText(str).setContentIntent(PendingIntent.getActivity(this, 50, action, 0));
         if (this.groupCall != null) {
-            i = NUM;
-            str2 = "VoipVoiceChat";
-        } else {
-            i = NUM;
-            str2 = "VoipOutgoingCall";
-        }
-        Notification.Builder contentIntent = builder.setContentTitle(LocaleController.getString(str2, i)).setContentText(str).setContentIntent(PendingIntent.getActivity(this, 50, action, 0));
-        if (this.groupCall != null) {
+            if (ChatObject.isChannelOrGiga(this.chat)) {
+                i2 = NUM;
+                str3 = "VoipLiveStream";
+            } else {
+                i2 = NUM;
+                str3 = "VoipVoiceChat";
+            }
+            contentIntent.setContentTitle(LocaleController.getString(str3, i2));
             contentIntent.setSmallIcon(isMicMute() ? NUM : NUM);
         } else {
+            contentIntent.setContentTitle(LocaleController.getString("VoipOutgoingCall", NUM));
             contentIntent.setSmallIcon(NUM);
         }
         int i3 = Build.VERSION.SDK_INT;
@@ -3967,13 +3968,17 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             Intent intent = new Intent(this, VoIPActionsReceiver.class);
             intent.setAction(getPackageName() + ".END_CALL");
             if (this.groupCall != null) {
-                i2 = NUM;
-                str3 = "VoipGroupLeaveAlertTitle";
+                if (ChatObject.isChannelOrGiga(this.chat)) {
+                    i = NUM;
+                    str2 = "VoipChannelLeaveAlertTitle";
+                } else {
+                    i = NUM;
+                    str2 = "VoipGroupLeaveAlertTitle";
+                }
+                contentIntent.addAction(NUM, LocaleController.getString(str2, i), PendingIntent.getBroadcast(this, 0, intent, NUM));
             } else {
-                i2 = NUM;
-                str3 = "VoipEndCall";
+                contentIntent.addAction(NUM, LocaleController.getString("VoipEndCall", NUM), PendingIntent.getBroadcast(this, 0, intent, NUM));
             }
-            contentIntent.addAction(NUM, LocaleController.getString(str3, i2), PendingIntent.getBroadcast(this, 0, intent, NUM));
             contentIntent.setPriority(2);
         }
         if (i3 >= 17) {
@@ -5099,9 +5104,9 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131628361(0x7f0e1149, float:1.8884013E38)
+            r6 = 2131628408(0x7f0e1178, float:1.8884108E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131628359(0x7f0e1147, float:1.8884008E38)
+            r8 = 2131628406(0x7f0e1176, float:1.8884104E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002a
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -5195,7 +5200,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r10.append(r15)
             r10.append(r14)
             java.lang.String r10 = r10.toString()
-            r13 = 2131625895(0x7f0e07a7, float:1.887901E38)
+            r13 = 2131625903(0x7f0e07af, float:1.8879027E38)
             r17 = r7
             java.lang.String r7 = "IncomingCalls"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r13)
@@ -5247,7 +5252,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131628241(0x7f0e10d1, float:1.888377E38)
+            r7 = 2131628288(0x7f0e1100, float:1.8883864E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a7
@@ -5282,7 +5287,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131628215(0x7f0e10b7, float:1.8883716E38)
+            r13 = 2131628230(0x7f0e10c6, float:1.8883747E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01fc
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -5362,7 +5367,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02af
-            r12 = 2131628362(0x7f0e114a, float:1.8884015E38)
+            r12 = 2131628409(0x7f0e1179, float:1.888411E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5374,7 +5379,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             goto L_0x02c5
         L_0x02af:
             r14 = 0
-            r12 = 2131628360(0x7f0e1148, float:1.888401E38)
+            r12 = 2131628407(0x7f0e1177, float:1.8884106E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5388,11 +5393,11 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x02c9:
             if (r22 == 0) goto L_0x02d1
             r10 = r17
-            r0 = 2131628361(0x7f0e1149, float:1.8884013E38)
+            r0 = 2131628408(0x7f0e1178, float:1.8884108E38)
             goto L_0x02d6
         L_0x02d1:
             r10 = r16
-            r0 = 2131628359(0x7f0e1147, float:1.8884008E38)
+            r0 = 2131628406(0x7f0e1176, float:1.8884104E38)
         L_0x02d6:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -5404,7 +5409,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131628216(0x7f0e10b8, float:1.8883718E38)
+            r10 = 2131628231(0x7f0e10c7, float:1.8883749E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5426,7 +5431,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230803(0x7var_, float:1.807767E38)
-            r8 = 2131628241(0x7f0e10d1, float:1.888377E38)
+            r8 = 2131628288(0x7f0e1100, float:1.8883864E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
             r3 = 2131230883(0x7var_a3, float:1.8077831E38)

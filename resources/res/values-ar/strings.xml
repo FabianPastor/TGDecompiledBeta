@@ -183,10 +183,8 @@
     <string name="ActionDeletedInviteLinkClickable">حذف un1 رابط الدعوة un2</string>
     <string name="ActionEditedInviteLinkClickable">عدّل un1 رابط الدعوة un2 إلى un3</string>
     <string name="ActionEditedInviteLinkToSameClickable">عدّل un1 رابط الدعوة un2</string>
-    <string name="ActionGroupCallEnded">انتهت المحادثة الصوتية (%s)</string>
     <string name="ActionGroupCallInvited">قام un1 بدعوة un2 إلى المحادثة الصوتية </string>
     <string name="ActionGroupCallInvitedYou">دعاك un1 إلى المحادثة الصوتية</string>
-    <string name="ActionGroupCallJustStarted">المحادثة الصوتية بدأت</string>
     <string name="ActionGroupCallScheduled">تمت جدولة المحادثة الصوتية إلى %1$s</string>
     <string name="ActionGroupCallStarted">بدأ un1 محادثة صوتية</string>
     <string name="ActionGroupCallStartedByYou">أنت بدأت محادثة صوتية </string>
@@ -4058,7 +4056,6 @@
     <string name="VideoDoesNotSupportStreaming">هذا المقطع غير مخصص للبث، قد تحتاج إلى تنزيله كاملًا قبل مشاهدته.</string>
     <string name="VideoMessagesAutodownload">الرسائل المرئية</string>
     <string name="VideoPreview">معاينة الفيديو</string>
-    <string name="VideoPreviewDesrciption">ستتم مشاركة فيديو الكاميرا الخاصة بك مع بقية المشاركين في هذه المحادثة الصوتية.</string>
     <string name="VideoQualityIsTooLow">جودة المقطع المرئي أقل مما ينبغي لتغيير إعدادات الضغط.</string>
     <string name="VideoSavedHint">تم حفظ المقطع المرئي في المعرض</string>
     <string name="VideoSavedToDownloadsHint">تم حفظ المقطع في التنزيلات</string>
@@ -4178,20 +4175,17 @@
     <string name="VoipGroupEndAlertText">هل ترغب حقًا في إنهاء هذه المحادثة الصوتية؟ </string>
     <string name="VoipGroupEndAlertTitle">إنهاء المحادثة الصوتية</string>
     <string name="VoipGroupEndChat">إنهاء المحادثة الصوتية</string>
-    <string name="VoipGroupEndedStartNew">انتهت المحادثة الصوتية. بدء واحدة جديدة؟ </string>
     <string name="VoipGroupInviteAlreadyParticipant">المستخدم المحدد موجود في هذه المحادثة الصوتية. </string>
     <string name="VoipGroupInviteCanSpeak">يمكنه التحدّث</string>
     <string name="VoipGroupInviteListenOnly">استماع فقط</string>
     <string name="VoipGroupInviteMember">دعوة أعضاء</string>
     <string name="VoipGroupInviteText">مرحبا! انضم إلى محادثتنا الصوتية: %1$s</string>
-    <string name="VoipGroupInvitedToVoiceChat">قام un1 بدعوة un2 إلى المحادثة الصوتية</string>
     <string name="VoipGroupInvitedUser">أنت دعوت **%1$s** إلى المحادثة الصوتية.</string>
     <string name="VoipGroupJoinAnonymousAdmin">عذرًا، لايمكنك الانضمام إلى المحادثات الصوتية كمشرف مجهول.</string>
     <string name="VoipGroupJoinAnonymouseAlert">هل تريد حقًا الظهور في هذه المحادثة الصوتية بحسابك الشخصيّ؟</string>
     <string name="VoipGroupJoinAs">الانضمام إلى المحادثة الصوتية بـ...</string>
     <string name="VoipGroupJoinAsLinstener">الانضمام كمستمع</string>
     <string name="VoipGroupJoinAsSpeaker">الانضمام كمتحدّث</string>
-    <string name="VoipGroupJoinCall">الانضمام للمحادثة الصوتية</string>
     <string name="VoipGroupJoinVoiceChatUrl">الانضمام للمحادثة الصوتية</string>
     <string name="VoipGroupLeave">مغادرة</string>
     <string name="VoipGroupLeaveAlertEndChat">إنهاء المحادثة الصوتيّة</string>
@@ -4199,7 +4193,6 @@
     <string name="VoipGroupLeaveAlertTitle">مغادرة المحادثة الصوتية </string>
     <string name="VoipGroupMute">كتم</string>
     <string name="VoipGroupMuteForMe">كتمه عندي</string>
-    <string name="VoipGroupMuteMemberAlertText">هل ترغب حقًا في منع **%1$s** من التحدث في المحادثة الصوتية؟</string>
     <string name="VoipGroupMuteMemberAlertTitle">كتم المايكروفون</string>
     <string name="VoipGroupMutedForMe">مكتوم عندي</string>
     <string name="VoipGroupOffline">أنت غير متصل حاليًا.يرجى الاتصال بالإنترنت للانضمام إلى المحادثات الصوتية. </string>
@@ -4227,7 +4220,6 @@
     <string name="VoipGroupSoundMuted">تم كتم صوت المحادثة الصوتية.</string>
     <string name="VoipGroupSoundUnmuted">تم إلغاء كتم صوت المحادثة الصوتية.</string>
     <string name="VoipGroupStart2">سيتم إعلام أعضاء المجموعة عندما تقوم بتشغيل المحادثة الصوتية.</string>
-    <string name="VoipGroupStartAs">بدء المحادثة الصوتية بـ...</string>
     <string name="VoipGroupStartAsInfo">يمكنك اختيار ما إذا كنت تريد الظهور بحسابك الشخصي أم بقناتك.</string>
     <string name="VoipGroupStartAsInfoGroup">يمكنك اختيار ما إذا كنت تريد الظهور بحسابك الشخصي أو بهذه المجموعة أو الظهور بإحدى قنواتك.</string>
     <string name="VoipGroupStartNow">البدء الآن</string>

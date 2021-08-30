@@ -1792,6 +1792,9 @@
     <public type="string" name="ActionChangedPhoto" id="NUM" />
     <public type="string" name="ActionChangedTitle" id="NUM" />
     <public type="string" name="ActionChangedVideo" id="NUM" />
+    <public type="string" name="ActionChannelCallEnded" id="NUM" />
+    <public type="string" name="ActionChannelCallJustStarted" id="NUM" />
+    <public type="string" name="ActionChannelCallScheduled" id="NUM" />
     <public type="string" name="ActionChannelChangedPhoto" id="NUM" />
     <public type="string" name="ActionChannelChangedTitle" id="NUM" />
     <public type="string" name="ActionChannelChangedVideo" id="NUM" />
@@ -1803,12 +1806,10 @@
     <public type="string" name="ActionDeletedInviteLinkClickable" id="NUM" />
     <public type="string" name="ActionEditedInviteLinkClickable" id="NUM" />
     <public type="string" name="ActionEditedInviteLinkToSameClickable" id="NUM" />
-    <public type="string" name="ActionGroupCallEnded" id="NUM" />
     <public type="string" name="ActionGroupCallEndedBy" id="NUM" />
     <public type="string" name="ActionGroupCallEndedByYou" id="NUM" />
     <public type="string" name="ActionGroupCallInvited" id="NUM" />
     <public type="string" name="ActionGroupCallInvitedYou" id="NUM" />
-    <public type="string" name="ActionGroupCallJustStarted" id="NUM" />
     <public type="string" name="ActionGroupCallScheduled" id="NUM" />
     <public type="string" name="ActionGroupCallStarted" id="NUM" />
     <public type="string" name="ActionGroupCallStartedByYou" id="NUM" />
@@ -3088,6 +3089,7 @@
     <public type="string" name="EventLogEmptyChannel" id="NUM" />
     <public type="string" name="EventLogEmptySearch" id="NUM" />
     <public type="string" name="EventLogEmptyTextSearch" id="NUM" />
+    <public type="string" name="EventLogEndedLiveStream" id="NUM" />
     <public type="string" name="EventLogEndedVoiceChat" id="NUM" />
     <public type="string" name="EventLogFilterAll" id="NUM" />
     <public type="string" name="EventLogFilterCalls" id="NUM" />
@@ -3148,6 +3150,7 @@
     <public type="string" name="EventLogRestrictedSendStickers" id="NUM" />
     <public type="string" name="EventLogRestrictedUntil" id="NUM" />
     <public type="string" name="EventLogSelectedEvents" id="NUM" />
+    <public type="string" name="EventLogStartedLiveStream" id="NUM" />
     <public type="string" name="EventLogStartedVoiceChat" id="NUM" />
     <public type="string" name="EventLogStopPoll" id="NUM" />
     <public type="string" name="EventLogStopQuiz" id="NUM" />
@@ -3305,8 +3308,10 @@
     <public type="string" name="Forward" id="NUM" />
     <public type="string" name="ForwardAnotherChat" id="NUM" />
     <public type="string" name="ForwardPreviewSendersNameHidden" id="NUM" />
+    <public type="string" name="ForwardPreviewSendersNameHiddenChannel" id="NUM" />
     <public type="string" name="ForwardPreviewSendersNameHiddenGroup" id="NUM" />
     <public type="string" name="ForwardPreviewSendersNameVisible" id="NUM" />
+    <public type="string" name="ForwardPreviewSendersNameVisibleChannel" id="NUM" />
     <public type="string" name="ForwardPreviewSendersNameVisibleGroup" id="NUM" />
     <public type="string" name="ForwardSendMessages" id="NUM" />
     <public type="string" name="ForwardTo" id="NUM" />
@@ -3489,6 +3494,7 @@
     <public type="string" name="HideOnTop" id="NUM" />
     <public type="string" name="HidePinnedMessages" id="NUM" />
     <public type="string" name="HideSenderName" id="NUM" />
+    <public type="string" name="HideSenderNames" id="NUM" />
     <public type="string" name="HideSendersName" id="NUM" />
     <public type="string" name="Highlights" id="NUM" />
     <public type="string" name="HintRead" id="NUM" />
@@ -5361,6 +5367,7 @@
     <public type="string" name="ShowNotificationsFor" id="NUM" />
     <public type="string" name="ShowNotificationsForInfo" id="NUM" />
     <public type="string" name="ShowSenderName" id="NUM" />
+    <public type="string" name="ShowSenderNames" id="NUM" />
     <public type="string" name="ShowSendersName" id="NUM" />
     <public type="string" name="ShowStickers" id="NUM" />
     <public type="string" name="ShowVotes_few" id="NUM" />
@@ -5410,6 +5417,10 @@
     <public type="string" name="SpeedVeryFast" id="NUM" />
     <public type="string" name="SpeedVerySlow" id="NUM" />
     <public type="string" name="SponsoredMessage" id="NUM" />
+    <public type="string" name="SponsoredMessageAlertLearnMore" id="NUM" />
+    <public type="string" name="SponsoredMessageAlertLearnMoreUrl" id="NUM" />
+    <public type="string" name="SponsoredMessageAlertText" id="NUM" />
+    <public type="string" name="SponsoredMessageAlertTitle" id="NUM" />
     <public type="string" name="SponsoredMessageInfo" id="NUM" />
     <public type="string" name="Start" id="NUM" />
     <public type="string" name="StartDayAt" id="NUM" />
@@ -5421,7 +5432,9 @@
     <public type="string" name="StartShortTodayAt" id="NUM" />
     <public type="string" name="StartText" id="NUM" />
     <public type="string" name="StartTodayAt" id="NUM" />
+    <public type="string" name="StartVoipChannel" id="NUM" />
     <public type="string" name="StartVoipChannelAlertText" id="NUM" />
+    <public type="string" name="StartVoipChannelTitle" id="NUM" />
     <public type="string" name="StartVoipChat" id="NUM" />
     <public type="string" name="StartVoipChatAlertText" id="NUM" />
     <public type="string" name="StartVoipChatPermission" id="NUM" />
@@ -5837,7 +5850,6 @@
     <public type="string" name="VideoDoesNotSupportStreaming" id="NUM" />
     <public type="string" name="VideoMessagesAutodownload" id="NUM" />
     <public type="string" name="VideoPreview" id="NUM" />
-    <public type="string" name="VideoPreviewDesrciption" id="NUM" />
     <public type="string" name="VideoQualityIsTooLow" id="NUM" />
     <public type="string" name="VideoSavedHint" id="NUM" />
     <public type="string" name="VideoSavedToDownloadsHint" id="NUM" />
@@ -5905,8 +5917,40 @@
     <public type="string" name="VoipBusy" id="NUM" />
     <public type="string" name="VoipCallEnded" id="NUM" />
     <public type="string" name="VoipCamera" id="NUM" />
+    <public type="string" name="VoipChannelCancelChat" id="NUM" />
+    <public type="string" name="VoipChannelChatJoined" id="NUM" />
+    <public type="string" name="VoipChannelEditTitle" id="NUM" />
+    <public type="string" name="VoipChannelEndAlertText" id="NUM" />
+    <public type="string" name="VoipChannelEndAlertTitle" id="NUM" />
+    <public type="string" name="VoipChannelEndChat" id="NUM" />
+    <public type="string" name="VoipChannelInviteText" id="NUM" />
+    <public type="string" name="VoipChannelInvitedUser" id="NUM" />
+    <public type="string" name="VoipChannelJoinAnonymousAdmin" id="NUM" />
+    <public type="string" name="VoipChannelJoinAnonymouseAlert" id="NUM" />
+    <public type="string" name="VoipChannelJoinAs" id="NUM" />
+    <public type="string" name="VoipChannelJoinVoiceChatUrl" id="NUM" />
+    <public type="string" name="VoipChannelLeaveAlertEndChat" id="NUM" />
+    <public type="string" name="VoipChannelLeaveAlertText" id="NUM" />
+    <public type="string" name="VoipChannelLeaveAlertTitle" id="NUM" />
+    <public type="string" name="VoipChannelOpenVoiceChat" id="NUM" />
+    <public type="string" name="VoipChannelRecordVoiceChat" id="NUM" />
+    <public type="string" name="VoipChannelRecording" id="NUM" />
+    <public type="string" name="VoipChannelRemoveMemberAlertText2" id="NUM" />
     <public type="string" name="VoipChannelScheduleInfo" id="NUM" />
+    <public type="string" name="VoipChannelScheduleVoiceChat" id="NUM" />
+    <public type="string" name="VoipChannelScheduledVoiceChat" id="NUM" />
+    <public type="string" name="VoipChannelSoundMuted" id="NUM" />
+    <public type="string" name="VoipChannelSoundUnmuted" id="NUM" />
     <public type="string" name="VoipChannelStart2" id="NUM" />
+    <public type="string" name="VoipChannelStartVoiceChat" id="NUM" />
+    <public type="string" name="VoipChannelStopRecordingText" id="NUM" />
+    <public type="string" name="VoipChannelTitle" id="NUM" />
+    <public type="string" name="VoipChannelTooMuch" id="NUM" />
+    <public type="string" name="VoipChannelUserChanged" id="NUM" />
+    <public type="string" name="VoipChannelUserJoined" id="NUM" />
+    <public type="string" name="VoipChannelVideoNotAvailableAdmin" id="NUM" />
+    <public type="string" name="VoipChannelViewVoiceChat" id="NUM" />
+    <public type="string" name="VoipChannelVoiceChat" id="NUM" />
     <public type="string" name="VoipChatActiveChats" id="NUM" />
     <public type="string" name="VoipChatChatJoined" id="NUM" />
     <public type="string" name="VoipChatDisplayedAs" id="NUM" />
@@ -5959,20 +6003,17 @@
     <public type="string" name="VoipGroupEndAlertText" id="NUM" />
     <public type="string" name="VoipGroupEndAlertTitle" id="NUM" />
     <public type="string" name="VoipGroupEndChat" id="NUM" />
-    <public type="string" name="VoipGroupEndedStartNew" id="NUM" />
     <public type="string" name="VoipGroupInviteAlreadyParticipant" id="NUM" />
     <public type="string" name="VoipGroupInviteCanSpeak" id="NUM" />
     <public type="string" name="VoipGroupInviteListenOnly" id="NUM" />
     <public type="string" name="VoipGroupInviteMember" id="NUM" />
     <public type="string" name="VoipGroupInviteText" id="NUM" />
-    <public type="string" name="VoipGroupInvitedToVoiceChat" id="NUM" />
     <public type="string" name="VoipGroupInvitedUser" id="NUM" />
     <public type="string" name="VoipGroupJoinAnonymousAdmin" id="NUM" />
     <public type="string" name="VoipGroupJoinAnonymouseAlert" id="NUM" />
     <public type="string" name="VoipGroupJoinAs" id="NUM" />
     <public type="string" name="VoipGroupJoinAsLinstener" id="NUM" />
     <public type="string" name="VoipGroupJoinAsSpeaker" id="NUM" />
-    <public type="string" name="VoipGroupJoinCall" id="NUM" />
     <public type="string" name="VoipGroupJoinVoiceChatUrl" id="NUM" />
     <public type="string" name="VoipGroupLeave" id="NUM" />
     <public type="string" name="VoipGroupLeaveAlertEndChat" id="NUM" />
@@ -5980,7 +6021,6 @@
     <public type="string" name="VoipGroupLeaveAlertTitle" id="NUM" />
     <public type="string" name="VoipGroupMute" id="NUM" />
     <public type="string" name="VoipGroupMuteForMe" id="NUM" />
-    <public type="string" name="VoipGroupMuteMemberAlertText" id="NUM" />
     <public type="string" name="VoipGroupMuteMemberAlertTitle" id="NUM" />
     <public type="string" name="VoipGroupMutedForMe" id="NUM" />
     <public type="string" name="VoipGroupOffline" id="NUM" />
@@ -6008,7 +6048,6 @@
     <public type="string" name="VoipGroupSoundMuted" id="NUM" />
     <public type="string" name="VoipGroupSoundUnmuted" id="NUM" />
     <public type="string" name="VoipGroupStart2" id="NUM" />
-    <public type="string" name="VoipGroupStartAs" id="NUM" />
     <public type="string" name="VoipGroupStartAsInfo" id="NUM" />
     <public type="string" name="VoipGroupStartAsInfoGroup" id="NUM" />
     <public type="string" name="VoipGroupStartNow" id="NUM" />
@@ -6043,6 +6082,7 @@
     <public type="string" name="VoipInVideoCallBranding" id="NUM" />
     <public type="string" name="VoipInVideoCallBrandingWithName" id="NUM" />
     <public type="string" name="VoipIncoming" id="NUM" />
+    <public type="string" name="VoipLiveStream" id="NUM" />
     <public type="string" name="VoipMute" id="NUM" />
     <public type="string" name="VoipMutedByAdmin" id="NUM" />
     <public type="string" name="VoipMutedByAdminInfo" id="NUM" />

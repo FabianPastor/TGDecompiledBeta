@@ -1,17 +1,22 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.content.DialogInterface;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.GroupCallActivity;
 
-public final /* synthetic */ class GroupCallActivity$6$$ExternalSyntheticLambda9 implements RequestDelegate {
-    public static final /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda9 INSTANCE = new GroupCallActivity$6$$ExternalSyntheticLambda9();
+public final /* synthetic */ class GroupCallActivity$6$$ExternalSyntheticLambda9 implements DialogInterface.OnShowListener {
+    public final /* synthetic */ GroupCallActivity.AnonymousClass6 f$0;
+    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ EditTextBoldCursor f$2;
 
-    private /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda9() {
+    public /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda9(GroupCallActivity.AnonymousClass6 r1, AlertDialog alertDialog, EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = r1;
+        this.f$1 = alertDialog;
+        this.f$2 = editTextBoldCursor;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        GroupCallActivity.AnonymousClass6.lambda$onItemClick$8(tLObject, tLRPC$TL_error);
+    public final void onShow(DialogInterface dialogInterface) {
+        this.f$0.lambda$onItemClick$4(this.f$1, this.f$2, dialogInterface);
     }
 }

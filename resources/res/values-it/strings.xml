@@ -183,10 +183,8 @@
     <string name="ActionDeletedInviteLinkClickable">un1 ha eliminato il link d\'invito un2</string>
     <string name="ActionEditedInviteLinkClickable">un1 ha modificato il link d\'invito un2 in un3</string>
     <string name="ActionEditedInviteLinkToSameClickable">un1 ha modificato il link d\'invito un2</string>
-    <string name="ActionGroupCallEnded">Chat vocale terminata (%s)</string>
     <string name="ActionGroupCallInvited">un1 ha invitato un2 nella chat vocale</string>
     <string name="ActionGroupCallInvitedYou">un1 ti ha invitato nella chat vocale</string>
-    <string name="ActionGroupCallJustStarted">Chat vocale iniziata</string>
     <string name="ActionGroupCallScheduled">Chat vocale programmata per il %1$s</string>
     <string name="ActionGroupCallStarted">un1 ha iniziato una chat vocale</string>
     <string name="ActionGroupCallStartedByYou">Hai iniziato una chat vocale</string>
@@ -4058,7 +4056,6 @@
     <string name="VideoDoesNotSupportStreaming">Video non ottimizzato per lo streaming. Potresti doverlo scaricare completamente per riprodurlo.</string>
     <string name="VideoMessagesAutodownload">Videomessaggi</string>
     <string name="VideoPreview">Anteprima video</string>
-    <string name="VideoPreviewDesrciption">Il video dalla tua fotocamera sarà condiviso con gli altri membri di questa chat vocale.</string>
     <string name="VideoQualityIsTooLow">Qualità video troppo bassa per cambiare le impostazioni di compressione.</string>
     <string name="VideoSavedHint">Video salvato nella galleria</string>
     <string name="VideoSavedToDownloadsHint">Video salvato nei download</string>
@@ -4178,20 +4175,17 @@
     <string name="VoipGroupEndAlertText">Sei sicuro di voler terminare questa chat vocale?</string>
     <string name="VoipGroupEndAlertTitle">Termina la chat vocale</string>
     <string name="VoipGroupEndChat">Termina la chat vocale</string>
-    <string name="VoipGroupEndedStartNew">Chat vocale terminata. Iniziarne una nuova?</string>
     <string name="VoipGroupInviteAlreadyParticipant">L\'utente selezionato è già in questa chat vocale.</string>
     <string name="VoipGroupInviteCanSpeak">Può parlare</string>
     <string name="VoipGroupInviteListenOnly">Solo ascolto</string>
     <string name="VoipGroupInviteMember">Invita membri</string>
     <string name="VoipGroupInviteText">Ehi! Unisciti alla nostra chat vocale: %1$s</string>
-    <string name="VoipGroupInvitedToVoiceChat">un1 ha invitato un2 nella chat vocale</string>
     <string name="VoipGroupInvitedUser">Hai invitato **%1$s** nella chat vocale.</string>
     <string name="VoipGroupJoinAnonymousAdmin">Spiacenti, non puoi unirti alle chat vocali come amministratore anonimo.</string>
     <string name="VoipGroupJoinAnonymouseAlert">Sei sicuro di voler apparire in questa chat vocale come account personale?</string>
     <string name="VoipGroupJoinAs">Unisciti alla chat vocale come...</string>
     <string name="VoipGroupJoinAsLinstener">UNISCITI COME ASCOLTATORE</string>
     <string name="VoipGroupJoinAsSpeaker">UNISCITI COME SPEAKER</string>
-    <string name="VoipGroupJoinCall">Unisciti alla chat vocale</string>
     <string name="VoipGroupJoinVoiceChatUrl">Unisciti alla chat vocale</string>
     <string name="VoipGroupLeave">Lascia</string>
     <string name="VoipGroupLeaveAlertEndChat">Termina la chat vocale</string>
@@ -4199,7 +4193,6 @@
     <string name="VoipGroupLeaveAlertTitle">Lascia la chat vocale</string>
     <string name="VoipGroupMute">Silenzia</string>
     <string name="VoipGroupMuteForMe">Silenzia per me</string>
-    <string name="VoipGroupMuteMemberAlertText">Sei sicuro di voler silenziare **%1$s** in questa chat vocale?</string>
     <string name="VoipGroupMuteMemberAlertTitle">Silenzia microfono</string>
     <string name="VoipGroupMutedForMe">Silenziato per me</string>
     <string name="VoipGroupOffline">Al momento non sei in linea. Connettiti a Internet per partecipare alle chat vocali.</string>
@@ -4227,7 +4220,6 @@
     <string name="VoipGroupSoundMuted">Suono chat vocale disattivato.</string>
     <string name="VoipGroupSoundUnmuted">Suono chat vocale riattivato.</string>
     <string name="VoipGroupStart2">I membri del gruppo saranno avvisati dell\'inizio della chat vocale.</string>
-    <string name="VoipGroupStartAs">Avvia la chat vocale come...</string>
     <string name="VoipGroupStartAsInfo">Scegli se vuoi essere visualizzato come account personale o come canale.</string>
     <string name="VoipGroupStartAsInfoGroup">Scegli se vuoi essere visualizzato come account personale, come questo gruppo o come uno dei tuoi canali.</string>
     <string name="VoipGroupStartNow">Avvia ora</string>

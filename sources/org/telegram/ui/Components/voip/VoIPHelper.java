@@ -284,6 +284,10 @@ public class VoIPHelper {
     public static void doInitiateCall(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, String str, TLRPC$InputPeer tLRPC$InputPeer, boolean z, boolean z2, boolean z3, boolean z4, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance, boolean z5, boolean z6) {
         ChatObject.Call groupCall;
         TLRPC$ChatFull chatFull;
+        String str2;
+        int i;
+        String str3;
+        int i2;
         TLRPC$ChatFull chatFull2;
         TLRPC$Peer tLRPC$Peer;
         TLRPC$User tLRPC$User2 = tLRPC$User;
@@ -342,9 +346,9 @@ public class VoIPHelper {
                             }
                             intent.putExtra("is_outgoing", true);
                             intent.putExtra("start_incall_activity", true);
-                            int i = Build.VERSION.SDK_INT;
-                            intent.putExtra("video_call", i >= 18 && z2);
-                            if (i >= 18 && z3) {
+                            int i3 = Build.VERSION.SDK_INT;
+                            intent.putExtra("video_call", i3 >= 18 && z2);
+                            if (i3 >= 18 && z3) {
                                 z9 = true;
                             }
                             intent.putExtra("can_video_call", z9);
@@ -358,7 +362,23 @@ public class VoIPHelper {
                             GroupCallActivity.create((LaunchActivity) activity2, accountInstance, tLRPC$Chat, tLRPC$InputPeer, z, str);
                         }
                     } else {
-                        new AlertDialog.Builder((Context) activity2).setTitle(LocaleController.getString("VoipGroupVoiceChat", NUM)).setMessage(LocaleController.getString("VoipGroupJoinAnonymouseAlert", NUM)).setPositiveButton(LocaleController.getString("VoipChatJoin", NUM), new VoIPHelper$$ExternalSyntheticLambda4(tLRPC$User, tLRPC$Chat, str, tLRPC$InputPeer, z2, z3, z4, activity, baseFragment, accountInstance)).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity2);
+                        if (ChatObject.isChannelOrGiga(tLRPC$Chat)) {
+                            i = NUM;
+                            str2 = "VoipChannelVoiceChat";
+                        } else {
+                            i = NUM;
+                            str2 = "VoipGroupVoiceChat";
+                        }
+                        AlertDialog.Builder title = builder.setTitle(LocaleController.getString(str2, i));
+                        if (ChatObject.isChannelOrGiga(tLRPC$Chat)) {
+                            i2 = NUM;
+                            str3 = "VoipChannelJoinAnonymouseAlert";
+                        } else {
+                            i2 = NUM;
+                            str3 = "VoipGroupJoinAnonymouseAlert";
+                        }
+                        title.setMessage(LocaleController.getString(str3, i2)).setPositiveButton(LocaleController.getString("VoipChatJoin", NUM), new VoIPHelper$$ExternalSyntheticLambda4(tLRPC$User, tLRPC$Chat, str, tLRPC$InputPeer, z2, z3, z4, activity, baseFragment, accountInstance)).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).show();
                     }
                 } else {
                     JoinCallAlert.checkFewUsers(activity2, -tLRPC$Chat2.id, accountInstance, new VoIPHelper$$ExternalSyntheticLambda16(str, activity, tLRPC$Chat, tLRPC$User, accountInstance.getMessagesController().getInputPeer(MessageObject.getPeerId(tLRPC$Peer)), z2, z3, baseFragment, accountInstance));

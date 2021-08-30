@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda153 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda153 implements RequestDelegate {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda153 INSTANCE = new ChatActivity$$ExternalSyntheticLambda153();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda153(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda153() {
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$createMenu$111(keyEvent);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ChatActivity.lambda$markSponsoredAsRead$163(tLObject, tLRPC$TL_error);
     }
 }

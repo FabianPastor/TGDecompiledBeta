@@ -15,6 +15,6 @@ public final /* synthetic */ class GroupCallActivity$6$$ExternalSyntheticLambda0
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        GroupCallActivity.AnonymousClass6.lambda$onItemClick$10(this.f$0, this.f$1, dialogInterface, i);
+        GroupCallActivity.AnonymousClass6.lambda$onItemClick$15(this.f$0, this.f$1, dialogInterface, i);
     }
 }

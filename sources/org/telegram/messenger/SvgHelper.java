@@ -122,6 +122,11 @@ public class SvgHelper {
             this.aspectFill = z;
         }
 
+        public void overrideWidthAndHeight(int i, int i2) {
+            this.width = i;
+            this.height = i2;
+        }
+
         public void draw(Canvas canvas) {
             Canvas canvas2 = canvas;
             String str = this.currentColorKey;
@@ -2310,8 +2315,7 @@ public class SvgHelper {
             for (byte b : bArr) {
                 byte b2 = b & 255;
                 if (b2 >= 192) {
-                    int i = (b2 - 128) - 64;
-                    sb.append("AACAAAAHAAALMAAAQASTAVAAAZaacaaaahaaalmaaaqastava.az0123456789-,".substring(i, i + 1));
+                    sb.append("AACAAAAHAAALMAAAQASTAVAAAZaacaaaahaaalmaaaqastava.az0123456789-,".charAt((b2 - 128) - 64));
                 } else {
                     if (b2 >= 128) {
                         sb.append(',');

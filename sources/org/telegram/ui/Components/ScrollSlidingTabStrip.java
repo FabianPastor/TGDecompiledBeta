@@ -1063,7 +1063,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             } else {
                 this.animateFromPosition = false;
             }
-            this.currentPosition = i;
+            this.currentPosition = Math.max(i, i2);
             if (i < this.tabsContainer.getChildCount()) {
                 this.positionAnimationProgress = 0.0f;
                 int i4 = 0;

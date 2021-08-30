@@ -746,6 +746,7 @@ public class SharedConfig {
         textSelectionHintShows = 0;
         scheduledOrNoSoundHintShows = 0;
         lockRecordAudioVideoHint = 0;
+        forwardingOptionsHintShown = false;
         saveConfig();
     }
 

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -277,23 +278,23 @@ public class JoinCallAlert extends BottomSheet {
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private JoinCallAlert(android.content.Context r19, long r20, java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r22, int r23, org.telegram.tgnet.TLRPC$Peer r24, org.telegram.ui.Components.JoinCallAlert.JoinCallAlertDelegate r25) {
+    private JoinCallAlert(android.content.Context r20, long r21, java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r23, int r24, org.telegram.tgnet.TLRPC$Peer r25, org.telegram.ui.Components.JoinCallAlert.JoinCallAlertDelegate r26) {
         /*
-            r18 = this;
-            r0 = r18
-            r1 = r19
-            r2 = r23
-            r3 = r25
+            r19 = this;
+            r0 = r19
+            r1 = r20
+            r2 = r24
+            r3 = r26
             r4 = 0
             r0.<init>(r1, r4)
             r0.setApplyBottomPadding(r4)
             java.util.ArrayList r5 = new java.util.ArrayList
-            r6 = r22
+            r6 = r23
             r5.<init>(r6)
             r0.chats = r5
             r0.delegate = r3
             r0.currentType = r2
-            android.content.res.Resources r5 = r19.getResources()
+            android.content.res.Resources r5 = r20.getResources()
             r6 = 2131166044(0x7var_c, float:1.7946322E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
@@ -321,8 +322,8 @@ public class JoinCallAlert extends BottomSheet {
             int r8 = r8 + 1
             goto L_0x0045
         L_0x005d:
-            if (r24 == 0) goto L_0x0086
-            int r5 = org.telegram.messenger.MessageObject.getPeerId(r24)
+            if (r25 == 0) goto L_0x0086
+            int r5 = org.telegram.messenger.MessageObject.getPeerId(r25)
             long r7 = (long) r5
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r5 = r0.chats
             int r5 = r5.size()
@@ -388,317 +389,336 @@ public class JoinCallAlert extends BottomSheet {
             int r9 = r0.backgroundPaddingLeft
             r8.setPadding(r9, r4, r9, r4)
         L_0x00e7:
-            org.telegram.ui.Components.JoinCallAlert$3 r8 = new org.telegram.ui.Components.JoinCallAlert$3
-            r8.<init>(r1)
-            r0.listView = r8
-            androidx.recyclerview.widget.LinearLayoutManager r9 = new androidx.recyclerview.widget.LinearLayoutManager
-            android.content.Context r10 = r18.getContext()
-            int r11 = r0.currentType
-            if (r11 != 0) goto L_0x00fa
-            r11 = 0
-            goto L_0x00fb
-        L_0x00fa:
-            r11 = 1
-        L_0x00fb:
-            r9.<init>(r10, r11, r4)
-            r8.setLayoutManager(r9)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            org.telegram.ui.Components.JoinCallAlert$ListAdapter r9 = new org.telegram.ui.Components.JoinCallAlert$ListAdapter
-            r9.<init>(r1)
-            r8.setAdapter(r9)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            r8.setVerticalScrollBarEnabled(r4)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            r8.setClipToPadding(r4)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            r8.setEnabled(r7)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            java.lang.String r9 = "dialogScrollGlow"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r8.setGlowColor(r9)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            org.telegram.ui.Components.JoinCallAlert$4 r9 = new org.telegram.ui.Components.JoinCallAlert$4
-            r9.<init>()
-            r8.setOnScrollListener(r9)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            org.telegram.ui.Components.JoinCallAlert$$ExternalSyntheticLambda8 r9 = new org.telegram.ui.Components.JoinCallAlert$$ExternalSyntheticLambda8
-            r9.<init>(r0)
-            r8.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r9)
-            if (r2 == 0) goto L_0x0150
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            r9 = -1
-            r10 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r11 = 51
-            r12 = 0
-            r13 = 1120403456(0x42CLASSNAME, float:100.0)
-            r14 = 0
-            r15 = 1117782016(0x42a00000, float:80.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
-            r5.addView(r8, r9)
-            goto L_0x0164
-        L_0x0150:
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            r8.setSelectorDrawableColor(r4)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
-            r9 = 1092616192(0x41200000, float:10.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            r8.setPadding(r10, r4, r9, r4)
-        L_0x0164:
-            if (r2 != 0) goto L_0x018e
-            org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
-            r8.<init>(r1)
-            r8.setAutoRepeat(r7)
-            r9 = 2131558512(0x7f0d0070, float:1.8742342E38)
-            r10 = 120(0x78, float:1.68E-43)
-            r8.setAnimation(r9, r10, r10)
-            r8.playAnimation()
-            r11 = 160(0xa0, float:2.24E-43)
-            r12 = 160(0xa0, float:2.24E-43)
-            r13 = 49
-            r14 = 17
-            r15 = 8
-            r16 = 17
-            r17 = 0
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17)
-            r5.addView(r8, r9)
-        L_0x018e:
-            android.widget.TextView r8 = new android.widget.TextView
-            r8.<init>(r1)
-            r0.textView = r8
-            java.lang.String r9 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
-            r8.setTypeface(r9)
-            android.widget.TextView r8 = r0.textView
-            r9 = 1101004800(0x41a00000, float:20.0)
-            r8.setTextSize(r7, r9)
-            if (r2 != r6) goto L_0x01b3
-            android.widget.TextView r8 = r0.textView
-            java.lang.String r9 = "voipgroup_nameText"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r8.setTextColor(r9)
-            goto L_0x01be
-        L_0x01b3:
-            android.widget.TextView r8 = r0.textView
-            java.lang.String r9 = "dialogTextBlack"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r8.setTextColor(r9)
-        L_0x01be:
-            android.widget.TextView r8 = r0.textView
-            r8.setSingleLine(r7)
-            android.widget.TextView r8 = r0.textView
-            android.text.TextUtils$TruncateAt r9 = android.text.TextUtils.TruncateAt.END
-            r8.setEllipsize(r9)
-            if (r2 != 0) goto L_0x01ef
-            android.widget.TextView r8 = r0.textView
-            r9 = 2131627746(0x7f0e0ee2, float:1.8882765E38)
-            java.lang.String r10 = "StartVoipChatTitle"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r8.setText(r9)
-            android.widget.TextView r8 = r0.textView
-            r9 = -2
-            r10 = -2
-            r11 = 49
-            r12 = 23
-            r13 = 16
-            r14 = 23
-            r15 = 0
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15)
-            r5.addView(r8, r9)
-            goto L_0x0223
-        L_0x01ef:
-            if (r2 != r6) goto L_0x0200
-            android.widget.TextView r8 = r0.textView
-            r9 = 2131628273(0x7f0e10f1, float:1.8883834E38)
-            java.lang.String r10 = "VoipGroupDisplayAs"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r8.setText(r9)
-            goto L_0x020e
-        L_0x0200:
-            android.widget.TextView r8 = r0.textView
-            r9 = 2131628290(0x7f0e1102, float:1.8883869E38)
-            java.lang.String r10 = "VoipGroupJoinAs"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r8.setText(r9)
-        L_0x020e:
-            android.widget.TextView r8 = r0.textView
-            r9 = -2
-            r10 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r11 = 51
-            r12 = 1102577664(0x41b80000, float:23.0)
-            r13 = 1090519040(0x41000000, float:8.0)
-            r14 = 1102577664(0x41b80000, float:23.0)
-            r15 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
-            r5.addView(r8, r9)
-        L_0x0223:
-            android.widget.TextView r8 = new android.widget.TextView
-            android.content.Context r9 = r18.getContext()
-            r8.<init>(r9)
-            r0.messageTextView = r8
-            if (r2 != r6) goto L_0x023a
-            java.lang.String r6 = "voipgroup_lastSeenText"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r8.setTextColor(r6)
-            goto L_0x0243
-        L_0x023a:
-            java.lang.String r6 = "dialogTextGray3"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r8.setTextColor(r6)
-        L_0x0243:
-            android.widget.TextView r6 = r0.messageTextView
-            r8 = 1096810496(0x41600000, float:14.0)
-            r6.setTextSize(r7, r8)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r6 = r0.chats
-            int r6 = r6.size()
-            r8 = 0
-        L_0x0251:
-            if (r8 >= r6) goto L_0x027f
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r9 = r0.chats
-            java.lang.Object r9 = r9.get(r8)
-            org.telegram.tgnet.TLRPC$Peer r9 = (org.telegram.tgnet.TLRPC$Peer) r9
-            int r9 = org.telegram.messenger.MessageObject.getPeerId(r9)
-            if (r9 >= 0) goto L_0x027c
-            int r10 = r0.currentAccount
-            org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
-            int r9 = -r9
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-            org.telegram.tgnet.TLRPC$Chat r9 = r10.getChat(r9)
-            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r9)
-            if (r10 == 0) goto L_0x027a
-            boolean r9 = r9.megagroup
-            if (r9 == 0) goto L_0x027c
-        L_0x027a:
-            r6 = 1
-            goto L_0x0280
-        L_0x027c:
-            int r8 = r8 + 1
-            goto L_0x0251
-        L_0x027f:
-            r6 = 0
-        L_0x0280:
-            android.widget.TextView r8 = r0.messageTextView
-            org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy r9 = new org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy
-            r9.<init>()
-            r8.setMovementMethod(r9)
-            android.widget.TextView r8 = r0.messageTextView
-            java.lang.String r9 = "dialogTextLink"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r8.setLinkTextColor(r9)
-            r8 = 5
-            if (r2 != 0) goto L_0x0313
-            int r6 = r0.currentAccount
-            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
-            r9 = r20
+            int r8 = r0.currentAccount
+            org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
+            r9 = r21
             long r9 = -r9
             int r10 = (int) r9
             java.lang.Integer r9 = java.lang.Integer.valueOf(r10)
-            org.telegram.tgnet.TLRPC$Chat r6 = r6.getChat(r9)
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r9.<init>()
-            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r6)
-            if (r10 == 0) goto L_0x02c6
-            boolean r6 = r6.megagroup
-            if (r6 != 0) goto L_0x02c6
-            r6 = 2131628227(0x7f0e10c3, float:1.888374E38)
-            java.lang.String r10 = "VoipChannelStart2"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-            r9.append(r6)
-            goto L_0x02d2
-        L_0x02c6:
-            r6 = 2131628328(0x7f0e1128, float:1.8883946E38)
-            java.lang.String r10 = "VoipGroupStart2"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-            r9.append(r6)
-        L_0x02d2:
+            org.telegram.tgnet.TLRPC$Chat r8 = r8.getChat(r9)
+            org.telegram.ui.Components.JoinCallAlert$3 r9 = new org.telegram.ui.Components.JoinCallAlert$3
+            r9.<init>(r1)
+            r0.listView = r9
+            androidx.recyclerview.widget.LinearLayoutManager r10 = new androidx.recyclerview.widget.LinearLayoutManager
+            android.content.Context r11 = r19.getContext()
+            int r12 = r0.currentType
+            if (r12 != 0) goto L_0x010c
+            r12 = 0
+            goto L_0x010d
+        L_0x010c:
+            r12 = 1
+        L_0x010d:
+            r10.<init>(r11, r12, r4)
+            r9.setLayoutManager(r10)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            org.telegram.ui.Components.JoinCallAlert$ListAdapter r10 = new org.telegram.ui.Components.JoinCallAlert$ListAdapter
+            r10.<init>(r1)
+            r9.setAdapter(r10)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r9.setVerticalScrollBarEnabled(r4)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r9.setClipToPadding(r4)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r9.setEnabled(r7)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            java.lang.String r10 = "dialogScrollGlow"
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r9.setGlowColor(r10)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            org.telegram.ui.Components.JoinCallAlert$4 r10 = new org.telegram.ui.Components.JoinCallAlert$4
+            r10.<init>()
+            r9.setOnScrollListener(r10)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            org.telegram.ui.Components.JoinCallAlert$$ExternalSyntheticLambda8 r10 = new org.telegram.ui.Components.JoinCallAlert$$ExternalSyntheticLambda8
+            r10.<init>(r0, r8)
+            r9.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r10)
+            if (r2 == 0) goto L_0x0162
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r10 = -1
+            r11 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r12 = 51
+            r13 = 0
+            r14 = 1120403456(0x42CLASSNAME, float:100.0)
+            r15 = 0
+            r16 = 1117782016(0x42a00000, float:80.0)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
+            r5.addView(r9, r10)
+            goto L_0x0176
+        L_0x0162:
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r9.setSelectorDrawableColor(r4)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r10 = 1092616192(0x41200000, float:10.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            r9.setPadding(r11, r4, r10, r4)
+        L_0x0176:
+            if (r2 != 0) goto L_0x01a0
+            org.telegram.ui.Components.RLottieImageView r9 = new org.telegram.ui.Components.RLottieImageView
+            r9.<init>(r1)
+            r9.setAutoRepeat(r7)
+            r10 = 2131558512(0x7f0d0070, float:1.8742342E38)
+            r11 = 120(0x78, float:1.68E-43)
+            r9.setAnimation(r10, r11, r11)
+            r9.playAnimation()
+            r12 = 160(0xa0, float:2.24E-43)
+            r13 = 160(0xa0, float:2.24E-43)
+            r14 = 49
+            r15 = 17
+            r16 = 8
+            r17 = 17
+            r18 = 0
+            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18)
+            r5.addView(r9, r10)
+        L_0x01a0:
+            android.widget.TextView r9 = new android.widget.TextView
+            r9.<init>(r1)
+            r0.textView = r9
+            java.lang.String r10 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r10 = org.telegram.messenger.AndroidUtilities.getTypeface(r10)
+            r9.setTypeface(r10)
+            android.widget.TextView r9 = r0.textView
+            r10 = 1101004800(0x41a00000, float:20.0)
+            r9.setTextSize(r7, r10)
+            if (r2 != r6) goto L_0x01c5
+            android.widget.TextView r9 = r0.textView
+            java.lang.String r10 = "voipgroup_nameText"
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r9.setTextColor(r10)
+            goto L_0x01d0
+        L_0x01c5:
+            android.widget.TextView r9 = r0.textView
+            java.lang.String r10 = "dialogTextBlack"
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r9.setTextColor(r10)
+        L_0x01d0:
+            android.widget.TextView r9 = r0.textView
+            r9.setSingleLine(r7)
+            android.widget.TextView r9 = r0.textView
+            android.text.TextUtils$TruncateAt r10 = android.text.TextUtils.TruncateAt.END
+            r9.setEllipsize(r10)
+            if (r2 != 0) goto L_0x0217
+            boolean r9 = org.telegram.messenger.ChatObject.isChannelOrGiga(r8)
+            if (r9 == 0) goto L_0x01f3
+            android.widget.TextView r9 = r0.textView
+            r10 = 2131627757(0x7f0e0eed, float:1.8882787E38)
+            java.lang.String r11 = "StartVoipChannelTitle"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r9.setText(r10)
+            goto L_0x0201
+        L_0x01f3:
+            android.widget.TextView r9 = r0.textView
+            r10 = 2131627761(0x7f0e0ef1, float:1.8882796E38)
+            java.lang.String r11 = "StartVoipChatTitle"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r9.setText(r10)
+        L_0x0201:
+            android.widget.TextView r9 = r0.textView
+            r10 = -2
+            r11 = -2
+            r12 = 49
+            r13 = 23
+            r14 = 16
+            r15 = 23
+            r16 = 0
+            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16)
+            r5.addView(r9, r10)
+            goto L_0x0261
+        L_0x0217:
+            if (r2 != r6) goto L_0x0228
+            android.widget.TextView r9 = r0.textView
+            r10 = 2131628320(0x7f0e1120, float:1.888393E38)
+            java.lang.String r11 = "VoipGroupDisplayAs"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r9.setText(r10)
+            goto L_0x024b
+        L_0x0228:
+            boolean r9 = org.telegram.messenger.ChatObject.isChannelOrGiga(r8)
+            if (r9 == 0) goto L_0x023d
+            android.widget.TextView r9 = r0.textView
+            r10 = 2131628251(0x7f0e10db, float:1.888379E38)
+            java.lang.String r11 = "VoipChannelJoinAs"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r9.setText(r10)
+            goto L_0x024b
+        L_0x023d:
+            android.widget.TextView r9 = r0.textView
+            r10 = 2131628337(0x7f0e1131, float:1.8883964E38)
+            java.lang.String r11 = "VoipGroupJoinAs"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r9.setText(r10)
+        L_0x024b:
+            android.widget.TextView r9 = r0.textView
+            r10 = -2
+            r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r12 = 51
+            r13 = 1102577664(0x41b80000, float:23.0)
+            r14 = 1090519040(0x41000000, float:8.0)
+            r15 = 1102577664(0x41b80000, float:23.0)
+            r16 = 0
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
+            r5.addView(r9, r10)
+        L_0x0261:
+            android.widget.TextView r9 = new android.widget.TextView
+            android.content.Context r10 = r19.getContext()
+            r9.<init>(r10)
+            r0.messageTextView = r9
+            if (r2 != r6) goto L_0x0278
+            java.lang.String r6 = "voipgroup_lastSeenText"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r9.setTextColor(r6)
+            goto L_0x0281
+        L_0x0278:
+            java.lang.String r6 = "dialogTextGray3"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r9.setTextColor(r6)
+        L_0x0281:
+            android.widget.TextView r6 = r0.messageTextView
+            r9 = 1096810496(0x41600000, float:14.0)
+            r6.setTextSize(r7, r9)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r6 = r0.chats
             int r6 = r6.size()
-            if (r6 <= r7) goto L_0x02ec
-            java.lang.String r6 = "\n\n"
-            r9.append(r6)
-            r6 = 2131628230(0x7f0e10c6, float:1.8883747E38)
-            java.lang.String r10 = "VoipChatDisplayedAs"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-            r9.append(r6)
-            goto L_0x02f3
-        L_0x02ec:
-            org.telegram.ui.Components.RecyclerListView r6 = r0.listView
-            r10 = 8
-            r6.setVisibility(r10)
-        L_0x02f3:
-            android.widget.TextView r6 = r0.messageTextView
-            r6.setText(r9)
-            android.widget.TextView r6 = r0.messageTextView
-            r9 = 49
-            r6.setGravity(r9)
-            android.widget.TextView r6 = r0.messageTextView
-            r9 = -2
-            r10 = -2
-            r11 = 49
-            r12 = 23
-            r13 = 0
-            r14 = 23
-            r15 = 5
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15)
-            r5.addView(r6, r9)
-            goto L_0x0355
-        L_0x0313:
-            if (r6 == 0) goto L_0x0324
-            android.widget.TextView r6 = r0.messageTextView
-            r9 = 2131628331(0x7f0e112b, float:1.8883952E38)
-            java.lang.String r10 = "VoipGroupStartAsInfoGroup"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r6.setText(r9)
-            goto L_0x0332
-        L_0x0324:
-            android.widget.TextView r6 = r0.messageTextView
-            r9 = 2131628330(0x7f0e112a, float:1.888395E38)
-            java.lang.String r10 = "VoipGroupStartAsInfo"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r6.setText(r9)
-        L_0x0332:
-            android.widget.TextView r6 = r0.messageTextView
-            boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x033a
+            r9 = 0
+        L_0x028f:
+            if (r9 >= r6) goto L_0x02bd
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r10 = r0.chats
+            java.lang.Object r10 = r10.get(r9)
+            org.telegram.tgnet.TLRPC$Peer r10 = (org.telegram.tgnet.TLRPC$Peer) r10
+            int r10 = org.telegram.messenger.MessageObject.getPeerId(r10)
+            if (r10 >= 0) goto L_0x02ba
+            int r11 = r0.currentAccount
+            org.telegram.messenger.MessagesController r11 = org.telegram.messenger.MessagesController.getInstance(r11)
+            int r10 = -r10
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
+            org.telegram.tgnet.TLRPC$Chat r10 = r11.getChat(r10)
+            boolean r11 = org.telegram.messenger.ChatObject.isChannel(r10)
+            if (r11 == 0) goto L_0x02b8
+            boolean r10 = r10.megagroup
+            if (r10 == 0) goto L_0x02ba
+        L_0x02b8:
+            r6 = 1
+            goto L_0x02be
+        L_0x02ba:
+            int r9 = r9 + 1
+            goto L_0x028f
+        L_0x02bd:
+            r6 = 0
+        L_0x02be:
+            android.widget.TextView r9 = r0.messageTextView
+            org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy r10 = new org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy
+            r10.<init>()
+            r9.setMovementMethod(r10)
+            android.widget.TextView r9 = r0.messageTextView
+            java.lang.String r10 = "dialogTextLink"
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r9.setLinkTextColor(r10)
             r9 = 5
-            goto L_0x033b
-        L_0x033a:
-            r9 = 3
-        L_0x033b:
-            r9 = r9 | 48
-            r6.setGravity(r9)
+            if (r2 != 0) goto L_0x0340
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder
+            r6.<init>()
+            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r8)
+            if (r10 == 0) goto L_0x02f2
+            boolean r10 = r8.megagroup
+            if (r10 != 0) goto L_0x02f2
+            r10 = 2131628265(0x7f0e10e9, float:1.8883818E38)
+            java.lang.String r11 = "VoipChannelStart2"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r6.append(r10)
+            goto L_0x02fe
+        L_0x02f2:
+            r10 = 2131628375(0x7f0e1157, float:1.888404E38)
+            java.lang.String r11 = "VoipGroupStart2"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r6.append(r10)
+        L_0x02fe:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r10 = r0.chats
+            int r10 = r10.size()
+            if (r10 <= r7) goto L_0x0318
+            java.lang.String r10 = "\n\n"
+            r6.append(r10)
+            r10 = 2131628277(0x7f0e10f5, float:1.8883842E38)
+            java.lang.String r11 = "VoipChatDisplayedAs"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r6.append(r10)
+            goto L_0x031f
+        L_0x0318:
+            org.telegram.ui.Components.RecyclerListView r10 = r0.listView
+            r11 = 8
+            r10.setVisibility(r11)
+        L_0x031f:
+            android.widget.TextView r10 = r0.messageTextView
+            r10.setText(r6)
             android.widget.TextView r6 = r0.messageTextView
-            r9 = -2
-            r10 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r11 = 51
-            r12 = 1102577664(0x41b80000, float:23.0)
-            r13 = 0
-            r14 = 1102577664(0x41b80000, float:23.0)
-            r15 = 1084227584(0x40a00000, float:5.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
-            r5.addView(r6, r9)
-        L_0x0355:
-            if (r2 != 0) goto L_0x0375
+            r10 = 49
+            r6.setGravity(r10)
+            android.widget.TextView r6 = r0.messageTextView
+            r10 = -2
+            r11 = -2
+            r12 = 49
+            r13 = 23
+            r14 = 0
+            r15 = 23
+            r16 = 5
+            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16)
+            r5.addView(r6, r10)
+            goto L_0x0382
+        L_0x0340:
+            if (r6 == 0) goto L_0x0351
+            android.widget.TextView r6 = r0.messageTextView
+            r10 = 2131628378(0x7f0e115a, float:1.8884047E38)
+            java.lang.String r11 = "VoipGroupStartAsInfoGroup"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r6.setText(r10)
+            goto L_0x035f
+        L_0x0351:
+            android.widget.TextView r6 = r0.messageTextView
+            r10 = 2131628377(0x7f0e1159, float:1.8884045E38)
+            java.lang.String r11 = "VoipGroupStartAsInfo"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r6.setText(r10)
+        L_0x035f:
+            android.widget.TextView r6 = r0.messageTextView
+            boolean r10 = org.telegram.messenger.LocaleController.isRTL
+            if (r10 == 0) goto L_0x0367
+            r10 = 5
+            goto L_0x0368
+        L_0x0367:
+            r10 = 3
+        L_0x0368:
+            r10 = r10 | 48
+            r6.setGravity(r10)
+            android.widget.TextView r6 = r0.messageTextView
+            r10 = -2
+            r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r12 = 51
+            r13 = 1102577664(0x41b80000, float:23.0)
+            r14 = 0
+            r15 = 1102577664(0x41b80000, float:23.0)
+            r16 = 1084227584(0x40a00000, float:5.0)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
+            r5.addView(r6, r10)
+        L_0x0382:
+            if (r2 != 0) goto L_0x03a2
             org.telegram.ui.Components.RecyclerListView r2 = r0.listView
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r6 = r0.chats
             int r6 = r6.size()
-            if (r6 >= r8) goto L_0x0364
+            if (r6 >= r9) goto L_0x0391
             r6 = -2
-            r8 = -2
-            goto L_0x0366
-        L_0x0364:
+            r9 = -2
+            goto L_0x0393
+        L_0x0391:
             r6 = -1
-            r8 = -1
-        L_0x0366:
-            r9 = 95
-            r10 = 49
-            r11 = 0
-            r12 = 6
-            r13 = 0
+            r9 = -1
+        L_0x0393:
+            r10 = 95
+            r11 = 49
+            r12 = 0
+            r13 = 6
             r14 = 0
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
+            r15 = 0
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15)
             r5.addView(r2, r6)
-        L_0x0375:
+        L_0x03a2:
             org.telegram.ui.Components.JoinCallAlert$BottomSheetCell r2 = new org.telegram.ui.Components.JoinCallAlert$BottomSheetCell
             r2.<init>(r1, r4)
             r0.doneButton = r2
@@ -707,23 +727,32 @@ public class JoinCallAlert extends BottomSheet {
             r6.<init>(r0, r3)
             r2.setOnClickListener(r6)
             int r2 = r0.currentType
-            if (r2 != 0) goto L_0x03da
+            if (r2 != 0) goto L_0x041a
             org.telegram.ui.Components.JoinCallAlert$BottomSheetCell r2 = r0.doneButton
-            r8 = -1
-            r9 = 50
-            r10 = 51
-            r11 = 0
+            r9 = -1
+            r10 = 50
+            r11 = 51
             r12 = 0
             r13 = 0
             r14 = 0
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
+            r15 = 0
+            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15)
             r5.addView(r2, r3)
             org.telegram.ui.Components.JoinCallAlert$BottomSheetCell r2 = new org.telegram.ui.Components.JoinCallAlert$BottomSheetCell
             r2.<init>(r1, r7)
-            r1 = 2131628320(0x7f0e1120, float:1.888393E38)
+            boolean r1 = org.telegram.messenger.ChatObject.isChannelOrGiga(r8)
+            if (r1 == 0) goto L_0x03e3
+            r1 = 2131628261(0x7f0e10e5, float:1.888381E38)
+            java.lang.String r3 = "VoipChannelScheduleVoiceChat"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
+            r2.setText(r1, r4)
+            goto L_0x03ef
+        L_0x03e3:
+            r1 = 2131628367(0x7f0e114f, float:1.8884025E38)
             java.lang.String r3 = "VoipGroupScheduleVoiceChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r2.setText(r1, r4)
+        L_0x03ef:
             android.view.View r1 = r2.background
             org.telegram.ui.Components.JoinCallAlert$$ExternalSyntheticLambda2 r3 = new org.telegram.ui.Components.JoinCallAlert$$ExternalSyntheticLambda2
             r3.<init>(r0)
@@ -732,46 +761,46 @@ public class JoinCallAlert extends BottomSheet {
             r3 = 50
             r6 = 51
             r7 = 0
-            r8 = 0
             r9 = 0
             r10 = 0
-            r19 = r1
-            r20 = r3
-            r21 = r6
-            r22 = r7
-            r23 = r8
+            r11 = 0
+            r20 = r1
+            r21 = r3
+            r22 = r6
+            r23 = r7
             r24 = r9
             r25 = r10
-            android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r19, (int) r20, (int) r21, (int) r22, (int) r23, (int) r24, (int) r25)
+            r26 = r11
+            android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r20, (int) r21, (int) r22, (int) r23, (int) r24, (int) r25, (int) r26)
             r5.addView(r2, r1)
-            goto L_0x03fa
-        L_0x03da:
+            goto L_0x043a
+        L_0x041a:
             org.telegram.ui.Components.JoinCallAlert$BottomSheetCell r1 = r0.doneButton
             r2 = -1
             r3 = 1112014848(0x42480000, float:50.0)
             r6 = 83
             r7 = 0
-            r8 = 0
             r9 = 0
             r10 = 0
-            r19 = r2
-            r20 = r3
-            r21 = r6
-            r22 = r7
-            r23 = r8
+            r11 = 0
+            r20 = r2
+            r21 = r3
+            r22 = r6
+            r23 = r7
             r24 = r9
             r25 = r10
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
+            r26 = r11
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26)
             r5.addView(r1, r2)
-        L_0x03fa:
-            r0.updateDoneButton(r4)
+        L_0x043a:
+            r0.updateDoneButton(r4, r8)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.JoinCallAlert.<init>(android.content.Context, long, java.util.ArrayList, int, org.telegram.tgnet.TLRPC$Peer, org.telegram.ui.Components.JoinCallAlert$JoinCallAlertDelegate):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$6(View view, int i) {
+    public /* synthetic */ void lambda$new$6(TLRPC$Chat tLRPC$Chat, View view, int i) {
         if (!this.animationInProgress && this.chats.get(i) != this.selectedPeer) {
             this.selectedPeer = this.chats.get(i);
             boolean z = view instanceof GroupCreateUserCell;
@@ -793,7 +822,7 @@ public class JoinCallAlert extends BottomSheet {
                 }
             }
             if (this.currentType != 0) {
-                updateDoneButton(true);
+                updateDoneButton(true, tLRPC$Chat);
             }
         }
     }
@@ -820,21 +849,23 @@ public class JoinCallAlert extends BottomSheet {
         dismiss();
     }
 
-    private void updateDoneButton(boolean z) {
-        if (this.currentType == 0) {
+    private void updateDoneButton(boolean z, TLRPC$Chat tLRPC$Chat) {
+        if (this.currentType != 0) {
+            int peerId = MessageObject.getPeerId(this.selectedPeer);
+            if (peerId > 0) {
+                this.doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", NUM, UserObject.getFirstName(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(peerId)))), z);
+                return;
+            }
+            TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-peerId));
+            BottomSheetCell bottomSheetCell = this.doneButton;
+            Object[] objArr = new Object[1];
+            objArr[0] = chat != null ? chat.title : "";
+            bottomSheetCell.setText(LocaleController.formatString("VoipGroupContinueAs", NUM, objArr), z);
+        } else if (ChatObject.isChannelOrGiga(tLRPC$Chat)) {
             this.doneButton.setText(LocaleController.formatString("VoipGroupStartVoiceChat", NUM, new Object[0]), z);
-            return;
+        } else {
+            this.doneButton.setText(LocaleController.formatString("VoipChannelStartVoiceChat", NUM, new Object[0]), z);
         }
-        int peerId = MessageObject.getPeerId(this.selectedPeer);
-        if (peerId > 0) {
-            this.doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", NUM, UserObject.getFirstName(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(peerId)))), z);
-            return;
-        }
-        TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-peerId));
-        BottomSheetCell bottomSheetCell = this.doneButton;
-        Object[] objArr = new Object[1];
-        objArr[0] = chat != null ? chat.title : "";
-        bottomSheetCell.setText(LocaleController.formatString("VoipGroupContinueAs", NUM, objArr), z);
     }
 
     /* access modifiers changed from: private */
