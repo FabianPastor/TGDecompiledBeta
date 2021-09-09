@@ -21,6 +21,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ResultCallback;
+import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_chatTheme;
 import org.telegram.tgnet.TLRPC$TL_theme;
@@ -157,6 +158,7 @@ public class ChatTheme {
     }
 
     public void loadWallpaperThumb(boolean z, ResultCallback<Pair<Long, Bitmap>> resultCallback) {
+        ArrayList<TLRPC$PhotoSize> arrayList;
         TLRPC$WallPaper wallpaper = getWallpaper(z);
         TLRPC$PhotoSize tLRPC$PhotoSize = null;
         if (wallpaper == null) {
@@ -174,7 +176,8 @@ public class ChatTheme {
             }
         }
         if (wallpaperThumbBitmap == null) {
-            if (!wallpaper.document.thumbs.isEmpty()) {
+            TLRPC$Document tLRPC$Document = wallpaper.document;
+            if (!(tLRPC$Document == null || (arrayList = tLRPC$Document.thumbs) == null || arrayList.isEmpty())) {
                 tLRPC$PhotoSize = wallpaper.document.thumbs.get(0);
             }
             ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$PhotoSize, wallpaper.document);
@@ -294,9 +297,6 @@ public class ChatTheme {
         }
         ArrayList<Integer> arrayList = new ArrayList<>();
         Theme.ThemeAccent accent = themeInfo.getAccent(false);
-        if (accent == null) {
-            accent = themeInfo.getAccent(true);
-        }
         if (accent != null) {
             int i = accent.myMessagesAccentColor;
             if (i != 0) {

@@ -1712,11 +1712,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             L_0x0172:
                 org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
                 org.telegram.ui.PhotoViewer$FrameLayoutDrawer r8 = r8.containerView
-                org.telegram.ui.Components.BulletinFactory r8 = org.telegram.ui.Components.BulletinFactory.of((android.widget.FrameLayout) r8)
+                org.telegram.ui.PhotoViewer r9 = org.telegram.ui.PhotoViewer.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r9 = r9.resourcesProvider
+                org.telegram.ui.Components.BulletinFactory r8 = org.telegram.ui.Components.BulletinFactory.of(r8, r9)
                 r9 = 2131558528(0x7f0d0080, float:1.8742374E38)
-                org.telegram.ui.PhotoViewer r10 = org.telegram.ui.PhotoViewer.this
-                org.telegram.ui.ActionBar.Theme$ResourcesProvider r10 = r10.resourcesProvider
-                org.telegram.ui.Components.Bulletin r7 = r8.createSimpleBulletin(r9, r7, r10)
+                org.telegram.ui.Components.Bulletin r7 = r8.createSimpleBulletin(r9, r7)
                 r7.show()
             L_0x018c:
                 return

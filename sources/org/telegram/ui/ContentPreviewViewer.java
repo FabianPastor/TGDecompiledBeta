@@ -292,7 +292,7 @@ public class ContentPreviewViewer {
                     TLRPC$BotInlineResult access$1700 = ContentPreviewViewer.this.inlineResult;
                     Object access$1800 = ContentPreviewViewer.this.parentObject;
                     ContentPreviewViewerDelegate access$600 = ContentPreviewViewer.this.delegate;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$600.getDialogId(), new ContentPreviewViewer$1$$ExternalSyntheticLambda5(access$600, access$300, access$1700, access$1800));
+                    AlertsCreator.createScheduleDatePickerDialog((Context) ContentPreviewViewer.this.parentActivity, access$600.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ContentPreviewViewer$1$$ExternalSyntheticLambda5(access$600, access$300, access$1700, access$1800), ContentPreviewViewer.this.resourcesProvider);
                 }
             }
         }

@@ -156,7 +156,7 @@ public class ChatObject {
                                 str = user.first_name;
                             }
                             sb.append(str);
-                            Log.d("kek", sb.toString());
+                            Log.d("GroupCall", sb.toString());
                         } else {
                             TLRPC$Chat chat = MessagesController.getInstance(Call.this.currentAccount.getCurrentAccount()).getChat(Long.valueOf(-keyAt));
                             StringBuilder sb2 = new StringBuilder();
@@ -167,7 +167,7 @@ public class ChatObject {
                                 str = chat.title;
                             }
                             sb2.append(str);
-                            Log.d("kek", sb2.toString());
+                            Log.d("GroupCall", sb2.toString());
                         }
                         i--;
                         z = true;
@@ -680,7 +680,7 @@ public class ChatObject {
                                 sb.append(peerId);
                                 sb.append(" ");
                                 sb.append(user == null ? null : user.first_name);
-                                Log.d("kek", sb.toString());
+                                Log.d("GroupCall", sb.toString());
                                 i = currentTime;
                                 j = elapsedRealtime;
                             } else {
@@ -692,7 +692,7 @@ public class ChatObject {
                                 sb2.append(peerId);
                                 sb2.append(" ");
                                 sb2.append(chat == null ? null : chat.title);
-                                Log.d("kek", sb2.toString());
+                                Log.d("GroupCall", sb2.toString());
                             }
                             this.currentSpeakingPeers.put(peerId, tLRPC$TL_groupCallParticipant);
                             z4 = true;
@@ -716,7 +716,7 @@ public class ChatObject {
                                 sb3.append(peerId);
                                 sb3.append(" ");
                                 sb3.append(user2 == null ? null : user2.first_name);
-                                Log.d("kek", sb3.toString());
+                                Log.d("GroupCall", sb3.toString());
                             } else {
                                 TLRPC$Chat chat2 = MessagesController.getInstance(this.currentAccount.getCurrentAccount()).getChat(Long.valueOf(-peerId));
                                 StringBuilder sb4 = new StringBuilder();
@@ -724,7 +724,7 @@ public class ChatObject {
                                 sb4.append(peerId);
                                 sb4.append(" ");
                                 sb4.append(chat2 == null ? null : chat2.title);
-                                Log.d("kek", sb4.toString());
+                                Log.d("GroupCall", sb4.toString());
                             }
                             z4 = true;
                         }
@@ -1126,7 +1126,7 @@ public class ChatObject {
                 boolean r6 = r15.left
                 java.lang.String r5 = " "
                 r23 = r12
-                java.lang.String r12 = "kek"
+                java.lang.String r12 = "GroupCall"
                 if (r6 == 0) goto L_0x0245
                 if (r2 != 0) goto L_0x0164
                 int r6 = r1.version

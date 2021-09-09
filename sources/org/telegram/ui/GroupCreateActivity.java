@@ -813,7 +813,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                             long j2 = this.channelId;
                             if (j2 == 0 && tLRPC$User.bot_nochats) {
                                 try {
-                                    BulletinFactory.of((BaseFragment) this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", NUM)).show();
+                                    BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", NUM)).show();
                                     return;
                                 } catch (Exception e) {
                                     FileLog.e((Throwable) e);
@@ -1007,6 +1007,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
     /* access modifiers changed from: private */
     public boolean onDonePressed(boolean z) {
+        String str;
         if (this.selectedContacts.size() == 0 && this.chatType != 2) {
             return false;
         }
@@ -1090,7 +1091,15 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 }
                 builder.setMessage(spannableStringBuilder);
             } else {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", NUM, sb, chat.title)));
+                Object[] objArr = new Object[2];
+                objArr[0] = sb;
+                if (chat == null) {
+                    str = "";
+                } else {
+                    str = chat.title;
+                }
+                objArr[1] = str;
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", NUM, objArr)));
             }
             CheckBoxCell[] checkBoxCellArr = new CheckBoxCell[1];
             if (!ChatObject.isChannel(chat)) {

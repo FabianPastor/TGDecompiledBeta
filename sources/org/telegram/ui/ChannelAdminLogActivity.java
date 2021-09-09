@@ -3134,7 +3134,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                 ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
                                 channelAdminLogActivity.showInviteLinkBottomSheet((TLRPC$TL_messages_exportedChatInvite) obj, channelAdminLogActivity.usersMap);
                             } else {
-                                BulletinFactory.of((BaseFragment) ChannelAdminLogActivity.this).createSimpleBulletin(NUM, LocaleController.getString("LinkHashExpired", NUM)).show();
+                                BulletinFactory.of(ChannelAdminLogActivity.this).createSimpleBulletin(NUM, LocaleController.getString("LinkHashExpired", NUM)).show();
                             }
                         }
                     }
@@ -3174,7 +3174,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                 channelAdminLogActivity.showInviteLinkBottomSheet(tLRPC$TL_messages_exportedChatInvite, channelAdminLogActivity.usersMap);
                                 return;
                             }
-                            BulletinFactory.of((BaseFragment) ChannelAdminLogActivity.this).createSimpleBulletin(NUM, LocaleController.getString("LinkHashExpired", NUM)).show();
+                            BulletinFactory.of(ChannelAdminLogActivity.this).createSimpleBulletin(NUM, LocaleController.getString("LinkHashExpired", NUM)).show();
                         }
                     }
                 });

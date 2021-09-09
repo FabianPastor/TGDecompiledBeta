@@ -1060,7 +1060,7 @@ public final class Bulletin {
         }
 
         public LottieLayout(Context context, Theme.ResourcesProvider resourcesProvider, int i, int i2) {
-            super(context, resourcesProvider);
+            this(context, resourcesProvider);
             setBackground(i);
             setTextColor(i2);
         }

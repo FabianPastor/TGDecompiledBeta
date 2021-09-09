@@ -1693,7 +1693,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onSubItemClick$10() {
-        BulletinFactory.of((FrameLayout) this.containerView).createDownloadBulletin(BulletinFactory.FileType.AUDIO, this.resourcesProvider).show();
+        BulletinFactory.of((FrameLayout) this.containerView, this.resourcesProvider).createDownloadBulletin(BulletinFactory.FileType.AUDIO).show();
     }
 
     /* access modifiers changed from: private */

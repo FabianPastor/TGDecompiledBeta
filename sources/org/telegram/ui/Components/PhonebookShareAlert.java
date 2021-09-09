@@ -1017,7 +1017,7 @@ public class PhonebookShareAlert extends BottomSheet {
         ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", vcardItem.getValue(false)));
         if (BulletinFactory.canShowBulletin(this.parentFragment)) {
             if (vcardItem.type == 3) {
-                BulletinFactory.of((FrameLayout) this.containerView).createCopyLinkBulletin(resourcesProvider).show();
+                BulletinFactory.of((FrameLayout) this.containerView, resourcesProvider).createCopyLinkBulletin().show();
             } else {
                 Bulletin.SimpleLayout simpleLayout = new Bulletin.SimpleLayout(context, resourcesProvider);
                 int i4 = vcardItem.type;

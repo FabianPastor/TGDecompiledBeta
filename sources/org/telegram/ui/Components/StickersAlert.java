@@ -1290,7 +1290,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             } else if (i == 2) {
                 try {
                     AndroidUtilities.addToClipboard(str);
-                    BulletinFactory.of((FrameLayout) this.containerView).createCopyLinkBulletin(this.resourcesProvider).show();
+                    BulletinFactory.of((FrameLayout) this.containerView, this.resourcesProvider).createCopyLinkBulletin().show();
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }

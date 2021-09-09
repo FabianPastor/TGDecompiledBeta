@@ -1482,7 +1482,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             int r1 = r10.changeInfoRow
             if (r0 != r1) goto L_0x014e
         L_0x0139:
-            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r30)
+            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r30)
             r1 = 2131625307(0x7f0e055b, float:1.8877818E38)
             java.lang.String r2 = "EditCantEditPermissionsPublic"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
@@ -1490,7 +1490,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0.show()
             goto L_0x0162
         L_0x014e:
-            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r30)
+            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r30)
             r1 = 2131625306(0x7f0e055a, float:1.8877816E38)
             java.lang.String r2 = "EditCantEditPermissions"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)

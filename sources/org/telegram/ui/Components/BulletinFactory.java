@@ -12,13 +12,14 @@ import org.telegram.ui.Components.Bulletin;
 public final class BulletinFactory {
     private final FrameLayout containerLayout;
     private final BaseFragment fragment;
+    private final Theme.ResourcesProvider resourcesProvider;
 
     public static BulletinFactory of(BaseFragment baseFragment) {
         return new BulletinFactory(baseFragment);
     }
 
-    public static BulletinFactory of(FrameLayout frameLayout) {
-        return new BulletinFactory(frameLayout);
+    public static BulletinFactory of(FrameLayout frameLayout, Theme.ResourcesProvider resourcesProvider2) {
+        return new BulletinFactory(frameLayout, resourcesProvider2);
     }
 
     public static boolean canShowBulletin(BaseFragment baseFragment) {
@@ -89,20 +90,19 @@ public final class BulletinFactory {
 
     private BulletinFactory(BaseFragment baseFragment) {
         this.fragment = baseFragment;
+        Theme.ResourcesProvider resourcesProvider2 = null;
         this.containerLayout = null;
+        this.resourcesProvider = baseFragment != null ? baseFragment.getResourceProvider() : resourcesProvider2;
     }
 
-    private BulletinFactory(FrameLayout frameLayout) {
+    private BulletinFactory(FrameLayout frameLayout, Theme.ResourcesProvider resourcesProvider2) {
         this.containerLayout = frameLayout;
         this.fragment = null;
+        this.resourcesProvider = resourcesProvider2;
     }
 
     public Bulletin createSimpleBulletin(int i, String str) {
-        return createSimpleBulletin(i, str, (Theme.ResourcesProvider) null);
-    }
-
-    public Bulletin createSimpleBulletin(int i, String str, Theme.ResourcesProvider resourcesProvider) {
-        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), this.resourcesProvider);
         lottieLayout.setAnimation(i, 36, 36, new String[0]);
         lottieLayout.textView.setText(str);
         lottieLayout.textView.setSingleLine(false);
@@ -110,16 +110,20 @@ public final class BulletinFactory {
         return create(lottieLayout, 1500);
     }
 
-    public Bulletin createDownloadBulletin(FileType fileType, Theme.ResourcesProvider resourcesProvider) {
-        return createDownloadBulletin(fileType, 1, resourcesProvider);
+    public Bulletin createDownloadBulletin(FileType fileType) {
+        return createDownloadBulletin(fileType, this.resourcesProvider);
     }
 
-    public Bulletin createDownloadBulletin(FileType fileType, int i, Theme.ResourcesProvider resourcesProvider) {
-        return createDownloadBulletin(fileType, i, 0, 0, resourcesProvider);
+    public Bulletin createDownloadBulletin(FileType fileType, Theme.ResourcesProvider resourcesProvider2) {
+        return createDownloadBulletin(fileType, 1, resourcesProvider2);
     }
 
-    public Bulletin createReportSent(Theme.ResourcesProvider resourcesProvider) {
-        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
+    public Bulletin createDownloadBulletin(FileType fileType, int i, Theme.ResourcesProvider resourcesProvider2) {
+        return createDownloadBulletin(fileType, i, 0, 0, resourcesProvider2);
+    }
+
+    public Bulletin createReportSent(Theme.ResourcesProvider resourcesProvider2) {
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2);
         lottieLayout.setAnimation(NUM, new String[0]);
         lottieLayout.textView.setText(LocaleController.getString("ReportChatSent", NUM));
         return create(lottieLayout, 1500);
@@ -129,12 +133,12 @@ public final class BulletinFactory {
         return createDownloadBulletin(fileType, i, i2, i3, (Theme.ResourcesProvider) null);
     }
 
-    public Bulletin createDownloadBulletin(FileType fileType, int i, int i2, int i3, Theme.ResourcesProvider resourcesProvider) {
+    public Bulletin createDownloadBulletin(FileType fileType, int i, int i2, int i3, Theme.ResourcesProvider resourcesProvider2) {
         Bulletin.LottieLayout lottieLayout;
         if (i2 == 0 || i3 == 0) {
-            lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
+            lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2);
         } else {
-            lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider, i2, i3);
+            lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2, i2, i3);
         }
         lottieLayout.setAnimation(fileType.icon.resId, fileType.icon.layers);
         lottieLayout.textView.setText(fileType.getText(i));
@@ -148,8 +152,8 @@ public final class BulletinFactory {
         return createErrorBulletin(str, (Theme.ResourcesProvider) null);
     }
 
-    public Bulletin createErrorBulletin(String str, Theme.ResourcesProvider resourcesProvider) {
-        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
+    public Bulletin createErrorBulletin(String str, Theme.ResourcesProvider resourcesProvider2) {
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2);
         lottieLayout.setAnimation(NUM, new String[0]);
         lottieLayout.textView.setText(str);
         lottieLayout.textView.setSingleLine(false);
@@ -158,11 +162,7 @@ public final class BulletinFactory {
     }
 
     public Bulletin createCopyLinkBulletin() {
-        return createCopyLinkBulletin((Theme.ResourcesProvider) null);
-    }
-
-    public Bulletin createCopyLinkBulletin(Theme.ResourcesProvider resourcesProvider) {
-        return createCopyLinkBulletin(false, resourcesProvider);
+        return createCopyLinkBulletin(false, this.resourcesProvider);
     }
 
     public Bulletin createCopyBulletin(String str) {
@@ -172,15 +172,15 @@ public final class BulletinFactory {
         return create(lottieLayout, 1500);
     }
 
-    public Bulletin createCopyLinkBulletin(boolean z, Theme.ResourcesProvider resourcesProvider) {
+    public Bulletin createCopyLinkBulletin(boolean z, Theme.ResourcesProvider resourcesProvider2) {
         if (z) {
-            Bulletin.TwoLineLottieLayout twoLineLottieLayout = new Bulletin.TwoLineLottieLayout(getContext(), resourcesProvider);
+            Bulletin.TwoLineLottieLayout twoLineLottieLayout = new Bulletin.TwoLineLottieLayout(getContext(), resourcesProvider2);
             twoLineLottieLayout.setAnimation(NUM, 36, 36, "Wibe", "Circle");
             twoLineLottieLayout.titleTextView.setText(LocaleController.getString("LinkCopied", NUM));
             twoLineLottieLayout.subtitleTextView.setText(LocaleController.getString("LinkCopiedPrivateInfo", NUM));
             return create(twoLineLottieLayout, 2750);
         }
-        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2);
         lottieLayout.setAnimation(NUM, 36, 36, "Wibe", "Circle");
         lottieLayout.textView.setText(LocaleController.getString("LinkCopied", NUM));
         return create(lottieLayout, 1500);
@@ -298,8 +298,8 @@ public final class BulletinFactory {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BulletinFactory.createMuteBulletin(org.telegram.ui.ActionBar.BaseFragment, int, org.telegram.ui.ActionBar.Theme$ResourcesProvider):org.telegram.ui.Components.Bulletin");
     }
 
-    public static Bulletin createMuteBulletin(BaseFragment baseFragment, boolean z, Theme.ResourcesProvider resourcesProvider) {
-        return createMuteBulletin(baseFragment, z ? 3 : 4, resourcesProvider);
+    public static Bulletin createMuteBulletin(BaseFragment baseFragment, boolean z, Theme.ResourcesProvider resourcesProvider2) {
+        return createMuteBulletin(baseFragment, z ? 3 : 4, resourcesProvider2);
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v1, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
@@ -371,12 +371,12 @@ public final class BulletinFactory {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BulletinFactory.createUnpinAllMessagesBulletin(org.telegram.ui.ActionBar.BaseFragment, int, boolean, java.lang.Runnable, java.lang.Runnable, org.telegram.ui.ActionBar.Theme$ResourcesProvider):org.telegram.ui.Components.Bulletin");
     }
 
-    public static Bulletin createSaveToGalleryBulletin(BaseFragment baseFragment, boolean z, Theme.ResourcesProvider resourcesProvider) {
-        return of(baseFragment).createDownloadBulletin(z ? FileType.VIDEO : FileType.PHOTO, resourcesProvider);
+    public static Bulletin createSaveToGalleryBulletin(BaseFragment baseFragment, boolean z, Theme.ResourcesProvider resourcesProvider2) {
+        return of(baseFragment).createDownloadBulletin(z ? FileType.VIDEO : FileType.PHOTO, resourcesProvider2);
     }
 
     public static Bulletin createSaveToGalleryBulletin(FrameLayout frameLayout, boolean z, int i, int i2) {
-        return of(frameLayout).createDownloadBulletin(z ? FileType.VIDEO : FileType.PHOTO, 1, i, i2);
+        return of(frameLayout, (Theme.ResourcesProvider) null).createDownloadBulletin(z ? FileType.VIDEO : FileType.PHOTO, 1, i, i2);
     }
 
     public static Bulletin createPromoteToAdminBulletin(BaseFragment baseFragment, String str) {
@@ -418,23 +418,23 @@ public final class BulletinFactory {
     }
 
     public static Bulletin createCopyLinkBulletin(FrameLayout frameLayout) {
-        return of(frameLayout).createCopyLinkBulletin();
+        return of(frameLayout, (Theme.ResourcesProvider) null).createCopyLinkBulletin();
     }
 
-    public static Bulletin createPinMessageBulletin(BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider) {
-        return createPinMessageBulletin(baseFragment, true, (Runnable) null, (Runnable) null, resourcesProvider);
+    public static Bulletin createPinMessageBulletin(BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider2) {
+        return createPinMessageBulletin(baseFragment, true, (Runnable) null, (Runnable) null, resourcesProvider2);
     }
 
-    public static Bulletin createUnpinMessageBulletin(BaseFragment baseFragment, Runnable runnable, Runnable runnable2, Theme.ResourcesProvider resourcesProvider) {
-        return createPinMessageBulletin(baseFragment, false, runnable, runnable2, resourcesProvider);
+    public static Bulletin createUnpinMessageBulletin(BaseFragment baseFragment, Runnable runnable, Runnable runnable2, Theme.ResourcesProvider resourcesProvider2) {
+        return createPinMessageBulletin(baseFragment, false, runnable, runnable2, resourcesProvider2);
     }
 
-    private static Bulletin createPinMessageBulletin(BaseFragment baseFragment, boolean z, Runnable runnable, Runnable runnable2, Theme.ResourcesProvider resourcesProvider) {
-        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity(), resourcesProvider);
+    private static Bulletin createPinMessageBulletin(BaseFragment baseFragment, boolean z, Runnable runnable, Runnable runnable2, Theme.ResourcesProvider resourcesProvider2) {
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity(), resourcesProvider2);
         lottieLayout.setAnimation(z ? NUM : NUM, 28, 28, "Pin", "Line");
         lottieLayout.textView.setText(LocaleController.getString(z ? "MessagePinnedHint" : "MessageUnpinnedHint", z ? NUM : NUM));
         if (!z) {
-            lottieLayout.setButton(new Bulletin.UndoButton(baseFragment.getParentActivity(), true, resourcesProvider).setUndoAction(runnable).setDelayedAction(runnable2));
+            lottieLayout.setButton(new Bulletin.UndoButton(baseFragment.getParentActivity(), true, resourcesProvider2).setUndoAction(runnable).setDelayedAction(runnable2));
         }
         return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, z ? 1500 : 5000);
     }

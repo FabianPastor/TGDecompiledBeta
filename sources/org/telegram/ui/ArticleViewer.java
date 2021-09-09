@@ -4968,7 +4968,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public void onTextCopied() {
-                BulletinFactory.of(ArticleViewer.this.containerView).createCopyBulletin(LocaleController.getString("TextCopied", NUM)).show();
+                BulletinFactory.of(ArticleViewer.this.containerView, (Theme.ResourcesProvider) null).createCopyBulletin(LocaleController.getString("TextCopied", NUM)).show();
             }
         });
         this.containerView.addView(this.textSelectionHelper.getOverlayView(activity2));

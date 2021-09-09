@@ -3933,10 +3933,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 ClipboardManager clipboardManager = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard");
                 if (this.userId != 0) {
                     str2 = "@" + str;
-                    BulletinFactory.of((BaseFragment) this).createCopyBulletin(LocaleController.getString("UsernameCopied", NUM)).show();
+                    BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("UsernameCopied", NUM)).show();
                 } else {
                     str2 = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/" + str;
-                    BulletinFactory.of((BaseFragment) this).createCopyBulletin(LocaleController.getString("LinkCopied", NUM)).show();
+                    BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("LinkCopied", NUM)).show();
                 }
                 clipboardManager.setPrimaryClip(ClipData.newPlainText("label", str2));
             } catch (Exception e) {
@@ -3959,7 +3959,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         } else if (intValue == 1) {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "+" + tLRPC$User.phone));
-                BulletinFactory.of((BaseFragment) this).createCopyBulletin(LocaleController.getString("PhoneCopied", NUM)).show();
+                BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("PhoneCopied", NUM)).show();
             } catch (Exception e2) {
                 FileLog.e((Throwable) e2);
             }
@@ -3996,9 +3996,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (!TextUtils.isEmpty(str)) {
                 AndroidUtilities.addToClipboard(str);
                 if (i == this.bioRow) {
-                    BulletinFactory.of((BaseFragment) this).createCopyBulletin(LocaleController.getString("BioCopied", NUM)).show();
+                    BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("BioCopied", NUM)).show();
                 } else {
-                    BulletinFactory.of((BaseFragment) this).createCopyBulletin(LocaleController.getString("TextCopied", NUM)).show();
+                    BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("TextCopied", NUM)).show();
                 }
             }
         } catch (Exception e) {

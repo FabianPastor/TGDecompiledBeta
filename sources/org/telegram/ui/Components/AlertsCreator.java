@@ -4119,7 +4119,7 @@ public class AlertsCreator {
             r0.showWithAction((long) r1, (int) r3, (java.lang.Runnable) r4)
             goto L_0x00f8
         L_0x00ec:
-            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r11)
+            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r11)
             r1 = r15
             org.telegram.ui.Components.Bulletin r0 = r0.createReportSent(r15)
             r0.show()

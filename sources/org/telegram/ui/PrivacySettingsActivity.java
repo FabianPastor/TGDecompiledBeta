@@ -582,7 +582,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         } else {
             return;
         }
-        BulletinFactory.of((BaseFragment) this).createSimpleBulletin(NUM, str).show();
+        BulletinFactory.of(this).createSimpleBulletin(NUM, str).show();
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {

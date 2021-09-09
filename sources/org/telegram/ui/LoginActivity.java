@@ -2021,7 +2021,7 @@ public class LoginActivity extends BaseFragment {
                 while (true) {
                     if (i >= this.countriesArray.size()) {
                         break;
-                    } else if (this.countriesArray.get(i).equals(str)) {
+                    } else if (this.countriesArray.get(i).name.equals(str)) {
                         country = this.countriesArray.get(i);
                         break;
                     } else {

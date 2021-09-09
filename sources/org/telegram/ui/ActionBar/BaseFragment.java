@@ -40,6 +40,7 @@ import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.ui.ActionBar.Theme;
 
 public abstract class BaseFragment {
     /* access modifiers changed from: protected */
@@ -92,6 +93,10 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public int getPreviewHeight() {
         return -1;
+    }
+
+    public Theme.ResourcesProvider getResourceProvider() {
+        return null;
     }
 
     /* access modifiers changed from: protected */

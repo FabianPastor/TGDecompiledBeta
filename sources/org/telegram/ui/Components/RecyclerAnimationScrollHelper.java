@@ -253,7 +253,7 @@ public class RecyclerAnimationScrollHelper {
                     if (measuredHeight < 300) {
                         measuredHeight = 300;
                     }
-                    j = Math.min(measuredHeight, 1300);
+                    j = Math.min(Math.min(measuredHeight, 1300), 1300);
                 }
                 RecyclerAnimationScrollHelper.this.animator.setDuration(j);
                 RecyclerAnimationScrollHelper.this.animator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
