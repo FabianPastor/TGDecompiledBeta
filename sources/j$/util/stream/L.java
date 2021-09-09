@@ -3,9 +3,9 @@ package j$.util.stream;
 import j$.lang.a;
 import j$.util.function.Consumer;
 import j$.util.function.g;
-import j$.util.function.l;
-import j$.util.function.q;
-import j$.util.function.x;
+import j$.util.function.m;
+import j$.util.function.r;
+import j$.util.function.y;
 
 class L extends CLASSNAMEe3 {
     public final /* synthetic */ int l = 1;
@@ -34,15 +34,15 @@ class L extends CLASSNAMEe3 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public L(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, l lVar) {
+    public L(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, m mVar) {
         super(cVar, f4Var, i);
-        this.m = lVar;
+        this.m = mVar;
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public L(CLASSNAMEe1 e1Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, q qVar) {
+    public L(CLASSNAMEe1 e1Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, r rVar) {
         super(cVar, f4Var, i);
-        this.m = qVar;
+        this.m = rVar;
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -52,8 +52,8 @@ class L extends CLASSNAMEe3 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public L(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, x xVar) {
+    public L(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, y yVar) {
         super(cVar, f4Var, i);
-        this.m = xVar;
+        this.m = yVar;
     }
 }

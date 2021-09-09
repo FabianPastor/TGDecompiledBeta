@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.y;
 
 final class I1 extends O1 {
@@ -17,7 +17,7 @@ final class I1 extends O1 {
         }
     }
 
-    public I1(CLASSNAMEz2 z2Var, l lVar, y yVar) {
-        super(z2Var, yVar, new CLASSNAMEb(lVar), N1.a);
+    public I1(CLASSNAMEz2 z2Var, m mVar, y yVar) {
+        super(z2Var, yVar, new CLASSNAMEb(mVar), N1.a);
     }
 }

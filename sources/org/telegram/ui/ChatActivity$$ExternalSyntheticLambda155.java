@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda155 implements ThemeDescription.ThemeDescriptionDelegate {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda155 implements RequestDelegate {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda155 INSTANCE = new ChatActivity$$ExternalSyntheticLambda155();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda155(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda155() {
     }
 
-    public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$164();
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ChatActivity.lambda$markSponsoredAsRead$164(tLObject, tLRPC$TL_error);
     }
 }

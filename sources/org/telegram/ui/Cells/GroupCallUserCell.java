@@ -72,7 +72,7 @@ public class GroupCallUserCell extends FrameLayout {
     /* access modifiers changed from: private */
     public float progressToAvatarPreview;
     private Runnable raiseHandCallback = new GroupCallUserCell$$ExternalSyntheticLambda2(this);
-    private int selfId;
+    private long selfId;
     private Runnable shakeHandCallback = new GroupCallUserCell$$ExternalSyntheticLambda4(this);
     private RLottieDrawable shakeHandDrawable;
     private Drawable speakingDrawable;
@@ -453,16 +453,16 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     public boolean isSelfUser() {
-        int i = this.selfId;
-        if (i > 0) {
+        long j = this.selfId;
+        if (j > 0) {
             TLRPC$User tLRPC$User = this.currentUser;
-            if (tLRPC$User == null || tLRPC$User.id != i) {
+            if (tLRPC$User == null || tLRPC$User.id != j) {
                 return false;
             }
             return true;
         }
         TLRPC$Chat tLRPC$Chat = this.currentChat;
-        if (tLRPC$Chat == null || tLRPC$Chat.id != (-i)) {
+        if (tLRPC$Chat == null || tLRPC$Chat.id != (-j)) {
             return false;
         }
         return true;
@@ -480,15 +480,15 @@ public class GroupCallUserCell extends FrameLayout {
         return this.avatarImageView.getImageReceiver().hasNotThumb();
     }
 
-    public void setData(AccountInstance accountInstance2, TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, ChatObject.Call call, int i, TLRPC$FileLocation tLRPC$FileLocation, boolean z) {
+    public void setData(AccountInstance accountInstance2, TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, ChatObject.Call call, long j, TLRPC$FileLocation tLRPC$FileLocation, boolean z) {
         this.currentCall = call;
         this.accountInstance = accountInstance2;
-        this.selfId = i;
+        this.selfId = j;
         this.participant = tLRPC$TL_groupCallParticipant;
-        int peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
+        long peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
         boolean z2 = false;
         if (peerId > 0) {
-            TLRPC$User user = this.accountInstance.getMessagesController().getUser(Integer.valueOf(peerId));
+            TLRPC$User user = this.accountInstance.getMessagesController().getUser(Long.valueOf(peerId));
             this.currentUser = user;
             this.currentChat = null;
             this.avatarDrawable.setInfo(user);
@@ -509,7 +509,7 @@ public class GroupCallUserCell extends FrameLayout {
                 this.avatarImageView.setImage(forUser, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
             }
         } else {
-            TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Integer.valueOf(-peerId));
+            TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Long.valueOf(-peerId));
             this.currentChat = chat;
             this.currentUser = null;
             this.avatarDrawable.setInfo(chat);
@@ -639,8 +639,8 @@ public class GroupCallUserCell extends FrameLayout {
             org.telegram.messenger.AccountInstance r2 = r0.accountInstance
             org.telegram.messenger.MessagesController r2 = r2.getMessagesController()
             org.telegram.messenger.ChatObject$Call r3 = r0.currentCall
-            int r3 = r3.chatId
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
+            long r3 = r3.chatId
+            java.lang.Long r3 = java.lang.Long.valueOf(r3)
             r2.getChat(r3)
             org.telegram.ui.Components.RLottieImageView r2 = r0.muteButton
             boolean r3 = r20.isSelfUser()
@@ -704,10 +704,10 @@ public class GroupCallUserCell extends FrameLayout {
             r0.updateRunnableScheduled = r7
         L_0x0077:
             org.telegram.messenger.ChatObject$Call r3 = r0.currentCall
-            android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r3 = r3.participants
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r3 = r3.participants
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r8 = r0.participant
             org.telegram.tgnet.TLRPC$Peer r8 = r8.peer
-            int r8 = org.telegram.messenger.MessageObject.getPeerId(r8)
+            long r8 = org.telegram.messenger.MessageObject.getPeerId(r8)
             java.lang.Object r3 = r3.get(r8)
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r3
             if (r3 == 0) goto L_0x008d
@@ -893,7 +893,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01b4
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627864(0x7f0e0var_, float:1.8883004E38)
+            r10 = 2131627889(0x7f0e0var_, float:1.8883055E38)
             java.lang.String r11 = "TapToAddPhotoOrBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -901,7 +901,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01b4:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627865(0x7f0e0var_, float:1.8883006E38)
+            r10 = 2131627890(0x7f0e0var_, float:1.8883057E38)
             java.lang.String r11 = "TapToAddPhotoOrDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -918,7 +918,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01e9
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627861(0x7f0e0var_, float:1.8882998E38)
+            r10 = 2131627886(0x7f0e0f6e, float:1.888305E38)
             java.lang.String r11 = "TapToAddBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -926,7 +926,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01e9:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627862(0x7f0e0var_, float:1.8883E38)
+            r10 = 2131627887(0x7f0e0f6f, float:1.8883051E38)
             java.lang.String r11 = "TapToAddDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -942,7 +942,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 != 0) goto L_0x0229
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627863(0x7f0e0var_, float:1.8883002E38)
+            r10 = 2131627888(0x7f0e0var_, float:1.8883053E38)
             java.lang.String r11 = "TapToAddPhoto"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -955,7 +955,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x0229:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627962(0x7f0e0fba, float:1.8883203E38)
+            r10 = 2131627987(0x7f0e0fd3, float:1.8883254E38)
             java.lang.String r11 = "ThisIsYou"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -1071,7 +1071,7 @@ public class GroupCallUserCell extends FrameLayout {
             r13.setLeftDrawable((android.graphics.drawable.Drawable) r14)
             org.telegram.ui.ActionBar.SimpleTextView[] r13 = r0.statusTextView
             r13 = r13[r7]
-            r14 = 2131627730(0x7f0e0ed2, float:1.8882733E38)
+            r14 = 2131627755(0x7f0e0eeb, float:1.8882783E38)
             java.lang.Object[] r15 = new java.lang.Object[r7]
             if (r2 >= r12) goto L_0x0321
             r11 = 1
@@ -1088,7 +1088,7 @@ public class GroupCallUserCell extends FrameLayout {
             r2.setLeftDrawable((android.graphics.drawable.Drawable) r10)
             org.telegram.ui.ActionBar.SimpleTextView[] r2 = r0.statusTextView
             r2 = r2[r7]
-            r11 = 2131627729(0x7f0e0ed1, float:1.888273E38)
+            r11 = 2131627754(0x7f0e0eea, float:1.8882781E38)
             java.lang.String r12 = "Speaking"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r2.setText(r11)
@@ -1612,7 +1612,7 @@ public class GroupCallUserCell extends FrameLayout {
         }
     }
 
-    public int getPeerId() {
+    public long getPeerId() {
         TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.participant;
         if (tLRPC$TL_groupCallParticipant == null) {
             return 0;

@@ -21,7 +21,7 @@ public class TLRPC$TL_user_layer65 extends TLRPC$TL_user {
             z2 = true;
         }
         this.bot_inline_geo = z2;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         if ((this.flags & 1) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
         }
@@ -79,7 +79,7 @@ public class TLRPC$TL_user_layer65 extends TLRPC$TL_user {
         int i11 = this.bot_inline_geo ? i10 | 2097152 : i10 & -2097153;
         this.flags = i11;
         abstractSerializedData.writeInt32(i11);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
         }

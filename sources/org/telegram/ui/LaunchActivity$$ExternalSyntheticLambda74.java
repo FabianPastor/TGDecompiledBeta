@@ -7,7 +7,7 @@ import org.telegram.ui.Components.AlertsCreator;
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda74 implements AlertsCreator.AccountSelectDelegate {
     public final /* synthetic */ LaunchActivity f$0;
     public final /* synthetic */ int f$1;
-    public final /* synthetic */ Integer f$10;
+    public final /* synthetic */ Long f$10;
     public final /* synthetic */ Integer f$11;
     public final /* synthetic */ Integer f$12;
     public final /* synthetic */ String f$13;
@@ -29,7 +29,7 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda74 imp
     public final /* synthetic */ boolean f$8;
     public final /* synthetic */ Integer f$9;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda74(LaunchActivity launchActivity, int i, String str, String str2, String str3, String str4, String str5, String str6, boolean z, Integer num, Integer num2, Integer num3, Integer num4, String str7, HashMap hashMap, String str8, String str9, String str10, String str11, TLRPC$TL_wallPaper tLRPC$TL_wallPaper, String str12, String str13, int i2) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda74(LaunchActivity launchActivity, int i, String str, String str2, String str3, String str4, String str5, String str6, boolean z, Integer num, Long l, Integer num2, Integer num3, String str7, HashMap hashMap, String str8, String str9, String str10, String str11, TLRPC$TL_wallPaper tLRPC$TL_wallPaper, String str12, String str13, int i2) {
         this.f$0 = launchActivity;
         this.f$1 = i;
         this.f$2 = str;
@@ -40,9 +40,9 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda74 imp
         this.f$7 = str6;
         this.f$8 = z;
         this.f$9 = num;
-        this.f$10 = num2;
-        this.f$11 = num3;
-        this.f$12 = num4;
+        this.f$10 = l;
+        this.f$11 = num2;
+        this.f$12 = num3;
         this.f$13 = str7;
         this.f$14 = hashMap;
         this.f$15 = str8;

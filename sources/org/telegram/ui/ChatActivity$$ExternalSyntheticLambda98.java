@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda98 imple
     }
 
     public final void run() {
-        this.f$0.lambda$showGigagroupConvertAlert$93();
+        this.f$0.lambda$showFieldPanel$76();
     }
 }

@@ -3,15 +3,15 @@ package j$.util.stream;
 import j$.util.function.BiConsumer;
 import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
-import j$.util.function.y;
+import j$.util.function.z;
 
 class K2 extends U2 implements T2 {
-    final /* synthetic */ y b;
+    final /* synthetic */ z b;
     final /* synthetic */ BiConsumer c;
     final /* synthetic */ CLASSNAMEb d;
 
-    K2(y yVar, BiConsumer biConsumer, CLASSNAMEb bVar) {
-        this.b = yVar;
+    K2(z zVar, BiConsumer biConsumer, CLASSNAMEb bVar) {
+        this.b = zVar;
         this.c = biConsumer;
         this.d = bVar;
     }

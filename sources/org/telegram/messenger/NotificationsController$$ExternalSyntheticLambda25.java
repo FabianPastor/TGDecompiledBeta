@@ -1,6 +1,6 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
+import androidx.collection.LongSparseArray;
 import java.util.ArrayList;
 
 public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda25 implements Runnable {
@@ -15,6 +15,6 @@ public final /* synthetic */ class NotificationsController$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$processDialogsUpdateRead$21(this.f$1, this.f$2);
+        this.f$0.lambda$removeDeletedMessagesFromNotifications$9(this.f$1, this.f$2);
     }
 }

@@ -209,14 +209,14 @@ public class VoIPHelper {
         if (tLRPC$User2 != null || tLRPC$Chat2 != null) {
             VoIPService sharedInstance = VoIPService.getSharedInstance();
             if (sharedInstance != null) {
-                int i3 = tLRPC$User2 != null ? tLRPC$User2.id : -tLRPC$Chat2.id;
-                int callerId = VoIPService.getSharedInstance().getCallerId();
-                if (callerId != i3 || sharedInstance.getAccount() != accountInstance.getCurrentAccount()) {
+                long j = tLRPC$User2 != null ? tLRPC$User2.id : -tLRPC$Chat2.id;
+                long callerId = VoIPService.getSharedInstance().getCallerId();
+                if (callerId != j || sharedInstance.getAccount() != accountInstance.getCurrentAccount()) {
                     String str6 = str;
                     if (callerId > 0) {
                         TLRPC$User user = sharedInstance.getUser();
                         str3 = ContactsController.formatName(user.first_name, user.last_name);
-                        if (i3 > 0) {
+                        if (j > 0) {
                             i = NUM;
                             str2 = "VoipOngoingAlert";
                         } else {
@@ -225,7 +225,7 @@ public class VoIPHelper {
                         }
                     } else {
                         str3 = sharedInstance.getChat().title;
-                        if (i3 > 0) {
+                        if (j > 0) {
                             i = NUM;
                             str2 = "VoipOngoingChatAlert2";
                         } else {
@@ -251,13 +251,12 @@ public class VoIPHelper {
                     activity2.startActivity(new Intent(activity2, LaunchActivity.class).setAction(tLRPC$User2 != null ? "voip" : "voip_chat"));
                 } else {
                     if (!TextUtils.isEmpty(str)) {
-                        String str7 = str;
                         sharedInstance.setGroupCallHash(str);
                     }
                     GroupCallActivity.create((LaunchActivity) activity2, AccountInstance.getInstance(UserConfig.selectedAccount), (TLRPC$Chat) null, (TLRPC$InputPeer) null, false, (String) null);
                 }
             } else {
-                String str8 = str;
+                String str7 = str;
                 if (VoIPService.callIShouldHavePutIntoIntent == null) {
                     doInitiateCall(tLRPC$User, tLRPC$Chat, str, (TLRPC$InputPeer) null, false, z, z2, z3, activity, baseFragment, accountInstance, true, true);
                 }

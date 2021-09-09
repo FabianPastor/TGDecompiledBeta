@@ -14,6 +14,7 @@ import android.os.Build;
 import android.util.Property;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
@@ -30,6 +31,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarPopupWindow extends PopupWindow {
@@ -95,15 +97,20 @@ public class ActionBarPopupWindow extends PopupWindow {
         private OnDispatchKeyEventListener mOnDispatchKeyEventListener;
         /* access modifiers changed from: private */
         public HashMap<View, Integer> positions;
+        private final Theme.ResourcesProvider resourcesProvider;
         private ScrollView scrollView;
         /* access modifiers changed from: private */
         public boolean shownFromBotton;
 
         public ActionBarPopupWindowLayout(Context context) {
-            this(context, NUM);
+            this(context, (Theme.ResourcesProvider) null);
         }
 
-        public ActionBarPopupWindowLayout(Context context, int i) {
+        public ActionBarPopupWindowLayout(Context context, Theme.ResourcesProvider resourcesProvider2) {
+            this(context, NUM, resourcesProvider2);
+        }
+
+        public ActionBarPopupWindowLayout(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
             super(context);
             this.backScaleX = 1.0f;
             this.backScaleY = 1.0f;
@@ -115,12 +122,13 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.gapEndY = -1000000;
             this.bgPaddings = new Rect();
             this.backgroundColor = -1;
+            this.resourcesProvider = resourcesProvider2;
             Drawable mutate = getResources().getDrawable(i).mutate();
             this.backgroundDrawable = mutate;
             if (mutate != null) {
                 mutate.getPadding(this.bgPaddings);
             }
-            setBackgroundColor(Theme.getColor("actionBarDefaultSubmenuBackground"));
+            setBackgroundColor(getThemedColor("actionBarDefaultSubmenuBackground"));
             setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             setWillNotDraw(false);
             try {
@@ -442,6 +450,12 @@ public class ActionBarPopupWindow extends PopupWindow {
                 }
             }
         }
+
+        private int getThemedColor(String str) {
+            Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+            return color != null ? color.intValue() : Theme.getColor(str);
+        }
     }
 
     public ActionBarPopupWindow(View view, int i, int i2) {
@@ -611,11 +625,17 @@ public class ActionBarPopupWindow extends PopupWindow {
             return;
         }
         this.isClosingAnimated = true;
-        ActionBarPopupWindowLayout actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) getContentView();
-        if (actionBarPopupWindowLayout.itemAnimators != null && !actionBarPopupWindowLayout.itemAnimators.isEmpty()) {
+        ViewGroup viewGroup = (ViewGroup) getContentView();
+        ActionBarPopupWindowLayout actionBarPopupWindowLayout = null;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            if (viewGroup.getChildAt(i) instanceof ActionBarPopupWindowLayout) {
+                actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) viewGroup.getChildAt(i);
+            }
+        }
+        if (!(actionBarPopupWindowLayout == null || actionBarPopupWindowLayout.itemAnimators == null || actionBarPopupWindowLayout.itemAnimators.isEmpty())) {
             int size = actionBarPopupWindowLayout.itemAnimators.size();
-            for (int i = 0; i < size; i++) {
-                AnimatorSet animatorSet2 = (AnimatorSet) actionBarPopupWindowLayout.itemAnimators.get(i);
+            for (int i2 = 0; i2 < size; i2++) {
+                AnimatorSet animatorSet2 = (AnimatorSet) actionBarPopupWindowLayout.itemAnimators.get(i2);
                 animatorSet2.removeAllListeners();
                 animatorSet2.cancel();
             }
@@ -626,9 +646,9 @@ public class ActionBarPopupWindow extends PopupWindow {
         Animator[] animatorArr = new Animator[2];
         Property property = View.TRANSLATION_Y;
         float[] fArr = new float[1];
-        fArr[0] = (float) AndroidUtilities.dp(actionBarPopupWindowLayout.shownFromBotton ? 5.0f : -5.0f);
-        animatorArr[0] = ObjectAnimator.ofFloat(actionBarPopupWindowLayout, property, fArr);
-        animatorArr[1] = ObjectAnimator.ofFloat(actionBarPopupWindowLayout, View.ALPHA, new float[]{0.0f});
+        fArr[0] = (float) AndroidUtilities.dp((actionBarPopupWindowLayout == null || !actionBarPopupWindowLayout.shownFromBotton) ? -5.0f : 5.0f);
+        animatorArr[0] = ObjectAnimator.ofFloat(viewGroup, property, fArr);
+        animatorArr[1] = ObjectAnimator.ofFloat(viewGroup, View.ALPHA, new float[]{0.0f});
         animatorSet3.playTogether(animatorArr);
         this.windowAnimatorSet.setDuration((long) this.dismissAnimationDuration);
         this.windowAnimatorSet.addListener(new AnimatorListenerAdapter() {

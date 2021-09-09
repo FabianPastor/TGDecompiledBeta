@@ -1,16 +1,16 @@
 package j$.wrappers;
 
-import j$.util.function.l;
+import j$.util.function.m;
 import java.util.function.IntFunction;
 
-public final /* synthetic */ class T implements l {
+public final /* synthetic */ class T implements m {
     final /* synthetic */ IntFunction a;
 
     private /* synthetic */ T(IntFunction intFunction) {
         this.a = intFunction;
     }
 
-    public static /* synthetic */ l a(IntFunction intFunction) {
+    public static /* synthetic */ m a(IntFunction intFunction) {
         if (intFunction == null) {
             return null;
         }

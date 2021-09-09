@@ -5,13 +5,12 @@ import j$.util.CLASSNAMEj;
 import j$.util.CLASSNAMEk;
 import j$.util.CLASSNAMEp;
 import j$.util.function.BiConsumer;
-import j$.util.function.i;
-import j$.util.function.k;
+import j$.util.function.j;
 import j$.util.function.l;
 import j$.util.function.m;
-import j$.util.function.u;
-import j$.util.function.y;
-import j$.util.v;
+import j$.util.function.n;
+import j$.util.function.v;
+import j$.util.function.z;
 import j$.wrappers.CLASSNAMEb0;
 import j$.wrappers.V;
 import j$.wrappers.X;
@@ -23,17 +22,17 @@ public interface M0 extends CLASSNAMEg {
 
     boolean F(V v);
 
-    void I(k kVar);
+    void I(l lVar);
 
-    Stream J(l lVar);
+    Stream J(m mVar);
 
-    int N(int i, i iVar);
+    int N(int i, j jVar);
 
-    M0 P(l lVar);
+    M0 P(m mVar);
 
-    void U(k kVar);
+    void U(l lVar);
 
-    CLASSNAMEk a0(i iVar);
+    CLASSNAMEk a0(j jVar);
 
     U asDoubleStream();
 
@@ -43,13 +42,13 @@ public interface M0 extends CLASSNAMEg {
 
     Stream boxed();
 
-    M0 c0(k kVar);
+    M0 c0(l lVar);
 
     long count();
 
     M0 distinct();
 
-    CLASSNAMEf1 f(m mVar);
+    CLASSNAMEf1 f(n nVar);
 
     CLASSNAMEk findAny();
 
@@ -59,7 +58,7 @@ public interface M0 extends CLASSNAMEg {
 
     CLASSNAMEp iterator();
 
-    Object k0(y yVar, u uVar, BiConsumer biConsumer);
+    Object k0(z zVar, v vVar, BiConsumer biConsumer);
 
     M0 limit(long j);
 
@@ -77,7 +76,7 @@ public interface M0 extends CLASSNAMEg {
 
     M0 sorted();
 
-    v spliterator();
+    j$.util.v spliterator();
 
     int sum();
 

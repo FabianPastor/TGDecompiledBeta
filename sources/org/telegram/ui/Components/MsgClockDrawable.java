@@ -9,10 +9,11 @@ import android.graphics.drawable.Drawable;
 import org.telegram.messenger.AndroidUtilities;
 
 public class MsgClockDrawable extends Drawable {
-    int alpha = 255;
-    int colorAlpha = 255;
-    Paint paint;
-    long startTime;
+    private int alpha = 255;
+    private int colorAlpha = 255;
+    private Drawable.ConstantState constantState;
+    private Paint paint;
+    private long startTime;
 
     public int getOpacity() {
         return -2;
@@ -62,5 +63,20 @@ public class MsgClockDrawable extends Drawable {
             this.alpha = i;
             this.paint.setAlpha((int) (((float) i) * (((float) this.colorAlpha) / 255.0f)));
         }
+    }
+
+    public Drawable.ConstantState getConstantState() {
+        if (this.constantState == null) {
+            this.constantState = new Drawable.ConstantState(this) {
+                public int getChangingConfigurations() {
+                    return 0;
+                }
+
+                public Drawable newDrawable() {
+                    return new MsgClockDrawable();
+                }
+            };
+        }
+        return this.constantState;
     }
 }

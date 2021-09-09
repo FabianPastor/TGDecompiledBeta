@@ -6,15 +6,15 @@ public class TLRPC$TL_channelParticipantKicked_layer67 extends TLRPC$ChannelPart
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
         this.peer = tLRPC$TL_peerUser;
-        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
-        this.kicked_by = abstractSerializedData.readInt32(z);
+        tLRPC$TL_peerUser.user_id = (long) abstractSerializedData.readInt32(z);
+        this.kicked_by = (long) abstractSerializedData.readInt32(z);
         this.date = abstractSerializedData.readInt32(z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        abstractSerializedData.writeInt32(this.peer.user_id);
-        abstractSerializedData.writeInt32(this.kicked_by);
+        abstractSerializedData.writeInt32((int) this.peer.user_id);
+        abstractSerializedData.writeInt32((int) this.kicked_by);
         abstractSerializedData.writeInt32(this.date);
     }
 }

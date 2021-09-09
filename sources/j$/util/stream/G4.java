@@ -2,12 +2,12 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.function.j;
 import j$.util.function.k;
+import j$.util.function.l;
 import j$.util.v;
 import j$.util.y;
 
-final class G4 extends I4 implements v, k {
+final class G4 extends I4 implements v, l {
     int e;
 
     G4(v vVar, long j, long j2) {
@@ -30,9 +30,9 @@ final class G4 extends I4 implements v, k {
         CLASSNAMEa.c(this, consumer);
     }
 
-    public k l(k kVar) {
-        kVar.getClass();
-        return new j(this, kVar);
+    public l l(l lVar) {
+        lVar.getClass();
+        return new k(this, lVar);
     }
 
     /* access modifiers changed from: protected */
@@ -42,7 +42,7 @@ final class G4 extends I4 implements v, k {
 
     /* access modifiers changed from: protected */
     public void s(Object obj) {
-        ((k) obj).accept(this.e);
+        ((l) obj).accept(this.e);
     }
 
     /* access modifiers changed from: protected */

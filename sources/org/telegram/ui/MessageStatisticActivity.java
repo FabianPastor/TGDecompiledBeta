@@ -20,7 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LruCache;
@@ -70,7 +70,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
     public ChatAvatarContainer avatarContainer;
     /* access modifiers changed from: private */
     public TLRPC$ChatFull chat;
-    private final int chatId;
+    private final long chatId;
     /* access modifiers changed from: private */
     public LruCache<ChartData> childDataCache = new LruCache<>(15);
     boolean drawPlay;
@@ -233,7 +233,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         if (i == NotificationCenter.chatInfoDidLoad) {
             TLRPC$ChatFull tLRPC$ChatFull = objArr[0];
             if (this.chat == null && tLRPC$ChatFull.id == this.chatId) {
-                TLRPC$Chat chat2 = getMessagesController().getChat(Integer.valueOf(this.chatId));
+                TLRPC$Chat chat2 = getMessagesController().getChat(Long.valueOf(this.chatId));
                 if (chat2 != null) {
                     this.avatarContainer.setChatAvatar(chat2);
                     this.avatarContainer.setTitle(chat2.title);
@@ -271,7 +271,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.<init>(r1)
             r0.emptyView = r3
             java.lang.String r4 = "NoResult"
-            r5 = 2131626408(0x7f0e09a8, float:1.8880051E38)
+            r5 = 2131626432(0x7f0e09c0, float:1.88801E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r3.setText(r4)
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
@@ -304,7 +304,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.setTextColor(r7)
             r3.setTag(r6)
             java.lang.String r7 = "LoadingStats"
-            r8 = 2131626076(0x7f0e085c, float:1.8879378E38)
+            r8 = 2131626088(0x7f0e0868, float:1.8879402E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
             r3.setText(r7)
             r3.setGravity(r5)
@@ -317,7 +317,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r7.setTextColor(r9)
             r7.setTag(r8)
             java.lang.String r9 = "LoadingStatsDescription"
-            r10 = 2131626077(0x7f0e085d, float:1.887938E38)
+            r10 = 2131626089(0x7f0e0869, float:1.8879404E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r7.setText(r9)
             r7.setGravity(r5)
@@ -448,8 +448,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
             r1.addView(r2, r10, r4)
             org.telegram.messenger.MessagesController r1 = r20.getMessagesController()
-            int r2 = r0.chatId
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            long r11 = r0.chatId
+            java.lang.Long r2 = java.lang.Long.valueOf(r11)
             org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r2)
             if (r1 == 0) goto L_0x01dd
             org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
@@ -672,12 +672,12 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         int i2 = this.startRow;
         if (i >= i2 && i < this.endRow) {
             TLRPC$Message tLRPC$Message = this.messages.get(i - i2);
-            int dialogId = (int) MessageObject.getDialogId(tLRPC$Message);
+            long dialogId = MessageObject.getDialogId(tLRPC$Message);
             Bundle bundle = new Bundle();
-            if (dialogId > 0) {
-                bundle.putInt("user_id", dialogId);
+            if (DialogObject.isUserDialog(dialogId)) {
+                bundle.putLong("user_id", dialogId);
             } else {
-                bundle.putInt("chat_id", -dialogId);
+                bundle.putLong("chat_id", -dialogId);
             }
             bundle.putInt("message_id", tLRPC$Message.id);
             bundle.putBoolean("need_remove_previous_same_chat_activity", false);
@@ -697,7 +697,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             }
         }
         Bundle bundle = new Bundle();
-        bundle.putInt("chat_id", this.chatId);
+        bundle.putLong("chat_id", this.chatId);
         bundle.putInt("message_id", this.messageId);
         bundle.putBoolean("need_remove_previous_same_chat_activity", false);
         presentFragment(new ChatActivity(bundle));
@@ -729,13 +729,13 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 tLRPC$TL_stats_getMessagePublicForwards.channel = getMessagesController().getInputChannel(-this.messageObject.getFromChatId());
             } else {
                 tLRPC$TL_stats_getMessagePublicForwards.msg_id = messageObject2.getId();
-                tLRPC$TL_stats_getMessagePublicForwards.channel = getMessagesController().getInputChannel((int) (-this.messageObject.getDialogId()));
+                tLRPC$TL_stats_getMessagePublicForwards.channel = getMessagesController().getInputChannel(-this.messageObject.getDialogId());
             }
             if (!this.messages.isEmpty()) {
                 ArrayList<TLRPC$Message> arrayList = this.messages;
                 TLRPC$Message tLRPC$Message = arrayList.get(arrayList.size() - 1);
                 tLRPC$TL_stats_getMessagePublicForwards.offset_id = tLRPC$Message.id;
-                tLRPC$TL_stats_getMessagePublicForwards.offset_peer = getMessagesController().getInputPeer((int) MessageObject.getDialogId(tLRPC$Message));
+                tLRPC$TL_stats_getMessagePublicForwards.offset_peer = getMessagesController().getInputPeer(MessageObject.getDialogId(tLRPC$Message));
                 tLRPC$TL_stats_getMessagePublicForwards.offset_rate = this.nextRate;
             } else {
                 tLRPC$TL_stats_getMessagePublicForwards.offset_peer = new TLRPC$TL_inputPeerEmpty();
@@ -785,7 +785,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             tLRPC$TL_stats_getMessageStats.channel = getMessagesController().getInputChannel(-this.messageObject.getFromChatId());
         } else {
             tLRPC$TL_stats_getMessageStats.msg_id = messageObject2.getId();
-            tLRPC$TL_stats_getMessageStats.channel = getMessagesController().getInputChannel((int) (-this.messageObject.getDialogId()));
+            tLRPC$TL_stats_getMessageStats.channel = getMessagesController().getInputChannel(-this.messageObject.getDialogId());
         }
         getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessageStats, new MessageStatisticActivity$$ExternalSyntheticLambda6(this), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true);
     }
@@ -990,55 +990,130 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MessageStatisticActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
 
-        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            String str;
-            Object obj;
-            String str2;
-            int itemViewType = viewHolder.getItemViewType();
-            boolean z = false;
-            if (itemViewType == 0) {
-                ManageChatUserCell manageChatUserCell = (ManageChatUserCell) viewHolder.itemView;
-                TLRPC$Message item = getItem(i);
-                int dialogId = (int) MessageObject.getDialogId(item);
-                if (dialogId > 0) {
-                    obj = MessageStatisticActivity.this.getMessagesController().getUser(Integer.valueOf(dialogId));
-                    str = null;
-                } else {
-                    TLRPC$Chat chat = MessageStatisticActivity.this.getMessagesController().getChat(Integer.valueOf(-dialogId));
-                    if (chat.participants_count != 0) {
-                        if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                            str2 = LocaleController.formatPluralString("Members", chat.participants_count);
-                        } else {
-                            str2 = LocaleController.formatPluralString("Subscribers", chat.participants_count);
-                        }
-                        str = String.format("%1$s, %2$s", new Object[]{str2, LocaleController.formatPluralString("Views", item.views)});
-                    } else {
-                        str = null;
-                    }
-                    obj = chat;
-                }
-                if (obj != null) {
-                    if (i != MessageStatisticActivity.this.endRow - 1) {
-                        z = true;
-                    }
-                    manageChatUserCell.setData(obj, (CharSequence) null, str, z);
-                }
-            } else if (itemViewType == 1) {
-                viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-            } else if (itemViewType == 2) {
-                HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-                if (i == MessageStatisticActivity.this.overviewHeaderRow) {
-                    headerCell.setText(LocaleController.formatString("StatisticOverview", NUM, new Object[0]));
-                } else {
-                    headerCell.setText(LocaleController.formatPluralString("PublicSharesCount", MessageStatisticActivity.this.publicChats));
-                }
-            } else if (itemViewType == 4) {
-                StatisticActivity.BaseChartCell baseChartCell = (StatisticActivity.BaseChartCell) viewHolder.itemView;
-                baseChartCell.updateData(MessageStatisticActivity.this.interactionsViewData, false);
-                baseChartCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            } else if (itemViewType == 5) {
-                ((OverviewCell) viewHolder.itemView).setData();
-            }
+        /* JADX WARNING: Removed duplicated region for block: B:30:0x00e1  */
+        /* JADX WARNING: Removed duplicated region for block: B:40:? A[RETURN, SYNTHETIC] */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r9, int r10) {
+            /*
+                r8 = this;
+                int r0 = r9.getItemViewType()
+                r1 = 2
+                r2 = 0
+                r3 = 1
+                if (r0 == 0) goto L_0x0076
+                if (r0 == r3) goto L_0x0064
+                if (r0 == r1) goto L_0x0037
+                r10 = 4
+                if (r0 == r10) goto L_0x001e
+                r10 = 5
+                if (r0 == r10) goto L_0x0015
+                goto L_0x00ee
+            L_0x0015:
+                android.view.View r9 = r9.itemView
+                org.telegram.ui.MessageStatisticActivity$OverviewCell r9 = (org.telegram.ui.MessageStatisticActivity.OverviewCell) r9
+                r9.setData()
+                goto L_0x00ee
+            L_0x001e:
+                android.view.View r9 = r9.itemView
+                org.telegram.ui.StatisticActivity$BaseChartCell r9 = (org.telegram.ui.StatisticActivity.BaseChartCell) r9
+                org.telegram.ui.MessageStatisticActivity r10 = org.telegram.ui.MessageStatisticActivity.this
+                org.telegram.ui.StatisticActivity$ChartViewData r10 = r10.interactionsViewData
+                r9.updateData(r10, r2)
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r10 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r0 = -1
+                r1 = -2
+                r10.<init>((int) r0, (int) r1)
+                r9.setLayoutParams(r10)
+                goto L_0x00ee
+            L_0x0037:
+                android.view.View r9 = r9.itemView
+                org.telegram.ui.Cells.HeaderCell r9 = (org.telegram.ui.Cells.HeaderCell) r9
+                org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
+                int r0 = r0.overviewHeaderRow
+                if (r10 != r0) goto L_0x0053
+                r10 = 2131627789(0x7f0e0f0d, float:1.8882852E38)
+                java.lang.Object[] r0 = new java.lang.Object[r2]
+                java.lang.String r1 = "StatisticOverview"
+                java.lang.String r10 = org.telegram.messenger.LocaleController.formatString(r1, r10, r0)
+                r9.setText(r10)
+                goto L_0x00ee
+            L_0x0053:
+                org.telegram.ui.MessageStatisticActivity r10 = org.telegram.ui.MessageStatisticActivity.this
+                int r10 = r10.publicChats
+                java.lang.String r0 = "PublicSharesCount"
+                java.lang.String r10 = org.telegram.messenger.LocaleController.formatPluralString(r0, r10)
+                r9.setText(r10)
+                goto L_0x00ee
+            L_0x0064:
+                android.view.View r9 = r9.itemView
+                android.content.Context r10 = r8.mContext
+                r0 = 2131165449(0x7var_, float:1.7945115E38)
+                java.lang.String r1 = "windowBackgroundGrayShadow"
+                android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
+                r9.setBackgroundDrawable(r10)
+                goto L_0x00ee
+            L_0x0076:
+                android.view.View r9 = r9.itemView
+                org.telegram.ui.Cells.ManageChatUserCell r9 = (org.telegram.ui.Cells.ManageChatUserCell) r9
+                org.telegram.tgnet.TLRPC$Message r0 = r8.getItem(r10)
+                long r4 = org.telegram.messenger.MessageObject.getDialogId(r0)
+                boolean r6 = org.telegram.messenger.DialogObject.isUserDialog(r4)
+                r7 = 0
+                if (r6 == 0) goto L_0x0098
+                org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
+                org.telegram.messenger.MessagesController r0 = r0.getMessagesController()
+                java.lang.Long r1 = java.lang.Long.valueOf(r4)
+                org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
+                goto L_0x00de
+            L_0x0098:
+                org.telegram.ui.MessageStatisticActivity r6 = org.telegram.ui.MessageStatisticActivity.this
+                org.telegram.messenger.MessagesController r6 = r6.getMessagesController()
+                long r4 = -r4
+                java.lang.Long r4 = java.lang.Long.valueOf(r4)
+                org.telegram.tgnet.TLRPC$Chat r4 = r6.getChat(r4)
+                int r5 = r4.participants_count
+                if (r5 == 0) goto L_0x00dd
+                boolean r5 = org.telegram.messenger.ChatObject.isChannel(r4)
+                if (r5 == 0) goto L_0x00be
+                boolean r5 = r4.megagroup
+                if (r5 != 0) goto L_0x00be
+                int r5 = r4.participants_count
+                java.lang.String r6 = "Subscribers"
+                java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r6, r5)
+                goto L_0x00c6
+            L_0x00be:
+                int r5 = r4.participants_count
+                java.lang.String r6 = "Members"
+                java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r6, r5)
+            L_0x00c6:
+                java.lang.Object[] r1 = new java.lang.Object[r1]
+                r1[r2] = r5
+                int r0 = r0.views
+                java.lang.String r5 = "Views"
+                java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r5, r0)
+                r1[r3] = r0
+                java.lang.String r0 = "%1$s, %2$s"
+                java.lang.String r0 = java.lang.String.format(r0, r1)
+                r1 = r0
+                r0 = r4
+                goto L_0x00df
+            L_0x00dd:
+                r0 = r4
+            L_0x00de:
+                r1 = r7
+            L_0x00df:
+                if (r0 == 0) goto L_0x00ee
+                org.telegram.ui.MessageStatisticActivity r4 = org.telegram.ui.MessageStatisticActivity.this
+                int r4 = r4.endRow
+                int r4 = r4 - r3
+                if (r10 == r4) goto L_0x00eb
+                r2 = 1
+            L_0x00eb:
+                r9.setData(r0, r7, r1, r2)
+            L_0x00ee:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MessageStatisticActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
         public void onViewRecycled(RecyclerView.ViewHolder viewHolder) {

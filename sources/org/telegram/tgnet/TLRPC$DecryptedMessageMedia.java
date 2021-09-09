@@ -27,7 +27,7 @@ public abstract class TLRPC$DecryptedMessageMedia extends TLObject {
     public int thumb_w;
     public String title;
     public String url;
-    public int user_id;
+    public long user_id;
     public String venue_id;
     public int w;
 

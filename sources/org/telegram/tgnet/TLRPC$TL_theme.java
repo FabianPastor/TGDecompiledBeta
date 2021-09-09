@@ -10,7 +10,7 @@ public class TLRPC$TL_theme extends TLRPC$Theme {
     public long id;
     public int installs_count;
     public boolean isDefault;
-    public TLRPC$TL_themeSettings settings;
+    public TLRPC$ThemeSettings settings;
     public String slug;
     public String title;
 
@@ -32,7 +32,7 @@ public class TLRPC$TL_theme extends TLRPC$Theme {
             this.document = TLRPC$Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 8) != 0) {
-            this.settings = TLRPC$TL_themeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.settings = TLRPC$ThemeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 16) != 0) {
             this.installs_count = abstractSerializedData.readInt32(z);

@@ -6,12 +6,12 @@ import android.widget.TextView;
 import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda62 implements TextView.OnEditorActionListener {
-    public final /* synthetic */ int f$0;
+    public final /* synthetic */ long f$0;
     public final /* synthetic */ AlertDialog f$1;
     public final /* synthetic */ DialogInterface.OnClickListener f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda62(int i, AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener) {
-        this.f$0 = i;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda62(long j, AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener) {
+        this.f$0 = j;
         this.f$1 = alertDialog;
         this.f$2 = onClickListener;
     }

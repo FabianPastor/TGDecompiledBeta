@@ -2,17 +2,17 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEl;
 import j$.util.function.Consumer;
-import j$.util.function.n;
 import j$.util.function.o;
 import j$.util.function.p;
+import j$.util.function.q;
 
 class S2 implements T2, CLASSNAMEm3 {
     private boolean a;
     private long b;
-    final /* synthetic */ n c;
+    final /* synthetic */ o c;
 
-    S2(n nVar) {
-        this.c = nVar;
+    S2(o oVar) {
+        this.c = oVar;
     }
 
     public /* synthetic */ void accept(double d) {
@@ -43,9 +43,9 @@ class S2 implements T2, CLASSNAMEm3 {
         CLASSNAMEp1.c(this, l);
     }
 
-    public p f(p pVar) {
-        pVar.getClass();
-        return new o(this, pVar);
+    public q f(q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
     }
 
     public Object get() {

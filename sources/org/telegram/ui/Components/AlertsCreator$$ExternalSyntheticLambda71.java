@@ -10,6 +10,7 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda71 implements Runnable {
     public final /* synthetic */ AlertDialog[] f$0;
@@ -18,6 +19,7 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda71 impl
     public final /* synthetic */ MessageObject.GroupedMessages f$11;
     public final /* synthetic */ boolean f$12;
     public final /* synthetic */ Runnable f$13;
+    public final /* synthetic */ Theme.ResourcesProvider f$14;
     public final /* synthetic */ TLRPC$TL_error f$2;
     public final /* synthetic */ BaseFragment f$3;
     public final /* synthetic */ TLRPC$User f$4;
@@ -27,7 +29,7 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda71 impl
     public final /* synthetic */ long f$8;
     public final /* synthetic */ MessageObject f$9;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda71(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable) {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda71(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable, Theme.ResourcesProvider resourcesProvider) {
         this.f$0 = alertDialogArr;
         this.f$1 = tLObject;
         this.f$2 = tLRPC$TL_error;
@@ -42,9 +44,10 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda71 impl
         this.f$11 = groupedMessages;
         this.f$12 = z;
         this.f$13 = runnable;
+        this.f$14 = resourcesProvider;
     }
 
     public final void run() {
-        AlertsCreator.lambda$createDeleteMessagesAlert$85(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13);
+        AlertsCreator.lambda$createDeleteMessagesAlert$85(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14);
     }
 }

@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$Dialog;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda54 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ TLRPC$Dialog f$2;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda54(MessagesController messagesController, int i, TLRPC$Dialog tLRPC$Dialog) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda54(MessagesController messagesController, long j) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = tLRPC$Dialog;
+        this.f$1 = j;
     }
 
     public final void run() {
-        this.f$0.lambda$checkLastDialogMessage$174(this.f$1, this.f$2);
+        this.f$0.lambda$setUserAdminRole$71(this.f$1);
     }
 }

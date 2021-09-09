@@ -15,7 +15,7 @@ public class SlideChooseView extends View {
     private final SeekBarAccessibilityDelegate accessibilityDelegate;
     private Callback callback;
     private int circleSize;
-    private int dashedFrom = -1;
+    private int dashedFrom;
     private int gapSize;
     private int lastDash;
     private Paint linePaint;
@@ -24,14 +24,15 @@ public class SlideChooseView extends View {
     private int[] optionsSizes;
     /* access modifiers changed from: private */
     public String[] optionsStr;
-    private Paint paint = new Paint(1);
+    private Paint paint;
+    private final Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public int selectedIndex;
     private int sideSide;
     private boolean startMoving;
     private int startMovingPreset;
     private float startX;
-    private TextPaint textPaint = new TextPaint(1);
+    private TextPaint textPaint;
 
     public interface Callback {
 
@@ -47,7 +48,15 @@ public class SlideChooseView extends View {
     }
 
     public SlideChooseView(Context context) {
+        this(context, (Theme.ResourcesProvider) null);
+    }
+
+    public SlideChooseView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.dashedFrom = -1;
+        this.resourcesProvider = resourcesProvider2;
+        this.paint = new Paint(1);
+        this.textPaint = new TextPaint(1);
         Paint paint2 = new Paint(1);
         this.linePaint = paint2;
         paint2.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
@@ -297,7 +306,7 @@ public class SlideChooseView extends View {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         Canvas canvas2 = canvas;
-        this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteGrayText"));
+        this.textPaint.setColor(getThemedColor("windowBackgroundWhiteGrayText"));
         int measuredHeight = (getMeasuredHeight() / 2) + AndroidUtilities.dp(11.0f);
         int i = 0;
         while (i < this.optionsStr.length) {
@@ -306,13 +315,13 @@ public class SlideChooseView extends View {
             int i4 = this.circleSize;
             int i5 = i2 + ((i3 + i4) * i) + (i4 / 2);
             if (i <= this.selectedIndex) {
-                int color = Theme.getColor("switchTrackChecked");
-                this.paint.setColor(color);
-                this.linePaint.setColor(color);
+                int themedColor = getThemedColor("switchTrackChecked");
+                this.paint.setColor(themedColor);
+                this.linePaint.setColor(themedColor);
             } else {
-                int color2 = Theme.getColor("switchTrack");
-                this.paint.setColor(color2);
-                this.linePaint.setColor(color2);
+                int themedColor2 = getThemedColor("switchTrack");
+                this.paint.setColor(themedColor2);
+                this.linePaint.setColor(themedColor2);
             }
             float f = (float) measuredHeight;
             canvas2.drawCircle((float) i5, f, (float) (i == this.selectedIndex ? AndroidUtilities.dp(6.0f) : this.circleSize / 2), this.paint);
@@ -366,5 +375,11 @@ public class SlideChooseView extends View {
 
     public int getSelectedIndex() {
         return this.selectedIndex;
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

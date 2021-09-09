@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.concurrent.CountDownLatch;
+import org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda99 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
     public final /* synthetic */ long f$1;
-    public final /* synthetic */ boolean[] f$2;
-    public final /* synthetic */ CountDownLatch f$3;
+    public final /* synthetic */ TLRPC$TL_updates_channelDifferenceTooLong f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda99(MessagesStorage messagesStorage, long j, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda99(MessagesStorage messagesStorage, long j, TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong) {
         this.f$0 = messagesStorage;
         this.f$1 = j;
-        this.f$2 = zArr;
-        this.f$3 = countDownLatch;
+        this.f$2 = tLRPC$TL_updates_channelDifferenceTooLong;
     }
 
     public final void run() {
-        this.f$0.lambda$checkMessageByRandomId$106(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$overwriteChannel$142(this.f$1, this.f$2);
     }
 }

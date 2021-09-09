@@ -19,7 +19,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class StickerEmptyView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private boolean animateLayoutChange;
-    int currentAccount = UserConfig.selectedAccount;
+    int currentAccount;
     int keyboardSize;
     private int lastH;
     private LinearLayout linearLayout;
@@ -28,22 +28,8 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
     public RadialProgressView progressBar;
     private boolean progressShowing;
     public final View progressView;
-    Runnable showProgressRunnable = new Runnable() {
-        public void run() {
-            StickerEmptyView stickerEmptyView = StickerEmptyView.this;
-            View view = stickerEmptyView.progressView;
-            if (view != null) {
-                if (view.getVisibility() != 0) {
-                    StickerEmptyView.this.progressView.setVisibility(0);
-                    StickerEmptyView.this.progressView.setAlpha(0.0f);
-                }
-                StickerEmptyView.this.progressView.animate().setListener((Animator.AnimatorListener) null).cancel();
-                StickerEmptyView.this.progressView.animate().alpha(1.0f).setDuration(150).start();
-                return;
-            }
-            stickerEmptyView.progressBar.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
-        }
-    };
+    private final Theme.ResourcesProvider resourcesProvider;
+    Runnable showProgressRunnable;
     private int stickerType;
     public BackupImageView stickerView;
     private LoadingStickerDrawable stubDrawable;
@@ -51,7 +37,29 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
     public final TextView title;
 
     public StickerEmptyView(Context context, View view, int i) {
+        this(context, view, i, (Theme.ResourcesProvider) null);
+    }
+
+    public StickerEmptyView(Context context, View view, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.currentAccount = UserConfig.selectedAccount;
+        this.showProgressRunnable = new Runnable() {
+            public void run() {
+                StickerEmptyView stickerEmptyView = StickerEmptyView.this;
+                View view = stickerEmptyView.progressView;
+                if (view != null) {
+                    if (view.getVisibility() != 0) {
+                        StickerEmptyView.this.progressView.setVisibility(0);
+                        StickerEmptyView.this.progressView.setAlpha(0.0f);
+                    }
+                    StickerEmptyView.this.progressView.animate().setListener((Animator.AnimatorListener) null).cancel();
+                    StickerEmptyView.this.progressView.animate().alpha(1.0f).setDuration(150).start();
+                    return;
+                }
+                stickerEmptyView.progressBar.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
+            }
+        };
+        this.resourcesProvider = resourcesProvider2;
         this.progressView = view;
         this.stickerType = i;
         AnonymousClass2 r0 = new LinearLayout(context) {
@@ -77,13 +85,13 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         this.title = textView;
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTag("windowBackgroundWhiteBlackText");
-        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        textView.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
         textView.setTextSize(1, 20.0f);
         textView.setGravity(17);
         TextView textView2 = new TextView(context);
         this.subtitle = textView2;
         textView2.setTag("windowBackgroundWhiteGrayText");
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
+        textView2.setTextColor(getThemedColor("windowBackgroundWhiteGrayText"));
         textView2.setTextSize(1, 14.0f);
         textView2.setGravity(17);
         this.linearLayout.addView(this.stickerView, LayoutHelper.createLinear(130, 130, 1));
@@ -91,7 +99,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         this.linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 1, 0, 8, 0, 0));
         addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f, 17, 56.0f, 0.0f, 56.0f, 30.0f));
         if (view == null) {
-            RadialProgressView radialProgressView = new RadialProgressView(context);
+            RadialProgressView radialProgressView = new RadialProgressView(context, resourcesProvider2);
             this.progressBar = radialProgressView;
             radialProgressView.setAlpha(0.0f);
             this.progressBar.setScaleY(0.5f);
@@ -129,9 +137,9 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
 
     public void setColors(String str, String str2, String str3, String str4) {
         this.title.setTag(str);
-        this.title.setTextColor(Theme.getColor(str));
+        this.title.setTextColor(getThemedColor(str));
         this.subtitle.setTag(str2);
-        this.subtitle.setTextColor(Theme.getColor(str2));
+        this.subtitle.setTextColor(getThemedColor(str2));
         this.stubDrawable.setColors(str3, str4);
     }
 
@@ -325,5 +333,11 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                 radialProgressView.setTranslationY(0.0f);
             }
         }
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

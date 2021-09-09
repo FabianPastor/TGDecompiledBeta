@@ -18,7 +18,7 @@ public class TLRPC$TL_channel_layer92 extends TLRPC$TL_channel {
             z2 = true;
         }
         this.min = z2;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         if ((this.flags & 8192) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
         }
@@ -66,7 +66,7 @@ public class TLRPC$TL_channel_layer92 extends TLRPC$TL_channel {
         int i8 = this.min ? i7 | 4096 : i7 & -4097;
         this.flags = i8;
         abstractSerializedData.writeInt32(i8);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         if ((this.flags & 8192) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
         }

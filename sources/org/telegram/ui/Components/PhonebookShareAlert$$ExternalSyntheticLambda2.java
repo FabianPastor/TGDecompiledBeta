@@ -1,19 +1,18 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class PhonebookShareAlert$$ExternalSyntheticLambda2 implements View.OnClickListener {
     public final /* synthetic */ PhonebookShareAlert f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ View f$2;
+    public final /* synthetic */ Theme.ResourcesProvider f$1;
 
-    public /* synthetic */ PhonebookShareAlert$$ExternalSyntheticLambda2(PhonebookShareAlert phonebookShareAlert, int i, View view) {
+    public /* synthetic */ PhonebookShareAlert$$ExternalSyntheticLambda2(PhonebookShareAlert phonebookShareAlert, Theme.ResourcesProvider resourcesProvider) {
         this.f$0 = phonebookShareAlert;
-        this.f$1 = i;
-        this.f$2 = view;
+        this.f$1 = resourcesProvider;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$2(this.f$1, this.f$2, view);
+        this.f$0.lambda$new$5(this.f$1, view);
     }
 }

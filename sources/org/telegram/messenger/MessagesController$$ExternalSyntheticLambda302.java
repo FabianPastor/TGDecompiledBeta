@@ -9,13 +9,13 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda30
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ boolean f$1;
     public final /* synthetic */ TLRPC$User f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda302(MessagesController messagesController, boolean z, TLRPC$User tLRPC$User, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda302(MessagesController messagesController, boolean z, TLRPC$User tLRPC$User, long j) {
         this.f$0 = messagesController;
         this.f$1 = z;
         this.f$2 = tLRPC$User;
-        this.f$3 = i;
+        this.f$3 = j;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {

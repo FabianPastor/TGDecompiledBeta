@@ -8,9 +8,9 @@ import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Consumer;
 import j$.util.function.f;
-import j$.util.function.k;
-import j$.util.function.p;
-import j$.util.function.x;
+import j$.util.function.l;
+import j$.util.function.q;
+import j$.util.function.y;
 import j$.util.stream.CLASSNAMEp1;
 import j$.util.stream.Stream;
 import java.util.Arrays;
@@ -169,7 +169,11 @@ public abstract /* synthetic */ class CLASSNAMEa {
     }
 
     public static Comparator J(Comparator comparator, Comparator comparator2) {
-        return comparator instanceof CLASSNAMEe ? ((CLASSNAMEf) ((CLASSNAMEe) comparator)).thenComparing(comparator2) : new CLASSNAMEc(comparator, comparator2);
+        if (comparator instanceof CLASSNAMEe) {
+            return ((CLASSNAMEf) ((CLASSNAMEe) comparator)).thenComparing(comparator2);
+        }
+        comparator2.getClass();
+        return new CLASSNAMEc(comparator, comparator2);
     }
 
     public static void a(Collection collection, Consumer consumer) {
@@ -192,8 +196,8 @@ public abstract /* synthetic */ class CLASSNAMEa {
     }
 
     public static void c(v vVar, Consumer consumer) {
-        if (consumer instanceof k) {
-            vVar.c((k) consumer);
+        if (consumer instanceof l) {
+            vVar.c((l) consumer);
         } else if (!P.a) {
             consumer.getClass();
             vVar.c(new CLASSNAMEo(consumer));
@@ -204,8 +208,8 @@ public abstract /* synthetic */ class CLASSNAMEa {
     }
 
     public static void d(w wVar, Consumer consumer) {
-        if (consumer instanceof p) {
-            wVar.d((p) consumer);
+        if (consumer instanceof q) {
+            wVar.d((q) consumer);
         } else if (!P.a) {
             consumer.getClass();
             wVar.d(new q(consumer));
@@ -230,15 +234,15 @@ public abstract /* synthetic */ class CLASSNAMEa {
         return CLASSNAMEp1.y(I(collection), true);
     }
 
-    public static boolean h(Collection collection, x xVar) {
+    public static boolean h(Collection collection, y yVar) {
         if (DesugarCollections.a.isInstance(collection)) {
-            return DesugarCollections.c(collection, xVar);
+            return DesugarCollections.c(collection, yVar);
         }
-        xVar.getClass();
+        yVar.getClass();
         boolean z = false;
         Iterator it = collection.iterator();
         while (it.hasNext()) {
-            if (xVar.test(it.next())) {
+            if (yVar.test(it.next())) {
                 it.remove();
                 z = true;
             }
@@ -263,8 +267,8 @@ public abstract /* synthetic */ class CLASSNAMEa {
     }
 
     public static boolean k(v vVar, Consumer consumer) {
-        if (consumer instanceof k) {
-            return vVar.g((k) consumer);
+        if (consumer instanceof l) {
+            return vVar.g((l) consumer);
         }
         if (!P.a) {
             consumer.getClass();
@@ -275,8 +279,8 @@ public abstract /* synthetic */ class CLASSNAMEa {
     }
 
     public static boolean l(w wVar, Consumer consumer) {
-        if (consumer instanceof p) {
-            return wVar.i((p) consumer);
+        if (consumer instanceof q) {
+            return wVar.i((q) consumer);
         }
         if (!P.a) {
             consumer.getClass();

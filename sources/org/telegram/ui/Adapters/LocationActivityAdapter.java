@@ -48,6 +48,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     private boolean needEmptyView;
     private int overScrollHeight;
     private Location previousFetchedLocation;
+    private final Theme.ResourcesProvider resourcesProvider;
     private SendLocationCell sendLocationCell;
     private int shareLiveLocationPotistion = -1;
     /* access modifiers changed from: private */
@@ -57,11 +58,12 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     public void onDirectionClick() {
     }
 
-    public LocationActivityAdapter(Context context, int i, long j, boolean z) {
+    public LocationActivityAdapter(Context context, int i, long j, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         this.mContext = context;
         this.locationType = i;
         this.dialogId = j;
         this.needEmptyView = z;
+        this.resourcesProvider = resourcesProvider2;
     }
 
     public void setOverScrollHeight(int i) {
@@ -113,7 +115,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
 
     public void setLiveLocations(ArrayList<LocationActivity.LiveLocation> arrayList) {
         this.currentLiveLocations = new ArrayList<>(arrayList);
-        int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
+        long clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
         int i = 0;
         while (true) {
             if (i >= this.currentLiveLocations.size()) {
@@ -262,38 +264,38 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 };
                 break;
             case 1:
-                view = new SendLocationCell(this.mContext, false);
+                view = new SendLocationCell(this.mContext, false, this.resourcesProvider);
                 break;
             case 2:
-                shadowSectionCell = new HeaderCell(this.mContext);
+                shadowSectionCell = new HeaderCell(this.mContext, this.resourcesProvider);
                 break;
             case 3:
-                view = new LocationCell(this.mContext, false);
+                view = new LocationCell(this.mContext, false, this.resourcesProvider);
                 break;
             case 4:
-                shadowSectionCell = new LocationLoadingCell(this.mContext);
+                shadowSectionCell = new LocationLoadingCell(this.mContext, this.resourcesProvider);
                 break;
             case 5:
-                shadowSectionCell = new LocationPoweredCell(this.mContext);
+                shadowSectionCell = new LocationPoweredCell(this.mContext, this.resourcesProvider);
                 break;
             case 6:
-                SendLocationCell sendLocationCell2 = new SendLocationCell(this.mContext, true);
+                SendLocationCell sendLocationCell2 = new SendLocationCell(this.mContext, true, this.resourcesProvider);
                 sendLocationCell2.setDialogId(this.dialogId);
                 shadowSectionCell = sendLocationCell2;
                 break;
             case 7:
                 Context context = this.mContext;
                 int i2 = this.locationType;
-                shadowSectionCell = new SharingLiveLocationCell(context, true, (i2 == 4 || i2 == 5) ? 16 : 54);
+                shadowSectionCell = new SharingLiveLocationCell(context, true, (i2 == 4 || i2 == 5) ? 16 : 54, this.resourcesProvider);
                 break;
             case 8:
-                LocationDirectionCell locationDirectionCell = new LocationDirectionCell(this.mContext);
+                LocationDirectionCell locationDirectionCell = new LocationDirectionCell(this.mContext, this.resourcesProvider);
                 locationDirectionCell.setOnButtonClick(new LocationActivityAdapter$$ExternalSyntheticLambda0(this));
                 shadowSectionCell = locationDirectionCell;
                 break;
             case 9:
                 ShadowSectionCell shadowSectionCell2 = new ShadowSectionCell(this.mContext);
-                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(getThemedColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                 combinedDrawable.setFullsize(true);
                 shadowSectionCell2.setBackgroundDrawable(combinedDrawable);
                 shadowSectionCell = shadowSectionCell2;
@@ -500,5 +502,11 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         } else {
             return false;
         }
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

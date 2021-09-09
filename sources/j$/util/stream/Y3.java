@@ -3,7 +3,7 @@ package j$.util.stream;
 import j$.util.CLASSNAMEa;
 import j$.util.N;
 import j$.util.function.Consumer;
-import j$.util.function.p;
+import j$.util.function.q;
 import j$.util.stream.CLASSNAMEa4;
 import j$.util.w;
 import j$.util.x;
@@ -19,7 +19,7 @@ class Y3 extends CLASSNAMEa4.a implements w {
 
     /* access modifiers changed from: package-private */
     public void a(Object obj, int i, Object obj2) {
-        ((p) obj2).accept(((long[]) obj)[i]);
+        ((q) obj2).accept(((long[]) obj)[i]);
     }
 
     public /* synthetic */ boolean b(Consumer consumer) {

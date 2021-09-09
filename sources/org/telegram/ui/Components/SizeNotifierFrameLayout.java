@@ -240,15 +240,15 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             super.onDraw(canvas);
             return;
         }
-        Drawable cachedWallpaperNonBlocking = Theme.getCachedWallpaperNonBlocking();
-        if (!(cachedWallpaperNonBlocking == this.backgroundDrawable || cachedWallpaperNonBlocking == null)) {
+        Drawable newDrawable = getNewDrawable();
+        if (!(newDrawable == this.backgroundDrawable || newDrawable == null)) {
             if (Theme.isAnimatingColor()) {
                 this.oldBackgroundDrawable = this.backgroundDrawable;
             }
-            if (cachedWallpaperNonBlocking instanceof MotionBackgroundDrawable) {
-                ((MotionBackgroundDrawable) cachedWallpaperNonBlocking).setParentView(this);
+            if (newDrawable instanceof MotionBackgroundDrawable) {
+                ((MotionBackgroundDrawable) newDrawable).setParentView(this);
             }
-            this.backgroundDrawable = cachedWallpaperNonBlocking;
+            this.backgroundDrawable = newDrawable;
         }
         ActionBarLayout actionBarLayout = this.parentLayout;
         float themeAnimationValue = actionBarLayout != null ? actionBarLayout.getThemeAnimationValue() : 1.0f;
@@ -352,5 +352,15 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public void setSkipBackgroundDrawing(boolean z) {
         this.skipBackgroundDrawing = z;
         invalidate();
+    }
+
+    /* access modifiers changed from: protected */
+    public Drawable getNewDrawable() {
+        return Theme.getCachedWallpaperNonBlocking();
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean verifyDrawable(Drawable drawable) {
+        return drawable == getBackgroundImage() || super.verifyDrawable(drawable);
     }
 }

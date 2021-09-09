@@ -166,7 +166,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             IdenticonDrawable identiconDrawable = new IdenticonDrawable();
             imageView.setImageDrawable(identiconDrawable);
             identiconDrawable.setEncryptedChat(encryptedChat);
-            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(encryptedChat.user_id));
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
             StringBuilder sb = new StringBuilder();
             byte[] bArr = encryptedChat.key_hash;

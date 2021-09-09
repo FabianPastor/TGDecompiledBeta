@@ -17,17 +17,17 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class RadialProgress2 {
     private int backgroundStroke;
-    private float circleCheckProgress = 1.0f;
+    private float circleCheckProgress;
     private int circleColor;
     private String circleColorKey;
     private String circleCrossfadeColorKey;
     private float circleCrossfadeColorProgress;
-    private Paint circleMiniPaint = new Paint(1);
-    private Paint circlePaint = new Paint(1);
+    private Paint circleMiniPaint;
+    private Paint circlePaint;
     private int circlePressedColor;
     private String circlePressedColorKey;
     private int circleRadius;
-    private boolean drawBackground = true;
+    private boolean drawBackground;
     private boolean drawMiniIcon;
     private int iconColor;
     private String iconColorKey;
@@ -38,17 +38,33 @@ public class RadialProgress2 {
     private MediaActionDrawable mediaActionDrawable;
     private Bitmap miniDrawBitmap;
     private Canvas miniDrawCanvas;
-    private float miniIconScale = 1.0f;
+    private float miniIconScale;
     private MediaActionDrawable miniMediaActionDrawable;
-    private Paint miniProgressBackgroundPaint = new Paint(1);
+    private Paint miniProgressBackgroundPaint;
     private ImageReceiver overlayImageView;
-    private Paint overlayPaint = new Paint(1);
-    private float overrideAlpha = 1.0f;
+    private Paint overlayPaint;
+    private float overrideAlpha;
     private View parent;
-    private int progressColor = -1;
-    private RectF progressRect = new RectF();
+    private int progressColor;
+    private RectF progressRect;
+    private final Theme.ResourcesProvider resourcesProvider;
 
     public RadialProgress2(View view) {
+        this(view, (Theme.ResourcesProvider) null);
+    }
+
+    public RadialProgress2(View view, Theme.ResourcesProvider resourcesProvider2) {
+        this.progressRect = new RectF();
+        this.progressColor = -1;
+        this.overlayPaint = new Paint(1);
+        this.circlePaint = new Paint(1);
+        this.circleMiniPaint = new Paint(1);
+        this.miniIconScale = 1.0f;
+        this.circleCheckProgress = 1.0f;
+        this.drawBackground = true;
+        this.overrideAlpha = 1.0f;
+        this.resourcesProvider = resourcesProvider2;
+        this.miniProgressBackgroundPaint = new Paint(1);
         this.parent = view;
         ImageReceiver imageReceiver = new ImageReceiver(view);
         this.overlayImageView = imageReceiver;
@@ -328,7 +344,7 @@ public class RadialProgress2 {
             java.lang.String r6 = r0.iconPressedColorKey
             if (r6 == 0) goto L_0x007a
             org.telegram.ui.Components.MediaActionDrawable r7 = r0.miniMediaActionDrawable
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            int r6 = r0.getThemedColor(r6)
             r7.setColor(r6)
             goto L_0x0081
         L_0x007a:
@@ -339,7 +355,7 @@ public class RadialProgress2 {
             java.lang.String r6 = r0.circlePressedColorKey
             if (r6 == 0) goto L_0x008f
             android.graphics.Paint r7 = r0.circleMiniPaint
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            int r6 = r0.getThemedColor(r6)
             r7.setColor(r6)
             goto L_0x00dd
         L_0x008f:
@@ -351,7 +367,7 @@ public class RadialProgress2 {
             java.lang.String r6 = r0.iconColorKey
             if (r6 == 0) goto L_0x00a5
             org.telegram.ui.Components.MediaActionDrawable r7 = r0.miniMediaActionDrawable
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            int r6 = r0.getThemedColor(r6)
             r7.setColor(r6)
             goto L_0x00ac
         L_0x00a5:
@@ -364,9 +380,9 @@ public class RadialProgress2 {
             java.lang.String r7 = r0.circleCrossfadeColorKey
             if (r7 == 0) goto L_0x00cc
             android.graphics.Paint r7 = r0.circleMiniPaint
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            int r6 = r0.getThemedColor(r6)
             java.lang.String r8 = r0.circleCrossfadeColorKey
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            int r8 = r0.getThemedColor(r8)
             float r9 = r0.circleCrossfadeColorProgress
             float r10 = r0.circleCheckProgress
             int r6 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r6, r8, r9, r10)
@@ -374,7 +390,7 @@ public class RadialProgress2 {
             goto L_0x00dd
         L_0x00cc:
             android.graphics.Paint r7 = r0.circleMiniPaint
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            int r6 = r0.getThemedColor(r6)
             r7.setColor(r6)
             goto L_0x00dd
         L_0x00d6:
@@ -387,11 +403,11 @@ public class RadialProgress2 {
             java.lang.String r6 = r0.iconPressedColorKey
             if (r6 == 0) goto L_0x00fa
             org.telegram.ui.Components.MediaActionDrawable r7 = r0.mediaActionDrawable
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            int r6 = r0.getThemedColor(r6)
             r7.setColor(r6)
             org.telegram.ui.Components.MediaActionDrawable r7 = r0.mediaActionDrawable
             java.lang.String r8 = r0.circlePressedColorKey
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            int r8 = r0.getThemedColor(r8)
             r7.setBackColor(r8)
             goto L_0x0109
         L_0x00fa:
@@ -406,7 +422,7 @@ public class RadialProgress2 {
             java.lang.String r7 = r0.circlePressedColorKey
             if (r7 == 0) goto L_0x0117
             android.graphics.Paint r8 = r0.circlePaint
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            int r7 = r0.getThemedColor(r7)
             r8.setColor(r7)
             goto L_0x015c
         L_0x0117:
@@ -418,11 +434,11 @@ public class RadialProgress2 {
             java.lang.String r6 = r0.iconColorKey
             if (r6 == 0) goto L_0x0138
             org.telegram.ui.Components.MediaActionDrawable r7 = r0.mediaActionDrawable
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            int r6 = r0.getThemedColor(r6)
             r7.setColor(r6)
             org.telegram.ui.Components.MediaActionDrawable r7 = r0.mediaActionDrawable
             java.lang.String r8 = r0.circleColorKey
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            int r8 = r0.getThemedColor(r8)
             r7.setBackColor(r8)
             goto L_0x0147
         L_0x0138:
@@ -437,7 +453,7 @@ public class RadialProgress2 {
             java.lang.String r7 = r0.circleColorKey
             if (r7 == 0) goto L_0x0155
             android.graphics.Paint r8 = r0.circlePaint
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            int r7 = r0.getThemedColor(r7)
             r8.setColor(r7)
             goto L_0x015c
         L_0x0155:
@@ -876,5 +892,11 @@ public class RadialProgress2 {
 
     public String getCircleColorKey() {
         return this.circleColorKey;
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

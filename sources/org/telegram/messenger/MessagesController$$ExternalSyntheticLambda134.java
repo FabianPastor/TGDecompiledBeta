@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC$Dialog;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda134 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$ChatFull f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ TLRPC$Dialog f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda134(MessagesController messagesController, TLRPC$ChatFull tLRPC$ChatFull, String str) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda134(MessagesController messagesController, TLRPC$Dialog tLRPC$Dialog) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$ChatFull;
-        this.f$2 = str;
+        this.f$1 = tLRPC$Dialog;
     }
 
     public final void run() {
-        this.f$0.lambda$updateChatAbout$218(this.f$1, this.f$2);
+        this.f$0.lambda$checkLastDialogMessage$174(this.f$1);
     }
 }

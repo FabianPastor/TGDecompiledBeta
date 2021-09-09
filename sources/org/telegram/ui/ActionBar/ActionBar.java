@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EllipsizeSpanAnimator;
@@ -71,6 +72,7 @@ public class ActionBar extends FrameLayout {
     private Paint.FontMetricsInt fontMetricsInt;
     private boolean fromBottom;
     private boolean ignoreLayoutRequest;
+    private View.OnTouchListener interceptTouchEventListener;
     private boolean interceptTouches;
     protected boolean isSearchFieldVisible;
     protected int itemsActionModeBackgroundColor;
@@ -91,6 +93,7 @@ public class ActionBar extends FrameLayout {
     public Object[] overlayTitleToSet;
     protected BaseFragment parentFragment;
     private Rect rect;
+    private final Theme.ResourcesProvider resourcesProvider;
     AnimatorSet searchVisibleAnimator;
     private SnowflakesEffect snowflakesEffect;
     /* access modifiers changed from: private */
@@ -105,7 +108,7 @@ public class ActionBar extends FrameLayout {
     private boolean titleOverlayShown;
     private int titleRightMargin;
     /* access modifiers changed from: private */
-    public SimpleTextView[] titleTextView = new SimpleTextView[2];
+    public SimpleTextView[] titleTextView;
 
     public static class ActionBarMenuOnItemClick {
         public boolean canOpenMenu() {
@@ -122,7 +125,12 @@ public class ActionBar extends FrameLayout {
     }
 
     public ActionBar(Context context) {
+        this(context, (Theme.ResourcesProvider) null);
+    }
+
+    public ActionBar(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.titleTextView = new SimpleTextView[2];
         this.occupyStatusBar = Build.VERSION.SDK_INT >= 21;
         this.addToContainer = true;
         this.interceptTouches = true;
@@ -130,6 +138,7 @@ public class ActionBar extends FrameLayout {
         this.castShadows = true;
         this.titleColorToSet = 0;
         this.ellipsizeSpanAnimator = new EllipsizeSpanAnimator(this);
+        this.resourcesProvider = resourcesProvider2;
         setOnClickListener(new ActionBar$$ExternalSyntheticLambda1(this));
     }
 
@@ -220,7 +229,11 @@ public class ActionBar extends FrameLayout {
                 invalidate();
             }
         }
-        return super.onInterceptTouchEvent(motionEvent);
+        View.OnTouchListener onTouchListener = this.interceptTouchEventListener;
+        if ((onTouchListener == null || !onTouchListener.onTouch(this, motionEvent)) && !super.onInterceptTouchEvent(motionEvent)) {
+            return false;
+        }
+        return true;
     }
 
     /* access modifiers changed from: protected */
@@ -306,7 +319,7 @@ public class ActionBar extends FrameLayout {
             this.subtitleTextView = simpleTextView;
             simpleTextView.setGravity(3);
             this.subtitleTextView.setVisibility(8);
-            this.subtitleTextView.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
+            this.subtitleTextView.setTextColor(getThemedColor("actionBarDefaultSubtitle"));
             addView(this.subtitleTextView, 0, LayoutHelper.createFrame(-2, -2, 51));
         }
     }
@@ -317,7 +330,7 @@ public class ActionBar extends FrameLayout {
             this.additionalSubtitleTextView = simpleTextView;
             simpleTextView.setGravity(3);
             this.additionalSubtitleTextView.setVisibility(8);
-            this.additionalSubtitleTextView.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
+            this.additionalSubtitleTextView.setTextColor(getThemedColor("actionBarDefaultSubtitle"));
             addView(this.additionalSubtitleTextView, 0, LayoutHelper.createFrame(-2, -2, 51));
         }
     }
@@ -362,7 +375,7 @@ public class ActionBar extends FrameLayout {
             if (i2 != 0) {
                 this.titleTextView[i].setTextColor(i2);
             } else {
-                this.titleTextView[i].setTextColor(Theme.getColor("actionBarDefaultTitle"));
+                this.titleTextView[i].setTextColor(getThemedColor("actionBarDefaultTitle"));
             }
             this.titleTextView[i].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             addView(this.titleTextView[i], 0, LayoutHelper.createFrame(-2, -2, 51));
@@ -519,7 +532,7 @@ public class ActionBar extends FrameLayout {
         this.actionMode = r4;
         r4.isActionMode = true;
         r4.setClickable(true);
-        this.actionMode.setBackgroundColor(Theme.getColor("actionBarActionModeDefault"));
+        this.actionMode.setBackgroundColor(getThemedColor("actionBarActionModeDefault"));
         addView(this.actionMode, indexOfChild(this.backButtonImageView));
         this.actionMode.setPadding(0, this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0, 0, 0);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.actionMode.getLayoutParams();
@@ -532,7 +545,7 @@ public class ActionBar extends FrameLayout {
         if (this.occupyStatusBar && z && this.actionModeTop == null) {
             View view = new View(getContext());
             this.actionModeTop = view;
-            view.setBackgroundColor(Theme.getColor("actionBarActionModeDefaultTop"));
+            view.setBackgroundColor(getThemedColor("actionBarActionModeDefaultTop"));
             addView(this.actionModeTop);
             FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.actionModeTop.getLayoutParams();
             layoutParams2.height = AndroidUtilities.statusBarHeight;
@@ -813,7 +826,7 @@ public class ActionBar extends FrameLayout {
         if (this.occupyStatusBar && this.actionModeTop == null) {
             View view = new View(getContext());
             this.actionModeTop = view;
-            view.setBackgroundColor(Theme.getColor("actionBarActionModeDefaultTop"));
+            view.setBackgroundColor(getThemedColor("actionBarActionModeDefaultTop"));
             addView(this.actionModeTop);
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.actionModeTop.getLayoutParams();
             layoutParams.height = AndroidUtilities.statusBarHeight;
@@ -990,6 +1003,10 @@ public class ActionBar extends FrameLayout {
 
     public void setInterceptTouches(boolean z) {
         this.interceptTouches = z;
+    }
+
+    public void setInterceptTouchEventListener(View.OnTouchListener onTouchListener) {
+        this.interceptTouchEventListener = onTouchListener;
     }
 
     public void setExtraHeight(int i) {
@@ -1958,5 +1975,19 @@ public class ActionBar extends FrameLayout {
             transitionSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
             TransitionManager.beginDelayedTransition(this, transitionSet);
         }
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer num = null;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        if (color == null) {
+            BaseFragment baseFragment = this.parentFragment;
+            if (baseFragment != null) {
+                num = Integer.valueOf(baseFragment.getThemedColor(str));
+            }
+            color = num;
+        }
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

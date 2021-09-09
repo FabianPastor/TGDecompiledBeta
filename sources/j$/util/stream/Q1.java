@@ -1,7 +1,7 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.x;
 import j$.util.y;
 
@@ -25,8 +25,8 @@ final class Q1 extends S1 implements CLASSNAMEx1 {
     }
 
     /* renamed from: h */
-    public /* synthetic */ CLASSNAMEx1 r(long j, long j2, l lVar) {
-        return CLASSNAMEp1.o(this, j, j2, lVar);
+    public /* synthetic */ CLASSNAMEx1 r(long j, long j2, m mVar) {
+        return CLASSNAMEp1.o(this, j, j2, mVar);
     }
 
     public x spliterator() {

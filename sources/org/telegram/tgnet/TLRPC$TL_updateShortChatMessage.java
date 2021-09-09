@@ -12,8 +12,8 @@ public class TLRPC$TL_updateShortChatMessage extends TLRPC$Updates {
         this.media_unread = (readInt32 & 32) != 0;
         this.silent = (readInt32 & 8192) != 0;
         this.id = abstractSerializedData.readInt32(z);
-        this.from_id = abstractSerializedData.readInt32(z);
-        this.chat_id = abstractSerializedData.readInt32(z);
+        this.from_id = abstractSerializedData.readInt64(z);
+        this.chat_id = abstractSerializedData.readInt64(z);
         this.message = abstractSerializedData.readString(z);
         this.pts = abstractSerializedData.readInt32(z);
         this.pts_count = abstractSerializedData.readInt32(z);
@@ -22,7 +22,7 @@ public class TLRPC$TL_updateShortChatMessage extends TLRPC$Updates {
             this.fwd_from = TLRPC$MessageFwdHeader.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 2048) != 0) {
-            this.via_bot_id = abstractSerializedData.readInt32(z);
+            this.via_bot_id = abstractSerializedData.readInt64(z);
         }
         if ((this.flags & 8) != 0) {
             this.reply_to = TLRPC$TL_messageReplyHeader.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);

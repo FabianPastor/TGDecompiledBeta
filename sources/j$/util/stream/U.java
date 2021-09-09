@@ -8,9 +8,8 @@ import j$.util.function.d;
 import j$.util.function.f;
 import j$.util.function.g;
 import j$.util.function.h;
-import j$.util.function.t;
-import j$.util.function.y;
-import j$.util.u;
+import j$.util.function.u;
+import j$.util.function.z;
 import j$.wrappers.E;
 import j$.wrappers.G;
 import j$.wrappers.K;
@@ -18,7 +17,7 @@ import j$.wrappers.K;
 public interface U extends CLASSNAMEg {
     CLASSNAMEj G(d dVar);
 
-    Object H(y yVar, t tVar, BiConsumer biConsumer);
+    Object H(z zVar, u uVar, BiConsumer biConsumer);
 
     double K(double d, d dVar);
 
@@ -68,7 +67,7 @@ public interface U extends CLASSNAMEg {
 
     U sorted();
 
-    u spliterator();
+    j$.util.u spliterator();
 
     double sum();
 

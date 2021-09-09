@@ -35,7 +35,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.LongSparseArray;
 import android.util.Property;
 import android.util.SparseArray;
 import android.view.ActionMode;
@@ -66,6 +65,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Keep;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.GridLayoutManagerFixed;
@@ -5792,7 +5792,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     private void openPreviewsChat(TLRPC$User tLRPC$User, long j) {
         if (tLRPC$User != null && (this.parentActivity instanceof LaunchActivity)) {
             Bundle bundle = new Bundle();
-            bundle.putInt("user_id", tLRPC$User.id);
+            bundle.putLong("user_id", tLRPC$User.id);
             bundle.putString("botUser", "webpage" + j);
             ((LaunchActivity) this.parentActivity).presentFragment(new ChatActivity(bundle), false, true);
             close(false, true);
@@ -6474,7 +6474,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
         AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda17(blockChannelCell));
         AndroidUtilities.runOnUIThread(new ArticleViewer$$ExternalSyntheticLambda16(i, tLRPC$Chat), 1000);
-        MessagesStorage.getInstance(i).updateDialogsWithDeletedMessages(new ArrayList(), (ArrayList<Long>) null, true, tLRPC$Chat.id);
+        MessagesStorage instance = MessagesStorage.getInstance(i);
+        long j = tLRPC$Chat.id;
+        instance.updateDialogsWithDeletedMessages(-j, j, new ArrayList(), (ArrayList<Long>) null, true);
     }
 
     /* access modifiers changed from: private */
@@ -6960,7 +6962,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.ui.ArticleViewer r5 = org.telegram.ui.ArticleViewer.this
                 int r5 = r5.currentAccount
                 org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r5)
-                int r5 = r5.getClientUserId()
+                long r5 = r5.getClientUserId()
                 r4.user_id = r5
                 r3.user_id = r5
                 long r3 = java.lang.System.currentTimeMillis()
@@ -14854,7 +14856,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.backgroundPaint.setColor(NUM);
                 this.imageView.setColorFilter(new PorterDuffColorFilter(-1, PorterDuff.Mode.MULTIPLY));
             }
-            TLRPC$Chat chat = MessagesController.getInstance(ArticleViewer.this.currentAccount).getChat(Integer.valueOf(tLRPC$TL_pageBlockChannel.channel.id));
+            TLRPC$Chat chat = MessagesController.getInstance(ArticleViewer.this.currentAccount).getChat(Long.valueOf(tLRPC$TL_pageBlockChannel.channel.id));
             if (chat == null || chat.min) {
                 ArticleViewer.this.loadChannel(this, this.parentAdapter, tLRPC$TL_pageBlockChannel.channel);
                 setState(1, false);

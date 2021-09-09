@@ -9,14 +9,14 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda35
     public final /* synthetic */ HashMap f$1;
     public final /* synthetic */ long f$2;
     public final /* synthetic */ SendMessagesHelper.ImportingHistory f$3;
-    public final /* synthetic */ MessagesStorage.IntCallback f$4;
+    public final /* synthetic */ MessagesStorage.LongCallback f$4;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda35(SendMessagesHelper sendMessagesHelper, HashMap hashMap, long j, SendMessagesHelper.ImportingHistory importingHistory, MessagesStorage.IntCallback intCallback) {
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda35(SendMessagesHelper sendMessagesHelper, HashMap hashMap, long j, SendMessagesHelper.ImportingHistory importingHistory, MessagesStorage.LongCallback longCallback) {
         this.f$0 = sendMessagesHelper;
         this.f$1 = hashMap;
         this.f$2 = j;
         this.f$3 = importingHistory;
-        this.f$4 = intCallback;
+        this.f$4 = longCallback;
     }
 
     public final void run() {

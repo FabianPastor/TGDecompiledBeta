@@ -1,6 +1,6 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
+import androidx.collection.LongSparseArray;
 import java.util.ArrayList;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;

@@ -726,6 +726,7 @@ public final class R {
         public static final int msg_check_s = NUM;
         public static final int msg_clear = NUM;
         public static final int msg_clock = NUM;
+        public static final int msg_colors = NUM;
         public static final int msg_contact = NUM;
         public static final int msg_copy = NUM;
         public static final int msg_copy_filled = NUM;
@@ -796,6 +797,7 @@ public final class R {
         public static final int msg_pin = NUM;
         public static final int msg_pin_filled = NUM;
         public static final int msg_pin_mini = NUM;
+        public static final int msg_played = NUM;
         public static final int msg_pollstop = NUM;
         public static final int msg_psa = NUM;
         public static final int msg_qrcode = NUM;
@@ -824,6 +826,7 @@ public final class R {
         public static final int msg_screencast = NUM;
         public static final int msg_screencast_off = NUM;
         public static final int msg_search = NUM;
+        public static final int msg_seen = NUM;
         public static final int msg_sendfile = NUM;
         public static final int msg_sendphoto = NUM;
         public static final int msg_share = NUM;
@@ -1699,6 +1702,7 @@ public final class R {
         public static final int speaker = NUM;
         public static final int statistic_preload = NUM;
         public static final int sun = NUM;
+        public static final int sun_outline = NUM;
         public static final int swipe_delete = NUM;
         public static final int swipe_disabled = NUM;
         public static final int swipe_mute = NUM;
@@ -2509,6 +2513,7 @@ public final class R {
         public static final int Change = NUM;
         public static final int ChangeChatBackground = NUM;
         public static final int ChangeColorToColor = NUM;
+        public static final int ChangeColors = NUM;
         public static final int ChangeLanguageLater = NUM;
         public static final int ChangePasscode = NUM;
         public static final int ChangePasscodeInfo = NUM;
@@ -2647,6 +2652,7 @@ public final class R {
         public static final int Characters_two = NUM;
         public static final int Characters_zero = NUM;
         public static final int ChatAdmin = NUM;
+        public static final int ChatApplyTheme = NUM;
         public static final int ChatArchived = NUM;
         public static final int ChatArchivedInfo = NUM;
         public static final int ChatBackground = NUM;
@@ -2670,12 +2676,22 @@ public final class R {
         public static final int ChatListExpanded = NUM;
         public static final int ChatListSwipeGesture = NUM;
         public static final int ChatLocation = NUM;
+        public static final int ChatNoTheme = NUM;
+        public static final int ChatResetTheme = NUM;
         public static final int ChatSetLocation = NUM;
         public static final int ChatSetLocationInfo = NUM;
         public static final int ChatSetNewPhoto = NUM;
         public static final int ChatSetPhotoOrVideo = NUM;
         public static final int ChatSetThisLocation = NUM;
         public static final int ChatSettings = NUM;
+        public static final int ChatThemeChangedTo = NUM;
+        public static final int ChatThemeChangedYou = NUM;
+        public static final int ChatThemeDisabled = NUM;
+        public static final int ChatThemeDisabledYou = NUM;
+        public static final int ChatThemeSaveDialogApply = NUM;
+        public static final int ChatThemeSaveDialogDiscard = NUM;
+        public static final int ChatThemeSaveDialogText = NUM;
+        public static final int ChatThemeSaveDialogTitle = NUM;
         public static final int ChatVideo = NUM;
         public static final int ChatWasMovedToMainList = NUM;
         public static final int ChatYourSelf = NUM;
@@ -4041,6 +4057,12 @@ public final class R {
         public static final int MessageNotFound = NUM;
         public static final int MessageNotifications = NUM;
         public static final int MessagePinnedHint = NUM;
+        public static final int MessagePlayed_few = NUM;
+        public static final int MessagePlayed_many = NUM;
+        public static final int MessagePlayed_one = NUM;
+        public static final int MessagePlayed_other = NUM;
+        public static final int MessagePlayed_two = NUM;
+        public static final int MessagePlayed_zero = NUM;
         public static final int MessagePreview = NUM;
         public static final int MessageScheduleEditTime = NUM;
         public static final int MessageScheduleSend = NUM;
@@ -4052,6 +4074,12 @@ public final class R {
         public static final int MessageScheduledUntilOnline = NUM;
         public static final int MessageScheduledVote = NUM;
         public static final int MessageScheduledVoteResults = NUM;
+        public static final int MessageSeen_few = NUM;
+        public static final int MessageSeen_many = NUM;
+        public static final int MessageSeen_one = NUM;
+        public static final int MessageSeen_other = NUM;
+        public static final int MessageSeen_two = NUM;
+        public static final int MessageSeen_zero = NUM;
         public static final int MessageUnpinnedHint = NUM;
         public static final int MessagesBold_few = NUM;
         public static final int MessagesBold_many = NUM;
@@ -5347,6 +5375,7 @@ public final class R {
         public static final int SelectFile = NUM;
         public static final int SelectFromGallery = NUM;
         public static final int SelectImage = NUM;
+        public static final int SelectTheme = NUM;
         public static final int SelectingContact = NUM;
         public static final int SelectingLocation = NUM;
         public static final int Send = NUM;

@@ -38,11 +38,11 @@ public final /* synthetic */ class R0 implements Stream {
     }
 
     public /* synthetic */ boolean allMatch(Predicate predicate) {
-        return this.a.W(x0.b(predicate));
+        return this.a.W(x0.c(predicate));
     }
 
     public /* synthetic */ boolean anyMatch(Predicate predicate) {
-        return this.a.a(x0.b(predicate));
+        return this.a.a(x0.c(predicate));
     }
 
     public /* synthetic */ void close() {
@@ -66,7 +66,7 @@ public final /* synthetic */ class R0 implements Stream {
     }
 
     public /* synthetic */ Stream filter(Predicate predicate) {
-        return n0(this.a.T(x0.b(predicate)));
+        return n0(this.a.T(x0.c(predicate)));
     }
 
     public /* synthetic */ Optional findAny() {
@@ -78,19 +78,19 @@ public final /* synthetic */ class R0 implements Stream {
     }
 
     public /* synthetic */ Stream flatMap(Function function) {
-        return n0(this.a.o(M.c(function)));
+        return n0(this.a.o(M.a(function)));
     }
 
     public /* synthetic */ DoubleStream flatMapToDouble(Function function) {
-        return M0.n0(this.a.E(M.c(function)));
+        return M0.n0(this.a.E(M.a(function)));
     }
 
     public /* synthetic */ IntStream flatMapToInt(Function function) {
-        return O0.n0(this.a.c(M.c(function)));
+        return O0.n0(this.a.c(M.a(function)));
     }
 
     public /* synthetic */ LongStream flatMapToLong(Function function) {
-        return Q0.n0(this.a.X(M.c(function)));
+        return Q0.n0(this.a.X(M.a(function)));
     }
 
     public /* synthetic */ void forEach(Consumer consumer) {
@@ -114,7 +114,7 @@ public final /* synthetic */ class R0 implements Stream {
     }
 
     public /* synthetic */ Stream map(Function function) {
-        return n0(this.a.n(M.c(function)));
+        return n0(this.a.n(M.a(function)));
     }
 
     public /* synthetic */ DoubleStream mapToDouble(ToDoubleFunction toDoubleFunction) {
@@ -138,7 +138,7 @@ public final /* synthetic */ class R0 implements Stream {
     }
 
     public /* synthetic */ boolean noneMatch(Predicate predicate) {
-        return this.a.d0(x0.b(predicate));
+        return this.a.d0(x0.c(predicate));
     }
 
     public /* synthetic */ BaseStream onClose(Runnable runnable) {

@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda5 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateInfoTopView$56(this.f$1, valueAnimator);
+        this.f$0.lambda$updateInfoTopView$57(this.f$1, valueAnimator);
     }
 }

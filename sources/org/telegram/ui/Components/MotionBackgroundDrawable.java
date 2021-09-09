@@ -43,8 +43,11 @@ public class MotionBackgroundDrawable extends Drawable {
     private Paint paint2 = new Paint(2);
     private Paint paint3 = new Paint();
     private WeakReference<View> parentView;
+    private float patternAlpha = 1.0f;
     private Bitmap patternBitmap;
     private Rect patternBounds = new Rect();
+    private ColorFilter patternColorFilter;
+    private float patternIntensity;
     private int phase;
     private float posAnimationProgress = 1.0f;
     private boolean postInvalidateParent;
@@ -242,6 +245,7 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     private void invalidateParent() {
+        invalidateSelf();
         WeakReference<View> weakReference = this.parentView;
         if (!(weakReference == null || weakReference.get() == null)) {
             ((View) this.parentView.get()).invalidate();
@@ -304,6 +308,22 @@ public class MotionBackgroundDrawable extends Drawable {
             return;
         }
         this.paint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+    }
+
+    public void setPatternSettings(ColorFilter colorFilter, float f) {
+        this.patternColorFilter = colorFilter;
+        this.patternIntensity = f;
+        invalidateParent();
+    }
+
+    public void setPatternIntensity(float f) {
+        this.patternIntensity = f;
+        invalidateParent();
+    }
+
+    public void setPatternAlpha(float f) {
+        this.patternAlpha = f;
+        invalidateParent();
     }
 
     public void setBounds(int i, int i2, int i3, int i4) {
@@ -374,7 +394,16 @@ public class MotionBackgroundDrawable extends Drawable {
                 float var_ = (width2 - f8) / 2.0f;
                 float var_ = (height2 - f9) / 2.0f;
                 this.rect.set(var_, var_, f8 + var_, f9 + var_);
+                int alpha = this.paint2.getAlpha();
+                ColorFilter colorFilter = this.patternColorFilter;
+                if (colorFilter != null) {
+                    this.paint2.setColorFilter(colorFilter);
+                    this.paint2.setAlpha((int) (this.patternIntensity * this.patternAlpha * 255.0f));
+                }
                 canvas.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
+                if (this.patternColorFilter != null) {
+                    this.paint2.setAlpha(alpha);
+                }
             }
         } else {
             canvas.drawColor(-16777216);

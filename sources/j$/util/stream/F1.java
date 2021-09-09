@@ -3,7 +3,7 @@ package j$.util.stream;
 import j$.util.CLASSNAMEa;
 import j$.util.CLASSNAMEb;
 import j$.util.function.Consumer;
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.y;
 import java.util.Collection;
 
@@ -37,13 +37,13 @@ final class F1 implements B1 {
         return 0;
     }
 
-    public Object[] q(l lVar) {
+    public Object[] q(m mVar) {
         Collection collection = this.a;
-        return collection.toArray((Object[]) lVar.apply(collection.size()));
+        return collection.toArray((Object[]) mVar.apply(collection.size()));
     }
 
-    public /* synthetic */ B1 r(long j, long j2, l lVar) {
-        return CLASSNAMEp1.q(this, j, j2, lVar);
+    public /* synthetic */ B1 r(long j, long j2, m mVar) {
+        return CLASSNAMEp1.q(this, j, j2, mVar);
     }
 
     public y spliterator() {

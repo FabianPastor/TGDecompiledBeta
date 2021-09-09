@@ -7,15 +7,15 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda16
     public final /* synthetic */ TLRPC$messages_Dialogs f$1;
     public final /* synthetic */ int f$2;
     public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ int[] f$4;
+    public final /* synthetic */ long[] f$4;
     public final /* synthetic */ int f$5;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda167(MessagesController messagesController, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i, boolean z, int[] iArr, int i2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda167(MessagesController messagesController, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i, boolean z, long[] jArr, int i2) {
         this.f$0 = messagesController;
         this.f$1 = tLRPC$messages_Dialogs;
         this.f$2 = i;
         this.f$3 = z;
-        this.f$4 = iArr;
+        this.f$4 = jArr;
         this.f$5 = i2;
     }
 

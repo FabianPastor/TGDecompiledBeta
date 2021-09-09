@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda138 implements MessagesStorage.BooleanCallback {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda138 implements Runnable {
+    public final /* synthetic */ AlertDialog[] f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda138(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda138(AlertDialog[] alertDialogArr) {
+        this.f$0 = alertDialogArr;
     }
 
-    public final void run(boolean z) {
-        this.f$0.lambda$createView$48(z);
+    public final void run() {
+        ChatActivity.lambda$processSelectedOption$128(this.f$0);
     }
 }

@@ -2,19 +2,19 @@ package j$.util.stream;
 
 import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
-import j$.util.function.j;
 import j$.util.function.k;
-import j$.util.function.u;
-import j$.util.function.y;
+import j$.util.function.l;
+import j$.util.function.v;
+import j$.util.function.z;
 
 class P2 extends U2 implements T2, CLASSNAMEl3 {
-    final /* synthetic */ y b;
-    final /* synthetic */ u c;
+    final /* synthetic */ z b;
+    final /* synthetic */ v c;
     final /* synthetic */ CLASSNAMEb d;
 
-    P2(y yVar, u uVar, CLASSNAMEb bVar) {
-        this.b = yVar;
-        this.c = uVar;
+    P2(z zVar, v vVar, CLASSNAMEb bVar) {
+        this.b = zVar;
+        this.c = vVar;
         this.d = bVar;
     }
 
@@ -45,9 +45,9 @@ class P2 extends U2 implements T2, CLASSNAMEl3 {
         this.a = this.d.apply(this.a, ((P2) t2).a);
     }
 
-    public k l(k kVar) {
-        kVar.getClass();
-        return new j(this, kVar);
+    public l l(l lVar) {
+        lVar.getClass();
+        return new k(this, lVar);
     }
 
     public /* synthetic */ void m() {

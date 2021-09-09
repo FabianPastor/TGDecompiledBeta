@@ -2,7 +2,7 @@ package j$.util.concurrent;
 
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.function.k;
+import j$.util.function.l;
 import j$.util.v;
 import java.util.Comparator;
 
@@ -35,8 +35,8 @@ final class g implements v {
     }
 
     /* renamed from: c */
-    public void forEachRemaining(k kVar) {
-        kVar.getClass();
+    public void forEachRemaining(l lVar) {
+        lVar.getClass();
         long j = this.a;
         long j2 = this.b;
         if (j < j2) {
@@ -45,7 +45,7 @@ final class g implements v {
             int i2 = this.d;
             i b2 = i.b();
             do {
-                kVar.accept(b2.e(i, i2));
+                lVar.accept(b2.e(i, i2));
                 j++;
             } while (j < j2);
         }
@@ -64,13 +64,13 @@ final class g implements v {
     }
 
     /* renamed from: g */
-    public boolean tryAdvance(k kVar) {
-        kVar.getClass();
+    public boolean tryAdvance(l lVar) {
+        lVar.getClass();
         long j = this.a;
         if (j >= this.b) {
             return false;
         }
-        kVar.accept(i.b().e(this.c, this.d));
+        lVar.accept(i.b().e(this.c, this.d));
         this.a = j + 1;
         return true;
     }

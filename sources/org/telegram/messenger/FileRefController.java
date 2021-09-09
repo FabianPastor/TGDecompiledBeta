@@ -156,13 +156,13 @@ public class FileRefController extends BaseController {
     public static String getKeyForParentObject(Object obj) {
         if (obj instanceof MessageObject) {
             MessageObject messageObject = (MessageObject) obj;
-            int channelId = messageObject.getChannelId();
+            long channelId = messageObject.getChannelId();
             return "message" + messageObject.getRealId() + "_" + channelId + "_" + messageObject.scheduled;
         } else if (obj instanceof TLRPC$Message) {
             TLRPC$Message tLRPC$Message = (TLRPC$Message) obj;
             TLRPC$Peer tLRPC$Peer = tLRPC$Message.peer_id;
-            int i = tLRPC$Peer != null ? tLRPC$Peer.channel_id : 0;
-            return "message" + tLRPC$Message.id + "_" + i + "_" + tLRPC$Message.from_scheduled;
+            long j = tLRPC$Peer != null ? tLRPC$Peer.channel_id : 0;
+            return "message" + tLRPC$Message.id + "_" + j + "_" + tLRPC$Message.from_scheduled;
         } else if (obj instanceof TLRPC$WebPage) {
             return "webpage" + ((TLRPC$WebPage) obj).id;
         } else if (obj instanceof TLRPC$User) {
@@ -675,10 +675,10 @@ public class FileRefController extends BaseController {
     private void requestReferenceFromServer(Object obj, String str, String str2, Object[] objArr) {
         if (obj instanceof MessageObject) {
             MessageObject messageObject = (MessageObject) obj;
-            int channelId = messageObject.getChannelId();
+            long channelId = messageObject.getChannelId();
             if (messageObject.scheduled) {
                 TLRPC$TL_messages_getScheduledMessages tLRPC$TL_messages_getScheduledMessages = new TLRPC$TL_messages_getScheduledMessages();
-                tLRPC$TL_messages_getScheduledMessages.peer = getMessagesController().getInputPeer((int) messageObject.getDialogId());
+                tLRPC$TL_messages_getScheduledMessages.peer = getMessagesController().getInputPeer(messageObject.getDialogId());
                 tLRPC$TL_messages_getScheduledMessages.id.add(Integer.valueOf(messageObject.getRealId()));
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_getScheduledMessages, new FileRefController$$ExternalSyntheticLambda22(this, str, str2));
             } else if (channelId != 0) {
@@ -721,7 +721,7 @@ public class FileRefController extends BaseController {
             TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) obj;
             if (tLRPC$Chat instanceof TLRPC$TL_chat) {
                 TLRPC$TL_messages_getChats tLRPC$TL_messages_getChats = new TLRPC$TL_messages_getChats();
-                tLRPC$TL_messages_getChats.id.add(Integer.valueOf(tLRPC$Chat.id));
+                tLRPC$TL_messages_getChats.id.add(Long.valueOf(tLRPC$Chat.id));
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_getChats, new FileRefController$$ExternalSyntheticLambda21(this, str, str2));
             } else if (tLRPC$Chat instanceof TLRPC$TL_channel) {
                 TLRPC$TL_channels_getChannels tLRPC$TL_channels_getChannels = new TLRPC$TL_channels_getChannels();
@@ -761,13 +761,13 @@ public class FileRefController extends BaseController {
                 }
                 getConnectionsManager().sendRequest(tLRPC$TL_help_getAppUpdate, new FileRefController$$ExternalSyntheticLambda23(this, str, str2));
             } else if (str3.startsWith("avatar_")) {
-                int intValue = Utilities.parseInt(str3).intValue();
-                if (intValue > 0) {
+                long longValue = Utilities.parseLong(str3).longValue();
+                if (longValue > 0) {
                     TLRPC$TL_photos_getUserPhotos tLRPC$TL_photos_getUserPhotos = new TLRPC$TL_photos_getUserPhotos();
                     tLRPC$TL_photos_getUserPhotos.limit = 80;
                     tLRPC$TL_photos_getUserPhotos.offset = 0;
                     tLRPC$TL_photos_getUserPhotos.max_id = 0;
-                    tLRPC$TL_photos_getUserPhotos.user_id = getMessagesController().getInputUser(intValue);
+                    tLRPC$TL_photos_getUserPhotos.user_id = getMessagesController().getInputUser(longValue);
                     getConnectionsManager().sendRequest(tLRPC$TL_photos_getUserPhotos, new FileRefController$$ExternalSyntheticLambda20(this, str, str2));
                     return;
                 }
@@ -776,15 +776,15 @@ public class FileRefController extends BaseController {
                 tLRPC$TL_messages_search.limit = 80;
                 tLRPC$TL_messages_search.offset_id = 0;
                 tLRPC$TL_messages_search.q = "";
-                tLRPC$TL_messages_search.peer = getMessagesController().getInputPeer(intValue);
+                tLRPC$TL_messages_search.peer = getMessagesController().getInputPeer(longValue);
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_search, new FileRefController$$ExternalSyntheticLambda25(this, str, str2));
             } else if (str3.startsWith("sent_")) {
                 String[] split = str3.split("_");
                 if (split.length == 3) {
-                    int intValue2 = Utilities.parseInt(split[1]).intValue();
-                    if (intValue2 != 0) {
+                    long longValue2 = Utilities.parseLong(split[1]).longValue();
+                    if (longValue2 != 0) {
                         TLRPC$TL_channels_getMessages tLRPC$TL_channels_getMessages2 = new TLRPC$TL_channels_getMessages();
-                        tLRPC$TL_channels_getMessages2.channel = getMessagesController().getInputChannel(intValue2);
+                        tLRPC$TL_channels_getMessages2.channel = getMessagesController().getInputChannel(longValue2);
                         tLRPC$TL_channels_getMessages2.id.add(Utilities.parseInt(split[2]));
                         getConnectionsManager().sendRequest(tLRPC$TL_channels_getMessages2, new FileRefController$$ExternalSyntheticLambda14(this, str, str2));
                         return;
@@ -1832,7 +1832,7 @@ public class FileRefController extends BaseController {
             if (r4 == 0) goto L_0x002e
             org.telegram.tgnet.TLRPC$TL_inputPeerUser r5 = new org.telegram.tgnet.TLRPC$TL_inputPeerUser
             r5.<init>()
-            int r6 = r4.id
+            long r6 = r4.id
             r5.user_id = r6
             long r6 = r4.access_hash
             r5.access_hash = r6
@@ -1845,7 +1845,7 @@ public class FileRefController extends BaseController {
             if (r4 == 0) goto L_0x0042
             org.telegram.tgnet.TLRPC$TL_inputPeerChannel r4 = new org.telegram.tgnet.TLRPC$TL_inputPeerChannel
             r4.<init>()
-            int r6 = r5.id
+            long r6 = r5.id
             r4.channel_id = r6
             long r6 = r5.access_hash
             r4.access_hash = r6
@@ -1853,7 +1853,7 @@ public class FileRefController extends BaseController {
         L_0x0042:
             org.telegram.tgnet.TLRPC$TL_inputPeerChat r4 = new org.telegram.tgnet.TLRPC$TL_inputPeerChat
             r4.<init>()
-            int r6 = r5.id
+            long r6 = r5.id
             r4.chat_id = r6
         L_0x004b:
             org.telegram.tgnet.TLRPC$ChatPhoto r5 = r5.photo

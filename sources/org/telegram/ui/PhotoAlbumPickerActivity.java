@@ -524,7 +524,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         if (this.selectPhotoType != SELECT_TYPE_ALL) {
             this.commentTextView.setVisibility(8);
         }
-        if (!this.loading || ((arrayList = this.albumsSorted) != null && (arrayList == null || !arrayList.isEmpty()))) {
+        if (!this.loading || ((arrayList = this.albumsSorted) != null && !arrayList.isEmpty())) {
             this.progressView.setVisibility(8);
             this.listView.setEmptyView(this.emptyView);
         } else {
@@ -583,14 +583,12 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 while (i < 2) {
                     if ((i != 0 || this.chatActivity.canScheduleMessage()) && (i != 1 || !UserObject.isUserSelf(currentUser))) {
                         this.itemCells[i] = new ActionBarMenuSubItem(getParentActivity(), i == 0, i == 1);
-                        if (i == 0) {
-                            if (UserObject.isUserSelf(currentUser)) {
-                                this.itemCells[i].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
-                            } else {
-                                this.itemCells[i].setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
-                            }
-                        } else if (i == 1) {
+                        if (i != 0) {
                             this.itemCells[i].setTextAndIcon(LocaleController.getString("SendWithoutSound", NUM), NUM);
+                        } else if (UserObject.isUserSelf(currentUser)) {
+                            this.itemCells[i].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
+                        } else {
+                            this.itemCells[i].setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
                         }
                         this.itemCells[i].setMinimumWidth(AndroidUtilities.dp(196.0f));
                         this.sendPopupLayout.addView(this.itemCells[i], LayoutHelper.createLinear(-1, 48));
@@ -636,10 +634,10 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
         if (i == 0) {
             AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new PhotoAlbumPickerActivity$$ExternalSyntheticLambda6(this));
-        } else if (i == 1) {
-            sendSelectedPhotos(this.selectedPhotos, this.selectedPhotosOrder, true, 0);
-            finishFragment();
+            return;
         }
+        sendSelectedPhotos(this.selectedPhotos, this.selectedPhotosOrder, true, 0);
+        finishFragment();
     }
 
     /* access modifiers changed from: private */

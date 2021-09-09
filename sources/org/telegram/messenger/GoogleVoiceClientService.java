@@ -32,14 +32,14 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
                 String stringExtra = intent2.getStringExtra("android.intent.extra.TEXT");
                 if (!TextUtils.isEmpty(stringExtra)) {
                     String stringExtra2 = intent2.getStringExtra("com.google.android.voicesearch.extra.RECIPIENT_CONTACT_URI");
-                    int parseInt = Integer.parseInt(intent2.getStringExtra("com.google.android.voicesearch.extra.RECIPIENT_CONTACT_CHAT_ID"));
-                    TLRPC$User user = MessagesController.getInstance(i).getUser(Integer.valueOf(parseInt));
-                    if (user == null && (user = MessagesStorage.getInstance(i).getUserSync(parseInt)) != null) {
+                    long parseLong = Long.parseLong(intent2.getStringExtra("com.google.android.voicesearch.extra.RECIPIENT_CONTACT_CHAT_ID"));
+                    TLRPC$User user = MessagesController.getInstance(i).getUser(Long.valueOf(parseLong));
+                    if (user == null && (user = MessagesStorage.getInstance(i).getUserSync(parseLong)) != null) {
                         MessagesController.getInstance(i).putUser(user, true);
                     }
                     if (user != null) {
                         ContactsController.getInstance(i).markAsContacted(stringExtra2);
-                        SendMessagesHelper.getInstance(i).sendMessage(stringExtra, (long) user.id, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
+                        SendMessagesHelper.getInstance(i).sendMessage(stringExtra, user.id, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
                     }
                 }
             }

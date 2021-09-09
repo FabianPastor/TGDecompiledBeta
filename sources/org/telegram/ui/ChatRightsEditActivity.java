@@ -83,7 +83,7 @@ public class ChatRightsEditActivity extends BaseFragment {
     public int cantEditInfoRow;
     /* access modifiers changed from: private */
     public int changeInfoRow;
-    private int chatId;
+    private long chatId;
     private String currentBannedRights = "";
     /* access modifiers changed from: private */
     public TLRPC$Chat currentChat;
@@ -163,13 +163,13 @@ public class ChatRightsEditActivity extends BaseFragment {
     public static /* synthetic */ void lambda$createView$3(DialogInterface dialogInterface, int i) {
     }
 
-    public ChatRightsEditActivity(int i, int i2, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights2, String str, int i3, boolean z, boolean z2) {
+    public ChatRightsEditActivity(long j, long j2, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights2, String str, int i, boolean z, boolean z2) {
         this.isAddingNew = z2;
-        this.chatId = i2;
-        this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
-        this.currentType = i3;
+        this.chatId = j2;
+        this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(j));
+        this.currentType = i;
         this.canEdit = z;
-        TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
+        TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(this.chatId));
         this.currentChat = chat;
         str = str == null ? "" : str;
         this.currentRank = str;
@@ -192,7 +192,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             tLRPC$TL_chatAdminRights2.post_messages = true;
             tLRPC$TL_chatAdminRights2.change_info = true;
         }
-        if (i3 == 0) {
+        if (i == 0) {
             TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights3 = new TLRPC$TL_chatAdminRights();
             this.adminRights = tLRPC$TL_chatAdminRights3;
             if (tLRPC$TL_chatAdminRights == null) {
@@ -388,7 +388,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         }
         if (i == 0) {
             Bundle bundle = new Bundle();
-            bundle.putInt("user_id", this.currentUser.id);
+            bundle.putLong("user_id", this.currentUser.id);
             presentFragment(new ProfileActivity(bundle));
         } else if (i == this.removeAdminRow) {
             int i2 = this.currentType;
@@ -733,10 +733,10 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$initTransfer$7(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, int i) {
-        if (i != 0) {
-            this.chatId = i;
-            this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
+    public /* synthetic */ void lambda$initTransfer$7(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, long j) {
+        if (j != 0) {
+            this.chatId = j;
+            this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(j));
             lambda$initTransfer$8(tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity);
         }
     }
@@ -1088,192 +1088,193 @@ public class ChatRightsEditActivity extends BaseFragment {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDonePressed() {
         /*
-            r13 = this;
-            org.telegram.tgnet.TLRPC$Chat r0 = r13.currentChat
+            r14 = this;
+            org.telegram.tgnet.TLRPC$Chat r0 = r14.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.isChannel(r0)
             r1 = 16
             r2 = -1
             r3 = 1
             r4 = 0
-            if (r0 != 0) goto L_0x003e
-            int r0 = r13.currentType
+            if (r0 != 0) goto L_0x003f
+            int r0 = r14.currentType
             if (r0 == r3) goto L_0x0029
-            if (r0 != 0) goto L_0x003e
-            boolean r0 = r13.isDefaultAdminRights()
+            if (r0 != 0) goto L_0x003f
+            boolean r0 = r14.isDefaultAdminRights()
             if (r0 == 0) goto L_0x0029
-            int r0 = r13.rankRow
-            if (r0 == r2) goto L_0x003e
-            java.lang.String r0 = r13.currentRank
+            int r0 = r14.rankRow
+            if (r0 == r2) goto L_0x003f
+            java.lang.String r0 = r14.currentRank
             int r5 = r0.length()
             int r0 = r0.codePointCount(r4, r5)
-            if (r0 <= r1) goto L_0x003e
+            if (r0 <= r1) goto L_0x003f
         L_0x0029:
-            int r0 = r13.currentAccount
-            org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
-            android.app.Activity r1 = r13.getParentActivity()
-            int r2 = r13.chatId
-            org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda12 r3 = new org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda12
-            r3.<init>(r13)
-            r0.convertToMegaGroup(r1, r2, r13, r3)
+            int r0 = r14.currentAccount
+            org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r0)
+            android.app.Activity r2 = r14.getParentActivity()
+            long r3 = r14.chatId
+            org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda12 r6 = new org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda12
+            r6.<init>(r14)
+            r5 = r14
+            r1.convertToMegaGroup(r2, r3, r5, r6)
             return
-        L_0x003e:
-            int r0 = r13.currentType
-            if (r0 != 0) goto L_0x0113
-            int r0 = r13.rankRow
-            if (r0 == r2) goto L_0x007e
-            java.lang.String r0 = r13.currentRank
+        L_0x003f:
+            int r0 = r14.currentType
+            if (r0 != 0) goto L_0x0114
+            int r0 = r14.rankRow
+            if (r0 == r2) goto L_0x007f
+            java.lang.String r0 = r14.currentRank
             int r2 = r0.length()
             int r0 = r0.codePointCount(r4, r2)
-            if (r0 <= r1) goto L_0x007e
-            org.telegram.ui.Components.RecyclerListView r0 = r13.listView
-            int r1 = r13.rankRow
+            if (r0 <= r1) goto L_0x007f
+            org.telegram.ui.Components.RecyclerListView r0 = r14.listView
+            int r1 = r14.rankRow
             r0.smoothScrollToPosition(r1)
-            android.app.Activity r0 = r13.getParentActivity()
+            android.app.Activity r0 = r14.getParentActivity()
             java.lang.String r1 = "vibrator"
             java.lang.Object r0 = r0.getSystemService(r1)
             android.os.Vibrator r0 = (android.os.Vibrator) r0
-            if (r0 == 0) goto L_0x006c
+            if (r0 == 0) goto L_0x006d
             r1 = 200(0xc8, double:9.9E-322)
             r0.vibrate(r1)
-        L_0x006c:
-            org.telegram.ui.Components.RecyclerListView r0 = r13.listView
-            int r1 = r13.rankHeaderRow
+        L_0x006d:
+            org.telegram.ui.Components.RecyclerListView r0 = r14.listView
+            int r1 = r14.rankHeaderRow
             androidx.recyclerview.widget.RecyclerView$ViewHolder r0 = r0.findViewHolderForAdapterPosition(r1)
-            if (r0 == 0) goto L_0x007d
+            if (r0 == 0) goto L_0x007e
             android.view.View r0 = r0.itemView
             r1 = 1073741824(0x40000000, float:2.0)
             org.telegram.messenger.AndroidUtilities.shakeView(r0, r1, r4)
-        L_0x007d:
-            return
         L_0x007e:
-            boolean r0 = r13.isChannel
-            if (r0 == 0) goto L_0x0089
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r13.adminRights
+            return
+        L_0x007f:
+            boolean r0 = r14.isChannel
+            if (r0 == 0) goto L_0x008a
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r14.adminRights
             r0.ban_users = r4
             r0.pin_messages = r4
-            goto L_0x008f
-        L_0x0089:
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r13.adminRights
+            goto L_0x0090
+        L_0x008a:
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r14.adminRights
             r0.edit_messages = r4
             r0.post_messages = r4
-        L_0x008f:
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r13.adminRights
+        L_0x0090:
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r14.adminRights
             boolean r1 = r0.change_info
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             boolean r1 = r0.post_messages
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             boolean r1 = r0.edit_messages
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             boolean r1 = r0.delete_messages
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             boolean r1 = r0.ban_users
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             boolean r1 = r0.invite_users
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             boolean r1 = r0.pin_messages
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             boolean r1 = r0.add_admins
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             boolean r1 = r0.anonymous
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             boolean r1 = r0.manage_call
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00bd
             r0.other = r3
-            goto L_0x00be
-        L_0x00bc:
+            goto L_0x00bf
+        L_0x00bd:
             r0.other = r4
-        L_0x00be:
-            int r0 = r13.currentAccount
+        L_0x00bf:
+            int r0 = r14.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r0)
-            int r6 = r13.chatId
-            org.telegram.tgnet.TLRPC$User r7 = r13.currentUser
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r8 = r13.adminRights
-            java.lang.String r9 = r13.currentRank
-            boolean r10 = r13.isChannel
-            org.telegram.ui.ActionBar.BaseFragment r11 = r13.getFragmentForAlert(r3)
-            boolean r12 = r13.isAddingNew
-            r5.setUserAdminRole(r6, r7, r8, r9, r10, r11, r12)
-            org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r0 = r13.delegate
-            if (r0 == 0) goto L_0x0158
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r1 = r13.adminRights
+            long r6 = r14.chatId
+            org.telegram.tgnet.TLRPC$User r8 = r14.currentUser
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r9 = r14.adminRights
+            java.lang.String r10 = r14.currentRank
+            boolean r11 = r14.isChannel
+            org.telegram.ui.ActionBar.BaseFragment r12 = r14.getFragmentForAlert(r3)
+            boolean r13 = r14.isAddingNew
+            r5.setUserAdminRole(r6, r8, r9, r10, r11, r12, r13)
+            org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r0 = r14.delegate
+            if (r0 == 0) goto L_0x0159
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r1 = r14.adminRights
             boolean r2 = r1.change_info
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.post_messages
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.edit_messages
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.delete_messages
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.ban_users
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.invite_users
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.pin_messages
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.add_admins
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.anonymous
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.manage_call
-            if (r2 != 0) goto L_0x010b
+            if (r2 != 0) goto L_0x010c
             boolean r2 = r1.other
-            if (r2 == 0) goto L_0x010a
-            goto L_0x010b
-        L_0x010a:
-            r3 = 0
+            if (r2 == 0) goto L_0x010b
+            goto L_0x010c
         L_0x010b:
-            org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = r13.bannedRights
-            java.lang.String r4 = r13.currentRank
+            r3 = 0
+        L_0x010c:
+            org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = r14.bannedRights
+            java.lang.String r4 = r14.currentRank
             r0.didSetRights(r3, r1, r2, r4)
-            goto L_0x0158
-        L_0x0113:
-            if (r0 != r3) goto L_0x0158
-            int r0 = r13.currentAccount
+            goto L_0x0159
+        L_0x0114:
+            if (r0 != r3) goto L_0x0159
+            int r0 = r14.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r0)
-            int r6 = r13.chatId
-            org.telegram.tgnet.TLRPC$User r7 = r13.currentUser
-            r8 = 0
-            org.telegram.tgnet.TLRPC$TL_chatBannedRights r9 = r13.bannedRights
-            boolean r10 = r13.isChannel
-            org.telegram.ui.ActionBar.BaseFragment r11 = r13.getFragmentForAlert(r3)
-            r5.setParticipantBannedRole(r6, r7, r8, r9, r10, r11)
-            org.telegram.tgnet.TLRPC$TL_chatBannedRights r0 = r13.bannedRights
+            long r6 = r14.chatId
+            org.telegram.tgnet.TLRPC$User r8 = r14.currentUser
+            r9 = 0
+            org.telegram.tgnet.TLRPC$TL_chatBannedRights r10 = r14.bannedRights
+            boolean r11 = r14.isChannel
+            org.telegram.ui.ActionBar.BaseFragment r12 = r14.getFragmentForAlert(r3)
+            r5.setParticipantBannedRole(r6, r8, r9, r10, r11, r12)
+            org.telegram.tgnet.TLRPC$TL_chatBannedRights r0 = r14.bannedRights
             boolean r1 = r0.send_messages
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_stickers
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.embed_links
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_media
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_gifs
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_games
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_inline
-            if (r1 == 0) goto L_0x014a
-            goto L_0x014d
-        L_0x014a:
+            if (r1 == 0) goto L_0x014b
+            goto L_0x014e
+        L_0x014b:
             r0.until_date = r4
             r3 = 2
-        L_0x014d:
-            org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r1 = r13.delegate
-            if (r1 == 0) goto L_0x0158
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r13.adminRights
-            java.lang.String r4 = r13.currentRank
+        L_0x014e:
+            org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r1 = r14.delegate
+            if (r1 == 0) goto L_0x0159
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r14.adminRights
+            java.lang.String r4 = r14.currentRank
             r1.didSetRights(r3, r2, r0, r4)
-        L_0x0158:
-            r13.finishFragment()
+        L_0x0159:
+            r14.finishFragment()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatRightsEditActivity.onDonePressed():void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDonePressed$15(int i) {
-        if (i != 0) {
-            this.chatId = i;
-            this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
+    public /* synthetic */ void lambda$onDonePressed$15(long j) {
+        if (j != 0) {
+            this.chatId = j;
+            this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(j));
             onDonePressed();
         }
     }
@@ -1295,7 +1296,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         }
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", NUM));
-        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("UserRestrictionsApplyChangesText", NUM, MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId)).title)));
+        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("UserRestrictionsApplyChangesText", NUM, MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(this.chatId)).title)));
         builder.setPositiveButton(LocaleController.getString("ApplyTheme", NUM), new ChatRightsEditActivity$$ExternalSyntheticLambda5(this));
         builder.setNegativeButton(LocaleController.getString("PassportDiscard", NUM), new ChatRightsEditActivity$$ExternalSyntheticLambda2(this));
         showDialog(builder.create());

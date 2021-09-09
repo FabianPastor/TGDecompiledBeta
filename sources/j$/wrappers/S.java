@@ -1,20 +1,20 @@
 package j$.wrappers;
 
-import j$.util.function.k;
+import j$.util.function.l;
 import java.util.function.IntConsumer;
 
 public final /* synthetic */ class S implements IntConsumer {
-    final /* synthetic */ k a;
+    final /* synthetic */ l a;
 
-    private /* synthetic */ S(k kVar) {
-        this.a = kVar;
+    private /* synthetic */ S(l lVar) {
+        this.a = lVar;
     }
 
-    public static /* synthetic */ IntConsumer a(k kVar) {
-        if (kVar == null) {
+    public static /* synthetic */ IntConsumer a(l lVar) {
+        if (lVar == null) {
             return null;
         }
-        return kVar instanceof Q ? ((Q) kVar).a : new S(kVar);
+        return lVar instanceof Q ? ((Q) lVar).a : new S(lVar);
     }
 
     public /* synthetic */ void accept(int i) {

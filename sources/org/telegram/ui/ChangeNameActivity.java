@@ -58,7 +58,7 @@ public class ChangeNameActivity extends BaseFragment {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
-        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
             user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         }
@@ -160,14 +160,14 @@ public class ChangeNameActivity extends BaseFragment {
                 currentUser.first_name = obj;
                 tLRPC$TL_account_updateProfile.last_name = obj2;
                 currentUser.last_name = obj2;
-                TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+                TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
                 if (user != null) {
                     user.first_name = tLRPC$TL_account_updateProfile.first_name;
                     user.last_name = tLRPC$TL_account_updateProfile.last_name;
                 }
                 UserConfig.getInstance(this.currentAccount).saveConfig(true);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, 1);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_NAME));
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateProfile, ChangeNameActivity$$ExternalSyntheticLambda4.INSTANCE);
             }
         }

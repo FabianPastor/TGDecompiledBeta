@@ -45,6 +45,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     /* access modifiers changed from: private */
     public int lineCount;
     private float offsetY;
+    private final Theme.ResourcesProvider resourcesProvider;
     private int selectionEnd = -1;
     private int selectionStart = -1;
     private int userNameLength;
@@ -59,8 +60,9 @@ public class EditTextCaption extends EditTextBoldCursor {
     public void onLineCountChanged(int i, int i2) {
     }
 
-    public EditTextCaption(Context context) {
+    public EditTextCaption(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
@@ -145,13 +147,13 @@ public class EditTextCaption extends EditTextBoldCursor {
         };
         r1.setTextSize(1, 18.0f);
         r1.setText("http://");
-        r1.setTextColor(Theme.getColor("dialogTextBlack"));
+        r1.setTextColor(getThemedColor("dialogTextBlack"));
         r1.setHintText(LocaleController.getString("URL", NUM));
-        r1.setHeaderHintColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
+        r1.setHeaderHintColor(getThemedColor("windowBackgroundWhiteBlueHeader"));
         r1.setSingleLine(true);
         r1.setFocusable(true);
         r1.setTransformHintToHeader(true);
-        r1.setLineColors(Theme.getColor("windowBackgroundWhiteInputField"), Theme.getColor("windowBackgroundWhiteInputFieldActivated"), Theme.getColor("windowBackgroundWhiteRedText3"));
+        r1.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
         r1.setImeOptions(6);
         r1.setBackgroundDrawable((Drawable) null);
         r1.requestFocus();
@@ -459,5 +461,11 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     public boolean performAccessibilityAction(int i, Bundle bundle) {
         return performMenuAction(i) || super.performAccessibilityAction(i, bundle);
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

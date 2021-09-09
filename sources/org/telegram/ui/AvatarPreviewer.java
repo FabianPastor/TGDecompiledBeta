@@ -238,7 +238,7 @@ public class AvatarPreviewer {
 
         /* access modifiers changed from: protected */
         public void onReceiveNotification(Object... objArr) {
-            if (objArr[0].intValue() == ((TLRPC$User) this.argument).id) {
+            if (objArr[0].longValue() == ((TLRPC$User) this.argument).id) {
                 onResult(objArr[1]);
             }
         }

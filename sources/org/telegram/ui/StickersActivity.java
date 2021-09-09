@@ -276,7 +276,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     public void onStickerSetRemove(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {
                         MediaDataController.getInstance(StickersActivity.this.currentAccount).toggleStickerSet(StickersActivity.this.getParentActivity(), tLRPC$StickerSetCovered, 0, StickersActivity.this, false, false);
                     }
-                }));
+                }), (Theme.ResourcesProvider) null);
                 this.trendingStickersAlert = trendingStickersAlert2;
                 trendingStickersAlert2.show();
             } else if (i == this.archivedRow) {
@@ -312,7 +312,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = (TLRPC$TL_messages_stickerSet) this.listAdapter.stickerSets.get(i - this.stickersStartRow);
             ArrayList<TLRPC$Document> arrayList = tLRPC$TL_messages_stickerSet.documents;
             if (arrayList != null && !arrayList.isEmpty()) {
-                showDialog(new StickersAlert(getParentActivity(), this, (TLRPC$InputStickerSet) null, tLRPC$TL_messages_stickerSet, (StickersAlert.StickersAlertDelegate) null));
+                showDialog(new StickersAlert((Context) getParentActivity(), (BaseFragment) this, (TLRPC$InputStickerSet) null, tLRPC$TL_messages_stickerSet, (StickersAlert.StickersAlertDelegate) null));
             }
         } else {
             this.listAdapter.toggleSelected(i);
@@ -854,13 +854,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             } else if (i == 2) {
                 view = new TextSettingsCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-            } else if (i == 3) {
-                view = new ShadowSectionCell(this.mContext);
-            } else if (i != 4) {
-                view = null;
-            } else {
+            } else if (i != 3) {
                 view = new TextCheckCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+            } else {
+                view = new ShadowSectionCell(this.mContext);
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
             return new RecyclerListView.Holder(view);
@@ -946,7 +944,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     notifyStickersItemsChanged(2);
                     if (!SharedConfig.stickersReorderingHintUsed) {
                         SharedConfig.setStickersReorderingHintUsed(true);
-                        Bulletin.make((FrameLayout) StickersActivity.this.parentLayout, (Bulletin.Layout) new ReorderingBulletinLayout(this.mContext, LocaleController.getString("StickersReorderHint", NUM)), 3250).show();
+                        Bulletin.make((FrameLayout) StickersActivity.this.parentLayout, (Bulletin.Layout) new ReorderingBulletinLayout(this.mContext, LocaleController.getString("StickersReorderHint", NUM), (Theme.ResourcesProvider) null), 3250).show();
                     }
                 }
             } else if (isActionModeShowed) {

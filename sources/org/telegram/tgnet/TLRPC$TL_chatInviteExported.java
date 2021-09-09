@@ -3,8 +3,8 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_chatInviteExported extends TLRPC$ExportedChatInvite {
-    public static int constructor = NUM;
-    public int admin_id;
+    public static int constructor = -NUM;
+    public long admin_id;
     public int date;
     public int expire_date;
     public boolean expired;
@@ -27,7 +27,7 @@ public class TLRPC$TL_chatInviteExported extends TLRPC$ExportedChatInvite {
         }
         this.permanent = z2;
         this.link = abstractSerializedData.readString(z);
-        this.admin_id = abstractSerializedData.readInt32(z);
+        this.admin_id = abstractSerializedData.readInt64(z);
         this.date = abstractSerializedData.readInt32(z);
         if ((this.flags & 16) != 0) {
             this.start_date = abstractSerializedData.readInt32(z);
@@ -51,7 +51,7 @@ public class TLRPC$TL_chatInviteExported extends TLRPC$ExportedChatInvite {
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeString(this.link);
-        abstractSerializedData.writeInt32(this.admin_id);
+        abstractSerializedData.writeInt64(this.admin_id);
         abstractSerializedData.writeInt32(this.date);
         if ((this.flags & 16) != 0) {
             abstractSerializedData.writeInt32(this.start_date);

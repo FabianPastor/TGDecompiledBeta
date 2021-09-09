@@ -1,15 +1,15 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.o;
 import j$.util.function.p;
+import j$.util.function.q;
 
 public final /* synthetic */ class s4 implements CLASSNAMEm3 {
     public final /* synthetic */ int a = 0;
     public final /* synthetic */ Object b;
 
-    public /* synthetic */ s4(p pVar) {
-        this.b = pVar;
+    public /* synthetic */ s4(q qVar) {
+        this.b = qVar;
     }
 
     public /* synthetic */ void accept(double d) {
@@ -43,14 +43,14 @@ public final /* synthetic */ class s4 implements CLASSNAMEm3 {
         }
     }
 
-    public p f(p pVar) {
+    public q f(q qVar) {
         switch (this.a) {
             case 0:
-                pVar.getClass();
-                return new o(this, pVar);
+                qVar.getClass();
+                return new p(this, qVar);
             default:
-                pVar.getClass();
-                return new o(this, pVar);
+                qVar.getClass();
+                return new p(this, qVar);
         }
     }
 
@@ -82,7 +82,7 @@ public final /* synthetic */ class s4 implements CLASSNAMEm3 {
     public final void accept(long j) {
         switch (this.a) {
             case 0:
-                ((p) this.b).accept(j);
+                ((q) this.b).accept(j);
                 return;
             default:
                 ((Z3) this.b).accept(j);

@@ -10,13 +10,7 @@ public final class ContactsLoadingObserver {
     private final int currentAccount;
     private final Handler handler;
     private final NotificationCenter notificationCenter;
-    private final NotificationCenter.NotificationCenterDelegate observer = new NotificationCenter.NotificationCenterDelegate() {
-        public void didReceivedNotification(int i, int i2, Object... objArr) {
-            if (i == NotificationCenter.contactsDidLoad) {
-                boolean unused = ContactsLoadingObserver.this.onContactsLoadingStateUpdated(i2, false);
-            }
-        }
-    };
+    private final NotificationCenter.NotificationCenterDelegate observer = new ContactsLoadingObserver$$ExternalSyntheticLambda1(this);
     private final Runnable releaseRunnable;
     private boolean released;
 
@@ -26,6 +20,13 @@ public final class ContactsLoadingObserver {
 
     public static void observe(Callback callback2, long j) {
         new ContactsLoadingObserver(callback2).start(j);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(int i, int i2, Object[] objArr) {
+        if (i == NotificationCenter.contactsDidLoad) {
+            onContactsLoadingStateUpdated(i2, false);
+        }
     }
 
     private ContactsLoadingObserver(Callback callback2) {
@@ -39,7 +40,7 @@ public final class ContactsLoadingObserver {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0() {
+    public /* synthetic */ void lambda$new$1() {
         onContactsLoadingStateUpdated(this.currentAccount, true);
     }
 
@@ -64,8 +65,7 @@ public final class ContactsLoadingObserver {
         }
     }
 
-    /* access modifiers changed from: private */
-    public boolean onContactsLoadingStateUpdated(int i, boolean z) {
+    private boolean onContactsLoadingStateUpdated(int i, boolean z) {
         if (this.released) {
             return false;
         }

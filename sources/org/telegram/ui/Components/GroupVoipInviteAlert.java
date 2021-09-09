@@ -2,9 +2,9 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +35,7 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserStatus;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
 import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.ManageChatTextCell;
@@ -51,7 +52,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     public int contactsEndRow;
     /* access modifiers changed from: private */
     public int contactsHeaderRow;
-    private SparseArray<TLObject> contactsMap = new SparseArray<>();
+    private LongSparseArray<TLObject> contactsMap = new LongSparseArray<>();
     /* access modifiers changed from: private */
     public int contactsStartRow;
     /* access modifiers changed from: private */
@@ -65,11 +66,11 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     /* access modifiers changed from: private */
     public int flickerProgressRow;
     /* access modifiers changed from: private */
-    public SparseArray<TLRPC$TL_groupCallParticipant> ignoredUsers;
+    public LongSparseArray<TLRPC$TL_groupCallParticipant> ignoredUsers;
     /* access modifiers changed from: private */
     public TLRPC$ChatFull info;
     /* access modifiers changed from: private */
-    public HashSet<Integer> invitedUsers;
+    public HashSet<Long> invitedUsers;
     /* access modifiers changed from: private */
     public int lastRow;
     /* access modifiers changed from: private */
@@ -80,7 +81,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     public ArrayList<TLObject> participants = new ArrayList<>();
     /* access modifiers changed from: private */
     public int participantsEndRow;
-    private SparseArray<TLObject> participantsMap = new SparseArray<>();
+    private LongSparseArray<TLObject> participantsMap = new LongSparseArray<>();
     /* access modifiers changed from: private */
     public int participantsStartRow;
     /* access modifiers changed from: private */
@@ -92,7 +93,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     public interface GroupVoipInviteAlertDelegate {
         void copyInviteLink();
 
-        void inviteUser(int i);
+        void inviteUser(long j);
 
         void needOpenSearch(MotionEvent motionEvent, EditTextBoldCursor editTextBoldCursor);
     }
@@ -114,16 +115,12 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         this.keySearchIconUnscrolled = "voipgroup_mutedIconUnscrolled";
     }
 
-    public GroupVoipInviteAlert(Context context, int i, TLRPC$Chat tLRPC$Chat, TLRPC$ChatFull tLRPC$ChatFull, SparseArray<TLRPC$TL_groupCallParticipant> sparseArray, HashSet<Integer> hashSet) {
-        super(context, false, i);
+    public GroupVoipInviteAlert(Context context, int i, TLRPC$Chat tLRPC$Chat, TLRPC$ChatFull tLRPC$ChatFull, LongSparseArray<TLRPC$TL_groupCallParticipant> longSparseArray, HashSet<Long> hashSet) {
+        super(context, false, i, (Theme.ResourcesProvider) null);
         setDimBehindAlpha(75);
         this.currentChat = tLRPC$Chat;
         this.info = tLRPC$ChatFull;
-        this.ignoredUsers = sparseArray;
-        this.invitedUsers = hashSet;
-        this.currentChat = tLRPC$Chat;
-        this.info = tLRPC$ChatFull;
-        this.ignoredUsers = sparseArray;
+        this.ignoredUsers = longSparseArray;
         this.invitedUsers = hashSet;
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new GroupVoipInviteAlert$$ExternalSyntheticLambda4(this));
         SearchAdapter searchAdapter2 = new SearchAdapter(context);
@@ -145,7 +142,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             dismiss();
         } else if (view instanceof ManageChatUserCell) {
             ManageChatUserCell manageChatUserCell = (ManageChatUserCell) view;
-            if (!this.invitedUsers.contains(Integer.valueOf(manageChatUserCell.getUserId()))) {
+            if (!this.invitedUsers.contains(Long.valueOf(manageChatUserCell.getUserId()))) {
                 this.delegate.inviteUser(manageChatUserCell.getUserId());
             }
         }
@@ -217,19 +214,22 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     }
 
     private void fillContacts() {
-        int i;
         if (this.showContacts) {
             this.contacts.addAll(ContactsController.getInstance(this.currentAccount).contacts);
-            int i2 = UserConfig.getInstance(this.currentAccount).clientUserId;
-            int i3 = 0;
+            long j = UserConfig.getInstance(this.currentAccount).clientUserId;
+            int i = 0;
             int size = this.contacts.size();
-            while (i3 < size) {
-                if ((this.contacts.get(i3) instanceof TLRPC$TL_contact) && ((i = ((TLRPC$TL_contact) this.contacts.get(i3)).user_id) == i2 || this.ignoredUsers.indexOfKey(i) >= 0 || this.invitedUsers.contains(Integer.valueOf(i)))) {
-                    this.contacts.remove(i3);
-                    i3--;
-                    size--;
+            while (i < size) {
+                TLObject tLObject = this.contacts.get(i);
+                if (tLObject instanceof TLRPC$TL_contact) {
+                    long j2 = ((TLRPC$TL_contact) tLObject).user_id;
+                    if (j2 == j || this.ignoredUsers.indexOfKey(j2) >= 0 || this.invitedUsers.contains(Long.valueOf(j2))) {
+                        this.contacts.remove(i);
+                        i--;
+                        size--;
+                    }
                 }
-                i3++;
+                i++;
             }
             Collections.sort(this.contacts, new GroupVoipInviteAlert$$ExternalSyntheticLambda1(MessagesController.getInstance(this.currentAccount), ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()));
         }
@@ -245,12 +245,12 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     public static /* synthetic */ int lambda$fillContacts$1(org.telegram.messenger.MessagesController r2, int r3, org.telegram.tgnet.TLObject r4, org.telegram.tgnet.TLObject r5) {
         /*
             org.telegram.tgnet.TLRPC$TL_contact r5 = (org.telegram.tgnet.TLRPC$TL_contact) r5
-            int r5 = r5.user_id
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
+            long r0 = r5.user_id
+            java.lang.Long r5 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$User r5 = r2.getUser(r5)
             org.telegram.tgnet.TLRPC$TL_contact r4 = (org.telegram.tgnet.TLRPC$TL_contact) r4
-            int r4 = r4.user_id
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            long r0 = r4.user_id
+            java.lang.Long r4 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r4)
             r4 = 50000(0xCLASSNAME, float:7.0065E-41)
             r0 = 0
@@ -323,7 +323,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
 
     /* access modifiers changed from: protected */
     public void loadChatParticipants(int i, int i2, boolean z) {
-        SparseArray<TLRPC$TL_groupCallParticipant> sparseArray;
+        LongSparseArray<TLRPC$TL_groupCallParticipant> longSparseArray;
         if (!ChatObject.isChannel(this.currentChat)) {
             this.loadingUsers = false;
             this.participants.clear();
@@ -331,13 +331,13 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             this.participantsMap.clear();
             this.contactsMap.clear();
             if (this.info != null) {
-                int i3 = UserConfig.getInstance(this.currentAccount).clientUserId;
+                long j = UserConfig.getInstance(this.currentAccount).clientUserId;
                 int size = this.info.participants.participants.size();
-                for (int i4 = 0; i4 < size; i4++) {
-                    TLRPC$ChatParticipant tLRPC$ChatParticipant = this.info.participants.participants.get(i4);
-                    int i5 = tLRPC$ChatParticipant.user_id;
-                    if (i5 != i3 && ((sparseArray = this.ignoredUsers) == null || sparseArray.indexOfKey(i5) < 0)) {
-                        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tLRPC$ChatParticipant.user_id));
+                for (int i3 = 0; i3 < size; i3++) {
+                    TLRPC$ChatParticipant tLRPC$ChatParticipant = this.info.participants.participants.get(i3);
+                    long j2 = tLRPC$ChatParticipant.user_id;
+                    if (j2 != j && ((longSparseArray = this.ignoredUsers) == null || longSparseArray.indexOfKey(j2) < 0)) {
+                        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(tLRPC$ChatParticipant.user_id));
                         if (!UserObject.isDeleted(user) && !user.bot) {
                             this.participants.add(tLRPC$ChatParticipant);
                             this.participantsMap.put(tLRPC$ChatParticipant.user_id, tLRPC$ChatParticipant);
@@ -393,15 +393,15 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadChatParticipants$3(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants) {
         int i;
-        SparseArray<TLObject> sparseArray;
+        LongSparseArray<TLObject> longSparseArray;
         ArrayList<TLObject> arrayList;
         boolean z;
-        SparseArray<TLRPC$TL_groupCallParticipant> sparseArray2;
+        LongSparseArray<TLRPC$TL_groupCallParticipant> longSparseArray2;
         if (tLRPC$TL_error == null) {
             TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
             MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_channels_channelParticipants.users, false);
             MessagesController.getInstance(this.currentAccount).putChats(tLRPC$TL_channels_channelParticipants.chats, false);
-            int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
+            long clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
             int i2 = 0;
             while (true) {
                 if (i2 >= tLRPC$TL_channels_channelParticipants.participants.size()) {
@@ -416,28 +416,28 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             this.delayResults--;
             if (tLRPC$TL_channels_getParticipants.filter instanceof TLRPC$TL_channelParticipantsContacts) {
                 arrayList = this.contacts;
-                sparseArray = this.contactsMap;
+                longSparseArray = this.contactsMap;
             } else {
                 arrayList = this.participants;
-                sparseArray = this.participantsMap;
+                longSparseArray = this.participantsMap;
             }
             arrayList.clear();
             arrayList.addAll(tLRPC$TL_channels_channelParticipants.participants);
             int size = tLRPC$TL_channels_channelParticipants.participants.size();
             for (int i3 = 0; i3 < size; i3++) {
                 TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_channels_channelParticipants.participants.get(i3);
-                sparseArray.put(MessageObject.getPeerId(tLRPC$ChannelParticipant.peer), tLRPC$ChannelParticipant);
+                longSparseArray.put(MessageObject.getPeerId(tLRPC$ChannelParticipant.peer), tLRPC$ChannelParticipant);
             }
             int size2 = this.participants.size();
             int i4 = 0;
             while (i4 < size2) {
-                int peerId = MessageObject.getPeerId(((TLRPC$ChannelParticipant) this.participants.get(i4)).peer);
-                if (this.contactsMap.get(peerId) == null && ((sparseArray2 = this.ignoredUsers) == null || sparseArray2.indexOfKey(peerId) < 0)) {
+                long peerId = MessageObject.getPeerId(((TLRPC$ChannelParticipant) this.participants.get(i4)).peer);
+                if (this.contactsMap.get(peerId) == null && ((longSparseArray2 = this.ignoredUsers) == null || longSparseArray2.indexOfKey(peerId) < 0)) {
                     z = false;
                 } else {
                     z = true;
                 }
-                TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(peerId));
+                TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(peerId));
                 if ((user != null && user.bot) || UserObject.isDeleted(user)) {
                     z = true;
                 }
@@ -488,8 +488,8 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         int i3;
         TLRPC$UserStatus tLRPC$UserStatus;
         TLRPC$UserStatus tLRPC$UserStatus2;
-        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject).peer)));
-        TLRPC$User user2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject2).peer)));
+        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject).peer)));
+        TLRPC$User user2 = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject2).peer)));
         if (user == null || (tLRPC$UserStatus2 = user.status) == null) {
             i2 = 0;
         } else {
@@ -551,7 +551,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                     return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
                 }
 
-                public /* synthetic */ SparseArray getExcludeUsers() {
+                public /* synthetic */ LongSparseArray getExcludeUsers() {
                     return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
                 }
 
@@ -576,7 +576,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                     }
                 }
 
-                public SparseArray<TLRPC$TL_groupCallParticipant> getExcludeCallParticipants() {
+                public LongSparseArray<TLRPC$TL_groupCallParticipant> getExcludeCallParticipants() {
                     return GroupVoipInviteAlert.this.ignoredUsers;
                 }
             });
@@ -635,149 +635,146 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             if (arrayList != null) {
                 Utilities.searchQueue.postRunnable(new GroupVoipInviteAlert$SearchAdapter$$ExternalSyntheticLambda3(this, str, i, arrayList));
             } else {
-                String str2 = str;
-                int i2 = i;
                 this.searchInProgress = false;
             }
             this.searchAdapterHelper.queryServerSearch(str, ChatObject.canAddUsers(GroupVoipInviteAlert.this.currentChat), false, true, false, false, ChatObject.isChannel(GroupVoipInviteAlert.this.currentChat) ? GroupVoipInviteAlert.this.currentChat.id : 0, false, 2, i);
         }
 
         /* access modifiers changed from: private */
-        /* JADX WARNING: Code restructure failed: missing block: B:41:0x00dd, code lost:
-            if (r14.contains(" " + r5) != false) goto L_0x00ed;
+        /* JADX WARNING: Code restructure failed: missing block: B:39:0x00db, code lost:
+            if (r14.contains(" " + r4) != false) goto L_0x00eb;
          */
-        /* JADX WARNING: Removed duplicated region for block: B:50:0x00f5 A[LOOP:1: B:32:0x00a1->B:50:0x00f5, LOOP_END] */
-        /* JADX WARNING: Removed duplicated region for block: B:59:0x00f1 A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:48:0x00f3 A[LOOP:1: B:30:0x009f->B:48:0x00f3, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:57:0x00ef A[SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public /* synthetic */ void lambda$processSearch$1(java.lang.String r19, int r20, java.util.ArrayList r21) {
             /*
                 r18 = this;
                 r0 = r18
                 r1 = r20
-                r2 = r21
-                java.lang.String r3 = r19.trim()
-                java.lang.String r3 = r3.toLowerCase()
-                int r4 = r3.length()
-                if (r4 != 0) goto L_0x001d
+                java.lang.String r2 = r19.trim()
+                java.lang.String r2 = r2.toLowerCase()
+                int r3 = r2.length()
+                if (r3 != 0) goto L_0x001b
                 java.util.ArrayList r2 = new java.util.ArrayList
                 r2.<init>()
                 r0.updateSearchResults(r2, r1)
                 return
-            L_0x001d:
-                org.telegram.messenger.LocaleController r4 = org.telegram.messenger.LocaleController.getInstance()
-                java.lang.String r4 = r4.getTranslitString(r3)
-                boolean r5 = r3.equals(r4)
-                if (r5 != 0) goto L_0x0031
-                int r5 = r4.length()
-                if (r5 != 0) goto L_0x0032
-            L_0x0031:
+            L_0x001b:
+                org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
+                java.lang.String r3 = r3.getTranslitString(r2)
+                boolean r4 = r2.equals(r3)
+                if (r4 != 0) goto L_0x002f
+                int r4 = r3.length()
+                if (r4 != 0) goto L_0x0030
+            L_0x002f:
+                r3 = 0
+            L_0x0030:
                 r4 = 0
-            L_0x0032:
-                r5 = 0
+                r6 = 1
+                if (r3 == 0) goto L_0x0036
                 r7 = 1
-                if (r4 == 0) goto L_0x0038
-                r8 = 1
-                goto L_0x0039
-            L_0x0038:
-                r8 = 0
-            L_0x0039:
-                int r8 = r8 + r7
-                java.lang.String[] r9 = new java.lang.String[r8]
-                r9[r5] = r3
-                if (r4 == 0) goto L_0x0042
-                r9[r7] = r4
-            L_0x0042:
-                java.util.ArrayList r3 = new java.util.ArrayList
-                r3.<init>()
-                if (r2 == 0) goto L_0x0100
-                int r4 = r21.size()
-                r10 = 0
-            L_0x004e:
-                if (r10 >= r4) goto L_0x0100
-                java.lang.Object r11 = r2.get(r10)
+                goto L_0x0037
+            L_0x0036:
+                r7 = 0
+            L_0x0037:
+                int r7 = r7 + r6
+                java.lang.String[] r8 = new java.lang.String[r7]
+                r8[r4] = r2
+                if (r3 == 0) goto L_0x0040
+                r8[r6] = r3
+            L_0x0040:
+                java.util.ArrayList r2 = new java.util.ArrayList
+                r2.<init>()
+                int r3 = r21.size()
+                r9 = 0
+            L_0x004a:
+                if (r9 >= r3) goto L_0x00fe
+                r10 = r21
+                java.lang.Object r11 = r10.get(r9)
                 org.telegram.tgnet.TLObject r11 = (org.telegram.tgnet.TLObject) r11
                 boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
-                if (r12 == 0) goto L_0x0060
+                if (r12 == 0) goto L_0x005e
                 r12 = r11
                 org.telegram.tgnet.TLRPC$ChatParticipant r12 = (org.telegram.tgnet.TLRPC$ChatParticipant) r12
-                int r12 = r12.user_id
-                goto L_0x006d
-            L_0x0060:
+                long r12 = r12.user_id
+                goto L_0x006b
+            L_0x005e:
                 boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-                if (r12 == 0) goto L_0x00fa
+                if (r12 == 0) goto L_0x00f8
                 r12 = r11
                 org.telegram.tgnet.TLRPC$ChannelParticipant r12 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r12
                 org.telegram.tgnet.TLRPC$Peer r12 = r12.peer
-                int r12 = org.telegram.messenger.MessageObject.getPeerId(r12)
-            L_0x006d:
-                org.telegram.ui.Components.GroupVoipInviteAlert r13 = org.telegram.ui.Components.GroupVoipInviteAlert.this
-                int r13 = r13.currentAccount
-                org.telegram.messenger.MessagesController r13 = org.telegram.messenger.MessagesController.getInstance(r13)
-                java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
-                org.telegram.tgnet.TLRPC$User r12 = r13.getUser(r12)
+                long r12 = org.telegram.messenger.MessageObject.getPeerId(r12)
+            L_0x006b:
+                org.telegram.ui.Components.GroupVoipInviteAlert r14 = org.telegram.ui.Components.GroupVoipInviteAlert.this
+                int r14 = r14.currentAccount
+                org.telegram.messenger.MessagesController r14 = org.telegram.messenger.MessagesController.getInstance(r14)
+                java.lang.Long r12 = java.lang.Long.valueOf(r12)
+                org.telegram.tgnet.TLRPC$User r12 = r14.getUser(r12)
                 boolean r13 = org.telegram.messenger.UserObject.isUserSelf(r12)
-                if (r13 == 0) goto L_0x0087
-                goto L_0x00fa
-            L_0x0087:
+                if (r13 == 0) goto L_0x0085
+                goto L_0x00f8
+            L_0x0085:
                 java.lang.String r13 = org.telegram.messenger.UserObject.getUserName(r12)
                 java.lang.String r13 = r13.toLowerCase()
                 org.telegram.messenger.LocaleController r14 = org.telegram.messenger.LocaleController.getInstance()
                 java.lang.String r14 = r14.getTranslitString(r13)
                 boolean r15 = r13.equals(r14)
-                if (r15 == 0) goto L_0x009e
+                if (r15 == 0) goto L_0x009c
                 r14 = 0
-            L_0x009e:
+            L_0x009c:
                 r15 = 0
                 r16 = 0
-            L_0x00a1:
-                if (r15 >= r8) goto L_0x00fa
-                r5 = r9[r15]
-                boolean r17 = r13.startsWith(r5)
-                if (r17 != 0) goto L_0x00ed
-                java.lang.StringBuilder r6 = new java.lang.StringBuilder
-                r6.<init>()
-                java.lang.String r7 = " "
-                r6.append(r7)
-                r6.append(r5)
-                java.lang.String r6 = r6.toString()
-                boolean r6 = r13.contains(r6)
-                if (r6 != 0) goto L_0x00ed
-                if (r14 == 0) goto L_0x00e0
-                boolean r6 = r14.startsWith(r5)
-                if (r6 != 0) goto L_0x00ed
-                java.lang.StringBuilder r6 = new java.lang.StringBuilder
-                r6.<init>()
-                r6.append(r7)
-                r6.append(r5)
-                java.lang.String r6 = r6.toString()
-                boolean r6 = r14.contains(r6)
-                if (r6 == 0) goto L_0x00e0
-                goto L_0x00ed
-            L_0x00e0:
-                java.lang.String r6 = r12.username
-                if (r6 == 0) goto L_0x00ef
-                boolean r5 = r6.startsWith(r5)
-                if (r5 == 0) goto L_0x00ef
+            L_0x009f:
+                if (r15 >= r7) goto L_0x00f8
+                r4 = r8[r15]
+                boolean r17 = r13.startsWith(r4)
+                if (r17 != 0) goto L_0x00eb
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder
+                r5.<init>()
+                java.lang.String r6 = " "
+                r5.append(r6)
+                r5.append(r4)
+                java.lang.String r5 = r5.toString()
+                boolean r5 = r13.contains(r5)
+                if (r5 != 0) goto L_0x00eb
+                if (r14 == 0) goto L_0x00de
+                boolean r5 = r14.startsWith(r4)
+                if (r5 != 0) goto L_0x00eb
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder
+                r5.<init>()
+                r5.append(r6)
+                r5.append(r4)
+                java.lang.String r5 = r5.toString()
+                boolean r5 = r14.contains(r5)
+                if (r5 == 0) goto L_0x00de
+                goto L_0x00eb
+            L_0x00de:
+                java.lang.String r5 = r12.username
+                if (r5 == 0) goto L_0x00ed
+                boolean r4 = r5.startsWith(r4)
+                if (r4 == 0) goto L_0x00ed
                 r16 = 2
-                goto L_0x00ef
-            L_0x00ed:
+                goto L_0x00ed
+            L_0x00eb:
                 r16 = 1
-            L_0x00ef:
-                if (r16 == 0) goto L_0x00f5
-                r3.add(r11)
-                goto L_0x00fa
-            L_0x00f5:
+            L_0x00ed:
+                if (r16 == 0) goto L_0x00f3
+                r2.add(r11)
+                goto L_0x00f8
+            L_0x00f3:
                 int r15 = r15 + 1
-                r5 = 0
-                r7 = 1
-                goto L_0x00a1
-            L_0x00fa:
-                int r10 = r10 + 1
-                r5 = 0
-                r7 = 1
-                goto L_0x004e
-            L_0x0100:
-                r0.updateSearchResults(r3, r1)
+                r4 = 0
+                r6 = 1
+                goto L_0x009f
+            L_0x00f8:
+                int r9 = r9 + 1
+                r4 = 0
+                r6 = 1
+                goto L_0x004a
+            L_0x00fe:
+                r0.updateSearchResults(r2, r1)
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.lambda$processSearch$1(java.lang.String, int, java.util.ArrayList):void");
@@ -811,7 +808,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             View view = viewHolder.itemView;
-            if ((!(view instanceof ManageChatUserCell) || !GroupVoipInviteAlert.this.invitedUsers.contains(Integer.valueOf(((ManageChatUserCell) view).getUserId()))) && viewHolder.getItemViewType() == 0) {
+            if ((!(view instanceof ManageChatUserCell) || !GroupVoipInviteAlert.this.invitedUsers.contains(Long.valueOf(((ManageChatUserCell) view).getUserId()))) && viewHolder.getItemViewType() == 0) {
                 return true;
             }
             return false;
@@ -903,7 +900,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r0 = r2.mContext
                 r1 = 0
                 r4.<init>(r0, r3, r3, r1)
-                r3 = 2131165761(0x7var_, float:1.7945748E38)
+                r3 = 2131165762(0x7var_, float:1.794575E38)
                 r4.setCustomRightImage(r3)
                 java.lang.String r3 = "voipgroup_nameText"
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
@@ -927,7 +924,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v1, resolved type: java.lang.String} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v2, resolved type: java.lang.String} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v3, resolved type: java.lang.String} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v6, resolved type: android.text.SpannableStringBuilder} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v5, resolved type: android.text.SpannableStringBuilder} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v4, resolved type: java.lang.String} */
         /* JADX WARNING: Multi-variable type inference failed */
         /* JADX WARNING: Removed duplicated region for block: B:48:0x00f2  */
@@ -945,7 +942,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
                 int r0 = r13.groupStartRow
                 if (r15 != r0) goto L_0x0021
-                r15 = 2131624752(0x7f0e0330, float:1.8876693E38)
+                r15 = 2131624753(0x7f0e0331, float:1.8876695E38)
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -953,7 +950,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x0133
-                r15 = 2131625759(0x7f0e071f, float:1.8878735E38)
+                r15 = 2131625771(0x7f0e072b, float:1.887876E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -972,8 +969,8 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
                 org.telegram.tgnet.TLRPC$ChannelParticipant r0 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r0
                 org.telegram.tgnet.TLRPC$Peer r0 = r0.peer
-                int r0 = org.telegram.messenger.MessageObject.getPeerId(r0)
-                java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                long r3 = org.telegram.messenger.MessageObject.getPeerId(r0)
+                java.lang.Long r0 = java.lang.Long.valueOf(r3)
                 org.telegram.tgnet.TLRPC$User r0 = r2.getUser(r0)
                 goto L_0x0077
             L_0x005d:
@@ -983,8 +980,8 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 int r2 = r2.currentAccount
                 org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
                 org.telegram.tgnet.TLRPC$ChatParticipant r0 = (org.telegram.tgnet.TLRPC$ChatParticipant) r0
-                int r0 = r0.user_id
-                java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                long r3 = r0.user_id
+                java.lang.Long r0 = java.lang.Long.valueOf(r3)
                 org.telegram.tgnet.TLRPC$User r0 = r2.getUser(r0)
             L_0x0077:
                 java.lang.String r2 = r0.username
@@ -1071,8 +1068,8 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 r14.setTag(r15)
                 org.telegram.ui.Components.GroupVoipInviteAlert r15 = org.telegram.ui.Components.GroupVoipInviteAlert.this
                 java.util.HashSet r15 = r15.invitedUsers
-                int r1 = r0.id
-                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                long r6 = r0.id
+                java.lang.Long r1 = java.lang.Long.valueOf(r6)
                 boolean r15 = r15.contains(r1)
                 r14.setCustomImageVisible(r15)
                 r14.setData(r0, r5, r2, r4)
@@ -1109,7 +1106,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             View view = viewHolder.itemView;
-            if ((view instanceof ManageChatUserCell) && GroupVoipInviteAlert.this.invitedUsers.contains(Integer.valueOf(((ManageChatUserCell) view).getUserId()))) {
+            if ((view instanceof ManageChatUserCell) && GroupVoipInviteAlert.this.invitedUsers.contains(Long.valueOf(((ManageChatUserCell) view).getUserId()))) {
                 return false;
             }
             int itemViewType = viewHolder.getItemViewType();
@@ -1192,7 +1189,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r3 = r5.mContext
                 r4 = 0
                 r7.<init>(r3, r0, r1, r4)
-                r0 = 2131165761(0x7var_, float:1.7945748E38)
+                r0 = 2131165762(0x7var_, float:1.794575E38)
                 r7.setCustomRightImage(r0)
                 java.lang.String r0 = "voipgroup_nameText"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
@@ -1214,7 +1211,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             int i2;
-            int i3;
+            long j;
             int itemViewType = viewHolder.getItemViewType();
             boolean z = false;
             if (itemViewType == 0) {
@@ -1227,17 +1224,17 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                     i2 = GroupVoipInviteAlert.this.participantsEndRow;
                 }
                 if (item instanceof TLRPC$TL_contact) {
-                    i3 = ((TLRPC$TL_contact) item).user_id;
+                    j = ((TLRPC$TL_contact) item).user_id;
                 } else if (item instanceof TLRPC$User) {
-                    i3 = ((TLRPC$User) item).id;
+                    j = ((TLRPC$User) item).id;
                 } else if (item instanceof TLRPC$ChannelParticipant) {
-                    i3 = MessageObject.getPeerId(((TLRPC$ChannelParticipant) item).peer);
+                    j = MessageObject.getPeerId(((TLRPC$ChannelParticipant) item).peer);
                 } else {
-                    i3 = ((TLRPC$ChatParticipant) item).user_id;
+                    j = ((TLRPC$ChatParticipant) item).user_id;
                 }
-                TLRPC$User user = MessagesController.getInstance(GroupVoipInviteAlert.this.currentAccount).getUser(Integer.valueOf(i3));
+                TLRPC$User user = MessagesController.getInstance(GroupVoipInviteAlert.this.currentAccount).getUser(Long.valueOf(j));
                 if (user != null) {
-                    manageChatUserCell.setCustomImageVisible(GroupVoipInviteAlert.this.invitedUsers.contains(Integer.valueOf(user.id)));
+                    manageChatUserCell.setCustomImageVisible(GroupVoipInviteAlert.this.invitedUsers.contains(Long.valueOf(user.id)));
                     if (i != i2 - 1) {
                         z = true;
                     }

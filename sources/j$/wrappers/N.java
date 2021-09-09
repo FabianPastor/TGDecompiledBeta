@@ -17,7 +17,7 @@ public final /* synthetic */ class N implements Function {
     }
 
     public /* synthetic */ Function andThen(Function function) {
-        return a(this.a.b(M.c(function)));
+        return a(this.a.andThen(M.a(function)));
     }
 
     public /* synthetic */ Object apply(Object obj) {
@@ -25,6 +25,6 @@ public final /* synthetic */ class N implements Function {
     }
 
     public /* synthetic */ Function compose(Function function) {
-        return a(this.a.a(M.c(function)));
+        return a(this.a.compose(M.a(function)));
     }
 }

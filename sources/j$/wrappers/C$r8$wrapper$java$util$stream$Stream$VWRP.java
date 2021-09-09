@@ -6,11 +6,11 @@ import j$.util.function.A;
 import j$.util.function.B;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
+import j$.util.function.C;
 import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
 import j$.util.function.Function;
-import j$.util.function.l;
-import j$.util.function.x;
+import j$.util.function.m;
 import j$.util.function.y;
 import j$.util.function.z;
 import j$.util.stream.CLASSNAMEf1;
@@ -44,24 +44,24 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return L0.n0(this.a.flatMapToDouble(N.a(function)));
     }
 
-    public /* synthetic */ Stream T(x xVar) {
-        return convert(this.a.filter(y0.a(xVar)));
+    public /* synthetic */ Stream T(y yVar) {
+        return convert(this.a.filter(y0.a(yVar)));
     }
 
     public /* synthetic */ Stream V(Consumer consumer) {
         return convert(this.a.peek(CLASSNAMEx.a(consumer)));
     }
 
-    public /* synthetic */ boolean W(x xVar) {
-        return this.a.allMatch(y0.a(xVar));
+    public /* synthetic */ boolean W(y yVar) {
+        return this.a.allMatch(y0.a(yVar));
     }
 
     public /* synthetic */ CLASSNAMEf1 X(Function function) {
         return P0.n0(this.a.flatMapToLong(N.a(function)));
     }
 
-    public /* synthetic */ boolean a(x xVar) {
-        return this.a.anyMatch(y0.a(xVar));
+    public /* synthetic */ boolean a(y yVar) {
+        return this.a.anyMatch(y0.a(yVar));
     }
 
     public /* synthetic */ Object b0(J0 j0) {
@@ -80,8 +80,8 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return this.a.count();
     }
 
-    public /* synthetic */ boolean d0(x xVar) {
-        return this.a.noneMatch(y0.a(xVar));
+    public /* synthetic */ boolean d0(y yVar) {
+        return this.a.noneMatch(y0.a(yVar));
     }
 
     public /* synthetic */ Stream distinct() {
@@ -104,12 +104,12 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         this.a.forEach(CLASSNAMEx.a(consumer));
     }
 
-    public /* synthetic */ CLASSNAMEf1 g0(B b) {
-        return P0.n0(this.a.mapToLong(G0.a(b)));
+    public /* synthetic */ CLASSNAMEf1 g0(C c) {
+        return P0.n0(this.a.mapToLong(G0.a(c)));
     }
 
-    public /* synthetic */ Object i(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
-        return this.a.collect(A0.a(yVar), r.a(biConsumer), r.a(biConsumer2));
+    public /* synthetic */ Object i(z zVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
+        return this.a.collect(A0.a(zVar), r.a(biConsumer), r.a(biConsumer2));
     }
 
     public /* synthetic */ boolean isParallel() {
@@ -120,20 +120,20 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return this.a.iterator();
     }
 
-    public /* synthetic */ U j0(z zVar) {
-        return L0.n0(this.a.mapToDouble(C0.a(zVar)));
+    public /* synthetic */ U j0(A a2) {
+        return L0.n0(this.a.mapToDouble(C0.a(a2)));
     }
 
-    public /* synthetic */ Object[] l(l lVar) {
-        return this.a.toArray(U.a(lVar));
+    public /* synthetic */ Object[] l(m mVar) {
+        return this.a.toArray(U.a(mVar));
     }
 
     public /* synthetic */ Stream limit(long j) {
         return convert(this.a.limit(j));
     }
 
-    public /* synthetic */ M0 m(A a2) {
-        return N0.n0(this.a.mapToInt(E0.a(a2)));
+    public /* synthetic */ M0 m(B b) {
+        return N0.n0(this.a.mapToInt(E0.a(b)));
     }
 
     public /* synthetic */ Object m0(Object obj, CLASSNAMEb bVar) {

@@ -5,35 +5,29 @@ import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.support.JobIntentService;
 
 public class KeepAliveJob extends JobIntentService {
-    /* access modifiers changed from: private */
-    public static volatile CountDownLatch countDownLatch;
-    private static Runnable finishJobByTimeoutRunnable = new Runnable() {
-        public void run() {
-            KeepAliveJob.finishJobInternal();
-        }
-    };
-    /* access modifiers changed from: private */
-    public static volatile boolean startingJob;
-    /* access modifiers changed from: private */
-    public static final Object sync = new Object();
+    private static volatile CountDownLatch countDownLatch;
+    private static Runnable finishJobByTimeoutRunnable = KeepAliveJob$$ExternalSyntheticLambda0.INSTANCE;
+    private static volatile boolean startingJob;
+    private static final Object sync = new Object();
 
     public static void startJob() {
-        Utilities.globalQueue.postRunnable(new Runnable() {
-            public void run() {
-                if (!KeepAliveJob.startingJob && KeepAliveJob.countDownLatch == null) {
-                    try {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("starting keep-alive job");
-                        }
-                        synchronized (KeepAliveJob.sync) {
-                            boolean unused = KeepAliveJob.startingJob = true;
-                        }
-                        JobIntentService.enqueueWork(ApplicationLoader.applicationContext, KeepAliveJob.class, 1000, new Intent());
-                    } catch (Exception unused2) {
-                    }
+        Utilities.globalQueue.postRunnable(KeepAliveJob$$ExternalSyntheticLambda1.INSTANCE);
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$startJob$0() {
+        if (!startingJob && countDownLatch == null) {
+            try {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("starting keep-alive job");
                 }
+                synchronized (sync) {
+                    startingJob = true;
+                }
+                JobIntentService.enqueueWork(ApplicationLoader.applicationContext, KeepAliveJob.class, 1000, new Intent());
+            } catch (Exception unused) {
             }
-        });
+        }
     }
 
     /* access modifiers changed from: private */
@@ -55,11 +49,7 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     public static void finishJob() {
-        Utilities.globalQueue.postRunnable(new Runnable() {
-            public void run() {
-                KeepAliveJob.finishJobInternal();
-            }
-        });
+        Utilities.globalQueue.postRunnable(KeepAliveJob$$ExternalSyntheticLambda0.INSTANCE);
     }
 
     /* access modifiers changed from: protected */

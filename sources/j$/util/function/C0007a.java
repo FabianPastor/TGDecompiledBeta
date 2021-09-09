@@ -4,18 +4,29 @@ import j$.util.concurrent.a;
 import java.util.Comparator;
 
 /* renamed from: j$.util.function.a  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEa implements CLASSNAMEb, x {
+public final /* synthetic */ class CLASSNAMEa implements CLASSNAMEb, y {
     public final /* synthetic */ int a;
     public final /* synthetic */ Object b;
 
-    public /* synthetic */ CLASSNAMEa(x xVar) {
+    public /* synthetic */ CLASSNAMEa(y yVar) {
         this.a = 2;
-        this.b = xVar;
+        this.b = yVar;
     }
 
-    public x a(x xVar) {
-        xVar.getClass();
-        return new w(this, xVar, 1);
+    public y a(y yVar) {
+        yVar.getClass();
+        return new x(this, yVar, 1);
+    }
+
+    public BiFunction andThen(Function function) {
+        switch (this.a) {
+            case 0:
+                function.getClass();
+                return new a((BiFunction) this, function);
+            default:
+                function.getClass();
+                return new a((BiFunction) this, function);
+        }
     }
 
     public Object apply(Object obj, Object obj2) {
@@ -27,28 +38,17 @@ public final /* synthetic */ class CLASSNAMEa implements CLASSNAMEb, x {
         }
     }
 
-    public BiFunction b(Function function) {
-        switch (this.a) {
-            case 0:
-                function.getClass();
-                return new a((BiFunction) this, function);
-            default:
-                function.getClass();
-                return new a((BiFunction) this, function);
-        }
+    public y b(y yVar) {
+        yVar.getClass();
+        return new x(this, yVar, 0);
     }
 
-    public x c(x xVar) {
-        xVar.getClass();
-        return new w(this, xVar, 0);
-    }
-
-    public x negate() {
+    public y negate() {
         return new CLASSNAMEa(this);
     }
 
     public boolean test(Object obj) {
-        return !((x) this.b).test(obj);
+        return !((y) this.b).test(obj);
     }
 
     public /* synthetic */ CLASSNAMEa(Comparator comparator, int i) {

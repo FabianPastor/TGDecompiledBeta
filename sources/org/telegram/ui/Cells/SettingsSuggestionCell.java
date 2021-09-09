@@ -93,7 +93,7 @@ public class SettingsSuggestionCell extends LinearLayout {
     public void setType(int i) {
         this.currentType = i;
         if (i == 0) {
-            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).clientUserId));
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(this.currentAccount).clientUserId));
             TextView textView2 = this.textView;
             PhoneFormat instance = PhoneFormat.getInstance();
             textView2.setText(LocaleController.formatString("CheckPhoneNumber", NUM, instance.format("+" + user.phone)));

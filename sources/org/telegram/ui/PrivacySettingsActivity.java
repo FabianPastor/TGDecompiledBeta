@@ -369,8 +369,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     }
                 } else if (i2 == this.contactsSuggestRow) {
                     TextCheckCell textCheckCell2 = (TextCheckCell) view2;
-                    boolean z2 = this.newSuggest;
-                    if (z2) {
+                    if (this.newSuggest) {
                         AlertDialog.Builder builder3 = new AlertDialog.Builder((Context) getParentActivity());
                         builder3.setTitle(LocaleController.getString("SuggestContactsTitle", NUM));
                         builder3.setMessage(LocaleController.getString("SuggestContactsAlert", NUM));
@@ -385,21 +384,20 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         }
                         return;
                     }
-                    boolean z3 = !z2;
-                    this.newSuggest = z3;
-                    textCheckCell2.setChecked(z3);
+                    this.newSuggest = true;
+                    textCheckCell2.setChecked(true);
                 } else if (i2 == this.newChatsRow) {
-                    boolean z4 = !this.archiveChats;
-                    this.archiveChats = z4;
-                    ((TextCheckCell) view2).setChecked(z4);
+                    boolean z2 = !this.archiveChats;
+                    this.archiveChats = z2;
+                    ((TextCheckCell) view2).setChecked(z2);
                 } else if (i2 == this.contactsSyncRow) {
-                    boolean z5 = !this.newSync;
-                    this.newSync = z5;
+                    boolean z3 = !this.newSync;
+                    this.newSync = z3;
                     if (view2 instanceof TextCheckCell) {
-                        ((TextCheckCell) view2).setChecked(z5);
+                        ((TextCheckCell) view2).setChecked(z3);
                     }
                 } else if (i2 == this.secretMapRow) {
-                    AlertsCreator.showSecretLocationAlert(getParentActivity(), this.currentAccount, new PrivacySettingsActivity$$ExternalSyntheticLambda7(this), false);
+                    AlertsCreator.showSecretLocationAlert(getParentActivity(), this.currentAccount, new PrivacySettingsActivity$$ExternalSyntheticLambda7(this), false, (Theme.ResourcesProvider) null);
                 } else if (i2 == this.paymentsClearRow) {
                     AlertDialog.Builder builder4 = new AlertDialog.Builder((Context) getParentActivity());
                     builder4.setTitle(LocaleController.getString("PrivacyPaymentsClearAlertTitle", NUM));
@@ -412,10 +410,10 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         if (i6 == 0) {
                             str = LocaleController.getString("PrivacyClearShipping", NUM);
                         } else {
-                            str = i6 == 1 ? LocaleController.getString("PrivacyClearPayment", NUM) : null;
+                            str = LocaleController.getString("PrivacyClearPayment", NUM);
                         }
                         this.clear[i6] = true;
-                        CheckBoxCell checkBoxCell = new CheckBoxCell(getParentActivity(), 1, 21);
+                        CheckBoxCell checkBoxCell = new CheckBoxCell(getParentActivity(), 1, 21, (Theme.ResourcesProvider) null);
                         checkBoxCell.setTag(Integer.valueOf(i6));
                         checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                         checkBoxCell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
@@ -485,7 +483,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$6(DialogInterface dialogInterface, int i) {
-        AlertDialog show = new AlertDialog.Builder(getParentActivity(), 3).show();
+        AlertDialog show = new AlertDialog.Builder(getParentActivity(), 3, (Theme.ResourcesProvider) null).show();
         this.progressDialog = show;
         show.setCanCacnel(false);
         if (this.currentSync != this.newSync) {

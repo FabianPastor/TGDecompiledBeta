@@ -3,10 +3,10 @@ package org.telegram.ui;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.util.LongSparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -153,7 +153,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             }
             TLRPC$InputStickerSet tLRPC$InputStickerSet2 = tLRPC$InputStickerSet;
             tLRPC$InputStickerSet2.access_hash = tLRPC$StickerSetCovered.set.access_hash;
-            StickersAlert stickersAlert = new StickersAlert(getParentActivity(), this, tLRPC$InputStickerSet2, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null);
+            StickersAlert stickersAlert = new StickersAlert((Context) getParentActivity(), (BaseFragment) this, tLRPC$InputStickerSet2, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null);
             stickersAlert.setInstallDelegate(new StickersAlert.StickersAlertInstallDelegate() {
                 public void onStickerSetUninstalled() {
                 }

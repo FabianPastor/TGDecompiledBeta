@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.util.function.l;
+import j$.util.function.m;
 
 abstract class S1 extends D1 implements A1 {
     S1(A1 a1, A1 a12) {
@@ -27,8 +27,8 @@ abstract class S1 extends D1 implements A1 {
         ((A1) this.b).g(obj);
     }
 
-    public /* synthetic */ Object[] q(l lVar) {
-        return CLASSNAMEp1.g(this, lVar);
+    public /* synthetic */ Object[] q(m mVar) {
+        return CLASSNAMEp1.g(this, mVar);
     }
 
     public String toString() {

@@ -3,10 +3,10 @@ package j$.util.stream;
 import j$.lang.a;
 import j$.lang.b;
 import j$.lang.c;
-import j$.util.function.A;
+import j$.util.function.B;
 import j$.util.function.Function;
-import j$.util.function.k;
 import j$.util.function.l;
+import j$.util.function.m;
 import j$.wrappers.CLASSNAMEb0;
 import j$.wrappers.CLASSNAMEn0;
 import j$.wrappers.G;
@@ -45,15 +45,15 @@ class M extends K0 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, k kVar) {
-        super(cVar, f4Var, i);
-        this.m = kVar;
-    }
-
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public M(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, l lVar) {
         super(cVar, f4Var, i);
         this.m = lVar;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public M(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, m mVar) {
+        super(cVar, f4Var, i);
+        this.m = mVar;
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -81,8 +81,8 @@ class M extends K0 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, A a) {
+    public M(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, B b) {
         super(cVar, f4Var, i);
-        this.m = a;
+        this.m = b;
     }
 }

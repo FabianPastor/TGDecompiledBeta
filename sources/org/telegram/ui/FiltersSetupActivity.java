@@ -699,20 +699,20 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             while (i < 2) {
                 TLRPC$TL_dialogFilter tLRPC$TL_dialogFilter = suggestedFilter.filter;
                 ArrayList<TLRPC$InputPeer> arrayList = i == 0 ? tLRPC$TL_dialogFilter.include_peers : tLRPC$TL_dialogFilter.exclude_peers;
-                ArrayList<Integer> arrayList2 = i == 0 ? dialogFilter.alwaysShow : dialogFilter.neverShow;
+                ArrayList<Long> arrayList2 = i == 0 ? dialogFilter.alwaysShow : dialogFilter.neverShow;
                 int size = arrayList.size();
                 for (int i2 = 0; i2 < size; i2++) {
                     TLRPC$InputPeer tLRPC$InputPeer = arrayList.get(i2);
-                    int i3 = tLRPC$InputPeer.user_id;
-                    if (i3 == 0) {
-                        int i4 = tLRPC$InputPeer.chat_id;
-                        if (i4 != 0) {
-                            i3 = -i4;
+                    long j = tLRPC$InputPeer.user_id;
+                    if (j == 0) {
+                        long j2 = tLRPC$InputPeer.chat_id;
+                        if (j2 != 0) {
+                            j = -j2;
                         } else {
-                            i3 = -tLRPC$InputPeer.channel_id;
+                            j = -tLRPC$InputPeer.channel_id;
                         }
                     }
-                    arrayList2.add(Integer.valueOf(i3));
+                    arrayList2.add(Long.valueOf(j));
                 }
                 i++;
             }

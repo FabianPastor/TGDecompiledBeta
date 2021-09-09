@@ -21,7 +21,7 @@ public abstract class TLRPC$Chat extends TLObject {
     public boolean gigagroup;
     public boolean has_geo;
     public boolean has_link;
-    public int id;
+    public long id;
     public boolean kicked;
     public boolean left;
     public boolean megagroup;
@@ -44,11 +44,14 @@ public abstract class TLRPC$Chat extends TLObject {
     public static TLRPC$Chat TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Chat tLRPC$Chat;
         switch (i) {
+            case -2107528095:
+                tLRPC$Chat = new TLRPC$TL_channel();
+                break;
             case -2059962289:
                 tLRPC$Chat = new TLRPC$TL_channelForbidden_layer67();
                 break;
             case -1683826688:
-                tLRPC$Chat = new TLRPC$TL_chatEmpty();
+                tLRPC$Chat = new TLRPC$TL_chatEmpty_layer131();
                 break;
             case -1588737454:
                 tLRPC$Chat = new TLRPC$TL_channel_layer67();
@@ -57,7 +60,7 @@ public abstract class TLRPC$Chat extends TLObject {
                 tLRPC$Chat = new TLRPC$TL_channel_layer92();
                 break;
             case -753232354:
-                tLRPC$Chat = new TLRPC$TL_channel();
+                tLRPC$Chat = new TLRPC$TL_channel_layer131();
                 break;
             case -652419756:
                 tLRPC$Chat = new TLRPC$TL_chat_layer92();
@@ -66,18 +69,27 @@ public abstract class TLRPC$Chat extends TLObject {
                 tLRPC$Chat = new TLRPC$TL_chatForbidden_old();
                 break;
             case 120753115:
-                tLRPC$Chat = new TLRPC$TL_chatForbidden();
+                tLRPC$Chat = new TLRPC$TL_chatForbidden_layer131();
                 break;
             case 213142300:
                 tLRPC$Chat = new TLRPC$TL_channel_layer72();
                 break;
-            case 681420594:
+            case 399807445:
                 tLRPC$Chat = new TLRPC$TL_channelForbidden();
+                break;
+            case 681420594:
+                tLRPC$Chat = new TLRPC$TL_channelForbidden_layer131();
+                break;
+            case 693512293:
+                tLRPC$Chat = new TLRPC$TL_chatEmpty();
                 break;
             case 763724588:
                 tLRPC$Chat = new TLRPC$TL_channelForbidden_layer52();
                 break;
             case 1004149726:
+                tLRPC$Chat = new TLRPC$TL_chat_layer131();
+                break;
+            case 1103884886:
                 tLRPC$Chat = new TLRPC$TL_chat();
                 break;
             case 1158377749:
@@ -88,6 +100,9 @@ public abstract class TLRPC$Chat extends TLObject {
                 break;
             case 1307772980:
                 tLRPC$Chat = new TLRPC$TL_channel_layer104();
+                break;
+            case 1704108455:
+                tLRPC$Chat = new TLRPC$TL_chatForbidden();
                 break;
             case 1737397639:
                 tLRPC$Chat = new TLRPC$TL_channel_old();

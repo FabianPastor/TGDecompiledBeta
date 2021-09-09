@@ -1,7 +1,7 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.y;
 
 interface B1 {
@@ -15,9 +15,9 @@ interface B1 {
 
     int p();
 
-    Object[] q(l lVar);
+    Object[] q(m mVar);
 
-    B1 r(long j, long j2, l lVar);
+    B1 r(long j, long j2, m mVar);
 
     y spliterator();
 }

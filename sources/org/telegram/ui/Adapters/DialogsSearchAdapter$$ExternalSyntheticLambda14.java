@@ -4,12 +4,12 @@ import org.telegram.messenger.MessagesStorage;
 
 public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda14 implements MessagesStorage.IntCallback {
     public final /* synthetic */ DialogsSearchAdapter f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$1;
     public final /* synthetic */ Object f$2;
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda14(DialogsSearchAdapter dialogsSearchAdapter, int i, Object obj) {
+    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda14(DialogsSearchAdapter dialogsSearchAdapter, long j, Object obj) {
         this.f$0 = dialogsSearchAdapter;
-        this.f$1 = i;
+        this.f$1 = j;
         this.f$2 = obj;
     }
 

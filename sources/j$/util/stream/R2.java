@@ -1,18 +1,18 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.n;
 import j$.util.function.o;
 import j$.util.function.p;
+import j$.util.function.q;
 
 class R2 implements T2, CLASSNAMEm3 {
     private long a;
     final /* synthetic */ long b;
-    final /* synthetic */ n c;
+    final /* synthetic */ o c;
 
-    R2(long j, n nVar) {
+    R2(long j, o oVar) {
         this.b = j;
-        this.c = nVar;
+        this.c = oVar;
     }
 
     public /* synthetic */ void accept(double d) {
@@ -38,9 +38,9 @@ class R2 implements T2, CLASSNAMEm3 {
         CLASSNAMEp1.c(this, l);
     }
 
-    public p f(p pVar) {
-        pVar.getClass();
-        return new o(this, pVar);
+    public q f(q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
     }
 
     public Object get() {

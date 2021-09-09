@@ -20,9 +20,11 @@ public class PhotoAttachCameraCell extends FrameLayout {
     private ImageView backgroundView;
     private ImageView imageView;
     private int itemSize = AndroidUtilities.dp(0.0f);
+    private final Theme.ResourcesProvider resourcesProvider;
 
-    public PhotoAttachCameraCell(Context context) {
+    public PhotoAttachCameraCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         ImageView imageView2 = new ImageView(context);
         this.backgroundView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -59,7 +61,7 @@ public class PhotoAttachCameraCell extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogCameraIcon"), PorterDuff.Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogCameraIcon"), PorterDuff.Mode.MULTIPLY));
     }
 
     public void updateBitmap() {
@@ -74,5 +76,12 @@ public class PhotoAttachCameraCell extends FrameLayout {
         } else {
             this.backgroundView.setImageResource(NUM);
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

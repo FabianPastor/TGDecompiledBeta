@@ -18,7 +18,7 @@ public class TLRPC$TL_channel_old extends TLRPC$TL_channel {
             z2 = true;
         }
         this.explicit_content = z2;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.title = abstractSerializedData.readString(z);
         if ((this.flags & 64) != 0) {
@@ -48,7 +48,7 @@ public class TLRPC$TL_channel_old extends TLRPC$TL_channel {
         int i8 = this.explicit_content ? i7 | 512 : i7 & -513;
         this.flags = i8;
         abstractSerializedData.writeInt32(i8);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeString(this.title);
         if ((this.flags & 64) != 0) {

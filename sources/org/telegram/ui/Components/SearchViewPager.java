@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
@@ -92,7 +93,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         super(context);
         this.folderId = i3;
         this.parent = baseFragment;
-        this.dialogsSearchAdapter = new DialogsSearchAdapter(context, i, i2, i3) {
+        this.dialogsSearchAdapter = new DialogsSearchAdapter(context, i, i2) {
             public void notifyDataSetChanged() {
                 RecyclerListView recyclerListView;
                 int currentItemCount = getCurrentItemCount();
@@ -106,7 +107,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 }
             }
         };
-        AnonymousClass2 r11 = new RecyclerListView(context) {
+        AnonymousClass2 r5 = new RecyclerListView(context) {
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
                 SearchViewPager.this.itemsEnterAnimator.dispatchDraw();
@@ -119,8 +120,8 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 SearchViewPager.this.itemsEnterAnimator.onDetached();
             }
         };
-        this.searchListView = r11;
-        r11.setPivotY(0.0f);
+        this.searchListView = r5;
+        r5.setPivotY(0.0f);
         this.searchListView.setAdapter(this.dialogsSearchAdapter);
         this.searchListView.setVerticalScrollBarEnabled(true);
         this.searchListView.setInstantClick(true);
@@ -153,7 +154,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.searchContainer = new FrameLayout(context);
         FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
         flickerLoadingView.setViewType(1);
-        AnonymousClass4 r13 = new StickerEmptyView(context, flickerLoadingView, 1) {
+        AnonymousClass4 r7 = new StickerEmptyView(context, flickerLoadingView, 1) {
             public void setVisibility(int i) {
                 if (SearchViewPager.this.noMediaFiltersSearchView.getTag() != null) {
                     super.setVisibility(8);
@@ -162,8 +163,8 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 }
             }
         };
-        this.emptyView = r13;
-        r13.title.setText(LocaleController.getString("NoResult", NUM));
+        this.emptyView = r7;
+        r7.title.setText(LocaleController.getString("NoResult", NUM));
         this.emptyView.subtitle.setVisibility(8);
         this.emptyView.setVisibility(8);
         this.emptyView.addView(flickerLoadingView, 0);
@@ -224,36 +225,30 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         View view2 = view;
         long j = 0;
         long j2 = 0;
-        int i2 = 0;
-        int i3 = 0;
+        long j3 = 0;
         boolean z4 = false;
-        while (true) {
-            z2 = true;
-            if (i2 >= this.currentSearchFilters.size()) {
-                break;
-            }
+        for (int i2 = 0; i2 < this.currentSearchFilters.size(); i2++) {
             FiltersView.MediaFilterData mediaFilterData = this.currentSearchFilters.get(i2);
-            int i4 = mediaFilterData.filterType;
-            if (i4 == 4) {
+            int i3 = mediaFilterData.filterType;
+            if (i3 == 4) {
                 TLObject tLObject = mediaFilterData.chat;
                 if (tLObject instanceof TLRPC$User) {
-                    i3 = ((TLRPC$User) tLObject).id;
+                    j = ((TLRPC$User) tLObject).id;
                 } else if (tLObject instanceof TLRPC$Chat) {
-                    i3 = -((TLRPC$Chat) tLObject).id;
+                    j = -((TLRPC$Chat) tLObject).id;
                 }
-            } else if (i4 == 6) {
+            } else if (i3 == 6) {
                 FiltersView.DateData dateData = mediaFilterData.dateData;
-                long j3 = dateData.minDate;
-                long j4 = dateData.maxDate;
-                j = j3;
+                long j4 = dateData.minDate;
+                long j5 = dateData.maxDate;
                 j2 = j4;
-            } else if (i4 == 7) {
+                j3 = j5;
+            } else if (i3 == 7) {
                 z4 = true;
             }
-            i2++;
         }
         if (view2 == this.searchContainer) {
-            if (i3 == 0 && j == 0 && j2 == 0) {
+            if (j == 0 && j2 == 0 && j3 == 0) {
                 this.lastSearchScrolledToTop = false;
                 this.dialogsSearchAdapter.searchDialogs(str, z4 ? 1 : 0);
                 this.dialogsSearchAdapter.setFiltersDelegate(this.filteredSearchViewDelegate, false);
@@ -283,18 +278,19 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 if (z) {
                     this.noMediaFiltersSearchView.setVisibility(0);
                     this.noMediaFiltersSearchView.setAlpha(1.0f);
-                    z3 = z;
+                    z2 = z;
                 } else {
                     if (this.noMediaFiltersSearchView.getVisibility() != 0) {
                         this.noMediaFiltersSearchView.setVisibility(0);
                         this.noMediaFiltersSearchView.setAlpha(0.0f);
+                        z3 = true;
                     } else {
-                        z2 = z;
+                        z3 = z;
                     }
                     this.noMediaFiltersSearchView.animate().alpha(1.0f).setDuration(150).start();
-                    z3 = z2;
+                    z2 = z3;
                 }
-                this.noMediaFiltersSearchView.search(i3, j, j2, (FiltersView.MediaFilterData) null, z4, str, z3);
+                this.noMediaFiltersSearchView.search(j, j2, j3, (FiltersView.MediaFilterData) null, z4, str, z2);
                 this.emptyView.setVisibility(8);
             }
             this.emptyView.setKeyboardHeight(this.keyboardSize, false);
@@ -304,7 +300,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         String str3 = str;
         FilteredSearchView filteredSearchView = (FilteredSearchView) view2;
         filteredSearchView.setKeyboardHeight(this.keyboardSize, false);
-        filteredSearchView.search(i3, j, j2, FiltersView.filters[i - 1], z4, str, z);
+        filteredSearchView.search(j, j2, j3, FiltersView.filters[i - 1], z4, str, z);
     }
 
     public void onResume() {
@@ -404,7 +400,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         }
         this.selectedFiles.clear();
         showActionMode(false);
-        if (arrayList.size() > 1 || ((Long) arrayList2.get(0)).longValue() == ((long) AccountInstance.getInstance(this.currentAccount).getUserConfig().getClientUserId()) || charSequence != null) {
+        if (arrayList.size() > 1 || ((Long) arrayList2.get(0)).longValue() == AccountInstance.getInstance(this.currentAccount).getUserConfig().getClientUserId() || charSequence != null) {
             for (int i = 0; i < arrayList.size(); i++) {
                 long longValue = ((Long) arrayList2.get(i)).longValue();
                 if (charSequence != null) {
@@ -416,39 +412,39 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             return;
         }
         long longValue2 = ((Long) arrayList2.get(0)).longValue();
-        int i2 = (int) longValue2;
-        int i3 = (int) (longValue2 >> 32);
         Bundle bundle = new Bundle();
         bundle.putBoolean("scrollToTopOnResume", true);
-        if (i2 == 0) {
-            bundle.putInt("enc_id", i3);
-        } else if (i2 > 0) {
-            bundle.putInt("user_id", i2);
-        } else if (i2 < 0) {
-            bundle.putInt("chat_id", -i2);
+        if (DialogObject.isEncryptedDialog(longValue2)) {
+            bundle.putInt("enc_id", DialogObject.getEncryptedChatId(longValue2));
+        } else {
+            if (DialogObject.isUserDialog(longValue2)) {
+                bundle.putLong("user_id", longValue2);
+            } else {
+                bundle.putLong("chat_id", -longValue2);
+            }
+            if (!AccountInstance.getInstance(this.currentAccount).getMessagesController().checkCanOpenChat(bundle, dialogsActivity2)) {
+                return;
+            }
         }
-        if (i2 == 0 || AccountInstance.getInstance(this.currentAccount).getMessagesController().checkCanOpenChat(bundle, dialogsActivity2)) {
-            ChatActivity chatActivity = new ChatActivity(bundle);
-            dialogsActivity2.presentFragment(chatActivity, true);
-            chatActivity.showFieldPanelForForward(true, arrayList3);
-        }
+        ChatActivity chatActivity = new ChatActivity(bundle);
+        dialogsActivity2.presentFragment(chatActivity, true);
+        chatActivity.showFieldPanelForForward(true, arrayList3);
     }
 
     public void goToMessage(MessageObject messageObject) {
         Bundle bundle = new Bundle();
-        int dialogId = (int) messageObject.getDialogId();
-        int dialogId2 = (int) (messageObject.getDialogId() >> 32);
-        if (dialogId == 0) {
-            bundle.putInt("enc_id", dialogId2);
-        } else if (dialogId > 0) {
-            bundle.putInt("user_id", dialogId);
-        } else if (dialogId < 0) {
-            TLRPC$Chat chat = AccountInstance.getInstance(this.currentAccount).getMessagesController().getChat(Integer.valueOf(-dialogId));
+        long dialogId = messageObject.getDialogId();
+        if (DialogObject.isEncryptedDialog(dialogId)) {
+            bundle.putInt("enc_id", DialogObject.getEncryptedChatId(dialogId));
+        } else if (DialogObject.isUserDialog(dialogId)) {
+            bundle.putLong("user_id", dialogId);
+        } else {
+            TLRPC$Chat chat = AccountInstance.getInstance(this.currentAccount).getMessagesController().getChat(Long.valueOf(-dialogId));
             if (!(chat == null || chat.migrated_to == null)) {
-                bundle.putInt("migrated_to", dialogId);
+                bundle.putLong("migrated_to", dialogId);
                 dialogId = -chat.migrated_to.channel_id;
             }
-            bundle.putInt("chat_id", -dialogId);
+            bundle.putLong("chat_id", -dialogId);
         }
         bundle.putInt("message_id", messageObject.getId());
         this.parent.presentFragment(new ChatActivity(bundle));
@@ -634,11 +630,11 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.showOnlyDialogsAdapter = z;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:21:0x0077, code lost:
-        if (org.telegram.messenger.ChatObject.isChannel(r6, r10.currentAccount) != false) goto L_0x007b;
+    /* JADX WARNING: Code restructure failed: missing block: B:21:0x0078, code lost:
+        if (org.telegram.messenger.ChatObject.isChannel((long) r6, r10.currentAccount) != false) goto L_0x007c;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void messagesDeleted(int r11, java.util.ArrayList<java.lang.Integer> r12) {
+    public void messagesDeleted(long r11, java.util.ArrayList<java.lang.Integer> r13) {
         /*
             r10 = this;
             android.util.SparseArray<android.view.View> r0 = r10.viewsByType
@@ -653,7 +649,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             boolean r4 = r3 instanceof org.telegram.ui.FilteredSearchView
             if (r4 == 0) goto L_0x001b
             org.telegram.ui.FilteredSearchView r3 = (org.telegram.ui.FilteredSearchView) r3
-            r3.messagesDeleted(r11, r12)
+            r3.messagesDeleted(r11, r13)
         L_0x001b:
             int r2 = r2 + 1
             goto L_0x0008
@@ -667,23 +663,23 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             if (r2 == 0) goto L_0x0036
             android.view.View r2 = r10.getChildAt(r0)
             org.telegram.ui.FilteredSearchView r2 = (org.telegram.ui.FilteredSearchView) r2
-            r2.messagesDeleted(r11, r12)
+            r2.messagesDeleted(r11, r13)
         L_0x0036:
             int r0 = r0 + 1
             goto L_0x001f
         L_0x0039:
             org.telegram.ui.FilteredSearchView r0 = r10.noMediaFiltersSearchView
-            r0.messagesDeleted(r11, r12)
+            r0.messagesDeleted(r11, r13)
             java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r0 = r10.selectedFiles
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x00d5
+            if (r0 != 0) goto L_0x00d9
             r0 = 0
             java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r2 = r10.selectedFiles
             java.util.Set r2 = r2.keySet()
             java.util.Iterator r2 = r2.iterator()
         L_0x0051:
             boolean r3 = r2.hasNext()
-            if (r3 == 0) goto L_0x00d5
+            if (r3 == 0) goto L_0x00d9
             java.lang.Object r3 = r2.next()
             org.telegram.ui.FilteredSearchView$MessageHashId r3 = (org.telegram.ui.FilteredSearchView.MessageHashId) r3
             java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r4 = r10.selectedFiles
@@ -692,44 +688,47 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             long r5 = r4.getDialogId()
             r7 = 0
             int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r9 >= 0) goto L_0x007a
+            if (r9 >= 0) goto L_0x007b
             long r5 = -r5
             int r6 = (int) r5
+            long r7 = (long) r6
             int r5 = r10.currentAccount
-            boolean r5 = org.telegram.messenger.ChatObject.isChannel(r6, r5)
-            if (r5 == 0) goto L_0x007a
-            goto L_0x007b
-        L_0x007a:
-            r6 = 0
+            boolean r5 = org.telegram.messenger.ChatObject.isChannel(r7, r5)
+            if (r5 == 0) goto L_0x007b
+            goto L_0x007c
         L_0x007b:
-            if (r6 != r11) goto L_0x009f
+            r6 = 0
+        L_0x007c:
+            long r5 = (long) r6
+            int r7 = (r5 > r11 ? 1 : (r5 == r11 ? 0 : -1))
+            if (r7 != 0) goto L_0x00a3
             r5 = 0
-        L_0x007e:
-            int r6 = r12.size()
-            if (r5 >= r6) goto L_0x009f
+        L_0x0082:
+            int r6 = r13.size()
+            if (r5 >= r6) goto L_0x00a3
             int r6 = r4.getId()
-            java.lang.Object r7 = r12.get(r5)
+            java.lang.Object r7 = r13.get(r5)
             java.lang.Integer r7 = (java.lang.Integer) r7
             int r7 = r7.intValue()
-            if (r6 != r7) goto L_0x009c
+            if (r6 != r7) goto L_0x00a0
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
             r0.add(r3)
-        L_0x009c:
+        L_0x00a0:
             int r5 = r5 + 1
-            goto L_0x007e
-        L_0x009f:
+            goto L_0x0082
+        L_0x00a3:
             if (r0 == 0) goto L_0x0051
             int r3 = r0.size()
             r4 = 0
-        L_0x00a6:
-            if (r4 >= r3) goto L_0x00b4
+        L_0x00aa:
+            if (r4 >= r3) goto L_0x00b8
             java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r5 = r10.selectedFiles
             java.lang.Object r6 = r0.get(r4)
             r5.remove(r6)
             int r4 = r4 + 1
-            goto L_0x00a6
-        L_0x00b4:
+            goto L_0x00aa
+        L_0x00b8:
             org.telegram.ui.Components.NumberTextView r3 = r10.selectedMessagesCountTextView
             java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r4 = r10.selectedFiles
             int r4 = r4.size()
@@ -739,18 +738,18 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             if (r3 == 0) goto L_0x0051
             java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r4 = r10.selectedFiles
             int r4 = r4.size()
-            if (r4 != r5) goto L_0x00ce
+            if (r4 != r5) goto L_0x00d2
             r4 = 0
-            goto L_0x00d0
-        L_0x00ce:
+            goto L_0x00d4
+        L_0x00d2:
             r4 = 8
-        L_0x00d0:
+        L_0x00d4:
             r3.setVisibility(r4)
             goto L_0x0051
-        L_0x00d5:
+        L_0x00d9:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SearchViewPager.messagesDeleted(int, java.util.ArrayList):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SearchViewPager.messagesDeleted(long, java.util.ArrayList):void");
     }
 
     public void runResultsEnterAnimation() {

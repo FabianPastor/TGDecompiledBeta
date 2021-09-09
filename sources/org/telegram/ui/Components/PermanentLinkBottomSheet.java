@@ -30,7 +30,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.ManageLinksActivity;
 
 public class PermanentLinkBottomSheet extends BottomSheet {
-    private int chatId;
+    private long chatId;
     private BaseFragment fragment;
     private final RLottieImageView imageView;
     TLRPC$TL_chatInviteExported invite;
@@ -42,22 +42,23 @@ public class PermanentLinkBottomSheet extends BottomSheet {
     private final TextView titleView;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PermanentLinkBottomSheet(Context context, boolean z, BaseFragment baseFragment, TLRPC$ChatFull tLRPC$ChatFull, int i, boolean z2) {
+    public PermanentLinkBottomSheet(Context context, boolean z, BaseFragment baseFragment, TLRPC$ChatFull tLRPC$ChatFull, long j, boolean z2) {
         super(context, z);
         String str;
-        int i2;
+        int i;
         TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported;
         Context context2 = context;
         TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
-        this.chatId = i;
+        this.chatId = j;
         setAllowNestedScroll(true);
         setApplyBottomPadding(false);
-        LinkActionView linkActionView2 = new LinkActionView(context, baseFragment, this, i, true, z2);
+        LinkActionView linkActionView2 = new LinkActionView(context, baseFragment, this, j, true, z2);
         this.linkActionView = linkActionView2;
         linkActionView2.setPermanent(true);
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
         this.imageView = rLottieImageView;
-        RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(90.0f), AndroidUtilities.dp(90.0f), false, (int[]) null);
+        RLottieDrawable rLottieDrawable = r1;
+        RLottieDrawable rLottieDrawable2 = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(90.0f), AndroidUtilities.dp(90.0f), false, (int[]) null);
         this.linkIcon = rLottieDrawable;
         rLottieDrawable.setCustomEndFrame(42);
         rLottieImageView.setAnimation(this.linkIcon);
@@ -73,13 +74,13 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         TextView textView2 = new TextView(context2);
         this.subtitle = textView2;
         if (z2) {
-            i2 = NUM;
+            i = NUM;
             str = "LinkInfoChannel";
         } else {
-            i2 = NUM;
+            i = NUM;
             str = "LinkInfo";
         }
-        textView2.setText(LocaleController.getString(str, i2));
+        textView2.setText(LocaleController.getString(str, i));
         textView2.setTextSize(14.0f);
         textView2.setGravity(1);
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
@@ -102,7 +103,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         nestedScrollView.setVerticalScrollBarEnabled(false);
         nestedScrollView.addView(linearLayout);
         setCustomView(nestedScrollView);
-        TLRPC$Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(Integer.valueOf(i));
+        TLRPC$Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(Long.valueOf(j));
         if (chat != null && chat.username != null) {
             linkActionView2.setLink("https://t.me/" + chat.username);
             textView3.setVisibility(8);
@@ -111,7 +112,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         } else {
             linkActionView2.setLink(tLRPC$TL_chatInviteExported.link);
         }
-        lambda$getThemeDescriptions$5();
+        updateColors();
     }
 
     /* access modifiers changed from: private */
@@ -186,8 +187,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: updateColors */
-    public void lambda$getThemeDescriptions$5() {
+    public void updateColors() {
         this.imageView.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(90.0f), Theme.getColor("featuredStickers_addButton")));
         this.manage.setBackground(Theme.createRadSelectorDrawable(ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhiteBlueText"), 76), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f)));
         int color = Theme.getColor("featuredStickers_buttonText");

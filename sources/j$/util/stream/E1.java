@@ -2,7 +2,7 @@ package j$.util.stream;
 
 import j$.util.N;
 import j$.util.function.Consumer;
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.y;
 import java.util.Arrays;
 
@@ -10,9 +10,9 @@ class E1 implements B1 {
     final Object[] a;
     int b;
 
-    E1(long j, l lVar) {
+    E1(long j, m mVar) {
         if (j < NUM) {
-            this.a = (Object[]) lVar.apply((int) j);
+            this.a = (Object[]) mVar.apply((int) j);
             this.b = 0;
             return;
         }
@@ -46,7 +46,7 @@ class E1 implements B1 {
         return 0;
     }
 
-    public Object[] q(l lVar) {
+    public Object[] q(m mVar) {
         Object[] objArr = this.a;
         if (objArr.length == this.b) {
             return objArr;
@@ -54,8 +54,8 @@ class E1 implements B1 {
         throw new IllegalStateException();
     }
 
-    public /* synthetic */ B1 r(long j, long j2, l lVar) {
-        return CLASSNAMEp1.q(this, j, j2, lVar);
+    public /* synthetic */ B1 r(long j, long j2, m mVar) {
+        return CLASSNAMEp1.q(this, j, j2, mVar);
     }
 
     public y spliterator() {

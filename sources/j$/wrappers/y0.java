@@ -1,24 +1,24 @@
 package j$.wrappers;
 
-import j$.util.function.x;
+import j$.util.function.y;
 import java.util.function.Predicate;
 
 public final /* synthetic */ class y0 implements Predicate {
-    final /* synthetic */ x a;
+    final /* synthetic */ y a;
 
-    private /* synthetic */ y0(x xVar) {
-        this.a = xVar;
+    private /* synthetic */ y0(y yVar) {
+        this.a = yVar;
     }
 
-    public static /* synthetic */ Predicate a(x xVar) {
-        if (xVar == null) {
+    public static /* synthetic */ Predicate a(y yVar) {
+        if (yVar == null) {
             return null;
         }
-        return xVar instanceof x0 ? ((x0) xVar).a : new y0(xVar);
+        return yVar instanceof x0 ? ((x0) yVar).a : new y0(yVar);
     }
 
     public /* synthetic */ Predicate and(Predicate predicate) {
-        return a(this.a.c(x0.b(predicate)));
+        return a(this.a.b(x0.c(predicate)));
     }
 
     public /* synthetic */ Predicate negate() {
@@ -26,7 +26,7 @@ public final /* synthetic */ class y0 implements Predicate {
     }
 
     public /* synthetic */ Predicate or(Predicate predicate) {
-        return a(this.a.a(x0.b(predicate)));
+        return a(this.a.a(x0.c(predicate)));
     }
 
     public /* synthetic */ boolean test(Object obj) {

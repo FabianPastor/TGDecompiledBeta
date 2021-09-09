@@ -1,16 +1,16 @@
 package j$.wrappers;
 
-import j$.util.function.m;
+import j$.util.function.n;
 import java.util.function.IntToLongFunction;
 
-public final /* synthetic */ class Z implements m {
+public final /* synthetic */ class Z implements n {
     final /* synthetic */ IntToLongFunction a;
 
     private /* synthetic */ Z(IntToLongFunction intToLongFunction) {
         this.a = intToLongFunction;
     }
 
-    public static /* synthetic */ m a(IntToLongFunction intToLongFunction) {
+    public static /* synthetic */ n a(IntToLongFunction intToLongFunction) {
         if (intToLongFunction == null) {
             return null;
         }

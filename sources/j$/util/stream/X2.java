@@ -1,8 +1,8 @@
 package j$.util.stream;
 
-import j$.util.function.l;
+import j$.util.function.m;
 
-public final /* synthetic */ class X2 implements l {
+public final /* synthetic */ class X2 implements m {
     public static final /* synthetic */ X2 a = new X2();
 
     private /* synthetic */ X2() {

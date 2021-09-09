@@ -538,12 +538,13 @@ public final class Bulletin {
         };
         Drawable background;
         protected Bulletin bulletin;
-        private final List<Callback> callbacks;
+        private final List<Callback> callbacks = new ArrayList();
         Delegate delegate;
         public float inOutOffset;
+        private final Theme.ResourcesProvider resourcesProvider;
         public boolean transitionRunning;
-        private int wideScreenGravity;
-        private int wideScreenWidth;
+        private int wideScreenGravity = 1;
+        private int wideScreenWidth = -2;
 
         public interface Callback {
             void onAttach(Layout layout, Bulletin bulletin);
@@ -569,20 +570,19 @@ public final class Bulletin {
             void animateExit(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i);
         }
 
-        public Layout(Context context) {
-            this(context, Theme.getColor("undo_background"));
-        }
-
-        public Layout(Context context, int i) {
+        public Layout(Context context, Theme.ResourcesProvider resourcesProvider2) {
             super(context);
-            this.callbacks = new ArrayList();
-            this.wideScreenWidth = -2;
-            this.wideScreenGravity = 1;
+            this.resourcesProvider = resourcesProvider2;
             setMinimumHeight(AndroidUtilities.dp(48.0f));
-            this.background = Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), i);
+            setBackground(getThemedColor("undo_background"));
             updateSize();
             setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             setWillNotDraw(false);
+        }
+
+        /* access modifiers changed from: protected */
+        public void setBackground(int i) {
+            this.background = Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), i);
         }
 
         /* access modifiers changed from: protected */
@@ -878,6 +878,13 @@ public final class Bulletin {
             canvas.restore();
             invalidate();
         }
+
+        /* access modifiers changed from: protected */
+        public int getThemedColor(String str) {
+            Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+            return color != null ? color.intValue() : Theme.getColor(str);
+        }
     }
 
     @SuppressLint({"ViewConstructor"})
@@ -885,12 +892,8 @@ public final class Bulletin {
         private Button button;
         private int childrenMeasuredWidth;
 
-        public ButtonLayout(Context context) {
-            super(context);
-        }
-
-        public ButtonLayout(Context context, int i) {
-            super(context, i);
+        public ButtonLayout(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
         }
 
         /* access modifiers changed from: protected */
@@ -937,17 +940,17 @@ public final class Bulletin {
         public final ImageView imageView;
         public final TextView textView;
 
-        public SimpleLayout(Context context) {
-            super(context);
-            int color = Theme.getColor("undo_infoColor");
+        public SimpleLayout(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
+            int themedColor = getThemedColor("undo_infoColor");
             ImageView imageView2 = new ImageView(context);
             this.imageView = imageView2;
-            imageView2.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            imageView2.setColorFilter(new PorterDuffColorFilter(themedColor, PorterDuff.Mode.MULTIPLY));
             addView(imageView2, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388627, 16.0f, 12.0f, 16.0f, 12.0f));
             TextView textView2 = new TextView(context);
             this.textView = textView2;
             textView2.setSingleLine();
-            textView2.setTextColor(color);
+            textView2.setTextColor(themedColor);
             textView2.setTypeface(Typeface.SANS_SERIF);
             textView2.setTextSize(1, 15.0f);
             addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
@@ -960,9 +963,9 @@ public final class Bulletin {
         public final TextView subtitleTextView;
         public final TextView titleTextView;
 
-        public TwoLineLayout(Context context) {
-            super(context);
-            int color = Theme.getColor("undo_infoColor");
+        public TwoLineLayout(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
+            int themedColor = getThemedColor("undo_infoColor");
             BackupImageView backupImageView = new BackupImageView(context);
             this.imageView = backupImageView;
             addView(backupImageView, LayoutHelper.createFrameRelatively(29.0f, 29.0f, 8388627, 12.0f, 12.0f, 12.0f, 12.0f));
@@ -972,14 +975,14 @@ public final class Bulletin {
             TextView textView = new TextView(context);
             this.titleTextView = textView;
             textView.setSingleLine();
-            textView.setTextColor(color);
+            textView.setTextColor(themedColor);
             textView.setTextSize(1, 14.0f);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(textView);
             TextView textView2 = new TextView(context);
             this.subtitleTextView = textView2;
             textView2.setMaxLines(2);
-            textView2.setTextColor(color);
+            textView2.setTextColor(themedColor);
             textView2.setTypeface(Typeface.SANS_SERIF);
             textView2.setTextSize(1, 13.0f);
             linearLayout.addView(textView2);
@@ -989,34 +992,30 @@ public final class Bulletin {
     public static class TwoLineLottieLayout extends ButtonLayout {
         public final RLottieImageView imageView;
         public final TextView subtitleTextView;
-        private final int textColor;
+        private final int textColor = getThemedColor("undo_infoColor");
         public final TextView titleTextView;
 
-        public TwoLineLottieLayout(Context context) {
-            this(context, Theme.getColor("undo_background"), Theme.getColor("undo_infoColor"));
-        }
-
-        public TwoLineLottieLayout(Context context, int i, int i2) {
-            super(context, i);
-            this.textColor = i2;
+        public TwoLineLottieLayout(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
+            setBackground(getThemedColor("undo_background"));
             RLottieImageView rLottieImageView = new RLottieImageView(context);
             this.imageView = rLottieImageView;
             rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
             addView(rLottieImageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627));
-            int color = Theme.getColor("undo_infoColor");
+            int themedColor = getThemedColor("undo_infoColor");
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(1);
             addView(linearLayout, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 8.0f, 12.0f, 8.0f));
             TextView textView = new TextView(context);
             this.titleTextView = textView;
             textView.setSingleLine();
-            textView.setTextColor(color);
+            textView.setTextColor(themedColor);
             textView.setTextSize(1, 14.0f);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(textView);
             TextView textView2 = new TextView(context);
             this.subtitleTextView = textView2;
-            textView2.setTextColor(color);
+            textView2.setTextColor(themedColor);
             textView2.setTypeface(Typeface.SANS_SERIF);
             textView2.setTextSize(1, 13.0f);
             linearLayout.addView(textView2);
@@ -1038,30 +1037,37 @@ public final class Bulletin {
     }
 
     public static class LottieLayout extends ButtonLayout {
-        public final RLottieImageView imageView;
-        private final int textColor;
-        public final TextView textView;
+        public RLottieImageView imageView;
+        private int textColor;
+        public TextView textView;
 
-        public LottieLayout(Context context) {
-            this(context, Theme.getColor("undo_background"), Theme.getColor("undo_infoColor"));
-        }
-
-        public LottieLayout(Context context, int i, int i2) {
-            super(context, i);
-            this.textColor = i2;
+        public LottieLayout(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
             RLottieImageView rLottieImageView = new RLottieImageView(context);
             this.imageView = rLottieImageView;
             rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
-            addView(rLottieImageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627));
+            addView(this.imageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627));
             TextView textView2 = new TextView(context);
             this.textView = textView2;
             textView2.setSingleLine();
-            textView2.setTextColor(i2);
-            textView2.setTypeface(Typeface.SANS_SERIF);
-            textView2.setTextSize(1, 15.0f);
-            textView2.setEllipsize(TextUtils.TruncateAt.END);
-            textView2.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
-            addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
+            this.textView.setTypeface(Typeface.SANS_SERIF);
+            this.textView.setTextSize(1, 15.0f);
+            this.textView.setEllipsize(TextUtils.TruncateAt.END);
+            this.textView.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
+            addView(this.textView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
+            setTextColor(getThemedColor("undo_infoColor"));
+            setBackground(getThemedColor("undo_background"));
+        }
+
+        public LottieLayout(Context context, Theme.ResourcesProvider resourcesProvider, int i, int i2) {
+            super(context, resourcesProvider);
+            setBackground(i);
+            setTextColor(i2);
+        }
+
+        public void setTextColor(int i) {
+            this.textColor = i;
+            this.textView.setTextColor(i);
         }
 
         /* access modifiers changed from: protected */
@@ -1117,19 +1123,25 @@ public final class Bulletin {
         private Bulletin bulletin;
         private Runnable delayedAction;
         private boolean isUndone;
+        private final Theme.ResourcesProvider resourcesProvider;
         private Runnable undoAction;
 
-        /* JADX INFO: super call moved to the top of the method (can break code semantics) */
         public UndoButton(Context context, boolean z) {
+            this(context, z, (Theme.ResourcesProvider) null);
+        }
+
+        /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+        public UndoButton(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
             super(context);
-            int color = Theme.getColor("undo_cancelColor");
+            this.resourcesProvider = resourcesProvider2;
+            int themedColor = getThemedColor("undo_cancelColor");
             if (z) {
                 TextView textView = new TextView(context);
                 textView.setOnClickListener(new Bulletin$UndoButton$$ExternalSyntheticLambda0(this));
-                textView.setBackground(Theme.createCircleSelectorDrawable(NUM | (16777215 & color), LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0, !LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0));
+                textView.setBackground(Theme.createCircleSelectorDrawable(NUM | (16777215 & themedColor), LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0, !LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0));
                 textView.setTextSize(1, 14.0f);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                textView.setTextColor(color);
+                textView.setTextColor(themedColor);
                 textView.setText(LocaleController.getString("Undo", NUM));
                 textView.setGravity(16);
                 ViewHelper.setPaddingRelative(textView, 16.0f, 0.0f, 16.0f, 0.0f);
@@ -1139,8 +1151,8 @@ public final class Bulletin {
             ImageView imageView = new ImageView(getContext());
             imageView.setOnClickListener(new Bulletin$UndoButton$$ExternalSyntheticLambda1(this));
             imageView.setImageResource(NUM);
-            imageView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-            imageView.setBackground(Theme.createSelectorDrawable((color & 16777215) | NUM));
+            imageView.setColorFilter(new PorterDuffColorFilter(themedColor, PorterDuff.Mode.MULTIPLY));
+            imageView.setBackground(Theme.createSelectorDrawable((themedColor & 16777215) | NUM));
             ViewHelper.setPaddingRelative(imageView, 0.0f, 12.0f, 0.0f, 12.0f);
             addView(imageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 16));
         }
@@ -1186,6 +1198,12 @@ public final class Bulletin {
         public UndoButton setDelayedAction(Runnable runnable) {
             this.delayedAction = runnable;
             return this;
+        }
+
+        private int getThemedColor(String str) {
+            Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+            return color != null ? color.intValue() : Theme.getColor(str);
         }
     }
 }

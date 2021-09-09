@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import androidx.collection.LongSparseArray;
 import j$.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,10 +88,10 @@ public class ContactsController extends BaseController {
     public HashMap<String, Contact> contactsBookSPhones = new HashMap<>();
     public HashMap<String, TLRPC$TL_contact> contactsByPhone = new HashMap<>();
     public HashMap<String, TLRPC$TL_contact> contactsByShortPhone = new HashMap<>();
-    public ConcurrentHashMap<Integer, TLRPC$TL_contact> contactsDict = new ConcurrentHashMap<>(20, 1.0f, 2);
+    public ConcurrentHashMap<Long, TLRPC$TL_contact> contactsDict = new ConcurrentHashMap<>(20, 1.0f, 2);
     public boolean contactsLoaded;
     private boolean contactsSyncInProgress;
-    private ArrayList<Integer> delayedContactsUpdate = new ArrayList<>();
+    private ArrayList<Long> delayedContactsUpdate = new ArrayList<>();
     private int deleteAccountTTL;
     public boolean doneLoadingContacts;
     private ArrayList<TLRPC$PrivacyRule> forwardsPrivacyRules;
@@ -490,9 +491,9 @@ public class ContactsController extends BaseController {
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x0049 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$deleteAllContacts$7(java.lang.Runnable r13) {
+    public /* synthetic */ void lambda$deleteAllContacts$7(java.lang.Runnable r15) {
         /*
-            r12 = this;
+            r14 = this;
             java.lang.String r0 = "org.telegram.messenger"
             java.lang.String r1 = ""
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
@@ -500,7 +501,7 @@ public class ContactsController extends BaseController {
             r3 = 0
             r4 = 0
             android.accounts.Account[] r5 = r2.getAccountsByType(r0)     // Catch:{ all -> 0x0049 }
-            r12.systemAccount = r3     // Catch:{ all -> 0x0049 }
+            r14.systemAccount = r3     // Catch:{ all -> 0x0049 }
             r6 = 0
         L_0x0013:
             int r7 = r5.length     // Catch:{ all -> 0x0049 }
@@ -517,8 +518,8 @@ public class ContactsController extends BaseController {
             java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ all -> 0x0049 }
             r11.<init>()     // Catch:{ all -> 0x0049 }
             r11.append(r1)     // Catch:{ all -> 0x0049 }
-            int r9 = r9.id     // Catch:{ all -> 0x0049 }
-            r11.append(r9)     // Catch:{ all -> 0x0049 }
+            long r12 = r9.id     // Catch:{ all -> 0x0049 }
+            r11.append(r12)     // Catch:{ all -> 0x0049 }
             java.lang.String r9 = r11.toString()     // Catch:{ all -> 0x0049 }
             boolean r9 = r10.equals(r9)     // Catch:{ all -> 0x0049 }
             if (r9 == 0) goto L_0x0043
@@ -535,53 +536,54 @@ public class ContactsController extends BaseController {
             java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x006a }
             r6.<init>()     // Catch:{ Exception -> 0x006a }
             r6.append(r1)     // Catch:{ Exception -> 0x006a }
-            org.telegram.messenger.UserConfig r7 = r12.getUserConfig()     // Catch:{ Exception -> 0x006a }
-            int r7 = r7.getClientUserId()     // Catch:{ Exception -> 0x006a }
+            org.telegram.messenger.UserConfig r7 = r14.getUserConfig()     // Catch:{ Exception -> 0x006a }
+            long r7 = r7.getClientUserId()     // Catch:{ Exception -> 0x006a }
             r6.append(r7)     // Catch:{ Exception -> 0x006a }
             java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x006a }
             r5.<init>(r6, r0)     // Catch:{ Exception -> 0x006a }
-            r12.systemAccount = r5     // Catch:{ Exception -> 0x006a }
+            r14.systemAccount = r5     // Catch:{ Exception -> 0x006a }
             r2.addAccountExplicitly(r5, r1, r3)     // Catch:{ Exception -> 0x006a }
         L_0x006a:
-            org.telegram.messenger.MessagesStorage r0 = r12.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r0 = r14.getMessagesStorage()
             java.util.HashMap r1 = new java.util.HashMap
             r1.<init>()
             r2 = 1
             r0.putCachedPhoneBook(r1, r4, r2)
-            org.telegram.messenger.MessagesStorage r0 = r12.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r0 = r14.getMessagesStorage()
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             r0.putContacts(r1, r2)
-            java.util.ArrayList<org.telegram.messenger.ContactsController$Contact> r0 = r12.phoneBookContacts
+            java.util.ArrayList<org.telegram.messenger.ContactsController$Contact> r0 = r14.phoneBookContacts
             r0.clear()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact> r0 = r12.contacts
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact> r0 = r14.contacts
             r0.clear()
-            j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r0 = r12.contactsDict
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, org.telegram.tgnet.TLRPC$TL_contact> r0 = r14.contactsDict
             r0.clear()
-            java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact>> r0 = r12.usersSectionsDict
+            java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact>> r0 = r14.usersSectionsDict
             r0.clear()
-            java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact>> r0 = r12.usersMutualSectionsDict
+            java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact>> r0 = r14.usersMutualSectionsDict
             r0.clear()
-            java.util.ArrayList<java.lang.String> r0 = r12.sortedUsersSectionsArray
+            java.util.ArrayList<java.lang.String> r0 = r14.sortedUsersSectionsArray
             r0.clear()
-            java.util.HashMap<java.lang.String, java.util.ArrayList<java.lang.Object>> r0 = r12.phoneBookSectionsDict
+            java.util.HashMap<java.lang.String, java.util.ArrayList<java.lang.Object>> r0 = r14.phoneBookSectionsDict
             r0.clear()
-            java.util.ArrayList<java.lang.String> r0 = r12.phoneBookSectionsArray
+            java.util.ArrayList<java.lang.String> r0 = r14.phoneBookSectionsArray
             r0.clear()
-            java.util.ArrayList<java.lang.Integer> r0 = r12.delayedContactsUpdate
+            java.util.ArrayList<java.lang.Long> r0 = r14.delayedContactsUpdate
             r0.clear()
-            java.util.ArrayList<java.lang.String> r0 = r12.sortedUsersMutualSectionsArray
+            java.util.ArrayList<java.lang.String> r0 = r14.sortedUsersMutualSectionsArray
             r0.clear()
-            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r0 = r12.contactsByPhone
+            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r0 = r14.contactsByPhone
             r0.clear()
-            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r0 = r12.contactsByShortPhone
+            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r0 = r14.contactsByShortPhone
             r0.clear()
-            org.telegram.messenger.NotificationCenter r0 = r12.getNotificationCenter()
+            org.telegram.messenger.NotificationCenter r0 = r14.getNotificationCenter()
             int r1 = org.telegram.messenger.NotificationCenter.contactsDidLoad
             java.lang.Object[] r2 = new java.lang.Object[r4]
             r0.postNotificationName(r1, r2)
-            r12.loadContacts(r4, r4)
-            r13.run()
+            r0 = 0
+            r14.loadContacts(r4, r0)
+            r15.run()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.lambda$deleteAllContacts$7(java.lang.Runnable):void");
@@ -695,10 +697,10 @@ public class ContactsController extends BaseController {
     }
 
     /* JADX INFO: finally extract failed */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x0329 A[Catch:{ all -> 0x0341 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x032e A[SYNTHETIC, Splitter:B:194:0x032e] */
-    /* JADX WARNING: Removed duplicated region for block: B:200:0x033b  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x032d A[Catch:{ all -> 0x0345 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x0332 A[SYNTHETIC, Splitter:B:197:0x0332] */
+    /* JADX WARNING: Removed duplicated region for block: B:203:0x033f  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private java.util.HashMap<java.lang.String, org.telegram.messenger.ContactsController.Contact> readContactsFromPhoneBook() {
         /*
@@ -727,21 +729,21 @@ public class ContactsController extends BaseController {
             r0.<init>()
             return r0
         L_0x002e:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ all -> 0x0320 }
-            r0.<init>()     // Catch:{ all -> 0x0320 }
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0320 }
-            android.content.ContentResolver r3 = r3.getContentResolver()     // Catch:{ all -> 0x0320 }
-            java.util.HashMap r10 = new java.util.HashMap     // Catch:{ all -> 0x0320 }
-            r10.<init>()     // Catch:{ all -> 0x0320 }
-            java.util.ArrayList r11 = new java.util.ArrayList     // Catch:{ all -> 0x0320 }
-            r11.<init>()     // Catch:{ all -> 0x0320 }
-            android.net.Uri r5 = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI     // Catch:{ all -> 0x0320 }
-            java.lang.String[] r6 = r1.projectionPhones     // Catch:{ all -> 0x0320 }
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ all -> 0x0324 }
+            r0.<init>()     // Catch:{ all -> 0x0324 }
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0324 }
+            android.content.ContentResolver r3 = r3.getContentResolver()     // Catch:{ all -> 0x0324 }
+            java.util.HashMap r10 = new java.util.HashMap     // Catch:{ all -> 0x0324 }
+            r10.<init>()     // Catch:{ all -> 0x0324 }
+            java.util.ArrayList r11 = new java.util.ArrayList     // Catch:{ all -> 0x0324 }
+            r11.<init>()     // Catch:{ all -> 0x0324 }
+            android.net.Uri r5 = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI     // Catch:{ all -> 0x0324 }
+            java.lang.String[] r6 = r1.projectionPhones     // Catch:{ all -> 0x0324 }
             r7 = 0
             r8 = 0
             r9 = 0
             r4 = r3
-            android.database.Cursor r4 = r4.query(r5, r6, r7, r8, r9)     // Catch:{ all -> 0x0320 }
+            android.database.Cursor r4 = r4.query(r5, r6, r7, r8, r9)     // Catch:{ all -> 0x0324 }
             r14 = 0
             java.lang.String r15 = ""
             r9 = 1
@@ -882,7 +884,7 @@ public class ContactsController extends BaseController {
             r1 = 0
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01eb }
             r0.add(r2)     // Catch:{ all -> 0x01eb }
-            r0 = 2131627002(0x7f0e0bfa, float:1.8881256E38)
+            r0 = 2131627026(0x7f0e0CLASSNAME, float:1.8881305E38)
             java.lang.String r1 = "PhoneMobile"
             if (r14 != 0) goto L_0x0182
             r2 = 3
@@ -901,7 +903,7 @@ public class ContactsController extends BaseController {
             if (r14 != r2) goto L_0x0194
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneHome"
-            r3 = 2131627000(0x7f0e0bf8, float:1.8881252E38)
+            r3 = 2131627024(0x7f0e0CLASSNAME, float:1.88813E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -917,7 +919,7 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01b3
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneWork"
-            r3 = 2131627010(0x7f0e0CLASSNAME, float:1.8881272E38)
+            r3 = 2131627034(0x7f0e0c1a, float:1.8881321E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -926,14 +928,14 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01c6
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneMain"
-            r3 = 2131627001(0x7f0e0bf9, float:1.8881254E38)
+            r3 = 2131627025(0x7f0e0CLASSNAME, float:1.8881303E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
         L_0x01c6:
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneOther"
-            r3 = 2131627009(0x7f0e0CLASSNAME, float:1.888127E38)
+            r3 = 2131627033(0x7f0e0CLASSNAME, float:1.888132E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
         L_0x01d4:
@@ -958,7 +960,7 @@ public class ContactsController extends BaseController {
             r10 = r20
         L_0x01ee:
             r2 = r6
-            goto L_0x0324
+            goto L_0x0328
         L_0x01f1:
             r3 = r6
             r1 = 0
@@ -967,7 +969,7 @@ public class ContactsController extends BaseController {
             r0 = move-exception
             r2 = 0
             r10 = r20
-            goto L_0x0324
+            goto L_0x0328
         L_0x01fa:
             r18 = r3
             r2 = 1
@@ -975,198 +977,203 @@ public class ContactsController extends BaseController {
             r3 = 0
         L_0x01ff:
             java.lang.String r0 = ","
-            java.lang.String r0 = android.text.TextUtils.join(r0, r11)     // Catch:{ all -> 0x031a }
-            android.net.Uri r5 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ all -> 0x031a }
+            java.lang.String r0 = android.text.TextUtils.join(r0, r11)     // Catch:{ all -> 0x031e }
+            android.net.Uri r5 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ all -> 0x031e }
             r10 = r20
-            java.lang.String[] r6 = r10.projectionNames     // Catch:{ all -> 0x0318 }
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ all -> 0x0318 }
-            r4.<init>()     // Catch:{ all -> 0x0318 }
+            java.lang.String[] r6 = r10.projectionNames     // Catch:{ all -> 0x031c }
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ all -> 0x031c }
+            r4.<init>()     // Catch:{ all -> 0x031c }
             java.lang.String r7 = "lookup IN ("
-            r4.append(r7)     // Catch:{ all -> 0x0318 }
-            r4.append(r0)     // Catch:{ all -> 0x0318 }
+            r4.append(r7)     // Catch:{ all -> 0x031c }
+            r4.append(r0)     // Catch:{ all -> 0x031c }
             java.lang.String r0 = ") AND "
-            r4.append(r0)     // Catch:{ all -> 0x0318 }
+            r4.append(r0)     // Catch:{ all -> 0x031c }
             java.lang.String r0 = "mimetype"
-            r4.append(r0)     // Catch:{ all -> 0x0318 }
+            r4.append(r0)     // Catch:{ all -> 0x031c }
             java.lang.String r0 = " = '"
-            r4.append(r0)     // Catch:{ all -> 0x0318 }
+            r4.append(r0)     // Catch:{ all -> 0x031c }
             java.lang.String r0 = "vnd.android.cursor.item/name"
-            r4.append(r0)     // Catch:{ all -> 0x0318 }
+            r4.append(r0)     // Catch:{ all -> 0x031c }
             java.lang.String r0 = "'"
-            r4.append(r0)     // Catch:{ all -> 0x0318 }
-            java.lang.String r7 = r4.toString()     // Catch:{ all -> 0x0318 }
+            r4.append(r0)     // Catch:{ all -> 0x031c }
+            java.lang.String r7 = r4.toString()     // Catch:{ all -> 0x031c }
             r8 = 0
             r9 = 0
             r4 = r18
             r0 = 1
-            android.database.Cursor r1 = r4.query(r5, r6, r7, r8, r9)     // Catch:{ all -> 0x0318 }
-            if (r1 == 0) goto L_0x030b
+            android.database.Cursor r1 = r4.query(r5, r6, r7, r8, r9)     // Catch:{ all -> 0x031c }
+            if (r1 == 0) goto L_0x030f
         L_0x0240:
-            boolean r2 = r1.moveToNext()     // Catch:{ all -> 0x0318 }
-            if (r2 == 0) goto L_0x0306
+            boolean r2 = r1.moveToNext()     // Catch:{ all -> 0x031c }
+            if (r2 == 0) goto L_0x030a
             r2 = 0
-            java.lang.String r4 = r1.getString(r2)     // Catch:{ all -> 0x0318 }
-            java.lang.String r5 = r1.getString(r0)     // Catch:{ all -> 0x0318 }
+            java.lang.String r4 = r1.getString(r2)     // Catch:{ all -> 0x031c }
+            java.lang.String r5 = r1.getString(r0)     // Catch:{ all -> 0x031c }
             r6 = 2
-            java.lang.String r7 = r1.getString(r6)     // Catch:{ all -> 0x0318 }
+            java.lang.String r7 = r1.getString(r6)     // Catch:{ all -> 0x031c }
             r8 = 3
-            java.lang.String r9 = r1.getString(r8)     // Catch:{ all -> 0x0318 }
-            java.lang.Object r4 = r3.get(r4)     // Catch:{ all -> 0x0318 }
-            org.telegram.messenger.ContactsController$Contact r4 = (org.telegram.messenger.ContactsController.Contact) r4     // Catch:{ all -> 0x0318 }
+            java.lang.String r9 = r1.getString(r8)     // Catch:{ all -> 0x031c }
+            if (r3 == 0) goto L_0x0262
+            java.lang.Object r4 = r3.get(r4)     // Catch:{ all -> 0x031c }
+            org.telegram.messenger.ContactsController$Contact r4 = (org.telegram.messenger.ContactsController.Contact) r4     // Catch:{ all -> 0x031c }
+            goto L_0x0263
+        L_0x0262:
+            r4 = 0
+        L_0x0263:
             if (r4 == 0) goto L_0x0240
-            boolean r11 = r4.namesFilled     // Catch:{ all -> 0x0318 }
+            boolean r11 = r4.namesFilled     // Catch:{ all -> 0x031c }
             if (r11 != 0) goto L_0x0240
-            boolean r11 = r4.isGoodProvider     // Catch:{ all -> 0x0318 }
+            boolean r11 = r4.isGoodProvider     // Catch:{ all -> 0x031c }
             java.lang.String r12 = " "
-            if (r11 == 0) goto L_0x02a1
-            if (r5 == 0) goto L_0x0270
-            r4.first_name = r5     // Catch:{ all -> 0x0318 }
-            goto L_0x0272
-        L_0x0270:
-            r4.first_name = r15     // Catch:{ all -> 0x0318 }
-        L_0x0272:
-            if (r7 == 0) goto L_0x0277
-            r4.last_name = r7     // Catch:{ all -> 0x0318 }
-            goto L_0x0279
-        L_0x0277:
-            r4.last_name = r15     // Catch:{ all -> 0x0318 }
-        L_0x0279:
-            boolean r5 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x0318 }
-            if (r5 != 0) goto L_0x0302
-            java.lang.String r5 = r4.first_name     // Catch:{ all -> 0x0318 }
-            boolean r5 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x0318 }
-            if (r5 != 0) goto L_0x029e
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x0318 }
-            r5.<init>()     // Catch:{ all -> 0x0318 }
-            java.lang.String r7 = r4.first_name     // Catch:{ all -> 0x0318 }
-            r5.append(r7)     // Catch:{ all -> 0x0318 }
-            r5.append(r12)     // Catch:{ all -> 0x0318 }
-            r5.append(r9)     // Catch:{ all -> 0x0318 }
-            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x0318 }
-            r4.first_name = r5     // Catch:{ all -> 0x0318 }
-            goto L_0x0302
-        L_0x029e:
-            r4.first_name = r9     // Catch:{ all -> 0x0318 }
-            goto L_0x0302
-        L_0x02a1:
-            boolean r11 = r10.isNotValidNameString(r5)     // Catch:{ all -> 0x0318 }
-            if (r11 != 0) goto L_0x02b7
-            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x0318 }
-            boolean r11 = r11.contains(r5)     // Catch:{ all -> 0x0318 }
-            if (r11 != 0) goto L_0x02cd
-            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x0318 }
-            boolean r11 = r5.contains(r11)     // Catch:{ all -> 0x0318 }
-            if (r11 != 0) goto L_0x02cd
-        L_0x02b7:
-            boolean r11 = r10.isNotValidNameString(r7)     // Catch:{ all -> 0x0318 }
-            if (r11 != 0) goto L_0x0302
-            java.lang.String r11 = r4.last_name     // Catch:{ all -> 0x0318 }
-            boolean r11 = r11.contains(r7)     // Catch:{ all -> 0x0318 }
-            if (r11 != 0) goto L_0x02cd
-            java.lang.String r11 = r4.last_name     // Catch:{ all -> 0x0318 }
-            boolean r11 = r5.contains(r11)     // Catch:{ all -> 0x0318 }
-            if (r11 == 0) goto L_0x0302
-        L_0x02cd:
-            if (r5 == 0) goto L_0x02d2
-            r4.first_name = r5     // Catch:{ all -> 0x0318 }
-            goto L_0x02d4
-        L_0x02d2:
-            r4.first_name = r15     // Catch:{ all -> 0x0318 }
-        L_0x02d4:
-            boolean r5 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x0318 }
-            if (r5 != 0) goto L_0x02fb
-            java.lang.String r5 = r4.first_name     // Catch:{ all -> 0x0318 }
-            boolean r5 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x0318 }
-            if (r5 != 0) goto L_0x02f9
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x0318 }
-            r5.<init>()     // Catch:{ all -> 0x0318 }
-            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x0318 }
-            r5.append(r11)     // Catch:{ all -> 0x0318 }
-            r5.append(r12)     // Catch:{ all -> 0x0318 }
-            r5.append(r9)     // Catch:{ all -> 0x0318 }
-            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x0318 }
-            r4.first_name = r5     // Catch:{ all -> 0x0318 }
-            goto L_0x02fb
-        L_0x02f9:
-            r4.first_name = r9     // Catch:{ all -> 0x0318 }
-        L_0x02fb:
-            if (r7 == 0) goto L_0x0300
-            r4.last_name = r7     // Catch:{ all -> 0x0318 }
-            goto L_0x0302
-        L_0x0300:
-            r4.last_name = r15     // Catch:{ all -> 0x0318 }
-        L_0x0302:
-            r4.namesFilled = r0     // Catch:{ all -> 0x0318 }
-            goto L_0x0240
+            if (r11 == 0) goto L_0x02a5
+            if (r5 == 0) goto L_0x0274
+            r4.first_name = r5     // Catch:{ all -> 0x031c }
+            goto L_0x0276
+        L_0x0274:
+            r4.first_name = r15     // Catch:{ all -> 0x031c }
+        L_0x0276:
+            if (r7 == 0) goto L_0x027b
+            r4.last_name = r7     // Catch:{ all -> 0x031c }
+            goto L_0x027d
+        L_0x027b:
+            r4.last_name = r15     // Catch:{ all -> 0x031c }
+        L_0x027d:
+            boolean r5 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x031c }
+            if (r5 != 0) goto L_0x0306
+            java.lang.String r5 = r4.first_name     // Catch:{ all -> 0x031c }
+            boolean r5 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x031c }
+            if (r5 != 0) goto L_0x02a2
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x031c }
+            r5.<init>()     // Catch:{ all -> 0x031c }
+            java.lang.String r7 = r4.first_name     // Catch:{ all -> 0x031c }
+            r5.append(r7)     // Catch:{ all -> 0x031c }
+            r5.append(r12)     // Catch:{ all -> 0x031c }
+            r5.append(r9)     // Catch:{ all -> 0x031c }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x031c }
+            r4.first_name = r5     // Catch:{ all -> 0x031c }
+            goto L_0x0306
+        L_0x02a2:
+            r4.first_name = r9     // Catch:{ all -> 0x031c }
+            goto L_0x0306
+        L_0x02a5:
+            boolean r11 = r10.isNotValidNameString(r5)     // Catch:{ all -> 0x031c }
+            if (r11 != 0) goto L_0x02bb
+            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x031c }
+            boolean r11 = r11.contains(r5)     // Catch:{ all -> 0x031c }
+            if (r11 != 0) goto L_0x02d1
+            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x031c }
+            boolean r11 = r5.contains(r11)     // Catch:{ all -> 0x031c }
+            if (r11 != 0) goto L_0x02d1
+        L_0x02bb:
+            boolean r11 = r10.isNotValidNameString(r7)     // Catch:{ all -> 0x031c }
+            if (r11 != 0) goto L_0x0306
+            java.lang.String r11 = r4.last_name     // Catch:{ all -> 0x031c }
+            boolean r11 = r11.contains(r7)     // Catch:{ all -> 0x031c }
+            if (r11 != 0) goto L_0x02d1
+            java.lang.String r11 = r4.last_name     // Catch:{ all -> 0x031c }
+            boolean r11 = r5.contains(r11)     // Catch:{ all -> 0x031c }
+            if (r11 == 0) goto L_0x0306
+        L_0x02d1:
+            if (r5 == 0) goto L_0x02d6
+            r4.first_name = r5     // Catch:{ all -> 0x031c }
+            goto L_0x02d8
+        L_0x02d6:
+            r4.first_name = r15     // Catch:{ all -> 0x031c }
+        L_0x02d8:
+            boolean r5 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x031c }
+            if (r5 != 0) goto L_0x02ff
+            java.lang.String r5 = r4.first_name     // Catch:{ all -> 0x031c }
+            boolean r5 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x031c }
+            if (r5 != 0) goto L_0x02fd
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x031c }
+            r5.<init>()     // Catch:{ all -> 0x031c }
+            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x031c }
+            r5.append(r11)     // Catch:{ all -> 0x031c }
+            r5.append(r12)     // Catch:{ all -> 0x031c }
+            r5.append(r9)     // Catch:{ all -> 0x031c }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x031c }
+            r4.first_name = r5     // Catch:{ all -> 0x031c }
+            goto L_0x02ff
+        L_0x02fd:
+            r4.first_name = r9     // Catch:{ all -> 0x031c }
+        L_0x02ff:
+            if (r7 == 0) goto L_0x0304
+            r4.last_name = r7     // Catch:{ all -> 0x031c }
+            goto L_0x0306
+        L_0x0304:
+            r4.last_name = r15     // Catch:{ all -> 0x031c }
         L_0x0306:
-            r1.close()     // Catch:{ Exception -> 0x0309 }
-        L_0x0309:
+            r4.namesFilled = r0     // Catch:{ all -> 0x031c }
+            goto L_0x0240
+        L_0x030a:
+            r1.close()     // Catch:{ Exception -> 0x030d }
+        L_0x030d:
             r2 = 0
-            goto L_0x030c
-        L_0x030b:
+            goto L_0x0310
+        L_0x030f:
             r2 = r1
-        L_0x030c:
-            if (r2 == 0) goto L_0x0338
-            r2.close()     // Catch:{ Exception -> 0x0312 }
-            goto L_0x0338
-        L_0x0312:
+        L_0x0310:
+            if (r2 == 0) goto L_0x033c
+            r2.close()     // Catch:{ Exception -> 0x0316 }
+            goto L_0x033c
+        L_0x0316:
             r0 = move-exception
             r1 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-            goto L_0x0338
-        L_0x0318:
+            goto L_0x033c
+        L_0x031c:
             r0 = move-exception
-            goto L_0x031d
-        L_0x031a:
+            goto L_0x0321
+        L_0x031e:
             r0 = move-exception
             r10 = r20
-        L_0x031d:
+        L_0x0321:
             r4 = r1
             r2 = r3
-            goto L_0x0324
-        L_0x0320:
+            goto L_0x0328
+        L_0x0324:
             r0 = move-exception
             r10 = r1
             r2 = 0
             r4 = 0
-        L_0x0324:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0341 }
-            if (r2 == 0) goto L_0x032c
-            r2.clear()     // Catch:{ all -> 0x0341 }
-        L_0x032c:
-            if (r4 == 0) goto L_0x0337
-            r4.close()     // Catch:{ Exception -> 0x0332 }
-            goto L_0x0337
-        L_0x0332:
+        L_0x0328:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0345 }
+            if (r2 == 0) goto L_0x0330
+            r2.clear()     // Catch:{ all -> 0x0345 }
+        L_0x0330:
+            if (r4 == 0) goto L_0x033b
+            r4.close()     // Catch:{ Exception -> 0x0336 }
+            goto L_0x033b
+        L_0x0336:
             r0 = move-exception
             r1 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x0337:
-            r3 = r2
-        L_0x0338:
-            if (r3 == 0) goto L_0x033b
-            goto L_0x0340
         L_0x033b:
+            r3 = r2
+        L_0x033c:
+            if (r3 == 0) goto L_0x033f
+            goto L_0x0344
+        L_0x033f:
             java.util.HashMap r3 = new java.util.HashMap
             r3.<init>()
-        L_0x0340:
+        L_0x0344:
             return r3
-        L_0x0341:
+        L_0x0345:
             r0 = move-exception
             r1 = r0
-            if (r4 == 0) goto L_0x034e
-            r4.close()     // Catch:{ Exception -> 0x0349 }
-            goto L_0x034e
-        L_0x0349:
+            if (r4 == 0) goto L_0x0352
+            r4.close()     // Catch:{ Exception -> 0x034d }
+            goto L_0x0352
+        L_0x034d:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x034e:
-            goto L_0x0350
-        L_0x034f:
+        L_0x0352:
+            goto L_0x0354
+        L_0x0353:
             throw r1
-        L_0x0350:
-            goto L_0x034f
+        L_0x0354:
+            goto L_0x0353
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.readContactsFromPhoneBook():java.util.HashMap");
     }
@@ -1243,11 +1250,8 @@ public class ContactsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:119:0x02f6, code lost:
-        if (r11.intValue() == 1) goto L_0x0308;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:210:0x04b6, code lost:
-        if ((r13.contactsByPhone.size() - r0) > ((r13.contactsByPhone.size() / 3) * 2)) goto L_0x04ba;
+    /* JADX WARNING: Code restructure failed: missing block: B:208:0x04c3, code lost:
+        if ((r14.contactsByPhone.size() - r0) > ((r14.contactsByPhone.size() / 3) * 2)) goto L_0x04c7;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:42:0x0134, code lost:
         if (r2.first_name.equals(r4.first_name) != false) goto L_0x0139;
@@ -1258,20 +1262,20 @@ public class ContactsController extends BaseController {
     /* JADX WARNING: Code restructure failed: missing block: B:48:0x014b, code lost:
         r0 = true;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:105:0x026c  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x04be  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x04ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:218:0x04fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x01e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0273  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x04cb  */
+    /* JADX WARNING: Removed duplicated region for block: B:214:0x04f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x0509  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x01f0  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$performSyncPhoneBook$24(java.util.HashMap r27, boolean r28, boolean r29, boolean r30, boolean r31, boolean r32, boolean r33) {
+    public /* synthetic */ void lambda$performSyncPhoneBook$24(java.util.HashMap r29, boolean r30, boolean r31, boolean r32, boolean r33, boolean r34, boolean r35) {
         /*
-            r26 = this;
-            r13 = r26
-            r3 = r27
+            r28 = this;
+            r13 = r28
+            r3 = r29
             java.util.HashMap r0 = new java.util.HashMap
             r0.<init>()
-            java.util.Set r1 = r27.entrySet()
+            java.util.Set r1 = r29.entrySet()
             java.util.Iterator r1 = r1.iterator()
         L_0x0011:
             boolean r2 = r1.hasNext()
@@ -1297,10 +1301,10 @@ public class ContactsController extends BaseController {
             java.lang.String r1 = "start read contacts from phone"
             org.telegram.messenger.FileLog.d(r1)
         L_0x0043:
-            if (r28 != 0) goto L_0x0048
-            r26.checkContactsInternal()
+            if (r30 != 0) goto L_0x0048
+            r28.checkContactsInternal()
         L_0x0048:
-            java.util.HashMap r14 = r26.readContactsFromPhoneBook()
+            java.util.HashMap r14 = r28.readContactsFromPhoneBook()
             java.util.HashMap r15 = new java.util.HashMap
             r15.<init>()
             java.util.HashMap r12 = new java.util.HashMap
@@ -1346,19 +1350,19 @@ public class ContactsController extends BaseController {
         L_0x00b5:
             java.util.HashMap r10 = new java.util.HashMap
             r10.<init>()
-            int r1 = r27.size()
+            int r1 = r29.size()
             java.util.ArrayList r9 = new java.util.ArrayList
             r9.<init>()
-            boolean r2 = r27.isEmpty()
+            boolean r2 = r29.isEmpty()
             java.lang.String r5 = ""
-            if (r2 != 0) goto L_0x039a
+            if (r2 != 0) goto L_0x03a7
             java.util.Set r2 = r14.entrySet()
             java.util.Iterator r2 = r2.iterator()
             r7 = 0
             r16 = 0
         L_0x00d6:
             boolean r17 = r2.hasNext()
-            if (r17 == 0) goto L_0x0353
+            if (r17 == 0) goto L_0x035a
             java.lang.Object r17 = r2.next()
             java.util.Map$Entry r17 = (java.util.Map.Entry) r17
             java.lang.Object r18 = r17.getKey()
@@ -1369,7 +1373,7 @@ public class ContactsController extends BaseController {
             org.telegram.messenger.ContactsController$Contact r4 = (org.telegram.messenger.ContactsController.Contact) r4
             java.lang.Object r17 = r3.get(r6)
             org.telegram.messenger.ContactsController$Contact r17 = (org.telegram.messenger.ContactsController.Contact) r17
-            r31 = r2
+            r33 = r2
             if (r17 != 0) goto L_0x0118
         L_0x00fc:
             java.util.ArrayList<java.lang.String> r2 = r4.shortPhones
@@ -1420,15 +1424,15 @@ public class ContactsController extends BaseController {
         L_0x014f:
             r0 = 0
         L_0x0150:
-            if (r2 == 0) goto L_0x02af
+            if (r2 == 0) goto L_0x02b9
             if (r0 == 0) goto L_0x0156
-            goto L_0x02af
+            goto L_0x02b9
         L_0x0156:
             r0 = 0
         L_0x0157:
             java.util.ArrayList<java.lang.String> r8 = r4.phones
             int r8 = r8.size()
-            if (r0 >= r8) goto L_0x0299
+            if (r0 >= r8) goto L_0x02a2
             java.util.ArrayList<java.lang.String> r8 = r4.shortPhones
             java.lang.Object r8 = r8.get(r0)
             java.lang.String r8 = (java.lang.String) r8
@@ -1442,127 +1446,130 @@ public class ContactsController extends BaseController {
             r10.put(r8, r4)
             java.util.ArrayList<java.lang.String> r12 = r2.shortPhones
             int r12 = r12.indexOf(r8)
-            if (r29 == 0) goto L_0x01da
+            if (r31 == 0) goto L_0x01e2
             r24 = r12
             java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r12 = r13.contactsByPhone
             java.lang.Object r12 = r12.get(r8)
             org.telegram.tgnet.TLRPC$TL_contact r12 = (org.telegram.tgnet.TLRPC$TL_contact) r12
-            if (r12 == 0) goto L_0x01cd
+            if (r12 == 0) goto L_0x01d1
             r25 = r11
-            org.telegram.messenger.MessagesController r11 = r26.getMessagesController()
-            int r12 = r12.user_id
-            java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
+            org.telegram.messenger.MessagesController r11 = r28.getMessagesController()
+            r26 = r14
+            r27 = r15
+            long r14 = r12.user_id
+            java.lang.Long r12 = java.lang.Long.valueOf(r14)
             org.telegram.tgnet.TLRPC$User r11 = r11.getUser(r12)
-            if (r11 == 0) goto L_0x01c9
+            if (r11 == 0) goto L_0x01cd
             int r16 = r16 + 1
             java.lang.String r12 = r11.first_name
             boolean r12 = android.text.TextUtils.isEmpty(r12)
-            if (r12 == 0) goto L_0x01c9
+            if (r12 == 0) goto L_0x01cd
             java.lang.String r11 = r11.last_name
             boolean r11 = android.text.TextUtils.isEmpty(r11)
-            if (r11 == 0) goto L_0x01c9
+            if (r11 == 0) goto L_0x01cd
             java.lang.String r11 = r4.first_name
             boolean r11 = android.text.TextUtils.isEmpty(r11)
-            if (r11 == 0) goto L_0x01c5
+            if (r11 == 0) goto L_0x01c9
             java.lang.String r11 = r4.last_name
             boolean r11 = android.text.TextUtils.isEmpty(r11)
-            if (r11 != 0) goto L_0x01c9
-        L_0x01c5:
+            if (r11 != 0) goto L_0x01cd
+        L_0x01c9:
             r11 = 1
             r24 = -1
-            goto L_0x01ca
-        L_0x01c9:
-            r11 = 0
-        L_0x01ca:
-            r12 = r24
-            goto L_0x01e1
+            goto L_0x01ce
         L_0x01cd:
+            r11 = 0
+        L_0x01ce:
+            r12 = r24
+            goto L_0x01ed
+        L_0x01d1:
             r25 = r11
+            r26 = r14
+            r27 = r15
             java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r11 = r13.contactsByShortPhone
             boolean r11 = r11.containsKey(r5)
-            if (r11 == 0) goto L_0x01de
+            if (r11 == 0) goto L_0x01ea
             int r16 = r16 + 1
-            goto L_0x01de
-        L_0x01da:
+            goto L_0x01ea
+        L_0x01e2:
             r25 = r11
             r24 = r12
-        L_0x01de:
+            r26 = r14
+            r27 = r15
+        L_0x01ea:
             r12 = r24
             r11 = 0
-        L_0x01e1:
-            r24 = r15
-            r15 = -1
-            if (r12 != r15) goto L_0x026c
-            if (r29 == 0) goto L_0x028d
-            if (r11 != 0) goto L_0x0242
+        L_0x01ed:
+            r14 = -1
+            if (r12 != r14) goto L_0x0273
+            if (r31 == 0) goto L_0x0294
+            if (r11 != 0) goto L_0x024c
             java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r11 = r13.contactsByPhone
             java.lang.Object r8 = r11.get(r8)
             org.telegram.tgnet.TLRPC$TL_contact r8 = (org.telegram.tgnet.TLRPC$TL_contact) r8
-            if (r8 == 0) goto L_0x0238
-            org.telegram.messenger.MessagesController r5 = r26.getMessagesController()
-            int r8 = r8.user_id
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            if (r8 == 0) goto L_0x0242
+            org.telegram.messenger.MessagesController r5 = r28.getMessagesController()
+            long r11 = r8.user_id
+            java.lang.Long r8 = java.lang.Long.valueOf(r11)
             org.telegram.tgnet.TLRPC$User r5 = r5.getUser(r8)
-            if (r5 == 0) goto L_0x0235
+            if (r5 == 0) goto L_0x023f
             int r16 = r16 + 1
             java.lang.String r8 = r5.first_name
-            if (r8 == 0) goto L_0x020b
-            goto L_0x020d
-        L_0x020b:
+            if (r8 == 0) goto L_0x0215
+            goto L_0x0217
+        L_0x0215:
             r8 = r23
-        L_0x020d:
+        L_0x0217:
             java.lang.String r5 = r5.last_name
-            if (r5 == 0) goto L_0x0212
-            goto L_0x0214
-        L_0x0212:
+            if (r5 == 0) goto L_0x021c
+            goto L_0x021e
+        L_0x021c:
             r5 = r23
-        L_0x0214:
+        L_0x021e:
             java.lang.String r11 = r4.first_name
             boolean r8 = r8.equals(r11)
-            if (r8 == 0) goto L_0x0224
+            if (r8 == 0) goto L_0x022e
             java.lang.String r8 = r4.last_name
             boolean r5 = r5.equals(r8)
-            if (r5 != 0) goto L_0x028d
-        L_0x0224:
+            if (r5 != 0) goto L_0x0294
+        L_0x022e:
             java.lang.String r5 = r4.first_name
             boolean r5 = android.text.TextUtils.isEmpty(r5)
-            if (r5 == 0) goto L_0x0242
+            if (r5 == 0) goto L_0x024c
             java.lang.String r5 = r4.last_name
             boolean r5 = android.text.TextUtils.isEmpty(r5)
-            if (r5 == 0) goto L_0x0242
-            goto L_0x028d
-        L_0x0235:
+            if (r5 == 0) goto L_0x024c
+            goto L_0x0294
+        L_0x023f:
             int r7 = r7 + 1
-            goto L_0x0242
-        L_0x0238:
+            goto L_0x024c
+        L_0x0242:
             java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r8 = r13.contactsByShortPhone
             boolean r5 = r8.containsKey(r5)
-            if (r5 == 0) goto L_0x0242
+            if (r5 == 0) goto L_0x024c
             int r16 = r16 + 1
-        L_0x0242:
+        L_0x024c:
             org.telegram.tgnet.TLRPC$TL_inputPhoneContact r5 = new org.telegram.tgnet.TLRPC$TL_inputPhoneContact
             r5.<init>()
             int r8 = r4.contact_id
             long r11 = (long) r8
             r5.client_id = r11
-            r15 = r7
-            long r7 = (long) r0
-            r18 = 32
-            long r7 = r7 << r18
-            long r7 = r7 | r11
-            r5.client_id = r7
-            java.lang.String r7 = r4.first_name
-            r5.first_name = r7
-            java.lang.String r7 = r4.last_name
-            r5.last_name = r7
-            java.util.ArrayList<java.lang.String> r7 = r4.phones
-            java.lang.Object r7 = r7.get(r0)
-            java.lang.String r7 = (java.lang.String) r7
-            r5.phone = r7
+            long r14 = (long) r0
+            r8 = 32
+            long r14 = r14 << r8
+            long r11 = r11 | r14
+            r5.client_id = r11
+            java.lang.String r8 = r4.first_name
+            r5.first_name = r8
+            java.lang.String r8 = r4.last_name
+            r5.last_name = r8
+            java.util.ArrayList<java.lang.String> r8 = r4.phones
+            java.lang.Object r8 = r8.get(r0)
+            java.lang.String r8 = (java.lang.String) r8
+            r5.phone = r8
             r9.add(r5)
-            r7 = r15
-            goto L_0x028d
-        L_0x026c:
+            goto L_0x0294
+        L_0x0273:
             java.util.ArrayList<java.lang.Integer> r5 = r4.phoneDeleted
             java.util.ArrayList<java.lang.Integer> r8 = r2.phoneDeleted
             java.lang.Object r8 = r8.get(r12)
@@ -1576,35 +1583,36 @@ public class ContactsController extends BaseController {
             r5.remove(r12)
             java.util.ArrayList<java.lang.String> r5 = r2.phoneTypes
             r5.remove(r12)
-        L_0x028d:
+        L_0x0294:
             int r0 = r0 + 1
             r12 = r22
             r5 = r23
-            r15 = r24
             r11 = r25
+            r14 = r26
+            r15 = r27
             goto L_0x0157
-        L_0x0299:
+        L_0x02a2:
             r23 = r5
             r25 = r11
             r22 = r12
-            r24 = r15
+            r26 = r14
+            r27 = r15
             java.util.ArrayList<java.lang.String> r0 = r2.phones
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x02ac
+            if (r0 == 0) goto L_0x0347
             r3.remove(r6)
-        L_0x02ac:
-            r15 = r10
-            goto L_0x0341
-        L_0x02af:
+            goto L_0x0347
+        L_0x02b9:
             r23 = r5
             r25 = r11
             r22 = r12
-            r24 = r15
+            r26 = r14
+            r27 = r15
             r5 = 0
-        L_0x02b8:
+        L_0x02c4:
             java.util.ArrayList<java.lang.String> r8 = r4.phones
             int r8 = r8.size()
-            if (r5 >= r8) goto L_0x033b
+            if (r5 >= r8) goto L_0x0342
             java.util.ArrayList<java.lang.String> r8 = r4.shortPhones
             java.lang.Object r8 = r8.get(r5)
             java.lang.String r8 = (java.lang.String) r8
@@ -1614,121 +1622,120 @@ public class ContactsController extends BaseController {
             int r11 = java.lang.Math.max(r12, r11)
             r8.substring(r11)
             r10.put(r8, r4)
-            if (r2 == 0) goto L_0x02f9
+            if (r2 == 0) goto L_0x0305
             java.util.ArrayList<java.lang.String> r11 = r2.shortPhones
             int r11 = r11.indexOf(r8)
             r12 = -1
-            if (r11 == r12) goto L_0x02fa
-            java.util.ArrayList<java.lang.Integer> r15 = r2.phoneDeleted
-            java.lang.Object r11 = r15.get(r11)
+            if (r11 == r12) goto L_0x0306
+            java.util.ArrayList<java.lang.Integer> r14 = r2.phoneDeleted
+            java.lang.Object r11 = r14.get(r11)
             java.lang.Integer r11 = (java.lang.Integer) r11
-            java.util.ArrayList<java.lang.Integer> r15 = r4.phoneDeleted
-            r15.set(r5, r11)
+            java.util.ArrayList<java.lang.Integer> r14 = r4.phoneDeleted
+            r14.set(r5, r11)
             int r11 = r11.intValue()
-            r15 = 1
-            if (r11 != r15) goto L_0x02fa
-            goto L_0x0308
-        L_0x02f9:
+            r14 = 1
+            if (r11 != r14) goto L_0x0306
+            goto L_0x033d
+        L_0x0305:
             r12 = -1
-        L_0x02fa:
-            if (r29 == 0) goto L_0x0308
-            if (r0 != 0) goto L_0x030c
+        L_0x0306:
+            if (r31 == 0) goto L_0x033d
+            if (r0 != 0) goto L_0x0317
             java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r11 = r13.contactsByPhone
             boolean r8 = r11.containsKey(r8)
-            if (r8 == 0) goto L_0x030a
+            if (r8 == 0) goto L_0x0315
             int r16 = r16 + 1
-        L_0x0308:
-            r15 = r10
-            goto L_0x0334
-        L_0x030a:
+            goto L_0x033d
+        L_0x0315:
             int r7 = r7 + 1
-        L_0x030c:
+        L_0x0317:
             org.telegram.tgnet.TLRPC$TL_inputPhoneContact r8 = new org.telegram.tgnet.TLRPC$TL_inputPhoneContact
             r8.<init>()
             int r11 = r4.contact_id
-            long r12 = (long) r11
+            long r14 = (long) r11
+            r8.client_id = r14
+            long r12 = (long) r5
+            r11 = 32
+            long r12 = r12 << r11
+            long r12 = r12 | r14
             r8.client_id = r12
-            r15 = r10
-            long r10 = (long) r5
-            r18 = 32
-            long r10 = r10 << r18
-            long r10 = r10 | r12
-            r8.client_id = r10
-            java.lang.String r10 = r4.first_name
-            r8.first_name = r10
-            java.lang.String r10 = r4.last_name
-            r8.last_name = r10
-            java.util.ArrayList<java.lang.String> r10 = r4.phones
-            java.lang.Object r10 = r10.get(r5)
-            java.lang.String r10 = (java.lang.String) r10
-            r8.phone = r10
+            java.lang.String r11 = r4.first_name
+            r8.first_name = r11
+            java.lang.String r11 = r4.last_name
+            r8.last_name = r11
+            java.util.ArrayList<java.lang.String> r11 = r4.phones
+            java.lang.Object r11 = r11.get(r5)
+            java.lang.String r11 = (java.lang.String) r11
+            r8.phone = r11
             r9.add(r8)
-        L_0x0334:
+        L_0x033d:
             int r5 = r5 + 1
-            r13 = r26
-            r10 = r15
-            goto L_0x02b8
-        L_0x033b:
-            r15 = r10
-            if (r2 == 0) goto L_0x0341
+            r13 = r28
+            goto L_0x02c4
+        L_0x0342:
+            if (r2 == 0) goto L_0x0347
             r3.remove(r6)
-        L_0x0341:
-            r13 = r26
-            r2 = r31
-            r10 = r15
+        L_0x0347:
+            r13 = r28
+            r2 = r33
             r0 = r17
             r12 = r22
             r5 = r23
-            r15 = r24
             r11 = r25
+            r14 = r26
+            r15 = r27
             r8 = 0
             goto L_0x00d6
-        L_0x0353:
+        L_0x035a:
             r25 = r11
             r22 = r12
-            r24 = r15
-            r15 = r10
-            if (r30 != 0) goto L_0x0378
-            boolean r0 = r27.isEmpty()
-            if (r0 == 0) goto L_0x0378
+            r26 = r14
+            r27 = r15
+            if (r32 != 0) goto L_0x0380
+            boolean r0 = r29.isEmpty()
+            if (r0 == 0) goto L_0x0380
             boolean r0 = r9.isEmpty()
-            if (r0 == 0) goto L_0x0378
-            int r0 = r14.size()
-            if (r1 != r0) goto L_0x0378
+            if (r0 == 0) goto L_0x0380
+            int r0 = r26.size()
+            if (r1 != r0) goto L_0x0380
             boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r0 == 0) goto L_0x0377
+            if (r0 == 0) goto L_0x037f
             java.lang.String r0 = "contacts not changed!"
             org.telegram.messenger.FileLog.d(r0)
-        L_0x0377:
+        L_0x037f:
             return
-        L_0x0378:
-            if (r29 == 0) goto L_0x0394
-            boolean r0 = r27.isEmpty()
-            if (r0 != 0) goto L_0x0394
-            boolean r0 = r14.isEmpty()
-            if (r0 != 0) goto L_0x0394
+        L_0x0380:
+            if (r31 == 0) goto L_0x039f
+            boolean r0 = r29.isEmpty()
+            if (r0 != 0) goto L_0x039f
+            boolean r0 = r26.isEmpty()
+            if (r0 != 0) goto L_0x039f
             boolean r0 = r9.isEmpty()
-            if (r0 == 0) goto L_0x0394
-            org.telegram.messenger.MessagesStorage r0 = r26.getMessagesStorage()
-            r2 = 0
-            r0.putCachedPhoneBook(r14, r2, r2)
-        L_0x0394:
+            if (r0 == 0) goto L_0x039f
+            org.telegram.messenger.MessagesStorage r0 = r28.getMessagesStorage()
             r13 = r26
+            r2 = 0
+            r0.putCachedPhoneBook(r13, r2, r2)
+            goto L_0x03a1
+        L_0x039f:
+            r13 = r26
+        L_0x03a1:
+            r14 = r28
             r0 = r16
-            goto L_0x047c
-        L_0x039a:
+            goto L_0x0489
+        L_0x03a7:
             r23 = r5
             r25 = r11
             r22 = r12
-            r24 = r15
-            r15 = r10
-            if (r29 == 0) goto L_0x0478
-            java.util.Set r0 = r14.entrySet()
+            r13 = r14
+            r27 = r15
+            if (r31 == 0) goto L_0x0485
+            java.util.Set r0 = r13.entrySet()
             java.util.Iterator r0 = r0.iterator()
             r16 = 0
-        L_0x03af:
+        L_0x03bc:
             boolean r2 = r0.hasNext()
-            if (r2 == 0) goto L_0x0473
+            if (r2 == 0) goto L_0x0480
             java.lang.Object r2 = r0.next()
             java.util.Map$Entry r2 = (java.util.Map.Entry) r2
             java.lang.Object r4 = r2.getValue()
@@ -1736,11 +1743,11 @@ public class ContactsController extends BaseController {
             java.lang.Object r2 = r2.getKey()
             java.lang.String r2 = (java.lang.String) r2
             r2 = 0
-        L_0x03c8:
+        L_0x03d5:
             java.util.ArrayList<java.lang.String> r5 = r4.phones
             int r5 = r5.size()
-            if (r2 >= r5) goto L_0x046f
-            if (r31 != 0) goto L_0x0443
+            if (r2 >= r5) goto L_0x047c
+            if (r33 != 0) goto L_0x0450
             java.util.ArrayList<java.lang.String> r5 = r4.shortPhones
             java.lang.Object r5 = r5.get(r2)
             java.lang.String r5 = (java.lang.String) r5
@@ -1749,63 +1756,63 @@ public class ContactsController extends BaseController {
             r7 = 0
             int r6 = java.lang.Math.max(r7, r6)
             java.lang.String r6 = r5.substring(r6)
-            r13 = r26
-            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r7 = r13.contactsByPhone
+            r14 = r28
+            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r7 = r14.contactsByPhone
             java.lang.Object r5 = r7.get(r5)
             org.telegram.tgnet.TLRPC$TL_contact r5 = (org.telegram.tgnet.TLRPC$TL_contact) r5
-            if (r5 == 0) goto L_0x0438
-            org.telegram.messenger.MessagesController r6 = r26.getMessagesController()
-            int r5 = r5.user_id
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
-            org.telegram.tgnet.TLRPC$User r5 = r6.getUser(r5)
             if (r5 == 0) goto L_0x0445
+            org.telegram.messenger.MessagesController r6 = r28.getMessagesController()
+            long r7 = r5.user_id
+            java.lang.Long r5 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$User r5 = r6.getUser(r5)
+            if (r5 == 0) goto L_0x0452
             int r16 = r16 + 1
             java.lang.String r6 = r5.first_name
-            if (r6 == 0) goto L_0x040c
-            goto L_0x040e
-        L_0x040c:
+            if (r6 == 0) goto L_0x0419
+            goto L_0x041b
+        L_0x0419:
             r6 = r23
-        L_0x040e:
+        L_0x041b:
             java.lang.String r5 = r5.last_name
-            if (r5 == 0) goto L_0x0413
-            goto L_0x0415
-        L_0x0413:
+            if (r5 == 0) goto L_0x0420
+            goto L_0x0422
+        L_0x0420:
             r5 = r23
-        L_0x0415:
+        L_0x0422:
             java.lang.String r7 = r4.first_name
             boolean r6 = r6.equals(r7)
-            if (r6 == 0) goto L_0x0425
+            if (r6 == 0) goto L_0x0432
             java.lang.String r6 = r4.last_name
             boolean r5 = r5.equals(r6)
-            if (r5 != 0) goto L_0x0435
-        L_0x0425:
+            if (r5 != 0) goto L_0x0442
+        L_0x0432:
             java.lang.String r5 = r4.first_name
             boolean r5 = android.text.TextUtils.isEmpty(r5)
-            if (r5 == 0) goto L_0x0445
+            if (r5 == 0) goto L_0x0452
             java.lang.String r5 = r4.last_name
             boolean r5 = android.text.TextUtils.isEmpty(r5)
-            if (r5 == 0) goto L_0x0445
-        L_0x0435:
+            if (r5 == 0) goto L_0x0452
+        L_0x0442:
             r8 = 32
-            goto L_0x046b
-        L_0x0438:
-            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r5 = r13.contactsByShortPhone
-            boolean r5 = r5.containsKey(r6)
-            if (r5 == 0) goto L_0x0445
-            int r16 = r16 + 1
-            goto L_0x0445
-        L_0x0443:
-            r13 = r26
+            goto L_0x0478
         L_0x0445:
+            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r5 = r14.contactsByShortPhone
+            boolean r5 = r5.containsKey(r6)
+            if (r5 == 0) goto L_0x0452
+            int r16 = r16 + 1
+            goto L_0x0452
+        L_0x0450:
+            r14 = r28
+        L_0x0452:
             org.telegram.tgnet.TLRPC$TL_inputPhoneContact r5 = new org.telegram.tgnet.TLRPC$TL_inputPhoneContact
             r5.<init>()
             int r6 = r4.contact_id
             long r6 = (long) r6
             r5.client_id = r6
-            long r10 = (long) r2
+            long r11 = (long) r2
             r8 = 32
-            long r10 = r10 << r8
-            long r6 = r6 | r10
+            long r11 = r11 << r8
+            long r6 = r6 | r11
             r5.client_id = r6
             java.lang.String r6 = r4.first_name
             r5.first_name = r6
@@ -1816,59 +1823,59 @@ public class ContactsController extends BaseController {
             java.lang.String r6 = (java.lang.String) r6
             r5.phone = r6
             r9.add(r5)
-        L_0x046b:
-            int r2 = r2 + 1
-            goto L_0x03c8
-        L_0x046f:
-            r13 = r26
-            goto L_0x03af
-        L_0x0473:
-            r13 = r26
-            r0 = r16
-            goto L_0x047b
         L_0x0478:
-            r13 = r26
-            r0 = 0
-        L_0x047b:
-            r7 = 0
+            int r2 = r2 + 1
+            goto L_0x03d5
         L_0x047c:
+            r14 = r28
+            goto L_0x03bc
+        L_0x0480:
+            r14 = r28
+            r0 = r16
+            goto L_0x0488
+        L_0x0485:
+            r14 = r28
+            r0 = 0
+        L_0x0488:
+            r7 = 0
+        L_0x0489:
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r2 == 0) goto L_0x0485
+            if (r2 == 0) goto L_0x0492
             java.lang.String r2 = "done processing contacts"
             org.telegram.messenger.FileLog.d(r2)
-        L_0x0485:
-            if (r29 == 0) goto L_0x05de
+        L_0x0492:
+            if (r31 == 0) goto L_0x05ec
             boolean r2 = r9.isEmpty()
-            if (r2 != 0) goto L_0x05c4
+            if (r2 != 0) goto L_0x05cf
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r2 == 0) goto L_0x0496
+            if (r2 == 0) goto L_0x04a3
             java.lang.String r2 = "start import contacts"
             org.telegram.messenger.FileLog.e((java.lang.String) r2)
-        L_0x0496:
+        L_0x04a3:
             r2 = 2
-            if (r32 == 0) goto L_0x04b9
-            if (r7 == 0) goto L_0x04b9
+            if (r34 == 0) goto L_0x04c6
+            if (r7 == 0) goto L_0x04c6
             r4 = 30
-            if (r7 < r4) goto L_0x04a1
+            if (r7 < r4) goto L_0x04ae
             r2 = 1
-            goto L_0x04ba
-        L_0x04a1:
-            if (r30 == 0) goto L_0x04b9
-            if (r1 != 0) goto L_0x04b9
-            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r1 = r13.contactsByPhone
+            goto L_0x04c7
+        L_0x04ae:
+            if (r32 == 0) goto L_0x04c6
+            if (r1 != 0) goto L_0x04c6
+            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r1 = r14.contactsByPhone
             int r1 = r1.size()
             int r1 = r1 - r0
-            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r4 = r13.contactsByPhone
+            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r4 = r14.contactsByPhone
             int r4 = r4.size()
             int r4 = r4 / 3
             int r4 = r4 * 2
-            if (r1 <= r4) goto L_0x04b9
-            goto L_0x04ba
-        L_0x04b9:
+            if (r1 <= r4) goto L_0x04c6
+            goto L_0x04c7
+        L_0x04c6:
             r2 = 0
-        L_0x04ba:
+        L_0x04c7:
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x04e8
+            if (r1 == 0) goto L_0x04f5
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r4 = "new phone book contacts "
@@ -1879,62 +1886,62 @@ public class ContactsController extends BaseController {
             r1.append(r0)
             java.lang.String r0 = " totalContacts "
             r1.append(r0)
-            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r0 = r13.contactsByPhone
+            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r0 = r14.contactsByPhone
             int r0 = r0.size()
             r1.append(r0)
             java.lang.String r0 = r1.toString()
             org.telegram.messenger.FileLog.d(r0)
-        L_0x04e8:
-            if (r2 == 0) goto L_0x04fc
+        L_0x04f5:
+            if (r2 == 0) goto L_0x0509
             org.telegram.messenger.ContactsController$$ExternalSyntheticLambda12 r6 = new org.telegram.messenger.ContactsController$$ExternalSyntheticLambda12
             r0 = r6
-            r1 = r26
-            r3 = r27
-            r4 = r30
-            r5 = r28
+            r1 = r28
+            r3 = r29
+            r4 = r32
+            r5 = r30
             r0.<init>(r1, r2, r3, r4, r5)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)
             return
-        L_0x04fc:
-            if (r33 == 0) goto L_0x0516
+        L_0x0509:
+            if (r35 == 0) goto L_0x0523
             org.telegram.messenger.DispatchQueue r8 = org.telegram.messenger.Utilities.stageQueue
             org.telegram.messenger.ContactsController$$ExternalSyntheticLambda32 r9 = new org.telegram.messenger.ContactsController$$ExternalSyntheticLambda32
             r0 = r9
-            r1 = r26
-            r2 = r15
-            r3 = r14
-            r4 = r30
-            r5 = r24
+            r1 = r28
+            r2 = r10
+            r3 = r13
+            r4 = r32
+            r5 = r27
             r6 = r25
             r7 = r22
             r0.<init>(r1, r2, r3, r4, r5, r6, r7)
             r8.postRunnable(r9)
             return
-        L_0x0516:
+        L_0x0523:
             r0 = 1
-            boolean[] r12 = new boolean[r0]
+            boolean[] r15 = new boolean[r0]
             r0 = 0
-            r12[r0] = r0
-            java.util.HashMap r11 = new java.util.HashMap
-            r11.<init>(r14)
-            android.util.SparseArray r10 = new android.util.SparseArray
-            r10.<init>()
-            java.util.Set r0 = r11.entrySet()
+            r15[r0] = r0
+            java.util.HashMap r12 = new java.util.HashMap
+            r12.<init>(r13)
+            android.util.SparseArray r11 = new android.util.SparseArray
+            r11.<init>()
+            java.util.Set r0 = r12.entrySet()
             java.util.Iterator r0 = r0.iterator()
-        L_0x052e:
+        L_0x053b:
             boolean r1 = r0.hasNext()
-            if (r1 == 0) goto L_0x0548
+            if (r1 == 0) goto L_0x0555
             java.lang.Object r1 = r0.next()
             java.util.Map$Entry r1 = (java.util.Map.Entry) r1
             java.lang.Object r1 = r1.getValue()
             org.telegram.messenger.ContactsController$Contact r1 = (org.telegram.messenger.ContactsController.Contact) r1
             int r2 = r1.contact_id
             java.lang.String r1 = r1.key
-            r10.put(r2, r1)
-            goto L_0x052e
-        L_0x0548:
+            r11.put(r2, r1)
+            goto L_0x053b
+        L_0x0555:
             r1 = 0
-            r13.completedRequestsCount = r1
+            r14.completedRequestsCount = r1
             int r0 = r9.size()
             double r0 = (double) r0
             r2 = 4647503709213818880(0x407fNUM, double:500.0)
@@ -1943,8 +1950,8 @@ public class ContactsController extends BaseController {
             double r0 = java.lang.Math.ceil(r0)
             int r8 = (int) r0
             r7 = 0
-        L_0x055f:
-            if (r7 >= r8) goto L_0x0605
+        L_0x056c:
+            if (r7 >= r8) goto L_0x0616
             org.telegram.tgnet.TLRPC$TL_contacts_importContacts r6 = new org.telegram.tgnet.TLRPC$TL_contacts_importContacts
             r6.<init>()
             int r0 = r7 * 500
@@ -1955,80 +1962,81 @@ public class ContactsController extends BaseController {
             java.util.List r0 = r9.subList(r0, r1)
             r2.<init>(r0)
             r6.contacts = r2
-            org.telegram.tgnet.ConnectionsManager r5 = r26.getConnectionsManager()
+            org.telegram.tgnet.ConnectionsManager r5 = r28.getConnectionsManager()
             org.telegram.messenger.ContactsController$$ExternalSyntheticLambda60 r4 = new org.telegram.messenger.ContactsController$$ExternalSyntheticLambda60
             r0 = r4
-            r1 = r26
-            r2 = r11
-            r3 = r10
-            r13 = r4
-            r4 = r12
-            r16 = r13
-            r13 = r5
-            r5 = r14
-            r27 = r6
+            r1 = r28
+            r2 = r12
+            r3 = r11
+            r14 = r4
+            r4 = r15
+            r16 = r15
+            r15 = r5
+            r5 = r13
+            r29 = r6
             r20 = r7
             r7 = r8
             r17 = r8
-            r8 = r15
+            r8 = r10
             r18 = r9
-            r9 = r30
+            r9 = r32
             r19 = r10
-            r10 = r24
+            r10 = r27
             r23 = r11
             r21 = r25
             r11 = r21
-            r25 = r12
+            r24 = r12
             r12 = r22
             r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
             r0 = 6
-            r1 = r27
-            r2 = r16
-            r13.sendRequest(r1, r2, r0)
+            r1 = r29
+            r15.sendRequest(r1, r14, r0)
             int r7 = r20 + 1
-            r13 = r26
+            r14 = r28
+            r15 = r16
             r8 = r17
             r9 = r18
             r10 = r19
             r11 = r23
-            r12 = r25
-            r25 = r21
-            goto L_0x055f
-        L_0x05c4:
+            r12 = r24
+            goto L_0x056c
+        L_0x05cf:
+            r19 = r10
             r21 = r25
             org.telegram.messenger.DispatchQueue r8 = org.telegram.messenger.Utilities.stageQueue
             org.telegram.messenger.ContactsController$$ExternalSyntheticLambda31 r9 = new org.telegram.messenger.ContactsController$$ExternalSyntheticLambda31
             r0 = r9
-            r1 = r26
-            r2 = r15
-            r3 = r14
-            r4 = r30
-            r5 = r24
+            r1 = r28
+            r2 = r19
+            r3 = r13
+            r4 = r32
+            r5 = r27
             r6 = r21
             r7 = r22
             r0.<init>(r1, r2, r3, r4, r5, r6, r7)
             r8.postRunnable(r9)
-            goto L_0x0605
-        L_0x05de:
+            goto L_0x0616
+        L_0x05ec:
+            r19 = r10
             r21 = r25
             org.telegram.messenger.DispatchQueue r8 = org.telegram.messenger.Utilities.stageQueue
             org.telegram.messenger.ContactsController$$ExternalSyntheticLambda33 r9 = new org.telegram.messenger.ContactsController$$ExternalSyntheticLambda33
             r0 = r9
-            r1 = r26
-            r2 = r15
-            r3 = r14
-            r4 = r30
-            r5 = r24
+            r1 = r28
+            r2 = r19
+            r3 = r13
+            r4 = r32
+            r5 = r27
             r6 = r21
             r7 = r22
             r0.<init>(r1, r2, r3, r4, r5, r6, r7)
             r8.postRunnable(r9)
-            boolean r0 = r14.isEmpty()
-            if (r0 != 0) goto L_0x0605
-            org.telegram.messenger.MessagesStorage r0 = r26.getMessagesStorage()
+            boolean r0 = r13.isEmpty()
+            if (r0 != 0) goto L_0x0616
+            org.telegram.messenger.MessagesStorage r0 = r28.getMessagesStorage()
             r1 = 0
-            r0.putCachedPhoneBook(r14, r1, r1)
-        L_0x0605:
+            r0.putCachedPhoneBook(r13, r1, r1)
+        L_0x0616:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.lambda$performSyncPhoneBook$24(java.util.HashMap, boolean, boolean, boolean, boolean, boolean, boolean):void");
@@ -2040,7 +2048,7 @@ public class ContactsController extends BaseController {
             try {
                 HashMap hashMap2 = new HashMap();
                 for (int i = 0; i < this.contacts.size(); i++) {
-                    TLRPC$User user = getMessagesController().getUser(Integer.valueOf(this.contacts.get(i).user_id));
+                    TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.contacts.get(i).user_id));
                     if (user != null) {
                         if (!TextUtils.isEmpty(user.phone)) {
                             hashMap2.put(user.phone, user);
@@ -2089,7 +2097,7 @@ public class ContactsController extends BaseController {
             this.contactsLoaded = true;
         }
         if (!this.delayedContactsUpdate.isEmpty() && this.contactsLoaded) {
-            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Integer, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Integer>) null);
+            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Long, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Long>) null);
             this.delayedContactsUpdate.clear();
         }
         getMessagesStorage().putCachedPhoneBook(hashMap2, false, false);
@@ -2169,7 +2177,7 @@ public class ContactsController extends BaseController {
             this.contactsLoaded = true;
         }
         if (!this.delayedContactsUpdate.isEmpty() && this.contactsLoaded) {
-            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Integer, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Integer>) null);
+            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Long, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Long>) null);
             this.delayedContactsUpdate.clear();
         }
         AndroidUtilities.runOnUIThread(new ContactsController$$ExternalSyntheticLambda28(this, hashMap3, arrayList, hashMap4));
@@ -2199,7 +2207,7 @@ public class ContactsController extends BaseController {
             this.contactsLoaded = true;
         }
         if (!this.delayedContactsUpdate.isEmpty() && this.contactsLoaded) {
-            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Integer, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Integer>) null);
+            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Long, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Long>) null);
             this.delayedContactsUpdate.clear();
         }
         AndroidUtilities.runOnUIThread(new ContactsController$$ExternalSyntheticLambda26(this, hashMap3, arrayList, hashMap4));
@@ -2222,8 +2230,8 @@ public class ContactsController extends BaseController {
         if (z) {
             this.contactsLoaded = true;
         }
-        if (!this.delayedContactsUpdate.isEmpty() && this.contactsLoaded && this.contactsBookLoaded) {
-            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Integer, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Integer>) null);
+        if (!this.delayedContactsUpdate.isEmpty() && this.contactsLoaded) {
+            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Long, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Long>) null);
             this.delayedContactsUpdate.clear();
         }
         AndroidUtilities.runOnUIThread(new ContactsController$$ExternalSyntheticLambda25(this, hashMap3, arrayList, hashMap4));
@@ -2237,37 +2245,32 @@ public class ContactsController extends BaseController {
         return z;
     }
 
-    private int getContactsHash(ArrayList<TLRPC$TL_contact> arrayList) {
-        int i;
-        long j;
+    private long getContactsHash(ArrayList<TLRPC$TL_contact> arrayList) {
         ArrayList arrayList2 = new ArrayList(arrayList);
         Collections.sort(arrayList2, ContactsController$$ExternalSyntheticLambda50.INSTANCE);
         int size = arrayList2.size();
-        long j2 = 0;
-        for (int i2 = -1; i2 < size; i2++) {
-            if (i2 == -1) {
-                j = (j2 * 20261) + 2147483648L;
-                i = getUserConfig().contactsSavedCount;
+        long j = 0;
+        for (int i = -1; i < size; i++) {
+            if (i == -1) {
+                j = MediaDataController.calcHash(j, (long) getUserConfig().contactsSavedCount);
             } else {
-                j = (j2 * 20261) + 2147483648L;
-                i = ((TLRPC$TL_contact) arrayList2.get(i2)).user_id;
+                j = MediaDataController.calcHash(j, ((TLRPC$TL_contact) arrayList2.get(i)).user_id);
             }
-            j2 = (j + ((long) i)) % 2147483648L;
         }
-        return (int) j2;
+        return j;
     }
 
     /* access modifiers changed from: private */
     public static /* synthetic */ int lambda$getContactsHash$25(TLRPC$TL_contact tLRPC$TL_contact, TLRPC$TL_contact tLRPC$TL_contact2) {
-        int i = tLRPC$TL_contact.user_id;
-        int i2 = tLRPC$TL_contact2.user_id;
-        if (i > i2) {
+        long j = tLRPC$TL_contact.user_id;
+        long j2 = tLRPC$TL_contact2.user_id;
+        if (j > j2) {
             return 1;
         }
-        return i < i2 ? -1 : 0;
+        return j < j2 ? -1 : 0;
     }
 
-    public void loadContacts(boolean z, int i) {
+    public void loadContacts(boolean z, long j) {
         synchronized (this.loadContactsSync) {
             this.loadingContacts = true;
         }
@@ -2282,15 +2285,15 @@ public class ContactsController extends BaseController {
             FileLog.d("load contacts from server");
         }
         TLRPC$TL_contacts_getContacts tLRPC$TL_contacts_getContacts = new TLRPC$TL_contacts_getContacts();
-        tLRPC$TL_contacts_getContacts.hash = i;
-        getConnectionsManager().sendRequest(tLRPC$TL_contacts_getContacts, new ContactsController$$ExternalSyntheticLambda55(this, i));
+        tLRPC$TL_contacts_getContacts.hash = j;
+        getConnectionsManager().sendRequest(tLRPC$TL_contacts_getContacts, new ContactsController$$ExternalSyntheticLambda56(this, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadContacts$27(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadContacts$27(long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             TLRPC$contacts_Contacts tLRPC$contacts_Contacts = (TLRPC$contacts_Contacts) tLObject;
-            if (i == 0 || !(tLRPC$contacts_Contacts instanceof TLRPC$TL_contacts_contactsNotModified)) {
+            if (j == 0 || !(tLRPC$contacts_Contacts instanceof TLRPC$TL_contacts_contactsNotModified)) {
                 getUserConfig().contactsSavedCount = tLRPC$contacts_Contacts.saved_count;
                 getUserConfig().saveConfig(false);
                 processLoadedContacts(tLRPC$contacts_Contacts.contacts, tLRPC$contacts_Contacts.users, 0);
@@ -2298,7 +2301,7 @@ public class ContactsController extends BaseController {
             }
             this.contactsLoaded = true;
             if (!this.delayedContactsUpdate.isEmpty() && this.contactsBookLoaded) {
-                applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Integer, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Integer>) null);
+                applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Long, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Long>) null);
                 this.delayedContactsUpdate.clear();
             }
             getUserConfig().lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000);
@@ -2325,12 +2328,12 @@ public class ContactsController extends BaseController {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$processLoadedContacts$37(ArrayList arrayList, int i, ArrayList arrayList2) {
         getMessagesController().putUsers(arrayList, i == 1);
-        SparseArray sparseArray = new SparseArray();
+        LongSparseArray longSparseArray = new LongSparseArray();
         boolean isEmpty = arrayList2.isEmpty();
         if (i == 2 && !this.contacts.isEmpty()) {
             int i2 = 0;
             while (i2 < arrayList2.size()) {
-                if (this.contactsDict.get(Integer.valueOf(((TLRPC$TL_contact) arrayList2.get(i2)).user_id)) != null) {
+                if (this.contactsDict.get(Long.valueOf(((TLRPC$TL_contact) arrayList2.get(i2)).user_id)) != null) {
                     arrayList2.remove(i2);
                     i2--;
                 }
@@ -2339,41 +2342,42 @@ public class ContactsController extends BaseController {
             arrayList2.addAll(this.contacts);
         }
         for (int i3 = 0; i3 < arrayList2.size(); i3++) {
-            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(((TLRPC$TL_contact) arrayList2.get(i3)).user_id));
+            TLRPC$User user = getMessagesController().getUser(Long.valueOf(((TLRPC$TL_contact) arrayList2.get(i3)).user_id));
             if (user != null) {
-                sparseArray.put(user.id, user);
+                longSparseArray.put(user.id, user);
             }
         }
-        Utilities.stageQueue.postRunnable(new ContactsController$$ExternalSyntheticLambda11(this, i, arrayList2, sparseArray, arrayList, isEmpty));
+        Utilities.stageQueue.postRunnable(new ContactsController$$ExternalSyntheticLambda11(this, i, arrayList2, longSparseArray, arrayList, isEmpty));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processLoadedContacts$36(int i, ArrayList arrayList, SparseArray sparseArray, ArrayList arrayList2, boolean z) {
+    public /* synthetic */ void lambda$processLoadedContacts$36(int i, ArrayList arrayList, LongSparseArray longSparseArray, ArrayList arrayList2, boolean z) {
         HashMap hashMap;
         HashMap hashMap2;
+        int i2;
         String str;
-        int i2 = i;
+        int i3 = i;
         ArrayList arrayList3 = arrayList;
-        SparseArray sparseArray2 = sparseArray;
+        LongSparseArray longSparseArray2 = longSparseArray;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("done loading contacts");
         }
-        if (i2 == 1 && (arrayList.isEmpty() || Math.abs((System.currentTimeMillis() / 1000) - ((long) getUserConfig().lastContactsSyncTime)) >= 86400)) {
+        if (i3 == 1 && (arrayList.isEmpty() || Math.abs((System.currentTimeMillis() / 1000) - ((long) getUserConfig().lastContactsSyncTime)) >= 86400)) {
             loadContacts(false, getContactsHash(arrayList3));
             if (arrayList.isEmpty()) {
                 AndroidUtilities.runOnUIThread(new ContactsController$$ExternalSyntheticLambda9(this));
                 return;
             }
         }
-        if (i2 == 0) {
+        if (i3 == 0) {
             getUserConfig().lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000);
             getUserConfig().saveConfig(false);
         }
-        int i3 = 0;
-        while (i3 < arrayList.size()) {
-            TLRPC$TL_contact tLRPC$TL_contact = (TLRPC$TL_contact) arrayList3.get(i3);
-            if (sparseArray2.get(tLRPC$TL_contact.user_id) != null || tLRPC$TL_contact.user_id == getUserConfig().getClientUserId()) {
-                i3++;
+        int i4 = 0;
+        while (i4 < arrayList.size()) {
+            TLRPC$TL_contact tLRPC$TL_contact = (TLRPC$TL_contact) arrayList3.get(i4);
+            if (longSparseArray2.get(tLRPC$TL_contact.user_id) != null || tLRPC$TL_contact.user_id == getUserConfig().getClientUserId()) {
+                i4++;
             } else {
                 loadContacts(false, 0);
                 if (BuildVars.LOGS_ENABLED) {
@@ -2383,11 +2387,11 @@ public class ContactsController extends BaseController {
                 return;
             }
         }
-        if (i2 != 1) {
+        if (i3 != 1) {
             getMessagesStorage().putUsersAndChats(arrayList2, (ArrayList<TLRPC$Chat>) null, true, true);
-            getMessagesStorage().putContacts(arrayList3, i2 != 2);
+            getMessagesStorage().putContacts(arrayList3, i3 != 2);
         }
-        Collections.sort(arrayList3, new ContactsController$$ExternalSyntheticLambda43(sparseArray2));
+        Collections.sort(arrayList3, new ContactsController$$ExternalSyntheticLambda43(longSparseArray2));
         ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap(20, 1.0f, 2);
         HashMap hashMap3 = new HashMap();
         HashMap hashMap4 = new HashMap();
@@ -2401,20 +2405,23 @@ public class ContactsController extends BaseController {
             hashMap2 = null;
             hashMap = null;
         }
-        int i4 = 0;
-        while (i4 < arrayList.size()) {
-            TLRPC$TL_contact tLRPC$TL_contact2 = (TLRPC$TL_contact) arrayList3.get(i4);
-            TLRPC$User tLRPC$User = (TLRPC$User) sparseArray2.get(tLRPC$TL_contact2.user_id);
+        int i5 = 0;
+        while (i5 < arrayList.size()) {
+            TLRPC$TL_contact tLRPC$TL_contact2 = (TLRPC$TL_contact) arrayList3.get(i5);
+            TLRPC$User tLRPC$User = (TLRPC$User) longSparseArray2.get(tLRPC$TL_contact2.user_id);
             if (tLRPC$User != null) {
-                concurrentHashMap.put(Integer.valueOf(tLRPC$TL_contact2.user_id), tLRPC$TL_contact2);
-                if (hashMap2 != null && !TextUtils.isEmpty(tLRPC$User.phone)) {
+                concurrentHashMap.put(Long.valueOf(tLRPC$TL_contact2.user_id), tLRPC$TL_contact2);
+                if (hashMap2 == null || TextUtils.isEmpty(tLRPC$User.phone)) {
+                    i2 = 0;
+                } else {
                     hashMap2.put(tLRPC$User.phone, tLRPC$TL_contact2);
                     String str2 = tLRPC$User.phone;
+                    i2 = 0;
                     hashMap.put(str2.substring(Math.max(0, str2.length() - 7)), tLRPC$TL_contact2);
                 }
                 String firstName = UserObject.getFirstName(tLRPC$User);
                 if (firstName.length() > 1) {
-                    firstName = firstName.substring(0, 1);
+                    firstName = firstName.substring(i2, 1);
                 }
                 if (firstName.length() == 0) {
                     str = "#";
@@ -2442,15 +2449,15 @@ public class ContactsController extends BaseController {
                     arrayList7.add(tLRPC$TL_contact2);
                 }
             }
-            i4++;
+            i5++;
             arrayList3 = arrayList;
-            sparseArray2 = sparseArray;
+            longSparseArray2 = longSparseArray;
         }
         Collections.sort(arrayList4, ContactsController$$ExternalSyntheticLambda47.INSTANCE);
         Collections.sort(arrayList5, ContactsController$$ExternalSyntheticLambda46.INSTANCE);
         AndroidUtilities.runOnUIThread(new ContactsController$$ExternalSyntheticLambda23(this, arrayList, concurrentHashMap, hashMap3, hashMap4, arrayList4, arrayList5, i, z));
         if (!this.delayedContactsUpdate.isEmpty() && this.contactsLoaded && this.contactsBookLoaded) {
-            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Integer, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Integer>) null);
+            applyContactsUpdates(this.delayedContactsUpdate, (ConcurrentHashMap<Long, TLRPC$User>) null, (ArrayList<TLRPC$TL_contact>) null, (ArrayList<Long>) null);
             this.delayedContactsUpdate.clear();
         }
         if (hashMap2 != null) {
@@ -2537,8 +2544,8 @@ public class ContactsController extends BaseController {
         this.contactsByShortPhone = hashMap2;
     }
 
-    public boolean isContact(int i) {
-        return this.contactsDict.get(Integer.valueOf(i)) != null;
+    public boolean isContact(long j) {
+        return this.contactsDict.get(Long.valueOf(j)) != null;
     }
 
     public void reloadContactsStatusesMaybe() {
@@ -2569,7 +2576,7 @@ public class ContactsController extends BaseController {
     public /* synthetic */ void lambda$mergePhonebookAndTelegramContacts$41(ArrayList arrayList, HashMap hashMap, HashMap hashMap2, ArrayList arrayList2) {
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
-            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(((TLRPC$TL_contact) arrayList.get(i)).user_id));
+            TLRPC$User user = getMessagesController().getUser(Long.valueOf(((TLRPC$TL_contact) arrayList.get(i)).user_id));
             if (user != null && !TextUtils.isEmpty(user.phone)) {
                 String str = user.phone;
                 Contact contact = (Contact) hashMap.get(str.substring(Math.max(0, str.length() - 7)));
@@ -2650,7 +2657,7 @@ public class ContactsController extends BaseController {
         int size = this.contacts.size();
         for (int i = 0; i < size; i++) {
             TLRPC$TL_contact tLRPC$TL_contact = this.contacts.get(i);
-            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(tLRPC$TL_contact.user_id));
+            TLRPC$User user = getMessagesController().getUser(Long.valueOf(tLRPC$TL_contact.user_id));
             if (user != null && !TextUtils.isEmpty(user.phone)) {
                 hashMap.put(user.phone, tLRPC$TL_contact);
             }
@@ -2701,7 +2708,7 @@ public class ContactsController extends BaseController {
         ArrayList<String> arrayList = new ArrayList<>();
         for (int i = 0; i < this.contacts.size(); i++) {
             TLRPC$TL_contact tLRPC$TL_contact = this.contacts.get(i);
-            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(tLRPC$TL_contact.user_id));
+            TLRPC$User user = getMessagesController().getUser(Long.valueOf(tLRPC$TL_contact.user_id));
             if (user != null) {
                 String firstName = UserObject.getFirstName(user);
                 if (firstName.length() > 1) {
@@ -2732,7 +2739,7 @@ public class ContactsController extends BaseController {
 
     /* access modifiers changed from: private */
     public /* synthetic */ int lambda$buildContactsSectionsArrays$43(TLRPC$TL_contact tLRPC$TL_contact, TLRPC$TL_contact tLRPC$TL_contact2) {
-        return UserObject.getFirstName(getMessagesController().getUser(Integer.valueOf(tLRPC$TL_contact.user_id))).compareTo(UserObject.getFirstName(getMessagesController().getUser(Integer.valueOf(tLRPC$TL_contact2.user_id))));
+        return UserObject.getFirstName(getMessagesController().getUser(Long.valueOf(tLRPC$TL_contact.user_id))).compareTo(UserObject.getFirstName(getMessagesController().getUser(Long.valueOf(tLRPC$TL_contact2.user_id))));
     }
 
     /* access modifiers changed from: private */
@@ -2787,7 +2794,7 @@ public class ContactsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x00bc  */
     /* JADX WARNING: Removed duplicated region for block: B:46:? A[RETURN, SYNTHETIC] */
     /* renamed from: performWriteContactsToPhoneBookInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -2796,108 +2803,109 @@ public class ContactsController extends BaseController {
             r12 = this;
             java.lang.String r0 = "contacts_updated_v7"
             r1 = 0
-            boolean r2 = r12.hasContactsPermission()     // Catch:{ Exception -> 0x00ac }
+            boolean r2 = r12.hasContactsPermission()     // Catch:{ Exception -> 0x00b0 }
             if (r2 != 0) goto L_0x000a
             return
         L_0x000a:
-            int r2 = r12.currentAccount     // Catch:{ Exception -> 0x00ac }
-            android.content.SharedPreferences r2 = org.telegram.messenger.MessagesController.getMainSettings(r2)     // Catch:{ Exception -> 0x00ac }
+            int r2 = r12.currentAccount     // Catch:{ Exception -> 0x00b0 }
+            android.content.SharedPreferences r2 = org.telegram.messenger.MessagesController.getMainSettings(r2)     // Catch:{ Exception -> 0x00b0 }
             r3 = 0
-            boolean r4 = r2.getBoolean(r0, r3)     // Catch:{ Exception -> 0x00ac }
+            boolean r4 = r2.getBoolean(r0, r3)     // Catch:{ Exception -> 0x00b0 }
             r5 = 1
             r4 = r4 ^ r5
             if (r4 == 0) goto L_0x0024
-            android.content.SharedPreferences$Editor r2 = r2.edit()     // Catch:{ Exception -> 0x00ac }
-            android.content.SharedPreferences$Editor r0 = r2.putBoolean(r0, r5)     // Catch:{ Exception -> 0x00ac }
-            r0.commit()     // Catch:{ Exception -> 0x00ac }
+            android.content.SharedPreferences$Editor r2 = r2.edit()     // Catch:{ Exception -> 0x00b0 }
+            android.content.SharedPreferences$Editor r0 = r2.putBoolean(r0, r5)     // Catch:{ Exception -> 0x00b0 }
+            r0.commit()     // Catch:{ Exception -> 0x00b0 }
         L_0x0024:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00ac }
-            android.content.ContentResolver r6 = r0.getContentResolver()     // Catch:{ Exception -> 0x00ac }
-            android.net.Uri r0 = android.provider.ContactsContract.RawContacts.CONTENT_URI     // Catch:{ Exception -> 0x00ac }
-            android.net.Uri$Builder r0 = r0.buildUpon()     // Catch:{ Exception -> 0x00ac }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00b0 }
+            android.content.ContentResolver r6 = r0.getContentResolver()     // Catch:{ Exception -> 0x00b0 }
+            android.net.Uri r0 = android.provider.ContactsContract.RawContacts.CONTENT_URI     // Catch:{ Exception -> 0x00b0 }
+            android.net.Uri$Builder r0 = r0.buildUpon()     // Catch:{ Exception -> 0x00b0 }
             java.lang.String r2 = "account_name"
-            android.accounts.Account r7 = r12.systemAccount     // Catch:{ Exception -> 0x00ac }
-            java.lang.String r7 = r7.name     // Catch:{ Exception -> 0x00ac }
-            android.net.Uri$Builder r0 = r0.appendQueryParameter(r2, r7)     // Catch:{ Exception -> 0x00ac }
+            android.accounts.Account r7 = r12.systemAccount     // Catch:{ Exception -> 0x00b0 }
+            java.lang.String r7 = r7.name     // Catch:{ Exception -> 0x00b0 }
+            android.net.Uri$Builder r0 = r0.appendQueryParameter(r2, r7)     // Catch:{ Exception -> 0x00b0 }
             java.lang.String r2 = "account_type"
-            android.accounts.Account r7 = r12.systemAccount     // Catch:{ Exception -> 0x00ac }
-            java.lang.String r7 = r7.type     // Catch:{ Exception -> 0x00ac }
-            android.net.Uri$Builder r0 = r0.appendQueryParameter(r2, r7)     // Catch:{ Exception -> 0x00ac }
-            android.net.Uri r7 = r0.build()     // Catch:{ Exception -> 0x00ac }
+            android.accounts.Account r7 = r12.systemAccount     // Catch:{ Exception -> 0x00b0 }
+            java.lang.String r7 = r7.type     // Catch:{ Exception -> 0x00b0 }
+            android.net.Uri$Builder r0 = r0.appendQueryParameter(r2, r7)     // Catch:{ Exception -> 0x00b0 }
+            android.net.Uri r7 = r0.build()     // Catch:{ Exception -> 0x00b0 }
             r0 = 2
-            java.lang.String[] r8 = new java.lang.String[r0]     // Catch:{ Exception -> 0x00ac }
+            java.lang.String[] r8 = new java.lang.String[r0]     // Catch:{ Exception -> 0x00b0 }
             java.lang.String r0 = "_id"
-            r8[r3] = r0     // Catch:{ Exception -> 0x00ac }
+            r8[r3] = r0     // Catch:{ Exception -> 0x00b0 }
             java.lang.String r0 = "sync2"
-            r8[r5] = r0     // Catch:{ Exception -> 0x00ac }
+            r8[r5] = r0     // Catch:{ Exception -> 0x00b0 }
             r9 = 0
             r10 = 0
             r11 = 0
-            android.database.Cursor r0 = r6.query(r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x00ac }
-            org.telegram.messenger.support.SparseLongArray r2 = new org.telegram.messenger.support.SparseLongArray     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
-            r2.<init>()     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
-            if (r0 == 0) goto L_0x00a0
+            android.database.Cursor r0 = r6.query(r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x00b0 }
+            androidx.collection.LongSparseArray r2 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x00ab, all -> 0x00a8 }
+            r2.<init>()     // Catch:{ Exception -> 0x00ab, all -> 0x00a8 }
+            if (r0 == 0) goto L_0x00a4
         L_0x0061:
-            boolean r6 = r0.moveToNext()     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
-            if (r6 == 0) goto L_0x0073
-            int r6 = r0.getInt(r5)     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
-            long r7 = r0.getLong(r3)     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
-            r2.put(r6, r7)     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
+            boolean r6 = r0.moveToNext()     // Catch:{ Exception -> 0x00ab, all -> 0x00a8 }
+            if (r6 == 0) goto L_0x0077
+            long r6 = r0.getLong(r5)     // Catch:{ Exception -> 0x00ab, all -> 0x00a8 }
+            long r8 = r0.getLong(r3)     // Catch:{ Exception -> 0x00ab, all -> 0x00a8 }
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x00ab, all -> 0x00a8 }
+            r2.put(r6, r8)     // Catch:{ Exception -> 0x00ab, all -> 0x00a8 }
             goto L_0x0061
-        L_0x0073:
-            r0.close()     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
-        L_0x0076:
-            int r0 = r13.size()     // Catch:{ Exception -> 0x00ac }
-            if (r3 >= r0) goto L_0x00a1
-            java.lang.Object r0 = r13.get(r3)     // Catch:{ Exception -> 0x00ac }
-            org.telegram.tgnet.TLRPC$TL_contact r0 = (org.telegram.tgnet.TLRPC$TL_contact) r0     // Catch:{ Exception -> 0x00ac }
-            if (r4 != 0) goto L_0x008c
-            int r5 = r0.user_id     // Catch:{ Exception -> 0x00ac }
-            int r5 = r2.indexOfKey(r5)     // Catch:{ Exception -> 0x00ac }
-            if (r5 >= 0) goto L_0x009d
-        L_0x008c:
-            org.telegram.messenger.MessagesController r5 = r12.getMessagesController()     // Catch:{ Exception -> 0x00ac }
-            int r0 = r0.user_id     // Catch:{ Exception -> 0x00ac }
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x00ac }
-            org.telegram.tgnet.TLRPC$User r0 = r5.getUser(r0)     // Catch:{ Exception -> 0x00ac }
-            r12.addContactToPhoneBook(r0, r4)     // Catch:{ Exception -> 0x00ac }
-        L_0x009d:
-            int r3 = r3 + 1
-            goto L_0x0076
-        L_0x00a0:
-            r1 = r0
+        L_0x0077:
+            r0.close()     // Catch:{ Exception -> 0x00ab, all -> 0x00a8 }
+        L_0x007a:
+            int r0 = r13.size()     // Catch:{ Exception -> 0x00b0 }
+            if (r3 >= r0) goto L_0x00a5
+            java.lang.Object r0 = r13.get(r3)     // Catch:{ Exception -> 0x00b0 }
+            org.telegram.tgnet.TLRPC$TL_contact r0 = (org.telegram.tgnet.TLRPC$TL_contact) r0     // Catch:{ Exception -> 0x00b0 }
+            if (r4 != 0) goto L_0x0090
+            long r5 = r0.user_id     // Catch:{ Exception -> 0x00b0 }
+            int r5 = r2.indexOfKey(r5)     // Catch:{ Exception -> 0x00b0 }
+            if (r5 >= 0) goto L_0x00a1
+        L_0x0090:
+            org.telegram.messenger.MessagesController r5 = r12.getMessagesController()     // Catch:{ Exception -> 0x00b0 }
+            long r6 = r0.user_id     // Catch:{ Exception -> 0x00b0 }
+            java.lang.Long r0 = java.lang.Long.valueOf(r6)     // Catch:{ Exception -> 0x00b0 }
+            org.telegram.tgnet.TLRPC$User r0 = r5.getUser(r0)     // Catch:{ Exception -> 0x00b0 }
+            r12.addContactToPhoneBook(r0, r4)     // Catch:{ Exception -> 0x00b0 }
         L_0x00a1:
-            if (r1 == 0) goto L_0x00b5
-            goto L_0x00b2
+            int r3 = r3 + 1
+            goto L_0x007a
         L_0x00a4:
+            r1 = r0
+        L_0x00a5:
+            if (r1 == 0) goto L_0x00b9
+            goto L_0x00b6
+        L_0x00a8:
             r13 = move-exception
             r1 = r0
-            goto L_0x00b6
-        L_0x00a7:
+            goto L_0x00ba
+        L_0x00ab:
             r13 = move-exception
             r1 = r0
-            goto L_0x00ad
-        L_0x00aa:
+            goto L_0x00b1
+        L_0x00ae:
             r13 = move-exception
-            goto L_0x00b6
-        L_0x00ac:
+            goto L_0x00ba
+        L_0x00b0:
             r13 = move-exception
-        L_0x00ad:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)     // Catch:{ all -> 0x00aa }
-            if (r1 == 0) goto L_0x00b5
-        L_0x00b2:
-            r1.close()
-        L_0x00b5:
-            return
+        L_0x00b1:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)     // Catch:{ all -> 0x00ae }
+            if (r1 == 0) goto L_0x00b9
         L_0x00b6:
-            if (r1 == 0) goto L_0x00bb
             r1.close()
-        L_0x00bb:
-            goto L_0x00bd
-        L_0x00bc:
+        L_0x00b9:
+            return
+        L_0x00ba:
+            if (r1 == 0) goto L_0x00bf
+            r1.close()
+        L_0x00bf:
+            goto L_0x00c1
+        L_0x00c0:
             throw r13
-        L_0x00bd:
-            goto L_0x00bc
+        L_0x00c1:
+            goto L_0x00c0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.lambda$performWriteContactsToPhoneBook$45(java.util.ArrayList):void");
     }
@@ -2906,20 +2914,20 @@ public class ContactsController extends BaseController {
         Utilities.phoneBookQueue.postRunnable(new ContactsController$$ExternalSyntheticLambda18(this, new ArrayList(this.contacts)));
     }
 
-    private void applyContactsUpdates(ArrayList<Integer> arrayList, ConcurrentHashMap<Integer, TLRPC$User> concurrentHashMap, ArrayList<TLRPC$TL_contact> arrayList2, ArrayList<Integer> arrayList3) {
+    private void applyContactsUpdates(ArrayList<Long> arrayList, ConcurrentHashMap<Long, TLRPC$User> concurrentHashMap, ArrayList<TLRPC$TL_contact> arrayList2, ArrayList<Long> arrayList3) {
         int indexOf;
         int indexOf2;
         if (arrayList2 == null || arrayList3 == null) {
             arrayList2 = new ArrayList<>();
             arrayList3 = new ArrayList<>();
             for (int i = 0; i < arrayList.size(); i++) {
-                Integer num = arrayList.get(i);
-                if (num.intValue() > 0) {
+                Long l = arrayList.get(i);
+                if (l.longValue() > 0) {
                     TLRPC$TL_contact tLRPC$TL_contact = new TLRPC$TL_contact();
-                    tLRPC$TL_contact.user_id = num.intValue();
+                    tLRPC$TL_contact.user_id = l.longValue();
                     arrayList2.add(tLRPC$TL_contact);
-                } else if (num.intValue() < 0) {
-                    arrayList3.add(Integer.valueOf(-num.intValue()));
+                } else if (l.longValue() < 0) {
+                    arrayList3.add(Long.valueOf(-l.longValue()));
                 }
             }
         }
@@ -2937,10 +2945,10 @@ public class ContactsController extends BaseController {
             }
             TLRPC$TL_contact tLRPC$TL_contact2 = arrayList2.get(i2);
             if (concurrentHashMap != null) {
-                tLRPC$User = concurrentHashMap.get(Integer.valueOf(tLRPC$TL_contact2.user_id));
+                tLRPC$User = concurrentHashMap.get(Long.valueOf(tLRPC$TL_contact2.user_id));
             }
             if (tLRPC$User == null) {
-                tLRPC$User = getMessagesController().getUser(Integer.valueOf(tLRPC$TL_contact2.user_id));
+                tLRPC$User = getMessagesController().getUser(Long.valueOf(tLRPC$TL_contact2.user_id));
             } else {
                 getMessagesController().putUser(tLRPC$User, true);
             }
@@ -2959,11 +2967,11 @@ public class ContactsController extends BaseController {
             i2++;
         }
         for (int i3 = 0; i3 < arrayList3.size(); i3++) {
-            Integer num2 = arrayList3.get(i3);
-            Utilities.phoneBookQueue.postRunnable(new ContactsController$$ExternalSyntheticLambda15(this, num2));
-            TLRPC$User tLRPC$User2 = concurrentHashMap != null ? concurrentHashMap.get(num2) : null;
+            Long l2 = arrayList3.get(i3);
+            Utilities.phoneBookQueue.postRunnable(new ContactsController$$ExternalSyntheticLambda15(this, l2));
+            TLRPC$User tLRPC$User2 = concurrentHashMap != null ? concurrentHashMap.get(l2) : null;
             if (tLRPC$User2 == null) {
-                tLRPC$User2 = getMessagesController().getUser(num2);
+                tLRPC$User2 = getMessagesController().getUser(l2);
             } else {
                 getMessagesController().putUser(tLRPC$User2, true);
             }
@@ -2991,8 +2999,8 @@ public class ContactsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$applyContactsUpdates$46(Integer num) {
-        deleteContactFromPhoneBook(num.intValue());
+    public /* synthetic */ void lambda$applyContactsUpdates$46(Long l) {
+        deleteContactFromPhoneBook(l.longValue());
     }
 
     /* access modifiers changed from: private */
@@ -3004,17 +3012,17 @@ public class ContactsController extends BaseController {
     public /* synthetic */ void lambda$applyContactsUpdates$48(ArrayList arrayList, ArrayList arrayList2) {
         for (int i = 0; i < arrayList.size(); i++) {
             TLRPC$TL_contact tLRPC$TL_contact = (TLRPC$TL_contact) arrayList.get(i);
-            if (this.contactsDict.get(Integer.valueOf(tLRPC$TL_contact.user_id)) == null) {
+            if (this.contactsDict.get(Long.valueOf(tLRPC$TL_contact.user_id)) == null) {
                 this.contacts.add(tLRPC$TL_contact);
-                this.contactsDict.put(Integer.valueOf(tLRPC$TL_contact.user_id), tLRPC$TL_contact);
+                this.contactsDict.put(Long.valueOf(tLRPC$TL_contact.user_id), tLRPC$TL_contact);
             }
         }
         for (int i2 = 0; i2 < arrayList2.size(); i2++) {
-            Integer num = (Integer) arrayList2.get(i2);
-            TLRPC$TL_contact tLRPC$TL_contact2 = this.contactsDict.get(num);
+            Long l = (Long) arrayList2.get(i2);
+            TLRPC$TL_contact tLRPC$TL_contact2 = this.contactsDict.get(l);
             if (tLRPC$TL_contact2 != null) {
                 this.contacts.remove(tLRPC$TL_contact2);
-                this.contactsDict.remove(num);
+                this.contactsDict.remove(l);
             }
         }
         if (!arrayList.isEmpty()) {
@@ -3026,24 +3034,24 @@ public class ContactsController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.contactsDidLoad, new Object[0]);
     }
 
-    public void processContactsUpdates(ArrayList<Integer> arrayList, ConcurrentHashMap<Integer, TLRPC$User> concurrentHashMap) {
+    public void processContactsUpdates(ArrayList<Long> arrayList, ConcurrentHashMap<Long, TLRPC$User> concurrentHashMap) {
         int indexOf;
         int indexOf2;
         ArrayList arrayList2 = new ArrayList();
         ArrayList arrayList3 = new ArrayList();
-        Iterator<Integer> it = arrayList.iterator();
+        Iterator<Long> it = arrayList.iterator();
         while (it.hasNext()) {
-            Integer next = it.next();
-            if (next.intValue() > 0) {
+            Long next = it.next();
+            if (next.longValue() > 0) {
                 TLRPC$TL_contact tLRPC$TL_contact = new TLRPC$TL_contact();
-                tLRPC$TL_contact.user_id = next.intValue();
+                tLRPC$TL_contact.user_id = next.longValue();
                 arrayList2.add(tLRPC$TL_contact);
-                if (!this.delayedContactsUpdate.isEmpty() && (indexOf2 = this.delayedContactsUpdate.indexOf(Integer.valueOf(-next.intValue()))) != -1) {
+                if (!this.delayedContactsUpdate.isEmpty() && (indexOf2 = this.delayedContactsUpdate.indexOf(Long.valueOf(-next.longValue()))) != -1) {
                     this.delayedContactsUpdate.remove(indexOf2);
                 }
-            } else if (next.intValue() < 0) {
-                arrayList3.add(Integer.valueOf(-next.intValue()));
-                if (!this.delayedContactsUpdate.isEmpty() && (indexOf = this.delayedContactsUpdate.indexOf(Integer.valueOf(-next.intValue()))) != -1) {
+            } else if (next.longValue() < 0) {
+                arrayList3.add(Long.valueOf(-next.longValue()));
+                if (!this.delayedContactsUpdate.isEmpty() && (indexOf = this.delayedContactsUpdate.indexOf(Long.valueOf(-next.longValue()))) != -1) {
                     this.delayedContactsUpdate.remove(indexOf);
                 }
             }
@@ -3086,7 +3094,7 @@ public class ContactsController extends BaseController {
         newInsert.withValue("account_name", this.systemAccount.name);
         newInsert.withValue("account_type", this.systemAccount.type);
         newInsert.withValue("sync1", TextUtils.isEmpty(tLRPC$User.phone) ? "" : tLRPC$User.phone);
-        newInsert.withValue("sync2", Integer.valueOf(tLRPC$User.id));
+        newInsert.withValue("sync2", Long.valueOf(tLRPC$User.id));
         arrayList.add(newInsert.build());
         ContentProviderOperation.Builder newInsert2 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
         newInsert2.withValueBackReference("raw_contact_id", 0);
@@ -3102,26 +3110,26 @@ public class ContactsController extends BaseController {
         ContentProviderOperation.Builder newInsert3 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
         newInsert3.withValueBackReference("raw_contact_id", 0);
         newInsert3.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile");
-        newInsert3.withValue("data1", Integer.valueOf(tLRPC$User.id));
+        newInsert3.withValue("data1", Long.valueOf(tLRPC$User.id));
         newInsert3.withValue("data2", "Telegram Profile");
         newInsert3.withValue("data3", LocaleController.formatString("ContactShortcutMessage", NUM, str));
-        newInsert3.withValue("data4", Integer.valueOf(tLRPC$User.id));
+        newInsert3.withValue("data4", Long.valueOf(tLRPC$User.id));
         arrayList.add(newInsert3.build());
         ContentProviderOperation.Builder newInsert4 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
         newInsert4.withValueBackReference("raw_contact_id", 0);
         newInsert4.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call");
-        newInsert4.withValue("data1", Integer.valueOf(tLRPC$User.id));
+        newInsert4.withValue("data1", Long.valueOf(tLRPC$User.id));
         newInsert4.withValue("data2", "Telegram Voice Call");
         newInsert4.withValue("data3", LocaleController.formatString("ContactShortcutVoiceCall", NUM, str));
-        newInsert4.withValue("data4", Integer.valueOf(tLRPC$User.id));
+        newInsert4.withValue("data4", Long.valueOf(tLRPC$User.id));
         arrayList.add(newInsert4.build());
         ContentProviderOperation.Builder newInsert5 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
         newInsert5.withValueBackReference("raw_contact_id", 0);
         newInsert5.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video");
-        newInsert5.withValue("data1", Integer.valueOf(tLRPC$User.id));
+        newInsert5.withValue("data1", Long.valueOf(tLRPC$User.id));
         newInsert5.withValue("data2", "Telegram Video Call");
         newInsert5.withValue("data3", LocaleController.formatString("ContactShortcutVideoCall", NUM, str));
-        newInsert5.withValue("data4", Integer.valueOf(tLRPC$User.id));
+        newInsert5.withValue("data4", Long.valueOf(tLRPC$User.id));
         arrayList.add(newInsert5.build());
         try {
             ContentProviderResult[] applyBatch = contentResolver.applyBatch("com.android.contacts", arrayList);
@@ -3136,7 +3144,7 @@ public class ContactsController extends BaseController {
         return j;
     }
 
-    private void deleteContactFromPhoneBook(int i) {
+    private void deleteContactFromPhoneBook(long j) {
         if (hasContactsPermission()) {
             synchronized (this.observerLock) {
                 this.ignoreChanges = true;
@@ -3144,7 +3152,7 @@ public class ContactsController extends BaseController {
             try {
                 ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
                 Uri build = ContactsContract.RawContacts.CONTENT_URI.buildUpon().appendQueryParameter("caller_is_syncadapter", "true").appendQueryParameter("account_name", this.systemAccount.name).appendQueryParameter("account_type", this.systemAccount.type).build();
-                contentResolver.delete(build, "sync2 = " + i, (String[]) null);
+                contentResolver.delete(build, "sync2 = " + j, (String[]) null);
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
@@ -3225,11 +3233,11 @@ public class ContactsController extends BaseController {
     public /* synthetic */ void lambda$addContact$51(TLRPC$Updates tLRPC$Updates) {
         for (int i = 0; i < tLRPC$Updates.users.size(); i++) {
             TLRPC$User tLRPC$User = tLRPC$Updates.users.get(i);
-            if (tLRPC$User.contact && this.contactsDict.get(Integer.valueOf(tLRPC$User.id)) == null) {
+            if (tLRPC$User.contact && this.contactsDict.get(Long.valueOf(tLRPC$User.id)) == null) {
                 TLRPC$TL_contact tLRPC$TL_contact = new TLRPC$TL_contact();
                 tLRPC$TL_contact.user_id = tLRPC$User.id;
                 this.contacts.add(tLRPC$TL_contact);
-                this.contactsDict.put(Integer.valueOf(tLRPC$TL_contact.user_id), tLRPC$TL_contact);
+                this.contactsDict.put(Long.valueOf(tLRPC$TL_contact.user_id), tLRPC$TL_contact);
             }
         }
         buildContactsSectionsArrays(true);
@@ -3240,13 +3248,13 @@ public class ContactsController extends BaseController {
         if (arrayList != null && !arrayList.isEmpty()) {
             TLRPC$TL_contacts_deleteContacts tLRPC$TL_contacts_deleteContacts = new TLRPC$TL_contacts_deleteContacts();
             ArrayList arrayList2 = new ArrayList();
-            Iterator<TLRPC$User> it = arrayList.iterator();
-            while (it.hasNext()) {
-                TLRPC$User next = it.next();
-                TLRPC$InputUser inputUser = getMessagesController().getInputUser(next);
+            int size = arrayList.size();
+            for (int i = 0; i < size; i++) {
+                TLRPC$User tLRPC$User = arrayList.get(i);
+                TLRPC$InputUser inputUser = getMessagesController().getInputUser(tLRPC$User);
                 if (inputUser != null) {
-                    next.contact = false;
-                    arrayList2.add(Integer.valueOf(next.id));
+                    tLRPC$User.contact = false;
+                    arrayList2.add(Long.valueOf(tLRPC$User.id));
                     tLRPC$TL_contacts_deleteContacts.id.add(inputUser);
                 }
             }
@@ -3289,17 +3297,17 @@ public class ContactsController extends BaseController {
         boolean z2 = false;
         while (it.hasNext()) {
             TLRPC$User tLRPC$User = (TLRPC$User) it.next();
-            TLRPC$TL_contact tLRPC$TL_contact = this.contactsDict.get(Integer.valueOf(tLRPC$User.id));
+            TLRPC$TL_contact tLRPC$TL_contact = this.contactsDict.get(Long.valueOf(tLRPC$User.id));
             if (tLRPC$TL_contact != null) {
                 this.contacts.remove(tLRPC$TL_contact);
-                this.contactsDict.remove(Integer.valueOf(tLRPC$User.id));
+                this.contactsDict.remove(Long.valueOf(tLRPC$User.id));
                 z2 = true;
             }
         }
         if (z2) {
             buildContactsSectionsArrays(false);
         }
-        getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, 1);
+        getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_NAME));
         getNotificationCenter().postNotificationName(NotificationCenter.contactsDidLoad, new Object[0]);
         if (z) {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 1, LocaleController.formatString("DeletedFromYourContacts", NUM, str));
@@ -3341,7 +3349,7 @@ public class ContactsController extends BaseController {
                     } else if (tLRPC$UserStatus instanceof TLRPC$TL_userStatusLastMonth) {
                         tLRPC$UserStatus.expires = -102;
                     }
-                    TLRPC$User user = getMessagesController().getUser(Integer.valueOf(tLRPC$TL_contactStatus.user_id));
+                    TLRPC$User user = getMessagesController().getUser(Long.valueOf(tLRPC$TL_contactStatus.user_id));
                     if (user != null) {
                         user.status = tLRPC$TL_contactStatus.status;
                     }
@@ -3351,7 +3359,7 @@ public class ContactsController extends BaseController {
             }
             getMessagesStorage().updateUsers(arrayList, true, true, true);
         }
-        getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, 4);
+        getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_STATUS));
     }
 
     public void loadPrivacySettings() {
@@ -3396,7 +3404,7 @@ public class ContactsController extends BaseController {
                             tLRPC$TL_account_getPrivacy.key = new TLRPC$TL_inputPrivacyKeyAddedByPhone();
                             break;
                     }
-                    getConnectionsManager().sendRequest(tLRPC$TL_account_getPrivacy, new ContactsController$$ExternalSyntheticLambda56(this, i));
+                    getConnectionsManager().sendRequest(tLRPC$TL_account_getPrivacy, new ContactsController$$ExternalSyntheticLambda55(this, i));
                 }
                 i++;
             } else {
@@ -3560,275 +3568,281 @@ public class ContactsController extends BaseController {
         reloadContactsStatuses();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x00cc A[Catch:{ Exception -> 0x027b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0119 A[SYNTHETIC, Splitter:B:17:0x0119] */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x0270 A[Catch:{ Exception -> 0x027b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:13:0x00d0 A[Catch:{ Exception -> 0x0286 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0120 A[SYNTHETIC, Splitter:B:17:0x0120] */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x027b A[Catch:{ Exception -> 0x0286 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void createOrUpdateConnectionServiceContact(int r25, java.lang.String r26, java.lang.String r27) {
+    public void createOrUpdateConnectionServiceContact(long r25, java.lang.String r27, java.lang.String r28) {
         /*
             r24 = this;
             r1 = r24
-            r0 = r25
-            r2 = r26
-            r3 = r27
-            java.lang.String r4 = "raw_contact_id=? AND mimetype=?"
-            java.lang.String r5 = "vnd.android.cursor.item/group_membership"
-            java.lang.String r6 = "TelegramConnectionService"
-            java.lang.String r7 = "true"
-            java.lang.String r8 = "caller_is_syncadapter"
-            java.lang.String r9 = "mimetype"
-            java.lang.String r10 = ""
-            java.lang.String r11 = "raw_contact_id"
-            boolean r12 = r24.hasContactsPermission()
-            if (r12 != 0) goto L_0x001f
+            r2 = r25
+            r0 = r27
+            r4 = r28
+            java.lang.String r5 = "raw_contact_id=? AND mimetype=?"
+            java.lang.String r6 = "vnd.android.cursor.item/group_membership"
+            java.lang.String r7 = "TelegramConnectionService"
+            java.lang.String r8 = "true"
+            java.lang.String r9 = "caller_is_syncadapter"
+            java.lang.String r10 = "mimetype"
+            java.lang.String r11 = ""
+            java.lang.String r12 = "raw_contact_id"
+            boolean r13 = r24.hasContactsPermission()
+            if (r13 != 0) goto L_0x001f
             return
         L_0x001f:
-            android.content.Context r12 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x027b }
-            android.content.ContentResolver r12 = r12.getContentResolver()     // Catch:{ Exception -> 0x027b }
-            java.util.ArrayList r15 = new java.util.ArrayList     // Catch:{ Exception -> 0x027b }
-            r15.<init>()     // Catch:{ Exception -> 0x027b }
-            android.net.Uri r13 = android.provider.ContactsContract.Groups.CONTENT_URI     // Catch:{ Exception -> 0x027b }
-            android.net.Uri$Builder r13 = r13.buildUpon()     // Catch:{ Exception -> 0x027b }
-            android.net.Uri$Builder r13 = r13.appendQueryParameter(r8, r7)     // Catch:{ Exception -> 0x027b }
-            android.net.Uri r14 = r13.build()     // Catch:{ Exception -> 0x027b }
-            android.net.Uri r13 = android.provider.ContactsContract.RawContacts.CONTENT_URI     // Catch:{ Exception -> 0x027b }
-            android.net.Uri$Builder r13 = r13.buildUpon()     // Catch:{ Exception -> 0x027b }
-            android.net.Uri$Builder r7 = r13.appendQueryParameter(r8, r7)     // Catch:{ Exception -> 0x027b }
-            android.net.Uri r7 = r7.build()     // Catch:{ Exception -> 0x027b }
-            r8 = 1
-            java.lang.String[] r13 = new java.lang.String[r8]     // Catch:{ Exception -> 0x027b }
+            android.content.Context r13 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentResolver r13 = r13.getContentResolver()     // Catch:{ Exception -> 0x0286 }
+            java.util.ArrayList r15 = new java.util.ArrayList     // Catch:{ Exception -> 0x0286 }
+            r15.<init>()     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r14 = android.provider.ContactsContract.Groups.CONTENT_URI     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri$Builder r14 = r14.buildUpon()     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri$Builder r14 = r14.appendQueryParameter(r9, r8)     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r14 = r14.build()     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r16 = android.provider.ContactsContract.RawContacts.CONTENT_URI     // Catch:{ Exception -> 0x0286 }
+            r17 = r14
+            android.net.Uri$Builder r14 = r16.buildUpon()     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri$Builder r8 = r14.appendQueryParameter(r9, r8)     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r8 = r8.build()     // Catch:{ Exception -> 0x0286 }
+            r9 = 1
+            java.lang.String[] r14 = new java.lang.String[r9]     // Catch:{ Exception -> 0x0286 }
             java.lang.String r16 = "_id"
-            r8 = 0
-            r13[r8] = r16     // Catch:{ Exception -> 0x027b }
-            java.lang.String r16 = "title=? AND account_type=? AND account_name=?"
-            r8 = 3
-            r19 = r9
-            java.lang.String[] r9 = new java.lang.String[r8]     // Catch:{ Exception -> 0x027b }
-            r17 = 0
-            r9[r17] = r6     // Catch:{ Exception -> 0x027b }
-            android.accounts.Account r8 = r1.systemAccount     // Catch:{ Exception -> 0x027b }
-            r17 = r13
-            java.lang.String r13 = r8.type     // Catch:{ Exception -> 0x027b }
-            r18 = 1
-            r9[r18] = r13     // Catch:{ Exception -> 0x027b }
-            java.lang.String r8 = r8.name     // Catch:{ Exception -> 0x027b }
-            r13 = 2
-            r9[r13] = r8     // Catch:{ Exception -> 0x027b }
-            r18 = 0
-            r8 = r17
-            r3 = 2
-            r13 = r12
-            r20 = r14
-            r21 = r15
-            r15 = r8
-            r17 = r9
-            android.database.Cursor r8 = r13.query(r14, r15, r16, r17, r18)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r9 = "account_name"
-            java.lang.String r15 = "account_type"
-            if (r8 == 0) goto L_0x008d
-            boolean r13 = r8.moveToFirst()     // Catch:{ Exception -> 0x027b }
-            if (r13 == 0) goto L_0x008d
-            r13 = 0
-            int r6 = r8.getInt(r13)     // Catch:{ Exception -> 0x027b }
-            r16 = r15
-            goto L_0x00ca
-        L_0x008d:
-            android.content.ContentValues r13 = new android.content.ContentValues     // Catch:{ Exception -> 0x027b }
-            r13.<init>()     // Catch:{ Exception -> 0x027b }
-            android.accounts.Account r14 = r1.systemAccount     // Catch:{ Exception -> 0x027b }
-            java.lang.String r14 = r14.type     // Catch:{ Exception -> 0x027b }
-            r13.put(r15, r14)     // Catch:{ Exception -> 0x027b }
-            android.accounts.Account r14 = r1.systemAccount     // Catch:{ Exception -> 0x027b }
-            java.lang.String r14 = r14.name     // Catch:{ Exception -> 0x027b }
-            r13.put(r9, r14)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r14 = "group_visible"
+            r9 = 0
+            r14[r9] = r16     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r18 = "title=? AND account_type=? AND account_name=?"
+            r9 = 3
+            r20 = r10
+            java.lang.String[] r10 = new java.lang.String[r9]     // Catch:{ Exception -> 0x0286 }
             r16 = 0
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x027b }
-            r13.put(r14, r3)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r3 = "group_is_read_only"
+            r10[r16] = r7     // Catch:{ Exception -> 0x0286 }
+            android.accounts.Account r9 = r1.systemAccount     // Catch:{ Exception -> 0x0286 }
+            r16 = r14
+            java.lang.String r14 = r9.type     // Catch:{ Exception -> 0x0286 }
+            r19 = 1
+            r10[r19] = r14     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r9 = r9.name     // Catch:{ Exception -> 0x0286 }
+            r14 = 2
+            r10[r14] = r9     // Catch:{ Exception -> 0x0286 }
+            r19 = 0
+            r9 = r17
+            r4 = 2
+            r14 = r13
+            r21 = r15
+            r15 = r9
+            r17 = r18
+            r18 = r10
+            android.database.Cursor r10 = r14.query(r15, r16, r17, r18, r19)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r15 = "account_name"
+            java.lang.String r14 = "account_type"
+            if (r10 == 0) goto L_0x0091
+            boolean r16 = r10.moveToFirst()     // Catch:{ Exception -> 0x0286 }
+            if (r16 == 0) goto L_0x0091
+            r4 = 0
+            int r7 = r10.getInt(r4)     // Catch:{ Exception -> 0x0286 }
+            r17 = r14
+            r16 = r15
+            goto L_0x00ce
+        L_0x0091:
+            android.content.ContentValues r4 = new android.content.ContentValues     // Catch:{ Exception -> 0x0286 }
+            r4.<init>()     // Catch:{ Exception -> 0x0286 }
+            android.accounts.Account r0 = r1.systemAccount     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r0 = r0.type     // Catch:{ Exception -> 0x0286 }
+            r4.put(r14, r0)     // Catch:{ Exception -> 0x0286 }
+            android.accounts.Account r0 = r1.systemAccount     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r0 = r0.name     // Catch:{ Exception -> 0x0286 }
+            r4.put(r15, r0)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r0 = "group_visible"
+            r17 = r14
+            r16 = 0
+            java.lang.Integer r14 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x0286 }
+            r4.put(r0, r14)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r0 = "group_is_read_only"
             r16 = r15
             r14 = 1
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x027b }
-            r13.put(r3, r15)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r3 = "title"
-            r13.put(r3, r6)     // Catch:{ Exception -> 0x027b }
-            r3 = r20
-            android.net.Uri r3 = r12.insert(r3, r13)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r3 = r3.getLastPathSegment()     // Catch:{ Exception -> 0x027b }
-            int r6 = java.lang.Integer.parseInt(r3)     // Catch:{ Exception -> 0x027b }
-        L_0x00ca:
-            if (r8 == 0) goto L_0x00cf
-            r8.close()     // Catch:{ Exception -> 0x027b }
-        L_0x00cf:
-            android.net.Uri r14 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x027b }
-            r3 = 1
-            java.lang.String[] r15 = new java.lang.String[r3]     // Catch:{ Exception -> 0x027b }
-            r3 = 0
-            r15[r3] = r11     // Catch:{ Exception -> 0x027b }
-            java.lang.String r8 = "mimetype=? AND data1=?"
-            r13 = 2
-            java.lang.String[] r3 = new java.lang.String[r13]     // Catch:{ Exception -> 0x027b }
-            r13 = 0
-            r3[r13] = r5     // Catch:{ Exception -> 0x027b }
-            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x027b }
-            r13.<init>()     // Catch:{ Exception -> 0x027b }
-            r13.append(r6)     // Catch:{ Exception -> 0x027b }
-            r13.append(r10)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x027b }
-            r17 = 1
-            r3[r17] = r13     // Catch:{ Exception -> 0x027b }
-            r18 = 0
-            r13 = r12
-            r20 = r12
-            r12 = r16
-            r16 = r8
-            r17 = r3
-            android.database.Cursor r3 = r13.query(r14, r15, r16, r17, r18)     // Catch:{ Exception -> 0x027b }
-            int r8 = r21.size()     // Catch:{ Exception -> 0x027b }
-            java.lang.String r13 = "+99084"
+            java.lang.Integer r15 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x0286 }
+            r4.put(r0, r15)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r0 = "title"
+            r4.put(r0, r7)     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r0 = r13.insert(r9, r4)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r0 = r0.getLastPathSegment()     // Catch:{ Exception -> 0x0286 }
+            int r7 = java.lang.Integer.parseInt(r0)     // Catch:{ Exception -> 0x0286 }
+        L_0x00ce:
+            if (r10 == 0) goto L_0x00d3
+            r10.close()     // Catch:{ Exception -> 0x0286 }
+        L_0x00d3:
+            android.net.Uri r15 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0286 }
+            r0 = 1
+            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0286 }
+            r0 = 0
+            r4[r0] = r12     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r9 = "mimetype=? AND data1=?"
+            r10 = 2
+            java.lang.String[] r14 = new java.lang.String[r10]     // Catch:{ Exception -> 0x0286 }
+            r14[r0] = r6     // Catch:{ Exception -> 0x0286 }
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0286 }
+            r0.<init>()     // Catch:{ Exception -> 0x0286 }
+            r0.append(r7)     // Catch:{ Exception -> 0x0286 }
+            r0.append(r11)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0286 }
+            r10 = 1
+            r14[r10] = r0     // Catch:{ Exception -> 0x0286 }
+            r19 = 0
+            r0 = r14
+            r10 = r17
+            r14 = r13
+            r22 = r13
+            r13 = r16
+            r16 = r4
+            r17 = r9
+            r18 = r0
+            android.database.Cursor r0 = r14.query(r15, r16, r17, r18, r19)     // Catch:{ Exception -> 0x0286 }
+            int r4 = r21.size()     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r9 = "+99084"
             java.lang.String r14 = "vnd.android.cursor.item/phone_v2"
             java.lang.String r15 = "data3"
-            r16 = r6
-            java.lang.String r6 = "data2"
-            r17 = r5
-            java.lang.String r5 = "vnd.android.cursor.item/name"
-            r18 = r8
-            java.lang.String r8 = "data1"
-            if (r3 == 0) goto L_0x01cb
-            boolean r22 = r3.moveToFirst()     // Catch:{ Exception -> 0x027b }
-            if (r22 == 0) goto L_0x01cb
-            r11 = 0
-            int r9 = r3.getInt(r11)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r7 = android.content.ContentProviderOperation.newUpdate(r7)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r11 = "_id=?"
-            r23 = r3
-            r12 = 1
-            java.lang.String[] r3 = new java.lang.String[r12]     // Catch:{ Exception -> 0x027b }
-            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x027b }
-            r12.<init>()     // Catch:{ Exception -> 0x027b }
-            r12.append(r9)     // Catch:{ Exception -> 0x027b }
-            r12.append(r10)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r12 = r12.toString()     // Catch:{ Exception -> 0x027b }
+            r16 = r7
+            java.lang.String r7 = "data2"
+            r17 = r6
+            java.lang.String r6 = "vnd.android.cursor.item/name"
+            r18 = r4
+            java.lang.String r4 = "data1"
+            if (r0 == 0) goto L_0x01d4
+            boolean r19 = r0.moveToFirst()     // Catch:{ Exception -> 0x0286 }
+            if (r19 == 0) goto L_0x01d4
+            r12 = 0
+            int r10 = r0.getInt(r12)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r8 = android.content.ContentProviderOperation.newUpdate(r8)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r12 = "_id=?"
+            r23 = r0
+            r13 = 1
+            java.lang.String[] r0 = new java.lang.String[r13]     // Catch:{ Exception -> 0x0286 }
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0286 }
+            r13.<init>()     // Catch:{ Exception -> 0x0286 }
+            r13.append(r10)     // Catch:{ Exception -> 0x0286 }
+            r13.append(r11)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0286 }
             r16 = 0
-            r3[r16] = r12     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r3 = r7.withSelection(r11, r3)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r7 = "deleted"
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r3 = r3.withValue(r7, r11)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation r3 = r3.build()     // Catch:{ Exception -> 0x027b }
-            r11 = r21
-            r11.add(r3)     // Catch:{ Exception -> 0x027b }
-            android.net.Uri r3 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r3 = android.content.ContentProviderOperation.newUpdate(r3)     // Catch:{ Exception -> 0x027b }
-            r7 = 2
-            java.lang.String[] r12 = new java.lang.String[r7]     // Catch:{ Exception -> 0x027b }
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x027b }
-            r7.<init>()     // Catch:{ Exception -> 0x027b }
-            r7.append(r9)     // Catch:{ Exception -> 0x027b }
-            r7.append(r10)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r7 = r7.toString()     // Catch:{ Exception -> 0x027b }
+            r0[r16] = r13     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r8.withSelection(r12, r0)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r8 = "deleted"
+            java.lang.Integer r12 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r8, r12)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0286 }
+            r12 = r21
+            r12.add(r0)     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newUpdate(r0)     // Catch:{ Exception -> 0x0286 }
+            r8 = 2
+            java.lang.String[] r13 = new java.lang.String[r8]     // Catch:{ Exception -> 0x0286 }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0286 }
+            r8.<init>()     // Catch:{ Exception -> 0x0286 }
+            r8.append(r10)     // Catch:{ Exception -> 0x0286 }
+            r8.append(r11)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x0286 }
             r16 = 0
-            r12[r16] = r7     // Catch:{ Exception -> 0x027b }
-            r7 = 1
-            r12[r7] = r14     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r3 = r3.withSelection(r4, r12)     // Catch:{ Exception -> 0x027b }
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x027b }
-            r7.<init>()     // Catch:{ Exception -> 0x027b }
-            r7.append(r13)     // Catch:{ Exception -> 0x027b }
-            r7.append(r0)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r0 = r7.toString()     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r0 = r3.withValue(r8, r0)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x027b }
-            r11.add(r0)     // Catch:{ Exception -> 0x027b }
-            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newUpdate(r0)     // Catch:{ Exception -> 0x027b }
-            r3 = 2
-            java.lang.String[] r3 = new java.lang.String[r3]     // Catch:{ Exception -> 0x027b }
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x027b }
-            r7.<init>()     // Catch:{ Exception -> 0x027b }
-            r7.append(r9)     // Catch:{ Exception -> 0x027b }
-            r7.append(r10)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r7 = r7.toString()     // Catch:{ Exception -> 0x027b }
-            r8 = 0
-            r3[r8] = r7     // Catch:{ Exception -> 0x027b }
-            r7 = 1
-            r3[r7] = r5     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r0 = r0.withSelection(r4, r3)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r6, r2)     // Catch:{ Exception -> 0x027b }
-            r3 = r27
-            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r15, r3)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x027b }
-            r11.add(r0)     // Catch:{ Exception -> 0x027b }
-            goto L_0x026e
-        L_0x01cb:
-            r23 = r3
-            r22 = r11
-            r11 = r21
-            r3 = r27
-            android.content.ContentProviderOperation$Builder r4 = android.content.ContentProviderOperation.newInsert(r7)     // Catch:{ Exception -> 0x027b }
-            android.accounts.Account r7 = r1.systemAccount     // Catch:{ Exception -> 0x027b }
-            java.lang.String r7 = r7.type     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r4 = r4.withValue(r12, r7)     // Catch:{ Exception -> 0x027b }
-            android.accounts.Account r7 = r1.systemAccount     // Catch:{ Exception -> 0x027b }
-            java.lang.String r7 = r7.name     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r4 = r4.withValue(r9, r7)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r7 = "raw_contact_is_read_only"
-            r9 = 1
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r4 = r4.withValue(r7, r9)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r7 = "aggregation_mode"
-            r9 = 3
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r4 = r4.withValue(r7, r9)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation r4 = r4.build()     // Catch:{ Exception -> 0x027b }
-            r11.add(r4)     // Catch:{ Exception -> 0x027b }
-            android.net.Uri r4 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r4 = android.content.ContentProviderOperation.newInsert(r4)     // Catch:{ Exception -> 0x027b }
-            r7 = r18
-            r9 = r22
-            android.content.ContentProviderOperation$Builder r4 = r4.withValueBackReference(r9, r7)     // Catch:{ Exception -> 0x027b }
+            r13[r16] = r8     // Catch:{ Exception -> 0x0286 }
+            r8 = 1
+            r13[r8] = r14     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withSelection(r5, r13)     // Catch:{ Exception -> 0x0286 }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0286 }
+            r8.<init>()     // Catch:{ Exception -> 0x0286 }
+            r8.append(r9)     // Catch:{ Exception -> 0x0286 }
+            r8.append(r2)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r2 = r8.toString()     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r4, r2)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0286 }
+            r12.add(r0)     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newUpdate(r0)     // Catch:{ Exception -> 0x0286 }
+            r2 = 2
+            java.lang.String[] r2 = new java.lang.String[r2]     // Catch:{ Exception -> 0x0286 }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0286 }
+            r3.<init>()     // Catch:{ Exception -> 0x0286 }
+            r3.append(r10)     // Catch:{ Exception -> 0x0286 }
+            r3.append(r11)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0286 }
+            r4 = 0
+            r2[r4] = r3     // Catch:{ Exception -> 0x0286 }
+            r3 = 1
+            r2[r3] = r6     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withSelection(r5, r2)     // Catch:{ Exception -> 0x0286 }
+            r5 = r27
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r7, r5)     // Catch:{ Exception -> 0x0286 }
+            r11 = r28
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r15, r11)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0286 }
+            r12.add(r0)     // Catch:{ Exception -> 0x0286 }
+            goto L_0x0279
+        L_0x01d4:
+            r5 = r27
+            r11 = r28
+            r23 = r0
+            r19 = r12
+            r12 = r21
+            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newInsert(r8)     // Catch:{ Exception -> 0x0286 }
+            android.accounts.Account r8 = r1.systemAccount     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r8 = r8.type     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r10, r8)     // Catch:{ Exception -> 0x0286 }
+            android.accounts.Account r8 = r1.systemAccount     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r8 = r8.name     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r13, r8)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r8 = "raw_contact_is_read_only"
+            r10 = 1
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r8, r10)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r8 = "aggregation_mode"
+            r10 = 3
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r8, r10)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0286 }
+            r12.add(r0)     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newInsert(r0)     // Catch:{ Exception -> 0x0286 }
+            r8 = r18
             r10 = r19
-            android.content.ContentProviderOperation$Builder r4 = r4.withValue(r10, r5)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r2 = r4.withValue(r6, r2)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r2 = r2.withValue(r15, r3)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation r2 = r2.build()     // Catch:{ Exception -> 0x027b }
-            r11.add(r2)     // Catch:{ Exception -> 0x027b }
-            android.net.Uri r2 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r2 = android.content.ContentProviderOperation.newInsert(r2)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r2 = r2.withValueBackReference(r9, r7)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r2 = r2.withValue(r10, r14)     // Catch:{ Exception -> 0x027b }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x027b }
-            r3.<init>()     // Catch:{ Exception -> 0x027b }
-            r3.append(r13)     // Catch:{ Exception -> 0x027b }
-            r3.append(r0)     // Catch:{ Exception -> 0x027b }
-            java.lang.String r0 = r3.toString()     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r0 = r2.withValue(r8, r0)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x027b }
-            r11.add(r0)     // Catch:{ Exception -> 0x027b }
-            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newInsert(r0)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r0 = r0.withValueBackReference(r9, r7)     // Catch:{ Exception -> 0x027b }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValueBackReference(r10, r8)     // Catch:{ Exception -> 0x0286 }
+            r13 = r20
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r13, r6)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r7, r5)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r15, r11)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0286 }
+            r12.add(r0)     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newInsert(r0)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValueBackReference(r10, r8)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r13, r14)     // Catch:{ Exception -> 0x0286 }
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0286 }
+            r5.<init>()     // Catch:{ Exception -> 0x0286 }
+            r5.append(r9)     // Catch:{ Exception -> 0x0286 }
+            r5.append(r2)     // Catch:{ Exception -> 0x0286 }
+            java.lang.String r2 = r5.toString()     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r4, r2)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0286 }
+            r12.add(r0)     // Catch:{ Exception -> 0x0286 }
+            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newInsert(r0)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValueBackReference(r10, r8)     // Catch:{ Exception -> 0x0286 }
             r2 = r17
-            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r10, r2)     // Catch:{ Exception -> 0x027b }
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r8, r2)     // Catch:{ Exception -> 0x027b }
-            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x027b }
-            r11.add(r0)     // Catch:{ Exception -> 0x027b }
-        L_0x026e:
-            if (r23 == 0) goto L_0x0273
-            r23.close()     // Catch:{ Exception -> 0x027b }
-        L_0x0273:
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r13, r2)     // Catch:{ Exception -> 0x0286 }
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r4, r2)     // Catch:{ Exception -> 0x0286 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0286 }
+            r12.add(r0)     // Catch:{ Exception -> 0x0286 }
+        L_0x0279:
+            if (r23 == 0) goto L_0x027e
+            r23.close()     // Catch:{ Exception -> 0x0286 }
+        L_0x027e:
             java.lang.String r0 = "com.android.contacts"
-            r2 = r20
-            r2.applyBatch(r0, r11)     // Catch:{ Exception -> 0x027b }
-            goto L_0x027f
-        L_0x027b:
+            r2 = r22
+            r2.applyBatch(r0, r12)     // Catch:{ Exception -> 0x0286 }
+            goto L_0x028a
+        L_0x0286:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x027f:
+        L_0x028a:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.createOrUpdateConnectionServiceContact(int, java.lang.String, java.lang.String):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.createOrUpdateConnectionServiceContact(long, java.lang.String, java.lang.String):void");
     }
 
     public void deleteConnectionServiceContact() {

@@ -7,16 +7,16 @@ import org.telegram.ui.ActionBar.BaseFragment;
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda30 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
     public final /* synthetic */ Bundle f$1;
-    public final /* synthetic */ Integer f$2;
+    public final /* synthetic */ Long f$2;
     public final /* synthetic */ int[] f$3;
     public final /* synthetic */ AlertDialog f$4;
     public final /* synthetic */ BaseFragment f$5;
     public final /* synthetic */ int f$6;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda30(LaunchActivity launchActivity, Bundle bundle, Integer num, int[] iArr, AlertDialog alertDialog, BaseFragment baseFragment, int i) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda30(LaunchActivity launchActivity, Bundle bundle, Long l, int[] iArr, AlertDialog alertDialog, BaseFragment baseFragment, int i) {
         this.f$0 = launchActivity;
         this.f$1 = bundle;
-        this.f$2 = num;
+        this.f$2 = l;
         this.f$3 = iArr;
         this.f$4 = alertDialog;
         this.f$5 = baseFragment;

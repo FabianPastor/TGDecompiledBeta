@@ -3,7 +3,7 @@ package j$.util;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Function;
-import j$.util.function.x;
+import j$.util.function.y;
 import j$.wrappers.CLASSNAMEq;
 import j$.wrappers.CLASSNAMEs;
 import j$.wrappers.M;
@@ -87,9 +87,9 @@ public class DesugarCollections {
 
         public Object computeIfAbsent(Object obj, java.util.function.Function function) {
             Object n;
-            Function c2 = M.c(function);
+            Function a2 = M.a(function);
             synchronized (this.b) {
-                n = CLASSNAMEa.n(this.a, obj, c2);
+                n = CLASSNAMEa.n(this.a, obj, a2);
             }
             return n;
         }
@@ -383,13 +383,13 @@ public class DesugarCollections {
         }
     }
 
-    static boolean c(Collection collection, x xVar) {
+    static boolean c(Collection collection, y yVar) {
         boolean k;
         Field field = c;
         if (field == null) {
             try {
                 Collection collection2 = (Collection) d.get(collection);
-                return collection2 instanceof CLASSNAMEb ? ((CLASSNAMEb) collection2).k(xVar) : CLASSNAMEa.h(collection2, xVar);
+                return collection2 instanceof CLASSNAMEb ? ((CLASSNAMEb) collection2).k(yVar) : CLASSNAMEa.h(collection2, yVar);
             } catch (IllegalAccessException e2) {
                 throw new Error("Runtime illegal access in synchronized collection removeIf fall-back.", e2);
             }
@@ -397,7 +397,7 @@ public class DesugarCollections {
             try {
                 synchronized (field.get(collection)) {
                     Collection collection3 = (Collection) d.get(collection);
-                    k = collection3 instanceof CLASSNAMEb ? ((CLASSNAMEb) collection3).k(xVar) : CLASSNAMEa.h(collection3, xVar);
+                    k = collection3 instanceof CLASSNAMEb ? ((CLASSNAMEb) collection3).k(yVar) : CLASSNAMEa.h(collection3, yVar);
                 }
                 return k;
             } catch (IllegalAccessException e3) {

@@ -1,12 +1,12 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_messages_search extends TLObject {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
     public int add_offset;
     public TLRPC$MessagesFilter filter;
     public int flags;
     public TLRPC$InputPeer from_id;
-    public int hash;
+    public long hash;
     public int limit;
     public int max_date;
     public int max_id;
@@ -40,6 +40,6 @@ public class TLRPC$TL_messages_search extends TLObject {
         abstractSerializedData.writeInt32(this.limit);
         abstractSerializedData.writeInt32(this.max_id);
         abstractSerializedData.writeInt32(this.min_id);
-        abstractSerializedData.writeInt32(this.hash);
+        abstractSerializedData.writeInt64(this.hash);
     }
 }

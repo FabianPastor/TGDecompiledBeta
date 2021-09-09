@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -59,7 +60,6 @@ import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$BotInlineResult;
-import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$Photo;
@@ -1120,15 +1120,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     } else {
                         i3 = Math.abs(PhotoPickerActivity.this.layoutManager.findLastVisibleItemPosition() - findFirstVisibleItemPosition) + 1;
                     }
-                    if (i3 > 0) {
-                        int itemCount = PhotoPickerActivity.this.layoutManager.getItemCount();
-                        if (i3 != 0 && findFirstVisibleItemPosition + i3 > itemCount - 2 && !PhotoPickerActivity.this.searching && !PhotoPickerActivity.this.imageSearchEndReached) {
-                            PhotoPickerActivity photoPickerActivity = PhotoPickerActivity.this;
-                            if (photoPickerActivity.type == 1) {
-                                z = true;
-                            }
-                            photoPickerActivity.searchImages(z, PhotoPickerActivity.this.lastSearchString, PhotoPickerActivity.this.nextImagesSearchOffset, true);
+                    if (i3 > 0 && findFirstVisibleItemPosition + i3 > PhotoPickerActivity.this.layoutManager.getItemCount() - 2 && !PhotoPickerActivity.this.searching && !PhotoPickerActivity.this.imageSearchEndReached) {
+                        PhotoPickerActivity photoPickerActivity = PhotoPickerActivity.this;
+                        if (photoPickerActivity.type == 1) {
+                            z = true;
                         }
+                        photoPickerActivity.searchImages(z, PhotoPickerActivity.this.lastSearchString, PhotoPickerActivity.this.nextImagesSearchOffset, true);
                     }
                 }
             }
@@ -1394,14 +1391,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 while (i < 2) {
                     if ((i != 0 || this.chatActivity.canScheduleMessage()) && (i != 1 || !UserObject.isUserSelf(currentUser))) {
                         this.itemCells[i] = new ActionBarMenuSubItem(getParentActivity(), i == 0, i == 1);
-                        if (i == 0) {
-                            if (UserObject.isUserSelf(currentUser)) {
-                                this.itemCells[i].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
-                            } else {
-                                this.itemCells[i].setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
-                            }
-                        } else if (i == 1) {
+                        if (i != 0) {
                             this.itemCells[i].setTextAndIcon(LocaleController.getString("SendWithoutSound", NUM), NUM);
+                        } else if (UserObject.isUserSelf(currentUser)) {
+                            this.itemCells[i].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
+                        } else {
+                            this.itemCells[i].setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
                         }
                         this.itemCells[i].setMinimumWidth(AndroidUtilities.dp(196.0f));
                         this.sendPopupLayout.addView(this.itemCells[i], LayoutHelper.createLinear(-1, 48));
@@ -1447,7 +1442,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
         if (i == 0) {
             AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new PhotoPickerActivity$$ExternalSyntheticLambda10(this));
-        } else if (i == 1) {
+        } else {
             sendSelectedPhotos(true, 0);
         }
     }
@@ -1474,17 +1469,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     private void onListItemClick(View view, Object obj) {
-        boolean z = false;
         int i = 1;
-        boolean z2 = addToSelectedPhotos(obj, -1) == -1;
+        boolean z = addToSelectedPhotos(obj, -1) == -1;
         if (view instanceof SharedDocumentCell) {
-            SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) view;
-            if (this.selectedPhotosOrder.indexOf(Integer.valueOf(this.selectedAlbum.photos.get(((Integer) view.getTag()).intValue()).imageId)) >= 0) {
-                z = true;
-            }
-            sharedDocumentCell.setChecked(z, true);
+            ((SharedDocumentCell) view).setChecked(this.selectedPhotosOrder.contains(Integer.valueOf(this.selectedAlbum.photos.get(((Integer) view.getTag()).intValue()).imageId)), true);
         }
-        if (!z2) {
+        if (!z) {
             i = 2;
         }
         updatePhotosButton(i);
@@ -1959,11 +1949,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             tLRPC$TL_messages_getInlineBotResults.offset = str2;
             ChatActivity chatActivity2 = this.chatActivity;
             if (chatActivity2 != null) {
-                int dialogId = (int) chatActivity2.getDialogId();
-                if (dialogId != 0) {
-                    tLRPC$TL_messages_getInlineBotResults.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(dialogId);
-                } else {
+                long dialogId = chatActivity2.getDialogId();
+                if (DialogObject.isEncryptedDialog(dialogId)) {
                     tLRPC$TL_messages_getInlineBotResults.peer = new TLRPC$TL_inputPeerEmpty();
+                } else {
+                    tLRPC$TL_messages_getInlineBotResults.peer = getMessagesController().getInputPeer(dialogId);
                 }
             } else {
                 tLRPC$TL_messages_getInlineBotResults.peer = new TLRPC$TL_inputPeerEmpty();
@@ -2016,11 +2006,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             }
                             searchImage.width = tLRPC$DocumentAttribute.w;
                             searchImage.height = tLRPC$DocumentAttribute.h;
-                            TLRPC$Document tLRPC$Document = tLRPC$BotInlineResult.document;
-                            searchImage.document = tLRPC$Document;
+                            searchImage.document = tLRPC$BotInlineResult.document;
                             searchImage.size = 0;
                             TLRPC$Photo tLRPC$Photo2 = tLRPC$BotInlineResult.photo;
-                            if (!(tLRPC$Photo2 == null || tLRPC$Document == null || (closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo2.sizes, this.itemSize, true)) == null)) {
+                            if (!(tLRPC$Photo2 == null || (closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo2.sizes, this.itemSize, true)) == null)) {
                                 tLRPC$BotInlineResult.document.thumbs.add(closestPhotoSizeWithSize);
                                 tLRPC$BotInlineResult.document.flags |= 1;
                             }
@@ -2186,7 +2175,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.PhotoPickerActivity r6 = org.telegram.ui.PhotoPickerActivity.this
                 boolean r6 = r6.forceDarckTheme
                 r5.setForceDarkTheme(r6)
-                goto L_0x00ad
+                goto L_0x00ae
             L_0x001f:
                 org.telegram.ui.Cells.TextCell r6 = new org.telegram.ui.Cells.TextCell
                 android.content.Context r2 = r4.mContext
@@ -2215,7 +2204,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.Cells.SharedDocumentCell r5 = new org.telegram.ui.Cells.SharedDocumentCell
                 android.content.Context r6 = r4.mContext
                 r5.<init>(r6, r1)
-                goto L_0x00ad
+                goto L_0x00ae
             L_0x0062:
                 android.widget.FrameLayout r6 = new android.widget.FrameLayout
                 android.content.Context r1 = r4.mContext
@@ -2233,11 +2222,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 r6.addView(r5, r0)
             L_0x0087:
                 r5 = r6
-                goto L_0x00ad
+                goto L_0x00ae
             L_0x0089:
                 org.telegram.ui.Cells.PhotoAttachPhotoCell r5 = new org.telegram.ui.Cells.PhotoAttachPhotoCell
                 android.content.Context r6 = r4.mContext
-                r5.<init>(r6)
+                r0 = 0
+                r5.<init>(r6, r0)
                 org.telegram.ui.PhotoPickerActivity$ListAdapter$1 r6 = new org.telegram.ui.PhotoPickerActivity$ListAdapter$1
                 r6.<init>()
                 r5.setDelegate(r6)
@@ -2245,14 +2235,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                 int r0 = r0.selectPhotoType
                 int r1 = org.telegram.ui.PhotoAlbumPickerActivity.SELECT_TYPE_ALL
-                if (r0 == r1) goto L_0x00a9
+                if (r0 == r1) goto L_0x00aa
                 r0 = 8
-                goto L_0x00aa
-            L_0x00a9:
-                r0 = 0
+                goto L_0x00ab
             L_0x00aa:
+                r0 = 0
+            L_0x00ab:
                 r6.setVisibility(r0)
-            L_0x00ad:
+            L_0x00ae:
                 org.telegram.ui.Components.RecyclerListView$Holder r6 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r6.<init>(r5)
                 return r6

@@ -18,7 +18,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -41,7 +40,7 @@ import org.telegram.ui.Components.RecyclerListView;
 
 public class GroupInviteActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
-    public int chat_id;
+    public long chatId;
     /* access modifiers changed from: private */
     public int copyLinkRow;
     private EmptyTextProgressView emptyView;
@@ -64,14 +63,14 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     /* access modifiers changed from: private */
     public int shareLinkRow;
 
-    public GroupInviteActivity(int i) {
-        this.chat_id = i;
+    public GroupInviteActivity(long j) {
+        this.chatId = j;
     }
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
-        MessagesController.getInstance(this.currentAccount).loadFullChat(this.chat_id, this.classGuid, true);
+        getMessagesController().loadFullChat(this.chatId, this.classGuid, true);
         this.loading = true;
         this.rowCount = 0;
         int i = 0 + 1;
@@ -171,8 +170,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.chatInfoDidLoad) {
             int intValue = objArr[1].intValue();
-            if (objArr[0].id == this.chat_id && intValue == this.classGuid) {
-                TLRPC$TL_chatInviteExported exportedInvite = MessagesController.getInstance(this.currentAccount).getExportedInvite(this.chat_id);
+            if (objArr[0].id == this.chatId && intValue == this.classGuid) {
+                TLRPC$TL_chatInviteExported exportedInvite = getMessagesController().getExportedInvite(this.chatId);
                 this.invite = exportedInvite;
                 if (exportedInvite == null) {
                     generateLink(false);
@@ -198,7 +197,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     private void generateLink(boolean z) {
         this.loading = true;
         TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
-        tLRPC$TL_messages_exportChatInvite.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chat_id);
+        tLRPC$TL_messages_exportChatInvite.peer = getMessagesController().getInputPeer(-this.chatId);
         ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_exportChatInvite, new GroupInviteActivity$$ExternalSyntheticLambda2(this, z)), this.classGuid);
         ListAdapter listAdapter2 = this.listAdapter;
         if (listAdapter2 != null) {
@@ -281,7 +280,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                     textInfoPrivacyCell.setText("");
                     textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                 } else if (i == GroupInviteActivity.this.linkInfoRow) {
-                    TLRPC$Chat chat = MessagesController.getInstance(GroupInviteActivity.this.currentAccount).getChat(Integer.valueOf(GroupInviteActivity.this.chat_id));
+                    TLRPC$Chat chat = GroupInviteActivity.this.getMessagesController().getChat(Long.valueOf(GroupInviteActivity.this.chatId));
                     if (!ChatObject.isChannel(chat) || chat.megagroup) {
                         textInfoPrivacyCell.setText(LocaleController.getString("LinkInfo", NUM));
                     } else {

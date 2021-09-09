@@ -12,4 +12,8 @@ public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda27 i
     public final void didSetColor() {
         this.f$0.lambda$getThemeDescriptions$28();
     }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    }
 }

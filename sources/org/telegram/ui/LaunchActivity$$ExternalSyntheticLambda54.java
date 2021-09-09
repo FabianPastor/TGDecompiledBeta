@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda54 implements MessagesStorage.IntCallback {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda54 implements MessagesStorage.LongCallback {
     public final /* synthetic */ LaunchActivity f$0;
     public final /* synthetic */ int f$1;
     public final /* synthetic */ DialogsActivity f$2;
@@ -24,7 +24,7 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda54 imp
         this.f$6 = alertDialog;
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$didSelectDialogs$59(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, i);
+    public final void run(long j) {
+        this.f$0.lambda$didSelectDialogs$59(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, j);
     }
 }

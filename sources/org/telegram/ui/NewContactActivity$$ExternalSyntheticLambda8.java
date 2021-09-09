@@ -9,7 +9,7 @@ public final /* synthetic */ class NewContactActivity$$ExternalSyntheticLambda8 
         this.f$0 = newContactActivity;
     }
 
-    public final void didSelectCountry(String str, String str2) {
-        this.f$0.lambda$createView$3(str, str2);
+    public final void didSelectCountry(CountrySelectActivity.Country country) {
+        this.f$0.lambda$createView$3(country);
     }
 }

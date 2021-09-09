@@ -195,7 +195,7 @@ public class ProxySettingsActivity extends BaseFragment {
             this.typeCell[i].setTag(Integer.valueOf(i));
             if (i == 0) {
                 this.typeCell[i].setText(LocaleController.getString("UseProxySocks5", NUM), i == this.currentType, true);
-            } else if (i == 1) {
+            } else {
                 this.typeCell[i].setText(LocaleController.getString("UseProxyTelegram", NUM), i == this.currentType, false);
             }
             this.linearLayout2.addView(this.typeCell[i], LayoutHelper.createLinear(-1, 50));
@@ -280,10 +280,7 @@ public class ProxySettingsActivity extends BaseFragment {
                                     editTextBoldCursor.setText(sb.toString());
                                 }
                             } else if (selectionStart >= 0) {
-                                if (selectionStart > editTextBoldCursor.length()) {
-                                    selectionStart = editTextBoldCursor.length();
-                                }
-                                editTextBoldCursor.setSelection(selectionStart);
+                                editTextBoldCursor.setSelection(Math.min(selectionStart, editTextBoldCursor.length()));
                             }
                             boolean unused2 = ProxySettingsActivity.this.ignoreOnTextChange = false;
                             ProxySettingsActivity.this.checkShareDone(true);
@@ -327,7 +324,7 @@ public class ProxySettingsActivity extends BaseFragment {
             this.bottomCells[i4].setBackground(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
             if (i4 == 0) {
                 this.bottomCells[i4].setText(LocaleController.getString("UseProxyInfo", NUM));
-            } else if (i4 == 1) {
+            } else {
                 TextInfoPrivacyCell textInfoPrivacyCell = this.bottomCells[i4];
                 textInfoPrivacyCell.setText(LocaleController.getString("UseProxyTelegramInfo", NUM) + "\n\n" + LocaleController.getString("UseProxyTelegramInfo2", NUM));
                 this.bottomCells[i4].setVisibility(8);

@@ -1,9 +1,9 @@
 package j$.util.stream;
 
-import j$.util.function.o;
 import j$.util.function.p;
+import j$.util.function.q;
 
-public final /* synthetic */ class X0 implements p {
+public final /* synthetic */ class X0 implements q {
     public final /* synthetic */ int a = 1;
     public final /* synthetic */ Object b;
 
@@ -22,14 +22,14 @@ public final /* synthetic */ class X0 implements p {
         }
     }
 
-    public p f(p pVar) {
+    public q f(q qVar) {
         switch (this.a) {
             case 0:
-                pVar.getClass();
-                return new o(this, pVar);
+                qVar.getClass();
+                return new p(this, qVar);
             default:
-                pVar.getClass();
-                return new o(this, pVar);
+                qVar.getClass();
+                return new p(this, qVar);
         }
     }
 

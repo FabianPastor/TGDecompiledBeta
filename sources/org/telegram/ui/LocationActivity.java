@@ -30,7 +30,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Property;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +40,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,6 +71,7 @@ import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
@@ -181,7 +182,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public int markerTop;
     private ArrayList<LiveLocation> markers = new ArrayList<>();
-    private SparseArray<LiveLocation> markersMap = new SparseArray<>();
+    private LongSparseArray<LiveLocation> markersMap = new LongSparseArray<>();
     /* access modifiers changed from: private */
     public MessageObject messageObject;
     /* access modifiers changed from: private */
@@ -235,7 +236,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         public TLRPC$Chat chat;
         public Marker directionMarker;
         public boolean hasRotation;
-        public int id;
+        public long id;
         public Marker marker;
         public TLRPC$Message object;
         public TLRPC$User user;
@@ -502,9 +503,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public View createView(Context context) {
         FrameLayout.LayoutParams layoutParams;
-        FrameLayout frameLayout;
         String str;
-        FrameLayout.LayoutParams layoutParams2;
         int i;
         int i2;
         Context context2 = context;
@@ -664,7 +663,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         };
         this.fragmentView = r0;
-        FrameLayout frameLayout2 = r0;
+        FrameLayout frameLayout = r0;
         r0.setBackgroundColor(Theme.getColor("dialogBackground"));
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable = mutate;
@@ -677,8 +676,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } else {
             layoutParams = new FrameLayout.LayoutParams(-1, AndroidUtilities.dp(6.0f) + rect.top);
         }
-        FrameLayout.LayoutParams layoutParams3 = layoutParams;
-        layoutParams3.gravity = 83;
+        FrameLayout.LayoutParams layoutParams2 = layoutParams;
+        layoutParams2.gravity = 83;
         AnonymousClass4 r02 = new FrameLayout(context2) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
@@ -690,7 +689,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         };
         this.mapViewClip = r02;
         r02.setBackgroundDrawable(new MapPlaceholderDrawable());
-        FrameLayout.LayoutParams layoutParams4 = layoutParams3;
+        FrameLayout frameLayout2 = frameLayout;
         if (this.messageObject == null && ((i2 = this.locationType) == 0 || i2 == 1)) {
             SearchButton searchButton = new SearchButton(context2);
             this.searchAreaButton = searchButton;
@@ -746,14 +745,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             combinedDrawable2.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
             createSimpleSelectorCircleDrawable = combinedDrawable2;
             str = "location_actionIcon";
-            frameLayout = frameLayout2;
         } else {
             StateListAnimator stateListAnimator2 = new StateListAnimator();
             ActionBarMenuItem actionBarMenuItem2 = this.mapTypeButton;
             Property property2 = View.TRANSLATION_Z;
-            str = "location_actionIcon";
             stateListAnimator2.addState(new int[]{16842919}, ObjectAnimator.ofFloat(actionBarMenuItem2, property2, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
-            frameLayout = frameLayout2;
+            str = "location_actionIcon";
             stateListAnimator2.addState(new int[0], ObjectAnimator.ofFloat(this.mapTypeButton, property2, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.mapTypeButton.setStateListAnimator(stateListAnimator2);
             this.mapTypeButton.setOutlineProvider(new ViewOutlineProvider(this) {
@@ -797,8 +794,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.locationButton.setTag("location_actionActiveIcon");
         this.locationButton.setContentDescription(LocaleController.getString("AccDescrMyLocation", NUM));
         FrameLayout.LayoutParams createFrame = LayoutHelper.createFrame(i5 >= 21 ? 40 : 44, i5 >= 21 ? 40.0f : 44.0f, 85, 0.0f, 0.0f, 12.0f, 12.0f);
-        FrameLayout.LayoutParams layoutParams5 = layoutParams4;
-        createFrame.bottomMargin += layoutParams5.height - rect.top;
+        createFrame.bottomMargin += layoutParams2.height - rect.top;
         this.mapViewClip.addView(this.locationButton, createFrame);
         this.locationButton.setOnClickListener(new LocationActivity$$ExternalSyntheticLambda4(this));
         this.proximityButton = new ImageView(context2);
@@ -809,12 +805,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             CombinedDrawable combinedDrawable4 = new CombinedDrawable(mutate5, createSimpleSelectorCircleDrawable3, 0, 0);
             combinedDrawable4.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
             createSimpleSelectorCircleDrawable3 = combinedDrawable4;
-            layoutParams2 = layoutParams5;
         } else {
             StateListAnimator stateListAnimator4 = new StateListAnimator();
             ImageView imageView2 = this.proximityButton;
             Property property4 = View.TRANSLATION_Z;
-            layoutParams2 = layoutParams5;
             stateListAnimator4.addState(new int[]{16842919}, ObjectAnimator.ofFloat(imageView2, property4, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator4.addState(new int[0], ObjectAnimator.ofFloat(this.proximityButton, property4, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.proximityButton.setStateListAnimator(stateListAnimator4);
@@ -832,8 +826,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.mapViewClip.addView(this.proximityButton, LayoutHelper.createFrame(i5 >= 21 ? 40 : 44, i5 >= 21 ? 40.0f : 44.0f, 53, 0.0f, 62.0f, 12.0f, 0.0f));
         this.proximityButton.setOnClickListener(new LocationActivity$$ExternalSyntheticLambda7(this));
         TLRPC$Chat tLRPC$Chat = null;
-        if (((int) this.dialogId) < 0) {
-            tLRPC$Chat = getMessagesController().getChat(Integer.valueOf(-((int) this.dialogId)));
+        if (DialogObject.isChatDialog(this.dialogId)) {
+            tLRPC$Chat = getMessagesController().getChat(Long.valueOf(-this.dialogId));
         }
         TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
         MessageObject messageObject3 = this.messageObject;
@@ -843,7 +837,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } else {
             LocationController.SharingLocationInfo sharingLocationInfo = getLocationController().getSharingLocationInfo(this.dialogId);
             if (sharingLocationInfo == null || sharingLocationInfo.proximityMeters <= 0) {
-                if (((int) this.dialogId) > 0 && this.messageObject.getFromChatId() == getUserConfig().getClientUserId()) {
+                if (DialogObject.isUserDialog(this.dialogId) && this.messageObject.getFromChatId() == getUserConfig().getClientUserId()) {
                     this.proximityButton.setVisibility(4);
                     this.proximityButton.setAlpha(0.0f);
                     this.proximityButton.setScaleX(0.4f);
@@ -865,7 +859,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.emptyView.setGravity(1);
         this.emptyView.setPadding(0, AndroidUtilities.dp(160.0f), 0, 0);
         this.emptyView.setVisibility(8);
-        FrameLayout frameLayout3 = frameLayout;
+        FrameLayout frameLayout3 = frameLayout2;
         frameLayout3.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.emptyView.setOnTouchListener(LocationActivity$$ExternalSyntheticLambda8.INSTANCE);
         ImageView imageView3 = new ImageView(context2);
@@ -890,8 +884,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.emptyView.addView(this.emptySubtitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 6, 0, 0));
         RecyclerListView recyclerListView = new RecyclerListView(context2);
         this.listView = recyclerListView;
-        AnonymousClass9 r9 = r0;
-        AnonymousClass9 r03 = new LocationActivityAdapter(context, this.locationType, this.dialogId, false) {
+        AnonymousClass9 r10 = r0;
+        String str3 = str;
+        FrameLayout.LayoutParams layoutParams3 = layoutParams2;
+        AnonymousClass9 r03 = new LocationActivityAdapter(context, this.locationType, this.dialogId, false, (Theme.ResourcesProvider) null) {
             /* access modifiers changed from: protected */
             public void onDirectionClick() {
                 Intent intent;
@@ -912,8 +908,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
             }
         };
-        this.adapter = r9;
-        recyclerListView.setAdapter(r9);
+        this.adapter = r10;
+        recyclerListView.setAdapter(r10);
         this.adapter.setUpdateRunnable(new LocationActivity$$ExternalSyntheticLambda14(this));
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView2 = this.listView;
@@ -1110,11 +1106,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (Build.VERSION.SDK_INT >= 21) {
             r06.setTranslationZ((float) AndroidUtilities.dp(6.0f));
         }
-        this.mapViewClip.addView(this.shadow, layoutParams2);
+        this.mapViewClip.addView(this.shadow, layoutParams3);
         if (this.messageObject == null && this.chatLocation == null && this.initialLocation != null) {
             this.userLocationMoved = true;
-            this.locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), PorterDuff.Mode.MULTIPLY));
-            this.locationButton.setTag(str);
+            this.locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str3), PorterDuff.Mode.MULTIPLY));
+            this.locationButton.setTag(str3);
         }
         frameLayout3.addView(this.actionBar);
         updateEmptyView();
@@ -1239,7 +1235,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 AlertDialog[] alertDialogArr = {new AlertDialog(getParentActivity(), 3)};
                 TLRPC$TL_channels_editLocation tLRPC$TL_channels_editLocation = new TLRPC$TL_channels_editLocation();
                 tLRPC$TL_channels_editLocation.address = tLRPC$TL_messageMediaVenue.address;
-                tLRPC$TL_channels_editLocation.channel = getMessagesController().getInputChannel(-((int) this.dialogId));
+                tLRPC$TL_channels_editLocation.channel = getMessagesController().getInputChannel(-this.dialogId);
                 TLRPC$TL_inputGeoPoint tLRPC$TL_inputGeoPoint = new TLRPC$TL_inputGeoPoint();
                 tLRPC$TL_channels_editLocation.geo_point = tLRPC$TL_inputGeoPoint;
                 TLRPC$GeoPoint tLRPC$GeoPoint = tLRPC$TL_messageMediaVenue.geo;
@@ -1578,11 +1574,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LocationActivity.createUserBitmap(org.telegram.ui.LocationActivity$LiveLocation):android.graphics.Bitmap");
     }
 
-    private int getMessageId(TLRPC$Message tLRPC$Message) {
+    private long getMessageId(TLRPC$Message tLRPC$Message) {
         if (tLRPC$Message.from_id != null) {
             return MessageObject.getFromChatId(tLRPC$Message);
         }
-        return (int) MessageObject.getDialogId(tLRPC$Message);
+        return MessageObject.getDialogId(tLRPC$Message);
     }
 
     private void openProximityAlert() {
@@ -1592,7 +1588,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } else {
             this.previousRadius = circle.getRadius();
         }
-        TLRPC$User user = ((int) this.dialogId) > 0 ? getMessagesController().getUser(Integer.valueOf((int) this.dialogId)) : null;
+        TLRPC$User user = DialogObject.isUserDialog(this.dialogId) ? getMessagesController().getUser(Long.valueOf(this.dialogId)) : null;
         ProximitySheet proximitySheet2 = new ProximitySheet(getParentActivity(), user, new LocationActivity$$ExternalSyntheticLambda35(this), new LocationActivity$$ExternalSyntheticLambda36(this, user), new LocationActivity$$ExternalSyntheticLambda17(this));
         this.proximitySheet = proximitySheet2;
         ((FrameLayout) this.fragmentView).addView(proximitySheet2, LayoutHelper.createFrame(-1, -1.0f));
@@ -1608,7 +1604,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 moveToBounds(i, true, true);
             }
         }
-        if (((int) this.dialogId) < 0) {
+        if (DialogObject.isChatDialog(this.dialogId)) {
             return true;
         }
         int size = this.markers.size();
@@ -1681,12 +1677,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
                 if (Math.abs((System.currentTimeMillis() / 1000) - ((long) globalMainSettings.getInt("backgroundloc", 0))) > 86400 && parentActivity.checkSelfPermission("android.permission.ACCESS_BACKGROUND_LOCATION") != 0) {
                     globalMainSettings.edit().putInt("backgroundloc", (int) (System.currentTimeMillis() / 1000)).commit();
-                    AlertsCreator.createBackgroundLocationPermissionDialog(parentActivity, getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), new LocationActivity$$ExternalSyntheticLambda15(this)).show();
+                    AlertsCreator.createBackgroundLocationPermissionDialog(parentActivity, getMessagesController().getUser(Long.valueOf(getUserConfig().getClientUserId())), new LocationActivity$$ExternalSyntheticLambda15(this), (Theme.ResourcesProvider) null).show();
                     return;
                 }
             }
-            TLRPC$User user = ((int) this.dialogId) > 0 ? getMessagesController().getUser(Integer.valueOf((int) this.dialogId)) : null;
-            showDialog(AlertsCreator.createLocationUpdateDialog(getParentActivity(), user, new LocationActivity$$ExternalSyntheticLambda25(this, user, i)));
+            TLRPC$User user = DialogObject.isUserDialog(this.dialogId) ? getMessagesController().getUser(Long.valueOf(this.dialogId)) : null;
+            showDialog(AlertsCreator.createLocationUpdateDialog(getParentActivity(), user, new LocationActivity$$ExternalSyntheticLambda25(this, user, i), (Theme.ResourcesProvider) null));
         }
     }
 
@@ -1787,14 +1783,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             liveLocation = new LiveLocation();
             liveLocation.object = tLRPC$Message;
             if (tLRPC$Message.from_id instanceof TLRPC$TL_peerUser) {
-                liveLocation.user = getMessagesController().getUser(Integer.valueOf(liveLocation.object.from_id.user_id));
+                liveLocation.user = getMessagesController().getUser(Long.valueOf(liveLocation.object.from_id.user_id));
                 liveLocation.id = liveLocation.object.from_id.user_id;
             } else {
-                int dialogId2 = (int) MessageObject.getDialogId(tLRPC$Message);
-                if (dialogId2 > 0) {
-                    liveLocation.user = getMessagesController().getUser(Integer.valueOf(dialogId2));
+                long dialogId2 = MessageObject.getDialogId(tLRPC$Message);
+                if (DialogObject.isUserDialog(dialogId2)) {
+                    liveLocation.user = getMessagesController().getUser(Long.valueOf(dialogId2));
                 } else {
-                    liveLocation.chat = getMessagesController().getChat(Integer.valueOf(-dialogId2));
+                    liveLocation.chat = getMessagesController().getChat(Long.valueOf(-dialogId2));
                 }
                 liveLocation.id = dialogId2;
             }
@@ -1846,13 +1842,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         TLRPC$GeoPoint tLRPC$GeoPoint = tLRPC$TL_channelLocation.geo_point;
         LatLng latLng = new LatLng(tLRPC$GeoPoint.lat, tLRPC$GeoPoint._long);
         LiveLocation liveLocation = new LiveLocation();
-        int i = (int) this.dialogId;
-        if (i > 0) {
-            liveLocation.user = getMessagesController().getUser(Integer.valueOf(i));
+        if (DialogObject.isUserDialog(this.dialogId)) {
+            liveLocation.user = getMessagesController().getUser(Long.valueOf(this.dialogId));
         } else {
-            liveLocation.chat = getMessagesController().getChat(Integer.valueOf(-i));
+            liveLocation.chat = getMessagesController().getChat(Long.valueOf(-this.dialogId));
         }
-        liveLocation.id = i;
+        liveLocation.id = this.dialogId;
         try {
             MarkerOptions position = new MarkerOptions().position(latLng);
             Bitmap createUserBitmap = createUserBitmap(liveLocation);
@@ -2123,52 +2118,51 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         /*
             r7 = this;
             android.widget.ImageView r0 = r7.proximityButton
-            if (r0 == 0) goto L_0x006a
+            if (r0 == 0) goto L_0x006c
             int r0 = r0.getVisibility()
-            if (r0 != 0) goto L_0x006a
+            if (r0 != 0) goto L_0x006c
             boolean r0 = r7.proximityAnimationInProgress
             if (r0 == 0) goto L_0x000f
-            goto L_0x006a
+            goto L_0x006c
         L_0x000f:
             android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
             java.lang.String r1 = "proximityhint"
             r2 = 0
             int r3 = r0.getInt(r1, r2)
             r4 = 3
-            if (r3 >= r4) goto L_0x006a
+            if (r3 >= r4) goto L_0x006c
             android.content.SharedPreferences$Editor r0 = r0.edit()
             r4 = 1
             int r3 = r3 + r4
             android.content.SharedPreferences$Editor r0 = r0.putInt(r1, r3)
             r0.commit()
             long r0 = r7.dialogId
-            int r1 = (int) r0
-            if (r1 <= 0) goto L_0x0055
+            boolean r0 = org.telegram.messenger.DialogObject.isUserDialog(r0)
+            if (r0 == 0) goto L_0x0057
             org.telegram.messenger.MessagesController r0 = r7.getMessagesController()
             long r5 = r7.dialogId
-            int r1 = (int) r5
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+            java.lang.Long r1 = java.lang.Long.valueOf(r5)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
             org.telegram.ui.Components.HintView r1 = r7.hintView
-            r3 = 2131627225(0x7f0e0cd9, float:1.8881708E38)
+            r3 = 2131627249(0x7f0e0cf1, float:1.8881757E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r0 = org.telegram.messenger.UserObject.getFirstName(r0)
             r5[r2] = r0
             java.lang.String r0 = "ProximityTooltioUser"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r5)
             r1.setOverrideText(r0)
-            goto L_0x0063
-        L_0x0055:
+            goto L_0x0065
+        L_0x0057:
             org.telegram.ui.Components.HintView r0 = r7.hintView
-            r1 = 2131627224(0x7f0e0cd8, float:1.8881706E38)
+            r1 = 2131627248(0x7f0e0cf0, float:1.8881755E38)
             java.lang.String r2 = "ProximityTooltioGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setOverrideText(r1)
-        L_0x0063:
+        L_0x0065:
             org.telegram.ui.Components.HintView r0 = r7.hintView
             android.widget.ImageView r1 = r7.proximityButton
             r0.showForView(r1, r4)
-        L_0x006a:
+        L_0x006c:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LocationActivity.maybeShowProximityHint():void");
@@ -2386,8 +2380,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.dialogId = messageObject2.getDialogId();
     }
 
-    public void setChatLocation(int i, TLRPC$TL_channelLocation tLRPC$TL_channelLocation) {
-        this.dialogId = (long) (-i);
+    public void setChatLocation(long j, TLRPC$TL_channelLocation tLRPC$TL_channelLocation) {
+        this.dialogId = -j;
         this.chatLocation = tLRPC$TL_channelLocation;
     }
 
@@ -2520,16 +2514,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } else {
             fetchRecentLocations(arrayList);
         }
-        int i = (int) this.dialogId;
-        if (i < 0) {
-            TLRPC$Chat chat = getMessagesController().getChat(Integer.valueOf(-i));
+        if (DialogObject.isChatDialog(this.dialogId)) {
+            TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(-this.dialogId));
             if (ChatObject.isChannel(chat) && !chat.megagroup) {
                 return false;
             }
         }
         TLRPC$TL_messages_getRecentLocations tLRPC$TL_messages_getRecentLocations = new TLRPC$TL_messages_getRecentLocations();
         long dialogId2 = this.messageObject.getDialogId();
-        tLRPC$TL_messages_getRecentLocations.peer = getMessagesController().getInputPeer((int) dialogId2);
+        tLRPC$TL_messages_getRecentLocations.peer = getMessagesController().getInputPeer(dialogId2);
         tLRPC$TL_messages_getRecentLocations.limit = 100;
         getConnectionsManager().sendRequest(tLRPC$TL_messages_getRecentLocations, new LocationActivity$$ExternalSyntheticLambda26(this, dialogId2));
         if (arrayList != null) {
@@ -2611,7 +2604,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         if (messageObject2.isLiveLocation()) {
                             addUserMarker(messageObject2.messageOwner);
                             z = true;
-                        } else if ((messageObject2.messageOwner.action instanceof TLRPC$TL_messageActionGeoProximityReached) && ((int) messageObject2.getDialogId()) > 0) {
+                        } else if ((messageObject2.messageOwner.action instanceof TLRPC$TL_messageActionGeoProximityReached) && DialogObject.isUserDialog(messageObject2.getDialogId())) {
                             this.proximityButton.setImageResource(NUM);
                             Circle circle = this.proximityCircle;
                             if (circle != null) {

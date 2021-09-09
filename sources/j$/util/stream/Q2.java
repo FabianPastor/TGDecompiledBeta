@@ -1,15 +1,15 @@
 package j$.util.stream;
 
-import j$.util.function.n;
+import j$.util.function.o;
 
 class Q2 extends V2 {
-    final /* synthetic */ n b;
+    final /* synthetic */ o b;
     final /* synthetic */ long c;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    Q2(CLASSNAMEf4 f4Var, n nVar, long j) {
+    Q2(CLASSNAMEf4 f4Var, o oVar, long j) {
         super(f4Var);
-        this.b = nVar;
+        this.b = oVar;
         this.c = j;
     }
 

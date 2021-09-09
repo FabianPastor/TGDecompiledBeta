@@ -8,21 +8,19 @@ import org.telegram.tgnet.TLRPC$User;
 
 public class AutoMessageHeardReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        Intent intent2 = intent;
         ApplicationLoader.postInitApplication();
-        long longExtra = intent2.getLongExtra("dialog_id", 0);
-        int intExtra = intent2.getIntExtra("max_id", 0);
-        int intExtra2 = intent2.getIntExtra("currentAccount", 0);
+        long longExtra = intent.getLongExtra("dialog_id", 0);
+        int intExtra = intent.getIntExtra("max_id", 0);
+        int intExtra2 = intent.getIntExtra("currentAccount", 0);
         if (longExtra != 0 && intExtra != 0 && UserConfig.isValidAccount(intExtra2)) {
-            int i = (int) longExtra;
             AccountInstance instance = AccountInstance.getInstance(intExtra2);
-            if (i > 0) {
-                if (instance.getMessagesController().getUser(Integer.valueOf(i)) == null) {
-                    Utilities.globalQueue.postRunnable(new AutoMessageHeardReceiver$$ExternalSyntheticLambda1(instance, i, intExtra2, longExtra, intExtra));
+            if (DialogObject.isUserDialog(longExtra)) {
+                if (instance.getMessagesController().getUser(Long.valueOf(longExtra)) == null) {
+                    Utilities.globalQueue.postRunnable(new AutoMessageHeardReceiver$$ExternalSyntheticLambda1(instance, longExtra, intExtra2, intExtra));
                     return;
                 }
-            } else if (i < 0 && instance.getMessagesController().getChat(Integer.valueOf(-i)) == null) {
-                Utilities.globalQueue.postRunnable(new AutoMessageHeardReceiver$$ExternalSyntheticLambda0(instance, i, intExtra2, longExtra, intExtra));
+            } else if (DialogObject.isChatDialog(longExtra) && instance.getMessagesController().getChat(Long.valueOf(-longExtra)) == null) {
+                Utilities.globalQueue.postRunnable(new AutoMessageHeardReceiver$$ExternalSyntheticLambda0(instance, longExtra, intExtra2, intExtra));
                 return;
             }
             MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, 0, true, 0);

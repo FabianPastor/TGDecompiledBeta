@@ -96,6 +96,11 @@ public class AnimatedArrowDrawable extends Drawable {
         }
     }
 
+    public void setColor(int i) {
+        this.paint.setColor(i);
+        invalidateSelf();
+    }
+
     @Keep
     public float getAnimationProgress() {
         return this.animProgress;

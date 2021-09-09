@@ -1,14 +1,15 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.y;
+import j$.util.function.z;
+import j$.util.y;
 
 final class M4 extends CLASSNAMEg4 {
-    M4(CLASSNAMEz2 z2Var, y yVar, boolean z) {
-        super(z2Var, yVar, z);
+    M4(CLASSNAMEz2 z2Var, z zVar, boolean z) {
+        super(z2Var, zVar, z);
     }
 
-    M4(CLASSNAMEz2 z2Var, j$.util.y yVar, boolean z) {
+    M4(CLASSNAMEz2 z2Var, y yVar, boolean z) {
         super(z2Var, yVar, z);
     }
 
@@ -67,7 +68,7 @@ final class M4 extends CLASSNAMEg4 {
     }
 
     /* access modifiers changed from: package-private */
-    public CLASSNAMEg4 l(j$.util.y yVar) {
+    public CLASSNAMEg4 l(y yVar) {
         return new M4(this.b, yVar, this.a);
     }
 }

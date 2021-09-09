@@ -2,7 +2,7 @@ package j$.util.stream;
 
 import j$.util.N;
 import j$.util.function.Consumer;
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.x;
 import j$.util.y;
 
@@ -24,8 +24,8 @@ final class Y1 extends CLASSNAMEb2 implements CLASSNAMEx1 {
     }
 
     /* renamed from: f */
-    public /* synthetic */ CLASSNAMEx1 r(long j, long j2, l lVar) {
-        return CLASSNAMEp1.o(this, j, j2, lVar);
+    public /* synthetic */ CLASSNAMEx1 r(long j, long j2, m mVar) {
+        return CLASSNAMEp1.o(this, j, j2, mVar);
     }
 
     public /* synthetic */ void forEach(Consumer consumer) {

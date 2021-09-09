@@ -1,7 +1,7 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.p;
+import j$.util.function.q;
 import java.util.Comparator;
 
 final class M implements w {
@@ -26,9 +26,9 @@ final class M implements w {
     }
 
     /* renamed from: d */
-    public void forEachRemaining(p pVar) {
+    public void forEachRemaining(q qVar) {
         int i;
-        pVar.getClass();
+        qVar.getClass();
         long[] jArr = this.a;
         int length = jArr.length;
         int i2 = this.c;
@@ -36,7 +36,7 @@ final class M implements w {
             this.b = i2;
             if (i < i2) {
                 do {
-                    pVar.accept(jArr[i]);
+                    qVar.accept(jArr[i]);
                     i++;
                 } while (i < i2);
             }
@@ -67,15 +67,15 @@ final class M implements w {
     }
 
     /* renamed from: i */
-    public boolean tryAdvance(p pVar) {
-        pVar.getClass();
+    public boolean tryAdvance(q qVar) {
+        qVar.getClass();
         int i = this.b;
         if (i < 0 || i >= this.c) {
             return false;
         }
         long[] jArr = this.a;
         this.b = i + 1;
-        pVar.accept(jArr[i]);
+        qVar.accept(jArr[i]);
         return true;
     }
 

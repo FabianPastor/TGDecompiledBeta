@@ -42,7 +42,7 @@ public class RecyclerListView extends RecyclerView {
     private static int[] attributes;
     private static boolean gotAttributes;
     /* access modifiers changed from: private */
-    public boolean allowItemsInteractionDuringAnimation = true;
+    public boolean allowItemsInteractionDuringAnimation;
     private boolean animateEmptyView;
     /* access modifiers changed from: private */
     public Runnable clickRunnable;
@@ -51,9 +51,9 @@ public class RecyclerListView extends RecyclerView {
     /* access modifiers changed from: private */
     public View currentChildView;
     /* access modifiers changed from: private */
-    public int currentFirst = -1;
+    public int currentFirst;
     int currentSelectedPosition;
-    private int currentVisible = -1;
+    private int currentVisible;
     private boolean disableHighlightState;
     private boolean disallowInterceptTouchEvents;
     private boolean drawSelectorBehind;
@@ -68,7 +68,7 @@ public class RecyclerListView extends RecyclerView {
     private ArrayList<View> headers;
     private ArrayList<View> headersCache;
     private boolean hiddenByEmptyView;
-    private boolean hideIfEmpty = true;
+    private boolean hideIfEmpty;
     /* access modifiers changed from: private */
     public boolean instantClick;
     /* access modifiers changed from: private */
@@ -76,8 +76,8 @@ public class RecyclerListView extends RecyclerView {
     private boolean isChildViewEnabled;
     private boolean isHidden;
     private long lastAlphaAnimationTime;
-    float lastX = Float.MAX_VALUE;
-    float lastY = Float.MAX_VALUE;
+    float lastX;
+    float lastY;
     int[] listPaddings;
     /* access modifiers changed from: private */
     public boolean longPressCalled;
@@ -86,28 +86,7 @@ public class RecyclerListView extends RecyclerView {
     onMultiSelectionChanged multiSelectionListener;
     boolean multiselectScrollRunning;
     boolean multiselectScrollToTop;
-    private RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
-        public void onChanged() {
-            RecyclerListView.this.checkIfEmpty(true);
-            int unused = RecyclerListView.this.currentFirst = -1;
-            if (RecyclerListView.this.removeHighlighSelectionRunnable == null) {
-                RecyclerListView.this.selectorRect.setEmpty();
-            }
-            RecyclerListView.this.invalidate();
-        }
-
-        public void onItemRangeInserted(int i, int i2) {
-            RecyclerListView.this.checkIfEmpty(true);
-            if (RecyclerListView.this.pinnedHeader != null && RecyclerListView.this.pinnedHeader.getAlpha() == 0.0f) {
-                int unused = RecyclerListView.this.currentFirst = -1;
-                RecyclerListView.this.invalidateViews();
-            }
-        }
-
-        public void onItemRangeRemoved(int i, int i2) {
-            RecyclerListView.this.checkIfEmpty(true);
-        }
-    };
+    private RecyclerView.AdapterDataObserver observer;
     private OnInterceptTouchListener onInterceptTouchListener;
     /* access modifiers changed from: private */
     public OnItemClickListener onItemClickListener;
@@ -129,28 +108,10 @@ public class RecyclerListView extends RecyclerView {
     private float pinnedHeaderShadowTargetAlpha;
     /* access modifiers changed from: private */
     public Runnable removeHighlighSelectionRunnable;
-    private boolean scrollEnabled = true;
-    Runnable scroller = new Runnable() {
-        public void run() {
-            int i;
-            RecyclerListView recyclerListView = RecyclerListView.this;
-            recyclerListView.multiSelectionListener.getPaddings(recyclerListView.listPaddings);
-            if (RecyclerListView.this.multiselectScrollToTop) {
-                i = -AndroidUtilities.dp(12.0f);
-                RecyclerListView recyclerListView2 = RecyclerListView.this;
-                boolean unused = recyclerListView2.chekMultiselect(0.0f, (float) recyclerListView2.listPaddings[0]);
-            } else {
-                i = AndroidUtilities.dp(12.0f);
-                RecyclerListView recyclerListView3 = RecyclerListView.this;
-                boolean unused2 = recyclerListView3.chekMultiselect(0.0f, (float) (recyclerListView3.getMeasuredHeight() - RecyclerListView.this.listPaddings[1]));
-            }
-            RecyclerListView.this.multiSelectionListener.scrollBy(i);
-            RecyclerListView recyclerListView4 = RecyclerListView.this;
-            if (recyclerListView4.multiselectScrollRunning) {
-                AndroidUtilities.runOnUIThread(recyclerListView4.scroller);
-            }
-        }
-    };
+    /* access modifiers changed from: protected */
+    public final Theme.ResourcesProvider resourcesProvider;
+    private boolean scrollEnabled;
+    Runnable scroller;
     /* access modifiers changed from: private */
     public boolean scrollingByUser;
     /* access modifiers changed from: private */
@@ -163,8 +124,8 @@ public class RecyclerListView extends RecyclerView {
     protected Drawable selectorDrawable;
     protected int selectorPosition;
     private int selectorRadius;
-    protected Rect selectorRect = new Rect();
-    private int selectorType = 2;
+    protected Rect selectorRect;
+    private int selectorType;
     /* access modifiers changed from: private */
     public boolean selfOnLayout;
     private int startSection;
@@ -1174,11 +1135,68 @@ public class RecyclerListView extends RecyclerView {
         return null;
     }
 
-    @SuppressLint({"PrivateApi"})
     public RecyclerListView(Context context) {
+        this(context, (Theme.ResourcesProvider) null);
+    }
+
+    @SuppressLint({"PrivateApi"})
+    public RecyclerListView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
-        setGlowColor(Theme.getColor("actionBarDefault"));
-        Drawable selectorDrawable2 = Theme.getSelectorDrawable(false);
+        this.allowItemsInteractionDuringAnimation = true;
+        this.currentFirst = -1;
+        this.currentVisible = -1;
+        this.hideIfEmpty = true;
+        this.selectorType = 2;
+        this.selectorRect = new Rect();
+        this.scrollEnabled = true;
+        this.lastX = Float.MAX_VALUE;
+        this.lastY = Float.MAX_VALUE;
+        this.observer = new RecyclerView.AdapterDataObserver() {
+            public void onChanged() {
+                RecyclerListView.this.checkIfEmpty(true);
+                int unused = RecyclerListView.this.currentFirst = -1;
+                if (RecyclerListView.this.removeHighlighSelectionRunnable == null) {
+                    RecyclerListView.this.selectorRect.setEmpty();
+                }
+                RecyclerListView.this.invalidate();
+            }
+
+            public void onItemRangeInserted(int i, int i2) {
+                RecyclerListView.this.checkIfEmpty(true);
+                if (RecyclerListView.this.pinnedHeader != null && RecyclerListView.this.pinnedHeader.getAlpha() == 0.0f) {
+                    int unused = RecyclerListView.this.currentFirst = -1;
+                    RecyclerListView.this.invalidateViews();
+                }
+            }
+
+            public void onItemRangeRemoved(int i, int i2) {
+                RecyclerListView.this.checkIfEmpty(true);
+            }
+        };
+        this.scroller = new Runnable() {
+            public void run() {
+                int i;
+                RecyclerListView recyclerListView = RecyclerListView.this;
+                recyclerListView.multiSelectionListener.getPaddings(recyclerListView.listPaddings);
+                if (RecyclerListView.this.multiselectScrollToTop) {
+                    i = -AndroidUtilities.dp(12.0f);
+                    RecyclerListView recyclerListView2 = RecyclerListView.this;
+                    boolean unused = recyclerListView2.chekMultiselect(0.0f, (float) recyclerListView2.listPaddings[0]);
+                } else {
+                    i = AndroidUtilities.dp(12.0f);
+                    RecyclerListView recyclerListView3 = RecyclerListView.this;
+                    boolean unused2 = recyclerListView3.chekMultiselect(0.0f, (float) (recyclerListView3.getMeasuredHeight() - RecyclerListView.this.listPaddings[1]));
+                }
+                RecyclerListView.this.multiSelectionListener.scrollBy(i);
+                RecyclerListView recyclerListView4 = RecyclerListView.this;
+                if (recyclerListView4.multiselectScrollRunning) {
+                    AndroidUtilities.runOnUIThread(recyclerListView4.scroller);
+                }
+            }
+        };
+        this.resourcesProvider = resourcesProvider2;
+        setGlowColor(getThemedColor("actionBarDefault"));
+        Drawable selectorDrawable2 = Theme.getSelectorDrawable(getThemedColor("listSelectorSDK21"), false);
         this.selectorDrawable = selectorDrawable2;
         selectorDrawable2.setCallback(this);
         try {
@@ -2307,5 +2325,26 @@ public class RecyclerListView extends RecyclerView {
 
     public boolean isMultiselect() {
         return this.multiSelectionGesture;
+    }
+
+    /* access modifiers changed from: protected */
+    public int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    /* access modifiers changed from: protected */
+    public Drawable getThemedDrawable(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Drawable drawable = resourcesProvider2 != null ? resourcesProvider2.getDrawable(str) : null;
+        return drawable != null ? drawable : Theme.getThemeDrawable(str);
+    }
+
+    /* access modifiers changed from: protected */
+    public Paint getThemedPaint(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Paint paint = resourcesProvider2 != null ? resourcesProvider2.getPaint(str) : null;
+        return paint != null ? paint : Theme.getThemePaint(str);
     }
 }

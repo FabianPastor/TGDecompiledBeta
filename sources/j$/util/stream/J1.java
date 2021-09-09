@@ -11,12 +11,12 @@ public final /* synthetic */ class J1 implements CLASSNAMEb {
     private /* synthetic */ J1() {
     }
 
-    public final Object apply(Object obj, Object obj2) {
-        return new Q1((CLASSNAMEx1) obj, (CLASSNAMEx1) obj2);
-    }
-
-    public BiFunction b(Function function) {
+    public BiFunction andThen(Function function) {
         function.getClass();
         return new a((BiFunction) this, function);
+    }
+
+    public final Object apply(Object obj, Object obj2) {
+        return new Q1((CLASSNAMEx1) obj, (CLASSNAMEx1) obj2);
     }
 }

@@ -20,7 +20,6 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 /* compiled from: FeedWidgetService */
 class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, NotificationCenter.NotificationCenterDelegate {
     private AccountInstance accountInstance;
-    private int appWidgetId;
     private int classGuid;
     private CountDownLatch countDownLatch = new CountDownLatch(1);
     private long dialogId;
@@ -48,11 +47,11 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
 
     public FeedRemoteViewsFactory(Context context, Intent intent) {
         this.mContext = context;
-        this.appWidgetId = intent.getIntExtra("appWidgetId", 0);
+        int intExtra = intent.getIntExtra("appWidgetId", 0);
         SharedPreferences sharedPreferences = context.getSharedPreferences("shortcut_widget", 0);
-        int i = sharedPreferences.getInt("account" + this.appWidgetId, -1);
+        int i = sharedPreferences.getInt("account" + intExtra, -1);
         if (i >= 0) {
-            this.dialogId = sharedPreferences.getLong("dialogId" + this.appWidgetId, 0);
+            this.dialogId = sharedPreferences.getLong("dialogId" + intExtra, 0);
             this.accountInstance = AccountInstance.getInstance(i);
         }
     }
@@ -101,7 +100,7 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
             }
         }
         Bundle bundle = new Bundle();
-        bundle.putInt("chatId", (int) (-messageObject.getDialogId()));
+        bundle.putLong("chatId", -messageObject.getDialogId());
         bundle.putInt("message_id", messageObject.getId());
         bundle.putInt("currentAccount", this.accountInstance.getCurrentAccount());
         Intent intent = new Intent();
@@ -130,7 +129,7 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
         if (this.classGuid == 0) {
             this.classGuid = ConnectionsManager.generateClassGuid();
         }
-        this.accountInstance.getMessagesController().loadMessages(this.dialogId, 0, false, 20, 0, 0, true, 0, this.classGuid, 0, 0, true, 0, 0, 0, 1);
+        this.accountInstance.getMessagesController().loadMessages(this.dialogId, 0, false, 20, 0, 0, true, 0, this.classGuid, 0, 0, 0, 0, 0, 1);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {

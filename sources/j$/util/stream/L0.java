@@ -7,11 +7,11 @@ import j$.util.CLASSNAMEp;
 import j$.util.N;
 import j$.util.function.BiConsumer;
 import j$.util.function.CLASSNAMEb;
-import j$.util.function.i;
-import j$.util.function.k;
+import j$.util.function.j;
 import j$.util.function.l;
 import j$.util.function.m;
-import j$.util.function.u;
+import j$.util.function.n;
+import j$.util.function.z;
 import j$.util.v;
 import j$.util.y;
 import j$.wrappers.CLASSNAMEb0;
@@ -52,10 +52,10 @@ abstract class L0 extends CLASSNAMEc implements M0 {
         /*
             r2 = this;
             j$.util.v r3 = M0(r3)
-            boolean r0 = r4 instanceof j$.util.function.k
+            boolean r0 = r4 instanceof j$.util.function.l
             if (r0 == 0) goto L_0x000c
             r0 = r4
-            j$.util.function.k r0 = (j$.util.function.k) r0
+            j$.util.function.l r0 = (j$.util.function.l) r0
             goto L_0x0015
         L_0x000c:
             boolean r0 = j$.util.stream.R4.a
@@ -96,38 +96,38 @@ abstract class L0 extends CLASSNAMEc implements M0 {
         return ((Boolean) x0(CLASSNAMEp1.v(v, CLASSNAMEl1.ANY))).booleanValue();
     }
 
-    public void I(k kVar) {
-        kVar.getClass();
-        x0(new CLASSNAMEl0(kVar, true));
+    public void I(l lVar) {
+        lVar.getClass();
+        x0(new CLASSNAMEl0(lVar, true));
     }
 
-    public final Stream J(l lVar) {
-        lVar.getClass();
-        return new L(this, (CLASSNAMEc) this, CLASSNAMEf4.INT_VALUE, CLASSNAMEe4.p | CLASSNAMEe4.n, lVar);
+    public final Stream J(m mVar) {
+        mVar.getClass();
+        return new L(this, (CLASSNAMEc) this, CLASSNAMEf4.INT_VALUE, CLASSNAMEe4.p | CLASSNAMEe4.n, mVar);
     }
 
     /* access modifiers changed from: package-private */
-    public final y K0(CLASSNAMEz2 z2Var, j$.util.function.y yVar, boolean z) {
-        return new CLASSNAMEr4(z2Var, yVar, z);
+    public final y K0(CLASSNAMEz2 z2Var, z zVar, boolean z) {
+        return new CLASSNAMEr4(z2Var, zVar, z);
     }
 
-    public final int N(int i, i iVar) {
-        iVar.getClass();
-        return ((Integer) x0(new M2(CLASSNAMEf4.INT_VALUE, iVar, i))).intValue();
+    public final int N(int i, j jVar) {
+        jVar.getClass();
+        return ((Integer) x0(new M2(CLASSNAMEf4.INT_VALUE, jVar, i))).intValue();
     }
 
-    public final M0 P(l lVar) {
-        return new M(this, (CLASSNAMEc) this, CLASSNAMEf4.INT_VALUE, CLASSNAMEe4.p | CLASSNAMEe4.n | CLASSNAMEe4.t, lVar);
+    public final M0 P(m mVar) {
+        return new M(this, (CLASSNAMEc) this, CLASSNAMEf4.INT_VALUE, CLASSNAMEe4.p | CLASSNAMEe4.n | CLASSNAMEe4.t, mVar);
     }
 
-    public void U(k kVar) {
-        kVar.getClass();
-        x0(new CLASSNAMEl0(kVar, false));
+    public void U(l lVar) {
+        lVar.getClass();
+        x0(new CLASSNAMEl0(lVar, false));
     }
 
-    public final CLASSNAMEk a0(i iVar) {
-        iVar.getClass();
-        return (CLASSNAMEk) x0(new E2(CLASSNAMEf4.INT_VALUE, iVar));
+    public final CLASSNAMEk a0(j jVar) {
+        jVar.getClass();
+        return (CLASSNAMEk) x0(new E2(CLASSNAMEf4.INT_VALUE, jVar));
     }
 
     public final U asDoubleStream() {
@@ -154,9 +154,9 @@ abstract class L0 extends CLASSNAMEc implements M0 {
         return J(C0.a);
     }
 
-    public final M0 c0(k kVar) {
-        kVar.getClass();
-        return new M(this, (CLASSNAMEc) this, CLASSNAMEf4.INT_VALUE, 0, kVar);
+    public final M0 c0(l lVar) {
+        lVar.getClass();
+        return new M(this, (CLASSNAMEc) this, CLASSNAMEf4.INT_VALUE, 0, lVar);
     }
 
     public final long count() {
@@ -167,9 +167,9 @@ abstract class L0 extends CLASSNAMEc implements M0 {
         return ((CLASSNAMEf3) J(C0.a)).distinct().m(CLASSNAMEw0.a);
     }
 
-    public final CLASSNAMEf1 f(m mVar) {
-        mVar.getClass();
-        return new N(this, (CLASSNAMEc) this, CLASSNAMEf4.INT_VALUE, CLASSNAMEe4.p | CLASSNAMEe4.n, mVar);
+    public final CLASSNAMEf1 f(n nVar) {
+        nVar.getClass();
+        return new N(this, (CLASSNAMEc) this, CLASSNAMEf4.INT_VALUE, CLASSNAMEe4.p | CLASSNAMEe4.n, nVar);
     }
 
     public final CLASSNAMEk findAny() {
@@ -194,11 +194,11 @@ abstract class L0 extends CLASSNAMEc implements M0 {
         return N.g(spliterator());
     }
 
-    public final Object k0(j$.util.function.y yVar, u uVar, BiConsumer biConsumer) {
+    public final Object k0(z zVar, j$.util.function.v vVar, BiConsumer biConsumer) {
         C c = new C(biConsumer, 1);
-        yVar.getClass();
-        uVar.getClass();
-        return x0(new A2(CLASSNAMEf4.INT_VALUE, (CLASSNAMEb) c, uVar, yVar));
+        zVar.getClass();
+        vVar.getClass();
+        return x0(new A2(CLASSNAMEf4.INT_VALUE, (CLASSNAMEb) c, vVar, zVar));
     }
 
     public final M0 limit(long j) {
@@ -246,7 +246,7 @@ abstract class L0 extends CLASSNAMEc implements M0 {
     }
 
     /* access modifiers changed from: package-private */
-    public final CLASSNAMEt1 t0(long j, l lVar) {
+    public final CLASSNAMEt1 t0(long j, m mVar) {
         return CLASSNAMEy2.p(j);
     }
 
@@ -263,7 +263,7 @@ abstract class L0 extends CLASSNAMEc implements M0 {
     }
 
     /* access modifiers changed from: package-private */
-    public final B1 z0(CLASSNAMEz2 z2Var, y yVar, boolean z, l lVar) {
+    public final B1 z0(CLASSNAMEz2 z2Var, y yVar, boolean z, m mVar) {
         return CLASSNAMEy2.g(z2Var, yVar, z);
     }
 }

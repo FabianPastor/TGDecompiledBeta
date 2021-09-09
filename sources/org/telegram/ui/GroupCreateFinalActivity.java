@@ -37,6 +37,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.ConnectionsManager;
@@ -113,7 +114,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public ContextProgressView progressView;
     private int reqId;
     /* access modifiers changed from: private */
-    public ArrayList<Integer> selectedContacts;
+    public ArrayList<Long> selectedContacts;
     /* access modifiers changed from: private */
     public Drawable shadowDrawable;
     private double videoTimestamp;
@@ -121,7 +122,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public interface GroupCreateFinalActivityDelegate {
         void didFailChatCreation();
 
-        void didFinishChatCreation(GroupCreateFinalActivity groupCreateFinalActivity, int i);
+        void didFinishChatCreation(GroupCreateFinalActivity groupCreateFinalActivity, long j);
 
         void didStartChatCreation();
     }
@@ -153,12 +154,18 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.imageUpdater = imageUpdater2;
         imageUpdater2.parentFragment = this;
         imageUpdater2.setDelegate(this);
-        this.selectedContacts = getArguments().getIntegerArrayList("result");
+        long[] longArray = getArguments().getLongArray("result");
+        if (longArray != null) {
+            this.selectedContacts = new ArrayList<>(longArray.length);
+            for (long valueOf : longArray) {
+                this.selectedContacts.add(Long.valueOf(valueOf));
+            }
+        }
         ArrayList arrayList = new ArrayList();
         for (int i = 0; i < this.selectedContacts.size(); i++) {
-            Integer num = this.selectedContacts.get(i);
-            if (getMessagesController().getUser(num) == null) {
-                arrayList.add(num);
+            Long l = this.selectedContacts.get(i);
+            if (getMessagesController().getUser(l) == null) {
+                arrayList.add(l);
             }
         }
         if (!arrayList.isEmpty()) {
@@ -252,7 +259,6 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public View createView(Context context) {
         String str;
         int i;
-        int i2;
         Context context2 = context;
         EditTextEmoji editTextEmoji = this.editText;
         if (editTextEmoji != null) {
@@ -479,10 +485,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         FrameLayout frameLayout2 = this.editTextContainer;
         BackupImageView backupImageView = this.avatarImage;
         boolean z = LocaleController.isRTL;
+        int i2 = 3;
         frameLayout2.addView(backupImageView, LayoutHelper.createFrame(64, 64.0f, (z ? 5 : 3) | 48, z ? 0.0f : 16.0f, 16.0f, z ? 16.0f : 0.0f, 16.0f));
         final Paint paint = new Paint(1);
         paint.setColor(NUM);
-        AnonymousClass5 r10 = new View(context2) {
+        AnonymousClass5 r8 = new View(context2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 if (GroupCreateFinalActivity.this.avatarImage != null && GroupCreateFinalActivity.this.avatarProgressView.getVisibility() == 0) {
@@ -491,10 +498,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 }
             }
         };
-        this.avatarOverlay = r10;
+        this.avatarOverlay = r8;
         FrameLayout frameLayout3 = this.editTextContainer;
         boolean z2 = LocaleController.isRTL;
-        frameLayout3.addView(r10, LayoutHelper.createFrame(64, 64.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 16.0f, 16.0f, z2 ? 16.0f : 0.0f, 16.0f));
+        frameLayout3.addView(r8, LayoutHelper.createFrame(64, 64.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 16.0f, 16.0f, z2 ? 16.0f : 0.0f, 16.0f));
         this.avatarOverlay.setOnClickListener(new GroupCreateFinalActivity$$ExternalSyntheticLambda2(this));
         this.cameraDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(60.0f), AndroidUtilities.dp(60.0f), false, (int[]) null);
         AnonymousClass6 r72 = new RLottieImageView(context2) {
@@ -588,7 +595,6 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.floatingButtonContainer.setBackgroundDrawable(createSimpleSelectorCircleDrawable);
         if (i4 >= 21) {
             StateListAnimator stateListAnimator = new StateListAnimator();
-            i2 = i4;
             stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButtonIcon, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButtonIcon, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.floatingButtonContainer.setStateListAnimator(stateListAnimator);
@@ -598,17 +604,17 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                 }
             });
-        } else {
-            i2 = i4;
         }
         VerticalPositionAutoAnimator.attach(this.floatingButtonContainer);
         FrameLayout frameLayout7 = this.floatingButtonContainer;
         int i5 = 60;
-        int i6 = i2;
-        int i7 = i6 >= 21 ? 56 : 60;
-        float f = i6 >= 21 ? 56.0f : 60.0f;
+        int i6 = i4 >= 21 ? 56 : 60;
+        float f = i4 >= 21 ? 56.0f : 60.0f;
         boolean z6 = LocaleController.isRTL;
-        r2.addView(frameLayout7, LayoutHelper.createFrame(i7, f, (z6 ? 3 : 5) | 80, z6 ? 14.0f : 0.0f, 0.0f, z6 ? 0.0f : 14.0f, 14.0f));
+        if (!z6) {
+            i2 = 5;
+        }
+        r2.addView(frameLayout7, LayoutHelper.createFrame(i6, f, i2 | 80, z6 ? 14.0f : 0.0f, 0.0f, z6 ? 0.0f : 14.0f, 14.0f));
         this.floatingButtonContainer.setOnClickListener(new GroupCreateFinalActivity$$ExternalSyntheticLambda1(this));
         ImageView imageView = new ImageView(context2);
         this.floatingButtonIcon = imageView;
@@ -619,10 +625,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.floatingButtonContainer.setContentDescription(LocaleController.getString("Done", NUM));
         FrameLayout frameLayout8 = this.floatingButtonContainer;
         ImageView imageView2 = this.floatingButtonIcon;
-        if (i6 >= 21) {
+        if (i4 >= 21) {
             i5 = 56;
         }
-        frameLayout8.addView(imageView2, LayoutHelper.createFrame(i5, i6 >= 21 ? 56.0f : 60.0f));
+        frameLayout8.addView(imageView2, LayoutHelper.createFrame(i5, i4 >= 21 ? 56.0f : 60.0f));
         ContextProgressView contextProgressView = new ContextProgressView(context2, 1);
         this.progressView = contextProgressView;
         contextProgressView.setAlpha(0.0f);
@@ -811,15 +817,17 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     public void saveSelfArgs(Bundle bundle) {
-        String obj;
         String str;
         ImageUpdater imageUpdater2 = this.imageUpdater;
         if (!(imageUpdater2 == null || (str = imageUpdater2.currentPicturePath) == null)) {
             bundle.putString("path", str);
         }
         EditTextEmoji editTextEmoji = this.editText;
-        if (editTextEmoji != null && (obj = editTextEmoji.getText().toString()) != null && obj.length() != 0) {
-            bundle.putString("nameTextView", obj);
+        if (editTextEmoji != null) {
+            String obj = editTextEmoji.getText().toString();
+            if (obj.length() != 0) {
+                bundle.putString("nameTextView", obj);
+            }
         }
     }
 
@@ -850,7 +858,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         if (i3 == NotificationCenter.updateInterfaces) {
             if (this.listView != null) {
                 int intValue = objArr[0].intValue();
-                if ((intValue & 2) != 0 || (intValue & 1) != 0 || (intValue & 4) != 0) {
+                if ((MessagesController.UPDATE_MASK_AVATAR & intValue) != 0 || (MessagesController.UPDATE_MASK_NAME & intValue) != 0 || (MessagesController.UPDATE_MASK_STATUS & intValue) != 0) {
                     int childCount = this.listView.getChildCount();
                     for (int i4 = 0; i4 < childCount; i4++) {
                         View childAt = this.listView.getChildAt(i4);
@@ -874,18 +882,18 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
         } else if (i3 == NotificationCenter.chatDidCreated) {
             this.reqId = 0;
-            int intValue2 = objArr[0].intValue();
+            long longValue = objArr[0].longValue();
             GroupCreateFinalActivityDelegate groupCreateFinalActivityDelegate2 = this.delegate;
             if (groupCreateFinalActivityDelegate2 != null) {
-                groupCreateFinalActivityDelegate2.didFinishChatCreation(this, intValue2);
+                groupCreateFinalActivityDelegate2.didFinishChatCreation(this, longValue);
             } else {
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                 Bundle bundle = new Bundle();
-                bundle.putInt("chat_id", intValue2);
+                bundle.putLong("chat_id", longValue);
                 presentFragment(new ChatActivity(bundle), true);
             }
             if (this.inputPhoto != null || this.inputVideo != null) {
-                getMessagesController().changeChatAvatar(intValue2, (TLRPC$TL_inputChatPhoto) null, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig, (Runnable) null);
+                getMessagesController().changeChatAvatar(longValue, (TLRPC$TL_inputChatPhoto) null, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig, (Runnable) null);
             }
         }
     }
@@ -1015,7 +1023,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                     headerCell.setText(LocaleController.getString("AttachLocation", NUM));
                 }
             } else if (itemViewType == 2) {
-                ((GroupCreateUserCell) viewHolder.itemView).setObject(GroupCreateFinalActivity.this.getMessagesController().getUser((Integer) GroupCreateFinalActivity.this.selectedContacts.get(i - this.usersStartRow)), (CharSequence) null, (CharSequence) null);
+                ((GroupCreateUserCell) viewHolder.itemView).setObject(GroupCreateFinalActivity.this.getMessagesController().getUser((Long) GroupCreateFinalActivity.this.selectedContacts.get(i - this.usersStartRow)), (CharSequence) null, (CharSequence) null);
             } else if (itemViewType == 3) {
                 ((TextSettingsCell) viewHolder.itemView).setText(GroupCreateFinalActivity.this.currentGroupCreateAddress, false);
             }

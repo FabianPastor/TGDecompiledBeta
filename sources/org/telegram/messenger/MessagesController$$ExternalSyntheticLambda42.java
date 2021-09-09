@@ -1,28 +1,22 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
-import org.telegram.tgnet.TLRPC$messages_Dialogs;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getHistory;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda42 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ int f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ TLRPC$messages_Dialogs f$4;
-    public final /* synthetic */ LongSparseArray f$5;
-    public final /* synthetic */ LongSparseArray f$6;
+    public final /* synthetic */ TLRPC$TL_messages_getHistory f$2;
+    public final /* synthetic */ TLRPC$TL_error f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda42(MessagesController messagesController, int i, int i2, int i3, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda42(MessagesController messagesController, int i, TLRPC$TL_messages_getHistory tLRPC$TL_messages_getHistory, TLRPC$TL_error tLRPC$TL_error) {
         this.f$0 = messagesController;
         this.f$1 = i;
-        this.f$2 = i2;
-        this.f$3 = i3;
-        this.f$4 = tLRPC$messages_Dialogs;
-        this.f$5 = longSparseArray;
-        this.f$6 = longSparseArray2;
+        this.f$2 = tLRPC$TL_messages_getHistory;
+        this.f$3 = tLRPC$TL_error;
     }
 
     public final void run() {
-        this.f$0.lambda$completeDialogsReset$161(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$loadMessagesInternal$140(this.f$1, this.f$2, this.f$3);
     }
 }

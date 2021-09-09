@@ -47,6 +47,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CloseProgressDrawable2;
@@ -87,6 +88,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean processedPopupClick;
     private CloseProgressDrawable2 progressDrawable;
     private Rect rect;
+    private final Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public FrameLayout searchContainer;
     AnimatorSet searchContainerAnimator;
@@ -166,7 +168,15 @@ public class ActionBarMenuItem extends FrameLayout {
         this(context, actionBarMenu, i, i2, false);
     }
 
+    public ActionBarMenuItem(Context context, ActionBarMenu actionBarMenu, int i, int i2, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, actionBarMenu, i, i2, false, resourcesProvider2);
+    }
+
     public ActionBarMenuItem(Context context, ActionBarMenu actionBarMenu, int i, int i2, boolean z) {
+        this(context, actionBarMenu, i, i2, z, (Theme.ResourcesProvider) null);
+    }
+
+    public ActionBarMenuItem(Context context, ActionBarMenu actionBarMenu, int i, int i2, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         new ArrayList();
         this.allowCloseAnimation = true;
@@ -177,6 +187,7 @@ public class ActionBarMenuItem extends FrameLayout {
         this.currentSearchFilters = new ArrayList<>();
         this.selectedFilterIndex = -1;
         this.notificationIndex = -1;
+        this.resourcesProvider = resourcesProvider2;
         if (i != 0) {
             setBackgroundDrawable(Theme.createSelectorDrawable(i, z ? 5 : 1));
         }
@@ -348,7 +359,7 @@ public class ActionBarMenuItem extends FrameLayout {
         if (this.popupLayout == null) {
             this.rect = new Rect();
             this.location = new int[2];
-            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext());
+            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), this.resourcesProvider);
             this.popupLayout = actionBarPopupWindowLayout;
             actionBarPopupWindowLayout.setOnTouchListener(new ActionBarMenuItem$$ExternalSyntheticLambda6(this));
             this.popupLayout.setDispatchKeyEventListener(new ActionBarMenuItem$$ExternalSyntheticLambda11(this));
@@ -425,7 +436,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public TextView addSubItem(int i, CharSequence charSequence) {
         createPopupLayout();
         TextView textView2 = new TextView(getContext());
-        textView2.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
+        textView2.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
         textView2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         if (!LocaleController.isRTL) {
             textView2.setGravity(16);
@@ -480,6 +491,10 @@ public class ActionBarMenuItem extends FrameLayout {
         return addSubItem(i, i2, (Drawable) null, charSequence, true, false);
     }
 
+    public ActionBarMenuSubItem addSubItem(int i, int i2, CharSequence charSequence, Theme.ResourcesProvider resourcesProvider2) {
+        return addSubItem(i, i2, (Drawable) null, charSequence, true, false, resourcesProvider2);
+    }
+
     public ActionBarMenuSubItem addSubItem(int i, int i2, CharSequence charSequence, boolean z) {
         return addSubItem(i, i2, (Drawable) null, charSequence, true, z);
     }
@@ -502,8 +517,12 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public ActionBarMenuSubItem addSubItem(int i, int i2, Drawable drawable, CharSequence charSequence, boolean z, boolean z2) {
+        return addSubItem(i, i2, drawable, charSequence, z, z2, (Theme.ResourcesProvider) null);
+    }
+
+    public ActionBarMenuSubItem addSubItem(int i, int i2, Drawable drawable, CharSequence charSequence, boolean z, boolean z2, Theme.ResourcesProvider resourcesProvider2) {
         createPopupLayout();
-        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), z2, false, false);
+        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), z2, false, false, resourcesProvider2);
         actionBarMenuSubItem.setTextAndIcon(charSequence, i2, drawable);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
         actionBarMenuSubItem.setTag(Integer.valueOf(i));
@@ -910,7 +929,7 @@ public class ActionBarMenuItem extends FrameLayout {
             i2++;
         }
         for (int i3 = 0; i3 < arrayList.size(); i3++) {
-            SearchFilterView searchFilterView = new SearchFilterView(getContext());
+            SearchFilterView searchFilterView = new SearchFilterView(getContext(), this.resourcesProvider);
             searchFilterView.setData((FiltersView.MediaFilterData) arrayList.get(i3));
             searchFilterView.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda3(this, searchFilterView));
             this.searchFilterLayout.addView(searchFilterView, LayoutHelper.createLinear(-2, -1, 0, 0, 0, 6, 0));
@@ -1175,7 +1194,7 @@ public class ActionBarMenuItem extends FrameLayout {
             TextView textView2 = new TextView(getContext());
             this.searchFieldCaption = textView2;
             textView2.setTextSize(1, 18.0f);
-            this.searchFieldCaption.setTextColor(Theme.getColor("actionBarDefaultSearch"));
+            this.searchFieldCaption.setTextColor(getThemedColor("actionBarDefaultSearch"));
             this.searchFieldCaption.setSingleLine(true);
             this.searchFieldCaption.setEllipsize(TextUtils.TruncateAt.END);
             this.searchFieldCaption.setVisibility(8);
@@ -1221,10 +1240,10 @@ public class ActionBarMenuItem extends FrameLayout {
             this.searchField = r22;
             r22.setScrollContainer(false);
             this.searchField.setCursorWidth(1.5f);
-            this.searchField.setCursorColor(Theme.getColor("actionBarDefaultSearch"));
+            this.searchField.setCursorColor(getThemedColor("actionBarDefaultSearch"));
             this.searchField.setTextSize(1, 18.0f);
-            this.searchField.setHintTextColor(Theme.getColor("actionBarDefaultSearchPlaceholder"));
-            this.searchField.setTextColor(Theme.getColor("actionBarDefaultSearch"));
+            this.searchField.setHintTextColor(getThemedColor("actionBarDefaultSearchPlaceholder"));
+            this.searchField.setTextColor(getThemedColor("actionBarDefaultSearch"));
             this.searchField.setSingleLine(true);
             this.searchField.setBackgroundResource(0);
             this.searchField.setPadding(0, 0, 0, 0);
@@ -1641,6 +1660,13 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             }
         }
+        if (this.popupLayout != null) {
+            for (int i2 = 0; i2 < this.popupLayout.getItemsCount(); i2++) {
+                if (this.popupLayout.getItemAt(i2) instanceof ActionBarMenuSubItem) {
+                    ((ActionBarMenuSubItem) this.popupLayout.getItemAt(i2)).setSelectorColor(getThemedColor("dialogButtonSelector"));
+                }
+            }
+        }
     }
 
     public void collapseSearchFilters() {
@@ -1651,6 +1677,12 @@ public class ActionBarMenuItem extends FrameLayout {
     public void setTransitionOffset(int i) {
         this.transitionOffset = (float) i;
         setTranslationX(0.0f);
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 
     private static class SearchFilterView extends FrameLayout {
@@ -1664,6 +1696,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             }
         };
+        private final Theme.ResourcesProvider resourcesProvider;
         ValueAnimator selectAnimator;
         /* access modifiers changed from: private */
         public boolean selectedForDelete;
@@ -1673,8 +1706,9 @@ public class ActionBarMenuItem extends FrameLayout {
         Drawable thumbDrawable;
         TextView titleView;
 
-        public SearchFilterView(Context context) {
+        public SearchFilterView(Context context, Theme.ResourcesProvider resourcesProvider2) {
             super(context);
+            this.resourcesProvider = resourcesProvider2;
             BackupImageView backupImageView = new BackupImageView(context);
             this.avatarImageView = backupImageView;
             addView(backupImageView, LayoutHelper.createFrame(32, 32.0f));
@@ -1694,20 +1728,20 @@ public class ActionBarMenuItem extends FrameLayout {
 
         /* access modifiers changed from: private */
         public void updateColors() {
-            int color = Theme.getColor("groupcreate_spanBackground");
-            int color2 = Theme.getColor("avatar_backgroundBlue");
-            int color3 = Theme.getColor("windowBackgroundWhiteBlackText");
-            int color4 = Theme.getColor("avatar_actionBarIconBlue");
-            this.shapeDrawable.getPaint().setColor(ColorUtils.blendARGB(color, color2, this.selectedProgress));
-            this.titleView.setTextColor(ColorUtils.blendARGB(color3, color4, this.selectedProgress));
-            this.closeIconView.setColorFilter(color4);
+            int themedColor = getThemedColor("groupcreate_spanBackground");
+            int themedColor2 = getThemedColor("avatar_backgroundBlue");
+            int themedColor3 = getThemedColor("windowBackgroundWhiteBlackText");
+            int themedColor4 = getThemedColor("avatar_actionBarIconBlue");
+            this.shapeDrawable.getPaint().setColor(ColorUtils.blendARGB(themedColor, themedColor2, this.selectedProgress));
+            this.titleView.setTextColor(ColorUtils.blendARGB(themedColor3, themedColor4, this.selectedProgress));
+            this.closeIconView.setColorFilter(themedColor4);
             this.closeIconView.setAlpha(this.selectedProgress);
             this.closeIconView.setScaleX(this.selectedProgress * 0.82f);
             this.closeIconView.setScaleY(this.selectedProgress * 0.82f);
             Drawable drawable = this.thumbDrawable;
             if (drawable != null) {
-                Theme.setCombinedDrawableColor(drawable, Theme.getColor("avatar_backgroundBlue"), false);
-                Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
+                Theme.setCombinedDrawableColor(drawable, getThemedColor("avatar_backgroundBlue"), false);
+                Theme.setCombinedDrawableColor(this.thumbDrawable, getThemedColor("avatar_actionBarIconBlue"), true);
             }
             this.avatarImageView.setAlpha(1.0f - this.selectedProgress);
             FiltersView.MediaFilterData mediaFilterData = this.data;
@@ -1722,8 +1756,8 @@ public class ActionBarMenuItem extends FrameLayout {
             this.titleView.setText(mediaFilterData.title);
             CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), mediaFilterData.iconResFilled);
             this.thumbDrawable = createCircleDrawableWithIcon;
-            Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor("avatar_backgroundBlue"), false);
-            Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
+            Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, getThemedColor("avatar_backgroundBlue"), false);
+            Theme.setCombinedDrawableColor(this.thumbDrawable, getThemedColor("avatar_actionBarIconBlue"), true);
             int i = mediaFilterData.filterType;
             if (i == 4) {
                 TLObject tLObject = mediaFilterData.chat;
@@ -1732,8 +1766,8 @@ public class ActionBarMenuItem extends FrameLayout {
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
                         CombinedDrawable createCircleDrawableWithIcon2 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
                         createCircleDrawableWithIcon2.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
-                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, Theme.getColor("avatar_backgroundSaved"), false);
-                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, Theme.getColor("avatar_actionBarIconBlue"), true);
+                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, getThemedColor("avatar_backgroundSaved"), false);
+                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, getThemedColor("avatar_actionBarIconBlue"), true);
                         this.avatarImageView.setImageDrawable(createCircleDrawableWithIcon2);
                         return;
                     }
@@ -1746,8 +1780,8 @@ public class ActionBarMenuItem extends FrameLayout {
             } else if (i == 7) {
                 CombinedDrawable createCircleDrawableWithIcon3 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
                 createCircleDrawableWithIcon3.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
-                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, Theme.getColor("avatar_backgroundArchived"), false);
-                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, Theme.getColor("avatar_actionBarIconBlue"), true);
+                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, getThemedColor("avatar_backgroundArchived"), false);
+                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, getThemedColor("avatar_actionBarIconBlue"), true);
                 this.avatarImageView.setImageDrawable(createCircleDrawableWithIcon3);
             } else {
                 this.avatarImageView.setImageDrawable(this.thumbDrawable);
@@ -1799,6 +1833,12 @@ public class ActionBarMenuItem extends FrameLayout {
 
         public FiltersView.MediaFilterData getFilter() {
             return this.data;
+        }
+
+        private int getThemedColor(String str) {
+            Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+            return color != null ? color.intValue() : Theme.getColor(str);
         }
     }
 }

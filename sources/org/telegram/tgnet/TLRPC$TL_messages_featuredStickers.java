@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class TLRPC$TL_messages_featuredStickers extends TLRPC$messages_FeaturedStickers {
     public static int constructor = -NUM;
     public int count;
-    public int hash;
+    public long hash;
     public ArrayList<TLRPC$StickerSetCovered> sets = new ArrayList<>();
     public ArrayList<Long> unread = new ArrayList<>();
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.hash = abstractSerializedData.readInt32(z);
+        this.hash = abstractSerializedData.readInt64(z);
         this.count = abstractSerializedData.readInt32(z);
         int readInt32 = abstractSerializedData.readInt32(z);
         if (readInt32 == NUM) {
@@ -41,7 +41,7 @@ public class TLRPC$TL_messages_featuredStickers extends TLRPC$messages_FeaturedS
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        abstractSerializedData.writeInt32(this.hash);
+        abstractSerializedData.writeInt64(this.hash);
         abstractSerializedData.writeInt32(this.count);
         abstractSerializedData.writeInt32(NUM);
         int size = this.sets.size();

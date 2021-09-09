@@ -7,13 +7,13 @@ import org.telegram.ui.Cells.CheckBoxCell;
 public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda4 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatObject.Call f$0;
     public final /* synthetic */ CheckBoxCell[] f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ long f$2;
     public final /* synthetic */ Runnable f$3;
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda4(ChatObject.Call call, CheckBoxCell[] checkBoxCellArr, int i, Runnable runnable) {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda4(ChatObject.Call call, CheckBoxCell[] checkBoxCellArr, long j, Runnable runnable) {
         this.f$0 = call;
         this.f$1 = checkBoxCellArr;
-        this.f$2 = i;
+        this.f$2 = j;
         this.f$3 = runnable;
     }
 

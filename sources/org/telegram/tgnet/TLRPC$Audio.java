@@ -10,7 +10,7 @@ public abstract class TLRPC$Audio extends TLObject {
     public byte[] key;
     public String mime_type;
     public int size;
-    public int user_id;
+    public long user_id;
 
     public static TLRPC$Audio TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Audio tLRPC$Audio;

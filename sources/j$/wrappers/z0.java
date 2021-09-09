@@ -1,16 +1,16 @@
 package j$.wrappers;
 
-import j$.util.function.y;
+import j$.util.function.z;
 import java.util.function.Supplier;
 
-public final /* synthetic */ class z0 implements y {
+public final /* synthetic */ class z0 implements z {
     final /* synthetic */ Supplier a;
 
     private /* synthetic */ z0(Supplier supplier) {
         this.a = supplier;
     }
 
-    public static /* synthetic */ y a(Supplier supplier) {
+    public static /* synthetic */ z a(Supplier supplier) {
         if (supplier == null) {
             return null;
         }

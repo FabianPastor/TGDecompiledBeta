@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda46 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
     public final /* synthetic */ int f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ TLRPC$TL_chatBannedRights f$3;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda46(MessagesStorage messagesStorage, int i, int i2, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda46(MessagesStorage messagesStorage, int i, ArrayList arrayList) {
         this.f$0 = messagesStorage;
         this.f$1 = i;
-        this.f$2 = i2;
-        this.f$3 = tLRPC$TL_chatBannedRights;
+        this.f$2 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$updateChatDefaultBannedRights$130(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$putWidgetDialogs$120(this.f$1, this.f$2);
     }
 }

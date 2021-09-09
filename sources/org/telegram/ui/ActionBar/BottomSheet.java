@@ -43,6 +43,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -50,37 +51,32 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
-    public boolean allowCustomAnimation = true;
+    public boolean allowCustomAnimation;
     /* access modifiers changed from: private */
-    public boolean allowDrawContent = true;
-    protected boolean allowNestedScroll = true;
+    public boolean allowDrawContent;
+    protected boolean allowNestedScroll;
     /* access modifiers changed from: private */
-    public boolean applyBottomPadding = true;
+    public boolean applyBottomPadding;
     /* access modifiers changed from: private */
-    public boolean applyTopPadding = true;
-    protected ColorDrawable backDrawable = new ColorDrawable(-16777216) {
-        public void setAlpha(int i) {
-            super.setAlpha(i);
-            BottomSheet.this.container.invalidate();
-        }
-    };
+    public boolean applyTopPadding;
+    protected ColorDrawable backDrawable;
     /* access modifiers changed from: protected */
     public int backgroundPaddingLeft;
     /* access modifiers changed from: protected */
     public int backgroundPaddingTop;
     protected int behindKeyboardColor;
-    protected String behindKeyboardColorKey = "dialogBackground";
+    protected String behindKeyboardColorKey;
     /* access modifiers changed from: private */
     public boolean bigTitle;
     /* access modifiers changed from: private */
     public int bottomInset;
     protected boolean calcMandatoryInsets;
-    private boolean canDismissWithSwipe = true;
+    private boolean canDismissWithSwipe;
     protected ContainerView container;
     /* access modifiers changed from: protected */
     public ViewGroup containerView;
     /* access modifiers changed from: protected */
-    public int currentAccount = UserConfig.selectedAccount;
+    public int currentAccount;
     /* access modifiers changed from: private */
     public float currentPanTranslationY;
     protected AnimatorSet currentSheetAnimation;
@@ -90,12 +86,12 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public BottomSheetDelegateInterface delegate;
     /* access modifiers changed from: private */
-    public boolean dimBehind = true;
-    private int dimBehindAlpha = 51;
+    public boolean dimBehind;
+    private int dimBehindAlpha;
     /* access modifiers changed from: private */
     public boolean disableScroll;
     /* access modifiers changed from: private */
-    public Runnable dismissRunnable = new BottomSheet$$ExternalSyntheticLambda3(this);
+    public Runnable dismissRunnable;
     /* access modifiers changed from: private */
     public boolean dismissed;
     protected boolean drawNavigationBar;
@@ -105,7 +101,7 @@ public class BottomSheet extends Dialog {
     public boolean isFullscreen;
     /* access modifiers changed from: private */
     public int[] itemIcons;
-    private ArrayList<BottomSheetCell> itemViews = new ArrayList<>();
+    private ArrayList<BottomSheetCell> itemViews;
     /* access modifiers changed from: private */
     public CharSequence[] items;
     /* access modifiers changed from: private */
@@ -120,14 +116,15 @@ public class BottomSheet extends Dialog {
     public int leftInset;
     /* access modifiers changed from: protected */
     public int navBarColor;
-    protected String navBarColorKey = "windowBackgroundGray";
+    protected String navBarColorKey;
     protected View nestedScrollChild;
     /* access modifiers changed from: private */
     public DialogInterface.OnClickListener onClickListener;
     private DialogInterface.OnDismissListener onHideListener;
-    protected Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
+    protected Interpolator openInterpolator;
     /* access modifiers changed from: private */
     public int overlayDrawNavBarColor;
+    protected Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public int rightInset;
     protected boolean scrollNavBar;
@@ -136,7 +133,7 @@ public class BottomSheet extends Dialog {
     protected boolean smoothKeyboardAnimationEnabled;
     protected Runnable startAnimationRunnable;
     /* access modifiers changed from: protected */
-    public int statusBarHeight = AndroidUtilities.statusBarHeight;
+    public int statusBarHeight;
     /* access modifiers changed from: private */
     public CharSequence title;
     private TextView titleView;
@@ -145,9 +142,9 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public boolean useFastDismiss;
     /* access modifiers changed from: private */
-    public boolean useHardwareLayer = true;
+    public boolean useHardwareLayer;
     protected boolean useLightNavBar;
-    protected boolean useLightStatusBar = true;
+    protected boolean useLightStatusBar;
     protected boolean useSmoothKeyboard;
 
     public static class BottomSheetDelegate implements BottomSheetDelegateInterface {
@@ -969,7 +966,7 @@ public class BottomSheet extends Dialog {
                 BottomSheet bottomSheet = BottomSheet.this;
                 String str = bottomSheet.navBarColorKey;
                 if (str != null) {
-                    this.backgroundPaint.setColor(Theme.getColor(str));
+                    this.backgroundPaint.setColor(bottomSheet.getThemedColor(str));
                 } else {
                     this.backgroundPaint.setColor(bottomSheet.navBarColor);
                 }
@@ -1018,7 +1015,7 @@ public class BottomSheet extends Dialog {
                 Paint paint = this.backgroundPaint;
                 BottomSheet bottomSheet10 = BottomSheet.this;
                 String str2 = bottomSheet10.behindKeyboardColorKey;
-                paint.setColor(str2 != null ? Theme.getColor(str2) : bottomSheet10.behindKeyboardColor);
+                paint.setColor(str2 != null ? bottomSheet10.getThemedColor(str2) : bottomSheet10.behindKeyboardColor);
                 int left = BottomSheet.this.containerView.getLeft();
                 BottomSheet bottomSheet11 = BottomSheet.this;
                 canvas.drawRect((float) (left + bottomSheet11.backgroundPaddingLeft), bottomSheet11.containerView.getY() + ((float) BottomSheet.this.containerView.getMeasuredHeight()), (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), (float) getMeasuredHeight(), this.backgroundPaint);
@@ -1032,7 +1029,7 @@ public class BottomSheet extends Dialog {
                 Paint paint = this.backgroundPaint;
                 BottomSheet bottomSheet = BottomSheet.this;
                 String str = bottomSheet.behindKeyboardColorKey;
-                paint.setColor(str != null ? Theme.getColor(str) : bottomSheet.behindKeyboardColor);
+                paint.setColor(str != null ? bottomSheet.getThemedColor(str) : bottomSheet.behindKeyboardColor);
                 float left = (float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft);
                 int measuredHeight = getMeasuredHeight() - this.keyboardHeight;
                 BottomSheet bottomSheet2 = BottomSheet.this;
@@ -1074,17 +1071,23 @@ public class BottomSheet extends Dialog {
         int currentType;
         /* access modifiers changed from: private */
         public ImageView imageView;
+        private final Theme.ResourcesProvider resourcesProvider;
         /* access modifiers changed from: private */
         public TextView textView;
 
         public BottomSheetCell(Context context, int i) {
+            this(context, i, (Theme.ResourcesProvider) null);
+        }
+
+        public BottomSheetCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
             super(context);
+            this.resourcesProvider = resourcesProvider2;
             this.currentType = i;
             setBackgroundDrawable(Theme.getSelectorDrawable(false));
             ImageView imageView2 = new ImageView(context);
             this.imageView = imageView2;
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
-            this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogIcon"), PorterDuff.Mode.MULTIPLY));
+            this.imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogIcon"), PorterDuff.Mode.MULTIPLY));
             int i2 = 5;
             addView(this.imageView, LayoutHelper.createFrame(56, 48, (LocaleController.isRTL ? 5 : 3) | 16));
             TextView textView2 = new TextView(context);
@@ -1094,21 +1097,21 @@ public class BottomSheet extends Dialog {
             this.textView.setGravity(1);
             this.textView.setEllipsize(TextUtils.TruncateAt.END);
             if (i == 0) {
-                this.textView.setTextColor(Theme.getColor("dialogTextBlack"));
+                this.textView.setTextColor(getThemedColor("dialogTextBlack"));
                 this.textView.setTextSize(1, 16.0f);
                 addView(this.textView, LayoutHelper.createFrame(-2, -2, (!LocaleController.isRTL ? 3 : i2) | 16));
             } else if (i == 1) {
                 this.textView.setGravity(17);
-                this.textView.setTextColor(Theme.getColor("dialogTextBlack"));
+                this.textView.setTextColor(getThemedColor("dialogTextBlack"));
                 this.textView.setTextSize(1, 14.0f);
                 this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 addView(this.textView, LayoutHelper.createFrame(-1, -1.0f));
             } else if (i == 2) {
                 this.textView.setGravity(17);
-                this.textView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+                this.textView.setTextColor(getThemedColor("featuredStickers_buttonText"));
                 this.textView.setTextSize(1, 14.0f);
                 this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                this.textView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+                this.textView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), getThemedColor("featuredStickers_addButton"), getThemedColor("featuredStickers_addButtonPressed")));
                 addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, 16.0f, 16.0f, 16.0f));
             }
         }
@@ -1189,6 +1192,12 @@ public class BottomSheet extends Dialog {
         public ImageView getImageView() {
             return this.imageView;
         }
+
+        private int getThemedColor(String str) {
+            Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+            return color != null ? color.intValue() : Theme.getColor(str);
+        }
     }
 
     public void setAllowNestedScroll(boolean z) {
@@ -1199,7 +1208,35 @@ public class BottomSheet extends Dialog {
     }
 
     public BottomSheet(Context context, boolean z) {
+        this(context, z, (Theme.ResourcesProvider) null);
+    }
+
+    public BottomSheet(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context, NUM);
+        this.currentAccount = UserConfig.selectedAccount;
+        this.allowDrawContent = true;
+        this.useHardwareLayer = true;
+        this.backDrawable = new ColorDrawable(-16777216) {
+            public void setAlpha(int i) {
+                super.setAlpha(i);
+                BottomSheet.this.container.invalidate();
+            }
+        };
+        this.useLightStatusBar = true;
+        this.behindKeyboardColorKey = "dialogBackground";
+        this.canDismissWithSwipe = true;
+        this.allowCustomAnimation = true;
+        this.statusBarHeight = AndroidUtilities.statusBarHeight;
+        this.openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
+        this.dimBehind = true;
+        this.dimBehindAlpha = 51;
+        this.allowNestedScroll = true;
+        this.applyTopPadding = true;
+        this.applyBottomPadding = true;
+        this.itemViews = new ArrayList<>();
+        this.dismissRunnable = new BottomSheet$$ExternalSyntheticLambda3(this);
+        this.navBarColorKey = "windowBackgroundGray";
+        this.resourcesProvider = resourcesProvider2;
         int i = Build.VERSION.SDK_INT;
         if (i >= 30) {
             getWindow().addFlags(-NUM);
@@ -1210,11 +1247,11 @@ public class BottomSheet extends Dialog {
         Rect rect = new Rect();
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable = mutate;
-        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
+        mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         this.shadowDrawable.getPadding(rect);
         this.backgroundPaddingLeft = rect.left;
         this.backgroundPaddingTop = rect.top;
-        AnonymousClass2 r9 = new ContainerView(getContext()) {
+        AnonymousClass2 r8 = new ContainerView(getContext()) {
             public boolean drawChild(Canvas canvas, View view, long j) {
                 try {
                     return BottomSheet.this.allowDrawContent && super.drawChild(canvas, view, j);
@@ -1224,8 +1261,8 @@ public class BottomSheet extends Dialog {
                 }
             }
         };
-        this.container = r9;
-        r9.setBackgroundDrawable(this.backDrawable);
+        this.container = r8;
+        r8.setBackgroundDrawable(this.backDrawable);
         this.focusable = z;
         if (i >= 21) {
             this.container.setFitsSystemWindows(true);
@@ -1291,12 +1328,12 @@ public class BottomSheet extends Dialog {
             this.titleView.setSingleLine(true);
             this.titleView.setText(this.title);
             if (this.bigTitle) {
-                this.titleView.setTextColor(Theme.getColor("dialogTextBlack"));
+                this.titleView.setTextColor(getThemedColor("dialogTextBlack"));
                 this.titleView.setTextSize(1, 20.0f);
                 this.titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.titleView.setPadding(AndroidUtilities.dp(21.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(21.0f), AndroidUtilities.dp(8.0f));
             } else {
-                this.titleView.setTextColor(Theme.getColor("dialogTextGray2"));
+                this.titleView.setTextColor(getThemedColor("dialogTextGray2"));
                 this.titleView.setTextSize(1, 16.0f);
                 this.titleView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), AndroidUtilities.dp(8.0f));
             }
@@ -1322,7 +1359,7 @@ public class BottomSheet extends Dialog {
                     break;
                 }
                 if (charSequenceArr[i2] != null) {
-                    BottomSheetCell bottomSheetCell = new BottomSheetCell(getContext(), 0);
+                    BottomSheetCell bottomSheetCell = new BottomSheetCell(getContext(), 0, this.resourcesProvider);
                     CharSequence charSequence = this.items[i2];
                     int[] iArr = this.itemIcons;
                     bottomSheetCell.setTextAndIcon(charSequence, iArr != null ? iArr[i2] : 0, (Drawable) null, this.bigTitle);
@@ -1461,6 +1498,10 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: protected */
     public boolean canDismissWithSwipe() {
         return this.canDismissWithSwipe;
+    }
+
+    public void setCanDismissWithSwipe(boolean z) {
+        this.canDismissWithSwipe = z;
     }
 
     public void setCustomView(View view) {
@@ -1756,11 +1797,15 @@ public class BottomSheet extends Dialog {
         private BottomSheet bottomSheet;
 
         public Builder(Context context) {
-            this.bottomSheet = new BottomSheet(context, false);
+            this(context, false);
         }
 
         public Builder(Context context, boolean z) {
-            this.bottomSheet = new BottomSheet(context, z);
+            this(context, z, (Theme.ResourcesProvider) null);
+        }
+
+        public Builder(Context context, boolean z, Theme.ResourcesProvider resourcesProvider) {
+            this.bottomSheet = new BottomSheet(context, z, resourcesProvider);
         }
 
         public Builder setItems(CharSequence[] charSequenceArr, DialogInterface.OnClickListener onClickListener) {
@@ -1876,5 +1921,12 @@ public class BottomSheet extends Dialog {
 
     public int getCurrentAccount() {
         return this.currentAccount;
+    }
+
+    /* access modifiers changed from: protected */
+    public int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

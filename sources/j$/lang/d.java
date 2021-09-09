@@ -1,7 +1,7 @@
 package j$.lang;
 
 import j$.util.function.BiConsumer;
-import j$.util.function.x;
+import j$.util.function.y;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
@@ -16,7 +16,7 @@ public abstract /* synthetic */ class d {
         }
     }
 
-    public static /* synthetic */ boolean b(x xVar, x xVar2, Object obj) {
-        return xVar.test(obj) && xVar2.test(obj);
+    public static /* synthetic */ boolean b(y yVar, y yVar2, Object obj) {
+        return yVar.test(obj) && yVar2.test(obj);
     }
 }

@@ -27,7 +27,7 @@ public class TLRPC$TL_message_layer123 extends TLRPC$TL_message {
             this.fwd_from = TLRPC$MessageFwdHeader.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 2048) != 0) {
-            this.via_bot_id = abstractSerializedData.readInt32(z);
+            this.via_bot_id = (long) abstractSerializedData.readInt32(z);
         }
         if ((this.flags & 8) != 0) {
             this.reply_to = TLRPC$TL_messageReplyHeader.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -74,7 +74,7 @@ public class TLRPC$TL_message_layer123 extends TLRPC$TL_message {
             this.forwards = abstractSerializedData.readInt32(z);
         }
         if ((this.flags & 8388608) != 0) {
-            this.replies = TLRPC$TL_messageReplies.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.replies = TLRPC$MessageReplies.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 32768) != 0) {
             this.edit_date = abstractSerializedData.readInt32(z);
@@ -134,7 +134,7 @@ public class TLRPC$TL_message_layer123 extends TLRPC$TL_message {
             this.fwd_from.serializeToStream(abstractSerializedData);
         }
         if ((this.flags & 2048) != 0) {
-            abstractSerializedData.writeInt32(this.via_bot_id);
+            abstractSerializedData.writeInt32((int) this.via_bot_id);
         }
         if ((this.flags & 8) != 0) {
             this.reply_to.serializeToStream(abstractSerializedData);

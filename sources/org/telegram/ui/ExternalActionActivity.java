@@ -297,14 +297,14 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                     return true;
                 }
             }
-            int intExtra = intent2.getIntExtra("bot_id", 0);
+            long longExtra = intent2.getLongExtra("bot_id", 0);
             String stringExtra = intent2.getStringExtra("nonce");
             String stringExtra2 = intent2.getStringExtra("payload");
             TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm = new TLRPC$TL_account_getAuthorizationForm();
-            tLRPC$TL_account_getAuthorizationForm.bot_id = intExtra;
+            tLRPC$TL_account_getAuthorizationForm.bot_id = longExtra;
             tLRPC$TL_account_getAuthorizationForm.scope = intent2.getStringExtra("scope");
             tLRPC$TL_account_getAuthorizationForm.public_key = intent2.getStringExtra("public_key");
-            if (intExtra == 0 || ((TextUtils.isEmpty(stringExtra2) && TextUtils.isEmpty(stringExtra)) || TextUtils.isEmpty(tLRPC$TL_account_getAuthorizationForm.scope) || TextUtils.isEmpty(tLRPC$TL_account_getAuthorizationForm.public_key))) {
+            if (longExtra == 0 || ((TextUtils.isEmpty(stringExtra2) && TextUtils.isEmpty(stringExtra)) || TextUtils.isEmpty(tLRPC$TL_account_getAuthorizationForm.scope) || TextUtils.isEmpty(tLRPC$TL_account_getAuthorizationForm.public_key))) {
                 finish();
                 return false;
             }

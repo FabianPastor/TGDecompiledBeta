@@ -9,7 +9,7 @@ public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda71 i
         this.f$0 = passportActivity;
     }
 
-    public final void didSelectCountry(String str, String str2) {
-        this.f$0.lambda$createAddressInterface$34(str, str2);
+    public final void didSelectCountry(CountrySelectActivity.Country country) {
+        this.f$0.lambda$createPhoneInterface$28(country);
     }
 }

@@ -10,7 +10,7 @@ public final /* synthetic */ class ChangePhoneActivity$PhoneView$$ExternalSynthe
         this.f$0 = phoneView;
     }
 
-    public final void didSelectCountry(String str, String str2) {
-        this.f$0.lambda$new$1(str, str2);
+    public final void didSelectCountry(CountrySelectActivity.Country country) {
+        this.f$0.lambda$new$1(country);
     }
 }

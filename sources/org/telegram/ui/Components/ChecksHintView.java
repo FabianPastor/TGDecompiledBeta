@@ -27,14 +27,16 @@ public class ChecksHintView extends FrameLayout {
     private RLottieImageView[] imageView = new RLottieImageView[2];
     /* access modifiers changed from: private */
     public ChatMessageCell messageCell;
+    private final Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public TextView[] textView = new TextView[2];
     private float translationY;
 
-    public ChecksHintView(Context context) {
+    public ChecksHintView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("chat_gifSaveHintBackground")));
+        frameLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), getThemedColor("chat_gifSaveHintBackground")));
         int i = 0;
         frameLayout.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         addView(frameLayout, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 0.0f, 0.0f, 6.0f));
@@ -43,7 +45,7 @@ public class ChecksHintView extends FrameLayout {
             this.imageView[i].setScaleType(ImageView.ScaleType.CENTER);
             frameLayout.addView(this.imageView[i], LayoutHelper.createFrame(24, 24.0f, 51, 0.0f, i == 0 ? 0.0f : 24.0f, 0.0f, 0.0f));
             this.textView[i] = new TextView(context);
-            this.textView[i].setTextColor(Theme.getColor("chat_gifSaveHintText"));
+            this.textView[i].setTextColor(getThemedColor("chat_gifSaveHintText"));
             this.textView[i].setTextSize(1, 14.0f);
             this.textView[i].setMaxLines(1);
             this.textView[i].setSingleLine(true);
@@ -64,7 +66,7 @@ public class ChecksHintView extends FrameLayout {
         ImageView imageView2 = new ImageView(context);
         this.arrowImageView = imageView2;
         imageView2.setImageResource(NUM);
-        this.arrowImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_gifSaveHintBackground"), PorterDuff.Mode.MULTIPLY));
+        this.arrowImageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_gifSaveHintBackground"), PorterDuff.Mode.MULTIPLY));
         addView(this.arrowImageView, LayoutHelper.createFrame(14, 6.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
     }
 
@@ -188,5 +190,11 @@ public class ChecksHintView extends FrameLayout {
             this.animatorSet.setDuration(180);
             this.animatorSet.start();
         }
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

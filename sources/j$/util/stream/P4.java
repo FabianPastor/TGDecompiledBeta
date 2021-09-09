@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.util.function.y;
+import j$.util.function.z;
 
-interface P4 extends CLASSNAMEn3, y {
+interface P4 extends CLASSNAMEn3, z {
 }

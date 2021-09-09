@@ -4,17 +4,17 @@ import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
 import j$.util.function.e;
 import j$.util.function.f;
-import j$.util.function.t;
-import j$.util.function.y;
+import j$.util.function.u;
+import j$.util.function.z;
 
 class G2 extends U2 implements T2, CLASSNAMEk3 {
-    final /* synthetic */ y b;
-    final /* synthetic */ t c;
+    final /* synthetic */ z b;
+    final /* synthetic */ u c;
     final /* synthetic */ CLASSNAMEb d;
 
-    G2(y yVar, t tVar, CLASSNAMEb bVar) {
-        this.b = yVar;
-        this.c = tVar;
+    G2(z zVar, u uVar, CLASSNAMEb bVar) {
+        this.b = zVar;
+        this.c = uVar;
         this.d = bVar;
     }
 

@@ -1,5 +1,11 @@
 package j$.util.function;
 
 public interface y {
-    Object get();
+    y a(y yVar);
+
+    y b(y yVar);
+
+    y negate();
+
+    boolean test(Object obj);
 }

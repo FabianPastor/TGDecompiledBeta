@@ -6,8 +6,7 @@ import j$.util.Iterator;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Consumer;
-import j$.util.function.x;
-import j$.util.y;
+import j$.util.function.y;
 import j$.wrappers.CLASSNAMEq;
 import j$.wrappers.CLASSNAMEs;
 import j$.wrappers.CLASSNAMEw;
@@ -248,8 +247,8 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
             return new d(lVarArr, length, 0, length, concurrentHashMap);
         }
 
-        public /* synthetic */ boolean k(x xVar) {
-            return CLASSNAMEa.h(this, xVar);
+        public /* synthetic */ boolean k(y yVar) {
+            return CLASSNAMEa.h(this, yVar);
         }
 
         public /* synthetic */ Stream parallelStream() {
@@ -288,10 +287,10 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
         }
 
         public /* synthetic */ boolean removeIf(Predicate predicate) {
-            return CLASSNAMEa.h(this, x0.b(predicate));
+            return CLASSNAMEa.h(this, x0.c(predicate));
         }
 
-        public y spliterator() {
+        public j$.util.y spliterator() {
             ConcurrentHashMap concurrentHashMap = this.a;
             long m = concurrentHashMap.m();
             l[] lVarArr = concurrentHashMap.a;
@@ -304,7 +303,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
         }
     }
 
-    static final class f extends p implements y {
+    static final class f extends p implements j$.util.y {
         final ConcurrentHashMap i;
         long j;
 
@@ -356,7 +355,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
             return CLASSNAMEa.f(this, i2);
         }
 
-        public y trySplit() {
+        public j$.util.y trySplit() {
             int i2 = this.f;
             int i3 = this.g;
             int i4 = (i2 + i3) >>> 1;
@@ -543,8 +542,8 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
             return new h(lVarArr, length, 0, length, concurrentHashMap);
         }
 
-        public /* synthetic */ boolean k(x xVar) {
-            return CLASSNAMEa.h(this, xVar);
+        public /* synthetic */ boolean k(y yVar) {
+            return CLASSNAMEa.h(this, yVar);
         }
 
         public /* synthetic */ Stream parallelStream() {
@@ -556,10 +555,10 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
         }
 
         public /* synthetic */ boolean removeIf(Predicate predicate) {
-            return CLASSNAMEa.h(this, x0.b(predicate));
+            return CLASSNAMEa.h(this, x0.c(predicate));
         }
 
-        public y spliterator() {
+        public j$.util.y spliterator() {
             ConcurrentHashMap concurrentHashMap = this.a;
             long m = concurrentHashMap.m();
             l[] lVarArr = concurrentHashMap.a;
@@ -572,7 +571,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
         }
     }
 
-    static final class j extends p implements y {
+    static final class j extends p implements j$.util.y {
         long i;
 
         j(l[] lVarArr, int i2, int i3, int i4, long j) {
@@ -622,7 +621,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
             return CLASSNAMEa.f(this, i2);
         }
 
-        public y trySplit() {
+        public j$.util.y trySplit() {
             int i2 = this.f;
             int i3 = this.g;
             int i4 = (i2 + i3) >>> 1;
@@ -1695,7 +1694,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
         }
     }
 
-    static final class t extends p implements y {
+    static final class t extends p implements j$.util.y {
         long i;
 
         t(l[] lVarArr, int i2, int i3, int i4, long j) {
@@ -1745,7 +1744,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
             return CLASSNAMEa.f(this, i2);
         }
 
-        public y trySplit() {
+        public j$.util.y trySplit() {
             int i2 = this.f;
             int i3 = this.g;
             int i4 = (i2 + i3) >>> 1;
@@ -1805,8 +1804,8 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
             return new s(lVarArr, length, 0, length, concurrentHashMap);
         }
 
-        public /* synthetic */ boolean k(x xVar) {
-            return CLASSNAMEa.h(this, xVar);
+        public /* synthetic */ boolean k(y yVar) {
+            return CLASSNAMEa.h(this, yVar);
         }
 
         public /* synthetic */ Stream parallelStream() {
@@ -1830,10 +1829,10 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
         }
 
         public /* synthetic */ boolean removeIf(Predicate predicate) {
-            return CLASSNAMEa.h(this, x0.b(predicate));
+            return CLASSNAMEa.h(this, x0.c(predicate));
         }
 
-        public y spliterator() {
+        public j$.util.y spliterator() {
             ConcurrentHashMap concurrentHashMap = this.a;
             long m = concurrentHashMap.m();
             l[] lVarArr = concurrentHashMap.a;
@@ -3200,7 +3199,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
     }
 
     public /* synthetic */ Object computeIfAbsent(Object obj, Function function) {
-        return computeIfAbsent(obj, M.c(function));
+        return computeIfAbsent(obj, M.a(function));
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:51:0x0099, code lost:

@@ -125,7 +125,7 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
-        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
             user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         }
@@ -376,7 +376,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
                 TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername = new TLRPC$TL_account_updateUsername();
                 tLRPC$TL_account_updateUsername.username = obj;
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, 1);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_NAME));
                 int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateUsername, new ChangeUsernameActivity$$ExternalSyntheticLambda8(this, alertDialog, tLRPC$TL_account_updateUsername), 2);
                 ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
                 alertDialog.setOnCancelListener(new ChangeUsernameActivity$$ExternalSyntheticLambda0(this, sendRequest));

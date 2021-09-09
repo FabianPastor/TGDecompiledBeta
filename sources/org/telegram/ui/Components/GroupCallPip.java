@@ -919,7 +919,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             ChatObject.Call call = sharedInstance != null ? sharedInstance.groupCall : null;
             int i = 0;
             if (call != null) {
-                int selfId = sharedInstance.getSelfId();
+                long selfId = sharedInstance.getSelfId();
                 int size = call.sortedParticipants.size();
                 int i2 = 0;
                 while (i < 2) {

@@ -88,8 +88,8 @@ public class UsersAlertBase extends BottomSheet {
     public void updateColorKeys() {
     }
 
-    public UsersAlertBase(Context context, boolean z, int i) {
-        super(context, z);
+    public UsersAlertBase(Context context, boolean z, int i, Theme.ResourcesProvider resourcesProvider) {
+        super(context, z, resourcesProvider);
         updateColorKeys();
         setDimBehindAlpha(75);
         this.currentAccount = i;
@@ -121,7 +121,7 @@ public class UsersAlertBase extends BottomSheet {
         this.emptyView.showProgress(true, false);
         this.emptyView.setColors(this.keyNameText, this.keyLastSeenText, this.keyInviteMembersBackground, this.keySearchBackground);
         this.containerView.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 62.0f, 0.0f, 0.0f));
-        AnonymousClass1 r14 = new RecyclerListView(this, context) {
+        AnonymousClass1 r13 = new RecyclerListView(this, context) {
             /* access modifiers changed from: protected */
             public boolean allowSelectChildAtPosition(float f, float f2) {
                 return f2 >= ((float) (AndroidUtilities.dp(58.0f) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
@@ -140,8 +140,8 @@ public class UsersAlertBase extends BottomSheet {
                 return false;
             }
         };
-        this.listView = r14;
-        r14.setTag(13);
+        this.listView = r13;
+        r13.setTag(13);
         this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(48.0f));
         this.listView.setClipToPadding(false);
         this.listView.setHideIfEmpty(false);

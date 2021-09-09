@@ -3,7 +3,6 @@ package org.telegram.messenger;
 public class SegmentTree {
     private int[] array;
     private Node[] heap;
-    private int size;
 
     private boolean contains(int i, int i2, int i3, int i4) {
         return i3 >= i && i4 <= i2;
@@ -16,9 +15,7 @@ public class SegmentTree {
     public SegmentTree(int[] iArr) {
         this.array = iArr;
         if (iArr.length >= 30) {
-            int pow = (int) (Math.pow(2.0d, Math.floor((Math.log((double) iArr.length) / Math.log(2.0d)) + 1.0d)) * 2.0d);
-            this.size = pow;
-            this.heap = new Node[pow];
+            this.heap = new Node[((int) (Math.pow(2.0d, Math.floor((Math.log((double) iArr.length) / Math.log(2.0d)) + 1.0d)) * 2.0d))];
             build(1, 0, iArr.length);
         }
     }

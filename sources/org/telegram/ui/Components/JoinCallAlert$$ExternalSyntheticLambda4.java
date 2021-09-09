@@ -8,14 +8,14 @@ import org.telegram.ui.ActionBar.AlertDialog;
 public final /* synthetic */ class JoinCallAlert$$ExternalSyntheticLambda4 implements Runnable {
     public final /* synthetic */ AlertDialog f$0;
     public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ long f$2;
     public final /* synthetic */ AccountInstance f$3;
     public final /* synthetic */ MessagesStorage.BooleanCallback f$4;
 
-    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda4(AlertDialog alertDialog, TLObject tLObject, int i, AccountInstance accountInstance, MessagesStorage.BooleanCallback booleanCallback) {
+    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda4(AlertDialog alertDialog, TLObject tLObject, long j, AccountInstance accountInstance, MessagesStorage.BooleanCallback booleanCallback) {
         this.f$0 = alertDialog;
         this.f$1 = tLObject;
-        this.f$2 = i;
+        this.f$2 = j;
         this.f$3 = accountInstance;
         this.f$4 = booleanCallback;
     }

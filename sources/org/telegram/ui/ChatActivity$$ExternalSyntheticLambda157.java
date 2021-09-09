@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import android.net.Uri;
-import org.telegram.ui.Components.AlertsCreator;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Uri f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda157(ChatActivity chatActivity, Uri uri) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda157(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = uri;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$onActivityResultFragment$84(this.f$1, z, i);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$createMenu$112(keyEvent);
     }
 }

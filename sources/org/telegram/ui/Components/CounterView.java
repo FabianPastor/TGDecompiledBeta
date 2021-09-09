@@ -17,12 +17,16 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class CounterView extends View {
-    public CounterDrawable counterDrawable = new CounterDrawable(this);
+    public CounterDrawable counterDrawable;
+    private final Theme.ResourcesProvider resourcesProvider;
 
-    public CounterView(Context context) {
+    public CounterView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         setVisibility(8);
-        this.counterDrawable.updateVisibility = true;
+        CounterDrawable counterDrawable2 = new CounterDrawable(this, resourcesProvider2);
+        this.counterDrawable = counterDrawable2;
+        counterDrawable2.updateVisibility = true;
     }
 
     /* access modifiers changed from: protected */
@@ -54,6 +58,7 @@ public class CounterView extends View {
     }
 
     public static class CounterDrawable {
+        public boolean addServiceGradient;
         int animationType = -1;
         private int circleColor;
         /* access modifiers changed from: private */
@@ -80,6 +85,7 @@ public class CounterView extends View {
         /* access modifiers changed from: private */
         public View parent;
         public RectF rectF = new RectF();
+        private final Theme.ResourcesProvider resourcesProvider;
         /* access modifiers changed from: private */
         public boolean reverseAnimation;
         private int textColor;
@@ -91,8 +97,9 @@ public class CounterView extends View {
         int width;
         float x;
 
-        public CounterDrawable(View view) {
+        public CounterDrawable(View view, Theme.ResourcesProvider resourcesProvider2) {
             this.parent = view;
+            this.resourcesProvider = resourcesProvider2;
             this.circlePaint.setColor(-16777216);
             this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
@@ -117,7 +124,7 @@ public class CounterView extends View {
             RectF rectF3 = this.rectF;
             float f2 = AndroidUtilities.density;
             canvas.drawRoundRect(rectF3, f2 * 11.5f, f2 * 11.5f, this.circlePaint);
-            if (Theme.hasGradientService()) {
+            if (this.addServiceGradient && Theme.hasGradientService()) {
                 RectF rectF4 = this.rectF;
                 float f3 = AndroidUtilities.density;
                 canvas.drawRoundRect(rectF4, f3 * 11.5f, f3 * 11.5f, Theme.chat_actionBackgroundGradientDarkenPaint);
@@ -256,15 +263,15 @@ public class CounterView extends View {
             float f2;
             boolean z = true;
             if (this.type != 1) {
-                int color = Theme.getColor(this.textColorKey);
-                int color2 = Theme.getColor(this.circleColorKey);
-                if (this.textColor != color) {
-                    this.textColor = color;
-                    this.textPaint.setColor(color);
+                int themedColor = getThemedColor(this.textColorKey);
+                int themedColor2 = getThemedColor(this.circleColorKey);
+                if (this.textColor != themedColor) {
+                    this.textColor = themedColor;
+                    this.textPaint.setColor(themedColor);
                 }
-                if (this.circleColor != color2) {
-                    this.circleColor = color2;
-                    this.circlePaint.setColor(color2);
+                if (this.circleColor != themedColor2) {
+                    this.circleColor = themedColor2;
+                    this.circlePaint.setColor(themedColor2);
                 }
             }
             float f3 = this.countChangeProgress;
@@ -309,7 +316,7 @@ public class CounterView extends View {
                 RectF rectF3 = this.rectF;
                 float var_ = AndroidUtilities.density;
                 canvas.drawRoundRect(rectF3, var_ * 11.5f, var_ * 11.5f, this.circlePaint);
-                if (Theme.hasGradientService()) {
+                if (this.addServiceGradient && Theme.hasGradientService()) {
                     RectF rectF4 = this.rectF;
                     float var_ = AndroidUtilities.density;
                     canvas.drawRoundRect(rectF4, var_ * 11.5f, var_ * 11.5f, Theme.chat_actionBackgroundGradientDarkenPaint);
@@ -427,6 +434,12 @@ public class CounterView extends View {
 
         public void setParent(View view) {
             this.parent = view;
+        }
+
+        private int getThemedColor(String str) {
+            Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+            return color != null ? color.intValue() : Theme.getColor(str);
         }
     }
 }

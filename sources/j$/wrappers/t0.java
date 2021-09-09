@@ -1,16 +1,16 @@
 package j$.wrappers;
 
-import j$.util.function.u;
+import j$.util.function.v;
 import java.util.function.ObjIntConsumer;
 
-public final /* synthetic */ class t0 implements u {
+public final /* synthetic */ class t0 implements v {
     final /* synthetic */ ObjIntConsumer a;
 
     private /* synthetic */ t0(ObjIntConsumer objIntConsumer) {
         this.a = objIntConsumer;
     }
 
-    public static /* synthetic */ u a(ObjIntConsumer objIntConsumer) {
+    public static /* synthetic */ v a(ObjIntConsumer objIntConsumer) {
         if (objIntConsumer == null) {
             return null;
         }

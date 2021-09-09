@@ -6,16 +6,14 @@ import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda243 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ long f$2;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda243(MessagesController messagesController, int i, long j) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda243(MessagesController messagesController, long j) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = j;
+        this.f$1 = j;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$deleteMessages$92(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$updateTimerProc$120(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

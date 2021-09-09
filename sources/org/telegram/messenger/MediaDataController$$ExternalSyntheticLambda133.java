@@ -1,6 +1,6 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
+import androidx.collection.LongSparseArray;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;

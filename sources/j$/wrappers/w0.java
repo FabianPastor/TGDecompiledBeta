@@ -1,20 +1,20 @@
 package j$.wrappers;
 
-import j$.util.function.v;
+import j$.util.function.w;
 import java.util.function.ObjLongConsumer;
 
 public final /* synthetic */ class w0 implements ObjLongConsumer {
-    final /* synthetic */ v a;
+    final /* synthetic */ w a;
 
-    private /* synthetic */ w0(v vVar) {
-        this.a = vVar;
+    private /* synthetic */ w0(w wVar) {
+        this.a = wVar;
     }
 
-    public static /* synthetic */ ObjLongConsumer a(v vVar) {
-        if (vVar == null) {
+    public static /* synthetic */ ObjLongConsumer a(w wVar) {
+        if (wVar == null) {
             return null;
         }
-        return vVar instanceof v0 ? ((v0) vVar).a : new w0(vVar);
+        return wVar instanceof v0 ? ((v0) wVar).a : new w0(wVar);
     }
 
     public /* synthetic */ void accept(Object obj, long j) {

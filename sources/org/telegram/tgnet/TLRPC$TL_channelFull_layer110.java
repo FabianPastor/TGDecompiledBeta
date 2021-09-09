@@ -14,7 +14,7 @@ public class TLRPC$TL_channelFull_layer110 extends TLRPC$ChatFull {
         this.can_view_stats = (readInt32 & 4096) != 0;
         this.can_set_location = (65536 & readInt32) != 0;
         this.has_scheduled = (readInt32 & 524288) != 0;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         this.about = abstractSerializedData.readString(z);
         if ((this.flags & 1) != 0) {
             this.participants_count = abstractSerializedData.readInt32(z);
@@ -53,7 +53,7 @@ public class TLRPC$TL_channelFull_layer110 extends TLRPC$ChatFull {
                 }
             }
             if ((this.flags & 16) != 0) {
-                this.migrated_from_chat_id = abstractSerializedData.readInt32(z);
+                this.migrated_from_chat_id = (long) abstractSerializedData.readInt32(z);
             }
             if ((this.flags & 16) != 0) {
                 this.migrated_from_max_id = abstractSerializedData.readInt32(z);
@@ -71,7 +71,7 @@ public class TLRPC$TL_channelFull_layer110 extends TLRPC$ChatFull {
                 this.folder_id = abstractSerializedData.readInt32(z);
             }
             if ((this.flags & 16384) != 0) {
-                this.linked_chat_id = abstractSerializedData.readInt32(z);
+                this.linked_chat_id = (long) abstractSerializedData.readInt32(z);
             }
             if ((this.flags & 32768) != 0) {
                 this.location = TLRPC$ChannelLocation.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -105,7 +105,7 @@ public class TLRPC$TL_channelFull_layer110 extends TLRPC$ChatFull {
         int i7 = this.has_scheduled ? i6 | 524288 : i6 & -524289;
         this.flags = i7;
         abstractSerializedData.writeInt32(i7);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         abstractSerializedData.writeString(this.about);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(this.participants_count);
@@ -135,7 +135,7 @@ public class TLRPC$TL_channelFull_layer110 extends TLRPC$ChatFull {
             this.bot_info.get(i8).serializeToStream(abstractSerializedData);
         }
         if ((this.flags & 16) != 0) {
-            abstractSerializedData.writeInt32(this.migrated_from_chat_id);
+            abstractSerializedData.writeInt32((int) this.migrated_from_chat_id);
         }
         if ((this.flags & 16) != 0) {
             abstractSerializedData.writeInt32(this.migrated_from_max_id);
@@ -153,7 +153,7 @@ public class TLRPC$TL_channelFull_layer110 extends TLRPC$ChatFull {
             abstractSerializedData.writeInt32(this.folder_id);
         }
         if ((this.flags & 16384) != 0) {
-            abstractSerializedData.writeInt32(this.linked_chat_id);
+            abstractSerializedData.writeInt32((int) this.linked_chat_id);
         }
         if ((this.flags & 32768) != 0) {
             this.location.serializeToStream(abstractSerializedData);

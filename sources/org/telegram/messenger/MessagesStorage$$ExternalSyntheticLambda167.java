@@ -1,28 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$photos_Photos;
+import org.telegram.tgnet.TLRPC$messages_Dialogs;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda167 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$photos_Photos f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ int f$4;
-    public final /* synthetic */ long f$5;
-    public final /* synthetic */ int f$6;
+    public final /* synthetic */ TLRPC$messages_Dialogs f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda167(MessagesStorage messagesStorage, TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList arrayList, int i, int i2, long j, int i3) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda167(MessagesStorage messagesStorage, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$photos_Photos;
-        this.f$2 = arrayList;
-        this.f$3 = i;
-        this.f$4 = i2;
-        this.f$5 = j;
-        this.f$6 = i3;
+        this.f$1 = tLRPC$messages_Dialogs;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$getDialogPhotos$55(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$putDialogs$181(this.f$1, this.f$2);
     }
 }

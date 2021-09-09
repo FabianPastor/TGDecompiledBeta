@@ -1,6 +1,6 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
+import androidx.collection.LongSparseArray;
 import java.util.ArrayList;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda62 implements Runnable {

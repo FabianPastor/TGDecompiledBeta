@@ -745,6 +745,7 @@
     <public type="drawable" name="msg_check_s" id="NUM" />
     <public type="drawable" name="msg_clear" id="NUM" />
     <public type="drawable" name="msg_clock" id="NUM" />
+    <public type="drawable" name="msg_colors" id="NUM" />
     <public type="drawable" name="msg_contact" id="NUM" />
     <public type="drawable" name="msg_copy" id="NUM" />
     <public type="drawable" name="msg_copy_filled" id="NUM" />
@@ -815,6 +816,7 @@
     <public type="drawable" name="msg_pin" id="NUM" />
     <public type="drawable" name="msg_pin_filled" id="NUM" />
     <public type="drawable" name="msg_pin_mini" id="NUM" />
+    <public type="drawable" name="msg_played" id="NUM" />
     <public type="drawable" name="msg_pollstop" id="NUM" />
     <public type="drawable" name="msg_psa" id="NUM" />
     <public type="drawable" name="msg_qrcode" id="NUM" />
@@ -843,6 +845,7 @@
     <public type="drawable" name="msg_screencast" id="NUM" />
     <public type="drawable" name="msg_screencast_off" id="NUM" />
     <public type="drawable" name="msg_search" id="NUM" />
+    <public type="drawable" name="msg_seen" id="NUM" />
     <public type="drawable" name="msg_sendfile" id="NUM" />
     <public type="drawable" name="msg_sendphoto" id="NUM" />
     <public type="drawable" name="msg_share" id="NUM" />
@@ -1566,6 +1569,7 @@
     <public type="raw" name="speaker" id="NUM" />
     <public type="raw" name="statistic_preload" id="NUM" />
     <public type="raw" name="sun" id="NUM" />
+    <public type="raw" name="sun_outline" id="NUM" />
     <public type="raw" name="swipe_delete" id="NUM" />
     <public type="raw" name="swipe_disabled" id="NUM" />
     <public type="raw" name="swipe_mute" id="NUM" />
@@ -2370,6 +2374,7 @@
     <public type="string" name="Change" id="NUM" />
     <public type="string" name="ChangeChatBackground" id="NUM" />
     <public type="string" name="ChangeColorToColor" id="NUM" />
+    <public type="string" name="ChangeColors" id="NUM" />
     <public type="string" name="ChangeLanguageLater" id="NUM" />
     <public type="string" name="ChangePasscode" id="NUM" />
     <public type="string" name="ChangePasscodeInfo" id="NUM" />
@@ -2508,6 +2513,7 @@
     <public type="string" name="Characters_two" id="NUM" />
     <public type="string" name="Characters_zero" id="NUM" />
     <public type="string" name="ChatAdmin" id="NUM" />
+    <public type="string" name="ChatApplyTheme" id="NUM" />
     <public type="string" name="ChatArchived" id="NUM" />
     <public type="string" name="ChatArchivedInfo" id="NUM" />
     <public type="string" name="ChatBackground" id="NUM" />
@@ -2531,12 +2537,22 @@
     <public type="string" name="ChatListExpanded" id="NUM" />
     <public type="string" name="ChatListSwipeGesture" id="NUM" />
     <public type="string" name="ChatLocation" id="NUM" />
+    <public type="string" name="ChatNoTheme" id="NUM" />
+    <public type="string" name="ChatResetTheme" id="NUM" />
     <public type="string" name="ChatSetLocation" id="NUM" />
     <public type="string" name="ChatSetLocationInfo" id="NUM" />
     <public type="string" name="ChatSetNewPhoto" id="NUM" />
     <public type="string" name="ChatSetPhotoOrVideo" id="NUM" />
     <public type="string" name="ChatSetThisLocation" id="NUM" />
     <public type="string" name="ChatSettings" id="NUM" />
+    <public type="string" name="ChatThemeChangedTo" id="NUM" />
+    <public type="string" name="ChatThemeChangedYou" id="NUM" />
+    <public type="string" name="ChatThemeDisabled" id="NUM" />
+    <public type="string" name="ChatThemeDisabledYou" id="NUM" />
+    <public type="string" name="ChatThemeSaveDialogApply" id="NUM" />
+    <public type="string" name="ChatThemeSaveDialogDiscard" id="NUM" />
+    <public type="string" name="ChatThemeSaveDialogText" id="NUM" />
+    <public type="string" name="ChatThemeSaveDialogTitle" id="NUM" />
     <public type="string" name="ChatVideo" id="NUM" />
     <public type="string" name="ChatWasMovedToMainList" id="NUM" />
     <public type="string" name="ChatYourSelf" id="NUM" />
@@ -3902,6 +3918,12 @@
     <public type="string" name="MessageNotFound" id="NUM" />
     <public type="string" name="MessageNotifications" id="NUM" />
     <public type="string" name="MessagePinnedHint" id="NUM" />
+    <public type="string" name="MessagePlayed_few" id="NUM" />
+    <public type="string" name="MessagePlayed_many" id="NUM" />
+    <public type="string" name="MessagePlayed_one" id="NUM" />
+    <public type="string" name="MessagePlayed_other" id="NUM" />
+    <public type="string" name="MessagePlayed_two" id="NUM" />
+    <public type="string" name="MessagePlayed_zero" id="NUM" />
     <public type="string" name="MessagePreview" id="NUM" />
     <public type="string" name="MessageScheduleEditTime" id="NUM" />
     <public type="string" name="MessageScheduleSend" id="NUM" />
@@ -3913,6 +3935,12 @@
     <public type="string" name="MessageScheduledUntilOnline" id="NUM" />
     <public type="string" name="MessageScheduledVote" id="NUM" />
     <public type="string" name="MessageScheduledVoteResults" id="NUM" />
+    <public type="string" name="MessageSeen_few" id="NUM" />
+    <public type="string" name="MessageSeen_many" id="NUM" />
+    <public type="string" name="MessageSeen_one" id="NUM" />
+    <public type="string" name="MessageSeen_other" id="NUM" />
+    <public type="string" name="MessageSeen_two" id="NUM" />
+    <public type="string" name="MessageSeen_zero" id="NUM" />
     <public type="string" name="MessageUnpinnedHint" id="NUM" />
     <public type="string" name="MessagesBold_few" id="NUM" />
     <public type="string" name="MessagesBold_many" id="NUM" />
@@ -5208,6 +5236,7 @@
     <public type="string" name="SelectFile" id="NUM" />
     <public type="string" name="SelectFromGallery" id="NUM" />
     <public type="string" name="SelectImage" id="NUM" />
+    <public type="string" name="SelectTheme" id="NUM" />
     <public type="string" name="SelectingContact" id="NUM" />
     <public type="string" name="SelectingLocation" id="NUM" />
     <public type="string" name="Send" id="NUM" />

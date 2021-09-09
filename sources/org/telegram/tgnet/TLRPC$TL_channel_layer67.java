@@ -20,7 +20,7 @@ public class TLRPC$TL_channel_layer67 extends TLRPC$TL_channel {
             z2 = true;
         }
         this.min = z2;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         if ((this.flags & 8192) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
         }
@@ -59,7 +59,7 @@ public class TLRPC$TL_channel_layer67 extends TLRPC$TL_channel {
         int i10 = this.min ? i9 | 4096 : i9 & -4097;
         this.flags = i10;
         abstractSerializedData.writeInt32(i10);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         if ((this.flags & 8192) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
         }

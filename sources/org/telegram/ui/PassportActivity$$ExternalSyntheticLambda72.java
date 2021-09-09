@@ -12,7 +12,7 @@ public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda72 i
         this.f$1 = view;
     }
 
-    public final void didSelectCountry(String str, String str2) {
-        this.f$0.lambda$createIdentityInterface$45(this.f$1, str, str2);
+    public final void didSelectCountry(CountrySelectActivity.Country country) {
+        this.f$0.lambda$createIdentityInterface$45(this.f$1, country);
     }
 }

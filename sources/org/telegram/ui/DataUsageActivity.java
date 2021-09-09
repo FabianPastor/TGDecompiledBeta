@@ -978,7 +978,7 @@ public class DataUsageActivity extends BaseFragment {
                 view = new TextSettingsCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i != 2) {
-                view = i != 3 ? null : new TextInfoPrivacyCell(this.mContext);
+                view = new TextInfoPrivacyCell(this.mContext);
             } else {
                 view = new HeaderCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));

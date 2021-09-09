@@ -38,8 +38,8 @@ public class TrendingStickersAlert extends BottomSheet {
         return false;
     }
 
-    public TrendingStickersAlert(Context context, BaseFragment baseFragment, TrendingStickersLayout trendingStickersLayout) {
-        super(context, true);
+    public TrendingStickersAlert(Context context, BaseFragment baseFragment, TrendingStickersLayout trendingStickersLayout, Theme.ResourcesProvider resourcesProvider) {
+        super(context, true, resourcesProvider);
         AlertContainerView alertContainerView2 = new AlertContainerView(context);
         this.alertContainerView = alertContainerView2;
         alertContainerView2.addView(trendingStickersLayout, LayoutHelper.createFrame(-1, -1.0f));
@@ -208,7 +208,7 @@ public class TrendingStickersAlert extends BottomSheet {
             TrendingStickersAlert.this.shadowDrawable.draw(canvas);
             if (fraction > 0.0f && fraction < 1.0f) {
                 float dp = ((float) AndroidUtilities.dp(12.0f)) * fraction;
-                TrendingStickersAlert.this.shapeDrawable.setColor(Theme.getColor("dialogBackground"));
+                TrendingStickersAlert.this.shapeDrawable.setColor(TrendingStickersAlert.this.getThemedColor("dialogBackground"));
                 float[] fArr = this.radii;
                 fArr[3] = dp;
                 fArr[2] = dp;
@@ -234,8 +234,8 @@ public class TrendingStickersAlert extends BottomSheet {
             int dp2 = AndroidUtilities.dp(4.0f);
             int i2 = (int) (((float) dp2) * 2.0f * (1.0f - fraction));
             TrendingStickersAlert.this.shapeDrawable.setCornerRadius((float) AndroidUtilities.dp(2.0f));
-            int color = Theme.getColor("key_sheet_scrollUp");
-            TrendingStickersAlert.this.shapeDrawable.setColor(ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * fraction)));
+            int access$1600 = TrendingStickersAlert.this.getThemedColor("key_sheet_scrollUp");
+            TrendingStickersAlert.this.shapeDrawable.setColor(ColorUtils.setAlphaComponent(access$1600, (int) (((float) Color.alpha(access$1600)) * fraction)));
             TrendingStickersAlert.this.shapeDrawable.setBounds((getWidth() - dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i2, (getWidth() + dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i2 + dp2);
             TrendingStickersAlert.this.shapeDrawable.draw(canvas);
             canvas.restore();
@@ -244,8 +244,8 @@ public class TrendingStickersAlert extends BottomSheet {
             }
             setStatusBarVisible(z, true);
             if (this.statusBarAlpha > 0.0f) {
-                int color2 = Theme.getColor("dialogBackground");
-                this.paint.setColor(Color.argb((int) (this.statusBarAlpha * 255.0f), (int) (((float) Color.red(color2)) * 0.8f), (int) (((float) Color.green(color2)) * 0.8f), (int) (((float) Color.blue(color2)) * 0.8f)));
+                int access$1700 = TrendingStickersAlert.this.getThemedColor("dialogBackground");
+                this.paint.setColor(Color.argb((int) (this.statusBarAlpha * 255.0f), (int) (((float) Color.red(access$1700)) * 0.8f), (int) (((float) Color.green(access$1700)) * 0.8f), (int) (((float) Color.blue(access$1700)) * 0.8f)));
                 canvas.drawRect((float) TrendingStickersAlert.this.backgroundPaddingLeft, 0.0f, (float) (getMeasuredWidth() - TrendingStickersAlert.this.backgroundPaddingLeft), (float) AndroidUtilities.statusBarHeight, this.paint);
             }
         }

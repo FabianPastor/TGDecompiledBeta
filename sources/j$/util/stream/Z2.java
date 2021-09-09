@@ -3,9 +3,9 @@ package j$.util.stream;
 import j$.lang.a;
 import j$.util.function.A;
 import j$.util.function.B;
+import j$.util.function.C;
 import j$.util.function.Consumer;
-import j$.util.function.x;
-import j$.util.function.z;
+import j$.util.function.y;
 
 class Z2 extends CLASSNAMEj3 {
     public final /* synthetic */ int b = 5;
@@ -24,7 +24,7 @@ class Z2 extends CLASSNAMEj3 {
                 this.a.accept(obj);
                 return;
             case 1:
-                if (((x) ((L) this.c).m).test(obj)) {
+                if (((y) ((L) this.c).m).test(obj)) {
                     this.a.accept(obj);
                     return;
                 }
@@ -33,13 +33,13 @@ class Z2 extends CLASSNAMEj3 {
                 this.a.accept(((CLASSNAMEb3) this.c).m.apply(obj));
                 return;
             case 3:
-                this.a.accept(((A) ((M) this.c).m).applyAsInt(obj));
+                this.a.accept(((B) ((M) this.c).m).applyAsInt(obj));
                 return;
             case 4:
-                this.a.accept(((B) ((N) this.c).m).applyAsLong(obj));
+                this.a.accept(((C) ((N) this.c).m).applyAsLong(obj));
                 return;
             case 5:
-                this.a.accept(((z) ((K) this.c).m).applyAsDouble(obj));
+                this.a.accept(((A) ((K) this.c).m).applyAsDouble(obj));
                 return;
             default:
                 Stream stream = (Stream) ((CLASSNAMEb3) this.c).m.apply(obj);

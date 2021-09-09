@@ -1,10 +1,10 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.p;
+import j$.util.function.q;
 
 public interface r extends s {
-    void d(p pVar);
+    void d(q qVar);
 
     void forEachRemaining(Consumer consumer);
 

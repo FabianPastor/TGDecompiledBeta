@@ -2,15 +2,15 @@ package j$.util.stream;
 
 import j$.util.function.BiConsumer;
 import j$.util.function.Consumer;
-import j$.util.function.y;
+import j$.util.function.z;
 
 class L2 extends U2 implements T2 {
-    final /* synthetic */ y b;
+    final /* synthetic */ z b;
     final /* synthetic */ BiConsumer c;
     final /* synthetic */ BiConsumer d;
 
-    L2(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
-        this.b = yVar;
+    L2(z zVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
+        this.b = zVar;
         this.c = biConsumer;
         this.d = biConsumer2;
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.LocationCell;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -23,7 +24,7 @@ public class LocationActivitySearchAdapter extends BaseLocationAdapter {
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new RecyclerListView.Holder(new LocationCell(this.mContext, false));
+        return new RecyclerListView.Holder(new LocationCell(this.mContext, false, (Theme.ResourcesProvider) null));
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

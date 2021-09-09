@@ -115,7 +115,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
             }
             TLRPC$InputStickerSet tLRPC$InputStickerSet2 = tLRPC$InputStickerSet;
             tLRPC$InputStickerSet2.access_hash = tLRPC$StickerSetCovered.set.access_hash;
-            StickersAlert stickersAlert = new StickersAlert(getParentActivity(), this, tLRPC$InputStickerSet2, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null);
+            StickersAlert stickersAlert = new StickersAlert((Context) getParentActivity(), (BaseFragment) this, tLRPC$InputStickerSet2, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null);
             stickersAlert.setInstallDelegate(new StickersAlert.StickersAlertInstallDelegate() {
                 public void onStickerSetUninstalled() {
                 }
@@ -229,17 +229,15 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextInfoPrivacyCell textInfoPrivacyCell;
-            if (i == 0) {
+            if (i != 0) {
+                TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(this.mContext);
+                textInfoPrivacyCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                textInfoPrivacyCell = textInfoPrivacyCell2;
+            } else {
                 FeaturedStickerSetCell featuredStickerSetCell = new FeaturedStickerSetCell(this.mContext);
                 featuredStickerSetCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 featuredStickerSetCell.setAddOnClickListener(new FeaturedStickersActivity$ListAdapter$$ExternalSyntheticLambda0(this));
                 textInfoPrivacyCell = featuredStickerSetCell;
-            } else if (i != 1) {
-                textInfoPrivacyCell = null;
-            } else {
-                TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(this.mContext);
-                textInfoPrivacyCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                textInfoPrivacyCell = textInfoPrivacyCell2;
             }
             textInfoPrivacyCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
             return new RecyclerListView.Holder(textInfoPrivacyCell);

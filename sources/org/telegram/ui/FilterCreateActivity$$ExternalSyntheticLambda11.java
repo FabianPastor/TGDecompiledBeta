@@ -12,4 +12,8 @@ public final /* synthetic */ class FilterCreateActivity$$ExternalSyntheticLambda
     public final void didSetColor() {
         this.f$0.lambda$getThemeDescriptions$14();
     }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    }
 }

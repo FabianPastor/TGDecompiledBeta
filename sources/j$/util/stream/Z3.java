@@ -2,13 +2,13 @@ package j$.util.stream;
 
 import j$.util.N;
 import j$.util.function.Consumer;
-import j$.util.function.o;
 import j$.util.function.p;
+import j$.util.function.q;
 import j$.util.w;
 import java.util.Arrays;
 import java.util.Iterator;
 
-class Z3 extends CLASSNAMEa4 implements p {
+class Z3 extends CLASSNAMEa4 implements q {
     Z3() {
     }
 
@@ -32,14 +32,14 @@ class Z3 extends CLASSNAMEa4 implements p {
         return new long[i];
     }
 
-    public p f(p pVar) {
-        pVar.getClass();
-        return new o(this, pVar);
+    public q f(q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
     }
 
     public void forEach(Consumer consumer) {
-        if (consumer instanceof p) {
-            g((p) consumer);
+        if (consumer instanceof q) {
+            g((q) consumer);
         } else if (!R4.a) {
             spliterator().forEachRemaining(consumer);
         } else {
@@ -55,9 +55,9 @@ class Z3 extends CLASSNAMEa4 implements p {
     /* access modifiers changed from: protected */
     public void t(Object obj, int i, int i2, Object obj2) {
         long[] jArr = (long[]) obj;
-        p pVar = (p) obj2;
+        q qVar = (q) obj2;
         while (i < i2) {
-            pVar.accept(jArr[i]);
+            qVar.accept(jArr[i]);
             i++;
         }
     }

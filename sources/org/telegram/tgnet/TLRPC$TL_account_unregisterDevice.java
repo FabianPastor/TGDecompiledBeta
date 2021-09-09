@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TLRPC$TL_account_unregisterDevice extends TLObject {
     public static int constructor = NUM;
-    public ArrayList<Integer> other_uids = new ArrayList<>();
+    public ArrayList<Long> other_uids = new ArrayList<>();
     public String token;
     public int token_type;
 
@@ -20,7 +20,7 @@ public class TLRPC$TL_account_unregisterDevice extends TLObject {
         int size = this.other_uids.size();
         abstractSerializedData.writeInt32(size);
         for (int i = 0; i < size; i++) {
-            abstractSerializedData.writeInt32(this.other_uids.get(i).intValue());
+            abstractSerializedData.writeInt64(this.other_uids.get(i).longValue());
         }
     }
 }

@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_user extends TLRPC$User {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -22,7 +22,7 @@ public class TLRPC$TL_user extends TLRPC$User {
         this.scam = (16777216 & readInt32) != 0;
         this.apply_min_photo = (33554432 & readInt32) != 0;
         this.fake = (readInt32 & 67108864) != 0;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = abstractSerializedData.readInt64(z);
         if ((this.flags & 1) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
         }
@@ -107,7 +107,7 @@ public class TLRPC$TL_user extends TLRPC$User {
         int i15 = this.fake ? i14 | 67108864 : i14 & -67108865;
         this.flags = i15;
         abstractSerializedData.writeInt32(i15);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt64(this.id);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
         }

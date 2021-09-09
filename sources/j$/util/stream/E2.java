@@ -2,8 +2,8 @@ package j$.util.stream;
 
 import j$.util.function.CLASSNAMEb;
 import j$.util.function.d;
-import j$.util.function.i;
-import j$.util.function.n;
+import j$.util.function.j;
+import j$.util.function.o;
 
 class E2 extends V2 {
     public final /* synthetic */ int b = 1;
@@ -22,9 +22,9 @@ class E2 extends V2 {
             case 1:
                 return new I2((CLASSNAMEb) this.c);
             case 2:
-                return new O2((i) this.c);
+                return new O2((j) this.c);
             default:
-                return new S2((n) this.c);
+                return new S2((o) this.c);
         }
     }
 
@@ -35,14 +35,14 @@ class E2 extends V2 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public E2(CLASSNAMEf4 f4Var, i iVar) {
+    public E2(CLASSNAMEf4 f4Var, j jVar) {
         super(f4Var);
-        this.c = iVar;
+        this.c = jVar;
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public E2(CLASSNAMEf4 f4Var, n nVar) {
+    public E2(CLASSNAMEf4 f4Var, o oVar) {
         super(f4Var);
-        this.c = nVar;
+        this.c = oVar;
     }
 }

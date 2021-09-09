@@ -98,7 +98,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private RLottieDrawable cameraDrawable;
     private boolean canCreatePublic = true;
     /* access modifiers changed from: private */
-    public int chatId;
+    public long chatId;
     private int checkReqId;
     private Runnable checkRunnable;
     /* access modifiers changed from: private */
@@ -174,7 +174,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 loadAdminedChannels();
             }
         }
-        this.chatId = bundle.getInt("chat_id", 0);
+        this.chatId = bundle.getLong("chat_id", 0);
     }
 
     /* access modifiers changed from: private */
@@ -328,7 +328,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         }
                         Bundle bundle = new Bundle();
                         bundle.putInt("step", 2);
-                        bundle.putInt("chatId", ChannelCreateActivity.this.chatId);
+                        bundle.putLong("chatId", ChannelCreateActivity.this.chatId);
                         bundle.putInt("chatType", 2);
                         ChannelCreateActivity.this.presentFragment(new GroupCreateActivity(bundle), true);
                     }
@@ -546,6 +546,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             };
             this.avatarImage = r2;
             r2.setRoundRadius(AndroidUtilities.dp(32.0f));
+            String str = "windowBackgroundWhiteHintText";
             this.avatarDrawable.setInfo(5, (String) null, (String) null);
             this.avatarImage.setImageDrawable(this.avatarDrawable);
             BackupImageView backupImageView = this.avatarImage;
@@ -553,7 +554,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             frameLayout.addView(backupImageView, LayoutHelper.createFrame(64, 64.0f, (z ? 5 : 3) | 48, z ? 0.0f : 16.0f, 12.0f, z ? 16.0f : 0.0f, 12.0f));
             final Paint paint = new Paint(1);
             paint.setColor(NUM);
-            AnonymousClass4 r12 = new View(context2) {
+            AnonymousClass4 r3 = new View(context2) {
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     if (ChannelCreateActivity.this.avatarImage != null && ChannelCreateActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
@@ -562,9 +563,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     }
                 }
             };
-            this.avatarOverlay = r12;
+            this.avatarOverlay = r3;
             boolean z2 = LocaleController.isRTL;
-            frameLayout.addView(r12, LayoutHelper.createFrame(64, 64.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 16.0f, 12.0f, z2 ? 16.0f : 0.0f, 12.0f));
+            frameLayout.addView(r3, LayoutHelper.createFrame(64, 64.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 16.0f, 12.0f, z2 ? 16.0f : 0.0f, 12.0f));
             this.avatarOverlay.setOnClickListener(new ChannelCreateActivity$$ExternalSyntheticLambda5(this));
             this.cameraDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(60.0f), AndroidUtilities.dp(60.0f), false, (int[]) null);
             AnonymousClass5 r22 = new RLottieImageView(context2) {
@@ -599,9 +600,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             EditTextEmoji editTextEmoji2 = new EditTextEmoji(context2, r0, this, 0);
             this.nameTextView = editTextEmoji2;
             editTextEmoji2.setHint(LocaleController.getString("EnterChannelName", NUM));
-            String str = this.nameToSet;
-            if (str != null) {
-                this.nameTextView.setText(str);
+            String str2 = this.nameToSet;
+            if (str2 != null) {
+                this.nameTextView.setText(str2);
                 this.nameToSet = null;
             }
             this.nameTextView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
@@ -614,7 +615,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
             this.descriptionTextView = editTextBoldCursor;
             editTextBoldCursor.setTextSize(1, 18.0f);
-            this.descriptionTextView.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
+            this.descriptionTextView.setHintTextColor(Theme.getColor(str));
             this.descriptionTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.descriptionTextView.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
             this.descriptionTextView.setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
@@ -645,132 +646,136 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.helpTextView.setText(LocaleController.getString("DescriptionInfo", NUM));
             this.linearLayout.addView(this.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 20));
-        } else if (i == 1) {
-            ScrollView scrollView = new ScrollView(context2);
-            this.fragmentView = scrollView;
-            ScrollView scrollView2 = scrollView;
-            scrollView2.setFillViewport(true);
-            LinearLayout linearLayout4 = new LinearLayout(context2);
-            this.linearLayout = linearLayout4;
-            linearLayout4.setOrientation(1);
-            scrollView2.addView(this.linearLayout, new FrameLayout.LayoutParams(-1, -2));
-            this.actionBar.setTitle(LocaleController.getString("ChannelSettingsTitle", NUM));
-            this.fragmentView.setTag("windowBackgroundGray");
-            this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-            HeaderCell headerCell3 = new HeaderCell(context2, 23);
-            this.headerCell2 = headerCell3;
-            headerCell3.setHeight(46);
-            this.headerCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-            this.headerCell2.setText(LocaleController.getString("ChannelTypeHeader", NUM));
-            this.linearLayout.addView(this.headerCell2);
-            LinearLayout linearLayout5 = new LinearLayout(context2);
-            this.linearLayout2 = linearLayout5;
-            linearLayout5.setOrientation(1);
-            this.linearLayout2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-            this.linearLayout.addView(this.linearLayout2, LayoutHelper.createLinear(-1, -2));
-            RadioButtonCell radioButtonCell = new RadioButtonCell(context2);
-            this.radioButtonCell1 = radioButtonCell;
-            radioButtonCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            this.radioButtonCell1.setTextAndValue(LocaleController.getString("ChannelPublic", NUM), LocaleController.getString("ChannelPublicInfo", NUM), false, !this.isPrivate);
-            this.linearLayout2.addView(this.radioButtonCell1, LayoutHelper.createLinear(-1, -2));
-            this.radioButtonCell1.setOnClickListener(new ChannelCreateActivity$$ExternalSyntheticLambda2(this));
-            RadioButtonCell radioButtonCell3 = new RadioButtonCell(context2);
-            this.radioButtonCell2 = radioButtonCell3;
-            radioButtonCell3.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            this.radioButtonCell2.setTextAndValue(LocaleController.getString("ChannelPrivate", NUM), LocaleController.getString("ChannelPrivateInfo", NUM), false, this.isPrivate);
-            this.linearLayout2.addView(this.radioButtonCell2, LayoutHelper.createLinear(-1, -2));
-            this.radioButtonCell2.setOnClickListener(new ChannelCreateActivity$$ExternalSyntheticLambda3(this));
-            ShadowSectionCell shadowSectionCell = new ShadowSectionCell(context2);
-            this.sectionCell = shadowSectionCell;
-            this.linearLayout.addView(shadowSectionCell, LayoutHelper.createLinear(-1, -2));
-            LinearLayout linearLayout6 = new LinearLayout(context2);
-            this.linkContainer = linearLayout6;
-            linearLayout6.setOrientation(1);
-            this.linkContainer.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-            this.linearLayout.addView(this.linkContainer, LayoutHelper.createLinear(-1, -2));
-            HeaderCell headerCell4 = new HeaderCell(context2);
-            this.headerCell = headerCell4;
-            this.linkContainer.addView(headerCell4);
-            LinearLayout linearLayout7 = new LinearLayout(context2);
-            this.publicContainer = linearLayout7;
-            linearLayout7.setOrientation(0);
-            this.linkContainer.addView(this.publicContainer, LayoutHelper.createLinear(-1, 36, 17.0f, 7.0f, 17.0f, 0.0f));
-            EditTextBoldCursor editTextBoldCursor2 = new EditTextBoldCursor(context2);
-            this.editText = editTextBoldCursor2;
-            editTextBoldCursor2.setText(MessagesController.getInstance(this.currentAccount).linkPrefix + "/");
-            this.editText.setTextSize(1, 18.0f);
-            this.editText.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
-            this.editText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.editText.setMaxLines(1);
-            this.editText.setLines(1);
-            this.editText.setEnabled(false);
-            this.editText.setBackgroundDrawable((Drawable) null);
-            this.editText.setPadding(0, 0, 0, 0);
-            this.editText.setSingleLine(true);
-            this.editText.setInputType(163840);
-            this.editText.setImeOptions(6);
-            this.publicContainer.addView(this.editText, LayoutHelper.createLinear(-2, 36));
-            EditTextBoldCursor editTextBoldCursor3 = new EditTextBoldCursor(context2);
-            this.descriptionTextView = editTextBoldCursor3;
-            editTextBoldCursor3.setTextSize(1, 18.0f);
-            this.descriptionTextView.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
-            this.descriptionTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.descriptionTextView.setMaxLines(1);
-            this.descriptionTextView.setLines(1);
-            this.descriptionTextView.setBackgroundDrawable((Drawable) null);
-            this.descriptionTextView.setPadding(0, 0, 0, 0);
-            this.descriptionTextView.setSingleLine(true);
-            this.descriptionTextView.setInputType(163872);
-            this.descriptionTextView.setImeOptions(6);
-            this.descriptionTextView.setHint(LocaleController.getString("ChannelUsernamePlaceholder", NUM));
-            this.descriptionTextView.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.descriptionTextView.setCursorSize(AndroidUtilities.dp(20.0f));
-            this.descriptionTextView.setCursorWidth(1.5f);
-            this.publicContainer.addView(this.descriptionTextView, LayoutHelper.createLinear(-1, 36));
-            this.descriptionTextView.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable editable) {
-                }
+        } else {
+            String str3 = "windowBackgroundWhiteHintText";
+            if (i == 1) {
+                ScrollView scrollView = new ScrollView(context2);
+                this.fragmentView = scrollView;
+                ScrollView scrollView2 = scrollView;
+                scrollView2.setFillViewport(true);
+                LinearLayout linearLayout4 = new LinearLayout(context2);
+                this.linearLayout = linearLayout4;
+                linearLayout4.setOrientation(1);
+                scrollView2.addView(this.linearLayout, new FrameLayout.LayoutParams(-1, -2));
+                this.actionBar.setTitle(LocaleController.getString("ChannelSettingsTitle", NUM));
+                this.fragmentView.setTag("windowBackgroundGray");
+                this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+                HeaderCell headerCell3 = new HeaderCell(context2, 23);
+                this.headerCell2 = headerCell3;
+                headerCell3.setHeight(46);
+                this.headerCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                this.headerCell2.setText(LocaleController.getString("ChannelTypeHeader", NUM));
+                this.linearLayout.addView(this.headerCell2);
+                LinearLayout linearLayout5 = new LinearLayout(context2);
+                this.linearLayout2 = linearLayout5;
+                linearLayout5.setOrientation(1);
+                this.linearLayout2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                this.linearLayout.addView(this.linearLayout2, LayoutHelper.createLinear(-1, -2));
+                RadioButtonCell radioButtonCell = new RadioButtonCell(context2);
+                this.radioButtonCell1 = radioButtonCell;
+                radioButtonCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                this.radioButtonCell1.setTextAndValue(LocaleController.getString("ChannelPublic", NUM), LocaleController.getString("ChannelPublicInfo", NUM), false, !this.isPrivate);
+                this.linearLayout2.addView(this.radioButtonCell1, LayoutHelper.createLinear(-1, -2));
+                this.radioButtonCell1.setOnClickListener(new ChannelCreateActivity$$ExternalSyntheticLambda2(this));
+                RadioButtonCell radioButtonCell3 = new RadioButtonCell(context2);
+                this.radioButtonCell2 = radioButtonCell3;
+                radioButtonCell3.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                this.radioButtonCell2.setTextAndValue(LocaleController.getString("ChannelPrivate", NUM), LocaleController.getString("ChannelPrivateInfo", NUM), false, this.isPrivate);
+                this.linearLayout2.addView(this.radioButtonCell2, LayoutHelper.createLinear(-1, -2));
+                this.radioButtonCell2.setOnClickListener(new ChannelCreateActivity$$ExternalSyntheticLambda3(this));
+                ShadowSectionCell shadowSectionCell = new ShadowSectionCell(context2);
+                this.sectionCell = shadowSectionCell;
+                this.linearLayout.addView(shadowSectionCell, LayoutHelper.createLinear(-1, -2));
+                LinearLayout linearLayout6 = new LinearLayout(context2);
+                this.linkContainer = linearLayout6;
+                linearLayout6.setOrientation(1);
+                this.linkContainer.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                this.linearLayout.addView(this.linkContainer, LayoutHelper.createLinear(-1, -2));
+                HeaderCell headerCell4 = new HeaderCell(context2);
+                this.headerCell = headerCell4;
+                this.linkContainer.addView(headerCell4);
+                LinearLayout linearLayout7 = new LinearLayout(context2);
+                this.publicContainer = linearLayout7;
+                linearLayout7.setOrientation(0);
+                this.linkContainer.addView(this.publicContainer, LayoutHelper.createLinear(-1, 36, 17.0f, 7.0f, 17.0f, 0.0f));
+                EditTextBoldCursor editTextBoldCursor2 = new EditTextBoldCursor(context2);
+                this.editText = editTextBoldCursor2;
+                editTextBoldCursor2.setText(MessagesController.getInstance(this.currentAccount).linkPrefix + "/");
+                this.editText.setTextSize(1, 18.0f);
+                this.editText.setHintTextColor(Theme.getColor(str3));
+                this.editText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                this.editText.setMaxLines(1);
+                this.editText.setLines(1);
+                this.editText.setEnabled(false);
+                this.editText.setBackgroundDrawable((Drawable) null);
+                this.editText.setPadding(0, 0, 0, 0);
+                this.editText.setSingleLine(true);
+                this.editText.setInputType(163840);
+                this.editText.setImeOptions(6);
+                this.publicContainer.addView(this.editText, LayoutHelper.createLinear(-2, 36));
+                EditTextBoldCursor editTextBoldCursor3 = new EditTextBoldCursor(context2);
+                this.descriptionTextView = editTextBoldCursor3;
+                editTextBoldCursor3.setTextSize(1, 18.0f);
+                this.descriptionTextView.setHintTextColor(Theme.getColor(str3));
+                this.descriptionTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                this.descriptionTextView.setMaxLines(1);
+                this.descriptionTextView.setLines(1);
+                this.descriptionTextView.setBackgroundDrawable((Drawable) null);
+                this.descriptionTextView.setPadding(0, 0, 0, 0);
+                this.descriptionTextView.setSingleLine(true);
+                this.descriptionTextView.setInputType(163872);
+                this.descriptionTextView.setImeOptions(6);
+                this.descriptionTextView.setHint(LocaleController.getString("ChannelUsernamePlaceholder", NUM));
+                this.descriptionTextView.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                this.descriptionTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+                this.descriptionTextView.setCursorWidth(1.5f);
+                this.publicContainer.addView(this.descriptionTextView, LayoutHelper.createLinear(-1, 36));
+                this.descriptionTextView.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable editable) {
+                    }
 
-                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                    }
 
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                    ChannelCreateActivity channelCreateActivity = ChannelCreateActivity.this;
-                    boolean unused = channelCreateActivity.checkUserName(channelCreateActivity.descriptionTextView.getText().toString());
-                }
-            });
-            LinearLayout linearLayout8 = new LinearLayout(context2);
-            this.privateContainer = linearLayout8;
-            linearLayout8.setOrientation(1);
-            this.linkContainer.addView(this.privateContainer, LayoutHelper.createLinear(-1, -2));
-            LinkActionView linkActionView = new LinkActionView(context, this, (BottomSheet) null, this.chatId, true, ChatObject.isChannel(getMessagesController().getChat(Integer.valueOf(this.chatId))));
-            this.permanentLinkView = linkActionView;
-            linkActionView.hideRevokeOption(true);
-            this.permanentLinkView.setUsers(0, (ArrayList<TLRPC$User>) null);
-            this.privateContainer.addView(this.permanentLinkView);
-            TextView textView2 = new TextView(context2);
-            this.checkTextView = textView2;
-            textView2.setTextSize(1, 15.0f);
-            this.checkTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-            this.checkTextView.setVisibility(8);
-            this.linkContainer.addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 17, 3, 17, 7));
-            TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context2);
-            this.typeInfoCell = textInfoPrivacyCell;
-            textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
-            this.linearLayout.addView(this.typeInfoCell, LayoutHelper.createLinear(-1, -2));
-            LoadingCell loadingCell = new LoadingCell(context2);
-            this.loadingAdminedCell = loadingCell;
-            this.linearLayout.addView(loadingCell, LayoutHelper.createLinear(-1, -2));
-            LinearLayout linearLayout9 = new LinearLayout(context2);
-            this.adminnedChannelsLayout = linearLayout9;
-            linearLayout9.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-            this.adminnedChannelsLayout.setOrientation(1);
-            this.linearLayout.addView(this.adminnedChannelsLayout, LayoutHelper.createLinear(-1, -2));
-            TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(context2);
-            this.adminedInfoCell = textInfoPrivacyCell2;
-            textInfoPrivacyCell2.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
-            this.linearLayout.addView(this.adminedInfoCell, LayoutHelper.createLinear(-1, -2));
-            updatePrivatePublic();
+                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                        ChannelCreateActivity channelCreateActivity = ChannelCreateActivity.this;
+                        boolean unused = channelCreateActivity.checkUserName(channelCreateActivity.descriptionTextView.getText().toString());
+                    }
+                });
+                LinearLayout linearLayout8 = new LinearLayout(context2);
+                this.privateContainer = linearLayout8;
+                linearLayout8.setOrientation(1);
+                this.linkContainer.addView(this.privateContainer, LayoutHelper.createLinear(-1, -2));
+                LinkActionView linkActionView = r0;
+                LinkActionView linkActionView2 = new LinkActionView(context, this, (BottomSheet) null, this.chatId, true, ChatObject.isChannel(getMessagesController().getChat(Long.valueOf(this.chatId))));
+                this.permanentLinkView = linkActionView;
+                linkActionView.hideRevokeOption(true);
+                this.permanentLinkView.setUsers(0, (ArrayList<TLRPC$User>) null);
+                this.privateContainer.addView(this.permanentLinkView);
+                TextView textView2 = new TextView(context2);
+                this.checkTextView = textView2;
+                textView2.setTextSize(1, 15.0f);
+                this.checkTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+                this.checkTextView.setVisibility(8);
+                this.linkContainer.addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 17, 3, 17, 7));
+                TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context2);
+                this.typeInfoCell = textInfoPrivacyCell;
+                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
+                this.linearLayout.addView(this.typeInfoCell, LayoutHelper.createLinear(-1, -2));
+                LoadingCell loadingCell = new LoadingCell(context2);
+                this.loadingAdminedCell = loadingCell;
+                this.linearLayout.addView(loadingCell, LayoutHelper.createLinear(-1, -2));
+                LinearLayout linearLayout9 = new LinearLayout(context2);
+                this.adminnedChannelsLayout = linearLayout9;
+                linearLayout9.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                this.adminnedChannelsLayout.setOrientation(1);
+                this.linearLayout.addView(this.adminnedChannelsLayout, LayoutHelper.createLinear(-1, -2));
+                TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(context2);
+                this.adminedInfoCell = textInfoPrivacyCell2;
+                textInfoPrivacyCell2.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
+                this.linearLayout.addView(this.adminedInfoCell, LayoutHelper.createLinear(-1, -2));
+                updatePrivatePublic();
+            }
         }
         return this.fragmentView;
     }
@@ -1004,7 +1009,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (this.avatarEditor != null) {
             AnimatorSet animatorSet = this.avatarAnimation;
             if (animatorSet != null) {
-                animatorSet.cancel();
+                animatorSet.removeAllListeners();
+                this.avatarAnimation.cancel();
                 this.avatarAnimation = null;
             }
             if (z2) {
@@ -1013,6 +1019,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     this.avatarProgressView.setVisibility(0);
                     this.avatarAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{1.0f})});
                 } else {
+                    if (this.avatarEditor.getVisibility() != 0) {
+                        this.avatarEditor.setAlpha(0.0f);
+                    }
                     this.avatarEditor.setVisibility(0);
                     this.avatarAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{0.0f})});
                 }
@@ -1117,13 +1126,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     FileLog.e((Throwable) e2);
                 }
             }
-            int intValue = objArr[0].intValue();
+            long longValue = objArr[0].longValue();
             Bundle bundle = new Bundle();
             bundle.putInt("step", 1);
-            bundle.putInt("chat_id", intValue);
+            bundle.putLong("chat_id", longValue);
             bundle.putBoolean("canCreatePublic", this.canCreatePublic);
             if (!(this.inputPhoto == null && this.inputVideo == null)) {
-                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue, (TLRPC$TL_inputChatPhoto) null, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig, (Runnable) null);
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(longValue, (TLRPC$TL_inputChatPhoto) null, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig, (Runnable) null);
             }
             presentFragment(new ChannelCreateActivity(bundle), true);
         }

@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -14,7 +14,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         this.has_scheduled = (524288 & readInt32) != 0;
         this.can_view_stats = (1048576 & readInt32) != 0;
         this.blocked = (readInt32 & 4194304) != 0;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = abstractSerializedData.readInt64(z);
         this.about = abstractSerializedData.readString(z);
         if ((this.flags & 1) != 0) {
             this.participants_count = abstractSerializedData.readInt32(z);
@@ -53,7 +53,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
                 }
             }
             if ((this.flags & 16) != 0) {
-                this.migrated_from_chat_id = abstractSerializedData.readInt32(z);
+                this.migrated_from_chat_id = abstractSerializedData.readInt64(z);
             }
             if ((this.flags & 16) != 0) {
                 this.migrated_from_max_id = abstractSerializedData.readInt32(z);
@@ -71,7 +71,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
                 this.folder_id = abstractSerializedData.readInt32(z);
             }
             if ((this.flags & 16384) != 0) {
-                this.linked_chat_id = abstractSerializedData.readInt32(z);
+                this.linked_chat_id = abstractSerializedData.readInt64(z);
             }
             if ((this.flags & 32768) != 0) {
                 this.location = TLRPC$ChannelLocation.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -135,7 +135,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         int i8 = this.blocked ? i7 | 4194304 : i7 & -4194305;
         this.flags = i8;
         abstractSerializedData.writeInt32(i8);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt64(this.id);
         abstractSerializedData.writeString(this.about);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(this.participants_count);
@@ -167,7 +167,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             this.bot_info.get(i9).serializeToStream(abstractSerializedData);
         }
         if ((this.flags & 16) != 0) {
-            abstractSerializedData.writeInt32(this.migrated_from_chat_id);
+            abstractSerializedData.writeInt64(this.migrated_from_chat_id);
         }
         if ((this.flags & 16) != 0) {
             abstractSerializedData.writeInt32(this.migrated_from_max_id);
@@ -185,7 +185,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             abstractSerializedData.writeInt32(this.folder_id);
         }
         if ((this.flags & 16384) != 0) {
-            abstractSerializedData.writeInt32(this.linked_chat_id);
+            abstractSerializedData.writeInt64(this.linked_chat_id);
         }
         if ((this.flags & 32768) != 0) {
             this.location.serializeToStream(abstractSerializedData);

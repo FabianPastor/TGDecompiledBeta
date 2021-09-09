@@ -1,7 +1,7 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.k;
+import j$.util.function.l;
 import java.util.Comparator;
 
 final class K implements v {
@@ -22,9 +22,9 @@ final class K implements v {
     }
 
     /* renamed from: c */
-    public void forEachRemaining(k kVar) {
+    public void forEachRemaining(l lVar) {
         int i;
-        kVar.getClass();
+        lVar.getClass();
         int[] iArr = this.a;
         int length = iArr.length;
         int i2 = this.c;
@@ -32,7 +32,7 @@ final class K implements v {
             this.b = i2;
             if (i < i2) {
                 do {
-                    kVar.accept(iArr[i]);
+                    lVar.accept(iArr[i]);
                     i++;
                 } while (i < i2);
             }
@@ -52,15 +52,15 @@ final class K implements v {
     }
 
     /* renamed from: g */
-    public boolean tryAdvance(k kVar) {
-        kVar.getClass();
+    public boolean tryAdvance(l lVar) {
+        lVar.getClass();
         int i = this.b;
         if (i < 0 || i >= this.c) {
             return false;
         }
         int[] iArr = this.a;
         this.b = i + 1;
-        kVar.accept(iArr[i]);
+        lVar.accept(iArr[i]);
         return true;
     }
 

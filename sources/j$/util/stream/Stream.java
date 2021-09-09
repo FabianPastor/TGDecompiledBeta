@@ -5,11 +5,11 @@ import j$.util.function.A;
 import j$.util.function.B;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
+import j$.util.function.C;
 import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
 import j$.util.function.Function;
-import j$.util.function.l;
-import j$.util.function.x;
+import j$.util.function.m;
 import j$.util.function.y;
 import j$.util.function.z;
 import j$.wrappers.J0;
@@ -20,15 +20,15 @@ public interface Stream<T> extends CLASSNAMEg {
 
     U E(Function function);
 
-    Stream T(x xVar);
+    Stream T(y yVar);
 
     Stream V(Consumer consumer);
 
-    boolean W(x xVar);
+    boolean W(y yVar);
 
     CLASSNAMEf1 X(Function function);
 
-    boolean a(x xVar);
+    boolean a(y yVar);
 
     Object b0(J0 j0);
 
@@ -38,7 +38,7 @@ public interface Stream<T> extends CLASSNAMEg {
 
     long count();
 
-    boolean d0(x xVar);
+    boolean d0(y yVar);
 
     Stream distinct();
 
@@ -50,17 +50,17 @@ public interface Stream<T> extends CLASSNAMEg {
 
     void forEach(Consumer<? super T> consumer);
 
-    CLASSNAMEf1 g0(B b);
+    CLASSNAMEf1 g0(C c);
 
-    Object i(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2);
+    Object i(z zVar, BiConsumer biConsumer, BiConsumer biConsumer2);
 
-    U j0(z zVar);
+    U j0(A a);
 
-    Object[] l(l lVar);
+    Object[] l(m mVar);
 
     Stream limit(long j);
 
-    M0 m(A a);
+    M0 m(B b);
 
     Object m0(Object obj, CLASSNAMEb bVar);
 

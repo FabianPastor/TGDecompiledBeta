@@ -21,6 +21,6 @@ public final /* synthetic */ class r implements BiConsumer {
     }
 
     public /* synthetic */ BiConsumer andThen(BiConsumer biConsumer) {
-        return a(this.a.c(CLASSNAMEq.a(biConsumer)));
+        return a(this.a.b(CLASSNAMEq.a(biConsumer)));
     }
 }

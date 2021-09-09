@@ -10,13 +10,13 @@ import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class JoinCallAlert$$ExternalSyntheticLambda6 implements RequestDelegate {
     public final /* synthetic */ AlertDialog f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$1;
     public final /* synthetic */ AccountInstance f$2;
     public final /* synthetic */ MessagesStorage.BooleanCallback f$3;
 
-    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda6(AlertDialog alertDialog, int i, AccountInstance accountInstance, MessagesStorage.BooleanCallback booleanCallback) {
+    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda6(AlertDialog alertDialog, long j, AccountInstance accountInstance, MessagesStorage.BooleanCallback booleanCallback) {
         this.f$0 = alertDialog;
-        this.f$1 = i;
+        this.f$1 = j;
         this.f$2 = accountInstance;
         this.f$3 = booleanCallback;
     }

@@ -73,27 +73,27 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r20 = r13
             android.content.res.Resources r13 = r19.getResources()
             r19 = r11
-            r11 = 2131165983(0x7var_f, float:1.7946199E38)
+            r11 = 2131165986(0x7var_, float:1.7946205E38)
             android.graphics.drawable.Drawable r11 = r13.getDrawable(r11)
             android.graphics.drawable.Drawable r11 = r11.mutate()
             org.telegram.ui.ActionBar.Theme.setDrawableColor(r11, r7)
             android.content.Context r13 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r13 = r13.getResources()
             r21 = r11
-            r11 = 2131165985(0x7var_, float:1.7946203E38)
+            r11 = 2131165988(0x7var_, float:1.7946209E38)
             android.graphics.drawable.Drawable r11 = r13.getDrawable(r11)
             android.graphics.drawable.Drawable r11 = r11.mutate()
             org.telegram.ui.ActionBar.Theme.setDrawableColor(r11, r7)
             android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r7 = r7.getResources()
-            r13 = 2131165988(0x7var_, float:1.7946209E38)
+            r13 = 2131165991(0x7var_, float:1.7946215E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r13)
             android.graphics.drawable.Drawable r13 = r7.mutate()
             org.telegram.ui.ActionBar.Theme.setDrawableColor(r13, r8)
             android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r7 = r7.getResources()
             r22 = r13
-            r13 = 2131165986(0x7var_, float:1.7946205E38)
+            r13 = 2131165989(0x7var_, float:1.794621E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r13)
             android.graphics.drawable.Drawable r13 = r7.mutate()
             org.telegram.ui.ActionBar.Theme.setDrawableColor(r13, r8)

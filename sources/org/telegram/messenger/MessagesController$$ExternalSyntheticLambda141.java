@@ -7,13 +7,13 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda14
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ TLRPC$TL_error f$1;
     public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ Integer f$3;
+    public final /* synthetic */ Long f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda141(MessagesController messagesController, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, Integer num) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda141(MessagesController messagesController, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, Long l) {
         this.f$0 = messagesController;
         this.f$1 = tLRPC$TL_error;
         this.f$2 = tLObject;
-        this.f$3 = num;
+        this.f$3 = l;
     }
 
     public final void run() {

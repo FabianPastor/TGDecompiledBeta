@@ -2,11 +2,11 @@ package j$.util;
 
 import j$.util.Iterator;
 import j$.util.function.Consumer;
-import j$.util.function.j;
 import j$.util.function.k;
+import j$.util.function.l;
 import java.util.NoSuchElementException;
 
-class A implements CLASSNAMEp, k, Iterator {
+class A implements CLASSNAMEp, l, Iterator {
     boolean a = false;
     int b;
     final /* synthetic */ v c;
@@ -21,16 +21,16 @@ class A implements CLASSNAMEp, k, Iterator {
     }
 
     /* renamed from: c */
-    public void forEachRemaining(k kVar) {
-        kVar.getClass();
+    public void forEachRemaining(l lVar) {
+        lVar.getClass();
         while (hasNext()) {
-            kVar.accept(nextInt());
+            lVar.accept(nextInt());
         }
     }
 
     public void forEachRemaining(Consumer consumer) {
-        if (consumer instanceof k) {
-            forEachRemaining((k) consumer);
+        if (consumer instanceof l) {
+            forEachRemaining((l) consumer);
             return;
         }
         consumer.getClass();
@@ -49,9 +49,9 @@ class A implements CLASSNAMEp, k, Iterator {
         return this.a;
     }
 
-    public k l(k kVar) {
-        kVar.getClass();
-        return new j(this, kVar);
+    public l l(l lVar) {
+        lVar.getClass();
+        return new k(this, lVar);
     }
 
     public Integer next() {

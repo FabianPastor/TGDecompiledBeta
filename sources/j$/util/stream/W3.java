@@ -3,7 +3,7 @@ package j$.util.stream;
 import j$.util.CLASSNAMEa;
 import j$.util.N;
 import j$.util.function.Consumer;
-import j$.util.function.k;
+import j$.util.function.l;
 import j$.util.stream.CLASSNAMEa4;
 import j$.util.v;
 import j$.util.x;
@@ -19,7 +19,7 @@ class W3 extends CLASSNAMEa4.a implements v {
 
     /* access modifiers changed from: package-private */
     public void a(Object obj, int i, Object obj2) {
-        ((k) obj2).accept(((int[]) obj)[i]);
+        ((l) obj2).accept(((int[]) obj)[i]);
     }
 
     public /* synthetic */ boolean b(Consumer consumer) {

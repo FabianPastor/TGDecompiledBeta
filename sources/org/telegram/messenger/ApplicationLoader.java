@@ -133,7 +133,7 @@ public class ApplicationLoader extends Application {
                 ContactsController.getInstance(i2).checkAppAccount();
                 DownloadController.getInstance(i2);
             }
-            WearDataLayerListenerService.updateWatchConnectionState();
+            ChatThemeController.init();
         }
     }
 

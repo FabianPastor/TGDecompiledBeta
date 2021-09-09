@@ -1,15 +1,16 @@
 package org.telegram.messenger;
 
 import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$Message;
+import org.telegram.messenger.support.LongSparseIntArray;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda185 implements Comparator {
-    public static final /* synthetic */ MessagesStorage$$ExternalSyntheticLambda185 INSTANCE = new MessagesStorage$$ExternalSyntheticLambda185();
+    public final /* synthetic */ LongSparseIntArray f$0;
 
-    private /* synthetic */ MessagesStorage$$ExternalSyntheticLambda185() {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda185(LongSparseIntArray longSparseIntArray) {
+        this.f$0 = longSparseIntArray;
     }
 
     public final int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$getMessagesInternal$112((TLRPC$Message) obj, (TLRPC$Message) obj2);
+        return MessagesStorage.lambda$checkLoadedRemoteFilters$37(this.f$0, (Long) obj, (Long) obj2);
     }
 }

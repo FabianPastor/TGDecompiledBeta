@@ -40,13 +40,15 @@ public class SearchCounterView extends View {
     public float horizontalPadding;
     int lastH;
     RectF rectF = new RectF();
+    private final Theme.ResourcesProvider resourcesProvider;
     private int textColor;
     private String textColorKey = "chat_searchPanelText";
     TextPaint textPaint = new TextPaint(1);
     float x;
 
-    public SearchCounterView(Context context) {
+    public SearchCounterView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
     }
@@ -199,7 +201,7 @@ public class SearchCounterView extends View {
     public void onDraw(Canvas canvas) {
         float f;
         super.onDraw(canvas);
-        int color = Theme.getColor(this.textColorKey);
+        int color = Theme.getColor(this.textColorKey, this.resourcesProvider);
         if (this.textColor != color) {
             this.textColor = color;
             this.textPaint.setColor(color);

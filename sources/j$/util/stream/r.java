@@ -2,8 +2,8 @@ package j$.util.stream;
 
 import j$.util.function.Function;
 import j$.util.function.f;
-import j$.util.function.k;
-import j$.util.function.p;
+import j$.util.function.l;
+import j$.util.function.q;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +31,7 @@ class r extends CLASSNAMEj3 {
                 CLASSNAMEf1 f1Var = (CLASSNAMEf1) ((Function) ((N) this.d).m).apply(obj);
                 if (f1Var != null) {
                     try {
-                        f1Var.sequential().d((p) this.c);
+                        f1Var.sequential().d((q) this.c);
                     } catch (Throwable unused) {
                         break;
                     }
@@ -45,7 +45,7 @@ class r extends CLASSNAMEj3 {
                 M0 m0 = (M0) ((Function) ((M) this.d).m).apply(obj);
                 if (m0 != null) {
                     try {
-                        m0.sequential().U((k) this.c);
+                        m0.sequential().U((l) this.c);
                     } catch (Throwable unused2) {
                         break;
                     }

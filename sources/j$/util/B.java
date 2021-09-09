@@ -2,11 +2,11 @@ package j$.util;
 
 import j$.util.Iterator;
 import j$.util.function.Consumer;
-import j$.util.function.o;
 import j$.util.function.p;
+import j$.util.function.q;
 import java.util.NoSuchElementException;
 
-class B implements r, p, Iterator {
+class B implements r, q, Iterator {
     boolean a = false;
     long b;
     final /* synthetic */ w c;
@@ -21,21 +21,21 @@ class B implements r, p, Iterator {
     }
 
     /* renamed from: d */
-    public void forEachRemaining(p pVar) {
-        pVar.getClass();
+    public void forEachRemaining(q qVar) {
+        qVar.getClass();
         while (hasNext()) {
-            pVar.accept(nextLong());
+            qVar.accept(nextLong());
         }
     }
 
-    public p f(p pVar) {
-        pVar.getClass();
-        return new o(this, pVar);
+    public q f(q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
     }
 
     public void forEachRemaining(Consumer consumer) {
-        if (consumer instanceof p) {
-            forEachRemaining((p) consumer);
+        if (consumer instanceof q) {
+            forEachRemaining((q) consumer);
             return;
         }
         consumer.getClass();

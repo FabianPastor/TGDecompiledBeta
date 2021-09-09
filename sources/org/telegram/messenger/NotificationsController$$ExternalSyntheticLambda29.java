@@ -12,6 +12,6 @@ public final /* synthetic */ class NotificationsController$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$removeDeletedMessagesFromNotifications$7(this.f$1);
+        this.f$0.lambda$forceShowPopupForReply$5(this.f$1);
     }
 }

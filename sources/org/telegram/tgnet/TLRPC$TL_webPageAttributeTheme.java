@@ -6,7 +6,7 @@ public class TLRPC$TL_webPageAttributeTheme extends TLObject {
     public static int constructor = NUM;
     public ArrayList<TLRPC$Document> documents = new ArrayList<>();
     public int flags;
-    public TLRPC$TL_themeSettings settings;
+    public TLRPC$ThemeSettings settings;
 
     public static TLRPC$TL_webPageAttributeTheme TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         if (constructor == i) {
@@ -44,7 +44,7 @@ public class TLRPC$TL_webPageAttributeTheme extends TLObject {
             }
         }
         if ((this.flags & 2) != 0) {
-            this.settings = TLRPC$TL_themeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.settings = TLRPC$ThemeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
     }
 

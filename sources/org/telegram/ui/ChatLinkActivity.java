@@ -64,7 +64,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public int createChatRow;
     private TLRPC$Chat currentChat;
-    private int currentChatId;
+    private long currentChatId;
     /* access modifiers changed from: private */
     public int detailRow;
     /* access modifiers changed from: private */
@@ -145,15 +145,15 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public ChatLinkActivity(int i) {
-        this.currentChatId = i;
-        TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
+    public ChatLinkActivity(long j) {
+        this.currentChatId = j;
+        TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(j));
         this.currentChat = chat;
         this.isChannel = ChatObject.isChannel(chat) && !this.currentChat.megagroup;
     }
 
     private void updateRows() {
-        TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChatId));
+        TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(this.currentChatId));
         this.currentChat = chat;
         if (chat != null) {
             int i = 0;
@@ -221,15 +221,15 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.chatInfoDidLoad) {
             TLRPC$ChatFull tLRPC$ChatFull = objArr[0];
-            int i3 = tLRPC$ChatFull.id;
-            if (i3 == this.currentChatId) {
+            long j = tLRPC$ChatFull.id;
+            if (j == this.currentChatId) {
                 this.info = tLRPC$ChatFull;
                 loadChats();
                 updateRows();
                 return;
             }
             TLRPC$Chat tLRPC$Chat = this.waitingForFullChat;
-            if (tLRPC$Chat != null && tLRPC$Chat.id == i3) {
+            if (tLRPC$Chat != null && tLRPC$Chat.id == j) {
                 try {
                     this.waitingForFullChatProgressAlert.dismiss();
                 } catch (Throwable unused) {
@@ -342,7 +342,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             if (tLRPC$Chat != null) {
                 if (!this.isChannel || this.info.linked_chat_id != 0) {
                     Bundle bundle = new Bundle();
-                    bundle.putInt("chat_id", tLRPC$Chat.id);
+                    bundle.putLong("chat_id", tLRPC$Chat.id);
                     presentFragment(new ChatActivity(bundle));
                     return;
                 }
@@ -351,9 +351,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             } else {
                 if (this.isChannel && this.info.linked_chat_id == 0) {
                     Bundle bundle2 = new Bundle();
-                    ArrayList arrayList = new ArrayList();
-                    arrayList.add(Integer.valueOf(getUserConfig().getClientUserId()));
-                    bundle2.putIntegerArrayList("result", arrayList);
+                    bundle2.putLongArray("result", new long[]{getUserConfig().getClientUserId()});
                     bundle2.putInt("chatType", 4);
                     GroupCreateFinalActivity groupCreateFinalActivity = new GroupCreateFinalActivity(bundle2);
                     groupCreateFinalActivity.setDelegate(new GroupCreateFinalActivity.GroupCreateFinalActivityDelegate() {
@@ -363,9 +361,9 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                         public void didStartChatCreation() {
                         }
 
-                        public void didFinishChatCreation(GroupCreateFinalActivity groupCreateFinalActivity, int i) {
+                        public void didFinishChatCreation(GroupCreateFinalActivity groupCreateFinalActivity, long j) {
                             ChatLinkActivity chatLinkActivity = ChatLinkActivity.this;
-                            chatLinkActivity.linkChat(chatLinkActivity.getMessagesController().getChat(Integer.valueOf(i)), groupCreateFinalActivity);
+                            chatLinkActivity.linkChat(chatLinkActivity.getMessagesController().getChat(Long.valueOf(j)), groupCreateFinalActivity);
                         }
                     });
                     presentFragment(groupCreateFinalActivity);
@@ -528,7 +526,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$showLinkAlert$9(TLRPC$ChatFull tLRPC$ChatFull, TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
         if (tLRPC$ChatFull.hidden_prehistory) {
-            MessagesController.getInstance(this.currentAccount).toogleChannelInvitesHistory(tLRPC$Chat.id, false);
+            getMessagesController().toogleChannelInvitesHistory(tLRPC$Chat.id, false);
         }
         linkChat(tLRPC$Chat, (BaseFragment) null);
     }
@@ -538,7 +536,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         AlertDialog alertDialog;
         if (tLRPC$Chat != null) {
             if (!ChatObject.isChannel(tLRPC$Chat)) {
-                MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), tLRPC$Chat.id, this, new ChatLinkActivity$$ExternalSyntheticLambda13(this, baseFragment));
+                getMessagesController().convertToMegaGroup(getParentActivity(), tLRPC$Chat.id, this, new ChatLinkActivity$$ExternalSyntheticLambda13(this, baseFragment));
                 return;
             }
             AlertDialog[] alertDialogArr = new AlertDialog[1];
@@ -556,10 +554,10 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$linkChat$10(BaseFragment baseFragment, int i) {
-        if (i != 0) {
-            MessagesController.getInstance(this.currentAccount).toogleChannelInvitesHistory(i, false);
-            linkChat(getMessagesController().getChat(Integer.valueOf(i)), baseFragment);
+    public /* synthetic */ void lambda$linkChat$10(BaseFragment baseFragment, long j) {
+        if (j != 0) {
+            getMessagesController().toogleChannelInvitesHistory(j, false);
+            linkChat(getMessagesController().getChat(Long.valueOf(j)), baseFragment);
         }
     }
 
@@ -616,7 +614,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     private void loadChats() {
         if (this.info.linked_chat_id != 0) {
             this.chats.clear();
-            TLRPC$Chat chat = getMessagesController().getChat(Integer.valueOf(this.info.linked_chat_id));
+            TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(this.info.linked_chat_id));
             if (chat != null) {
                 this.chats.add(chat);
             }
@@ -671,14 +669,14 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             this.messageTextView.setTextSize(1, 14.0f);
             this.messageTextView.setGravity(17);
             if (!chatLinkActivity.isChannel) {
-                TLRPC$Chat chat = chatLinkActivity.getMessagesController().getChat(Integer.valueOf(chatLinkActivity.info.linked_chat_id));
+                TLRPC$Chat chat = chatLinkActivity.getMessagesController().getChat(Long.valueOf(chatLinkActivity.info.linked_chat_id));
                 if (chat != null) {
                     this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionGroupHelp", NUM, chat.title)));
                 }
             } else if (chatLinkActivity.info == null || chatLinkActivity.info.linked_chat_id == 0) {
                 this.messageTextView.setText(LocaleController.getString("DiscussionChannelHelp3", NUM));
             } else {
-                TLRPC$Chat chat2 = chatLinkActivity.getMessagesController().getChat(Integer.valueOf(chatLinkActivity.info.linked_chat_id));
+                TLRPC$Chat chat2 = chatLinkActivity.getMessagesController().getChat(Long.valueOf(chatLinkActivity.info.linked_chat_id));
                 if (chat2 != null) {
                     this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionChannelGroupSetHelp2", NUM, chat2.title)));
                 }

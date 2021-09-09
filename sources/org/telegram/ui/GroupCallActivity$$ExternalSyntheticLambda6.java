@@ -6,12 +6,12 @@ import org.telegram.tgnet.TLRPC$User;
 public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda6 implements DialogInterface.OnClickListener {
     public final /* synthetic */ GroupCallActivity f$0;
     public final /* synthetic */ TLRPC$User f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda6(GroupCallActivity groupCallActivity, TLRPC$User tLRPC$User, int i) {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda6(GroupCallActivity groupCallActivity, TLRPC$User tLRPC$User, long j) {
         this.f$0 = groupCallActivity;
         this.f$1 = tLRPC$User;
-        this.f$2 = i;
+        this.f$2 = j;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {

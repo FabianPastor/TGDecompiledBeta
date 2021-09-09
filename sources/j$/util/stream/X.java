@@ -2,26 +2,26 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEk;
 import j$.util.function.CLASSNAMEa;
-import j$.util.function.w;
 import j$.util.function.x;
+import j$.util.function.y;
 
-public final /* synthetic */ class X implements x {
+public final /* synthetic */ class X implements y {
     public static final /* synthetic */ X a = new X();
 
     private /* synthetic */ X() {
     }
 
-    public x a(x xVar) {
-        xVar.getClass();
-        return new w(this, xVar, 1);
+    public y a(y yVar) {
+        yVar.getClass();
+        return new x(this, yVar, 1);
     }
 
-    public x c(x xVar) {
-        xVar.getClass();
-        return new w(this, xVar, 0);
+    public y b(y yVar) {
+        yVar.getClass();
+        return new x(this, yVar, 0);
     }
 
-    public x negate() {
+    public y negate() {
         return new CLASSNAMEa(this);
     }
 

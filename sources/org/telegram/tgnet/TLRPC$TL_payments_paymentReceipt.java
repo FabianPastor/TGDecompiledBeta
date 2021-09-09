@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TLRPC$TL_payments_paymentReceipt extends TLObject {
     public static int constructor = NUM;
-    public int bot_id;
+    public long bot_id;
     public String credentials_title;
     public String currency;
     public int date;
@@ -13,7 +13,7 @@ public class TLRPC$TL_payments_paymentReceipt extends TLObject {
     public TLRPC$TL_paymentRequestedInfo info;
     public TLRPC$TL_invoice invoice;
     public TLRPC$WebDocument photo;
-    public int provider_id;
+    public long provider_id;
     public TLRPC$TL_shippingOption shipping;
     public long tip_amount;
     public String title;
@@ -35,8 +35,8 @@ public class TLRPC$TL_payments_paymentReceipt extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.date = abstractSerializedData.readInt32(z);
-        this.bot_id = abstractSerializedData.readInt32(z);
-        this.provider_id = abstractSerializedData.readInt32(z);
+        this.bot_id = abstractSerializedData.readInt64(z);
+        this.provider_id = abstractSerializedData.readInt64(z);
         this.title = abstractSerializedData.readString(z);
         this.description = abstractSerializedData.readString(z);
         if ((this.flags & 4) != 0) {
@@ -77,8 +77,8 @@ public class TLRPC$TL_payments_paymentReceipt extends TLObject {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);
         abstractSerializedData.writeInt32(this.date);
-        abstractSerializedData.writeInt32(this.bot_id);
-        abstractSerializedData.writeInt32(this.provider_id);
+        abstractSerializedData.writeInt64(this.bot_id);
+        abstractSerializedData.writeInt64(this.provider_id);
         abstractSerializedData.writeString(this.title);
         abstractSerializedData.writeString(this.description);
         if ((this.flags & 4) != 0) {

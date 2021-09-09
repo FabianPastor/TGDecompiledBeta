@@ -1,27 +1,7 @@
 package org.telegram.tgnet;
 
-import java.util.ArrayList;
-
-public class TLRPC$TL_themeSettings extends TLObject {
+public class TLRPC$TL_themeSettings extends TLRPC$ThemeSettings {
     public static int constructor = -NUM;
-    public int accent_color;
-    public TLRPC$BaseTheme base_theme;
-    public int flags;
-    public ArrayList<Integer> message_colors = new ArrayList<>();
-    public boolean message_colors_animated;
-    public TLRPC$WallPaper wallpaper;
-
-    public static TLRPC$TL_themeSettings TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_themeSettings tLRPC$TL_themeSettings = new TLRPC$TL_themeSettings();
-            tLRPC$TL_themeSettings.readParams(abstractSerializedData, z);
-            return tLRPC$TL_themeSettings;
-        } else if (!z) {
-            return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_themeSettings", new Object[]{Integer.valueOf(i)}));
-        }
-    }
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -29,6 +9,9 @@ public class TLRPC$TL_themeSettings extends TLObject {
         this.message_colors_animated = (readInt32 & 4) != 0;
         this.base_theme = TLRPC$BaseTheme.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.accent_color = abstractSerializedData.readInt32(z);
+        if ((this.flags & 8) != 0) {
+            this.outbox_accent_color = abstractSerializedData.readInt32(z);
+        }
         if ((this.flags & 1) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
             if (readInt322 == NUM) {
@@ -54,6 +37,9 @@ public class TLRPC$TL_themeSettings extends TLObject {
         abstractSerializedData.writeInt32(i);
         this.base_theme.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.accent_color);
+        if ((this.flags & 8) != 0) {
+            abstractSerializedData.writeInt32(this.outbox_accent_color);
+        }
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(NUM);
             int size = this.message_colors.size();

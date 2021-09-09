@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import java.util.Comparator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda139 implements MessagesStorage.IntCallback {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda139 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda139 INSTANCE = new ChatActivity$$ExternalSyntheticLambda139();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda139(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda139() {
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$createView$18(i);
+    public final int compare(Object obj, Object obj2) {
+        return ((Integer) obj2).compareTo((Integer) obj);
     }
 }

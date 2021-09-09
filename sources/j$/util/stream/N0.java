@@ -14,7 +14,7 @@ public final /* synthetic */ class N0 implements BiConsumer {
         ((CLASSNAMEi) obj).b((CLASSNAMEi) obj2);
     }
 
-    public BiConsumer c(BiConsumer biConsumer) {
+    public BiConsumer b(BiConsumer biConsumer) {
         biConsumer.getClass();
         return new a((BiConsumer) this, biConsumer);
     }

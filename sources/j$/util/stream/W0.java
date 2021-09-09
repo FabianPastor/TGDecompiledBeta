@@ -1,8 +1,8 @@
 package j$.util.stream;
 
-import j$.util.function.n;
+import j$.util.function.o;
 
-public final /* synthetic */ class W0 implements n {
+public final /* synthetic */ class W0 implements o {
     public static final /* synthetic */ W0 a = new W0();
 
     private /* synthetic */ W0() {

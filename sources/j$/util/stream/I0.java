@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.util.function.k;
+import j$.util.function.l;
 import j$.util.y;
 
 class I0 extends L0 {
@@ -18,20 +18,20 @@ class I0 extends L0 {
         throw new UnsupportedOperationException();
     }
 
-    public void I(k kVar) {
+    public void I(l lVar) {
         if (!isParallel()) {
-            L0.M0(J0()).c(kVar);
+            L0.M0(J0()).c(lVar);
             return;
         }
-        kVar.getClass();
-        x0(new CLASSNAMEl0(kVar, true));
+        lVar.getClass();
+        x0(new CLASSNAMEl0(lVar, true));
     }
 
-    public void U(k kVar) {
+    public void U(l lVar) {
         if (!isParallel()) {
-            L0.M0(J0()).c(kVar);
+            L0.M0(J0()).c(lVar);
         } else {
-            super.U(kVar);
+            super.U(lVar);
         }
     }
 

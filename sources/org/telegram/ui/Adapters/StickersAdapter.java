@@ -15,6 +15,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmojiReplacementCell;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -25,6 +26,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
     private String lastSearch;
     private String[] lastSearchKeyboardLanguage;
     private Context mContext;
+    private final Theme.ResourcesProvider resourcesProvider;
     private Runnable searchRunnable;
     private boolean visible;
 
@@ -40,11 +42,12 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         return false;
     }
 
-    public StickersAdapter(Context context, StickersAdapterDelegate stickersAdapterDelegate) {
+    public StickersAdapter(Context context, StickersAdapterDelegate stickersAdapterDelegate, Theme.ResourcesProvider resourcesProvider2) {
         int i = UserConfig.selectedAccount;
         this.currentAccount = i;
         this.mContext = context;
         this.delegate = stickersAdapterDelegate;
+        this.resourcesProvider = resourcesProvider2;
         MediaDataController.getInstance(i).checkStickers(0);
         MediaDataController.getInstance(this.currentAccount).checkStickers(1);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.newEmojiSuggestionsAvailable);
@@ -196,7 +199,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new RecyclerListView.Holder(new EmojiReplacementCell(this.mContext));
+        return new RecyclerListView.Holder(new EmojiReplacementCell(this.mContext, this.resourcesProvider));
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

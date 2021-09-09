@@ -12,4 +12,8 @@ public final /* synthetic */ class ChangePhoneActivity$$ExternalSyntheticLambda0
     public final void didSetColor() {
         this.f$0.lambda$getThemeDescriptions$0();
     }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    }
 }

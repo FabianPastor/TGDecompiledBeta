@@ -25,9 +25,15 @@ public class CheckBoxSquare extends View {
     private String key3;
     private float progress;
     private RectF rectF;
+    private final Theme.ResourcesProvider resourcesProvider;
 
     public CheckBoxSquare(Context context, boolean z) {
+        this(context, z, (Theme.ResourcesProvider) null);
+    }
+
+    public CheckBoxSquare(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         if (Theme.checkboxSquare_backgroundPaint == null) {
             Theme.createCommonResources(context);
         }
@@ -119,20 +125,20 @@ public class CheckBoxSquare extends View {
         float f;
         float f2;
         if (getVisibility() == 0) {
-            int color = Theme.getColor(this.key1);
-            int color2 = Theme.getColor(this.key2);
+            int themedColor = getThemedColor(this.key1);
+            int themedColor2 = getThemedColor(this.key2);
             float f3 = this.progress;
             if (f3 <= 0.5f) {
                 f = f3 / 0.5f;
-                Theme.checkboxSquare_backgroundPaint.setColor(Color.rgb(Color.red(color) + ((int) (((float) (Color.red(color2) - Color.red(color))) * f)), Color.green(color) + ((int) (((float) (Color.green(color2) - Color.green(color))) * f)), Color.blue(color) + ((int) (((float) (Color.blue(color2) - Color.blue(color))) * f))));
+                Theme.checkboxSquare_backgroundPaint.setColor(Color.rgb(Color.red(themedColor) + ((int) (((float) (Color.red(themedColor2) - Color.red(themedColor))) * f)), Color.green(themedColor) + ((int) (((float) (Color.green(themedColor2) - Color.green(themedColor))) * f)), Color.blue(themedColor) + ((int) (((float) (Color.blue(themedColor2) - Color.blue(themedColor))) * f))));
                 f2 = f;
             } else {
-                Theme.checkboxSquare_backgroundPaint.setColor(color2);
+                Theme.checkboxSquare_backgroundPaint.setColor(themedColor2);
                 f2 = 2.0f - (f3 / 0.5f);
                 f = 1.0f;
             }
             if (this.isDisabled) {
-                Theme.checkboxSquare_backgroundPaint.setColor(Theme.getColor(this.isAlert ? "dialogCheckboxSquareDisabled" : "checkboxSquareDisabled"));
+                Theme.checkboxSquare_backgroundPaint.setColor(getThemedColor(this.isAlert ? "dialogCheckboxSquareDisabled" : "checkboxSquareDisabled"));
             }
             float dp = ((float) AndroidUtilities.dp(1.0f)) * f2;
             this.rectF.set(dp, dp, ((float) AndroidUtilities.dp(18.0f)) - dp, ((float) AndroidUtilities.dp(18.0f)) - dp);
@@ -144,12 +150,19 @@ public class CheckBoxSquare extends View {
                 this.drawCanvas.drawRect(this.rectF, Theme.checkboxSquare_eraserPaint);
             }
             if (this.progress > 0.5f) {
-                Theme.checkboxSquare_checkPaint.setColor(Theme.getColor(this.key3));
+                Theme.checkboxSquare_checkPaint.setColor(getThemedColor(this.key3));
                 float f4 = 1.0f - f2;
                 this.drawCanvas.drawLine((float) AndroidUtilities.dp(7.0f), (float) ((int) AndroidUtilities.dpf2(13.0f)), (float) ((int) (((float) AndroidUtilities.dp(7.0f)) - (((float) AndroidUtilities.dp(3.0f)) * f4))), (float) ((int) (AndroidUtilities.dpf2(13.0f) - (((float) AndroidUtilities.dp(3.0f)) * f4))), Theme.checkboxSquare_checkPaint);
                 this.drawCanvas.drawLine((float) ((int) AndroidUtilities.dpf2(7.0f)), (float) ((int) AndroidUtilities.dpf2(13.0f)), (float) ((int) (AndroidUtilities.dpf2(7.0f) + (((float) AndroidUtilities.dp(7.0f)) * f4))), (float) ((int) (AndroidUtilities.dpf2(13.0f) - (((float) AndroidUtilities.dp(7.0f)) * f4))), Theme.checkboxSquare_checkPaint);
             }
             canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, (Paint) null);
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

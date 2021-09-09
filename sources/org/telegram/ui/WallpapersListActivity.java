@@ -32,9 +32,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -502,7 +504,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 WallpapersListActivity.this.selectedWallPapers.clear();
                 WallpapersListActivity.this.actionBar.hideActionMode();
                 WallpapersListActivity.this.actionBar.closeSearchField();
-                if (arrayList.size() > 1 || ((Long) arrayList2.get(0)).longValue() == ((long) UserConfig.getInstance(WallpapersListActivity.this.currentAccount).getClientUserId()) || charSequence != null) {
+                if (arrayList.size() > 1 || ((Long) arrayList2.get(0)).longValue() == UserConfig.getInstance(WallpapersListActivity.this.currentAccount).getClientUserId() || charSequence != null) {
                     DialogsActivity dialogsActivity2 = dialogsActivity;
                     WallpapersListActivity.this.updateRowsSelection();
                     for (int i2 = 0; i2 < arrayList.size(); i2++) {
@@ -518,22 +520,23 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     return;
                 }
                 long longValue2 = ((Long) arrayList2.get(0)).longValue();
-                int i3 = (int) longValue2;
-                int i4 = (int) (longValue2 >> 32);
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("scrollToTopOnResume", true);
-                if (i3 == 0) {
-                    bundle.putInt("enc_id", i4);
-                } else if (i3 > 0) {
-                    bundle.putInt("user_id", i3);
-                } else if (i3 < 0) {
-                    bundle.putInt("chat_id", -i3);
+                if (DialogObject.isEncryptedDialog(longValue2)) {
+                    bundle.putInt("enc_id", DialogObject.getEncryptedChatId(longValue2));
+                } else {
+                    if (DialogObject.isUserDialog(longValue2)) {
+                        bundle.putLong("user_id", longValue2);
+                    } else if (DialogObject.isChatDialog(longValue2)) {
+                        bundle.putLong("chat_id", -longValue2);
+                    }
+                    if (!MessagesController.getInstance(WallpapersListActivity.this.currentAccount).checkCanOpenChat(bundle, dialogsActivity)) {
+                        return;
+                    }
                 }
-                if (i3 == 0 || MessagesController.getInstance(WallpapersListActivity.this.currentAccount).checkCanOpenChat(bundle, dialogsActivity)) {
-                    NotificationCenter.getInstance(WallpapersListActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                    WallpapersListActivity.this.presentFragment(new ChatActivity(bundle), true);
-                    SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(sb.toString(), longValue2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
-                }
+                NotificationCenter.getInstance(WallpapersListActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                WallpapersListActivity.this.presentFragment(new ChatActivity(bundle), true);
+                SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(sb.toString(), longValue2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
             }
         });
         if (this.currentType == 0) {
@@ -1094,14 +1097,14 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 if (obj instanceof TLRPC$WallPaper) {
                     long j3 = ((TLRPC$WallPaper) obj).id;
                     if (j3 >= 0) {
-                        j2 = (((((((j2 * 20261) + 2147483648L) + ((long) ((int) (j3 >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) j3))) % 2147483648L;
+                        j2 = MediaDataController.calcHash(j2, j3);
                     }
                 }
             }
             j = j2;
         }
         TLRPC$TL_account_getWallPapers tLRPC$TL_account_getWallPapers = new TLRPC$TL_account_getWallPapers();
-        tLRPC$TL_account_getWallPapers.hash = (int) j;
+        tLRPC$TL_account_getWallPapers.hash = j;
         ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_getWallPapers, new WallpapersListActivity$$ExternalSyntheticLambda6(this, z)), this.classGuid);
     }
 
@@ -2177,7 +2180,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.resetInfoRow
                 if (r14 != r0) goto L_0x027e
-                r14 = 2131627384(0x7f0e0d78, float:1.888203E38)
+                r14 = 2131627408(0x7f0e0d90, float:1.888208E38)
                 java.lang.String r0 = "ResetChatBackgroundsInfo"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14)
@@ -2435,17 +2438,17 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.uploadImageRow
                 if (r14 != r0) goto L_0x0252
-                r14 = 2131627528(0x7f0e0e08, float:1.8882323E38)
+                r14 = 2131627552(0x7f0e0e20, float:1.8882372E38)
                 java.lang.String r0 = "SelectFromGallery"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                r0 = 2131165998(0x7var_e, float:1.7946229E38)
+                r0 = 2131166001(0x7var_, float:1.7946235E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
                 goto L_0x027e
             L_0x0252:
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.setColorRow
                 if (r14 != r0) goto L_0x026a
-                r14 = 2131627595(0x7f0e0e4b, float:1.8882459E38)
+                r14 = 2131627620(0x7f0e0e64, float:1.888251E38)
                 java.lang.String r0 = "SetColor"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r0 = 2131165673(0x7var_e9, float:1.794557E38)
@@ -2455,7 +2458,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.resetRow
                 if (r14 != r0) goto L_0x027e
-                r14 = 2131627381(0x7f0e0d75, float:1.8882025E38)
+                r14 = 2131627405(0x7f0e0d8d, float:1.8882074E38)
                 java.lang.String r0 = "ResetChatBackgrounds"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14, r1)

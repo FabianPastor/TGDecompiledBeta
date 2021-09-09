@@ -5,7 +5,7 @@ public class TLRPC$TL_chatFull_layer92 extends TLRPC$TL_chatFull {
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         this.participants = TLRPC$ChatParticipants.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 4) != 0) {
             this.chat_photo = TLRPC$Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -43,7 +43,7 @@ public class TLRPC$TL_chatFull_layer92 extends TLRPC$TL_chatFull {
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         this.participants.serializeToStream(abstractSerializedData);
         if ((this.flags & 4) != 0) {
             this.chat_photo.serializeToStream(abstractSerializedData);

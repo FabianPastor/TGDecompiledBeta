@@ -245,8 +245,8 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didStartVideoStream(this, messageObject);
                     }
 
-                    public /* synthetic */ String getAdminRank(int i) {
-                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$getAdminRank(this, i);
+                    public /* synthetic */ String getAdminRank(long j) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$getAdminRank(this, j);
                     }
 
                     public /* synthetic */ PinchToZoomHelper getPinchToZoomHelper() {

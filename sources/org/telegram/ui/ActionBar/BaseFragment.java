@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,10 +18,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DownloadController;
@@ -48,6 +51,8 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public int currentAccount;
     private boolean finishing;
+    /* access modifiers changed from: protected */
+    public boolean fragmentBeginToShow;
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
@@ -153,10 +158,6 @@ public abstract class BaseFragment {
 
     /* access modifiers changed from: protected */
     public void onTransitionAnimationProgress(boolean z, float f) {
-    }
-
-    /* access modifiers changed from: protected */
-    public void onTransitionAnimationStart(boolean z, boolean z2) {
     }
 
     /* access modifiers changed from: protected */
@@ -326,11 +327,11 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public ActionBar createActionBar(Context context) {
         ActionBar actionBar2 = new ActionBar(context);
-        actionBar2.setBackgroundColor(Theme.getColor("actionBarDefault"));
-        actionBar2.setItemsBackgroundColor(Theme.getColor("actionBarDefaultSelector"), false);
-        actionBar2.setItemsBackgroundColor(Theme.getColor("actionBarActionModeDefaultSelector"), true);
-        actionBar2.setItemsColor(Theme.getColor("actionBarDefaultIcon"), false);
-        actionBar2.setItemsColor(Theme.getColor("actionBarActionModeDefaultIcon"), true);
+        actionBar2.setBackgroundColor(getThemedColor("actionBarDefault"));
+        actionBar2.setItemsBackgroundColor(getThemedColor("actionBarDefaultSelector"), false);
+        actionBar2.setItemsBackgroundColor(getThemedColor("actionBarActionModeDefaultSelector"), true);
+        actionBar2.setItemsColor(getThemedColor("actionBarDefaultIcon"), false);
+        actionBar2.setItemsColor(getThemedColor("actionBarActionModeDefaultIcon"), true);
         if (this.inPreviewMode || this.inBubbleMode) {
             actionBar2.setOccupyStatusBar(false);
         }
@@ -526,6 +527,13 @@ public abstract class BaseFragment {
     }
 
     /* access modifiers changed from: protected */
+    public void onTransitionAnimationStart(boolean z, boolean z2) {
+        if (z) {
+            this.fragmentBeginToShow = true;
+        }
+    }
+
+    /* access modifiers changed from: protected */
     public void onBecomeFullyVisible() {
         ActionBar actionBar2;
         if (((AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility")).isEnabled() && (actionBar2 = getActionBar()) != null) {
@@ -714,6 +722,33 @@ public abstract class BaseFragment {
         baseFragment.setParentDialog(r1);
         r1.show();
         return actionBarLayoutArr;
+    }
+
+    public int getThemedColor(String str) {
+        return Theme.getColor(str);
+    }
+
+    public Drawable getThemedDrawable(String str) {
+        return Theme.getThemeDrawable(str);
+    }
+
+    public int getNavigationBarColor() {
+        return Theme.getColor("windowBackgroundGray");
+    }
+
+    public void setNavigationBarColor(int i) {
+        Activity parentActivity = getParentActivity();
+        if (parentActivity != null) {
+            Window window = parentActivity.getWindow();
+            if (Build.VERSION.SDK_INT >= 26 && window != null && window.getNavigationBarColor() != i) {
+                window.setNavigationBarColor(i);
+                AndroidUtilities.setLightNavigationBar(window, AndroidUtilities.computePerceivedBrightness(i) >= 0.721f);
+            }
+        }
+    }
+
+    public boolean isBeginToShow() {
+        return this.fragmentBeginToShow;
     }
 
     private void setParentDialog(Dialog dialog) {

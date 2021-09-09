@@ -9,7 +9,7 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda5
         this.f$0 = paymentFormActivity;
     }
 
-    public final void didSelectCountry(String str, String str2) {
-        this.f$0.lambda$createView$5(str, str2);
+    public final void didSelectCountry(CountrySelectActivity.Country country) {
+        this.f$0.lambda$createView$5(country);
     }
 }

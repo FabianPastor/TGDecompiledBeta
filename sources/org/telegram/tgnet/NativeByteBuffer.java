@@ -2,21 +2,22 @@ package org.telegram.tgnet;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.LinkedList;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class NativeByteBuffer extends AbstractSerializedData {
-    private static final ThreadLocal<NativeByteBuffer> addressWrapper = new ThreadLocal<NativeByteBuffer>() {
+    private static final ThreadLocal<LinkedList<NativeByteBuffer>> addressWrappers = new ThreadLocal<LinkedList<NativeByteBuffer>>() {
         /* access modifiers changed from: protected */
-        public NativeByteBuffer initialValue() {
-            return new NativeByteBuffer(0, true);
+        public LinkedList<NativeByteBuffer> initialValue() {
+            return new LinkedList<>();
         }
     };
     protected long address;
     public ByteBuffer buffer;
     private boolean justCalc;
     private int len;
-    public boolean reused;
+    public boolean reused = true;
 
     public static native long native_getFreeBuffer(int i);
 
@@ -33,31 +34,30 @@ public class NativeByteBuffer extends AbstractSerializedData {
     }
 
     public static NativeByteBuffer wrap(long j) {
-        NativeByteBuffer nativeByteBuffer = addressWrapper.get();
-        if (j != 0) {
-            if (!nativeByteBuffer.reused && BuildVars.LOGS_ENABLED) {
-                FileLog.e("forgot to reuse?");
-            }
-            nativeByteBuffer.address = j;
-            nativeByteBuffer.reused = false;
-            ByteBuffer native_getJavaByteBuffer = native_getJavaByteBuffer(j);
-            nativeByteBuffer.buffer = native_getJavaByteBuffer;
-            native_getJavaByteBuffer.limit(native_limit(j));
-            int native_position = native_position(j);
-            if (native_position <= nativeByteBuffer.buffer.limit()) {
-                nativeByteBuffer.buffer.position(native_position);
-            }
-            nativeByteBuffer.buffer.order(ByteOrder.LITTLE_ENDIAN);
+        if (j == 0) {
+            return null;
         }
+        NativeByteBuffer nativeByteBuffer = (NativeByteBuffer) addressWrappers.get().poll();
+        if (nativeByteBuffer == null) {
+            nativeByteBuffer = new NativeByteBuffer(0, true);
+        }
+        nativeByteBuffer.address = j;
+        nativeByteBuffer.reused = false;
+        ByteBuffer native_getJavaByteBuffer = native_getJavaByteBuffer(j);
+        nativeByteBuffer.buffer = native_getJavaByteBuffer;
+        native_getJavaByteBuffer.limit(native_limit(j));
+        int native_position = native_position(j);
+        if (native_position <= nativeByteBuffer.buffer.limit()) {
+            nativeByteBuffer.buffer.position(native_position);
+        }
+        nativeByteBuffer.buffer.order(ByteOrder.LITTLE_ENDIAN);
         return nativeByteBuffer;
     }
 
     private NativeByteBuffer(int i, boolean z) {
-        this.reused = true;
     }
 
     public NativeByteBuffer(int i) throws Exception {
-        this.reused = true;
         if (i >= 0) {
             long native_getFreeBuffer = native_getFreeBuffer(i);
             this.address = native_getFreeBuffer;
@@ -75,7 +75,6 @@ public class NativeByteBuffer extends AbstractSerializedData {
     }
 
     public NativeByteBuffer(boolean z) {
-        this.reused = true;
         this.justCalc = z;
     }
 
@@ -563,10 +562,10 @@ public class NativeByteBuffer extends AbstractSerializedData {
     }
 
     public void reuse() {
-        long j = this.address;
-        if (j != 0) {
+        if (this.address != 0) {
+            addressWrappers.get().add(this);
             this.reused = true;
-            native_reuse(j);
+            native_reuse(this.address);
         }
     }
 

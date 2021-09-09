@@ -7,7 +7,7 @@ import org.telegram.ui.Components.AlertsCreator;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda58 implements View.OnClickListener {
     public final /* synthetic */ boolean[] f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$1;
     public final /* synthetic */ long f$2;
     public final /* synthetic */ NumberPicker f$3;
     public final /* synthetic */ NumberPicker f$4;
@@ -16,10 +16,10 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda58 impl
     public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$7;
     public final /* synthetic */ BottomSheet.Builder f$8;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda58(boolean[] zArr, int i, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda58(boolean[] zArr, long j, long j2, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
         this.f$0 = zArr;
-        this.f$1 = i;
-        this.f$2 = j;
+        this.f$1 = j;
+        this.f$2 = j2;
         this.f$3 = numberPicker;
         this.f$4 = numberPicker2;
         this.f$5 = numberPicker3;

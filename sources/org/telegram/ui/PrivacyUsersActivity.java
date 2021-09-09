@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$User;
@@ -52,7 +54,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     /* access modifiers changed from: private */
     public int rowCount;
     /* access modifiers changed from: private */
-    public ArrayList<Integer> uidArray;
+    public ArrayList<Long> uidArray;
     /* access modifiers changed from: private */
     public int usersDetailRow;
     /* access modifiers changed from: private */
@@ -63,7 +65,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     public int usersStartRow;
 
     public interface PrivacyActivityDelegate {
-        void didUpdateUserList(ArrayList<Integer> arrayList, boolean z);
+        void didUpdateUserList(ArrayList<Long> arrayList, boolean z);
     }
 
     public PrivacyUsersActivity() {
@@ -71,7 +73,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         this.blockedUsersActivity = true;
     }
 
-    public PrivacyUsersActivity(int i, ArrayList<Integer> arrayList, boolean z, boolean z2) {
+    public PrivacyUsersActivity(int i, ArrayList<Long> arrayList, boolean z, boolean z2) {
         this.uidArray = arrayList;
         this.isAlwaysShare = z2;
         this.isGroup = z;
@@ -201,16 +203,16 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         } else if (i >= this.usersStartRow && i < this.usersEndRow) {
             if (this.currentType == 1) {
                 Bundle bundle2 = new Bundle();
-                bundle2.putInt("user_id", getMessagesController().blockePeers.keyAt(i - this.usersStartRow));
+                bundle2.putLong("user_id", getMessagesController().blockePeers.keyAt(i - this.usersStartRow));
                 presentFragment(new ProfileActivity(bundle2));
                 return;
             }
             Bundle bundle3 = new Bundle();
-            int intValue = this.uidArray.get(i - this.usersStartRow).intValue();
-            if (intValue > 0) {
-                bundle3.putInt("user_id", intValue);
+            long longValue = this.uidArray.get(i - this.usersStartRow).longValue();
+            if (DialogObject.isUserDialog(longValue)) {
+                bundle3.putLong("user_id", longValue);
             } else {
-                bundle3.putInt("chat_id", -intValue);
+                bundle3.putLong("chat_id", -longValue);
             }
             presentFragment(new ProfileActivity(bundle3));
         }
@@ -220,9 +222,9 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     public /* synthetic */ void lambda$createView$0(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
-            Integer num = (Integer) it.next();
-            if (!this.uidArray.contains(num)) {
-                this.uidArray.add(num);
+            Long l = (Long) it.next();
+            if (!this.uidArray.contains(l)) {
+                this.uidArray.add(l);
             }
         }
         updateRows();
@@ -239,7 +241,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             return false;
         }
         if (this.currentType == 1) {
-            showUnblockAlert(Integer.valueOf(getMessagesController().blockePeers.keyAt(i - this.usersStartRow)));
+            showUnblockAlert(Long.valueOf(getMessagesController().blockePeers.keyAt(i - this.usersStartRow)));
         } else {
             showUnblockAlert(this.uidArray.get(i - i2));
         }
@@ -251,24 +253,24 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public void showUnblockAlert(Integer num) {
+    public void showUnblockAlert(Long l) {
         if (getParentActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            builder.setItems(this.currentType == 1 ? new CharSequence[]{LocaleController.getString("Unblock", NUM)} : new CharSequence[]{LocaleController.getString("Delete", NUM)}, new PrivacyUsersActivity$$ExternalSyntheticLambda0(this, num));
+            builder.setItems(this.currentType == 1 ? new CharSequence[]{LocaleController.getString("Unblock", NUM)} : new CharSequence[]{LocaleController.getString("Delete", NUM)}, new PrivacyUsersActivity$$ExternalSyntheticLambda0(this, l));
             showDialog(builder.create());
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showUnblockAlert$3(Integer num, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showUnblockAlert$3(Long l, DialogInterface dialogInterface, int i) {
         if (i != 0) {
             return;
         }
         if (this.currentType == 1) {
-            getMessagesController().unblockPeer(num.intValue());
+            getMessagesController().unblockPeer(l.longValue());
             return;
         }
-        this.uidArray.remove(num);
+        this.uidArray.remove(l);
         updateRows();
         PrivacyActivityDelegate privacyActivityDelegate = this.delegate;
         if (privacyActivityDelegate != null) {
@@ -321,7 +323,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.updateInterfaces) {
             int intValue = objArr[0].intValue();
-            if ((intValue & 2) != 0 || (intValue & 1) != 0) {
+            if ((MessagesController.UPDATE_MASK_AVATAR & intValue) != 0 || (MessagesController.UPDATE_MASK_NAME & intValue) != 0) {
                 updateVisibleRows(intValue);
             }
         } else if (i == NotificationCenter.blockedUsersDidLoad) {
@@ -378,7 +380,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             if (!z) {
                 return true;
             }
-            PrivacyUsersActivity.this.showUnblockAlert((Integer) manageChatUserCell.getTag());
+            PrivacyUsersActivity.this.showUnblockAlert((Long) manageChatUserCell.getTag());
             return true;
         }
 
@@ -447,7 +449,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            int i2;
+            long j;
             String str;
             String str2;
             int itemViewType = viewHolder.getItemViewType();
@@ -455,13 +457,13 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             if (itemViewType == 0) {
                 ManageChatUserCell manageChatUserCell = (ManageChatUserCell) viewHolder.itemView;
                 if (PrivacyUsersActivity.this.currentType == 1) {
-                    i2 = PrivacyUsersActivity.this.getMessagesController().blockePeers.keyAt(i - PrivacyUsersActivity.this.usersStartRow);
+                    j = PrivacyUsersActivity.this.getMessagesController().blockePeers.keyAt(i - PrivacyUsersActivity.this.usersStartRow);
                 } else {
-                    i2 = ((Integer) PrivacyUsersActivity.this.uidArray.get(i - PrivacyUsersActivity.this.usersStartRow)).intValue();
+                    j = ((Long) PrivacyUsersActivity.this.uidArray.get(i - PrivacyUsersActivity.this.usersStartRow)).longValue();
                 }
-                manageChatUserCell.setTag(Integer.valueOf(i2));
-                if (i2 > 0) {
-                    TLRPC$User user = PrivacyUsersActivity.this.getMessagesController().getUser(Integer.valueOf(i2));
+                manageChatUserCell.setTag(Long.valueOf(j));
+                if (j > 0) {
+                    TLRPC$User user = PrivacyUsersActivity.this.getMessagesController().getUser(Long.valueOf(j));
                     if (user != null) {
                         if (user.bot) {
                             str2 = LocaleController.getString("Bot", NUM).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", NUM).substring(1);
@@ -481,11 +483,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     }
                     return;
                 }
-                TLRPC$Chat chat = PrivacyUsersActivity.this.getMessagesController().getChat(Integer.valueOf(-i2));
+                TLRPC$Chat chat = PrivacyUsersActivity.this.getMessagesController().getChat(Long.valueOf(-j));
                 if (chat != null) {
-                    int i3 = chat.participants_count;
-                    if (i3 != 0) {
-                        str = LocaleController.formatPluralString("Members", i3);
+                    int i2 = chat.participants_count;
+                    if (i2 != 0) {
+                        str = LocaleController.formatPluralString("Members", i2);
                     } else if (chat.has_geo) {
                         str = LocaleController.getString("MegaLocation", NUM);
                     } else if (TextUtils.isEmpty(chat.username)) {

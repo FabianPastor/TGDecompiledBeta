@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda16 im
     }
 
     public final void run() {
-        this.f$0.lambda$updateFiltersReadCounter$75();
+        this.f$0.lambda$fixNotificationSettings$5();
     }
 }

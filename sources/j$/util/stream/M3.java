@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.y;
 import java.util.Arrays;
 
@@ -9,11 +9,11 @@ final class M3 extends CLASSNAMEc1 {
         super(cVar, CLASSNAMEf4.LONG_VALUE, CLASSNAMEe4.q | CLASSNAMEe4.o);
     }
 
-    public B1 E0(CLASSNAMEz2 z2Var, y yVar, l lVar) {
+    public B1 E0(CLASSNAMEz2 z2Var, y yVar, m mVar) {
         if (CLASSNAMEe4.SORTED.d(z2Var.s0())) {
-            return z2Var.p0(yVar, false, lVar);
+            return z2Var.p0(yVar, false, mVar);
         }
-        long[] jArr = (long[]) ((CLASSNAMEz1) z2Var.p0(yVar, true, lVar)).e();
+        long[] jArr = (long[]) ((CLASSNAMEz1) z2Var.p0(yVar, true, mVar)).e();
         Arrays.sort(jArr);
         return new CLASSNAMEm2(jArr);
     }

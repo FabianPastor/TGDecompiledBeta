@@ -6,14 +6,14 @@ public abstract class TLRPC$MessageAction extends TLObject {
     public String address;
     public TLRPC$TL_inputGroupCall call;
     public long call_id;
-    public int channel_id;
-    public int chat_id;
+    public long channel_id;
+    public long chat_id;
     public String currency;
     public int duration;
     public TLRPC$DecryptedMessageAction encryptedAction;
     public int flags;
     public long game_id;
-    public int inviter_id;
+    public long inviter_id;
     public String message;
     public TLRPC$UserProfilePhoto newUserPhoto;
     public TLRPC$Photo photo;
@@ -22,8 +22,8 @@ public abstract class TLRPC$MessageAction extends TLObject {
     public String title;
     public long total_amount;
     public int ttl;
-    public int user_id;
-    public ArrayList<Integer> users = new ArrayList<>();
+    public long user_id;
+    public ArrayList<Long> users = new ArrayList<>();
     public boolean video;
 
     public static TLRPC$MessageAction TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -50,8 +50,11 @@ public abstract class TLRPC$MessageAction extends TLObject {
             case -1615153660:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionHistoryClear();
                 break;
+            case -1539362612:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatDeleteUser();
+                break;
             case -1503425638:
-                tLRPC$MessageAction = new TLRPC$TL_messageActionChatCreate();
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatCreate_layer131();
                 break;
             case -1441072131:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionSetMessagesTTL();
@@ -63,10 +66,10 @@ public abstract class TLRPC$MessageAction extends TLObject {
                 tLRPC$MessageAction = new TLRPC$TL_messageActionBotAllowed();
                 break;
             case -1336546578:
-                tLRPC$MessageAction = new TLRPC$TL_messageActionChannelMigrateFrom();
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChannelMigrateFrom_layer131();
                 break;
             case -1297179892:
-                tLRPC$MessageAction = new TLRPC$TL_messageActionChatDeleteUser();
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatDeleteUser_layer131();
                 break;
             case -1281329567:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionGroupCallScheduled();
@@ -77,17 +80,32 @@ public abstract class TLRPC$MessageAction extends TLObject {
             case -1230047312:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionEmpty();
                 break;
+            case -1119368275:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatCreate();
+                break;
             case -648257196:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionSecureValuesSent();
+                break;
+            case -519864430:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatMigrateTo();
+                break;
+            case -365344535:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChannelMigrateFrom();
                 break;
             case -202219658:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionContactSignUp();
                 break;
             case -123931160:
-                tLRPC$MessageAction = new TLRPC$TL_messageActionChatJoinedByLink();
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatJoinedByLink_layer131();
                 break;
             case -85549226:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionCustomAction();
+                break;
+            case 51520707:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatJoinedByLink();
+                break;
+            case 365886720:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatAddUser();
                 break;
             case 1080663248:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionPaymentSent();
@@ -96,10 +114,13 @@ public abstract class TLRPC$MessageAction extends TLObject {
                 tLRPC$MessageAction = new TLRPC$TL_messageActionScreenshotTaken();
                 break;
             case 1217033015:
-                tLRPC$MessageAction = new TLRPC$TL_messageActionChatAddUser();
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatAddUser_layer131();
+                break;
+            case 1345295095:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionInviteToGroupCall();
                 break;
             case 1371385889:
-                tLRPC$MessageAction = new TLRPC$TL_messageActionChatMigrateTo();
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatMigrateTo_layer131();
                 break;
             case 1431655760:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionUserJoined();
@@ -123,7 +144,7 @@ public abstract class TLRPC$MessageAction extends TLObject {
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatAddUser_old();
                 break;
             case 1991897370:
-                tLRPC$MessageAction = new TLRPC$TL_messageActionInviteToGroupCall();
+                tLRPC$MessageAction = new TLRPC$TL_messageActionInviteToGroupCall_layer131();
                 break;
             case 2047704898:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionGroupCall();

@@ -171,6 +171,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public int recordingGuid;
     private RectF rect;
     /* access modifiers changed from: private */
+    public final Theme.ResourcesProvider resourcesProvider;
+    /* access modifiers changed from: private */
     public float scaleX;
     /* access modifiers changed from: private */
     public float scaleY;
@@ -203,13 +205,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     @SuppressLint({"ClickableViewAccessibility"})
-    public InstantCameraView(Context context, ChatActivity chatActivity) {
+    public InstantCameraView(Context context, ChatActivity chatActivity, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         Context context2 = context;
         this.aspectRatio = SharedConfig.roundCamera16to9 ? new Size(16, 9) : new Size(4, 3);
         this.mMVPMatrix = new float[16];
         this.mSTMatrix = new float[16];
         this.moldSTMatrix = new float[16];
+        this.resourcesProvider = resourcesProvider2;
         this.parentView = chatActivity.getFragmentView();
         setWillNotDraw(false);
         this.baseFragment = chatActivity;
@@ -253,7 +256,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             final Paint paint2 = new Paint(1);
             paint2.setColor(-16777216);
             paint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-            AnonymousClass4 r9 = new InstantViewCameraContainer(context2) {
+            AnonymousClass4 r10 = new InstantViewCameraContainer(context2) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     InstantCameraView.this.invalidate();
@@ -277,8 +280,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
                 }
             };
-            this.cameraContainer = r9;
-            r9.setWillNotDraw(false);
+            this.cameraContainer = r10;
+            r10.setWillNotDraw(false);
             this.cameraContainer.setLayerType(2, (Paint) null);
         }
         InstantViewCameraContainer instantViewCameraContainer = this.cameraContainer;
@@ -320,7 +323,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         int i2 = AndroidUtilities.roundPlayingMessageSize;
         addView(r2, new FrameLayout.LayoutParams(i2, i2, 17));
         setVisibility(4);
-        this.blurBehindDrawable = new BlurBehindDrawable(this.parentView, this, 0);
+        this.blurBehindDrawable = new BlurBehindDrawable(this.parentView, this, 0, (Theme.ResourcesProvider) null);
     }
 
     /* access modifiers changed from: private */
@@ -2687,7 +2690,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 InstantCameraView.this.videoEditedInfo.estimatedDuration = InstantCameraView.this.recordedTime;
                 NotificationCenter.getInstance(InstantCameraView.this.currentAccount).postNotificationName(NotificationCenter.audioDidSent, Integer.valueOf(InstantCameraView.this.recordingGuid), InstantCameraView.this.videoEditedInfo, this.videoFile.getAbsolutePath(), this.keyframeThumbs);
             } else if (InstantCameraView.this.baseFragment.isInScheduleMode()) {
-                AlertsCreator.createScheduleDatePickerDialog((Context) InstantCameraView.this.baseFragment.getParentActivity(), InstantCameraView.this.baseFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new InstantCameraView$VideoRecorder$$ExternalSyntheticLambda5(this), (Runnable) new InstantCameraView$VideoRecorder$$ExternalSyntheticLambda2(this));
+                AlertsCreator.createScheduleDatePickerDialog((Context) InstantCameraView.this.baseFragment.getParentActivity(), InstantCameraView.this.baseFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new InstantCameraView$VideoRecorder$$ExternalSyntheticLambda5(this), (Runnable) new InstantCameraView$VideoRecorder$$ExternalSyntheticLambda2(this), InstantCameraView.this.resourcesProvider);
             } else {
                 InstantCameraView.this.baseFragment.sendMedia(new MediaController.PhotoEntry(0, 0, 0, this.videoFile.getAbsolutePath(), 0, true, 0, 0, 0), InstantCameraView.this.videoEditedInfo, true, 0, false);
             }

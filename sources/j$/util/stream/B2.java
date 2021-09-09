@@ -2,19 +2,19 @@ package j$.util.stream;
 
 import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
-import j$.util.function.o;
 import j$.util.function.p;
-import j$.util.function.v;
-import j$.util.function.y;
+import j$.util.function.q;
+import j$.util.function.w;
+import j$.util.function.z;
 
 class B2 extends U2 implements T2, CLASSNAMEm3 {
-    final /* synthetic */ y b;
-    final /* synthetic */ v c;
+    final /* synthetic */ z b;
+    final /* synthetic */ w c;
     final /* synthetic */ CLASSNAMEb d;
 
-    B2(y yVar, v vVar, CLASSNAMEb bVar) {
-        this.b = yVar;
-        this.c = vVar;
+    B2(z zVar, w wVar, CLASSNAMEb bVar) {
+        this.b = zVar;
+        this.c = wVar;
         this.d = bVar;
     }
 
@@ -41,9 +41,9 @@ class B2 extends U2 implements T2, CLASSNAMEm3 {
         CLASSNAMEp1.c(this, l);
     }
 
-    public p f(p pVar) {
-        pVar.getClass();
-        return new o(this, pVar);
+    public q f(q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
     }
 
     public void h(T2 t2) {

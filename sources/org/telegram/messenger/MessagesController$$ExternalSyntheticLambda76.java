@@ -1,6 +1,6 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
+import androidx.collection.LongSparseArray;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda76 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda76
     }
 
     public final void run() {
-        this.f$0.lambda$getDifference$257(this.f$1);
+        this.f$0.lambda$getChannelDifference$247(this.f$1);
     }
 }

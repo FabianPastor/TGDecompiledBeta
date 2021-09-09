@@ -1,7 +1,7 @@
 package j$.util.stream;
 
 import j$.util.Comparator$CC;
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.y;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -23,11 +23,11 @@ final class N3 extends CLASSNAMEd3 {
         this.m = comparator;
     }
 
-    public B1 E0(CLASSNAMEz2 z2Var, y yVar, l lVar) {
+    public B1 E0(CLASSNAMEz2 z2Var, y yVar, m mVar) {
         if (CLASSNAMEe4.SORTED.d(z2Var.s0()) && this.l) {
-            return z2Var.p0(yVar, false, lVar);
+            return z2Var.p0(yVar, false, mVar);
         }
-        Object[] q = z2Var.p0(yVar, true, lVar).q(lVar);
+        Object[] q = z2Var.p0(yVar, true, mVar).q(mVar);
         Arrays.sort(q, this.m);
         return new E1(q);
     }

@@ -1,6 +1,6 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
+import androidx.collection.LongSparseArray;
 
 public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda24 implements Runnable {
     public final /* synthetic */ NotificationsController f$0;

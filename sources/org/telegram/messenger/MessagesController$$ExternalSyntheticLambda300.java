@@ -10,17 +10,17 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda30
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ boolean f$1;
     public final /* synthetic */ TLRPC$InputUser f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ long f$3;
     public final /* synthetic */ BaseFragment f$4;
     public final /* synthetic */ TLObject f$5;
     public final /* synthetic */ boolean f$6;
     public final /* synthetic */ Runnable f$7;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda300(MessagesController messagesController, boolean z, TLRPC$InputUser tLRPC$InputUser, int i, BaseFragment baseFragment, TLObject tLObject, boolean z2, Runnable runnable) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda300(MessagesController messagesController, boolean z, TLRPC$InputUser tLRPC$InputUser, long j, BaseFragment baseFragment, TLObject tLObject, boolean z2, Runnable runnable) {
         this.f$0 = messagesController;
         this.f$1 = z;
         this.f$2 = tLRPC$InputUser;
-        this.f$3 = i;
+        this.f$3 = j;
         this.f$4 = baseFragment;
         this.f$5 = tLObject;
         this.f$6 = z2;

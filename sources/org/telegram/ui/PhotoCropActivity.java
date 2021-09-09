@@ -79,466 +79,463 @@ public class PhotoCropActivity extends BaseFragment {
             this.halfPaint = paint3;
             paint3.setColor(-NUM);
             setBackgroundColor(-13421773);
-            setOnTouchListener(new View.OnTouchListener() {
-                /* JADX WARNING: Removed duplicated region for block: B:50:0x00bd  */
-                /* Code decompiled incorrectly, please refer to instructions dump. */
-                public boolean onTouch(android.view.View r14, android.view.MotionEvent r15) {
-                    /*
-                        r13 = this;
-                        float r14 = r15.getX()
-                        float r0 = r15.getY()
-                        r1 = 1096810496(0x41600000, float:14.0)
-                        int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                        int r2 = r15.getAction()
-                        r3 = 4
-                        r4 = 3
-                        r5 = 5
-                        r6 = 0
-                        r7 = 2
-                        r8 = 1
-                        if (r2 != 0) goto L_0x00c8
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r15 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r2 = r15.rectX
-                        float r1 = (float) r1
-                        float r9 = r2 - r1
-                        int r9 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1))
-                        if (r9 >= 0) goto L_0x003c
-                        float r9 = r2 + r1
-                        int r9 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1))
-                        if (r9 <= 0) goto L_0x003c
-                        float r9 = r15.rectY
-                        float r10 = r9 - r1
-                        int r10 = (r10 > r0 ? 1 : (r10 == r0 ? 0 : -1))
-                        if (r10 >= 0) goto L_0x003c
-                        float r9 = r9 + r1
-                        int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-                        if (r9 <= 0) goto L_0x003c
-                        r15.draggingState = r8
-                        goto L_0x00b9
-                    L_0x003c:
-                        float r9 = r2 - r1
-                        float r10 = r15.rectSizeX
-                        float r9 = r9 + r10
-                        int r9 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1))
-                        if (r9 >= 0) goto L_0x005c
-                        float r9 = r2 + r1
-                        float r9 = r9 + r10
-                        int r9 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1))
-                        if (r9 <= 0) goto L_0x005c
-                        float r9 = r15.rectY
-                        float r11 = r9 - r1
-                        int r11 = (r11 > r0 ? 1 : (r11 == r0 ? 0 : -1))
-                        if (r11 >= 0) goto L_0x005c
-                        float r9 = r9 + r1
-                        int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-                        if (r9 <= 0) goto L_0x005c
-                        r15.draggingState = r7
-                        goto L_0x00b9
-                    L_0x005c:
-                        float r7 = r2 - r1
-                        int r7 = (r7 > r14 ? 1 : (r7 == r14 ? 0 : -1))
-                        if (r7 >= 0) goto L_0x007c
-                        float r7 = r2 + r1
-                        int r7 = (r7 > r14 ? 1 : (r7 == r14 ? 0 : -1))
-                        if (r7 <= 0) goto L_0x007c
-                        float r7 = r15.rectY
-                        float r9 = r7 - r1
-                        float r11 = r15.rectSizeY
-                        float r9 = r9 + r11
-                        int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-                        if (r9 >= 0) goto L_0x007c
-                        float r7 = r7 + r1
-                        float r7 = r7 + r11
-                        int r7 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1))
-                        if (r7 <= 0) goto L_0x007c
-                        r15.draggingState = r4
-                        goto L_0x00b9
-                    L_0x007c:
-                        float r4 = r2 - r1
-                        float r4 = r4 + r10
-                        int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
-                        if (r4 >= 0) goto L_0x009e
-                        float r4 = r2 + r1
-                        float r4 = r4 + r10
-                        int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x009e
-                        float r4 = r15.rectY
-                        float r7 = r4 - r1
-                        float r9 = r15.rectSizeY
-                        float r7 = r7 + r9
-                        int r7 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1))
-                        if (r7 >= 0) goto L_0x009e
-                        float r4 = r4 + r1
-                        float r4 = r4 + r9
-                        int r1 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
-                        if (r1 <= 0) goto L_0x009e
-                        r15.draggingState = r3
-                        goto L_0x00b9
-                    L_0x009e:
-                        int r1 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x00b7
-                        float r2 = r2 + r10
-                        int r1 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-                        if (r1 <= 0) goto L_0x00b7
-                        float r1 = r15.rectY
-                        int r2 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-                        if (r2 >= 0) goto L_0x00b7
-                        float r2 = r15.rectSizeY
-                        float r1 = r1 + r2
-                        int r1 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-                        if (r1 <= 0) goto L_0x00b7
-                        r15.draggingState = r5
-                        goto L_0x00b9
-                    L_0x00b7:
-                        r15.draggingState = r6
-                    L_0x00b9:
-                        int r1 = r15.draggingState
-                        if (r1 == 0) goto L_0x00c0
-                        r15.requestDisallowInterceptTouchEvent(r8)
-                    L_0x00c0:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r15 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        r15.oldX = r14
-                        r15.oldY = r0
-                        goto L_0x02c5
-                    L_0x00c8:
-                        int r1 = r15.getAction()
-                        if (r1 != r8) goto L_0x00d4
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r14 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        r14.draggingState = r6
-                        goto L_0x02c5
-                    L_0x00d4:
-                        int r15 = r15.getAction()
-                        if (r15 != r7) goto L_0x02c5
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r15 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        int r1 = r15.draggingState
-                        if (r1 == 0) goto L_0x02c5
-                        float r2 = r15.oldX
-                        float r2 = r14 - r2
-                        float r6 = r15.oldY
-                        float r6 = r0 - r6
-                        if (r1 != r5) goto L_0x012f
-                        float r1 = r15.rectX
-                        float r1 = r1 + r2
-                        r15.rectX = r1
-                        float r2 = r15.rectY
-                        float r2 = r2 + r6
-                        r15.rectY = r2
-                        int r3 = r15.bitmapX
-                        float r4 = (float) r3
-                        int r4 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-                        if (r4 >= 0) goto L_0x00ff
-                        float r1 = (float) r3
-                        r15.rectX = r1
-                        goto L_0x0110
-                    L_0x00ff:
-                        float r4 = r15.rectSizeX
-                        float r1 = r1 + r4
-                        int r5 = r15.bitmapWidth
-                        int r6 = r3 + r5
-                        float r6 = (float) r6
-                        int r1 = (r1 > r6 ? 1 : (r1 == r6 ? 0 : -1))
-                        if (r1 <= 0) goto L_0x0110
-                        int r3 = r3 + r5
-                        float r1 = (float) r3
-                        float r1 = r1 - r4
-                        r15.rectX = r1
-                    L_0x0110:
-                        int r1 = r15.bitmapY
-                        float r3 = (float) r1
-                        int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x011c
-                        float r1 = (float) r1
-                        r15.rectY = r1
-                        goto L_0x02be
-                    L_0x011c:
-                        float r3 = r15.rectSizeY
-                        float r2 = r2 + r3
-                        int r4 = r15.bitmapHeight
-                        int r5 = r1 + r4
-                        float r5 = (float) r5
-                        int r2 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
-                        if (r2 <= 0) goto L_0x02be
-                        int r1 = r1 + r4
-                        float r1 = (float) r1
-                        float r1 = r1 - r3
-                        r15.rectY = r1
-                        goto L_0x02be
-                    L_0x012f:
-                        r5 = 1126170624(0x43200000, float:160.0)
-                        if (r1 != r8) goto L_0x0190
-                        float r1 = r15.rectSizeX
-                        float r3 = r1 - r2
-                        int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x013d
-                        float r2 = r1 - r5
-                    L_0x013d:
-                        float r3 = r15.rectX
-                        float r4 = r3 + r2
-                        int r7 = r15.bitmapX
-                        float r9 = (float) r7
-                        int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
-                        if (r4 >= 0) goto L_0x014a
-                        float r2 = (float) r7
-                        float r2 = r2 - r3
-                    L_0x014a:
-                        boolean r4 = r15.freeform
-                        if (r4 != 0) goto L_0x016b
-                        float r4 = r15.rectY
-                        float r5 = r4 + r2
-                        int r6 = r15.bitmapY
-                        float r7 = (float) r6
-                        int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-                        if (r5 >= 0) goto L_0x015b
-                        float r2 = (float) r6
-                        float r2 = r2 - r4
-                    L_0x015b:
-                        float r3 = r3 + r2
-                        r15.rectX = r3
-                        float r4 = r4 + r2
-                        r15.rectY = r4
-                        float r1 = r1 - r2
-                        r15.rectSizeX = r1
-                        float r1 = r15.rectSizeY
-                        float r1 = r1 - r2
-                        r15.rectSizeY = r1
-                        goto L_0x02be
-                    L_0x016b:
-                        float r4 = r15.rectSizeY
-                        float r7 = r4 - r6
-                        int r7 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1))
-                        if (r7 >= 0) goto L_0x0175
-                        float r6 = r4 - r5
-                    L_0x0175:
-                        float r5 = r15.rectY
-                        float r7 = r5 + r6
-                        int r9 = r15.bitmapY
-                        float r10 = (float) r9
-                        int r7 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1))
-                        if (r7 >= 0) goto L_0x0182
-                        float r6 = (float) r9
-                        float r6 = r6 - r5
-                    L_0x0182:
-                        float r3 = r3 + r2
-                        r15.rectX = r3
-                        float r5 = r5 + r6
-                        r15.rectY = r5
-                        float r1 = r1 - r2
-                        r15.rectSizeX = r1
-                        float r4 = r4 - r6
-                        r15.rectSizeY = r4
-                        goto L_0x02be
-                    L_0x0190:
-                        if (r1 != r7) goto L_0x01f3
-                        float r1 = r15.rectSizeX
-                        float r3 = r1 + r2
-                        int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x019d
-                        float r2 = r1 - r5
-                        float r2 = -r2
-                    L_0x019d:
-                        float r3 = r15.rectX
-                        float r4 = r3 + r1
-                        float r4 = r4 + r2
-                        int r7 = r15.bitmapX
-                        int r9 = r15.bitmapWidth
-                        int r10 = r7 + r9
-                        float r10 = (float) r10
-                        int r4 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x01b1
-                        int r7 = r7 + r9
-                        float r2 = (float) r7
-                        float r2 = r2 - r3
-                        float r2 = r2 - r1
-                    L_0x01b1:
-                        boolean r3 = r15.freeform
-                        if (r3 != 0) goto L_0x01d0
-                        float r3 = r15.rectY
-                        float r4 = r3 - r2
-                        int r5 = r15.bitmapY
-                        float r6 = (float) r5
-                        int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                        if (r4 >= 0) goto L_0x01c3
-                        float r2 = (float) r5
-                        float r2 = r3 - r2
-                    L_0x01c3:
-                        float r3 = r3 - r2
-                        r15.rectY = r3
-                        float r1 = r1 + r2
-                        r15.rectSizeX = r1
-                        float r1 = r15.rectSizeY
-                        float r1 = r1 + r2
-                        r15.rectSizeY = r1
-                        goto L_0x02be
-                    L_0x01d0:
-                        float r3 = r15.rectSizeY
-                        float r4 = r3 - r6
-                        int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-                        if (r4 >= 0) goto L_0x01da
-                        float r6 = r3 - r5
-                    L_0x01da:
-                        float r4 = r15.rectY
-                        float r5 = r4 + r6
-                        int r7 = r15.bitmapY
-                        float r9 = (float) r7
-                        int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
-                        if (r5 >= 0) goto L_0x01e8
-                        float r5 = (float) r7
-                        float r6 = r5 - r4
-                    L_0x01e8:
-                        float r4 = r4 + r6
-                        r15.rectY = r4
-                        float r1 = r1 + r2
-                        r15.rectSizeX = r1
-                        float r3 = r3 - r6
-                        r15.rectSizeY = r3
-                        goto L_0x02be
-                    L_0x01f3:
-                        if (r1 != r4) goto L_0x0259
-                        float r1 = r15.rectSizeX
-                        float r3 = r1 - r2
-                        int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x01ff
-                        float r2 = r1 - r5
-                    L_0x01ff:
-                        float r3 = r15.rectX
-                        float r4 = r3 + r2
-                        int r7 = r15.bitmapX
-                        float r9 = (float) r7
-                        int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
-                        if (r4 >= 0) goto L_0x020c
-                        float r2 = (float) r7
-                        float r2 = r2 - r3
-                    L_0x020c:
-                        boolean r4 = r15.freeform
-                        if (r4 != 0) goto L_0x0233
-                        float r4 = r15.rectY
-                        float r5 = r4 + r1
-                        float r5 = r5 - r2
-                        int r6 = r15.bitmapY
-                        int r7 = r15.bitmapHeight
-                        int r9 = r6 + r7
-                        float r9 = (float) r9
-                        int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
-                        if (r5 <= 0) goto L_0x0226
-                        float r4 = r4 + r1
-                        float r2 = (float) r6
-                        float r4 = r4 - r2
-                        float r2 = (float) r7
-                        float r2 = r4 - r2
-                    L_0x0226:
-                        float r3 = r3 + r2
-                        r15.rectX = r3
-                        float r1 = r1 - r2
-                        r15.rectSizeX = r1
-                        float r1 = r15.rectSizeY
-                        float r1 = r1 - r2
-                        r15.rectSizeY = r1
-                        goto L_0x02be
-                    L_0x0233:
-                        float r4 = r15.rectY
-                        float r7 = r15.rectSizeY
-                        float r9 = r4 + r7
-                        float r9 = r9 + r6
-                        int r10 = r15.bitmapY
-                        int r11 = r15.bitmapHeight
-                        int r12 = r10 + r11
-                        float r12 = (float) r12
-                        int r9 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1))
-                        if (r9 <= 0) goto L_0x0249
-                        int r10 = r10 + r11
-                        float r6 = (float) r10
-                        float r6 = r6 - r4
-                        float r6 = r6 - r7
-                    L_0x0249:
-                        float r3 = r3 + r2
-                        r15.rectX = r3
-                        float r1 = r1 - r2
-                        r15.rectSizeX = r1
-                        float r7 = r7 + r6
-                        r15.rectSizeY = r7
-                        int r1 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x02be
-                        r15.rectSizeY = r5
-                        goto L_0x02be
-                    L_0x0259:
-                        if (r1 != r3) goto L_0x02be
-                        float r1 = r15.rectX
-                        float r3 = r15.rectSizeX
-                        float r4 = r1 + r3
-                        float r4 = r4 + r2
-                        int r7 = r15.bitmapX
-                        int r9 = r15.bitmapWidth
-                        int r10 = r7 + r9
-                        float r10 = (float) r10
-                        int r4 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x0271
-                        int r7 = r7 + r9
-                        float r2 = (float) r7
-                        float r2 = r2 - r1
-                        float r2 = r2 - r3
-                    L_0x0271:
-                        boolean r1 = r15.freeform
-                        if (r1 != 0) goto L_0x0292
-                        float r1 = r15.rectY
-                        float r4 = r1 + r3
-                        float r4 = r4 + r2
-                        int r6 = r15.bitmapY
-                        int r7 = r15.bitmapHeight
-                        int r9 = r6 + r7
-                        float r9 = (float) r9
-                        int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x0289
-                        int r6 = r6 + r7
-                        float r2 = (float) r6
-                        float r2 = r2 - r1
-                        float r2 = r2 - r3
-                    L_0x0289:
-                        float r3 = r3 + r2
-                        r15.rectSizeX = r3
-                        float r1 = r15.rectSizeY
-                        float r1 = r1 + r2
-                        r15.rectSizeY = r1
-                        goto L_0x02ae
-                    L_0x0292:
-                        float r1 = r15.rectY
-                        float r4 = r15.rectSizeY
-                        float r7 = r1 + r4
-                        float r7 = r7 + r6
-                        int r9 = r15.bitmapY
-                        int r10 = r15.bitmapHeight
-                        int r11 = r9 + r10
-                        float r11 = (float) r11
-                        int r7 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
-                        if (r7 <= 0) goto L_0x02a8
-                        int r9 = r9 + r10
-                        float r6 = (float) r9
-                        float r6 = r6 - r1
-                        float r6 = r6 - r4
-                    L_0x02a8:
-                        float r3 = r3 + r2
-                        r15.rectSizeX = r3
-                        float r4 = r4 + r6
-                        r15.rectSizeY = r4
-                    L_0x02ae:
-                        float r1 = r15.rectSizeX
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x02b6
-                        r15.rectSizeX = r5
-                    L_0x02b6:
-                        float r1 = r15.rectSizeY
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x02be
-                        r15.rectSizeY = r5
-                    L_0x02be:
-                        r15.oldX = r14
-                        r15.oldY = r0
-                        r15.invalidate()
-                    L_0x02c5:
-                        return r8
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoCropActivity.PhotoCropView.AnonymousClass1.onTouch(android.view.View, android.view.MotionEvent):boolean");
-                }
-            });
+            setOnTouchListener(new PhotoCropActivity$PhotoCropView$$ExternalSyntheticLambda0(this));
+        }
+
+        /* access modifiers changed from: private */
+        /* JADX WARNING: Removed duplicated region for block: B:50:0x00bb  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public /* synthetic */ boolean lambda$init$0(android.view.View r13, android.view.MotionEvent r14) {
+            /*
+                r12 = this;
+                float r13 = r14.getX()
+                float r0 = r14.getY()
+                r1 = 1096810496(0x41600000, float:14.0)
+                int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                int r2 = r14.getAction()
+                r3 = 4
+                r4 = 3
+                r5 = 5
+                r6 = 0
+                r7 = 2
+                r8 = 1
+                if (r2 != 0) goto L_0x00c4
+                float r14 = r12.rectX
+                float r1 = (float) r1
+                float r2 = r14 - r1
+                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+                if (r2 >= 0) goto L_0x003a
+                float r2 = r14 + r1
+                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+                if (r2 <= 0) goto L_0x003a
+                float r2 = r12.rectY
+                float r9 = r2 - r1
+                int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
+                if (r9 >= 0) goto L_0x003a
+                float r2 = r2 + r1
+                int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+                if (r2 <= 0) goto L_0x003a
+                r12.draggingState = r8
+                goto L_0x00b7
+            L_0x003a:
+                float r2 = r14 - r1
+                float r9 = r12.rectSizeX
+                float r2 = r2 + r9
+                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+                if (r2 >= 0) goto L_0x005a
+                float r2 = r14 + r1
+                float r2 = r2 + r9
+                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+                if (r2 <= 0) goto L_0x005a
+                float r2 = r12.rectY
+                float r10 = r2 - r1
+                int r10 = (r10 > r0 ? 1 : (r10 == r0 ? 0 : -1))
+                if (r10 >= 0) goto L_0x005a
+                float r2 = r2 + r1
+                int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+                if (r2 <= 0) goto L_0x005a
+                r12.draggingState = r7
+                goto L_0x00b7
+            L_0x005a:
+                float r2 = r14 - r1
+                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+                if (r2 >= 0) goto L_0x007a
+                float r2 = r14 + r1
+                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+                if (r2 <= 0) goto L_0x007a
+                float r2 = r12.rectY
+                float r7 = r2 - r1
+                float r10 = r12.rectSizeY
+                float r7 = r7 + r10
+                int r7 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1))
+                if (r7 >= 0) goto L_0x007a
+                float r2 = r2 + r1
+                float r2 = r2 + r10
+                int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+                if (r2 <= 0) goto L_0x007a
+                r12.draggingState = r4
+                goto L_0x00b7
+            L_0x007a:
+                float r2 = r14 - r1
+                float r2 = r2 + r9
+                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+                if (r2 >= 0) goto L_0x009c
+                float r2 = r14 + r1
+                float r2 = r2 + r9
+                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+                if (r2 <= 0) goto L_0x009c
+                float r2 = r12.rectY
+                float r4 = r2 - r1
+                float r7 = r12.rectSizeY
+                float r4 = r4 + r7
+                int r4 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
+                if (r4 >= 0) goto L_0x009c
+                float r2 = r2 + r1
+                float r2 = r2 + r7
+                int r1 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+                if (r1 <= 0) goto L_0x009c
+                r12.draggingState = r3
+                goto L_0x00b7
+            L_0x009c:
+                int r1 = (r14 > r13 ? 1 : (r14 == r13 ? 0 : -1))
+                if (r1 >= 0) goto L_0x00b5
+                float r14 = r14 + r9
+                int r14 = (r14 > r13 ? 1 : (r14 == r13 ? 0 : -1))
+                if (r14 <= 0) goto L_0x00b5
+                float r14 = r12.rectY
+                int r1 = (r14 > r0 ? 1 : (r14 == r0 ? 0 : -1))
+                if (r1 >= 0) goto L_0x00b5
+                float r1 = r12.rectSizeY
+                float r14 = r14 + r1
+                int r14 = (r14 > r0 ? 1 : (r14 == r0 ? 0 : -1))
+                if (r14 <= 0) goto L_0x00b5
+                r12.draggingState = r5
+                goto L_0x00b7
+            L_0x00b5:
+                r12.draggingState = r6
+            L_0x00b7:
+                int r14 = r12.draggingState
+                if (r14 == 0) goto L_0x00be
+                r12.requestDisallowInterceptTouchEvent(r8)
+            L_0x00be:
+                r12.oldX = r13
+                r12.oldY = r0
+                goto L_0x02bc
+            L_0x00c4:
+                int r1 = r14.getAction()
+                if (r1 != r8) goto L_0x00ce
+                r12.draggingState = r6
+                goto L_0x02bc
+            L_0x00ce:
+                int r14 = r14.getAction()
+                if (r14 != r7) goto L_0x02bc
+                int r14 = r12.draggingState
+                if (r14 == 0) goto L_0x02bc
+                float r1 = r12.oldX
+                float r1 = r13 - r1
+                float r2 = r12.oldY
+                float r2 = r0 - r2
+                if (r14 != r5) goto L_0x0127
+                float r14 = r12.rectX
+                float r14 = r14 + r1
+                r12.rectX = r14
+                float r1 = r12.rectY
+                float r1 = r1 + r2
+                r12.rectY = r1
+                int r2 = r12.bitmapX
+                float r3 = (float) r2
+                int r3 = (r14 > r3 ? 1 : (r14 == r3 ? 0 : -1))
+                if (r3 >= 0) goto L_0x00f7
+                float r14 = (float) r2
+                r12.rectX = r14
+                goto L_0x0108
+            L_0x00f7:
+                float r3 = r12.rectSizeX
+                float r14 = r14 + r3
+                int r4 = r12.bitmapWidth
+                int r5 = r2 + r4
+                float r5 = (float) r5
+                int r14 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
+                if (r14 <= 0) goto L_0x0108
+                int r2 = r2 + r4
+                float r14 = (float) r2
+                float r14 = r14 - r3
+                r12.rectX = r14
+            L_0x0108:
+                int r14 = r12.bitmapY
+                float r2 = (float) r14
+                int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+                if (r2 >= 0) goto L_0x0114
+                float r14 = (float) r14
+                r12.rectY = r14
+                goto L_0x02b5
+            L_0x0114:
+                float r2 = r12.rectSizeY
+                float r1 = r1 + r2
+                int r3 = r12.bitmapHeight
+                int r4 = r14 + r3
+                float r4 = (float) r4
+                int r1 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
+                if (r1 <= 0) goto L_0x02b5
+                int r14 = r14 + r3
+                float r14 = (float) r14
+                float r14 = r14 - r2
+                r12.rectY = r14
+                goto L_0x02b5
+            L_0x0127:
+                r5 = 1126170624(0x43200000, float:160.0)
+                if (r14 != r8) goto L_0x0188
+                float r14 = r12.rectSizeX
+                float r3 = r14 - r1
+                int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+                if (r3 >= 0) goto L_0x0135
+                float r1 = r14 - r5
+            L_0x0135:
+                float r3 = r12.rectX
+                float r4 = r3 + r1
+                int r6 = r12.bitmapX
+                float r7 = (float) r6
+                int r4 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1))
+                if (r4 >= 0) goto L_0x0142
+                float r1 = (float) r6
+                float r1 = r1 - r3
+            L_0x0142:
+                boolean r4 = r12.freeform
+                if (r4 != 0) goto L_0x0163
+                float r2 = r12.rectY
+                float r4 = r2 + r1
+                int r5 = r12.bitmapY
+                float r6 = (float) r5
+                int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+                if (r4 >= 0) goto L_0x0153
+                float r1 = (float) r5
+                float r1 = r1 - r2
+            L_0x0153:
+                float r3 = r3 + r1
+                r12.rectX = r3
+                float r2 = r2 + r1
+                r12.rectY = r2
+                float r14 = r14 - r1
+                r12.rectSizeX = r14
+                float r14 = r12.rectSizeY
+                float r14 = r14 - r1
+                r12.rectSizeY = r14
+                goto L_0x02b5
+            L_0x0163:
+                float r4 = r12.rectSizeY
+                float r6 = r4 - r2
+                int r6 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
+                if (r6 >= 0) goto L_0x016d
+                float r2 = r4 - r5
+            L_0x016d:
+                float r5 = r12.rectY
+                float r6 = r5 + r2
+                int r7 = r12.bitmapY
+                float r9 = (float) r7
+                int r6 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
+                if (r6 >= 0) goto L_0x017a
+                float r2 = (float) r7
+                float r2 = r2 - r5
+            L_0x017a:
+                float r3 = r3 + r1
+                r12.rectX = r3
+                float r5 = r5 + r2
+                r12.rectY = r5
+                float r14 = r14 - r1
+                r12.rectSizeX = r14
+                float r4 = r4 - r2
+                r12.rectSizeY = r4
+                goto L_0x02b5
+            L_0x0188:
+                if (r14 != r7) goto L_0x01ea
+                float r14 = r12.rectSizeX
+                float r3 = r14 + r1
+                int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+                if (r3 >= 0) goto L_0x0195
+                float r1 = r14 - r5
+                float r1 = -r1
+            L_0x0195:
+                float r3 = r12.rectX
+                float r4 = r3 + r14
+                float r4 = r4 + r1
+                int r6 = r12.bitmapX
+                int r7 = r12.bitmapWidth
+                int r9 = r6 + r7
+                float r9 = (float) r9
+                int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
+                if (r4 <= 0) goto L_0x01a9
+                int r6 = r6 + r7
+                float r1 = (float) r6
+                float r1 = r1 - r3
+                float r1 = r1 - r14
+            L_0x01a9:
+                boolean r3 = r12.freeform
+                if (r3 != 0) goto L_0x01c8
+                float r2 = r12.rectY
+                float r3 = r2 - r1
+                int r4 = r12.bitmapY
+                float r5 = (float) r4
+                int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+                if (r3 >= 0) goto L_0x01bb
+                float r1 = (float) r4
+                float r1 = r2 - r1
+            L_0x01bb:
+                float r2 = r2 - r1
+                r12.rectY = r2
+                float r14 = r14 + r1
+                r12.rectSizeX = r14
+                float r14 = r12.rectSizeY
+                float r14 = r14 + r1
+                r12.rectSizeY = r14
+                goto L_0x02b5
+            L_0x01c8:
+                float r3 = r12.rectSizeY
+                float r4 = r3 - r2
+                int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
+                if (r4 >= 0) goto L_0x01d2
+                float r2 = r3 - r5
+            L_0x01d2:
+                float r4 = r12.rectY
+                float r5 = r4 + r2
+                int r6 = r12.bitmapY
+                float r7 = (float) r6
+                int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                if (r5 >= 0) goto L_0x01df
+                float r2 = (float) r6
+                float r2 = r2 - r4
+            L_0x01df:
+                float r4 = r4 + r2
+                r12.rectY = r4
+                float r14 = r14 + r1
+                r12.rectSizeX = r14
+                float r3 = r3 - r2
+                r12.rectSizeY = r3
+                goto L_0x02b5
+            L_0x01ea:
+                if (r14 != r4) goto L_0x0250
+                float r14 = r12.rectSizeX
+                float r3 = r14 - r1
+                int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+                if (r3 >= 0) goto L_0x01f6
+                float r1 = r14 - r5
+            L_0x01f6:
+                float r3 = r12.rectX
+                float r4 = r3 + r1
+                int r6 = r12.bitmapX
+                float r7 = (float) r6
+                int r4 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1))
+                if (r4 >= 0) goto L_0x0203
+                float r1 = (float) r6
+                float r1 = r1 - r3
+            L_0x0203:
+                boolean r4 = r12.freeform
+                if (r4 != 0) goto L_0x022a
+                float r2 = r12.rectY
+                float r4 = r2 + r14
+                float r4 = r4 - r1
+                int r5 = r12.bitmapY
+                int r6 = r12.bitmapHeight
+                int r7 = r5 + r6
+                float r7 = (float) r7
+                int r4 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1))
+                if (r4 <= 0) goto L_0x021d
+                float r2 = r2 + r14
+                float r1 = (float) r5
+                float r2 = r2 - r1
+                float r1 = (float) r6
+                float r1 = r2 - r1
+            L_0x021d:
+                float r3 = r3 + r1
+                r12.rectX = r3
+                float r14 = r14 - r1
+                r12.rectSizeX = r14
+                float r14 = r12.rectSizeY
+                float r14 = r14 - r1
+                r12.rectSizeY = r14
+                goto L_0x02b5
+            L_0x022a:
+                float r4 = r12.rectY
+                float r6 = r12.rectSizeY
+                float r7 = r4 + r6
+                float r7 = r7 + r2
+                int r9 = r12.bitmapY
+                int r10 = r12.bitmapHeight
+                int r11 = r9 + r10
+                float r11 = (float) r11
+                int r7 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
+                if (r7 <= 0) goto L_0x0240
+                int r9 = r9 + r10
+                float r2 = (float) r9
+                float r2 = r2 - r4
+                float r2 = r2 - r6
+            L_0x0240:
+                float r3 = r3 + r1
+                r12.rectX = r3
+                float r14 = r14 - r1
+                r12.rectSizeX = r14
+                float r6 = r6 + r2
+                r12.rectSizeY = r6
+                int r14 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
+                if (r14 >= 0) goto L_0x02b5
+                r12.rectSizeY = r5
+                goto L_0x02b5
+            L_0x0250:
+                if (r14 != r3) goto L_0x02b5
+                float r14 = r12.rectX
+                float r3 = r12.rectSizeX
+                float r4 = r14 + r3
+                float r4 = r4 + r1
+                int r6 = r12.bitmapX
+                int r7 = r12.bitmapWidth
+                int r9 = r6 + r7
+                float r9 = (float) r9
+                int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
+                if (r4 <= 0) goto L_0x0268
+                int r6 = r6 + r7
+                float r1 = (float) r6
+                float r1 = r1 - r14
+                float r1 = r1 - r3
+            L_0x0268:
+                boolean r14 = r12.freeform
+                if (r14 != 0) goto L_0x0289
+                float r14 = r12.rectY
+                float r2 = r14 + r3
+                float r2 = r2 + r1
+                int r4 = r12.bitmapY
+                int r6 = r12.bitmapHeight
+                int r7 = r4 + r6
+                float r7 = (float) r7
+                int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
+                if (r2 <= 0) goto L_0x0280
+                int r4 = r4 + r6
+                float r1 = (float) r4
+                float r1 = r1 - r14
+                float r1 = r1 - r3
+            L_0x0280:
+                float r3 = r3 + r1
+                r12.rectSizeX = r3
+                float r14 = r12.rectSizeY
+                float r14 = r14 + r1
+                r12.rectSizeY = r14
+                goto L_0x02a5
+            L_0x0289:
+                float r14 = r12.rectY
+                float r4 = r12.rectSizeY
+                float r6 = r14 + r4
+                float r6 = r6 + r2
+                int r7 = r12.bitmapY
+                int r9 = r12.bitmapHeight
+                int r10 = r7 + r9
+                float r10 = (float) r10
+                int r6 = (r6 > r10 ? 1 : (r6 == r10 ? 0 : -1))
+                if (r6 <= 0) goto L_0x029f
+                int r7 = r7 + r9
+                float r2 = (float) r7
+                float r2 = r2 - r14
+                float r2 = r2 - r4
+            L_0x029f:
+                float r3 = r3 + r1
+                r12.rectSizeX = r3
+                float r4 = r4 + r2
+                r12.rectSizeY = r4
+            L_0x02a5:
+                float r14 = r12.rectSizeX
+                int r14 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
+                if (r14 >= 0) goto L_0x02ad
+                r12.rectSizeX = r5
+            L_0x02ad:
+                float r14 = r12.rectSizeY
+                int r14 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
+                if (r14 >= 0) goto L_0x02b5
+                r12.rectSizeY = r5
+            L_0x02b5:
+                r12.oldX = r13
+                r12.oldY = r0
+                r12.invalidate()
+            L_0x02bc:
+                return r8
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoCropActivity.PhotoCropView.lambda$init$0(android.view.View, android.view.MotionEvent):boolean");
         }
 
         private void updateBitmapSize() {

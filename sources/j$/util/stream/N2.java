@@ -1,18 +1,18 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.i;
 import j$.util.function.j;
 import j$.util.function.k;
+import j$.util.function.l;
 
 class N2 implements T2, CLASSNAMEl3 {
     private int a;
     final /* synthetic */ int b;
-    final /* synthetic */ i c;
+    final /* synthetic */ j c;
 
-    N2(int i, i iVar) {
+    N2(int i, j jVar) {
         this.b = i;
-        this.c = iVar;
+        this.c = jVar;
     }
 
     public /* synthetic */ void accept(double d) {
@@ -46,9 +46,9 @@ class N2 implements T2, CLASSNAMEl3 {
         accept(((N2) t2).a);
     }
 
-    public k l(k kVar) {
-        kVar.getClass();
-        return new j(this, kVar);
+    public l l(l lVar) {
+        lVar.getClass();
+        return new k(this, lVar);
     }
 
     public /* synthetic */ void m() {

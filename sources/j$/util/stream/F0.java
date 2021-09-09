@@ -3,9 +3,9 @@ package j$.util.stream;
 import j$.lang.a;
 import j$.lang.b;
 import j$.lang.c;
-import j$.util.function.k;
 import j$.util.function.l;
 import j$.util.function.m;
+import j$.util.function.n;
 import j$.wrappers.CLASSNAMEb0;
 import j$.wrappers.V;
 import j$.wrappers.X;
@@ -26,7 +26,7 @@ class F0 extends CLASSNAMEh3 {
                 this.a.accept((long) i);
                 return;
             case 1:
-                ((k) ((M) this.c).m).accept(i);
+                ((l) ((M) this.c).m).accept(i);
                 this.a.accept(i);
                 return;
             case 2:
@@ -36,16 +36,16 @@ class F0 extends CLASSNAMEh3 {
                 this.a.accept(((CLASSNAMEb0) ((M) this.c).m).a(i));
                 return;
             case 4:
-                this.a.accept(((l) ((L) this.c).m).apply(i));
+                this.a.accept(((m) ((L) this.c).m).apply(i));
                 return;
             case 5:
-                this.a.accept(((m) ((N) this.c).m).applyAsLong(i));
+                this.a.accept(((n) ((N) this.c).m).applyAsLong(i));
                 return;
             case 6:
                 this.a.accept(((X) ((K) this.c).m).a(i));
                 return;
             case 7:
-                M0 m0 = (M0) ((l) ((M) this.c).m).apply(i);
+                M0 m0 = (M0) ((m) ((M) this.c).m).apply(i);
                 if (m0 != null) {
                     try {
                         m0.sequential().U(new B0(this));

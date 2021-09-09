@@ -91,6 +91,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     Paint paint;
     /* access modifiers changed from: private */
     public boolean popupAnimating;
+    private final Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public ValueAnimator sendButtonColorAnimator;
     boolean sendButtonEnabled = true;
@@ -126,12 +127,13 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto, View view) {
+    public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto, View view, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         Context context2 = context;
         Paint paint2 = new Paint();
         this.paint = paint2;
         this.offset = 0.0f;
+        this.resourcesProvider = resourcesProvider2;
         paint2.setColor(NUM);
         setWillNotDraw(false);
         setFocusable(true);
@@ -165,7 +167,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
         this.lengthTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.lengthTextPaint.setColor(-2500135);
-        AnonymousClass1 r7 = new EditTextCaption(context2) {
+        AnonymousClass1 r7 = new EditTextCaption(context2, (Theme.ResourcesProvider) null) {
             /* access modifiers changed from: protected */
             public int getActionModeStyle() {
                 return 2;
@@ -447,8 +449,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$afterTextChanged$0(ValueAnimator valueAnimator) {
                 float unused = PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-                int color = Theme.getColor("dialogFloatingIcon");
-                Theme.setDrawableColor(PhotoViewerCaptionEnterView.this.checkDrawable, ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * ((PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress * 0.42f) + 0.58f))));
+                int access$1200 = PhotoViewerCaptionEnterView.this.getThemedColor("dialogFloatingIcon");
+                Theme.setDrawableColor(PhotoViewerCaptionEnterView.this.checkDrawable, ColorUtils.setAlphaComponent(access$1200, (int) (((float) Color.alpha(access$1200)) * ((PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress * 0.42f) + 0.58f))));
                 PhotoViewerCaptionEnterView.this.doneButton.invalidate();
             }
         });
@@ -594,9 +596,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public void updateColors() {
-        Theme.setDrawableColor(this.doneDrawable, Theme.getColor("dialogFloatingButton"));
-        int color = Theme.getColor("dialogFloatingIcon");
-        Theme.setDrawableColor(this.checkDrawable, ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * ((this.sendButtonEnabledProgress * 0.42f) + 0.58f))));
+        Theme.setDrawableColor(this.doneDrawable, getThemedColor("dialogFloatingButton"));
+        int themedColor = getThemedColor("dialogFloatingIcon");
+        Theme.setDrawableColor(this.checkDrawable, ColorUtils.setAlphaComponent(themedColor, (int) (((float) Color.alpha(themedColor)) * ((this.sendButtonEnabledProgress * 0.42f) + 0.58f))));
         EmojiView emojiView2 = this.emojiView;
         if (emojiView2 != null) {
             emojiView2.updateColors();
@@ -673,7 +675,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null);
+            EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, (Theme.ResourcesProvider) null);
             this.emojiView = emojiView2;
             emojiView2.setDelegate(new EmojiView.EmojiViewDelegate() {
                 public /* synthetic */ boolean canSchedule() {
@@ -736,8 +738,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     EmojiView.EmojiViewDelegate.CC.$default$onStickerSetRemove(this, tLRPC$StickerSetCovered);
                 }
 
-                public /* synthetic */ void onStickersGroupClick(int i) {
-                    EmojiView.EmojiViewDelegate.CC.$default$onStickersGroupClick(this, i);
+                public /* synthetic */ void onStickersGroupClick(long j) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onStickersGroupClick(this, j);
                 }
 
                 public /* synthetic */ void onStickersSettingsClick() {
@@ -1039,5 +1041,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public EditTextCaption getMessageEditText() {
         return this.messageEditText;
+    }
+
+    /* access modifiers changed from: private */
+    public int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

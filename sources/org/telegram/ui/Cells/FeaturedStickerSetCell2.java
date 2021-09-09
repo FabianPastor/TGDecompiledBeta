@@ -26,13 +26,15 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
     private final BackupImageView imageView;
     private boolean isInstalled;
     private boolean needDivider;
+    private final Theme.ResourcesProvider resourcesProvider;
     private TLRPC$StickerSetCovered stickersSet;
     private final TextView textView;
     private final TextView valueTextView;
 
-    public FeaturedStickerSetCell2(Context context) {
+    public FeaturedStickerSetCell2(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         int i = UserConfig.selectedAccount;
+        this.resourcesProvider = resourcesProvider2;
         TextView textView2 = new TextView(context);
         this.textView = textView2;
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));

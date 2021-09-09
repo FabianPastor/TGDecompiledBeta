@@ -100,6 +100,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     private int[] pos = new int[2];
     private DispatchQueue queue;
     private RenderView renderView;
+    private final Theme.ResourcesProvider resourcesProvider;
     private int selectedTextType = 2;
     private FrameLayout selectionContainerView;
     private float[] temp = new float[2];
@@ -123,14 +124,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public void onTextAdd() {
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v37, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v40, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v41, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v38, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v41, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v42, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v43, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public PhotoPaintView(android.content.Context r24, android.graphics.Bitmap r25, android.graphics.Bitmap r26, int r27, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r28, org.telegram.messenger.MediaController.CropState r29, java.lang.Runnable r30) {
+    public PhotoPaintView(android.content.Context r24, android.graphics.Bitmap r25, android.graphics.Bitmap r26, int r27, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r28, org.telegram.messenger.MediaController.CropState r29, java.lang.Runnable r30, org.telegram.ui.ActionBar.Theme.ResourcesProvider r31) {
         /*
             r23 = this;
             r0 = r23
@@ -162,6 +163,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r0.selectedTextType = r9
             int[] r5 = new int[r9]
             r0.pos = r5
+            r5 = r31
+            r0.resourcesProvider = r5
             boolean r5 = r1 instanceof org.telegram.ui.BubbleActivity
             r0.inBubbleMode = r5
             r5 = r29
@@ -312,7 +315,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setTextSize(r8, r10)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "dialogFloatingButton"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            int r5 = r0.getThemedColor(r5)
             r2.setTextColor(r5)
             android.widget.TextView r2 = r0.doneTextView
             r2.setGravity(r11)
@@ -325,7 +328,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625259(0x7f0e052b, float:1.887772E38)
+            r10 = 2131625271(0x7f0e0537, float:1.8877745E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)
@@ -343,7 +346,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.paintButton
-            r4 = 2131165935(0x7var_ef, float:1.7946101E38)
+            r4 = 2131165938(0x7var_f2, float:1.7946107E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.paintButton
             r4 = 1090519039(0x40ffffff, float:7.9999995)
@@ -368,7 +371,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
-            r5 = 2131165939(0x7var_f3, float:1.794611E38)
+            r5 = 2131165942(0x7var_f6, float:1.7946115E38)
             r2.setImageResource(r5)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r5)
@@ -383,7 +386,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r1)
-            r1 = 2131165937(0x7var_f1, float:1.7946105E38)
+            r1 = 2131165940(0x7var_f4, float:1.7946111E38)
             r2.setImageResource(r1)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r1)
@@ -401,47 +404,47 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             org.telegram.ui.Components.Paint.Swatch r1 = r1.getSwatch()
             r0.setCurrentSwatch(r1, r7)
             r23.updateSettingsButton()
-            if (r3 == 0) goto L_0x036f
+            if (r3 == 0) goto L_0x0373
             boolean r1 = r28.isEmpty()
-            if (r1 != 0) goto L_0x036f
+            if (r1 != 0) goto L_0x0373
             int r1 = r28.size()
             r2 = 0
-        L_0x02af:
-            if (r2 >= r1) goto L_0x036f
+        L_0x02b3:
+            if (r2 >= r1) goto L_0x0373
             java.lang.Object r4 = r3.get(r2)
             org.telegram.messenger.VideoEditedInfo$MediaEntity r4 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r4
             byte r5 = r4.type
-            if (r5 != 0) goto L_0x02d8
+            if (r5 != 0) goto L_0x02dc
             java.lang.Object r5 = r4.parentObject
             org.telegram.tgnet.TLRPC$Document r6 = r4.document
             org.telegram.ui.Components.Paint.Views.StickerView r5 = r0.createSticker(r5, r6, r7)
             byte r6 = r4.subType
             r6 = r6 & r9
-            if (r6 == 0) goto L_0x02cb
+            if (r6 == 0) goto L_0x02cf
             r5.mirror()
-        L_0x02cb:
+        L_0x02cf:
             android.view.ViewGroup$LayoutParams r6 = r5.getLayoutParams()
             int r10 = r4.viewWidth
             r6.width = r10
             int r10 = r4.viewHeight
             r6.height = r10
-            goto L_0x0300
-        L_0x02d8:
-            if (r5 != r8) goto L_0x036b
+            goto L_0x0304
+        L_0x02dc:
+            if (r5 != r8) goto L_0x036f
             org.telegram.ui.Components.Paint.Views.TextPaintView r5 = r0.createText(r7)
             byte r6 = r4.subType
             r10 = r6 & 1
-            if (r10 == 0) goto L_0x02e6
+            if (r10 == 0) goto L_0x02ea
             r6 = 0
-            goto L_0x02ed
-        L_0x02e6:
+            goto L_0x02f1
+        L_0x02ea:
             r6 = r6 & 4
-            if (r6 == 0) goto L_0x02ec
+            if (r6 == 0) goto L_0x02f0
             r6 = 2
-            goto L_0x02ed
-        L_0x02ec:
+            goto L_0x02f1
+        L_0x02f0:
             r6 = 1
-        L_0x02ed:
+        L_0x02f1:
             r5.setType(r6)
             java.lang.String r6 = r4.text
             r5.setText(r6)
@@ -449,7 +452,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             int r10 = r4.color
             r6.color = r10
             r5.setSwatch(r6)
-        L_0x0300:
+        L_0x0304:
             float r6 = r4.x
             org.telegram.ui.Components.Size r10 = r0.paintingSize
             float r10 = r10.width
@@ -503,16 +506,16 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             double r10 = r10 * r12
             float r4 = (float) r10
             r5.setRotation(r4)
-        L_0x036b:
-            int r2 = r2 + 1
-            goto L_0x02af
         L_0x036f:
+            int r2 = r2 + 1
+            goto L_0x02b3
+        L_0x0373:
             org.telegram.ui.Components.Paint.Views.EntitiesContainerView r1 = r0.entitiesView
             r2 = 4
             r1.setVisibility(r2)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.<init>(android.content.Context, android.graphics.Bitmap, android.graphics.Bitmap, int, java.util.ArrayList, org.telegram.messenger.MediaController$CropState, java.lang.Runnable):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.<init>(android.content.Context, android.graphics.Bitmap, android.graphics.Bitmap, int, java.util.ArrayList, org.telegram.messenger.MediaController$CropState, java.lang.Runnable, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
     }
 
     /* access modifiers changed from: private */
@@ -608,7 +611,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 setCurrentSwatch(swatch, true);
                 this.brushSwatch = null;
             }
-            this.paintButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
+            this.paintButton.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
             this.paintButton.setImageResource(NUM);
         }
         this.colorPicker.setSettingsButtonImage(i);
@@ -617,11 +620,11 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public void updateColors() {
         ImageView imageView = this.paintButton;
         if (!(imageView == null || imageView.getColorFilter() == null)) {
-            this.paintButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
+            this.paintButton.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
         }
         TextView textView = this.doneTextView;
         if (textView != null) {
-            textView.setTextColor(Theme.getColor("dialogFloatingButton"));
+            textView.setTextColor(getThemedColor("dialogFloatingButton"));
         }
     }
 
@@ -1246,7 +1249,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     private void openStickersView() {
-        StickerMasksAlert stickerMasksAlert = new StickerMasksAlert(getContext(), this.facesBitmap == null);
+        StickerMasksAlert stickerMasksAlert = new StickerMasksAlert(getContext(), this.facesBitmap == null, this.resourcesProvider);
         stickerMasksAlert.setDelegate(new PhotoPaintView$$ExternalSyntheticLambda21(this));
         stickerMasksAlert.setOnDismissListener(new PhotoPaintView$$ExternalSyntheticLambda1(this));
         stickerMasksAlert.show();
@@ -1450,7 +1453,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(0);
         TextView textView = new TextView(getContext());
-        textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
+        textView.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
         textView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         textView.setGravity(16);
         textView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(14.0f), 0);
@@ -1461,7 +1464,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         linearLayout.addView(textView, LayoutHelper.createLinear(-2, 48));
         if (entityView instanceof TextPaintView) {
             TextView textView2 = new TextView(getContext());
-            textView2.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
+            textView2.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
             textView2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             textView2.setGravity(16);
             textView2.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
@@ -1472,7 +1475,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             linearLayout.addView(textView2, LayoutHelper.createLinear(-2, 48));
         }
         TextView textView3 = new TextView(getContext());
-        textView3.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
+        textView3.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
         textView3.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         textView3.setGravity(16);
         textView3.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(16.0f), 0);
@@ -1528,10 +1531,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         ImageView imageView = new ImageView(getContext());
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setImageResource(i2);
-        imageView.setColorFilter(Theme.getColor("actionBarDefaultSubmenuItem"));
+        imageView.setColorFilter(getThemedColor("actionBarDefaultSubmenuItem"));
         r0.addView(imageView, LayoutHelper.createLinear(-2, -2, 19, 16, 0, 16, 0));
         TextView textView = new TextView(getContext());
-        textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
+        textView.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
         textView.setTextSize(1, 16.0f);
         textView.setText(str);
         textView.setMinWidth(AndroidUtilities.dp(70.0f));
@@ -1539,7 +1542,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         ImageView imageView2 = new ImageView(getContext());
         imageView2.setImageResource(NUM);
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
+        imageView2.setColorFilter(new PorterDuffColorFilter(getThemedColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
         if (!z) {
             i3 = 4;
         }
@@ -1587,10 +1590,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         ImageView imageView = new ImageView(getContext());
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setImageResource(i2);
-        imageView.setColorFilter(Theme.getColor("actionBarDefaultSubmenuItem"));
+        imageView.setColorFilter(getThemedColor("actionBarDefaultSubmenuItem"));
         r0.addView(imageView, LayoutHelper.createLinear(-2, -2, 19, 16, 0, 16, 0));
         TextView textView = new TextView(getContext());
-        textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
+        textView.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
         textView.setTextSize(1, 16.0f);
         textView.setText(str);
         r0.addView(textView, LayoutHelper.createLinear(-2, -2, 19, 0, 0, 16, 0));
@@ -1598,7 +1601,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             ImageView imageView2 = new ImageView(getContext());
             imageView2.setImageResource(NUM);
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
-            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
+            imageView2.setColorFilter(new PorterDuffColorFilter(getThemedColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
             r0.addView(imageView2, LayoutHelper.createLinear(50, -1));
         }
         return r0;
@@ -1925,6 +1928,12 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             }
         }
         return false;
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 
     private static class StickerPosition {

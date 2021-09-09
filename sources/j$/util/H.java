@@ -1,7 +1,7 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.p;
+import j$.util.function.q;
 import java.util.Comparator;
 
 final class H extends J implements w {
@@ -12,8 +12,8 @@ final class H extends J implements w {
         return CLASSNAMEa.l(this, consumer);
     }
 
-    public void d(p pVar) {
-        pVar.getClass();
+    public void d(q qVar) {
+        qVar.getClass();
     }
 
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
@@ -32,8 +32,8 @@ final class H extends J implements w {
         return CLASSNAMEa.f(this, i);
     }
 
-    public boolean i(p pVar) {
-        pVar.getClass();
+    public boolean i(q qVar) {
+        qVar.getClass();
         return false;
     }
 }

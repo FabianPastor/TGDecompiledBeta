@@ -23,7 +23,7 @@ public class TLRPC$TL_user_layer104 extends TLRPC$TL_user {
             z2 = true;
         }
         this.scam = z2;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         if ((this.flags & 1) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
         }
@@ -88,7 +88,7 @@ public class TLRPC$TL_user_layer104 extends TLRPC$TL_user {
         int i13 = this.scam ? i12 | 16777216 : i12 & -16777217;
         this.flags = i13;
         abstractSerializedData.writeInt32(i13);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
         }

@@ -27,6 +27,7 @@ public class ChatGreetingsView extends LinearLayout {
     boolean ignoreLayot;
     private Listener listener;
     private TLRPC$Document preloadedGreetingsSticker;
+    private final Theme.ResourcesProvider resourcesProvider;
     public BackupImageView stickerToSendView;
     private TextView titleView;
 
@@ -34,10 +35,11 @@ public class ChatGreetingsView extends LinearLayout {
         void onGreetings(TLRPC$Document tLRPC$Document);
     }
 
-    public ChatGreetingsView(Context context, TLRPC$User tLRPC$User, int i, int i2, TLRPC$Document tLRPC$Document) {
+    public ChatGreetingsView(Context context, TLRPC$User tLRPC$User, int i, int i2, TLRPC$Document tLRPC$Document, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         setOrientation(1);
         this.currentAccount = i2;
+        this.resourcesProvider = resourcesProvider2;
         TextView textView = new TextView(context);
         this.titleView = textView;
         textView.setTextSize(1, 14.0f);
@@ -137,8 +139,8 @@ public class ChatGreetingsView extends LinearLayout {
     }
 
     private void updateColors() {
-        this.titleView.setTextColor(Theme.getColor("chat_serviceText"));
-        this.descriptionView.setTextColor(Theme.getColor("chat_serviceText"));
+        this.titleView.setTextColor(getThemedColor("chat_serviceText"));
+        this.descriptionView.setTextColor(getThemedColor("chat_serviceText"));
     }
 
     public void setListener(Listener listener2) {
@@ -185,5 +187,11 @@ public class ChatGreetingsView extends LinearLayout {
             this.preloadedGreetingsSticker = greetingsSticker;
             setSticker(greetingsSticker);
         }
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

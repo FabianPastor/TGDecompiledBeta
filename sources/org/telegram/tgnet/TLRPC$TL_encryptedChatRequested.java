@@ -12,8 +12,8 @@ public class TLRPC$TL_encryptedChatRequested extends TLRPC$EncryptedChat {
         this.id = abstractSerializedData.readInt32(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.date = abstractSerializedData.readInt32(z);
-        this.admin_id = abstractSerializedData.readInt32(z);
-        this.participant_id = abstractSerializedData.readInt32(z);
+        this.admin_id = abstractSerializedData.readInt64(z);
+        this.participant_id = abstractSerializedData.readInt64(z);
         this.g_a = abstractSerializedData.readByteArray(z);
     }
 
@@ -26,8 +26,8 @@ public class TLRPC$TL_encryptedChatRequested extends TLRPC$EncryptedChat {
         abstractSerializedData.writeInt32(this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeInt32(this.date);
-        abstractSerializedData.writeInt32(this.admin_id);
-        abstractSerializedData.writeInt32(this.participant_id);
+        abstractSerializedData.writeInt64(this.admin_id);
+        abstractSerializedData.writeInt64(this.participant_id);
         abstractSerializedData.writeByteArray(this.g_a);
     }
 }

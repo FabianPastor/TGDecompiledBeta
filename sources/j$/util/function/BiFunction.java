@@ -1,7 +1,7 @@
 package j$.util.function;
 
 public interface BiFunction<T, U, R> {
-    Object apply(Object obj, Object obj2);
+    BiFunction andThen(Function function);
 
-    BiFunction b(Function function);
+    Object apply(Object obj, Object obj2);
 }

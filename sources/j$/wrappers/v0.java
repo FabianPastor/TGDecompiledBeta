@@ -1,16 +1,16 @@
 package j$.wrappers;
 
-import j$.util.function.v;
+import j$.util.function.w;
 import java.util.function.ObjLongConsumer;
 
-public final /* synthetic */ class v0 implements v {
+public final /* synthetic */ class v0 implements w {
     final /* synthetic */ ObjLongConsumer a;
 
     private /* synthetic */ v0(ObjLongConsumer objLongConsumer) {
         this.a = objLongConsumer;
     }
 
-    public static /* synthetic */ v a(ObjLongConsumer objLongConsumer) {
+    public static /* synthetic */ w a(ObjLongConsumer objLongConsumer) {
         if (objLongConsumer == null) {
             return null;
         }

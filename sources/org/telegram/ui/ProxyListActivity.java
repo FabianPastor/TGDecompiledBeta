@@ -613,14 +613,12 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             } else if (i == 3) {
                 view = new TextCheckCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-            } else if (i == 4) {
-                view = new TextInfoPrivacyCell(this.mContext);
-                view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-            } else if (i != 5) {
-                view = null;
-            } else {
+            } else if (i != 4) {
                 view = new TextDetailProxyCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+            } else {
+                view = new TextInfoPrivacyCell(this.mContext);
+                view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
             return new RecyclerListView.Holder(view);

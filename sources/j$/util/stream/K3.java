@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.y;
 import java.util.Arrays;
 
@@ -9,11 +9,11 @@ final class K3 extends Q {
         super(cVar, CLASSNAMEf4.DOUBLE_VALUE, CLASSNAMEe4.q | CLASSNAMEe4.o);
     }
 
-    public B1 E0(CLASSNAMEz2 z2Var, y yVar, l lVar) {
+    public B1 E0(CLASSNAMEz2 z2Var, y yVar, m mVar) {
         if (CLASSNAMEe4.SORTED.d(z2Var.s0())) {
-            return z2Var.p0(yVar, false, lVar);
+            return z2Var.p0(yVar, false, mVar);
         }
-        double[] dArr = (double[]) ((CLASSNAMEv1) z2Var.p0(yVar, true, lVar)).e();
+        double[] dArr = (double[]) ((CLASSNAMEv1) z2Var.p0(yVar, true, mVar)).e();
         Arrays.sort(dArr);
         return new U1(dArr);
     }

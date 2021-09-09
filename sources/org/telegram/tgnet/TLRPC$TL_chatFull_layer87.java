@@ -4,7 +4,7 @@ public class TLRPC$TL_chatFull_layer87 extends TLRPC$TL_chatFull {
     public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         this.participants = TLRPC$ChatParticipants.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.chat_photo = TLRPC$Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.notify_settings = TLRPC$PeerNotifySettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -32,7 +32,7 @@ public class TLRPC$TL_chatFull_layer87 extends TLRPC$TL_chatFull {
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         this.participants.serializeToStream(abstractSerializedData);
         this.chat_photo.serializeToStream(abstractSerializedData);
         this.notify_settings.serializeToStream(abstractSerializedData);

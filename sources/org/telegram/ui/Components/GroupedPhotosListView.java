@@ -59,7 +59,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     private ArrayList<ImageReceiver> unusedReceivers = new ArrayList<>();
 
     public interface GroupedPhotosListViewDelegate {
-        int getAvatarsDialogId();
+        long getAvatarsDialogId();
 
         int getCurrentAccount();
 

@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda30
     }
 
     public final void run() {
-        this.f$0.lambda$onFolderEmpty$150(this.f$1);
+        this.f$0.lambda$didAddedNewTask$53(this.f$1);
     }
 }

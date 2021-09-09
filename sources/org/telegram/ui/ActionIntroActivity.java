@@ -474,7 +474,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     this.desctiptionLines[i9].setText(spannableStringBuilder);
                 } else if (i5 == 1) {
                     this.desctiptionLines[i9].setText(LocaleController.getString("AuthAnotherClientInfo2", NUM));
-                } else if (i5 == 2) {
+                } else {
                     this.desctiptionLines[i9].setText(LocaleController.getString("AuthAnotherClientInfo3", NUM));
                 }
                 if (LocaleController.isRTL) {
@@ -578,7 +578,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             this.imageView.setImageDrawable(new CombinedDrawable(this.drawable1, this.drawable2));
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
             UserConfig userConfig = getUserConfig();
-            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(userConfig.clientUserId));
+            TLRPC$User user = getMessagesController().getUser(Long.valueOf(userConfig.clientUserId));
             if (user == null) {
                 user = userConfig.getCurrentUser();
             }
@@ -647,9 +647,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 }
             } else if (this.currentGroupCreateAddress != null && this.currentGroupCreateLocation != null) {
                 Bundle bundle2 = new Bundle();
-                ArrayList arrayList = new ArrayList();
-                arrayList.add(Integer.valueOf(getUserConfig().getClientUserId()));
-                bundle2.putIntegerArrayList("result", arrayList);
+                bundle2.putLongArray("result", new long[]{getUserConfig().getClientUserId()});
                 bundle2.putInt("chatType", 4);
                 bundle2.putString("address", this.currentGroupCreateAddress);
                 bundle2.putParcelable("location", this.currentGroupCreateLocation);

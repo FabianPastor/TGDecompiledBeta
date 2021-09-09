@@ -21,10 +21,12 @@ public class LocationCell extends FrameLayout {
     private BackupImageView imageView;
     private TextView nameTextView;
     private boolean needDivider;
+    private final Theme.ResourcesProvider resourcesProvider;
     private boolean wrapContent;
 
-    public LocationCell(Context context, boolean z) {
+    public LocationCell(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         this.wrapContent = z;
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
@@ -42,7 +44,7 @@ public class LocationCell extends FrameLayout {
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.nameTextView.setSingleLine(true);
-        this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.nameTextView.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         TextView textView2 = this.nameTextView;
@@ -55,7 +57,7 @@ public class LocationCell extends FrameLayout {
         this.addressTextView.setMaxLines(1);
         this.addressTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.addressTextView.setSingleLine(true);
-        this.addressTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+        this.addressTextView.setTextColor(getThemedColor("windowBackgroundWhiteGrayText3"));
         this.addressTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         TextView textView4 = this.addressTextView;
         boolean z4 = LocaleController.isRTL;
@@ -117,5 +119,11 @@ public class LocationCell extends FrameLayout {
         if (this.needDivider) {
             canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
         }
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

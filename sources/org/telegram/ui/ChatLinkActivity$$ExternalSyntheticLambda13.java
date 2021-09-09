@@ -3,7 +3,7 @@ package org.telegram.ui;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda13 implements MessagesStorage.IntCallback {
+public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda13 implements MessagesStorage.LongCallback {
     public final /* synthetic */ ChatLinkActivity f$0;
     public final /* synthetic */ BaseFragment f$1;
 
@@ -12,7 +12,7 @@ public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda13 i
         this.f$1 = baseFragment;
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$linkChat$10(this.f$1, i);
+    public final void run(long j) {
+        this.f$0.lambda$linkChat$10(this.f$1, j);
     }
 }

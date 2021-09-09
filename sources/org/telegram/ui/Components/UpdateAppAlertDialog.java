@@ -129,7 +129,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r0.setApplyTopPadding(r3)
             r0.setApplyBottomPadding(r3)
             android.content.res.Resources r5 = r21.getResources()
-            r6 = 2131166044(0x7var_c, float:1.7946322E38)
+            r6 = 2131166047(0x7var_f, float:1.7946328E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             r0.shadowDrawable = r5

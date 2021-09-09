@@ -175,6 +175,7 @@ import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgress;
 import org.telegram.ui.Components.SlideView;
+import org.telegram.ui.CountrySelectActivity;
 import org.telegram.ui.PhotoViewer;
 
 public class PassportActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -199,7 +200,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public int currentActivityType;
     /* access modifiers changed from: private */
-    public int currentBotId;
+    public long currentBotId;
     /* access modifiers changed from: private */
     public String currentCallbackUrl;
     /* access modifiers changed from: private */
@@ -661,11 +662,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* JADX WARNING: Removed duplicated region for block: B:94:0x022f A[Catch:{ Exception -> 0x023d }] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public PassportActivity(int r20, int r21, java.lang.String r22, java.lang.String r23, java.lang.String r24, java.lang.String r25, java.lang.String r26, org.telegram.tgnet.TLRPC$TL_account_authorizationForm r27, org.telegram.tgnet.TLRPC$TL_account_password r28) {
+    public PassportActivity(int r20, long r21, java.lang.String r23, java.lang.String r24, java.lang.String r25, java.lang.String r26, java.lang.String r27, org.telegram.tgnet.TLRPC$TL_account_authorizationForm r28, org.telegram.tgnet.TLRPC$TL_account_password r29) {
         /*
             r19 = this;
             r10 = r19
-            r11 = r27
+            r11 = r28
             r4 = 0
             r5 = 0
             r6 = 0
@@ -674,20 +675,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r9 = 0
             r0 = r19
             r1 = r20
-            r2 = r27
-            r3 = r28
+            r2 = r28
+            r3 = r29
             r0.<init>((int) r1, (org.telegram.tgnet.TLRPC$TL_account_authorizationForm) r2, (org.telegram.tgnet.TLRPC$TL_account_password) r3, (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r4, (org.telegram.tgnet.TLRPC$TL_secureValue) r5, (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r6, (org.telegram.tgnet.TLRPC$TL_secureValue) r7, (java.util.HashMap<java.lang.String, java.lang.String>) r8, (java.util.HashMap<java.lang.String, java.lang.String>) r9)
             r0 = r21
             r10.currentBotId = r0
-            r0 = r24
-            r10.currentPayload = r0
             r0 = r25
-            r10.currentNonce = r0
-            r0 = r22
-            r10.currentScope = r0
-            r0 = r23
-            r10.currentPublicKey = r0
+            r10.currentPayload = r0
             r0 = r26
+            r10.currentNonce = r0
+            r0 = r23
+            r10.currentScope = r0
+            r0 = r24
+            r10.currentPublicKey = r0
+            r0 = r27
             r10.currentCallbackUrl = r0
             if (r20 != 0) goto L_0x023d
             java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors
@@ -991,7 +992,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x023d:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.<init>(int, int, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.telegram.tgnet.TLRPC$TL_account_authorizationForm, org.telegram.tgnet.TLRPC$TL_account_password):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.<init>(int, long, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.telegram.tgnet.TLRPC$TL_account_authorizationForm, org.telegram.tgnet.TLRPC$TL_account_password):void");
     }
 
     public PassportActivity(int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_password tLRPC$TL_account_password, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureValue tLRPC$TL_secureValue, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, TLRPC$TL_secureValue tLRPC$TL_secureValue2, HashMap<String, String> hashMap, HashMap<String, String> hashMap2) {
@@ -1270,7 +1271,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r1 = org.telegram.ui.PassportActivity.this
                     org.telegram.ui.Components.EditTextBoldCursor[] r1 = r1.inputFields
                     r1 = r1[r12]
-                    r2 = 2131626877(0x7f0e0b7d, float:1.8881003E38)
+                    r2 = 2131626901(0x7f0e0b95, float:1.8881051E38)
                     java.lang.String r3 = "PassportUseLatinOnly"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                     r1.setErrorText(r2)
@@ -1342,7 +1343,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r0 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r0 = r0.getParentActivity()
                     r13.<init>((android.content.Context) r0)
-                    r0 = 2131626823(0x7f0e0b47, float:1.8880893E38)
+                    r0 = 2131626847(0x7f0e0b5f, float:1.8880942E38)
                     java.lang.Object[] r1 = new java.lang.Object[r9]
                     r1[r8] = r2
                     r1[r11] = r3
@@ -1354,7 +1355,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     java.lang.String r1 = "AppName"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r13.setTitle(r0)
-                    r0 = 2131625259(0x7f0e052b, float:1.887772E38)
+                    r0 = 2131625271(0x7f0e0537, float:1.8877745E38)
                     java.lang.String r1 = "Done"
                     java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda1 r15 = new org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda1
@@ -1364,7 +1365,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     r6 = r27
                     r0.<init>(r1, r2, r3, r4, r5, r6)
                     r13.setPositiveButton(r14, r15)
-                    r0 = 2131625261(0x7f0e052d, float:1.8877725E38)
+                    r0 = 2131625273(0x7f0e0539, float:1.887775E38)
                     java.lang.String r1 = "Edit"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda0 r1 = new org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda0
@@ -1727,7 +1728,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r2 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r2 = r2.getParentActivity()
                     r1.<init>(r2)
-                    r2 = 2131626767(0x7f0e0b0f, float:1.888078E38)
+                    r2 = 2131626791(0x7f0e0b27, float:1.8880828E38)
                     java.lang.String r7 = "PassportInfo2"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r7, r2)
                     android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder
@@ -1743,7 +1744,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     int r3 = r9 + 1
                     r7.replace(r9, r3, r8)
                     org.telegram.ui.PassportActivity$3$1 r3 = new org.telegram.ui.PassportActivity$3$1
-                    r8 = 2131626769(0x7f0e0b11, float:1.8880784E38)
+                    r8 = 2131626793(0x7f0e0b29, float:1.8880832E38)
                     java.lang.String r10 = "PassportInfoUrl"
                     java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                     r3.<init>(r8)
@@ -1775,11 +1776,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     android.app.Activity r3 = r3.getParentActivity()
                     r2.<init>((android.content.Context) r3)
                     r2.setView(r1)
-                    r1 = 2131626768(0x7f0e0b10, float:1.8880782E38)
+                    r1 = 2131626792(0x7f0e0b28, float:1.888083E38)
                     java.lang.String r3 = "PassportInfoTitle"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setTitle(r1)
-                    r1 = 2131624957(0x7f0e03fd, float:1.8877108E38)
+                    r1 = 2131624969(0x7f0e0409, float:1.8877133E38)
                     java.lang.String r3 = "Close"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setNegativeButton(r1, r5)
@@ -2765,278 +2766,602 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         return (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypeUtilityBill) || (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypeBankStatement) || (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypePassportRegistration) || (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypeTemporaryRegistration) || (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypeRentalAgreement);
     }
 
-    private void createRequestInterface(Context context) {
-        TLRPC$User tLRPC$User;
-        ArrayList arrayList;
-        int i;
-        boolean z;
-        ArrayList arrayList2;
-        TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType;
-        TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2;
-        ArrayList arrayList3;
-        TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType3;
-        ArrayList arrayList4;
-        ArrayList arrayList5;
-        Context context2 = context;
-        int i2 = 0;
-        if (this.currentForm != null) {
-            int i3 = 0;
-            while (true) {
-                if (i3 >= this.currentForm.users.size()) {
-                    break;
-                }
-                TLRPC$User tLRPC$User2 = this.currentForm.users.get(i3);
-                if (tLRPC$User2.id == this.currentBotId) {
-                    tLRPC$User = tLRPC$User2;
-                    break;
-                }
-                i3++;
-            }
-        }
-        tLRPC$User = null;
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
-        this.actionBar.setTitle(LocaleController.getString("TelegramPassport", NUM));
-        this.actionBar.createMenu().addItem(1, NUM);
-        if (tLRPC$User != null) {
-            FrameLayout frameLayout2 = new FrameLayout(context2);
-            this.linearLayout2.addView(frameLayout2, LayoutHelper.createLinear(-1, 100));
-            BackupImageView backupImageView = new BackupImageView(context2);
-            backupImageView.setRoundRadius(AndroidUtilities.dp(32.0f));
-            frameLayout2.addView(backupImageView, LayoutHelper.createFrame(64, 64.0f, 17, 0.0f, 8.0f, 0.0f, 0.0f));
-            backupImageView.setForUserOrChat(tLRPC$User, new AvatarDrawable(tLRPC$User));
-            TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context2);
-            this.bottomCell = textInfoPrivacyCell;
-            textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
-            this.bottomCell.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PassportRequest", NUM, UserObject.getFirstName(tLRPC$User))));
-            this.bottomCell.getTextView().setGravity(1);
-            ((FrameLayout.LayoutParams) this.bottomCell.getTextView().getLayoutParams()).gravity = 1;
-            this.linearLayout2.addView(this.bottomCell, LayoutHelper.createLinear(-1, -2));
-        }
-        HeaderCell headerCell2 = new HeaderCell(context2);
-        this.headerCell = headerCell2;
-        headerCell2.setText(LocaleController.getString("PassportRequestedInformation", NUM));
-        this.headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        this.linearLayout2.addView(this.headerCell, LayoutHelper.createLinear(-1, -2));
-        TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm = this.currentForm;
-        if (tLRPC$TL_account_authorizationForm != null) {
-            int size = tLRPC$TL_account_authorizationForm.required_types.size();
-            ArrayList arrayList6 = new ArrayList();
-            ArrayList arrayList7 = new ArrayList();
-            int i4 = 0;
-            boolean z2 = false;
-            int i5 = 0;
-            int i6 = 0;
-            boolean z3 = false;
-            while (i4 < size) {
-                TLRPC$SecureRequiredType tLRPC$SecureRequiredType = this.currentForm.required_types.get(i4);
-                if (tLRPC$SecureRequiredType instanceof TLRPC$TL_secureRequiredType) {
-                    TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType4 = (TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType;
-                    if (isPersonalDocument(tLRPC$TL_secureRequiredType4.type)) {
-                        arrayList6.add(tLRPC$TL_secureRequiredType4);
-                        i5++;
-                    } else if (isAddressDocument(tLRPC$TL_secureRequiredType4.type)) {
-                        arrayList7.add(tLRPC$TL_secureRequiredType4);
-                        i6++;
-                    } else {
-                        TLRPC$SecureValueType tLRPC$SecureValueType = tLRPC$TL_secureRequiredType4.type;
-                        if (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypePersonalDetails) {
-                            z2 = true;
-                        } else if (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypeAddress) {
-                            z3 = true;
-                        }
-                    }
-                } else if (tLRPC$SecureRequiredType instanceof TLRPC$TL_secureRequiredTypeOneOf) {
-                    TLRPC$TL_secureRequiredTypeOneOf tLRPC$TL_secureRequiredTypeOneOf = (TLRPC$TL_secureRequiredTypeOneOf) tLRPC$SecureRequiredType;
-                    if (!tLRPC$TL_secureRequiredTypeOneOf.types.isEmpty()) {
-                        TLRPC$SecureRequiredType tLRPC$SecureRequiredType2 = tLRPC$TL_secureRequiredTypeOneOf.types.get(i2);
-                        if (tLRPC$SecureRequiredType2 instanceof TLRPC$TL_secureRequiredType) {
-                            TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType5 = (TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType2;
-                            if (isPersonalDocument(tLRPC$TL_secureRequiredType5.type)) {
-                                int size2 = tLRPC$TL_secureRequiredTypeOneOf.types.size();
-                                int i7 = 0;
-                                while (i7 < size2) {
-                                    TLRPC$SecureRequiredType tLRPC$SecureRequiredType3 = tLRPC$TL_secureRequiredTypeOneOf.types.get(i7);
-                                    int i8 = size2;
-                                    if (tLRPC$SecureRequiredType3 instanceof TLRPC$TL_secureRequiredType) {
-                                        arrayList6.add((TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType3);
-                                    }
-                                    i7++;
-                                    size2 = i8;
-                                }
-                                i5++;
-                            } else if (isAddressDocument(tLRPC$TL_secureRequiredType5.type)) {
-                                int size3 = tLRPC$TL_secureRequiredTypeOneOf.types.size();
-                                int i9 = 0;
-                                while (i9 < size3) {
-                                    TLRPC$SecureRequiredType tLRPC$SecureRequiredType4 = tLRPC$TL_secureRequiredTypeOneOf.types.get(i9);
-                                    ArrayList arrayList8 = arrayList6;
-                                    if (tLRPC$SecureRequiredType4 instanceof TLRPC$TL_secureRequiredType) {
-                                        arrayList7.add((TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType4);
-                                    }
-                                    i9++;
-                                    arrayList6 = arrayList8;
-                                }
-                                arrayList5 = arrayList6;
-                                i6++;
-                                i4++;
-                                arrayList6 = arrayList5;
-                                i2 = 0;
-                            }
-                        }
-                    }
-                }
-                arrayList5 = arrayList6;
-                i4++;
-                arrayList6 = arrayList5;
-                i2 = 0;
-            }
-            ArrayList arrayList9 = arrayList6;
-            boolean z4 = !z2 || i5 > 1;
-            boolean z5 = !z3 || i6 > 1;
-            int i10 = 0;
-            while (i10 < size) {
-                TLRPC$SecureRequiredType tLRPC$SecureRequiredType5 = this.currentForm.required_types.get(i10);
-                if (tLRPC$SecureRequiredType5 instanceof TLRPC$TL_secureRequiredType) {
-                    TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType6 = (TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType5;
-                    TLRPC$SecureValueType tLRPC$SecureValueType2 = tLRPC$TL_secureRequiredType6.type;
-                    if ((tLRPC$SecureValueType2 instanceof TLRPC$TL_secureValueTypePhone) || (tLRPC$SecureValueType2 instanceof TLRPC$TL_secureValueTypeEmail)) {
-                        tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType6;
-                        arrayList2 = null;
-                    } else {
-                        if (tLRPC$SecureValueType2 instanceof TLRPC$TL_secureValueTypePersonalDetails) {
-                            if (!z4) {
-                                arrayList4 = arrayList9;
-                                tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType6;
-                                arrayList2 = arrayList4;
-                            }
-                        } else if (!(tLRPC$SecureValueType2 instanceof TLRPC$TL_secureValueTypeAddress)) {
-                            if (!z4 || !isPersonalDocument(tLRPC$SecureValueType2)) {
-                                if (z5 && isAddressDocument(tLRPC$TL_secureRequiredType6.type)) {
-                                    arrayList3 = new ArrayList();
-                                    arrayList3.add(tLRPC$TL_secureRequiredType6);
-                                    tLRPC$TL_secureRequiredType3 = new TLRPC$TL_secureRequiredType();
-                                    tLRPC$TL_secureRequiredType3.type = new TLRPC$TL_secureValueTypeAddress();
-                                }
-                                arrayList = arrayList7;
-                                i = size;
-                                i10++;
-                                size = i;
-                                arrayList7 = arrayList;
-                            } else {
-                                arrayList3 = new ArrayList();
-                                arrayList3.add(tLRPC$TL_secureRequiredType6);
-                                tLRPC$TL_secureRequiredType3 = new TLRPC$TL_secureRequiredType();
-                                tLRPC$TL_secureRequiredType3.type = new TLRPC$TL_secureValueTypePersonalDetails();
-                            }
-                            tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType3;
-                            arrayList2 = arrayList3;
-                            z = true;
-                        } else if (!z5) {
-                            arrayList4 = arrayList7;
-                            tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType6;
-                            arrayList2 = arrayList4;
-                        }
-                        arrayList4 = null;
-                        tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType6;
-                        arrayList2 = arrayList4;
-                    }
-                    z = false;
-                } else {
-                    if (tLRPC$SecureRequiredType5 instanceof TLRPC$TL_secureRequiredTypeOneOf) {
-                        TLRPC$TL_secureRequiredTypeOneOf tLRPC$TL_secureRequiredTypeOneOf2 = (TLRPC$TL_secureRequiredTypeOneOf) tLRPC$SecureRequiredType5;
-                        if (!tLRPC$TL_secureRequiredTypeOneOf2.types.isEmpty()) {
-                            TLRPC$SecureRequiredType tLRPC$SecureRequiredType6 = tLRPC$TL_secureRequiredTypeOneOf2.types.get(0);
-                            if (tLRPC$SecureRequiredType6 instanceof TLRPC$TL_secureRequiredType) {
-                                TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType7 = (TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType6;
-                                if ((z4 && isPersonalDocument(tLRPC$TL_secureRequiredType7.type)) || (z5 && isAddressDocument(tLRPC$TL_secureRequiredType7.type))) {
-                                    ArrayList arrayList10 = new ArrayList();
-                                    int size4 = tLRPC$TL_secureRequiredTypeOneOf2.types.size();
-                                    int i11 = 0;
-                                    while (i11 < size4) {
-                                        TLRPC$SecureRequiredType tLRPC$SecureRequiredType7 = tLRPC$TL_secureRequiredTypeOneOf2.types.get(i11);
-                                        TLRPC$TL_secureRequiredTypeOneOf tLRPC$TL_secureRequiredTypeOneOf3 = tLRPC$TL_secureRequiredTypeOneOf2;
-                                        if (tLRPC$SecureRequiredType7 instanceof TLRPC$TL_secureRequiredType) {
-                                            arrayList10.add((TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType7);
-                                        }
-                                        i11++;
-                                        tLRPC$TL_secureRequiredTypeOneOf2 = tLRPC$TL_secureRequiredTypeOneOf3;
-                                    }
-                                    if (isPersonalDocument(tLRPC$TL_secureRequiredType7.type)) {
-                                        tLRPC$TL_secureRequiredType2 = new TLRPC$TL_secureRequiredType();
-                                        tLRPC$TL_secureRequiredType2.type = new TLRPC$TL_secureValueTypePersonalDetails();
-                                    } else {
-                                        tLRPC$TL_secureRequiredType2 = new TLRPC$TL_secureRequiredType();
-                                        tLRPC$TL_secureRequiredType2.type = new TLRPC$TL_secureValueTypeAddress();
-                                    }
-                                    arrayList2 = arrayList10;
-                                    z = true;
-                                    tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType2;
-                                }
-                            }
-                        }
-                    }
-                    arrayList = arrayList7;
-                    i = size;
-                    i10++;
-                    size = i;
-                    arrayList7 = arrayList;
-                }
-                arrayList = arrayList7;
-                ArrayList arrayList11 = arrayList2;
-                boolean z6 = z;
-                i = size;
-                addField(context, tLRPC$TL_secureRequiredType, arrayList11, z6, i10 == size + -1);
-                i10++;
-                size = i;
-                arrayList7 = arrayList;
-            }
-        }
-        if (tLRPC$User != null) {
-            TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(context2);
-            this.bottomCell = textInfoPrivacyCell2;
-            textInfoPrivacyCell2.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
-            this.bottomCell.setLinkTextColorKey("windowBackgroundWhiteGrayText4");
-            if (!TextUtils.isEmpty(this.currentForm.privacy_policy_url)) {
-                String formatString = LocaleController.formatString("PassportPolicy", NUM, UserObject.getFirstName(tLRPC$User), tLRPC$User.username);
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(formatString);
-                int indexOf = formatString.indexOf(42);
-                int lastIndexOf = formatString.lastIndexOf(42);
-                if (!(indexOf == -1 || lastIndexOf == -1)) {
-                    this.bottomCell.getTextView().setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
-                    spannableStringBuilder.replace(lastIndexOf, lastIndexOf + 1, "");
-                    spannableStringBuilder.replace(indexOf, indexOf + 1, "");
-                    spannableStringBuilder.setSpan(new LinkSpan(), indexOf, lastIndexOf - 1, 33);
-                }
-                this.bottomCell.setText(spannableStringBuilder);
-            } else {
-                this.bottomCell.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PassportNoPolicy", NUM, UserObject.getFirstName(tLRPC$User), tLRPC$User.username)));
-            }
-            this.bottomCell.getTextView().setHighlightColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
-            this.bottomCell.getTextView().setGravity(1);
-            this.linearLayout2.addView(this.bottomCell, LayoutHelper.createLinear(-1, -2));
-        }
-        FrameLayout frameLayout3 = new FrameLayout(context2);
-        this.bottomLayout = frameLayout3;
-        frameLayout3.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor("passport_authorizeBackground"), Theme.getColor("passport_authorizeBackgroundSelected")));
-        frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
-        this.bottomLayout.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda28(this));
-        TextView textView = new TextView(context2);
-        this.acceptTextView = textView;
-        textView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
-        this.acceptTextView.setCompoundDrawablesWithIntrinsicBounds(NUM, 0, 0, 0);
-        this.acceptTextView.setTextColor(Theme.getColor("passport_authorizeText"));
-        this.acceptTextView.setText(LocaleController.getString("PassportAuthorize", NUM));
-        this.acceptTextView.setTextSize(1, 14.0f);
-        this.acceptTextView.setGravity(17);
-        this.acceptTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.bottomLayout.addView(this.acceptTextView, LayoutHelper.createFrame(-2, -1, 17));
-        ContextProgressView contextProgressView = new ContextProgressView(context2, 0);
-        this.progressViewButton = contextProgressView;
-        contextProgressView.setVisibility(4);
-        this.bottomLayout.addView(this.progressViewButton, LayoutHelper.createFrame(-1, -1.0f));
-        View view = new View(context2);
-        view.setBackgroundResource(NUM);
-        frameLayout.addView(view, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x030d  */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x0052  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0107  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void createRequestInterface(android.content.Context r24) {
+        /*
+            r23 = this;
+            r6 = r23
+            r7 = r24
+            org.telegram.tgnet.TLRPC$TL_account_authorizationForm r0 = r6.currentForm
+            r9 = 0
+            if (r0 == 0) goto L_0x002b
+            r0 = 0
+        L_0x000a:
+            org.telegram.tgnet.TLRPC$TL_account_authorizationForm r1 = r6.currentForm
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r1 = r1.users
+            int r1 = r1.size()
+            if (r0 >= r1) goto L_0x002b
+            org.telegram.tgnet.TLRPC$TL_account_authorizationForm r1 = r6.currentForm
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r1 = r1.users
+            java.lang.Object r1 = r1.get(r0)
+            org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
+            long r2 = r1.id
+            long r4 = r6.currentBotId
+            int r10 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r10 != 0) goto L_0x0028
+            r10 = r1
+            goto L_0x002c
+        L_0x0028:
+            int r0 = r0 + 1
+            goto L_0x000a
+        L_0x002b:
+            r10 = 0
+        L_0x002c:
+            android.view.View r0 = r6.fragmentView
+            r11 = r0
+            android.widget.FrameLayout r11 = (android.widget.FrameLayout) r11
+            org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
+            r1 = 2131627912(0x7f0e0var_, float:1.8883102E38)
+            java.lang.String r2 = "TelegramPassport"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setTitle(r1)
+            org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
+            org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
+            r1 = 2131165997(0x7var_d, float:1.7946227E38)
+            r12 = 1
+            r0.addItem((int) r12, (int) r1)
+            java.lang.String r13 = "windowBackgroundGrayShadow"
+            r14 = -2
+            r15 = -1
+            if (r10 == 0) goto L_0x00da
+            android.widget.FrameLayout r0 = new android.widget.FrameLayout
+            r0.<init>(r7)
+            android.widget.LinearLayout r1 = r6.linearLayout2
+            r2 = 100
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r2)
+            r1.addView(r0, r2)
+            org.telegram.ui.Components.BackupImageView r1 = new org.telegram.ui.Components.BackupImageView
+            r1.<init>(r7)
+            r2 = 1107296256(0x42000000, float:32.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r1.setRoundRadius(r2)
+            r16 = 64
+            r17 = 1115684864(0x42800000, float:64.0)
+            r18 = 17
+            r19 = 0
+            r20 = 1090519040(0x41000000, float:8.0)
+            r21 = 0
+            r22 = 0
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+            r0.addView(r1, r2)
+            org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable
+            r0.<init>((org.telegram.tgnet.TLRPC$User) r10)
+            r1.setForUserOrChat(r10, r0)
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r0.<init>(r7)
+            r6.bottomCell = r0
+            r1 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r1, (java.lang.String) r13)
+            r0.setBackgroundDrawable(r1)
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r6.bottomCell
+            r1 = 2131626872(0x7f0e0b78, float:1.8880992E38)
+            java.lang.Object[] r2 = new java.lang.Object[r12]
+            java.lang.String r3 = org.telegram.messenger.UserObject.getFirstName(r10)
+            r2[r9] = r3
+            java.lang.String r3 = "PassportRequest"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r3, r1, r2)
+            android.text.SpannableStringBuilder r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1)
+            r0.setText(r1)
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r6.bottomCell
+            android.widget.TextView r0 = r0.getTextView()
+            r0.setGravity(r12)
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r6.bottomCell
+            android.widget.TextView r0 = r0.getTextView()
+            android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r0 = (android.widget.FrameLayout.LayoutParams) r0
+            r0.gravity = r12
+            android.widget.LinearLayout r0 = r6.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell r1 = r6.bottomCell
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r14)
+            r0.addView(r1, r2)
+        L_0x00da:
+            org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
+            r0.<init>(r7)
+            r6.headerCell = r0
+            r1 = 2131626874(0x7f0e0b7a, float:1.8880997E38)
+            java.lang.String r2 = "PassportRequestedInformation"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setText(r1)
+            org.telegram.ui.Cells.HeaderCell r0 = r6.headerCell
+            java.lang.String r1 = "windowBackgroundWhite"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r0.setBackgroundColor(r1)
+            android.widget.LinearLayout r0 = r6.linearLayout2
+            org.telegram.ui.Cells.HeaderCell r1 = r6.headerCell
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r14)
+            r0.addView(r1, r2)
+            org.telegram.tgnet.TLRPC$TL_account_authorizationForm r0 = r6.currentForm
+            if (r0 == 0) goto L_0x030b
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r0 = r0.required_types
+            int r5 = r0.size()
+            java.util.ArrayList r4 = new java.util.ArrayList
+            r4.<init>()
+            java.util.ArrayList r3 = new java.util.ArrayList
+            r3.<init>()
+            r0 = 0
+            r1 = 0
+            r2 = 0
+            r8 = 0
+            r16 = 0
+        L_0x011d:
+            if (r0 >= r5) goto L_0x01e0
+            org.telegram.tgnet.TLRPC$TL_account_authorizationForm r14 = r6.currentForm
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r14 = r14.required_types
+            java.lang.Object r14 = r14.get(r0)
+            org.telegram.tgnet.TLRPC$SecureRequiredType r14 = (org.telegram.tgnet.TLRPC$SecureRequiredType) r14
+            boolean r15 = r14 instanceof org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            if (r15 == 0) goto L_0x015c
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r14 = (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r14
+            org.telegram.tgnet.TLRPC$SecureValueType r15 = r14.type
+            boolean r15 = r6.isPersonalDocument(r15)
+            if (r15 == 0) goto L_0x013c
+            r4.add(r14)
+            goto L_0x01a5
+        L_0x013c:
+            org.telegram.tgnet.TLRPC$SecureValueType r15 = r14.type
+            boolean r15 = r6.isAddressDocument(r15)
+            if (r15 == 0) goto L_0x014a
+            r3.add(r14)
+            int r8 = r8 + 1
+            goto L_0x0158
+        L_0x014a:
+            org.telegram.tgnet.TLRPC$SecureValueType r14 = r14.type
+            boolean r15 = r14 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
+            if (r15 == 0) goto L_0x0152
+            r1 = 1
+            goto L_0x0158
+        L_0x0152:
+            boolean r14 = r14 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress
+            if (r14 == 0) goto L_0x0158
+            r16 = 1
+        L_0x0158:
+            r22 = r4
+            goto L_0x01d6
+        L_0x015c:
+            boolean r15 = r14 instanceof org.telegram.tgnet.TLRPC$TL_secureRequiredTypeOneOf
+            if (r15 == 0) goto L_0x0158
+            org.telegram.tgnet.TLRPC$TL_secureRequiredTypeOneOf r14 = (org.telegram.tgnet.TLRPC$TL_secureRequiredTypeOneOf) r14
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r15 = r14.types
+            boolean r15 = r15.isEmpty()
+            if (r15 == 0) goto L_0x016b
+            goto L_0x0158
+        L_0x016b:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r15 = r14.types
+            java.lang.Object r15 = r15.get(r9)
+            org.telegram.tgnet.TLRPC$SecureRequiredType r15 = (org.telegram.tgnet.TLRPC$SecureRequiredType) r15
+            boolean r9 = r15 instanceof org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            if (r9 != 0) goto L_0x0178
+            goto L_0x0158
+        L_0x0178:
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r15 = (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r15
+            org.telegram.tgnet.TLRPC$SecureValueType r9 = r15.type
+            boolean r9 = r6.isPersonalDocument(r9)
+            if (r9 == 0) goto L_0x01a8
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r9 = r14.types
+            int r9 = r9.size()
+            r15 = 0
+        L_0x0189:
+            if (r15 >= r9) goto L_0x01a5
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r12 = r14.types
+            java.lang.Object r12 = r12.get(r15)
+            org.telegram.tgnet.TLRPC$SecureRequiredType r12 = (org.telegram.tgnet.TLRPC$SecureRequiredType) r12
+            r22 = r9
+            boolean r9 = r12 instanceof org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            if (r9 != 0) goto L_0x019a
+            goto L_0x019f
+        L_0x019a:
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r12 = (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r12
+            r4.add(r12)
+        L_0x019f:
+            int r15 = r15 + 1
+            r9 = r22
+            r12 = 1
+            goto L_0x0189
+        L_0x01a5:
+            int r2 = r2 + 1
+            goto L_0x0158
+        L_0x01a8:
+            org.telegram.tgnet.TLRPC$SecureValueType r9 = r15.type
+            boolean r9 = r6.isAddressDocument(r9)
+            if (r9 == 0) goto L_0x0158
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r9 = r14.types
+            int r9 = r9.size()
+            r12 = 0
+        L_0x01b7:
+            if (r12 >= r9) goto L_0x01d2
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r15 = r14.types
+            java.lang.Object r15 = r15.get(r12)
+            org.telegram.tgnet.TLRPC$SecureRequiredType r15 = (org.telegram.tgnet.TLRPC$SecureRequiredType) r15
+            r22 = r4
+            boolean r4 = r15 instanceof org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            if (r4 != 0) goto L_0x01c8
+            goto L_0x01cd
+        L_0x01c8:
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r15 = (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r15
+            r3.add(r15)
+        L_0x01cd:
+            int r12 = r12 + 1
+            r4 = r22
+            goto L_0x01b7
+        L_0x01d2:
+            r22 = r4
+            int r8 = r8 + 1
+        L_0x01d6:
+            int r0 = r0 + 1
+            r4 = r22
+            r9 = 0
+            r12 = 1
+            r14 = -2
+            r15 = -1
+            goto L_0x011d
+        L_0x01e0:
+            r22 = r4
+            r0 = 1
+            if (r1 == 0) goto L_0x01ea
+            if (r2 <= r0) goto L_0x01e8
+            goto L_0x01ea
+        L_0x01e8:
+            r9 = 0
+            goto L_0x01eb
+        L_0x01ea:
+            r9 = 1
+        L_0x01eb:
+            if (r16 == 0) goto L_0x01f2
+            if (r8 <= r0) goto L_0x01f0
+            goto L_0x01f2
+        L_0x01f0:
+            r8 = 0
+            goto L_0x01f3
+        L_0x01f2:
+            r8 = 1
+        L_0x01f3:
+            r12 = 0
+        L_0x01f4:
+            if (r12 >= r5) goto L_0x030b
+            org.telegram.tgnet.TLRPC$TL_account_authorizationForm r0 = r6.currentForm
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r0 = r0.required_types
+            java.lang.Object r0 = r0.get(r12)
+            org.telegram.tgnet.TLRPC$SecureRequiredType r0 = (org.telegram.tgnet.TLRPC$SecureRequiredType) r0
+            boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            if (r1 == 0) goto L_0x026c
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r0
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r0.type
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePhone
+            if (r2 != 0) goto L_0x0267
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeEmail
+            if (r2 == 0) goto L_0x0211
+            goto L_0x0267
+        L_0x0211:
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
+            if (r2 == 0) goto L_0x021e
+            if (r9 == 0) goto L_0x0219
+        L_0x0217:
+            r1 = 0
+            goto L_0x021b
+        L_0x0219:
+            r1 = r22
+        L_0x021b:
+            r2 = r0
+            r4 = r1
+            goto L_0x0269
+        L_0x021e:
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress
+            if (r2 == 0) goto L_0x0227
+            if (r8 == 0) goto L_0x0225
+            goto L_0x0217
+        L_0x0225:
+            r1 = r3
+            goto L_0x021b
+        L_0x0227:
+            if (r9 == 0) goto L_0x0248
+            boolean r1 = r6.isPersonalDocument(r1)
+            if (r1 == 0) goto L_0x0248
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r1.add(r0)
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            r0.<init>()
+            org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails r2 = new org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
+            r2.<init>()
+            r0.type = r2
+        L_0x0243:
+            r2 = r0
+            r4 = r1
+            r14 = 1
+            goto L_0x02ec
+        L_0x0248:
+            if (r8 == 0) goto L_0x0301
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r0.type
+            boolean r1 = r6.isAddressDocument(r1)
+            if (r1 == 0) goto L_0x0301
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r1.add(r0)
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            r0.<init>()
+            org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress r2 = new org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress
+            r2.<init>()
+            r0.type = r2
+            goto L_0x0243
+        L_0x0267:
+            r2 = r0
+            r4 = 0
+        L_0x0269:
+            r14 = 0
+            goto L_0x02ec
+        L_0x026c:
+            boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_secureRequiredTypeOneOf
+            if (r1 == 0) goto L_0x0301
+            org.telegram.tgnet.TLRPC$TL_secureRequiredTypeOneOf r0 = (org.telegram.tgnet.TLRPC$TL_secureRequiredTypeOneOf) r0
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r1 = r0.types
+            boolean r1 = r1.isEmpty()
+            if (r1 == 0) goto L_0x027c
+            goto L_0x0301
+        L_0x027c:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r1 = r0.types
+            r2 = 0
+            java.lang.Object r1 = r1.get(r2)
+            org.telegram.tgnet.TLRPC$SecureRequiredType r1 = (org.telegram.tgnet.TLRPC$SecureRequiredType) r1
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            if (r2 != 0) goto L_0x028b
+            goto L_0x0301
+        L_0x028b:
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r1 = (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r1
+            if (r9 == 0) goto L_0x0297
+            org.telegram.tgnet.TLRPC$SecureValueType r2 = r1.type
+            boolean r2 = r6.isPersonalDocument(r2)
+            if (r2 != 0) goto L_0x02a1
+        L_0x0297:
+            if (r8 == 0) goto L_0x0301
+            org.telegram.tgnet.TLRPC$SecureValueType r2 = r1.type
+            boolean r2 = r6.isAddressDocument(r2)
+            if (r2 == 0) goto L_0x0301
+        L_0x02a1:
+            java.util.ArrayList r2 = new java.util.ArrayList
+            r2.<init>()
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r4 = r0.types
+            int r4 = r4.size()
+            r14 = 0
+        L_0x02ad:
+            if (r14 >= r4) goto L_0x02c8
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureRequiredType> r15 = r0.types
+            java.lang.Object r15 = r15.get(r14)
+            org.telegram.tgnet.TLRPC$SecureRequiredType r15 = (org.telegram.tgnet.TLRPC$SecureRequiredType) r15
+            r16 = r0
+            boolean r0 = r15 instanceof org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            if (r0 != 0) goto L_0x02be
+            goto L_0x02c3
+        L_0x02be:
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r15 = (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r15
+            r2.add(r15)
+        L_0x02c3:
+            int r14 = r14 + 1
+            r0 = r16
+            goto L_0x02ad
+        L_0x02c8:
+            org.telegram.tgnet.TLRPC$SecureValueType r0 = r1.type
+            boolean r0 = r6.isPersonalDocument(r0)
+            if (r0 == 0) goto L_0x02dd
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            r0.<init>()
+            org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails r1 = new org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
+            r1.<init>()
+            r0.type = r1
+            goto L_0x02e9
+        L_0x02dd:
+            org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType
+            r0.<init>()
+            org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress r1 = new org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress
+            r1.<init>()
+            r0.type = r1
+        L_0x02e9:
+            r4 = r2
+            r14 = 1
+            r2 = r0
+        L_0x02ec:
+            int r0 = r5 + -1
+            if (r12 != r0) goto L_0x02f2
+            r15 = 1
+            goto L_0x02f3
+        L_0x02f2:
+            r15 = 0
+        L_0x02f3:
+            r0 = r23
+            r1 = r24
+            r16 = r3
+            r3 = r4
+            r4 = r14
+            r14 = r5
+            r5 = r15
+            r0.addField(r1, r2, r3, r4, r5)
+            goto L_0x0304
+        L_0x0301:
+            r16 = r3
+            r14 = r5
+        L_0x0304:
+            int r12 = r12 + 1
+            r5 = r14
+            r3 = r16
+            goto L_0x01f4
+        L_0x030b:
+            if (r10 == 0) goto L_0x03cb
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r0.<init>(r7)
+            r6.bottomCell = r0
+            r1 = 2131165449(0x7var_, float:1.7945115E38)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r1, (java.lang.String) r13)
+            r0.setBackgroundDrawable(r1)
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r6.bottomCell
+            java.lang.String r1 = "windowBackgroundWhiteGrayText4"
+            r0.setLinkTextColorKey(r1)
+            org.telegram.tgnet.TLRPC$TL_account_authorizationForm r0 = r6.currentForm
+            java.lang.String r0 = r0.privacy_policy_url
+            boolean r0 = android.text.TextUtils.isEmpty(r0)
+            r2 = 2
+            if (r0 != 0) goto L_0x0387
+            r0 = 2131626869(0x7f0e0b75, float:1.8880986E38)
+            java.lang.Object[] r2 = new java.lang.Object[r2]
+            java.lang.String r3 = org.telegram.messenger.UserObject.getFirstName(r10)
+            r4 = 0
+            r2[r4] = r3
+            java.lang.String r3 = r10.username
+            r4 = 1
+            r2[r4] = r3
+            java.lang.String r3 = "PassportPolicy"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r3, r0, r2)
+            android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder
+            r2.<init>(r0)
+            r3 = 42
+            int r4 = r0.indexOf(r3)
+            int r0 = r0.lastIndexOf(r3)
+            r3 = -1
+            if (r4 == r3) goto L_0x0381
+            if (r0 == r3) goto L_0x0381
+            org.telegram.ui.Cells.TextInfoPrivacyCell r3 = r6.bottomCell
+            android.widget.TextView r3 = r3.getTextView()
+            org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy r5 = new org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy
+            r5.<init>()
+            r3.setMovementMethod(r5)
+            int r3 = r0 + 1
+            java.lang.String r5 = ""
+            r2.replace(r0, r3, r5)
+            int r3 = r4 + 1
+            r2.replace(r4, r3, r5)
+            org.telegram.ui.PassportActivity$LinkSpan r3 = new org.telegram.ui.PassportActivity$LinkSpan
+            r3.<init>()
+            r5 = 1
+            int r0 = r0 - r5
+            r5 = 33
+            r2.setSpan(r3, r4, r0, r5)
+        L_0x0381:
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r6.bottomCell
+            r0.setText(r2)
+            goto L_0x03a7
+        L_0x0387:
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r6.bottomCell
+            r3 = 2131626857(0x7f0e0b69, float:1.8880962E38)
+            java.lang.Object[] r2 = new java.lang.Object[r2]
+            java.lang.String r4 = org.telegram.messenger.UserObject.getFirstName(r10)
+            r5 = 0
+            r2[r5] = r4
+            java.lang.String r4 = r10.username
+            r5 = 1
+            r2[r5] = r4
+            java.lang.String r4 = "PassportNoPolicy"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r4, r3, r2)
+            android.text.SpannableStringBuilder r2 = org.telegram.messenger.AndroidUtilities.replaceTags(r2)
+            r0.setText(r2)
+        L_0x03a7:
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r6.bottomCell
+            android.widget.TextView r0 = r0.getTextView()
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r0.setHighlightColor(r1)
+            org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r6.bottomCell
+            android.widget.TextView r0 = r0.getTextView()
+            r1 = 1
+            r0.setGravity(r1)
+            android.widget.LinearLayout r0 = r6.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell r1 = r6.bottomCell
+            r2 = -2
+            r3 = -1
+            android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r2)
+            r0.addView(r1, r4)
+        L_0x03cb:
+            android.widget.FrameLayout r0 = new android.widget.FrameLayout
+            r0.<init>(r7)
+            r6.bottomLayout = r0
+            java.lang.String r1 = "passport_authorizeBackground"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            java.lang.String r2 = "passport_authorizeBackgroundSelected"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorWithBackgroundDrawable(r1, r2)
+            r0.setBackgroundDrawable(r1)
+            android.widget.FrameLayout r0 = r6.bottomLayout
+            r1 = 48
+            r2 = 80
+            r3 = -1
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r1, r2)
+            r11.addView(r0, r1)
+            android.widget.FrameLayout r0 = r6.bottomLayout
+            org.telegram.ui.PassportActivity$$ExternalSyntheticLambda28 r1 = new org.telegram.ui.PassportActivity$$ExternalSyntheticLambda28
+            r1.<init>(r6)
+            r0.setOnClickListener(r1)
+            android.widget.TextView r0 = new android.widget.TextView
+            r0.<init>(r7)
+            r6.acceptTextView = r0
+            r1 = 1090519040(0x41000000, float:8.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            r0.setCompoundDrawablePadding(r1)
+            android.widget.TextView r0 = r6.acceptTextView
+            r1 = 2131165275(0x7var_b, float:1.7944763E38)
+            r2 = 0
+            r0.setCompoundDrawablesWithIntrinsicBounds(r1, r2, r2, r2)
+            android.widget.TextView r0 = r6.acceptTextView
+            java.lang.String r1 = "passport_authorizeText"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r0.setTextColor(r1)
+            android.widget.TextView r0 = r6.acceptTextView
+            r1 = 2131626751(0x7f0e0aff, float:1.8880747E38)
+            java.lang.String r2 = "PassportAuthorize"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setText(r1)
+            android.widget.TextView r0 = r6.acceptTextView
+            r1 = 1096810496(0x41600000, float:14.0)
+            r2 = 1
+            r0.setTextSize(r2, r1)
+            android.widget.TextView r0 = r6.acceptTextView
+            r1 = 17
+            r0.setGravity(r1)
+            android.widget.TextView r0 = r6.acceptTextView
+            java.lang.String r2 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
+            r0.setTypeface(r2)
+            android.widget.FrameLayout r0 = r6.bottomLayout
+            android.widget.TextView r2 = r6.acceptTextView
+            r3 = -2
+            r4 = -1
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r4, r1)
+            r0.addView(r2, r1)
+            org.telegram.ui.Components.ContextProgressView r0 = new org.telegram.ui.Components.ContextProgressView
+            r1 = 0
+            r0.<init>(r7, r1)
+            r6.progressViewButton = r0
+            r1 = 4
+            r0.setVisibility(r1)
+            android.widget.FrameLayout r0 = r6.bottomLayout
+            org.telegram.ui.Components.ContextProgressView r1 = r6.progressViewButton
+            r2 = -1082130432(0xffffffffbvar_, float:-1.0)
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r2)
+            r0.addView(r1, r2)
+            android.view.View r0 = new android.view.View
+            r0.<init>(r7)
+            r1 = 2131165466(0x7var_a, float:1.794515E38)
+            r0.setBackgroundResource(r1)
+            r12 = -1
+            r13 = 1077936128(0x40400000, float:3.0)
+            r14 = 83
+            r15 = 0
+            r16 = 0
+            r17 = 0
+            r18 = 1111490560(0x42400000, float:48.0)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
+            r11.addView(r0, r1)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.createRequestInterface(android.content.Context):void");
     }
 
     /* access modifiers changed from: private */
@@ -3307,19 +3632,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "TelegramPassport"
-            r2 = 2131627887(0x7f0e0f6f, float:1.8883051E38)
+            r2 = 2131627912(0x7f0e0var_, float:1.8883102E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
             r8 = 1
-            r1 = 2131165994(0x7var_a, float:1.794622E38)
+            r1 = 2131165997(0x7var_d, float:1.7946227E38)
             r0.addItem((int) r8, (int) r1)
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r7)
             r6.headerCell = r0
             java.lang.String r1 = "PassportProvidedInformation"
-            r2 = 2131626847(0x7f0e0b5f, float:1.8880942E38)
+            r2 = 2131626871(0x7f0e0b77, float:1.888099E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setText(r1)
             org.telegram.ui.Cells.HeaderCell r0 = r6.headerCell
@@ -3350,7 +3675,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r1)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.addDocumentCell
             java.lang.String r1 = "PassportNoDocumentsAdd"
-            r5 = 2131626830(0x7f0e0b4e, float:1.8880907E38)
+            r5 = 2131626854(0x7f0e0b66, float:1.8880956E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r1, r5)
             r0.setText(r9, r8)
             android.widget.LinearLayout r0 = r6.linearLayout2
@@ -3372,7 +3697,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
             java.lang.String r9 = "TelegramPassportDelete"
-            r10 = 2131627890(0x7f0e0var_, float:1.8883057E38)
+            r10 = 2131627915(0x7f0e0f8b, float:1.8883108E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r10 = 0
             r0.setText(r9, r10)
@@ -3430,7 +3755,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.emptyImageView = r0
-            r2 = 2131165881(0x7var_b9, float:1.7945992E38)
+            r2 = 2131165884(0x7var_bc, float:1.7945998E38)
             r0.setImageResource(r2)
             android.widget.ImageView r0 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -3459,7 +3784,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r0.setTypeface(r9)
             android.widget.TextView r0 = r6.emptyTextView1
-            r9 = 2131626829(0x7f0e0b4d, float:1.8880905E38)
+            r9 = 2131626853(0x7f0e0b65, float:1.8880954E38)
             java.lang.String r12 = "PassportNoDocuments"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r12, r9)
             r0.setText(r9)
@@ -3490,7 +3815,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.setPadding(r9, r10, r2, r10)
             android.widget.TextView r0 = r6.emptyTextView2
-            r2 = 2131626831(0x7f0e0b4f, float:1.888091E38)
+            r2 = 2131626855(0x7f0e0b67, float:1.8880958E38)
             java.lang.String r9 = "PassportNoDocumentsInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r0.setText(r2)
@@ -3959,7 +4284,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = r25
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
             java.lang.String r3 = "PassportPhone"
-            r4 = 2131626838(0x7f0e0b56, float:1.8880923E38)
+            r4 = 2131626862(0x7f0e0b6e, float:1.8880972E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r0.setTitle(r3)
             java.util.HashMap r0 = new java.util.HashMap
@@ -4026,7 +4351,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setTextColor(r8)
             android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
             r7.setBackgroundDrawable(r8)
-            r8 = 2131626842(0x7f0e0b5a, float:1.8880932E38)
+            r8 = 2131626866(0x7f0e0b72, float:1.888098E38)
             java.lang.Object[] r9 = new java.lang.Object[r5]
             org.telegram.PhoneFormat.PhoneFormat r10 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -4056,7 +4381,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r7, (java.lang.String) r10)
             r0.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r11 = 2131626844(0x7f0e0b5c, float:1.8880936E38)
+            r11 = 2131626868(0x7f0e0b74, float:1.8880984E38)
             java.lang.String r13 = "PassportPhoneUseSameInfo"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4067,7 +4392,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r2)
             r1.headerCell = r0
-            r11 = 2131626841(0x7f0e0b59, float:1.888093E38)
+            r11 = 2131626865(0x7f0e0b71, float:1.8880978E38)
             java.lang.String r13 = "PassportPhoneUseOther"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4167,7 +4492,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setOnTouchListener(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131624914(0x7f0e03d2, float:1.8877021E38)
+            r8 = 2131624926(0x7f0e03de, float:1.8877045E38)
             java.lang.String r13 = "ChooseCountry"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r8)
             r7.setText(r8)
@@ -4262,7 +4587,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setHintText(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131626939(0x7f0e0bbb, float:1.8881128E38)
+            r8 = 2131626963(0x7f0e0bd3, float:1.8881177E38)
             java.lang.String r9 = "PaymentShippingPhoneNumber"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7.setHint(r8)
@@ -4380,7 +4705,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r10)
             r0.setBackgroundDrawable(r2)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r2 = 2131626840(0x7f0e0b58, float:1.8880928E38)
+            r2 = 2131626864(0x7f0e0b70, float:1.8880976E38)
             java.lang.String r3 = "PassportPhoneUploadInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -4409,21 +4734,21 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         if (motionEvent.getAction() == 1) {
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
-            countrySelectActivity.setCountrySelectActivityDelegate(new PassportActivity$$ExternalSyntheticLambda70(this));
+            countrySelectActivity.setCountrySelectActivityDelegate(new PassportActivity$$ExternalSyntheticLambda71(this));
             presentFragment(countrySelectActivity);
         }
         return true;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createPhoneInterface$28(String str, String str2) {
-        this.inputFields[0].setText(str);
-        if (this.countriesArray.indexOf(str) != -1) {
+    public /* synthetic */ void lambda$createPhoneInterface$28(CountrySelectActivity.Country country) {
+        this.inputFields[0].setText(country.name);
+        if (this.countriesArray.indexOf(country.name) != -1) {
             this.ignoreOnTextChange = true;
-            String str3 = this.countriesMap.get(str);
-            this.inputFields[1].setText(str3);
-            String str4 = this.phoneFormatMap.get(str3);
-            this.inputFields[2].setHintText(str4 != null ? str4.replace('X', 8211) : null);
+            String str = this.countriesMap.get(country.name);
+            this.inputFields[1].setText(str);
+            String str2 = this.phoneFormatMap.get(str);
+            this.inputFields[2].setHintText(str2 != null ? str2.replace('X', 8211) : null);
             this.ignoreOnTextChange = false;
         }
         AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda48(this), 300);
@@ -4621,7 +4946,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         while (i3 < i2) {
             final EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
             this.inputFields[i3] = editTextBoldCursor;
-            AnonymousClass11 r13 = new FrameLayout(this, context2) {
+            AnonymousClass11 r11 = new FrameLayout(this, context2) {
                 private StaticLayout errorLayout;
                 float offsetX;
 
@@ -4667,9 +4992,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             };
-            r13.setWillNotDraw(false);
-            this.linearLayout2.addView(r13, LayoutHelper.createLinear(-1, i));
-            r13.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+            r11.setWillNotDraw(false);
+            this.linearLayout2.addView(r11, LayoutHelper.createLinear(-1, i));
+            r11.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             int i4 = 5;
             if (i3 == 5) {
                 View view = new View(context2);
@@ -4678,7 +5003,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.linearLayout2.addView(this.extraBackgroundView, LayoutHelper.createLinear(-1, i2));
             }
             if (this.documentOnly && this.currentDocumentsType != null) {
-                r13.setVisibility(8);
+                r11.setVisibility(8);
                 View view2 = this.extraBackgroundView;
                 if (view2 != null) {
                     view2.setVisibility(8);
@@ -4785,7 +5110,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 i4 = 3;
             }
             editTextBoldCursor2.setGravity(i4 | 16);
-            r13.addView(this.inputFields[i3], LayoutHelper.createFrame(-1, 64.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
+            r11.addView(this.inputFields[i3], LayoutHelper.createFrame(-1, 64.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
             this.inputFields[i3].setOnEditorActionListener(new PassportActivity$$ExternalSyntheticLambda42(this));
             i3++;
             i2 = 6;
@@ -4848,16 +5173,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         if (motionEvent.getAction() == 1) {
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
-            countrySelectActivity.setCountrySelectActivityDelegate(new PassportActivity$$ExternalSyntheticLambda71(this));
+            countrySelectActivity.setCountrySelectActivityDelegate(new PassportActivity$$ExternalSyntheticLambda70(this));
             presentFragment(countrySelectActivity);
         }
         return true;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createAddressInterface$34(String str, String str2) {
-        this.inputFields[5].setText(str);
-        this.currentCitizeship = str2;
+    public /* synthetic */ void lambda$createAddressInterface$34(CountrySelectActivity.Country country) {
+        this.inputFields[5].setText(country.name);
+        this.currentCitizeship = country.shortname;
     }
 
     /* access modifiers changed from: private */
@@ -4999,22 +5324,22 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:126:0x0216, code lost:
-        if (r6 != 5) goto L_0x0228;
+    /* JADX WARNING: Code restructure failed: missing block: B:124:0x021a, code lost:
+        if (r6 != 5) goto L_0x022c;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:167:0x028c, code lost:
-        if (r8 > 24) goto L_0x0298;
+    /* JADX WARNING: Code restructure failed: missing block: B:165:0x0290, code lost:
+        if (r8 > 24) goto L_0x029c;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:171:0x0296, code lost:
-        if (r8 < 2) goto L_0x0298;
+    /* JADX WARNING: Code restructure failed: missing block: B:169:0x029a, code lost:
+        if (r8 < 2) goto L_0x029c;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:176:0x02a6, code lost:
-        if (r8 < 2) goto L_0x0298;
+    /* JADX WARNING: Code restructure failed: missing block: B:174:0x02aa, code lost:
+        if (r8 < 2) goto L_0x029c;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:180:0x02af, code lost:
-        if (r8 > 10) goto L_0x0298;
+    /* JADX WARNING: Code restructure failed: missing block: B:178:0x02b3, code lost:
+        if (r8 > 10) goto L_0x029c;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x022b  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x022f  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean checkFieldsForError() {
         /*
@@ -5022,16 +5347,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = r13.currentDocumentsType
             r1 = 0
             r2 = 1
-            if (r0 == 0) goto L_0x019f
+            if (r0 == 0) goto L_0x01a3
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "error_all"
             boolean r0 = r0.containsKey(r3)
-            if (r0 != 0) goto L_0x0199
+            if (r0 != 0) goto L_0x019d
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "error_document_all"
             boolean r0 = r0.containsKey(r3)
             if (r0 == 0) goto L_0x001c
-            goto L_0x0199
+            goto L_0x019d
         L_0x001c:
             org.telegram.ui.Cells.TextSettingsCell r0 = r13.uploadDocumentCell
             if (r0 == 0) goto L_0x006d
@@ -5073,12 +5398,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "files_all"
             boolean r0 = r0.containsKey(r3)
-            if (r0 != 0) goto L_0x0193
+            if (r0 != 0) goto L_0x0197
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "translation_all"
             boolean r0 = r0.containsKey(r3)
             if (r0 == 0) goto L_0x0083
-            goto L_0x0193
+            goto L_0x0197
         L_0x0083:
             org.telegram.ui.Cells.TextDetailSettingsCell r0 = r13.uploadFrontCell
             if (r0 == 0) goto L_0x00bc
@@ -5138,48 +5463,51 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             return r2
         L_0x0101:
             org.telegram.ui.Cells.TextDetailSettingsCell r0 = r13.uploadSelfieCell
-            if (r0 == 0) goto L_0x013e
-            int r3 = r13.currentBotId
-            if (r3 == 0) goto L_0x013e
-            org.telegram.messenger.SecureDocument r3 = r13.selfieDocument
-            if (r3 != 0) goto L_0x0111
+            r3 = 0
+            if (r0 == 0) goto L_0x0142
+            long r5 = r13.currentBotId
+            int r7 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
+            if (r7 == 0) goto L_0x0142
+            org.telegram.messenger.SecureDocument r5 = r13.selfieDocument
+            if (r5 != 0) goto L_0x0115
             r13.onFieldError(r0)
             return r2
-        L_0x0111:
+        L_0x0115:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
-            java.lang.String r3 = "selfie"
-            r0.append(r3)
-            org.telegram.messenger.SecureDocument r3 = r13.selfieDocument
-            java.lang.String r3 = r13.getDocumentHash(r3)
-            r0.append(r3)
+            java.lang.String r5 = "selfie"
+            r0.append(r5)
+            org.telegram.messenger.SecureDocument r5 = r13.selfieDocument
+            java.lang.String r5 = r13.getDocumentHash(r5)
+            r0.append(r5)
             java.lang.String r0 = r0.toString()
-            java.util.HashMap<java.lang.String, java.lang.String> r3 = r13.errorsValues
-            boolean r0 = r3.containsKey(r0)
-            if (r0 == 0) goto L_0x013e
+            java.util.HashMap<java.lang.String, java.lang.String> r5 = r13.errorsValues
+            boolean r0 = r5.containsKey(r0)
+            if (r0 == 0) goto L_0x0142
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             org.telegram.messenger.SecureDocument r1 = r13.selfieDocument
             java.lang.Object r0 = r0.get(r1)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x013e:
+        L_0x0142:
             org.telegram.ui.Cells.TextSettingsCell r0 = r13.uploadTranslationCell
-            if (r0 == 0) goto L_0x019f
-            int r0 = r13.currentBotId
-            if (r0 == 0) goto L_0x019f
+            if (r0 == 0) goto L_0x01a3
+            long r5 = r13.currentBotId
+            int r0 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
+            if (r0 == 0) goto L_0x01a3
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r0 = r13.translationDocuments
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x0154
+            if (r0 == 0) goto L_0x015a
             org.telegram.ui.Cells.TextSettingsCell r0 = r13.uploadTranslationCell
             r13.onFieldError(r0)
             return r2
-        L_0x0154:
+        L_0x015a:
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r0 = r13.translationDocuments
             int r0 = r0.size()
             r3 = 0
-        L_0x015b:
-            if (r3 >= r0) goto L_0x019f
+        L_0x0161:
+            if (r3 >= r0) goto L_0x01a3
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r4 = r13.translationDocuments
             java.lang.Object r4 = r4.get(r3)
             org.telegram.messenger.SecureDocument r4 = (org.telegram.messenger.SecureDocument) r4
@@ -5190,246 +5518,245 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r6 = r13.getDocumentHash(r4)
             r5.append(r6)
             java.lang.String r5 = r5.toString()
-            if (r5 == 0) goto L_0x0190
             java.util.HashMap<java.lang.String, java.lang.String> r6 = r13.errorsValues
             boolean r5 = r6.containsKey(r5)
-            if (r5 == 0) goto L_0x0190
+            if (r5 == 0) goto L_0x0194
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             java.lang.Object r0 = r0.get(r4)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x0190:
+        L_0x0194:
             int r3 = r3 + 1
-            goto L_0x015b
-        L_0x0193:
+            goto L_0x0161
+        L_0x0197:
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r13.bottomCell
             r13.onFieldError(r0)
             return r2
-        L_0x0199:
+        L_0x019d:
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r13.topErrorCell
             r13.onFieldError(r0)
             return r2
-        L_0x019f:
+        L_0x01a3:
             r0 = 0
-        L_0x01a0:
+        L_0x01a4:
             r3 = 2
-            if (r0 >= r3) goto L_0x02ca
+            if (r0 >= r3) goto L_0x02ce
             r4 = 0
-            if (r0 != 0) goto L_0x01a9
+            if (r0 != 0) goto L_0x01ad
             org.telegram.ui.Components.EditTextBoldCursor[] r5 = r13.inputFields
-            goto L_0x01b7
-        L_0x01a9:
+            goto L_0x01bb
+        L_0x01ad:
             org.telegram.ui.Cells.TextInfoPrivacyCell r5 = r13.nativeInfoCell
-            if (r5 == 0) goto L_0x01b6
+            if (r5 == 0) goto L_0x01ba
             int r5 = r5.getVisibility()
-            if (r5 != 0) goto L_0x01b6
+            if (r5 != 0) goto L_0x01ba
             org.telegram.ui.Components.EditTextBoldCursor[] r5 = r13.inputExtraFields
-            goto L_0x01b7
-        L_0x01b6:
+            goto L_0x01bb
+        L_0x01ba:
             r5 = r4
-        L_0x01b7:
-            if (r5 != 0) goto L_0x01bb
-            goto L_0x02c6
         L_0x01bb:
+            if (r5 != 0) goto L_0x01bf
+            goto L_0x02ca
+        L_0x01bf:
             r6 = 0
-        L_0x01bc:
+        L_0x01c0:
             int r7 = r5.length
-            if (r6 >= r7) goto L_0x02c6
+            if (r6 >= r7) goto L_0x02ca
             r7 = r5[r6]
             boolean r7 = r7.hasErrorText()
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r13.errorsValues
             boolean r8 = r8.isEmpty()
             r9 = 4
             r10 = 3
-            if (r8 != 0) goto L_0x024a
+            if (r8 != 0) goto L_0x024e
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r8 = r13.currentType
             org.telegram.tgnet.TLRPC$SecureValueType r8 = r8.type
             boolean r11 = r8 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
             java.lang.String r12 = "country_code"
-            if (r11 == 0) goto L_0x0207
-            if (r0 != 0) goto L_0x01f7
+            if (r11 == 0) goto L_0x020b
+            if (r0 != 0) goto L_0x01fb
             switch(r6) {
-                case 0: goto L_0x01f4;
-                case 1: goto L_0x01f1;
-                case 2: goto L_0x01ee;
-                case 3: goto L_0x01eb;
-                case 4: goto L_0x01e8;
-                case 5: goto L_0x0229;
-                case 6: goto L_0x01e5;
-                case 7: goto L_0x01e2;
-                case 8: goto L_0x01df;
-                default: goto L_0x01de;
+                case 0: goto L_0x01f8;
+                case 1: goto L_0x01f5;
+                case 2: goto L_0x01f2;
+                case 3: goto L_0x01ef;
+                case 4: goto L_0x01ec;
+                case 5: goto L_0x022d;
+                case 6: goto L_0x01e9;
+                case 7: goto L_0x01e6;
+                case 8: goto L_0x01e3;
+                default: goto L_0x01e2;
             }
-        L_0x01de:
-            goto L_0x0228
-        L_0x01df:
-            java.lang.String r12 = "expiry_date"
-            goto L_0x0229
         L_0x01e2:
+            goto L_0x022c
+        L_0x01e3:
+            java.lang.String r12 = "expiry_date"
+            goto L_0x022d
+        L_0x01e6:
             java.lang.String r12 = "document_no"
-            goto L_0x0229
-        L_0x01e5:
+            goto L_0x022d
+        L_0x01e9:
             java.lang.String r12 = "residence_country_code"
-            goto L_0x0229
-        L_0x01e8:
+            goto L_0x022d
+        L_0x01ec:
             java.lang.String r12 = "gender"
-            goto L_0x0229
-        L_0x01eb:
+            goto L_0x022d
+        L_0x01ef:
             java.lang.String r12 = "birth_date"
-            goto L_0x0229
-        L_0x01ee:
+            goto L_0x022d
+        L_0x01f2:
             java.lang.String r12 = "last_name"
-            goto L_0x0229
-        L_0x01f1:
+            goto L_0x022d
+        L_0x01f5:
             java.lang.String r12 = "middle_name"
-            goto L_0x0229
-        L_0x01f4:
+            goto L_0x022d
+        L_0x01f8:
             java.lang.String r12 = "first_name"
-            goto L_0x0229
-        L_0x01f7:
-            if (r6 == 0) goto L_0x0204
-            if (r6 == r2) goto L_0x0201
-            if (r6 == r3) goto L_0x01fe
-            goto L_0x0228
-        L_0x01fe:
+            goto L_0x022d
+        L_0x01fb:
+            if (r6 == 0) goto L_0x0208
+            if (r6 == r2) goto L_0x0205
+            if (r6 == r3) goto L_0x0202
+            goto L_0x022c
+        L_0x0202:
             java.lang.String r12 = "last_name_native"
-            goto L_0x0229
-        L_0x0201:
+            goto L_0x022d
+        L_0x0205:
             java.lang.String r12 = "middle_name_native"
-            goto L_0x0229
-        L_0x0204:
+            goto L_0x022d
+        L_0x0208:
             java.lang.String r12 = "first_name_native"
-            goto L_0x0229
-        L_0x0207:
+            goto L_0x022d
+        L_0x020b:
             boolean r8 = r8 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress
-            if (r8 == 0) goto L_0x0228
-            if (r6 == 0) goto L_0x0225
-            if (r6 == r2) goto L_0x0222
-            if (r6 == r3) goto L_0x021f
-            if (r6 == r10) goto L_0x021c
-            if (r6 == r9) goto L_0x0219
+            if (r8 == 0) goto L_0x022c
+            if (r6 == 0) goto L_0x0229
+            if (r6 == r2) goto L_0x0226
+            if (r6 == r3) goto L_0x0223
+            if (r6 == r10) goto L_0x0220
+            if (r6 == r9) goto L_0x021d
             r8 = 5
-            if (r6 == r8) goto L_0x0229
-            goto L_0x0228
-        L_0x0219:
+            if (r6 == r8) goto L_0x022d
+            goto L_0x022c
+        L_0x021d:
             java.lang.String r12 = "state"
-            goto L_0x0229
-        L_0x021c:
+            goto L_0x022d
+        L_0x0220:
             java.lang.String r12 = "city"
-            goto L_0x0229
-        L_0x021f:
+            goto L_0x022d
+        L_0x0223:
             java.lang.String r12 = "post_code"
-            goto L_0x0229
-        L_0x0222:
+            goto L_0x022d
+        L_0x0226:
             java.lang.String r12 = "street_line2"
-            goto L_0x0229
-        L_0x0225:
-            java.lang.String r12 = "street_line1"
-            goto L_0x0229
-        L_0x0228:
-            r12 = r4
+            goto L_0x022d
         L_0x0229:
-            if (r12 == 0) goto L_0x024a
+            java.lang.String r12 = "street_line1"
+            goto L_0x022d
+        L_0x022c:
+            r12 = r4
+        L_0x022d:
+            if (r12 == 0) goto L_0x024e
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r13.errorsValues
             java.lang.Object r8 = r8.get(r12)
             java.lang.String r8 = (java.lang.String) r8
             boolean r11 = android.text.TextUtils.isEmpty(r8)
-            if (r11 != 0) goto L_0x024a
+            if (r11 != 0) goto L_0x024e
             r11 = r5[r6]
             android.text.Editable r11 = r11.getText()
             java.lang.String r11 = r11.toString()
             boolean r8 = r8.equals(r11)
-            if (r8 == 0) goto L_0x024a
+            if (r8 == 0) goto L_0x024e
             r7 = 1
-        L_0x024a:
+        L_0x024e:
             boolean r8 = r13.documentOnly
             r11 = 7
-            if (r8 == 0) goto L_0x0257
+            if (r8 == 0) goto L_0x025b
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r8 = r13.currentDocumentsType
-            if (r8 == 0) goto L_0x0257
-            if (r6 >= r11) goto L_0x0257
-            goto L_0x02c2
-        L_0x0257:
-            if (r7 != 0) goto L_0x02ba
+            if (r8 == 0) goto L_0x025b
+            if (r6 >= r11) goto L_0x025b
+            goto L_0x02c6
+        L_0x025b:
+            if (r7 != 0) goto L_0x02be
             r8 = r5[r6]
             int r8 = r8.length()
             int r12 = r13.currentActivityType
-            if (r12 != r2) goto L_0x028f
+            if (r12 != r2) goto L_0x0293
             r9 = 8
-            if (r6 != r9) goto L_0x0269
-            goto L_0x02c2
-        L_0x0269:
-            if (r0 != 0) goto L_0x0271
-            if (r6 == 0) goto L_0x0279
-            if (r6 == r3) goto L_0x0279
-            if (r6 == r2) goto L_0x0279
-        L_0x0271:
-            if (r0 != r2) goto L_0x0288
-            if (r6 == 0) goto L_0x0279
-            if (r6 == r2) goto L_0x0279
-            if (r6 != r3) goto L_0x0288
-        L_0x0279:
+            if (r6 != r9) goto L_0x026d
+            goto L_0x02c6
+        L_0x026d:
+            if (r0 != 0) goto L_0x0275
+            if (r6 == 0) goto L_0x027d
+            if (r6 == r3) goto L_0x027d
+            if (r6 == r2) goto L_0x027d
+        L_0x0275:
+            if (r0 != r2) goto L_0x028c
+            if (r6 == 0) goto L_0x027d
+            if (r6 == r2) goto L_0x027d
+            if (r6 != r3) goto L_0x028c
+        L_0x027d:
             r9 = 255(0xff, float:3.57E-43)
-            if (r8 <= r9) goto L_0x027e
+            if (r8 <= r9) goto L_0x0282
             r7 = 1
-        L_0x027e:
-            if (r0 != 0) goto L_0x0282
-            if (r6 == r2) goto L_0x0286
         L_0x0282:
-            if (r0 != r2) goto L_0x02b2
-            if (r6 != r2) goto L_0x02b2
+            if (r0 != 0) goto L_0x0286
+            if (r6 == r2) goto L_0x028a
         L_0x0286:
+            if (r0 != r2) goto L_0x02b6
+            if (r6 != r2) goto L_0x02b6
+        L_0x028a:
             r9 = 1
-            goto L_0x02b3
-        L_0x0288:
-            if (r6 != r11) goto L_0x02b2
+            goto L_0x02b7
+        L_0x028c:
+            if (r6 != r11) goto L_0x02b6
             r9 = 24
-            if (r8 <= r9) goto L_0x02b2
-            goto L_0x0298
-        L_0x028f:
-            if (r12 != r3) goto L_0x02b2
-            if (r6 != r2) goto L_0x0294
-            goto L_0x02c2
-        L_0x0294:
-            if (r6 != r10) goto L_0x029a
-            if (r8 >= r3) goto L_0x02b2
+            if (r8 <= r9) goto L_0x02b6
+            goto L_0x029c
+        L_0x0293:
+            if (r12 != r3) goto L_0x02b6
+            if (r6 != r2) goto L_0x0298
+            goto L_0x02c6
         L_0x0298:
+            if (r6 != r10) goto L_0x029e
+            if (r8 >= r3) goto L_0x02b6
+        L_0x029c:
             r7 = 1
-            goto L_0x02b2
-        L_0x029a:
-            if (r6 != r9) goto L_0x02a9
+            goto L_0x02b6
+        L_0x029e:
+            if (r6 != r9) goto L_0x02ad
             java.lang.String r9 = r13.currentCitizeship
             java.lang.String r10 = "US"
             boolean r9 = r10.equals(r9)
-            if (r9 == 0) goto L_0x02c2
-            if (r8 >= r3) goto L_0x02b2
-            goto L_0x0298
-        L_0x02a9:
-            if (r6 != r3) goto L_0x02b2
-            if (r8 < r3) goto L_0x0298
+            if (r9 == 0) goto L_0x02c6
+            if (r8 >= r3) goto L_0x02b6
+            goto L_0x029c
+        L_0x02ad:
+            if (r6 != r3) goto L_0x02b6
+            if (r8 < r3) goto L_0x029c
             r9 = 10
-            if (r8 <= r9) goto L_0x02b2
-            goto L_0x0298
-        L_0x02b2:
+            if (r8 <= r9) goto L_0x02b6
+            goto L_0x029c
+        L_0x02b6:
             r9 = 0
-        L_0x02b3:
-            if (r7 != 0) goto L_0x02ba
-            if (r9 != 0) goto L_0x02ba
-            if (r8 != 0) goto L_0x02ba
+        L_0x02b7:
+            if (r7 != 0) goto L_0x02be
+            if (r9 != 0) goto L_0x02be
+            if (r8 != 0) goto L_0x02be
             r7 = 1
-        L_0x02ba:
-            if (r7 == 0) goto L_0x02c2
+        L_0x02be:
+            if (r7 == 0) goto L_0x02c6
             r0 = r5[r6]
             r13.onFieldError(r0)
             return r2
-        L_0x02c2:
-            int r6 = r6 + 1
-            goto L_0x01bc
         L_0x02c6:
-            int r0 = r0 + 1
-            goto L_0x01a0
+            int r6 = r6 + 1
+            goto L_0x01c0
         L_0x02ca:
+            int r0 = r0 + 1
+            goto L_0x01a4
+        L_0x02ce:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.checkFieldsForError():boolean");
@@ -5459,7 +5786,6 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context2);
         this.topErrorCell = textInfoPrivacyCell;
         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
-        boolean z = false;
         this.topErrorCell.setPadding(0, AndroidUtilities.dp(7.0f), 0, 0);
         int i = -1;
         this.linearLayout2.addView(this.topErrorCell, LayoutHelper.createLinear(-1, -2));
@@ -5487,11 +5813,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.reverseLayout = linearLayout3;
             linearLayout3.setOrientation(1);
             this.linearLayout2.addView(this.reverseLayout, LayoutHelper.createLinear(-1, -2));
-            boolean z2 = this.currentDocumentsType.selfie_required;
+            boolean z = this.currentDocumentsType.selfie_required;
             TextDetailSettingsCell textDetailSettingsCell2 = new TextDetailSettingsCell(context2);
             this.uploadReverseCell = textDetailSettingsCell2;
             textDetailSettingsCell2.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-            this.uploadReverseCell.setTextAndValue(LocaleController.getString("PassportReverseSide", NUM), LocaleController.getString("PassportReverseSideInfo", NUM), z2);
+            this.uploadReverseCell.setTextAndValue(LocaleController.getString("PassportReverseSide", NUM), LocaleController.getString("PassportReverseSideInfo", NUM), z);
             this.linearLayout2.addView(this.uploadReverseCell, LayoutHelper.createLinear(-1, -2));
             this.uploadReverseCell.setOnClickListener(new PassportActivity$$ExternalSyntheticLambda24(this));
             if (this.currentDocumentsType.selfie_required) {
@@ -5589,11 +5915,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.inputFields = new EditTextBoldCursor[i2];
         int i3 = 0;
         while (true) {
-            int i4 = 64;
+            int i4 = 6;
             if (i3 < i2) {
                 final EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
                 this.inputFields[i3] = editTextBoldCursor;
-                AnonymousClass15 r4 = new FrameLayout(this, context2) {
+                AnonymousClass15 r14 = new FrameLayout(this, context2) {
                     private StaticLayout errorLayout;
                     private float offsetX;
 
@@ -5639,9 +5965,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         }
                     }
                 };
-                r4.setWillNotDraw(z);
-                this.linearLayout2.addView(r4, LayoutHelper.createLinear(i, 64));
-                r4.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                r14.setWillNotDraw(false);
+                this.linearLayout2.addView(r14, LayoutHelper.createLinear(i, 64));
+                r14.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 if (i3 == i2 - 1) {
                     View view = new View(context2);
                     this.extraBackgroundView = view;
@@ -5650,7 +5976,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
                 if (this.documentOnly && this.currentDocumentsType != null) {
                     if (i3 < 7) {
-                        r4.setVisibility(8);
+                        r14.setVisibility(8);
                         View view2 = this.extraBackgroundView;
                         if (view2 != null) {
                             view2.setVisibility(8);
@@ -5803,10 +6129,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
                 this.inputFields[i3].setPadding(0, 0, 0, 0);
                 this.inputFields[i3].setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-                r4.addView(this.inputFields[i3], LayoutHelper.createFrame(-1, -1.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
+                r14.addView(this.inputFields[i3], LayoutHelper.createFrame(-1, -1.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
                 this.inputFields[i3].setOnEditorActionListener(new PassportActivity$$ExternalSyntheticLambda43(this));
                 i3++;
-                z = false;
                 i = -1;
             } else {
                 ShadowSectionCell shadowSectionCell = new ShadowSectionCell(context2);
@@ -5869,13 +6194,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         }
                     };
                     r7.setWillNotDraw(false);
-                    this.linearLayout2.addView(r7, LayoutHelper.createLinear(-1, i4));
+                    this.linearLayout2.addView(r7, LayoutHelper.createLinear(-1, 64));
                     r7.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     if (i6 == 2) {
                         View view3 = new View(context2);
                         this.extraBackgroundView2 = view3;
                         view3.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                        this.linearLayout2.addView(this.extraBackgroundView2, LayoutHelper.createLinear(-1, 6));
+                        this.linearLayout2.addView(this.extraBackgroundView2, LayoutHelper.createLinear(-1, i4));
                     }
                     this.inputExtraFields[i6].setTag(Integer.valueOf(i6));
                     this.inputExtraFields[i6].setSupportRtlHint(true);
@@ -5900,7 +6225,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     } else if (i6 != 2) {
                         i6++;
                         i5 = 3;
-                        i4 = 64;
+                        i4 = 6;
                     } else {
                         hashMap = this.currentValues;
                         str = "last_name_native";
@@ -5931,7 +6256,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     this.inputExtraFields[i6].setOnEditorActionListener(new PassportActivity$$ExternalSyntheticLambda41(this));
                     i6++;
                     i5 = 3;
-                    i4 = 64;
+                    i4 = 6;
                 }
                 TextInfoPrivacyCell textInfoPrivacyCell5 = new TextInfoPrivacyCell(context2);
                 this.nativeInfoCell = textInfoPrivacyCell5;
@@ -6071,15 +6396,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createIdentityInterface$45(View view, String str, String str2) {
+    public /* synthetic */ void lambda$createIdentityInterface$45(View view, CountrySelectActivity.Country country) {
         int intValue = ((Integer) view.getTag()).intValue();
         EditTextBoldCursor editTextBoldCursor = this.inputFields[intValue];
         if (intValue == 5) {
-            this.currentCitizeship = str2;
+            this.currentCitizeship = country.shortname;
         } else {
-            this.currentResidence = str2;
+            this.currentResidence = country.shortname;
         }
-        editTextBoldCursor.setText(str);
+        editTextBoldCursor.setText(country.name);
     }
 
     /* access modifiers changed from: private */
@@ -6250,9 +6575,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     public void updateUploadText(int r9) {
         /*
             r8 = this;
-            r0 = 2131626873(0x7f0e0b79, float:1.8880994E38)
+            r0 = 2131626897(0x7f0e0b91, float:1.8881043E38)
             java.lang.String r1 = "PassportUploadAdditinalDocument"
-            r2 = 2131626874(0x7f0e0b7a, float:1.8880997E38)
+            r2 = 2131626898(0x7f0e0b92, float:1.8881045E38)
             java.lang.String r3 = "PassportUploadDocument"
             r4 = 1
             r5 = 0
@@ -6332,19 +6657,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r0 == 0) goto L_0x0092
             goto L_0x00a8
         L_0x0092:
-            r0 = 2131626758(0x7f0e0b06, float:1.8880761E38)
+            r0 = 2131626782(0x7f0e0b1e, float:1.888081E38)
             java.lang.String r1 = "PassportFrontSide"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626759(0x7f0e0b07, float:1.8880763E38)
+            r1 = 2131626783(0x7f0e0b1f, float:1.8880812E38)
             java.lang.String r2 = "PassportFrontSideInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
             goto L_0x00bd
         L_0x00a8:
-            r0 = 2131626816(0x7f0e0b40, float:1.8880879E38)
+            r0 = 2131626840(0x7f0e0b58, float:1.8880928E38)
             java.lang.String r1 = "PassportMainPage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626817(0x7f0e0b41, float:1.888088E38)
+            r1 = 2131626841(0x7f0e0b59, float:1.888093E38)
             java.lang.String r2 = "PassportMainPageInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
@@ -6555,7 +6880,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7[r3] = r5
             r7[r4] = r5
             r7[r5] = r5
-            r7 = 2131626832(0x7f0e0b50, float:1.8880911E38)
+            r7 = 2131626856(0x7f0e0b68, float:1.888096E38)
             java.lang.String r0 = "PassportNoExpireDate"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6565,7 +6890,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00c9
             r6.currentGender = r7
-            r7 = 2131626818(0x7f0e0b42, float:1.8880883E38)
+            r7 = 2131626842(0x7f0e0b5a, float:1.8880932E38)
             java.lang.String r0 = "PassportMale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6575,7 +6900,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00ef
             r6.currentGender = r7
-            r7 = 2131626757(0x7f0e0b05, float:1.888076E38)
+            r7 = 2131626781(0x7f0e0b1d, float:1.8880808E38)
             java.lang.String r0 = "PassportFemale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -7018,7 +7343,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r3 = 0
             r7.languageMap = r3
         L_0x00cb:
-            r5 = 2131626750(0x7f0e0afe, float:1.8880745E38)
+            r5 = 2131626774(0x7f0e0b16, float:1.8880794E38)
             java.lang.String r14 = "PassportDocuments"
             if (r9 == 0) goto L_0x010b
             org.telegram.tgnet.TLRPC$SecureValueType r0 = r8.type
@@ -7387,7 +7712,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0395 }
             if (r2 == 0) goto L_0x0360
             java.lang.String r2 = "PassportMale"
-            r4 = 2131626818(0x7f0e0b42, float:1.8880883E38)
+            r4 = 2131626842(0x7f0e0b5a, float:1.8880932E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)     // Catch:{ Exception -> 0x0395 }
             r12.append(r2)     // Catch:{ Exception -> 0x0395 }
             goto L_0x0392
@@ -7396,7 +7721,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0395 }
             if (r2 == 0) goto L_0x0392
             java.lang.String r2 = "PassportFemale"
-            r4 = 2131626757(0x7f0e0b05, float:1.888076E38)
+            r4 = 2131626781(0x7f0e0b1d, float:1.8880808E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)     // Catch:{ Exception -> 0x0395 }
             r12.append(r2)     // Catch:{ Exception -> 0x0395 }
             goto L_0x0392
@@ -7542,7 +7867,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04c5
             if (r11 != 0) goto L_0x046c
-            r0 = 2131626836(0x7f0e0b54, float:1.888092E38)
+            r0 = 2131626860(0x7f0e0b6c, float:1.8880968E38)
             java.lang.String r1 = "PassportPersonalDetailsInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x0467:
@@ -7554,7 +7879,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = 8
             if (r1 != r2) goto L_0x047c
             r2 = r26
-            r1 = 2131626750(0x7f0e0afe, float:1.8880745E38)
+            r1 = 2131626774(0x7f0e0b16, float:1.8880794E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x0467
         L_0x047c:
@@ -7564,33 +7889,33 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r11.type
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassport
             if (r2 == 0) goto L_0x0491
-            r0 = 2131626766(0x7f0e0b0e, float:1.8880777E38)
+            r0 = 2131626790(0x7f0e0b26, float:1.8880826E38)
             java.lang.String r1 = "PassportIdentityPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x0491:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeInternalPassport
             if (r2 == 0) goto L_0x049f
-            r0 = 2131626765(0x7f0e0b0d, float:1.8880775E38)
+            r0 = 2131626789(0x7f0e0b25, float:1.8880824E38)
             java.lang.String r1 = "PassportIdentityInternalPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x049f:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeDriverLicense
             if (r2 == 0) goto L_0x04ad
-            r0 = 2131626763(0x7f0e0b0b, float:1.8880771E38)
+            r0 = 2131626787(0x7f0e0b23, float:1.888082E38)
             java.lang.String r1 = "PassportIdentityDriverLicence"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x04ad:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeIdentityCard
             if (r1 == 0) goto L_0x04c5
-            r0 = 2131626764(0x7f0e0b0c, float:1.8880773E38)
+            r0 = 2131626788(0x7f0e0b24, float:1.8880822E38)
             java.lang.String r1 = "PassportIdentityID"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x04bb:
-            r0 = 2131626762(0x7f0e0b0a, float:1.888077E38)
+            r0 = 2131626786(0x7f0e0b22, float:1.8880818E38)
             java.lang.String r1 = "PassportIdentityDocumentInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
@@ -7605,7 +7930,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04c5
             if (r11 != 0) goto L_0x04e2
-            r0 = 2131626726(0x7f0e0ae6, float:1.8880696E38)
+            r0 = 2131626750(0x7f0e0afe, float:1.8880745E38)
             java.lang.String r1 = "PassportAddressNoUploadInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
@@ -7613,7 +7938,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r1 = r7.currentActivityType
             r4 = 8
             if (r1 != r4) goto L_0x04f1
-            r1 = 2131626750(0x7f0e0afe, float:1.8880745E38)
+            r1 = 2131626774(0x7f0e0b16, float:1.8880794E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x0467
         L_0x04f1:
@@ -7622,40 +7947,40 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r11.type
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeRentalAgreement
             if (r3 == 0) goto L_0x0505
-            r0 = 2131626700(0x7f0e0acc, float:1.8880644E38)
+            r0 = 2131626724(0x7f0e0ae4, float:1.8880692E38)
             java.lang.String r1 = "PassportAddAgreementInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0505:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeUtilityBill
             if (r3 == 0) goto L_0x0513
-            r0 = 2131626704(0x7f0e0ad0, float:1.8880652E38)
+            r0 = 2131626728(0x7f0e0ae8, float:1.88807E38)
             java.lang.String r1 = "PassportAddBillInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0513:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassportRegistration
             if (r3 == 0) goto L_0x0521
-            r0 = 2131626714(0x7f0e0ada, float:1.8880672E38)
+            r0 = 2131626738(0x7f0e0af2, float:1.888072E38)
             java.lang.String r1 = "PassportAddPassportRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0521:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeTemporaryRegistration
             if (r3 == 0) goto L_0x052f
-            r0 = 2131626716(0x7f0e0adc, float:1.8880676E38)
+            r0 = 2131626740(0x7f0e0af4, float:1.8880725E38)
             java.lang.String r1 = "PassportAddTemporaryRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x052f:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeBankStatement
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626702(0x7f0e0ace, float:1.8880648E38)
+            r0 = 2131626726(0x7f0e0ae6, float:1.8880696E38)
             java.lang.String r1 = "PassportAddBankInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x053d:
-            r0 = 2131626725(0x7f0e0ae5, float:1.8880694E38)
+            r0 = 2131626749(0x7f0e0afd, float:1.8880743E38)
             java.lang.String r1 = "PassportAddressInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
@@ -7665,7 +7990,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r3 == 0) goto L_0x055c
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626839(0x7f0e0b57, float:1.8880926E38)
+            r0 = 2131626863(0x7f0e0b6f, float:1.8880974E38)
             java.lang.String r1 = "PassportPhoneInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
@@ -7674,7 +7999,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r1 == 0) goto L_0x056f
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626753(0x7f0e0b01, float:1.8880751E38)
+            r0 = 2131626777(0x7f0e0b19, float:1.88808E38)
             java.lang.String r1 = "PassportEmailInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x056f:
@@ -8320,7 +8645,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r9.setBackgroundDrawable(r4)
             org.telegram.tgnet.TLRPC$SecureValueType r4 = r1.type
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
-            r10 = 2131626872(0x7f0e0b78, float:1.8880992E38)
+            r10 = 2131626896(0x7f0e0b90, float:1.8881041E38)
             java.lang.String r11 = "PassportTwoDocuments"
             r12 = 2
             java.lang.String r13 = ""
@@ -8356,12 +8681,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x008b
         L_0x0078:
-            r4 = 2131626761(0x7f0e0b09, float:1.8880767E38)
+            r4 = 2131626785(0x7f0e0b21, float:1.8880816E38)
             java.lang.String r5 = "PassportIdentityDocument"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x008b
         L_0x0082:
-            r4 = 2131626835(0x7f0e0b53, float:1.8880917E38)
+            r4 = 2131626859(0x7f0e0b6b, float:1.8880966E38)
             java.lang.String r5 = "PassportPersonalDetails"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x008b:
@@ -8402,12 +8727,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x00f2
         L_0x00df:
-            r4 = 2131626853(0x7f0e0b65, float:1.8880954E38)
+            r4 = 2131626877(0x7f0e0b7d, float:1.8881003E38)
             java.lang.String r5 = "PassportResidentialAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x00f2
         L_0x00e9:
-            r4 = 2131626723(0x7f0e0ae3, float:1.888069E38)
+            r4 = 2131626747(0x7f0e0afb, float:1.8880739E38)
             java.lang.String r5 = "PassportAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x00f2:
@@ -8417,7 +8742,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x00f8:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePhone
             if (r5 == 0) goto L_0x010b
-            r4 = 2131626838(0x7f0e0b56, float:1.8880923E38)
+            r4 = 2131626862(0x7f0e0b6e, float:1.8880972E38)
             java.lang.String r5 = "PassportPhone"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -8426,7 +8751,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x010b:
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeEmail
             if (r4 == 0) goto L_0x011d
-            r4 = 2131626751(0x7f0e0aff, float:1.8880747E38)
+            r4 = 2131626775(0x7f0e0b17, float:1.8880796E38)
             java.lang.String r5 = "PassportEmail"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -10054,7 +10379,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165930(0x7var_ea, float:1.794609E38)
+                r14 = 2131165933(0x7var_ed, float:1.7946097E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x00f9
@@ -10122,7 +10447,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166077(0x7var_d, float:1.794639E38)
+                r11 = 2131166080(0x7var_, float:1.7946395E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -10143,7 +10468,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166075(0x7var_b, float:1.7946385E38)
+                r10 = 2131166078(0x7var_e, float:1.7946391E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10155,7 +10480,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627579(0x7f0e0e3b, float:1.8882426E38)
+                r8 = 2131627604(0x7f0e0e54, float:1.8882477E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10164,7 +10489,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166076(0x7var_c, float:1.7946387E38)
+                r10 = 2131166079(0x7var_f, float:1.7946393E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10183,7 +10508,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627583(0x7f0e0e3f, float:1.8882435E38)
+                r8 = 2131627608(0x7f0e0e58, float:1.8882485E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10301,14 +10626,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 int r1 = r0.verificationType
                 if (r1 != r3) goto L_0x02f5
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625218(0x7f0e0502, float:1.8877638E38)
+                r2 = 2131625230(0x7f0e050e, float:1.8877662E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0303
             L_0x02f5:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625217(0x7f0e0501, float:1.8877636E38)
+                r2 = 2131625229(0x7f0e050d, float:1.887766E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)

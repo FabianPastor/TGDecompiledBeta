@@ -80,6 +80,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SlideView;
+import org.telegram.ui.CountrySelectActivity;
 
 public class ChangePhoneActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -620,7 +621,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r0 = new android.widget.TextView
                 r0.<init>(r2)
                 r1.textView2 = r0
-                r2 = 2131624696(0x7f0e02f8, float:1.887658E38)
+                r2 = 2131624697(0x7f0e02f9, float:1.8876581E38)
                 java.lang.String r5 = "ChangePhoneHelp"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
                 r0.setText(r2)
@@ -743,7 +744,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 int r0 = r0.length()
                 if (r0 != 0) goto L_0x0343
                 android.widget.TextView r0 = r1.countryButton
-                r2 = 2131624914(0x7f0e03d2, float:1.8877021E38)
+                r2 = 2131624926(0x7f0e03de, float:1.8877045E38)
                 java.lang.String r3 = "ChooseCountry"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -781,8 +782,8 @@ public class ChangePhoneActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$1(String str, String str2) {
-            selectCountry(str);
+        public /* synthetic */ void lambda$new$1(CountrySelectActivity.Country country) {
+            selectCountry(country.name);
             AndroidUtilities.runOnUIThread(new ChangePhoneActivity$PhoneView$$ExternalSyntheticLambda4(this), 300);
             this.phoneField.requestFocus();
             HintEditText hintEditText = this.phoneField;
@@ -1147,7 +1148,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165930(0x7var_ea, float:1.794609E38)
+                r14 = 2131165933(0x7var_ed, float:1.7946097E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x00f9
@@ -1215,7 +1216,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166077(0x7var_d, float:1.794639E38)
+                r11 = 2131166080(0x7var_, float:1.7946395E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -1236,7 +1237,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166075(0x7var_b, float:1.7946385E38)
+                r10 = 2131166078(0x7var_e, float:1.7946391E38)
                 r8.setImageResource(r10)
                 org.telegram.ui.Components.RLottieImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -1248,7 +1249,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627579(0x7f0e0e3b, float:1.8882426E38)
+                r8 = 2131627604(0x7f0e0e54, float:1.8882477E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -1289,7 +1290,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627583(0x7f0e0e3f, float:1.8882435E38)
+                r8 = 2131627608(0x7f0e0e58, float:1.8882485E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -1407,14 +1408,14 @@ public class ChangePhoneActivity extends BaseFragment {
                 int r1 = r0.currentType
                 if (r1 != r3) goto L_0x0316
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625218(0x7f0e0502, float:1.8877638E38)
+                r2 = 2131625230(0x7f0e050e, float:1.8877662E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0324
             L_0x0316:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625217(0x7f0e0501, float:1.8877636E38)
+                r2 = 2131625229(0x7f0e050d, float:1.887766E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)

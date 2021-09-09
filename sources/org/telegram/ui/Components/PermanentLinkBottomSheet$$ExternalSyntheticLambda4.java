@@ -10,6 +10,10 @@ public final /* synthetic */ class PermanentLinkBottomSheet$$ExternalSyntheticLa
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$5();
+        this.f$0.updateColors();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

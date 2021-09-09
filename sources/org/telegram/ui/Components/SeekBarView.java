@@ -27,6 +27,7 @@ public class SeekBarView extends FrameLayout {
     private int[] pressedState;
     private float progressToSet;
     private boolean reportChanges;
+    private final Theme.ResourcesProvider resourcesProvider;
     private final SeekBarAccessibilityDelegate seekBarAccessibilityDelegate;
     private int selectorWidth;
     float sx;
@@ -61,30 +62,35 @@ public class SeekBarView extends FrameLayout {
     }
 
     public SeekBarView(Context context) {
-        this(context, false);
+        this(context, (Theme.ResourcesProvider) null);
     }
 
-    public SeekBarView(Context context, boolean z) {
+    public SeekBarView(Context context, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, false, resourcesProvider2);
+    }
+
+    public SeekBarView(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.progressToSet = -100.0f;
         this.pressedState = new int[]{16842910, 16842919};
         this.transitionProgress = 1.0f;
+        this.resourcesProvider = resourcesProvider2;
         setWillNotDraw(false);
         this.innerPaint1 = new Paint(1);
         Paint paint = new Paint(1);
         this.outerPaint1 = paint;
-        paint.setColor(Theme.getColor("player_progress"));
+        paint.setColor(getThemedColor("player_progress"));
         this.selectorWidth = AndroidUtilities.dp(32.0f);
         this.thumbSize = AndroidUtilities.dp(24.0f);
         this.currentRadius = (float) AndroidUtilities.dp(6.0f);
         if (Build.VERSION.SDK_INT >= 21) {
-            Drawable createSelectorDrawable = Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(Theme.getColor("player_progress"), 40), 1, AndroidUtilities.dp(16.0f));
+            Drawable createSelectorDrawable = Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(getThemedColor("player_progress"), 40), 1, AndroidUtilities.dp(16.0f));
             this.hoverDrawable = createSelectorDrawable;
             createSelectorDrawable.setCallback(this);
             this.hoverDrawable.setVisible(true, false);
         }
         setImportantForAccessibility(1);
-        AnonymousClass1 r5 = new FloatSeekBarAccessibilityDelegate(z) {
+        AnonymousClass1 r4 = new FloatSeekBarAccessibilityDelegate(z) {
             public float getProgress() {
                 return SeekBarView.this.getProgress();
             }
@@ -116,8 +122,8 @@ public class SeekBarView extends FrameLayout {
                 return null;
             }
         };
-        this.seekBarAccessibilityDelegate = r5;
-        setAccessibilityDelegate(r5);
+        this.seekBarAccessibilityDelegate = r4;
+        setAccessibilityDelegate(r4);
     }
 
     public void setTwoSided(boolean z) {
@@ -348,7 +354,7 @@ public class SeekBarView extends FrameLayout {
             int r6 = r0 / 2
             android.graphics.Paint r0 = r11.innerPaint1
             java.lang.String r1 = "player_progressBackground"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            int r1 = r11.getThemedColor(r1)
             r0.setColor(r1)
             int r0 = r11.selectorWidth
             int r0 = r0 / 2
@@ -378,7 +384,7 @@ public class SeekBarView extends FrameLayout {
             if (r0 <= 0) goto L_0x008a
             android.graphics.Paint r0 = r11.innerPaint1
             java.lang.String r1 = "key_player_progressCachedBackground"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            int r1 = r11.getThemedColor(r1)
             r0.setColor(r1)
             int r0 = r11.selectorWidth
             int r0 = r0 / 2
@@ -659,5 +665,11 @@ public class SeekBarView extends FrameLayout {
 
     public SeekBarAccessibilityDelegate getSeekBarAccessibilityDelegate() {
         return this.seekBarAccessibilityDelegate;
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

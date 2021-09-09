@@ -26,7 +26,7 @@ public abstract class TLRPC$MessageMedia extends TLObject {
     public String title;
     public long total_amount;
     public int ttl_seconds;
-    public int user_id;
+    public long user_id;
     public String vcard;
     public String venue_id;
     public String venue_type;
@@ -65,7 +65,7 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaPhoto_old();
                 break;
             case -873313984:
-                tLRPC$MessageMedia = new TLRPC$TL_messageMediaContact();
+                tLRPC$MessageMedia = new TLRPC$TL_messageMediaContact_layer131();
                 break;
             case -203411800:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaDocument_layer68();
@@ -108,6 +108,9 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                 break;
             case 1766936791:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaPhoto();
+                break;
+            case 1882335561:
+                tLRPC$MessageMedia = new TLRPC$TL_messageMediaContact();
                 break;
             case 2031269663:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaVenue_layer71();

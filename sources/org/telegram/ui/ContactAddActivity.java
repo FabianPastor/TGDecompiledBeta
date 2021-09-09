@@ -52,7 +52,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     boolean paused;
     private String phone;
     /* access modifiers changed from: private */
-    public int user_id;
+    public long user_id;
 
     public interface ContactAddActivityDelegate {
         void didAddToContacts();
@@ -69,12 +69,12 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     public boolean onFragmentCreate() {
         getNotificationCenter().addObserver(this, NotificationCenter.updateInterfaces);
-        this.user_id = getArguments().getInt("user_id", 0);
+        this.user_id = getArguments().getLong("user_id", 0);
         this.phone = getArguments().getString("phone");
         this.addContact = getArguments().getBoolean("addContact", false);
         SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
         this.needAddException = notificationsSettings.getBoolean("dialog_bar_exception" + this.user_id, false);
-        if (getMessagesController().getUser(Integer.valueOf(this.user_id)) == null || !super.onFragmentCreate()) {
+        if (getMessagesController().getUser(Long.valueOf(this.user_id)) == null || !super.onFragmentCreate()) {
             return false;
         }
         return true;
@@ -100,14 +100,14 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 if (i == -1) {
                     ContactAddActivity.this.finishFragment();
                 } else if (i == 1 && ContactAddActivity.this.firstNameField.getText().length() != 0) {
-                    TLRPC$User user = ContactAddActivity.this.getMessagesController().getUser(Integer.valueOf(ContactAddActivity.this.user_id));
+                    TLRPC$User user = ContactAddActivity.this.getMessagesController().getUser(Long.valueOf(ContactAddActivity.this.user_id));
                     user.first_name = ContactAddActivity.this.firstNameField.getText().toString();
                     user.last_name = ContactAddActivity.this.lastNameField.getText().toString();
                     ContactAddActivity.this.getContactsController().addContact(user, ContactAddActivity.this.checkBoxCell != null && ContactAddActivity.this.checkBoxCell.isChecked());
                     SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(ContactAddActivity.this.currentAccount).edit();
                     edit.putInt("dialog_bar_vis3" + ContactAddActivity.this.user_id, 3).commit();
-                    ContactAddActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, 1);
-                    ContactAddActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, Long.valueOf((long) ContactAddActivity.this.user_id));
+                    ContactAddActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_NAME));
+                    ContactAddActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, Long.valueOf(ContactAddActivity.this.user_id));
                     ContactAddActivity.this.finishFragment();
                     if (ContactAddActivity.this.delegate != null) {
                         ContactAddActivity.this.delegate.didAddToContacts();
@@ -199,7 +199,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.lastNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
         this.lastNameField.setOnEditorActionListener(new ContactAddActivity$$ExternalSyntheticLambda3(this));
-        TLRPC$User user = getMessagesController().getUser(Integer.valueOf(this.user_id));
+        TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.user_id));
         if (user != null) {
             if (user.phone == null && (str = this.phone) != null) {
                 user.phone = PhoneFormat.stripExceptNumbers(str);
@@ -267,7 +267,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     private void updateAvatarLayout() {
         TLRPC$User user;
-        if (this.nameTextView != null && (user = getMessagesController().getUser(Integer.valueOf(this.user_id))) != null) {
+        if (this.nameTextView != null && (user = getMessagesController().getUser(Long.valueOf(this.user_id))) != null) {
             if (TextUtils.isEmpty(user.phone)) {
                 this.nameTextView.setText(LocaleController.getString("MobileHidden", NUM));
                 this.infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileHiddenExceptionInfo", NUM, UserObject.getFirstName(user))));
@@ -290,7 +290,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.updateInterfaces) {
             int intValue = objArr[0].intValue();
-            if ((intValue & 2) != 0 || (intValue & 4) != 0) {
+            if ((MessagesController.UPDATE_MASK_AVATAR & intValue) != 0 || (intValue & MessagesController.UPDATE_MASK_STATUS) != 0) {
                 updateAvatarLayout();
             }
         }
@@ -354,7 +354,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$getThemeDescriptions$4() {
         TLRPC$User user;
-        if (this.avatarImage != null && (user = getMessagesController().getUser(Integer.valueOf(this.user_id))) != null) {
+        if (this.avatarImage != null && (user = getMessagesController().getUser(Long.valueOf(this.user_id))) != null) {
             this.avatarDrawable.setInfo(user);
             this.avatarImage.invalidate();
         }

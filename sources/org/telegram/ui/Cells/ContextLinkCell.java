@@ -1052,7 +1052,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
             tLRPC$TL_message.from_id = tLRPC$TL_peerUser;
             TLRPC$Peer tLRPC$Peer = tLRPC$TL_message.peer_id;
-            int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
+            long clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
             tLRPC$TL_peerUser.user_id = clientUserId;
             tLRPC$Peer.user_id = clientUserId;
             tLRPC$TL_message.date = (int) (System.currentTimeMillis() / 1000);

@@ -2,13 +2,13 @@ package j$.util.stream;
 
 import j$.util.N;
 import j$.util.function.Consumer;
-import j$.util.function.j;
 import j$.util.function.k;
+import j$.util.function.l;
 import j$.util.v;
 import java.util.Arrays;
 import java.util.Iterator;
 
-class X3 extends CLASSNAMEa4 implements k {
+class X3 extends CLASSNAMEa4 implements l {
     X3() {
     }
 
@@ -33,8 +33,8 @@ class X3 extends CLASSNAMEa4 implements k {
     }
 
     public void forEach(Consumer consumer) {
-        if (consumer instanceof k) {
-            g((k) consumer);
+        if (consumer instanceof l) {
+            g((l) consumer);
         } else if (!R4.a) {
             spliterator().forEachRemaining(consumer);
         } else {
@@ -47,17 +47,17 @@ class X3 extends CLASSNAMEa4 implements k {
         return N.g(spliterator());
     }
 
-    public k l(k kVar) {
-        kVar.getClass();
-        return new j(this, kVar);
+    public l l(l lVar) {
+        lVar.getClass();
+        return new k(this, lVar);
     }
 
     /* access modifiers changed from: protected */
     public void t(Object obj, int i, int i2, Object obj2) {
         int[] iArr = (int[]) obj;
-        k kVar = (k) obj2;
+        l lVar = (l) obj2;
         while (i < i2) {
-            kVar.accept(iArr[i]);
+            lVar.accept(iArr[i]);
             i++;
         }
     }

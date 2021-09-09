@@ -21,6 +21,11 @@ public final /* synthetic */ class a implements BiConsumer, BiFunction, Consumer
         ((Consumer) this.c).accept(obj);
     }
 
+    public BiFunction andThen(Function function) {
+        function.getClass();
+        return new a((BiFunction) this, function);
+    }
+
     public /* synthetic */ Consumer andThen(Consumer consumer) {
         return Consumer.CC.$default$andThen(this, consumer);
     }
@@ -29,12 +34,7 @@ public final /* synthetic */ class a implements BiConsumer, BiFunction, Consumer
         return ((Function) this.b).apply(((BiFunction) this.c).apply(obj, obj2));
     }
 
-    public BiFunction b(Function function) {
-        function.getClass();
-        return new a((BiFunction) this, function);
-    }
-
-    public BiConsumer c(BiConsumer biConsumer) {
+    public BiConsumer b(BiConsumer biConsumer) {
         switch (this.a) {
             case 0:
                 biConsumer.getClass();

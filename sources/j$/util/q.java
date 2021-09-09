@@ -1,10 +1,9 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.o;
 import j$.util.function.p;
 
-public final /* synthetic */ class q implements p {
+public final /* synthetic */ class q implements j$.util.function.q {
     public final /* synthetic */ Consumer a;
 
     public /* synthetic */ q(Consumer consumer) {
@@ -15,8 +14,8 @@ public final /* synthetic */ class q implements p {
         this.a.accept(Long.valueOf(j));
     }
 
-    public p f(p pVar) {
-        pVar.getClass();
-        return new o(this, pVar);
+    public j$.util.function.q f(j$.util.function.q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
     }
 }

@@ -96,7 +96,7 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public LinkActionView(Context context, BaseFragment baseFragment, BottomSheet bottomSheet, int i, boolean z, boolean z2) {
+    public LinkActionView(Context context, BaseFragment baseFragment, BottomSheet bottomSheet, long j, boolean z, boolean z2) {
         super(context);
         Context context2 = context;
         BaseFragment baseFragment2 = baseFragment;
@@ -534,7 +534,7 @@ public class LinkActionView extends LinearLayout {
         }
     }
 
-    public void loadUsers(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, int i) {
+    public void loadUsers(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, long j) {
         if (tLRPC$TL_chatInviteExported == null) {
             setUsers(0, (ArrayList<TLRPC$User>) null);
             return;
@@ -543,7 +543,7 @@ public class LinkActionView extends LinearLayout {
         if (tLRPC$TL_chatInviteExported.usage > 0 && tLRPC$TL_chatInviteExported.importers == null && !this.loadingImporters) {
             TLRPC$TL_messages_getChatInviteImporters tLRPC$TL_messages_getChatInviteImporters = new TLRPC$TL_messages_getChatInviteImporters();
             tLRPC$TL_messages_getChatInviteImporters.link = tLRPC$TL_chatInviteExported.link;
-            tLRPC$TL_messages_getChatInviteImporters.peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer(-i);
+            tLRPC$TL_messages_getChatInviteImporters.peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer(-j);
             tLRPC$TL_messages_getChatInviteImporters.offset_user = new TLRPC$TL_inputUserEmpty();
             tLRPC$TL_messages_getChatInviteImporters.limit = Math.min(tLRPC$TL_chatInviteExported.usage, 3);
             this.loadingImporters = true;

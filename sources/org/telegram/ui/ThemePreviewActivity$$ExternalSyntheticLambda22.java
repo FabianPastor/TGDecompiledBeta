@@ -12,4 +12,8 @@ public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda
     public final void didSetColor() {
         this.f$0.lambda$getThemeDescriptionsInternal$26();
     }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    }
 }

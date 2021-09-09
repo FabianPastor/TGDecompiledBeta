@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AnimatedArrowDrawable;
 import org.telegram.ui.Components.AudioPlayerAlert;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -99,10 +101,20 @@ public class ThemeDescription {
     private Paint[] paintToUpdate;
     private int previousColor;
     private boolean[] previousIsDefault;
+    public Theme.ResourcesProvider resourcesProvider;
     private View viewToInvalidate;
 
     public interface ThemeDescriptionDelegate {
+
+        /* renamed from: org.telegram.ui.ActionBar.ThemeDescription$ThemeDescriptionDelegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$onAnimationProgress(ThemeDescriptionDelegate themeDescriptionDelegate, float f) {
+            }
+        }
+
         void didSetColor();
+
+        void onAnimationProgress(float f);
     }
 
     public ThemeDescription(View view, int i, Class[] clsArr, Paint[] paintArr, Drawable[] drawableArr, ThemeDescriptionDelegate themeDescriptionDelegate, String str, Object obj) {
@@ -262,6 +274,8 @@ public class ThemeDescription {
                         }
                     } else if (drawableArr[i4] instanceof AvatarDrawable) {
                         ((AvatarDrawable) drawableArr[i4]).setColor(i);
+                    } else if (drawableArr[i4] instanceof AnimatedArrowDrawable) {
+                        ((AnimatedArrowDrawable) drawableArr[i4]).setColor(i);
                     } else {
                         drawableArr[i4].setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
                     }
@@ -520,6 +534,7 @@ public class ThemeDescription {
         Object obj;
         TypefaceSpan[] typefaceSpanArr;
         TypefaceSpan[] typefaceSpanArr2;
+        TypefaceSpan[] typefaceSpanArr3;
         int i2 = 0;
         while (true) {
             Class[] clsArr = this.listClasses;
@@ -643,8 +658,8 @@ public class ThemeDescription {
                                                 textView2.invalidate();
                                             } else if ((i6 & FLAG_FASTSCROLL) != 0) {
                                                 CharSequence text = textView2.getText();
-                                                if ((text instanceof SpannedString) && (typefaceSpanArr2 = (TypefaceSpan[]) ((SpannedString) text).getSpans(0, text.length(), TypefaceSpan.class)) != null && typefaceSpanArr2.length > 0) {
-                                                    for (TypefaceSpan color : typefaceSpanArr2) {
+                                                if ((text instanceof SpannedString) && (typefaceSpanArr3 = (TypefaceSpan[]) ((SpannedString) text).getSpans(0, text.length(), TypefaceSpan.class)) != null && typefaceSpanArr3.length > 0) {
+                                                    for (TypefaceSpan color : typefaceSpanArr3) {
                                                         color.setColor(i);
                                                     }
                                                 }
@@ -747,8 +762,8 @@ public class ThemeDescription {
                                                     TextView textView3 = i8 == 0 ? ((AudioPlayerAlert.ClippingTextViewSwitcher) drawable).getTextView() : ((AudioPlayerAlert.ClippingTextViewSwitcher) drawable).getNextTextView();
                                                     if (textView3 != null) {
                                                         CharSequence text2 = textView3.getText();
-                                                        if ((text2 instanceof SpannedString) && (typefaceSpanArr = (TypefaceSpan[]) ((SpannedString) text2).getSpans(0, text2.length(), TypefaceSpan.class)) != null && typefaceSpanArr.length > 0) {
-                                                            for (TypefaceSpan color2 : typefaceSpanArr) {
+                                                        if ((text2 instanceof SpannedString) && (typefaceSpanArr2 = (TypefaceSpan[]) ((SpannedString) text2).getSpans(0, text2.length(), TypefaceSpan.class)) != null && typefaceSpanArr2.length > 0) {
+                                                            for (TypefaceSpan color2 : typefaceSpanArr2) {
                                                                 color2.setColor(i);
                                                             }
                                                         }
@@ -761,6 +776,12 @@ public class ThemeDescription {
                                                     TextView textView4 = i9 == 0 ? ((AudioPlayerAlert.ClippingTextViewSwitcher) drawable).getTextView() : ((AudioPlayerAlert.ClippingTextViewSwitcher) drawable).getNextTextView();
                                                     if (textView4 != null) {
                                                         textView4.setTextColor(i);
+                                                        CharSequence text3 = textView4.getText();
+                                                        if ((text3 instanceof SpannedString) && (typefaceSpanArr = (TypefaceSpan[]) ((SpannedString) text3).getSpans(0, text3.length(), TypefaceSpan.class)) != null && typefaceSpanArr.length > 0) {
+                                                            for (TypefaceSpan color3 : typefaceSpanArr) {
+                                                                color3.setColor(i);
+                                                            }
+                                                        }
                                                     }
                                                     i9++;
                                                 }
@@ -799,7 +820,18 @@ public class ThemeDescription {
     }
 
     public int getSetColor() {
-        return Theme.getColor(this.currentKey);
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(this.currentKey) : null;
+        return color != null ? color.intValue() : Theme.getColor(this.currentKey);
+    }
+
+    public void setAnimatedColor(int i) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        if (resourcesProvider2 != null) {
+            resourcesProvider2.setAnimatedColor(getCurrentKey(), i);
+        } else {
+            Theme.setAnimatedColor(getCurrentKey(), i);
+        }
     }
 
     public void setDefaultColor() {

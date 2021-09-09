@@ -1,6 +1,6 @@
 package org.telegram.ui;
 
-import android.util.SparseArray;
+import androidx.collection.LongSparseArray;
 import org.telegram.tgnet.TLRPC$TL_channelAdminLogEventsFilter;
 import org.telegram.ui.Components.AdminLogFilterAlert;
 
@@ -11,7 +11,7 @@ public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLam
         this.f$0 = channelAdminLogActivity;
     }
 
-    public final void didSelectRights(TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, SparseArray sparseArray) {
-        this.f$0.lambda$createView$4(tLRPC$TL_channelAdminLogEventsFilter, sparseArray);
+    public final void didSelectRights(TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, LongSparseArray longSparseArray) {
+        this.f$0.lambda$createView$4(tLRPC$TL_channelAdminLogEventsFilter, longSparseArray);
     }
 }

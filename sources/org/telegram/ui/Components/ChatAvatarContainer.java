@@ -38,21 +38,22 @@ import org.telegram.ui.Components.ClearHistoryAlert;
 import org.telegram.ui.Components.SharedMediaLayout;
 
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImageView;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount;
     private int currentConnectionState;
-    private boolean[] isOnline = new boolean[1];
+    private boolean[] isOnline;
     private CharSequence lastSubtitle;
     private String lastSubtitleColorKey;
-    private int leftPadding = AndroidUtilities.dp(8.0f);
-    private boolean occupyStatusBar = true;
-    private int onlineCount = -1;
+    private int leftPadding;
+    private boolean occupyStatusBar;
+    private int onlineCount;
     /* access modifiers changed from: private */
     public ChatActivity parentFragment;
+    private Theme.ResourcesProvider resourcesProvider;
     private boolean secretChatTimer;
     private SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader;
-    private StatusDrawable[] statusDrawables = new StatusDrawable[6];
+    private StatusDrawable[] statusDrawables;
     /* access modifiers changed from: private */
     public SimpleTextView subtitleTextView;
     /* access modifiers changed from: private */
@@ -63,7 +64,19 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private SimpleTextView titleTextView;
 
     public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean z) {
+        this(context, chatActivity, z, (Theme.ResourcesProvider) null);
+    }
+
+    public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.statusDrawables = new StatusDrawable[6];
+        this.avatarDrawable = new AvatarDrawable();
+        this.currentAccount = UserConfig.selectedAccount;
+        this.occupyStatusBar = true;
+        this.leftPadding = AndroidUtilities.dp(8.0f);
+        this.isOnline = new boolean[1];
+        this.onlineCount = -1;
+        this.resourcesProvider = resourcesProvider2;
         this.parentFragment = chatActivity;
         final boolean z2 = chatActivity != null && chatActivity.getChatMode() == 0 && !UserObject.isReplyUser(this.parentFragment.getCurrentUser());
         this.avatarImageView = new BackupImageView(this, context) {
@@ -93,7 +106,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
         SimpleTextView simpleTextView = new SimpleTextView(context);
         this.titleTextView = simpleTextView;
-        simpleTextView.setTextColor(Theme.getColor("actionBarDefaultTitle"));
+        simpleTextView.setTextColor(getThemedColor("actionBarDefaultTitle"));
         this.titleTextView.setTextSize(18);
         this.titleTextView.setGravity(3);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -101,7 +114,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         addView(this.titleTextView);
         SimpleTextView simpleTextView2 = new SimpleTextView(context);
         this.subtitleTextView = simpleTextView2;
-        simpleTextView2.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
+        simpleTextView2.setTextColor(getThemedColor("actionBarDefaultSubtitle"));
         this.subtitleTextView.setTag("actionBarDefaultSubtitle");
         this.subtitleTextView.setTextSize(14);
         this.subtitleTextView.setGravity(3);
@@ -121,7 +134,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             imageView2.setImageDrawable(timerDrawable2);
             addView(this.timeItem);
             this.secretChatTimer = z;
-            this.timeItem.setOnClickListener(new ChatAvatarContainer$$ExternalSyntheticLambda2(this));
+            this.timeItem.setOnClickListener(new ChatAvatarContainer$$ExternalSyntheticLambda2(this, resourcesProvider2));
             if (this.secretChatTimer) {
                 this.timeItem.setContentDescription(LocaleController.getString("SetTimer", NUM));
             } else {
@@ -159,9 +172,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(View view) {
+    public /* synthetic */ void lambda$new$1(Theme.ResourcesProvider resourcesProvider2, View view) {
         if (this.secretChatTimer) {
-            this.parentFragment.showDialog(AlertsCreator.createTTLAlert(getContext(), this.parentFragment.getCurrentEncryptedChat()).create());
+            this.parentFragment.showDialog(AlertsCreator.createTTLAlert(getContext(), this.parentFragment.getCurrentEncryptedChat(), resourcesProvider2).create());
         } else {
             openSetTimer();
         }
@@ -178,7 +191,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
         TLRPC$Chat currentChat = this.parentFragment.getCurrentChat();
         if (currentChat == null || ChatObject.canUserDoAdminAction(currentChat, 13)) {
-            ClearHistoryAlert clearHistoryAlert = new ClearHistoryAlert(this.parentFragment.getParentActivity(), this.parentFragment.getCurrentUser(), this.parentFragment.getCurrentChat(), false);
+            ClearHistoryAlert clearHistoryAlert = new ClearHistoryAlert(this.parentFragment.getParentActivity(), this.parentFragment.getCurrentUser(), this.parentFragment.getCurrentChat(), false, (Theme.ResourcesProvider) null);
             clearHistoryAlert.setDelegate(new ClearHistoryAlert.ClearHistoryAlertDelegate() {
                 public /* synthetic */ void onClearHistory(boolean z) {
                     ClearHistoryAlert.ClearHistoryAlertDelegate.CC.$default$onClearHistory(this, z);
@@ -243,7 +256,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         L_0x004d:
             r3 = 2
             r4 = 1
-            if (r1 == 0) goto L_0x00ca
+            if (r1 == 0) goto L_0x00d5
             android.os.Bundle r2 = new android.os.Bundle
             r2.<init>()
             boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r1)
@@ -267,11 +280,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             r8.setChatInfo(r0)
             org.telegram.ui.ChatActivity r0 = r7.parentFragment
             r0.presentFragment(r8)
-            goto L_0x00f4
+            goto L_0x00ff
         L_0x008e:
-            int r0 = r1.id
-            java.lang.String r1 = "user_id"
-            r2.putInt(r1, r0)
+            long r0 = r1.id
+            java.lang.String r5 = "user_id"
+            r2.putLong(r5, r0)
             org.telegram.ui.ChatActivity r0 = r7.parentFragment
             boolean r0 = r0.hasReportSpam()
             java.lang.String r1 = "reportSpam"
@@ -282,43 +295,47 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             long r0 = r0.getDialogId()
             r2.putLong(r6, r0)
         L_0x00ad:
+            java.lang.String r0 = "actionBarDefault"
+            int r0 = r7.getThemedColor(r0)
+            java.lang.String r1 = "actionBarColor"
+            r2.putInt(r1, r0)
             org.telegram.ui.ProfileActivity r0 = new org.telegram.ui.ProfileActivity
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r1 = r7.sharedMediaPreloader
             r0.<init>(r2, r1)
             org.telegram.ui.ChatActivity r1 = r7.parentFragment
             org.telegram.tgnet.TLRPC$UserFull r1 = r1.getCurrentUserInfo()
             r0.setUserInfo(r1)
-            if (r8 == 0) goto L_0x00c0
-            goto L_0x00c1
-        L_0x00c0:
+            if (r8 == 0) goto L_0x00cb
+            goto L_0x00cc
+        L_0x00cb:
             r3 = 1
-        L_0x00c1:
+        L_0x00cc:
             r0.setPlayProfileAnimation(r3)
             org.telegram.ui.ChatActivity r8 = r7.parentFragment
             r8.presentFragment(r0)
-            goto L_0x00f4
-        L_0x00ca:
-            if (r2 == 0) goto L_0x00f4
+            goto L_0x00ff
+        L_0x00d5:
+            if (r2 == 0) goto L_0x00ff
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
-            int r1 = r2.id
-            java.lang.String r2 = "chat_id"
-            r0.putInt(r2, r1)
+            long r1 = r2.id
+            java.lang.String r5 = "chat_id"
+            r0.putLong(r5, r1)
             org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r2 = r7.sharedMediaPreloader
             r1.<init>(r0, r2)
             org.telegram.ui.ChatActivity r0 = r7.parentFragment
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.getCurrentChatInfo()
             r1.setChatInfo(r0)
-            if (r8 == 0) goto L_0x00eb
-            goto L_0x00ec
-        L_0x00eb:
+            if (r8 == 0) goto L_0x00f6
+            goto L_0x00f7
+        L_0x00f6:
             r3 = 1
-        L_0x00ec:
+        L_0x00f7:
             r1.setPlayProfileAnimation(r3)
             org.telegram.ui.ChatActivity r8 = r7.parentFragment
             r8.presentFragment(r1)
-        L_0x00f4:
+        L_0x00ff:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAvatarContainer.openProfile(boolean):void");
@@ -438,7 +455,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         if (z || z2) {
             if (!(this.titleTextView.getRightDrawable() instanceof ScamDrawable)) {
                 ScamDrawable scamDrawable = new ScamDrawable(11, z ^ true ? 1 : 0);
-                scamDrawable.setColor(Theme.getColor("actionBarDefaultSubtitle"));
+                scamDrawable.setColor(getThemedColor("actionBarDefaultSubtitle"));
                 this.titleTextView.setRightDrawable((Drawable) scamDrawable);
             }
         } else if (this.titleTextView.getRightDrawable() instanceof ScamDrawable) {
@@ -613,7 +630,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             }
                         }
                     } else if (currentUser != null) {
-                        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(currentUser.id));
+                        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(currentUser.id));
                         if (user != null) {
                             currentUser = user;
                         }
@@ -621,8 +638,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                                 string = LocaleController.getString("ChatYourSelf", NUM);
                             } else {
-                                int i3 = currentUser.id;
-                                if (i3 == 333000 || i3 == 777000 || i3 == 42777) {
+                                long j = currentUser.id;
+                                if (j == 333000 || j == 777000 || j == 42777) {
                                     string = LocaleController.getString("ServiceNotifications", NUM);
                                 } else if (MessagesController.isSupportUser(currentUser)) {
                                     string = LocaleController.getString("SupportStatus", NUM);
@@ -675,7 +692,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 this.lastSubtitleColorKey = z2 ? "chat_status" : "actionBarDefaultSubtitle";
                 if (this.lastSubtitle == null) {
                     this.subtitleTextView.setText(str);
-                    this.subtitleTextView.setTextColor(Theme.getColor(this.lastSubtitleColorKey));
+                    this.subtitleTextView.setTextColor(getThemedColor(this.lastSubtitleColorKey));
                     this.subtitleTextView.setTag(this.lastSubtitleColorKey);
                     return;
                 }
@@ -772,7 +789,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                 if ((currentChatInfo instanceof TLRPC$TL_chatFull) || (z && currentChatInfo.participants_count <= 200 && currentChatInfo.participants != null)) {
                     for (int i = 0; i < currentChatInfo.participants.participants.size(); i++) {
-                        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(currentChatInfo.participants.participants.get(i).user_id));
+                        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(currentChatInfo.participants.participants.get(i).user_id));
                         if (!(user == null || (tLRPC$UserStatus = user.status) == null || ((tLRPC$UserStatus.expires <= currentTime && user.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) || user.status.expires <= 10000))) {
                             this.onlineCount++;
                         }
@@ -829,7 +846,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 this.lastSubtitle = null;
                 String str2 = this.lastSubtitleColorKey;
                 if (str2 != null) {
-                    this.subtitleTextView.setTextColor(Theme.getColor(str2));
+                    this.subtitleTextView.setTextColor(getThemedColor(str2));
                     this.subtitleTextView.setTag(this.lastSubtitleColorKey);
                     return;
                 }
@@ -841,7 +858,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.lastSubtitle = this.subtitleTextView.getText();
         }
         this.subtitleTextView.setText(str);
-        this.subtitleTextView.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
+        this.subtitleTextView.setTextColor(getThemedColor("actionBarDefaultSubtitle"));
         this.subtitleTextView.setTag("actionBarDefaultSubtitle");
     }
 
@@ -858,5 +875,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 
     public BackupImageView getAvatarImageView() {
         return this.avatarImageView;
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

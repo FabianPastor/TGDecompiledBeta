@@ -3,13 +3,13 @@ package j$.util.stream;
 import j$.lang.a;
 import j$.lang.b;
 import j$.lang.c;
-import j$.util.function.B;
+import j$.util.function.C;
 import j$.util.function.Function;
 import j$.util.function.h;
-import j$.util.function.m;
-import j$.util.function.p;
+import j$.util.function.n;
 import j$.util.function.q;
-import j$.util.function.s;
+import j$.util.function.r;
+import j$.util.function.t;
 import j$.wrappers.CLASSNAMEj0;
 
 class N extends CLASSNAMEd1 {
@@ -45,15 +45,9 @@ class N extends CLASSNAMEd1 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public N(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, m mVar) {
+    public N(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, n nVar) {
         super(cVar, f4Var, i);
-        this.m = mVar;
-    }
-
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public N(CLASSNAMEe1 e1Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, p pVar) {
-        super(cVar, f4Var, i);
-        this.m = pVar;
+        this.m = nVar;
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -63,9 +57,15 @@ class N extends CLASSNAMEd1 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public N(CLASSNAMEe1 e1Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, s sVar) {
+    public N(CLASSNAMEe1 e1Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, r rVar) {
         super(cVar, f4Var, i);
-        this.m = sVar;
+        this.m = rVar;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public N(CLASSNAMEe1 e1Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, t tVar) {
+        super(cVar, f4Var, i);
+        this.m = tVar;
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -81,8 +81,8 @@ class N extends CLASSNAMEd1 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public N(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, B b) {
+    public N(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, C c) {
         super(cVar, f4Var, i);
-        this.m = b;
+        this.m = c;
     }
 }

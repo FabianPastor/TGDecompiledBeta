@@ -35,7 +35,7 @@ public class TLRPC$TL_pollResults_layer111 extends TLRPC$PollResults {
             if (readInt324 == NUM) {
                 int readInt325 = abstractSerializedData.readInt32(z);
                 for (int i2 = 0; i2 < readInt325; i2++) {
-                    this.recent_voters.add(Integer.valueOf(abstractSerializedData.readInt32(z)));
+                    this.recent_voters.add(Long.valueOf((long) abstractSerializedData.readInt32(z)));
                 }
             } else if (z) {
                 throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
@@ -64,7 +64,7 @@ public class TLRPC$TL_pollResults_layer111 extends TLRPC$PollResults {
             int size2 = this.recent_voters.size();
             abstractSerializedData.writeInt32(size2);
             for (int i3 = 0; i3 < size2; i3++) {
-                abstractSerializedData.writeInt32(this.recent_voters.get(i3).intValue());
+                abstractSerializedData.writeInt32((int) this.recent_voters.get(i3).longValue());
             }
         }
     }

@@ -118,7 +118,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native int native_getTimeDifference(int i);
 
-    public static native void native_init(int i, int i2, int i3, int i4, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, String str11, int i5, int i6, boolean z, boolean z2, int i7);
+    public static native void native_init(int i, int i2, int i3, int i4, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, String str11, int i5, long j, boolean z, boolean z2, int i6);
 
     public static native int native_isTestBackend(int i);
 
@@ -148,7 +148,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_setSystemLangCode(int i, String str);
 
-    public static native void native_setUserId(int i, int i2);
+    public static native void native_setUserId(int i, long j);
 
     public static native void native_switchBackend(int i, boolean z);
 
@@ -264,7 +264,7 @@ public class ConnectionsManager extends BaseController {
         }
         String str9 = str4.trim().length() == 0 ? "SDK Unknown" : str4;
         getUserConfig().loadConfig();
-        init(BuildVars.BUILD_VERSION, 132, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), getRegId(), AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        init(BuildVars.BUILD_VERSION, 133, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), getRegId(), AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
     }
 
     private String getRegId() {
@@ -435,8 +435,8 @@ public class ConnectionsManager extends BaseController {
         return 5;
     }
 
-    public void setUserId(int i) {
-        native_setUserId(this.currentAccount, i);
+    public void setUserId(long j) {
+        native_setUserId(this.currentAccount, j);
     }
 
     public void checkConnection() {
@@ -448,7 +448,7 @@ public class ConnectionsManager extends BaseController {
         native_setPushConnectionEnabled(this.currentAccount, z);
     }
 
-    public void init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, int i4, int i5, boolean z) {
+    public void init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, int i4, long j, boolean z) {
         String str10;
         String str11;
         String str12;
@@ -458,9 +458,9 @@ public class ConnectionsManager extends BaseController {
         String string2 = sharedPreferences.getString("proxy_user", "");
         String string3 = sharedPreferences.getString("proxy_pass", "");
         String string4 = sharedPreferences.getString("proxy_secret", "");
-        int i6 = sharedPreferences.getInt("proxy_port", 1080);
+        int i5 = sharedPreferences.getInt("proxy_port", 1080);
         if (sharedPreferences.getBoolean("proxy_enabled", false) && !TextUtils.isEmpty(string)) {
-            native_setProxySettings(this.currentAccount, string, i6, string2, string3, string4);
+            native_setProxySettings(this.currentAccount, string, i5, string2, string3, string4);
         }
         try {
             str10 = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
@@ -482,7 +482,7 @@ public class ConnectionsManager extends BaseController {
         } else {
             str13 = str12;
         }
-        native_init(this.currentAccount, i, i2, i3, str, str2, str3, str4, str5, str6, str7, str8, str9, str11, str13, i4, i5, z, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
+        native_init(this.currentAccount, i, i2, i3, str, str2, str3, str4, str5, str6, str7, str8, str9, str11, str13, i4, j, z, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
         checkConnection();
     }
 

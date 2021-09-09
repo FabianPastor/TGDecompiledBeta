@@ -1,9 +1,9 @@
 package j$.util.stream;
 
-import j$.util.function.j;
 import j$.util.function.k;
+import j$.util.function.l;
 
-public final /* synthetic */ class B0 implements k {
+public final /* synthetic */ class B0 implements l {
     public final /* synthetic */ int a = 1;
     public final /* synthetic */ Object b;
 
@@ -22,14 +22,14 @@ public final /* synthetic */ class B0 implements k {
         }
     }
 
-    public k l(k kVar) {
+    public l l(l lVar) {
         switch (this.a) {
             case 0:
-                kVar.getClass();
-                return new j(this, kVar);
+                lVar.getClass();
+                return new k(this, lVar);
             default:
-                kVar.getClass();
-                return new j(this, kVar);
+                lVar.getClass();
+                return new k(this, lVar);
         }
     }
 

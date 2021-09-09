@@ -1,6 +1,6 @@
 package org.telegram.ui.Adapters;
 
-import android.util.LongSparseArray;
+import androidx.collection.LongSparseArray;
 import java.util.ArrayList;
 import org.telegram.ui.Adapters.DialogsSearchAdapter;
 

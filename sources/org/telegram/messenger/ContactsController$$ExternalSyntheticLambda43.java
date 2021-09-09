@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import android.util.SparseArray;
+import androidx.collection.LongSparseArray;
 import java.util.Comparator;
 import org.telegram.tgnet.TLRPC$TL_contact;
 import org.telegram.tgnet.TLRPC$User;
 
 public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda43 implements Comparator {
-    public final /* synthetic */ SparseArray f$0;
+    public final /* synthetic */ LongSparseArray f$0;
 
-    public /* synthetic */ ContactsController$$ExternalSyntheticLambda43(SparseArray sparseArray) {
-        this.f$0 = sparseArray;
+    public /* synthetic */ ContactsController$$ExternalSyntheticLambda43(LongSparseArray longSparseArray) {
+        this.f$0 = longSparseArray;
     }
 
     public final int compare(Object obj, Object obj2) {

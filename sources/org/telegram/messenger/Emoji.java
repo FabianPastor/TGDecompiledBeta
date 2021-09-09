@@ -31,6 +31,7 @@ public class Emoji {
     public static Bitmap[][] emojiBmp = new Bitmap[8][];
     public static HashMap<String, String> emojiColor = new HashMap<>();
     private static int[] emojiCounts = {1906, 199, 123, 332, 128, 222, 292, 259};
+    public static float emojiDrawingYOffset;
     public static HashMap<String, Integer> emojiUseHistory = new HashMap<>();
     private static boolean inited = false;
     private static Runnable invalidateUiRunnable = Emoji$$ExternalSyntheticLambda1.INSTANCE;
@@ -788,13 +789,23 @@ public class Emoji {
 
         public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
             boolean z;
+            boolean z2 = true;
             if (paint.getAlpha() != 255) {
-                z = true;
                 getDrawable().setAlpha(paint.getAlpha());
+                z = true;
             } else {
                 z = false;
             }
+            if (Emoji.emojiDrawingYOffset != 0.0f) {
+                canvas.save();
+                canvas.translate(0.0f, Emoji.emojiDrawingYOffset);
+            } else {
+                z2 = false;
+            }
             super.draw(canvas, charSequence, i, i2, f, i3, i4, i5, paint);
+            if (z2) {
+                canvas.restore();
+            }
             if (z) {
                 getDrawable().setAlpha(255);
             }

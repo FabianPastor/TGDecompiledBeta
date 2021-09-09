@@ -12,4 +12,8 @@ public final /* synthetic */ class PeopleNearbyActivity$$ExternalSyntheticLambda
     public final void didSetColor() {
         this.f$0.lambda$getThemeDescriptions$10();
     }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    }
 }

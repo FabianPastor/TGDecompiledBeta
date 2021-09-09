@@ -47,7 +47,6 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$Message;
-import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.LayoutHelper;
@@ -88,7 +87,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     public int currentAccount;
     /* access modifiers changed from: private */
     public AnimatorSet currentActionBarAnimation;
-    private int currentChannelId;
+    private long currentDialogId;
     /* access modifiers changed from: private */
     public MessageObject currentMessageObject;
     private PhotoViewer.PhotoViewerProvider currentProvider;
@@ -341,7 +340,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.messagesDeleted) {
-            if (objArr[2].booleanValue() || this.currentMessageObject == null || objArr[1].intValue() != 0 || !objArr[0].contains(Integer.valueOf(this.currentMessageObject.getId()))) {
+            if (objArr[2].booleanValue() || this.currentMessageObject == null || objArr[1].longValue() != 0 || !objArr[0].contains(Integer.valueOf(this.currentMessageObject.getId()))) {
                 return;
             }
             if (this.isVideo && !this.videoWatchedOneTime) {
@@ -350,23 +349,13 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 this.closeAfterAnimation = true;
             }
         } else if (i == NotificationCenter.didCreatedNewDeleteTask) {
-            if (this.currentMessageObject != null && this.secretDeleteTimer != null) {
-                SparseArray sparseArray = objArr[0];
+            if (this.currentMessageObject != null && this.secretDeleteTimer != null && objArr[0].longValue() == this.currentDialogId) {
+                SparseArray sparseArray = objArr[1];
                 for (int i3 = 0; i3 < sparseArray.size(); i3++) {
                     int keyAt = sparseArray.keyAt(i3);
                     ArrayList arrayList = (ArrayList) sparseArray.get(keyAt);
                     for (int i4 = 0; i4 < arrayList.size(); i4++) {
-                        long longValue = ((Long) arrayList.get(i4)).longValue();
-                        if (i4 == 0) {
-                            int i5 = (int) (longValue >> 32);
-                            if (i5 < 0) {
-                                i5 = 0;
-                            }
-                            if (i5 != this.currentChannelId) {
-                                return;
-                            }
-                        }
-                        if (((long) this.currentMessageObject.getId()) == longValue) {
+                        if (((long) this.currentMessageObject.getId()) == ((long) ((Integer) arrayList.get(i4)).intValue())) {
                             this.currentMessageObject.messageOwner.destroyTime = keyAt;
                             this.secretDeleteTimer.invalidate();
                             return;
@@ -759,8 +748,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagesDeleted);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateMessageMedia);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didCreatedNewDeleteTask);
-            TLRPC$Peer tLRPC$Peer = messageObject2.messageOwner.peer_id;
-            this.currentChannelId = tLRPC$Peer != null ? tLRPC$Peer.channel_id : 0;
+            this.currentDialogId = MessageObject.getPeerId(messageObject2.messageOwner.peer_id);
             toggleActionBar(true, false);
             this.currentMessageObject = messageObject2;
             TLRPC$Document document = messageObject.getDocument();

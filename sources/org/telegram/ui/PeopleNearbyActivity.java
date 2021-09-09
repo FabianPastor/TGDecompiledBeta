@@ -431,20 +431,20 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$2(View view, int i) {
-        int i2;
+        long j;
         if (getParentActivity() != null) {
-            int i3 = this.usersStartRow;
-            if (i < i3 || i >= this.usersEndRow) {
-                int i4 = this.chatsStartRow;
-                if (i >= i4 && i < this.chatsEndRow) {
+            int i2 = this.usersStartRow;
+            if (i < i2 || i >= this.usersEndRow) {
+                int i3 = this.chatsStartRow;
+                if (i >= i3 && i < this.chatsEndRow) {
                     Bundle bundle = new Bundle();
-                    TLRPC$Peer tLRPC$Peer = this.chats.get(i - i4).peer;
+                    TLRPC$Peer tLRPC$Peer = this.chats.get(i - i3).peer;
                     if (tLRPC$Peer instanceof TLRPC$TL_peerChat) {
-                        i2 = tLRPC$Peer.chat_id;
+                        j = tLRPC$Peer.chat_id;
                     } else {
-                        i2 = tLRPC$Peer.channel_id;
+                        j = tLRPC$Peer.channel_id;
                     }
-                    bundle.putInt("chat_id", i2);
+                    bundle.putLong("chat_id", j);
                     presentFragment(new ChatActivity(bundle));
                 } else if (i == this.chatsCreateRow) {
                     if (this.checkingCanCreate || this.currentGroupCreateAddress == null) {
@@ -478,14 +478,14 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     updateRows(diffCallback);
                 }
             } else if (view instanceof ManageChatUserCell) {
-                TLRPC$TL_peerLocated tLRPC$TL_peerLocated = this.users.get(i - i3);
+                TLRPC$TL_peerLocated tLRPC$TL_peerLocated = this.users.get(i - i2);
                 Bundle bundle2 = new Bundle();
-                bundle2.putInt("user_id", tLRPC$TL_peerLocated.peer.user_id);
+                bundle2.putLong("user_id", tLRPC$TL_peerLocated.peer.user_id);
                 if (((ManageChatUserCell) view).hasAvatarSet()) {
                     bundle2.putBoolean("expandPhoto", true);
                 }
                 bundle2.putInt("nearby_distance", tLRPC$TL_peerLocated.distance);
-                MessagesController.getInstance(this.currentAccount).ensureMessagesLoaded((long) tLRPC$TL_peerLocated.peer.user_id, 0, (MessagesController.MessagesLoadedCallback) null);
+                MessagesController.getInstance(this.currentAccount).ensureMessagesLoaded(tLRPC$TL_peerLocated.peer.user_id, 0, (MessagesController.MessagesLoadedCallback) null);
                 presentFragment(new ProfileActivity(bundle2));
             }
         }
@@ -902,54 +902,150 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         this.groupCreateActivity = null;
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        ArrayList<TLRPC$TL_peerLocated> arrayList;
-        int i3;
-        int i4;
-        if (i == NotificationCenter.newLocationAvailable) {
-            sendRequest(false, 0);
-        } else if (i == NotificationCenter.newPeopleNearbyAvailable) {
-            TLRPC$TL_updatePeerLocated tLRPC$TL_updatePeerLocated = objArr[0];
-            DiffCallback diffCallback = new DiffCallback();
-            diffCallback.saveCurrentState();
-            int size = tLRPC$TL_updatePeerLocated.peers.size();
-            for (int i5 = 0; i5 < size; i5++) {
-                TLRPC$PeerLocated tLRPC$PeerLocated = tLRPC$TL_updatePeerLocated.peers.get(i5);
-                if (tLRPC$PeerLocated instanceof TLRPC$TL_peerLocated) {
-                    TLRPC$TL_peerLocated tLRPC$TL_peerLocated = (TLRPC$TL_peerLocated) tLRPC$PeerLocated;
-                    if (tLRPC$TL_peerLocated.peer instanceof TLRPC$TL_peerUser) {
-                        arrayList = this.users;
-                    } else {
-                        arrayList = this.chats;
-                    }
-                    int size2 = arrayList.size();
-                    boolean z = false;
-                    for (int i6 = 0; i6 < size2; i6++) {
-                        TLRPC$Peer tLRPC$Peer = arrayList.get(i6).peer;
-                        int i7 = tLRPC$Peer.user_id;
-                        if ((i7 != 0 && i7 == tLRPC$TL_peerLocated.peer.user_id) || (((i3 = tLRPC$Peer.chat_id) != 0 && i3 == tLRPC$TL_peerLocated.peer.chat_id) || ((i4 = tLRPC$Peer.channel_id) != 0 && i4 == tLRPC$TL_peerLocated.peer.channel_id))) {
-                            arrayList.set(i6, tLRPC$TL_peerLocated);
-                            z = true;
-                        }
-                    }
-                    if (!z) {
-                        arrayList.add(tLRPC$TL_peerLocated);
-                    }
-                }
-            }
-            checkForExpiredLocations(true);
-            updateRows(diffCallback);
-        } else if (i == NotificationCenter.needDeleteDialog && this.fragmentView != null && !this.isPaused) {
-            long longValue = objArr[0].longValue();
-            TLRPC$User tLRPC$User = objArr[1];
-            PeopleNearbyActivity$$ExternalSyntheticLambda5 peopleNearbyActivity$$ExternalSyntheticLambda5 = new PeopleNearbyActivity$$ExternalSyntheticLambda5(this, objArr[2], longValue, objArr[3].booleanValue());
-            UndoView undoView2 = this.undoView;
-            if (undoView2 != null) {
-                undoView2.showWithAction(longValue, 1, (Runnable) peopleNearbyActivity$$ExternalSyntheticLambda5);
-            } else {
-                peopleNearbyActivity$$ExternalSyntheticLambda5.run();
-            }
-        }
+    /* JADX WARNING: Code restructure failed: missing block: B:18:0x0061, code lost:
+        if (r13 != r5.peer.user_id) goto L_0x0069;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void didReceivedNotification(int r19, int r20, java.lang.Object... r21) {
+        /*
+            r18 = this;
+            r6 = r18
+            r0 = r19
+            int r1 = org.telegram.messenger.NotificationCenter.newLocationAvailable
+            r2 = 0
+            if (r0 != r1) goto L_0x000e
+            r6.sendRequest(r2, r2)
+            goto L_0x00e2
+        L_0x000e:
+            int r1 = org.telegram.messenger.NotificationCenter.newPeopleNearbyAvailable
+            if (r0 != r1) goto L_0x00a2
+            r0 = r21[r2]
+            org.telegram.tgnet.TLRPC$TL_updatePeerLocated r0 = (org.telegram.tgnet.TLRPC$TL_updatePeerLocated) r0
+            org.telegram.ui.PeopleNearbyActivity$DiffCallback r1 = new org.telegram.ui.PeopleNearbyActivity$DiffCallback
+            r3 = 0
+            r1.<init>()
+            r1.saveCurrentState()
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PeerLocated> r3 = r0.peers
+            int r3 = r3.size()
+            r4 = 0
+        L_0x0026:
+            if (r4 >= r3) goto L_0x009a
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PeerLocated> r5 = r0.peers
+            java.lang.Object r5 = r5.get(r4)
+            org.telegram.tgnet.TLRPC$PeerLocated r5 = (org.telegram.tgnet.TLRPC$PeerLocated) r5
+            boolean r8 = r5 instanceof org.telegram.tgnet.TLRPC$TL_peerLocated
+            if (r8 == 0) goto L_0x0096
+            org.telegram.tgnet.TLRPC$TL_peerLocated r5 = (org.telegram.tgnet.TLRPC$TL_peerLocated) r5
+            org.telegram.tgnet.TLRPC$Peer r8 = r5.peer
+            boolean r8 = r8 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
+            if (r8 == 0) goto L_0x003f
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_peerLocated> r8 = r6.users
+            goto L_0x0041
+        L_0x003f:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_peerLocated> r8 = r6.chats
+        L_0x0041:
+            int r9 = r8.size()
+            r10 = 0
+            r11 = 0
+        L_0x0047:
+            if (r10 >= r9) goto L_0x0091
+            java.lang.Object r12 = r8.get(r10)
+            org.telegram.tgnet.TLRPC$TL_peerLocated r12 = (org.telegram.tgnet.TLRPC$TL_peerLocated) r12
+            org.telegram.tgnet.TLRPC$Peer r12 = r12.peer
+            long r13 = r12.user_id
+            r15 = 0
+            int r17 = (r13 > r15 ? 1 : (r13 == r15 ? 0 : -1))
+            if (r17 == 0) goto L_0x0067
+            org.telegram.tgnet.TLRPC$Peer r2 = r5.peer
+            r19 = r8
+            long r7 = r2.user_id
+            int r2 = (r13 > r7 ? 1 : (r13 == r7 ? 0 : -1))
+            if (r2 == 0) goto L_0x0064
+            goto L_0x0069
+        L_0x0064:
+            r8 = r19
+            goto L_0x0086
+        L_0x0067:
+            r19 = r8
+        L_0x0069:
+            long r7 = r12.chat_id
+            int r2 = (r7 > r15 ? 1 : (r7 == r15 ? 0 : -1))
+            if (r2 == 0) goto L_0x0077
+            org.telegram.tgnet.TLRPC$Peer r2 = r5.peer
+            long r13 = r2.chat_id
+            int r2 = (r7 > r13 ? 1 : (r7 == r13 ? 0 : -1))
+            if (r2 == 0) goto L_0x0064
+        L_0x0077:
+            long r7 = r12.channel_id
+            int r2 = (r7 > r15 ? 1 : (r7 == r15 ? 0 : -1))
+            if (r2 == 0) goto L_0x008b
+            org.telegram.tgnet.TLRPC$Peer r2 = r5.peer
+            long r12 = r2.channel_id
+            int r2 = (r7 > r12 ? 1 : (r7 == r12 ? 0 : -1))
+            if (r2 != 0) goto L_0x008b
+            goto L_0x0064
+        L_0x0086:
+            r8.set(r10, r5)
+            r11 = 1
+            goto L_0x008d
+        L_0x008b:
+            r8 = r19
+        L_0x008d:
+            int r10 = r10 + 1
+            r2 = 0
+            goto L_0x0047
+        L_0x0091:
+            if (r11 != 0) goto L_0x0096
+            r8.add(r5)
+        L_0x0096:
+            int r4 = r4 + 1
+            r2 = 0
+            goto L_0x0026
+        L_0x009a:
+            r2 = 1
+            r6.checkForExpiredLocations(r2)
+            r6.updateRows(r1)
+            goto L_0x00e2
+        L_0x00a2:
+            int r1 = org.telegram.messenger.NotificationCenter.needDeleteDialog
+            if (r0 != r1) goto L_0x00e2
+            android.view.View r0 = r6.fragmentView
+            if (r0 == 0) goto L_0x00e2
+            boolean r0 = r6.isPaused
+            if (r0 == 0) goto L_0x00af
+            goto L_0x00e2
+        L_0x00af:
+            r0 = 0
+            r0 = r21[r0]
+            java.lang.Long r0 = (java.lang.Long) r0
+            long r7 = r0.longValue()
+            r0 = 1
+            r1 = r21[r0]
+            org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
+            r0 = 2
+            r0 = r21[r0]
+            r2 = r0
+            org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2
+            r0 = 3
+            r0 = r21[r0]
+            java.lang.Boolean r0 = (java.lang.Boolean) r0
+            boolean r5 = r0.booleanValue()
+            org.telegram.ui.PeopleNearbyActivity$$ExternalSyntheticLambda5 r9 = new org.telegram.ui.PeopleNearbyActivity$$ExternalSyntheticLambda5
+            r0 = r9
+            r1 = r18
+            r3 = r7
+            r0.<init>(r1, r2, r3, r5)
+            org.telegram.ui.Components.UndoView r0 = r6.undoView
+            if (r0 == 0) goto L_0x00de
+            r1 = 1
+            r0.showWithAction((long) r7, (int) r1, (java.lang.Runnable) r9)
+            goto L_0x00e2
+        L_0x00de:
+            r9.run()
+        L_0x00e2:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PeopleNearbyActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
     }
 
     /* access modifiers changed from: private */
@@ -959,7 +1055,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         } else if (ChatObject.isNotInChat(tLRPC$Chat)) {
             getMessagesController().deleteDialog(j, 0, z);
         } else {
-            getMessagesController().deleteParticipantFromChat((int) (-j), getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), (TLRPC$Chat) null, (TLRPC$ChatFull) null, z, z);
+            getMessagesController().deleteParticipantFromChat(-j, getMessagesController().getUser(Long.valueOf(getUserConfig().getClientUserId())), (TLRPC$Chat) null, (TLRPC$ChatFull) null, z, z);
         }
     }
 
@@ -1131,7 +1227,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            int i2;
+            long j;
             int itemViewType = viewHolder.getItemViewType();
             boolean z = false;
             if (itemViewType == 0) {
@@ -1139,7 +1235,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                 manageChatUserCell.setTag(Integer.valueOf(i));
                 if (i >= PeopleNearbyActivity.this.usersStartRow && i < PeopleNearbyActivity.this.usersEndRow) {
                     TLRPC$TL_peerLocated tLRPC$TL_peerLocated = (TLRPC$TL_peerLocated) PeopleNearbyActivity.this.users.get(i - PeopleNearbyActivity.this.usersStartRow);
-                    TLRPC$User user = PeopleNearbyActivity.this.getMessagesController().getUser(Integer.valueOf(tLRPC$TL_peerLocated.peer.user_id));
+                    TLRPC$User user = PeopleNearbyActivity.this.getMessagesController().getUser(Long.valueOf(tLRPC$TL_peerLocated.peer.user_id));
                     if (user != null) {
                         String formatDistance = formatDistance(tLRPC$TL_peerLocated);
                         if (!(PeopleNearbyActivity.this.showMoreRow == -1 && i == PeopleNearbyActivity.this.usersEndRow - 1)) {
@@ -1152,16 +1248,16 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     TLRPC$TL_peerLocated tLRPC$TL_peerLocated2 = (TLRPC$TL_peerLocated) PeopleNearbyActivity.this.chats.get(access$600);
                     TLRPC$Peer tLRPC$Peer = tLRPC$TL_peerLocated2.peer;
                     if (tLRPC$Peer instanceof TLRPC$TL_peerChat) {
-                        i2 = tLRPC$Peer.chat_id;
+                        j = tLRPC$Peer.chat_id;
                     } else {
-                        i2 = tLRPC$Peer.channel_id;
+                        j = tLRPC$Peer.channel_id;
                     }
-                    TLRPC$Chat chat = PeopleNearbyActivity.this.getMessagesController().getChat(Integer.valueOf(i2));
+                    TLRPC$Chat chat = PeopleNearbyActivity.this.getMessagesController().getChat(Long.valueOf(j));
                     if (chat != null) {
                         String formatDistance2 = formatDistance(tLRPC$TL_peerLocated2);
-                        int i3 = chat.participants_count;
-                        if (i3 != 0) {
-                            formatDistance2 = String.format("%1$s, %2$s", new Object[]{formatDistance2, LocaleController.formatPluralString("Members", i3)});
+                        int i2 = chat.participants_count;
+                        if (i2 != 0) {
+                            formatDistance2 = String.format("%1$s, %2$s", new Object[]{formatDistance2, LocaleController.formatPluralString("Members", i2)});
                         }
                         if (access$600 != PeopleNearbyActivity.this.chats.size() - 1) {
                             z = true;

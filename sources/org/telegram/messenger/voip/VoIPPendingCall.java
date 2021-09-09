@@ -20,11 +20,11 @@ public final class VoIPPendingCall {
     private final NotificationCenter.NotificationCenterDelegate observer;
     private final Runnable releaseRunnable;
     private boolean released;
-    private final int userId;
+    private final long userId;
     private final boolean video;
 
-    public static VoIPPendingCall startOrSchedule(Activity activity2, int i, boolean z, AccountInstance accountInstance2) {
-        return new VoIPPendingCall(activity2, i, z, 1000, accountInstance2);
+    public static VoIPPendingCall startOrSchedule(Activity activity2, long j, boolean z, AccountInstance accountInstance2) {
+        return new VoIPPendingCall(activity2, j, z, 1000, accountInstance2);
     }
 
     /* access modifiers changed from: private */
@@ -39,13 +39,13 @@ public final class VoIPPendingCall {
         onConnectionStateUpdated(true);
     }
 
-    private VoIPPendingCall(Activity activity2, int i, boolean z, long j, AccountInstance accountInstance2) {
+    private VoIPPendingCall(Activity activity2, long j, boolean z, long j2, AccountInstance accountInstance2) {
         VoIPPendingCall$$ExternalSyntheticLambda1 voIPPendingCall$$ExternalSyntheticLambda1 = new VoIPPendingCall$$ExternalSyntheticLambda1(this);
         this.observer = voIPPendingCall$$ExternalSyntheticLambda1;
         VoIPPendingCall$$ExternalSyntheticLambda0 voIPPendingCall$$ExternalSyntheticLambda0 = new VoIPPendingCall$$ExternalSyntheticLambda0(this);
         this.releaseRunnable = voIPPendingCall$$ExternalSyntheticLambda0;
         this.activity = activity2;
-        this.userId = i;
+        this.userId = j;
         this.video = z;
         this.accountInstance = accountInstance2;
         if (!onConnectionStateUpdated(false)) {
@@ -54,7 +54,7 @@ public final class VoIPPendingCall {
             instance.addObserver(voIPPendingCall$$ExternalSyntheticLambda1, NotificationCenter.didUpdateConnectionState);
             Handler handler2 = new Handler(Looper.myLooper());
             this.handler = handler2;
-            handler2.postDelayed(voIPPendingCall$$ExternalSyntheticLambda0, j);
+            handler2.postDelayed(voIPPendingCall$$ExternalSyntheticLambda0, j2);
         }
     }
 
@@ -63,7 +63,7 @@ public final class VoIPPendingCall {
             return false;
         }
         MessagesController messagesController = this.accountInstance.getMessagesController();
-        TLRPC$User user = messagesController.getUser(Integer.valueOf(this.userId));
+        TLRPC$User user = messagesController.getUser(Long.valueOf(this.userId));
         if (user != null) {
             TLRPC$UserFull userFull = messagesController.getUserFull(user.id);
             VoIPHelper.startCall(user, this.video, userFull != null && userFull.video_calls_available, this.activity, userFull, this.accountInstance);

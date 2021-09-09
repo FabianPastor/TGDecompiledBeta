@@ -13,8 +13,7 @@ import org.telegram.tgnet.TLRPC$User;
 public class UserConfig extends BaseController {
     private static volatile UserConfig[] Instance = new UserConfig[3];
     public static final int MAX_ACCOUNT_COUNT = 3;
-    public static final int i_dialogsLoadOffsetAccess_1 = 5;
-    public static final int i_dialogsLoadOffsetAccess_2 = 6;
+    public static final int i_dialogsLoadOffsetAccess = 5;
     public static final int i_dialogsLoadOffsetChannelId = 4;
     public static final int i_dialogsLoadOffsetChatId = 3;
     public static final int i_dialogsLoadOffsetDate = 1;
@@ -23,7 +22,7 @@ public class UserConfig extends BaseController {
     public static int selectedAccount;
     public long autoDownloadConfigLoadTime;
     public int botRatingLoadTime;
-    public int clientUserId;
+    public long clientUserId;
     private boolean configLoaded;
     public boolean contactsReimported;
     public int contactsSavedCount;
@@ -39,11 +38,11 @@ public class UserConfig extends BaseController {
     public int lastSendMessageId = -210000;
     public int loginTime;
     public long migrateOffsetAccess = -1;
-    public int migrateOffsetChannelId = -1;
-    public int migrateOffsetChatId = -1;
+    public long migrateOffsetChannelId = -1;
+    public long migrateOffsetChatId = -1;
     public int migrateOffsetDate = -1;
     public int migrateOffsetId = -1;
-    public int migrateOffsetUserId = -1;
+    public long migrateOffsetUserId = -1;
     public boolean notificationsSettingsLoaded;
     public boolean notificationsSignUpSettingsLoaded;
     public int ratingLoadTime;
@@ -135,9 +134,9 @@ public class UserConfig extends BaseController {
                 edit.putInt("6migrateOffsetId", this.migrateOffsetId);
                 if (this.migrateOffsetId != -1) {
                     edit.putInt("6migrateOffsetDate", this.migrateOffsetDate);
-                    edit.putInt("6migrateOffsetUserId", this.migrateOffsetUserId);
-                    edit.putInt("6migrateOffsetChatId", this.migrateOffsetChatId);
-                    edit.putInt("6migrateOffsetChannelId", this.migrateOffsetChannelId);
+                    edit.putLong("6migrateOffsetUserId", this.migrateOffsetUserId);
+                    edit.putLong("6migrateOffsetChatId", this.migrateOffsetChatId);
+                    edit.putLong("6migrateOffsetChannelId", this.migrateOffsetChannelId);
                     edit.putLong("6migrateOffsetAccess", this.migrateOffsetAccess);
                 }
                 TLRPC$TL_help_termsOfService tLRPC$TL_help_termsOfService = this.unacceptedTermsOfService;
@@ -188,13 +187,13 @@ public class UserConfig extends BaseController {
         return z;
     }
 
-    public int getClientUserId() {
-        int i;
+    public long getClientUserId() {
+        long j;
         synchronized (this.sync) {
             TLRPC$User tLRPC$User = this.currentUser;
-            i = tLRPC$User != null ? tLRPC$User.id : 0;
+            j = tLRPC$User != null ? tLRPC$User.id : 0;
         }
-        return i;
+        return j;
     }
 
     public String getClientPhone() {
@@ -362,14 +361,14 @@ public class UserConfig extends BaseController {
             int r4 = r1.getInt(r4, r3)     // Catch:{ all -> 0x019b }
             r10.migrateOffsetDate = r4     // Catch:{ all -> 0x019b }
             java.lang.String r4 = "6migrateOffsetUserId"
-            int r4 = r1.getInt(r4, r3)     // Catch:{ all -> 0x019b }
-            r10.migrateOffsetUserId = r4     // Catch:{ all -> 0x019b }
+            long r8 = org.telegram.messenger.AndroidUtilities.getPrefIntOrLong(r1, r4, r6)     // Catch:{ all -> 0x019b }
+            r10.migrateOffsetUserId = r8     // Catch:{ all -> 0x019b }
             java.lang.String r4 = "6migrateOffsetChatId"
-            int r4 = r1.getInt(r4, r3)     // Catch:{ all -> 0x019b }
-            r10.migrateOffsetChatId = r4     // Catch:{ all -> 0x019b }
+            long r8 = org.telegram.messenger.AndroidUtilities.getPrefIntOrLong(r1, r4, r6)     // Catch:{ all -> 0x019b }
+            r10.migrateOffsetChatId = r8     // Catch:{ all -> 0x019b }
             java.lang.String r4 = "6migrateOffsetChannelId"
-            int r4 = r1.getInt(r4, r3)     // Catch:{ all -> 0x019b }
-            r10.migrateOffsetChannelId = r4     // Catch:{ all -> 0x019b }
+            long r8 = org.telegram.messenger.AndroidUtilities.getPrefIntOrLong(r1, r4, r6)     // Catch:{ all -> 0x019b }
+            r10.migrateOffsetChannelId = r8     // Catch:{ all -> 0x019b }
             java.lang.String r4 = "6migrateOffsetAccess"
             long r6 = r1.getLong(r4, r6)     // Catch:{ all -> 0x019b }
             r10.migrateOffsetAccess = r6     // Catch:{ all -> 0x019b }
@@ -400,7 +399,7 @@ public class UserConfig extends BaseController {
         L_0x018f:
             org.telegram.tgnet.TLRPC$User r1 = r10.currentUser     // Catch:{ all -> 0x019b }
             if (r1 == 0) goto L_0x0197
-            int r1 = r1.id     // Catch:{ all -> 0x019b }
+            long r1 = r1.id     // Catch:{ all -> 0x019b }
             r10.clientUserId = r1     // Catch:{ all -> 0x019b }
         L_0x0197:
             r10.configLoaded = r5     // Catch:{ all -> 0x019b }
@@ -527,7 +526,7 @@ public class UserConfig extends BaseController {
         edit.putInt(sb.toString(), i2).commit();
     }
 
-    public int[] getDialogLoadOffsets(int i) {
+    public long[] getDialogLoadOffsets(int i) {
         SharedPreferences preferences = getPreferences();
         StringBuilder sb = new StringBuilder();
         sb.append("2dialogsLoadOffsetId");
@@ -538,34 +537,38 @@ public class UserConfig extends BaseController {
         StringBuilder sb2 = new StringBuilder();
         sb2.append("2dialogsLoadOffsetDate");
         sb2.append(i == 0 ? obj : Integer.valueOf(i));
-        int i4 = preferences.getInt(sb2.toString(), this.hasValidDialogLoadIds ? 0 : -1);
-        StringBuilder sb3 = new StringBuilder();
-        sb3.append("2dialogsLoadOffsetUserId");
-        sb3.append(i == 0 ? obj : Integer.valueOf(i));
-        int i5 = preferences.getInt(sb3.toString(), this.hasValidDialogLoadIds ? 0 : -1);
-        StringBuilder sb4 = new StringBuilder();
-        sb4.append("2dialogsLoadOffsetChatId");
-        sb4.append(i == 0 ? obj : Integer.valueOf(i));
-        int i6 = preferences.getInt(sb4.toString(), this.hasValidDialogLoadIds ? 0 : -1);
-        StringBuilder sb5 = new StringBuilder();
-        sb5.append("2dialogsLoadOffsetChannelId");
-        sb5.append(i == 0 ? obj : Integer.valueOf(i));
-        String sb6 = sb5.toString();
+        String sb3 = sb2.toString();
         if (this.hasValidDialogLoadIds) {
             i2 = 0;
         }
-        int i7 = preferences.getInt(sb6, i2);
+        int i4 = preferences.getInt(sb3, i2);
+        StringBuilder sb4 = new StringBuilder();
+        sb4.append("2dialogsLoadOffsetUserId");
+        sb4.append(i == 0 ? obj : Integer.valueOf(i));
+        long j = -1;
+        long prefIntOrLong = AndroidUtilities.getPrefIntOrLong(preferences, sb4.toString(), this.hasValidDialogLoadIds ? 0 : -1);
+        StringBuilder sb5 = new StringBuilder();
+        sb5.append("2dialogsLoadOffsetChatId");
+        sb5.append(i == 0 ? obj : Integer.valueOf(i));
+        long prefIntOrLong2 = AndroidUtilities.getPrefIntOrLong(preferences, sb5.toString(), this.hasValidDialogLoadIds ? 0 : -1);
+        StringBuilder sb6 = new StringBuilder();
+        sb6.append("2dialogsLoadOffsetChannelId");
+        sb6.append(i == 0 ? obj : Integer.valueOf(i));
+        long prefIntOrLong3 = AndroidUtilities.getPrefIntOrLong(preferences, sb6.toString(), this.hasValidDialogLoadIds ? 0 : -1);
         StringBuilder sb7 = new StringBuilder();
         sb7.append("2dialogsLoadOffsetAccess");
         if (i != 0) {
             obj = Integer.valueOf(i);
         }
         sb7.append(obj);
-        long j = preferences.getLong(sb7.toString(), this.hasValidDialogLoadIds ? 0 : -1);
-        return new int[]{i3, i4, i5, i6, i7, (int) j, (int) (j >> 32)};
+        String sb8 = sb7.toString();
+        if (this.hasValidDialogLoadIds) {
+            j = 0;
+        }
+        return new long[]{(long) i3, (long) i4, prefIntOrLong, prefIntOrLong2, prefIntOrLong3, preferences.getLong(sb8, j)};
     }
 
-    public void setDialogsLoadOffset(int i, int i2, int i3, int i4, int i5, int i6, long j) {
+    public void setDialogsLoadOffset(int i, int i2, int i3, long j, long j2, long j3, long j4) {
         SharedPreferences.Editor edit = getPreferences().edit();
         StringBuilder sb = new StringBuilder();
         sb.append("2dialogsLoadOffsetId");
@@ -579,22 +582,22 @@ public class UserConfig extends BaseController {
         StringBuilder sb3 = new StringBuilder();
         sb3.append("2dialogsLoadOffsetUserId");
         sb3.append(i == 0 ? obj : Integer.valueOf(i));
-        edit.putInt(sb3.toString(), i4);
+        edit.putLong(sb3.toString(), j);
         StringBuilder sb4 = new StringBuilder();
         sb4.append("2dialogsLoadOffsetChatId");
         sb4.append(i == 0 ? obj : Integer.valueOf(i));
-        edit.putInt(sb4.toString(), i5);
+        edit.putLong(sb4.toString(), j2);
         StringBuilder sb5 = new StringBuilder();
         sb5.append("2dialogsLoadOffsetChannelId");
         sb5.append(i == 0 ? obj : Integer.valueOf(i));
-        edit.putInt(sb5.toString(), i6);
+        edit.putLong(sb5.toString(), j3);
         StringBuilder sb6 = new StringBuilder();
         sb6.append("2dialogsLoadOffsetAccess");
         if (i != 0) {
             obj = Integer.valueOf(i);
         }
         sb6.append(obj);
-        edit.putLong(sb6.toString(), j);
+        edit.putLong(sb6.toString(), j4);
         edit.putBoolean("hasValidDialogLoadIds", true);
         edit.commit();
     }

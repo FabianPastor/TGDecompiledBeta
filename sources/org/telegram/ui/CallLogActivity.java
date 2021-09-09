@@ -20,7 +20,6 @@ import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -89,7 +89,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 public class CallLogActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     private ArrayList<View> actionModeViews = new ArrayList<>();
     /* access modifiers changed from: private */
-    public ArrayList<Integer> activeGroupCalls;
+    public ArrayList<Long> activeGroupCalls;
     /* access modifiers changed from: private */
     public ArrayList<CallLogRow> calls = new ArrayList<>();
     private EmptyTextProgressView emptyView;
@@ -133,7 +133,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     private NumberTextView selectedDialogsCountTextView;
     private ArrayList<Integer> selectedIds = new ArrayList<>();
     /* access modifiers changed from: private */
-    public Integer waitingForCallChatId;
+    public Long waitingForCallChatId;
     /* access modifiers changed from: private */
     public ProgressButton waitingForLoadButton;
 
@@ -222,7 +222,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        Integer num;
+        Long l;
         ListAdapter listAdapter;
         int i3 = 0;
         if (i == NotificationCenter.didReceiveNewMessages) {
@@ -231,16 +231,16 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 while (it.hasNext()) {
                     MessageObject messageObject = (MessageObject) it.next();
                     if (messageObject.messageOwner.action instanceof TLRPC$TL_messageActionPhoneCall) {
-                        int fromChatId = messageObject.getFromChatId();
-                        int i4 = fromChatId == getUserConfig().getClientUserId() ? messageObject.messageOwner.peer_id.user_id : fromChatId;
-                        int i5 = fromChatId == getUserConfig().getClientUserId() ? 0 : 1;
+                        long fromChatId = messageObject.getFromChatId();
+                        long j = fromChatId == getUserConfig().getClientUserId() ? messageObject.messageOwner.peer_id.user_id : fromChatId;
+                        int i4 = fromChatId == getUserConfig().getClientUserId() ? 0 : 1;
                         TLRPC$PhoneCallDiscardReason tLRPC$PhoneCallDiscardReason = messageObject.messageOwner.action.reason;
-                        if (i5 == 1 && ((tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonMissed) || (tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonBusy))) {
-                            i5 = 2;
+                        if (i4 == 1 && ((tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonMissed) || (tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonBusy))) {
+                            i4 = 2;
                         }
                         if (this.calls.size() > 0) {
                             CallLogRow callLogRow = this.calls.get(0);
-                            if (callLogRow.user.id == i4 && callLogRow.type == i5) {
+                            if (callLogRow.user.id == j && callLogRow.type == i4) {
                                 callLogRow.calls.add(0, messageObject.messageOwner);
                                 this.listViewAdapter.notifyItemChanged(0);
                             }
@@ -249,8 +249,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                         ArrayList<TLRPC$Message> arrayList = new ArrayList<>();
                         callLogRow2.calls = arrayList;
                         arrayList.add(messageObject.messageOwner);
-                        callLogRow2.user = getMessagesController().getUser(Integer.valueOf(i4));
-                        callLogRow2.type = i5;
+                        callLogRow2.user = getMessagesController().getUser(Long.valueOf(j));
+                        callLogRow2.type = i4;
                         callLogRow2.video = messageObject.isVideoCall();
                         this.calls.add(0, callLogRow2);
                         this.listViewAdapter.notifyItemInserted(0);
@@ -292,8 +292,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 listAdapter2.notifyDataSetChanged();
             }
         } else if (i == NotificationCenter.chatInfoDidLoad) {
-            Integer num2 = this.waitingForCallChatId;
-            if (num2 != null && objArr[0].id == num2.intValue() && getMessagesController().getGroupCall(this.waitingForCallChatId.intValue(), true) != null) {
+            Long l2 = this.waitingForCallChatId;
+            if (l2 != null && objArr[0].id == l2.longValue() && getMessagesController().getGroupCall(this.waitingForCallChatId.longValue(), true) != null) {
                 ProgressButton progressButton = this.waitingForLoadButton;
                 if (progressButton != null) {
                     progressButton.setDrawProgress(false, false);
@@ -301,7 +301,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 VoIPHelper.startCall(this.lastCallChat, (TLRPC$InputPeer) null, (String) null, false, getParentActivity(), this, getAccountInstance());
                 this.waitingForCallChatId = null;
             }
-        } else if (i == NotificationCenter.groupCallUpdated && (num = this.waitingForCallChatId) != null && num.equals(objArr[0])) {
+        } else if (i == NotificationCenter.groupCallUpdated && (l = this.waitingForCallChatId) != null && l.equals(objArr[0])) {
             ProgressButton progressButton2 = this.waitingForLoadButton;
             if (progressButton2 != null) {
                 progressButton2.setDrawProgress(false, false);
@@ -394,10 +394,10 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             if (CallLogActivity.this.waitingForLoadButton != null) {
                 CallLogActivity.this.waitingForLoadButton.setDrawProgress(false, true);
             }
-            Integer num = (Integer) view.getTag();
-            ChatObject.Call groupCall = CallLogActivity.this.getMessagesController().getGroupCall(num.intValue(), false);
+            Long l = (Long) view.getTag();
+            ChatObject.Call groupCall = CallLogActivity.this.getMessagesController().getGroupCall(l.longValue(), false);
             CallLogActivity callLogActivity = CallLogActivity.this;
-            TLRPC$Chat unused = callLogActivity.lastCallChat = callLogActivity.getMessagesController().getChat(num);
+            TLRPC$Chat unused = callLogActivity.lastCallChat = callLogActivity.getMessagesController().getChat(l);
             if (groupCall != null) {
                 TLRPC$Chat access$300 = CallLogActivity.this.lastCallChat;
                 Activity parentActivity = CallLogActivity.this.getParentActivity();
@@ -405,8 +405,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 VoIPHelper.startCall(access$300, (TLRPC$InputPeer) null, (String) null, false, parentActivity, callLogActivity2, callLogActivity2.getAccountInstance());
                 return;
             }
-            Integer unused2 = CallLogActivity.this.waitingForCallChatId = num;
-            CallLogActivity.this.getMessagesController().loadFullChat(num.intValue(), 0, true);
+            Long unused2 = CallLogActivity.this.waitingForCallChatId = l;
+            CallLogActivity.this.getMessagesController().loadFullChat(l.longValue(), 0, true);
             this.button.setDrawProgress(true, true);
             ProgressButton unused3 = CallLogActivity.this.waitingForLoadButton = this.button;
         }
@@ -674,13 +674,13 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 return;
             }
             Bundle bundle = new Bundle();
-            bundle.putInt("user_id", callLogRow.user.id);
+            bundle.putLong("user_id", callLogRow.user.id);
             bundle.putInt("message_id", callLogRow.calls.get(0).id);
             getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
             presentFragment(new ChatActivity(bundle), true);
         } else if (view instanceof GroupCallCell) {
             Bundle bundle2 = new Bundle();
-            bundle2.putInt("chat_id", ((GroupCallCell) view).currentChat.id);
+            bundle2.putLong("chat_id", ((GroupCallCell) view).currentChat.id);
             getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
             presentFragment(new ChatActivity(bundle2), true);
         }
@@ -759,7 +759,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.otherItem.setVisibility(8);
             this.listViewAdapter.notifyDataSetChanged();
         } else {
-            getMessagesController().deleteMessages(new ArrayList(this.selectedIds), (ArrayList<Long>) null, (TLRPC$EncryptedChat) null, 0, 0, zArr[0], false);
+            getMessagesController().deleteMessages(new ArrayList(this.selectedIds), (ArrayList<Long>) null, (TLRPC$EncryptedChat) null, 0, zArr[0], false);
         }
         hideActionMode(false);
     }
@@ -922,12 +922,12 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         int i = 0;
         int max = Math.max(this.listViewAdapter.callsStartRow, 0) + this.calls.size();
         if (tLRPC$TL_error == null) {
-            SparseArray sparseArray = new SparseArray();
+            LongSparseArray longSparseArray = new LongSparseArray();
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             this.endReached = tLRPC$messages_Messages.messages.isEmpty();
             for (int i2 = 0; i2 < tLRPC$messages_Messages.users.size(); i2++) {
                 TLRPC$User tLRPC$User = tLRPC$messages_Messages.users.get(i2);
-                sparseArray.put(tLRPC$User.id, tLRPC$User);
+                longSparseArray.put(tLRPC$User.id, tLRPC$User);
             }
             if (this.calls.size() > 0) {
                 ArrayList<CallLogRow> arrayList = this.calls;
@@ -944,7 +944,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     if (i4 == 1 && ((tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonMissed) || (tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonBusy))) {
                         i4 = 2;
                     }
-                    int fromChatId = MessageObject.getFromChatId(tLRPC$Message);
+                    long fromChatId = MessageObject.getFromChatId(tLRPC$Message);
                     if (fromChatId == getUserConfig().getClientUserId()) {
                         fromChatId = tLRPC$Message.peer_id.user_id;
                     }
@@ -954,7 +954,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                         }
                         callLogRow = new CallLogRow();
                         callLogRow.calls = new ArrayList<>();
-                        callLogRow.user = (TLRPC$User) sparseArray.get(fromChatId);
+                        callLogRow.user = (TLRPC$User) longSparseArray.get(fromChatId);
                         callLogRow.type = i4;
                         TLRPC$MessageAction tLRPC$MessageAction2 = tLRPC$Message.action;
                         callLogRow.video = tLRPC$MessageAction2 != null && tLRPC$MessageAction2.video;
@@ -1172,7 +1172,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             } else if (view instanceof GroupCallCell) {
                 GroupCallCell groupCallCell = (GroupCallCell) view;
                 TLRPC$Chat chat = groupCallCell.profileSearchCell.getChat();
-                if (CallLogActivity.this.waitingForCallChatId == null || chat.id != CallLogActivity.this.waitingForCallChatId.intValue()) {
+                if (CallLogActivity.this.waitingForCallChatId == null || chat.id != CallLogActivity.this.waitingForCallChatId.longValue()) {
                     groupCallCell.button.setDrawProgress(false, false);
                     return;
                 }
@@ -1225,10 +1225,10 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 }
             } else if (itemViewType == 4) {
                 int i5 = i2 - this.activeStartRow;
-                TLRPC$Chat chat = CallLogActivity.this.getMessagesController().getChat((Integer) CallLogActivity.this.activeGroupCalls.get(i5));
+                TLRPC$Chat chat = CallLogActivity.this.getMessagesController().getChat((Long) CallLogActivity.this.activeGroupCalls.get(i5));
                 GroupCallCell groupCallCell = (GroupCallCell) viewHolder2.itemView;
                 groupCallCell.setChat(chat);
-                groupCallCell.button.setTag(Integer.valueOf(chat.id));
+                groupCallCell.button.setTag(Long.valueOf(chat.id));
                 if (!ChatObject.isChannel(chat) || chat.megagroup) {
                     if (chat.has_geo) {
                         str = LocaleController.getString("MegaLocation", NUM);

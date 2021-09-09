@@ -1,16 +1,16 @@
 package j$.wrappers;
 
-import j$.util.function.i;
+import j$.util.function.j;
 import java.util.function.IntBinaryOperator;
 
-public final /* synthetic */ class O implements i {
+public final /* synthetic */ class O implements j {
     final /* synthetic */ IntBinaryOperator a;
 
     private /* synthetic */ O(IntBinaryOperator intBinaryOperator) {
         this.a = intBinaryOperator;
     }
 
-    public static /* synthetic */ i a(IntBinaryOperator intBinaryOperator) {
+    public static /* synthetic */ j a(IntBinaryOperator intBinaryOperator) {
         if (intBinaryOperator == null) {
             return null;
         }

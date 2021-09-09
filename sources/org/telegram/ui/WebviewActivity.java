@@ -315,7 +315,7 @@ public class WebviewActivity extends BaseFragment {
         if (!this.loadStats) {
             this.loadStats = true;
             TLRPC$TL_messages_getStatsURL tLRPC$TL_messages_getStatsURL = new TLRPC$TL_messages_getStatsURL();
-            tLRPC$TL_messages_getStatsURL.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) this.currentDialogId);
+            tLRPC$TL_messages_getStatsURL.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(this.currentDialogId);
             if (str == null) {
                 str = "";
             }

@@ -1,0 +1,1081 @@
+package org.telegram.ui.Components;
+
+import android.animation.Animator;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.util.Pair;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.core.graphics.ColorUtils;
+import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatThemeController;
+import org.telegram.messenger.Emoji;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.tgnet.ResultCallback;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_theme;
+import org.telegram.tgnet.TLRPC$WallPaperSettings;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.ChatTheme;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.RecyclerListView;
+
+public class ChatThemeBottomSheet extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
+    /* access modifiers changed from: private */
+    public final Adapter adapter;
+    private final View applyButton;
+    private TextView applyTextView;
+    private final ChatActivity chatActivity;
+    private final RLottieDrawable darkThemeDrawable;
+    private final RLottieImageView darkThemeView;
+    private boolean forceDark;
+    private boolean isApplyClicked;
+    /* access modifiers changed from: private */
+    public boolean isLightDarkChangeAnimation;
+    private final ChatTheme originalTheme;
+    /* access modifiers changed from: private */
+    public int prevSelectedPosition = -1;
+    private final RadialProgressView progressView;
+    /* access modifiers changed from: private */
+    public final RecyclerListView recyclerView;
+    private TextView resetTextView;
+    /* access modifiers changed from: private */
+    public final LinearSmoothScroller scroller;
+    private ChatThemeItem selectedItem;
+    /* access modifiers changed from: private */
+    public final ChatActivity.ThemeDelegate themeDelegate;
+    private final TextView titleView;
+
+    /* JADX WARNING: Illegal instructions before constructor call */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public ChatThemeBottomSheet(org.telegram.ui.ChatActivity r21, org.telegram.ui.ChatActivity.ThemeDelegate r22) {
+        /*
+            r20 = this;
+            r0 = r20
+            r1 = r22
+            android.app.Activity r2 = r21.getParentActivity()
+            r3 = 1
+            r0.<init>(r2, r3, r1)
+            r2 = -1
+            r0.prevSelectedPosition = r2
+            r2 = r21
+            r0.chatActivity = r2
+            r0.themeDelegate = r1
+            org.telegram.ui.ActionBar.ChatTheme r2 = r22.getCurrentTheme()
+            r0.originalTheme = r2
+            org.telegram.ui.Components.ChatThemeBottomSheet$Adapter r2 = new org.telegram.ui.Components.ChatThemeBottomSheet$Adapter
+            r2.<init>(r1)
+            r0.adapter = r2
+            r4 = 0
+            r0.setDimBehind(r4)
+            r0.setCanDismissWithSwipe(r4)
+            r0.setApplyBottomPadding(r4)
+            android.widget.FrameLayout r5 = new android.widget.FrameLayout
+            android.content.Context r6 = r20.getContext()
+            r5.<init>(r6)
+            r0.setCustomView(r5)
+            android.widget.TextView r6 = new android.widget.TextView
+            android.content.Context r7 = r20.getContext()
+            r6.<init>(r7)
+            r0.titleView = r6
+            android.text.TextUtils$TruncateAt r7 = android.text.TextUtils.TruncateAt.MIDDLE
+            r6.setEllipsize(r7)
+            r6.setLines(r3)
+            r6.setSingleLine(r3)
+            java.lang.String r7 = "SelectTheme"
+            r8 = 2131627555(0x7f0e0e23, float:1.8882378E38)
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
+            r6.setText(r7)
+            java.lang.String r7 = "dialogTextBlack"
+            int r7 = r0.getThemedColor(r7)
+            r6.setTextColor(r7)
+            r7 = 1101004800(0x41a00000, float:20.0)
+            r6.setTextSize(r3, r7)
+            java.lang.String r7 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r6.setTypeface(r8)
+            r8 = 1101529088(0x41a80000, float:21.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r10 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r12 = 1090519040(0x41000000, float:8.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            r6.setPadding(r9, r11, r8, r12)
+            r13 = -1
+            r14 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r15 = 8388659(0x800033, float:1.1755015E-38)
+            r16 = 0
+            r17 = 0
+            r18 = 1115160576(0x42780000, float:62.0)
+            r19 = 0
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
+            r5.addView(r6, r8)
+            java.lang.String r6 = "featuredStickers_addButton"
+            int r8 = r0.getThemedColor(r6)
+            r9 = 1105199104(0x41e00000, float:28.0)
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.RLottieDrawable r9 = new org.telegram.ui.Components.RLottieDrawable
+            r12 = 2131558488(0x7f0d0058, float:1.8742293E38)
+            java.lang.String r13 = "NUM"
+            r16 = 1
+            r17 = 0
+            r11 = r9
+            r14 = r15
+            r11.<init>((int) r12, (java.lang.String) r13, (int) r14, (int) r15, (boolean) r16, (int[]) r17)
+            r0.darkThemeDrawable = r9
+            r9.setPlayInDirectionOfCustomEndFrame(r3)
+            r9.beginApplyLayerColors()
+            r0.setDarkButtonColor(r8)
+            r9.commitApplyLayerColors()
+            r9.setCustomEndFrame(r4)
+            org.telegram.ui.Components.RLottieImageView r11 = new org.telegram.ui.Components.RLottieImageView
+            android.content.Context r12 = r20.getContext()
+            r11.<init>(r12)
+            r0.darkThemeView = r11
+            r11.setAnimation(r9)
+            android.widget.ImageView$ScaleType r9 = android.widget.ImageView.ScaleType.CENTER
+            r11.setScaleType(r9)
+            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda2 r9 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda2
+            r9.<init>(r0)
+            r11.setOnClickListener(r9)
+            r12 = 44
+            r13 = 1110441984(0x42300000, float:44.0)
+            r14 = 8388661(0x800035, float:1.1755018E-38)
+            r15 = 0
+            r16 = 0
+            r17 = 1088421888(0x40e00000, float:7.0)
+            r18 = 0
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
+            r5.addView(r11, r9)
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+            boolean r9 = r9.isDark()
+            r9 = r9 ^ r3
+            r0.forceDark = r9
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+            boolean r9 = r9.isDark()
+            r0.setForceDark(r9, r4)
+            org.telegram.ui.Components.ChatThemeBottomSheet$1 r9 = new org.telegram.ui.Components.ChatThemeBottomSheet$1
+            android.content.Context r11 = r20.getContext()
+            r9.<init>(r0, r11)
+            r0.scroller = r9
+            org.telegram.ui.Components.RecyclerListView r9 = new org.telegram.ui.Components.RecyclerListView
+            android.content.Context r11 = r20.getContext()
+            r9.<init>(r11)
+            r0.recyclerView = r9
+            r9.setAdapter(r2)
+            r9.setClipChildren(r4)
+            r9.setClipToPadding(r4)
+            r9.setHasFixedSize(r3)
+            r2 = 0
+            r9.setItemAnimator(r2)
+            r9.setNestedScrollingEnabled(r4)
+            androidx.recyclerview.widget.LinearLayoutManager r2 = new androidx.recyclerview.widget.LinearLayoutManager
+            android.content.Context r11 = r20.getContext()
+            r2.<init>(r11, r4, r4)
+            r9.setLayoutManager(r2)
+            r2 = 1094713344(0x41400000, float:12.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r9.setPadding(r11, r4, r2, r4)
+            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda5 r2 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda5
+            r2.<init>(r0, r1)
+            r9.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r2)
+            r11 = -1
+            r12 = 1120927744(0x42d00000, float:104.0)
+            r13 = 8388611(0x800003, float:1.1754948E-38)
+            r14 = 0
+            r15 = 1110441984(0x42300000, float:44.0)
+            r16 = 0
+            r17 = 0
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r5.addView(r9, r1)
+            android.view.View r1 = new android.view.View
+            android.content.Context r2 = r20.getContext()
+            r1.<init>(r2)
+            r0.applyButton = r1
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r6 = r0.getThemedColor(r6)
+            java.lang.String r9 = "featuredStickers_addButtonPressed"
+            int r9 = r0.getThemedColor(r9)
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorRoundRectDrawable(r2, r6, r9)
+            r1.setBackground(r2)
+            r2 = 4
+            r1.setVisibility(r2)
+            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda3 r6 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda3
+            r6.<init>(r0)
+            r1.setOnClickListener(r6)
+            r9 = -1
+            r10 = 1111490560(0x42400000, float:48.0)
+            r11 = 8388611(0x800003, float:1.1754948E-38)
+            r12 = 1098907648(0x41800000, float:16.0)
+            r13 = 1126301696(0x43220000, float:162.0)
+            r14 = 1098907648(0x41800000, float:16.0)
+            r15 = 1098907648(0x41800000, float:16.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            r5.addView(r1, r6)
+            android.widget.TextView r1 = new android.widget.TextView
+            android.content.Context r6 = r20.getContext()
+            r1.<init>(r6)
+            r0.resetTextView = r1
+            r6 = 0
+            r1.setAlpha(r6)
+            android.widget.TextView r1 = r0.resetTextView
+            android.text.TextUtils$TruncateAt r6 = android.text.TextUtils.TruncateAt.END
+            r1.setEllipsize(r6)
+            android.widget.TextView r1 = r0.resetTextView
+            r6 = 17
+            r1.setGravity(r6)
+            android.widget.TextView r1 = r0.resetTextView
+            r1.setLines(r3)
+            android.widget.TextView r1 = r0.resetTextView
+            r1.setSingleLine(r3)
+            android.widget.TextView r1 = r0.resetTextView
+            r9 = 2131624855(0x7f0e0397, float:1.8876901E38)
+            java.lang.String r10 = "ChatResetTheme"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r1.setText(r9)
+            android.widget.TextView r1 = r0.resetTextView
+            java.lang.String r9 = "featuredStickers_buttonText"
+            int r10 = r0.getThemedColor(r9)
+            r1.setTextColor(r10)
+            android.widget.TextView r1 = r0.resetTextView
+            r10 = 1097859072(0x41700000, float:15.0)
+            r1.setTextSize(r3, r10)
+            android.widget.TextView r1 = r0.resetTextView
+            android.graphics.Typeface r11 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r1.setTypeface(r11)
+            android.widget.TextView r1 = r0.resetTextView
+            r1.setVisibility(r2)
+            android.widget.TextView r1 = r0.resetTextView
+            r11 = -1
+            r12 = 1111490560(0x42400000, float:48.0)
+            r13 = 8388611(0x800003, float:1.1754948E-38)
+            r15 = 1126301696(0x43220000, float:162.0)
+            r16 = 1098907648(0x41800000, float:16.0)
+            r17 = 1098907648(0x41800000, float:16.0)
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r5.addView(r1, r11)
+            android.widget.TextView r1 = new android.widget.TextView
+            android.content.Context r11 = r20.getContext()
+            r1.<init>(r11)
+            r0.applyTextView = r1
+            android.text.TextUtils$TruncateAt r11 = android.text.TextUtils.TruncateAt.END
+            r1.setEllipsize(r11)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setGravity(r6)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setLines(r3)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setSingleLine(r3)
+            android.widget.TextView r1 = r0.applyTextView
+            r6 = 2131624830(0x7f0e037e, float:1.887685E38)
+            java.lang.String r11 = "ChatApplyTheme"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
+            r1.setText(r6)
+            android.widget.TextView r1 = r0.applyTextView
+            int r6 = r0.getThemedColor(r9)
+            r1.setTextColor(r6)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setTextSize(r3, r10)
+            android.widget.TextView r1 = r0.applyTextView
+            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r1.setTypeface(r3)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setVisibility(r2)
+            android.widget.TextView r1 = r0.applyTextView
+            r9 = -1
+            r10 = 1111490560(0x42400000, float:48.0)
+            r11 = 8388611(0x800003, float:1.1754948E-38)
+            r12 = 1098907648(0x41800000, float:16.0)
+            r13 = 1126301696(0x43220000, float:162.0)
+            r15 = 1098907648(0x41800000, float:16.0)
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            r5.addView(r1, r2)
+            r1 = 1108344832(0x42100000, float:36.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            org.telegram.ui.Components.RadialProgressView r1 = new org.telegram.ui.Components.RadialProgressView
+            android.content.Context r2 = r20.getContext()
+            org.telegram.ui.ActionBar.Theme$ResourcesProvider r3 = r0.resourcesProvider
+            r1.<init>(r2, r3)
+            r0.progressView = r1
+            r1.setProgressColor(r8)
+            r1.setSize(r9)
+            r1.setVisibility(r4)
+            float r10 = (float) r9
+            r11 = 17
+            r12 = 0
+            r13 = 1090519040(0x41000000, float:8.0)
+            r14 = 0
+            r15 = 0
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            r5.addView(r1, r2)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatThemeBottomSheet.<init>(org.telegram.ui.ChatActivity, org.telegram.ui.ChatActivity$ThemeDelegate):void");
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(View view) {
+        setupLightDarkTheme(!this.forceDark);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(ChatActivity.ThemeDelegate themeDelegate2, View view, final int i) {
+        if (this.adapter.items.get(i) != this.selectedItem) {
+            ChatThemeItem chatThemeItem = (ChatThemeItem) this.adapter.items.get(i);
+            this.selectedItem = chatThemeItem;
+            this.isLightDarkChangeAnimation = false;
+            ChatTheme chatTheme = chatThemeItem.chatTheme;
+            if (chatTheme == null || chatTheme.isDefault) {
+                this.applyTextView.animate().alpha(0.0f).setDuration(300).start();
+                this.resetTextView.animate().alpha(1.0f).setDuration(300).start();
+            } else {
+                this.resetTextView.animate().alpha(0.0f).setDuration(300).start();
+                this.applyTextView.animate().alpha(1.0f).setDuration(300).start();
+            }
+            themeDelegate2.setCurrentTheme(this.selectedItem.chatTheme, true, Boolean.valueOf(this.forceDark));
+            this.adapter.setSelectedItem(i);
+            this.containerView.postDelayed(new Runnable() {
+                public void run() {
+                    int i;
+                    RecyclerView.LayoutManager layoutManager = ChatThemeBottomSheet.this.recyclerView.getLayoutManager();
+                    if (layoutManager != null) {
+                        if (i > ChatThemeBottomSheet.this.prevSelectedPosition) {
+                            i = Math.min(i + 1, ChatThemeBottomSheet.this.adapter.items.size() - 1);
+                        } else {
+                            i = Math.max(i - 1, 0);
+                        }
+                        ChatThemeBottomSheet.this.scroller.setTargetPosition(i);
+                        layoutManager.startSmoothScroll(ChatThemeBottomSheet.this.scroller);
+                    }
+                    int unused = ChatThemeBottomSheet.this.prevSelectedPosition = i;
+                }
+            }, 100);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$2(View view) {
+        applySelectedTheme();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        ChatThemeController.preloadAllWallpaperThumbs(true);
+        ChatThemeController.preloadAllWallpaperThumbs(false);
+        ChatThemeController.preloadAllWallpaperImages(true);
+        ChatThemeController.preloadAllWallpaperImages(false);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
+        this.isApplyClicked = false;
+        List<ChatTheme> cachedThemes = this.themeDelegate.getCachedThemes();
+        if (cachedThemes == null || cachedThemes.isEmpty()) {
+            ChatThemeController.requestAllChatThemes(new ResultCallback<List<ChatTheme>>() {
+                public void onComplete(List<ChatTheme> list) {
+                    if (list != null && !list.isEmpty()) {
+                        ChatThemeBottomSheet.this.themeDelegate.setCachedThemes(list);
+                    }
+                    ChatThemeBottomSheet.this.onDataLoaded(list);
+                }
+
+                public void onError(TLRPC$TL_error tLRPC$TL_error) {
+                    Toast.makeText(ChatThemeBottomSheet.this.getContext(), tLRPC$TL_error.text, 0).show();
+                }
+            }, true);
+        } else {
+            onDataLoaded(cachedThemes);
+        }
+    }
+
+    public void onBackPressed() {
+        close();
+    }
+
+    public void dismiss() {
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
+        super.dismiss();
+        if (!this.isApplyClicked) {
+            this.themeDelegate.setCurrentTheme(this.originalTheme, true, Boolean.valueOf(getResultIsDark()));
+        }
+    }
+
+    public void close() {
+        if (hasChanges()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), this.resourcesProvider);
+            builder.setTitle(LocaleController.getString("ChatThemeSaveDialogTitle", NUM));
+            builder.setSubtitle(LocaleController.getString("ChatThemeSaveDialogText", NUM));
+            builder.setPositiveButton(LocaleController.getString("ChatThemeSaveDialogApply", NUM), new ChatThemeBottomSheet$$ExternalSyntheticLambda1(this));
+            builder.setNegativeButton(LocaleController.getString("ChatThemeSaveDialogDiscard", NUM), new ChatThemeBottomSheet$$ExternalSyntheticLambda0(this));
+            builder.show();
+            return;
+        }
+        dismiss();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$close$3(DialogInterface dialogInterface, int i) {
+        applySelectedTheme();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$close$4(DialogInterface dialogInterface, int i) {
+        dismiss();
+    }
+
+    @SuppressLint({"NotifyDataSetChanged"})
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.emojiLoaded) {
+            this.adapter.notifyDataSetChanged();
+        }
+    }
+
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        AnonymousClass4 r7 = new ThemeDescription.ThemeDescriptionDelegate() {
+            private boolean isAnimationStarted = false;
+
+            public void didSetColor() {
+            }
+
+            public void onAnimationProgress(float f) {
+                if (f == 0.0f && !this.isAnimationStarted) {
+                    ChatThemeBottomSheet.this.onAnimationStart();
+                    this.isAnimationStarted = true;
+                }
+                ChatThemeBottomSheet chatThemeBottomSheet = ChatThemeBottomSheet.this;
+                chatThemeBottomSheet.setDarkButtonColor(chatThemeBottomSheet.getThemedColor("featuredStickers_addButton"));
+                ChatThemeBottomSheet chatThemeBottomSheet2 = ChatThemeBottomSheet.this;
+                chatThemeBottomSheet2.setOverlayNavBarColor(chatThemeBottomSheet2.getThemedColor("dialogBackground"));
+                if (ChatThemeBottomSheet.this.isLightDarkChangeAnimation) {
+                    ChatThemeBottomSheet.this.setItemsAnimationProgress(f);
+                }
+                if (f == 1.0f && this.isAnimationStarted) {
+                    boolean unused = ChatThemeBottomSheet.this.isLightDarkChangeAnimation = false;
+                    ChatThemeBottomSheet.this.onAnimationEnd();
+                    this.isAnimationStarted = false;
+                }
+            }
+        };
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
+        arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, new Drawable[]{this.shadowDrawable}, r7, "dialogBackground"));
+        arrayList.add(new ThemeDescription(this.titleView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
+        arrayList.add(new ThemeDescription(this.recyclerView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{Adapter.ChatThemeView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackgroundGray"));
+        arrayList.add(new ThemeDescription(this.applyButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addButton"));
+        arrayList.add(new ThemeDescription(this.applyButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addButtonPressed"));
+        Iterator<ThemeDescription> it = arrayList.iterator();
+        while (it.hasNext()) {
+            it.next().resourcesProvider = this.themeDelegate;
+        }
+        return arrayList;
+    }
+
+    public void setupLightDarkTheme(boolean z) {
+        setForceDark(z, true);
+        ChatThemeItem chatThemeItem = this.selectedItem;
+        if (chatThemeItem != null) {
+            this.isLightDarkChangeAnimation = true;
+            this.themeDelegate.setCurrentTheme(chatThemeItem.chatTheme, true, Boolean.valueOf(z));
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean onContainerTouchEvent(MotionEvent motionEvent) {
+        if (motionEvent == null || !hasChanges()) {
+            return false;
+        }
+        int x = (int) motionEvent.getX();
+        if (((int) motionEvent.getY()) >= this.containerView.getTop() && x >= this.containerView.getLeft() && x <= this.containerView.getRight()) {
+            return false;
+        }
+        this.chatActivity.getFragmentView().dispatchTouchEvent(motionEvent);
+        return true;
+    }
+
+    /* access modifiers changed from: private */
+    public void onDataLoaded(List<ChatTheme> list) {
+        if (list != null && !list.isEmpty()) {
+            int i = 0;
+            ChatThemeItem chatThemeItem = new ChatThemeItem(list.get(0));
+            ArrayList arrayList = new ArrayList(list.size());
+            ChatTheme currentTheme = this.themeDelegate.getCurrentTheme();
+            if (currentTheme != null) {
+                arrayList.add(0, chatThemeItem);
+            }
+            this.selectedItem = chatThemeItem;
+            for (int i2 = 1; i2 < list.size(); i2++) {
+                ChatTheme chatTheme = list.get(i2);
+                ChatThemeItem chatThemeItem2 = new ChatThemeItem(chatTheme);
+                HashMap<String, Integer> currentColors = chatTheme.getCurrentColors(this.chatActivity.getCurrentAccount(), true);
+                Integer num = currentColors.get("chat_inBubble");
+                if (num == null) {
+                    num = Integer.valueOf(getThemedColor("chat_inBubble"));
+                }
+                chatThemeItem2.inBubbleColorDark = num.intValue();
+                Integer num2 = currentColors.get("chat_outBubble");
+                if (num2 == null) {
+                    num2 = Integer.valueOf(getThemedColor("chat_outBubble"));
+                }
+                chatThemeItem2.outBubbleColorDark = num2.intValue();
+                Integer num3 = currentColors.get("featuredStickers_addButton");
+                chatThemeItem2.strokeColorLight = num3 != null ? num3.intValue() : 0;
+                HashMap<String, Integer> currentColors2 = chatTheme.getCurrentColors(this.chatActivity.getCurrentAccount(), false);
+                Integer num4 = currentColors2.get("chat_inBubble");
+                if (num4 == null) {
+                    num4 = Integer.valueOf(getThemedColor("chat_inBubble"));
+                }
+                chatThemeItem2.inBubbleColorLight = num4.intValue();
+                Integer num5 = currentColors2.get("chat_outBubble");
+                if (num5 == null) {
+                    num5 = Integer.valueOf(getThemedColor("chat_outBubble"));
+                }
+                chatThemeItem2.outBubbleColorLight = num5.intValue();
+                Integer num6 = currentColors2.get("featuredStickers_addButton");
+                chatThemeItem2.strokeColorDark = num6 != null ? num6.intValue() : 0;
+                chatThemeItem2.isDark = this.forceDark;
+                arrayList.add(chatThemeItem2);
+            }
+            this.adapter.setItems(arrayList);
+            this.applyButton.setVisibility(0);
+            this.applyTextView.setVisibility(0);
+            this.resetTextView.setVisibility(0);
+            this.darkThemeView.setVisibility(0);
+            if (currentTheme != null) {
+                while (true) {
+                    if (i != arrayList.size()) {
+                        if (((ChatThemeItem) arrayList.get(i)).chatTheme != null && ((ChatThemeItem) arrayList.get(i)).chatTheme.getEmoticon().equals(currentTheme.getEmoticon())) {
+                            this.selectedItem = (ChatThemeItem) arrayList.get(i);
+                            break;
+                        }
+                        i++;
+                    } else {
+                        i = -1;
+                        break;
+                    }
+                }
+                if (i != -1) {
+                    this.prevSelectedPosition = i;
+                    this.adapter.setSelectedItem(i);
+                    AndroidUtilities.runOnUIThread(new ChatThemeBottomSheet$$ExternalSyntheticLambda4(this, Math.min(i + 1, this.adapter.items.size() - 1)), 100);
+                }
+            }
+            this.progressView.setVisibility(8);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDataLoaded$5(int i) {
+        this.recyclerView.smoothScrollToPosition(i);
+    }
+
+    /* access modifiers changed from: private */
+    public void onAnimationStart() {
+        for (ChatThemeItem chatThemeItem : this.adapter.items) {
+            chatThemeItem.isDark = this.forceDark;
+        }
+        if (!this.isLightDarkChangeAnimation) {
+            setItemsAnimationProgress(1.0f);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public void onAnimationEnd() {
+        this.isLightDarkChangeAnimation = false;
+    }
+
+    /* access modifiers changed from: private */
+    public void setDarkButtonColor(int i) {
+        this.darkThemeDrawable.setLayerColor("Sunny.**", i);
+        this.darkThemeDrawable.setLayerColor("Path.**", i);
+        this.darkThemeDrawable.setLayerColor("Path 10.**", i);
+        this.darkThemeDrawable.setLayerColor("Path 11.**", i);
+    }
+
+    private void setForceDark(boolean z, boolean z2) {
+        this.useLightNavBar = z;
+        this.useLightStatusBar = z;
+        if (this.forceDark != z) {
+            this.forceDark = z;
+            int i = 0;
+            if (z2) {
+                RLottieDrawable rLottieDrawable = this.darkThemeDrawable;
+                if (z) {
+                    i = rLottieDrawable.getFramesCount();
+                }
+                rLottieDrawable.setCustomEndFrame(i);
+                this.darkThemeView.playAnimation();
+                return;
+            }
+            this.darkThemeDrawable.setInvalidateOnProgressSet(true);
+            RLottieDrawable rLottieDrawable2 = this.darkThemeDrawable;
+            if (z) {
+                i = rLottieDrawable2.getFramesCount();
+            }
+            rLottieDrawable2.setCurrentFrame(i);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public void setItemsAnimationProgress(float f) {
+        for (int i = 0; i < this.adapter.getItemCount(); i++) {
+            ((ChatThemeItem) this.adapter.items.get(i)).animationProgress = f;
+        }
+        for (int i2 = 0; i2 < this.recyclerView.getAttachedScrapChildCount(); i2++) {
+            ((Adapter.ChatThemeView) this.recyclerView.getAttachedScrapChildAt(i2)).setAnimationProgress(f);
+        }
+        for (int i3 = 0; i3 < this.recyclerView.getHiddenChildCount(); i3++) {
+            ((Adapter.ChatThemeView) this.recyclerView.getHiddenChildAt(i3)).setAnimationProgress(f);
+        }
+        for (int i4 = 0; i4 < this.recyclerView.getCachedChildCount(); i4++) {
+            ((Adapter.ChatThemeView) this.recyclerView.getCachedChildAt(i4)).setAnimationProgress(f);
+        }
+        for (int i5 = 0; i5 < this.recyclerView.getChildCount(); i5++) {
+            ((Adapter.ChatThemeView) this.recyclerView.getChildAt(i5)).setAnimationProgress(f);
+        }
+    }
+
+    private void applySelectedTheme() {
+        ChatThemeItem chatThemeItem = this.selectedItem;
+        if (chatThemeItem != null) {
+            ChatTheme chatTheme = chatThemeItem.chatTheme;
+            ChatThemeController.getInstance(this.currentAccount).setDialogTheme(this.chatActivity.getDialogId(), (chatTheme == null || chatTheme.isDefault) ? null : chatTheme.getEmoticon(), true);
+            if (chatTheme == null || chatTheme.isDefault) {
+                this.themeDelegate.setCurrentTheme((ChatTheme) null, true, Boolean.valueOf(Theme.getActiveTheme().isDark()));
+            } else {
+                this.themeDelegate.setCurrentTheme(chatTheme, true, Boolean.valueOf(getResultIsDark()));
+            }
+            this.isApplyClicked = true;
+        }
+        dismiss();
+    }
+
+    private boolean hasChanges() {
+        if (this.selectedItem == null) {
+            return false;
+        }
+        ChatTheme chatTheme = this.originalTheme;
+        String str = null;
+        String emoticon = chatTheme != null ? chatTheme.getEmoticon() : null;
+        String str2 = "❌";
+        if (TextUtils.isEmpty(emoticon)) {
+            emoticon = str2;
+        }
+        ChatTheme chatTheme2 = this.selectedItem.chatTheme;
+        if (chatTheme2 != null) {
+            str = chatTheme2.getEmoticon();
+        }
+        if (!TextUtils.isEmpty(str)) {
+            str2 = str;
+        }
+        return !ObjectsCompat$$ExternalSyntheticBackport0.m(emoticon, str2);
+    }
+
+    private boolean getResultIsDark() {
+        return Theme.getActiveTheme().isDark();
+    }
+
+    @SuppressLint({"NotifyDataSetChanged"})
+    private static class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        /* access modifiers changed from: private */
+        public List<ChatThemeItem> items;
+        private final Theme.ResourcesProvider resourcesProvider;
+        private int selectedItemPosition = -1;
+        private WeakReference<ChatThemeView> selectedViewRef;
+
+        public Adapter(Theme.ResourcesProvider resourcesProvider2) {
+            this.resourcesProvider = resourcesProvider2;
+        }
+
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            return new RecyclerListView.Holder(new ChatThemeView(viewGroup.getContext(), this.resourcesProvider));
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            ChatThemeView chatThemeView = (ChatThemeView) viewHolder.itemView;
+            chatThemeView.setItem(this.items.get(i));
+            chatThemeView.setSelected(i == this.selectedItemPosition);
+            if (i == this.selectedItemPosition) {
+                this.selectedViewRef = new WeakReference<>(chatThemeView);
+            }
+        }
+
+        public int getItemCount() {
+            List<ChatThemeItem> list = this.items;
+            if (list == null) {
+                return 0;
+            }
+            return list.size();
+        }
+
+        public void setItems(List<ChatThemeItem> list) {
+            this.items = list;
+            notifyDataSetChanged();
+        }
+
+        public void setSelectedItem(int i) {
+            int i2 = this.selectedItemPosition;
+            if (i2 != i) {
+                if (i2 >= 0) {
+                    notifyItemChanged(i2);
+                    ChatThemeView chatThemeView = (ChatThemeView) this.selectedViewRef.get();
+                    if (chatThemeView != null) {
+                        chatThemeView.setSelected(false);
+                    }
+                }
+                this.selectedItemPosition = i;
+                notifyItemChanged(i);
+            }
+        }
+
+        private static class ChatThemeView extends View implements Animator.AnimatorListener, ValueAnimator.AnimatorUpdateListener {
+            private static final float BUBBLE_HEIGHT = ((float) AndroidUtilities.dp(21.0f));
+            private static final float BUBBLE_WIDTH = ((float) AndroidUtilities.dp(41.0f));
+            private static final float INNER_RADIUS = ((float) AndroidUtilities.dp(6.0f));
+            private static final float INNER_RECT_SPACE = ((float) AndroidUtilities.dp(4.0f));
+            private static final float STROKE_RADIUS = ((float) AndroidUtilities.dp(8.0f));
+            private final Paint backgroundFillPaint = new Paint(1);
+            private ChatThemeItem chatThemeItem;
+            private final Path clipPath;
+            private Emoji.EmojiDrawable emojiDrawable;
+            private final Paint inBubblePaint;
+            private TextPaint noThemeTextPaint;
+            private final Paint outBubblePaintFirst;
+            private final Paint outBubblePaintSecond;
+            private final RectF rectF;
+            private final Theme.ResourcesProvider resourcesProvider;
+            private ValueAnimator strokeAlphaAnimator;
+            private final Paint strokePaint;
+            private StaticLayout textLayout;
+
+            public void onAnimationRepeat(Animator animator) {
+            }
+
+            public void onAnimationStart(Animator animator) {
+            }
+
+            public ChatThemeView(Context context, Theme.ResourcesProvider resourcesProvider2) {
+                super(context);
+                Paint paint = new Paint(1);
+                this.strokePaint = paint;
+                this.outBubblePaintFirst = new Paint(1);
+                this.outBubblePaintSecond = new Paint(1);
+                this.inBubblePaint = new Paint(1);
+                this.rectF = new RectF();
+                this.clipPath = new Path();
+                this.resourcesProvider = resourcesProvider2;
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+                setBackgroundColor(getThemedColor("dialogBackgroundGray"));
+            }
+
+            /* access modifiers changed from: protected */
+            public void onMeasure(int i, int i2) {
+                setMeasuredDimension(AndroidUtilities.dp(77.0f), View.MeasureSpec.getSize(i2));
+            }
+
+            /* access modifiers changed from: protected */
+            public void onSizeChanged(int i, int i2, int i3, int i4) {
+                super.onSizeChanged(i, i2, i3, i4);
+                if (i != i3 || i2 != i4) {
+                    RectF rectF2 = this.rectF;
+                    float f = INNER_RECT_SPACE;
+                    rectF2.set(f, f, ((float) i) - f, ((float) i2) - f);
+                    this.clipPath.reset();
+                    Path path = this.clipPath;
+                    RectF rectF3 = this.rectF;
+                    float f2 = INNER_RADIUS;
+                    path.addRoundRect(rectF3, f2, f2, Path.Direction.CW);
+                }
+            }
+
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                ChatThemeItem chatThemeItem2 = this.chatThemeItem;
+                if (chatThemeItem2 != null) {
+                    if (chatThemeItem2.isSelected || this.strokeAlphaAnimator != null) {
+                        float strokeWidth = this.strokePaint.getStrokeWidth() * 0.5f;
+                        this.rectF.set(strokeWidth, strokeWidth, ((float) getWidth()) - strokeWidth, ((float) getHeight()) - strokeWidth);
+                        RectF rectF2 = this.rectF;
+                        float f = STROKE_RADIUS;
+                        canvas.drawRoundRect(rectF2, f, f, this.strokePaint);
+                    }
+                    RectF rectF3 = this.rectF;
+                    float f2 = INNER_RECT_SPACE;
+                    rectF3.set(f2, f2, ((float) getWidth()) - f2, ((float) getHeight()) - f2);
+                    ChatThemeItem chatThemeItem3 = this.chatThemeItem;
+                    ChatTheme chatTheme = chatThemeItem3.chatTheme;
+                    if (chatTheme == null || chatTheme.isDefault) {
+                        RectF rectF4 = this.rectF;
+                        float f3 = INNER_RADIUS;
+                        canvas.drawRoundRect(rectF4, f3, f3, this.backgroundFillPaint);
+                        canvas.save();
+                        StaticLayout noThemeStaticLayout = getNoThemeStaticLayout();
+                        canvas.translate(((float) (getWidth() - noThemeStaticLayout.getWidth())) * 0.5f, (float) AndroidUtilities.dp(18.0f));
+                        noThemeStaticLayout.draw(canvas);
+                        canvas.restore();
+                    } else {
+                        if (chatThemeItem3.previewDrawable != null) {
+                            canvas.save();
+                            canvas.clipPath(this.clipPath);
+                            this.chatThemeItem.previewDrawable.setBounds(0, 0, getWidth(), getHeight());
+                            this.chatThemeItem.previewDrawable.draw(canvas);
+                            canvas.restore();
+                        } else {
+                            RectF rectF5 = this.rectF;
+                            float f4 = INNER_RADIUS;
+                            canvas.drawRoundRect(rectF5, f4, f4, this.backgroundFillPaint);
+                        }
+                        float dp = ((float) AndroidUtilities.dp(8.0f)) + f2;
+                        float dp2 = ((float) AndroidUtilities.dp(22.0f)) + f2;
+                        RectF rectF6 = this.rectF;
+                        float f5 = BUBBLE_WIDTH;
+                        float f6 = BUBBLE_HEIGHT;
+                        rectF6.set(dp2, dp, dp2 + f5, dp + f6);
+                        RectF rectF7 = this.rectF;
+                        canvas.drawRoundRect(rectF7, rectF7.height() * 0.5f, this.rectF.height() * 0.5f, this.outBubblePaintFirst);
+                        RectF rectF8 = this.rectF;
+                        canvas.drawRoundRect(rectF8, rectF8.height() * 0.5f, this.rectF.height() * 0.5f, this.outBubblePaintSecond);
+                        float dp3 = f2 + ((float) AndroidUtilities.dp(5.0f));
+                        float dp4 = dp + ((float) AndroidUtilities.dp(4.0f)) + f6;
+                        this.rectF.set(dp3, dp4, f5 + dp3, f6 + dp4);
+                        RectF rectF9 = this.rectF;
+                        canvas.drawRoundRect(rectF9, rectF9.height() * 0.5f, this.rectF.height() * 0.5f, this.inBubblePaint);
+                    }
+                    if (this.emojiDrawable != null) {
+                        int width = (getWidth() - this.emojiDrawable.getBounds().width()) / 2;
+                        int height = (getHeight() - this.emojiDrawable.getBounds().height()) - AndroidUtilities.dp(12.0f);
+                        Emoji.EmojiDrawable emojiDrawable2 = this.emojiDrawable;
+                        emojiDrawable2.setBounds(width, height, emojiDrawable2.getBounds().width() + width, this.emojiDrawable.getBounds().height() + height);
+                        this.emojiDrawable.draw(canvas);
+                    }
+                }
+            }
+
+            public void setItem(ChatThemeItem chatThemeItem2) {
+                boolean z = this.chatThemeItem != chatThemeItem2;
+                this.chatThemeItem = chatThemeItem2;
+                if (z || this.emojiDrawable == null) {
+                    ChatTheme chatTheme = chatThemeItem2.chatTheme;
+                    this.emojiDrawable = Emoji.getEmojiDrawable(chatTheme == null ? "❌" : chatTheme.getEmoticon());
+                }
+                ChatTheme chatTheme2 = chatThemeItem2.chatTheme;
+                if (chatTheme2 != null && !chatTheme2.isDefault) {
+                    setAnimationProgress(1.0f);
+                    if (z) {
+                        boolean z2 = chatThemeItem2.isDark;
+                        chatThemeItem2.chatTheme.loadWallpaperThumb(z2, new ChatThemeBottomSheet$Adapter$ChatThemeView$$ExternalSyntheticLambda0(this, chatThemeItem2.chatTheme.getTlTheme(z2).id, chatThemeItem2.chatTheme.getWallpaper(z2).settings.intensity));
+                    }
+                }
+                setBackgroundColor(0);
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$setItem$0(long j, int i, Pair pair) {
+                MotionBackgroundDrawable previewDrawable;
+                if (pair != null && ((Long) pair.first).longValue() == j && (previewDrawable = getPreviewDrawable()) != null) {
+                    previewDrawable.setPatternBitmap(i, (Bitmap) pair.second);
+                }
+            }
+
+            public void setSelected(boolean z) {
+                super.setSelected(z);
+                if (this.chatThemeItem.isSelected != z) {
+                    ValueAnimator valueAnimator = this.strokeAlphaAnimator;
+                    if (valueAnimator != null) {
+                        valueAnimator.cancel();
+                    }
+                    int i = 0;
+                    if (z) {
+                        this.strokePaint.setAlpha(0);
+                    }
+                    int[] iArr = new int[2];
+                    iArr[0] = z ? 0 : 255;
+                    if (z) {
+                        i = 255;
+                    }
+                    iArr[1] = i;
+                    ValueAnimator ofInt = ValueAnimator.ofInt(iArr);
+                    this.strokeAlphaAnimator = ofInt;
+                    ofInt.addUpdateListener(this);
+                    this.strokeAlphaAnimator.addListener(this);
+                    this.strokeAlphaAnimator.setDuration(350);
+                    this.strokeAlphaAnimator.start();
+                }
+                this.chatThemeItem.isSelected = z;
+            }
+
+            public void setBackgroundColor(int i) {
+                this.backgroundFillPaint.setColor(getThemedColor("dialogBackgroundGray"));
+                TextPaint textPaint = this.noThemeTextPaint;
+                if (textPaint != null) {
+                    textPaint.setColor(getThemedColor("chat_emojiPanelTrendingDescription"));
+                }
+                invalidate();
+            }
+
+            private void fillOutBubblePaint(Paint paint, List<Integer> list) {
+                if (list.size() > 1) {
+                    int[] iArr = new int[list.size()];
+                    for (int i = 0; i != list.size(); i++) {
+                        iArr[i] = list.get(i).intValue();
+                    }
+                    float dp = INNER_RECT_SPACE + ((float) AndroidUtilities.dp(8.0f));
+                    paint.setShader(new LinearGradient(0.0f, dp, 0.0f, dp + BUBBLE_HEIGHT, iArr, (float[]) null, Shader.TileMode.CLAMP));
+                    return;
+                }
+                paint.setShader((Shader) null);
+            }
+
+            public void setAnimationProgress(float f) {
+                ChatTheme chatTheme;
+                ChatThemeItem chatThemeItem2 = this.chatThemeItem;
+                if (chatThemeItem2 != null && (chatTheme = chatThemeItem2.chatTheme) != null && !chatTheme.isDefault) {
+                    boolean z = chatThemeItem2.isDark;
+                    this.inBubblePaint.setColor(ColorUtils.blendARGB(z ? chatThemeItem2.inBubbleColorLight : chatThemeItem2.inBubbleColorDark, z ? chatThemeItem2.inBubbleColorDark : chatThemeItem2.inBubbleColorLight, f));
+                    ChatThemeItem chatThemeItem3 = this.chatThemeItem;
+                    boolean z2 = chatThemeItem3.isDark;
+                    int i = z2 ? chatThemeItem3.outBubbleColorLight : chatThemeItem3.outBubbleColorDark;
+                    int i2 = z2 ? chatThemeItem3.outBubbleColorDark : chatThemeItem3.outBubbleColorLight;
+                    this.outBubblePaintFirst.setColor(i);
+                    this.outBubblePaintSecond.setColor(ColorUtils.blendARGB(i, i2, f));
+                    ChatThemeItem chatThemeItem4 = this.chatThemeItem;
+                    TLRPC$TL_theme tlTheme = chatThemeItem4.chatTheme.getTlTheme(!chatThemeItem4.isDark);
+                    fillOutBubblePaint(this.outBubblePaintFirst, tlTheme.settings.message_colors);
+                    this.outBubblePaintFirst.setAlpha((int) ((1.0f - f) * 255.0f));
+                    ChatThemeItem chatThemeItem5 = this.chatThemeItem;
+                    TLRPC$TL_theme tlTheme2 = chatThemeItem5.chatTheme.getTlTheme(chatThemeItem5.isDark);
+                    fillOutBubblePaint(this.outBubblePaintSecond, tlTheme2.settings.message_colors);
+                    this.outBubblePaintSecond.setAlpha((int) (255.0f * f));
+                    MotionBackgroundDrawable previewDrawable = getPreviewDrawable();
+                    if (previewDrawable != null) {
+                        TLRPC$WallPaperSettings tLRPC$WallPaperSettings = tlTheme.settings.wallpaper.settings;
+                        TLRPC$WallPaperSettings tLRPC$WallPaperSettings2 = tlTheme2.settings.wallpaper.settings;
+                        int blendARGB = ColorUtils.blendARGB(tLRPC$WallPaperSettings.background_color, tLRPC$WallPaperSettings2.background_color, f) | -16777216;
+                        if (blendARGB == -16777216) {
+                            blendARGB = 0;
+                        }
+                        int blendARGB2 = ColorUtils.blendARGB(tLRPC$WallPaperSettings.second_background_color, tLRPC$WallPaperSettings2.second_background_color, f) | -16777216;
+                        if (blendARGB2 == -16777216) {
+                            blendARGB2 = 0;
+                        }
+                        int blendARGB3 = ColorUtils.blendARGB(tLRPC$WallPaperSettings.third_background_color, tLRPC$WallPaperSettings2.third_background_color, f) | -16777216;
+                        if (blendARGB3 == -16777216) {
+                            blendARGB3 = 0;
+                        }
+                        int blendARGB4 = ColorUtils.blendARGB(tLRPC$WallPaperSettings.fourth_background_color, tLRPC$WallPaperSettings2.fourth_background_color, f) | -16777216;
+                        previewDrawable.setColors(blendARGB, blendARGB2, blendARGB3, blendARGB4 == -16777216 ? 0 : blendARGB4, false);
+                        previewDrawable.setPatternSettings(new PorterDuffColorFilter(previewDrawable.getPatternColor(), PorterDuff.Mode.SRC_IN), (((float) tLRPC$WallPaperSettings2.intensity) * f) / 100.0f);
+                    }
+                    invalidate();
+                }
+            }
+
+            private MotionBackgroundDrawable getPreviewDrawable() {
+                ChatThemeItem chatThemeItem2 = this.chatThemeItem;
+                if (chatThemeItem2 == null) {
+                    return null;
+                }
+                MotionBackgroundDrawable motionBackgroundDrawable = chatThemeItem2.previewDrawable;
+                if (motionBackgroundDrawable != null) {
+                    return motionBackgroundDrawable;
+                }
+                MotionBackgroundDrawable motionBackgroundDrawable2 = new MotionBackgroundDrawable();
+                this.chatThemeItem.previewDrawable = motionBackgroundDrawable2;
+                return motionBackgroundDrawable2;
+            }
+
+            private StaticLayout getNoThemeStaticLayout() {
+                StaticLayout staticLayout = this.textLayout;
+                if (staticLayout != null) {
+                    return staticLayout;
+                }
+                TextPaint textPaint = new TextPaint(129);
+                this.noThemeTextPaint = textPaint;
+                textPaint.setColor(getThemedColor("chat_emojiPanelTrendingDescription"));
+                this.noThemeTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
+                this.noThemeTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                StaticLayout createStaticLayout2 = StaticLayoutEx.createStaticLayout2(LocaleController.getString("NoTheme", NUM), this.noThemeTextPaint, AndroidUtilities.dp(52.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, true, TextUtils.TruncateAt.END, AndroidUtilities.dp(52.0f), 3);
+                this.textLayout = createStaticLayout2;
+                return createStaticLayout2;
+            }
+
+            private int getThemedColor(String str) {
+                Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+                Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+                return color != null ? color.intValue() : Theme.getColor(str);
+            }
+
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int i;
+                ChatThemeItem chatThemeItem2 = this.chatThemeItem;
+                if (chatThemeItem2.chatTheme.isDefault) {
+                    i = getThemedColor("featuredStickers_addButton");
+                } else {
+                    i = chatThemeItem2.isDark ? chatThemeItem2.strokeColorDark : chatThemeItem2.strokeColorLight;
+                }
+                this.strokePaint.setColor(i);
+                this.strokePaint.setAlpha(((Integer) valueAnimator.getAnimatedValue()).intValue());
+                invalidate();
+            }
+
+            public void onAnimationEnd(Animator animator) {
+                this.strokeAlphaAnimator = null;
+                invalidate();
+            }
+
+            public void onAnimationCancel(Animator animator) {
+                this.strokeAlphaAnimator = null;
+                invalidate();
+            }
+        }
+    }
+
+    private static class ChatThemeItem {
+        public float animationProgress;
+        public final ChatTheme chatTheme;
+        public int inBubbleColorDark;
+        public int inBubbleColorLight;
+        public boolean isDark;
+        public boolean isSelected;
+        public int outBubbleColorDark;
+        public int outBubbleColorLight;
+        public MotionBackgroundDrawable previewDrawable;
+        public int strokeColorDark;
+        public int strokeColorLight;
+
+        public ChatThemeItem(ChatTheme chatTheme2) {
+            this.chatTheme = chatTheme2;
+        }
+    }
+}

@@ -38,6 +38,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
+import org.telegram.ui.ActionBar.Theme;
 
 public class EditTextBoldCursor extends EditText {
     private static Class editorClass;
@@ -116,6 +117,11 @@ public class EditTextBoldCursor extends EditText {
     @TargetApi(26)
     public int getAutofillType() {
         return 0;
+    }
+
+    /* access modifiers changed from: protected */
+    public Theme.ResourcesProvider getResourcesProvider() {
+        return null;
     }
 
     @TargetApi(23)
@@ -999,7 +1005,7 @@ public class EditTextBoldCursor extends EditText {
         if (view == null) {
             view = this.attachedToWindow;
         }
-        this.floatingToolbar = new FloatingToolbar(context, view, getActionModeStyle());
+        this.floatingToolbar = new FloatingToolbar(context, view, getActionModeStyle(), getResourcesProvider());
         this.floatingActionMode = new FloatingActionMode(getContext(), new ActionModeCallback2Wrapper(callback), this, this.floatingToolbar);
         this.floatingToolbarPreDrawListener = new EditTextBoldCursor$$ExternalSyntheticLambda0(this);
         FloatingActionMode floatingActionMode3 = this.floatingActionMode;

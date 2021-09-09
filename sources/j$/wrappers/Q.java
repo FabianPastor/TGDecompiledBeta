@@ -1,16 +1,16 @@
 package j$.wrappers;
 
-import j$.util.function.k;
+import j$.util.function.l;
 import java.util.function.IntConsumer;
 
-public final /* synthetic */ class Q implements k {
+public final /* synthetic */ class Q implements l {
     final /* synthetic */ IntConsumer a;
 
     private /* synthetic */ Q(IntConsumer intConsumer) {
         this.a = intConsumer;
     }
 
-    public static /* synthetic */ k b(IntConsumer intConsumer) {
+    public static /* synthetic */ l b(IntConsumer intConsumer) {
         if (intConsumer == null) {
             return null;
         }
@@ -21,7 +21,7 @@ public final /* synthetic */ class Q implements k {
         this.a.accept(i);
     }
 
-    public /* synthetic */ k l(k kVar) {
-        return b(this.a.andThen(S.a(kVar)));
+    public /* synthetic */ l l(l lVar) {
+        return b(this.a.andThen(S.a(lVar)));
     }
 }

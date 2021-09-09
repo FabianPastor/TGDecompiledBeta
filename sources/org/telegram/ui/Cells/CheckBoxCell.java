@@ -22,35 +22,43 @@ public class CheckBoxCell extends FrameLayout {
     private int currentType;
     private boolean isMultiline;
     private boolean needDivider;
+    private final Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
     private TextView valueTextView;
 
     public CheckBoxCell(Context context, int i) {
-        this(context, i, 17);
+        this(context, i, 17, (Theme.ResourcesProvider) null);
+    }
+
+    public CheckBoxCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, i, 17, resourcesProvider2);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public CheckBoxCell(Context context, int i, int i2) {
+    public CheckBoxCell(Context context, int i, int i2, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         String str;
         String str2;
         Context context2 = context;
         int i3 = i;
         int i4 = i2;
+        Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
         this.checkBoxSize = 18;
+        this.resourcesProvider = resourcesProvider3;
         this.currentType = i3;
         TextView textView2 = new TextView(context2);
         this.textView = textView2;
         int i5 = 5;
         boolean z = true;
-        textView2.setTextColor(Theme.getColor((i3 == 1 || i3 == 5) ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
-        this.textView.setLinkTextColor(Theme.getColor((i3 == 1 || i3 == 5) ? "dialogTextLink" : "windowBackgroundWhiteLinkText"));
-        this.textView.setTag(Integer.valueOf(Theme.getColor((i3 == 1 || i3 == 5) ? "dialogTextBlack" : str2)));
+        textView2.setTextColor(getThemedColor((i3 == 1 || i3 == 5) ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        this.textView.setLinkTextColor(getThemedColor((i3 == 1 || i3 == 5) ? "dialogTextLink" : "windowBackgroundWhiteLinkText"));
+        this.textView.setTag(Integer.valueOf(getThemedColor((i3 == 1 || i3 == 5) ? "dialogTextBlack" : str2)));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
+        int i6 = 0;
         if (i3 == 3) {
             this.textView.setGravity(19);
             addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 29.0f, 0.0f, 0.0f, 0.0f));
@@ -62,15 +70,15 @@ public class CheckBoxCell extends FrameLayout {
                 boolean z2 = LocaleController.isRTL;
                 addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, (float) (z2 ? 0 : 29), 0.0f, (float) (z2 ? 29 : 0), 0.0f));
             } else {
-                int i6 = i3 == 4 ? 56 : 46;
+                int i7 = i3 == 4 ? 56 : 46;
                 TextView textView4 = this.textView;
                 boolean z3 = LocaleController.isRTL;
-                addView(textView4, LayoutHelper.createFrame(-1, -1.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? i4 : i6 + (i4 - 17)), 0.0f, (float) (z3 ? i6 + (i4 - 17) : i4), 0.0f));
+                addView(textView4, LayoutHelper.createFrame(-1, -1.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? i4 : i7 + (i4 - 17)), 0.0f, (float) (z3 ? i7 + (i4 - 17) : i4), 0.0f));
             }
         }
         TextView textView5 = new TextView(context2);
         this.valueTextView = textView5;
-        textView5.setTextColor(Theme.getColor((i3 == 1 || i3 == 5) ? "dialogTextBlue" : "windowBackgroundWhiteValueText"));
+        textView5.setTextColor(getThemedColor((i3 == 1 || i3 == 5) ? "dialogTextBlue" : "windowBackgroundWhiteValueText"));
         this.valueTextView.setTag((i3 == 1 || i3 == 5) ? "dialogTextBlue" : str);
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
@@ -81,7 +89,7 @@ public class CheckBoxCell extends FrameLayout {
         float f = (float) i4;
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, f, 0.0f, f, 0.0f));
         if (i3 == 4) {
-            CheckBox2 checkBox2 = new CheckBox2(context2, 21);
+            CheckBox2 checkBox2 = new CheckBox2(context2, 21, resourcesProvider3);
             this.checkBoxRound = checkBox2;
             this.checkBox = checkBox2;
             checkBox2.setDrawUnchecked(true);
@@ -91,20 +99,20 @@ public class CheckBoxCell extends FrameLayout {
             View view = this.checkBox;
             float f2 = (float) 21;
             boolean z4 = LocaleController.isRTL;
-            addView(view, LayoutHelper.createFrame(21, f2, (!z4 ? 3 : i5) | 48, (float) (z4 ? 0 : i4), 16.0f, (float) (!z4 ? 0 : i4), 0.0f));
+            addView(view, LayoutHelper.createFrame(21, f2, (!z4 ? 3 : i5) | 48, (float) (z4 ? 0 : i4), 16.0f, (float) (z4 ? i4 : i6), 0.0f));
             return;
         }
         if (!(i3 == 1 || i3 == 5)) {
             z = false;
         }
-        CheckBoxSquare checkBoxSquare2 = new CheckBoxSquare(context2, z);
+        CheckBoxSquare checkBoxSquare2 = new CheckBoxSquare(context2, z, resourcesProvider3);
         this.checkBoxSquare = checkBoxSquare2;
         this.checkBox = checkBoxSquare2;
         this.checkBoxSize = 18;
         if (i3 == 5) {
             float f3 = (float) 18;
             boolean z5 = LocaleController.isRTL;
-            addView(checkBoxSquare2, LayoutHelper.createFrame(18, f3, (!z5 ? 3 : i5) | 16, (float) (z5 ? 0 : i4), 0.0f, (float) (!z5 ? 0 : i4), 0.0f));
+            addView(checkBoxSquare2, LayoutHelper.createFrame(18, f3, (!z5 ? 3 : i5) | 16, (float) (z5 ? 0 : i4), 0.0f, (float) (z5 ? i4 : i6), 0.0f));
         } else if (i3 == 3) {
             addView(checkBoxSquare2, LayoutHelper.createFrame(18, (float) 18, 51, 0.0f, 15.0f, 0.0f, 0.0f));
         } else if (i3 == 2) {
@@ -112,7 +120,7 @@ public class CheckBoxCell extends FrameLayout {
         } else {
             float f4 = (float) 18;
             boolean z6 = LocaleController.isRTL;
-            addView(checkBoxSquare2, LayoutHelper.createFrame(18, f4, (!z6 ? 3 : i5) | 48, (float) (z6 ? 0 : i4), 16.0f, (float) (!z6 ? 0 : i4), 0.0f));
+            addView(checkBoxSquare2, LayoutHelper.createFrame(18, f4, (!z6 ? 3 : i5) | 48, (float) (z6 ? 0 : i4), 16.0f, (float) (z6 ? i4 : i6), 0.0f));
         }
     }
 
@@ -246,5 +254,11 @@ public class CheckBoxCell extends FrameLayout {
         accessibilityNodeInfo.setClassName("android.widget.CheckBox");
         accessibilityNodeInfo.setCheckable(true);
         accessibilityNodeInfo.setChecked(isChecked());
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

@@ -76,7 +76,7 @@ public class PollEditTextCell extends FrameLayout {
         Context context2 = context;
         View.OnClickListener onClickListener2 = onClickListener;
         if (z) {
-            AnonymousClass1 r4 = new EditTextCaption(context2) {
+            AnonymousClass1 r5 = new EditTextCaption(context2, (Theme.ResourcesProvider) null) {
                 public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
                     InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
                     if (PollEditTextCell.this.showNextButton) {
@@ -113,8 +113,8 @@ public class PollEditTextCell extends FrameLayout {
                     return startActionMode;
                 }
             };
-            this.textView = r4;
-            r4.setAllowTextEntitiesIntersection(true);
+            this.textView = r5;
+            r5.setAllowTextEntitiesIntersection(true);
         } else {
             this.textView = new EditTextBoldCursor(context2) {
                 public InputConnection onCreateInputConnection(EditorInfo editorInfo) {

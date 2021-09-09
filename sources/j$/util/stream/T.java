@@ -10,8 +10,8 @@ import j$.util.function.d;
 import j$.util.function.f;
 import j$.util.function.g;
 import j$.util.function.h;
-import j$.util.function.l;
-import j$.util.function.t;
+import j$.util.function.m;
+import j$.util.function.z;
 import j$.util.u;
 import j$.util.y;
 import j$.wrappers.E;
@@ -88,11 +88,11 @@ abstract class T extends CLASSNAMEc implements U {
         return (CLASSNAMEj) x0(new E2(CLASSNAMEf4.DOUBLE_VALUE, dVar));
     }
 
-    public final Object H(j$.util.function.y yVar, t tVar, BiConsumer biConsumer) {
+    public final Object H(z zVar, j$.util.function.u uVar, BiConsumer biConsumer) {
         C c = new C(biConsumer, 0);
-        yVar.getClass();
-        tVar.getClass();
-        return x0(new A2(CLASSNAMEf4.DOUBLE_VALUE, (CLASSNAMEb) c, tVar, yVar));
+        zVar.getClass();
+        uVar.getClass();
+        return x0(new A2(CLASSNAMEf4.DOUBLE_VALUE, (CLASSNAMEb) c, uVar, zVar));
     }
 
     public final double K(double d, d dVar) {
@@ -101,8 +101,8 @@ abstract class T extends CLASSNAMEc implements U {
     }
 
     /* access modifiers changed from: package-private */
-    public final y K0(CLASSNAMEz2 z2Var, j$.util.function.y yVar, boolean z) {
-        return new CLASSNAMEp4(z2Var, yVar, z);
+    public final y K0(CLASSNAMEz2 z2Var, z zVar, boolean z) {
+        return new CLASSNAMEp4(z2Var, zVar, z);
     }
 
     public final Stream M(g gVar) {
@@ -221,7 +221,7 @@ abstract class T extends CLASSNAMEc implements U {
     }
 
     /* access modifiers changed from: package-private */
-    public final CLASSNAMEt1 t0(long j, l lVar) {
+    public final CLASSNAMEt1 t0(long j, m mVar) {
         return CLASSNAMEy2.j(j);
     }
 
@@ -248,7 +248,7 @@ abstract class T extends CLASSNAMEc implements U {
     }
 
     /* access modifiers changed from: package-private */
-    public final B1 z0(CLASSNAMEz2 z2Var, y yVar, boolean z, l lVar) {
+    public final B1 z0(CLASSNAMEz2 z2Var, y yVar, boolean z, m mVar) {
         return CLASSNAMEy2.f(z2Var, yVar, z);
     }
 }

@@ -1,11 +1,11 @@
 package j$.util.stream;
 
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.y;
 
 final class B3 extends CLASSNAMEd {
     private final CLASSNAMEc j;
-    private final l k;
+    private final m k;
     private final long l;
     private final long m;
     private long n;
@@ -19,10 +19,10 @@ final class B3 extends CLASSNAMEd {
         this.m = b3.m;
     }
 
-    B3(CLASSNAMEc cVar, CLASSNAMEz2 z2Var, y yVar, l lVar, long j2, long j3) {
+    B3(CLASSNAMEc cVar, CLASSNAMEz2 z2Var, y yVar, m mVar, long j2, long j3) {
         super(z2Var, yVar);
         this.j = cVar;
-        this.k = lVar;
+        this.k = mVar;
         this.l = j2;
         this.m = j3;
     }
@@ -153,7 +153,7 @@ final class B3 extends CLASSNAMEd {
         L_0x007b:
             r6 = r4
             long r4 = r11.l
-            j$.util.function.l r8 = r11.k
+            j$.util.function.m r8 = r11.k
             j$.util.stream.B1 r3 = r3.r(r4, r6, r8)
         L_0x0084:
             r11.g(r3)

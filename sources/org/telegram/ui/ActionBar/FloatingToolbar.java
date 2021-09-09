@@ -47,6 +47,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.Theme;
 
 @TargetApi(23)
 public final class FloatingToolbar {
@@ -78,6 +79,7 @@ public final class FloatingToolbar {
     /* access modifiers changed from: private */
     public boolean mWidthChanged = true;
     private final View mWindowView;
+    private final Theme.ResourcesProvider resourcesProvider;
 
     /* access modifiers changed from: private */
     public static /* synthetic */ boolean lambda$static$0(MenuItem menuItem) {
@@ -89,9 +91,10 @@ public final class FloatingToolbar {
         return menuItem.getOrder() - menuItem2.getOrder();
     }
 
-    public FloatingToolbar(Context context, View view, int i) {
+    public FloatingToolbar(Context context, View view, int i, Theme.ResourcesProvider resourcesProvider2) {
         this.mWindowView = view;
         this.currentStyle = i;
+        this.resourcesProvider = resourcesProvider2;
         this.mPopup = new FloatingToolbarPopup(context, view);
     }
 
@@ -919,14 +922,14 @@ public final class FloatingToolbar {
             imageButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             imageButton.setImageDrawable(this.mOverflow);
             if (FloatingToolbar.this.currentStyle == 0) {
-                i = Theme.getColor("dialogTextBlack");
-                imageButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 1));
+                i = FloatingToolbar.this.getThemedColor("dialogTextBlack");
+                imageButton.setBackgroundDrawable(Theme.createSelectorDrawable(FloatingToolbar.this.getThemedColor("listSelectorSDK21"), 1));
             } else if (FloatingToolbar.this.currentStyle == 2) {
                 i = -328966;
                 imageButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 1));
             } else {
-                i = Theme.getColor("windowBackgroundWhiteBlackText");
-                imageButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 1));
+                i = FloatingToolbar.this.getThemedColor("windowBackgroundWhiteBlackText");
+                imageButton.setBackgroundDrawable(Theme.createSelectorDrawable(FloatingToolbar.this.getThemedColor("listSelectorSDK21"), 1));
             }
             this.mOverflow.setTint(i);
             this.mArrow.setTint(i);
@@ -1140,13 +1143,13 @@ public final class FloatingToolbar {
         textView.setFocusableInTouchMode(false);
         int i2 = this.currentStyle;
         if (i2 == 0) {
-            textView.setTextColor(Theme.getColor("dialogTextBlack"));
+            textView.setTextColor(getThemedColor("dialogTextBlack"));
             linearLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         } else if (i2 == 2) {
             textView.setTextColor(-328966);
             linearLayout.setBackgroundDrawable(Theme.getSelectorDrawable(NUM, false));
         } else if (i2 == 1) {
-            textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            textView.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
             linearLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         }
         textView.setPaddingRelative(AndroidUtilities.dp(11.0f), 0, 0, 0);
@@ -1189,16 +1192,23 @@ public final class FloatingToolbar {
         gradientDrawable.setCornerRadii(new float[]{dp2, dp2, dp2, dp2, dp2, dp2, dp2, dp2});
         int i = this.currentStyle;
         if (i == 0) {
-            gradientDrawable.setColor(Theme.getColor("dialogBackground"));
+            gradientDrawable.setColor(getThemedColor("dialogBackground"));
         } else if (i == 2) {
             gradientDrawable.setColor(-NUM);
         } else if (i == 1) {
-            gradientDrawable.setColor(Theme.getColor("windowBackgroundWhite"));
+            gradientDrawable.setColor(getThemedColor("windowBackgroundWhite"));
         }
         relativeLayout.setBackgroundDrawable(gradientDrawable);
         relativeLayout.setLayoutParams(new ViewGroup.LayoutParams(-2, -2));
         relativeLayout.setClipToOutline(true);
         return relativeLayout;
+    }
+
+    /* access modifiers changed from: private */
+    public int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 
     /* access modifiers changed from: private */

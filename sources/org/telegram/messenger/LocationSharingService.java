@@ -92,13 +92,13 @@ public class LocationSharingService extends Service implements NotificationCente
             ArrayList<LocationController.SharingLocationInfo> infos = getInfos();
             if (infos.size() == 1) {
                 LocationController.SharingLocationInfo sharingLocationInfo = infos.get(0);
-                int dialogId = (int) sharingLocationInfo.messageObject.getDialogId();
+                long dialogId = sharingLocationInfo.messageObject.getDialogId();
                 int i = sharingLocationInfo.messageObject.currentAccount;
-                if (dialogId > 0) {
-                    str2 = UserObject.getFirstName(MessagesController.getInstance(i).getUser(Integer.valueOf(dialogId)));
+                if (DialogObject.isUserDialog(dialogId)) {
+                    str2 = UserObject.getFirstName(MessagesController.getInstance(i).getUser(Long.valueOf(dialogId)));
                     str = LocaleController.getString("AttachLiveLocationIsSharing", NUM);
                 } else {
-                    TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Integer.valueOf(-dialogId));
+                    TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Long.valueOf(-dialogId));
                     str2 = chat != null ? chat.title : "";
                     str = LocaleController.getString("AttachLiveLocationIsSharingChat", NUM);
                 }

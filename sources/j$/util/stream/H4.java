@@ -2,12 +2,12 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.function.o;
 import j$.util.function.p;
+import j$.util.function.q;
 import j$.util.w;
 import j$.util.y;
 
-final class H4 extends I4 implements w, p {
+final class H4 extends I4 implements w, q {
     long e;
 
     H4(w wVar, long j, long j2) {
@@ -26,9 +26,9 @@ final class H4 extends I4 implements w, p {
         return CLASSNAMEa.l(this, consumer);
     }
 
-    public p f(p pVar) {
-        pVar.getClass();
-        return new o(this, pVar);
+    public q f(q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
     }
 
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
@@ -42,7 +42,7 @@ final class H4 extends I4 implements w, p {
 
     /* access modifiers changed from: protected */
     public void s(Object obj) {
-        ((p) obj).accept(this.e);
+        ((q) obj).accept(this.e);
     }
 
     /* access modifiers changed from: protected */

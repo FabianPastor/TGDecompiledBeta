@@ -8,7 +8,7 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda18
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ boolean f$1;
     public final /* synthetic */ boolean f$10;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ long f$2;
     public final /* synthetic */ boolean f$3;
     public final /* synthetic */ boolean f$4;
     public final /* synthetic */ TLRPC$ChatFull f$5;
@@ -17,17 +17,17 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda18
     public final /* synthetic */ HashMap f$8;
     public final /* synthetic */ int f$9;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda185(MessagesController messagesController, boolean z, int i, boolean z2, boolean z3, TLRPC$ChatFull tLRPC$ChatFull, ArrayList arrayList, ArrayList arrayList2, HashMap hashMap, int i2, boolean z4) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda185(MessagesController messagesController, boolean z, long j, boolean z2, boolean z3, TLRPC$ChatFull tLRPC$ChatFull, ArrayList arrayList, ArrayList arrayList2, HashMap hashMap, int i, boolean z4) {
         this.f$0 = messagesController;
         this.f$1 = z;
-        this.f$2 = i;
+        this.f$2 = j;
         this.f$3 = z2;
         this.f$4 = z3;
         this.f$5 = tLRPC$ChatFull;
         this.f$6 = arrayList;
         this.f$7 = arrayList2;
         this.f$8 = hashMap;
-        this.f$9 = i2;
+        this.f$9 = i;
         this.f$10 = z4;
     }
 

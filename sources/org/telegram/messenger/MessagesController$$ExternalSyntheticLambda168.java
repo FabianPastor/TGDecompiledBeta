@@ -1,6 +1,6 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
+import androidx.collection.LongSparseArray;
 import org.telegram.tgnet.TLRPC$messages_Dialogs;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda168 implements Runnable {

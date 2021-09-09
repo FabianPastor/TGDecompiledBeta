@@ -18,7 +18,7 @@ public final /* synthetic */ class A implements BiConsumer {
         dArr[3] = dArr[3] + dArr2[3];
     }
 
-    public BiConsumer c(BiConsumer biConsumer) {
+    public BiConsumer b(BiConsumer biConsumer) {
         biConsumer.getClass();
         return new a((BiConsumer) this, biConsumer);
     }

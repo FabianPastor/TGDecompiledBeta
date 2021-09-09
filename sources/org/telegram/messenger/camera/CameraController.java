@@ -195,6 +195,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                         } catch (Exception e) {
                             e = e;
                             cameraController = this;
+                            FileLog.e((Throwable) e);
                             AndroidUtilities.runOnUIThread(new CameraController$$ExternalSyntheticLambda12(cameraController, z, e, runnable));
                         }
                     }
@@ -229,6 +230,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             AndroidUtilities.runOnUIThread(new CameraController$$ExternalSyntheticLambda4(cameraController));
         } catch (Exception e2) {
             e = e2;
+            FileLog.e((Throwable) e);
             AndroidUtilities.runOnUIThread(new CameraController$$ExternalSyntheticLambda12(cameraController, z, e, runnable));
         }
     }

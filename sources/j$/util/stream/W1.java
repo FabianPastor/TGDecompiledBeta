@@ -2,7 +2,7 @@ package j$.util.stream;
 
 import j$.util.function.Consumer;
 import j$.util.function.f;
-import j$.util.function.l;
+import j$.util.function.m;
 import j$.util.u;
 import j$.util.x;
 import j$.util.y;
@@ -26,8 +26,8 @@ final class W1 extends V3 implements CLASSNAMEv1, CLASSNAMEq1 {
     }
 
     /* renamed from: E */
-    public /* synthetic */ CLASSNAMEv1 r(long j, long j2, l lVar) {
-        return CLASSNAMEp1.n(this, j, j2, lVar);
+    public /* synthetic */ CLASSNAMEv1 r(long j, long j2, m mVar) {
+        return CLASSNAMEp1.n(this, j, j2, mVar);
     }
 
     public B1 a() {
@@ -89,8 +89,8 @@ final class W1 extends V3 implements CLASSNAMEv1, CLASSNAMEq1 {
         return 0;
     }
 
-    public /* synthetic */ Object[] q(l lVar) {
-        return CLASSNAMEp1.g(this, lVar);
+    public /* synthetic */ Object[] q(m mVar) {
+        return CLASSNAMEp1.g(this, mVar);
     }
 
     public x spliterator() {

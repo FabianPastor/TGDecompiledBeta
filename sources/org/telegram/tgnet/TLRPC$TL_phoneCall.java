@@ -12,8 +12,8 @@ public class TLRPC$TL_phoneCall extends TLRPC$PhoneCall {
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.date = abstractSerializedData.readInt32(z);
-        this.admin_id = abstractSerializedData.readInt32(z);
-        this.participant_id = abstractSerializedData.readInt32(z);
+        this.admin_id = abstractSerializedData.readInt64(z);
+        this.participant_id = abstractSerializedData.readInt64(z);
         this.g_a_or_b = abstractSerializedData.readByteArray(z);
         this.key_fingerprint = abstractSerializedData.readInt64(z);
         this.protocol = TLRPC$PhoneCallProtocol.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -45,8 +45,8 @@ public class TLRPC$TL_phoneCall extends TLRPC$PhoneCall {
         abstractSerializedData.writeInt64(this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeInt32(this.date);
-        abstractSerializedData.writeInt32(this.admin_id);
-        abstractSerializedData.writeInt32(this.participant_id);
+        abstractSerializedData.writeInt64(this.admin_id);
+        abstractSerializedData.writeInt64(this.participant_id);
         abstractSerializedData.writeByteArray(this.g_a_or_b);
         abstractSerializedData.writeInt64(this.key_fingerprint);
         this.protocol.serializeToStream(abstractSerializedData);

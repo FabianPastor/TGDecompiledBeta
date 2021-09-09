@@ -360,8 +360,8 @@ public class PollVotesAlert extends BottomSheet {
         /* JADX WARNING: Code restructure failed: missing block: B:2:0x0005, code lost:
             r2 = r0.photo;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:42:0x005e, code lost:
-            if (r1.equals(r11.lastName) == false) goto L_0x0062;
+        /* JADX WARNING: Code restructure failed: missing block: B:42:0x0062, code lost:
+            if (r1.equals(r11.lastName) == false) goto L_0x0066;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void update(int r12) {
@@ -378,102 +378,105 @@ public class PollVotesAlert extends BottomSheet {
                 r2 = r1
             L_0x000d:
                 r3 = 0
-                if (r12 == 0) goto L_0x0065
-                r4 = r12 & 2
+                if (r12 == 0) goto L_0x0069
+                int r4 = org.telegram.messenger.MessagesController.UPDATE_MASK_AVATAR
+                r4 = r4 & r12
                 r5 = 1
-                if (r4 == 0) goto L_0x0033
+                if (r4 == 0) goto L_0x0034
                 org.telegram.tgnet.TLRPC$FileLocation r4 = r11.lastAvatar
-                if (r4 == 0) goto L_0x001b
-                if (r2 == 0) goto L_0x0031
-            L_0x001b:
-                if (r4 != 0) goto L_0x001f
-                if (r2 != 0) goto L_0x0031
-            L_0x001f:
-                if (r4 == 0) goto L_0x0033
-                if (r2 == 0) goto L_0x0033
+                if (r4 == 0) goto L_0x001c
+                if (r2 == 0) goto L_0x0032
+            L_0x001c:
+                if (r4 != 0) goto L_0x0020
+                if (r2 != 0) goto L_0x0032
+            L_0x0020:
+                if (r4 == 0) goto L_0x0034
+                if (r2 == 0) goto L_0x0034
                 long r6 = r4.volume_id
                 long r8 = r2.volume_id
                 int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-                if (r10 != 0) goto L_0x0031
+                if (r10 != 0) goto L_0x0032
                 int r4 = r4.local_id
                 int r6 = r2.local_id
-                if (r4 == r6) goto L_0x0033
-            L_0x0031:
+                if (r4 == r6) goto L_0x0034
+            L_0x0032:
                 r4 = 1
-                goto L_0x0034
-            L_0x0033:
-                r4 = 0
+                goto L_0x0035
             L_0x0034:
-                if (r0 == 0) goto L_0x0049
-                if (r4 != 0) goto L_0x0049
-                r6 = r12 & 4
-                if (r6 == 0) goto L_0x0049
+                r4 = 0
+            L_0x0035:
+                if (r0 == 0) goto L_0x004b
+                if (r4 != 0) goto L_0x004b
+                int r6 = org.telegram.messenger.MessagesController.UPDATE_MASK_STATUS
+                r6 = r6 & r12
+                if (r6 == 0) goto L_0x004b
                 org.telegram.tgnet.TLRPC$UserStatus r6 = r0.status
-                if (r6 == 0) goto L_0x0043
+                if (r6 == 0) goto L_0x0045
                 int r6 = r6.expires
-                goto L_0x0044
-            L_0x0043:
+                goto L_0x0046
+            L_0x0045:
                 r6 = 0
-            L_0x0044:
+            L_0x0046:
                 int r7 = r11.lastStatus
-                if (r6 == r7) goto L_0x0049
+                if (r6 == r7) goto L_0x004b
                 r4 = 1
-            L_0x0049:
-                if (r4 != 0) goto L_0x0061
+            L_0x004b:
+                if (r4 != 0) goto L_0x0065
                 java.lang.String r6 = r11.lastName
-                if (r6 == 0) goto L_0x0061
-                r12 = r12 & r5
-                if (r12 == 0) goto L_0x0061
-                if (r0 == 0) goto L_0x0058
+                if (r6 == 0) goto L_0x0065
+                int r6 = org.telegram.messenger.MessagesController.UPDATE_MASK_NAME
+                r12 = r12 & r6
+                if (r12 == 0) goto L_0x0065
+                if (r0 == 0) goto L_0x005c
                 java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r0)
-            L_0x0058:
+            L_0x005c:
                 java.lang.String r12 = r11.lastName
                 boolean r12 = r1.equals(r12)
-                if (r12 != 0) goto L_0x0061
-                goto L_0x0062
-            L_0x0061:
-                r5 = r4
-            L_0x0062:
-                if (r5 != 0) goto L_0x0065
-                return
+                if (r12 != 0) goto L_0x0065
+                goto L_0x0066
             L_0x0065:
+                r5 = r4
+            L_0x0066:
+                if (r5 != 0) goto L_0x0069
+                return
+            L_0x0069:
                 org.telegram.ui.Components.AvatarDrawable r12 = r11.avatarDrawable
                 org.telegram.tgnet.TLRPC$User r0 = r11.currentUser
                 r12.setInfo((org.telegram.tgnet.TLRPC$User) r0)
                 org.telegram.tgnet.TLRPC$User r12 = r11.currentUser
                 org.telegram.tgnet.TLRPC$UserStatus r0 = r12.status
-                if (r0 == 0) goto L_0x0077
+                if (r0 == 0) goto L_0x007b
                 int r0 = r0.expires
                 r11.lastStatus = r0
-                goto L_0x0079
-            L_0x0077:
+                goto L_0x007d
+            L_0x007b:
                 r11.lastStatus = r3
-            L_0x0079:
-                if (r12 == 0) goto L_0x0084
-                if (r1 != 0) goto L_0x0081
+            L_0x007d:
+                if (r12 == 0) goto L_0x0088
+                if (r1 != 0) goto L_0x0085
                 java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r12)
-            L_0x0081:
+            L_0x0085:
                 r11.lastName = r1
-                goto L_0x0088
-            L_0x0084:
+                goto L_0x008c
+            L_0x0088:
                 java.lang.String r12 = ""
                 r11.lastName = r12
-            L_0x0088:
+            L_0x008c:
                 org.telegram.ui.ActionBar.SimpleTextView r12 = r11.nameTextView
                 java.lang.String r0 = r11.lastName
                 r12.setText(r0)
                 r11.lastAvatar = r2
                 org.telegram.tgnet.TLRPC$User r12 = r11.currentUser
-                if (r12 == 0) goto L_0x009d
+                if (r12 == 0) goto L_0x00a1
                 org.telegram.ui.Components.BackupImageView r0 = r11.avatarImageView
                 org.telegram.ui.Components.AvatarDrawable r1 = r11.avatarDrawable
                 r0.setForUserOrChat(r12, r1)
-                goto L_0x00a4
-            L_0x009d:
+                goto L_0x00a8
+            L_0x00a1:
                 org.telegram.ui.Components.BackupImageView r12 = r11.avatarImageView
                 org.telegram.ui.Components.AvatarDrawable r0 = r11.avatarDrawable
                 r12.setImageDrawable(r0)
-            L_0x00a4:
+            L_0x00a8:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PollVotesAlert.UserCell.update(int):void");
@@ -564,7 +567,7 @@ public class PollVotesAlert extends BottomSheet {
         TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll = (TLRPC$TL_messageMediaPoll) messageObject3.messageOwner.media;
         this.poll = tLRPC$TL_messageMediaPoll.poll;
         Activity parentActivity = chatActivity2.getParentActivity();
-        this.peer = chatActivity2.getMessagesController().getInputPeer((int) messageObject2.getDialogId());
+        this.peer = chatActivity2.getMessagesController().getInputPeer((long) ((int) messageObject2.getDialogId()));
         ArrayList arrayList = new ArrayList();
         int size = tLRPC$TL_messageMediaPoll.results.results.size();
         Integer[] numArr = new Integer[size];
@@ -970,7 +973,7 @@ public class PollVotesAlert extends BottomSheet {
                     if (userCell.currentUser != null) {
                         TLRPC$User currentUser = chatActivity2.getCurrentUser();
                         Bundle bundle = new Bundle();
-                        bundle.putInt("user_id", userCell.currentUser.id);
+                        bundle.putLong("user_id", userCell.currentUser.id);
                         dismiss();
                         ProfileActivity profileActivity = new ProfileActivity(bundle);
                         if (currentUser != null && currentUser.id == userCell.currentUser.id) {
@@ -1293,7 +1296,7 @@ public class PollVotesAlert extends BottomSheet {
                 UserCell userCell = (UserCell) viewHolder.itemView;
                 VotesList votesList = (VotesList) PollVotesAlert.this.voters.get(sectionForPosition - 1);
                 TLRPC$MessageUserVote tLRPC$MessageUserVote = votesList.votes.get(positionInSectionForPosition);
-                TLRPC$User user = tLRPC$MessageUserVote.user_id != 0 ? PollVotesAlert.this.chatActivity.getMessagesController().getUser(Integer.valueOf(tLRPC$MessageUserVote.user_id)) : null;
+                TLRPC$User user = tLRPC$MessageUserVote.user_id != 0 ? PollVotesAlert.this.chatActivity.getMessagesController().getUser(Long.valueOf(tLRPC$MessageUserVote.user_id)) : null;
                 boolean z = true;
                 if (positionInSectionForPosition == votesList.getCount() - 1 && TextUtils.isEmpty(votesList.next_offset) && !votesList.collapsed) {
                     z = false;

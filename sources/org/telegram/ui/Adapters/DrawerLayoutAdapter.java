@@ -112,7 +112,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
         if (itemViewType == 0) {
-            ((DrawerProfileCell) viewHolder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShown);
+            ((DrawerProfileCell) viewHolder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Long.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShown);
         } else if (itemViewType == 3) {
             DrawerActionCell drawerActionCell = (DrawerActionCell) viewHolder.itemView;
             int i2 = i - 2;

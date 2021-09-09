@@ -1,7 +1,6 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
-import android.util.SparseArray;
+import androidx.collection.LongSparseArray;
 import java.util.ArrayList;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$messages_Dialogs;
@@ -20,9 +19,9 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda13
     public final /* synthetic */ int f$6;
     public final /* synthetic */ LongSparseArray f$7;
     public final /* synthetic */ LongSparseArray f$8;
-    public final /* synthetic */ SparseArray f$9;
+    public final /* synthetic */ LongSparseArray f$9;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda136(MessagesController messagesController, TLRPC$Message tLRPC$Message, int i, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, ArrayList arrayList, boolean z, int i2, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, SparseArray sparseArray, int i3, boolean z2, int i4, ArrayList arrayList2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda136(MessagesController messagesController, TLRPC$Message tLRPC$Message, int i, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, ArrayList arrayList, boolean z, int i2, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3, int i3, boolean z2, int i4, ArrayList arrayList2) {
         this.f$0 = messagesController;
         this.f$1 = tLRPC$Message;
         this.f$2 = i;
@@ -32,7 +31,7 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda13
         this.f$6 = i2;
         this.f$7 = longSparseArray;
         this.f$8 = longSparseArray2;
-        this.f$9 = sparseArray;
+        this.f$9 = longSparseArray3;
         this.f$10 = i3;
         this.f$11 = z2;
         this.f$12 = i4;

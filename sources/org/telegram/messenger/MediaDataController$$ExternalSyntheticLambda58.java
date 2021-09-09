@@ -5,17 +5,15 @@ import java.util.ArrayList;
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda58 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
     public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda58(MediaDataController mediaDataController, ArrayList arrayList, int i, int i2) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda58(MediaDataController mediaDataController, ArrayList arrayList, long j) {
         this.f$0 = mediaDataController;
         this.f$1 = arrayList;
-        this.f$2 = i;
-        this.f$3 = i2;
+        this.f$2 = j;
     }
 
     public final void run() {
-        this.f$0.lambda$processLoadedStickers$55(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$savePinnedMessages$109(this.f$1, this.f$2);
     }
 }

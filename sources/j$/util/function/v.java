@@ -1,5 +1,5 @@
 package j$.util.function;
 
 public interface v {
-    void accept(Object obj, long j);
+    void accept(Object obj, int i);
 }

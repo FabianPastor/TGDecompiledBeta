@@ -8,11 +8,11 @@ public abstract class TLRPC$ChannelParticipant extends TLObject {
     public boolean can_edit;
     public int date;
     public int flags;
-    public int inviter_id;
-    public int kicked_by;
+    public long inviter_id;
+    public long kicked_by;
     public boolean left;
     public TLRPC$Peer peer;
-    public int promoted_by;
+    public long promoted_by;
     public String rank;
     public boolean self;
 
@@ -32,22 +32,25 @@ public abstract class TLRPC$ChannelParticipant extends TLObject {
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantEditor_layer67();
                 break;
             case -1557620115:
-                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantSelf();
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantSelf_layer131();
                 break;
             case -1473271656:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin_layer92();
+                break;
+            case -1072953408:
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipant();
                 break;
             case -1010402965:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantLeft_layer125();
                 break;
             case -859915345:
-                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin();
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin_layer131();
                 break;
             case -471670279:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantCreator_layer103();
                 break;
             case 367766557:
-                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipant();
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipant_layer131();
                 break;
             case 453242886:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantLeft();
@@ -58,14 +61,26 @@ public abstract class TLRPC$ChannelParticipant extends TLObject {
             case 573315206:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantBanned_layer92();
                 break;
-            case 1149094475:
+            case 682146919:
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantSelf();
+                break;
+            case 803602899:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantCreator();
                 break;
+            case 885242707:
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin();
+                break;
+            case 1149094475:
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantCreator_layer131();
+                break;
             case 1352785878:
-                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantBanned();
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantBanned_layer131();
                 break;
             case 1571450403:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin_layer103();
+                break;
+            case 1844969806:
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantBanned();
                 break;
             default:
                 tLRPC$ChannelParticipant = null;

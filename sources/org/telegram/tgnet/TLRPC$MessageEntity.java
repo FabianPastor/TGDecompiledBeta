@@ -27,6 +27,9 @@ public abstract class TLRPC$MessageEntity extends TLObject {
             case -1090087980:
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityStrike();
                 break;
+            case -595914432:
+                tLRPC$MessageEntity = new TLRPC$TL_messageEntityMentionName();
+                break;
             case -100378723:
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityMention();
                 break;
@@ -40,7 +43,7 @@ public abstract class TLRPC$MessageEntity extends TLObject {
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityCode();
                 break;
             case 892193368:
-                tLRPC$MessageEntity = new TLRPC$TL_messageEntityMentionName();
+                tLRPC$MessageEntity = new TLRPC$TL_messageEntityMentionName_layer131();
                 break;
             case 1280209983:
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityCashtag();

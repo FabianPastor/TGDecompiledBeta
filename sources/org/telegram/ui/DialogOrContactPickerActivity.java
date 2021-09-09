@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.TLRPC$User;
@@ -117,9 +118,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
     public /* synthetic */ void lambda$new$1(DialogsActivity dialogsActivity2, ArrayList arrayList, CharSequence charSequence, boolean z) {
         if (!arrayList.isEmpty()) {
             long longValue = ((Long) arrayList.get(0)).longValue();
-            int i = (int) longValue;
-            if (longValue > 0) {
-                showBlockAlert(getMessagesController().getUser(Integer.valueOf(i)));
+            if (DialogObject.isUserDialog(longValue)) {
+                showBlockAlert(getMessagesController().getUser(Long.valueOf(longValue)));
             }
         }
     }

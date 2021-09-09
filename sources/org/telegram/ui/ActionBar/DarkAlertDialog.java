@@ -11,7 +11,7 @@ public class DarkAlertDialog extends AlertDialog {
     /* access modifiers changed from: protected */
     /* JADX WARNING: Can't fix incorrect switch cases order */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public int getThemeColor(java.lang.String r3) {
+    public int getThemedColor(java.lang.String r3) {
         /*
             r2 = this;
             r3.hashCode()
@@ -67,7 +67,7 @@ public class DarkAlertDialog extends AlertDialog {
                 default: goto L_0x003b;
             }
         L_0x003b:
-            int r3 = super.getThemeColor(r3)
+            int r3 = super.getThemedColor(r3)
             return r3
         L_0x0040:
             return r1
@@ -75,7 +75,7 @@ public class DarkAlertDialog extends AlertDialog {
             r3 = -14277082(0xfffffffffvar_, float:-2.2084993E38)
             return r3
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.DarkAlertDialog.getThemeColor(java.lang.String):int");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.DarkAlertDialog.getThemedColor(java.lang.String):int");
     }
 
     public static class Builder extends AlertDialog.Builder {

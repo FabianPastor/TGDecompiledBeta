@@ -1,16 +1,22 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
-import java.util.Comparator;
+import java.util.concurrent.CountDownLatch;
+import org.telegram.tgnet.TLRPC$Chat;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda181 implements Comparator {
-    public final /* synthetic */ LongSparseArray f$0;
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda181 implements Runnable {
+    public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ TLRPC$Chat[] f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ CountDownLatch f$3;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda181(LongSparseArray longSparseArray) {
-        this.f$0 = longSparseArray;
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda181(MessagesStorage messagesStorage, TLRPC$Chat[] tLRPC$ChatArr, long j, CountDownLatch countDownLatch) {
+        this.f$0 = messagesStorage;
+        this.f$1 = tLRPC$ChatArr;
+        this.f$2 = j;
+        this.f$3 = countDownLatch;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$checkLoadedRemoteFilters$34(this.f$0, (Long) obj, (Long) obj2);
+    public final void run() {
+        this.f$0.lambda$getChatSync$187(this.f$1, this.f$2, this.f$3);
     }
 }

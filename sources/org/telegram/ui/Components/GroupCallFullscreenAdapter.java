@@ -153,7 +153,7 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
         String name;
         int nameWidth;
         TLRPC$TL_groupCallParticipant participant;
-        int peerId;
+        long peerId;
         float progress = 1.0f;
         GroupCallMiniTextureView renderer;
         boolean selected;
@@ -202,12 +202,12 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
         public void setParticipant(ChatObject.VideoParticipant videoParticipant2, TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant) {
             this.videoParticipant = videoParticipant2;
             this.participant = tLRPC$TL_groupCallParticipant;
-            int i = this.peerId;
-            int peerId2 = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
+            long j = this.peerId;
+            long peerId2 = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
             this.peerId = peerId2;
             boolean z = true;
             if (peerId2 > 0) {
-                TLRPC$User user = AccountInstance.getInstance(GroupCallFullscreenAdapter.this.currentAccount).getMessagesController().getUser(Integer.valueOf(this.peerId));
+                TLRPC$User user = AccountInstance.getInstance(GroupCallFullscreenAdapter.this.currentAccount).getMessagesController().getUser(Long.valueOf(this.peerId));
                 this.currentUser = user;
                 this.currentChat = null;
                 this.avatarDrawable.setInfo(user);
@@ -215,7 +215,7 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                 this.avatarImageView.getImageReceiver().setCurrentAccount(GroupCallFullscreenAdapter.this.currentAccount);
                 this.avatarImageView.setImage(ImageLocation.getForUser(this.currentUser, 1), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
             } else {
-                TLRPC$Chat chat = AccountInstance.getInstance(GroupCallFullscreenAdapter.this.currentAccount).getMessagesController().getChat(Integer.valueOf(-this.peerId));
+                TLRPC$Chat chat = AccountInstance.getInstance(GroupCallFullscreenAdapter.this.currentAccount).getMessagesController().getChat(Long.valueOf(-this.peerId));
                 this.currentChat = chat;
                 this.currentUser = null;
                 this.avatarDrawable.setInfo(chat);
@@ -226,7 +226,7 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                     this.avatarImageView.setImage(ImageLocation.getForChat(this.currentChat, 1), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
                 }
             }
-            boolean z2 = i == this.peerId;
+            boolean z2 = j == this.peerId;
             if (videoParticipant2 == null) {
                 if (GroupCallFullscreenAdapter.this.renderersContainer.fullscreenPeerId != MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer)) {
                     z = false;
@@ -392,7 +392,7 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
             }
         }
 
-        public int getPeerId() {
+        public long getPeerId() {
             return this.peerId;
         }
 

@@ -76,7 +76,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public FrameLayout searchViewContainer;
     /* access modifiers changed from: private */
-    public Set<Integer> selectedIds = new HashSet();
+    public Set<Long> selectedIds = new HashSet();
     Runnable showProgressRunnable = new Runnable() {
         public void run() {
             TooManyCommunitiesActivity.this.progressBar.setVisibility(0);
@@ -91,11 +91,11 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         if (view instanceof GroupCreateUserCell) {
             GroupCreateUserCell groupCreateUserCell = (GroupCreateUserCell) view;
             TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) groupCreateUserCell.getObject();
-            if (this.selectedIds.contains(Integer.valueOf(tLRPC$Chat.id))) {
-                this.selectedIds.remove(Integer.valueOf(tLRPC$Chat.id));
+            if (this.selectedIds.contains(Long.valueOf(tLRPC$Chat.id))) {
+                this.selectedIds.remove(Long.valueOf(tLRPC$Chat.id));
                 groupCreateUserCell.setChecked(false, true);
             } else {
-                this.selectedIds.add(Integer.valueOf(tLRPC$Chat.id));
+                this.selectedIds.add(Long.valueOf(tLRPC$Chat.id));
                 groupCreateUserCell.setChecked(true, true);
             }
             onSelectedCountChange();
@@ -253,10 +253,10 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$2(View view) {
         if (!this.selectedIds.isEmpty()) {
-            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId()));
+            TLRPC$User user = getMessagesController().getUser(Long.valueOf(getUserConfig().getClientUserId()));
             ArrayList arrayList = new ArrayList();
             for (int i = 0; i < this.inactiveChats.size(); i++) {
-                if (this.selectedIds.contains(Integer.valueOf(this.inactiveChats.get(i).id))) {
+                if (this.selectedIds.contains(Long.valueOf(this.inactiveChats.get(i).id))) {
                     arrayList.add(this.inactiveChats.get(i));
                 }
             }
@@ -483,7 +483,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625901(0x7f0e07ad, float:1.8879023E38)
+                r8 = 2131625913(0x7f0e07b9, float:1.8879047E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
@@ -516,18 +516,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x009e
-                r8 = 2131627981(0x7f0e0fcd, float:1.8883242E38)
+                r8 = 2131628006(0x7f0e0fe6, float:1.8883292E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x009e:
                 if (r8 != r0) goto L_0x00aa
-                r8 = 2131627980(0x7f0e0fcc, float:1.888324E38)
+                r8 = 2131628005(0x7f0e0fe5, float:1.888329E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x00aa:
-                r8 = 2131627979(0x7f0e0fcb, float:1.8883238E38)
+                r8 = 2131628004(0x7f0e0fe4, float:1.8883288E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b3:
@@ -572,7 +572,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                     z = false;
                 }
                 groupCreateUserCell.setObject(tLRPC$Chat, str2, str, z);
-                groupCreateUserCell.setChecked(TooManyCommunitiesActivity.this.selectedIds.contains(Integer.valueOf(tLRPC$Chat.id)), false);
+                groupCreateUserCell.setChecked(TooManyCommunitiesActivity.this.selectedIds.contains(Long.valueOf(tLRPC$Chat.id)), false);
             }
         }
 
@@ -625,7 +625,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 z = false;
             }
             groupCreateUserCell.setObject(tLRPC$Chat, str2, str, z);
-            groupCreateUserCell.setChecked(TooManyCommunitiesActivity.this.selectedIds.contains(Integer.valueOf(tLRPC$Chat.id)), false);
+            groupCreateUserCell.setChecked(TooManyCommunitiesActivity.this.selectedIds.contains(Long.valueOf(tLRPC$Chat.id)), false);
         }
 
         public int getItemCount() {

@@ -6,12 +6,12 @@ import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 
 public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda7 implements Comparator {
     public final /* synthetic */ ChatObject.Call f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$1;
     public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ ChatObject$Call$$ExternalSyntheticLambda7(ChatObject.Call call, int i, boolean z) {
+    public /* synthetic */ ChatObject$Call$$ExternalSyntheticLambda7(ChatObject.Call call, long j, boolean z) {
         this.f$0 = call;
-        this.f$1 = i;
+        this.f$1 = j;
         this.f$2 = z;
     }
 

@@ -15,20 +15,20 @@ public final /* synthetic */ class JoinCallAlert$$ExternalSyntheticLambda7 imple
     public final /* synthetic */ AlertDialog f$0;
     public final /* synthetic */ AccountInstance f$1;
     public final /* synthetic */ JoinCallAlert.JoinCallAlertDelegate f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ long f$3;
     public final /* synthetic */ Context f$4;
     public final /* synthetic */ BaseFragment f$5;
     public final /* synthetic */ int f$6;
     public final /* synthetic */ TLRPC$Peer f$7;
 
-    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda7(AlertDialog alertDialog, AccountInstance accountInstance, JoinCallAlert.JoinCallAlertDelegate joinCallAlertDelegate, int i, Context context, BaseFragment baseFragment, int i2, TLRPC$Peer tLRPC$Peer) {
+    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda7(AlertDialog alertDialog, AccountInstance accountInstance, JoinCallAlert.JoinCallAlertDelegate joinCallAlertDelegate, long j, Context context, BaseFragment baseFragment, int i, TLRPC$Peer tLRPC$Peer) {
         this.f$0 = alertDialog;
         this.f$1 = accountInstance;
         this.f$2 = joinCallAlertDelegate;
-        this.f$3 = i;
+        this.f$3 = j;
         this.f$4 = context;
         this.f$5 = baseFragment;
-        this.f$6 = i2;
+        this.f$6 = i;
         this.f$7 = tLRPC$Peer;
     }
 

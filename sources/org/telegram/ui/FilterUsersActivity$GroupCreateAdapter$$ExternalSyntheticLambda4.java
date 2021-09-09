@@ -1,6 +1,6 @@
 package org.telegram.ui;
 
-import android.util.SparseArray;
+import androidx.collection.LongSparseArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
@@ -17,11 +17,11 @@ public final /* synthetic */ class FilterUsersActivity$GroupCreateAdapter$$Exter
         return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
     }
 
-    public /* synthetic */ SparseArray getExcludeCallParticipants() {
+    public /* synthetic */ LongSparseArray getExcludeCallParticipants() {
         return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeCallParticipants(this);
     }
 
-    public /* synthetic */ SparseArray getExcludeUsers() {
+    public /* synthetic */ LongSparseArray getExcludeUsers() {
         return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
     }
 

@@ -11,14 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarMenuSubItem extends FrameLayout {
     boolean bottom;
-    private ImageView checkView;
+    private CheckBox2 checkView;
     private int iconColor;
     private ImageView imageView;
     private int itemHeight;
+    private final Theme.ResourcesProvider resourcesProvider;
     private ImageView rightIcon;
     private int selectorColor;
     private TextView subtextView;
@@ -31,13 +34,22 @@ public class ActionBarMenuSubItem extends FrameLayout {
     }
 
     public ActionBarMenuSubItem(Context context, boolean z, boolean z2, boolean z3) {
+        this(context, z, z2, z3, (Theme.ResourcesProvider) null);
+    }
+
+    public ActionBarMenuSubItem(Context context, boolean z, boolean z2, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, false, z, z2, resourcesProvider2);
+    }
+
+    public ActionBarMenuSubItem(Context context, boolean z, boolean z2, boolean z3, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
-        this.textColor = Theme.getColor("actionBarDefaultSubmenuItem");
-        this.iconColor = Theme.getColor("actionBarDefaultSubmenuItemIcon");
-        this.selectorColor = Theme.getColor("dialogButtonSelector");
         this.itemHeight = 48;
+        this.resourcesProvider = resourcesProvider2;
         this.top = z2;
         this.bottom = z3;
+        this.textColor = getThemedColor("actionBarDefaultSubmenuItem");
+        this.iconColor = getThemedColor("actionBarDefaultSubmenuItemIcon");
+        this.selectorColor = getThemedColor("dialogButtonSelector");
         updateBackground();
         setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         ImageView imageView2 = new ImageView(context);
@@ -56,11 +68,11 @@ public class ActionBarMenuSubItem extends FrameLayout {
         this.textView.setTextSize(1, 16.0f);
         addView(this.textView, LayoutHelper.createFrame(-2, -2, (LocaleController.isRTL ? 5 : 3) | 16));
         if (z) {
-            ImageView imageView3 = new ImageView(context);
-            this.checkView = imageView3;
-            imageView3.setImageResource(NUM);
-            this.checkView.setScaleType(ImageView.ScaleType.CENTER);
-            this.checkView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
+            CheckBox2 checkBox2 = new CheckBox2(context, 26, resourcesProvider2);
+            this.checkView = checkBox2;
+            checkBox2.setDrawUnchecked(false);
+            this.checkView.setColor((String) null, (String) null, "radioBackgroundChecked");
+            this.checkView.setDrawBackgroundAsArc(-1);
             addView(this.checkView, LayoutHelper.createFrame(26, -1, (!LocaleController.isRTL ? 3 : i) | 16));
         }
     }
@@ -75,14 +87,14 @@ public class ActionBarMenuSubItem extends FrameLayout {
     }
 
     public void setChecked(boolean z) {
-        ImageView imageView2 = this.checkView;
-        if (imageView2 != null) {
-            imageView2.setVisibility(z ? 0 : 4);
+        CheckBox2 checkBox2 = this.checkView;
+        if (checkBox2 != null) {
+            checkBox2.setChecked(z, true);
         }
     }
 
-    public void setCheckColor(int i) {
-        this.checkView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+    public void setCheckColor(String str) {
+        this.checkView.setColor((String) null, (String) null, str);
     }
 
     public void setRightIcon(int i) {
@@ -230,12 +242,19 @@ public class ActionBarMenuSubItem extends FrameLayout {
         }
     }
 
-    private void updateBackground() {
+    /* access modifiers changed from: package-private */
+    public void updateBackground() {
         int i = 6;
         int i2 = this.top ? 6 : 0;
         if (!this.bottom) {
             i = 0;
         }
         setBackground(Theme.createRadSelectorDrawable(this.selectorColor, i2, i));
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

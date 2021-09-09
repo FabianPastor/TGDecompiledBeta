@@ -82,8 +82,8 @@ public class GroupCallInvitedCell extends FrameLayout {
         return this.nameTextView.getText();
     }
 
-    public void setData(int i, Integer num) {
-        TLRPC$User user = MessagesController.getInstance(i).getUser(num);
+    public void setData(int i, Long l) {
+        TLRPC$User user = MessagesController.getInstance(i).getUser(l);
         this.currentUser = user;
         this.avatarDrawable.setInfo(user);
         this.nameTextView.setText(UserObject.getUserName(this.currentUser));

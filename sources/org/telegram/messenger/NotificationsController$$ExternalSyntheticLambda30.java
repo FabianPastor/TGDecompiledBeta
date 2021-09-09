@@ -12,6 +12,6 @@ public final /* synthetic */ class NotificationsController$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$removeDeletedHisoryFromNotifications$10(this.f$1);
+        this.f$0.lambda$processReadMessages$13(this.f$1);
     }
 }

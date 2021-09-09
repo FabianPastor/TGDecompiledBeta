@@ -12,4 +12,8 @@ public final /* synthetic */ class ActionIntroActivity$$ExternalSyntheticLambda6
     public final void didSetColor() {
         this.f$0.updateColors();
     }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    }
 }

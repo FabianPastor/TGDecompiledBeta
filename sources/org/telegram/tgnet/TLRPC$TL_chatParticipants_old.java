@@ -4,8 +4,8 @@ public class TLRPC$TL_chatParticipants_old extends TLRPC$TL_chatParticipants {
     public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.chat_id = abstractSerializedData.readInt32(z);
-        this.admin_id = abstractSerializedData.readInt32(z);
+        this.chat_id = (long) abstractSerializedData.readInt32(z);
+        this.admin_id = (long) abstractSerializedData.readInt32(z);
         int readInt32 = abstractSerializedData.readInt32(z);
         int i = 0;
         if (readInt32 == NUM) {
@@ -27,8 +27,8 @@ public class TLRPC$TL_chatParticipants_old extends TLRPC$TL_chatParticipants {
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        abstractSerializedData.writeInt32(this.chat_id);
-        abstractSerializedData.writeInt32(this.admin_id);
+        abstractSerializedData.writeInt32((int) this.chat_id);
+        abstractSerializedData.writeInt32((int) this.admin_id);
         abstractSerializedData.writeInt32(NUM);
         int size = this.participants.size();
         abstractSerializedData.writeInt32(size);

@@ -37,6 +37,7 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.ui.ActionBar.Theme;
 
 public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private boolean animateFromPosition;
@@ -73,6 +74,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     float pressedY;
     private HashMap<String, View> prevTypes = new HashMap<>();
     private Paint rectPaint;
+    private final Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public int scrollByOnNextMeasure;
     private int scrollOffset = AndroidUtilities.dp(52.0f);
@@ -117,7 +119,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     public void updatePosition() {
     }
 
-    public ScrollSlidingTabStrip(Context context) {
+    public ScrollSlidingTabStrip(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         AndroidUtilities.dp(12.0f);
         AndroidUtilities.dp(24.0f);
@@ -219,11 +221,12 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ScrollSlidingTabStrip.AnonymousClass6.run():void");
             }
         };
+        this.resourcesProvider = resourcesProvider2;
         this.touchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
         setFillViewport(true);
         setWillNotDraw(false);
         setHorizontalScrollBarEnabled(false);
-        AnonymousClass2 r4 = new LinearLayout(context) {
+        AnonymousClass2 r3 = new LinearLayout(context) {
             /* access modifiers changed from: protected */
             public boolean drawChild(Canvas canvas, View view, long j) {
                 if (view instanceof StickerTabView) {
@@ -235,8 +238,8 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                 return super.drawChild(canvas, view, j);
             }
         };
-        this.tabsContainer = r4;
-        r4.setOrientation(0);
+        this.tabsContainer = r3;
+        r3.setOrientation(0);
         this.tabsContainer.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
         addView(this.tabsContainer);
         Paint paint = new Paint();

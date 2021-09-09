@@ -13,21 +13,21 @@ public final /* synthetic */ class JoinCallAlert$$ExternalSyntheticLambda5 imple
     public final /* synthetic */ TLObject f$1;
     public final /* synthetic */ AccountInstance f$2;
     public final /* synthetic */ JoinCallAlert.JoinCallAlertDelegate f$3;
-    public final /* synthetic */ int f$4;
+    public final /* synthetic */ long f$4;
     public final /* synthetic */ Context f$5;
     public final /* synthetic */ BaseFragment f$6;
     public final /* synthetic */ int f$7;
     public final /* synthetic */ TLRPC$Peer f$8;
 
-    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda5(AlertDialog alertDialog, TLObject tLObject, AccountInstance accountInstance, JoinCallAlert.JoinCallAlertDelegate joinCallAlertDelegate, int i, Context context, BaseFragment baseFragment, int i2, TLRPC$Peer tLRPC$Peer) {
+    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda5(AlertDialog alertDialog, TLObject tLObject, AccountInstance accountInstance, JoinCallAlert.JoinCallAlertDelegate joinCallAlertDelegate, long j, Context context, BaseFragment baseFragment, int i, TLRPC$Peer tLRPC$Peer) {
         this.f$0 = alertDialog;
         this.f$1 = tLObject;
         this.f$2 = accountInstance;
         this.f$3 = joinCallAlertDelegate;
-        this.f$4 = i;
+        this.f$4 = j;
         this.f$5 = context;
         this.f$6 = baseFragment;
-        this.f$7 = i2;
+        this.f$7 = i;
         this.f$8 = tLRPC$Peer;
     }
 

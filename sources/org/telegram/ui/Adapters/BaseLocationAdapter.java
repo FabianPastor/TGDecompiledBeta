@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Build;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -153,20 +154,19 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
                     tLRPC$TL_inputGeoPoint.lat = AndroidUtilities.fixLocationCoord(location.getLatitude());
                     tLRPC$TL_messages_getInlineBotResults.geo_point._long = AndroidUtilities.fixLocationCoord(location.getLongitude());
                     tLRPC$TL_messages_getInlineBotResults.flags |= 1;
-                    int i = (int) this.dialogId;
-                    if (i != 0) {
-                        tLRPC$TL_messages_getInlineBotResults.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(i);
-                    } else {
+                    if (DialogObject.isEncryptedDialog(this.dialogId)) {
                         tLRPC$TL_messages_getInlineBotResults.peer = new TLRPC$TL_inputPeerEmpty();
+                    } else {
+                        tLRPC$TL_messages_getInlineBotResults.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(this.dialogId);
                     }
                     this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getInlineBotResults, new BaseLocationAdapter$$ExternalSyntheticLambda5(this, str));
                     if (!z2 || Build.VERSION.SDK_INT < 19) {
                         notifyDataSetChanged();
                     } else if (!this.places.isEmpty() && !z3) {
                         int size = this.places.size() + 1;
-                        int i2 = itemCount - size;
-                        notifyItemInserted(i2);
-                        notifyItemRangeRemoved(i2, size);
+                        int i = itemCount - size;
+                        notifyItemInserted(i);
+                        notifyItemRangeRemoved(i, size);
                     } else if (!z3) {
                         notifyItemChanged(getItemCount() - 1);
                     }

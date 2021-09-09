@@ -36,8 +36,10 @@ public class VoiceMessageEnterTransition implements MessageEnterTransitionContai
     float progress;
     /* access modifiers changed from: private */
     public final ChatActivityEnterView.RecordCircle recordCircle;
+    private final Theme.ResourcesProvider resourcesProvider;
 
-    public VoiceMessageEnterTransition(final ChatMessageCell chatMessageCell, ChatActivityEnterView chatActivityEnterView, RecyclerListView recyclerListView, final MessageEnterTransitionContainer messageEnterTransitionContainer) {
+    public VoiceMessageEnterTransition(final ChatMessageCell chatMessageCell, ChatActivityEnterView chatActivityEnterView, RecyclerListView recyclerListView, final MessageEnterTransitionContainer messageEnterTransitionContainer, Theme.ResourcesProvider resourcesProvider2) {
+        this.resourcesProvider = resourcesProvider2;
         this.messageView = chatMessageCell;
         this.container = messageEnterTransitionContainer;
         this.listView = recyclerListView;
@@ -122,7 +124,7 @@ public class VoiceMessageEnterTransition implements MessageEnterTransitionContai
             canvas.save();
             i = 0;
         }
-        this.circlePaint.setColor(ColorUtils.blendARGB(Theme.getColor("chat_messagePanelVoiceBackground"), Theme.getColor(this.messageView.getRadialProgress().getCircleColorKey()), interpolation));
+        this.circlePaint.setColor(ColorUtils.blendARGB(getThemedColor("chat_messagePanelVoiceBackground"), getThemedColor(this.messageView.getRadialProgress().getCircleColorKey()), interpolation));
         float var_ = f3;
         this.recordCircle.drawWaves(canvas2, f7, var_, 1.0f - f6);
         float var_ = f4;
@@ -145,5 +147,11 @@ public class VoiceMessageEnterTransition implements MessageEnterTransitionContai
         }
         canvas.restore();
         this.recordCircle.drawIcon(canvas2, (int) x, (int) y, 1.0f - f5);
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

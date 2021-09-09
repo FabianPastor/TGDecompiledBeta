@@ -12,4 +12,8 @@ public final /* synthetic */ class PollVotesAlert$$ExternalSyntheticLambda5 impl
     public final void didSetColor() {
         this.f$0.updatePlaceholder();
     }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    }
 }

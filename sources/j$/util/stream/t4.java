@@ -2,16 +2,17 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.function.p;
-import j$.util.function.y;
+import j$.util.function.q;
+import j$.util.function.z;
 import j$.util.w;
+import j$.util.y;
 
 final class t4 extends CLASSNAMEg4 implements w {
-    t4(CLASSNAMEz2 z2Var, y yVar, boolean z) {
-        super(z2Var, yVar, z);
+    t4(CLASSNAMEz2 z2Var, z zVar, boolean z) {
+        super(z2Var, zVar, z);
     }
 
-    t4(CLASSNAMEz2 z2Var, j$.util.y yVar, boolean z) {
+    t4(CLASSNAMEz2 z2Var, y yVar, boolean z) {
         super(z2Var, yVar, z);
     }
 
@@ -20,15 +21,15 @@ final class t4 extends CLASSNAMEg4 implements w {
     }
 
     /* renamed from: d */
-    public void forEachRemaining(p pVar) {
+    public void forEachRemaining(q qVar) {
         if (this.h != null || this.i) {
             do {
-            } while (tryAdvance(pVar));
+            } while (tryAdvance(qVar));
             return;
         }
-        pVar.getClass();
+        qVar.getClass();
         h();
-        this.b.u0(new s4(pVar), this.d);
+        this.b.u0(new s4(qVar), this.d);
         this.i = true;
     }
 
@@ -37,14 +38,14 @@ final class t4 extends CLASSNAMEg4 implements w {
     }
 
     /* renamed from: i */
-    public boolean tryAdvance(p pVar) {
-        pVar.getClass();
+    public boolean tryAdvance(q qVar) {
+        qVar.getClass();
         boolean a = a();
         if (a) {
             Z3 z3 = (Z3) this.h;
             long j = this.g;
             int w = z3.w(j);
-            pVar.accept((z3.c == 0 && w == 0) ? ((long[]) z3.e)[(int) j] : ((long[][]) z3.f)[w][(int) (j - z3.d[w])]);
+            qVar.accept((z3.c == 0 && w == 0) ? ((long[]) z3.e)[(int) j] : ((long[][]) z3.f)[w][(int) (j - z3.d[w])]);
         }
         return a;
     }
@@ -58,7 +59,7 @@ final class t4 extends CLASSNAMEg4 implements w {
     }
 
     /* access modifiers changed from: package-private */
-    public CLASSNAMEg4 l(j$.util.y yVar) {
+    public CLASSNAMEg4 l(y yVar) {
         return new t4(this.b, yVar, this.a);
     }
 

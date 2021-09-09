@@ -1,23 +1,23 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
-import android.util.SparseArray;
 import android.view.View;
+import androidx.collection.LongSparseArray;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.RecyclerListView;
 
 public final /* synthetic */ class InviteMembersBottomSheet$$ExternalSyntheticLambda8 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ InviteMembersBottomSheet f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$1;
     public final /* synthetic */ BaseFragment f$2;
-    public final /* synthetic */ SparseArray f$3;
+    public final /* synthetic */ LongSparseArray f$3;
     public final /* synthetic */ Context f$4;
 
-    public /* synthetic */ InviteMembersBottomSheet$$ExternalSyntheticLambda8(InviteMembersBottomSheet inviteMembersBottomSheet, int i, BaseFragment baseFragment, SparseArray sparseArray, Context context) {
+    public /* synthetic */ InviteMembersBottomSheet$$ExternalSyntheticLambda8(InviteMembersBottomSheet inviteMembersBottomSheet, long j, BaseFragment baseFragment, LongSparseArray longSparseArray, Context context) {
         this.f$0 = inviteMembersBottomSheet;
-        this.f$1 = i;
+        this.f$1 = j;
         this.f$2 = baseFragment;
-        this.f$3 = sparseArray;
+        this.f$3 = longSparseArray;
         this.f$4 = context;
     }
 

@@ -1,20 +1,20 @@
 package j$.wrappers;
 
-import j$.util.function.i;
+import j$.util.function.j;
 import java.util.function.IntBinaryOperator;
 
 public final /* synthetic */ class P implements IntBinaryOperator {
-    final /* synthetic */ i a;
+    final /* synthetic */ j a;
 
-    private /* synthetic */ P(i iVar) {
-        this.a = iVar;
+    private /* synthetic */ P(j jVar) {
+        this.a = jVar;
     }
 
-    public static /* synthetic */ IntBinaryOperator a(i iVar) {
-        if (iVar == null) {
+    public static /* synthetic */ IntBinaryOperator a(j jVar) {
+        if (jVar == null) {
             return null;
         }
-        return iVar instanceof O ? ((O) iVar).a : new P(iVar);
+        return jVar instanceof O ? ((O) jVar).a : new P(jVar);
     }
 
     public /* synthetic */ int applyAsInt(int i, int i2) {

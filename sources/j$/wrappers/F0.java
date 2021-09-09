@@ -1,16 +1,16 @@
 package j$.wrappers;
 
-import j$.util.function.B;
+import j$.util.function.C;
 import java.util.function.ToLongFunction;
 
-public final /* synthetic */ class F0 implements B {
+public final /* synthetic */ class F0 implements C {
     final /* synthetic */ ToLongFunction a;
 
     private /* synthetic */ F0(ToLongFunction toLongFunction) {
         this.a = toLongFunction;
     }
 
-    public static /* synthetic */ B a(ToLongFunction toLongFunction) {
+    public static /* synthetic */ C a(ToLongFunction toLongFunction) {
         if (toLongFunction == null) {
             return null;
         }

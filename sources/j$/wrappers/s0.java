@@ -1,20 +1,20 @@
 package j$.wrappers;
 
-import j$.util.function.t;
+import j$.util.function.u;
 import java.util.function.ObjDoubleConsumer;
 
 public final /* synthetic */ class s0 implements ObjDoubleConsumer {
-    final /* synthetic */ t a;
+    final /* synthetic */ u a;
 
-    private /* synthetic */ s0(t tVar) {
-        this.a = tVar;
+    private /* synthetic */ s0(u uVar) {
+        this.a = uVar;
     }
 
-    public static /* synthetic */ ObjDoubleConsumer a(t tVar) {
-        if (tVar == null) {
+    public static /* synthetic */ ObjDoubleConsumer a(u uVar) {
+        if (uVar == null) {
             return null;
         }
-        return tVar instanceof CLASSNAMEr0 ? ((CLASSNAMEr0) tVar).a : new s0(tVar);
+        return uVar instanceof CLASSNAMEr0 ? ((CLASSNAMEr0) uVar).a : new s0(uVar);
     }
 
     public /* synthetic */ void accept(Object obj, double d) {

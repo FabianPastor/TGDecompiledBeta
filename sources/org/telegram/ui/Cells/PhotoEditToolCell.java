@@ -11,6 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PhotoEditorSeekBar;
 
@@ -35,14 +36,16 @@ public class PhotoEditToolCell extends FrameLayout {
     };
     /* access modifiers changed from: private */
     public TextView nameTextView;
+    private final Theme.ResourcesProvider resourcesProvider;
     private PhotoEditorSeekBar seekBar;
     /* access modifiers changed from: private */
     public AnimatorSet valueAnimation;
     /* access modifiers changed from: private */
     public TextView valueTextView;
 
-    public PhotoEditToolCell(Context context) {
+    public PhotoEditToolCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         TextView textView = new TextView(context);
         this.nameTextView = textView;
         textView.setGravity(5);
@@ -54,7 +57,7 @@ public class PhotoEditToolCell extends FrameLayout {
         addView(this.nameTextView, LayoutHelper.createFrame(80, -2.0f, 19, 0.0f, 0.0f, 0.0f, 0.0f));
         TextView textView2 = new TextView(context);
         this.valueTextView = textView2;
-        textView2.setTextColor(-9649153);
+        textView2.setTextColor(getThemedColor("dialogFloatingButton"));
         this.valueTextView.setTextSize(1, 12.0f);
         this.valueTextView.setGravity(5);
         this.valueTextView.setSingleLine(true);
@@ -132,5 +135,11 @@ public class PhotoEditToolCell extends FrameLayout {
         this.nameTextView.setAlpha(1.0f);
         this.seekBar.setMinMax(i, i2);
         this.seekBar.setProgress((int) f, false);
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

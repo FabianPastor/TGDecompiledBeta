@@ -64,7 +64,7 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
 public class GroupStickersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    private int chatId;
+    private long chatId;
     /* access modifiers changed from: private */
     public ActionBarMenuItem doneItem;
     /* access modifiers changed from: private */
@@ -111,8 +111,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     /* access modifiers changed from: private */
     public EditTextBoldCursor usernameTextView;
 
-    public GroupStickersActivity(int i) {
-        this.chatId = i;
+    public GroupStickersActivity(long j) {
+        this.chatId = j;
     }
 
     public boolean onFragmentCreate() {
@@ -316,7 +316,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             int i2 = this.selectedStickerRow;
             if (i == i2) {
                 if (this.selectedStickerSet != null) {
-                    showDialog(new StickersAlert(getParentActivity(), this, (TLRPC$InputStickerSet) null, this.selectedStickerSet, (StickersAlert.StickersAlertDelegate) null));
+                    showDialog(new StickersAlert((Context) getParentActivity(), (BaseFragment) this, (TLRPC$InputStickerSet) null, this.selectedStickerSet, (StickersAlert.StickersAlertDelegate) null));
                 }
             } else if (i >= this.stickersStartRow && i < this.stickersEndRow) {
                 boolean z = i2 == -1;
@@ -710,12 +710,9 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 } else if (i == 3) {
                     view = new ShadowSectionCell(this.mContext);
                     view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                } else if (i == 4) {
-                    HeaderCell headerCell = new HeaderCell(this.mContext);
-                    headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    view = headerCell;
                 } else if (i != 5) {
-                    view = null;
+                    view = new HeaderCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 }
                 view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
                 return new RecyclerListView.Holder(view);

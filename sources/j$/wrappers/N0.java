@@ -5,12 +5,12 @@ import j$.util.CLASSNAMEh;
 import j$.util.CLASSNAMEj;
 import j$.util.CLASSNAMEk;
 import j$.util.function.BiConsumer;
-import j$.util.function.i;
-import j$.util.function.k;
+import j$.util.function.j;
 import j$.util.function.l;
 import j$.util.function.m;
-import j$.util.function.u;
-import j$.util.function.y;
+import j$.util.function.n;
+import j$.util.function.v;
+import j$.util.function.z;
 import j$.util.stream.CLASSNAMEf1;
 import j$.util.stream.CLASSNAMEg;
 import j$.util.stream.M0;
@@ -44,28 +44,28 @@ public final /* synthetic */ class N0 implements M0 {
         return this.a.anyMatch(W.a(v));
     }
 
-    public /* synthetic */ void I(k kVar) {
-        this.a.forEachOrdered(S.a(kVar));
+    public /* synthetic */ void I(l lVar) {
+        this.a.forEachOrdered(S.a(lVar));
     }
 
-    public /* synthetic */ Stream J(l lVar) {
-        return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.a.mapToObj(U.a(lVar)));
+    public /* synthetic */ Stream J(m mVar) {
+        return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.a.mapToObj(U.a(mVar)));
     }
 
-    public /* synthetic */ int N(int i, i iVar) {
-        return this.a.reduce(i, P.a(iVar));
+    public /* synthetic */ int N(int i, j jVar) {
+        return this.a.reduce(i, P.a(jVar));
     }
 
-    public /* synthetic */ M0 P(l lVar) {
-        return n0(this.a.flatMap(U.a(lVar)));
+    public /* synthetic */ M0 P(m mVar) {
+        return n0(this.a.flatMap(U.a(mVar)));
     }
 
-    public /* synthetic */ void U(k kVar) {
-        this.a.forEach(S.a(kVar));
+    public /* synthetic */ void U(l lVar) {
+        this.a.forEach(S.a(lVar));
     }
 
-    public /* synthetic */ CLASSNAMEk a0(i iVar) {
-        return CLASSNAMEa.r(this.a.reduce(P.a(iVar)));
+    public /* synthetic */ CLASSNAMEk a0(j jVar) {
+        return CLASSNAMEa.r(this.a.reduce(P.a(jVar)));
     }
 
     public /* synthetic */ U asDoubleStream() {
@@ -84,8 +84,8 @@ public final /* synthetic */ class N0 implements M0 {
         return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.a.boxed());
     }
 
-    public /* synthetic */ M0 c0(k kVar) {
-        return n0(this.a.peek(S.a(kVar)));
+    public /* synthetic */ M0 c0(l lVar) {
+        return n0(this.a.peek(S.a(lVar)));
     }
 
     public /* synthetic */ void close() {
@@ -100,8 +100,8 @@ public final /* synthetic */ class N0 implements M0 {
         return n0(this.a.distinct());
     }
 
-    public /* synthetic */ CLASSNAMEf1 f(m mVar) {
-        return P0.n0(this.a.mapToLong(CLASSNAMEa0.a(mVar)));
+    public /* synthetic */ CLASSNAMEf1 f(n nVar) {
+        return P0.n0(this.a.mapToLong(CLASSNAMEa0.a(nVar)));
     }
 
     public /* synthetic */ CLASSNAMEk findAny() {
@@ -120,8 +120,8 @@ public final /* synthetic */ class N0 implements M0 {
         return this.a.isParallel();
     }
 
-    public /* synthetic */ Object k0(y yVar, u uVar, BiConsumer biConsumer) {
-        return this.a.collect(A0.a(yVar), u0.a(uVar), r.a(biConsumer));
+    public /* synthetic */ Object k0(z zVar, v vVar, BiConsumer biConsumer) {
+        return this.a.collect(A0.a(zVar), u0.a(vVar), r.a(biConsumer));
     }
 
     public /* synthetic */ M0 limit(long j) {

@@ -2,7 +2,7 @@ package j$.util.concurrent;
 
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.function.p;
+import j$.util.function.q;
 import j$.util.w;
 import java.util.Comparator;
 
@@ -39,8 +39,8 @@ final class h implements w {
     }
 
     /* renamed from: d */
-    public void forEachRemaining(p pVar) {
-        pVar.getClass();
+    public void forEachRemaining(q qVar) {
+        qVar.getClass();
         long j = this.a;
         long j2 = this.b;
         if (j < j2) {
@@ -49,7 +49,7 @@ final class h implements w {
             long j4 = this.d;
             i b2 = i.b();
             do {
-                pVar.accept(b2.f(j3, j4));
+                qVar.accept(b2.f(j3, j4));
                 j++;
             } while (j < j2);
         }
@@ -76,13 +76,13 @@ final class h implements w {
     }
 
     /* renamed from: i */
-    public boolean tryAdvance(p pVar) {
-        pVar.getClass();
+    public boolean tryAdvance(q qVar) {
+        qVar.getClass();
         long j = this.a;
         if (j >= this.b) {
             return false;
         }
-        pVar.accept(i.b().f(this.c, this.d));
+        qVar.accept(i.b().f(this.c, this.d));
         this.a = j + 1;
         return true;
     }
