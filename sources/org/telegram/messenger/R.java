@@ -3632,7 +3632,6 @@ public final class R {
         public static final int HideNewChatsAlertTitle = NUM;
         public static final int HideOnTop = NUM;
         public static final int HidePinnedMessages = NUM;
-        public static final int HideSenderName = NUM;
         public static final int HideSenderNames = NUM;
         public static final int HideSendersName = NUM;
         public static final int Highlights = NUM;
@@ -5505,7 +5504,6 @@ public final class R {
         public static final int ShowInChat = NUM;
         public static final int ShowNotificationsFor = NUM;
         public static final int ShowNotificationsForInfo = NUM;
-        public static final int ShowSenderName = NUM;
         public static final int ShowSenderNames = NUM;
         public static final int ShowSendersName = NUM;
         public static final int ShowStickers = NUM;
@@ -6081,6 +6079,7 @@ public final class R {
         public static final int VoipChannelSoundMuted = NUM;
         public static final int VoipChannelSoundUnmuted = NUM;
         public static final int VoipChannelStart2 = NUM;
+        public static final int VoipChannelStartRecordingVideoText = NUM;
         public static final int VoipChannelStartVoiceChat = NUM;
         public static final int VoipChannelStopRecordingText = NUM;
         public static final int VoipChannelTitle = NUM;

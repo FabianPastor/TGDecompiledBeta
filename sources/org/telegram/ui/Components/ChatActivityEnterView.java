@@ -2895,8 +2895,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         return false;
                     }
                 }
-                boolean contains = inputContentInfoCompat.getContentUri().getPathSegments().contains("sticker");
-                if (!inputContentInfoCompat.getDescription().hasMimeType("image/gif") && !contains) {
+                if (!inputContentInfoCompat.getDescription().hasMimeType("image/gif") && !SendMessagesHelper.shouldSendWebPAsSticker((String) null, inputContentInfoCompat.getContentUri())) {
                     editPhoto(inputContentInfoCompat.getContentUri(), inputContentInfoCompat.getDescription().getMimeType(0));
                 } else if (ChatActivityEnterView.this.isInScheduleMode()) {
                     AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), new ChatActivityEnterView$11$$ExternalSyntheticLambda4(this, inputContentInfoCompat));
@@ -10048,7 +10047,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.emojiViewVisible = false;
                 }
                 BotKeyboardView botKeyboardView4 = this.botKeyboardView;
-                if (botKeyboardView4 != null) {
+                if (botKeyboardView4 != null && botKeyboardView4.getVisibility() == 0) {
                     if (i5 != 2 || AndroidUtilities.usingHardwareInput || AndroidUtilities.isInMultiwindow) {
                         if (this.smoothKeyboard && !this.keyboardVisible) {
                             if (this.botKeyboardViewVisible) {
@@ -10079,7 +10078,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             AndroidUtilities.runOnUIThread(this.runEmojiPanelAnimation, 50);
                             requestLayout();
                         } else if (!this.waitingForKeyboardOpen) {
-                            botKeyboardView4.setVisibility(8);
+                            this.botKeyboardView.setVisibility(8);
                         }
                     }
                     this.botKeyboardViewVisible = false;

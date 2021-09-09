@@ -3493,7 +3493,6 @@
     <public type="string" name="HideNewChatsAlertTitle" id="NUM" />
     <public type="string" name="HideOnTop" id="NUM" />
     <public type="string" name="HidePinnedMessages" id="NUM" />
-    <public type="string" name="HideSenderName" id="NUM" />
     <public type="string" name="HideSenderNames" id="NUM" />
     <public type="string" name="HideSendersName" id="NUM" />
     <public type="string" name="Highlights" id="NUM" />
@@ -5366,7 +5365,6 @@
     <public type="string" name="ShowInChat" id="NUM" />
     <public type="string" name="ShowNotificationsFor" id="NUM" />
     <public type="string" name="ShowNotificationsForInfo" id="NUM" />
-    <public type="string" name="ShowSenderName" id="NUM" />
     <public type="string" name="ShowSenderNames" id="NUM" />
     <public type="string" name="ShowSendersName" id="NUM" />
     <public type="string" name="ShowStickers" id="NUM" />
@@ -5942,6 +5940,7 @@
     <public type="string" name="VoipChannelSoundMuted" id="NUM" />
     <public type="string" name="VoipChannelSoundUnmuted" id="NUM" />
     <public type="string" name="VoipChannelStart2" id="NUM" />
+    <public type="string" name="VoipChannelStartRecordingVideoText" id="NUM" />
     <public type="string" name="VoipChannelStartVoiceChat" id="NUM" />
     <public type="string" name="VoipChannelStopRecordingText" id="NUM" />
     <public type="string" name="VoipChannelTitle" id="NUM" />

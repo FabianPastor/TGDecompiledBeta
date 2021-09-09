@@ -864,7 +864,7 @@ public class AlertsCreator {
         L_0x0133:
             if (r7 == 0) goto L_0x0171
             if (r24 == 0) goto L_0x0171
-            r2 = 2131627366(0x7f0e0d66, float:1.8881994E38)
+            r2 = 2131627365(0x7f0e0d65, float:1.8881992E38)
             java.lang.String r6 = "ReportUnrelatedGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r11.setTitle(r2)
@@ -873,7 +873,7 @@ public class AlertsCreator {
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$TL_channelLocation r1 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r1
-            r2 = 2131627367(0x7f0e0d67, float:1.8881996E38)
+            r2 = 2131627366(0x7f0e0d66, float:1.8881994E38)
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r1 = r1.address
             r4[r5] = r1
@@ -883,13 +883,13 @@ public class AlertsCreator {
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0164:
-            r1 = 2131627368(0x7f0e0d68, float:1.8881998E38)
+            r1 = 2131627367(0x7f0e0d67, float:1.8881996E38)
             java.lang.String r2 = "ReportUnrelatedGroupTextNoAddress"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0171:
-            r1 = 2131627359(0x7f0e0d5f, float:1.888198E38)
+            r1 = 2131627358(0x7f0e0d5e, float:1.8881978E38)
             java.lang.String r2 = "ReportSpamTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setTitle(r1)
@@ -897,18 +897,18 @@ public class AlertsCreator {
             if (r1 == 0) goto L_0x0194
             boolean r1 = r7.megagroup
             if (r1 != 0) goto L_0x0194
-            r1 = 2131627355(0x7f0e0d5b, float:1.8881972E38)
+            r1 = 2131627354(0x7f0e0d5a, float:1.888197E38)
             java.lang.String r2 = "ReportSpamAlertChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0194:
-            r1 = 2131627356(0x7f0e0d5c, float:1.8881974E38)
+            r1 = 2131627355(0x7f0e0d5b, float:1.8881972E38)
             java.lang.String r2 = "ReportSpamAlertGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
         L_0x01a0:
-            r1 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+            r1 = 2131627336(0x7f0e0d48, float:1.8881934E38)
             java.lang.String r2 = "ReportChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r12 = r1
@@ -1418,11 +1418,11 @@ public class AlertsCreator {
             org.telegram.ui.ActionBar.AlertDialog$Builder r15 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r11.getParentActivity()
             r15.<init>((android.content.Context) r1)
-            r1 = 2131626644(0x7f0e0a94, float:1.888053E38)
+            r1 = 2131626643(0x7f0e0a93, float:1.8880528E38)
             java.lang.String r2 = "OpenUrlTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r15.setTitle(r1)
-            r1 = 2131626641(0x7f0e0a91, float:1.8880524E38)
+            r1 = 2131626640(0x7f0e0a90, float:1.8880522E38)
             java.lang.String r2 = "OpenUrlAlert2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r2 = "%"
@@ -1442,7 +1442,7 @@ public class AlertsCreator {
         L_0x009c:
             r15.setMessage(r3)
             r15.setMessageTextViewClickable(r5)
-            r13 = 2131626627(0x7f0e0a83, float:1.8880496E38)
+            r13 = 2131626626(0x7f0e0a82, float:1.8880494E38)
             java.lang.String r1 = "Open"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r1, r13)
             org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda23 r1 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda23
@@ -1827,17 +1827,17 @@ public class AlertsCreator {
             if (r9 == 0) goto L_0x0159
             boolean r9 = r8.megagroup
             if (r9 == 0) goto L_0x014e
-            r9 = 2131626028(0x7f0e082c, float:1.887928E38)
+            r9 = 2131626027(0x7f0e082b, float:1.8879279E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r14.setText(r10)
             goto L_0x016e
         L_0x014e:
-            r10 = 2131626026(0x7f0e082a, float:1.8879277E38)
+            r10 = 2131626025(0x7f0e0829, float:1.8879275E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r14.setText(r9)
             goto L_0x016e
         L_0x0159:
-            r9 = 2131626028(0x7f0e082c, float:1.887928E38)
+            r9 = 2131626027(0x7f0e082b, float:1.8879279E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r14.setText(r10)
             goto L_0x016e
@@ -2246,7 +2246,7 @@ public class AlertsCreator {
             if (r0 == 0) goto L_0x04c7
             boolean r0 = r8.megagroup
             if (r0 == 0) goto L_0x04ae
-            r0 = 2131626176(0x7f0e08c0, float:1.887958E38)
+            r0 = 2131626175(0x7f0e08bf, float:1.8879579E38)
             r1 = 1
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = r8.title
@@ -2323,12 +2323,12 @@ public class AlertsCreator {
             if (r0 == 0) goto L_0x0547
             boolean r0 = r8.megagroup
             if (r0 == 0) goto L_0x053d
-            r0 = 2131626028(0x7f0e082c, float:1.887928E38)
+            r0 = 2131626027(0x7f0e082b, float:1.8879279E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r11, r0)
             goto L_0x04ea
         L_0x053d:
             r1 = r28
-            r0 = 2131626026(0x7f0e082a, float:1.8879277E38)
+            r0 = 2131626025(0x7f0e0829, float:1.8879275E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x04ea
         L_0x0547:

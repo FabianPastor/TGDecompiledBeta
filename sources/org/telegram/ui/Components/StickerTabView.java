@@ -24,6 +24,7 @@ public class StickerTabView extends FrameLayout {
     BackupImageView imageView;
     public final int index;
     public boolean inited;
+    public boolean isChatSticker;
     float lastLeft;
     boolean roundImage;
     public SvgHelper.SvgDrawable svgThumb;

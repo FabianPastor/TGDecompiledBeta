@@ -379,7 +379,13 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
         int i;
         float f = this.highlightProgress;
         if (!(f == 0.0f || this.scrollToSet == null)) {
-            this.highlightProgress = f - 0.0053333333f;
+            float f2 = f - 0.0053333333f;
+            this.highlightProgress = f2;
+            if (f2 < 0.0f) {
+                this.highlightProgress = 0.0f;
+            } else {
+                invalidate();
+            }
             Integer num = (Integer) this.adapter.setsToPosition.get(this.scrollToSet);
             if (num != null) {
                 View findViewByPosition = this.layoutManager.findViewByPosition(num.intValue());
@@ -399,12 +405,11 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 }
                 if (!(findViewByPosition == null && findViewByPosition2 == null)) {
                     this.paint.setColor(Theme.getColor("featuredStickers_addButton"));
-                    float f2 = this.highlightProgress;
-                    this.paint.setAlpha((int) ((f2 < 0.06f ? f2 / 0.06f : 1.0f) * 25.5f));
+                    float f3 = this.highlightProgress;
+                    this.paint.setAlpha((int) ((f3 < 0.06f ? f3 / 0.06f : 1.0f) * 25.5f));
                     canvas.drawRect(0.0f, (float) i2, (float) getMeasuredWidth(), (float) i, this.paint);
                 }
             }
-            invalidate();
         }
         super.dispatchDraw(canvas);
     }

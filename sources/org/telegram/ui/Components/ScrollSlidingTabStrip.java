@@ -423,6 +423,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             stickerTabView.updateExpandProgress(this.expandProgress);
             this.tabsContainer.addView(stickerTabView, i2);
         }
+        stickerTabView.isChatSticker = false;
         stickerTabView.setTag(NUM, Integer.valueOf(i2));
         if (i2 != this.currentPosition) {
             z = false;
@@ -438,33 +439,31 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void addStickerTab(TLRPC$Chat tLRPC$Chat) {
-        StickerTabView stickerTabView;
         String str = "chat" + tLRPC$Chat.id;
         int i = this.tabCount;
         this.tabCount = i + 1;
-        FrameLayout frameLayout = (FrameLayout) this.prevTypes.get(str);
+        StickerTabView stickerTabView = (StickerTabView) this.prevTypes.get(str);
         boolean z = false;
-        if (frameLayout != null) {
-            checkViewIndex(str, frameLayout, i);
-            stickerTabView = frameLayout;
+        if (stickerTabView != null) {
+            checkViewIndex(str, stickerTabView, i);
         } else {
-            StickerTabView stickerTabView2 = new StickerTabView(getContext(), 0);
-            stickerTabView2.setFocusable(true);
-            stickerTabView2.setOnClickListener(new ScrollSlidingTabStrip$$ExternalSyntheticLambda6(this));
-            this.tabsContainer.addView(stickerTabView2, i);
-            stickerTabView2.setRoundImage();
+            stickerTabView = new StickerTabView(getContext(), 0);
+            stickerTabView.setFocusable(true);
+            stickerTabView.setOnClickListener(new ScrollSlidingTabStrip$$ExternalSyntheticLambda6(this));
+            this.tabsContainer.addView(stickerTabView, i);
+            stickerTabView.setRoundImage();
             AvatarDrawable avatarDrawable = new AvatarDrawable();
             avatarDrawable.setTextSize(AndroidUtilities.dp(14.0f));
             avatarDrawable.setInfo(tLRPC$Chat);
-            BackupImageView backupImageView = stickerTabView2.imageView;
+            BackupImageView backupImageView = stickerTabView.imageView;
             backupImageView.setLayerNum(1);
             backupImageView.setForUserOrChat(tLRPC$Chat, avatarDrawable);
             backupImageView.setAspectFit(true);
-            stickerTabView2.setExpanded(this.expanded);
-            stickerTabView2.updateExpandProgress(this.expandProgress);
-            stickerTabView2.textView.setText(tLRPC$Chat.title);
-            stickerTabView = stickerTabView2;
+            stickerTabView.setExpanded(this.expanded);
+            stickerTabView.updateExpandProgress(this.expandProgress);
+            stickerTabView.textView.setText(tLRPC$Chat.title);
         }
+        stickerTabView.isChatSticker = true;
         stickerTabView.setTag(NUM, Integer.valueOf(i));
         if (i == this.currentPosition) {
             z = true;
@@ -494,6 +493,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             stickerTabView.updateExpandProgress(this.expandProgress);
             this.tabsContainer.addView(stickerTabView, i2);
         }
+        stickerTabView.isChatSticker = false;
         stickerTabView.setTag(NUM, Integer.valueOf(i2));
         stickerTabView.setTag(NUM, emojiDrawable);
         stickerTabView.setTag(NUM, tLRPC$Document);
@@ -529,6 +529,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             stickerTabView.updateExpandProgress(this.expandProgress);
             this.tabsContainer.addView(stickerTabView, i);
         }
+        stickerTabView.isChatSticker = false;
         stickerTabView.setTag(tLObject);
         stickerTabView.setTag(NUM, Integer.valueOf(i));
         stickerTabView.setTag(NUM, tLRPC$TL_messages_stickerSet);
@@ -1063,7 +1064,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             } else {
                 this.animateFromPosition = false;
             }
-            this.currentPosition = Math.max(i, i2);
+            this.currentPosition = i;
             if (i < this.tabsContainer.getChildCount()) {
                 this.positionAnimationProgress = 0.0f;
                 int i4 = 0;
@@ -1218,10 +1219,13 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     public boolean canSwap(int i) {
         if (this.dragEnabled && i >= 0 && i < this.tabsContainer.getChildCount()) {
             View childAt = this.tabsContainer.getChildAt(i);
-            if (!(childAt instanceof StickerTabView) || ((StickerTabView) childAt).type != 0) {
-                return false;
+            if (childAt instanceof StickerTabView) {
+                StickerTabView stickerTabView = (StickerTabView) childAt;
+                if (stickerTabView.type != 0 || stickerTabView.isChatSticker) {
+                    return false;
+                }
+                return true;
             }
-            return true;
         }
         return false;
     }

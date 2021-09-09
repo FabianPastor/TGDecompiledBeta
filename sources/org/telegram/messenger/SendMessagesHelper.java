@@ -4951,7 +4951,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r7.sendCallback(r3, r4, r5, r6)
             goto L_0x04a5
         L_0x001d:
-            r8 = 2131626612(0x7f0e0a74, float:1.8880465E38)
+            r8 = 2131626611(0x7f0e0a73, float:1.8880463E38)
             java.lang.String r9 = "OK"
             r10 = 0
             r11 = 1
@@ -5471,7 +5471,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r15 = 0
             android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r11, r12, r13, r14, r15)
             r4.addView(r1, r2)
-            r1 = 2131626612(0x7f0e0a74, float:1.8880465E38)
+            r1 = 2131626611(0x7f0e0a73, float:1.8880463E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r2 = 0
             r0.setNegativeButton(r1, r2)
@@ -15263,7 +15263,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
 
     /* JADX WARNING: Missing exception handler attribute for start block: B:17:0x004c */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private static boolean shouldSendWebPAsSticker(java.lang.String r10, android.net.Uri r11) {
+    public static boolean shouldSendWebPAsSticker(java.lang.String r10, android.net.Uri r11) {
         /*
             android.graphics.BitmapFactory$Options r0 = new android.graphics.BitmapFactory$Options
             r0.<init>()
