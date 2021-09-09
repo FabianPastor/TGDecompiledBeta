@@ -15,7 +15,6 @@ public class MessageEnterTransitionContainer extends View {
             MessageEnterTransitionContainer.this.lambda$new$0$MessageEnterTransitionContainer();
         }
     };
-    long time;
     private ArrayList<Transition> transitions = new ArrayList<>();
 
     public interface Transition {
@@ -48,7 +47,6 @@ public class MessageEnterTransitionContainer extends View {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (!this.transitions.isEmpty()) {
-            this.time = System.currentTimeMillis();
             for (int i = 0; i < this.transitions.size(); i++) {
                 this.transitions.get(i).onDraw(canvas);
             }

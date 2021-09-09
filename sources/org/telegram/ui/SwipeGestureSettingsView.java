@@ -169,9 +169,9 @@ public class SwipeGestureSettingsView extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x00b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x00d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0115  */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x00b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x00d5  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0113  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r16) {
         /*
@@ -266,7 +266,7 @@ public class SwipeGestureSettingsView extends FrameLayout {
             java.lang.String r6 = r0.currentColorKey
             r10 = 1063675494(0x3var_, float:0.9)
             java.lang.String r11 = "windowBackgroundWhite"
-            if (r6 != 0) goto L_0x00d7
+            if (r6 != 0) goto L_0x00d5
             java.lang.String[] r6 = r0.backgroundKeys
             org.telegram.ui.Components.NumberPicker r12 = r0.picker
             int r12 = r12.getValue()
@@ -278,15 +278,15 @@ public class SwipeGestureSettingsView extends FrameLayout {
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
             int r6 = androidx.core.graphics.ColorUtils.blendARGB(r6, r12, r10)
             r0.fromColor = r6
-            goto L_0x010f
-        L_0x00d7:
+            goto L_0x010d
+        L_0x00d5:
             java.lang.String[] r6 = r0.backgroundKeys
             org.telegram.ui.Components.NumberPicker r12 = r0.picker
             int r12 = r12.getValue()
             r6 = r6[r12]
             java.lang.String r12 = r0.currentColorKey
             boolean r6 = r6.equals(r12)
-            if (r6 != 0) goto L_0x010f
+            if (r6 != 0) goto L_0x010d
             int r6 = r0.fromColor
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             java.lang.String r13 = r0.currentColorKey
@@ -301,20 +301,20 @@ public class SwipeGestureSettingsView extends FrameLayout {
             int r12 = r12.getValue()
             r6 = r6[r12]
             r0.currentColorKey = r6
-        L_0x010f:
+        L_0x010d:
             float r6 = r0.colorProgress
             int r12 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
-            if (r12 == 0) goto L_0x0125
+            if (r12 == 0) goto L_0x0123
             r12 = 1042536202(0x3e23d70a, float:0.16)
             float r6 = r6 + r12
             r0.colorProgress = r6
             int r6 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0122
+            if (r6 <= 0) goto L_0x0120
             r0.colorProgress = r5
-            goto L_0x0125
-        L_0x0122:
+            goto L_0x0123
+        L_0x0120:
             r15.invalidate()
-        L_0x0125:
+        L_0x0123:
             int r6 = r0.fromColor
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             java.lang.String r13 = r0.currentColorKey

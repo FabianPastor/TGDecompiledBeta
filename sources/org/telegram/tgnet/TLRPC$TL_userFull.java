@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_userFull extends TLRPC$UserFull {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -37,6 +37,9 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         }
         if ((this.flags & 16384) != 0) {
             this.ttl_period = abstractSerializedData.readInt32(z);
+        }
+        if ((this.flags & 32768) != 0) {
+            this.theme_emoticon = abstractSerializedData.readString(z);
         }
     }
 
@@ -76,6 +79,9 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         }
         if ((this.flags & 16384) != 0) {
             abstractSerializedData.writeInt32(this.ttl_period);
+        }
+        if ((this.flags & 32768) != 0) {
+            abstractSerializedData.writeString(this.theme_emoticon);
         }
     }
 }

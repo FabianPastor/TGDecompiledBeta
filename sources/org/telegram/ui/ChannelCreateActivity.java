@@ -863,8 +863,12 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     /* access modifiers changed from: private */
     /* renamed from: lambda$createView$4 */
     public /* synthetic */ void lambda$createView$4$ChannelCreateActivity(DialogInterface dialogInterface) {
-        this.cameraDrawable.setCustomEndFrame(86);
-        this.avatarEditor.playAnimation();
+        if (!this.imageUpdater.isUploadingImage()) {
+            this.cameraDrawable.setCustomEndFrame(86);
+            this.avatarEditor.playAnimation();
+            return;
+        }
+        this.cameraDrawable.setCurrentFrame(0, false);
     }
 
     /* access modifiers changed from: private */

@@ -1257,13 +1257,13 @@ public class ChatRightsEditActivity extends BaseFragment {
             return
         L_0x003e:
             int r0 = r13.currentType
-            if (r0 != 0) goto L_0x0114
+            if (r0 != 0) goto L_0x0113
             int r0 = r13.rankRow
-            if (r0 == r2) goto L_0x007f
+            if (r0 == r2) goto L_0x007e
             java.lang.String r0 = r13.currentRank
             int r2 = r0.length()
             int r0 = r0.codePointCount(r4, r2)
-            if (r0 <= r1) goto L_0x007f
+            if (r0 <= r1) goto L_0x007e
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
             int r1 = r13.rankRow
             r0.smoothScrollToPosition(r1)
@@ -1271,57 +1271,57 @@ public class ChatRightsEditActivity extends BaseFragment {
             java.lang.String r1 = "vibrator"
             java.lang.Object r0 = r0.getSystemService(r1)
             android.os.Vibrator r0 = (android.os.Vibrator) r0
-            if (r0 == 0) goto L_0x006d
+            if (r0 == 0) goto L_0x006c
             r1 = 200(0xc8, double:9.9E-322)
             r0.vibrate(r1)
-        L_0x006d:
+        L_0x006c:
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
             int r1 = r13.rankHeaderRow
             androidx.recyclerview.widget.RecyclerView$ViewHolder r0 = r0.findViewHolderForAdapterPosition(r1)
-            if (r0 == 0) goto L_0x007e
+            if (r0 == 0) goto L_0x007d
             android.view.View r0 = r0.itemView
             r1 = 1073741824(0x40000000, float:2.0)
             org.telegram.messenger.AndroidUtilities.shakeView(r0, r1, r4)
-        L_0x007e:
+        L_0x007d:
             return
-        L_0x007f:
+        L_0x007e:
             boolean r0 = r13.isChannel
-            if (r0 == 0) goto L_0x008a
+            if (r0 == 0) goto L_0x0089
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r13.adminRights
             r0.ban_users = r4
             r0.pin_messages = r4
-            goto L_0x0090
-        L_0x008a:
+            goto L_0x008f
+        L_0x0089:
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r13.adminRights
             r0.edit_messages = r4
             r0.post_messages = r4
-        L_0x0090:
+        L_0x008f:
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r13.adminRights
             boolean r1 = r0.change_info
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.post_messages
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.edit_messages
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.delete_messages
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.ban_users
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.invite_users
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.pin_messages
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.add_admins
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.anonymous
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.manage_call
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             r0.other = r3
-            goto L_0x00bf
-        L_0x00bd:
+            goto L_0x00be
+        L_0x00bc:
             r0.other = r4
-        L_0x00bf:
+        L_0x00be:
             int r0 = r13.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r0)
             int r6 = r13.chatId
@@ -1333,40 +1333,40 @@ public class ChatRightsEditActivity extends BaseFragment {
             boolean r12 = r13.isAddingNew
             r5.setUserAdminRole(r6, r7, r8, r9, r10, r11, r12)
             org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r0 = r13.delegate
-            if (r0 == 0) goto L_0x0159
+            if (r0 == 0) goto L_0x0158
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r1 = r13.adminRights
             boolean r2 = r1.change_info
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.post_messages
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.edit_messages
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.delete_messages
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.ban_users
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.invite_users
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.pin_messages
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.add_admins
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.anonymous
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.manage_call
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.other
-            if (r2 == 0) goto L_0x010b
-            goto L_0x010c
-        L_0x010b:
+            if (r2 == 0) goto L_0x010a
+            goto L_0x010b
+        L_0x010a:
             r3 = 0
-        L_0x010c:
+        L_0x010b:
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = r13.bannedRights
             java.lang.String r4 = r13.currentRank
             r0.didSetRights(r3, r1, r2, r4)
-            goto L_0x0159
-        L_0x0114:
-            if (r0 != r3) goto L_0x0159
+            goto L_0x0158
+        L_0x0113:
+            if (r0 != r3) goto L_0x0158
             int r0 = r13.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r0)
             int r6 = r13.chatId
@@ -1378,30 +1378,30 @@ public class ChatRightsEditActivity extends BaseFragment {
             r5.setParticipantBannedRole(r6, r7, r8, r9, r10, r11)
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r0 = r13.bannedRights
             boolean r1 = r0.send_messages
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_stickers
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.embed_links
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_media
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_gifs
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_games
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_inline
-            if (r1 == 0) goto L_0x014b
-            goto L_0x014e
-        L_0x014b:
+            if (r1 == 0) goto L_0x014a
+            goto L_0x014d
+        L_0x014a:
             r0.until_date = r4
             r3 = 2
-        L_0x014e:
+        L_0x014d:
             org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r1 = r13.delegate
-            if (r1 == 0) goto L_0x0159
+            if (r1 == 0) goto L_0x0158
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r13.adminRights
             java.lang.String r4 = r13.currentRank
             r1.didSetRights(r3, r2, r0, r4)
-        L_0x0159:
+        L_0x0158:
             r13.finishFragment()
             return
         */
@@ -1567,16 +1567,16 @@ public class ChatRightsEditActivity extends BaseFragment {
                 r6 = this;
                 java.lang.String r7 = "windowBackgroundWhite"
                 switch(r8) {
-                    case 0: goto L_0x0083;
-                    case 1: goto L_0x006c;
-                    case 2: goto L_0x005d;
-                    case 3: goto L_0x0045;
-                    case 4: goto L_0x0036;
-                    case 5: goto L_0x002e;
-                    case 6: goto L_0x001f;
-                    default: goto L_0x0006;
+                    case 0: goto L_0x0080;
+                    case 1: goto L_0x006a;
+                    case 2: goto L_0x005b;
+                    case 3: goto L_0x0044;
+                    case 4: goto L_0x0035;
+                    case 5: goto L_0x002d;
+                    case 6: goto L_0x001e;
+                    default: goto L_0x0005;
                 }
-            L_0x0006:
+            L_0x0005:
                 org.telegram.ui.Cells.PollEditTextCell r8 = new org.telegram.ui.Cells.PollEditTextCell
                 android.content.Context r0 = r6.mContext
                 r1 = 0
@@ -1586,27 +1586,27 @@ public class ChatRightsEditActivity extends BaseFragment {
                 org.telegram.ui.ChatRightsEditActivity$ListAdapter$1 r7 = new org.telegram.ui.ChatRightsEditActivity$ListAdapter$1
                 r7.<init>()
                 r8.addTextWatcher(r7)
-                goto L_0x0093
-            L_0x001f:
+                goto L_0x0090
+            L_0x001e:
                 org.telegram.ui.Cells.TextDetailCell r8 = new org.telegram.ui.Cells.TextDetailCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x0093
-            L_0x002e:
+                goto L_0x0090
+            L_0x002d:
                 org.telegram.ui.Cells.ShadowSectionCell r8 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x0093
-            L_0x0036:
+                goto L_0x0090
+            L_0x0035:
                 org.telegram.ui.Cells.TextCheckCell2 r8 = new org.telegram.ui.Cells.TextCheckCell2
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x0093
-            L_0x0045:
+                goto L_0x0090
+            L_0x0044:
                 org.telegram.ui.Cells.HeaderCell r8 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r1 = r6.mContext
                 r3 = 21
@@ -1617,25 +1617,25 @@ public class ChatRightsEditActivity extends BaseFragment {
                 r0.<init>(r1, r2, r3, r4, r5)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x0093
-            L_0x005d:
+                goto L_0x0090
+            L_0x005b:
                 org.telegram.ui.Cells.TextSettingsCell r8 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x0093
-            L_0x006c:
+                goto L_0x0090
+            L_0x006a:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
                 android.content.Context r7 = r6.mContext
-                r0 = 2131165444(0x7var_, float:1.7945105E38)
+                r0 = 2131165449(0x7var_, float:1.7945115E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r7)
-                goto L_0x0093
-            L_0x0083:
+                goto L_0x0090
+            L_0x0080:
                 org.telegram.ui.Cells.UserCell2 r8 = new org.telegram.ui.Cells.UserCell2
                 android.content.Context r0 = r6.mContext
                 r1 = 4
@@ -1643,7 +1643,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 r8.<init>(r0, r1, r2)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-            L_0x0093:
+            L_0x0090:
                 org.telegram.ui.Components.RecyclerListView$Holder r7 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r7.<init>(r8)
                 return r7

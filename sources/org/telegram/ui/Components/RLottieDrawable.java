@@ -62,6 +62,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     protected boolean loadingInBackground;
     protected final int[] metaData;
     protected volatile long nativePtr;
+    private boolean needScale;
     private HashMap<String, Integer> newColorUpdates;
     private int[] newReplaceColors;
     protected volatile boolean nextFrameIsLast;
@@ -1676,7 +1677,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     private boolean isCurrentParentViewMaster() {
-        if (getCallback() != null) {
+        if (getCallback() != null || this.parentViews.size() <= 1) {
             return true;
         }
         int size = this.parentViews.size();
@@ -1764,17 +1765,28 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                     this.dstRect.set(getBounds());
                     this.scaleX = ((float) this.dstRect.width()) / ((float) this.width);
                     this.scaleY = ((float) this.dstRect.height()) / ((float) this.height);
+                    boolean z = false;
                     this.applyTransformation = false;
+                    if (Math.abs(this.dstRect.width() - this.width) >= AndroidUtilities.dp(1.0f) || Math.abs(this.dstRect.width() - this.width) >= AndroidUtilities.dp(1.0f)) {
+                        z = true;
+                    }
+                    this.needScale = z;
                 }
-                canvas.save();
-                Rect rect = this.dstRect;
-                canvas.translate((float) rect.left, (float) rect.top);
-                canvas.scale(this.scaleX, this.scaleY);
-                canvas.drawBitmap(this.renderingBitmap, 0.0f, 0.0f, getPaint());
+                if (!this.needScale) {
+                    Bitmap bitmap = this.renderingBitmap;
+                    Rect rect = this.dstRect;
+                    canvas.drawBitmap(bitmap, (float) rect.left, (float) rect.top, getPaint());
+                } else {
+                    canvas.save();
+                    Rect rect2 = this.dstRect;
+                    canvas.translate((float) rect2.left, (float) rect2.top);
+                    canvas.scale(this.scaleX, this.scaleY);
+                    canvas.drawBitmap(this.renderingBitmap, 0.0f, 0.0f, getPaint());
+                    canvas.restore();
+                }
                 if (this.isRunning) {
                     invalidateInternal();
                 }
-                canvas.restore();
             }
         }
     }

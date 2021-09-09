@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.LongSparseArray;
@@ -62,6 +63,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     public boolean gluedToTop;
     /* access modifiers changed from: private */
     public int hash;
+    private float highlightProgress;
     /* access modifiers changed from: private */
     public boolean ignoreLayout;
     /* access modifiers changed from: private */
@@ -76,6 +78,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     public boolean motionEventCatchedByListView;
     /* access modifiers changed from: private */
     public RecyclerView.OnScrollListener onScrollListener;
+    Paint paint;
     private BaseFragment parentFragment;
     /* access modifiers changed from: private */
     public final TLRPC$StickerSetCovered[] primaryInstallingStickerSets;
@@ -145,6 +148,8 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
         final Delegate delegate3 = delegate2;
         int i = UserConfig.selectedAccount;
         this.currentAccount = i;
+        this.highlightProgress = 1.0f;
+        this.paint = new Paint();
         this.delegate = delegate3;
         TLRPC$StickerSetCovered[] tLRPC$StickerSetCoveredArr2 = tLRPC$StickerSetCoveredArr;
         this.primaryInstallingStickerSets = tLRPC$StickerSetCoveredArr2;
@@ -387,6 +392,46 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 this.layoutManager.scrollToPositionWithOffset(num.intValue(), (-this.listView.getPaddingTop()) + AndroidUtilities.dp(58.0f));
             }
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void dispatchDraw(Canvas canvas) {
+        int i;
+        float f = this.highlightProgress;
+        if (!(f == 0.0f || this.scrollToSet == null)) {
+            float f2 = f - 0.0053333333f;
+            this.highlightProgress = f2;
+            if (f2 < 0.0f) {
+                this.highlightProgress = 0.0f;
+            } else {
+                invalidate();
+            }
+            Integer num = (Integer) this.adapter.setsToPosition.get(this.scrollToSet);
+            if (num != null) {
+                View findViewByPosition = this.layoutManager.findViewByPosition(num.intValue());
+                int i2 = -1;
+                if (findViewByPosition != null) {
+                    i2 = (int) findViewByPosition.getY();
+                    i = ((int) findViewByPosition.getY()) + findViewByPosition.getMeasuredHeight();
+                } else {
+                    i = -1;
+                }
+                View findViewByPosition2 = this.layoutManager.findViewByPosition(num.intValue() + 1);
+                if (findViewByPosition2 != null) {
+                    if (findViewByPosition == null) {
+                        i2 = (int) findViewByPosition2.getY();
+                    }
+                    i = ((int) findViewByPosition2.getY()) + findViewByPosition2.getMeasuredHeight();
+                }
+                if (!(findViewByPosition == null && findViewByPosition2 == null)) {
+                    this.paint.setColor(Theme.getColor("featuredStickers_addButton"));
+                    float f3 = this.highlightProgress;
+                    this.paint.setAlpha((int) ((f3 < 0.06f ? f3 / 0.06f : 1.0f) * 25.5f));
+                    canvas.drawRect(0.0f, (float) i2, (float) getMeasuredWidth(), (float) i, this.paint);
+                }
+            }
+        }
+        super.dispatchDraw(canvas);
     }
 
     /* access modifiers changed from: protected */

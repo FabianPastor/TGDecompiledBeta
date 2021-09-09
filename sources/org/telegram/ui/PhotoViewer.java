@@ -793,7 +793,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         /*  JADX ERROR: Method code generation error
                             jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0052: INVOKE  
                               (wrap: org.telegram.ui.-$$Lambda$PhotoViewer$7$1$Wlkh36-8R3AsZyI8MUjUhc5wuqU : 0x004f: CONSTRUCTOR  (r0v7 org.telegram.ui.-$$Lambda$PhotoViewer$7$1$Wlkh36-8R3AsZyI8MUjUhc5wuqU) = (r2v0 'this' org.telegram.ui.PhotoViewer$7$1 A[THIS]) call: org.telegram.ui.-$$Lambda$PhotoViewer$7$1$Wlkh36-8R3AsZyI8MUjUhc5wuqU.<init>(org.telegram.ui.PhotoViewer$7$1):void type: CONSTRUCTOR)
-                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PhotoViewer.7.1.onPreDraw():boolean, dex: classes.dex
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PhotoViewer.7.1.onPreDraw():boolean, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -876,7 +876,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                             	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x004f: CONSTRUCTOR  (r0v7 org.telegram.ui.-$$Lambda$PhotoViewer$7$1$Wlkh36-8R3AsZyI8MUjUhc5wuqU) = (r2v0 'this' org.telegram.ui.PhotoViewer$7$1 A[THIS]) call: org.telegram.ui.-$$Lambda$PhotoViewer$7$1$Wlkh36-8R3AsZyI8MUjUhc5wuqU.<init>(org.telegram.ui.PhotoViewer$7$1):void type: CONSTRUCTOR in method: org.telegram.ui.PhotoViewer.7.1.onPreDraw():boolean, dex: classes.dex
+                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x004f: CONSTRUCTOR  (r0v7 org.telegram.ui.-$$Lambda$PhotoViewer$7$1$Wlkh36-8R3AsZyI8MUjUhc5wuqU) = (r2v0 'this' org.telegram.ui.PhotoViewer$7$1 A[THIS]) call: org.telegram.ui.-$$Lambda$PhotoViewer$7$1$Wlkh36-8R3AsZyI8MUjUhc5wuqU.<init>(org.telegram.ui.PhotoViewer$7$1):void type: CONSTRUCTOR in method: org.telegram.ui.PhotoViewer.7.1.onPreDraw():boolean, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1324,6 +1324,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         public void updatePhotoAtIndex(int i) {
         }
 
+        public boolean validateGroupId(long j) {
+            return true;
+        }
+
         public void willHidePhotoViewer() {
         }
 
@@ -1413,6 +1417,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         int setPhotoUnchecked(Object obj);
 
         void updatePhotoAtIndex(int i);
+
+        boolean validateGroupId(long j);
 
         void willHidePhotoViewer();
 
@@ -1643,8 +1649,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:8:0x0036  */
-        /* JADX WARNING: Removed duplicated region for block: B:9:0x003e  */
+        /* JADX WARNING: Removed duplicated region for block: B:8:0x0035  */
+        /* JADX WARNING: Removed duplicated region for block: B:9:0x003d  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onLongClick(android.text.style.URLSpan r9) {
             /*
@@ -1658,34 +1664,34 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r1 = r1.startsWith(r2)
                 r2 = 1
                 r3 = -1
-                if (r1 == 0) goto L_0x0032
-                java.lang.String r1 = r9.getURL()     // Catch:{ all -> 0x0032 }
-                java.lang.String r4 = r9.getURL()     // Catch:{ all -> 0x0032 }
+                if (r1 == 0) goto L_0x0031
+                java.lang.String r1 = r9.getURL()     // Catch:{ all -> 0x0031 }
+                java.lang.String r4 = r9.getURL()     // Catch:{ all -> 0x0031 }
                 r5 = 63
-                int r4 = r4.indexOf(r5)     // Catch:{ all -> 0x0032 }
+                int r4 = r4.indexOf(r5)     // Catch:{ all -> 0x0031 }
                 int r4 = r4 + r2
-                java.lang.String r1 = r1.substring(r4)     // Catch:{ all -> 0x0032 }
-                int r1 = java.lang.Integer.parseInt(r1)     // Catch:{ all -> 0x0032 }
-                goto L_0x0033
-            L_0x0032:
+                java.lang.String r1 = r1.substring(r4)     // Catch:{ all -> 0x0031 }
+                int r1 = java.lang.Integer.parseInt(r1)     // Catch:{ all -> 0x0031 }
+                goto L_0x0032
+            L_0x0031:
                 r1 = -1
-            L_0x0033:
+            L_0x0032:
                 r4 = 0
-                if (r1 < 0) goto L_0x003e
+                if (r1 < 0) goto L_0x003d
                 java.lang.String r5 = org.telegram.messenger.AndroidUtilities.formatDuration(r1, r4)
                 r0.setTitle(r5)
-                goto L_0x0045
-            L_0x003e:
+                goto L_0x0044
+            L_0x003d:
                 java.lang.String r5 = r9.getURL()
                 r0.setTitle(r5)
-            L_0x0045:
+            L_0x0044:
                 r5 = 2
                 java.lang.CharSequence[] r5 = new java.lang.CharSequence[r5]
-                r6 = 2131626589(0x7f0e0a5d, float:1.8880418E38)
+                r6 = 2131626626(0x7f0e0a82, float:1.8880494E38)
                 java.lang.String r7 = "Open"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5[r4] = r6
-                r6 = 2131625031(0x7f0e0447, float:1.8877258E38)
+                r6 = 2131625040(0x7f0e0450, float:1.8877277E38)
                 java.lang.String r7 = "Copy"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5[r2] = r6
@@ -1706,8 +1712,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:46:0x0128  */
-        /* JADX WARNING: Removed duplicated region for block: B:47:0x0132  */
+        /* JADX WARNING: Removed duplicated region for block: B:51:0x0138  */
+        /* JADX WARNING: Removed duplicated region for block: B:52:0x0142  */
         /* renamed from: lambda$onLongClick$0 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public /* synthetic */ void lambda$onLongClick$0$PhotoViewer$CaptionLinkMovementMethod(android.text.style.URLSpan r6, int r7, android.content.DialogInterface r8, int r9) {
@@ -1716,10 +1722,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (r9 != 0) goto L_0x0009
                 android.widget.TextView r7 = r5.selectedWidget
                 r5.onClick(r6, r7)
-                goto L_0x0173
+                goto L_0x0183
             L_0x0009:
                 r8 = 1
-                if (r9 != r8) goto L_0x0173
+                if (r9 != r8) goto L_0x0183
                 java.lang.String r6 = r6.getURL()
                 java.lang.String r9 = "mailto:"
                 boolean r9 = r6.startsWith(r9)
@@ -1729,15 +1735,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r6 = r6.substring(r7)
             L_0x001e:
                 r8 = 0
-                goto L_0x0123
+                goto L_0x0133
             L_0x0021:
                 java.lang.String r9 = "tel:"
                 boolean r9 = r6.startsWith(r9)
-                if (r9 == 0) goto L_0x0031
+                if (r9 == 0) goto L_0x0030
                 r7 = 4
                 java.lang.String r6 = r6.substring(r7)
-                goto L_0x0123
-            L_0x0031:
+                goto L_0x0133
+            L_0x0030:
                 if (r7 < 0) goto L_0x001e
                 org.telegram.ui.PhotoViewer r9 = org.telegram.ui.PhotoViewer.this
                 org.telegram.messenger.MessageObject r9 = r9.currentMessageObject
@@ -1751,48 +1757,57 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.ui.PhotoViewer r1 = org.telegram.ui.PhotoViewer.this
                 org.telegram.messenger.MessageObject r1 = r1.currentMessageObject
                 boolean r1 = r1.isVideo()
-                if (r1 != 0) goto L_0x007d
+                if (r1 != 0) goto L_0x007c
                 org.telegram.ui.PhotoViewer r1 = org.telegram.ui.PhotoViewer.this
                 org.telegram.messenger.MessageObject r1 = r1.currentMessageObject
                 boolean r1 = r1.isRoundVideo()
-                if (r1 != 0) goto L_0x007d
+                if (r1 != 0) goto L_0x007c
                 org.telegram.ui.PhotoViewer r1 = org.telegram.ui.PhotoViewer.this
                 org.telegram.messenger.MessageObject r1 = r1.currentMessageObject
                 boolean r1 = r1.isVoice()
-                if (r1 != 0) goto L_0x007d
+                if (r1 != 0) goto L_0x007c
                 org.telegram.ui.PhotoViewer r1 = org.telegram.ui.PhotoViewer.this
                 org.telegram.messenger.MessageObject r1 = r1.currentMessageObject
                 boolean r1 = r1.isMusic()
-                if (r1 == 0) goto L_0x007c
-                goto L_0x007d
-            L_0x007c:
+                if (r1 == 0) goto L_0x007b
+                goto L_0x007c
+            L_0x007b:
                 r8 = 0
-            L_0x007d:
-                if (r8 != 0) goto L_0x0091
+            L_0x007c:
+                if (r8 != 0) goto L_0x0090
                 org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
                 org.telegram.messenger.MessageObject r8 = r8.currentMessageObject
                 org.telegram.messenger.MessageObject r8 = r8.replyMessageObject
-                if (r8 == 0) goto L_0x0091
+                if (r8 == 0) goto L_0x0090
                 org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
                 org.telegram.messenger.MessageObject r8 = r8.currentMessageObject
                 org.telegram.messenger.MessageObject r9 = r8.replyMessageObject
-            L_0x0091:
+            L_0x0090:
                 long r1 = r9.getDialogId()
                 int r8 = (int) r1
                 int r1 = r9.getId()
                 org.telegram.tgnet.TLRPC$Message r2 = r9.messageOwner
                 org.telegram.tgnet.TLRPC$MessageFwdHeader r2 = r2.fwd_from
-                if (r2 == 0) goto L_0x00ac
-                org.telegram.tgnet.TLRPC$Peer r8 = r2.saved_from_peer
-                int r8 = org.telegram.messenger.MessageObject.getPeerId(r8)
+                if (r2 == 0) goto L_0x00bc
+                org.telegram.tgnet.TLRPC$Peer r3 = r2.saved_from_peer
+                if (r3 == 0) goto L_0x00ae
+                int r8 = org.telegram.messenger.MessageObject.getPeerId(r3)
                 org.telegram.tgnet.TLRPC$Message r9 = r9.messageOwner
                 org.telegram.tgnet.TLRPC$MessageFwdHeader r9 = r9.fwd_from
                 int r1 = r9.saved_from_msg_id
-            L_0x00ac:
+                goto L_0x00bc
+            L_0x00ae:
+                org.telegram.tgnet.TLRPC$Peer r2 = r2.from_id
+                if (r2 == 0) goto L_0x00bc
+                int r8 = org.telegram.messenger.MessageObject.getPeerId(r2)
+                org.telegram.tgnet.TLRPC$Message r9 = r9.messageOwner
+                org.telegram.tgnet.TLRPC$MessageFwdHeader r9 = r9.fwd_from
+                int r1 = r9.channel_post
+            L_0x00bc:
                 java.lang.String r9 = "?t="
                 java.lang.String r2 = "/"
                 java.lang.String r3 = "https://t.me/"
-                if (r8 >= 0) goto L_0x00ec
+                if (r8 >= 0) goto L_0x00fc
                 org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                 int r4 = r4.currentAccount
                 org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
@@ -1813,7 +1828,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r6.append(r7)
                 java.lang.String r6 = r6.toString()
                 goto L_0x001e
-            L_0x00ec:
+            L_0x00fc:
                 org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                 int r4 = r4.currentAccount
                 org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
@@ -1833,41 +1848,41 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r6.append(r7)
                 java.lang.String r6 = r6.toString()
                 goto L_0x001e
-            L_0x0123:
+            L_0x0133:
                 org.telegram.messenger.AndroidUtilities.addToClipboard(r6)
-                if (r8 == 0) goto L_0x0132
-                r6 = 2131626960(0x7f0e0bd0, float:1.888117E38)
+                if (r8 == 0) goto L_0x0142
+                r6 = 2131626998(0x7f0e0bf6, float:1.8881248E38)
                 java.lang.String r7 = "PhoneCopied"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-                goto L_0x015f
-            L_0x0132:
+                goto L_0x016f
+            L_0x0142:
                 java.lang.String r7 = "#"
                 boolean r7 = r6.startsWith(r7)
-                if (r7 == 0) goto L_0x0144
-                r6 = 2131625778(0x7f0e0732, float:1.8878774E38)
+                if (r7 == 0) goto L_0x0154
+                r6 = 2131625804(0x7f0e074c, float:1.8878826E38)
                 java.lang.String r7 = "HashtagCopied"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-                goto L_0x015f
-            L_0x0144:
+                goto L_0x016f
+            L_0x0154:
                 java.lang.String r7 = "@"
                 boolean r6 = r6.startsWith(r7)
-                if (r6 == 0) goto L_0x0156
-                r6 = 2131628003(0x7f0e0fe3, float:1.8883286E38)
+                if (r6 == 0) goto L_0x0166
+                r6 = 2131628128(0x7f0e1060, float:1.888354E38)
                 java.lang.String r7 = "UsernameCopied"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-                goto L_0x015f
-            L_0x0156:
-                r6 = 2131626006(0x7f0e0816, float:1.8879236E38)
+                goto L_0x016f
+            L_0x0166:
+                r6 = 2131626037(0x7f0e0835, float:1.8879299E38)
                 java.lang.String r7 = "LinkCopied"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            L_0x015f:
+            L_0x016f:
                 org.telegram.ui.PhotoViewer r7 = org.telegram.ui.PhotoViewer.this
                 org.telegram.ui.PhotoViewer$FrameLayoutDrawer r7 = r7.containerView
                 org.telegram.ui.Components.BulletinFactory r7 = org.telegram.ui.Components.BulletinFactory.of((android.widget.FrameLayout) r7)
-                r8 = 2131558524(0x7f0d007c, float:1.8742366E38)
+                r8 = 2131558527(0x7f0d007f, float:1.8742372E38)
                 org.telegram.ui.Components.Bulletin r6 = r7.createSimpleBulletin(r8, r6)
                 r6.show()
-            L_0x0173:
+            L_0x0183:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.CaptionLinkMovementMethod.lambda$onLongClick$0$PhotoViewer$CaptionLinkMovementMethod(android.text.style.URLSpan, int, android.content.DialogInterface, int):void");
@@ -3898,18 +3913,18 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         this.blackPaint.setColor(-16777216);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:282:0x05b1, code lost:
-        if (r1.get(r1.size() - 1).getDialogId() != r0.mergeDialogId) goto L_0x05f2;
+    /* JADX WARNING: Code restructure failed: missing block: B:282:0x05b0, code lost:
+        if (r1.get(r1.size() - 1).getDialogId() != r0.mergeDialogId) goto L_0x05f1;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:295:0x05f0, code lost:
-        if (r0.imagesArrTemp.get(0).getDialogId() != r0.mergeDialogId) goto L_0x05f2;
+    /* JADX WARNING: Code restructure failed: missing block: B:295:0x05ef, code lost:
+        if (r0.imagesArrTemp.get(0).getDialogId() != r0.mergeDialogId) goto L_0x05f1;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x0269  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0277  */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x027c  */
-    /* JADX WARNING: Removed duplicated region for block: B:159:0x027f  */
-    /* JADX WARNING: Removed duplicated region for block: B:301:0x05ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x02ad A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x0268  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0276  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x027b  */
+    /* JADX WARNING: Removed duplicated region for block: B:159:0x027e  */
+    /* JADX WARNING: Removed duplicated region for block: B:301:0x05fe  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x02ac A[SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:459:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void didReceivedNotification(int r21, int r22, java.lang.Object... r23) {
@@ -3928,7 +3943,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             java.lang.String r1 = (java.lang.String) r1
             r2 = 0
         L_0x0013:
-            if (r2 >= r4) goto L_0x07f6
+            if (r2 >= r4) goto L_0x07f5
             java.lang.String[] r8 = r0.currentFileNames
             r9 = r8[r2]
             if (r9 == 0) goto L_0x0045
@@ -3956,24 +3971,24 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r4 = r4[r2]
             r4.setProgress(r3, r1)
             r0.checkProgress(r2, r7, r6)
-            goto L_0x07f6
+            goto L_0x07f5
         L_0x0045:
             int r2 = r2 + 1
             goto L_0x0013
         L_0x0048:
             int r2 = org.telegram.messenger.NotificationCenter.fileLoaded
-            if (r1 != r2) goto L_0x00c6
+            if (r1 != r2) goto L_0x00c5
             r1 = r23[r7]
             java.lang.String r1 = (java.lang.String) r1
             r2 = 0
         L_0x0051:
-            if (r2 >= r4) goto L_0x07f6
+            if (r2 >= r4) goto L_0x07f5
             java.lang.String[] r8 = r0.currentFileNames
             r9 = r8[r2]
-            if (r9 == 0) goto L_0x00c3
+            if (r9 == 0) goto L_0x00c2
             r8 = r8[r2]
             boolean r8 = r8.equals(r1)
-            if (r8 == 0) goto L_0x00c3
+            if (r8 == 0) goto L_0x00c2
             if (r2 == 0) goto L_0x0076
             if (r2 != r6) goto L_0x006b
             org.telegram.messenger.ImageReceiver r1 = r0.sideImage
@@ -3996,55 +4011,55 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r4.setProgress(r3, r1)
             r0.checkProgress(r2, r7, r1)
             org.telegram.ui.Components.VideoPlayer r1 = r0.videoPlayer
-            if (r1 != 0) goto L_0x00b9
-            if (r2 != 0) goto L_0x00b9
+            if (r1 != 0) goto L_0x00b8
+            if (r2 != 0) goto L_0x00b8
             org.telegram.messenger.MessageObject r1 = r0.currentMessageObject
             if (r1 == 0) goto L_0x0091
             boolean r1 = r1.isVideo()
-            if (r1 != 0) goto L_0x00b6
+            if (r1 != 0) goto L_0x00b5
         L_0x0091:
             org.telegram.tgnet.TLRPC$BotInlineResult r1 = r0.currentBotInlineResult
-            if (r1 == 0) goto L_0x00aa
+            if (r1 == 0) goto L_0x00a9
             java.lang.String r1 = r1.type
             java.lang.String r3 = "video"
             boolean r1 = r1.equals(r3)
-            if (r1 != 0) goto L_0x00b6
+            if (r1 != 0) goto L_0x00b5
             org.telegram.tgnet.TLRPC$BotInlineResult r1 = r0.currentBotInlineResult
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             boolean r1 = org.telegram.messenger.MessageObject.isVideoDocument(r1)
-            if (r1 != 0) goto L_0x00b6
-        L_0x00aa:
+            if (r1 != 0) goto L_0x00b5
+        L_0x00a9:
             org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r0.pageBlocksAdapter
-            if (r1 == 0) goto L_0x00b9
+            if (r1 == 0) goto L_0x00b8
             int r3 = r0.currentIndex
             boolean r1 = r1.isVideo(r3)
-            if (r1 == 0) goto L_0x00b9
-        L_0x00b6:
+            if (r1 == 0) goto L_0x00b8
+        L_0x00b5:
             r0.onActionClick(r7)
-        L_0x00b9:
-            if (r2 != 0) goto L_0x07f6
+        L_0x00b8:
+            if (r2 != 0) goto L_0x07f5
             org.telegram.ui.Components.VideoPlayer r1 = r0.videoPlayer
-            if (r1 == 0) goto L_0x07f6
+            if (r1 == 0) goto L_0x07f5
             r0.currentVideoFinishedLoading = r6
-            goto L_0x07f6
-        L_0x00c3:
+            goto L_0x07f5
+        L_0x00c2:
             int r2 = r2 + 1
             goto L_0x0051
-        L_0x00c6:
+        L_0x00c5:
             int r2 = org.telegram.messenger.NotificationCenter.fileLoadProgressChanged
             r8 = 0
-            if (r1 != r2) goto L_0x019d
+            if (r1 != r2) goto L_0x019c
             r1 = r23[r7]
             java.lang.String r1 = (java.lang.String) r1
             r2 = 0
-        L_0x00d1:
-            if (r2 >= r4) goto L_0x07f6
+        L_0x00d0:
+            if (r2 >= r4) goto L_0x07f5
             java.lang.String[] r10 = r0.currentFileNames
             r11 = r10[r2]
-            if (r11 == 0) goto L_0x0194
+            if (r11 == 0) goto L_0x0193
             r10 = r10[r2]
             boolean r10 = r10.equals(r1)
-            if (r10 == 0) goto L_0x0194
+            if (r10 == 0) goto L_0x0193
             r10 = r23[r6]
             java.lang.Long r10 = (java.lang.Long) r10
             r11 = r23[r5]
@@ -4055,108 +4070,108 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             float r11 = (float) r11
             float r10 = r10 / r11
             float r10 = java.lang.Math.min(r3, r10)
-            if (r2 == 0) goto L_0x010d
-            if (r2 != r6) goto L_0x0102
+            if (r2 == 0) goto L_0x010c
+            if (r2 != r6) goto L_0x0101
             org.telegram.messenger.ImageReceiver r11 = r0.sideImage
             org.telegram.messenger.ImageReceiver r12 = r0.rightImage
-            if (r11 == r12) goto L_0x010d
-        L_0x0102:
-            if (r2 != r5) goto L_0x010b
+            if (r11 == r12) goto L_0x010c
+        L_0x0101:
+            if (r2 != r5) goto L_0x010a
             org.telegram.messenger.ImageReceiver r11 = r0.sideImage
             org.telegram.messenger.ImageReceiver r12 = r0.leftImage
-            if (r11 != r12) goto L_0x010b
-            goto L_0x010d
-        L_0x010b:
+            if (r11 != r12) goto L_0x010a
+            goto L_0x010c
+        L_0x010a:
             r11 = 0
-            goto L_0x010e
-        L_0x010d:
+            goto L_0x010d
+        L_0x010c:
             r11 = 1
-        L_0x010e:
+        L_0x010d:
             org.telegram.ui.PhotoViewer$PhotoProgressView[] r12 = r0.photoProgressViews
             r12 = r12[r2]
             r12.setProgress(r10, r11)
-            if (r2 != 0) goto L_0x0194
+            if (r2 != 0) goto L_0x0193
             org.telegram.ui.Components.VideoPlayer r11 = r0.videoPlayer
-            if (r11 == 0) goto L_0x0194
+            if (r11 == 0) goto L_0x0193
             org.telegram.ui.Components.VideoPlayerSeekBar r11 = r0.videoPlayerSeekbar
-            if (r11 == 0) goto L_0x0194
+            if (r11 == 0) goto L_0x0193
             boolean r11 = r0.currentVideoFinishedLoading
-            if (r11 == 0) goto L_0x0126
-        L_0x0123:
+            if (r11 == 0) goto L_0x0125
+        L_0x0122:
             r4 = -1082130432(0xffffffffbvar_, float:-1.0)
-            goto L_0x017c
-        L_0x0126:
+            goto L_0x017b
+        L_0x0125:
             long r13 = android.os.SystemClock.elapsedRealtime()
             long r5 = r0.lastBufferedPositionCheck
             long r5 = r13 - r5
             long r5 = java.lang.Math.abs(r5)
             r15 = 500(0x1f4, double:2.47E-321)
             int r17 = (r5 > r15 ? 1 : (r5 == r15 ? 0 : -1))
-            if (r17 < 0) goto L_0x0179
+            if (r17 < 0) goto L_0x0178
             float r5 = r0.seekToProgressPending
             r6 = 0
             int r15 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r15 != 0) goto L_0x0161
+            if (r15 != 0) goto L_0x0160
             org.telegram.ui.Components.VideoPlayer r5 = r0.videoPlayer
             long r3 = r5.getDuration()
             org.telegram.ui.Components.VideoPlayer r5 = r0.videoPlayer
             long r11 = r5.getCurrentPosition()
             int r5 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
-            if (r5 < 0) goto L_0x0160
+            if (r5 < 0) goto L_0x015f
             r18 = -9223372036854775807(0xNUM, double:-4.9E-324)
             int r5 = (r3 > r18 ? 1 : (r3 == r18 ? 0 : -1))
-            if (r5 == 0) goto L_0x0160
+            if (r5 == 0) goto L_0x015f
             int r5 = (r11 > r8 ? 1 : (r11 == r8 ? 0 : -1))
-            if (r5 < 0) goto L_0x0160
+            if (r5 < 0) goto L_0x015f
             float r5 = (float) r11
             float r3 = (float) r3
             float r5 = r5 / r3
-            goto L_0x0161
-        L_0x0160:
+            goto L_0x0160
+        L_0x015f:
             r5 = 0
-        L_0x0161:
+        L_0x0160:
             boolean r3 = r0.isStreaming
-            if (r3 == 0) goto L_0x0174
+            if (r3 == 0) goto L_0x0173
             int r3 = r0.currentAccount
             org.telegram.messenger.FileLoader r3 = org.telegram.messenger.FileLoader.getInstance(r3)
             java.lang.String[] r4 = r0.currentFileNames
             r4 = r4[r7]
             float r3 = r3.getBufferedProgressFromPosition(r5, r4)
-            goto L_0x0176
-        L_0x0174:
+            goto L_0x0175
+        L_0x0173:
             r3 = 1065353216(0x3var_, float:1.0)
-        L_0x0176:
+        L_0x0175:
             r0.lastBufferedPositionCheck = r13
-            goto L_0x0123
-        L_0x0179:
+            goto L_0x0122
+        L_0x0178:
             r3 = -1082130432(0xffffffffbvar_, float:-1.0)
-            goto L_0x0123
-        L_0x017c:
+            goto L_0x0122
+        L_0x017b:
             int r4 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r4 == 0) goto L_0x0191
+            if (r4 == 0) goto L_0x0190
             org.telegram.ui.Components.VideoPlayerSeekBar r4 = r0.videoPlayerSeekbar
             r4.setBufferedProgress(r3)
             org.telegram.ui.Components.PipVideoView r4 = r0.pipVideoView
-            if (r4 == 0) goto L_0x018c
+            if (r4 == 0) goto L_0x018b
             r4.setBufferedProgress(r3)
-        L_0x018c:
+        L_0x018b:
             android.view.View r3 = r0.videoPlayerSeekbarView
             r3.invalidate()
-        L_0x0191:
+        L_0x0190:
             r0.checkBufferedProgress(r10)
-        L_0x0194:
+        L_0x0193:
             int r2 = r2 + 1
             r3 = 1065353216(0x3var_, float:1.0)
             r4 = 3
             r5 = 2
             r6 = 1
-            goto L_0x00d1
-        L_0x019d:
+            goto L_0x00d0
+        L_0x019c:
             int r2 = org.telegram.messenger.NotificationCenter.dialogPhotosLoaded
             r3 = 5
             r4 = 4
             r5 = -1
-            if (r1 != r2) goto L_0x037f
+            if (r1 != r2) goto L_0x037e
             r2 = 3
             r1 = r23[r2]
             java.lang.Integer r1 = (java.lang.Integer) r1
@@ -4165,9 +4180,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             java.lang.Integer r2 = (java.lang.Integer) r2
             int r2 = r2.intValue()
             int r6 = r0.avatarsDialogId
-            if (r6 != r2) goto L_0x07f6
+            if (r6 != r2) goto L_0x07f5
             int r2 = r0.classGuid
-            if (r2 != r1) goto L_0x07f6
+            if (r2 != r1) goto L_0x07f5
             r1 = 2
             r1 = r23[r1]
             java.lang.Boolean r1 = (java.lang.Boolean) r1
@@ -4175,9 +4190,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r2 = r23[r4]
             java.util.ArrayList r2 = (java.util.ArrayList) r2
             boolean r4 = r2.isEmpty()
-            if (r4 == 0) goto L_0x01d1
+            if (r4 == 0) goto L_0x01d0
             return
-        L_0x01d1:
+        L_0x01d0:
             r3 = r23[r3]
             java.util.ArrayList r3 = (java.util.ArrayList) r3
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.imagesArrLocations
@@ -4192,84 +4207,84 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r4.clear()
             r4 = 0
             r6 = -1
-        L_0x01f0:
+        L_0x01ef:
             int r8 = r2.size()
-            if (r4 >= r8) goto L_0x02b2
+            if (r4 >= r8) goto L_0x02b1
             java.lang.Object r8 = r2.get(r4)
             org.telegram.tgnet.TLRPC$Photo r8 = (org.telegram.tgnet.TLRPC$Photo) r8
-            if (r8 == 0) goto L_0x02ad
+            if (r8 == 0) goto L_0x02ac
             boolean r10 = r8 instanceof org.telegram.tgnet.TLRPC$TL_photoEmpty
-            if (r10 != 0) goto L_0x02ad
+            if (r10 != 0) goto L_0x02ac
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r10 = r8.sizes
-            if (r10 != 0) goto L_0x0208
-            goto L_0x02ad
-        L_0x0208:
+            if (r10 != 0) goto L_0x0207
+            goto L_0x02ac
+        L_0x0207:
             r11 = 640(0x280, float:8.97E-43)
             org.telegram.tgnet.TLRPC$PhotoSize r10 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r10, r11)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r11 = r8.video_sizes
             boolean r11 = r11.isEmpty()
-            if (r11 == 0) goto L_0x0218
+            if (r11 == 0) goto L_0x0217
             r11 = 0
-            goto L_0x0220
-        L_0x0218:
+            goto L_0x021f
+        L_0x0217:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r11 = r8.video_sizes
             java.lang.Object r11 = r11.get(r7)
             org.telegram.tgnet.TLRPC$VideoSize r11 = (org.telegram.tgnet.TLRPC$VideoSize) r11
-        L_0x0220:
-            if (r10 == 0) goto L_0x02ad
-            if (r6 != r5) goto L_0x0261
+        L_0x021f:
+            if (r10 == 0) goto L_0x02ac
+            if (r6 != r5) goto L_0x0260
             org.telegram.messenger.ImageLocation r12 = r0.currentFileLocation
-            if (r12 == 0) goto L_0x0261
+            if (r12 == 0) goto L_0x0260
             r12 = 0
-        L_0x0229:
+        L_0x0228:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r13 = r8.sizes
             int r13 = r13.size()
-            if (r12 >= r13) goto L_0x0261
+            if (r12 >= r13) goto L_0x0260
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r13 = r8.sizes
             java.lang.Object r13 = r13.get(r12)
             org.telegram.tgnet.TLRPC$PhotoSize r13 = (org.telegram.tgnet.TLRPC$PhotoSize) r13
             org.telegram.tgnet.TLRPC$FileLocation r13 = r13.location
-            if (r13 == 0) goto L_0x0259
+            if (r13 == 0) goto L_0x0258
             int r14 = r13.local_id
             org.telegram.messenger.ImageLocation r15 = r0.currentFileLocation
             org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r15 = r15.location
             int r5 = r15.local_id
-            if (r14 != r5) goto L_0x0259
+            if (r14 != r5) goto L_0x0258
             long r13 = r13.volume_id
             r22 = r10
             long r9 = r15.volume_id
             int r5 = (r13 > r9 ? 1 : (r13 == r9 ? 0 : -1))
-            if (r5 != 0) goto L_0x025b
+            if (r5 != 0) goto L_0x025a
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r5 = r0.imagesArrLocations
             int r5 = r5.size()
             r6 = r5
-            goto L_0x0263
-        L_0x0259:
+            goto L_0x0262
+        L_0x0258:
             r22 = r10
-        L_0x025b:
+        L_0x025a:
             int r12 = r12 + 1
             r10 = r22
             r5 = -1
-            goto L_0x0229
-        L_0x0261:
+            goto L_0x0228
+        L_0x0260:
             r22 = r10
-        L_0x0263:
+        L_0x0262:
             int r5 = r8.dc_id
             r9 = r22
-            if (r5 == 0) goto L_0x0271
+            if (r5 == 0) goto L_0x0270
             org.telegram.tgnet.TLRPC$FileLocation r10 = r9.location
             r10.dc_id = r5
             byte[] r5 = r8.file_reference
             r10.file_reference = r5
-        L_0x0271:
+        L_0x0270:
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r9, (org.telegram.tgnet.TLRPC$Photo) r8)
-            if (r11 == 0) goto L_0x027c
+            if (r11 == 0) goto L_0x027b
             org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r11, (org.telegram.tgnet.TLRPC$Photo) r8)
-            goto L_0x027d
-        L_0x027c:
+            goto L_0x027c
+        L_0x027b:
             r9 = r5
-        L_0x027d:
-            if (r5 == 0) goto L_0x02ad
+        L_0x027c:
+            if (r5 == 0) goto L_0x02ac
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r10 = r0.imagesArrLocations
             r10.add(r5)
             java.util.ArrayList<java.lang.Integer> r5 = r0.imagesArrLocationsSizes
@@ -4278,52 +4293,52 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r5.add(r10)
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r5 = r0.imagesArrLocationsVideo
             r5.add(r9)
-            if (r3 == 0) goto L_0x02a2
+            if (r3 == 0) goto L_0x02a1
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r5 = r0.imagesArrMessages
             java.lang.Object r9 = r3.get(r4)
             org.telegram.tgnet.TLRPC$Message r9 = (org.telegram.tgnet.TLRPC$Message) r9
             r5.add(r9)
-            goto L_0x02a8
-        L_0x02a2:
+            goto L_0x02a7
+        L_0x02a1:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r5 = r0.imagesArrMessages
             r9 = 0
             r5.add(r9)
-        L_0x02a8:
+        L_0x02a7:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r5 = r0.avatarsArr
             r5.add(r8)
-        L_0x02ad:
+        L_0x02ac:
             int r4 = r4 + 1
             r5 = -1
-            goto L_0x01f0
-        L_0x02b2:
+            goto L_0x01ef
+        L_0x02b1:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r2 = r0.avatarsArr
             boolean r2 = r2.isEmpty()
             r3 = 6
-            if (r2 != 0) goto L_0x02c1
+            if (r2 != 0) goto L_0x02c0
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.menuItem
             r2.showSubItem(r3)
-            goto L_0x02c6
-        L_0x02c1:
+            goto L_0x02c5
+        L_0x02c0:
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.menuItem
             r2.hideSubItem(r3)
-        L_0x02c6:
+        L_0x02c5:
             r0.needSearchImageInArr = r7
             r2 = -1
             r0.currentIndex = r2
-            if (r6 == r2) goto L_0x02d2
+            if (r6 == r2) goto L_0x02d1
             r0.setImageIndex(r6)
-            goto L_0x0369
-        L_0x02d2:
+            goto L_0x0368
+        L_0x02d1:
             int r2 = r0.avatarsDialogId
-            if (r2 <= 0) goto L_0x02e8
+            if (r2 <= 0) goto L_0x02e7
             int r2 = r0.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             int r3 = r0.avatarsDialogId
             java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
             org.telegram.tgnet.TLRPC$User r9 = r2.getUser(r3)
             r2 = 0
-            goto L_0x02fb
-        L_0x02e8:
+            goto L_0x02fa
+        L_0x02e7:
             int r2 = r0.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             int r3 = r0.avatarsDialogId
@@ -4332,27 +4347,27 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             org.telegram.tgnet.TLRPC$Chat r9 = r2.getChat(r3)
             r2 = r9
             r9 = 0
-        L_0x02fb:
-            if (r9 != 0) goto L_0x02ff
-            if (r2 == 0) goto L_0x0369
-        L_0x02ff:
-            if (r9 == 0) goto L_0x0306
+        L_0x02fa:
+            if (r9 != 0) goto L_0x02fe
+            if (r2 == 0) goto L_0x0368
+        L_0x02fe:
+            if (r9 == 0) goto L_0x0305
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForUserOrChat(r9, r7)
-            goto L_0x030a
-        L_0x0306:
+            goto L_0x0309
+        L_0x0305:
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForUserOrChat(r2, r7)
-        L_0x030a:
-            if (r2 == 0) goto L_0x0369
+        L_0x0309:
+            if (r2 == 0) goto L_0x0368
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.imagesArrLocations
             boolean r3 = r3.isEmpty()
-            if (r3 != 0) goto L_0x033d
+            if (r3 != 0) goto L_0x033c
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.imagesArrLocations
             java.lang.Object r3 = r3.get(r7)
             org.telegram.messenger.ImageLocation r3 = (org.telegram.messenger.ImageLocation) r3
             long r3 = r3.photoId
             long r5 = r2.photoId
             int r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r8 != 0) goto L_0x033d
+            if (r8 != 0) goto L_0x033c
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.imagesArrLocations
             r3.remove(r7)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r3 = r0.avatarsArr
@@ -4363,7 +4378,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r3.remove(r7)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r3 = r0.imagesArrMessages
             r3.remove(r7)
-        L_0x033d:
+        L_0x033c:
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.imagesArrLocations
             r3.add(r7, r2)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r2 = r0.avatarsArr
@@ -4382,8 +4397,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r3 = 0
             r2.add(r7, r3)
             r0.setImageIndex(r7)
-        L_0x0369:
-            if (r1 == 0) goto L_0x07f6
+        L_0x0368:
+            if (r1 == 0) goto L_0x07f5
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r1)
             int r3 = r0.avatarsDialogId
@@ -4392,47 +4407,47 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r7 = 0
             int r8 = r0.classGuid
             r2.loadDialogPhotos(r3, r4, r5, r7, r8)
-            goto L_0x07f6
-        L_0x037f:
+            goto L_0x07f5
+        L_0x037e:
             int r2 = org.telegram.messenger.NotificationCenter.mediaCountDidLoad
-            if (r1 != r2) goto L_0x0447
+            if (r1 != r2) goto L_0x0446
             r1 = r23[r7]
             java.lang.Long r1 = (java.lang.Long) r1
             long r1 = r1.longValue()
             long r3 = r0.currentDialogId
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 == 0) goto L_0x0397
+            if (r5 == 0) goto L_0x0396
             long r3 = r0.mergeDialogId
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 != 0) goto L_0x07f6
-        L_0x0397:
+            if (r5 != 0) goto L_0x07f5
+        L_0x0396:
             org.telegram.messenger.MessageObject r3 = r0.currentMessageObject
-            if (r3 == 0) goto L_0x03a5
+            if (r3 == 0) goto L_0x03a4
             org.telegram.tgnet.TLRPC$Message r3 = r3.messageOwner
             int r3 = org.telegram.messenger.MediaDataController.getMediaType(r3)
             int r4 = r0.sharedMediaType
-            if (r3 != r4) goto L_0x07f6
-        L_0x03a5:
+            if (r3 != r4) goto L_0x07f5
+        L_0x03a4:
             long r3 = r0.currentDialogId
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 != 0) goto L_0x03b7
+            if (r5 != 0) goto L_0x03b6
             r1 = 1
             r2 = r23[r1]
             java.lang.Integer r2 = (java.lang.Integer) r2
             int r2 = r2.intValue()
             r0.totalImagesCount = r2
-            goto L_0x03c2
-        L_0x03b7:
+            goto L_0x03c1
+        L_0x03b6:
             r1 = 1
             r2 = r23[r1]
             java.lang.Integer r2 = (java.lang.Integer) r2
             int r2 = r2.intValue()
             r0.totalImagesCountMerge = r2
-        L_0x03c2:
+        L_0x03c1:
             boolean r2 = r0.needSearchImageInArr
-            if (r2 == 0) goto L_0x03e3
+            if (r2 == 0) goto L_0x03e2
             boolean r2 = r0.isFirstLoading
-            if (r2 == 0) goto L_0x03e3
+            if (r2 == 0) goto L_0x03e2
             r0.isFirstLoading = r7
             r0.loadingMoreImages = r1
             int r1 = r0.currentAccount
@@ -4444,15 +4459,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r8 = 1
             int r9 = r0.classGuid
             r2.loadMedia(r3, r5, r6, r7, r8, r9)
-            goto L_0x07f6
-        L_0x03e3:
+            goto L_0x07f5
+        L_0x03e2:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x07f6
+            if (r1 != 0) goto L_0x07f5
             boolean r1 = r0.opennedFromMedia
-            r2 = 2131626576(0x7f0e0a50, float:1.8880392E38)
+            r2 = 2131626613(0x7f0e0a75, float:1.8880467E38)
             java.lang.String r3 = "Of"
-            if (r1 == 0) goto L_0x0417
+            if (r1 == 0) goto L_0x0416
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
             r4 = 2
             java.lang.Object[] r4 = new java.lang.Object[r4]
@@ -4468,8 +4483,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r4[r6] = r5
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r3, r2, r4)
             r1.setTitle(r2)
-            goto L_0x07f6
-        L_0x0417:
+            goto L_0x07f5
+        L_0x0416:
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
             r4 = 2
             java.lang.Object[] r4 = new java.lang.Object[r4]
@@ -4492,10 +4507,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r4[r6] = r5
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r3, r2, r4)
             r1.setTitle(r2)
-            goto L_0x07f6
-        L_0x0447:
+            goto L_0x07f5
+        L_0x0446:
             int r2 = org.telegram.messenger.NotificationCenter.mediaDidLoad
-            if (r1 != r2) goto L_0x0685
+            if (r1 != r2) goto L_0x0684
             r1 = r23[r7]
             java.lang.Long r1 = (java.lang.Long) r1
             long r1 = r1.longValue()
@@ -4505,21 +4520,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int r4 = r4.intValue()
             long r5 = r0.currentDialogId
             int r10 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-            if (r10 == 0) goto L_0x0468
+            if (r10 == 0) goto L_0x0467
             long r12 = r0.mergeDialogId
             int r10 = (r1 > r12 ? 1 : (r1 == r12 ? 0 : -1))
-            if (r10 != 0) goto L_0x07f6
-        L_0x0468:
+            if (r10 != 0) goto L_0x07f5
+        L_0x0467:
             int r10 = r0.classGuid
-            if (r4 != r10) goto L_0x07f6
+            if (r4 != r10) goto L_0x07f5
             r0.loadingMoreImages = r7
             int r4 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-            if (r4 != 0) goto L_0x0474
+            if (r4 != 0) goto L_0x0473
             r1 = 0
-            goto L_0x0475
-        L_0x0474:
+            goto L_0x0474
+        L_0x0473:
             r1 = 1
-        L_0x0475:
+        L_0x0474:
             r2 = 2
             r4 = r23[r2]
             java.util.ArrayList r4 = (java.util.ArrayList) r4
@@ -4529,21 +4544,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             boolean r3 = r3.booleanValue()
             r2[r1] = r3
             boolean r2 = r0.needSearchImageInArr
-            if (r2 == 0) goto L_0x061e
+            if (r2 == 0) goto L_0x061d
             boolean r2 = r4.isEmpty()
-            if (r2 == 0) goto L_0x0498
-            if (r1 != 0) goto L_0x061b
+            if (r2 == 0) goto L_0x0497
+            if (r1 != 0) goto L_0x061a
             long r2 = r0.mergeDialogId
             int r5 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
-            if (r5 == 0) goto L_0x061b
-        L_0x0498:
+            if (r5 == 0) goto L_0x061a
+        L_0x0497:
             int r2 = r0.currentIndex
-            if (r2 < 0) goto L_0x061b
+            if (r2 < 0) goto L_0x061a
             java.util.ArrayList<org.telegram.messenger.MessageObject> r3 = r0.imagesArr
             int r3 = r3.size()
-            if (r2 < r3) goto L_0x04a6
-            goto L_0x061b
-        L_0x04a6:
+            if (r2 < r3) goto L_0x04a5
+            goto L_0x061a
+        L_0x04a5:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
             int r3 = r0.currentIndex
             java.lang.Object r2 = r2.get(r3)
@@ -4551,66 +4566,66 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r3 = -1
             r5 = 0
             r6 = 0
-        L_0x04b3:
+        L_0x04b2:
             int r10 = r4.size()
-            if (r5 >= r10) goto L_0x0508
+            if (r5 >= r10) goto L_0x0507
             java.lang.Object r10 = r4.get(r5)
             org.telegram.messenger.MessageObject r10 = (org.telegram.messenger.MessageObject) r10
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r12 = r0.imagesByIdsTemp
             r12 = r12[r1]
             int r13 = r10.getId()
             int r12 = r12.indexOfKey(r13)
-            if (r12 >= 0) goto L_0x0505
+            if (r12 >= 0) goto L_0x0504
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r12 = r0.imagesByIdsTemp
             r12 = r12[r1]
             int r13 = r10.getId()
             r12.put(r13, r10)
             boolean r12 = r0.opennedFromMedia
-            if (r12 == 0) goto L_0x04ef
+            if (r12 == 0) goto L_0x04ee
             java.util.ArrayList<org.telegram.messenger.MessageObject> r12 = r0.imagesArrTemp
             r12.add(r10)
             int r10 = r10.getId()
             int r12 = r2.getId()
-            if (r10 != r12) goto L_0x04ec
+            if (r10 != r12) goto L_0x04eb
             r3 = r6
-        L_0x04ec:
+        L_0x04eb:
             int r6 = r6 + 1
-            goto L_0x0505
-        L_0x04ef:
+            goto L_0x0504
+        L_0x04ee:
             int r6 = r6 + 1
             java.util.ArrayList<org.telegram.messenger.MessageObject> r12 = r0.imagesArrTemp
             r12.add(r7, r10)
             int r10 = r10.getId()
             int r12 = r2.getId()
-            if (r10 != r12) goto L_0x0505
+            if (r10 != r12) goto L_0x0504
             int r3 = r4.size()
             int r3 = r3 - r6
-        L_0x0505:
+        L_0x0504:
             int r5 = r5 + 1
-            goto L_0x04b3
-        L_0x0508:
-            if (r6 != 0) goto L_0x051c
-            if (r1 != 0) goto L_0x0512
+            goto L_0x04b2
+        L_0x0507:
+            if (r6 != 0) goto L_0x051b
+            if (r1 != 0) goto L_0x0511
             long r4 = r0.mergeDialogId
             int r2 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
-            if (r2 != 0) goto L_0x051c
-        L_0x0512:
+            if (r2 != 0) goto L_0x051b
+        L_0x0511:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
             int r2 = r2.size()
             r0.totalImagesCount = r2
             r0.totalImagesCountMerge = r7
-        L_0x051c:
+        L_0x051b:
             r2 = -1
-            if (r3 == r2) goto L_0x0565
+            if (r3 == r2) goto L_0x0564
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
             r1.clear()
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArrTemp
             r1.addAll(r2)
             r1 = 0
-        L_0x052c:
+        L_0x052b:
             r2 = 2
-            if (r1 >= r2) goto L_0x0545
+            if (r1 >= r2) goto L_0x0544
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r2 = r0.imagesByIds
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r4 = r0.imagesByIdsTemp
             r4 = r4[r1]
@@ -4620,8 +4635,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r2 = r2[r1]
             r2.clear()
             int r1 = r1 + 1
-            goto L_0x052c
-        L_0x0545:
+            goto L_0x052b
+        L_0x0544:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArrTemp
             r1.clear()
             r0.needSearchImageInArr = r7
@@ -4629,23 +4644,23 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.currentIndex = r1
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
             int r1 = r1.size()
-            if (r3 < r1) goto L_0x0560
+            if (r3 < r1) goto L_0x055f
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
             int r1 = r1.size()
             r2 = 1
             int r3 = r1 + -1
-        L_0x0560:
+        L_0x055f:
             r0.setImageIndex(r3)
-            goto L_0x07f6
-        L_0x0565:
+            goto L_0x07f5
+        L_0x0564:
             boolean r2 = r0.opennedFromMedia
-            if (r2 == 0) goto L_0x05b4
+            if (r2 == 0) goto L_0x05b3
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArrTemp
             boolean r2 = r2.isEmpty()
-            if (r2 == 0) goto L_0x0573
+            if (r2 == 0) goto L_0x0572
             r2 = 0
-            goto L_0x0585
-        L_0x0573:
+            goto L_0x0584
+        L_0x0572:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArrTemp
             int r3 = r2.size()
             r4 = 1
@@ -4653,17 +4668,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             java.lang.Object r2 = r2.get(r3)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             int r2 = r2.getId()
-        L_0x0585:
-            if (r1 != 0) goto L_0x05f8
+        L_0x0584:
+            if (r1 != 0) goto L_0x05f7
             boolean[] r3 = r0.endReached
             boolean r3 = r3[r1]
-            if (r3 == 0) goto L_0x05f8
+            if (r3 == 0) goto L_0x05f7
             long r3 = r0.mergeDialogId
             int r5 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
-            if (r5 == 0) goto L_0x05f8
+            if (r5 == 0) goto L_0x05f7
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArrTemp
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x05f5
+            if (r1 != 0) goto L_0x05f4
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArrTemp
             int r3 = r1.size()
             r4 = 1
@@ -4673,135 +4688,135 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             long r3 = r1.getDialogId()
             long r5 = r0.mergeDialogId
             int r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r1 == 0) goto L_0x05f5
-            goto L_0x05f2
-        L_0x05b4:
+            if (r1 == 0) goto L_0x05f4
+            goto L_0x05f1
+        L_0x05b3:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArrTemp
             boolean r2 = r2.isEmpty()
-            if (r2 == 0) goto L_0x05be
+            if (r2 == 0) goto L_0x05bd
             r2 = 0
-            goto L_0x05ca
-        L_0x05be:
+            goto L_0x05c9
+        L_0x05bd:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArrTemp
             java.lang.Object r2 = r2.get(r7)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             int r2 = r2.getId()
-        L_0x05ca:
-            if (r1 != 0) goto L_0x05f8
+        L_0x05c9:
+            if (r1 != 0) goto L_0x05f7
             boolean[] r3 = r0.endReached
             boolean r3 = r3[r1]
-            if (r3 == 0) goto L_0x05f8
+            if (r3 == 0) goto L_0x05f7
             long r3 = r0.mergeDialogId
             int r5 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
-            if (r5 == 0) goto L_0x05f8
+            if (r5 == 0) goto L_0x05f7
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArrTemp
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x05f5
+            if (r1 != 0) goto L_0x05f4
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArrTemp
             java.lang.Object r1 = r1.get(r7)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
             long r3 = r1.getDialogId()
             long r5 = r0.mergeDialogId
             int r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r1 == 0) goto L_0x05f5
-        L_0x05f2:
+            if (r1 == 0) goto L_0x05f4
+        L_0x05f1:
             r1 = 1
             r6 = 0
-            goto L_0x05f9
-        L_0x05f5:
+            goto L_0x05f8
+        L_0x05f4:
             r6 = r2
             r1 = 1
-            goto L_0x05f9
-        L_0x05f8:
+            goto L_0x05f8
+        L_0x05f7:
             r6 = r2
-        L_0x05f9:
+        L_0x05f8:
             boolean[] r2 = r0.endReached
             boolean r2 = r2[r1]
-            if (r2 != 0) goto L_0x07f6
+            if (r2 != 0) goto L_0x07f5
             r2 = 1
             r0.loadingMoreImages = r2
             int r2 = r0.currentAccount
             org.telegram.messenger.MediaDataController r2 = org.telegram.messenger.MediaDataController.getInstance(r2)
-            if (r1 != 0) goto L_0x060d
+            if (r1 != 0) goto L_0x060c
             long r3 = r0.currentDialogId
-            goto L_0x060f
-        L_0x060d:
+            goto L_0x060e
+        L_0x060c:
             long r3 = r0.mergeDialogId
-        L_0x060f:
+        L_0x060e:
             r5 = 40
             int r7 = r0.sharedMediaType
             r8 = 1
             int r9 = r0.classGuid
             r2.loadMedia(r3, r5, r6, r7, r8, r9)
-            goto L_0x07f6
-        L_0x061b:
+            goto L_0x07f5
+        L_0x061a:
             r0.needSearchImageInArr = r7
             return
-        L_0x061e:
+        L_0x061d:
             java.util.Iterator r2 = r4.iterator()
             r3 = 0
-        L_0x0623:
+        L_0x0622:
             boolean r4 = r2.hasNext()
-            if (r4 == 0) goto L_0x065a
+            if (r4 == 0) goto L_0x0659
             java.lang.Object r4 = r2.next()
             org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r5 = r0.imagesByIds
             r5 = r5[r1]
             int r6 = r4.getId()
             int r5 = r5.indexOfKey(r6)
-            if (r5 >= 0) goto L_0x0623
+            if (r5 >= 0) goto L_0x0622
             int r3 = r3 + 1
             boolean r5 = r0.opennedFromMedia
-            if (r5 == 0) goto L_0x0649
+            if (r5 == 0) goto L_0x0648
             java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r0.imagesArr
             r5.add(r4)
-            goto L_0x064e
-        L_0x0649:
+            goto L_0x064d
+        L_0x0648:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r0.imagesArr
             r5.add(r7, r4)
-        L_0x064e:
+        L_0x064d:
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r5 = r0.imagesByIds
             r5 = r5[r1]
             int r6 = r4.getId()
             r5.put(r6, r4)
-            goto L_0x0623
-        L_0x065a:
+            goto L_0x0622
+        L_0x0659:
             boolean r1 = r0.opennedFromMedia
-            if (r1 == 0) goto L_0x066c
-            if (r3 != 0) goto L_0x07f6
+            if (r1 == 0) goto L_0x066b
+            if (r3 != 0) goto L_0x07f5
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
             int r1 = r1.size()
             r0.totalImagesCount = r1
             r0.totalImagesCountMerge = r7
-            goto L_0x07f6
-        L_0x066c:
-            if (r3 == 0) goto L_0x0679
+            goto L_0x07f5
+        L_0x066b:
+            if (r3 == 0) goto L_0x0678
             int r1 = r0.currentIndex
             r2 = -1
             r0.currentIndex = r2
             int r1 = r1 + r3
             r0.setImageIndex(r1)
-            goto L_0x07f6
-        L_0x0679:
+            goto L_0x07f5
+        L_0x0678:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
             int r1 = r1.size()
             r0.totalImagesCount = r1
             r0.totalImagesCountMerge = r7
-            goto L_0x07f6
-        L_0x0685:
+            goto L_0x07f5
+        L_0x0684:
             int r2 = org.telegram.messenger.NotificationCenter.emojiLoaded
-            if (r1 != r2) goto L_0x0692
+            if (r1 != r2) goto L_0x0691
             org.telegram.ui.PhotoViewer$CaptionTextViewSwitcher r1 = r0.captionTextViewSwitcher
-            if (r1 == 0) goto L_0x07f6
+            if (r1 == 0) goto L_0x07f5
             r1.invalidateViews()
-            goto L_0x07f6
-        L_0x0692:
+            goto L_0x07f5
+        L_0x0691:
             int r2 = org.telegram.messenger.NotificationCenter.filePreparingFailed
-            if (r1 != r2) goto L_0x06d4
+            if (r1 != r2) goto L_0x06d3
             r1 = r23[r7]
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
             boolean r2 = r0.loadInitialVideo
-            if (r2 == 0) goto L_0x06b0
+            if (r2 == 0) goto L_0x06af
             r0.loadInitialVideo = r7
             org.telegram.ui.Components.RadialProgressView r1 = r0.progressView
             r1.setVisibility(r4)
@@ -4809,10 +4824,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             org.telegram.ui.PhotoViewer$EditState r2 = r0.editState
             org.telegram.messenger.MediaController$SavedFilterState r2 = r2.savedFilterState
             r0.preparePlayer(r1, r7, r7, r2)
-            goto L_0x07f6
-        L_0x06b0:
+            goto L_0x07f5
+        L_0x06af:
             boolean r2 = r0.tryStartRequestPreviewOnFinish
-            if (r2 == 0) goto L_0x06c7
+            if (r2 == 0) goto L_0x06c6
             r0.releasePlayer(r7)
             org.telegram.messenger.MediaController r1 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r2 = r0.videoPreviewMessageObject
@@ -4820,21 +4835,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             boolean r1 = r1.scheduleVideoConvert(r2, r3)
             r1 = r1 ^ r3
             r0.tryStartRequestPreviewOnFinish = r1
-            goto L_0x07f6
-        L_0x06c7:
+            goto L_0x07f5
+        L_0x06c6:
             org.telegram.messenger.MessageObject r2 = r0.videoPreviewMessageObject
-            if (r1 != r2) goto L_0x07f6
+            if (r1 != r2) goto L_0x07f5
             r0.requestingPreview = r7
             org.telegram.ui.Components.RadialProgressView r1 = r0.progressView
             r1.setVisibility(r4)
-            goto L_0x07f6
-        L_0x06d4:
+            goto L_0x07f5
+        L_0x06d3:
             int r2 = org.telegram.messenger.NotificationCenter.fileNewChunkAvailable
-            if (r1 != r2) goto L_0x0726
+            if (r1 != r2) goto L_0x0725
             r1 = r23[r7]
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
             org.telegram.messenger.MessageObject r2 = r0.videoPreviewMessageObject
-            if (r1 != r2) goto L_0x07f6
+            if (r1 != r2) goto L_0x07f5
             r1 = 1
             r2 = r23[r1]
             java.lang.String r2 = (java.lang.String) r2
@@ -4849,7 +4864,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r4 = r4[r7]
             r4.setProgress(r3, r1)
             int r3 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r3 == 0) goto L_0x07f6
+            if (r3 == 0) goto L_0x07f5
             r0.requestingPreview = r7
             org.telegram.ui.PhotoViewer$PhotoProgressView[] r3 = r0.photoProgressViews
             r3 = r3[r7]
@@ -4865,17 +4880,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             org.telegram.ui.PhotoViewer$EditState r3 = r0.editState
             org.telegram.messenger.MediaController$SavedFilterState r3 = r3.savedFilterState
             r0.preparePlayer(r2, r7, r1, r3)
-            goto L_0x07f6
-        L_0x0726:
+            goto L_0x07f5
+        L_0x0725:
             int r2 = org.telegram.messenger.NotificationCenter.messagesDeleted
-            if (r1 != r2) goto L_0x07f6
+            if (r1 != r2) goto L_0x07f5
             r1 = 2
             r2 = r23[r1]
             java.lang.Boolean r2 = (java.lang.Boolean) r2
             boolean r2 = r2.booleanValue()
-            if (r2 == 0) goto L_0x0736
+            if (r2 == 0) goto L_0x0735
             return
-        L_0x0736:
+        L_0x0735:
             r2 = 1
             r3 = r23[r2]
             java.lang.Integer r3 = (java.lang.Integer) r3
@@ -4885,40 +4900,40 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r4 = 0
             r5 = 0
             r6 = 0
-        L_0x0746:
-            if (r4 >= r1) goto L_0x07c5
-            if (r4 != 0) goto L_0x074d
+        L_0x0745:
+            if (r4 >= r1) goto L_0x07c4
+            if (r4 != 0) goto L_0x074c
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
-            goto L_0x074f
-        L_0x074d:
+            goto L_0x074e
+        L_0x074c:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArrTemp
-        L_0x074f:
-            if (r4 != 0) goto L_0x0754
+        L_0x074e:
+            if (r4 != 0) goto L_0x0753
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r8 = r0.imagesByIds
-            goto L_0x0756
-        L_0x0754:
+            goto L_0x0755
+        L_0x0753:
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r8 = r0.imagesByIdsTemp
-        L_0x0756:
+        L_0x0755:
             boolean r9 = r1.isEmpty()
-            if (r9 != 0) goto L_0x07c0
+            if (r9 != 0) goto L_0x07bf
             r9 = 0
             r10 = 2
-        L_0x075e:
-            if (r9 >= r10) goto L_0x07c1
+        L_0x075d:
+            if (r9 >= r10) goto L_0x07c0
             r11 = r8[r9]
             int r11 = r11.size()
-            if (r11 <= 0) goto L_0x07bd
+            if (r11 <= 0) goto L_0x07bc
             r11 = r8[r9]
             java.lang.Object r11 = r11.valueAt(r7)
             org.telegram.messenger.MessageObject r11 = (org.telegram.messenger.MessageObject) r11
             org.telegram.tgnet.TLRPC$Message r11 = r11.messageOwner
             org.telegram.tgnet.TLRPC$Peer r11 = r11.peer_id
             int r11 = r11.channel_id
-            if (r11 != r2) goto L_0x07bd
+            if (r11 != r2) goto L_0x07bc
             int r11 = r3.size()
             r12 = 0
-        L_0x077d:
-            if (r12 >= r11) goto L_0x07bd
+        L_0x077c:
+            if (r12 >= r11) goto L_0x07bc
             java.lang.Object r13 = r3.get(r12)
             java.lang.Integer r13 = (java.lang.Integer) r13
             int r13 = r13.intValue()
@@ -4928,67 +4943,67 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int r15 = r15.intValue()
             java.lang.Object r14 = r14.get(r15)
             org.telegram.messenger.MessageObject r14 = (org.telegram.messenger.MessageObject) r14
-            if (r14 == 0) goto L_0x07ba
+            if (r14 == 0) goto L_0x07b9
             r5 = r8[r9]
             r5.remove(r13)
             r1.remove(r14)
-            if (r9 != 0) goto L_0x07ae
+            if (r9 != 0) goto L_0x07ad
             int r5 = r0.totalImagesCount
             r13 = 1
             int r5 = r5 - r13
             r0.totalImagesCount = r5
-            goto L_0x07b4
-        L_0x07ae:
+            goto L_0x07b3
+        L_0x07ad:
             r13 = 1
             int r5 = r0.totalImagesCountMerge
             int r5 = r5 - r13
             r0.totalImagesCountMerge = r5
-        L_0x07b4:
+        L_0x07b3:
             org.telegram.messenger.MessageObject r5 = r0.currentMessageObject
-            if (r14 != r5) goto L_0x07b9
+            if (r14 != r5) goto L_0x07b8
             r6 = 1
-        L_0x07b9:
+        L_0x07b8:
             r5 = 1
-        L_0x07ba:
+        L_0x07b9:
             int r12 = r12 + 1
-            goto L_0x077d
-        L_0x07bd:
+            goto L_0x077c
+        L_0x07bc:
             int r9 = r9 + 1
-            goto L_0x075e
-        L_0x07c0:
+            goto L_0x075d
+        L_0x07bf:
             r10 = 2
-        L_0x07c1:
+        L_0x07c0:
             int r4 = r4 + 1
             r1 = 2
-            goto L_0x0746
-        L_0x07c5:
-            if (r5 == 0) goto L_0x07f6
-            if (r6 == 0) goto L_0x07d1
+            goto L_0x0745
+        L_0x07c4:
+            if (r5 == 0) goto L_0x07f5
+            if (r6 == 0) goto L_0x07d0
             org.telegram.ui.PhotoViewer r1 = PipInstance
-            if (r0 != r1) goto L_0x07d1
+            if (r0 != r1) goto L_0x07d0
             r20.destroyPhotoViewer()
-            goto L_0x07f6
-        L_0x07d1:
+            goto L_0x07f5
+        L_0x07d0:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x07f2
+            if (r1 != 0) goto L_0x07f1
             int r1 = r0.currentIndex
             r2 = -1
             r0.currentIndex = r2
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
             int r2 = r2.size()
-            if (r1 < r2) goto L_0x07ee
+            if (r1 < r2) goto L_0x07ed
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
             int r1 = r1.size()
             r2 = 1
             int r1 = r1 - r2
-        L_0x07ee:
+        L_0x07ed:
             r0.setImageIndex(r1)
-            goto L_0x07f6
-        L_0x07f2:
+            goto L_0x07f5
+        L_0x07f1:
             r2 = 1
             r0.closePhoto(r7, r2)
-        L_0x07f6:
+        L_0x07f5:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -5014,53 +5029,53 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Can't wrap try/catch for region: R(4:41|42|43|44) */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:43:0x00a8 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:43:0x00a7 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onSharePressed() {
         /*
             r6 = this;
             android.app.Activity r0 = r6.parentActivity
-            if (r0 == 0) goto L_0x00d4
+            if (r0 == 0) goto L_0x00d3
             boolean r0 = r6.allowShare
             if (r0 != 0) goto L_0x000a
-            goto L_0x00d4
+            goto L_0x00d3
         L_0x000a:
-            org.telegram.messenger.MessageObject r0 = r6.currentMessageObject     // Catch:{ Exception -> 0x00d0 }
+            org.telegram.messenger.MessageObject r0 = r6.currentMessageObject     // Catch:{ Exception -> 0x00cf }
             r1 = 1
             r2 = 0
             r3 = 0
             if (r0 == 0) goto L_0x003f
-            boolean r2 = r0.isVideo()     // Catch:{ Exception -> 0x00d0 }
-            org.telegram.messenger.MessageObject r0 = r6.currentMessageObject     // Catch:{ Exception -> 0x00d0 }
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner     // Catch:{ Exception -> 0x00d0 }
-            java.lang.String r0 = r0.attachPath     // Catch:{ Exception -> 0x00d0 }
-            boolean r0 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x00d0 }
+            boolean r2 = r0.isVideo()     // Catch:{ Exception -> 0x00cf }
+            org.telegram.messenger.MessageObject r0 = r6.currentMessageObject     // Catch:{ Exception -> 0x00cf }
+            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner     // Catch:{ Exception -> 0x00cf }
+            java.lang.String r0 = r0.attachPath     // Catch:{ Exception -> 0x00cf }
+            boolean r0 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x00cf }
             if (r0 != 0) goto L_0x0034
-            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x00d0 }
-            org.telegram.messenger.MessageObject r4 = r6.currentMessageObject     // Catch:{ Exception -> 0x00d0 }
-            org.telegram.tgnet.TLRPC$Message r4 = r4.messageOwner     // Catch:{ Exception -> 0x00d0 }
-            java.lang.String r4 = r4.attachPath     // Catch:{ Exception -> 0x00d0 }
-            r0.<init>(r4)     // Catch:{ Exception -> 0x00d0 }
-            boolean r4 = r0.exists()     // Catch:{ Exception -> 0x00d0 }
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x00cf }
+            org.telegram.messenger.MessageObject r4 = r6.currentMessageObject     // Catch:{ Exception -> 0x00cf }
+            org.telegram.tgnet.TLRPC$Message r4 = r4.messageOwner     // Catch:{ Exception -> 0x00cf }
+            java.lang.String r4 = r4.attachPath     // Catch:{ Exception -> 0x00cf }
+            r0.<init>(r4)     // Catch:{ Exception -> 0x00cf }
+            boolean r4 = r0.exists()     // Catch:{ Exception -> 0x00cf }
             if (r4 != 0) goto L_0x0033
             goto L_0x0034
         L_0x0033:
             r3 = r0
         L_0x0034:
             if (r3 != 0) goto L_0x0068
-            org.telegram.messenger.MessageObject r0 = r6.currentMessageObject     // Catch:{ Exception -> 0x00d0 }
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner     // Catch:{ Exception -> 0x00d0 }
-            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToMessage(r0)     // Catch:{ Exception -> 0x00d0 }
+            org.telegram.messenger.MessageObject r0 = r6.currentMessageObject     // Catch:{ Exception -> 0x00cf }
+            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner     // Catch:{ Exception -> 0x00cf }
+            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToMessage(r0)     // Catch:{ Exception -> 0x00cf }
             goto L_0x0068
         L_0x003f:
-            org.telegram.messenger.ImageLocation r0 = r6.currentFileLocationVideo     // Catch:{ Exception -> 0x00d0 }
+            org.telegram.messenger.ImageLocation r0 = r6.currentFileLocationVideo     // Catch:{ Exception -> 0x00cf }
             if (r0 == 0) goto L_0x005e
-            org.telegram.tgnet.TLRPC$FileLocation r0 = getFileLocation(r0)     // Catch:{ Exception -> 0x00d0 }
-            org.telegram.messenger.ImageLocation r3 = r6.currentFileLocationVideo     // Catch:{ Exception -> 0x00d0 }
-            java.lang.String r3 = getFileLocationExt(r3)     // Catch:{ Exception -> 0x00d0 }
-            int r4 = r6.avatarsDialogId     // Catch:{ Exception -> 0x00d0 }
+            org.telegram.tgnet.TLRPC$FileLocation r0 = getFileLocation(r0)     // Catch:{ Exception -> 0x00cf }
+            org.telegram.messenger.ImageLocation r3 = r6.currentFileLocationVideo     // Catch:{ Exception -> 0x00cf }
+            java.lang.String r3 = getFileLocationExt(r3)     // Catch:{ Exception -> 0x00cf }
+            int r4 = r6.avatarsDialogId     // Catch:{ Exception -> 0x00cf }
             if (r4 != 0) goto L_0x0058
-            boolean r4 = r6.isEvent     // Catch:{ Exception -> 0x00d0 }
+            boolean r4 = r6.isEvent     // Catch:{ Exception -> 0x00cf }
             if (r4 == 0) goto L_0x0056
             goto L_0x0058
         L_0x0056:
@@ -5069,67 +5084,67 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x0058:
             r4 = 1
         L_0x0059:
-            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r3, r4)     // Catch:{ Exception -> 0x00d0 }
+            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r3, r4)     // Catch:{ Exception -> 0x00cf }
             goto L_0x0068
         L_0x005e:
-            org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r6.pageBlocksAdapter     // Catch:{ Exception -> 0x00d0 }
+            org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r6.pageBlocksAdapter     // Catch:{ Exception -> 0x00cf }
             if (r0 == 0) goto L_0x0068
-            int r3 = r6.currentIndex     // Catch:{ Exception -> 0x00d0 }
-            java.io.File r3 = r0.getFile(r3)     // Catch:{ Exception -> 0x00d0 }
+            int r3 = r6.currentIndex     // Catch:{ Exception -> 0x00cf }
+            java.io.File r3 = r0.getFile(r3)     // Catch:{ Exception -> 0x00cf }
         L_0x0068:
-            if (r3 == 0) goto L_0x00cc
-            boolean r0 = r3.exists()     // Catch:{ Exception -> 0x00d0 }
-            if (r0 == 0) goto L_0x00cc
-            android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x00d0 }
+            if (r3 == 0) goto L_0x00cb
+            boolean r0 = r3.exists()     // Catch:{ Exception -> 0x00cf }
+            if (r0 == 0) goto L_0x00cb
+            android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x00cf }
             java.lang.String r4 = "android.intent.action.SEND"
-            r0.<init>(r4)     // Catch:{ Exception -> 0x00d0 }
-            if (r2 == 0) goto L_0x0080
+            r0.<init>(r4)     // Catch:{ Exception -> 0x00cf }
+            if (r2 == 0) goto L_0x007f
             java.lang.String r2 = "video/mp4"
-            r0.setType(r2)     // Catch:{ Exception -> 0x00d0 }
-            goto L_0x0091
-        L_0x0080:
-            org.telegram.messenger.MessageObject r2 = r6.currentMessageObject     // Catch:{ Exception -> 0x00d0 }
-            if (r2 == 0) goto L_0x008c
-            java.lang.String r2 = r2.getMimeType()     // Catch:{ Exception -> 0x00d0 }
-            r0.setType(r2)     // Catch:{ Exception -> 0x00d0 }
-            goto L_0x0091
-        L_0x008c:
+            r0.setType(r2)     // Catch:{ Exception -> 0x00cf }
+            goto L_0x0090
+        L_0x007f:
+            org.telegram.messenger.MessageObject r2 = r6.currentMessageObject     // Catch:{ Exception -> 0x00cf }
+            if (r2 == 0) goto L_0x008b
+            java.lang.String r2 = r2.getMimeType()     // Catch:{ Exception -> 0x00cf }
+            r0.setType(r2)     // Catch:{ Exception -> 0x00cf }
+            goto L_0x0090
+        L_0x008b:
             java.lang.String r2 = "image/jpeg"
-            r0.setType(r2)     // Catch:{ Exception -> 0x00d0 }
-        L_0x0091:
-            int r2 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x00d0 }
+            r0.setType(r2)     // Catch:{ Exception -> 0x00cf }
+        L_0x0090:
+            int r2 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x00cf }
             r4 = 24
             java.lang.String r5 = "android.intent.extra.STREAM"
-            if (r2 < r4) goto L_0x00b0
-            android.app.Activity r2 = r6.parentActivity     // Catch:{ Exception -> 0x00a8 }
+            if (r2 < r4) goto L_0x00af
+            android.app.Activity r2 = r6.parentActivity     // Catch:{ Exception -> 0x00a7 }
             java.lang.String r4 = "org.telegram.messenger.web.provider"
-            android.net.Uri r2 = androidx.core.content.FileProvider.getUriForFile(r2, r4, r3)     // Catch:{ Exception -> 0x00a8 }
-            r0.putExtra(r5, r2)     // Catch:{ Exception -> 0x00a8 }
-            r0.setFlags(r1)     // Catch:{ Exception -> 0x00a8 }
-            goto L_0x00b7
-        L_0x00a8:
-            android.net.Uri r1 = android.net.Uri.fromFile(r3)     // Catch:{ Exception -> 0x00d0 }
-            r0.putExtra(r5, r1)     // Catch:{ Exception -> 0x00d0 }
-            goto L_0x00b7
-        L_0x00b0:
-            android.net.Uri r1 = android.net.Uri.fromFile(r3)     // Catch:{ Exception -> 0x00d0 }
-            r0.putExtra(r5, r1)     // Catch:{ Exception -> 0x00d0 }
-        L_0x00b7:
-            android.app.Activity r1 = r6.parentActivity     // Catch:{ Exception -> 0x00d0 }
+            android.net.Uri r2 = androidx.core.content.FileProvider.getUriForFile(r2, r4, r3)     // Catch:{ Exception -> 0x00a7 }
+            r0.putExtra(r5, r2)     // Catch:{ Exception -> 0x00a7 }
+            r0.setFlags(r1)     // Catch:{ Exception -> 0x00a7 }
+            goto L_0x00b6
+        L_0x00a7:
+            android.net.Uri r1 = android.net.Uri.fromFile(r3)     // Catch:{ Exception -> 0x00cf }
+            r0.putExtra(r5, r1)     // Catch:{ Exception -> 0x00cf }
+            goto L_0x00b6
+        L_0x00af:
+            android.net.Uri r1 = android.net.Uri.fromFile(r3)     // Catch:{ Exception -> 0x00cf }
+            r0.putExtra(r5, r1)     // Catch:{ Exception -> 0x00cf }
+        L_0x00b6:
+            android.app.Activity r1 = r6.parentActivity     // Catch:{ Exception -> 0x00cf }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131627515(0x7f0e0dfb, float:1.8882297E38)
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x00d0 }
-            android.content.Intent r0 = android.content.Intent.createChooser(r0, r2)     // Catch:{ Exception -> 0x00d0 }
+            r3 = 2131627623(0x7f0e0e67, float:1.8882516E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x00cf }
+            android.content.Intent r0 = android.content.Intent.createChooser(r0, r2)     // Catch:{ Exception -> 0x00cf }
             r2 = 500(0x1f4, float:7.0E-43)
-            r1.startActivityForResult(r0, r2)     // Catch:{ Exception -> 0x00d0 }
-            goto L_0x00d4
-        L_0x00cc:
-            r6.showDownloadAlert()     // Catch:{ Exception -> 0x00d0 }
-            goto L_0x00d4
-        L_0x00d0:
+            r1.startActivityForResult(r0, r2)     // Catch:{ Exception -> 0x00cf }
+            goto L_0x00d3
+        L_0x00cb:
+            r6.showDownloadAlert()     // Catch:{ Exception -> 0x00cf }
+            goto L_0x00d3
+        L_0x00cf:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00d4:
+        L_0x00d3:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onSharePressed():void");
@@ -5453,7 +5468,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                             if (charSequence != null) {
                                 SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage(charSequence.toString(), longValue, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
                             }
-                            SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage(arrayList, longValue, true, 0);
+                            SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage((ArrayList<MessageObject>) arrayList, longValue, false, false, true, 0);
                         }
                         dialogsActivity.finishFragment();
                         if (chatActivity == null) {
@@ -5629,7 +5644,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     L_0x0033:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         r0.closePhoto(r3, r5)
-                        goto L_0x0b4c
+                        goto L_0x0b4b
                     L_0x003a:
                         r6 = 4
                         r7 = 0
@@ -5745,11 +5760,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.-$$Lambda$PhotoViewer$12$Qy68h5BqOIS9cywuuINkThCGyzY r13 = new org.telegram.ui.-$$Lambda$PhotoViewer$12$Qy68h5BqOIS9cywuuINkThCGyzY
                         r13.<init>(r10)
                         org.telegram.messenger.MediaController.saveFile(r8, r9, r10, r11, r12, r13)
-                        goto L_0x0b4c
+                        goto L_0x0b4b
                     L_0x013f:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         r0.showDownloadAlert()
-                        goto L_0x0b4c
+                        goto L_0x0b4b
                     L_0x0146:
                         r8 = 6
                         r9 = 2
@@ -5758,7 +5773,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         long r9 = r0.currentDialogId
                         r11 = 0
                         int r0 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
-                        if (r0 == 0) goto L_0x0b4c
+                        if (r0 == 0) goto L_0x0b4b
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         boolean unused = r0.disableShowCheck = r3
                         android.os.Bundle r0 = new android.os.Bundle
@@ -5786,14 +5801,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r0 = r0.parentActivity
                         boolean r0 = r0 instanceof org.telegram.ui.LaunchActivity
-                        if (r0 == 0) goto L_0x0b4c
+                        if (r0 == 0) goto L_0x0b4b
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r0 = r0.parentActivity
                         org.telegram.ui.LaunchActivity r0 = (org.telegram.ui.LaunchActivity) r0
                         r0.presentFragment(r2, r5, r3)
-                        goto L_0x0b4c
+                        goto L_0x0b4b
                     L_0x01ac:
-                        if (r0 != r6) goto L_0x0269
+                        if (r0 != r6) goto L_0x0268
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
                         if (r0 != 0) goto L_0x01b7
@@ -5814,35 +5829,35 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         r4 = 32
                         long r8 = r8 >> r4
                         int r4 = (int) r8
-                        if (r2 == 0) goto L_0x020e
-                        if (r2 <= 0) goto L_0x01e4
+                        if (r2 == 0) goto L_0x020d
+                        if (r2 <= 0) goto L_0x01e3
                         java.lang.String r4 = "user_id"
                         r0.putInt(r4, r2)
-                        goto L_0x0213
-                    L_0x01e4:
+                        goto L_0x0212
+                    L_0x01e3:
                         org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                         int r4 = r4.currentAccount
                         org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
                         int r6 = -r2
                         java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
                         org.telegram.tgnet.TLRPC$Chat r4 = r4.getChat(r6)
-                        if (r4 == 0) goto L_0x0207
+                        if (r4 == 0) goto L_0x0206
                         org.telegram.tgnet.TLRPC$InputChannel r6 = r4.migrated_to
-                        if (r6 == 0) goto L_0x0207
+                        if (r6 == 0) goto L_0x0206
                         java.lang.String r6 = "migrated_to"
                         r0.putInt(r6, r2)
                         org.telegram.tgnet.TLRPC$InputChannel r2 = r4.migrated_to
                         int r2 = r2.channel_id
                         int r2 = -r2
-                    L_0x0207:
+                    L_0x0206:
                         int r2 = -r2
                         java.lang.String r4 = "chat_id"
                         r0.putInt(r4, r2)
-                        goto L_0x0213
-                    L_0x020e:
+                        goto L_0x0212
+                    L_0x020d:
                         java.lang.String r2 = "enc_id"
                         r0.putInt(r2, r4)
-                    L_0x0213:
+                    L_0x0212:
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r2 = r2.currentMessageObject
                         int r2 = r2.getId()
@@ -5857,42 +5872,42 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r2 = r2.parentActivity
                         boolean r2 = r2 instanceof org.telegram.ui.LaunchActivity
-                        if (r2 == 0) goto L_0x025d
+                        if (r2 == 0) goto L_0x025c
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r2 = r2.parentActivity
                         org.telegram.ui.LaunchActivity r2 = (org.telegram.ui.LaunchActivity) r2
                         int r4 = r2.getMainFragmentsCount()
-                        if (r4 > r3) goto L_0x0254
+                        if (r4 > r3) goto L_0x0253
                         boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-                        if (r4 == 0) goto L_0x0252
-                        goto L_0x0254
-                    L_0x0252:
+                        if (r4 == 0) goto L_0x0251
+                        goto L_0x0253
+                    L_0x0251:
                         r4 = 0
-                        goto L_0x0255
-                    L_0x0254:
+                        goto L_0x0254
+                    L_0x0253:
                         r4 = 1
-                    L_0x0255:
+                    L_0x0254:
                         org.telegram.ui.ChatActivity r6 = new org.telegram.ui.ChatActivity
                         r6.<init>(r0)
                         r2.presentFragment(r6, r4, r3)
-                    L_0x025d:
+                    L_0x025c:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         r0.closePhoto(r5, r5)
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject unused = r0.currentMessageObject = r7
-                        goto L_0x0b4c
-                    L_0x0269:
+                        goto L_0x0b4b
+                    L_0x0268:
                         r10 = 3
-                        if (r0 != r10) goto L_0x02d5
+                        if (r0 != r10) goto L_0x02d4
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
-                        if (r0 == 0) goto L_0x02d4
+                        if (r0 == 0) goto L_0x02d3
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r0 = r0.parentActivity
                         boolean r0 = r0 instanceof org.telegram.ui.LaunchActivity
-                        if (r0 != 0) goto L_0x027f
-                        goto L_0x02d4
-                    L_0x027f:
+                        if (r0 != 0) goto L_0x027e
+                        goto L_0x02d3
+                    L_0x027e:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r0 = r0.parentActivity
                         org.telegram.ui.LaunchActivity r0 = (org.telegram.ui.LaunchActivity) r0
@@ -5924,31 +5939,31 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         r0.presentFragment(r2, r5, r3)
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         r0.closePhoto(r5, r5)
-                        goto L_0x0b4c
-                    L_0x02d4:
+                        goto L_0x0b4b
+                    L_0x02d3:
                         return
-                    L_0x02d5:
-                        if (r0 != r8) goto L_0x05ae
+                    L_0x02d4:
+                        if (r0 != r8) goto L_0x05ad
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r0 = r0.parentActivity
-                        if (r0 == 0) goto L_0x05ad
+                        if (r0 == 0) goto L_0x05ac
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$PhotoViewerProvider r0 = r0.placeProvider
-                        if (r0 != 0) goto L_0x02e9
-                        goto L_0x05ad
-                    L_0x02e9:
+                        if (r0 != 0) goto L_0x02e8
+                        goto L_0x05ac
+                    L_0x02e8:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
-                        if (r0 == 0) goto L_0x0320
+                        if (r0 == 0) goto L_0x031f
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
                         boolean r0 = r0.scheduled
-                        if (r0 != 0) goto L_0x0320
+                        if (r0 != 0) goto L_0x031f
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
                         long r8 = r0.getDialogId()
                         int r0 = (int) r8
-                        if (r0 >= 0) goto L_0x0320
+                        if (r0 >= 0) goto L_0x031f
                         org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                         int r4 = r4.currentAccount
                         org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
@@ -5956,10 +5971,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                         org.telegram.tgnet.TLRPC$Chat r0 = r4.getChat(r0)
                         boolean r0 = org.telegram.messenger.ChatObject.isChannel(r0)
-                        goto L_0x0321
-                    L_0x0320:
+                        goto L_0x0320
+                    L_0x031f:
                         r0 = 0
-                    L_0x0321:
+                    L_0x0320:
                         org.telegram.ui.ActionBar.AlertDialog$Builder r4 = new org.telegram.ui.ActionBar.AlertDialog$Builder
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r6 = r6.parentActivity
@@ -5967,118 +5982,118 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$PhotoViewerProvider r6 = r6.placeProvider
                         java.lang.String r6 = r6.getDeleteMessageString()
-                        r8 = 2131624353(0x7f0e01a1, float:1.8875883E38)
+                        r8 = 2131624356(0x7f0e01a4, float:1.887589E38)
                         java.lang.String r9 = "AreYouSureDeletePhotoTitle"
-                        if (r6 == 0) goto L_0x0349
+                        if (r6 == 0) goto L_0x0348
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r8)
                         r4.setTitle(r0)
                         r4.setMessage(r6)
-                        goto L_0x040e
-                    L_0x0349:
+                        goto L_0x040d
+                    L_0x0348:
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         boolean r6 = r6.isEmbedVideo
-                        if (r6 != 0) goto L_0x03e3
+                        if (r6 != 0) goto L_0x03e2
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.ImageLocation r6 = r6.currentFileLocationVideo
-                        if (r6 == 0) goto L_0x0367
+                        if (r6 == 0) goto L_0x0366
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.ImageLocation r6 = r6.currentFileLocationVideo
                         org.telegram.ui.PhotoViewer r10 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.ImageLocation r10 = r10.currentFileLocation
-                        if (r6 != r10) goto L_0x03e3
-                    L_0x0367:
+                        if (r6 != r10) goto L_0x03e2
+                    L_0x0366:
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
-                        if (r6 == 0) goto L_0x037c
+                        if (r6 == 0) goto L_0x037b
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
                         boolean r6 = r6.isVideo()
-                        if (r6 == 0) goto L_0x037c
-                        goto L_0x03e3
-                    L_0x037c:
+                        if (r6 == 0) goto L_0x037b
+                        goto L_0x03e2
+                    L_0x037b:
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
-                        if (r6 == 0) goto L_0x03bc
+                        if (r6 == 0) goto L_0x03bb
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
                         boolean r6 = r6.isGif()
-                        if (r6 == 0) goto L_0x03bc
-                        r6 = 2131624350(0x7f0e019e, float:1.8875877E38)
+                        if (r6 == 0) goto L_0x03bb
+                        r6 = 2131624353(0x7f0e01a1, float:1.8875883E38)
                         java.lang.String r8 = "AreYouSureDeleteGIFTitle"
                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
                         r4.setTitle(r6)
-                        if (r0 == 0) goto L_0x03ad
-                        r0 = 2131624349(0x7f0e019d, float:1.8875875E38)
+                        if (r0 == 0) goto L_0x03ac
+                        r0 = 2131624352(0x7f0e01a0, float:1.8875881E38)
                         java.lang.Object[] r6 = new java.lang.Object[r5]
                         java.lang.String r8 = "AreYouSureDeleteGIFEveryone"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r0, r6)
                         r4.setMessage(r0)
-                        goto L_0x040e
-                    L_0x03ad:
-                        r0 = 2131624348(0x7f0e019c, float:1.8875873E38)
+                        goto L_0x040d
+                    L_0x03ac:
+                        r0 = 2131624351(0x7f0e019f, float:1.887588E38)
                         java.lang.Object[] r6 = new java.lang.Object[r5]
                         java.lang.String r8 = "AreYouSureDeleteGIF"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r0, r6)
                         r4.setMessage(r0)
-                        goto L_0x040e
-                    L_0x03bc:
+                        goto L_0x040d
+                    L_0x03bb:
                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r8)
                         r4.setTitle(r6)
-                        if (r0 == 0) goto L_0x03d4
-                        r0 = 2131624352(0x7f0e01a0, float:1.8875881E38)
+                        if (r0 == 0) goto L_0x03d3
+                        r0 = 2131624355(0x7f0e01a3, float:1.8875887E38)
                         java.lang.Object[] r6 = new java.lang.Object[r5]
                         java.lang.String r8 = "AreYouSureDeletePhotoEveryone"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r0, r6)
                         r4.setMessage(r0)
-                        goto L_0x040e
-                    L_0x03d4:
-                        r0 = 2131624351(0x7f0e019f, float:1.887588E38)
+                        goto L_0x040d
+                    L_0x03d3:
+                        r0 = 2131624354(0x7f0e01a2, float:1.8875885E38)
                         java.lang.Object[] r6 = new java.lang.Object[r5]
                         java.lang.String r8 = "AreYouSureDeletePhoto"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r0, r6)
                         r4.setMessage(r0)
-                        goto L_0x040e
-                    L_0x03e3:
-                        r6 = 2131624364(0x7f0e01ac, float:1.8875906E38)
+                        goto L_0x040d
+                    L_0x03e2:
+                        r6 = 2131624367(0x7f0e01af, float:1.8875912E38)
                         java.lang.String r8 = "AreYouSureDeleteVideoTitle"
                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
                         r4.setTitle(r6)
-                        if (r0 == 0) goto L_0x0400
-                        r0 = 2131624363(0x7f0e01ab, float:1.8875904E38)
+                        if (r0 == 0) goto L_0x03ff
+                        r0 = 2131624366(0x7f0e01ae, float:1.887591E38)
                         java.lang.Object[] r6 = new java.lang.Object[r5]
                         java.lang.String r8 = "AreYouSureDeleteVideoEveryone"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r0, r6)
                         r4.setMessage(r0)
-                        goto L_0x040e
-                    L_0x0400:
-                        r0 = 2131624362(0x7f0e01aa, float:1.8875902E38)
+                        goto L_0x040d
+                    L_0x03ff:
+                        r0 = 2131624365(0x7f0e01ad, float:1.8875908E38)
                         java.lang.Object[] r6 = new java.lang.Object[r5]
                         java.lang.String r8 = "AreYouSureDeleteVideo"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r0, r6)
                         r4.setMessage(r0)
-                    L_0x040e:
+                    L_0x040d:
                         boolean[] r0 = new boolean[r3]
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
-                        if (r6 == 0) goto L_0x0574
+                        if (r6 == 0) goto L_0x0573
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
                         boolean r6 = r6.scheduled
-                        if (r6 != 0) goto L_0x0574
+                        if (r6 != 0) goto L_0x0573
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r6 = r6.currentMessageObject
                         long r8 = r6.getDialogId()
                         int r6 = (int) r8
-                        if (r6 == 0) goto L_0x0574
-                        if (r6 <= 0) goto L_0x0445
+                        if (r6 == 0) goto L_0x0573
+                        if (r6 <= 0) goto L_0x0444
                         org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
                         int r8 = r8.currentAccount
                         org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
                         java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
                         org.telegram.tgnet.TLRPC$User r6 = r8.getUser(r6)
                         r8 = r7
-                        goto L_0x045a
-                    L_0x0445:
+                        goto L_0x0459
+                    L_0x0444:
                         org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
                         int r8 = r8.currentAccount
                         org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
@@ -6087,74 +6102,74 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.tgnet.TLRPC$Chat r6 = r8.getChat(r6)
                         r8 = r6
                         r6 = r7
-                    L_0x045a:
-                        if (r6 != 0) goto L_0x0462
+                    L_0x0459:
+                        if (r6 != 0) goto L_0x0461
                         boolean r9 = org.telegram.messenger.ChatObject.isChannel(r8)
-                        if (r9 != 0) goto L_0x0574
-                    L_0x0462:
+                        if (r9 != 0) goto L_0x0573
+                    L_0x0461:
                         org.telegram.ui.PhotoViewer r9 = org.telegram.ui.PhotoViewer.this
                         int r9 = r9.currentAccount
                         org.telegram.tgnet.ConnectionsManager r9 = org.telegram.tgnet.ConnectionsManager.getInstance(r9)
                         int r9 = r9.getCurrentTime()
-                        if (r6 == 0) goto L_0x047f
+                        if (r6 == 0) goto L_0x047e
                         org.telegram.ui.PhotoViewer r10 = org.telegram.ui.PhotoViewer.this
                         int r10 = r10.currentAccount
                         org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
                         int r10 = r10.revokeTimePmLimit
-                        goto L_0x048b
-                    L_0x047f:
+                        goto L_0x048a
+                    L_0x047e:
                         org.telegram.ui.PhotoViewer r10 = org.telegram.ui.PhotoViewer.this
                         int r10 = r10.currentAccount
                         org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
                         int r10 = r10.revokeTimeLimit
-                    L_0x048b:
-                        if (r6 == 0) goto L_0x049f
+                    L_0x048a:
+                        if (r6 == 0) goto L_0x049e
                         int r11 = r6.id
                         org.telegram.ui.PhotoViewer r12 = org.telegram.ui.PhotoViewer.this
                         int r12 = r12.currentAccount
                         org.telegram.messenger.UserConfig r12 = org.telegram.messenger.UserConfig.getInstance(r12)
                         int r12 = r12.getClientUserId()
-                        if (r11 != r12) goto L_0x04a1
-                    L_0x049f:
-                        if (r8 == 0) goto L_0x0574
-                    L_0x04a1:
-                        if (r6 == 0) goto L_0x04b3
+                        if (r11 != r12) goto L_0x04a0
+                    L_0x049e:
+                        if (r8 == 0) goto L_0x0573
+                    L_0x04a0:
+                        if (r6 == 0) goto L_0x04b2
                         org.telegram.ui.PhotoViewer r11 = org.telegram.ui.PhotoViewer.this
                         int r11 = r11.currentAccount
                         org.telegram.messenger.MessagesController r11 = org.telegram.messenger.MessagesController.getInstance(r11)
                         boolean r11 = r11.canRevokePmInbox
-                        if (r11 == 0) goto L_0x04b3
+                        if (r11 == 0) goto L_0x04b2
                         r11 = 1
-                        goto L_0x04b4
-                    L_0x04b3:
+                        goto L_0x04b3
+                    L_0x04b2:
                         r11 = 0
-                    L_0x04b4:
+                    L_0x04b3:
                         org.telegram.ui.PhotoViewer r12 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r12 = r12.currentMessageObject
                         org.telegram.tgnet.TLRPC$Message r12 = r12.messageOwner
                         org.telegram.tgnet.TLRPC$MessageAction r12 = r12.action
-                        if (r12 == 0) goto L_0x04ce
+                        if (r12 == 0) goto L_0x04cd
                         org.telegram.ui.PhotoViewer r12 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r12 = r12.currentMessageObject
                         org.telegram.tgnet.TLRPC$Message r12 = r12.messageOwner
                         org.telegram.tgnet.TLRPC$MessageAction r12 = r12.action
                         boolean r12 = r12 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
-                        if (r12 == 0) goto L_0x0574
-                    L_0x04ce:
+                        if (r12 == 0) goto L_0x0573
+                    L_0x04cd:
                         org.telegram.ui.PhotoViewer r12 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r12 = r12.currentMessageObject
                         boolean r12 = r12.isOut()
-                        if (r12 != 0) goto L_0x04e2
-                        if (r11 != 0) goto L_0x04e2
+                        if (r12 != 0) goto L_0x04e1
+                        if (r11 != 0) goto L_0x04e1
                         boolean r11 = org.telegram.messenger.ChatObject.hasAdminRights(r8)
-                        if (r11 == 0) goto L_0x0574
-                    L_0x04e2:
+                        if (r11 == 0) goto L_0x0573
+                    L_0x04e1:
                         org.telegram.ui.PhotoViewer r11 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r11 = r11.currentMessageObject
                         org.telegram.tgnet.TLRPC$Message r11 = r11.messageOwner
                         int r11 = r11.date
                         int r9 = r9 - r11
-                        if (r9 > r10) goto L_0x0574
+                        if (r9 > r10) goto L_0x0573
                         android.widget.FrameLayout r9 = new android.widget.FrameLayout
                         org.telegram.ui.PhotoViewer r10 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r10 = r10.parentActivity
@@ -6166,37 +6181,37 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
                         r10.setBackgroundDrawable(r11)
                         java.lang.String r11 = ""
-                        if (r8 == 0) goto L_0x051d
-                        r3 = 2131625159(0x7f0e04c7, float:1.8877518E38)
+                        if (r8 == 0) goto L_0x051c
+                        r3 = 2131625168(0x7f0e04d0, float:1.8877536E38)
                         java.lang.String r6 = "DeleteForAll"
                         java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
                         r10.setText(r3, r11, r5, r5)
-                        goto L_0x0531
-                    L_0x051d:
-                        r8 = 2131625160(0x7f0e04c8, float:1.887752E38)
+                        goto L_0x0530
+                    L_0x051c:
+                        r8 = 2131625169(0x7f0e04d1, float:1.8877538E38)
                         java.lang.Object[] r3 = new java.lang.Object[r3]
                         java.lang.String r6 = org.telegram.messenger.UserObject.getFirstName(r6)
                         r3[r5] = r6
                         java.lang.String r6 = "DeleteForUser"
                         java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r6, r8, r3)
                         r10.setText(r3, r11, r5, r5)
-                    L_0x0531:
+                    L_0x0530:
                         boolean r3 = org.telegram.messenger.LocaleController.isRTL
                         r6 = 1098907648(0x41800000, float:16.0)
                         r8 = 1090519040(0x41000000, float:8.0)
-                        if (r3 == 0) goto L_0x053e
+                        if (r3 == 0) goto L_0x053d
                         int r3 = org.telegram.messenger.AndroidUtilities.dp(r6)
-                        goto L_0x0542
-                    L_0x053e:
+                        goto L_0x0541
+                    L_0x053d:
                         int r3 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                    L_0x0542:
+                    L_0x0541:
                         boolean r11 = org.telegram.messenger.LocaleController.isRTL
-                        if (r11 == 0) goto L_0x054b
+                        if (r11 == 0) goto L_0x054a
                         int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                        goto L_0x054f
-                    L_0x054b:
+                        goto L_0x054e
+                    L_0x054a:
                         int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-                    L_0x054f:
+                    L_0x054e:
                         r10.setPadding(r3, r5, r6, r5)
                         r11 = -1
                         r12 = 1111490560(0x42400000, float:48.0)
@@ -6213,14 +6228,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         r4.setView(r9)
                         r3 = 9
                         r4.setCustomViewOffset(r3)
-                    L_0x0574:
-                        r3 = 2131625128(0x7f0e04a8, float:1.8877455E38)
+                    L_0x0573:
+                        r3 = 2131625137(0x7f0e04b1, float:1.8877473E38)
                         java.lang.String r5 = "Delete"
                         java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
                         org.telegram.ui.-$$Lambda$PhotoViewer$12$WpNhxb9ZegX_ilgortTEqNdBKmE r5 = new org.telegram.ui.-$$Lambda$PhotoViewer$12$WpNhxb9ZegX_ilgortTEqNdBKmE
                         r5.<init>(r0)
                         r4.setPositiveButton(r3, r5)
-                        r0 = 2131624658(0x7f0e02d2, float:1.8876502E38)
+                        r0 = 2131624663(0x7f0e02d7, float:1.8876512E38)
                         java.lang.String r3 = "Cancel"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
                         r4.setNegativeButton(r0, r7)
@@ -6229,184 +6244,184 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         r3.showAlertDialog(r4)
                         android.view.View r0 = r0.getButton(r2)
                         android.widget.TextView r0 = (android.widget.TextView) r0
-                        if (r0 == 0) goto L_0x0b4c
+                        if (r0 == 0) goto L_0x0b4b
                         java.lang.String r2 = "dialogTextRed2"
                         int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                         r0.setTextColor(r2)
-                        goto L_0x0b4c
-                    L_0x05ad:
+                        goto L_0x0b4b
+                    L_0x05ac:
                         return
-                    L_0x05ae:
+                    L_0x05ad:
                         r8 = 10
-                        if (r0 == r8) goto L_0x0b47
+                        if (r0 == r8) goto L_0x0b46
                         r8 = 18
-                        if (r0 != r8) goto L_0x05b8
-                        goto L_0x0b47
-                    L_0x05b8:
+                        if (r0 != r8) goto L_0x05b7
+                        goto L_0x0b46
+                    L_0x05b7:
                         r8 = 19
                         r11 = 1065353216(0x3var_, float:1.0)
-                        if (r0 != r8) goto L_0x065a
+                        if (r0 != r8) goto L_0x0659
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.menuItemSpeed
                         r0.setVisibility(r5)
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.menuItemSpeed
                         r0.toggleSubMenu()
-                    L_0x05d0:
+                    L_0x05cf:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.ActionBar.ActionBarMenuSubItem[] r0 = r0.speedItems
                         int r0 = r0.length
-                        if (r5 >= r0) goto L_0x0b4c
+                        if (r5 >= r0) goto L_0x0b4b
                         r0 = 981668463(0x3a83126f, float:0.001)
-                        if (r5 != 0) goto L_0x05ef
+                        if (r5 != 0) goto L_0x05ee
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         float r2 = r2.currentVideoSpeed
                         r4 = 1048576000(0x3e800000, float:0.25)
                         float r2 = r2 - r4
                         float r2 = java.lang.Math.abs(r2)
                         int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                        if (r2 < 0) goto L_0x0639
-                    L_0x05ef:
-                        if (r5 != r3) goto L_0x0602
+                        if (r2 < 0) goto L_0x0638
+                    L_0x05ee:
+                        if (r5 != r3) goto L_0x0601
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         float r2 = r2.currentVideoSpeed
                         r4 = 1056964608(0x3var_, float:0.5)
                         float r2 = r2 - r4
                         float r2 = java.lang.Math.abs(r2)
                         int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                        if (r2 < 0) goto L_0x0639
-                    L_0x0602:
-                        if (r5 != r9) goto L_0x0613
+                        if (r2 < 0) goto L_0x0638
+                    L_0x0601:
+                        if (r5 != r9) goto L_0x0612
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         float r2 = r2.currentVideoSpeed
                         float r2 = r2 - r11
                         float r2 = java.lang.Math.abs(r2)
                         int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                        if (r2 < 0) goto L_0x0639
-                    L_0x0613:
-                        if (r5 != r10) goto L_0x0626
+                        if (r2 < 0) goto L_0x0638
+                    L_0x0612:
+                        if (r5 != r10) goto L_0x0625
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         float r2 = r2.currentVideoSpeed
                         r4 = 1069547520(0x3fCLASSNAME, float:1.5)
                         float r2 = r2 - r4
                         float r2 = java.lang.Math.abs(r2)
                         int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                        if (r2 < 0) goto L_0x0639
-                    L_0x0626:
-                        if (r5 != r6) goto L_0x0648
+                        if (r2 < 0) goto L_0x0638
+                    L_0x0625:
+                        if (r5 != r6) goto L_0x0647
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         float r2 = r2.currentVideoSpeed
                         r4 = 1073741824(0x40000000, float:2.0)
                         float r2 = r2 - r4
                         float r2 = java.lang.Math.abs(r2)
                         int r0 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                        if (r0 >= 0) goto L_0x0648
-                    L_0x0639:
+                        if (r0 >= 0) goto L_0x0647
+                    L_0x0638:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.ActionBar.ActionBarMenuSubItem[] r0 = r0.speedItems
                         r0 = r0[r5]
                         r2 = -9718023(0xffffffffff6bb6f9, float:-3.1331863E38)
                         r0.setColors(r2, r2)
-                        goto L_0x0656
-                    L_0x0648:
+                        goto L_0x0655
+                    L_0x0647:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.ActionBar.ActionBarMenuSubItem[] r0 = r0.speedItems
                         r0 = r0[r5]
                         r2 = -328966(0xfffffffffffafafa, float:NaN)
                         r0.setColors(r2, r2)
-                    L_0x0656:
+                    L_0x0655:
                         int r5 = r5 + 1
-                        goto L_0x05d0
-                    L_0x065a:
+                        goto L_0x05cf
+                    L_0x0659:
                         r6 = 11
-                        if (r0 != r6) goto L_0x06e4
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        boolean r0 = r0.isEmbedVideo     // Catch:{ Exception -> 0x06de }
-                        if (r0 == 0) goto L_0x0684
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        android.app.Activity r0 = r0.parentActivity     // Catch:{ Exception -> 0x06de }
-                        org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        org.telegram.messenger.MessageObject r2 = r2.currentMessageObject     // Catch:{ Exception -> 0x06de }
-                        org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner     // Catch:{ Exception -> 0x06de }
-                        org.telegram.tgnet.TLRPC$MessageMedia r2 = r2.media     // Catch:{ Exception -> 0x06de }
-                        org.telegram.tgnet.TLRPC$WebPage r2 = r2.webpage     // Catch:{ Exception -> 0x06de }
-                        java.lang.String r2 = r2.url     // Catch:{ Exception -> 0x06de }
-                        org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r0, (java.lang.String) r2)     // Catch:{ Exception -> 0x06de }
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        r0.closePhoto(r5, r5)     // Catch:{ Exception -> 0x06de }
-                        goto L_0x0b4c
-                    L_0x0684:
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        org.telegram.messenger.MessageObject r0 = r0.currentMessageObject     // Catch:{ Exception -> 0x06de }
-                        if (r0 == 0) goto L_0x06ac
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        org.telegram.messenger.MessageObject r0 = r0.currentMessageObject     // Catch:{ Exception -> 0x06de }
-                        org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        android.app.Activity r2 = r2.parentActivity     // Catch:{ Exception -> 0x06de }
-                        boolean r0 = org.telegram.messenger.AndroidUtilities.openForView((org.telegram.messenger.MessageObject) r0, (android.app.Activity) r2)     // Catch:{ Exception -> 0x06de }
-                        if (r0 == 0) goto L_0x06a5
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        r0.closePhoto(r5, r5)     // Catch:{ Exception -> 0x06de }
-                        goto L_0x0b4c
-                    L_0x06a5:
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        r0.showDownloadAlert()     // Catch:{ Exception -> 0x06de }
-                        goto L_0x0b4c
-                    L_0x06ac:
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r0.pageBlocksAdapter     // Catch:{ Exception -> 0x06de }
-                        if (r0 == 0) goto L_0x0b4c
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r0.pageBlocksAdapter     // Catch:{ Exception -> 0x06de }
-                        org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        int r2 = r2.currentIndex     // Catch:{ Exception -> 0x06de }
-                        org.telegram.tgnet.TLObject r0 = r0.getMedia(r2)     // Catch:{ Exception -> 0x06de }
-                        org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        android.app.Activity r2 = r2.parentActivity     // Catch:{ Exception -> 0x06de }
-                        boolean r0 = org.telegram.messenger.AndroidUtilities.openForView((org.telegram.tgnet.TLObject) r0, (android.app.Activity) r2)     // Catch:{ Exception -> 0x06de }
-                        if (r0 == 0) goto L_0x06d7
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        r0.closePhoto(r5, r5)     // Catch:{ Exception -> 0x06de }
-                        goto L_0x0b4c
-                    L_0x06d7:
-                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06de }
-                        r0.showDownloadAlert()     // Catch:{ Exception -> 0x06de }
-                        goto L_0x0b4c
-                    L_0x06de:
+                        if (r0 != r6) goto L_0x06e3
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        boolean r0 = r0.isEmbedVideo     // Catch:{ Exception -> 0x06dd }
+                        if (r0 == 0) goto L_0x0683
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        android.app.Activity r0 = r0.parentActivity     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.messenger.MessageObject r2 = r2.currentMessageObject     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.tgnet.TLRPC$MessageMedia r2 = r2.media     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.tgnet.TLRPC$WebPage r2 = r2.webpage     // Catch:{ Exception -> 0x06dd }
+                        java.lang.String r2 = r2.url     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r0, (java.lang.String) r2)     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        r0.closePhoto(r5, r5)     // Catch:{ Exception -> 0x06dd }
+                        goto L_0x0b4b
+                    L_0x0683:
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.messenger.MessageObject r0 = r0.currentMessageObject     // Catch:{ Exception -> 0x06dd }
+                        if (r0 == 0) goto L_0x06ab
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.messenger.MessageObject r0 = r0.currentMessageObject     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        android.app.Activity r2 = r2.parentActivity     // Catch:{ Exception -> 0x06dd }
+                        boolean r0 = org.telegram.messenger.AndroidUtilities.openForView((org.telegram.messenger.MessageObject) r0, (android.app.Activity) r2)     // Catch:{ Exception -> 0x06dd }
+                        if (r0 == 0) goto L_0x06a4
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        r0.closePhoto(r5, r5)     // Catch:{ Exception -> 0x06dd }
+                        goto L_0x0b4b
+                    L_0x06a4:
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        r0.showDownloadAlert()     // Catch:{ Exception -> 0x06dd }
+                        goto L_0x0b4b
+                    L_0x06ab:
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r0.pageBlocksAdapter     // Catch:{ Exception -> 0x06dd }
+                        if (r0 == 0) goto L_0x0b4b
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r0.pageBlocksAdapter     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        int r2 = r2.currentIndex     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.tgnet.TLObject r0 = r0.getMedia(r2)     // Catch:{ Exception -> 0x06dd }
+                        org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        android.app.Activity r2 = r2.parentActivity     // Catch:{ Exception -> 0x06dd }
+                        boolean r0 = org.telegram.messenger.AndroidUtilities.openForView((org.telegram.tgnet.TLObject) r0, (android.app.Activity) r2)     // Catch:{ Exception -> 0x06dd }
+                        if (r0 == 0) goto L_0x06d6
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        r0.closePhoto(r5, r5)     // Catch:{ Exception -> 0x06dd }
+                        goto L_0x0b4b
+                    L_0x06d6:
+                        org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this     // Catch:{ Exception -> 0x06dd }
+                        r0.showDownloadAlert()     // Catch:{ Exception -> 0x06dd }
+                        goto L_0x0b4b
+                    L_0x06dd:
                         r0 = move-exception
                         org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-                        goto L_0x0b4c
-                    L_0x06e4:
+                        goto L_0x0b4b
+                    L_0x06e3:
                         r6 = 13
-                        if (r0 == r6) goto L_0x0ae0
+                        if (r0 == r6) goto L_0x0adf
                         r6 = 15
-                        if (r0 != r6) goto L_0x06ee
-                        goto L_0x0ae0
-                    L_0x06ee:
+                        if (r0 != r6) goto L_0x06ed
+                        goto L_0x0adf
+                    L_0x06ed:
                         r6 = 5
-                        if (r0 != r6) goto L_0x076d
+                        if (r0 != r6) goto L_0x076c
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.pipItem
                         float r0 = r0.getAlpha()
                         int r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1))
-                        if (r0 == 0) goto L_0x0700
+                        if (r0 == 0) goto L_0x06ff
                         return
-                    L_0x0700:
+                    L_0x06ff:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         boolean r0 = r0.isEmbedVideo
-                        if (r0 == 0) goto L_0x0766
+                        if (r0 == 0) goto L_0x0765
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.Components.PhotoViewerWebView r2 = r0.photoViewerWebView
                         org.telegram.ui.Components.PipVideoView r2 = r2.openInPip()
                         org.telegram.ui.Components.PipVideoView unused = r0.pipVideoView = r2
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.Components.PipVideoView r0 = r0.pipVideoView
-                        if (r0 == 0) goto L_0x0b4c
+                        if (r0 == 0) goto L_0x0b4b
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.PipInstance
-                        if (r0 == 0) goto L_0x072a
+                        if (r0 == 0) goto L_0x0729
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.PipInstance
                         r0.destroyPhotoViewer()
-                    L_0x072a:
+                    L_0x0729:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         boolean unused = r0.isInline = r3
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.Instance
@@ -6416,32 +6431,32 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         boolean unused = r0.isVisible = r5
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$PlaceProviderObject r0 = r0.currentPlaceObject
-                        if (r0 == 0) goto L_0x075f
+                        if (r0 == 0) goto L_0x075e
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$PlaceProviderObject r0 = r0.currentPlaceObject
                         org.telegram.messenger.ImageReceiver r0 = r0.imageReceiver
                         boolean r0 = r0.getVisible()
-                        if (r0 != 0) goto L_0x075f
+                        if (r0 != 0) goto L_0x075e
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$PlaceProviderObject r0 = r0.currentPlaceObject
                         org.telegram.messenger.ImageReceiver r0 = r0.imageReceiver
                         r0.setVisible(r3, r3)
-                    L_0x075f:
+                    L_0x075e:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         r0.dismissInternal()
-                        goto L_0x0b4c
-                    L_0x0766:
+                        goto L_0x0b4b
+                    L_0x0765:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         r0.switchToPip(r5)
-                        goto L_0x0b4c
-                    L_0x076d:
+                        goto L_0x0b4b
+                    L_0x076c:
                         r6 = 7
-                        if (r0 != r6) goto L_0x07a9
+                        if (r0 != r6) goto L_0x07a8
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
-                        if (r0 != 0) goto L_0x0779
+                        if (r0 != 0) goto L_0x0778
                         return
-                    L_0x0779:
+                    L_0x0778:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         int r0 = r0.currentAccount
                         org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)
@@ -6457,30 +6472,30 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         android.widget.FrameLayout r0 = r0.bottomLayout
                         r0.setVisibility(r5)
-                        goto L_0x0b4c
-                    L_0x07a9:
+                        goto L_0x0b4b
+                    L_0x07a8:
                         r6 = 14
-                        if (r0 != r6) goto L_0x0851
+                        if (r0 != r6) goto L_0x0850
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
                         r2 = 1000(0x3e8, double:4.94E-321)
-                        if (r0 == 0) goto L_0x0807
+                        if (r0 == 0) goto L_0x0806
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
                         org.telegram.tgnet.TLRPC$Document r0 = r0.getDocument()
                         org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.ChatActivity r4 = r4.parentChatActivity
-                        if (r4 == 0) goto L_0x07df
+                        if (r4 == 0) goto L_0x07de
                         org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.ChatActivity r4 = r4.parentChatActivity
                         org.telegram.ui.Components.ChatActivityEnterView r4 = r4.chatActivityEnterView
-                        if (r4 == 0) goto L_0x07df
+                        if (r4 == 0) goto L_0x07de
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.ChatActivity r2 = r2.parentChatActivity
                         org.telegram.ui.Components.ChatActivityEnterView r2 = r2.chatActivityEnterView
                         r2.addRecentGif(r0)
-                        goto L_0x07f2
-                    L_0x07df:
+                        goto L_0x07f1
+                    L_0x07de:
                         org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                         int r4 = r4.currentAccount
                         org.telegram.messenger.MediaDataController r4 = org.telegram.messenger.MediaDataController.getInstance(r4)
@@ -6488,25 +6503,25 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         long r5 = r5 / r2
                         int r2 = (int) r5
                         r4.addRecentGif(r0, r2)
-                    L_0x07f2:
+                    L_0x07f1:
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         int r2 = r2.currentAccount
                         org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
                         org.telegram.ui.PhotoViewer r3 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r3 = r3.currentMessageObject
                         r2.saveGif(r3, r0)
-                        goto L_0x0b4c
-                    L_0x0807:
+                        goto L_0x0b4b
+                    L_0x0806:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r0.pageBlocksAdapter
-                        if (r0 == 0) goto L_0x0b4c
+                        if (r0 == 0) goto L_0x0b4b
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r0.pageBlocksAdapter
                         org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                         int r4 = r4.currentIndex
                         org.telegram.tgnet.TLObject r0 = r0.getMedia(r4)
                         boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$Document
-                        if (r4 == 0) goto L_0x0b4c
+                        if (r4 == 0) goto L_0x0b4b
                         org.telegram.tgnet.TLRPC$Document r0 = (org.telegram.tgnet.TLRPC$Document) r0
                         org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
                         int r4 = r4.currentAccount
@@ -6522,22 +6537,22 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.PhotoViewer$PageBlocksAdapter r3 = r3.pageBlocksAdapter
                         java.lang.Object r3 = r3.getParentObject()
                         r2.saveGif(r3, r0)
-                        goto L_0x0b4c
-                    L_0x0851:
+                        goto L_0x0b4b
+                    L_0x0850:
                         r6 = 16
-                        if (r0 != r6) goto L_0x0a8d
+                        if (r0 != r6) goto L_0x0a8c
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         java.util.ArrayList r0 = r0.avatarsArr
                         org.telegram.ui.PhotoViewer r6 = org.telegram.ui.PhotoViewer.this
                         int r6 = r6.currentIndex
                         java.lang.Object r0 = r0.get(r6)
                         org.telegram.tgnet.TLRPC$Photo r0 = (org.telegram.tgnet.TLRPC$Photo) r0
-                        if (r0 == 0) goto L_0x0a8c
+                        if (r0 == 0) goto L_0x0a8b
                         java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r6 = r0.sizes
                         boolean r6 = r6.isEmpty()
-                        if (r6 == 0) goto L_0x0873
-                        goto L_0x0a8c
-                    L_0x0873:
+                        if (r6 == 0) goto L_0x0872
+                        goto L_0x0a8b
+                    L_0x0872:
                         java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r6 = r0.sizes
                         r8 = 800(0x320, float:1.121E-42)
                         org.telegram.tgnet.TLRPC$PhotoSize r6 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r6, r8)
@@ -6550,7 +6565,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.PhotoViewer r11 = org.telegram.ui.PhotoViewer.this
                         int r11 = r11.avatarsDialogId
                         int r12 = r10.clientUserId
-                        if (r11 != r12) goto L_0x0901
+                        if (r11 != r12) goto L_0x0900
                         org.telegram.tgnet.TLRPC$TL_photos_updateProfilePhoto r9 = new org.telegram.tgnet.TLRPC$TL_photos_updateProfilePhoto
                         r9.<init>()
                         org.telegram.tgnet.TLRPC$TL_inputPhoto r11 = new org.telegram.tgnet.TLRPC$TL_inputPhoto
@@ -6574,7 +6589,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         int r11 = r10.clientUserId
                         java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
                         org.telegram.tgnet.TLRPC$User r9 = r9.getUser(r11)
-                        if (r9 == 0) goto L_0x097a
+                        if (r9 == 0) goto L_0x0979
                         org.telegram.tgnet.TLRPC$UserProfilePhoto r11 = r9.photo
                         long r12 = r0.id
                         r11.photo_id = r12
@@ -6592,8 +6607,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         int r8 = org.telegram.messenger.NotificationCenter.mainUserInfoChanged
                         java.lang.Object[] r9 = new java.lang.Object[r5]
                         r3.postNotificationName(r8, r9)
-                        goto L_0x097a
-                    L_0x0901:
+                        goto L_0x0979
+                    L_0x0900:
                         org.telegram.ui.PhotoViewer r10 = org.telegram.ui.PhotoViewer.this
                         int r10 = r10.currentAccount
                         org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
@@ -6602,9 +6617,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         int r11 = -r11
                         java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
                         org.telegram.tgnet.TLRPC$Chat r10 = r10.getChat(r11)
-                        if (r10 != 0) goto L_0x091d
+                        if (r10 != 0) goto L_0x091c
                         return
-                    L_0x091d:
+                    L_0x091c:
                         org.telegram.tgnet.TLRPC$TL_inputChatPhoto r13 = new org.telegram.tgnet.TLRPC$TL_inputChatPhoto
                         r13.<init>()
                         org.telegram.tgnet.TLRPC$TL_inputPhoto r11 = new org.telegram.tgnet.TLRPC$TL_inputPhoto
@@ -6645,7 +6660,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                         r3[r5] = r9
                         r8.postNotificationName(r10, r3)
-                    L_0x097a:
+                    L_0x0979:
                         org.telegram.ui.PhotoViewer r3 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r6, (org.telegram.tgnet.TLRPC$Photo) r0)
                         org.telegram.messenger.ImageLocation unused = r3.currentAvatarLocation = r6
@@ -6733,20 +6748,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.messenger.ImageLocation r6 = r6.currentFileLocationVideo
                         org.telegram.ui.PhotoViewer r8 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.ImageLocation r8 = r8.currentFileLocation
-                        if (r6 != r8) goto L_0x0a7d
+                        if (r6 != r8) goto L_0x0a7c
                         r4 = r7
-                    L_0x0a7d:
+                    L_0x0a7c:
                         r0.showWithAction((long) r2, (int) r5, (java.lang.Object) r4)
                         org.telegram.ui.-$$Lambda$PhotoViewer$12$tpGe9fUzb04FEsHEVcwtHX_WJEc r0 = new org.telegram.ui.-$$Lambda$PhotoViewer$12$tpGe9fUzb04FEsHEVcwtHX_WJEc
                         r0.<init>()
                         r2 = 300(0x12c, double:1.48E-321)
                         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r2)
-                        goto L_0x0b4c
-                    L_0x0a8c:
+                        goto L_0x0b4b
+                    L_0x0a8b:
                         return
-                    L_0x0a8d:
+                    L_0x0a8c:
                         r2 = 17
-                        if (r0 != r2) goto L_0x0b4c
+                        if (r0 != r2) goto L_0x0b4b
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.ImageLocation r0 = r0.currentFileLocationVideo
                         org.telegram.tgnet.TLRPC$FileLocation r0 = org.telegram.ui.PhotoViewer.getFileLocation(r0)
@@ -6757,10 +6772,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.ImageLocation r2 = r2.currentFileLocationVideo
                         int r2 = r2.imageType
-                        if (r2 != r9) goto L_0x0ab4
+                        if (r2 != r9) goto L_0x0ab3
                         r5 = 1
-                    L_0x0ab4:
-                        if (r5 == 0) goto L_0x0ad2
+                    L_0x0ab3:
+                        if (r5 == 0) goto L_0x0ad1
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.ImageLocation r2 = r2.currentFileLocation
                         org.telegram.tgnet.TLRPC$FileLocation r2 = org.telegram.ui.PhotoViewer.getFileLocation(r2)
@@ -6769,46 +6784,46 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         java.lang.String r4 = org.telegram.ui.PhotoViewer.getFileLocationExt(r4)
                         java.io.File r2 = org.telegram.messenger.FileLoader.getPathToAttach(r2, r4, r3)
                         java.lang.String r7 = r2.getAbsolutePath()
-                    L_0x0ad2:
+                    L_0x0ad1:
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$PhotoViewerProvider r2 = r2.placeProvider
                         java.lang.String r0 = r0.getAbsolutePath()
                         r2.openPhotoForEdit(r0, r7, r5)
-                        goto L_0x0b4c
-                    L_0x0ae0:
+                        goto L_0x0b4b
+                    L_0x0adf:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         android.app.Activity r0 = r0.parentActivity
-                        if (r0 == 0) goto L_0x0b46
+                        if (r0 == 0) goto L_0x0b45
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
-                        if (r0 != 0) goto L_0x0af1
-                        goto L_0x0b46
-                    L_0x0af1:
+                        if (r0 != 0) goto L_0x0af0
+                        goto L_0x0b45
+                    L_0x0af0:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
                         org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
                         org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
                         boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto
-                        if (r0 == 0) goto L_0x0b0c
+                        if (r0 == 0) goto L_0x0b0b
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
                         org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
                         org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
                         org.telegram.tgnet.TLRPC$Photo r0 = r0.photo
-                        goto L_0x0b26
-                    L_0x0b0c:
+                        goto L_0x0b25
+                    L_0x0b0b:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
                         org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
                         org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
                         boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument
-                        if (r0 == 0) goto L_0x0b46
+                        if (r0 == 0) goto L_0x0b45
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.messenger.MessageObject r0 = r0.currentMessageObject
                         org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
                         org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
                         org.telegram.tgnet.TLRPC$Document r0 = r0.document
-                    L_0x0b26:
+                    L_0x0b25:
                         org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$12$1 r3 = new org.telegram.ui.PhotoViewer$12$1
                         org.telegram.ui.PhotoViewer r4 = org.telegram.ui.PhotoViewer.this
@@ -6820,13 +6835,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.Components.StickersAlert r0 = r0.masksAlert
                         r0.show()
-                        goto L_0x0b4c
-                    L_0x0b46:
+                        goto L_0x0b4b
+                    L_0x0b45:
                         return
-                    L_0x0b47:
+                    L_0x0b46:
                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                         r0.onSharePressed()
-                    L_0x0b4c:
+                    L_0x0b4b:
                         return
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.AnonymousClass12.onItemClick(int):void");
@@ -7047,6 +7062,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         PhotoViewer.this.onActionClick(true);
                         PhotoViewer.this.checkProgress(0, false, true);
                     }
+                }
+
+                public boolean validGroupId(long j) {
+                    if (PhotoViewer.this.placeProvider != null) {
+                        return PhotoViewer.this.placeProvider.validateGroupId(j);
+                    }
+                    return true;
                 }
             });
             for (int i3 = 0; i3 < 3; i3++) {
@@ -8357,49 +8379,49 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r13.<init>(r14, r15, r6)
             if (r11 != 0) goto L_0x012d
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r2)
-            r9 = 2131165818(0x7var_a, float:1.7945864E38)
+            r9 = 2131165826(0x7var_, float:1.794588E38)
             if (r6 == 0) goto L_0x0120
-            r6 = 2131627492(0x7f0e0de4, float:1.888225E38)
+            r6 = 2131627600(0x7f0e0e50, float:1.888247E38)
             java.lang.String r10 = "SetReminder"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
             r13.setTextAndIcon(r6, r9)
             goto L_0x0174
         L_0x0120:
-            r6 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
+            r6 = 2131627449(0x7f0e0db9, float:1.8882163E38)
             java.lang.String r10 = "ScheduleMessage"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
             r13.setTextAndIcon(r6, r9)
             goto L_0x0174
         L_0x012d:
             if (r11 != r5) goto L_0x013f
-            r6 = 2131627461(0x7f0e0dc5, float:1.8882187E38)
+            r6 = 2131627569(0x7f0e0e31, float:1.8882406E38)
             java.lang.String r9 = "SendWithoutSound"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            r9 = 2131165538(0x7var_, float:1.7945296E38)
+            r9 = 2131165543(0x7var_, float:1.7945306E38)
             r13.setTextAndIcon(r6, r9)
             goto L_0x0174
         L_0x013f:
             if (r11 != r10) goto L_0x0151
-            r6 = 2131627216(0x7f0e0cd0, float:1.888169E38)
+            r6 = 2131627324(0x7f0e0d3c, float:1.888191E38)
             java.lang.String r9 = "ReplacePhoto"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            r9 = 2131165799(0x7var_, float:1.7945825E38)
+            r9 = 2131165807(0x7var_f, float:1.7945842E38)
             r13.setTextAndIcon(r6, r9)
             goto L_0x0174
         L_0x0151:
             if (r11 != r9) goto L_0x0163
-            r6 = 2131627429(0x7f0e0da5, float:1.8882122E38)
+            r6 = 2131627537(0x7f0e0e11, float:1.8882341E38)
             java.lang.String r9 = "SendAsNewPhoto"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            r9 = 2131165823(0x7var_f, float:1.7945874E38)
+            r9 = 2131165831(0x7var_, float:1.794589E38)
             r13.setTextAndIcon(r6, r9)
             goto L_0x0174
         L_0x0163:
             if (r11 != r12) goto L_0x0174
-            r6 = 2131627459(0x7f0e0dc3, float:1.8882183E38)
+            r6 = 2131627567(0x7f0e0e2f, float:1.8882402E38)
             java.lang.String r9 = "SendWithoutCompression"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            r9 = 2131165822(0x7var_e, float:1.7945872E38)
+            r9 = 2131165830(0x7var_, float:1.7945888E38)
             r13.setTextAndIcon(r6, r9)
         L_0x0174:
             r6 = 1128529920(0x43440000, float:196.0)
@@ -9070,7 +9092,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                       (wrap: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc : 0x0011: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) call: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc.<init>(org.telegram.ui.PhotoViewer$34$1):void type: CONSTRUCTOR)
                                      org.telegram.ui.PhotoViewer.access$18202(org.telegram.ui.PhotoViewer, java.lang.Runnable):java.lang.Runnable type: STATIC)
                                       (860 long)
-                                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable, long):void type: STATIC in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes.dex
+                                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable, long):void type: STATIC in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                     	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -9190,7 +9212,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                       (wrap: org.telegram.ui.PhotoViewer$34 : 0x000b: IGET  (r3v4 org.telegram.ui.PhotoViewer$34) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) org.telegram.ui.PhotoViewer.34.1.this$1 org.telegram.ui.PhotoViewer$34)
                                      org.telegram.ui.PhotoViewer.34.this$0 org.telegram.ui.PhotoViewer)
                                       (wrap: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc : 0x0011: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) call: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc.<init>(org.telegram.ui.PhotoViewer$34$1):void type: CONSTRUCTOR)
-                                     org.telegram.ui.PhotoViewer.access$18202(org.telegram.ui.PhotoViewer, java.lang.Runnable):java.lang.Runnable type: STATIC in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes.dex
+                                     org.telegram.ui.PhotoViewer.access$18202(org.telegram.ui.PhotoViewer, java.lang.Runnable):java.lang.Runnable type: STATIC in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                     	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                     	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -9204,14 +9226,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                       (wrap: org.telegram.ui.PhotoViewer : 0x000d: IGET  (r3v5 org.telegram.ui.PhotoViewer) = 
                                       (wrap: org.telegram.ui.PhotoViewer$34 : 0x000b: IGET  (r3v4 org.telegram.ui.PhotoViewer$34) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) org.telegram.ui.PhotoViewer.34.1.this$1 org.telegram.ui.PhotoViewer$34)
                                      org.telegram.ui.PhotoViewer.34.this$0 org.telegram.ui.PhotoViewer)
-                                     org.telegram.ui.PhotoViewer.videoPlayRunnable java.lang.Runnable in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes.dex
+                                     org.telegram.ui.PhotoViewer.videoPlayRunnable java.lang.Runnable in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                     	at jadx.core.codegen.InsnGen.inlineMethod(InsnGen.java:924)
                                     	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:684)
                                     	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
                                     	... 119 more
-                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0011: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) call: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc.<init>(org.telegram.ui.PhotoViewer$34$1):void type: CONSTRUCTOR in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes.dex
+                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0011: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc) = (r2v0 'this' org.telegram.ui.PhotoViewer$34$1 A[THIS]) call: org.telegram.ui.-$$Lambda$PhotoViewer$34$1$T8w12jHVQd-9nwOt326vidZDNCc.<init>(org.telegram.ui.PhotoViewer$34$1):void type: CONSTRUCTOR in method: org.telegram.ui.PhotoViewer.34.1.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                     	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                     	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -9761,8 +9783,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:13:0x0068, code lost:
-            if (r4 == null) goto L_0x006b;
+        /* JADX WARNING: Code restructure failed: missing block: B:13:0x0067, code lost:
+            if (r4 == null) goto L_0x006a;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         private int[] fixVideoWidthHeight(int r8, int r9) {
@@ -9777,46 +9799,46 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1[r3] = r9
                 int r4 = android.os.Build.VERSION.SDK_INT
                 r5 = 21
-                if (r4 < r5) goto L_0x006b
+                if (r4 < r5) goto L_0x006a
                 r4 = 0
-                android.media.MediaCodec r4 = android.media.MediaCodec.createEncoderByType(r0)     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                android.media.MediaCodecInfo r5 = r4.getCodecInfo()     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                android.media.MediaCodecInfo$CodecCapabilities r0 = r5.getCapabilitiesForType(r0)     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                android.media.MediaCodecInfo$VideoCapabilities r0 = r0.getVideoCapabilities()     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                android.util.Range r5 = r0.getSupportedWidths()     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                android.util.Range r0 = r0.getSupportedHeights()     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                java.lang.Comparable r5 = r5.getLower()     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                java.lang.Integer r5 = (java.lang.Integer) r5     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                int r5 = r5.intValue()     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                float r8 = (float) r8     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
+                android.media.MediaCodec r4 = android.media.MediaCodec.createEncoderByType(r0)     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                android.media.MediaCodecInfo r5 = r4.getCodecInfo()     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                android.media.MediaCodecInfo$CodecCapabilities r0 = r5.getCapabilitiesForType(r0)     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                android.media.MediaCodecInfo$VideoCapabilities r0 = r0.getVideoCapabilities()     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                android.util.Range r5 = r0.getSupportedWidths()     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                android.util.Range r0 = r0.getSupportedHeights()     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                java.lang.Comparable r5 = r5.getLower()     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                java.lang.Integer r5 = (java.lang.Integer) r5     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                int r5 = r5.intValue()     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                float r8 = (float) r8     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
                 r6 = 1098907648(0x41800000, float:16.0)
                 float r8 = r8 / r6
-                int r8 = java.lang.Math.round(r8)     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
+                int r8 = java.lang.Math.round(r8)     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
                 int r8 = r8 * 16
-                int r8 = java.lang.Math.max(r5, r8)     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                r1[r2] = r8     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                java.lang.Comparable r8 = r0.getLower()     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                java.lang.Integer r8 = (java.lang.Integer) r8     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                int r8 = r8.intValue()     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                float r9 = (float) r9     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
+                int r8 = java.lang.Math.max(r5, r8)     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                r1[r2] = r8     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                java.lang.Comparable r8 = r0.getLower()     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                java.lang.Integer r8 = (java.lang.Integer) r8     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                int r8 = r8.intValue()     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                float r9 = (float) r9     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
                 float r9 = r9 / r6
-                int r9 = java.lang.Math.round(r9)     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
+                int r9 = java.lang.Math.round(r9)     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
                 int r9 = r9 * 16
-                int r8 = java.lang.Math.max(r8, r9)     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-                r1[r3] = r8     // Catch:{ Exception -> 0x0068, all -> 0x0061 }
-            L_0x005d:
-                r4.release()     // Catch:{ Exception -> 0x006b }
-                goto L_0x006b
-            L_0x0061:
+                int r8 = java.lang.Math.max(r8, r9)     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+                r1[r3] = r8     // Catch:{ Exception -> 0x0067, all -> 0x0060 }
+            L_0x005c:
+                r4.release()     // Catch:{ Exception -> 0x006a }
+                goto L_0x006a
+            L_0x0060:
                 r8 = move-exception
-                if (r4 == 0) goto L_0x0067
-                r4.release()     // Catch:{ Exception -> 0x0067 }
-            L_0x0067:
+                if (r4 == 0) goto L_0x0066
+                r4.release()     // Catch:{ Exception -> 0x0066 }
+            L_0x0066:
                 throw r8
-            L_0x0068:
-                if (r4 == 0) goto L_0x006b
-                goto L_0x005d
-            L_0x006b:
+            L_0x0067:
+                if (r4 == 0) goto L_0x006a
+                goto L_0x005c
+            L_0x006a:
                 return r1
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.fixVideoWidthHeight(int, int):int[]");
@@ -10329,8 +10351,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (!this.videoPlayer.isPlaying() || i == 4) {
                     if (this.isPlaying || i == 4) {
                         if (this.currentEditMode != 3) {
-                            this.photoProgressViews[0].setIndexedAlpha(1, 1.0f, false);
-                            this.photoProgressViews[0].setBackgroundState(3, false, this.isPlaying);
+                            this.photoProgressViews[0].setIndexedAlpha(1, 1.0f, i == 4);
+                            PhotoProgressView[] photoProgressViewArr = this.photoProgressViews;
+                            photoProgressViewArr[0].setBackgroundState(3, false, photoProgressViewArr[0].animAlphas[1] > 0.0f);
                         }
                         this.isPlaying = false;
                         AndroidUtilities.cancelRunOnUIThread(this.updateProgressRunnable);
@@ -10607,8 +10630,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                 boolean unused2 = PhotoViewer.this.switchingInlineMode = false;
                                 if (Build.VERSION.SDK_INT >= 21) {
                                     PhotoViewer.this.aspectRatioFrameLayout.getLocationInWindow(PhotoViewer.this.pipPosition);
-                                    int[] access$20300 = PhotoViewer.this.pipPosition;
-                                    access$20300[1] = (int) (((float) access$20300[1]) - PhotoViewer.this.containerView.getTranslationY());
+                                    int[] access$20400 = PhotoViewer.this.pipPosition;
+                                    access$20400[1] = (int) (((float) access$20400[1]) - PhotoViewer.this.containerView.getTranslationY());
                                     PhotoViewer.this.textureImageView.setTranslationX(PhotoViewer.this.textureImageView.getTranslationX() + ((float) PhotoViewer.this.getLeftInset()));
                                     PhotoViewer.this.videoTextureView.setTranslationX((PhotoViewer.this.videoTextureView.getTranslationX() + ((float) PhotoViewer.this.getLeftInset())) - PhotoViewer.this.aspectRatioFrameLayout.getX());
                                     AnimatorSet animatorSet = new AnimatorSet();
@@ -14488,8 +14511,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         /* JADX WARNING: type inference failed for: r11v23 */
         /* JADX WARNING: type inference failed for: r11v24 */
         /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:299:0x078b  */
-        /* JADX WARNING: Removed duplicated region for block: B:304:0x07d2  */
+        /* JADX WARNING: Removed duplicated region for block: B:299:0x0788  */
+        /* JADX WARNING: Removed duplicated region for block: B:304:0x07cf  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onPhotoShow(org.telegram.messenger.MessageObject r20, org.telegram.tgnet.TLRPC$FileLocation r21, org.telegram.messenger.ImageLocation r22, org.telegram.messenger.ImageLocation r23, java.util.ArrayList<org.telegram.messenger.MessageObject> r24, java.util.ArrayList<org.telegram.messenger.SecureDocument> r25, java.util.List<java.lang.Object> r26, int r27, org.telegram.ui.PhotoViewer.PlaceProviderObject r28) {
             /*
@@ -14621,7 +14644,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r7 = 0
                 r0.sharedMediaType = r7
                 org.telegram.ui.ActionBar.ActionBarMenuSubItem r8 = r0.allMediaItem
-                r13 = 2131627571(0x7f0e0e33, float:1.888241E38)
+                r13 = 2131627679(0x7f0e0e9f, float:1.888263E38)
                 java.lang.String r10 = "ShowAllMedia"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r13)
                 r8.setText(r10)
@@ -14779,7 +14802,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9.setVisibility(r10)
                 r0.muteVideo = r7
                 android.widget.ImageView r7 = r0.muteItem
-                r9 = 2131166135(0x7var_b7, float:1.7946507E38)
+                r9 = 2131166143(0x7var_bf, float:1.7946523E38)
                 r7.setImageResource(r9)
                 org.telegram.ui.Components.PickerBottomLayoutViewer r7 = r0.editorDoneLayout
                 r7.setVisibility(r10)
@@ -14831,7 +14854,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r7 = r7.getTotalImageCount()
                 r0.totalImagesCount = r7
             L_0x02b0:
-                if (r1 == 0) goto L_0x02e4
+                if (r1 == 0) goto L_0x02e3
                 android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext
                 java.lang.String r9 = "playback_speed"
                 r11 = 0
@@ -14849,71 +14872,71 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r9 = r9.toString()
                 float r7 = r7.getFloat(r9, r13)
                 r0.currentVideoSpeed = r7
-                goto L_0x02e6
-            L_0x02e4:
+                goto L_0x02e5
+            L_0x02e3:
                 r0.currentVideoSpeed = r13
-            L_0x02e6:
+            L_0x02e5:
                 r19.setMenuItemIcon()
-                r7 = 2131627570(0x7f0e0e32, float:1.8882408E38)
+                r7 = 2131627678(0x7f0e0e9e, float:1.8882627E38)
                 java.lang.String r9 = "ShowAllGIFs"
-                r11 = 2131627569(0x7f0e0e31, float:1.8882406E38)
+                r11 = 2131627677(0x7f0e0e9d, float:1.8882625E38)
                 java.lang.String r12 = "ShowAllFiles"
                 r13 = 5
-                if (r1 == 0) goto L_0x043a
-                if (r2 != 0) goto L_0x043a
+                if (r1 == 0) goto L_0x0437
+                if (r2 != 0) goto L_0x0437
                 org.telegram.tgnet.TLRPC$Message r2 = r1.messageOwner
                 org.telegram.tgnet.TLRPC$MessageMedia r2 = r2.media
                 boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-                if (r3 == 0) goto L_0x038a
+                if (r3 == 0) goto L_0x0387
                 org.telegram.tgnet.TLRPC$WebPage r2 = r2.webpage
-                if (r2 == 0) goto L_0x038a
+                if (r2 == 0) goto L_0x0387
                 java.lang.String r3 = r2.site_name
-                if (r3 == 0) goto L_0x038a
+                if (r3 == 0) goto L_0x0387
                 java.lang.String r3 = r3.toLowerCase()
                 java.lang.String r4 = "instagram"
                 boolean r4 = r3.equals(r4)
-                if (r4 != 0) goto L_0x0328
+                if (r4 != 0) goto L_0x0325
                 java.lang.String r4 = "twitter"
                 boolean r3 = r3.equals(r4)
-                if (r3 != 0) goto L_0x0328
+                if (r3 != 0) goto L_0x0325
                 java.lang.String r3 = r2.type
                 java.lang.String r4 = "telegram_album"
                 boolean r3 = r4.equals(r3)
-                if (r3 == 0) goto L_0x038a
-            L_0x0328:
+                if (r3 == 0) goto L_0x0387
+            L_0x0325:
                 java.lang.String r3 = r2.author
                 boolean r3 = android.text.TextUtils.isEmpty(r3)
-                if (r3 != 0) goto L_0x0334
+                if (r3 != 0) goto L_0x0331
                 java.lang.String r3 = r2.author
                 r0.nameOverride = r3
-            L_0x0334:
+            L_0x0331:
                 org.telegram.tgnet.TLRPC$Page r3 = r2.cached_page
                 boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_page
-                if (r3 == 0) goto L_0x035d
+                if (r3 == 0) goto L_0x035a
                 r3 = 0
-            L_0x033b:
+            L_0x0338:
                 org.telegram.tgnet.TLRPC$Page r4 = r2.cached_page
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r4 = r4.blocks
                 int r4 = r4.size()
-                if (r3 >= r4) goto L_0x035d
+                if (r3 >= r4) goto L_0x035a
                 org.telegram.tgnet.TLRPC$Page r4 = r2.cached_page
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r4 = r4.blocks
                 java.lang.Object r4 = r4.get(r3)
                 org.telegram.tgnet.TLRPC$PageBlock r4 = (org.telegram.tgnet.TLRPC$PageBlock) r4
                 boolean r6 = r4 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockAuthorDate
-                if (r6 == 0) goto L_0x035a
+                if (r6 == 0) goto L_0x0357
                 org.telegram.tgnet.TLRPC$TL_pageBlockAuthorDate r4 = (org.telegram.tgnet.TLRPC$TL_pageBlockAuthorDate) r4
                 int r2 = r4.published_date
                 r0.dateOverride = r2
-                goto L_0x035d
-            L_0x035a:
+                goto L_0x035a
+            L_0x0357:
                 int r3 = r3 + 1
-                goto L_0x033b
-            L_0x035d:
+                goto L_0x0338
+            L_0x035a:
                 r2 = 0
                 java.util.ArrayList r3 = r1.getWebPagePhotos(r2, r2)
                 boolean r2 = r3.isEmpty()
-                if (r2 != 0) goto L_0x038a
+                if (r2 != 0) goto L_0x0387
                 int r2 = r20.getId()
                 r0.slideshowMessageId = r2
                 r2 = 0
@@ -14925,69 +14948,69 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0.totalImagesCount = r2
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
                 int r2 = r2.indexOf(r1)
-                if (r2 >= 0) goto L_0x0387
+                if (r2 >= 0) goto L_0x0384
                 r2 = 0
-            L_0x0387:
+            L_0x0384:
                 r0.setImageIndex(r2)
-            L_0x038a:
+            L_0x0387:
                 boolean r2 = r20.canPreviewDocument()
-                if (r2 == 0) goto L_0x039c
+                if (r2 == 0) goto L_0x0399
                 r0.sharedMediaType = r14
                 org.telegram.ui.ActionBar.ActionBarMenuSubItem r2 = r0.allMediaItem
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 r2.setText(r3)
-                goto L_0x03ad
-            L_0x039c:
+                goto L_0x03aa
+            L_0x0399:
                 boolean r2 = r20.isGif()
-                if (r2 == 0) goto L_0x03ad
+                if (r2 == 0) goto L_0x03aa
                 r0.sharedMediaType = r13
                 org.telegram.ui.ActionBar.ActionBarMenuSubItem r2 = r0.allMediaItem
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r9, r7)
                 r2.setText(r3)
-            L_0x03ad:
+            L_0x03aa:
                 boolean r2 = r0.isEmbedVideo
-                if (r2 == 0) goto L_0x03bc
+                if (r2 == 0) goto L_0x03b9
                 android.widget.FrameLayout r2 = r0.bottomLayout
                 r3 = 0
                 r2.setTag(r3)
                 android.widget.FrameLayout r2 = r0.bottomLayout
                 r2.setVisibility(r10)
-            L_0x03bc:
+            L_0x03b9:
                 int r2 = r0.slideshowMessageId
-                if (r2 != 0) goto L_0x0444
+                if (r2 != 0) goto L_0x0441
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
                 r2.add(r1)
                 long r2 = r1.eventId
                 r6 = 0
                 int r4 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-                if (r4 == 0) goto L_0x03d1
+                if (r4 == 0) goto L_0x03ce
                 r4 = 0
                 r0.needSearchImageInArr = r4
-                goto L_0x0436
-            L_0x03d1:
+                goto L_0x0433
+            L_0x03ce:
                 r4 = 0
                 org.telegram.ui.Components.AnimatedFileDrawable r6 = r0.currentAnimation
-                if (r6 == 0) goto L_0x03e4
+                if (r6 == 0) goto L_0x03e1
                 r0.needSearchImageInArr = r4
                 boolean r1 = r20.canForwardMessage()
-                if (r1 == 0) goto L_0x0436
+                if (r1 == 0) goto L_0x0433
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.sendItem
                 r0.setItemVisible(r1, r14, r4)
-                goto L_0x0436
-            L_0x03e4:
+                goto L_0x0433
+            L_0x03e1:
                 boolean r4 = r1.scheduled
-                if (r4 != 0) goto L_0x0426
+                if (r4 != 0) goto L_0x0423
                 org.telegram.tgnet.TLRPC$Message r4 = r1.messageOwner
                 org.telegram.tgnet.TLRPC$MessageMedia r6 = r4.media
                 boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaInvoice
-                if (r7 != 0) goto L_0x0426
+                if (r7 != 0) goto L_0x0423
                 boolean r6 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-                if (r6 != 0) goto L_0x0426
+                if (r6 != 0) goto L_0x0423
                 org.telegram.tgnet.TLRPC$MessageAction r4 = r4.action
-                if (r4 == 0) goto L_0x03fc
+                if (r4 == 0) goto L_0x03f9
                 boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
-                if (r4 == 0) goto L_0x0426
-            L_0x03fc:
+                if (r4 == 0) goto L_0x0423
+            L_0x03f9:
                 r0.needSearchImageInArr = r14
                 android.util.SparseArray<org.telegram.messenger.MessageObject>[] r2 = r0.imagesByIds
                 r3 = 0
@@ -14995,61 +15018,61 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r3 = r20.getId()
                 r2.put(r3, r1)
                 org.telegram.ui.ChatActivity r1 = r0.parentChatActivity
-                if (r1 == 0) goto L_0x0414
+                if (r1 == 0) goto L_0x0411
                 boolean r1 = r1.isThreadChat()
-                if (r1 != 0) goto L_0x041f
-            L_0x0414:
+                if (r1 != 0) goto L_0x041c
+            L_0x0411:
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.showSubItem(r8)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r2 = 2
                 r1.showSubItem(r2)
-            L_0x041f:
+            L_0x041c:
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.sendItem
                 r4 = 0
                 r0.setItemVisible(r1, r14, r4)
-                goto L_0x0436
-            L_0x0426:
+                goto L_0x0433
+            L_0x0423:
                 r4 = 0
                 boolean r1 = r0.isEmbedVideo
-                if (r1 == 0) goto L_0x0436
+                if (r1 == 0) goto L_0x0433
                 r6 = 0
                 int r1 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-                if (r1 != 0) goto L_0x0436
+                if (r1 != 0) goto L_0x0433
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.sendItem
                 r0.setItemVisible(r1, r14, r4)
-            L_0x0436:
+            L_0x0433:
                 r0.setImageIndex(r4)
-                goto L_0x0444
-            L_0x043a:
-                if (r3 == 0) goto L_0x0447
+                goto L_0x0441
+            L_0x0437:
+                if (r3 == 0) goto L_0x0444
                 java.util.ArrayList<org.telegram.messenger.SecureDocument> r1 = r0.secureDocuments
                 r1.addAll(r3)
                 r0.setImageIndex(r5)
+            L_0x0441:
+                r2 = 0
+                goto L_0x076c
             L_0x0444:
-                r2 = 0
-                goto L_0x076f
-            L_0x0447:
-                if (r21 == 0) goto L_0x04f4
-                if (r6 == 0) goto L_0x044e
+                if (r21 == 0) goto L_0x04f1
+                if (r6 == 0) goto L_0x044b
                 int r1 = r6.dialogId
-                goto L_0x044f
-            L_0x044e:
+                goto L_0x044c
+            L_0x044b:
                 r1 = 0
-            L_0x044f:
+            L_0x044c:
                 r0.avatarsDialogId = r1
-                if (r6 == 0) goto L_0x0459
+                if (r6 == 0) goto L_0x0456
                 boolean r2 = r6.canEdit
-                if (r2 == 0) goto L_0x0459
+                if (r2 == 0) goto L_0x0456
                 r2 = 1
-                goto L_0x045a
-            L_0x0459:
+                goto L_0x0457
+            L_0x0456:
                 r2 = 0
-            L_0x045a:
+            L_0x0457:
                 r0.canEditAvatar = r2
-                if (r22 != 0) goto L_0x048f
-                if (r1 == 0) goto L_0x048f
-                if (r1 <= 0) goto L_0x0478
+                if (r22 != 0) goto L_0x048c
+                if (r1 == 0) goto L_0x048c
+                if (r1 <= 0) goto L_0x0475
                 int r1 = r0.currentAccount
                 org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
                 int r2 = r0.avatarsDialogId
@@ -15057,8 +15080,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r2)
                 r2 = 0
                 org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForUserOrChat(r1, r2)
-                goto L_0x0491
-            L_0x0478:
+                goto L_0x048e
+            L_0x0475:
                 r2 = 0
                 int r1 = r0.currentAccount
                 org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
@@ -15067,31 +15090,31 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
                 org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r3)
                 org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForUserOrChat(r1, r2)
-                goto L_0x0491
-            L_0x048f:
+                goto L_0x048e
+            L_0x048c:
                 r1 = r22
-            L_0x0491:
-                if (r1 != 0) goto L_0x0494
+            L_0x048e:
+                if (r1 != 0) goto L_0x0491
                 return
-            L_0x0494:
+            L_0x0491:
                 java.util.ArrayList<org.telegram.messenger.ImageLocation> r2 = r0.imagesArrLocations
                 r2.add(r1)
                 java.util.ArrayList<org.telegram.messenger.ImageLocation> r2 = r0.imagesArrLocationsVideo
-                if (r23 == 0) goto L_0x04a0
+                if (r23 == 0) goto L_0x049d
                 r3 = r23
-                goto L_0x04a1
-            L_0x04a0:
+                goto L_0x049e
+            L_0x049d:
                 r3 = r1
-            L_0x04a1:
+            L_0x049e:
                 r2.add(r3)
                 r0.currentAvatarLocation = r1
                 java.util.ArrayList<java.lang.Integer> r1 = r0.imagesArrLocationsSizes
-                if (r6 == 0) goto L_0x04ad
+                if (r6 == 0) goto L_0x04aa
                 int r2 = r6.size
-                goto L_0x04ae
-            L_0x04ad:
+                goto L_0x04ab
+            L_0x04aa:
                 r2 = 0
-            L_0x04ae:
+            L_0x04ab:
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 r1.add(r2)
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r0.imagesArrMessages
@@ -15103,9 +15126,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1.add(r2)
                 android.widget.LinearLayout r1 = r0.bottomButtonsLayout
                 boolean r2 = r0.videoPlayerControlVisible
-                if (r2 != 0) goto L_0x04cc
+                if (r2 != 0) goto L_0x04c9
                 r10 = 0
-            L_0x04cc:
+            L_0x04c9:
                 r1.setVisibility(r10)
                 r0.allowShare = r14
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
@@ -15113,28 +15136,28 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1.hideSubItem(r2)
                 android.widget.LinearLayout r1 = r0.bottomButtonsLayout
                 int r1 = r1.getVisibility()
-                if (r1 != 0) goto L_0x04e7
+                if (r1 != 0) goto L_0x04e4
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r2 = 10
                 r1.hideSubItem(r2)
-                goto L_0x04ee
-            L_0x04e7:
+                goto L_0x04eb
+            L_0x04e4:
                 r2 = 10
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.showSubItem(r2)
-            L_0x04ee:
+            L_0x04eb:
                 r1 = 0
                 r0.setImageIndex(r1)
-                goto L_0x0444
-            L_0x04f4:
-                if (r2 == 0) goto L_0x058f
+                goto L_0x0441
+            L_0x04f1:
+                if (r2 == 0) goto L_0x058c
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
                 r1.addAll(r2)
                 r1 = 0
-            L_0x04fc:
+            L_0x04f9:
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
                 int r2 = r2.size()
-                if (r1 >= r2) goto L_0x052e
+                if (r1 >= r2) goto L_0x052b
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
                 java.lang.Object r2 = r2.get(r1)
                 org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
@@ -15143,76 +15166,76 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r18 = r12
                 long r11 = r0.currentDialogId
                 int r4 = (r15 > r11 ? 1 : (r15 == r11 ? 0 : -1))
-                if (r4 != 0) goto L_0x051c
+                if (r4 != 0) goto L_0x0519
                 r4 = 0
-                goto L_0x051d
-            L_0x051c:
+                goto L_0x051a
+            L_0x0519:
                 r4 = 1
-            L_0x051d:
+            L_0x051a:
                 r3 = r3[r4]
                 int r4 = r2.getId()
                 r3.put(r4, r2)
                 int r1 = r1 + 1
                 r12 = r18
-                r11 = 2131627569(0x7f0e0e31, float:1.8882406E38)
-                goto L_0x04fc
-            L_0x052e:
+                r11 = 2131627677(0x7f0e0e9d, float:1.8882625E38)
+                goto L_0x04f9
+            L_0x052b:
                 r18 = r12
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
                 java.lang.Object r1 = r1.get(r5)
                 org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
                 boolean r2 = r1.scheduled
-                if (r2 != 0) goto L_0x0582
+                if (r2 != 0) goto L_0x057f
                 org.telegram.ui.ChatActivity r2 = r0.parentChatActivity
-                if (r2 == 0) goto L_0x0546
+                if (r2 == 0) goto L_0x0543
                 boolean r2 = r2.isThreadChat()
-                if (r2 != 0) goto L_0x0582
-            L_0x0546:
+                if (r2 != 0) goto L_0x057f
+            L_0x0543:
                 r0.opennedFromMedia = r14
                 org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.menuItem
                 r2.showSubItem(r8)
                 boolean r2 = r1.canForwardMessage()
-                if (r2 == 0) goto L_0x0559
+                if (r2 == 0) goto L_0x0556
                 org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.sendItem
                 r3 = 0
                 r0.setItemVisible(r2, r14, r3)
-            L_0x0559:
+            L_0x0556:
                 boolean r2 = r1.canPreviewDocument()
-                if (r2 == 0) goto L_0x0570
+                if (r2 == 0) goto L_0x056d
                 r0.sharedMediaType = r14
                 org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.allMediaItem
                 r3 = r18
-                r2 = 2131627569(0x7f0e0e31, float:1.8882406E38)
+                r2 = 2131627677(0x7f0e0e9d, float:1.8882625E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x058a
-            L_0x0570:
+                goto L_0x0587
+            L_0x056d:
                 boolean r1 = r1.isGif()
-                if (r1 == 0) goto L_0x058a
+                if (r1 == 0) goto L_0x0587
                 r0.sharedMediaType = r13
                 org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.allMediaItem
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r7)
                 r1.setText(r2)
-                goto L_0x058a
-            L_0x0582:
+                goto L_0x0587
+            L_0x057f:
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
                 int r1 = r1.size()
                 r0.totalImagesCount = r1
-            L_0x058a:
+            L_0x0587:
                 r0.setImageIndex(r5)
-                goto L_0x0444
-            L_0x058f:
-                if (r4 == 0) goto L_0x076b
+                goto L_0x0441
+            L_0x058c:
+                if (r4 == 0) goto L_0x0768
                 int r1 = r0.sendPhotoType
-                if (r1 == 0) goto L_0x05a2
-                if (r1 == r8) goto L_0x05a2
+                if (r1 == 0) goto L_0x059f
+                if (r1 == r8) goto L_0x059f
                 r2 = 2
-                if (r1 == r2) goto L_0x059c
-                if (r1 != r13) goto L_0x05b8
-            L_0x059c:
+                if (r1 == r2) goto L_0x0599
+                if (r1 != r13) goto L_0x05b5
+            L_0x0599:
                 int r1 = r26.size()
-                if (r1 <= r14) goto L_0x05b8
-            L_0x05a2:
+                if (r1 <= r14) goto L_0x05b5
+            L_0x059f:
                 org.telegram.ui.Components.CheckBox r1 = r0.checkImageView
                 r2 = 0
                 r1.setVisibility(r2)
@@ -15222,21 +15245,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r2 = 1120403456(0x42CLASSNAME, float:100.0)
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                 r1.setTitleRightMargin(r2)
-            L_0x05b8:
+            L_0x05b5:
                 int r1 = r0.sendPhotoType
                 r2 = 2
-                if (r1 == r2) goto L_0x05bf
-                if (r1 != r13) goto L_0x05d2
-            L_0x05bf:
+                if (r1 == r2) goto L_0x05bc
+                if (r1 != r13) goto L_0x05cf
+            L_0x05bc:
                 org.telegram.ui.PhotoViewer$PhotoViewerProvider r1 = r0.placeProvider
                 boolean r1 = r1.canCaptureMorePhotos()
-                if (r1 == 0) goto L_0x05d2
+                if (r1 == 0) goto L_0x05cf
                 android.widget.ImageView r1 = r0.cameraItem
                 r2 = 0
                 r1.setVisibility(r2)
                 android.widget.ImageView r1 = r0.cameraItem
                 r1.setTag(r15)
-            L_0x05d2:
+            L_0x05cf:
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.setVisibility(r10)
                 java.util.ArrayList<java.lang.Object> r1 = r0.imagesArrLocals
@@ -15244,20 +15267,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.util.ArrayList<java.lang.Object> r1 = r0.imagesArrLocals
                 java.lang.Object r1 = r1.get(r5)
                 boolean r2 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry
-                if (r2 == 0) goto L_0x0681
+                if (r2 == 0) goto L_0x067e
                 int r2 = r0.sendPhotoType
                 r3 = 10
-                if (r2 != r3) goto L_0x05fd
+                if (r2 != r3) goto L_0x05fa
                 android.widget.ImageView r1 = r0.cropItem
                 r1.setVisibility(r10)
                 android.widget.ImageView r1 = r0.rotateItem
                 r1.setVisibility(r10)
                 android.widget.ImageView r1 = r0.mirrorItem
                 r1.setVisibility(r10)
-                goto L_0x067d
-            L_0x05fd:
+                goto L_0x067a
+            L_0x05fa:
                 boolean r3 = r0.isDocumentsPicker
-                if (r3 == 0) goto L_0x062a
+                if (r3 == 0) goto L_0x0627
                 android.widget.ImageView r1 = r0.cropItem
                 r1.setVisibility(r10)
                 android.widget.ImageView r1 = r0.rotateItem
@@ -15274,11 +15297,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r2 = 1118306304(0x42a80000, float:84.0)
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                 r1.height = r2
-                goto L_0x067d
-            L_0x062a:
+                goto L_0x067a
+            L_0x0627:
                 org.telegram.messenger.MediaController$PhotoEntry r1 = (org.telegram.messenger.MediaController.PhotoEntry) r1
                 boolean r1 = r1.isVideo
-                if (r1 == 0) goto L_0x0658
+                if (r1 == 0) goto L_0x0655
                 android.widget.ImageView r1 = r0.cropItem
                 r1.setVisibility(r10)
                 android.widget.ImageView r1 = r0.rotateItem
@@ -15296,62 +15319,62 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r2 = -r2
                 float r2 = (float) r2
                 r1.setTranslationY(r2)
-                goto L_0x067d
-            L_0x0658:
+                goto L_0x067a
+            L_0x0655:
                 android.widget.ImageView r1 = r0.cropItem
-                if (r2 == r14) goto L_0x065e
+                if (r2 == r14) goto L_0x065b
                 r2 = 0
-                goto L_0x0660
-            L_0x065e:
+                goto L_0x065d
+            L_0x065b:
                 r2 = 8
-            L_0x0660:
+            L_0x065d:
                 r1.setVisibility(r2)
                 android.widget.ImageView r1 = r0.rotateItem
                 int r2 = r0.sendPhotoType
-                if (r2 == r14) goto L_0x066c
+                if (r2 == r14) goto L_0x0669
                 r2 = 8
-                goto L_0x066d
-            L_0x066c:
+                goto L_0x066a
+            L_0x0669:
                 r2 = 0
-            L_0x066d:
+            L_0x066a:
                 r1.setVisibility(r2)
                 android.widget.ImageView r1 = r0.mirrorItem
                 int r2 = r0.sendPhotoType
-                if (r2 == r14) goto L_0x0679
+                if (r2 == r14) goto L_0x0676
                 r2 = 8
-                goto L_0x067a
-            L_0x0679:
+                goto L_0x0677
+            L_0x0676:
                 r2 = 0
-            L_0x067a:
+            L_0x0677:
                 r1.setVisibility(r2)
-            L_0x067d:
+            L_0x067a:
                 boolean r1 = r0.isDocumentsPicker
                 r1 = r1 ^ r14
-                goto L_0x06bc
-            L_0x0681:
+                goto L_0x06b9
+            L_0x067e:
                 boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$BotInlineResult
-                if (r2 == 0) goto L_0x0696
+                if (r2 == 0) goto L_0x0693
                 android.widget.ImageView r1 = r0.cropItem
                 r1.setVisibility(r10)
                 android.widget.ImageView r1 = r0.rotateItem
                 r1.setVisibility(r10)
                 android.widget.ImageView r1 = r0.mirrorItem
                 r1.setVisibility(r10)
-            L_0x0694:
+            L_0x0691:
                 r1 = 0
-                goto L_0x06bc
-            L_0x0696:
+                goto L_0x06b9
+            L_0x0693:
                 android.widget.ImageView r2 = r0.cropItem
                 boolean r3 = r1 instanceof org.telegram.messenger.MediaController.SearchImage
-                if (r3 == 0) goto L_0x06a4
+                if (r3 == 0) goto L_0x06a1
                 org.telegram.messenger.MediaController$SearchImage r1 = (org.telegram.messenger.MediaController.SearchImage) r1
                 int r1 = r1.type
-                if (r1 != 0) goto L_0x06a4
+                if (r1 != 0) goto L_0x06a1
                 r1 = 0
-                goto L_0x06a6
-            L_0x06a4:
+                goto L_0x06a3
+            L_0x06a1:
                 r1 = 8
-            L_0x06a6:
+            L_0x06a3:
                 r2.setVisibility(r1)
                 android.widget.ImageView r1 = r0.rotateItem
                 r1.setVisibility(r10)
@@ -15359,53 +15382,53 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1.setVisibility(r10)
                 android.widget.ImageView r1 = r0.cropItem
                 int r1 = r1.getVisibility()
-                if (r1 != 0) goto L_0x0694
+                if (r1 != 0) goto L_0x0691
                 r1 = 1
-            L_0x06bc:
+            L_0x06b9:
                 org.telegram.ui.ChatActivity r2 = r0.parentChatActivity
-                if (r2 == 0) goto L_0x0702
+                if (r2 == 0) goto L_0x06ff
                 org.telegram.ui.Adapters.MentionsAdapter r3 = r0.mentionsAdapter
                 org.telegram.tgnet.TLRPC$ChatFull r2 = r2.chatInfo
                 r3.setChatInfo(r2)
                 org.telegram.ui.Adapters.MentionsAdapter r2 = r0.mentionsAdapter
                 org.telegram.ui.ChatActivity r3 = r0.parentChatActivity
                 org.telegram.tgnet.TLRPC$Chat r3 = r3.currentChat
-                if (r3 == 0) goto L_0x06d1
+                if (r3 == 0) goto L_0x06ce
                 r3 = 1
-                goto L_0x06d2
-            L_0x06d1:
+                goto L_0x06cf
+            L_0x06ce:
                 r3 = 0
-            L_0x06d2:
+            L_0x06cf:
                 r2.setNeedUsernames(r3)
                 org.telegram.ui.Adapters.MentionsAdapter r2 = r0.mentionsAdapter
                 r3 = 0
                 r2.setNeedBotContext(r3)
-                if (r1 == 0) goto L_0x06eb
+                if (r1 == 0) goto L_0x06e8
                 org.telegram.ui.PhotoViewer$PhotoViewerProvider r1 = r0.placeProvider
-                if (r1 == 0) goto L_0x06e9
-                if (r1 == 0) goto L_0x06eb
+                if (r1 == 0) goto L_0x06e6
+                if (r1 == 0) goto L_0x06e8
                 boolean r1 = r1.allowCaption()
-                if (r1 == 0) goto L_0x06eb
-            L_0x06e9:
+                if (r1 == 0) goto L_0x06e8
+            L_0x06e6:
                 r1 = 1
-                goto L_0x06ec
-            L_0x06eb:
+                goto L_0x06e9
+            L_0x06e8:
                 r1 = 0
-            L_0x06ec:
+            L_0x06e9:
                 r0.needCaptionLayout = r1
                 org.telegram.ui.Components.PhotoViewerCaptionEnterView r2 = r0.captionEditText
-                if (r1 == 0) goto L_0x06f4
+                if (r1 == 0) goto L_0x06f1
                 r1 = 0
-                goto L_0x06f6
-            L_0x06f4:
+                goto L_0x06f3
+            L_0x06f1:
                 r1 = 8
-            L_0x06f6:
+            L_0x06f3:
                 r2.setVisibility(r1)
                 boolean r1 = r0.needCaptionLayout
-                if (r1 == 0) goto L_0x0702
+                if (r1 == 0) goto L_0x06ff
                 org.telegram.ui.Components.PhotoViewerCaptionEnterView r1 = r0.captionEditText
                 r1.onCreate()
-            L_0x0702:
+            L_0x06ff:
                 android.widget.FrameLayout r1 = r0.pickerView
                 r2 = 0
                 r1.setVisibility(r2)
@@ -15426,62 +15449,62 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1.setTag(r2)
                 r0.setImageIndex(r5)
                 int r1 = r0.sendPhotoType
-                if (r1 != r14) goto L_0x073d
+                if (r1 != r14) goto L_0x073a
                 android.widget.ImageView r1 = r0.paintItem
                 r3 = 0
                 r1.setVisibility(r3)
                 android.widget.ImageView r1 = r0.tuneItem
                 r1.setVisibility(r3)
-                goto L_0x0767
-            L_0x073d:
-                if (r1 == r8) goto L_0x075d
-                if (r1 == r13) goto L_0x075d
+                goto L_0x0764
+            L_0x073a:
+                if (r1 == r8) goto L_0x075a
+                if (r1 == r13) goto L_0x075a
                 android.widget.ImageView r1 = r0.paintItem
                 java.lang.Object r3 = r1.getTag()
-                if (r3 == 0) goto L_0x074b
+                if (r3 == 0) goto L_0x0748
                 r3 = 0
-                goto L_0x074d
-            L_0x074b:
+                goto L_0x074a
+            L_0x0748:
                 r3 = 8
-            L_0x074d:
+            L_0x074a:
                 r1.setVisibility(r3)
                 android.widget.ImageView r1 = r0.tuneItem
                 java.lang.Object r3 = r1.getTag()
-                if (r3 == 0) goto L_0x0759
+                if (r3 == 0) goto L_0x0756
                 r10 = 0
-            L_0x0759:
+            L_0x0756:
                 r1.setVisibility(r10)
-                goto L_0x0767
-            L_0x075d:
+                goto L_0x0764
+            L_0x075a:
                 android.widget.ImageView r1 = r0.paintItem
                 r1.setVisibility(r10)
                 android.widget.ImageView r1 = r0.tuneItem
                 r1.setVisibility(r10)
-            L_0x0767:
+            L_0x0764:
                 r19.updateSelectedCount()
-                goto L_0x076f
-            L_0x076b:
+                goto L_0x076c
+            L_0x0768:
                 r2 = 0
                 r0.setImageIndex(r5)
-            L_0x076f:
+            L_0x076c:
                 org.telegram.ui.Components.AnimatedFileDrawable r1 = r0.currentAnimation
-                if (r1 != 0) goto L_0x07f4
+                if (r1 != 0) goto L_0x07f1
                 boolean r1 = r0.isEvent
-                if (r1 != 0) goto L_0x07f4
+                if (r1 != 0) goto L_0x07f1
                 long r3 = r0.currentDialogId
                 r6 = 0
                 int r1 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1))
-                if (r1 == 0) goto L_0x07d2
+                if (r1 == 0) goto L_0x07cf
                 int r1 = r0.totalImagesCount
-                if (r1 != 0) goto L_0x07d2
+                if (r1 != 0) goto L_0x07cf
                 org.telegram.messenger.MessageObject r1 = r0.currentMessageObject
-                if (r1 == 0) goto L_0x07d2
+                if (r1 == 0) goto L_0x07cf
                 boolean r3 = r1.scheduled
-                if (r3 != 0) goto L_0x07d2
+                if (r3 != 0) goto L_0x07cf
                 org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
                 int r1 = org.telegram.messenger.MediaDataController.getMediaType(r1)
                 int r3 = r0.sharedMediaType
-                if (r1 != r3) goto L_0x07f4
+                if (r1 != r3) goto L_0x07f1
                 int r1 = r0.currentAccount
                 org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
                 long r3 = r0.currentDialogId
@@ -15497,7 +15520,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 long r3 = r0.mergeDialogId
                 r6 = 0
                 int r1 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1))
-                if (r1 == 0) goto L_0x07f4
+                if (r1 == 0) goto L_0x07f1
                 int r1 = r0.currentAccount
                 org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
                 long r3 = r0.mergeDialogId
@@ -15510,10 +15533,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r24 = r7
                 r25 = r8
                 r20.getMediaCount(r21, r23, r24, r25)
-                goto L_0x07f4
-            L_0x07d2:
+                goto L_0x07f1
+            L_0x07cf:
                 int r1 = r0.avatarsDialogId
-                if (r1 == 0) goto L_0x07f4
+                if (r1 == 0) goto L_0x07f1
                 int r1 = r0.currentAccount
                 org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
                 int r3 = r0.avatarsDialogId
@@ -15528,99 +15551,99 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r25 = r8
                 r26 = r9
                 r20.loadDialogPhotos(r21, r22, r23, r25, r26)
-            L_0x07f4:
+            L_0x07f1:
                 org.telegram.messenger.MessageObject r1 = r0.currentMessageObject
-                if (r1 == 0) goto L_0x07fe
+                if (r1 == 0) goto L_0x07fb
                 boolean r1 = r1.isVideo()
-                if (r1 != 0) goto L_0x0821
-            L_0x07fe:
+                if (r1 != 0) goto L_0x081d
+            L_0x07fb:
                 org.telegram.tgnet.TLRPC$BotInlineResult r1 = r0.currentBotInlineResult
-                if (r1 == 0) goto L_0x0817
+                if (r1 == 0) goto L_0x0813
                 java.lang.String r1 = r1.type
                 java.lang.String r3 = "video"
                 boolean r1 = r1.equals(r3)
-                if (r1 != 0) goto L_0x0821
+                if (r1 != 0) goto L_0x081d
                 org.telegram.tgnet.TLRPC$BotInlineResult r1 = r0.currentBotInlineResult
                 org.telegram.tgnet.TLRPC$Document r1 = r1.document
                 boolean r1 = org.telegram.messenger.MessageObject.isVideoDocument(r1)
-                if (r1 != 0) goto L_0x0821
-            L_0x0817:
+                if (r1 != 0) goto L_0x081d
+            L_0x0813:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r0.pageBlocksAdapter
-                if (r1 == 0) goto L_0x0829
+                if (r1 == 0) goto L_0x0825
                 boolean r1 = r1.isVideo(r5)
-                if (r1 == 0) goto L_0x0829
-            L_0x0821:
+                if (r1 == 0) goto L_0x0825
+            L_0x081d:
                 r0.playerAutoStarted = r14
                 r1 = 0
                 r0.onActionClick(r1)
-                goto L_0x089b
-            L_0x0829:
+                goto L_0x0897
+            L_0x0825:
                 java.util.ArrayList<java.lang.Object> r1 = r0.imagesArrLocals
                 boolean r1 = r1.isEmpty()
-                if (r1 != 0) goto L_0x089b
+                if (r1 != 0) goto L_0x0897
                 java.util.ArrayList<java.lang.Object> r1 = r0.imagesArrLocals
                 java.lang.Object r1 = r1.get(r5)
                 org.telegram.ui.ChatActivity r3 = r0.parentChatActivity
-                if (r3 == 0) goto L_0x0840
+                if (r3 == 0) goto L_0x083c
                 org.telegram.tgnet.TLRPC$User r7 = r3.getCurrentUser()
-                goto L_0x0841
-            L_0x0840:
+                goto L_0x083d
+            L_0x083c:
                 r7 = r2
-            L_0x0841:
+            L_0x083d:
                 boolean r2 = r0.isDocumentsPicker
-                if (r2 != 0) goto L_0x086d
+                if (r2 != 0) goto L_0x0869
                 org.telegram.ui.ChatActivity r2 = r0.parentChatActivity
-                if (r2 == 0) goto L_0x086d
+                if (r2 == 0) goto L_0x0869
                 boolean r2 = r2.isSecretChat()
-                if (r2 != 0) goto L_0x086d
+                if (r2 != 0) goto L_0x0869
                 org.telegram.ui.ChatActivity r2 = r0.parentChatActivity
                 boolean r2 = r2.isInScheduleMode()
-                if (r2 != 0) goto L_0x086d
-                if (r7 == 0) goto L_0x086d
+                if (r2 != 0) goto L_0x0869
+                if (r7 == 0) goto L_0x0869
                 boolean r2 = r7.bot
-                if (r2 != 0) goto L_0x086d
+                if (r2 != 0) goto L_0x0869
                 boolean r2 = org.telegram.messenger.UserObject.isUserSelf(r7)
-                if (r2 != 0) goto L_0x086d
+                if (r2 != 0) goto L_0x0869
                 org.telegram.ui.ChatActivity r2 = r0.parentChatActivity
                 boolean r2 = r2.isEditingMessageMedia()
-                if (r2 != 0) goto L_0x086d
+                if (r2 != 0) goto L_0x0869
                 r7 = 1
-                goto L_0x086e
-            L_0x086d:
+                goto L_0x086a
+            L_0x0869:
                 r7 = 0
-            L_0x086e:
+            L_0x086a:
                 org.telegram.ui.PhotoViewer$PhotoViewerProvider r2 = r0.placeProvider
-                if (r2 == 0) goto L_0x0879
+                if (r2 == 0) goto L_0x0875
                 org.telegram.messenger.MessageObject r2 = r2.getEditingMessageObject()
-                if (r2 == 0) goto L_0x0879
+                if (r2 == 0) goto L_0x0875
                 r7 = 0
-            L_0x0879:
+            L_0x0875:
                 boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$BotInlineResult
-                if (r2 == 0) goto L_0x087f
+                if (r2 == 0) goto L_0x087b
                 r7 = 0
-                goto L_0x0893
-            L_0x087f:
+                goto L_0x088f
+            L_0x087b:
                 boolean r2 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry
-                if (r2 == 0) goto L_0x0884
-                goto L_0x0893
-            L_0x0884:
-                if (r7 == 0) goto L_0x0893
+                if (r2 == 0) goto L_0x0880
+                goto L_0x088f
+            L_0x0880:
+                if (r7 == 0) goto L_0x088f
                 boolean r2 = r1 instanceof org.telegram.messenger.MediaController.SearchImage
-                if (r2 == 0) goto L_0x0893
+                if (r2 == 0) goto L_0x088f
                 org.telegram.messenger.MediaController$SearchImage r1 = (org.telegram.messenger.MediaController.SearchImage) r1
                 int r1 = r1.type
-                if (r1 != 0) goto L_0x0891
-                goto L_0x0892
-            L_0x0891:
+                if (r1 != 0) goto L_0x088d
+                goto L_0x088e
+            L_0x088d:
                 r14 = 0
-            L_0x0892:
+            L_0x088e:
                 r7 = r14
-            L_0x0893:
-                if (r7 == 0) goto L_0x089b
+            L_0x088f:
+                if (r7 == 0) goto L_0x0897
                 android.widget.ImageView r1 = r0.timeItem
                 r2 = 0
                 r1.setVisibility(r2)
-            L_0x089b:
+            L_0x0897:
                 r19.checkFullscreenButton()
                 return
             */
@@ -15671,26 +15694,26 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:268:0x066b  */
-        /* JADX WARNING: Removed duplicated region for block: B:269:0x0672  */
-        /* JADX WARNING: Removed duplicated region for block: B:313:0x076c  */
-        /* JADX WARNING: Removed duplicated region for block: B:333:0x087d  */
-        /* JADX WARNING: Removed duplicated region for block: B:367:0x0942  */
-        /* JADX WARNING: Removed duplicated region for block: B:376:0x096a  */
-        /* JADX WARNING: Removed duplicated region for block: B:382:0x098a  */
-        /* JADX WARNING: Removed duplicated region for block: B:385:0x0999  */
-        /* JADX WARNING: Removed duplicated region for block: B:388:0x09b5  */
-        /* JADX WARNING: Removed duplicated region for block: B:391:0x09de  */
-        /* JADX WARNING: Removed duplicated region for block: B:413:0x0a4b  */
-        /* JADX WARNING: Removed duplicated region for block: B:414:0x0a4d  */
-        /* JADX WARNING: Removed duplicated region for block: B:417:0x0a55  */
-        /* JADX WARNING: Removed duplicated region for block: B:418:0x0a57  */
-        /* JADX WARNING: Removed duplicated region for block: B:421:0x0a5f  */
-        /* JADX WARNING: Removed duplicated region for block: B:422:0x0a61  */
-        /* JADX WARNING: Removed duplicated region for block: B:425:0x0a69  */
-        /* JADX WARNING: Removed duplicated region for block: B:426:0x0a6b  */
-        /* JADX WARNING: Removed duplicated region for block: B:429:0x0a73  */
-        /* JADX WARNING: Removed duplicated region for block: B:441:0x0a8c  */
+        /* JADX WARNING: Removed duplicated region for block: B:268:0x066a  */
+        /* JADX WARNING: Removed duplicated region for block: B:269:0x0671  */
+        /* JADX WARNING: Removed duplicated region for block: B:313:0x076a  */
+        /* JADX WARNING: Removed duplicated region for block: B:333:0x087b  */
+        /* JADX WARNING: Removed duplicated region for block: B:367:0x0940  */
+        /* JADX WARNING: Removed duplicated region for block: B:376:0x0968  */
+        /* JADX WARNING: Removed duplicated region for block: B:382:0x0988  */
+        /* JADX WARNING: Removed duplicated region for block: B:385:0x0997  */
+        /* JADX WARNING: Removed duplicated region for block: B:388:0x09b3  */
+        /* JADX WARNING: Removed duplicated region for block: B:391:0x09dc  */
+        /* JADX WARNING: Removed duplicated region for block: B:413:0x0a49  */
+        /* JADX WARNING: Removed duplicated region for block: B:414:0x0a4b  */
+        /* JADX WARNING: Removed duplicated region for block: B:417:0x0a53  */
+        /* JADX WARNING: Removed duplicated region for block: B:418:0x0a55  */
+        /* JADX WARNING: Removed duplicated region for block: B:421:0x0a5d  */
+        /* JADX WARNING: Removed duplicated region for block: B:422:0x0a5f  */
+        /* JADX WARNING: Removed duplicated region for block: B:425:0x0a67  */
+        /* JADX WARNING: Removed duplicated region for block: B:426:0x0a69  */
+        /* JADX WARNING: Removed duplicated region for block: B:429:0x0a71  */
+        /* JADX WARNING: Removed duplicated region for block: B:441:0x0a8a  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         private void setIsAboutToSwitchToIndex(int r29, boolean r30, boolean r31) {
             /*
@@ -15737,13 +15760,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r7 = ""
                 r9 = 0
                 r10 = 1
-                if (r5 != 0) goto L_0x05af
+                if (r5 != 0) goto L_0x05ae
                 int r1 = r0.switchingToIndex
-                if (r1 < 0) goto L_0x05ae
+                if (r1 < 0) goto L_0x05ad
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r0.imagesArr
                 int r5 = r5.size()
                 if (r1 < r5) goto L_0x0068
-                goto L_0x05ae
+                goto L_0x05ad
             L_0x0068:
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
                 int r5 = r0.switchingToIndex
@@ -15967,7 +15990,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 long r9 = (long) r7
                 r20 = 1000(0x3e8, double:4.94E-321)
                 long r9 = r9 * r20
-                r7 = 2131628418(0x7f0e1182, float:1.8884128E38)
+                r7 = 2131628588(0x7f0e122c, float:1.8884473E38)
                 r14 = 2
                 java.lang.Object[] r6 = new java.lang.Object[r14]
                 org.telegram.messenger.LocaleController r14 = org.telegram.messenger.LocaleController.getInstance()
@@ -16057,11 +16080,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r5 = 8
                 r4.setVisibility(r5)
                 org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-                r5 = 2131624389(0x7f0e01c5, float:1.8875956E38)
+                r5 = 2131624392(0x7f0e01c8, float:1.8875962E38)
                 java.lang.String r6 = "AttachGif"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r4.setTitle(r5)
-                goto L_0x05a6
+                goto L_0x05a5
             L_0x02f0:
                 int r5 = r0.totalImagesCount
                 int r6 = r0.totalImagesCountMerge
@@ -16181,7 +16204,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r8 = r8 + r9
                 java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
                 r7[r6] = r8
-                r6 = 2131626576(0x7f0e0a50, float:1.8880392E38)
+                r6 = 2131626613(0x7f0e0a75, float:1.8880467E38)
                 java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r12, r6, r7)
                 r5.setTitle(r6)
                 goto L_0x0519
@@ -16275,7 +16298,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r7 = r7 + r9
                 java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
                 r6[r8] = r7
-                r7 = 2131626576(0x7f0e0a50, float:1.8880392E38)
+                r7 = 2131626613(0x7f0e0a75, float:1.8880467E38)
                 java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r12, r7, r6)
                 r5.setTitle(r6)
                 goto L_0x0519
@@ -16296,7 +16319,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r5 = r1.canPreviewDocument()
                 if (r5 == 0) goto L_0x04c4
                 org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-                r6 = 2131624387(0x7f0e01c3, float:1.8875952E38)
+                r6 = 2131624390(0x7f0e01c6, float:1.8875958E38)
                 java.lang.String r7 = "AttachDocument"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5.setTitle(r6)
@@ -16305,13 +16328,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r5 = r1.isVideo()
                 if (r5 == 0) goto L_0x04d7
                 org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-                r6 = 2131624408(0x7f0e01d8, float:1.8875995E38)
+                r6 = 2131624411(0x7f0e01db, float:1.8876E38)
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
                 r5.setTitle(r6)
                 goto L_0x0519
             L_0x04d7:
                 org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-                r6 = 2131624402(0x7f0e01d2, float:1.8875983E38)
+                r6 = 2131624405(0x7f0e01d5, float:1.8875989E38)
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r13, r6)
                 r5.setTitle(r6)
                 goto L_0x0519
@@ -16327,7 +16350,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r5 = r1.isVideo()
                 if (r5 == 0) goto L_0x0505
                 org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-                r6 = 2131624408(0x7f0e01d8, float:1.8875995E38)
+                r6 = 2131624411(0x7f0e01db, float:1.8876E38)
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
                 r5.setTitle(r6)
                 goto L_0x0519
@@ -16335,7 +16358,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.tgnet.TLRPC$Document r5 = r1.getDocument()
                 if (r5 == 0) goto L_0x0519
                 org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-                r6 = 2131624387(0x7f0e01c3, float:1.8875952E38)
+                r6 = 2131624390(0x7f0e01c6, float:1.8875958E38)
                 java.lang.String r7 = "AttachDocument"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5.setTitle(r6)
@@ -16349,64 +16372,64 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0.setItemVisible(r5, r4, r4)
             L_0x0527:
                 boolean r5 = r0.isEmbedVideo
-                if (r5 != 0) goto L_0x0590
+                if (r5 != 0) goto L_0x058f
                 org.telegram.tgnet.TLRPC$Message r5 = r1.messageOwner
                 int r5 = r5.ttl
                 if (r5 == 0) goto L_0x0536
                 r6 = 3600(0xe10, float:5.045E-42)
                 if (r5 >= r6) goto L_0x0536
-                goto L_0x0590
+                goto L_0x058f
             L_0x0536:
                 r5 = 1
                 r0.allowShare = r5
                 org.telegram.ui.ActionBar.ActionBarMenuItem r6 = r0.menuItem
                 r6.showSubItem(r5)
                 org.telegram.tgnet.TLRPC$Document r5 = r1.getDocument()
-                if (r5 == 0) goto L_0x055a
+                if (r5 == 0) goto L_0x0559
                 boolean r5 = r1.canPreviewDocument()
-                if (r5 != 0) goto L_0x055a
+                if (r5 != 0) goto L_0x0559
                 java.lang.String r5 = r1.getMimeType()
                 java.lang.String r6 = "video/"
                 boolean r5 = r5.startsWith(r6)
-                if (r5 == 0) goto L_0x0558
-                goto L_0x055a
-            L_0x0558:
+                if (r5 == 0) goto L_0x0557
+                goto L_0x0559
+            L_0x0557:
                 r10 = 0
-                goto L_0x055b
-            L_0x055a:
+                goto L_0x055a
+            L_0x0559:
                 r10 = 1
-            L_0x055b:
+            L_0x055a:
                 android.widget.ImageView r5 = r0.paintButton
-                if (r10 == 0) goto L_0x0567
+                if (r10 == 0) goto L_0x0566
                 boolean r6 = r28.canSendMediaToParentChatActivity()
-                if (r6 == 0) goto L_0x0567
+                if (r6 == 0) goto L_0x0566
                 r6 = 0
-                goto L_0x0569
-            L_0x0567:
+                goto L_0x0568
+            L_0x0566:
                 r6 = 8
-            L_0x0569:
+            L_0x0568:
                 r5.setVisibility(r6)
                 android.widget.LinearLayout r5 = r0.bottomButtonsLayout
                 boolean r6 = r0.videoPlayerControlVisible
-                if (r6 != 0) goto L_0x0573
-                goto L_0x0575
-            L_0x0573:
+                if (r6 != 0) goto L_0x0572
+                goto L_0x0574
+            L_0x0572:
                 r4 = 8
-            L_0x0575:
+            L_0x0574:
                 r5.setVisibility(r4)
                 android.widget.LinearLayout r4 = r0.bottomButtonsLayout
                 int r4 = r4.getVisibility()
-                if (r4 != 0) goto L_0x0588
+                if (r4 != 0) goto L_0x0587
                 org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.menuItem
                 r5 = 10
                 r4.hideSubItem(r5)
-                goto L_0x05a6
-            L_0x0588:
+                goto L_0x05a5
+            L_0x0587:
                 r5 = 10
                 org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.menuItem
                 r4.showSubItem(r5)
-                goto L_0x05a6
-            L_0x0590:
+                goto L_0x05a5
+            L_0x058f:
                 r5 = 10
                 r0.allowShare = r4
                 org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.menuItem
@@ -16417,17 +16440,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r4.setVisibility(r6)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.menuItem
                 r4.hideSubItem(r5)
-            L_0x05a6:
+            L_0x05a5:
                 org.telegram.ui.Components.GroupedPhotosListView r4 = r0.groupedPhotosListView
                 r4.fillList()
                 r9 = r1
-                goto L_0x0b98
-            L_0x05ae:
+                goto L_0x0b96
+            L_0x05ad:
                 return
-            L_0x05af:
+            L_0x05ae:
                 java.util.ArrayList<org.telegram.messenger.SecureDocument> r3 = r0.secureDocuments
                 boolean r3 = r3.isEmpty()
-                if (r3 != 0) goto L_0x05f6
+                if (r3 != 0) goto L_0x05f5
                 r0.allowShare = r4
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r3 = 6
@@ -16450,22 +16473,22 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r4 = r4.size()
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
                 r5[r3] = r4
-                r3 = 2131626576(0x7f0e0a50, float:1.8880392E38)
+                r3 = 2131626613(0x7f0e0a75, float:1.8880467E38)
                 java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r12, r3, r5)
                 r1.setTitle(r3)
-            L_0x05f3:
+            L_0x05f2:
                 r6 = 0
-                goto L_0x0b96
-            L_0x05f6:
+                goto L_0x0b94
+            L_0x05f5:
                 java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.imagesArrLocations
                 boolean r3 = r3.isEmpty()
-                if (r3 != 0) goto L_0x06f2
-                if (r1 < 0) goto L_0x06f1
+                if (r3 != 0) goto L_0x06f1
+                if (r1 < 0) goto L_0x06f0
                 java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.imagesArrLocations
                 int r3 = r3.size()
-                if (r1 < r3) goto L_0x060a
-                goto L_0x06f1
-            L_0x060a:
+                if (r1 < r3) goto L_0x0609
+                goto L_0x06f0
+            L_0x0609:
                 org.telegram.ui.Components.FadingTextViewLayout r3 = r0.nameTextView
                 r3.setText(r7)
                 org.telegram.ui.Components.FadingTextViewLayout r3 = r0.dateTextView
@@ -16473,27 +16496,27 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r3 = r0.canEditAvatar
                 r5 = 17
                 r7 = 16
-                if (r3 == 0) goto L_0x0679
+                if (r3 == 0) goto L_0x0678
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r3 = r0.avatarsArr
                 boolean r3 = r3.isEmpty()
-                if (r3 != 0) goto L_0x0679
+                if (r3 != 0) goto L_0x0678
                 org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.menuItem
                 r3.showSubItem(r5)
                 boolean r3 = r28.isCurrentAvatarSet()
-                if (r3 == 0) goto L_0x0635
+                if (r3 == 0) goto L_0x0634
                 org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.menuItem
                 r3.hideSubItem(r7)
-                goto L_0x063a
-            L_0x0635:
+                goto L_0x0639
+            L_0x0634:
                 org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.menuItem
                 r3.showSubItem(r7)
-            L_0x063a:
+            L_0x0639:
                 int r3 = r0.avatarsDialogId
-                if (r3 <= 0) goto L_0x0640
-            L_0x063e:
+                if (r3 <= 0) goto L_0x063f
+            L_0x063d:
                 r1 = 1
-                goto L_0x0669
-            L_0x0640:
+                goto L_0x0668
+            L_0x063f:
                 int r3 = r0.currentAccount
                 org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
                 int r5 = r0.avatarsDialogId
@@ -16501,28 +16524,28 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r5)
                 boolean r5 = r28.isCurrentAvatarSet()
-                if (r5 != 0) goto L_0x063e
+                if (r5 != 0) goto L_0x063d
                 int r5 = r0.currentAccount
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r7 = r0.imagesArrMessages
                 java.lang.Object r1 = r7.get(r1)
                 org.telegram.tgnet.TLRPC$Message r1 = (org.telegram.tgnet.TLRPC$Message) r1
                 boolean r1 = org.telegram.messenger.MessageObject.canDeleteMessage(r5, r4, r1, r3)
-                if (r1 == 0) goto L_0x0668
-                goto L_0x063e
-            L_0x0668:
+                if (r1 == 0) goto L_0x0667
+                goto L_0x063d
+            L_0x0667:
                 r1 = 0
-            L_0x0669:
-                if (r1 == 0) goto L_0x0672
+            L_0x0668:
+                if (r1 == 0) goto L_0x0671
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r3 = 6
                 r1.showSubItem(r3)
-                goto L_0x0689
-            L_0x0672:
+                goto L_0x0688
+            L_0x0671:
                 r3 = 6
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.hideSubItem(r3)
-                goto L_0x0689
-            L_0x0679:
+                goto L_0x0688
+            L_0x0678:
                 r3 = 6
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.hideSubItem(r5)
@@ -16530,16 +16553,16 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1.hideSubItem(r7)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.hideSubItem(r3)
-            L_0x0689:
+            L_0x0688:
                 boolean r1 = r0.isEvent
-                if (r1 == 0) goto L_0x069b
+                if (r1 == 0) goto L_0x069a
                 org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-                r3 = 2131624402(0x7f0e01d2, float:1.8875983E38)
+                r3 = 2131624405(0x7f0e01d5, float:1.8875989E38)
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r13, r3)
                 r1.setTitle(r3)
                 r7 = 1
-                goto L_0x06c0
-            L_0x069b:
+                goto L_0x06bf
+            L_0x069a:
                 org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
                 r3 = 2
                 java.lang.Object[] r3 = new java.lang.Object[r3]
@@ -16552,83 +16575,83 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r5 = r5.size()
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r3[r7] = r5
-                r5 = 2131626576(0x7f0e0a50, float:1.8880392E38)
+                r5 = 2131626613(0x7f0e0a75, float:1.8880467E38)
                 java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r12, r5, r3)
                 r1.setTitle(r3)
-            L_0x06c0:
+            L_0x06bf:
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.showSubItem(r7)
                 r0.allowShare = r7
                 android.widget.LinearLayout r1 = r0.bottomButtonsLayout
                 boolean r3 = r0.videoPlayerControlVisible
-                if (r3 != 0) goto L_0x06ce
-                goto L_0x06d0
-            L_0x06ce:
+                if (r3 != 0) goto L_0x06cd
+                goto L_0x06cf
+            L_0x06cd:
                 r4 = 8
-            L_0x06d0:
+            L_0x06cf:
                 r1.setVisibility(r4)
                 android.widget.LinearLayout r1 = r0.bottomButtonsLayout
                 int r1 = r1.getVisibility()
-                if (r1 != 0) goto L_0x06e3
+                if (r1 != 0) goto L_0x06e2
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r3 = 10
                 r1.hideSubItem(r3)
-                goto L_0x06ea
-            L_0x06e3:
+                goto L_0x06e9
+            L_0x06e2:
                 r3 = 10
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.showSubItem(r3)
-            L_0x06ea:
+            L_0x06e9:
                 org.telegram.ui.Components.GroupedPhotosListView r1 = r0.groupedPhotosListView
                 r1.fillList()
-                goto L_0x05f3
-            L_0x06f1:
+                goto L_0x05f2
+            L_0x06f0:
                 return
-            L_0x06f2:
+            L_0x06f1:
                 java.util.ArrayList<java.lang.Object> r3 = r0.imagesArrLocals
                 boolean r3 = r3.isEmpty()
-                if (r3 != 0) goto L_0x0aac
-                if (r1 < 0) goto L_0x0aab
+                if (r3 != 0) goto L_0x0aaa
+                if (r1 < 0) goto L_0x0aa9
                 java.util.ArrayList<java.lang.Object> r3 = r0.imagesArrLocals
                 int r3 = r3.size()
-                if (r1 < r3) goto L_0x0706
-                goto L_0x0aab
-            L_0x0706:
+                if (r1 < r3) goto L_0x0705
+                goto L_0x0aa9
+            L_0x0705:
                 java.util.ArrayList<java.lang.Object> r3 = r0.imagesArrLocals
                 java.lang.Object r1 = r3.get(r1)
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$BotInlineResult
-                if (r3 == 0) goto L_0x0739
+                if (r3 == 0) goto L_0x0737
                 r3 = r1
                 org.telegram.tgnet.TLRPC$BotInlineResult r3 = (org.telegram.tgnet.TLRPC$BotInlineResult) r3
                 r0.currentBotInlineResult = r3
                 org.telegram.tgnet.TLRPC$Document r5 = r3.document
-                if (r5 == 0) goto L_0x071e
+                if (r5 == 0) goto L_0x071d
                 boolean r3 = org.telegram.messenger.MessageObject.isVideoDocument(r5)
-                goto L_0x072f
-            L_0x071e:
+                goto L_0x072d
+            L_0x071d:
                 org.telegram.tgnet.TLRPC$WebDocument r5 = r3.content
                 boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-                if (r5 == 0) goto L_0x072e
+                if (r5 == 0) goto L_0x072c
                 java.lang.String r3 = r3.type
                 java.lang.String r5 = "video"
                 boolean r3 = r3.equals(r5)
-                goto L_0x072f
-            L_0x072e:
+                goto L_0x072d
+            L_0x072c:
                 r3 = 0
-            L_0x072f:
+            L_0x072d:
                 r9 = r2
                 r7 = r3
                 r2 = 0
                 r3 = 0
                 r5 = 0
-            L_0x0734:
+            L_0x0732:
                 r8 = 0
                 r10 = 0
                 r14 = 0
-                goto L_0x0980
-            L_0x0739:
+                goto L_0x097e
+            L_0x0737:
                 boolean r3 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry
-                if (r3 == 0) goto L_0x074a
+                if (r3 == 0) goto L_0x0748
                 r5 = r1
                 org.telegram.messenger.MediaController$PhotoEntry r5 = (org.telegram.messenger.MediaController.PhotoEntry) r5
                 java.lang.String r7 = r5.path
@@ -16636,10 +16659,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r7 = r5.isVideo
                 org.telegram.messenger.MediaController$CropState r5 = r5.cropState
                 r8 = 1
-                goto L_0x0767
-            L_0x074a:
+                goto L_0x0765
+            L_0x0748:
                 boolean r5 = r1 instanceof org.telegram.messenger.MediaController.SearchImage
-                if (r5 == 0) goto L_0x0764
+                if (r5 == 0) goto L_0x0762
                 r5 = r1
                 org.telegram.messenger.MediaController$SearchImage r5 = (org.telegram.messenger.MediaController.SearchImage) r5
                 java.lang.String r7 = r5.getPathToAttach()
@@ -16647,60 +16670,60 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.messenger.MediaController$CropState r7 = r5.cropState
                 int r5 = r5.type
                 r8 = 1
-                if (r5 != r8) goto L_0x0762
+                if (r5 != r8) goto L_0x0760
                 r5 = r7
                 r7 = 0
                 r9 = 1
-                goto L_0x0768
-            L_0x0762:
-                r5 = r7
                 goto L_0x0766
-            L_0x0764:
+            L_0x0760:
+                r5 = r7
+                goto L_0x0764
+            L_0x0762:
                 r8 = 1
                 r5 = 0
-            L_0x0766:
+            L_0x0764:
                 r7 = 0
-            L_0x0767:
+            L_0x0765:
                 r9 = 0
-            L_0x0768:
+            L_0x0766:
                 r10 = 1065353216(0x3var_, float:1.0)
-                if (r7 == 0) goto L_0x087d
+                if (r7 == 0) goto L_0x087b
                 boolean r9 = r0.isCurrentVideo
-                if (r9 != 0) goto L_0x0772
+                if (r9 != 0) goto L_0x0770
                 r9 = 0
-                goto L_0x0773
-            L_0x0772:
+                goto L_0x0771
+            L_0x0770:
                 r9 = r2
-            L_0x0773:
+            L_0x0771:
                 r0.isCurrentVideo = r8
                 r8 = 0
-                if (r3 == 0) goto L_0x0786
+                if (r3 == 0) goto L_0x0784
                 r14 = r1
                 org.telegram.messenger.MediaController$PhotoEntry r14 = (org.telegram.messenger.MediaController.PhotoEntry) r14
                 org.telegram.messenger.VideoEditedInfo r14 = r14.editedInfo
-                if (r14 == 0) goto L_0x0786
+                if (r14 == 0) goto L_0x0784
                 boolean r8 = r14.muted
                 float r15 = r14.start
                 float r14 = r14.end
-                goto L_0x078a
-            L_0x0786:
+                goto L_0x0788
+            L_0x0784:
                 r8 = 0
                 r14 = 1065353216(0x3var_, float:1.0)
                 r15 = 0
-            L_0x078a:
+            L_0x0788:
                 java.lang.String r6 = r0.currentPathObject
                 r0.processOpenVideo(r6, r8, r15, r14)
                 boolean r6 = r0.isDocumentsPicker
-                if (r6 != 0) goto L_0x0834
+                if (r6 != 0) goto L_0x0832
                 int r6 = android.os.Build.VERSION.SDK_INT
                 r8 = 18
-                if (r6 >= r8) goto L_0x079b
-                goto L_0x0834
-            L_0x079b:
+                if (r6 >= r8) goto L_0x0799
+                goto L_0x0832
+            L_0x0799:
                 r6 = 1
                 r0.showVideoTimeline(r6, r2)
                 int r8 = r0.sendPhotoType
-                if (r8 == r6) goto L_0x07d9
+                if (r8 == r6) goto L_0x07d7
                 android.widget.TextView r8 = r0.videoAvatarTooltip
                 r14 = 8
                 r8.setVisibility(r14)
@@ -16723,8 +16746,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 android.widget.ImageView r2 = r0.compressItem
                 r2.setVisibility(r4)
                 r14 = 1
-                goto L_0x0814
-            L_0x07d9:
+                goto L_0x0812
+            L_0x07d7:
                 r14 = 8
                 r15 = 0
                 android.widget.TextView r6 = r0.videoAvatarTooltip
@@ -16749,7 +16772,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 android.widget.ImageView r2 = r0.compressItem
                 r8 = 8
                 r2.setVisibility(r8)
-            L_0x0814:
+            L_0x0812:
                 android.widget.ImageView r2 = r0.tuneItem
                 r2.setVisibility(r4)
                 android.widget.ImageView r2 = r0.tuneItem
@@ -16761,8 +16784,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.Integer r8 = java.lang.Integer.valueOf(r14)
                 r2.setTag(r8)
                 r14 = 8
-                goto L_0x0940
-            L_0x0834:
+                goto L_0x093e
+            L_0x0832:
                 r0.showVideoTimeline(r4, r2)
                 android.widget.TextView r8 = r0.videoAvatarTooltip
                 r14 = 8
@@ -16792,8 +16815,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r8, r4, r10, r2)
                 android.widget.ImageView r2 = r0.compressItem
                 r2.setVisibility(r14)
-                goto L_0x0940
-            L_0x087d:
+                goto L_0x093e
+            L_0x087b:
                 r14 = 8
                 r0.showVideoTimeline(r4, r2)
                 android.widget.TextView r8 = r0.videoAvatarTooltip
@@ -16801,29 +16824,29 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 android.widget.ImageView r8 = r0.muteItem
                 org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r8, r4, r10, r2)
                 boolean r8 = r0.isCurrentVideo
-                if (r8 == 0) goto L_0x0892
+                if (r8 == 0) goto L_0x0890
                 r8 = 0
-                goto L_0x0893
-            L_0x0892:
+                goto L_0x0891
+            L_0x0890:
                 r8 = r2
-            L_0x0893:
+            L_0x0891:
                 r0.isCurrentVideo = r4
                 android.widget.ImageView r10 = r0.compressItem
                 r10.setVisibility(r14)
-                if (r9 != 0) goto L_0x090d
+                if (r9 != 0) goto L_0x090b
                 int r9 = r0.sendPhotoType
                 r10 = 10
-                if (r9 == r10) goto L_0x090d
+                if (r9 == r10) goto L_0x090b
                 boolean r10 = r0.isDocumentsPicker
-                if (r10 == 0) goto L_0x08a7
-                goto L_0x090d
-            L_0x08a7:
+                if (r10 == 0) goto L_0x08a5
+                goto L_0x090b
+            L_0x08a5:
                 r10 = 4
-                if (r9 == r10) goto L_0x08cc
+                if (r9 == r10) goto L_0x08ca
                 r10 = 5
-                if (r9 != r10) goto L_0x08ae
-                goto L_0x08cc
-            L_0x08ae:
+                if (r9 != r10) goto L_0x08ac
+                goto L_0x08ca
+            L_0x08ac:
                 android.widget.ImageView r9 = r0.paintItem
                 r9.setVisibility(r4)
                 android.widget.ImageView r9 = r0.paintItem
@@ -16835,8 +16858,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 android.widget.ImageView r9 = r0.tuneItem
                 java.lang.Integer r14 = java.lang.Integer.valueOf(r10)
                 r9.setTag(r14)
-                goto L_0x08e3
-            L_0x08cc:
+                goto L_0x08e1
+            L_0x08ca:
                 android.widget.ImageView r9 = r0.paintItem
                 r10 = 8
                 r9.setVisibility(r10)
@@ -16847,38 +16870,38 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9.setVisibility(r10)
                 android.widget.ImageView r9 = r0.tuneItem
                 r9.setTag(r6)
-            L_0x08e3:
+            L_0x08e1:
                 android.widget.ImageView r9 = r0.cropItem
                 int r10 = r0.sendPhotoType
                 r14 = 1
-                if (r10 == r14) goto L_0x08ec
+                if (r10 == r14) goto L_0x08ea
                 r10 = 0
-                goto L_0x08ee
-            L_0x08ec:
+                goto L_0x08ec
+            L_0x08ea:
                 r10 = 8
-            L_0x08ee:
+            L_0x08ec:
                 r9.setVisibility(r10)
                 android.widget.ImageView r9 = r0.rotateItem
                 int r10 = r0.sendPhotoType
-                if (r10 == r14) goto L_0x08fa
+                if (r10 == r14) goto L_0x08f8
                 r10 = 8
-                goto L_0x08fb
-            L_0x08fa:
+                goto L_0x08f9
+            L_0x08f8:
                 r10 = 0
-            L_0x08fb:
+            L_0x08f9:
                 r9.setVisibility(r10)
                 android.widget.ImageView r9 = r0.mirrorItem
                 int r10 = r0.sendPhotoType
-                if (r10 == r14) goto L_0x0907
+                if (r10 == r14) goto L_0x0905
                 r10 = 8
-                goto L_0x0908
-            L_0x0907:
+                goto L_0x0906
+            L_0x0905:
                 r10 = 0
-            L_0x0908:
+            L_0x0906:
                 r9.setVisibility(r10)
                 r6 = 0
-                goto L_0x0933
-            L_0x090d:
+                goto L_0x0931
+            L_0x090b:
                 android.widget.ImageView r9 = r0.paintItem
                 r10 = 8
                 r9.setVisibility(r10)
@@ -16895,43 +16918,43 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9.setVisibility(r10)
                 android.widget.ImageView r9 = r0.tuneItem
                 r9.setTag(r6)
-            L_0x0933:
-                if (r2 == 0) goto L_0x093a
+            L_0x0931:
+                if (r2 == 0) goto L_0x0938
                 org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
                 r2.beginDelayedTransition()
-            L_0x093a:
+            L_0x0938:
                 org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
                 r2.setSubtitle(r6)
                 r9 = r8
-            L_0x0940:
-                if (r3 == 0) goto L_0x096a
+            L_0x093e:
+                if (r3 == 0) goto L_0x0968
                 r2 = r1
                 org.telegram.messenger.MediaController$PhotoEntry r2 = (org.telegram.messenger.MediaController.PhotoEntry) r2
                 int r3 = r2.bucketId
-                if (r3 != 0) goto L_0x095c
+                if (r3 != 0) goto L_0x095a
                 long r14 = r2.dateTaken
                 r16 = 0
                 int r3 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1))
-                if (r3 != 0) goto L_0x095c
+                if (r3 != 0) goto L_0x095a
                 java.util.ArrayList<java.lang.Object> r3 = r0.imagesArrLocals
                 int r3 = r3.size()
                 r8 = 1
-                if (r3 != r8) goto L_0x095c
+                if (r3 != r8) goto L_0x095a
                 r3 = 1
-                goto L_0x095d
-            L_0x095c:
+                goto L_0x095b
+            L_0x095a:
                 r3 = 0
-            L_0x095d:
+            L_0x095b:
                 r0.fromCamera = r3
                 java.lang.CharSequence r3 = r2.caption
                 int r8 = r2.ttl
                 boolean r10 = r2.isFiltered
                 boolean r14 = r2.isPainted
                 boolean r2 = r2.isCropped
-                goto L_0x0980
-            L_0x096a:
+                goto L_0x097e
+            L_0x0968:
                 boolean r2 = r1 instanceof org.telegram.messenger.MediaController.SearchImage
-                if (r2 == 0) goto L_0x097c
+                if (r2 == 0) goto L_0x097a
                 r2 = r1
                 org.telegram.messenger.MediaController$SearchImage r2 = (org.telegram.messenger.MediaController.SearchImage) r2
                 java.lang.CharSequence r3 = r2.caption
@@ -16939,37 +16962,37 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r10 = r2.isFiltered
                 boolean r14 = r2.isPainted
                 boolean r2 = r2.isCropped
-                goto L_0x0980
-            L_0x097c:
+                goto L_0x097e
+            L_0x097a:
                 r2 = 0
                 r3 = 0
-                goto L_0x0734
-            L_0x0980:
+                goto L_0x0732
+            L_0x097e:
                 android.widget.FrameLayout r15 = r0.bottomLayout
                 int r15 = r15.getVisibility()
                 r6 = 8
-                if (r15 == r6) goto L_0x098f
+                if (r15 == r6) goto L_0x098d
                 android.widget.FrameLayout r15 = r0.bottomLayout
                 r15.setVisibility(r6)
-            L_0x098f:
+            L_0x098d:
                 android.widget.FrameLayout r6 = r0.bottomLayout
                 r15 = 0
                 r6.setTag(r15)
                 boolean r15 = r0.fromCamera
-                if (r15 == 0) goto L_0x09b5
-                if (r7 == 0) goto L_0x09a8
+                if (r15 == 0) goto L_0x09b3
+                if (r7 == 0) goto L_0x09a6
                 org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-                r12 = 2131624408(0x7f0e01d8, float:1.8875995E38)
+                r12 = 2131624411(0x7f0e01db, float:1.8876E38)
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)
                 r7.setTitle(r11)
-                goto L_0x09da
-            L_0x09a8:
+                goto L_0x09d8
+            L_0x09a6:
                 org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-                r11 = 2131624402(0x7f0e01d2, float:1.8875983E38)
+                r11 = 2131624405(0x7f0e01d5, float:1.8875989E38)
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
                 r7.setTitle(r11)
-                goto L_0x09da
-            L_0x09b5:
+                goto L_0x09d8
+            L_0x09b3:
                 org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
                 r11 = 2
                 java.lang.Object[] r13 = new java.lang.Object[r11]
@@ -16982,57 +17005,57 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r11 = r11.size()
                 java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
                 r13[r15] = r11
-                r11 = 2131626576(0x7f0e0a50, float:1.8880392E38)
+                r11 = 2131626613(0x7f0e0a75, float:1.8880467E38)
                 java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r12, r11, r13)
                 r7.setTitle(r11)
-            L_0x09da:
+            L_0x09d8:
                 org.telegram.ui.ChatActivity r7 = r0.parentChatActivity
-                if (r7 == 0) goto L_0x0a14
+                if (r7 == 0) goto L_0x0a12
                 org.telegram.tgnet.TLRPC$Chat r7 = r7.getCurrentChat()
-                if (r7 == 0) goto L_0x09ec
+                if (r7 == 0) goto L_0x09ea
                 org.telegram.ui.ActionBar.ActionBar r11 = r0.actionBar
                 java.lang.String r7 = r7.title
                 r11.setTitle(r7)
-                goto L_0x0a14
-            L_0x09ec:
+                goto L_0x0a12
+            L_0x09ea:
                 org.telegram.ui.ChatActivity r7 = r0.parentChatActivity
                 org.telegram.tgnet.TLRPC$User r7 = r7.getCurrentUser()
-                if (r7 == 0) goto L_0x0a14
+                if (r7 == 0) goto L_0x0a12
                 boolean r11 = r7.self
-                if (r11 == 0) goto L_0x0a07
+                if (r11 == 0) goto L_0x0a05
                 org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-                r11 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+                r11 = 2131627445(0x7f0e0db5, float:1.8882155E38)
                 java.lang.String r12 = "SavedMessages"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 r7.setTitle(r11)
-                goto L_0x0a14
-            L_0x0a07:
+                goto L_0x0a12
+            L_0x0a05:
                 org.telegram.ui.ActionBar.ActionBar r11 = r0.actionBar
                 java.lang.String r12 = r7.first_name
                 java.lang.String r7 = r7.last_name
                 java.lang.String r7 = org.telegram.messenger.ContactsController.formatName(r12, r7)
                 r11.setTitle(r7)
-            L_0x0a14:
+            L_0x0a12:
                 int r7 = r0.sendPhotoType
-                if (r7 == 0) goto L_0x0a2a
+                if (r7 == 0) goto L_0x0a28
                 r11 = 4
-                if (r7 == r11) goto L_0x0a2a
+                if (r7 == r11) goto L_0x0a28
                 r11 = 2
-                if (r7 == r11) goto L_0x0a21
+                if (r7 == r11) goto L_0x0a1f
                 r11 = 5
-                if (r7 != r11) goto L_0x0a37
-            L_0x0a21:
+                if (r7 != r11) goto L_0x0a35
+            L_0x0a1f:
                 java.util.ArrayList<java.lang.Object> r7 = r0.imagesArrLocals
                 int r7 = r7.size()
                 r11 = 1
-                if (r7 <= r11) goto L_0x0a37
-            L_0x0a2a:
+                if (r7 <= r11) goto L_0x0a35
+            L_0x0a28:
                 org.telegram.ui.Components.CheckBox r7 = r0.checkImageView
                 org.telegram.ui.PhotoViewer$PhotoViewerProvider r11 = r0.placeProvider
                 int r12 = r0.switchingToIndex
                 boolean r11 = r11.isPhotoChecked(r12)
                 r7.setChecked(r11, r4)
-            L_0x0a37:
+            L_0x0a35:
                 r0.updateCaptionTextForCurrentPhoto(r1)
                 android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
                 java.lang.String r4 = "dialogFloatingButton"
@@ -17040,92 +17063,92 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 android.graphics.PorterDuff$Mode r7 = android.graphics.PorterDuff.Mode.MULTIPLY
                 r1.<init>(r4, r7)
                 android.widget.ImageView r4 = r0.timeItem
-                if (r8 == 0) goto L_0x0a4d
+                if (r8 == 0) goto L_0x0a4b
                 r7 = r1
-                goto L_0x0a4e
-            L_0x0a4d:
+                goto L_0x0a4c
+            L_0x0a4b:
                 r7 = 0
-            L_0x0a4e:
+            L_0x0a4c:
                 r4.setColorFilter(r7)
                 android.widget.ImageView r4 = r0.paintItem
-                if (r14 == 0) goto L_0x0a57
+                if (r14 == 0) goto L_0x0a55
                 r7 = r1
-                goto L_0x0a58
-            L_0x0a57:
+                goto L_0x0a56
+            L_0x0a55:
                 r7 = 0
-            L_0x0a58:
+            L_0x0a56:
                 r4.setColorFilter(r7)
                 android.widget.ImageView r4 = r0.cropItem
-                if (r2 == 0) goto L_0x0a61
+                if (r2 == 0) goto L_0x0a5f
                 r2 = r1
-                goto L_0x0a62
-            L_0x0a61:
+                goto L_0x0a60
+            L_0x0a5f:
                 r2 = 0
-            L_0x0a62:
+            L_0x0a60:
                 r4.setColorFilter(r2)
                 android.widget.ImageView r2 = r0.tuneItem
-                if (r10 == 0) goto L_0x0a6b
+                if (r10 == 0) goto L_0x0a69
                 r4 = r1
-                goto L_0x0a6c
-            L_0x0a6b:
+                goto L_0x0a6a
+            L_0x0a69:
                 r4 = 0
-            L_0x0a6c:
+            L_0x0a6a:
                 r2.setColorFilter(r4)
                 boolean r2 = r0.fromCamera
-                if (r2 == 0) goto L_0x0a8c
+                if (r2 == 0) goto L_0x0a8a
                 android.widget.ImageView r2 = r0.mirrorItem
-                if (r5 == 0) goto L_0x0a87
+                if (r5 == 0) goto L_0x0a85
                 boolean r4 = r0.isCurrentVideo
-                if (r4 == 0) goto L_0x0a7f
+                if (r4 == 0) goto L_0x0a7d
                 boolean r7 = r5.mirrored
-                if (r7 == 0) goto L_0x0a85
-            L_0x0a7f:
-                if (r4 != 0) goto L_0x0a87
+                if (r7 == 0) goto L_0x0a83
+            L_0x0a7d:
+                if (r4 != 0) goto L_0x0a85
                 boolean r4 = r5.mirrored
-                if (r4 == 0) goto L_0x0a87
+                if (r4 == 0) goto L_0x0a85
+            L_0x0a83:
+                r4 = r1
+                goto L_0x0a86
             L_0x0a85:
-                r4 = r1
-                goto L_0x0a88
-            L_0x0a87:
                 r4 = 0
-            L_0x0a88:
+            L_0x0a86:
                 r2.setColorFilter(r4)
-                goto L_0x0a9a
-            L_0x0a8c:
+                goto L_0x0a98
+            L_0x0a8a:
                 android.widget.ImageView r2 = r0.mirrorItem
-                if (r5 == 0) goto L_0x0a96
+                if (r5 == 0) goto L_0x0a94
                 boolean r4 = r5.mirrored
-                if (r4 == 0) goto L_0x0a96
+                if (r4 == 0) goto L_0x0a94
                 r4 = r1
-                goto L_0x0a97
-            L_0x0a96:
+                goto L_0x0a95
+            L_0x0a94:
                 r4 = 0
-            L_0x0a97:
+            L_0x0a95:
                 r2.setColorFilter(r4)
-            L_0x0a9a:
+            L_0x0a98:
                 android.widget.ImageView r2 = r0.rotateItem
-                if (r5 == 0) goto L_0x0aa3
+                if (r5 == 0) goto L_0x0aa1
                 int r4 = r5.transformRotation
-                if (r4 == 0) goto L_0x0aa3
-                goto L_0x0aa4
-            L_0x0aa3:
+                if (r4 == 0) goto L_0x0aa1
+                goto L_0x0aa2
+            L_0x0aa1:
                 r1 = 0
-            L_0x0aa4:
+            L_0x0aa2:
                 r2.setColorFilter(r1)
                 r2 = r9
                 r9 = 0
-                goto L_0x0b98
-            L_0x0aab:
+                goto L_0x0b96
+            L_0x0aa9:
                 return
-            L_0x0aac:
+            L_0x0aaa:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r0.pageBlocksAdapter
-                if (r1 == 0) goto L_0x05f3
+                if (r1 == 0) goto L_0x05f2
                 int r1 = r1.getItemsCount()
                 int r3 = r0.switchingToIndex
-                if (r3 < 0) goto L_0x0b95
-                if (r3 < r1) goto L_0x0abc
-                goto L_0x0b95
-            L_0x0abc:
+                if (r3 < 0) goto L_0x0b93
+                if (r3 < r1) goto L_0x0aba
+                goto L_0x0b93
+            L_0x0aba:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r5 = r0.pageBlocksAdapter
                 org.telegram.tgnet.TLRPC$PageBlock r3 = r5.get(r3)
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r5 = r0.pageBlocksAdapter
@@ -17134,37 +17157,37 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r7 = r0.pageBlocksAdapter
                 int r9 = r0.switchingToIndex
                 boolean r7 = r7.isVideo(r9)
-                if (r7 == 0) goto L_0x0af2
+                if (r7 == 0) goto L_0x0af0
                 org.telegram.ui.ActionBar.ActionBarMenuItem r9 = r0.menuItem
                 r9.showSubItem(r14)
                 boolean r9 = r0.pipAvailable
-                if (r9 != 0) goto L_0x0aeb
+                if (r9 != 0) goto L_0x0ae9
                 org.telegram.ui.ActionBar.ActionBarMenuItem r9 = r0.pipItem
                 r9.setEnabled(r4)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r9 = r0.pipItem
                 r10 = 1056964608(0x3var_, float:0.5)
                 r15 = 1
                 r0.setItemVisible(r9, r15, r15, r10)
-                goto L_0x0afd
-            L_0x0aeb:
+                goto L_0x0afb
+            L_0x0ae9:
                 r15 = 1
                 org.telegram.ui.ActionBar.ActionBarMenuItem r9 = r0.pipItem
                 r0.setItemVisible(r9, r15, r15)
-                goto L_0x0afd
-            L_0x0af2:
+                goto L_0x0afb
+            L_0x0af0:
                 r15 = 1
                 org.telegram.ui.ActionBar.ActionBarMenuItem r9 = r0.menuItem
                 r9.hideSubItem(r14)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r9 = r0.pipItem
                 r0.setItemVisible(r9, r4, r15)
-            L_0x0afd:
+            L_0x0afb:
                 android.widget.FrameLayout r9 = r0.bottomLayout
                 int r9 = r9.getVisibility()
                 r10 = 8
-                if (r9 == r10) goto L_0x0b0c
+                if (r9 == r10) goto L_0x0b0a
                 android.widget.FrameLayout r9 = r0.bottomLayout
                 r9.setVisibility(r10)
-            L_0x0b0c:
+            L_0x0b0a:
                 android.widget.FrameLayout r9 = r0.bottomLayout
                 r6 = 0
                 r9.setTag(r6)
@@ -17172,7 +17195,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.ui.ActionBar.ActionBarMenuItem r9 = r0.shareItem
                 r9.setVisibility(r4)
                 org.telegram.ui.Components.AnimatedFileDrawable r9 = r0.currentAnimation
-                if (r9 == 0) goto L_0x0b3b
+                if (r9 == 0) goto L_0x0b39
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.setVisibility(r4)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
@@ -17180,30 +17203,30 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.showSubItem(r8)
                 org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-                r4 = 2131624389(0x7f0e01c5, float:1.8875956E38)
+                r4 = 2131624392(0x7f0e01c8, float:1.8875962E38)
                 java.lang.String r7 = "AttachGif"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
                 r1.setTitle(r4)
-                goto L_0x0b88
-            L_0x0b3b:
+                goto L_0x0b86
+            L_0x0b39:
                 org.telegram.ui.ActionBar.ActionBarMenuItem r9 = r0.menuItem
                 r9.setVisibility(r4)
-                if (r1 != r15) goto L_0x0b5f
-                if (r7 == 0) goto L_0x0b51
+                if (r1 != r15) goto L_0x0b5d
+                if (r7 == 0) goto L_0x0b4f
                 org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-                r4 = 2131624408(0x7f0e01d8, float:1.8875995E38)
+                r4 = 2131624411(0x7f0e01db, float:1.8876E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r11, r4)
                 r1.setTitle(r4)
-                goto L_0x0b5d
-            L_0x0b51:
+                goto L_0x0b5b
+            L_0x0b4f:
                 org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-                r4 = 2131624402(0x7f0e01d2, float:1.8875983E38)
+                r4 = 2131624405(0x7f0e01d5, float:1.8875989E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r13, r4)
                 r1.setTitle(r4)
-            L_0x0b5d:
+            L_0x0b5b:
                 r11 = 1
-                goto L_0x0b7e
-            L_0x0b5f:
+                goto L_0x0b7c
+            L_0x0b5d:
                 org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
                 r9 = 2
                 java.lang.Object[] r9 = new java.lang.Object[r9]
@@ -17214,28 +17237,28 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9[r4] = r10
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 r9[r11] = r1
-                r1 = 2131626576(0x7f0e0a50, float:1.8880392E38)
+                r1 = 2131626613(0x7f0e0a75, float:1.8880467E38)
                 java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r12, r1, r9)
                 r7.setTitle(r1)
-            L_0x0b7e:
+            L_0x0b7c:
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.showSubItem(r11)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
                 r1.hideSubItem(r8)
-            L_0x0b88:
+            L_0x0b86:
                 org.telegram.ui.Components.GroupedPhotosListView r1 = r0.groupedPhotosListView
                 r1.fillList()
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r0.pageBlocksAdapter
                 r1.updateSlideshowCell(r3)
                 r3 = r5
                 r9 = r6
-                goto L_0x0b98
-            L_0x0b95:
+                goto L_0x0b96
+            L_0x0b93:
                 return
-            L_0x0b96:
+            L_0x0b94:
                 r3 = r6
                 r9 = r3
-            L_0x0b98:
+            L_0x0b96:
                 r0.setCurrentCaption(r9, r3, r2)
                 return
             */
@@ -17321,10 +17344,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0 = r44
                 r1 = r45
                 int r2 = r0.currentIndex
-                if (r2 == r1) goto L_0x04e6
+                if (r2 == r1) goto L_0x04e5
                 org.telegram.ui.PhotoViewer$PhotoViewerProvider r2 = r0.placeProvider
                 if (r2 != 0) goto L_0x000e
-                goto L_0x04e6
+                goto L_0x04e5
             L_0x000e:
                 r2 = 0
                 if (r46 != 0) goto L_0x001a
@@ -17418,7 +17441,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1.setVisibility(r5)
             L_0x00ca:
                 r12 = r2
-                goto L_0x036b
+                goto L_0x036a
             L_0x00cd:
                 r0.closePhoto(r5, r5)
                 return
@@ -17436,7 +17459,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.Object r1 = r4.get(r1)
                 org.telegram.messenger.SecureDocument r1 = (org.telegram.messenger.SecureDocument) r1
                 r0.currentSecureDocument = r1
-                goto L_0x0368
+                goto L_0x0367
             L_0x00f0:
                 r0.closePhoto(r5, r5)
                 return
@@ -17481,24 +17504,24 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0.currentFileLocationVideo = r1
                 r12 = r2
                 r10 = 0
-                goto L_0x036b
+                goto L_0x036a
             L_0x0144:
                 r0.closePhoto(r5, r5)
                 return
             L_0x0148:
                 java.util.ArrayList<java.lang.Object> r4 = r0.imagesArrLocals
                 boolean r4 = r4.isEmpty()
-                if (r4 != 0) goto L_0x0339
-                if (r1 < 0) goto L_0x0335
+                if (r4 != 0) goto L_0x0338
+                if (r1 < 0) goto L_0x0334
                 java.util.ArrayList<java.lang.Object> r4 = r0.imagesArrLocals
                 int r4 = r4.size()
                 if (r1 < r4) goto L_0x015c
-                goto L_0x0335
+                goto L_0x0334
             L_0x015c:
                 java.util.ArrayList<java.lang.Object> r4 = r0.imagesArrLocals
                 java.lang.Object r1 = r4.get(r1)
                 boolean r4 = r1 instanceof org.telegram.tgnet.TLRPC$BotInlineResult
-                if (r4 == 0) goto L_0x01b2
+                if (r4 == 0) goto L_0x01b1
                 org.telegram.tgnet.TLRPC$BotInlineResult r1 = (org.telegram.tgnet.TLRPC$BotInlineResult) r1
                 r0.currentBotInlineResult = r1
                 org.telegram.tgnet.TLRPC$Document r4 = r1.document
@@ -17508,7 +17531,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0.currentPathObject = r4
                 org.telegram.tgnet.TLRPC$Document r1 = r1.document
                 boolean r1 = org.telegram.messenger.MessageObject.isVideoDocument(r1)
-                goto L_0x01ad
+                goto L_0x01ac
             L_0x017f:
                 org.telegram.tgnet.TLRPC$Photo r4 = r1.photo
                 if (r4 == 0) goto L_0x0198
@@ -17518,35 +17541,35 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.io.File r1 = org.telegram.messenger.FileLoader.getPathToAttach(r1)
                 java.lang.String r1 = r1.getAbsolutePath()
                 r0.currentPathObject = r1
-                goto L_0x01ac
+                goto L_0x01ab
             L_0x0198:
                 org.telegram.tgnet.TLRPC$WebDocument r4 = r1.content
                 boolean r10 = r4 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-                if (r10 == 0) goto L_0x01ac
+                if (r10 == 0) goto L_0x01ab
                 java.lang.String r4 = r4.url
                 r0.currentPathObject = r4
                 java.lang.String r1 = r1.type
                 java.lang.String r4 = "video"
                 boolean r1 = r1.equals(r4)
-                goto L_0x01ad
-            L_0x01ac:
+                goto L_0x01ac
+            L_0x01ab:
                 r1 = 0
-            L_0x01ad:
+            L_0x01ac:
                 r10 = r1
                 r12 = r2
                 r4 = 0
-                goto L_0x02b5
-            L_0x01b2:
+                goto L_0x02b4
+            L_0x01b1:
                 boolean r4 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry
-                if (r4 == 0) goto L_0x026b
+                if (r4 == 0) goto L_0x026a
                 r4 = r1
                 org.telegram.messenger.MediaController$PhotoEntry r4 = (org.telegram.messenger.MediaController.PhotoEntry) r4
                 java.lang.String r10 = r4.path
                 r0.currentPathObject = r10
-                if (r10 != 0) goto L_0x01c3
+                if (r10 != 0) goto L_0x01c2
                 r0.closePhoto(r5, r5)
                 return
-            L_0x01c3:
+            L_0x01c2:
                 boolean r10 = r4.isVideo
                 org.telegram.ui.PhotoViewer$EditState r11 = r0.editState
                 org.telegram.messenger.MediaController$SavedFilterState r12 = r4.savedFilterState
@@ -17568,18 +17591,18 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r11.<init>(r12)
                 android.net.Uri r12 = android.net.Uri.fromFile(r11)
                 boolean r13 = r0.isDocumentsPicker
-                if (r13 == 0) goto L_0x0263
+                if (r13 == 0) goto L_0x0262
                 java.lang.StringBuilder r13 = new java.lang.StringBuilder
                 r13.<init>()
                 int r14 = r4.width
                 java.lang.String r15 = ", "
-                if (r14 == 0) goto L_0x0227
+                if (r14 == 0) goto L_0x0226
                 int r14 = r4.height
-                if (r14 == 0) goto L_0x0227
+                if (r14 == 0) goto L_0x0226
                 int r14 = r13.length()
-                if (r14 <= 0) goto L_0x020a
+                if (r14 <= 0) goto L_0x0209
                 r13.append(r15)
-            L_0x020a:
+            L_0x0209:
                 java.util.Locale r14 = java.util.Locale.US
                 java.lang.Object[] r2 = new java.lang.Object[r7]
                 int r7 = r4.width
@@ -17591,44 +17614,44 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r7 = "%dx%d"
                 java.lang.String r2 = java.lang.String.format(r14, r7, r2)
                 r13.append(r2)
-            L_0x0227:
+            L_0x0226:
                 boolean r2 = r4.isVideo
-                if (r2 == 0) goto L_0x023d
+                if (r2 == 0) goto L_0x023c
                 int r2 = r13.length()
-                if (r2 <= 0) goto L_0x0234
+                if (r2 <= 0) goto L_0x0233
                 r13.append(r15)
-            L_0x0234:
+            L_0x0233:
                 int r2 = r4.duration
                 java.lang.String r2 = org.telegram.messenger.AndroidUtilities.formatShortDuration(r2)
                 r13.append(r2)
-            L_0x023d:
+            L_0x023c:
                 long r6 = r4.size
                 int r14 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-                if (r14 == 0) goto L_0x0255
+                if (r14 == 0) goto L_0x0254
                 int r6 = r13.length()
-                if (r6 <= 0) goto L_0x024c
+                if (r6 <= 0) goto L_0x024b
                 r13.append(r15)
-            L_0x024c:
+            L_0x024b:
                 long r6 = r4.size
                 java.lang.String r4 = org.telegram.messenger.AndroidUtilities.formatFileSize(r6)
                 r13.append(r4)
-            L_0x0255:
+            L_0x0254:
                 android.widget.TextView r4 = r0.docNameTextView
                 java.lang.String r6 = r11.getName()
                 r4.setText(r6)
                 android.widget.TextView r4 = r0.docInfoTextView
                 r4.setText(r13)
-            L_0x0263:
+            L_0x0262:
                 org.telegram.ui.PhotoViewer$SavedState r4 = r0.savedState
-                if (r4 == 0) goto L_0x0269
+                if (r4 == 0) goto L_0x0268
                 r4 = 1
-                goto L_0x0299
-            L_0x0269:
+                goto L_0x0298
+            L_0x0268:
                 r4 = 0
-                goto L_0x0299
-            L_0x026b:
+                goto L_0x0298
+            L_0x026a:
                 boolean r4 = r1 instanceof org.telegram.messenger.MediaController.SearchImage
-                if (r4 == 0) goto L_0x0296
+                if (r4 == 0) goto L_0x0295
                 r4 = r1
                 org.telegram.messenger.MediaController$SearchImage r4 = (org.telegram.messenger.MediaController.SearchImage) r4
                 java.lang.String r6 = r4.getPathToAttach()
@@ -17648,31 +17671,31 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r6.mediaEntities = r7
                 org.telegram.messenger.MediaController$CropState r4 = r4.cropState
                 r6.cropState = r4
-            L_0x0296:
+            L_0x0295:
                 r4 = 0
                 r10 = 0
                 r12 = 0
-            L_0x0299:
+            L_0x0298:
                 boolean r6 = r1 instanceof org.telegram.messenger.MediaController.MediaEditState
-                if (r6 == 0) goto L_0x02b5
+                if (r6 == 0) goto L_0x02b4
                 org.telegram.messenger.MediaController$MediaEditState r1 = (org.telegram.messenger.MediaController.MediaEditState) r1
                 boolean r6 = r44.hasAnimatedMediaEntities()
-                if (r6 == 0) goto L_0x02aa
+                if (r6 == 0) goto L_0x02a9
                 java.lang.String r1 = r1.imagePath
                 r0.currentImagePath = r1
-                goto L_0x02b5
-            L_0x02aa:
+                goto L_0x02b4
+            L_0x02a9:
                 java.lang.String r1 = r1.filterPath
-                if (r1 == 0) goto L_0x02b1
+                if (r1 == 0) goto L_0x02b0
                 r0.currentImagePath = r1
-                goto L_0x02b5
-            L_0x02b1:
+                goto L_0x02b4
+            L_0x02b0:
                 java.lang.String r1 = r0.currentPathObject
                 r0.currentImagePath = r1
-            L_0x02b5:
+            L_0x02b4:
                 org.telegram.ui.PhotoViewer$EditState r1 = r0.editState
                 org.telegram.messenger.MediaController$CropState r1 = r1.cropState
-                if (r1 == 0) goto L_0x0301
+                if (r1 == 0) goto L_0x0300
                 r6 = 1
                 r0.previousHasTransform = r6
                 float r7 = r1.cropPx
@@ -17707,8 +17730,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r26 = r8
                 r29 = r1
                 r16.setViewTransform(r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27, r28, r29)
-                goto L_0x036b
-            L_0x0301:
+                goto L_0x036a
+            L_0x0300:
                 r0.previousHasTransform = r5
                 org.telegram.ui.Components.Crop.CropTransform r1 = r0.cropTransform
                 r31 = 0
@@ -17734,56 +17757,56 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r40 = r13
                 r43 = r14
                 r30.setViewTransform(r31, r32, r33, r34, r35, r36, r37, r38, r39, r40, r41, r42, r43)
-                goto L_0x036b
-            L_0x0335:
+                goto L_0x036a
+            L_0x0334:
                 r0.closePhoto(r5, r5)
                 return
-            L_0x0339:
+            L_0x0338:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r0.pageBlocksAdapter
-                if (r1 == 0) goto L_0x0368
+                if (r1 == 0) goto L_0x0367
                 int r2 = r0.currentIndex
-                if (r2 < 0) goto L_0x0364
+                if (r2 < 0) goto L_0x0363
                 int r1 = r1.getItemsCount()
-                if (r2 < r1) goto L_0x0348
-                goto L_0x0364
-            L_0x0348:
+                if (r2 < r1) goto L_0x0347
+                goto L_0x0363
+            L_0x0347:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r0.pageBlocksAdapter
                 int r2 = r0.currentIndex
                 org.telegram.tgnet.TLRPC$PageBlock r1 = r1.get(r2)
                 org.telegram.tgnet.TLRPC$PageBlock r2 = r0.currentPageBlock
-                if (r2 == 0) goto L_0x0358
-                if (r2 != r1) goto L_0x0358
+                if (r2 == 0) goto L_0x0357
+                if (r2 != r1) goto L_0x0357
                 r4 = 1
-                goto L_0x0359
-            L_0x0358:
+                goto L_0x0358
+            L_0x0357:
                 r4 = 0
-            L_0x0359:
+            L_0x0358:
                 r0.currentPageBlock = r1
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r0.pageBlocksAdapter
                 int r2 = r0.currentIndex
                 boolean r10 = r1.isVideo(r2)
-                goto L_0x036a
-            L_0x0364:
+                goto L_0x0369
+            L_0x0363:
                 r0.closePhoto(r5, r5)
                 return
-            L_0x0368:
+            L_0x0367:
                 r4 = 0
                 r10 = 0
-            L_0x036a:
+            L_0x0369:
                 r12 = 0
-            L_0x036b:
+            L_0x036a:
                 r44.setMenuItemIcon()
                 org.telegram.ui.PhotoViewer$PlaceProviderObject r1 = r0.currentPlaceObject
-                if (r1 == 0) goto L_0x037f
+                if (r1 == 0) goto L_0x037e
                 int r2 = r0.animationInProgress
-                if (r2 != 0) goto L_0x037d
+                if (r2 != 0) goto L_0x037c
                 org.telegram.messenger.ImageReceiver r1 = r1.imageReceiver
                 r2 = 1
                 r1.setVisible(r2, r2)
-                goto L_0x037f
-            L_0x037d:
+                goto L_0x037e
+            L_0x037c:
                 r0.showAfterAnimation = r1
-            L_0x037f:
+            L_0x037e:
                 org.telegram.ui.PhotoViewer$PhotoViewerProvider r1 = r0.placeProvider
                 org.telegram.messenger.MessageObject r6 = r0.currentMessageObject
                 org.telegram.messenger.ImageLocation r7 = r0.currentFileLocation
@@ -17791,17 +17814,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r8 = r0.currentIndex
                 org.telegram.ui.PhotoViewer$PlaceProviderObject r1 = r1.getPlaceForPhoto(r6, r7, r8, r5)
                 r0.currentPlaceObject = r1
-                if (r1 == 0) goto L_0x03a0
+                if (r1 == 0) goto L_0x039f
                 int r6 = r0.animationInProgress
-                if (r6 != 0) goto L_0x039e
+                if (r6 != 0) goto L_0x039d
                 org.telegram.messenger.ImageReceiver r1 = r1.imageReceiver
                 r2 = 1
                 r1.setVisible(r5, r2)
-                goto L_0x03a0
-            L_0x039e:
+                goto L_0x039f
+            L_0x039d:
                 r0.hideAfterAnimation = r1
-            L_0x03a0:
-                if (r4 != 0) goto L_0x0414
+            L_0x039f:
+                if (r4 != 0) goto L_0x0413
                 r0.draggingDown = r5
                 r1 = 0
                 r0.translationX = r1
@@ -17818,10 +17841,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0.imageMoveAnimation = r6
                 r0.changeModeAnimation = r6
                 com.google.android.exoplayer2.ui.AspectRatioFrameLayout r6 = r0.aspectRatioFrameLayout
-                if (r6 == 0) goto L_0x03c6
+                if (r6 == 0) goto L_0x03c5
                 r7 = 4
                 r6.setVisibility(r7)
-            L_0x03c6:
+            L_0x03c5:
                 r0.pinchStartDistance = r1
                 r0.pinchStartScale = r4
                 r0.pinchCenterX = r1
@@ -17840,49 +17863,49 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0.changingPage = r5
                 r0.switchImageAfterAnimation = r5
                 int r2 = r0.sharedMediaType
-                if (r2 == r1) goto L_0x040c
+                if (r2 == r1) goto L_0x040b
                 boolean r1 = r0.isEmbedVideo
-                if (r1 != 0) goto L_0x0409
+                if (r1 != 0) goto L_0x0408
                 java.util.ArrayList<java.lang.Object> r1 = r0.imagesArrLocals
                 boolean r1 = r1.isEmpty()
-                if (r1 == 0) goto L_0x0407
+                if (r1 == 0) goto L_0x0406
                 java.lang.String[] r1 = r0.currentFileNames
                 r1 = r1[r5]
-                if (r1 == 0) goto L_0x0409
+                if (r1 == 0) goto L_0x0408
                 org.telegram.ui.PhotoViewer$PhotoProgressView[] r1 = r0.photoProgressViews
                 r1 = r1[r5]
                 int r1 = r1.backgroundState
-                if (r1 == 0) goto L_0x0409
-            L_0x0407:
+                if (r1 == 0) goto L_0x0408
+            L_0x0406:
                 r1 = 1
-                goto L_0x040a
-            L_0x0409:
+                goto L_0x0409
+            L_0x0408:
                 r1 = 0
-            L_0x040a:
+            L_0x0409:
                 r0.canZoom = r1
-            L_0x040c:
+            L_0x040b:
                 float r1 = r0.scale
                 r0.updateMinMax(r1)
                 r0.releasePlayer(r5)
-            L_0x0414:
-                if (r10 == 0) goto L_0x0429
-                if (r12 == 0) goto L_0x0429
+            L_0x0413:
+                if (r10 == 0) goto L_0x0428
+                if (r12 == 0) goto L_0x0428
                 r0.isStreaming = r5
                 int r1 = r0.sendPhotoType
                 r2 = 1
-                if (r1 != r2) goto L_0x0421
+                if (r1 != r2) goto L_0x0420
                 r1 = 1
-                goto L_0x0422
-            L_0x0421:
+                goto L_0x0421
+            L_0x0420:
                 r1 = 0
-            L_0x0422:
+            L_0x0421:
                 org.telegram.ui.PhotoViewer$EditState r4 = r0.editState
                 org.telegram.messenger.MediaController$SavedFilterState r4 = r4.savedFilterState
                 r0.preparePlayer(r12, r1, r5, r4)
-            L_0x0429:
+            L_0x0428:
                 java.util.ArrayList<java.lang.Object> r1 = r0.imagesArrLocals
                 boolean r1 = r1.isEmpty()
-                if (r1 != 0) goto L_0x0444
+                if (r1 != 0) goto L_0x0443
                 org.telegram.ui.Components.PaintingOverlay r1 = r0.paintingOverlay
                 r1.setVisibility(r5)
                 org.telegram.ui.Components.PaintingOverlay r1 = r0.paintingOverlay
@@ -17891,29 +17914,29 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r4 = r4.mediaEntities
                 boolean r7 = r0.isCurrentVideo
                 r1.setData(r6, r4, r7, r5)
-                goto L_0x0450
-            L_0x0444:
+                goto L_0x044f
+            L_0x0443:
                 org.telegram.ui.Components.PaintingOverlay r1 = r0.paintingOverlay
                 r4 = 8
                 r1.setVisibility(r4)
                 org.telegram.ui.PhotoViewer$EditState r1 = r0.editState
                 r1.reset()
-            L_0x0450:
+            L_0x044f:
                 r1 = -1
-                if (r3 != r1) goto L_0x0460
+                if (r3 != r1) goto L_0x045f
                 r44.setImages()
                 r1 = 0
-            L_0x0457:
+            L_0x0456:
                 r2 = 3
-                if (r1 >= r2) goto L_0x04e3
+                if (r1 >= r2) goto L_0x04e2
                 r0.checkProgress(r1, r5, r5)
                 int r1 = r1 + 1
-                goto L_0x0457
-            L_0x0460:
+                goto L_0x0456
+            L_0x045f:
                 r1 = 1
                 r0.checkProgress(r5, r1, r5)
                 int r1 = r0.currentIndex
-                if (r3 <= r1) goto L_0x04a5
+                if (r3 <= r1) goto L_0x04a4
                 org.telegram.messenger.ImageReceiver r1 = r0.rightImage
                 org.telegram.messenger.ImageReceiver r3 = r0.centerImage
                 r0.rightImage = r3
@@ -17942,10 +17965,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r44.updateAccessibilityOverlayVisibility()
                 r0.checkProgress(r2, r2, r5)
                 r0.checkProgress(r4, r2, r5)
-                goto L_0x04e3
-            L_0x04a5:
+                goto L_0x04e2
+            L_0x04a4:
                 r2 = 1
-                if (r3 >= r1) goto L_0x04e3
+                if (r3 >= r1) goto L_0x04e2
                 org.telegram.messenger.ImageReceiver r1 = r0.leftImage
                 org.telegram.messenger.ImageReceiver r3 = r0.centerImage
                 r0.leftImage = r3
@@ -17973,9 +17996,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0.checkProgress(r2, r2, r5)
                 r1 = 2
                 r0.checkProgress(r1, r2, r5)
-            L_0x04e3:
+            L_0x04e2:
                 r44.detectFaces()
-            L_0x04e6:
+            L_0x04e5:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.setImageIndex(int, boolean, boolean):void");
@@ -18271,7 +18294,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r3 = 3
                 r5 = -1
                 r6 = 0
-                if (r2 == 0) goto L_0x0219
+                if (r2 == 0) goto L_0x0218
                 org.telegram.messenger.MessageObject r2 = r10.currentMessageObject
                 r7 = 0
                 if (r2 == 0) goto L_0x00ab
@@ -18346,7 +18369,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r15 = r5
                 r5 = r2
                 r2 = r15
-                goto L_0x01f9
+                goto L_0x01f8
             L_0x00a3:
                 org.telegram.ui.PhotoViewer$PhotoProgressView[] r0 = r10.photoProgressViews
                 r0 = r0[r4]
@@ -18355,12 +18378,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             L_0x00ab:
                 org.telegram.tgnet.TLRPC$BotInlineResult r2 = r10.currentBotInlineResult
                 r8 = 4
-                if (r2 == 0) goto L_0x015b
-                if (r0 < 0) goto L_0x0153
+                if (r2 == 0) goto L_0x015a
+                if (r0 < 0) goto L_0x0152
                 java.util.ArrayList<java.lang.Object> r2 = r10.imagesArrLocals
                 int r2 = r2.size()
                 if (r0 < r2) goto L_0x00bc
-                goto L_0x0153
+                goto L_0x0152
             L_0x00bc:
                 java.util.ArrayList<java.lang.Object> r2 = r10.imagesArrLocals
                 java.lang.Object r0 = r2.get(r0)
@@ -18368,43 +18391,43 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r2 = r0.type
                 java.lang.String r5 = "video"
                 boolean r2 = r2.equals(r5)
-                if (r2 != 0) goto L_0x00ff
+                if (r2 != 0) goto L_0x00fe
                 org.telegram.tgnet.TLRPC$Document r2 = r0.document
                 boolean r2 = org.telegram.messenger.MessageObject.isVideoDocument(r2)
-                if (r2 == 0) goto L_0x00d8
-                goto L_0x00ff
-            L_0x00d8:
+                if (r2 == 0) goto L_0x00d7
+                goto L_0x00fe
+            L_0x00d7:
                 org.telegram.tgnet.TLRPC$Document r2 = r0.document
-                if (r2 == 0) goto L_0x00ea
+                if (r2 == 0) goto L_0x00e9
                 java.io.File r0 = new java.io.File
                 java.io.File r2 = org.telegram.messenger.FileLoader.getDirectory(r3)
                 java.lang.String[] r3 = r10.currentFileNames
                 r3 = r3[r4]
                 r0.<init>(r2, r3)
-                goto L_0x00fd
-            L_0x00ea:
+                goto L_0x00fc
+            L_0x00e9:
                 org.telegram.tgnet.TLRPC$Photo r0 = r0.photo
-                if (r0 == 0) goto L_0x00fc
+                if (r0 == 0) goto L_0x00fb
                 java.io.File r0 = new java.io.File
                 java.io.File r2 = org.telegram.messenger.FileLoader.getDirectory(r6)
                 java.lang.String[] r3 = r10.currentFileNames
                 r3 = r3[r4]
                 r0.<init>(r2, r3)
-                goto L_0x00fd
-            L_0x00fc:
+                goto L_0x00fc
+            L_0x00fb:
                 r0 = r7
-            L_0x00fd:
+            L_0x00fc:
                 r2 = 0
-                goto L_0x0141
-            L_0x00ff:
-                org.telegram.tgnet.TLRPC$Document r2 = r0.document
-                if (r2 == 0) goto L_0x0108
-                java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r2)
                 goto L_0x0140
-            L_0x0108:
+            L_0x00fe:
+                org.telegram.tgnet.TLRPC$Document r2 = r0.document
+                if (r2 == 0) goto L_0x0107
+                java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r2)
+                goto L_0x013f
+            L_0x0107:
                 org.telegram.tgnet.TLRPC$WebDocument r2 = r0.content
                 boolean r2 = r2 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-                if (r2 == 0) goto L_0x013f
+                if (r2 == 0) goto L_0x013e
                 java.io.File r2 = new java.io.File
                 java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r8)
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
@@ -18423,12 +18446,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r0 = r5.toString()
                 r2.<init>(r3, r0)
                 r0 = r2
-                goto L_0x0140
-            L_0x013f:
+                goto L_0x013f
+            L_0x013e:
                 r0 = r7
-            L_0x0140:
+            L_0x013f:
                 r2 = 1
-            L_0x0141:
+            L_0x0140:
                 java.io.File r3 = new java.io.File
                 java.io.File r5 = org.telegram.messenger.FileLoader.getDirectory(r8)
                 java.lang.String[] r8 = r10.currentFileNames
@@ -18437,69 +18460,69 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r8 = r2
                 r5 = r7
                 r7 = 0
-                goto L_0x01d9
-            L_0x0153:
+                goto L_0x01d8
+            L_0x0152:
                 org.telegram.ui.PhotoViewer$PhotoProgressView[] r0 = r10.photoProgressViews
                 r0 = r0[r4]
                 r0.setBackgroundState(r5, r9, r1)
                 return
-            L_0x015b:
+            L_0x015a:
                 org.telegram.messenger.ImageLocation r2 = r10.currentFileLocation
-                if (r2 == 0) goto L_0x0191
-                if (r0 < 0) goto L_0x0189
+                if (r2 == 0) goto L_0x0190
+                if (r0 < 0) goto L_0x0188
                 java.util.ArrayList<org.telegram.messenger.ImageLocation> r2 = r10.imagesArrLocationsVideo
                 int r2 = r2.size()
-                if (r0 < r2) goto L_0x016a
-                goto L_0x0189
-            L_0x016a:
+                if (r0 < r2) goto L_0x0169
+                goto L_0x0188
+            L_0x0169:
                 java.util.ArrayList<org.telegram.messenger.ImageLocation> r2 = r10.imagesArrLocationsVideo
                 java.lang.Object r0 = r2.get(r0)
                 org.telegram.messenger.ImageLocation r0 = (org.telegram.messenger.ImageLocation) r0
                 org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r2 = r0.location
                 java.lang.String r0 = getFileLocationExt(r0)
                 int r3 = r10.avatarsDialogId
-                if (r3 != 0) goto L_0x0183
+                if (r3 != 0) goto L_0x0182
                 boolean r3 = r10.isEvent
-                if (r3 == 0) goto L_0x0181
-                goto L_0x0183
-            L_0x0181:
+                if (r3 == 0) goto L_0x0180
+                goto L_0x0182
+            L_0x0180:
                 r3 = 0
-                goto L_0x0184
-            L_0x0183:
+                goto L_0x0183
+            L_0x0182:
                 r3 = 1
-            L_0x0184:
+            L_0x0183:
                 java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r2, r0, r3)
-                goto L_0x01ac
-            L_0x0189:
+                goto L_0x01ab
+            L_0x0188:
                 org.telegram.ui.PhotoViewer$PhotoProgressView[] r0 = r10.photoProgressViews
                 r0 = r0[r4]
                 r0.setBackgroundState(r5, r9, r1)
                 return
-            L_0x0191:
+            L_0x0190:
                 org.telegram.messenger.SecureDocument r2 = r10.currentSecureDocument
-                if (r2 == 0) goto L_0x01b7
-                if (r0 < 0) goto L_0x01af
+                if (r2 == 0) goto L_0x01b6
+                if (r0 < 0) goto L_0x01ae
                 java.util.ArrayList<org.telegram.messenger.SecureDocument> r2 = r10.secureDocuments
                 int r2 = r2.size()
-                if (r0 < r2) goto L_0x01a0
-                goto L_0x01af
-            L_0x01a0:
+                if (r0 < r2) goto L_0x019f
+                goto L_0x01ae
+            L_0x019f:
                 java.util.ArrayList<org.telegram.messenger.SecureDocument> r2 = r10.secureDocuments
                 java.lang.Object r0 = r2.get(r0)
                 org.telegram.messenger.SecureDocument r0 = (org.telegram.messenger.SecureDocument) r0
                 java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r1)
-            L_0x01ac:
+            L_0x01ab:
                 r2 = r0
                 r3 = r7
-                goto L_0x01f5
-            L_0x01af:
+                goto L_0x01f4
+            L_0x01ae:
                 org.telegram.ui.PhotoViewer$PhotoProgressView[] r0 = r10.photoProgressViews
                 r0 = r0[r4]
                 r0.setBackgroundState(r5, r9, r1)
                 return
-            L_0x01b7:
+            L_0x01b6:
                 java.lang.String r2 = r10.currentPathObject
-                if (r2 == 0) goto L_0x01dc
+                if (r2 == 0) goto L_0x01db
                 java.io.File r0 = new java.io.File
                 java.io.File r2 = org.telegram.messenger.FileLoader.getDirectory(r3)
                 java.lang.String[] r3 = r10.currentFileNames
@@ -18514,13 +18537,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r5 = r7
                 r7 = 0
                 r8 = 0
-            L_0x01d9:
+            L_0x01d8:
                 r2 = r0
                 r0 = 0
-                goto L_0x01f9
-            L_0x01dc:
+                goto L_0x01f8
+            L_0x01db:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r2 = r10.pageBlocksAdapter
-                if (r2 == 0) goto L_0x01f3
+                if (r2 == 0) goto L_0x01f2
                 java.io.File r2 = r2.getFile(r0)
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r3 = r10.pageBlocksAdapter
                 boolean r3 = r3.isVideo(r0)
@@ -18529,26 +18552,26 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r3 = r7
                 r5 = r3
                 r7 = 0
-                goto L_0x01f9
-            L_0x01f3:
+                goto L_0x01f8
+            L_0x01f2:
                 r2 = r7
                 r3 = r2
-            L_0x01f5:
+            L_0x01f4:
                 r5 = r3
                 r0 = 0
                 r7 = 0
                 r8 = 0
-            L_0x01f9:
-                if (r4 != 0) goto L_0x01ff
+            L_0x01f8:
+                if (r4 != 0) goto L_0x01fe
                 boolean r11 = r10.dontAutoPlay
-                if (r11 != 0) goto L_0x0203
-            L_0x01ff:
-                if (r0 == 0) goto L_0x0203
+                if (r11 != 0) goto L_0x0202
+            L_0x01fe:
+                if (r0 == 0) goto L_0x0202
                 r11 = 1
-                goto L_0x0204
-            L_0x0203:
+                goto L_0x0203
+            L_0x0202:
                 r11 = 0
-            L_0x0204:
+            L_0x0203:
                 org.telegram.messenger.DispatchQueue r12 = org.telegram.messenger.Utilities.globalQueue
                 org.telegram.ui.-$$Lambda$PhotoViewer$e_cfsV9POX7m7dtxwC9MMIddQbw r13 = new org.telegram.ui.-$$Lambda$PhotoViewer$e_cfsV9POX7m7dtxwC9MMIddQbw
                 r0 = r13
@@ -18560,32 +18583,32 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9 = r19
                 r0.<init>(r2, r3, r4, r5, r6, r7, r8, r9)
                 r12.postRunnable(r13)
-                goto L_0x024a
-            L_0x0219:
+                goto L_0x0249
+            L_0x0218:
                 java.util.ArrayList<java.lang.Object> r2 = r10.imagesArrLocals
                 boolean r2 = r2.isEmpty()
-                if (r2 != 0) goto L_0x0239
-                if (r0 < 0) goto L_0x0239
+                if (r2 != 0) goto L_0x0238
+                if (r0 < 0) goto L_0x0238
                 java.util.ArrayList<java.lang.Object> r2 = r10.imagesArrLocals
                 int r2 = r2.size()
-                if (r0 >= r2) goto L_0x0239
+                if (r0 >= r2) goto L_0x0238
                 java.util.ArrayList<java.lang.Object> r2 = r10.imagesArrLocals
                 java.lang.Object r0 = r2.get(r0)
                 boolean r2 = r0 instanceof org.telegram.messenger.MediaController.PhotoEntry
-                if (r2 == 0) goto L_0x0239
+                if (r2 == 0) goto L_0x0238
                 org.telegram.messenger.MediaController$PhotoEntry r0 = (org.telegram.messenger.MediaController.PhotoEntry) r0
                 boolean r6 = r0.isVideo
-            L_0x0239:
-                if (r6 == 0) goto L_0x0243
+            L_0x0238:
+                if (r6 == 0) goto L_0x0242
                 org.telegram.ui.PhotoViewer$PhotoProgressView[] r0 = r10.photoProgressViews
                 r0 = r0[r4]
                 r0.setBackgroundState(r3, r9, r1)
-                goto L_0x024a
-            L_0x0243:
+                goto L_0x0249
+            L_0x0242:
                 org.telegram.ui.PhotoViewer$PhotoProgressView[] r0 = r10.photoProgressViews
                 r0 = r0[r4]
                 r0.setBackgroundState(r5, r9, r1)
-            L_0x024a:
+            L_0x0249:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.checkProgress(int, boolean, boolean):void");
@@ -18758,8 +18781,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         /* JADX WARNING: type inference failed for: r1v125 */
         /* JADX WARNING: type inference failed for: r1v127 */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:307:0x0633  */
-        /* JADX WARNING: Removed duplicated region for block: B:315:0x0661  */
+        /* JADX WARNING: Removed duplicated region for block: B:307:0x0630  */
+        /* JADX WARNING: Removed duplicated region for block: B:315:0x065e  */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         private void setIndexToImage(org.telegram.messenger.ImageReceiver r22, int r23) {
@@ -18774,10 +18797,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r2 = r2.isEmpty()
                 r3 = 0
                 if (r2 != 0) goto L_0x006a
-                if (r1 < 0) goto L_0x06ad
+                if (r1 < 0) goto L_0x06aa
                 java.util.ArrayList<org.telegram.messenger.SecureDocument> r2 = r0.secureDocuments
                 int r2 = r2.size()
-                if (r1 >= r2) goto L_0x06ad
+                if (r1 >= r2) goto L_0x06aa
                 java.util.ArrayList<org.telegram.messenger.SecureDocument> r2 = r0.secureDocuments
                 r2.get(r1)
                 org.telegram.messenger.AndroidUtilities.getPhotoSize()
@@ -18824,18 +18847,18 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9 = r10
                 r10 = r12
                 r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-                goto L_0x06ad
+                goto L_0x06aa
             L_0x006a:
                 java.util.ArrayList<java.lang.Object> r2 = r0.imagesArrLocals
                 boolean r2 = r2.isEmpty()
                 java.lang.String r4 = "%d_%d"
                 r5 = 2
                 r6 = 1
-                if (r2 != 0) goto L_0x0384
-                if (r1 < 0) goto L_0x037e
+                if (r2 != 0) goto L_0x0381
+                if (r1 < 0) goto L_0x037b
                 java.util.ArrayList<java.lang.Object> r2 = r0.imagesArrLocals
                 int r2 = r2.size()
-                if (r1 >= r2) goto L_0x037e
+                if (r1 >= r2) goto L_0x037b
                 java.util.ArrayList<java.lang.Object> r2 = r0.imagesArrLocals
                 java.lang.Object r13 = r2.get(r1)
                 int r2 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
@@ -18858,15 +18881,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r1 = r13 instanceof org.telegram.messenger.MediaController.PhotoEntry
                 r8 = 90
                 java.lang.String r9 = "d"
-                if (r1 == 0) goto L_0x0116
+                if (r1 == 0) goto L_0x0115
                 r1 = r13
                 org.telegram.messenger.MediaController$PhotoEntry r1 = (org.telegram.messenger.MediaController.PhotoEntry) r1
                 boolean r9 = r1.isVideo
-                if (r9 == 0) goto L_0x00e8
+                if (r9 == 0) goto L_0x00e7
                 java.lang.String r10 = r1.thumbPath
                 if (r10 == 0) goto L_0x00c8
                 boolean r14 = r0.fromCamera
-                if (r14 == 0) goto L_0x00e6
+                if (r14 == 0) goto L_0x00e5
                 android.graphics.Bitmap r10 = android.graphics.BitmapFactory.decodeFile(r10)
                 if (r10 == 0) goto L_0x00c5
                 org.telegram.messenger.ImageReceiver$BitmapHolder r7 = new org.telegram.messenger.ImageReceiver$BitmapHolder
@@ -18875,7 +18898,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             L_0x00c5:
                 r1 = r3
                 r10 = r1
-                goto L_0x0109
+                goto L_0x0108
             L_0x00c8:
                 java.lang.StringBuilder r10 = new java.lang.StringBuilder
                 r10.<init>()
@@ -18888,19 +18911,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r1 = r1.path
                 r10.append(r1)
                 java.lang.String r10 = r10.toString()
-            L_0x00e6:
+            L_0x00e5:
                 r1 = r3
-                goto L_0x0109
-            L_0x00e8:
+                goto L_0x0108
+            L_0x00e7:
                 java.lang.String r10 = r1.filterPath
-                if (r10 == 0) goto L_0x00ed
-                goto L_0x00f5
-            L_0x00ed:
+                if (r10 == 0) goto L_0x00ec
+                goto L_0x00f4
+            L_0x00ec:
                 int r10 = r1.orientation
                 r11.setOrientation(r10, r12)
                 java.lang.String r1 = r1.path
                 r10 = r1
-            L_0x00f5:
+            L_0x00f4:
                 java.util.Locale r1 = java.util.Locale.US
                 java.lang.Object[] r14 = new java.lang.Object[r5]
                 java.lang.Integer r15 = java.lang.Integer.valueOf(r2)
@@ -18908,7 +18931,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.Integer r15 = java.lang.Integer.valueOf(r2)
                 r14[r6] = r15
                 java.lang.String r1 = java.lang.String.format(r1, r4, r14)
-            L_0x0109:
+            L_0x0108:
                 r15 = r1
                 r1 = r3
                 r6 = r1
@@ -18917,47 +18940,47 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r18 = r9
                 r9 = 0
                 r14 = 0
-                goto L_0x0262
-            L_0x0116:
+                goto L_0x025f
+            L_0x0115:
                 boolean r1 = r13 instanceof org.telegram.tgnet.TLRPC$BotInlineResult
-                if (r1 == 0) goto L_0x020d
+                if (r1 == 0) goto L_0x020a
                 r1 = r13
                 org.telegram.tgnet.TLRPC$BotInlineResult r1 = (org.telegram.tgnet.TLRPC$BotInlineResult) r1
                 java.lang.String r10 = r1.type
                 java.lang.String r14 = "video"
                 boolean r10 = r10.equals(r14)
-                if (r10 != 0) goto L_0x01d5
+                if (r10 != 0) goto L_0x01d2
                 org.telegram.tgnet.TLRPC$Document r10 = r1.document
                 boolean r10 = org.telegram.messenger.MessageObject.isVideoDocument(r10)
-                if (r10 == 0) goto L_0x0132
-                goto L_0x01d5
-            L_0x0132:
+                if (r10 == 0) goto L_0x0130
+                goto L_0x01d2
+            L_0x0130:
                 java.lang.String r10 = r1.type
                 java.lang.String r14 = "gif"
                 boolean r10 = r10.equals(r14)
-                if (r10 == 0) goto L_0x0159
+                if (r10 == 0) goto L_0x0157
                 org.telegram.tgnet.TLRPC$Document r10 = r1.document
-                if (r10 == 0) goto L_0x0159
+                if (r10 == 0) goto L_0x0157
                 int r1 = r10.size
                 org.telegram.tgnet.TLRPC$VideoSize r14 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r10)
-                if (r14 == 0) goto L_0x014d
+                if (r14 == 0) goto L_0x014b
                 org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$VideoSize) r14, (org.telegram.tgnet.TLRPC$Document) r10)
-                goto L_0x014e
-            L_0x014d:
+                goto L_0x014c
+            L_0x014b:
                 r14 = r3
-            L_0x014e:
+            L_0x014c:
                 r15 = r9
                 r16 = r10
                 r17 = r14
                 r10 = r1
                 r1 = r3
                 r9 = r1
-            L_0x0156:
+            L_0x0154:
                 r14 = r9
-                goto L_0x0201
-            L_0x0159:
+                goto L_0x01fe
+            L_0x0157:
                 org.telegram.tgnet.TLRPC$Photo r10 = r1.photo
-                if (r10 == 0) goto L_0x0186
+                if (r10 == 0) goto L_0x0184
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r10.sizes
                 int r10 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
                 org.telegram.tgnet.TLRPC$PhotoSize r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r10)
@@ -18974,27 +18997,27 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r17 = r16
                 r15 = r14
                 r14 = r9
-                goto L_0x01e8
-            L_0x0186:
+                goto L_0x01e5
+            L_0x0184:
                 org.telegram.tgnet.TLRPC$WebDocument r10 = r1.content
                 boolean r10 = r10 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-                if (r10 == 0) goto L_0x01f8
+                if (r10 == 0) goto L_0x01f5
                 java.lang.String r10 = r1.type
                 boolean r10 = r10.equals(r14)
-                if (r10 == 0) goto L_0x01b1
+                if (r10 == 0) goto L_0x01ae
                 org.telegram.tgnet.TLRPC$WebDocument r10 = r1.thumb
                 boolean r14 = r10 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-                if (r14 == 0) goto L_0x01c5
+                if (r14 == 0) goto L_0x01c2
                 java.lang.String r10 = r10.mime_type
                 java.lang.String r14 = "video/mp4"
                 boolean r10 = r14.equals(r10)
-                if (r10 == 0) goto L_0x01c5
+                if (r10 == 0) goto L_0x01c2
                 org.telegram.tgnet.TLRPC$WebDocument r10 = r1.thumb
                 org.telegram.messenger.WebFile r10 = org.telegram.messenger.WebFile.createWithWebDocument(r10)
                 org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForWebFile(r10)
                 r14 = r10
-                goto L_0x01c6
-            L_0x01b1:
+                goto L_0x01c3
+            L_0x01ae:
                 java.util.Locale r9 = java.util.Locale.US
                 java.lang.Object[] r10 = new java.lang.Object[r5]
                 java.lang.Integer r14 = java.lang.Integer.valueOf(r2)
@@ -19002,9 +19025,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.Integer r14 = java.lang.Integer.valueOf(r2)
                 r10[r6] = r14
                 java.lang.String r9 = java.lang.String.format(r9, r4, r10)
-            L_0x01c5:
+            L_0x01c2:
                 r14 = r3
-            L_0x01c6:
+            L_0x01c3:
                 org.telegram.tgnet.TLRPC$WebDocument r1 = r1.content
                 org.telegram.messenger.WebFile r1 = org.telegram.messenger.WebFile.createWithWebDocument(r1)
                 r16 = r3
@@ -19012,10 +19035,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r17 = r14
                 r10 = 0
                 r9 = r16
-                goto L_0x0156
-            L_0x01d5:
+                goto L_0x0154
+            L_0x01d2:
                 org.telegram.tgnet.TLRPC$Document r9 = r1.document
-                if (r9 == 0) goto L_0x01ec
+                if (r9 == 0) goto L_0x01e9
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r9.thumbs
                 org.telegram.tgnet.TLRPC$PhotoSize r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r8)
                 org.telegram.tgnet.TLRPC$Document r1 = r1.document
@@ -19024,27 +19047,27 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r17 = r16
                 r14 = r9
                 r10 = 0
-            L_0x01e8:
+            L_0x01e5:
                 r9 = r1
                 r1 = r17
-                goto L_0x0201
-            L_0x01ec:
+                goto L_0x01fe
+            L_0x01e9:
                 org.telegram.tgnet.TLRPC$WebDocument r1 = r1.thumb
                 boolean r9 = r1 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-                if (r9 == 0) goto L_0x01f8
+                if (r9 == 0) goto L_0x01f5
                 org.telegram.messenger.WebFile r1 = org.telegram.messenger.WebFile.createWithWebDocument(r1)
                 r9 = r3
-                goto L_0x01fa
-            L_0x01f8:
+                goto L_0x01f7
+            L_0x01f5:
                 r1 = r3
                 r9 = r1
-            L_0x01fa:
+            L_0x01f7:
                 r14 = r9
                 r15 = r14
                 r16 = r15
                 r17 = r16
                 r10 = 0
-            L_0x0201:
+            L_0x01fe:
                 r19 = r14
                 r6 = r16
                 r14 = 1
@@ -19052,47 +19075,47 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r20 = r10
                 r10 = r3
                 r3 = r9
-                goto L_0x0253
-            L_0x020d:
+                goto L_0x0250
+            L_0x020a:
                 boolean r1 = r13 instanceof org.telegram.messenger.MediaController.SearchImage
-                if (r1 == 0) goto L_0x0256
+                if (r1 == 0) goto L_0x0253
                 r1 = r13
                 org.telegram.messenger.MediaController$SearchImage r1 = (org.telegram.messenger.MediaController.SearchImage) r1
                 org.telegram.tgnet.TLRPC$PhotoSize r10 = r1.photoSize
-                if (r10 == 0) goto L_0x0223
+                if (r10 == 0) goto L_0x0220
                 org.telegram.tgnet.TLRPC$Photo r1 = r1.photo
                 int r14 = r10.size
                 r16 = r3
                 r15 = r14
                 r14 = r10
                 r10 = r16
-                goto L_0x0244
-            L_0x0223:
+                goto L_0x0241
+            L_0x0220:
                 java.lang.String r10 = r1.filterPath
-                if (r10 == 0) goto L_0x022d
+                if (r10 == 0) goto L_0x022a
                 r1 = r3
                 r14 = r1
                 r16 = r14
                 r15 = 0
-                goto L_0x0244
-            L_0x022d:
+                goto L_0x0241
+            L_0x022a:
                 org.telegram.tgnet.TLRPC$Document r10 = r1.document
-                if (r10 == 0) goto L_0x023a
+                if (r10 == 0) goto L_0x0237
                 int r14 = r10.size
                 r1 = r3
                 r16 = r10
                 r15 = r14
                 r10 = r1
                 r14 = r10
-                goto L_0x0244
-            L_0x023a:
+                goto L_0x0241
+            L_0x0237:
                 java.lang.String r10 = r1.imageUrl
                 int r14 = r1.size
                 r1 = r3
                 r16 = r1
                 r15 = r14
                 r14 = r16
-            L_0x0244:
+            L_0x0241:
                 r17 = r3
                 r19 = r14
                 r6 = r16
@@ -19102,10 +19125,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1 = r17
                 r20 = r15
                 r15 = r9
-            L_0x0253:
+            L_0x0250:
                 r9 = r20
-                goto L_0x0262
-            L_0x0256:
+                goto L_0x025f
+            L_0x0253:
                 r1 = r3
                 r6 = r1
                 r10 = r6
@@ -19115,20 +19138,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9 = 0
                 r14 = 0
                 r18 = 0
-            L_0x0262:
-                if (r6 == 0) goto L_0x02f4
+            L_0x025f:
+                if (r6 == 0) goto L_0x02f1
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r6.thumbs
                 org.telegram.tgnet.TLRPC$PhotoSize r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r1, r8)
-                if (r17 == 0) goto L_0x02b2
+                if (r17 == 0) goto L_0x02af
                 org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForDocument(r6)
                 r8 = 0
-                if (r7 != 0) goto L_0x0279
+                if (r7 != 0) goto L_0x0276
                 org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r1, (org.telegram.tgnet.TLRPC$Document) r6)
                 r6 = r1
-                goto L_0x027a
-            L_0x0279:
+                goto L_0x0277
+            L_0x0276:
                 r6 = 0
-            L_0x027a:
+            L_0x0277:
                 java.util.Locale r1 = java.util.Locale.US
                 java.lang.Object[] r5 = new java.lang.Object[r5]
                 java.lang.Integer r10 = java.lang.Integer.valueOf(r2)
@@ -19137,15 +19160,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r10 = 1
                 r5[r10] = r2
                 java.lang.String r10 = java.lang.String.format(r1, r4, r5)
-                if (r7 == 0) goto L_0x029b
+                if (r7 == 0) goto L_0x0298
                 android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r2 = r7.bitmap
                 r1.<init>(r2)
                 r16 = r1
-                goto L_0x029d
-            L_0x029b:
+                goto L_0x029a
+            L_0x0298:
                 r16 = 0
-            L_0x029d:
+            L_0x029a:
                 r12 = 0
                 java.lang.String r4 = "d"
                 r1 = r22
@@ -19159,16 +19182,16 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r11 = r13
                 r12 = r14
                 r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
-                goto L_0x06ad
-            L_0x02b2:
+                goto L_0x06aa
+            L_0x02af:
                 org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForDocument(r6)
-                if (r7 != 0) goto L_0x02be
+                if (r7 != 0) goto L_0x02bb
                 org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r1, (org.telegram.tgnet.TLRPC$Document) r6)
                 r6 = r1
-                goto L_0x02bf
-            L_0x02be:
+                goto L_0x02bc
+            L_0x02bb:
                 r6 = 0
-            L_0x02bf:
+            L_0x02bc:
                 java.util.Locale r1 = java.util.Locale.US
                 java.lang.Object[] r5 = new java.lang.Object[r5]
                 java.lang.Integer r8 = java.lang.Integer.valueOf(r2)
@@ -19177,15 +19200,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r8 = 1
                 r5[r8] = r2
                 java.lang.String r5 = java.lang.String.format(r1, r4, r5)
-                if (r7 == 0) goto L_0x02e0
+                if (r7 == 0) goto L_0x02dd
                 android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r2 = r7.bitmap
                 r1.<init>(r2)
                 r16 = r1
-                goto L_0x02e2
-            L_0x02e0:
+                goto L_0x02df
+            L_0x02dd:
                 r16 = 0
-            L_0x02e2:
+            L_0x02df:
                 r8 = 0
                 java.lang.String r4 = "d"
                 r1 = r22
@@ -19197,20 +19220,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9 = r13
                 r10 = r14
                 r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-                goto L_0x06ad
-            L_0x02f4:
+                goto L_0x06aa
+            L_0x02f1:
                 r2 = r19
-                if (r2 == 0) goto L_0x0314
+                if (r2 == 0) goto L_0x0311
                 org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForObject(r2, r3)
-                if (r7 == 0) goto L_0x0307
+                if (r7 == 0) goto L_0x0304
                 android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r3 = r7.bitmap
                 r1.<init>(r3)
                 r4 = r1
-                goto L_0x0308
-            L_0x0307:
+                goto L_0x0305
+            L_0x0304:
                 r4 = 0
-            L_0x0308:
+            L_0x0305:
                 r6 = 0
                 r1 = r22
                 r3 = r15
@@ -19218,11 +19241,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r7 = r13
                 r8 = r14
                 r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (android.graphics.drawable.Drawable) r4, (int) r5, (java.lang.String) r6, (java.lang.Object) r7, (int) r8)
-                goto L_0x06ad
-            L_0x0314:
-                r2 = 2131165877(0x7var_b5, float:1.7945984E38)
-                if (r1 == 0) goto L_0x0358
-                if (r17 == 0) goto L_0x032d
+                goto L_0x06aa
+            L_0x0311:
+                r2 = 2131165885(0x7var_bd, float:1.7946E38)
+                if (r1 == 0) goto L_0x0355
+                if (r17 == 0) goto L_0x032a
                 org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForWebFile(r1)
                 r5 = 0
                 r6 = 0
@@ -19232,26 +19255,26 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r7 = r13
                 r8 = r14
                 r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (org.telegram.messenger.ImageLocation) r4, (java.lang.String) r5, (android.graphics.drawable.Drawable) r6, (java.lang.Object) r7, (int) r8)
-                goto L_0x06ad
-            L_0x032d:
+                goto L_0x06aa
+            L_0x032a:
                 org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForWebFile(r1)
-                if (r7 == 0) goto L_0x033c
+                if (r7 == 0) goto L_0x0339
                 android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r2 = r7.bitmap
                 r1.<init>(r2)
-            L_0x033a:
+            L_0x0337:
                 r4 = r1
-                goto L_0x034c
-            L_0x033c:
-                if (r18 == 0) goto L_0x034b
+                goto L_0x0349
+            L_0x0339:
+                if (r18 == 0) goto L_0x0348
                 android.app.Activity r1 = r0.parentActivity
-                if (r1 == 0) goto L_0x034b
+                if (r1 == 0) goto L_0x0348
                 android.content.res.Resources r1 = r1.getResources()
                 android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
-                goto L_0x033a
-            L_0x034b:
+                goto L_0x0337
+            L_0x0348:
                 r4 = 0
-            L_0x034c:
+            L_0x0349:
                 r5 = 0
                 r1 = r22
                 r2 = r3
@@ -19259,77 +19282,77 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r6 = r13
                 r7 = r14
                 r1.setImage(r2, r3, r4, r5, r6, r7)
-                goto L_0x06ad
-            L_0x0358:
-                if (r7 == 0) goto L_0x0363
+                goto L_0x06aa
+            L_0x0355:
+                if (r7 == 0) goto L_0x0360
                 android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r2 = r7.bitmap
                 r1.<init>(r2)
-            L_0x0361:
+            L_0x035e:
                 r4 = r1
-                goto L_0x0373
-            L_0x0363:
-                if (r18 == 0) goto L_0x0372
+                goto L_0x0370
+            L_0x0360:
+                if (r18 == 0) goto L_0x036f
                 android.app.Activity r1 = r0.parentActivity
-                if (r1 == 0) goto L_0x0372
+                if (r1 == 0) goto L_0x036f
                 android.content.res.Resources r1 = r1.getResources()
                 android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
-                goto L_0x0361
-            L_0x0372:
+                goto L_0x035e
+            L_0x036f:
                 r4 = 0
-            L_0x0373:
+            L_0x0370:
                 r5 = 0
                 r1 = r22
                 r2 = r10
                 r3 = r15
                 r6 = r9
                 r1.setImage(r2, r3, r4, r5, r6)
-                goto L_0x06ad
-            L_0x037e:
+                goto L_0x06aa
+            L_0x037b:
                 r1 = r3
                 r11.setImageBitmap((android.graphics.Bitmap) r1)
-                goto L_0x06ad
-            L_0x0384:
+                goto L_0x06aa
+            L_0x0381:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r2 = r0.pageBlocksAdapter
                 r3 = -1
-                r6 = 2131165943(0x7var_f7, float:1.7946117E38)
-                if (r2 == 0) goto L_0x046c
+                r6 = 2131165951(0x7var_ff, float:1.7946134E38)
+                if (r2 == 0) goto L_0x0469
                 r7 = 1
                 int[] r4 = new int[r7]
                 org.telegram.tgnet.TLObject r2 = r2.getMedia(r1)
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r5 = r0.pageBlocksAdapter
                 org.telegram.tgnet.TLRPC$PhotoSize r5 = r5.getFileLocation(r2, r4)
-                if (r5 == 0) goto L_0x0453
+                if (r5 == 0) goto L_0x0450
                 boolean r7 = r2 instanceof org.telegram.tgnet.TLRPC$Photo
-                if (r7 == 0) goto L_0x03ed
+                if (r7 == 0) goto L_0x03ea
                 org.telegram.tgnet.TLRPC$Photo r2 = (org.telegram.tgnet.TLRPC$Photo) r2
                 org.telegram.messenger.ImageReceiver$BitmapHolder r1 = r0.currentThumb
-                if (r1 == 0) goto L_0x03aa
+                if (r1 == 0) goto L_0x03a7
                 org.telegram.messenger.ImageReceiver r6 = r0.centerImage
-                if (r11 != r6) goto L_0x03aa
-                goto L_0x03ab
-            L_0x03aa:
+                if (r11 != r6) goto L_0x03a7
+                goto L_0x03a8
+            L_0x03a7:
                 r1 = 0
-            L_0x03ab:
+            L_0x03a8:
                 r6 = r4[r12]
-                if (r6 != 0) goto L_0x03b1
+                if (r6 != 0) goto L_0x03ae
                 r4[r12] = r3
-            L_0x03b1:
+            L_0x03ae:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r2.sizes
                 r6 = 80
                 org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r6)
                 org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r5, (org.telegram.tgnet.TLRPC$Photo) r2)
                 r6 = 0
                 org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r3, (org.telegram.tgnet.TLRPC$Photo) r2)
-                if (r1 == 0) goto L_0x03ce
+                if (r1 == 0) goto L_0x03cb
                 android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r1 = r1.bitmap
                 r2.<init>(r1)
                 r16 = r2
-                goto L_0x03d0
-            L_0x03ce:
+                goto L_0x03cd
+            L_0x03cb:
                 r16 = 0
-            L_0x03d0:
+            L_0x03cd:
                 r8 = r4[r12]
                 r9 = 0
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r0.pageBlocksAdapter
@@ -19347,41 +19370,41 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9 = r10
                 r10 = r12
                 r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-                goto L_0x06ad
-            L_0x03ed:
+                goto L_0x06aa
+            L_0x03ea:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r3 = r0.pageBlocksAdapter
                 boolean r1 = r3.isVideo(r1)
-                if (r1 == 0) goto L_0x0443
+                if (r1 == 0) goto L_0x0440
                 org.telegram.tgnet.TLRPC$FileLocation r1 = r5.location
                 boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable
-                if (r1 != 0) goto L_0x0434
+                if (r1 != 0) goto L_0x0431
                 org.telegram.messenger.ImageReceiver$BitmapHolder r1 = r0.currentThumb
-                if (r1 == 0) goto L_0x0404
+                if (r1 == 0) goto L_0x0401
                 org.telegram.messenger.ImageReceiver r3 = r0.centerImage
-                if (r11 != r3) goto L_0x0404
-                goto L_0x0405
-            L_0x0404:
+                if (r11 != r3) goto L_0x0401
+                goto L_0x0402
+            L_0x0401:
                 r1 = 0
-            L_0x0405:
+            L_0x0402:
                 r3 = 0
                 r4 = 0
-                if (r1 != 0) goto L_0x0411
+                if (r1 != 0) goto L_0x040e
                 org.telegram.tgnet.TLRPC$Document r2 = (org.telegram.tgnet.TLRPC$Document) r2
                 org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r5, (org.telegram.tgnet.TLRPC$Document) r2)
                 r5 = r2
-                goto L_0x0412
-            L_0x0411:
+                goto L_0x040f
+            L_0x040e:
                 r5 = 0
-            L_0x0412:
-                if (r1 == 0) goto L_0x041d
+            L_0x040f:
+                if (r1 == 0) goto L_0x041a
                 android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r1 = r1.bitmap
                 r2.<init>(r1)
                 r6 = r2
-                goto L_0x041e
-            L_0x041d:
+                goto L_0x041b
+            L_0x041a:
                 r6 = 0
-            L_0x041e:
+            L_0x041b:
                 r7 = 0
                 r8 = 0
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r0.pageBlocksAdapter
@@ -19394,110 +19417,110 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r4 = r5
                 r5 = r12
                 r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-                goto L_0x06ad
-            L_0x0434:
+                goto L_0x06aa
+            L_0x0431:
                 android.app.Activity r1 = r0.parentActivity
                 android.content.res.Resources r1 = r1.getResources()
                 android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
                 r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
-                goto L_0x06ad
-            L_0x0443:
+                goto L_0x06aa
+            L_0x0440:
                 org.telegram.ui.Components.AnimatedFileDrawable r1 = r0.currentAnimation
-                if (r1 == 0) goto L_0x06ad
+                if (r1 == 0) goto L_0x06aa
                 r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
                 org.telegram.ui.Components.AnimatedFileDrawable r1 = r0.currentAnimation
                 org.telegram.ui.PhotoViewer$FrameLayoutDrawer r2 = r0.containerView
                 r1.addSecondParentView(r2)
-                goto L_0x06ad
-            L_0x0453:
+                goto L_0x06aa
+            L_0x0450:
                 r1 = r4[r12]
-                if (r1 != 0) goto L_0x045d
+                if (r1 != 0) goto L_0x045a
                 r1 = 0
                 r11.setImageBitmap((android.graphics.Bitmap) r1)
-                goto L_0x06ad
-            L_0x045d:
+                goto L_0x06aa
+            L_0x045a:
                 android.app.Activity r1 = r0.parentActivity
                 android.content.res.Resources r1 = r1.getResources()
                 android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
                 r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
-                goto L_0x06ad
-            L_0x046c:
+                goto L_0x06aa
+            L_0x0469:
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
                 boolean r2 = r2.isEmpty()
-                if (r2 != 0) goto L_0x048c
-                if (r1 < 0) goto L_0x048c
+                if (r2 != 0) goto L_0x0489
+                if (r1 < 0) goto L_0x0489
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
                 int r2 = r2.size()
-                if (r1 >= r2) goto L_0x048c
+                if (r1 >= r2) goto L_0x0489
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
                 java.lang.Object r2 = r2.get(r1)
                 org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
                 r7 = 1
                 r11.setShouldGenerateQualityThumb(r7)
                 r9 = r2
-                goto L_0x048d
-            L_0x048c:
+                goto L_0x048a
+            L_0x0489:
                 r9 = 0
-            L_0x048d:
+            L_0x048a:
                 r2 = 100
-                if (r9 == 0) goto L_0x05a0
+                if (r9 == 0) goto L_0x059d
                 org.telegram.tgnet.TLRPC$Message r7 = r9.messageOwner
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_restrictionReason> r7 = r7.restriction_reason
                 java.lang.String r7 = org.telegram.messenger.MessagesController.getRestrictionReason(r7)
                 boolean r7 = android.text.TextUtils.isEmpty(r7)
-                if (r7 != 0) goto L_0x04ad
+                if (r7 != 0) goto L_0x04aa
                 android.app.Activity r1 = r0.parentActivity
                 android.content.res.Resources r1 = r1.getResources()
                 android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
                 r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
                 return
-            L_0x04ad:
+            L_0x04aa:
                 boolean r7 = r9.isVideo()
-                if (r7 == 0) goto L_0x051b
+                if (r7 == 0) goto L_0x0518
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r9.photoThumbs
-                if (r1 == 0) goto L_0x050d
+                if (r1 == 0) goto L_0x050a
                 boolean r1 = r1.isEmpty()
-                if (r1 != 0) goto L_0x050d
+                if (r1 != 0) goto L_0x050a
                 org.telegram.messenger.ImageReceiver$BitmapHolder r1 = r0.currentThumb
-                if (r1 == 0) goto L_0x04c6
+                if (r1 == 0) goto L_0x04c3
                 org.telegram.messenger.ImageReceiver r3 = r0.centerImage
-                if (r11 != r3) goto L_0x04c6
-                goto L_0x04c7
-            L_0x04c6:
+                if (r11 != r3) goto L_0x04c3
+                goto L_0x04c4
+            L_0x04c3:
                 r1 = 0
-            L_0x04c7:
+            L_0x04c4:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r9.photoThumbs
                 r4 = 320(0x140, float:4.48E-43)
                 org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r4)
                 int r4 = r3.w
-                if (r4 >= r2) goto L_0x04d9
+                if (r4 >= r2) goto L_0x04d6
                 int r4 = r3.h
-                if (r4 >= r2) goto L_0x04d9
+                if (r4 >= r2) goto L_0x04d6
                 r6 = 1
-                goto L_0x04da
-            L_0x04d9:
+                goto L_0x04d7
+            L_0x04d6:
                 r6 = 0
-            L_0x04da:
+            L_0x04d7:
                 r11.setNeedsQualityThumb(r6)
                 r2 = 0
                 r4 = 0
-                if (r1 != 0) goto L_0x04e9
+                if (r1 != 0) goto L_0x04e6
                 org.telegram.tgnet.TLObject r5 = r9.photoThumbsObject
                 org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForObject(r3, r5)
                 r5 = r3
-                goto L_0x04ea
-            L_0x04e9:
+                goto L_0x04e7
+            L_0x04e6:
                 r5 = 0
-            L_0x04ea:
-                if (r1 == 0) goto L_0x04f5
+            L_0x04e7:
+                if (r1 == 0) goto L_0x04f2
                 android.graphics.drawable.BitmapDrawable r3 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r1 = r1.bitmap
                 r3.<init>(r1)
                 r6 = r3
-                goto L_0x04f6
-            L_0x04f5:
+                goto L_0x04f3
+            L_0x04f2:
                 r6 = 0
-            L_0x04f6:
+            L_0x04f3:
                 r7 = 0
                 r8 = 0
                 r10 = 1
@@ -19508,41 +19531,41 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r5 = r13
                 r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
                 org.telegram.messenger.ImageReceiver$BitmapHolder r1 = r0.currentThumb
-                if (r1 == 0) goto L_0x051a
+                if (r1 == 0) goto L_0x0517
                 int r1 = r1.orientation
                 r11.setOrientation(r1, r12)
-                goto L_0x051a
-            L_0x050d:
+                goto L_0x0517
+            L_0x050a:
                 android.app.Activity r1 = r0.parentActivity
                 android.content.res.Resources r1 = r1.getResources()
                 android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
                 r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
-            L_0x051a:
+            L_0x0517:
                 return
-            L_0x051b:
+            L_0x0518:
                 org.telegram.ui.Components.AnimatedFileDrawable r7 = r0.currentAnimation
-                if (r7 == 0) goto L_0x052a
+                if (r7 == 0) goto L_0x0527
                 org.telegram.ui.PhotoViewer$FrameLayoutDrawer r1 = r0.containerView
                 r7.addSecondParentView(r1)
                 org.telegram.ui.Components.AnimatedFileDrawable r1 = r0.currentAnimation
                 r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
                 return
-            L_0x052a:
+            L_0x0527:
                 int r7 = r0.sharedMediaType
                 r8 = 1
-                if (r7 != r8) goto L_0x05a0
+                if (r7 != r8) goto L_0x059d
                 boolean r1 = r9.canPreviewDocument()
-                if (r1 == 0) goto L_0x0593
+                if (r1 == 0) goto L_0x0590
                 org.telegram.tgnet.TLRPC$Document r1 = r9.getDocument()
                 r11.setNeedsQualityThumb(r8)
                 org.telegram.messenger.ImageReceiver$BitmapHolder r3 = r0.currentThumb
-                if (r3 == 0) goto L_0x0545
+                if (r3 == 0) goto L_0x0542
                 org.telegram.messenger.ImageReceiver r6 = r0.centerImage
-                if (r11 != r6) goto L_0x0545
-                goto L_0x0546
-            L_0x0545:
+                if (r11 != r6) goto L_0x0542
+                goto L_0x0543
+            L_0x0542:
                 r3 = 0
-            L_0x0546:
+            L_0x0543:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r6 = r9.photoThumbs
                 org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r6, r2)
                 r6 = 1157627904(0x45000000, float:2048.0)
@@ -19558,22 +19581,22 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r10 = 1
                 r5[r10] = r6
                 java.lang.String r4 = java.lang.String.format(r8, r4, r5)
-                if (r3 != 0) goto L_0x0573
+                if (r3 != 0) goto L_0x0570
                 org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r1)
                 r5 = r2
-                goto L_0x0574
-            L_0x0573:
+                goto L_0x0571
+            L_0x0570:
                 r5 = 0
-            L_0x0574:
-                if (r3 == 0) goto L_0x057f
+            L_0x0571:
+                if (r3 == 0) goto L_0x057c
                 android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r3 = r3.bitmap
                 r2.<init>(r3)
                 r6 = r2
-                goto L_0x0580
-            L_0x057f:
+                goto L_0x057d
+            L_0x057c:
                 r6 = 0
-            L_0x0580:
+            L_0x057d:
                 int r8 = r1.size
                 r10 = 0
                 r12 = 0
@@ -19587,128 +19610,128 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r8 = r10
                 r10 = r12
                 r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-                goto L_0x059f
-            L_0x0593:
+                goto L_0x059c
+            L_0x0590:
                 org.telegram.ui.Components.OtherDocumentPlaceholderDrawable r1 = new org.telegram.ui.Components.OtherDocumentPlaceholderDrawable
                 android.app.Activity r2 = r0.parentActivity
                 org.telegram.ui.PhotoViewer$FrameLayoutDrawer r3 = r0.containerView
                 r1.<init>(r2, r3, r9)
                 r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
-            L_0x059f:
+            L_0x059c:
                 return
-            L_0x05a0:
+            L_0x059d:
                 r4 = 1
                 int[] r7 = new int[r4]
                 org.telegram.messenger.ImageLocation r8 = r0.getImageLocation(r1, r7)
                 org.telegram.tgnet.TLObject r1 = r0.getFileLocation(r1, r7)
                 r11.setNeedsQualityThumb(r4)
-                if (r8 == 0) goto L_0x0697
+                if (r8 == 0) goto L_0x0694
                 org.telegram.messenger.ImageReceiver$BitmapHolder r6 = r0.currentThumb
-                if (r6 == 0) goto L_0x05b9
+                if (r6 == 0) goto L_0x05b6
                 org.telegram.messenger.ImageReceiver r10 = r0.centerImage
-                if (r11 != r10) goto L_0x05b9
-                goto L_0x05ba
-            L_0x05b9:
+                if (r11 != r10) goto L_0x05b6
+                goto L_0x05b7
+            L_0x05b6:
                 r6 = 0
-            L_0x05ba:
+            L_0x05b7:
                 r10 = r7[r12]
-                if (r10 != 0) goto L_0x05c0
+                if (r10 != 0) goto L_0x05bd
                 r7[r12] = r3
-            L_0x05c0:
-                if (r9 == 0) goto L_0x05cb
+            L_0x05bd:
+                if (r9 == 0) goto L_0x05c8
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r9.photoThumbs
                 org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r2)
                 org.telegram.tgnet.TLObject r3 = r9.photoThumbsObject
-                goto L_0x05cd
-            L_0x05cb:
+                goto L_0x05ca
+            L_0x05c8:
                 r2 = 0
                 r3 = 0
-            L_0x05cd:
-                if (r2 == 0) goto L_0x05d3
-                if (r2 != r1) goto L_0x05d3
+            L_0x05ca:
+                if (r2 == 0) goto L_0x05d0
+                if (r2 != r1) goto L_0x05d0
                 r1 = 0
-                goto L_0x05d4
-            L_0x05d3:
+                goto L_0x05d1
+            L_0x05d0:
                 r1 = r2
-            L_0x05d4:
-                if (r9 == 0) goto L_0x05dc
+            L_0x05d1:
+                if (r9 == 0) goto L_0x05d9
                 boolean r2 = r9.isWebpage()
-                if (r2 != 0) goto L_0x05e7
-            L_0x05dc:
+                if (r2 != 0) goto L_0x05e4
+            L_0x05d9:
                 int r2 = r0.avatarsDialogId
-                if (r2 != 0) goto L_0x05e7
+                if (r2 != 0) goto L_0x05e4
                 boolean r2 = r0.isEvent
-                if (r2 == 0) goto L_0x05e5
-                goto L_0x05e7
-            L_0x05e5:
+                if (r2 == 0) goto L_0x05e2
+                goto L_0x05e4
+            L_0x05e2:
                 r13 = 0
-                goto L_0x05e8
-            L_0x05e7:
+                goto L_0x05e5
+            L_0x05e4:
                 r13 = 1
-            L_0x05e8:
-                if (r9 == 0) goto L_0x0605
+            L_0x05e5:
+                if (r9 == 0) goto L_0x0602
                 int r2 = r0.sharedMediaType
                 r4 = 5
-                if (r2 != r4) goto L_0x0602
+                if (r2 != r4) goto L_0x05ff
                 org.telegram.tgnet.TLRPC$Document r2 = r9.getDocument()
                 org.telegram.tgnet.TLRPC$VideoSize r4 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r2)
-                if (r4 == 0) goto L_0x05fe
+                if (r4 == 0) goto L_0x05fb
                 org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Document) r2)
-                goto L_0x05ff
-            L_0x05fe:
+                goto L_0x05fc
+            L_0x05fb:
                 r2 = 0
-            L_0x05ff:
+            L_0x05fc:
                 r4 = r2
                 r14 = r9
-                goto L_0x0631
-            L_0x0602:
+                goto L_0x062e
+            L_0x05ff:
                 r14 = r9
-            L_0x0603:
+            L_0x0600:
                 r4 = 0
-                goto L_0x0631
-            L_0x0605:
+                goto L_0x062e
+            L_0x0602:
                 int r2 = r0.avatarsDialogId
-                if (r2 == 0) goto L_0x062f
-                if (r2 <= 0) goto L_0x061c
+                if (r2 == 0) goto L_0x062c
+                if (r2 <= 0) goto L_0x0619
                 int r2 = r0.currentAccount
                 org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
                 int r4 = r0.avatarsDialogId
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
                 org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r4)
-                goto L_0x062d
-            L_0x061c:
+                goto L_0x062a
+            L_0x0619:
                 int r2 = r0.currentAccount
                 org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
                 int r4 = r0.avatarsDialogId
                 int r4 = -r4
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
                 org.telegram.tgnet.TLRPC$Chat r2 = r2.getChat(r4)
-            L_0x062d:
+            L_0x062a:
                 r14 = r2
-                goto L_0x0603
-            L_0x062f:
+                goto L_0x0600
+            L_0x062c:
                 r4 = 0
                 r14 = 0
-            L_0x0631:
-                if (r4 == 0) goto L_0x0661
+            L_0x062e:
+                if (r4 == 0) goto L_0x065e
                 r5 = 0
                 r9 = 0
-                if (r6 != 0) goto L_0x063d
+                if (r6 != 0) goto L_0x063a
                 org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForObject(r1, r3)
                 r10 = r1
-                goto L_0x063e
-            L_0x063d:
+                goto L_0x063b
+            L_0x063a:
                 r10 = 0
-            L_0x063e:
-                if (r6 == 0) goto L_0x064a
+            L_0x063b:
+                if (r6 == 0) goto L_0x0647
                 android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r2 = r6.bitmap
                 r1.<init>(r2)
                 r16 = r1
-                goto L_0x064c
-            L_0x064a:
+                goto L_0x0649
+            L_0x0647:
                 r16 = 0
-            L_0x064c:
+            L_0x0649:
                 r12 = r7[r12]
                 r15 = 0
                 java.lang.String r7 = "b"
@@ -19723,38 +19746,38 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r11 = r14
                 r12 = r13
                 r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
-                goto L_0x06ad
-            L_0x0661:
+                goto L_0x06aa
+            L_0x065e:
                 int r2 = r0.avatarsDialogId
-                if (r2 == 0) goto L_0x066f
+                if (r2 == 0) goto L_0x066c
                 int r2 = r8.imageType
-                if (r2 != r5) goto L_0x066c
+                if (r2 != r5) goto L_0x0669
                 java.lang.String r2 = "g"
+                goto L_0x066a
+            L_0x0669:
+                r2 = 0
+            L_0x066a:
+                r4 = r2
                 goto L_0x066d
             L_0x066c:
-                r2 = 0
-            L_0x066d:
-                r4 = r2
-                goto L_0x0670
-            L_0x066f:
                 r4 = 0
-            L_0x0670:
-                if (r6 != 0) goto L_0x0678
+            L_0x066d:
+                if (r6 != 0) goto L_0x0675
                 org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForObject(r1, r3)
                 r5 = r1
-                goto L_0x0679
-            L_0x0678:
+                goto L_0x0676
+            L_0x0675:
                 r5 = 0
-            L_0x0679:
-                if (r6 == 0) goto L_0x0684
+            L_0x0676:
+                if (r6 == 0) goto L_0x0681
                 android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
                 android.graphics.Bitmap r2 = r6.bitmap
                 r1.<init>(r2)
                 r6 = r1
-                goto L_0x0685
-            L_0x0684:
+                goto L_0x0682
+            L_0x0681:
                 r6 = 0
-            L_0x0685:
+            L_0x0682:
                 r7 = r7[r12]
                 r9 = 0
                 java.lang.String r10 = "b"
@@ -19767,19 +19790,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r9 = r14
                 r10 = r13
                 r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-                goto L_0x06ad
-            L_0x0697:
+                goto L_0x06aa
+            L_0x0694:
                 r1 = r7[r12]
-                if (r1 != 0) goto L_0x06a0
+                if (r1 != 0) goto L_0x069d
                 r1 = 0
                 r11.setImageBitmap((android.graphics.Bitmap) r1)
-                goto L_0x06ad
-            L_0x06a0:
+                goto L_0x06aa
+            L_0x069d:
                 android.app.Activity r1 = r0.parentActivity
                 android.content.res.Resources r1 = r1.getResources()
                 android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
                 r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
-            L_0x06ad:
+            L_0x06aa:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.setIndexToImage(org.telegram.messenger.ImageReceiver, int):void");
@@ -20255,21 +20278,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         /* JADX WARNING: Failed to process nested try/catch */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:18:0x004d */
-        /* JADX WARNING: Removed duplicated region for block: B:104:0x0308  */
-        /* JADX WARNING: Removed duplicated region for block: B:119:0x0370  */
-        /* JADX WARNING: Removed duplicated region for block: B:21:0x0059 A[Catch:{ Exception -> 0x038d }] */
-        /* JADX WARNING: Removed duplicated region for block: B:22:0x005f A[Catch:{ Exception -> 0x038d }] */
-        /* JADX WARNING: Removed duplicated region for block: B:26:0x006b A[Catch:{ Exception -> 0x038d }] */
-        /* JADX WARNING: Removed duplicated region for block: B:27:0x0074 A[Catch:{ Exception -> 0x038d }] */
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x0082 A[Catch:{ Exception -> 0x038d }] */
-        /* JADX WARNING: Removed duplicated region for block: B:31:0x0085 A[Catch:{ Exception -> 0x038d }] */
-        /* JADX WARNING: Removed duplicated region for block: B:35:0x00a6  */
-        /* JADX WARNING: Removed duplicated region for block: B:36:0x00a8  */
-        /* JADX WARNING: Removed duplicated region for block: B:39:0x014e  */
-        /* JADX WARNING: Removed duplicated region for block: B:42:0x015f  */
-        /* JADX WARNING: Removed duplicated region for block: B:43:0x0163  */
-        /* JADX WARNING: Removed duplicated region for block: B:49:0x017c  */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:18:0x004c */
+        /* JADX WARNING: Removed duplicated region for block: B:104:0x0307  */
+        /* JADX WARNING: Removed duplicated region for block: B:119:0x036f  */
+        /* JADX WARNING: Removed duplicated region for block: B:21:0x0058 A[Catch:{ Exception -> 0x038c }] */
+        /* JADX WARNING: Removed duplicated region for block: B:22:0x005e A[Catch:{ Exception -> 0x038c }] */
+        /* JADX WARNING: Removed duplicated region for block: B:26:0x006a A[Catch:{ Exception -> 0x038c }] */
+        /* JADX WARNING: Removed duplicated region for block: B:27:0x0073 A[Catch:{ Exception -> 0x038c }] */
+        /* JADX WARNING: Removed duplicated region for block: B:30:0x0081 A[Catch:{ Exception -> 0x038c }] */
+        /* JADX WARNING: Removed duplicated region for block: B:31:0x0084 A[Catch:{ Exception -> 0x038c }] */
+        /* JADX WARNING: Removed duplicated region for block: B:35:0x00a5  */
+        /* JADX WARNING: Removed duplicated region for block: B:36:0x00a7  */
+        /* JADX WARNING: Removed duplicated region for block: B:39:0x014d  */
+        /* JADX WARNING: Removed duplicated region for block: B:42:0x015e  */
+        /* JADX WARNING: Removed duplicated region for block: B:43:0x0162  */
+        /* JADX WARNING: Removed duplicated region for block: B:49:0x017b  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean openPhoto(org.telegram.messenger.MessageObject r17, org.telegram.tgnet.TLRPC$FileLocation r18, org.telegram.messenger.ImageLocation r19, org.telegram.messenger.ImageLocation r20, java.util.ArrayList<org.telegram.messenger.MessageObject> r21, java.util.ArrayList<org.telegram.messenger.SecureDocument> r22, java.util.ArrayList<java.lang.Object> r23, int r24, org.telegram.ui.PhotoViewer.PhotoViewerProvider r25, org.telegram.ui.ChatActivity r26, long r27, long r29, boolean r31, org.telegram.ui.PhotoViewer.PageBlocksAdapter r32, java.lang.Integer r33) {
             /*
@@ -20283,12 +20306,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r13 = r33
                 android.app.Activity r4 = r11.parentActivity
                 r14 = 0
-                if (r4 == 0) goto L_0x0391
+                if (r4 == 0) goto L_0x0390
                 boolean r4 = r11.isVisible
-                if (r4 != 0) goto L_0x0391
+                if (r4 != 0) goto L_0x0390
                 if (r1 != 0) goto L_0x001f
                 boolean r4 = r16.checkAnimation()
-                if (r4 != 0) goto L_0x0391
+                if (r4 != 0) goto L_0x0390
             L_0x001f:
                 if (r0 != 0) goto L_0x002f
                 if (r3 != 0) goto L_0x002f
@@ -20297,7 +20320,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (r22 != 0) goto L_0x002f
                 if (r19 != 0) goto L_0x002f
                 if (r12 != 0) goto L_0x002f
-                goto L_0x0391
+                goto L_0x0390
             L_0x002f:
                 r15 = 1
                 r9 = r24
@@ -20309,67 +20332,67 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.Object r5 = r5.getSystemService(r6)
                 android.view.WindowManager r5 = (android.view.WindowManager) r5
                 boolean r6 = r11.attachedToWindow
-                if (r6 == 0) goto L_0x004d
-                android.widget.FrameLayout r6 = r11.windowView     // Catch:{ Exception -> 0x004d }
-                r5.removeView(r6)     // Catch:{ Exception -> 0x004d }
-            L_0x004d:
-                android.view.WindowManager$LayoutParams r6 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038d }
+                if (r6 == 0) goto L_0x004c
+                android.widget.FrameLayout r6 = r11.windowView     // Catch:{ Exception -> 0x004c }
+                r5.removeView(r6)     // Catch:{ Exception -> 0x004c }
+            L_0x004c:
+                android.view.WindowManager$LayoutParams r6 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038c }
                 r7 = 99
-                r6.type = r7     // Catch:{ Exception -> 0x038d }
-                int r7 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x038d }
+                r6.type = r7     // Catch:{ Exception -> 0x038c }
+                int r7 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x038c }
                 r8 = 21
-                if (r7 < r8) goto L_0x005f
+                if (r7 < r8) goto L_0x005e
                 r7 = -2147286784(0xfffffffvar_, float:-2.75865E-40)
-                r6.flags = r7     // Catch:{ Exception -> 0x038d }
-                goto L_0x0063
-            L_0x005f:
+                r6.flags = r7     // Catch:{ Exception -> 0x038c }
+                goto L_0x0062
+            L_0x005e:
                 r7 = 131072(0x20000, float:1.83671E-40)
-                r6.flags = r7     // Catch:{ Exception -> 0x038d }
-            L_0x0063:
-                if (r2 == 0) goto L_0x0074
-                org.telegram.tgnet.TLRPC$EncryptedChat r6 = r26.getCurrentEncryptedChat()     // Catch:{ Exception -> 0x038d }
-                if (r6 == 0) goto L_0x0074
-                android.view.WindowManager$LayoutParams r6 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038d }
-                int r7 = r6.flags     // Catch:{ Exception -> 0x038d }
+                r6.flags = r7     // Catch:{ Exception -> 0x038c }
+            L_0x0062:
+                if (r2 == 0) goto L_0x0073
+                org.telegram.tgnet.TLRPC$EncryptedChat r6 = r26.getCurrentEncryptedChat()     // Catch:{ Exception -> 0x038c }
+                if (r6 == 0) goto L_0x0073
+                android.view.WindowManager$LayoutParams r6 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038c }
+                int r7 = r6.flags     // Catch:{ Exception -> 0x038c }
                 r7 = r7 | 8192(0x2000, float:1.14794E-41)
-                r6.flags = r7     // Catch:{ Exception -> 0x038d }
-                goto L_0x007c
-            L_0x0074:
-                android.view.WindowManager$LayoutParams r6 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038d }
-                int r7 = r6.flags     // Catch:{ Exception -> 0x038d }
+                r6.flags = r7     // Catch:{ Exception -> 0x038c }
+                goto L_0x007b
+            L_0x0073:
+                android.view.WindowManager$LayoutParams r6 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038c }
+                int r7 = r6.flags     // Catch:{ Exception -> 0x038c }
                 r7 = r7 & -8193(0xffffffffffffdfff, float:NaN)
-                r6.flags = r7     // Catch:{ Exception -> 0x038d }
-            L_0x007c:
-                android.view.WindowManager$LayoutParams r6 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038d }
-                boolean r7 = r11.useSmoothKeyboard     // Catch:{ Exception -> 0x038d }
-                if (r7 == 0) goto L_0x0085
+                r6.flags = r7     // Catch:{ Exception -> 0x038c }
+            L_0x007b:
+                android.view.WindowManager$LayoutParams r6 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038c }
+                boolean r7 = r11.useSmoothKeyboard     // Catch:{ Exception -> 0x038c }
+                if (r7 == 0) goto L_0x0084
                 r7 = 32
-                goto L_0x0087
-            L_0x0085:
+                goto L_0x0086
+            L_0x0084:
                 r7 = 16
-            L_0x0087:
+            L_0x0086:
                 r7 = r7 | 256(0x100, float:3.59E-43)
-                r6.softInputMode = r7     // Catch:{ Exception -> 0x038d }
-                android.widget.FrameLayout r6 = r11.windowView     // Catch:{ Exception -> 0x038d }
-                r6.setFocusable(r14)     // Catch:{ Exception -> 0x038d }
-                org.telegram.ui.PhotoViewer$FrameLayoutDrawer r6 = r11.containerView     // Catch:{ Exception -> 0x038d }
-                r6.setFocusable(r14)     // Catch:{ Exception -> 0x038d }
-                android.widget.FrameLayout r6 = r11.windowView     // Catch:{ Exception -> 0x038d }
-                android.view.WindowManager$LayoutParams r7 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038d }
-                r5.addView(r6, r7)     // Catch:{ Exception -> 0x038d }
+                r6.softInputMode = r7     // Catch:{ Exception -> 0x038c }
+                android.widget.FrameLayout r6 = r11.windowView     // Catch:{ Exception -> 0x038c }
+                r6.setFocusable(r14)     // Catch:{ Exception -> 0x038c }
+                org.telegram.ui.PhotoViewer$FrameLayoutDrawer r6 = r11.containerView     // Catch:{ Exception -> 0x038c }
+                r6.setFocusable(r14)     // Catch:{ Exception -> 0x038c }
+                android.widget.FrameLayout r6 = r11.windowView     // Catch:{ Exception -> 0x038c }
+                android.view.WindowManager$LayoutParams r7 = r11.windowLayoutParams     // Catch:{ Exception -> 0x038c }
+                r5.addView(r6, r7)     // Catch:{ Exception -> 0x038c }
                 r11.doneButtonPressed = r14
                 r11.allowShowFullscreenButton = r15
                 r11.parentChatActivity = r2
                 r11.lastTitle = r4
-                if (r13 == 0) goto L_0x00a8
+                if (r13 == 0) goto L_0x00a7
                 r2 = 1
-                goto L_0x00a9
-            L_0x00a8:
+                goto L_0x00a8
+            L_0x00a7:
                 r2 = 0
-            L_0x00a9:
+            L_0x00a8:
                 r11.isEmbedVideo = r2
                 org.telegram.ui.ActionBar.ActionBar r2 = r11.actionBar
-                r5 = 2131626576(0x7f0e0a50, float:1.8880392E38)
+                r5 = 2131626613(0x7f0e0a75, float:1.8880467E38)
                 r6 = 2
                 java.lang.Object[] r6 = new java.lang.Object[r6]
                 java.lang.Integer r7 = java.lang.Integer.valueOf(r15)
@@ -20429,93 +20452,93 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1.notifyDataSetChanged()
                 r11.pageBlocksAdapter = r12
                 android.view.VelocityTracker r1 = r11.velocityTracker
-                if (r1 != 0) goto L_0x0154
+                if (r1 != 0) goto L_0x0153
                 android.view.VelocityTracker r1 = android.view.VelocityTracker.obtain()
                 r11.velocityTracker = r1
-            L_0x0154:
+            L_0x0153:
                 r11.isVisible = r15
                 r11.togglePhotosListView(r14, r14)
                 r1 = r31 ^ 1
                 r11.openedFullScreenVideo = r1
-                if (r1 == 0) goto L_0x0163
+                if (r1 == 0) goto L_0x0162
                 r11.toggleActionBar(r14, r14)
-                goto L_0x0171
-            L_0x0163:
+                goto L_0x0170
+            L_0x0162:
                 int r1 = r11.sendPhotoType
-                if (r1 != r15) goto L_0x016e
+                if (r1 != r15) goto L_0x016d
                 r16.createCropView()
                 r11.toggleActionBar(r14, r14)
-                goto L_0x0171
-            L_0x016e:
+                goto L_0x0170
+            L_0x016d:
                 r11.toggleActionBar(r15, r14)
-            L_0x0171:
+            L_0x0170:
                 r8 = 0
                 r11.seekToProgressPending2 = r8
                 r11.skipFirstBufferingProgress = r14
                 r11.playerInjected = r14
                 r7 = 1065353216(0x3var_, float:1.0)
-                if (r10 == 0) goto L_0x0308
+                if (r10 == 0) goto L_0x0307
                 r11.disableShowCheck = r15
                 r11.animationInProgress = r15
-                if (r0 == 0) goto L_0x01f1
+                if (r0 == 0) goto L_0x01f0
                 boolean r1 = r10.allowTakeAnimation
-                if (r1 == 0) goto L_0x018d
+                if (r1 == 0) goto L_0x018c
                 org.telegram.messenger.ImageReceiver r1 = r10.imageReceiver
                 org.telegram.ui.Components.AnimatedFileDrawable r1 = r1.getAnimation()
-                goto L_0x018e
-            L_0x018d:
+                goto L_0x018d
+            L_0x018c:
                 r1 = r4
-            L_0x018e:
+            L_0x018d:
                 r11.currentAnimation = r1
-                if (r1 == 0) goto L_0x01fb
+                if (r1 == 0) goto L_0x01fa
                 boolean r1 = r17.isVideo()
-                if (r1 == 0) goto L_0x01e4
+                if (r1 == 0) goto L_0x01e3
                 org.telegram.messenger.ImageReceiver r1 = r10.imageReceiver
                 r1.setAllowStartAnimation(r14)
                 org.telegram.messenger.ImageReceiver r1 = r10.imageReceiver
                 r1.stopAnimation()
                 org.telegram.messenger.MediaController r1 = org.telegram.messenger.MediaController.getInstance()
                 boolean r1 = r1.isPlayingMessage(r0)
-                if (r1 == 0) goto L_0x01b0
+                if (r1 == 0) goto L_0x01af
                 float r1 = r0.audioProgress
                 r11.seekToProgressPending2 = r1
-            L_0x01b0:
+            L_0x01af:
                 org.telegram.ui.Components.VideoPlayer r1 = r11.injectingVideoPlayer
-                if (r1 != 0) goto L_0x01de
+                if (r1 != 0) goto L_0x01dd
                 int r1 = r0.currentAccount
                 org.telegram.messenger.FileLoader r1 = org.telegram.messenger.FileLoader.getInstance(r1)
                 org.telegram.tgnet.TLRPC$Document r2 = r17.getDocument()
                 boolean r1 = r1.isLoadingVideo(r2, r15)
-                if (r1 != 0) goto L_0x01de
+                if (r1 != 0) goto L_0x01dd
                 org.telegram.ui.Components.AnimatedFileDrawable r1 = r11.currentAnimation
                 boolean r1 = r1.hasBitmap()
-                if (r1 != 0) goto L_0x01dc
+                if (r1 != 0) goto L_0x01db
                 int r1 = r0.currentAccount
                 org.telegram.messenger.FileLoader r1 = org.telegram.messenger.FileLoader.getInstance(r1)
                 org.telegram.tgnet.TLRPC$Document r2 = r17.getDocument()
                 boolean r1 = r1.isLoadingVideo(r2, r14)
-                if (r1 != 0) goto L_0x01de
-            L_0x01dc:
+                if (r1 != 0) goto L_0x01dd
+            L_0x01db:
                 r1 = 1
-                goto L_0x01df
-            L_0x01de:
+                goto L_0x01de
+            L_0x01dd:
                 r1 = 0
-            L_0x01df:
+            L_0x01de:
                 r11.skipFirstBufferingProgress = r1
                 r11.currentAnimation = r4
-                goto L_0x01fb
-            L_0x01e4:
+                goto L_0x01fa
+            L_0x01e3:
                 java.util.ArrayList r1 = r0.getWebPagePhotos(r4, r4)
                 int r1 = r1.size()
-                if (r1 <= r15) goto L_0x01fb
+                if (r1 <= r15) goto L_0x01fa
                 r11.currentAnimation = r4
-                goto L_0x01fb
-            L_0x01f1:
-                if (r12 == 0) goto L_0x01fb
+                goto L_0x01fa
+            L_0x01f0:
+                if (r12 == 0) goto L_0x01fa
                 org.telegram.messenger.ImageReceiver r1 = r10.imageReceiver
                 org.telegram.ui.Components.AnimatedFileDrawable r1 = r1.getAnimation()
                 r11.currentAnimation = r1
-            L_0x01fb:
+            L_0x01fa:
                 r1 = r16
                 r2 = r17
                 r3 = r18
@@ -20530,14 +20553,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r25 = r10
                 r1.onPhotoShow(r2, r3, r4, r5, r6, r7, r8, r9, r10)
                 int r1 = r11.sendPhotoType
-                if (r1 != r15) goto L_0x0228
+                if (r1 != r15) goto L_0x0227
                 org.telegram.ui.Components.PhotoCropView r1 = r11.photoCropView
                 r1.setVisibility(r14)
                 org.telegram.ui.Components.PhotoCropView r1 = r11.photoCropView
                 r1.setAlpha(r0)
                 org.telegram.ui.Components.PhotoCropView r1 = r11.photoCropView
                 r1.setFreeform(r14)
-            L_0x0228:
+            L_0x0227:
                 r10 = r25
                 org.telegram.messenger.ImageReceiver r1 = r10.imageReceiver
                 android.graphics.RectF r1 = r1.getDrawRegion()
@@ -20547,14 +20570,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r2 = r2.getOrientation()
                 org.telegram.messenger.ImageReceiver r3 = r10.imageReceiver
                 int r3 = r3.getAnimatedOrientation()
-                if (r3 == 0) goto L_0x0243
+                if (r3 == 0) goto L_0x0242
                 r2 = r3
-            L_0x0243:
+            L_0x0242:
                 org.telegram.ui.Components.ClippingImageView[] r3 = r11.getAnimatingImageViews(r10)
                 r4 = 0
-            L_0x0248:
+            L_0x0247:
                 int r6 = r3.length
-                if (r4 >= r6) goto L_0x026d
+                if (r4 >= r6) goto L_0x026c
                 r6 = r3[r4]
                 float[][] r8 = r11.animationValues
                 r6.setAnimationValues(r8)
@@ -20569,15 +20592,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.messenger.ImageReceiver$BitmapHolder r8 = r10.thumb
                 r6.setImageBitmap(r8)
                 int r4 = r4 + 1
-                goto L_0x0248
-            L_0x026d:
+                goto L_0x0247
+            L_0x026c:
                 r16.initCropView()
                 int r2 = r11.sendPhotoType
-                if (r2 != r15) goto L_0x027b
+                if (r2 != r15) goto L_0x027a
                 org.telegram.ui.Components.PhotoCropView r2 = r11.photoCropView
                 r4 = 1065353216(0x3var_, float:1.0)
                 r2.setAspectRatio(r4)
-            L_0x027b:
+            L_0x027a:
                 org.telegram.ui.Components.ClippingImageView r2 = r11.animatingImageView
                 android.view.ViewGroup$LayoutParams r4 = r2.getLayoutParams()
                 float r2 = r1.width()
@@ -20588,25 +20611,25 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r4.height = r2
                 int r6 = r4.width
                 r8 = 100
-                if (r6 > 0) goto L_0x0297
+                if (r6 > 0) goto L_0x0296
                 r4.width = r8
-            L_0x0297:
-                if (r2 > 0) goto L_0x029b
+            L_0x0296:
+                if (r2 > 0) goto L_0x029a
                 r4.height = r8
-            L_0x029b:
+            L_0x029a:
                 int r2 = r3.length
-                if (r14 >= r2) goto L_0x02ef
+                if (r14 >= r2) goto L_0x02ee
                 int r2 = r3.length
-                if (r2 <= r15) goto L_0x02a9
+                if (r2 <= r15) goto L_0x02a8
                 r2 = r3[r14]
                 r2.setAlpha(r0)
                 r6 = 1065353216(0x3var_, float:1.0)
-                goto L_0x02b0
-            L_0x02a9:
+                goto L_0x02af
+            L_0x02a8:
                 r2 = r3[r14]
                 r6 = 1065353216(0x3var_, float:1.0)
                 r2.setAlpha(r6)
-            L_0x02b0:
+            L_0x02af:
                 r2 = r3[r14]
                 r2.setPivotX(r0)
                 r2 = r3[r14]
@@ -20637,8 +20660,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0.setLayoutParams(r4)
                 int r14 = r14 + 1
                 r0 = 0
-                goto L_0x029b
-            L_0x02ef:
+                goto L_0x029a
+            L_0x02ee:
                 android.widget.FrameLayout r0 = r11.windowView
                 android.view.ViewTreeObserver r0 = r0.getViewTreeObserver()
                 org.telegram.ui.PhotoViewer$62 r14 = new org.telegram.ui.PhotoViewer$62
@@ -20650,20 +20673,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r10 = r33
                 r1.<init>(r3, r4, r5, r6, r7, r8, r9, r10)
                 r0.addOnPreDrawListener(r14)
-                goto L_0x0360
-            L_0x0308:
+                goto L_0x035f
+            L_0x0307:
                 r1 = 1065353216(0x3var_, float:1.0)
-                if (r23 == 0) goto L_0x031e
+                if (r23 == 0) goto L_0x031d
                 int r2 = r11.sendPhotoType
                 r4 = 3
-                if (r2 == r4) goto L_0x031e
+                if (r2 == r4) goto L_0x031d
                 org.telegram.ui.PhotoViewer$PhotoViewerProvider r2 = r11.placeProvider
-                if (r2 == 0) goto L_0x031b
+                if (r2 == 0) goto L_0x031a
                 boolean r2 = r2.closeKeyboard()
-                if (r2 != 0) goto L_0x031e
-            L_0x031b:
+                if (r2 != 0) goto L_0x031d
+            L_0x031a:
                 r16.makeFocusable()
-            L_0x031e:
+            L_0x031d:
                 org.telegram.ui.PhotoViewer$FrameLayoutDrawer r2 = r11.containerView
                 r2.setAlpha(r1)
                 r1 = r16
@@ -20679,25 +20702,25 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r16.initCropView()
                 r16.setCropBitmap()
                 org.telegram.ui.ChatActivity r0 = r11.parentChatActivity
-                if (r0 == 0) goto L_0x0352
+                if (r0 == 0) goto L_0x0351
                 org.telegram.ui.Components.UndoView r0 = r0.getUndoView()
                 r0.hide(r14, r15)
                 org.telegram.ui.ChatActivity r0 = r11.parentChatActivity
                 android.view.View r0 = r0.getFragmentView()
                 r0.invalidate()
-            L_0x0352:
+            L_0x0351:
                 android.widget.FrameLayout r0 = r11.windowView
                 android.view.ViewTreeObserver r0 = r0.getViewTreeObserver()
                 org.telegram.ui.PhotoViewer$63 r1 = new org.telegram.ui.PhotoViewer$63
                 r1.<init>(r13)
                 r0.addOnPreDrawListener(r1)
-            L_0x0360:
+            L_0x035f:
                 android.app.Activity r0 = r11.parentActivity
                 java.lang.String r1 = "accessibility"
                 java.lang.Object r0 = r0.getSystemService(r1)
                 android.view.accessibility.AccessibilityManager r0 = (android.view.accessibility.AccessibilityManager) r0
                 boolean r1 = r0.isTouchExplorationEnabled()
-                if (r1 == 0) goto L_0x038c
+                if (r1 == 0) goto L_0x038b
                 android.view.accessibility.AccessibilityEvent r1 = android.view.accessibility.AccessibilityEvent.obtain()
                 r2 = 16384(0x4000, float:2.2959E-41)
                 r1.setEventType(r2)
@@ -20707,12 +20730,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.add(r3)
                 r0.sendAccessibilityEvent(r1)
-            L_0x038c:
+            L_0x038b:
                 return r15
-            L_0x038d:
+            L_0x038c:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0391:
+            L_0x0390:
                 return r14
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.openPhoto(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$FileLocation, org.telegram.messenger.ImageLocation, org.telegram.messenger.ImageLocation, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, int, org.telegram.ui.PhotoViewer$PhotoViewerProvider, org.telegram.ui.ChatActivity, long, long, boolean, org.telegram.ui.PhotoViewer$PageBlocksAdapter, java.lang.Integer):boolean");
@@ -21122,7 +21145,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                         if (r3 == 0) goto L_0x0035
                                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                                         java.lang.Runnable r0 = r0.animationEndRunnable
-                                        r3.lambda$openDiscussionMessageChat$145(r0)
+                                        r3.lambda$openDiscussionMessageChat$148(r0)
                                         goto L_0x0044
                                     L_0x0035:
                                         org.telegram.ui.PhotoViewer r3 = org.telegram.ui.PhotoViewer.this
@@ -24409,17 +24432,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         /* JADX WARNING: Code restructure failed: missing block: B:15:0x0039, code lost:
             if (r1.exists() == false) goto L_0x003b;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:46:0x0140, code lost:
-            if (r1.exists() == false) goto L_0x01a1;
+        /* JADX WARNING: Code restructure failed: missing block: B:46:0x013f, code lost:
+            if (r1.exists() == false) goto L_0x01a0;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:50:0x017f, code lost:
-            if (r1.exists() == false) goto L_0x01a1;
+        /* JADX WARNING: Code restructure failed: missing block: B:50:0x017e, code lost:
+            if (r1.exists() == false) goto L_0x01a0;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:59:0x019f, code lost:
-            if (r1.exists() == false) goto L_0x01a1;
+        /* JADX WARNING: Code restructure failed: missing block: B:59:0x019e, code lost:
+            if (r1.exists() == false) goto L_0x01a0;
          */
-        /* JADX WARNING: Removed duplicated region for block: B:65:0x01ad  */
-        /* JADX WARNING: Removed duplicated region for block: B:95:0x02a4  */
+        /* JADX WARNING: Removed duplicated region for block: B:65:0x01ac  */
+        /* JADX WARNING: Removed duplicated region for block: B:95:0x02a3  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onActionClick(boolean r11) {
             /*
@@ -24443,7 +24466,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r2 = "mp4"
                 r4 = 1
                 r5 = 0
-                if (r1 == 0) goto L_0x0130
+                if (r1 == 0) goto L_0x012f
                 org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
                 java.lang.String r1 = r1.attachPath
                 if (r1 == 0) goto L_0x003b
@@ -24459,118 +24482,118 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             L_0x003b:
                 r1 = r5
             L_0x003c:
-                if (r1 != 0) goto L_0x012d
+                if (r1 != 0) goto L_0x012c
                 org.telegram.messenger.MessageObject r1 = r10.currentMessageObject
                 org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
                 java.io.File r1 = org.telegram.messenger.FileLoader.getPathToMessage(r1)
                 boolean r6 = r1.exists()
-                if (r6 != 0) goto L_0x012d
+                if (r6 != 0) goto L_0x012c
                 boolean r1 = org.telegram.messenger.SharedConfig.streamMedia
-                if (r1 == 0) goto L_0x01a1
+                if (r1 == 0) goto L_0x01a0
                 org.telegram.messenger.MessageObject r1 = r10.currentMessageObject
                 long r6 = r1.getDialogId()
                 int r1 = (int) r6
-                if (r1 == 0) goto L_0x01a1
+                if (r1 == 0) goto L_0x01a0
                 org.telegram.messenger.MessageObject r1 = r10.currentMessageObject
                 boolean r1 = r1.isVideo()
-                if (r1 == 0) goto L_0x01a1
+                if (r1 == 0) goto L_0x01a0
                 org.telegram.messenger.MessageObject r1 = r10.currentMessageObject
                 boolean r1 = r1.canStreamVideo()
-                if (r1 == 0) goto L_0x01a1
-                org.telegram.messenger.MessageObject r1 = r10.currentMessageObject     // Catch:{ Exception -> 0x0129 }
-                int r1 = r1.currentAccount     // Catch:{ Exception -> 0x0129 }
-                org.telegram.messenger.FileLoader r1 = org.telegram.messenger.FileLoader.getInstance(r1)     // Catch:{ Exception -> 0x0129 }
-                org.telegram.messenger.MessageObject r6 = r10.currentMessageObject     // Catch:{ Exception -> 0x0129 }
-                int r1 = r1.getFileReference(r6)     // Catch:{ Exception -> 0x0129 }
-                int r6 = r10.currentAccount     // Catch:{ Exception -> 0x0129 }
-                org.telegram.messenger.FileLoader r6 = org.telegram.messenger.FileLoader.getInstance(r6)     // Catch:{ Exception -> 0x0129 }
-                org.telegram.messenger.MessageObject r7 = r10.currentMessageObject     // Catch:{ Exception -> 0x0129 }
-                org.telegram.tgnet.TLRPC$Document r7 = r7.getDocument()     // Catch:{ Exception -> 0x0129 }
-                org.telegram.messenger.MessageObject r8 = r10.currentMessageObject     // Catch:{ Exception -> 0x0129 }
-                r6.loadFile(r7, r8, r4, r3)     // Catch:{ Exception -> 0x0129 }
-                org.telegram.messenger.MessageObject r6 = r10.currentMessageObject     // Catch:{ Exception -> 0x0129 }
-                org.telegram.tgnet.TLRPC$Document r6 = r6.getDocument()     // Catch:{ Exception -> 0x0129 }
-                java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0129 }
-                r7.<init>()     // Catch:{ Exception -> 0x0129 }
+                if (r1 == 0) goto L_0x01a0
+                org.telegram.messenger.MessageObject r1 = r10.currentMessageObject     // Catch:{ Exception -> 0x0128 }
+                int r1 = r1.currentAccount     // Catch:{ Exception -> 0x0128 }
+                org.telegram.messenger.FileLoader r1 = org.telegram.messenger.FileLoader.getInstance(r1)     // Catch:{ Exception -> 0x0128 }
+                org.telegram.messenger.MessageObject r6 = r10.currentMessageObject     // Catch:{ Exception -> 0x0128 }
+                int r1 = r1.getFileReference(r6)     // Catch:{ Exception -> 0x0128 }
+                int r6 = r10.currentAccount     // Catch:{ Exception -> 0x0128 }
+                org.telegram.messenger.FileLoader r6 = org.telegram.messenger.FileLoader.getInstance(r6)     // Catch:{ Exception -> 0x0128 }
+                org.telegram.messenger.MessageObject r7 = r10.currentMessageObject     // Catch:{ Exception -> 0x0128 }
+                org.telegram.tgnet.TLRPC$Document r7 = r7.getDocument()     // Catch:{ Exception -> 0x0128 }
+                org.telegram.messenger.MessageObject r8 = r10.currentMessageObject     // Catch:{ Exception -> 0x0128 }
+                r6.loadFile(r7, r8, r4, r3)     // Catch:{ Exception -> 0x0128 }
+                org.telegram.messenger.MessageObject r6 = r10.currentMessageObject     // Catch:{ Exception -> 0x0128 }
+                org.telegram.tgnet.TLRPC$Document r6 = r6.getDocument()     // Catch:{ Exception -> 0x0128 }
+                java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0128 }
+                r7.<init>()     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r8 = "?account="
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
-                org.telegram.messenger.MessageObject r8 = r10.currentMessageObject     // Catch:{ Exception -> 0x0129 }
-                int r8 = r8.currentAccount     // Catch:{ Exception -> 0x0129 }
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
+                org.telegram.messenger.MessageObject r8 = r10.currentMessageObject     // Catch:{ Exception -> 0x0128 }
+                int r8 = r8.currentAccount     // Catch:{ Exception -> 0x0128 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r8 = "&id="
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
-                long r8 = r6.id     // Catch:{ Exception -> 0x0129 }
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
+                long r8 = r6.id     // Catch:{ Exception -> 0x0128 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r8 = "&hash="
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
-                long r8 = r6.access_hash     // Catch:{ Exception -> 0x0129 }
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
+                long r8 = r6.access_hash     // Catch:{ Exception -> 0x0128 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r8 = "&dc="
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
-                int r8 = r6.dc_id     // Catch:{ Exception -> 0x0129 }
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
+                int r8 = r6.dc_id     // Catch:{ Exception -> 0x0128 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r8 = "&size="
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
-                int r8 = r6.size     // Catch:{ Exception -> 0x0129 }
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
+                int r8 = r6.size     // Catch:{ Exception -> 0x0128 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r8 = "&mime="
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
-                java.lang.String r8 = r6.mime_type     // Catch:{ Exception -> 0x0129 }
-                java.lang.String r8 = java.net.URLEncoder.encode(r8, r0)     // Catch:{ Exception -> 0x0129 }
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
+                java.lang.String r8 = r6.mime_type     // Catch:{ Exception -> 0x0128 }
+                java.lang.String r8 = java.net.URLEncoder.encode(r8, r0)     // Catch:{ Exception -> 0x0128 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r8 = "&rid="
-                r7.append(r8)     // Catch:{ Exception -> 0x0129 }
-                r7.append(r1)     // Catch:{ Exception -> 0x0129 }
+                r7.append(r8)     // Catch:{ Exception -> 0x0128 }
+                r7.append(r1)     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r1 = "&name="
-                r7.append(r1)     // Catch:{ Exception -> 0x0129 }
-                java.lang.String r1 = org.telegram.messenger.FileLoader.getDocumentFileName(r6)     // Catch:{ Exception -> 0x0129 }
-                java.lang.String r0 = java.net.URLEncoder.encode(r1, r0)     // Catch:{ Exception -> 0x0129 }
-                r7.append(r0)     // Catch:{ Exception -> 0x0129 }
+                r7.append(r1)     // Catch:{ Exception -> 0x0128 }
+                java.lang.String r1 = org.telegram.messenger.FileLoader.getDocumentFileName(r6)     // Catch:{ Exception -> 0x0128 }
+                java.lang.String r0 = java.net.URLEncoder.encode(r1, r0)     // Catch:{ Exception -> 0x0128 }
+                r7.append(r0)     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r0 = "&reference="
-                r7.append(r0)     // Catch:{ Exception -> 0x0129 }
-                byte[] r0 = r6.file_reference     // Catch:{ Exception -> 0x0129 }
+                r7.append(r0)     // Catch:{ Exception -> 0x0128 }
+                byte[] r0 = r6.file_reference     // Catch:{ Exception -> 0x0128 }
                 if (r0 == 0) goto L_0x00f7
                 goto L_0x00f9
             L_0x00f7:
-                byte[] r0 = new byte[r3]     // Catch:{ Exception -> 0x0129 }
+                byte[] r0 = new byte[r3]     // Catch:{ Exception -> 0x0128 }
             L_0x00f9:
-                java.lang.String r0 = org.telegram.messenger.Utilities.bytesToHex(r0)     // Catch:{ Exception -> 0x0129 }
-                r7.append(r0)     // Catch:{ Exception -> 0x0129 }
-                java.lang.String r0 = r7.toString()     // Catch:{ Exception -> 0x0129 }
-                java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0129 }
-                r1.<init>()     // Catch:{ Exception -> 0x0129 }
+                java.lang.String r0 = org.telegram.messenger.Utilities.bytesToHex(r0)     // Catch:{ Exception -> 0x0128 }
+                r7.append(r0)     // Catch:{ Exception -> 0x0128 }
+                java.lang.String r0 = r7.toString()     // Catch:{ Exception -> 0x0128 }
+                java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0128 }
+                r1.<init>()     // Catch:{ Exception -> 0x0128 }
                 java.lang.String r6 = "tg://"
-                r1.append(r6)     // Catch:{ Exception -> 0x0129 }
-                org.telegram.messenger.MessageObject r6 = r10.currentMessageObject     // Catch:{ Exception -> 0x0129 }
-                java.lang.String r6 = r6.getFileName()     // Catch:{ Exception -> 0x0129 }
-                r1.append(r6)     // Catch:{ Exception -> 0x0129 }
-                r1.append(r0)     // Catch:{ Exception -> 0x0129 }
-                java.lang.String r0 = r1.toString()     // Catch:{ Exception -> 0x0129 }
-                android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0129 }
-                r10.isStreaming = r4     // Catch:{ Exception -> 0x012a }
-                r10.checkProgress(r3, r3, r3)     // Catch:{ Exception -> 0x012a }
-                goto L_0x012a
+                r1.append(r6)     // Catch:{ Exception -> 0x0128 }
+                org.telegram.messenger.MessageObject r6 = r10.currentMessageObject     // Catch:{ Exception -> 0x0128 }
+                java.lang.String r6 = r6.getFileName()     // Catch:{ Exception -> 0x0128 }
+                r1.append(r6)     // Catch:{ Exception -> 0x0128 }
+                r1.append(r0)     // Catch:{ Exception -> 0x0128 }
+                java.lang.String r0 = r1.toString()     // Catch:{ Exception -> 0x0128 }
+                android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0128 }
+                r10.isStreaming = r4     // Catch:{ Exception -> 0x0129 }
+                r10.checkProgress(r3, r3, r3)     // Catch:{ Exception -> 0x0129 }
+                goto L_0x0129
+            L_0x0128:
+                r0 = r5
             L_0x0129:
-                r0 = r5
-            L_0x012a:
                 r1 = r5
-                goto L_0x01a3
-            L_0x012d:
+                goto L_0x01a2
+            L_0x012c:
                 r0 = r5
-                goto L_0x01a3
-            L_0x0130:
+                goto L_0x01a2
+            L_0x012f:
                 org.telegram.tgnet.TLRPC$BotInlineResult r0 = r10.currentBotInlineResult
-                if (r0 == 0) goto L_0x0182
+                if (r0 == 0) goto L_0x0181
                 org.telegram.tgnet.TLRPC$Document r1 = r0.document
-                if (r1 == 0) goto L_0x0143
+                if (r1 == 0) goto L_0x0142
                 java.io.File r1 = org.telegram.messenger.FileLoader.getPathToAttach(r1)
                 boolean r0 = r1.exists()
-                if (r0 != 0) goto L_0x012d
-                goto L_0x01a1
-            L_0x0143:
+                if (r0 != 0) goto L_0x012c
+                goto L_0x01a0
+            L_0x0142:
                 org.telegram.tgnet.TLRPC$WebDocument r0 = r0.content
                 boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-                if (r0 == 0) goto L_0x01a1
+                if (r0 == 0) goto L_0x01a0
                 java.io.File r1 = new java.io.File
                 r0 = 4
                 java.io.File r0 = org.telegram.messenger.FileLoader.getDirectory(r0)
@@ -24591,113 +24614,113 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r6 = r6.toString()
                 r1.<init>(r0, r6)
                 boolean r0 = r1.exists()
-                if (r0 != 0) goto L_0x012d
-                goto L_0x01a1
-            L_0x0182:
+                if (r0 != 0) goto L_0x012c
+                goto L_0x01a0
+            L_0x0181:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r10.pageBlocksAdapter
-                if (r0 == 0) goto L_0x01a1
+                if (r0 == 0) goto L_0x01a0
                 int r1 = r10.currentIndex
                 org.telegram.tgnet.TLObject r0 = r0.getMedia(r1)
                 boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$Document
-                if (r0 != 0) goto L_0x0191
+                if (r0 != 0) goto L_0x0190
                 return
-            L_0x0191:
+            L_0x0190:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r10.pageBlocksAdapter
                 int r1 = r10.currentIndex
                 java.io.File r1 = r0.getFile(r1)
-                if (r1 == 0) goto L_0x012d
+                if (r1 == 0) goto L_0x012c
                 boolean r0 = r1.exists()
-                if (r0 != 0) goto L_0x012d
-            L_0x01a1:
+                if (r0 != 0) goto L_0x012c
+            L_0x01a0:
                 r0 = r5
                 r1 = r0
-            L_0x01a3:
-                if (r1 == 0) goto L_0x01ab
-                if (r0 != 0) goto L_0x01ab
+            L_0x01a2:
+                if (r1 == 0) goto L_0x01aa
+                if (r0 != 0) goto L_0x01aa
                 android.net.Uri r0 = android.net.Uri.fromFile(r1)
-            L_0x01ab:
-                if (r0 != 0) goto L_0x02a4
-                if (r11 == 0) goto L_0x02bb
+            L_0x01aa:
+                if (r0 != 0) goto L_0x02a3
+                if (r11 == 0) goto L_0x02ba
                 org.telegram.messenger.MessageObject r11 = r10.currentMessageObject
-                if (r11 == 0) goto L_0x01e7
+                if (r11 == 0) goto L_0x01e6
                 int r11 = r10.currentAccount
                 org.telegram.messenger.FileLoader r11 = org.telegram.messenger.FileLoader.getInstance(r11)
                 java.lang.String[] r0 = r10.currentFileNames
                 r0 = r0[r3]
                 boolean r11 = r11.isLoadingFile(r0)
-                if (r11 != 0) goto L_0x01d6
+                if (r11 != 0) goto L_0x01d5
                 int r11 = r10.currentAccount
                 org.telegram.messenger.FileLoader r11 = org.telegram.messenger.FileLoader.getInstance(r11)
                 org.telegram.messenger.MessageObject r0 = r10.currentMessageObject
                 org.telegram.tgnet.TLRPC$Document r0 = r0.getDocument()
                 org.telegram.messenger.MessageObject r1 = r10.currentMessageObject
                 r11.loadFile(r0, r1, r4, r3)
-                goto L_0x0294
-            L_0x01d6:
+                goto L_0x0293
+            L_0x01d5:
                 int r11 = r10.currentAccount
                 org.telegram.messenger.FileLoader r11 = org.telegram.messenger.FileLoader.getInstance(r11)
                 org.telegram.messenger.MessageObject r0 = r10.currentMessageObject
                 org.telegram.tgnet.TLRPC$Document r0 = r0.getDocument()
                 r11.cancelLoadFile((org.telegram.tgnet.TLRPC$Document) r0)
-                goto L_0x0294
-            L_0x01e7:
+                goto L_0x0293
+            L_0x01e6:
                 org.telegram.tgnet.TLRPC$BotInlineResult r11 = r10.currentBotInlineResult
-                if (r11 == 0) goto L_0x0253
+                if (r11 == 0) goto L_0x0252
                 org.telegram.tgnet.TLRPC$Document r0 = r11.document
-                if (r0 == 0) goto L_0x021f
+                if (r0 == 0) goto L_0x021e
                 int r11 = r10.currentAccount
                 org.telegram.messenger.FileLoader r11 = org.telegram.messenger.FileLoader.getInstance(r11)
                 java.lang.String[] r0 = r10.currentFileNames
                 r0 = r0[r3]
                 boolean r11 = r11.isLoadingFile(r0)
-                if (r11 != 0) goto L_0x0210
+                if (r11 != 0) goto L_0x020f
                 int r11 = r10.currentAccount
                 org.telegram.messenger.FileLoader r11 = org.telegram.messenger.FileLoader.getInstance(r11)
                 org.telegram.tgnet.TLRPC$BotInlineResult r0 = r10.currentBotInlineResult
                 org.telegram.tgnet.TLRPC$Document r0 = r0.document
                 org.telegram.messenger.MessageObject r1 = r10.currentMessageObject
                 r11.loadFile(r0, r1, r4, r3)
-                goto L_0x0294
-            L_0x0210:
+                goto L_0x0293
+            L_0x020f:
                 int r11 = r10.currentAccount
                 org.telegram.messenger.FileLoader r11 = org.telegram.messenger.FileLoader.getInstance(r11)
                 org.telegram.tgnet.TLRPC$BotInlineResult r0 = r10.currentBotInlineResult
                 org.telegram.tgnet.TLRPC$Document r0 = r0.document
                 r11.cancelLoadFile((org.telegram.tgnet.TLRPC$Document) r0)
-                goto L_0x0294
-            L_0x021f:
+                goto L_0x0293
+            L_0x021e:
                 org.telegram.tgnet.TLRPC$WebDocument r11 = r11.content
                 boolean r11 = r11 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-                if (r11 == 0) goto L_0x0294
+                if (r11 == 0) goto L_0x0293
                 org.telegram.messenger.ImageLoader r11 = org.telegram.messenger.ImageLoader.getInstance()
                 org.telegram.tgnet.TLRPC$BotInlineResult r0 = r10.currentBotInlineResult
                 org.telegram.tgnet.TLRPC$WebDocument r0 = r0.content
                 java.lang.String r0 = r0.url
                 boolean r11 = r11.isLoadingHttpFile(r0)
-                if (r11 != 0) goto L_0x0245
+                if (r11 != 0) goto L_0x0244
                 org.telegram.messenger.ImageLoader r11 = org.telegram.messenger.ImageLoader.getInstance()
                 org.telegram.tgnet.TLRPC$BotInlineResult r0 = r10.currentBotInlineResult
                 org.telegram.tgnet.TLRPC$WebDocument r0 = r0.content
                 java.lang.String r0 = r0.url
                 int r1 = r10.currentAccount
                 r11.loadHttpFile(r0, r2, r1)
-                goto L_0x0294
-            L_0x0245:
+                goto L_0x0293
+            L_0x0244:
                 org.telegram.messenger.ImageLoader r11 = org.telegram.messenger.ImageLoader.getInstance()
                 org.telegram.tgnet.TLRPC$BotInlineResult r0 = r10.currentBotInlineResult
                 org.telegram.tgnet.TLRPC$WebDocument r0 = r0.content
                 java.lang.String r0 = r0.url
                 r11.cancelLoadHttpFile(r0)
-                goto L_0x0294
-            L_0x0253:
+                goto L_0x0293
+            L_0x0252:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r11 = r10.pageBlocksAdapter
-                if (r11 == 0) goto L_0x0294
+                if (r11 == 0) goto L_0x0293
                 int r11 = r10.currentAccount
                 org.telegram.messenger.FileLoader r11 = org.telegram.messenger.FileLoader.getInstance(r11)
                 java.lang.String[] r0 = r10.currentFileNames
                 r0 = r0[r3]
                 boolean r11 = r11.isLoadingFile(r0)
-                if (r11 != 0) goto L_0x0281
+                if (r11 != 0) goto L_0x0280
                 int r11 = r10.currentAccount
                 org.telegram.messenger.FileLoader r11 = org.telegram.messenger.FileLoader.getInstance(r11)
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r10.pageBlocksAdapter
@@ -24707,8 +24730,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r1 = r10.pageBlocksAdapter
                 java.lang.Object r1 = r1.getParentObject()
                 r11.loadFile(r0, r1, r4, r4)
-                goto L_0x0294
-            L_0x0281:
+                goto L_0x0293
+            L_0x0280:
                 int r11 = r10.currentAccount
                 org.telegram.messenger.FileLoader r11 = org.telegram.messenger.FileLoader.getInstance(r11)
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r0 = r10.pageBlocksAdapter
@@ -24716,27 +24739,27 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.tgnet.TLObject r0 = r0.getMedia(r1)
                 org.telegram.tgnet.TLRPC$Document r0 = (org.telegram.tgnet.TLRPC$Document) r0
                 r11.cancelLoadFile((org.telegram.tgnet.TLRPC$Document) r0)
-            L_0x0294:
+            L_0x0293:
                 org.telegram.messenger.ImageReceiver r11 = r10.centerImage
                 android.graphics.drawable.Drawable r11 = r11.getStaticThumb()
                 boolean r0 = r11 instanceof org.telegram.ui.Components.OtherDocumentPlaceholderDrawable
-                if (r0 == 0) goto L_0x02bb
+                if (r0 == 0) goto L_0x02ba
                 org.telegram.ui.Components.OtherDocumentPlaceholderDrawable r11 = (org.telegram.ui.Components.OtherDocumentPlaceholderDrawable) r11
                 r11.checkFileExist()
-                goto L_0x02bb
-            L_0x02a4:
+                goto L_0x02ba
+            L_0x02a3:
                 int r11 = r10.sharedMediaType
-                if (r11 != r4) goto L_0x02b8
+                if (r11 != r4) goto L_0x02b7
                 org.telegram.messenger.MessageObject r11 = r10.currentMessageObject
                 boolean r11 = r11.canPreviewDocument()
-                if (r11 != 0) goto L_0x02b8
+                if (r11 != 0) goto L_0x02b7
                 org.telegram.messenger.MessageObject r11 = r10.currentMessageObject
                 android.app.Activity r0 = r10.parentActivity
                 org.telegram.messenger.AndroidUtilities.openDocument(r11, r0, r5)
                 return
-            L_0x02b8:
+            L_0x02b7:
                 r10.preparePlayer(r0, r4, r3)
-            L_0x02bb:
+            L_0x02ba:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onActionClick(boolean):void");
@@ -24864,15 +24887,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (this.sharedMediaType != 1 || (messageObject = this.currentMessageObject) == null) {
                     PhotoProgressView[] photoProgressViewArr = this.photoProgressViews;
                     if (!(photoProgressViewArr[0] == null || this.containerView == null)) {
-                        int access$20900 = photoProgressViewArr[0].backgroundState;
+                        int access$21000 = photoProgressViewArr[0].backgroundState;
                         if (x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
                             if (!z) {
-                                if (access$20900 > 0 && access$20900 <= 3) {
+                                if (access$21000 > 0 && access$21000 <= 3) {
                                     onActionClick(true);
                                     checkProgress(0, false, true);
                                     return true;
                                 }
-                            } else if ((access$20900 == 3 || access$20900 == 4) && this.photoProgressViews[0].isVisible()) {
+                            } else if ((access$21000 == 3 || access$21000 == 4) && this.photoProgressViews[0].isVisible()) {
                                 this.manuallyPaused = true;
                                 toggleVideoPlayer();
                                 return true;
@@ -24892,8 +24915,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (i != 0 && i != 4) {
                     TLRPC$BotInlineResult tLRPC$BotInlineResult = this.currentBotInlineResult;
                     if (tLRPC$BotInlineResult != null && (tLRPC$BotInlineResult.type.equals("video") || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
-                        int access$209002 = this.photoProgressViews[0].backgroundState;
-                        if (access$209002 > 0 && access$209002 <= 3 && x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
+                        int access$210002 = this.photoProgressViews[0].backgroundState;
+                        if (access$210002 > 0 && access$210002 <= 3 && x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
                             onActionClick(true);
                             checkProgress(0, false, true);
                             return true;
@@ -25719,12 +25742,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         /* access modifiers changed from: private */
         public void updateAccessibilityOverlayVisibility() {
             if (this.playButtonAccessibilityOverlay != null) {
-                int access$20900 = this.photoProgressViews[0].backgroundState;
-                if (!this.photoProgressViews[0].isVisible() || !(access$20900 == 3 || access$20900 == 4)) {
+                int access$21000 = this.photoProgressViews[0].backgroundState;
+                if (!this.photoProgressViews[0].isVisible() || !(access$21000 == 3 || access$21000 == 4)) {
                     this.playButtonAccessibilityOverlay.setVisibility(4);
                     return;
                 }
-                if (access$20900 == 3) {
+                if (access$21000 == 3) {
                     this.playButtonAccessibilityOverlay.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
                 } else {
                     this.playButtonAccessibilityOverlay.setContentDescription(LocaleController.getString("AccActionPause", NUM));

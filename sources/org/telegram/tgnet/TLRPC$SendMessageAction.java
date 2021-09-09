@@ -24,6 +24,9 @@ public abstract class TLRPC$SendMessageAction extends TLObject {
             case -1441998364:
                 tLRPC$SendMessageAction = new TLRPC$TL_sendMessageUploadDocumentAction();
                 break;
+            case -1336228175:
+                tLRPC$SendMessageAction = new TLRPC$TL_sendMessageChooseStickerAction();
+                break;
             case -774682074:
                 tLRPC$SendMessageAction = new TLRPC$TL_sendMessageUploadPhotoAction();
                 break;

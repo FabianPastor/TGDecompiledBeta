@@ -558,7 +558,7 @@ public class ProxySettingsActivity extends BaseFragment {
             java.lang.String[] r4 = new java.lang.String[r4]
             r11.pasteFields = r4
             r4 = 2
-            if (r0 == 0) goto L_0x012d
+            if (r0 == 0) goto L_0x0128
             java.lang.String[] r5 = new java.lang.String[r4]
             java.lang.String r6 = "t.me/socks?"
             r5[r2] = r6
@@ -566,58 +566,58 @@ public class ProxySettingsActivity extends BaseFragment {
             r7 = 1
             r5[r7] = r6
             r6 = 0
-        L_0x004a:
+        L_0x0048:
             java.lang.String r8 = "&"
-            if (r6 >= r4) goto L_0x006b
+            if (r6 >= r4) goto L_0x0069
             r9 = r5[r6]
             int r9 = r0.indexOf(r9)
-            if (r9 < 0) goto L_0x0068
+            if (r9 < 0) goto L_0x0066
             r11.pasteType = r2
             r1 = r5[r6]
             int r1 = r1.length()
             int r9 = r9 + r1
             java.lang.String r1 = r0.substring(r9)
             java.lang.String[] r1 = r1.split(r8)
-            goto L_0x006b
-        L_0x0068:
+            goto L_0x0069
+        L_0x0066:
             int r6 = r6 + 1
-            goto L_0x004a
-        L_0x006b:
-            if (r1 != 0) goto L_0x0099
+            goto L_0x0048
+        L_0x0069:
+            if (r1 != 0) goto L_0x0095
             java.lang.String[] r5 = new java.lang.String[r4]
             java.lang.String r6 = "t.me/proxy?"
             r5[r2] = r6
             java.lang.String r6 = "tg://proxy?"
             r5[r7] = r6
             r6 = 0
-        L_0x007a:
-            if (r6 >= r4) goto L_0x0099
+        L_0x0076:
+            if (r6 >= r4) goto L_0x0095
             r9 = r5[r6]
             int r9 = r0.indexOf(r9)
-            if (r9 < 0) goto L_0x0096
+            if (r9 < 0) goto L_0x0092
             r11.pasteType = r7
             r1 = r5[r6]
             int r1 = r1.length()
             int r9 = r9 + r1
             java.lang.String r0 = r0.substring(r9)
             java.lang.String[] r1 = r0.split(r8)
-            goto L_0x0099
-        L_0x0096:
+            goto L_0x0095
+        L_0x0092:
             int r6 = r6 + 1
-            goto L_0x007a
-        L_0x0099:
-            if (r1 == 0) goto L_0x012d
+            goto L_0x0076
+        L_0x0095:
+            if (r1 == 0) goto L_0x0128
             r0 = 0
-        L_0x009c:
+        L_0x0098:
             int r5 = r1.length
-            if (r0 >= r5) goto L_0x012d
+            if (r0 >= r5) goto L_0x0128
             r5 = r1[r0]
             java.lang.String r6 = "="
             java.lang.String[] r5 = r5.split(r6)
             int r6 = r5.length
-            if (r6 == r4) goto L_0x00ac
-            goto L_0x0129
-        L_0x00ac:
+            if (r6 == r4) goto L_0x00a8
+            goto L_0x0124
+        L_0x00a8:
             r6 = r5[r2]
             java.lang.String r6 = r6.toLowerCase()
             r6.hashCode()
@@ -625,122 +625,122 @@ public class ProxySettingsActivity extends BaseFragment {
             r9 = 4
             r10 = 3
             switch(r8) {
-                case -906277200: goto L_0x00ed;
-                case -905826493: goto L_0x00e2;
-                case 3433489: goto L_0x00d7;
-                case 3446913: goto L_0x00cc;
-                case 3599307: goto L_0x00c0;
-                default: goto L_0x00be;
+                case -906277200: goto L_0x00e8;
+                case -905826493: goto L_0x00dd;
+                case 3433489: goto L_0x00d2;
+                case 3446913: goto L_0x00c7;
+                case 3599307: goto L_0x00bc;
+                default: goto L_0x00ba;
             }
-        L_0x00be:
+        L_0x00ba:
             r6 = -1
-            goto L_0x00f7
-        L_0x00c0:
+            goto L_0x00f2
+        L_0x00bc:
             java.lang.String r8 = "user"
             boolean r6 = r6.equals(r8)
-            if (r6 != 0) goto L_0x00ca
-            goto L_0x00be
-        L_0x00ca:
+            if (r6 != 0) goto L_0x00c5
+            goto L_0x00ba
+        L_0x00c5:
             r6 = 4
-            goto L_0x00f7
-        L_0x00cc:
+            goto L_0x00f2
+        L_0x00c7:
             java.lang.String r8 = "port"
             boolean r6 = r6.equals(r8)
-            if (r6 != 0) goto L_0x00d5
-            goto L_0x00be
-        L_0x00d5:
+            if (r6 != 0) goto L_0x00d0
+            goto L_0x00ba
+        L_0x00d0:
             r6 = 3
-            goto L_0x00f7
-        L_0x00d7:
+            goto L_0x00f2
+        L_0x00d2:
             java.lang.String r8 = "pass"
             boolean r6 = r6.equals(r8)
-            if (r6 != 0) goto L_0x00e0
-            goto L_0x00be
-        L_0x00e0:
+            if (r6 != 0) goto L_0x00db
+            goto L_0x00ba
+        L_0x00db:
             r6 = 2
-            goto L_0x00f7
-        L_0x00e2:
+            goto L_0x00f2
+        L_0x00dd:
             java.lang.String r8 = "server"
             boolean r6 = r6.equals(r8)
-            if (r6 != 0) goto L_0x00eb
-            goto L_0x00be
-        L_0x00eb:
+            if (r6 != 0) goto L_0x00e6
+            goto L_0x00ba
+        L_0x00e6:
             r6 = 1
-            goto L_0x00f7
-        L_0x00ed:
+            goto L_0x00f2
+        L_0x00e8:
             java.lang.String r8 = "secret"
             boolean r6 = r6.equals(r8)
-            if (r6 != 0) goto L_0x00f6
-            goto L_0x00be
-        L_0x00f6:
+            if (r6 != 0) goto L_0x00f1
+            goto L_0x00ba
+        L_0x00f1:
             r6 = 0
-        L_0x00f7:
+        L_0x00f2:
             switch(r6) {
-                case 0: goto L_0x011f;
-                case 1: goto L_0x0118;
-                case 2: goto L_0x010d;
-                case 3: goto L_0x0106;
-                case 4: goto L_0x00fb;
-                default: goto L_0x00fa;
+                case 0: goto L_0x011a;
+                case 1: goto L_0x0113;
+                case 2: goto L_0x0108;
+                case 3: goto L_0x0101;
+                case 4: goto L_0x00f6;
+                default: goto L_0x00f5;
             }
-        L_0x00fa:
-            goto L_0x0129
-        L_0x00fb:
+        L_0x00f5:
+            goto L_0x0124
+        L_0x00f6:
             int r6 = r11.pasteType
-            if (r6 != 0) goto L_0x0129
+            if (r6 != 0) goto L_0x0124
             java.lang.String[] r6 = r11.pasteFields
             r5 = r5[r7]
             r6[r4] = r5
-            goto L_0x0129
-        L_0x0106:
+            goto L_0x0124
+        L_0x0101:
             java.lang.String[] r6 = r11.pasteFields
             r5 = r5[r7]
             r6[r7] = r5
-            goto L_0x0129
-        L_0x010d:
+            goto L_0x0124
+        L_0x0108:
             int r6 = r11.pasteType
-            if (r6 != 0) goto L_0x0129
+            if (r6 != 0) goto L_0x0124
             java.lang.String[] r6 = r11.pasteFields
             r5 = r5[r7]
             r6[r10] = r5
-            goto L_0x0129
-        L_0x0118:
+            goto L_0x0124
+        L_0x0113:
             java.lang.String[] r6 = r11.pasteFields
             r5 = r5[r7]
             r6[r2] = r5
-            goto L_0x0129
-        L_0x011f:
+            goto L_0x0124
+        L_0x011a:
             int r6 = r11.pasteType
-            if (r6 != r7) goto L_0x0129
+            if (r6 != r7) goto L_0x0124
             java.lang.String[] r6 = r11.pasteFields
             r5 = r5[r7]
             r6[r9] = r5
-        L_0x0129:
+        L_0x0124:
             int r0 = r0 + 1
-            goto L_0x009c
-        L_0x012d:
+            goto L_0x0098
+        L_0x0128:
             int r0 = r11.pasteType
-            if (r0 == r3) goto L_0x0146
+            if (r0 == r3) goto L_0x0141
             org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
             int r0 = r0.getVisibility()
-            if (r0 == 0) goto L_0x015c
+            if (r0 == 0) goto L_0x0157
             org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
             r0.setVisibility(r2)
             org.telegram.ui.Cells.ShadowSectionCell[] r0 = r11.sectionCell
             r0 = r0[r4]
             r0.setVisibility(r2)
-            goto L_0x015c
-        L_0x0146:
+            goto L_0x0157
+        L_0x0141:
             org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
             int r0 = r0.getVisibility()
             r1 = 8
-            if (r0 == r1) goto L_0x015c
+            if (r0 == r1) goto L_0x0157
             org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
             r0.setVisibility(r1)
             org.telegram.ui.Cells.ShadowSectionCell[] r0 = r11.sectionCell
             r0 = r0[r4]
             r0.setVisibility(r1)
-        L_0x015c:
+        L_0x0157:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProxySettingsActivity.updatePasteCell():void");

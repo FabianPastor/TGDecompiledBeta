@@ -1,6 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,15 +17,19 @@ import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.CheckBox2;
+import org.telegram.ui.Components.CheckBoxBase;
 import org.telegram.ui.Components.CounterView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class HintDialogCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    CheckBox2 checkBox;
     CounterView counterView;
     private int currentAccount = UserConfig.selectedAccount;
     private TLRPC$User currentUser;
     private long dialog_id;
+    private final boolean drawCheckbox;
     private BackupImageView imageView;
     private int lastUnreadCount;
     private TextView nameTextView;
@@ -32,8 +37,9 @@ public class HintDialogCell extends FrameLayout {
     float showOnlineProgress;
     boolean wasDraw;
 
-    public HintDialogCell(Context context) {
+    public HintDialogCell(Context context, boolean z) {
         super(context);
+        this.drawCheckbox = z;
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(27.0f));
@@ -52,12 +58,36 @@ public class HintDialogCell extends FrameLayout {
         addView(counterView2, LayoutHelper.createFrame(-1, 28.0f, 48, 0.0f, 4.0f, 0.0f, 0.0f));
         this.counterView.setColors("chats_unreadCounterText", "chats_unreadCounter");
         this.counterView.setGravity(5);
+        if (z) {
+            CheckBox2 checkBox2 = new CheckBox2(context, 21);
+            this.checkBox = checkBox2;
+            checkBox2.setColor("dialogRoundCheckBox", "dialogBackground", "dialogRoundCheckBoxCheck");
+            this.checkBox.setDrawUnchecked(false);
+            this.checkBox.setDrawBackgroundAsArc(4);
+            this.checkBox.setProgressDelegate(new CheckBoxBase.ProgressDelegate() {
+                public final void setProgress(float f) {
+                    HintDialogCell.this.lambda$new$0$HintDialogCell(f);
+                }
+            });
+            addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 49, 19.0f, 42.0f, 0.0f, 0.0f));
+            this.checkBox.setChecked(true, false);
+            setWillNotDraw(false);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$HintDialogCell(float f) {
+        float progress = 1.0f - (this.checkBox.getProgress() * 0.143f);
+        this.imageView.setScaleX(progress);
+        this.imageView.setScaleY(progress);
+        invalidate();
     }
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(86.0f), NUM));
-        this.counterView.horizontalPadding = (float) AndroidUtilities.dp(13.0f);
+        this.counterView.counterDrawable.horizontalPadding = (float) AndroidUtilities.dp(13.0f);
     }
 
     public void update(int i) {
@@ -242,5 +272,26 @@ public class HintDialogCell extends FrameLayout {
             return r8
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.HintDialogCell.drawChild(android.graphics.Canvas, android.view.View, long):boolean");
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDraw(Canvas canvas) {
+        if (this.drawCheckbox) {
+            int left = this.imageView.getLeft() + (this.imageView.getMeasuredWidth() / 2);
+            int top = this.imageView.getTop() + (this.imageView.getMeasuredHeight() / 2);
+            Theme.checkboxSquare_checkPaint.setColor(Theme.getColor("dialogRoundCheckBox"));
+            Theme.checkboxSquare_checkPaint.setAlpha((int) (this.checkBox.getProgress() * 255.0f));
+            canvas.drawCircle((float) left, (float) top, (float) AndroidUtilities.dp(28.0f), Theme.checkboxSquare_checkPaint);
+        }
+    }
+
+    public void setChecked(boolean z, boolean z2) {
+        if (this.drawCheckbox) {
+            this.checkBox.setChecked(z, z2);
+        }
+    }
+
+    public long getDialogId() {
+        return this.dialog_id;
     }
 }

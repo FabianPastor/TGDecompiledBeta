@@ -183,10 +183,8 @@
     <string name="ActionDeletedInviteLinkClickable">un1 hat Einladungslink un2 gelöscht</string>
     <string name="ActionEditedInviteLinkClickable">un1 hat Einladungslink un2 zu un3 geändert</string>
     <string name="ActionEditedInviteLinkToSameClickable">un1 hat Einladungslink un2 bearbeitet</string>
-    <string name="ActionGroupCallEnded">Sprachchat beendet (%s)</string>
     <string name="ActionGroupCallInvited">un1 hat un2 in den Sprachchat eingeladen</string>
     <string name="ActionGroupCallInvitedYou">un1 hat dich in den Sprachchat eingeladen</string>
-    <string name="ActionGroupCallJustStarted">Sprachchat gestartet</string>
     <string name="ActionGroupCallScheduled">Sprachchat geplant für %1$s</string>
     <string name="ActionGroupCallStarted">un1 hat einen Sprachchat gestartet</string>
     <string name="ActionGroupCallStartedByYou">Du hast einen Sprachchat gestartet</string>
@@ -723,8 +721,6 @@
     <string name="CancelAccountResetInfo2">Jemand mit Zugang zu deiner Telefonnummer **%1$s** hat die Kontolöschung und Zurücksetzung der zweistufige Bestätigung beantragt.\10\10Wenn du das nicht selbst gewesen bist, tippe den Code der SMS ein, den wir dir gerade gesendet haben oder **ändere deine Telefonnummer**.</string>
     <string name="CancelEmailQuestion">Wirklich die E-Mail-Einrichtung abbrechen?</string>
     <string name="CancelEmailQuestionTitle">Einrichtung abbrechen</string>
-    <string name="CancelForward">Weiterleitung abbrechen</string>
-    <string name="CancelForwardMessage">Weiterleitung abbrechen oder möchtest du Nachrichten an einen anderen Chat senden?</string>
     <string name="CancelForwarding">Weiterleitung abbrechen</string>
     <string name="CancelLinkExpired">Link ist ungültig oder abgelaufen.</string>
     <string name="CancelLinkSuccess">Löschvorgang für dein Konto %1$s wurde abgebrochen. Du kannst das Fenster nun schließen.</string>
@@ -2384,7 +2380,7 @@
     <string name="NoGroupsInCommon">Keine gemeinsamen Gruppen</string>
     <string name="NoHandleAppInstalled">Du hast keine Applikationen, die den Dateityp \'%1$s\' öffnen könnten. Bitte installiere eine entsprechende Anwendung um fortzufahren.</string>
     <string name="NoLimit">Kein Limit</string>
-    <string name="NoMailInstalled">Bitte sende eine E-Mail an sms@stel.com mit einer Beschreibung des Problems.</string>
+    <string name="NoMailInstalled">Bitte sende eine E-Mail an reports@stel.com mit einer Beschreibung des Problems.</string>
     <string name="NoMasks">Noch keine Masken</string>
     <string name="NoMedia">Die hier geteilten Bilder und Videos kannst du von jedem deiner Geräte aufrufen.</string>
     <string name="NoMediaAutoDownload">kein automatischer Download</string>
@@ -3445,7 +3441,6 @@
     <string name="SelectFile">Datei auswählen</string>
     <string name="SelectFromGallery">Aus der Galerie wählen</string>
     <string name="SelectImage">Bild auswählen</string>
-    <string name="SelectOtherChat">Anderen Chat wählen</string>
     <string name="Send">Senden</string>
     <string name="SendAnonymously">Anonym senden</string>
     <string name="SendAsFile">Als Datei</string>
@@ -4061,7 +4056,6 @@
     <string name="VideoDoesNotSupportStreaming">Das Video ist nicht für Streaming optimiert. Du musst es vollständig herunterladen, um es abzuspielen.</string>
     <string name="VideoMessagesAutodownload">Videonachrichten</string>
     <string name="VideoPreview">Videovorschau</string>
-    <string name="VideoPreviewDesrciption">Das Video deiner Kamera wird mit anderen Teilnehmern des Sprachchats geteilt.</string>
     <string name="VideoQualityIsTooLow">Die Videoqualität ist zu niedrig, um die Komprimierung zu ändern.</string>
     <string name="VideoSavedHint">Video in Galerie gespeichert</string>
     <string name="VideoSavedToDownloadsHint">Video in Downloads gespeichert</string>
@@ -4181,20 +4175,17 @@
     <string name="VoipGroupEndAlertText">Wirklich diesen Sprachchat beenden?</string>
     <string name="VoipGroupEndAlertTitle">Sprachchat beenden</string>
     <string name="VoipGroupEndChat">Sprachchat beenden</string>
-    <string name="VoipGroupEndedStartNew">Sprachchat beendet. Neuen starten?</string>
     <string name="VoipGroupInviteAlreadyParticipant">Ausgewählter Nutzer ist bereits in diesem Sprachchat.</string>
     <string name="VoipGroupInviteCanSpeak">Kann sprechen</string>
     <string name="VoipGroupInviteListenOnly">Nur Zuhören</string>
     <string name="VoipGroupInviteMember">Mitglieder einladen</string>
     <string name="VoipGroupInviteText">Hallo! Tritt unserem Sprachchat bei: %1$s</string>
-    <string name="VoipGroupInvitedToVoiceChat">un1 hat un2 in den Sprachchat eingeladen</string>
     <string name="VoipGroupInvitedUser">Du hast **%1$s** in den Sprachchat eingeladen.</string>
     <string name="VoipGroupJoinAnonymousAdmin">Leider kannst du an Sprachchats als anonymer Admin nicht teilnehmen.</string>
     <string name="VoipGroupJoinAnonymouseAlert">Wirklich in diesem Sprachchat mit deinem privaten Konto erscheinen?</string>
     <string name="VoipGroupJoinAs">Sprachchat beitreten als...</string>
     <string name="VoipGroupJoinAsLinstener">ALS ZUHÖRER BEITRETEN</string>
     <string name="VoipGroupJoinAsSpeaker">ALS SPRECHER BEITRETEN</string>
-    <string name="VoipGroupJoinCall">Am Sprachchat teilnehmen</string>
     <string name="VoipGroupJoinVoiceChatUrl">Sprachchat beitreten</string>
     <string name="VoipGroupLeave">Verlassen</string>
     <string name="VoipGroupLeaveAlertEndChat">Sprachchat beenden</string>
@@ -4202,7 +4193,6 @@
     <string name="VoipGroupLeaveAlertTitle">Sprachchat verlassen</string>
     <string name="VoipGroupMute">Stummschalten</string>
     <string name="VoipGroupMuteForMe">Stumm für mich</string>
-    <string name="VoipGroupMuteMemberAlertText">Wirklich **%1$s** in diesem Sprachchat stummschalten?</string>
     <string name="VoipGroupMuteMemberAlertTitle">Mikrofon stummschalten</string>
     <string name="VoipGroupMutedForMe">Für mich stumm</string>
     <string name="VoipGroupOffline">Du bist offline. Bitte verbinde dich mit dem Internet, um an Sprachchat teilzunehmen.</string>
@@ -4230,7 +4220,6 @@
     <string name="VoipGroupSoundMuted">Sprachchat ist stumm</string>
     <string name="VoipGroupSoundUnmuted">Sprachchat nicht mehr stumm</string>
     <string name="VoipGroupStart2">Mitglieder dieser Gruppe werden benachrichtigt, sobald du den Sprachchat startest.</string>
-    <string name="VoipGroupStartAs">Sprachchat starten als...</string>
     <string name="VoipGroupStartAsInfo">Möchtest du mit deinem privaten Konto oder lieber als Kanal angezeigt werden?</string>
     <string name="VoipGroupStartAsInfoGroup">Möchtest du mit deinem privaten Konto, dieser Gruppe oder lieber mit einem deiner Kanäle angezeigt werden?</string>
     <string name="VoipGroupStartNow">Jetzt starten</string>

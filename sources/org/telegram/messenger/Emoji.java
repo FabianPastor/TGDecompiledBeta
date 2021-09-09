@@ -9,6 +9,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -218,11 +219,17 @@ public class Emoji {
 
     public static boolean isValidEmoji(CharSequence charSequence) {
         CharSequence charSequence2;
+        if (TextUtils.isEmpty(charSequence)) {
+            return false;
+        }
         DrawableInfo drawableInfo = rects.get(charSequence);
         if (drawableInfo == null && (charSequence2 = EmojiData.emojiAliasMap.get(charSequence)) != null) {
             drawableInfo = rects.get(charSequence2);
         }
-        return drawableInfo != null;
+        if (drawableInfo != null) {
+            return true;
+        }
+        return false;
     }
 
     public static Drawable getEmojiBigDrawable(String str) {

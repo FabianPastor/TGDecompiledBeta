@@ -239,9 +239,9 @@ public class CameraSession {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x005a  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0060  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x006b  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0059  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x005f  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x006a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateRotation() {
         /*
@@ -250,9 +250,9 @@ public class CameraSession {
             if (r0 != 0) goto L_0x0005
             return
         L_0x0005:
-            int r0 = r0.getCameraId()     // Catch:{ all -> 0x008a }
-            android.hardware.Camera$CameraInfo r1 = r7.info     // Catch:{ all -> 0x008a }
-            android.hardware.Camera.getCameraInfo(r0, r1)     // Catch:{ all -> 0x008a }
+            int r0 = r0.getCameraId()     // Catch:{ all -> 0x0089 }
+            android.hardware.Camera$CameraInfo r1 = r7.info     // Catch:{ all -> 0x0089 }
+            android.hardware.Camera.getCameraInfo(r0, r1)     // Catch:{ all -> 0x0089 }
             org.telegram.messenger.camera.CameraInfo r0 = r7.cameraInfo
             if (r0 == 0) goto L_0x001a
             boolean r1 = r7.destroyed
@@ -272,71 +272,71 @@ public class CameraSession {
             java.lang.String r3 = "samsung"
             boolean r1 = r3.equals(r1)
             r3 = 0
-            if (r1 == 0) goto L_0x003b
+            if (r1 == 0) goto L_0x003a
             java.lang.String r1 = android.os.Build.PRODUCT
             java.lang.String r4 = "sf2wifixx"
             boolean r1 = r4.equals(r1)
-            if (r1 == 0) goto L_0x003b
-            goto L_0x0073
-        L_0x003b:
+            if (r1 == 0) goto L_0x003a
+            goto L_0x0072
+        L_0x003a:
             int r1 = r7.displayOrientation
             r4 = 90
-            if (r1 == 0) goto L_0x0049
-            if (r1 == r2) goto L_0x0051
+            if (r1 == 0) goto L_0x0048
+            if (r1 == r2) goto L_0x0050
             r5 = 2
-            if (r1 == r5) goto L_0x004e
+            if (r1 == r5) goto L_0x004d
             r5 = 3
-            if (r1 == r5) goto L_0x004b
-        L_0x0049:
+            if (r1 == r5) goto L_0x004a
+        L_0x0048:
             r1 = 0
-            goto L_0x0053
-        L_0x004b:
+            goto L_0x0052
+        L_0x004a:
             r1 = 270(0x10e, float:3.78E-43)
-            goto L_0x0053
-        L_0x004e:
+            goto L_0x0052
+        L_0x004d:
             r1 = 180(0xb4, float:2.52E-43)
-            goto L_0x0053
-        L_0x0051:
+            goto L_0x0052
+        L_0x0050:
             r1 = 90
-        L_0x0053:
+        L_0x0052:
             android.hardware.Camera$CameraInfo r5 = r7.info
             int r6 = r5.orientation
             int r6 = r6 % r4
-            if (r6 == 0) goto L_0x005c
+            if (r6 == 0) goto L_0x005b
             r5.orientation = r3
-        L_0x005c:
+        L_0x005b:
             int r3 = r5.facing
-            if (r3 != r2) goto L_0x006b
+            if (r3 != r2) goto L_0x006a
             int r2 = r5.orientation
             int r2 = r2 + r1
             int r2 = r2 % 360
             int r1 = 360 - r2
             int r1 = r1 % 360
             r3 = r1
-            goto L_0x0073
-        L_0x006b:
+            goto L_0x0072
+        L_0x006a:
             int r2 = r5.orientation
             int r2 = r2 - r1
             int r2 = r2 + 360
             int r2 = r2 % 360
             r3 = r2
-        L_0x0073:
+        L_0x0072:
             r7.currentOrientation = r3
-            if (r0 == 0) goto L_0x007c
-            r0.setDisplayOrientation(r3)     // Catch:{ all -> 0x007b }
-            goto L_0x007c
+            if (r0 == 0) goto L_0x007b
+            r0.setDisplayOrientation(r3)     // Catch:{ all -> 0x007a }
+            goto L_0x007b
+        L_0x007a:
         L_0x007b:
-        L_0x007c:
             int r0 = r7.currentOrientation
             int r1 = r7.displayOrientation
             int r0 = r0 - r1
             r7.diffOrientation = r0
-            if (r0 >= 0) goto L_0x0089
+            if (r0 >= 0) goto L_0x0088
             int r0 = r0 + 360
             r7.diffOrientation = r0
-        L_0x0089:
+        L_0x0088:
             return
-        L_0x008a:
+        L_0x0089:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             return
@@ -347,95 +347,95 @@ public class CameraSession {
     /* access modifiers changed from: protected */
     /* JADX WARNING: Can't wrap try/catch for region: R(12:14|(4:16|(1:20)|21|(1:23))(2:24|(1:26))|27|(2:29|(1:31)(1:32))(1:33)|34|35|(3:37|(1:39)|40)(3:41|(1:43)|44)|45|46|(1:48)(1:49)|50|(3:51|52|60)) */
     /* JADX WARNING: Missing exception handler attribute for start block: B:45:0x00d3 */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x00d7 A[Catch:{ Exception -> 0x000e, all -> 0x00e4 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x00db A[Catch:{ Exception -> 0x000e, all -> 0x00e4 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x00d7 A[Catch:{ Exception -> 0x000e, all -> 0x00e3 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x00da A[Catch:{ Exception -> 0x000e, all -> 0x00e3 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void configurePhotoCamera() {
         /*
             r7 = this;
             java.lang.String r0 = "barcode"
-            org.telegram.messenger.camera.CameraInfo r1 = r7.cameraInfo     // Catch:{ all -> 0x00e4 }
-            android.hardware.Camera r1 = r1.camera     // Catch:{ all -> 0x00e4 }
-            if (r1 == 0) goto L_0x00e8
+            org.telegram.messenger.camera.CameraInfo r1 = r7.cameraInfo     // Catch:{ all -> 0x00e3 }
+            android.hardware.Camera r1 = r1.camera     // Catch:{ all -> 0x00e3 }
+            if (r1 == 0) goto L_0x00e7
             r2 = 0
             android.hardware.Camera$Parameters r2 = r1.getParameters()     // Catch:{ Exception -> 0x000e }
             goto L_0x0012
         L_0x000e:
             r3 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ all -> 0x00e4 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ all -> 0x00e3 }
         L_0x0012:
-            org.telegram.messenger.camera.CameraInfo r3 = r7.cameraInfo     // Catch:{ all -> 0x00e4 }
-            int r3 = r3.getCameraId()     // Catch:{ all -> 0x00e4 }
-            android.hardware.Camera$CameraInfo r4 = r7.info     // Catch:{ all -> 0x00e4 }
-            android.hardware.Camera.getCameraInfo(r3, r4)     // Catch:{ all -> 0x00e4 }
-            r7.updateRotation()     // Catch:{ all -> 0x00e4 }
-            int r3 = r7.currentOrientation     // Catch:{ all -> 0x00e4 }
-            int r4 = r7.displayOrientation     // Catch:{ all -> 0x00e4 }
+            org.telegram.messenger.camera.CameraInfo r3 = r7.cameraInfo     // Catch:{ all -> 0x00e3 }
+            int r3 = r3.getCameraId()     // Catch:{ all -> 0x00e3 }
+            android.hardware.Camera$CameraInfo r4 = r7.info     // Catch:{ all -> 0x00e3 }
+            android.hardware.Camera.getCameraInfo(r3, r4)     // Catch:{ all -> 0x00e3 }
+            r7.updateRotation()     // Catch:{ all -> 0x00e3 }
+            int r3 = r7.currentOrientation     // Catch:{ all -> 0x00e3 }
+            int r4 = r7.displayOrientation     // Catch:{ all -> 0x00e3 }
             int r3 = r3 - r4
-            r7.diffOrientation = r3     // Catch:{ all -> 0x00e4 }
+            r7.diffOrientation = r3     // Catch:{ all -> 0x00e3 }
             if (r3 >= 0) goto L_0x002d
             int r3 = r3 + 360
-            r7.diffOrientation = r3     // Catch:{ all -> 0x00e4 }
+            r7.diffOrientation = r3     // Catch:{ all -> 0x00e3 }
         L_0x002d:
-            if (r2 == 0) goto L_0x00e8
-            org.telegram.messenger.camera.Size r3 = r7.previewSize     // Catch:{ all -> 0x00e4 }
-            int r3 = r3.getWidth()     // Catch:{ all -> 0x00e4 }
-            org.telegram.messenger.camera.Size r4 = r7.previewSize     // Catch:{ all -> 0x00e4 }
-            int r4 = r4.getHeight()     // Catch:{ all -> 0x00e4 }
-            r2.setPreviewSize(r3, r4)     // Catch:{ all -> 0x00e4 }
-            org.telegram.messenger.camera.Size r3 = r7.pictureSize     // Catch:{ all -> 0x00e4 }
-            int r3 = r3.getWidth()     // Catch:{ all -> 0x00e4 }
-            org.telegram.messenger.camera.Size r4 = r7.pictureSize     // Catch:{ all -> 0x00e4 }
-            int r4 = r4.getHeight()     // Catch:{ all -> 0x00e4 }
-            r2.setPictureSize(r3, r4)     // Catch:{ all -> 0x00e4 }
-            int r3 = r7.pictureFormat     // Catch:{ all -> 0x00e4 }
-            r2.setPictureFormat(r3)     // Catch:{ all -> 0x00e4 }
+            if (r2 == 0) goto L_0x00e7
+            org.telegram.messenger.camera.Size r3 = r7.previewSize     // Catch:{ all -> 0x00e3 }
+            int r3 = r3.getWidth()     // Catch:{ all -> 0x00e3 }
+            org.telegram.messenger.camera.Size r4 = r7.previewSize     // Catch:{ all -> 0x00e3 }
+            int r4 = r4.getHeight()     // Catch:{ all -> 0x00e3 }
+            r2.setPreviewSize(r3, r4)     // Catch:{ all -> 0x00e3 }
+            org.telegram.messenger.camera.Size r3 = r7.pictureSize     // Catch:{ all -> 0x00e3 }
+            int r3 = r3.getWidth()     // Catch:{ all -> 0x00e3 }
+            org.telegram.messenger.camera.Size r4 = r7.pictureSize     // Catch:{ all -> 0x00e3 }
+            int r4 = r4.getHeight()     // Catch:{ all -> 0x00e3 }
+            r2.setPictureSize(r3, r4)     // Catch:{ all -> 0x00e3 }
+            int r3 = r7.pictureFormat     // Catch:{ all -> 0x00e3 }
+            r2.setPictureFormat(r3)     // Catch:{ all -> 0x00e3 }
             r3 = 100
-            r2.setJpegQuality(r3)     // Catch:{ all -> 0x00e4 }
-            r2.setJpegThumbnailQuality(r3)     // Catch:{ all -> 0x00e4 }
-            int r3 = r2.getMaxZoom()     // Catch:{ all -> 0x00e4 }
-            r7.maxZoom = r3     // Catch:{ all -> 0x00e4 }
-            float r4 = r7.currentZoom     // Catch:{ all -> 0x00e4 }
-            float r3 = (float) r3     // Catch:{ all -> 0x00e4 }
+            r2.setJpegQuality(r3)     // Catch:{ all -> 0x00e3 }
+            r2.setJpegThumbnailQuality(r3)     // Catch:{ all -> 0x00e3 }
+            int r3 = r2.getMaxZoom()     // Catch:{ all -> 0x00e3 }
+            r7.maxZoom = r3     // Catch:{ all -> 0x00e3 }
+            float r4 = r7.currentZoom     // Catch:{ all -> 0x00e3 }
+            float r3 = (float) r3     // Catch:{ all -> 0x00e3 }
             float r4 = r4 * r3
-            int r3 = (int) r4     // Catch:{ all -> 0x00e4 }
-            r2.setZoom(r3)     // Catch:{ all -> 0x00e4 }
-            boolean r3 = r7.optimizeForBarcode     // Catch:{ all -> 0x00e4 }
+            int r3 = (int) r4     // Catch:{ all -> 0x00e3 }
+            r2.setZoom(r3)     // Catch:{ all -> 0x00e3 }
+            boolean r3 = r7.optimizeForBarcode     // Catch:{ all -> 0x00e3 }
             if (r3 == 0) goto L_0x008c
-            java.util.List r3 = r2.getSupportedSceneModes()     // Catch:{ all -> 0x00e4 }
+            java.util.List r3 = r2.getSupportedSceneModes()     // Catch:{ all -> 0x00e3 }
             if (r3 == 0) goto L_0x007c
-            boolean r3 = r3.contains(r0)     // Catch:{ all -> 0x00e4 }
+            boolean r3 = r3.contains(r0)     // Catch:{ all -> 0x00e3 }
             if (r3 == 0) goto L_0x007c
-            r2.setSceneMode(r0)     // Catch:{ all -> 0x00e4 }
+            r2.setSceneMode(r0)     // Catch:{ all -> 0x00e3 }
         L_0x007c:
             java.lang.String r0 = "continuous-video"
-            java.util.List r3 = r2.getSupportedFocusModes()     // Catch:{ all -> 0x00e4 }
-            boolean r3 = r3.contains(r0)     // Catch:{ all -> 0x00e4 }
+            java.util.List r3 = r2.getSupportedFocusModes()     // Catch:{ all -> 0x00e3 }
+            boolean r3 = r3.contains(r0)     // Catch:{ all -> 0x00e3 }
             if (r3 == 0) goto L_0x009b
-            r2.setFocusMode(r0)     // Catch:{ all -> 0x00e4 }
+            r2.setFocusMode(r0)     // Catch:{ all -> 0x00e3 }
             goto L_0x009b
         L_0x008c:
             java.lang.String r0 = "continuous-picture"
-            java.util.List r3 = r2.getSupportedFocusModes()     // Catch:{ all -> 0x00e4 }
-            boolean r3 = r3.contains(r0)     // Catch:{ all -> 0x00e4 }
+            java.util.List r3 = r2.getSupportedFocusModes()     // Catch:{ all -> 0x00e3 }
+            boolean r3 = r3.contains(r0)     // Catch:{ all -> 0x00e3 }
             if (r3 == 0) goto L_0x009b
-            r2.setFocusMode(r0)     // Catch:{ all -> 0x00e4 }
+            r2.setFocusMode(r0)     // Catch:{ all -> 0x00e3 }
         L_0x009b:
-            int r0 = r7.jpegOrientation     // Catch:{ all -> 0x00e4 }
+            int r0 = r7.jpegOrientation     // Catch:{ all -> 0x00e3 }
             r3 = -1
             r4 = 0
             r5 = 1
             if (r0 == r3) goto L_0x00b6
-            android.hardware.Camera$CameraInfo r3 = r7.info     // Catch:{ all -> 0x00e4 }
-            int r6 = r3.facing     // Catch:{ all -> 0x00e4 }
+            android.hardware.Camera$CameraInfo r3 = r7.info     // Catch:{ all -> 0x00e3 }
+            int r6 = r3.facing     // Catch:{ all -> 0x00e3 }
             if (r6 != r5) goto L_0x00b0
-            int r3 = r3.orientation     // Catch:{ all -> 0x00e4 }
+            int r3 = r3.orientation     // Catch:{ all -> 0x00e3 }
             int r3 = r3 - r0
             int r3 = r3 + 360
             int r3 = r3 % 360
             goto L_0x00b7
         L_0x00b0:
-            int r3 = r3.orientation     // Catch:{ all -> 0x00e4 }
+            int r3 = r3.orientation     // Catch:{ all -> 0x00e3 }
             int r3 = r3 + r0
             int r3 = r3 % 360
             goto L_0x00b7
@@ -461,20 +461,20 @@ public class CameraSession {
         L_0x00d1:
             r7.sameTakePictureOrientation = r4     // Catch:{ Exception -> 0x00d3 }
         L_0x00d3:
-            boolean r0 = r7.useTorch     // Catch:{ all -> 0x00e4 }
-            if (r0 == 0) goto L_0x00db
+            boolean r0 = r7.useTorch     // Catch:{ all -> 0x00e3 }
+            if (r0 == 0) goto L_0x00da
             java.lang.String r0 = "torch"
-            goto L_0x00dd
-        L_0x00db:
-            java.lang.String r0 = r7.currentFlashMode     // Catch:{ all -> 0x00e4 }
-        L_0x00dd:
-            r2.setFlashMode(r0)     // Catch:{ all -> 0x00e4 }
-            r1.setParameters(r2)     // Catch:{ Exception -> 0x00e8 }
-            goto L_0x00e8
-        L_0x00e4:
+            goto L_0x00dc
+        L_0x00da:
+            java.lang.String r0 = r7.currentFlashMode     // Catch:{ all -> 0x00e3 }
+        L_0x00dc:
+            r2.setFlashMode(r0)     // Catch:{ all -> 0x00e3 }
+            r1.setParameters(r2)     // Catch:{ Exception -> 0x00e7 }
+            goto L_0x00e7
+        L_0x00e3:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00e8:
+        L_0x00e7:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraSession.configurePhotoCamera():void");

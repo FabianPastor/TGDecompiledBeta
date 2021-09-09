@@ -27,6 +27,9 @@ public class LanguageCell extends FrameLayout {
         super(context);
         Context context2 = context;
         boolean z2 = z;
+        if (Theme.dividerPaint == null) {
+            Theme.createCommonResources(context);
+        }
         setWillNotDraw(false);
         this.isDialog = z2;
         TextView textView3 = new TextView(context2);

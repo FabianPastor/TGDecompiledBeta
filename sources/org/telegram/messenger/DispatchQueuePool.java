@@ -1,13 +1,13 @@
 package org.telegram.messenger;
 
 import android.os.SystemClock;
-import java.util.HashMap;
+import android.util.SparseIntArray;
 import java.util.LinkedList;
 
 public class DispatchQueuePool {
     /* access modifiers changed from: private */
     public LinkedList<DispatchQueue> busyQueues = new LinkedList<>();
-    private HashMap<DispatchQueue, Integer> busyQueuesMap = new HashMap<>();
+    private SparseIntArray busyQueuesMap = new SparseIntArray();
     private Runnable cleanupRunnable = new Runnable() {
         public void run() {
             if (!DispatchQueuePool.this.queues.isEmpty()) {
@@ -71,11 +71,7 @@ public class DispatchQueuePool {
         }
         this.totalTasksCount++;
         this.busyQueues.add(dispatchQueue);
-        Integer num = this.busyQueuesMap.get(dispatchQueue);
-        if (num == null) {
-            num = 0;
-        }
-        this.busyQueuesMap.put(dispatchQueue, Integer.valueOf(num.intValue() + 1));
+        this.busyQueuesMap.put(dispatchQueue.index, this.busyQueuesMap.get(dispatchQueue.index, 0) + 1);
         dispatchQueue.postRunnable(new Runnable(runnable, dispatchQueue) {
             public final /* synthetic */ Runnable f$1;
             public final /* synthetic */ DispatchQueue f$2;
@@ -112,13 +108,13 @@ public class DispatchQueuePool {
     /* renamed from: lambda$execute$0 */
     public /* synthetic */ void lambda$execute$0$DispatchQueuePool(DispatchQueue dispatchQueue) {
         this.totalTasksCount--;
-        int intValue = this.busyQueuesMap.get(dispatchQueue).intValue() - 1;
-        if (intValue == 0) {
-            this.busyQueuesMap.remove(dispatchQueue);
+        int i = this.busyQueuesMap.get(dispatchQueue.index) - 1;
+        if (i == 0) {
+            this.busyQueuesMap.delete(dispatchQueue.index);
             this.busyQueues.remove(dispatchQueue);
             this.queues.add(dispatchQueue);
             return;
         }
-        this.busyQueuesMap.put(dispatchQueue, Integer.valueOf(intValue));
+        this.busyQueuesMap.put(dispatchQueue.index, i);
     }
 }

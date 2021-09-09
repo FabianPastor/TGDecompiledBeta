@@ -444,7 +444,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131166009(0x7var_, float:1.7946251E38)
+            r3 = 2131166017(0x7var_, float:1.7946267E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -1438,7 +1438,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                           (r4v0 'this' org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1 A[THIS])
                           (r5v0 'str' java.lang.String)
                          call: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk.<init>(org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1, java.lang.String):void type: CONSTRUCTOR)
-                         org.telegram.ui.ActionBar.BottomSheet.Builder.setItems(java.lang.CharSequence[], android.content.DialogInterface$OnClickListener):org.telegram.ui.ActionBar.BottomSheet$Builder type: VIRTUAL in method: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.1.onLinkPress(java.lang.String, boolean):void, dex: classes.dex
+                         org.telegram.ui.ActionBar.BottomSheet.Builder.setItems(java.lang.CharSequence[], android.content.DialogInterface$OnClickListener):org.telegram.ui.ActionBar.BottomSheet$Builder type: VIRTUAL in method: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.1.onLinkPress(java.lang.String, boolean):void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                         	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1507,7 +1507,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002d: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk) = 
                           (r4v0 'this' org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1 A[THIS])
                           (r5v0 'str' java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk.<init>(org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.1.onLinkPress(java.lang.String, boolean):void, dex: classes.dex
+                         call: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk.<init>(org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.1.onLinkPress(java.lang.String, boolean):void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1535,12 +1535,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626589(0x7f0e0a5d, float:1.8880418E38)
+                        r2 = 2131626626(0x7f0e0a82, float:1.8880494E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
                         r1 = 1
-                        r2 = 2131625031(0x7f0e0447, float:1.8877258E38)
+                        r2 = 2131625040(0x7f0e0450, float:1.8877277E38)
                         java.lang.String r3 = "Copy"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
@@ -2035,7 +2035,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r4 = r4.getContext()
                     r5.<init>(r4)
-                    r4 = 2131627374(0x7f0e0d6e, float:1.888201E38)
+                    r4 = 2131627482(0x7f0e0dda, float:1.888223E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                     r5.setText(r4)

@@ -2324,4 +2324,8 @@ public class RecyclerListView extends RecyclerView {
             AndroidUtilities.runOnUIThread(this.scroller);
         }
     }
+
+    public boolean isMultiselect() {
+        return this.multiSelectionGesture;
+    }
 }

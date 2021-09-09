@@ -22,6 +22,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -705,7 +706,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null);
+            EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null);
             this.emojiView = emojiView2;
             emojiView2.setDelegate(new EmojiView.EmojiViewDelegate() {
                 public /* synthetic */ boolean canSchedule() {
@@ -714,6 +715,18 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
                 public /* synthetic */ long getDialogId() {
                     return EmojiView.EmojiViewDelegate.CC.$default$getDialogId(this);
+                }
+
+                public /* synthetic */ float getProgressToSearchOpened() {
+                    return EmojiView.EmojiViewDelegate.CC.$default$getProgressToSearchOpened(this);
+                }
+
+                public /* synthetic */ int getThreadId() {
+                    return EmojiView.EmojiViewDelegate.CC.$default$getThreadId(this);
+                }
+
+                public /* synthetic */ void invalidateEnterView() {
+                    EmojiView.EmojiViewDelegate.CC.$default$invalidateEnterView(this);
                 }
 
                 public /* synthetic */ boolean isExpanded() {

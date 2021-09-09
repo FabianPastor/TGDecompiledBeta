@@ -72,9 +72,9 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
     /* JADX WARNING: Removed duplicated region for block: B:102:0x0249  */
     /* JADX WARNING: Removed duplicated region for block: B:113:0x0282  */
     /* JADX WARNING: Removed duplicated region for block: B:119:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:120:0x02a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x02c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x02cb  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x02a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:123:0x02c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x02ca  */
     /* JADX WARNING: Removed duplicated region for block: B:63:0x0168  */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x016c  */
     /* JADX WARNING: Removed duplicated region for block: B:67:0x0174  */
@@ -97,7 +97,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r3 = 2131427356(0x7f0b001c, float:1.8476326E38)
             r0.<init>(r2, r3)
             r2 = 2131230941(0x7var_dd, float:1.8077949E38)
-            r3 = 2131628342(0x7f0e1136, float:1.8883974E38)
+            r3 = 2131628510(0x7f0e11de, float:1.8884315E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -114,7 +114,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r5 = 2131427357(0x7f0b001d, float:1.8476328E38)
             r0.<init>(r2, r5)
             r2 = 2131230943(0x7var_df, float:1.8077953E38)
-            r5 = 2131627745(0x7f0e0ee1, float:1.8882763E38)
+            r5 = 2131627870(0x7f0e0f5e, float:1.8883017E38)
             java.lang.String r6 = "TapToEditWidgetShort"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)
@@ -144,7 +144,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r7 = 0
         L_0x0086:
             r0 = 2
-            if (r7 >= r0) goto L_0x02d8
+            if (r7 >= r0) goto L_0x02d7
             int r0 = r2 * 2
             int r0 = r0 + r7
             java.util.ArrayList<java.lang.Long> r8 = r1.dids
@@ -161,7 +161,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r9 = r1
             r3 = r4
             r10 = 1
-            goto L_0x02d1
+            goto L_0x02d0
         L_0x00a6:
             if (r7 != 0) goto L_0x00ac
             r8 = 2131230789(0x7var_, float:1.807764E38)
@@ -186,21 +186,21 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             org.telegram.tgnet.TLRPC$User r9 = r11.getUser(r9)
             boolean r10 = org.telegram.messenger.UserObject.isUserSelf(r9)
             if (r10 == 0) goto L_0x00e8
-            r10 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+            r10 = 2131627445(0x7f0e0db5, float:1.8882155E38)
             java.lang.String r11 = "SavedMessages"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x010c
         L_0x00e8:
             boolean r10 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r9)
             if (r10 == 0) goto L_0x00f8
-            r10 = 2131627218(0x7f0e0cd2, float:1.8881694E38)
+            r10 = 2131627326(0x7f0e0d3e, float:1.8881913E38)
             java.lang.String r11 = "RepliesTitle"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x010c
         L_0x00f8:
             boolean r10 = org.telegram.messenger.UserObject.isDeleted(r9)
             if (r10 == 0) goto L_0x0108
-            r10 = 2131625781(0x7f0e0735, float:1.887878E38)
+            r10 = 2131625807(0x7f0e074f, float:1.8878832E38)
             java.lang.String r11 = "HiddenName"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x010c
@@ -417,19 +417,19 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r0.<init>()
             long r3 = r8.longValue()
             int r1 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
-            if (r1 <= 0) goto L_0x02a7
+            if (r1 <= 0) goto L_0x02a6
             long r3 = r8.longValue()
             int r1 = (int) r3
             java.lang.String r3 = "userId"
             r0.putInt(r3, r1)
-            goto L_0x02b2
-        L_0x02a7:
+            goto L_0x02b1
+        L_0x02a6:
             long r3 = r8.longValue()
             int r1 = (int) r3
             int r1 = -r1
             java.lang.String r3 = "chatId"
             r0.putInt(r3, r1)
-        L_0x02b2:
+        L_0x02b1:
             org.telegram.messenger.AccountInstance r1 = r9.accountInstance
             int r1 = r1.getCurrentAccount()
             r3 = r16
@@ -437,20 +437,20 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             android.content.Intent r1 = new android.content.Intent
             r1.<init>()
             r1.putExtras(r0)
-            if (r7 != 0) goto L_0x02cb
+            if (r7 != 0) goto L_0x02ca
             r15 = 2131230789(0x7var_, float:1.807764E38)
-            goto L_0x02ce
-        L_0x02cb:
+            goto L_0x02cd
+        L_0x02ca:
             r15 = 2131230790(0x7var_, float:1.8077643E38)
-        L_0x02ce:
+        L_0x02cd:
             r5.setOnClickFillInIntent(r15, r1)
-        L_0x02d1:
+        L_0x02d0:
             int r7 = r7 + 1
             r4 = r3
             r1 = r9
             r3 = 1
             goto L_0x0086
-        L_0x02d8:
+        L_0x02d7:
             r9 = r1
             return r5
         */

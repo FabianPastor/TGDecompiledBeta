@@ -108,6 +108,9 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             if ((this.flags & 67108864) != 0) {
                 this.groupcall_default_join_as = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             }
+            if ((this.flags & NUM) != 0) {
+                this.theme_emoticon = abstractSerializedData.readString(z);
+            }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
         }
@@ -213,6 +216,9 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         }
         if ((this.flags & 67108864) != 0) {
             this.groupcall_default_join_as.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & NUM) != 0) {
+            abstractSerializedData.writeString(this.theme_emoticon);
         }
     }
 }

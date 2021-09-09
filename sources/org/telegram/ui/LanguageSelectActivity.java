@@ -428,17 +428,17 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             return new RecyclerListView.Holder(view);
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:12:0x0066, code lost:
-            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$800(r6.this$0).size() - 1)) goto L_0x0068;
+        /* JADX WARNING: Code restructure failed: missing block: B:12:0x0065, code lost:
+            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$800(r6.this$0).size() - 1)) goto L_0x0067;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:14:0x006a, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:14:0x0069, code lost:
             r8 = false;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:21:0x009d, code lost:
-            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$1000(r6.this$0).size() - 1)) goto L_0x0068;
+        /* JADX WARNING: Code restructure failed: missing block: B:21:0x009c, code lost:
+            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$1000(r6.this$0).size() - 1)) goto L_0x0067;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:26:0x00cf, code lost:
-            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$900(r6.this$0).size() - 1)) goto L_0x0068;
+        /* JADX WARNING: Code restructure failed: missing block: B:26:0x00ce, code lost:
+            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$900(r6.this$0).size() - 1)) goto L_0x0067;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r7, int r8) {
@@ -446,9 +446,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 r6 = this;
                 int r0 = r7.getItemViewType()
                 r1 = 1
-                if (r0 == 0) goto L_0x0046
+                if (r0 == 0) goto L_0x0045
                 if (r0 == r1) goto L_0x000b
-                goto L_0x0109
+                goto L_0x0108
             L_0x000b:
                 android.view.View r7 = r7.itemView
                 org.telegram.ui.Cells.ShadowSectionCell r7 = (org.telegram.ui.Cells.ShadowSectionCell) r7
@@ -456,28 +456,28 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.util.ArrayList r0 = r0.unofficialLanguages
                 boolean r0 = r0.isEmpty()
                 java.lang.String r1 = "windowBackgroundGrayShadow"
-                if (r0 != 0) goto L_0x0038
+                if (r0 != 0) goto L_0x0037
                 org.telegram.ui.LanguageSelectActivity r0 = org.telegram.ui.LanguageSelectActivity.this
                 java.util.ArrayList r0 = r0.unofficialLanguages
                 int r0 = r0.size()
-                if (r8 != r0) goto L_0x0038
+                if (r8 != r0) goto L_0x0037
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165443(0x7var_, float:1.7945103E38)
+                r0 = 2131165448(0x7var_, float:1.7945113E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
-                goto L_0x0109
-            L_0x0038:
+                goto L_0x0108
+            L_0x0037:
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165444(0x7var_, float:1.7945105E38)
+                r0 = 2131165449(0x7var_, float:1.7945115E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
-                goto L_0x0109
-            L_0x0046:
+                goto L_0x0108
+            L_0x0045:
                 android.view.View r7 = r7.itemView
                 org.telegram.ui.Cells.LanguageCell r7 = (org.telegram.ui.Cells.LanguageCell) r7
                 boolean r0 = r6.search
                 r2 = 0
-                if (r0 == 0) goto L_0x006c
+                if (r0 == 0) goto L_0x006b
                 org.telegram.ui.LanguageSelectActivity r0 = org.telegram.ui.LanguageSelectActivity.this
                 java.util.ArrayList r0 = r0.searchResult
                 java.lang.Object r0 = r0.get(r8)
@@ -486,23 +486,23 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.util.ArrayList r3 = r3.searchResult
                 int r3 = r3.size()
                 int r3 = r3 - r1
-                if (r8 != r3) goto L_0x006a
-            L_0x0068:
+                if (r8 != r3) goto L_0x0069
+            L_0x0067:
                 r8 = 1
-                goto L_0x00d2
-            L_0x006a:
+                goto L_0x00d1
+            L_0x0069:
                 r8 = 0
-                goto L_0x00d2
-            L_0x006c:
+                goto L_0x00d1
+            L_0x006b:
                 org.telegram.ui.LanguageSelectActivity r0 = org.telegram.ui.LanguageSelectActivity.this
                 java.util.ArrayList r0 = r0.unofficialLanguages
                 boolean r0 = r0.isEmpty()
-                if (r0 != 0) goto L_0x00a0
-                if (r8 < 0) goto L_0x00a0
+                if (r0 != 0) goto L_0x009f
+                if (r8 < 0) goto L_0x009f
                 org.telegram.ui.LanguageSelectActivity r0 = org.telegram.ui.LanguageSelectActivity.this
                 java.util.ArrayList r0 = r0.unofficialLanguages
                 int r0 = r0.size()
-                if (r8 >= r0) goto L_0x00a0
+                if (r8 >= r0) goto L_0x009f
                 org.telegram.ui.LanguageSelectActivity r0 = org.telegram.ui.LanguageSelectActivity.this
                 java.util.ArrayList r0 = r0.unofficialLanguages
                 java.lang.Object r0 = r0.get(r8)
@@ -511,19 +511,19 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.util.ArrayList r3 = r3.unofficialLanguages
                 int r3 = r3.size()
                 int r3 = r3 - r1
-                if (r8 != r3) goto L_0x006a
-                goto L_0x0068
-            L_0x00a0:
+                if (r8 != r3) goto L_0x0069
+                goto L_0x0067
+            L_0x009f:
                 org.telegram.ui.LanguageSelectActivity r0 = org.telegram.ui.LanguageSelectActivity.this
                 java.util.ArrayList r0 = r0.unofficialLanguages
                 boolean r0 = r0.isEmpty()
-                if (r0 != 0) goto L_0x00b8
+                if (r0 != 0) goto L_0x00b7
                 org.telegram.ui.LanguageSelectActivity r0 = org.telegram.ui.LanguageSelectActivity.this
                 java.util.ArrayList r0 = r0.unofficialLanguages
                 int r0 = r0.size()
                 int r0 = r0 + r1
                 int r8 = r8 - r0
-            L_0x00b8:
+            L_0x00b7:
                 org.telegram.ui.LanguageSelectActivity r0 = org.telegram.ui.LanguageSelectActivity.this
                 java.util.ArrayList r0 = r0.sortedLanguages
                 java.lang.Object r0 = r0.get(r8)
@@ -532,16 +532,16 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.util.ArrayList r3 = r3.sortedLanguages
                 int r3 = r3.size()
                 int r3 = r3 - r1
-                if (r8 != r3) goto L_0x006a
-                goto L_0x0068
-            L_0x00d2:
+                if (r8 != r3) goto L_0x0069
+                goto L_0x0067
+            L_0x00d1:
                 boolean r3 = r0.isLocal()
-                if (r3 == 0) goto L_0x00f5
+                if (r3 == 0) goto L_0x00f4
                 r3 = 2
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625964(0x7f0e07ec, float:1.887915E38)
+                r4 = 2131625995(0x7f0e080b, float:1.8879214E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4
@@ -549,21 +549,21 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.String r3 = java.lang.String.format(r4, r3)
                 r8 = r8 ^ r1
                 r7.setLanguage(r0, r3, r8)
-                goto L_0x00fa
-            L_0x00f5:
+                goto L_0x00f9
+            L_0x00f4:
                 r3 = 0
                 r8 = r8 ^ r1
                 r7.setLanguage(r0, r3, r8)
-            L_0x00fa:
+            L_0x00f9:
                 org.telegram.messenger.LocaleController r8 = org.telegram.messenger.LocaleController.getInstance()
                 org.telegram.messenger.LocaleController$LocaleInfo r8 = r8.getCurrentLocaleInfo()
-                if (r0 != r8) goto L_0x0105
-                goto L_0x0106
-            L_0x0105:
+                if (r0 != r8) goto L_0x0104
+                goto L_0x0105
+            L_0x0104:
                 r1 = 0
-            L_0x0106:
+            L_0x0105:
                 r7.setLanguageSelected(r1)
-            L_0x0109:
+            L_0x0108:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LanguageSelectActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

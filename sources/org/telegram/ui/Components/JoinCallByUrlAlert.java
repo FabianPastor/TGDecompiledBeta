@@ -98,7 +98,11 @@ public class JoinCallByUrlAlert extends BottomSheet {
         }
         BottomSheetCell bottomSheetCell = new BottomSheetCell(context);
         bottomSheetCell.setBackground((Drawable) null);
-        bottomSheetCell.setText(LocaleController.getString("VoipGroupJoinVoiceChatUrl", NUM));
+        if (ChatObject.isChannelOrGiga(tLRPC$Chat)) {
+            bottomSheetCell.setText(LocaleController.getString("VoipChannelJoinVoiceChatUrl", NUM));
+        } else {
+            bottomSheetCell.setText(LocaleController.getString("VoipGroupJoinVoiceChatUrl", NUM));
+        }
         bottomSheetCell.background.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 JoinCallByUrlAlert.this.lambda$new$0$JoinCallByUrlAlert(view);

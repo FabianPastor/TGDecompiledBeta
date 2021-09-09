@@ -87,8 +87,7 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public float currentPanTranslationY;
     protected AnimatorSet currentSheetAnimation;
-    /* access modifiers changed from: protected */
-    public int currentSheetAnimationType;
+    protected int currentSheetAnimationType;
     /* access modifiers changed from: private */
     public View customView;
     /* access modifiers changed from: private */
@@ -139,8 +138,7 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public int rightInset;
     protected boolean scrollNavBar;
-    /* access modifiers changed from: protected */
-    public Drawable shadowDrawable;
+    protected Drawable shadowDrawable;
     private boolean showWithoutAnimation;
     protected boolean smoothKeyboardAnimationEnabled;
     protected Runnable startAnimationRunnable;

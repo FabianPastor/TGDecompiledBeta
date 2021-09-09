@@ -1309,7 +1309,7 @@ public class ChatObject {
             int selfId = getSelfId();
             VoIPService.getSharedInstance();
             TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = this.participants.get(selfId);
-            this.canStreamVideo = tLRPC$TL_groupCallParticipant2 != null && tLRPC$TL_groupCallParticipant2.video_joined;
+            this.canStreamVideo = true;
             this.activeVideos = 0;
             int size2 = this.sortedParticipants.size();
             boolean z = false;
@@ -1572,7 +1572,7 @@ public class ChatObject {
             }
         }
 
-        public void toggleRecord(String str) {
+        public void toggleRecord(String str, int i) {
             this.recording = !this.recording;
             TLRPC$TL_phone_toggleGroupCallRecord tLRPC$TL_phone_toggleGroupCallRecord = new TLRPC$TL_phone_toggleGroupCallRecord();
             tLRPC$TL_phone_toggleGroupCallRecord.call = getInputGroupCall();
@@ -1580,6 +1580,11 @@ public class ChatObject {
             if (str != null) {
                 tLRPC$TL_phone_toggleGroupCallRecord.title = str;
                 tLRPC$TL_phone_toggleGroupCallRecord.flags |= 2;
+            }
+            if (i == 1 || i == 2) {
+                tLRPC$TL_phone_toggleGroupCallRecord.flags |= 4;
+                tLRPC$TL_phone_toggleGroupCallRecord.video = true;
+                tLRPC$TL_phone_toggleGroupCallRecord.video_portrait = i == 1;
             }
             this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_toggleGroupCallRecord, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -1755,6 +1760,10 @@ public class ChatObject {
 
     public static boolean isChannel(TLRPC$Chat tLRPC$Chat) {
         return (tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden);
+    }
+
+    public static boolean isChannelOrGiga(TLRPC$Chat tLRPC$Chat) {
+        return ((tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden)) && (!tLRPC$Chat.megagroup || tLRPC$Chat.gigagroup);
     }
 
     public static boolean isMegagroup(TLRPC$Chat tLRPC$Chat) {

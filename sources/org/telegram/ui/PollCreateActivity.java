@@ -886,20 +886,20 @@ public class PollCreateActivity extends BaseFragment {
             /*
                 r6 = this;
                 java.lang.String r7 = "windowBackgroundWhite"
-                if (r8 == 0) goto L_0x00b7
+                if (r8 == 0) goto L_0x00b6
                 r0 = 1
-                if (r8 == r0) goto L_0x00af
+                if (r8 == r0) goto L_0x00ae
                 r1 = 2
-                if (r8 == r1) goto L_0x00a7
+                if (r8 == r1) goto L_0x00a6
                 r1 = 3
-                if (r8 == r1) goto L_0x0098
+                if (r8 == r1) goto L_0x0097
                 r1 = 4
                 r2 = 0
-                if (r8 == r1) goto L_0x007e
+                if (r8 == r1) goto L_0x007d
                 r1 = 6
-                if (r8 == r1) goto L_0x006f
+                if (r8 == r1) goto L_0x006e
                 r1 = 7
-                if (r8 == r1) goto L_0x0055
+                if (r8 == r1) goto L_0x0054
                 org.telegram.ui.PollCreateActivity$ListAdapter$4 r8 = new org.telegram.ui.PollCreateActivity$ListAdapter$4
                 android.content.Context r1 = r6.mContext
                 org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$CE4hMeBrii7X7YyEe3DPqpm1fIg r2 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$CE4hMeBrii7X7YyEe3DPqpm1fIg
@@ -921,8 +921,8 @@ public class PollCreateActivity extends BaseFragment {
                 org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$4GdhUAeBCk5Oj0yFpg4wB3oKdrM r0 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$4GdhUAeBCk5Oj0yFpg4wB3oKdrM
                 r0.<init>()
                 r7.setOnKeyListener(r0)
-                goto L_0x00ce
-            L_0x0055:
+                goto L_0x00cc
+            L_0x0054:
                 org.telegram.ui.PollCreateActivity$ListAdapter$2 r8 = new org.telegram.ui.PollCreateActivity$ListAdapter$2
                 android.content.Context r1 = r6.mContext
                 r8.<init>(r1, r0, r2)
@@ -932,15 +932,15 @@ public class PollCreateActivity extends BaseFragment {
                 org.telegram.ui.PollCreateActivity$ListAdapter$3 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$3
                 r7.<init>(r8)
                 r8.addTextWatcher(r7)
-                goto L_0x00ce
-            L_0x006f:
+                goto L_0x00cc
+            L_0x006e:
                 org.telegram.ui.Cells.TextCheckCell r8 = new org.telegram.ui.Cells.TextCheckCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x00ce
-            L_0x007e:
+                goto L_0x00cc
+            L_0x007d:
                 org.telegram.ui.Cells.PollEditTextCell r8 = new org.telegram.ui.Cells.PollEditTextCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0, r2)
@@ -950,25 +950,25 @@ public class PollCreateActivity extends BaseFragment {
                 org.telegram.ui.PollCreateActivity$ListAdapter$1 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$1
                 r7.<init>(r8)
                 r8.addTextWatcher(r7)
-                goto L_0x00ce
-            L_0x0098:
+                goto L_0x00cc
+            L_0x0097:
                 org.telegram.ui.Cells.TextCell r8 = new org.telegram.ui.Cells.TextCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x00ce
-            L_0x00a7:
+                goto L_0x00cc
+            L_0x00a6:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x00ce
-            L_0x00af:
+                goto L_0x00cc
+            L_0x00ae:
                 org.telegram.ui.Cells.ShadowSectionCell r8 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x00ce
-            L_0x00b7:
+                goto L_0x00cc
+            L_0x00b6:
                 org.telegram.ui.Cells.HeaderCell r8 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r1 = r6.mContext
                 r3 = 21
@@ -979,7 +979,7 @@ public class PollCreateActivity extends BaseFragment {
                 r0.<init>(r1, r2, r3, r4, r5)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-            L_0x00ce:
+            L_0x00cc:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r7 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2

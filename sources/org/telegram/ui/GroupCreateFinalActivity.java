@@ -695,8 +695,12 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     /* access modifiers changed from: private */
     /* renamed from: lambda$createView$3 */
     public /* synthetic */ void lambda$createView$3$GroupCreateFinalActivity(DialogInterface dialogInterface) {
-        this.cameraDrawable.setCustomEndFrame(86);
-        this.avatarEditor.playAnimation();
+        if (!this.imageUpdater.isUploadingImage()) {
+            this.cameraDrawable.setCustomEndFrame(86);
+            this.avatarEditor.playAnimation();
+            return;
+        }
+        this.cameraDrawable.setCurrentFrame(0, false);
     }
 
     /* access modifiers changed from: private */
@@ -1027,27 +1031,27 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 org.telegram.ui.Cells.TextSettingsCell r5 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r6 = r4.context
                 r5.<init>(r6)
-                goto L_0x0052
+                goto L_0x0050
             L_0x0010:
                 org.telegram.ui.Cells.GroupCreateUserCell r5 = new org.telegram.ui.Cells.GroupCreateUserCell
                 android.content.Context r6 = r4.context
                 r0 = 3
                 r1 = 0
                 r5.<init>(r6, r1, r0, r1)
-                goto L_0x0052
+                goto L_0x0050
             L_0x001a:
                 org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r6 = r4.context
                 r5.<init>(r6)
                 r6 = 46
                 r5.setHeight(r6)
-                goto L_0x0052
+                goto L_0x0050
             L_0x0027:
                 org.telegram.ui.Cells.ShadowSectionCell r6 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r0 = r4.context
                 r6.<init>(r0)
                 android.content.Context r0 = r4.context
-                r1 = 2131165445(0x7var_, float:1.7945107E38)
+                r1 = 2131165450(0x7var_a, float:1.7945117E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -1059,7 +1063,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 r1.setFullsize(r5)
                 r6.setBackgroundDrawable(r1)
                 r5 = r6
-            L_0x0052:
+            L_0x0050:
                 org.telegram.ui.Components.RecyclerListView$Holder r6 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r6.<init>(r5)
                 return r6

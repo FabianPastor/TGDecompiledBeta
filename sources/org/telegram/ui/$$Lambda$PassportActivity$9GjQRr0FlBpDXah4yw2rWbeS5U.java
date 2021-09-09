@@ -19,7 +19,7 @@ public final /* synthetic */ class $$Lambda$PassportActivity$9GjQRr0FlBpDXah4yw2
             jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0000: INVOKE  
               (r1v0 'tLObject' org.telegram.tgnet.TLObject)
               (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-             org.telegram.ui.PassportActivity.lambda$new$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void type: STATIC in method: org.telegram.ui.-$$Lambda$PassportActivity$9GjQ-Rr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+             org.telegram.ui.PassportActivity.lambda$new$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void type: STATIC in method: org.telegram.ui.-$$Lambda$PassportActivity$9GjQ-Rr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -52,14 +52,14 @@ public final /* synthetic */ class $$Lambda$PassportActivity$9GjQRr0FlBpDXah4yw2
             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
             Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0005: INVOKE  
               (wrap: org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E : 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR)
-             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.-$$Lambda$PassportActivity$9GjQ-Rr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.-$$Lambda$PassportActivity$9GjQ-Rr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
             	at jadx.core.codegen.InsnGen.inlineMethod(InsnGen.java:924)
             	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:684)
             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
             	... 29 more
-            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR in method: org.telegram.ui.-$$Lambda$PassportActivity$9GjQ-Rr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$PassportActivity$cO7BWHa9UUtu89DpDtLKDHC_m-E.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR in method: org.telegram.ui.-$$Lambda$PassportActivity$9GjQ-Rr0FlBpDXah4yw2rWbeS5U.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)

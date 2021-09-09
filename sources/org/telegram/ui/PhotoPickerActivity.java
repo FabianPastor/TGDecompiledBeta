@@ -2272,13 +2272,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r5, int r6) {
             /*
                 r4 = this;
-                if (r6 == 0) goto L_0x008a
+                if (r6 == 0) goto L_0x0089
                 r5 = -2
                 r0 = -1
                 r1 = 1
-                if (r6 == r1) goto L_0x0063
+                if (r6 == r1) goto L_0x0062
                 r2 = 2
-                if (r6 == r2) goto L_0x005b
+                if (r6 == r2) goto L_0x005a
                 r2 = 3
                 if (r6 == r2) goto L_0x001f
                 org.telegram.ui.Cells.DividerCell r5 = new org.telegram.ui.Cells.DividerCell
@@ -2287,7 +2287,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.PhotoPickerActivity r6 = org.telegram.ui.PhotoPickerActivity.this
                 boolean r6 = r6.forceDarckTheme
                 r5.setForceDarkTheme(r6)
-                goto L_0x00ae
+                goto L_0x00ad
             L_0x001f:
                 org.telegram.ui.Cells.TextCell r6 = new org.telegram.ui.Cells.TextCell
                 android.content.Context r2 = r4.mContext
@@ -2298,7 +2298,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 r6.setLayoutParams(r1)
                 org.telegram.ui.PhotoPickerActivity r5 = org.telegram.ui.PhotoPickerActivity.this
                 boolean r5 = r5.forceDarckTheme
-                if (r5 == 0) goto L_0x0088
+                if (r5 == 0) goto L_0x0087
                 org.telegram.ui.ActionBar.SimpleTextView r5 = r6.textView
                 org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                 java.lang.String r0 = r0.textKey
@@ -2311,13 +2311,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.MULTIPLY
                 r0.<init>(r1, r2)
                 r5.setColorFilter(r0)
-                goto L_0x0088
-            L_0x005b:
+                goto L_0x0087
+            L_0x005a:
                 org.telegram.ui.Cells.SharedDocumentCell r5 = new org.telegram.ui.Cells.SharedDocumentCell
                 android.content.Context r6 = r4.mContext
                 r5.<init>(r6, r1)
-                goto L_0x00ae
-            L_0x0063:
+                goto L_0x00ad
+            L_0x0062:
                 android.widget.FrameLayout r6 = new android.widget.FrameLayout
                 android.content.Context r1 = r4.mContext
                 r6.<init>(r1)
@@ -2332,10 +2332,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 r1 = -1082130432(0xffffffffbvar_, float:-1.0)
                 android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r1)
                 r6.addView(r5, r0)
-            L_0x0088:
+            L_0x0087:
                 r5 = r6
-                goto L_0x00ae
-            L_0x008a:
+                goto L_0x00ad
+            L_0x0089:
                 org.telegram.ui.Cells.PhotoAttachPhotoCell r5 = new org.telegram.ui.Cells.PhotoAttachPhotoCell
                 android.content.Context r6 = r4.mContext
                 r5.<init>(r6)
@@ -2346,14 +2346,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                 int r0 = r0.selectPhotoType
                 int r1 = org.telegram.ui.PhotoAlbumPickerActivity.SELECT_TYPE_ALL
-                if (r0 == r1) goto L_0x00aa
+                if (r0 == r1) goto L_0x00a9
                 r0 = 8
-                goto L_0x00ab
-            L_0x00aa:
+                goto L_0x00aa
+            L_0x00a9:
                 r0 = 0
-            L_0x00ab:
+            L_0x00aa:
                 r6.setVisibility(r0)
-            L_0x00ae:
+            L_0x00ad:
                 org.telegram.ui.Components.RecyclerListView$Holder r6 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r6.<init>(r5)
                 return r6

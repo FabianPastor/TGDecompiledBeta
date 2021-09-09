@@ -1,4 +1,4 @@
-package org.telegram.ui;
+package org.telegram.ui.Adapters;
 
 import j$.util.Comparator;
 import j$.util.function.Function;
@@ -6,17 +6,18 @@ import j$.util.function.ToDoubleFunction;
 import j$.util.function.ToIntFunction;
 import j$.util.function.ToLongFunction;
 import java.util.Comparator;
+import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
-/* renamed from: org.telegram.ui.-$$Lambda$ChatActivity$G-4l26o787VW1yRHwpXydDjU9XA  reason: invalid class name */
+/* renamed from: org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$xs9P1VcT8m00-uW7HndORqJHwBc  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$ChatActivity$G4l26o787VW1yRHwpXydDjU9XA implements Comparator, j$.util.Comparator {
-    public static final /* synthetic */ $$Lambda$ChatActivity$G4l26o787VW1yRHwpXydDjU9XA INSTANCE = new $$Lambda$ChatActivity$G4l26o787VW1yRHwpXydDjU9XA();
+public final /* synthetic */ class $$Lambda$DialogsSearchAdapter$xs9P1VcT8m00uW7HndORqJHwBc implements Comparator, j$.util.Comparator {
+    public static final /* synthetic */ $$Lambda$DialogsSearchAdapter$xs9P1VcT8m00uW7HndORqJHwBc INSTANCE = new $$Lambda$DialogsSearchAdapter$xs9P1VcT8m00uW7HndORqJHwBc();
 
-    private /* synthetic */ $$Lambda$ChatActivity$G4l26o787VW1yRHwpXydDjU9XA() {
+    private /* synthetic */ $$Lambda$DialogsSearchAdapter$xs9P1VcT8m00uW7HndORqJHwBc() {
     }
 
     public final int compare(Object obj, Object obj2) {
-        return ((Integer) obj2).compareTo((Integer) obj);
+        return DialogsSearchAdapter.lambda$loadRecentSearch$3((DialogsSearchAdapter.RecentSearchObject) obj, (DialogsSearchAdapter.RecentSearchObject) obj2);
     }
 
     public /* synthetic */ Comparator reversed() {

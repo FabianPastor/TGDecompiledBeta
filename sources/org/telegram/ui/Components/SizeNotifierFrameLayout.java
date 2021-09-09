@@ -37,6 +37,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private ActionBarLayout parentLayout;
     private boolean paused;
     private Rect rect;
+    private boolean skipBackgroundDrawing;
     private float translationX;
     private float translationY;
 
@@ -254,7 +255,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        if (this.backgroundDrawable == null) {
+        if (this.backgroundDrawable == null || this.skipBackgroundDrawing) {
             super.onDraw(canvas);
             return;
         }
@@ -365,5 +366,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             }
             i++;
         }
+    }
+
+    public void setSkipBackgroundDrawing(boolean z) {
+        this.skipBackgroundDrawing = z;
+        invalidate();
     }
 }

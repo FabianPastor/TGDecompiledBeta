@@ -11,6 +11,7 @@ public abstract class TLRPC$GroupCall extends TLObject {
     public boolean join_muted;
     public int participants_count;
     public int record_start_date;
+    public boolean record_video_active;
     public int schedule_date;
     public boolean schedule_start_subscribed;
     public int stream_dc_id;

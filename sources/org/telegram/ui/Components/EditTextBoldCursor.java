@@ -290,7 +290,7 @@ public class EditTextBoldCursor extends EditText {
         L_0x00d3:
             java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00e1 }
             if (r0 == 0) goto L_0x00e1
-            r1 = 2131165395(0x7var_d3, float:1.7945006E38)
+            r1 = 2131165400(0x7var_d8, float:1.7945016E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00e1 }
             r0.set(r8, r1)     // Catch:{ all -> 0x00e1 }
         L_0x00e1:
@@ -625,9 +625,9 @@ public class EditTextBoldCursor extends EditText {
             float lineWidth = this.hintLayout.getLineWidth(0);
             int i5 = lineLeft != 0.0f ? (int) (((float) 0) - lineLeft) : 0;
             if (!this.supportRtlHint || !LocaleController.isRTL) {
-                canvas2.translate((float) (i5 + getScrollX()), (this.lineY - ((float) this.hintLayout.getHeight())) - ((float) AndroidUtilities.dp(6.0f)));
+                canvas2.translate((float) (i5 + getScrollX()), (this.lineY - ((float) this.hintLayout.getHeight())) - ((float) AndroidUtilities.dp2(7.0f)));
             } else {
-                canvas2.translate(((float) (i5 + getScrollX())) + (((float) getMeasuredWidth()) - lineWidth), (this.lineY - ((float) this.hintLayout.getHeight())) - ((float) AndroidUtilities.dp(6.0f)));
+                canvas2.translate(((float) (i5 + getScrollX())) + (((float) getMeasuredWidth()) - lineWidth), (this.lineY - ((float) this.hintLayout.getHeight())) - ((float) AndroidUtilities.dp(7.0f)));
             }
             if (this.transformHintToHeader) {
                 float f6 = 1.0f - (this.headerAnimationProgress * 0.3f);

@@ -493,9 +493,9 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             /*
                 r7 = this;
                 r0 = 1
-                if (r9 == r0) goto L_0x007d
+                if (r9 == r0) goto L_0x007a
                 r1 = 2
-                if (r9 == r1) goto L_0x004e
+                if (r9 == r1) goto L_0x004d
                 r1 = 3
                 if (r9 == r1) goto L_0x0029
                 r1 = 5
@@ -504,14 +504,14 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 android.content.Context r8 = r8.getContext()
                 r1 = 0
                 r9.<init>(r8, r0, r1, r1)
-                goto L_0x00df
+                goto L_0x00dc
             L_0x0018:
                 org.telegram.ui.Cells.EmptyCell r9 = new org.telegram.ui.Cells.EmptyCell
                 android.content.Context r8 = r8.getContext()
                 r0 = 1094713344(0x41400000, float:12.0)
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
                 r9.<init>(r8, r0)
-                goto L_0x00df
+                goto L_0x00dc
             L_0x0029:
                 org.telegram.ui.Cells.HeaderCell r9 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r2 = r8.getContext()
@@ -523,17 +523,17 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625871(0x7f0e078f, float:1.8878962E38)
+                r8 = 2131625901(0x7f0e07ad, float:1.8879023E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
-                goto L_0x00df
-            L_0x004e:
+                goto L_0x00dc
+            L_0x004d:
                 org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r1 = r8.getContext()
                 r9.<init>(r1)
                 android.content.Context r8 = r8.getContext()
-                r1 = 2131165443(0x7var_, float:1.7945103E38)
+                r1 = 2131165448(0x7var_, float:1.7945113E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -544,8 +544,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r8)
                 r1.setFullsize(r0)
                 r9.setBackground(r1)
-                goto L_0x00df
-            L_0x007d:
+                goto L_0x00dc
+            L_0x007a:
                 org.telegram.ui.TooManyCommunitiesActivity r9 = org.telegram.ui.TooManyCommunitiesActivity.this
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r1 = new org.telegram.ui.Cells.TooManyCommunitiesHintCell
                 android.content.Context r8 = r8.getContext()
@@ -555,22 +555,22 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r9 = r8.hintCell
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
-                if (r8 != 0) goto L_0x00a1
-                r8 = 2131627856(0x7f0e0var_, float:1.8882988E38)
+                if (r8 != 0) goto L_0x009e
+                r8 = 2131627981(0x7f0e0fcd, float:1.8883242E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
-                goto L_0x00b6
-            L_0x00a1:
-                if (r8 != r0) goto L_0x00ad
-                r8 = 2131627855(0x7f0e0f4f, float:1.8882986E38)
+                goto L_0x00b3
+            L_0x009e:
+                if (r8 != r0) goto L_0x00aa
+                r8 = 2131627980(0x7f0e0fcc, float:1.888324E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
-                goto L_0x00b6
-            L_0x00ad:
-                r8 = 2131627854(0x7f0e0f4e, float:1.8882984E38)
+                goto L_0x00b3
+            L_0x00aa:
+                r8 = 2131627979(0x7f0e0fcb, float:1.8883238E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
-            L_0x00b6:
+            L_0x00b3:
                 org.telegram.ui.TooManyCommunitiesActivity r0 = org.telegram.ui.TooManyCommunitiesActivity.this
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r0 = r0.hintCell
                 r0.setMessageText(r8)
@@ -587,7 +587,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r0 = org.telegram.ui.TooManyCommunitiesActivity.this
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r0 = r0.hintCell
                 r0.setLayoutParams(r8)
-            L_0x00df:
+            L_0x00dc:
                 org.telegram.ui.Components.RecyclerListView$Holder r8 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r8.<init>(r9)
                 return r8

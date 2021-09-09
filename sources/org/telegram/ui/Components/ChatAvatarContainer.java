@@ -52,7 +52,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     public ChatActivity parentFragment;
     private boolean secretChatTimer;
     private SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader;
-    private StatusDrawable[] statusDrawables = new StatusDrawable[5];
+    private StatusDrawable[] statusDrawables = new StatusDrawable[6];
     /* access modifiers changed from: private */
     public SimpleTextView subtitleTextView;
     /* access modifiers changed from: private */
@@ -151,6 +151,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.statusDrawables[2] = new SendingFileDrawable(false);
             this.statusDrawables[3] = new PlayingGameDrawable(false);
             this.statusDrawables[4] = new RoundStatusDrawable(false);
+            this.statusDrawables[5] = new ChoosingStickerStatusDrawable(false);
             int i = 0;
             while (true) {
                 StatusDrawable[] statusDrawableArr = this.statusDrawables;
@@ -491,25 +492,37 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         int i = 0;
         if (z) {
             try {
-                Integer printingStringType = MessagesController.getInstance(this.currentAccount).getPrintingStringType(this.parentFragment.getDialogId(), this.parentFragment.getThreadId());
-                this.subtitleTextView.setLeftDrawable((Drawable) this.statusDrawables[printingStringType.intValue()]);
-                while (i < this.statusDrawables.length) {
-                    if (i == printingStringType.intValue()) {
-                        this.statusDrawables[i].start();
+                int intValue = MessagesController.getInstance(this.currentAccount).getPrintingStringType(this.parentFragment.getDialogId(), this.parentFragment.getThreadId()).intValue();
+                if (intValue == 5) {
+                    this.subtitleTextView.replaceTextWithDrawable(this.statusDrawables[intValue], "**oo**");
+                    this.subtitleTextView.setLeftDrawable((Drawable) null);
+                } else {
+                    this.subtitleTextView.replaceTextWithDrawable((Drawable) null, (String) null);
+                    this.subtitleTextView.setLeftDrawable((Drawable) this.statusDrawables[intValue]);
+                }
+                while (true) {
+                    StatusDrawable[] statusDrawableArr = this.statusDrawables;
+                    if (i < statusDrawableArr.length) {
+                        if (i == intValue) {
+                            statusDrawableArr[i].start();
+                        } else {
+                            statusDrawableArr[i].stop();
+                        }
+                        i++;
                     } else {
-                        this.statusDrawables[i].stop();
+                        return;
                     }
-                    i++;
                 }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
         } else {
             this.subtitleTextView.setLeftDrawable((Drawable) null);
+            this.subtitleTextView.replaceTextWithDrawable((Drawable) null, (String) null);
             while (true) {
-                StatusDrawable[] statusDrawableArr = this.statusDrawables;
-                if (i < statusDrawableArr.length) {
-                    statusDrawableArr[i].stop();
+                StatusDrawable[] statusDrawableArr2 = this.statusDrawables;
+                if (i < statusDrawableArr2.length) {
+                    statusDrawableArr2[i].stop();
                     i++;
                 } else {
                     return;
@@ -856,5 +869,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 
     public SharedMediaLayout.SharedMediaPreloader getSharedMediaPreloader() {
         return this.sharedMediaPreloader;
+    }
+
+    public BackupImageView getAvatarImageView() {
+        return this.avatarImageView;
     }
 }

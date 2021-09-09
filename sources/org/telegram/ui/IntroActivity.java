@@ -501,7 +501,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                               (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
                              call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR)
                               (16 long)
-                             org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable, long):boolean type: VIRTUAL in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes.dex
+                             org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable, long):boolean type: VIRTUAL in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -572,7 +572,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                             Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00bd: CONSTRUCTOR  (r1v9 org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY) = 
                               (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes.dex
+                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)

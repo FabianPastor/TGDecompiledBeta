@@ -87,6 +87,7 @@ public class SvgHelper {
         /* access modifiers changed from: private */
         public static Runnable shiftRunnable;
         private static float totalTranslation;
+        private boolean aspectFill = true;
         private Bitmap backgroundBitmap;
         private Canvas backgroundCanvas;
         private Shader backgroundGradient;
@@ -117,22 +118,37 @@ public class SvgHelper {
             return this.height;
         }
 
+        public void setAspectFill(boolean z) {
+            this.aspectFill = z;
+        }
+
+        public void overrideWidthAndHeight(int i, int i2) {
+            this.width = i;
+            this.height = i2;
+        }
+
         public void draw(Canvas canvas) {
+            Canvas canvas2 = canvas;
             String str = this.currentColorKey;
             if (str != null) {
                 setupGradient(str, this.colorAlpha);
             }
             Rect bounds = getBounds();
-            float max = Math.max(((float) bounds.width()) / ((float) this.width), ((float) bounds.height()) / ((float) this.height));
+            float width2 = ((float) bounds.width()) / ((float) this.width);
+            float height2 = ((float) bounds.height()) / ((float) this.height);
+            float max = this.aspectFill ? Math.max(width2, height2) : Math.min(width2, height2);
             canvas.save();
-            canvas.translate((float) bounds.left, (float) bounds.top);
-            canvas.scale(max, max);
+            canvas2.translate((float) bounds.left, (float) bounds.top);
+            if (!this.aspectFill) {
+                canvas2.translate((((float) bounds.width()) - (((float) this.width) * max)) / 2.0f, (((float) bounds.height()) - (((float) this.height) * max)) / 2.0f);
+            }
+            canvas2.scale(max, max);
             int size = this.commands.size();
             for (int i = 0; i < size; i++) {
                 Object obj = this.commands.get(i);
                 if (obj instanceof Matrix) {
                     canvas.save();
-                    canvas.concat((Matrix) obj);
+                    canvas2.concat((Matrix) obj);
                 } else if (obj == null) {
                     canvas.restore();
                 } else {
@@ -140,24 +156,24 @@ public class SvgHelper {
                     int alpha = paint.getAlpha();
                     paint.setAlpha((int) (this.crossfadeAlpha * ((float) alpha)));
                     if (obj instanceof Path) {
-                        canvas.drawPath((Path) obj, paint);
+                        canvas2.drawPath((Path) obj, paint);
                     } else if (obj instanceof Rect) {
-                        canvas.drawRect((Rect) obj, paint);
+                        canvas2.drawRect((Rect) obj, paint);
                     } else if (obj instanceof RectF) {
-                        canvas.drawRect((RectF) obj, paint);
+                        canvas2.drawRect((RectF) obj, paint);
                     } else if (obj instanceof Line) {
                         Line line = (Line) obj;
                         canvas.drawLine(line.x1, line.y1, line.x2, line.y2, paint);
                     } else if (obj instanceof Circle) {
                         Circle circle = (Circle) obj;
-                        canvas.drawCircle(circle.x1, circle.y1, circle.rad, paint);
+                        canvas2.drawCircle(circle.x1, circle.y1, circle.rad, paint);
                     } else if (obj instanceof Oval) {
-                        canvas.drawOval(((Oval) obj).rect, paint);
+                        canvas2.drawOval(((Oval) obj).rect, paint);
                     } else if (obj instanceof RoundRect) {
                         RoundRect roundRect = (RoundRect) obj;
                         RectF rectF = roundRect.rect;
                         float f = roundRect.rx;
-                        canvas.drawRoundRect(rectF, f, f, paint);
+                        canvas2.drawRoundRect(rectF, f, f, paint);
                     }
                     paint.setAlpha(alpha);
                 }
@@ -185,9 +201,9 @@ public class SvgHelper {
                     if (runnable != null) {
                         AndroidUtilities.cancelRunOnUIThread(runnable);
                     }
-                    $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw r15 = $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw.INSTANCE;
-                    shiftRunnable = r15;
-                    AndroidUtilities.runOnUIThread(r15, (long) (((int) (1000.0f / AndroidUtilities.screenRefreshRate)) - 1));
+                    $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw r1 = $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw.INSTANCE;
+                    shiftRunnable = r1;
+                    AndroidUtilities.runOnUIThread(r1, (long) (((int) (1000.0f / AndroidUtilities.screenRefreshRate)) - 1));
                 }
                 ImageReceiver imageReceiver = this.parentImageReceiver;
                 if (imageReceiver != null) {
@@ -945,20 +961,20 @@ public class SvgHelper {
             int r0 = r2.hashCode()
             r1 = -1
             switch(r0) {
-                case -734239628: goto L_0x006d;
-                case 112785: goto L_0x0062;
-                case 3027034: goto L_0x0057;
-                case 3068707: goto L_0x004c;
-                case 3181155: goto L_0x0041;
-                case 93818879: goto L_0x0036;
-                case 98619139: goto L_0x002b;
+                case -734239628: goto L_0x006c;
+                case 112785: goto L_0x0061;
+                case 3027034: goto L_0x0056;
+                case 3068707: goto L_0x004b;
+                case 3181155: goto L_0x0040;
+                case 93818879: goto L_0x0035;
+                case 98619139: goto L_0x002a;
                 case 113101865: goto L_0x001f;
                 case 828922025: goto L_0x0012;
                 default: goto L_0x000f;
             }
         L_0x000f:
             r2 = -1
-            goto L_0x0078
+            goto L_0x0076
         L_0x0012:
             java.lang.String r0 = "magenta"
             boolean r2 = r2.equals(r0)
@@ -966,118 +982,118 @@ public class SvgHelper {
             goto L_0x000f
         L_0x001b:
             r2 = 8
-            goto L_0x0078
+            goto L_0x0076
         L_0x001f:
             java.lang.String r0 = "white"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0029
+            if (r2 != 0) goto L_0x0028
             goto L_0x000f
-        L_0x0029:
+        L_0x0028:
             r2 = 7
-            goto L_0x0078
-        L_0x002b:
+            goto L_0x0076
+        L_0x002a:
             java.lang.String r0 = "green"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0034
+            if (r2 != 0) goto L_0x0033
             goto L_0x000f
-        L_0x0034:
+        L_0x0033:
             r2 = 6
-            goto L_0x0078
-        L_0x0036:
+            goto L_0x0076
+        L_0x0035:
             java.lang.String r0 = "black"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x003f
+            if (r2 != 0) goto L_0x003e
             goto L_0x000f
-        L_0x003f:
+        L_0x003e:
             r2 = 5
-            goto L_0x0078
-        L_0x0041:
+            goto L_0x0076
+        L_0x0040:
             java.lang.String r0 = "gray"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x004a
+            if (r2 != 0) goto L_0x0049
             goto L_0x000f
-        L_0x004a:
+        L_0x0049:
             r2 = 4
-            goto L_0x0078
-        L_0x004c:
+            goto L_0x0076
+        L_0x004b:
             java.lang.String r0 = "cyan"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0055
+            if (r2 != 0) goto L_0x0054
             goto L_0x000f
-        L_0x0055:
+        L_0x0054:
             r2 = 3
-            goto L_0x0078
-        L_0x0057:
+            goto L_0x0076
+        L_0x0056:
             java.lang.String r0 = "blue"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0060
+            if (r2 != 0) goto L_0x005f
             goto L_0x000f
-        L_0x0060:
+        L_0x005f:
             r2 = 2
-            goto L_0x0078
-        L_0x0062:
+            goto L_0x0076
+        L_0x0061:
             java.lang.String r0 = "red"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x006b
+            if (r2 != 0) goto L_0x006a
             goto L_0x000f
-        L_0x006b:
+        L_0x006a:
             r2 = 1
-            goto L_0x0078
-        L_0x006d:
+            goto L_0x0076
+        L_0x006c:
             java.lang.String r0 = "yellow"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0077
+            if (r2 != 0) goto L_0x0075
             goto L_0x000f
-        L_0x0077:
+        L_0x0075:
             r2 = 0
-        L_0x0078:
+        L_0x0076:
             switch(r2) {
-                case 0: goto L_0x00b8;
-                case 1: goto L_0x00b1;
-                case 2: goto L_0x00a9;
-                case 3: goto L_0x00a1;
-                case 4: goto L_0x0099;
-                case 5: goto L_0x0092;
-                case 6: goto L_0x008a;
-                case 7: goto L_0x0085;
-                case 8: goto L_0x007d;
-                default: goto L_0x007b;
+                case 0: goto L_0x00b6;
+                case 1: goto L_0x00af;
+                case 2: goto L_0x00a7;
+                case 3: goto L_0x009f;
+                case 4: goto L_0x0097;
+                case 5: goto L_0x0090;
+                case 6: goto L_0x0088;
+                case 7: goto L_0x0083;
+                case 8: goto L_0x007b;
+                default: goto L_0x0079;
             }
-        L_0x007b:
+        L_0x0079:
             r2 = 0
             return r2
-        L_0x007d:
+        L_0x007b:
             r2 = -65281(0xfffffffffffvar_ff, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0085:
+        L_0x0083:
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
             return r2
-        L_0x008a:
+        L_0x0088:
             r2 = -16711936(0xfffffffffvar_fvar_, float:-1.7146522E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0092:
+        L_0x0090:
             r2 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0099:
+        L_0x0097:
             r2 = -7829368(0xfffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00a1:
+        L_0x009f:
             r2 = -16711681(0xfffffffffvar_ffff, float:-1.714704E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00a9:
+        L_0x00a7:
             r2 = -16776961(0xfffffffffvar_ff, float:-1.7014636E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00b1:
+        L_0x00af:
             r2 = -65536(0xfffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00b8:
+        L_0x00b6:
             r2 = -256(0xfffffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
@@ -2299,8 +2315,7 @@ public class SvgHelper {
             for (byte b : bArr) {
                 byte b2 = b & 255;
                 if (b2 >= 192) {
-                    int i = (b2 - 128) - 64;
-                    sb.append("AACAAAAHAAALMAAAQASTAVAAAZaacaaaahaaalmaaaqastava.az0123456789-,".substring(i, i + 1));
+                    sb.append("AACAAAAHAAALMAAAQASTAVAAAZaacaaaahaaalmaaaqastava.az0123456789-,".charAt((b2 - 128) - 64));
                 } else {
                     if (b2 >= 128) {
                         sb.append(',');

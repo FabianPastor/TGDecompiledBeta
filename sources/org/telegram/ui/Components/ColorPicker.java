@@ -64,8 +64,6 @@ public class ColorPicker extends FrameLayout {
     private int currentResetType;
     /* access modifiers changed from: private */
     public final ColorPickerDelegate delegate;
-    /* access modifiers changed from: private */
-    public ImageView exchangeButton;
     private float[] hsvTemp = new float[3];
     boolean ignoreTextChange;
     private long lastUpdateTime;
@@ -77,8 +75,7 @@ public class ColorPicker extends FrameLayout {
     private ActionBarMenuItem menuItem;
     private float minBrightness = 0.0f;
     private float minHsvBrightness = 0.0f;
-    /* access modifiers changed from: private */
-    public boolean myMessagesColor;
+    private boolean myMessagesColor;
     private float pressedMoveProgress = 1.0f;
     /* access modifiers changed from: private */
     public RadioButton[] radioButton = new RadioButton[4];
@@ -100,7 +97,7 @@ public class ColorPicker extends FrameLayout {
         void setColor(int i, int i2, boolean z);
     }
 
-    static /* synthetic */ void lambda$new$5(View view) {
+    static /* synthetic */ void lambda$new$4(View view) {
     }
 
     private static class RadioButton extends View {
@@ -366,39 +363,26 @@ public class ColorPicker extends FrameLayout {
             i2++;
         }
         ImageView imageView = new ImageView(getContext());
-        this.exchangeButton = imageView;
+        this.addButton = imageView;
         imageView.setBackground(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 1));
-        this.exchangeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
-        this.exchangeButton.setScaleType(ImageView.ScaleType.CENTER);
-        this.exchangeButton.setVisibility(8);
-        this.exchangeButton.setImageResource(NUM);
-        this.exchangeButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ColorPicker.this.lambda$new$2$ColorPicker(view);
-            }
-        });
-        this.radioContainer.addView(this.exchangeButton, 1, LayoutHelper.createFrame(30, 30.0f, 51, 0.0f, 1.0f, 0.0f, 0.0f));
-        ImageView imageView2 = new ImageView(getContext());
-        this.addButton = imageView2;
-        imageView2.setBackground(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 1));
         this.addButton.setImageResource(NUM);
         this.addButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
         this.addButton.setScaleType(ImageView.ScaleType.CENTER);
         this.addButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                ColorPicker.this.lambda$new$3$ColorPicker(view);
+                ColorPicker.this.lambda$new$2$ColorPicker(view);
             }
         });
         this.addButton.setContentDescription(LocaleController.getString("Add", NUM));
         addView(this.addButton, LayoutHelper.createFrame(30, 30.0f, 49, 36.0f, 1.0f, 0.0f, 0.0f));
-        AnonymousClass6 r2 = new ImageView(getContext()) {
+        AnonymousClass6 r82 = new ImageView(getContext()) {
             public void setAlpha(float f) {
                 super.setAlpha(f);
                 ColorPicker.this.linearLayout.invalidate();
             }
         };
-        this.clearButton = r2;
-        r2.setBackground(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 1));
+        this.clearButton = r82;
+        r82.setBackground(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 1));
         this.clearButton.setImageResource(NUM);
         this.clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
         this.clearButton.setAlpha(0.0f);
@@ -408,7 +392,7 @@ public class ColorPicker extends FrameLayout {
         this.clearButton.setVisibility(4);
         this.clearButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                ColorPicker.this.lambda$new$4$ColorPicker(view);
+                ColorPicker.this.lambda$new$3$ColorPicker(view);
             }
         });
         this.clearButton.setContentDescription(LocaleController.getString("ClearButton", NUM));
@@ -421,7 +405,7 @@ public class ColorPicker extends FrameLayout {
         this.resetButton.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
         this.resetButton.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         addView(this.resetButton, LayoutHelper.createFrame(-2, 36.0f, 53, 0.0f, 3.0f, 14.0f, 0.0f));
-        this.resetButton.setOnClickListener($$Lambda$ColorPicker$syEQkClvdDnLfY8eHlLzSDMvD84.INSTANCE);
+        this.resetButton.setOnClickListener($$Lambda$ColorPicker$agi1xQ7HMg_yyWwtRZqf9hz_0KE.INSTANCE);
         if (z) {
             ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context2, (ActionBarMenu) null, 0, Theme.getColor("windowBackgroundWhiteBlackText"));
             this.menuItem = actionBarMenuItem;
@@ -435,7 +419,7 @@ public class ColorPicker extends FrameLayout {
             this.menuItem.setSubMenuOpenSide(2);
             this.menuItem.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() {
                 public final void onItemClick(int i) {
-                    ColorPicker.this.lambda$new$6$ColorPicker(i);
+                    ColorPicker.this.lambda$new$5$ColorPicker(i);
                 }
             });
             this.menuItem.setAdditionalYOffset(AndroidUtilities.dp(72.0f));
@@ -444,7 +428,7 @@ public class ColorPicker extends FrameLayout {
             addView(this.menuItem, LayoutHelper.createFrame(30, 30.0f, 53, 0.0f, 2.0f, 10.0f, 0.0f));
             this.menuItem.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    ColorPicker.this.lambda$new$7$ColorPicker(view);
+                    ColorPicker.this.lambda$new$6$ColorPicker(view);
                 }
             });
         }
@@ -485,19 +469,6 @@ public class ColorPicker extends FrameLayout {
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$2 */
     public /* synthetic */ void lambda$new$2$ColorPicker(View view) {
-        if (this.exchangeButton.getAlpha() == 1.0f) {
-            int color = this.radioButton[0].getColor();
-            RadioButton[] radioButtonArr = this.radioButton;
-            radioButtonArr[0].setColor(radioButtonArr[1].getColor());
-            this.radioButton[1].setColor(color);
-            this.delegate.setColor(this.radioButton[0].getColor(), 0, false);
-            this.delegate.setColor(this.radioButton[1].getColor(), 1, true);
-        }
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$ColorPicker(View view) {
         ArrayList arrayList;
         if (this.colorsAnimator == null) {
             int i = this.colorsCount;
@@ -517,35 +488,22 @@ public class ColorPicker extends FrameLayout {
                 arrayList.add(ObjectAnimator.ofFloat(this.clearButton, View.SCALE_X, new float[]{1.0f}));
                 arrayList.add(ObjectAnimator.ofFloat(this.clearButton, View.SCALE_Y, new float[]{1.0f}));
                 arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.TRANSLATION_X, new float[]{(float) (AndroidUtilities.dp(30.0f) + AndroidUtilities.dp(13.0f))}));
-                if (this.myMessagesColor) {
-                    this.exchangeButton.setVisibility(0);
-                    arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.ALPHA, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.SCALE_X, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.SCALE_Y, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.exchangeButton, View.ALPHA, new float[]{1.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.exchangeButton, View.SCALE_X, new float[]{1.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.exchangeButton, View.SCALE_Y, new float[]{1.0f}));
-                }
             } else if (i == 2) {
-                if (!this.myMessagesColor) {
-                    this.colorsCount = 3;
-                    if (this.radioButton[2].getColor() == 0) {
-                        float[] fArr = new float[3];
-                        Color.colorToHSV(this.radioButton[0].getColor(), fArr);
-                        if (fArr[0] > 180.0f) {
-                            fArr[0] = fArr[0] - 60.0f;
-                        } else {
-                            fArr[0] = fArr[0] + 60.0f;
-                        }
-                        this.radioButton[2].setColor(Color.HSVToColor(255, fArr));
+                this.colorsCount = 3;
+                if (this.radioButton[2].getColor() == 0) {
+                    float[] fArr = new float[3];
+                    Color.colorToHSV(this.radioButton[0].getColor(), fArr);
+                    if (fArr[0] > 180.0f) {
+                        fArr[0] = fArr[0] - 60.0f;
+                    } else {
+                        fArr[0] = fArr[0] + 60.0f;
                     }
-                    arrayList = new ArrayList();
-                    arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.TRANSLATION_X, new float[]{(float) ((AndroidUtilities.dp(30.0f) * 2) + (AndroidUtilities.dp(13.0f) * 2))}));
-                    this.delegate.setColor(this.radioButton[2].getColor(), 2, true);
-                } else {
-                    return;
+                    this.radioButton[2].setColor(Color.HSVToColor(255, fArr));
                 }
-            } else if (i == 3 && !this.myMessagesColor) {
+                arrayList = new ArrayList();
+                arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.TRANSLATION_X, new float[]{(float) ((AndroidUtilities.dp(30.0f) * 2) + (AndroidUtilities.dp(13.0f) * 2))}));
+                this.delegate.setColor(this.radioButton[2].getColor(), 2, true);
+            } else if (i == 3) {
                 this.colorsCount = 4;
                 if (this.radioButton[3].getColor() == 0) {
                     RadioButton[] radioButtonArr2 = this.radioButton;
@@ -568,7 +526,7 @@ public class ColorPicker extends FrameLayout {
             this.colorsAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
             this.colorsAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
-                    if (ColorPicker.this.colorsCount == 4 || (ColorPicker.this.myMessagesColor && ColorPicker.this.colorsCount == 2)) {
+                    if (ColorPicker.this.colorsCount == 4) {
                         ColorPicker.this.addButton.setVisibility(4);
                     }
                     AnimatorSet unused = ColorPicker.this.colorsAnimator = null;
@@ -579,8 +537,8 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$ColorPicker(View view) {
+    /* renamed from: lambda$new$3 */
+    public /* synthetic */ void lambda$new$3$ColorPicker(View view) {
         ArrayList arrayList;
         RadioButton[] radioButtonArr;
         if (this.colorsAnimator == null) {
@@ -592,15 +550,6 @@ public class ColorPicker extends FrameLayout {
                 arrayList.add(ObjectAnimator.ofFloat(this.clearButton, View.SCALE_X, new float[]{0.0f}));
                 arrayList.add(ObjectAnimator.ofFloat(this.clearButton, View.SCALE_Y, new float[]{0.0f}));
                 arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.TRANSLATION_X, new float[]{0.0f}));
-                if (this.myMessagesColor) {
-                    this.addButton.setVisibility(0);
-                    arrayList.add(ObjectAnimator.ofFloat(this.exchangeButton, View.ALPHA, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.exchangeButton, View.SCALE_X, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.exchangeButton, View.SCALE_Y, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.ALPHA, new float[]{1.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.SCALE_X, new float[]{1.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.addButton, View.SCALE_Y, new float[]{1.0f}));
-                }
             } else if (i == 3) {
                 this.colorsCount = 2;
                 arrayList = new ArrayList();
@@ -651,9 +600,6 @@ public class ColorPicker extends FrameLayout {
                         public void onAnimationEnd(Animator animator) {
                             if (ColorPicker.this.colorsCount == 1) {
                                 ColorPicker.this.clearButton.setVisibility(4);
-                                if (ColorPicker.this.myMessagesColor) {
-                                    ColorPicker.this.exchangeButton.setVisibility(4);
-                                }
                             }
                             for (int i = 0; i < ColorPicker.this.radioButton.length; i++) {
                                 if (ColorPicker.this.radioButton[i].getTag(NUM) == null) {
@@ -671,8 +617,8 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$6 */
-    public /* synthetic */ void lambda$new$6$ColorPicker(int i) {
+    /* renamed from: lambda$new$5 */
+    public /* synthetic */ void lambda$new$5$ColorPicker(int i) {
         boolean z = true;
         if (i == 1 || i == 2) {
             ColorPickerDelegate colorPickerDelegate = this.delegate;
@@ -686,8 +632,8 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$7 */
-    public /* synthetic */ void lambda$new$7$ColorPicker(View view) {
+    /* renamed from: lambda$new$6 */
+    public /* synthetic */ void lambda$new$6$ColorPicker(View view) {
         this.menuItem.toggleSubMenu();
     }
 
@@ -699,9 +645,6 @@ public class ColorPicker extends FrameLayout {
 
     private void updateColorsPosition(ArrayList<Animator> arrayList, int i, boolean z, int i2) {
         int i3 = this.colorsCount;
-        if (this.myMessagesColor && i3 == 2) {
-            i3++;
-        }
         int left = this.radioContainer.getLeft() + (AndroidUtilities.dp(30.0f) * i3) + ((i3 - 1) * AndroidUtilities.dp(13.0f));
         int dp = i2 - AndroidUtilities.dp(this.currentResetType == 1 ? 50.0f : 0.0f);
         float f = left > dp ? (float) (left - dp) : 0.0f;
@@ -717,10 +660,6 @@ public class ColorPicker extends FrameLayout {
             if (i4 < radioButtonArr.length) {
                 boolean z2 = radioButtonArr[i4].getTag(NUM) != null;
                 if (i4 < this.colorsCount) {
-                    if (i4 == 1 && this.myMessagesColor) {
-                        this.exchangeButton.setTranslationX((float) i5);
-                        i5 += AndroidUtilities.dp(30.0f) + AndroidUtilities.dp(13.0f);
-                    }
                     this.radioButton[i4].setVisibility(0);
                     if (arrayList != null) {
                         if (!z2) {
@@ -1326,7 +1265,6 @@ public class ColorPicker extends FrameLayout {
         this.currentResetType = i;
         this.myMessagesColor = z3;
         this.colorsCount = i2;
-        float f = 0.0f;
         if (i2 == 1) {
             this.addButton.setTranslationX(0.0f);
         } else if (i2 == 2) {
@@ -1346,12 +1284,11 @@ public class ColorPicker extends FrameLayout {
                 this.clearButton.setTranslationX(0.0f);
             }
         }
-        int i4 = 4;
         if (!z2) {
             this.addButton.setVisibility(8);
             this.clearButton.setVisibility(8);
         } else {
-            if (i2 < (z3 ? 2 : 4)) {
+            if (i2 < 4) {
                 this.addButton.setVisibility(0);
                 this.addButton.setScaleX(1.0f);
                 this.addButton.setScaleY(1.0f);
@@ -1368,22 +1305,6 @@ public class ColorPicker extends FrameLayout {
                 this.clearButton.setVisibility(8);
             }
         }
-        if (z3) {
-            ImageView imageView = this.exchangeButton;
-            if (i2 == 2) {
-                i4 = 0;
-            }
-            imageView.setVisibility(i4);
-            this.exchangeButton.setAlpha(i2 == 2 ? 1.0f : 0.0f);
-            this.exchangeButton.setScaleX(i2 == 2 ? 1.0f : 0.0f);
-            ImageView imageView2 = this.exchangeButton;
-            if (i2 == 2) {
-                f = 1.0f;
-            }
-            imageView2.setScaleY(f);
-        } else {
-            this.exchangeButton.setVisibility(8);
-        }
         this.linearLayout.invalidate();
         ArrayList arrayList = null;
         updateColorsPosition((ArrayList<Animator>) null, 0, false, getMeasuredWidth());
@@ -1398,7 +1319,6 @@ public class ColorPicker extends FrameLayout {
                 public void onAnimationEnd(Animator animator) {
                     if (!z2) {
                         ColorPicker.this.clearButton.setVisibility(8);
-                        ColorPicker.this.exchangeButton.setVisibility(8);
                     }
                 }
             });
@@ -1463,12 +1383,10 @@ public class ColorPicker extends FrameLayout {
         }
         list2.add(new ThemeDescription(this.clearButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         list2.add(new ThemeDescription(this.clearButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogButtonSelector"));
-        list2.add(new ThemeDescription(this.exchangeButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        list2.add(new ThemeDescription(this.exchangeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogButtonSelector"));
         if (this.menuItem != null) {
-            $$Lambda$ColorPicker$PtUvOjwsWsQZ593TTF1yZMwiw r9 = new ThemeDescription.ThemeDescriptionDelegate() {
+            $$Lambda$ColorPicker$ciTUnxeYnWMQ4SHmg9zobxHaYZI r9 = new ThemeDescription.ThemeDescriptionDelegate() {
                 public final void didSetColor() {
-                    ColorPicker.this.lambda$provideThemeDescriptions$8$ColorPicker();
+                    ColorPicker.this.lambda$provideThemeDescriptions$7$ColorPicker();
                 }
             };
             list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r9, "windowBackgroundWhiteBlackText"));
@@ -1480,8 +1398,8 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$provideThemeDescriptions$8 */
-    public /* synthetic */ void lambda$provideThemeDescriptions$8$ColorPicker() {
+    /* renamed from: lambda$provideThemeDescriptions$7 */
+    public /* synthetic */ void lambda$provideThemeDescriptions$7$ColorPicker() {
         this.menuItem.setIconColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         Theme.setDrawableColor(this.menuItem.getBackground(), Theme.getColor("dialogButtonSelector"));
         this.menuItem.setPopupItemsColor(Theme.getColor("actionBarDefaultSubmenuItem"), false);

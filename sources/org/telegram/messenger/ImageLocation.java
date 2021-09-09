@@ -366,7 +366,23 @@ public class ImageLocation {
                 return null;
             } else if (!z && (tLRPC$Document instanceof DocumentObject.ThemeDocument)) {
                 DocumentObject.ThemeDocument themeDocument = (DocumentObject.ThemeDocument) tLRPC$Document;
-                return this.document.dc_id + "_" + this.document.id + "_" + Theme.getBaseThemeKey(themeDocument.themeSettings) + "_" + themeDocument.themeSettings.accent_color + "_" + themeDocument.themeSettings.message_top_color + "_" + themeDocument.themeSettings.message_bottom_color;
+                StringBuilder sb = new StringBuilder();
+                sb.append(this.document.dc_id);
+                sb.append("_");
+                sb.append(this.document.id);
+                sb.append("_");
+                sb.append(Theme.getBaseThemeKey(themeDocument.themeSettings));
+                sb.append("_");
+                sb.append(themeDocument.themeSettings.accent_color);
+                sb.append("_");
+                int i = 0;
+                sb.append(themeDocument.themeSettings.message_colors.size() > 1 ? themeDocument.themeSettings.message_colors.get(1).intValue() : 0);
+                sb.append("_");
+                if (themeDocument.themeSettings.message_colors.size() > 0) {
+                    i = themeDocument.themeSettings.message_colors.get(0).intValue();
+                }
+                sb.append(i);
+                return sb.toString();
             } else if (tLRPC$Document.id == 0 || tLRPC$Document.dc_id == 0) {
                 return null;
             } else {

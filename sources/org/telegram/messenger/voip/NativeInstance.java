@@ -38,7 +38,7 @@ public class NativeInstance {
     }
 
     public interface RequestBroadcastPartCallback {
-        void run(long j, long j2);
+        void run(long j, long j2, int i, int i2);
     }
 
     public static class SsrcGroup {
@@ -94,7 +94,7 @@ public class NativeInstance {
 
     public native void onSignalingDataReceive(byte[] bArr);
 
-    public native void onStreamPartAvailable(long j, ByteBuffer byteBuffer, int i, long j2);
+    public native void onStreamPartAvailable(long j, ByteBuffer byteBuffer, int i, long j2, int i2, int i3);
 
     public native void prepareForStream();
 
@@ -311,12 +311,12 @@ public class NativeInstance {
         }
     }
 
-    private void onRequestBroadcastPart(long j, long j2) {
-        this.requestBroadcastPartCallback.run(j, j2);
+    private void onRequestBroadcastPart(long j, long j2, int i, int i2) {
+        this.requestBroadcastPartCallback.run(j, j2, i, i2);
     }
 
-    private void onCancelRequestBroadcastPart(long j) {
-        this.cancelRequestBroadcastPartCallback.run(j, 0);
+    private void onCancelRequestBroadcastPart(long j, int i, int i2) {
+        this.cancelRequestBroadcastPartCallback.run(j, 0, 0, 0);
     }
 
     private void onStop(Instance.FinalState finalState2) {

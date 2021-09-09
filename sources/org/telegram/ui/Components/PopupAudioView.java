@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -99,22 +100,32 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        int i;
+        int i2;
         if (this.currentMessageObject != null) {
             if (!this.wasLayout) {
                 requestLayout();
                 return;
             }
-            int i = AndroidUtilities.displaySize.y;
+            Point point = AndroidUtilities.displaySize;
+            int i3 = point.y;
+            int i4 = point.x;
             if (getParent() instanceof View) {
-                i = ((View) getParent()).getMeasuredHeight();
+                View view = (View) getParent();
+                int measuredWidth = view.getMeasuredWidth();
+                i = view.getMeasuredHeight();
+                i2 = measuredWidth;
+            } else {
+                i2 = i4;
+                i = i3;
             }
-            Theme.chat_msgInMediaDrawable.setTop((int) getY(), i, false, false);
+            Theme.chat_msgInMediaDrawable.setTop((int) getY(), i2, i, false, false);
             BaseCell.setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
             Theme.chat_msgInMediaDrawable.draw(canvas);
             if (this.currentMessageObject != null) {
                 canvas.save();
-                int i2 = this.buttonState;
-                if (i2 == 0 || i2 == 1) {
+                int i5 = this.buttonState;
+                if (i5 == 0 || i5 == 1) {
                     canvas.translate((float) this.seekBarX, (float) this.seekBarY);
                     this.seekBar.draw(canvas);
                 } else {

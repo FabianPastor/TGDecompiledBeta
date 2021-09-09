@@ -350,9 +350,6 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     BaseFragment baseFragment = ImageUpdater.this.parentFragment;
                     if (baseFragment != null && baseFragment.getParentActivity() != null && ImageUpdater.this.chatAttachAlert != null) {
                         if (i == 8 || i == 7) {
-                            if (i != 8) {
-                                ImageUpdater.this.chatAttachAlert.dismiss();
-                            }
                             HashMap<Object, Object> selectedPhotos = ImageUpdater.this.chatAttachAlert.getPhotoLayout().getSelectedPhotos();
                             ArrayList<Object> selectedPhotosOrder = ImageUpdater.this.chatAttachAlert.getPhotoLayout().getSelectedPhotosOrder();
                             ArrayList arrayList = new ArrayList();
@@ -407,6 +404,10 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                                 }
                             }
                             ImageUpdater.this.didSelectPhotos(arrayList);
+                            if (i != 8) {
+                                ImageUpdater.this.chatAttachAlert.dismiss();
+                                return;
+                            }
                             return;
                         }
                         ImageUpdater.this.chatAttachAlert.dismissWithButtonClick(i);
