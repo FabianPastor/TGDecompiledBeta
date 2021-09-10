@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda75 imple
     }
 
     public final void run() {
-        this.f$0.lambda$showPinnedProgress$83();
+        this.f$0.lambda$onFragmentCreate$8();
     }
 }

@@ -151,7 +151,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.statusDrawables[0] = new TypingDotsDrawable(false);
         this.statusDrawables[1] = new RecordStatusDrawable(false);
         this.statusDrawables[2] = new SendingFileDrawable(false);
-        this.statusDrawables[3] = new PlayingGameDrawable(false);
+        this.statusDrawables[3] = new PlayingGameDrawable(false, (Theme.ResourcesProvider) null);
         this.statusDrawables[4] = new RoundStatusDrawable(false);
         AnonymousClass1 r2 = new SizeNotifierFrameLayout(this) {
             /* access modifiers changed from: protected */
@@ -318,7 +318,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         r2.setBackgroundColor(-NUM);
         RelativeLayout relativeLayout = new RelativeLayout(this);
         r2.addView(relativeLayout, LayoutHelper.createFrame(-1, -1.0f));
-        AnonymousClass2 r9 = new RelativeLayout(this) {
+        AnonymousClass2 r10 = new RelativeLayout(this) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, i2);
@@ -343,8 +343,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 }
             }
         };
-        this.popupContainer = r9;
-        r9.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+        this.popupContainer = r10;
+        r10.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         relativeLayout.addView(this.popupContainer, LayoutHelper.createRelative(-1, 240, 12, 0, 12, 0, 13));
         ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
         if (chatActivityEnterView2 != null) {

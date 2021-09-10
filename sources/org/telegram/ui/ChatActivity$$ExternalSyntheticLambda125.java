@@ -1,23 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview;
+import org.telegram.tgnet.TLRPC$TL_messages_editMessage;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda125 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
     public final /* synthetic */ TLRPC$TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ TLRPC$TL_messages_getWebPagePreview f$3;
+    public final /* synthetic */ TLRPC$TL_messages_editMessage f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda125(ChatActivity chatActivity, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda125(ChatActivity chatActivity, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage) {
         this.f$0 = chatActivity;
         this.f$1 = tLRPC$TL_error;
-        this.f$2 = tLObject;
-        this.f$3 = tLRPC$TL_messages_getWebPagePreview;
+        this.f$2 = tLRPC$TL_messages_editMessage;
     }
 
     public final void run() {
-        this.f$0.lambda$searchLinks$73(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$processSelectedOption$131(this.f$1, this.f$2);
     }
 }

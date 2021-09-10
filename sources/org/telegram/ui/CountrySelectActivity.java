@@ -63,8 +63,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     public CountrySelectActivity(boolean z, ArrayList<Country> arrayList) {
-        if (!arrayList.isEmpty()) {
-            this.existingCountries = arrayList;
+        if (arrayList != null && !arrayList.isEmpty()) {
+            this.existingCountries = new ArrayList<>(arrayList);
         }
         this.needPhoneCode = z;
     }

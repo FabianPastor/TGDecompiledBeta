@@ -1,15 +1,19 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class ChatThemeBottomSheet$$ExternalSyntheticLambda4 implements Runnable {
-    public final /* synthetic */ ChatThemeBottomSheet f$0;
-    public final /* synthetic */ int f$1;
+import android.view.View;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.RecyclerListView;
 
-    public /* synthetic */ ChatThemeBottomSheet$$ExternalSyntheticLambda4(ChatThemeBottomSheet chatThemeBottomSheet, int i) {
+public final /* synthetic */ class ChatThemeBottomSheet$$ExternalSyntheticLambda4 implements RecyclerListView.OnItemClickListener {
+    public final /* synthetic */ ChatThemeBottomSheet f$0;
+    public final /* synthetic */ ChatActivity.ThemeDelegate f$1;
+
+    public /* synthetic */ ChatThemeBottomSheet$$ExternalSyntheticLambda4(ChatThemeBottomSheet chatThemeBottomSheet, ChatActivity.ThemeDelegate themeDelegate) {
         this.f$0 = chatThemeBottomSheet;
-        this.f$1 = i;
+        this.f$1 = themeDelegate;
     }
 
-    public final void run() {
-        this.f$0.lambda$onDataLoaded$5(this.f$1);
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$new$1(this.f$1, view, i);
     }
 }

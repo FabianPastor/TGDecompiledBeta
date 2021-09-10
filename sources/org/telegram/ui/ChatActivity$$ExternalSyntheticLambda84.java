@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda84 imple
     }
 
     public final void run() {
-        this.f$0.lambda$onEditTextDialogClose$61();
+        this.f$0.lambda$checkListViewPaddings$105();
     }
 }

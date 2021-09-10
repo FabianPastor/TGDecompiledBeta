@@ -1008,6 +1008,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     /* access modifiers changed from: private */
     public boolean onDonePressed(boolean z) {
         String str;
+        String str2;
         if (this.selectedContacts.size() == 0 && this.chatType != 2) {
             return false;
         }
@@ -1083,7 +1084,15 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
             TLRPC$Chat chat = messagesController.getChat(Long.valueOf(j));
             if (this.selectedContacts.size() > 5) {
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", NUM, LocaleController.formatPluralString("Members", this.selectedContacts.size()), chat.title)));
+                Object[] objArr = new Object[2];
+                objArr[0] = LocaleController.formatPluralString("Members", this.selectedContacts.size());
+                if (chat == null) {
+                    str2 = "";
+                } else {
+                    str2 = chat.title;
+                }
+                objArr[1] = str2;
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", NUM, objArr)));
                 String format = String.format("%d", new Object[]{Integer.valueOf(this.selectedContacts.size())});
                 int indexOf = TextUtils.indexOf(spannableStringBuilder, format);
                 if (indexOf >= 0) {
@@ -1091,15 +1100,15 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 }
                 builder.setMessage(spannableStringBuilder);
             } else {
-                Object[] objArr = new Object[2];
-                objArr[0] = sb;
+                Object[] objArr2 = new Object[2];
+                objArr2[0] = sb;
                 if (chat == null) {
                     str = "";
                 } else {
                     str = chat.title;
                 }
-                objArr[1] = str;
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", NUM, objArr)));
+                objArr2[1] = str;
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", NUM, objArr2)));
             }
             CheckBoxCell[] checkBoxCellArr = new CheckBoxCell[1];
             if (!ChatObject.isChannel(chat)) {
@@ -1378,7 +1387,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r1 = 8
                 r4.setVisibility(r1)
                 android.widget.TextView r4 = r5.title
-                r1 = 2131626393(0x7f0e0999, float:1.888002E38)
+                r1 = 2131626394(0x7f0e099a, float:1.8880023E38)
                 java.lang.String r2 = "NoContacts"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r4.setText(r1)

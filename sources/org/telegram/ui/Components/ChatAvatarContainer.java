@@ -147,12 +147,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 setOnClickListener(new ChatAvatarContainer$$ExternalSyntheticLambda1(this));
             }
             TLRPC$Chat currentChat = this.parentFragment.getCurrentChat();
-            this.statusDrawables[0] = new TypingDotsDrawable(false);
-            this.statusDrawables[1] = new RecordStatusDrawable(false);
-            this.statusDrawables[2] = new SendingFileDrawable(false);
-            this.statusDrawables[3] = new PlayingGameDrawable(false);
-            this.statusDrawables[4] = new RoundStatusDrawable(false);
-            this.statusDrawables[5] = new ChoosingStickerStatusDrawable(false);
+            this.statusDrawables[0] = new TypingDotsDrawable(true);
+            this.statusDrawables[1] = new RecordStatusDrawable(true);
+            this.statusDrawables[2] = new SendingFileDrawable(true);
+            this.statusDrawables[3] = new PlayingGameDrawable(false, resourcesProvider2);
+            this.statusDrawables[4] = new RoundStatusDrawable(true);
+            this.statusDrawables[5] = new ChoosingStickerStatusDrawable(true);
             int i = 0;
             while (true) {
                 StatusDrawable[] statusDrawableArr = this.statusDrawables;
@@ -500,6 +500,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     this.subtitleTextView.setLeftDrawable((Drawable) null);
                 } else {
                     this.subtitleTextView.replaceTextWithDrawable((Drawable) null, (String) null);
+                    this.statusDrawables[intValue].setColor(getThemedColor("chat_status"));
                     this.subtitleTextView.setLeftDrawable((Drawable) this.statusDrawables[intValue]);
                 }
                 while (true) {

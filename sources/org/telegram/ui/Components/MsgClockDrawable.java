@@ -6,10 +6,12 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 
 public class MsgClockDrawable extends Drawable {
     private int alpha = 255;
+    private int color;
     private int colorAlpha = 255;
     private Drawable.ConstantState constantState;
     private Paint paint;
@@ -46,8 +48,12 @@ public class MsgClockDrawable extends Drawable {
     }
 
     public void setColor(int i) {
-        this.colorAlpha = Color.alpha(i);
-        this.paint.setColor(i);
+        if (i != this.color) {
+            int alpha2 = Color.alpha(i);
+            this.colorAlpha = alpha2;
+            this.paint.setColor(ColorUtils.setAlphaComponent(i, (int) (((float) this.alpha) * (((float) alpha2) / 255.0f))));
+        }
+        this.color = i;
     }
 
     public int getIntrinsicHeight() {

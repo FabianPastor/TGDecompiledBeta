@@ -4,16 +4,14 @@ import android.content.DialogInterface;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda24 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ boolean[] f$2;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda24(ChatActivity chatActivity, int i, boolean[] zArr) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda24(ChatActivity chatActivity, String str) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
-        this.f$2 = zArr;
+        this.f$1 = str;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$processSelectedOption$125(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$didPressMessageUrl$162(this.f$1, dialogInterface, i);
     }
 }

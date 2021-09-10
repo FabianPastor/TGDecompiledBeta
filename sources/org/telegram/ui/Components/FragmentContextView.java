@@ -794,8 +794,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private void updatePlaybackButton() {
         if (this.playbackSpeedButton != null) {
             float playbackSpeed = MediaController.getInstance().getPlaybackSpeed(this.isMusic);
-            float f = playbackSpeed - 1.0f;
-            String str = Math.abs(f) > 0.001f ? "inappPlayerPlayPause" : "inappPlayerClose";
             float fastPlaybackSpeed = MediaController.getInstance().getFastPlaybackSpeed(this.isMusic);
             if (Math.abs(fastPlaybackSpeed - 1.8f) < 0.001f) {
                 this.playbackSpeedButton.setIcon(NUM);
@@ -804,16 +802,23 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             } else {
                 this.playbackSpeedButton.setIcon(NUM);
             }
-            this.playbackSpeedButton.setIconColor(getThemedColor(str));
-            if (Build.VERSION.SDK_INT >= 21) {
-                this.playbackSpeedButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(str) & NUM, 1, AndroidUtilities.dp(14.0f)));
-            }
+            updateColors();
             for (int i = 0; i < this.speedItems.length; i++) {
-                if ((i != 0 || Math.abs(playbackSpeed - 0.5f) >= 0.001f) && ((i != 1 || Math.abs(f) >= 0.001f) && ((i != 2 || Math.abs(playbackSpeed - 1.5f) >= 0.001f) && (i != 3 || Math.abs(playbackSpeed - 1.8f) >= 0.001f)))) {
+                if ((i != 0 || Math.abs(playbackSpeed - 0.5f) >= 0.001f) && ((i != 1 || Math.abs(playbackSpeed - 1.0f) >= 0.001f) && ((i != 2 || Math.abs(playbackSpeed - 1.5f) >= 0.001f) && (i != 3 || Math.abs(playbackSpeed - 1.8f) >= 0.001f)))) {
                     this.speedItems[i].setColors(getThemedColor("actionBarDefaultSubmenuItem"), getThemedColor("actionBarDefaultSubmenuItemIcon"));
                 } else {
                     this.speedItems[i].setColors(getThemedColor("inappPlayerPlayPause"), getThemedColor("inappPlayerPlayPause"));
                 }
+            }
+        }
+    }
+
+    public void updateColors() {
+        if (this.playbackSpeedButton != null) {
+            String str = Math.abs(MediaController.getInstance().getPlaybackSpeed(this.isMusic) - 1.0f) > 0.001f ? "inappPlayerPlayPause" : "inappPlayerClose";
+            this.playbackSpeedButton.setIconColor(getThemedColor(str));
+            if (Build.VERSION.SDK_INT >= 21) {
+                this.playbackSpeedButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(str) & NUM, 1, AndroidUtilities.dp(14.0f)));
             }
         }
     }
@@ -2147,14 +2152,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x020a
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628285(0x7f0e10fd, float:1.8883858E38)
+            r9 = 2131628293(0x7f0e1105, float:1.8883875E38)
             java.lang.String r11 = "VoipChannelScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0218
         L_0x020a:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628392(0x7f0e1168, float:1.8884075E38)
+            r9 = 2131628400(0x7f0e1170, float:1.8884092E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2178,14 +2183,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x024e
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628298(0x7f0e110a, float:1.8883885E38)
+            r9 = 2131628306(0x7f0e1112, float:1.88839E38)
             java.lang.String r11 = "VoipChannelVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x025c
         L_0x024e:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628424(0x7f0e1188, float:1.888414E38)
+            r9 = 2131628432(0x7f0e1190, float:1.8884157E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2194,7 +2199,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r4 = r4.participants_count
             if (r4 != 0) goto L_0x0271
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r4 = r0.subtitleTextView
-            r6 = 2131626210(0x7f0e08e2, float:1.887965E38)
+            r6 = 2131626211(0x7f0e08e3, float:1.8879652E38)
             java.lang.String r9 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r4.setText(r6, r5)

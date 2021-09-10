@@ -19,7 +19,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_setChatTheme;
 import org.telegram.ui.ActionBar.ChatTheme;
 
 public class ChatThemeController extends BaseController {
-    private static volatile List<ChatTheme> allChatThemes = null;
+    private static List<ChatTheme> allChatThemes = null;
     private static volatile DispatchQueue chatThemeQueue = new DispatchQueue("stageQueue");
     private static final ChatThemeController[] instances = new ChatThemeController[3];
     private static volatile long lastReloadTimeMs = 0;
@@ -56,7 +56,8 @@ public class ChatThemeController extends BaseController {
             init();
         }
         boolean z2 = System.currentTimeMillis() - lastReloadTimeMs > 7200000;
-        if (allChatThemes == null || allChatThemes.isEmpty() || z2) {
+        List<ChatTheme> list = allChatThemes;
+        if (list == null || list.isEmpty() || z2) {
             TLRPC$TL_account_getChatThemes tLRPC$TL_account_getChatThemes = new TLRPC$TL_account_getChatThemes();
             tLRPC$TL_account_getChatThemes.hash = themesHash;
             ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_account_getChatThemes, new ChatThemeController$$ExternalSyntheticLambda5(resultCallback, z));
@@ -67,7 +68,7 @@ public class ChatThemeController extends BaseController {
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:13:0x00a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:23:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static /* synthetic */ void lambda$requestAllChatThemes$2(org.telegram.tgnet.TLObject r7, org.telegram.tgnet.ResultCallback r8, org.telegram.tgnet.TLRPC$TL_error r9, boolean r10) {
         /*
@@ -142,30 +143,33 @@ public class ChatThemeController extends BaseController {
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
             r7 = 1
         L_0x00a4:
-            if (r7 != 0) goto L_0x00d2
-            java.util.ArrayList r7 = new java.util.ArrayList
-            r7.<init>(r0)
-            allChatThemes = r7
-            if (r10 == 0) goto L_0x00b6
+            if (r7 != 0) goto L_0x00cb
+            if (r10 == 0) goto L_0x00af
             org.telegram.ui.ActionBar.ChatTheme r7 = org.telegram.ui.ActionBar.ChatTheme.getDefault()
             r0.add(r1, r7)
-        L_0x00b6:
+        L_0x00af:
             java.util.Iterator r7 = r0.iterator()
-        L_0x00ba:
+        L_0x00b3:
             boolean r9 = r7.hasNext()
-            if (r9 == 0) goto L_0x00ca
+            if (r9 == 0) goto L_0x00c3
             java.lang.Object r9 = r7.next()
             org.telegram.ui.ActionBar.ChatTheme r9 = (org.telegram.ui.ActionBar.ChatTheme) r9
             r9.initColors()
-            goto L_0x00ba
-        L_0x00ca:
+            goto L_0x00b3
+        L_0x00c3:
             org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda0 r7 = new org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda0
-            r7.<init>(r8, r0)
+            r7.<init>(r0, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
-        L_0x00d2:
+        L_0x00cb:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatThemeController.lambda$requestAllChatThemes$2(org.telegram.tgnet.TLObject, org.telegram.tgnet.ResultCallback, org.telegram.tgnet.TLRPC$TL_error, boolean):void");
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$requestAllChatThemes$1(List list, ResultCallback resultCallback) {
+        allChatThemes = new ArrayList(list);
+        resultCallback.onComplete(list);
     }
 
     /* access modifiers changed from: private */
@@ -262,7 +266,7 @@ public class ChatThemeController extends BaseController {
                     str = "";
                 }
                 tLRPC$TL_messages_setChatTheme.emoticon = str;
-                tLRPC$TL_messages_setChatTheme.peer = getMessagesController().getInputPeer((long) ((int) j));
+                tLRPC$TL_messages_setChatTheme.peer = getMessagesController().getInputPeer(j);
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_setChatTheme, (RequestDelegate) null);
             }
         }

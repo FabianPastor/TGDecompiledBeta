@@ -17,6 +17,7 @@ public class PlayingGameDrawable extends StatusDrawable {
     private Paint paint = new Paint(1);
     private float progress;
     private RectF rect = new RectF();
+    Theme.ResourcesProvider resourcesProvider;
     private boolean started = false;
 
     public int getOpacity() {
@@ -32,8 +33,9 @@ public class PlayingGameDrawable extends StatusDrawable {
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
-    public PlayingGameDrawable(boolean z) {
+    public PlayingGameDrawable(boolean z, Theme.ResourcesProvider resourcesProvider2) {
         this.isDialogScreen = z;
+        this.resourcesProvider = resourcesProvider2;
     }
 
     public void setIsChat(boolean z) {
@@ -76,7 +78,7 @@ public class PlayingGameDrawable extends StatusDrawable {
             intrinsicHeight += AndroidUtilities.dp(1.0f);
         }
         int i = intrinsicHeight;
-        this.paint.setColor(Theme.getColor(this.isDialogScreen ? "chats_actionMessage" : "chat_status"));
+        this.paint.setColor(Theme.getColor(this.isDialogScreen ? "chats_actionMessage" : "chat_status", this.resourcesProvider));
         this.rect.set(0.0f, (float) i, (float) dp, (float) (i + dp));
         float f = this.progress;
         int i2 = (int) (f < 0.5f ? (1.0f - (f / 0.5f)) * 35.0f : ((f - 0.5f) * 35.0f) / 0.5f);

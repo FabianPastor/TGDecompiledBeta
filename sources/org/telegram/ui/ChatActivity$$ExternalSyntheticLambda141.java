@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda141 impl
     }
 
     public final void run(int i) {
-        this.f$0.lambda$createView$19(i);
+        this.f$0.jumpToDate(i);
     }
 }

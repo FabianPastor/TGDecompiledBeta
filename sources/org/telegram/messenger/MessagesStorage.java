@@ -270,7 +270,7 @@ public class MessagesStorage extends BaseController {
 
     public MessagesStorage(int i) {
         super(i);
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda11(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda9(this));
     }
 
     /* access modifiers changed from: private */
@@ -514,11 +514,17 @@ public class MessagesStorage extends BaseController {
     }
 
     private void updateDbToLastVersion(int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda25(this, i));
+        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda13(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda26(this, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateDbToLastVersion$1(int i) {
+    public /* synthetic */ void lambda$updateDbToLastVersion$1() {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.onDatabaseMigration, Boolean.TRUE);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateDbToLastVersion$3(int i) {
         SQLiteCursor sQLiteCursor;
         int i2;
         NativeByteBuffer nativeByteBuffer;
@@ -533,34 +539,35 @@ public class MessagesStorage extends BaseController {
         SQLiteCursor sQLiteCursor5;
         SQLiteCursor sQLiteCursor6;
         SQLiteCursor sQLiteCursor7;
+        MessagesStorage messagesStorage = this;
         int i6 = 4;
         int i7 = i;
         if (i7 < 4) {
             try {
-                this.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
-                this.database.executeFast("DROP INDEX IF EXISTS read_state_out_idx_messages;").stepThis().dispose();
-                this.database.executeFast("DROP INDEX IF EXISTS ttl_idx_messages;").stepThis().dispose();
-                this.database.executeFast("DROP INDEX IF EXISTS date_idx_messages;").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages ON messages(mid, out);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages ON messages(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages ON messages(uid, date, mid);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE IF NOT EXISTS user_contacts_v6(uid INTEGER PRIMARY KEY, fname TEXT, sname TEXT)").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v6(uid INTEGER, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (uid, phone))").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v6(sphone, deleted);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms ON randoms(mid);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE IF NOT EXISTS sent_files_v2(uid TEXT, type INTEGER, data BLOB, PRIMARY KEY (uid, type))").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE IF NOT EXISTS download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, PRIMARY KEY (uid, type));").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
-                this.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid < 0 AND send_state = 1").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
+                messagesStorage.database.executeFast("DROP INDEX IF EXISTS read_state_out_idx_messages;").stepThis().dispose();
+                messagesStorage.database.executeFast("DROP INDEX IF EXISTS ttl_idx_messages;").stepThis().dispose();
+                messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_messages;").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages ON messages(mid, out);").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages ON messages(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages ON messages(uid, date, mid);").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_contacts_v6(uid INTEGER PRIMARY KEY, fname TEXT, sname TEXT)").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v6(uid INTEGER, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (uid, phone))").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v6(sphone, deleted);").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms ON randoms(mid);").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS sent_files_v2(uid TEXT, type INTEGER, data BLOB, PRIMARY KEY (uid, type))").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, PRIMARY KEY (uid, type));").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
+                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
+                messagesStorage.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid < 0 AND send_state = 1").stepThis().dispose();
                 fixNotificationSettings();
-                this.database.executeFast("PRAGMA user_version = 4").stepThis().dispose();
+                messagesStorage.database.executeFast("PRAGMA user_version = 4").stepThis().dispose();
                 i7 = 4;
             } catch (Exception e) {
                 e = e;
                 FileLog.e((Throwable) e);
-                return;
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda19(messagesStorage));
             }
         }
         int i8 = 6;
@@ -568,11 +575,11 @@ public class MessagesStorage extends BaseController {
         int i10 = 1;
         int i11 = 0;
         if (i7 == 4) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v2(mid INTEGER PRIMARY KEY, date INTEGER)").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v2 ON enc_tasks_v2(date);").stepThis().dispose();
-            this.database.beginTransaction();
-            SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT date, data FROM enc_tasks WHERE 1", new Object[0]);
-            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v2(mid INTEGER PRIMARY KEY, date INTEGER)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v2 ON enc_tasks_v2(date);").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
+            SQLiteCursor queryFinalized = messagesStorage.database.queryFinalized("SELECT date, data FROM enc_tasks WHERE 1", new Object[0]);
+            SQLitePreparedStatement executeFast = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
             if (queryFinalized.next()) {
                 int intValue = queryFinalized.intValue(0);
                 NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(1);
@@ -589,96 +596,96 @@ public class MessagesStorage extends BaseController {
             }
             executeFast.dispose();
             queryFinalized.dispose();
-            this.database.commitTransaction();
-            this.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS enc_tasks;").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE messages ADD COLUMN media INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 6").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS enc_tasks;").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN media INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 6").stepThis().dispose();
             i7 = 6;
         }
         if (i7 == 6) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS messages_seq(mid INTEGER PRIMARY KEY, seq_in INTEGER, seq_out INTEGER);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS seq_idx_messages_seq ON messages_seq(seq_in, seq_out);").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN layer INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN seq_in INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN seq_out INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 7").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS messages_seq(mid INTEGER PRIMARY KEY, seq_in INTEGER, seq_out INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS seq_idx_messages_seq ON messages_seq(seq_in, seq_out);").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN layer INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN seq_in INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN seq_out INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 7").stepThis().dispose();
             i7 = 7;
         }
         if (i7 == 7 || i7 == 8 || i7 == 9) {
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN use_count INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN exchange_id INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN key_date INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN fprint INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN fauthkey BLOB default NULL").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN khash BLOB default NULL").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 10").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN use_count INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN exchange_id INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN key_date INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN fprint INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN fauthkey BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN khash BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 10").stepThis().dispose();
             i7 = 10;
         }
         if (i7 == 10) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS web_recent_v3(id TEXT, type INTEGER, image_url TEXT, thumb_url TEXT, local_url TEXT, width INTEGER, height INTEGER, size INTEGER, date INTEGER, PRIMARY KEY (id, type));").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 11").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS web_recent_v3(id TEXT, type INTEGER, image_url TEXT, thumb_url TEXT, local_url TEXT, width INTEGER, height INTEGER, size INTEGER, date INTEGER, PRIMARY KEY (id, type));").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 11").stepThis().dispose();
             i7 = 11;
         }
         if (i7 == 11 || i7 == 12) {
-            this.database.executeFast("DROP INDEX IF EXISTS uid_mid_idx_media;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS mid_idx_media;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_idx_media;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS media;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS media_counts;").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS media_v2(mid INTEGER PRIMARY KEY, uid INTEGER, date INTEGER, type INTEGER, data BLOB)").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS media_counts_v2(uid INTEGER, type INTEGER, count INTEGER, PRIMARY KEY(uid, type))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media ON media_v2(uid, mid, type, date);").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS keyvalue(id TEXT PRIMARY KEY, value TEXT)").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 13").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_idx_media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_idx_media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_idx_media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS media_counts;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_v2(mid INTEGER PRIMARY KEY, uid INTEGER, date INTEGER, type INTEGER, data BLOB)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_counts_v2(uid INTEGER, type INTEGER, count INTEGER, PRIMARY KEY(uid, type))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media ON media_v2(uid, mid, type, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS keyvalue(id TEXT PRIMARY KEY, value TEXT)").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 13").stepThis().dispose();
             i7 = 13;
         }
         if (i7 == 13) {
-            this.database.executeFast("ALTER TABLE messages ADD COLUMN replydata BLOB default NULL").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 14").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN replydata BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 14").stepThis().dispose();
             i7 = 14;
         }
         if (i7 == 14) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS hashtag_recent_v2(id TEXT PRIMARY KEY, date INTEGER);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 15").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS hashtag_recent_v2(id TEXT PRIMARY KEY, date INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 15").stepThis().dispose();
             i7 = 15;
         }
         if (i7 == 15) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS webpage_pending(id INTEGER, mid INTEGER, PRIMARY KEY (id, mid));").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 16").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS webpage_pending(id INTEGER, mid INTEGER, PRIMARY KEY (id, mid));").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 16").stepThis().dispose();
             i7 = 16;
         }
         if (i7 == 16) {
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN inbox_max INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN outbox_max INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 17").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN inbox_max INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN outbox_max INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 17").stepThis().dispose();
             i7 = 17;
         }
         if (i7 == 17) {
-            this.database.executeFast("PRAGMA user_version = 18").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 18").stepThis().dispose();
             i7 = 18;
         }
         if (i7 == 18) {
-            this.database.executeFast("DROP TABLE IF EXISTS stickers;").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 19").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS stickers;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 19").stepThis().dispose();
             i7 = 19;
         }
         if (i7 == 19) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS bot_keyboard(uid INTEGER PRIMARY KEY, mid INTEGER, info BLOB)").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid ON bot_keyboard(mid);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 20").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS bot_keyboard(uid INTEGER PRIMARY KEY, mid INTEGER, info BLOB)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid ON bot_keyboard(mid);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 20").stepThis().dispose();
             i7 = 20;
         }
         if (i7 == 20) {
-            this.database.executeFast("CREATE TABLE search_recent(did INTEGER PRIMARY KEY, date INTEGER);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 21").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE search_recent(did INTEGER PRIMARY KEY, date INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 21").stepThis().dispose();
             i7 = 21;
         }
         if (i7 == 21) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS chat_settings_v2(uid INTEGER PRIMARY KEY, info BLOB)").stepThis().dispose();
-            SQLiteCursor queryFinalized2 = this.database.queryFinalized("SELECT uid, participants FROM chat_settings WHERE uid < 0", new Object[0]);
-            SQLitePreparedStatement executeFast2 = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?)");
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_settings_v2(uid INTEGER PRIMARY KEY, info BLOB)").stepThis().dispose();
+            SQLiteCursor queryFinalized2 = messagesStorage.database.queryFinalized("SELECT uid, participants FROM chat_settings WHERE uid < 0", new Object[0]);
+            SQLitePreparedStatement executeFast2 = messagesStorage.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?)");
             while (queryFinalized2.next()) {
                 long intValue2 = (long) queryFinalized2.intValue(0);
                 NativeByteBuffer byteBufferValue2 = queryFinalized2.byteBufferValue(1);
@@ -704,323 +711,323 @@ public class MessagesStorage extends BaseController {
             }
             executeFast2.dispose();
             queryFinalized2.dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS chat_settings;").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN last_mid_i INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN unread_count_i INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN pts INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN date_i INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS last_mid_i_idx_dialogs ON dialogs(last_mid_i);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_i_idx_dialogs ON dialogs(unread_count_i);").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE messages ADD COLUMN imp INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS messages_holes(uid INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, start));").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 22").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS chat_settings;").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN last_mid_i INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN unread_count_i INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN pts INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN date_i INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS last_mid_i_idx_dialogs ON dialogs(last_mid_i);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_i_idx_dialogs ON dialogs(unread_count_i);").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN imp INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS messages_holes(uid INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, start));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 22").stepThis().dispose();
             i7 = 22;
         }
         if (i7 == 22) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS media_holes_v2(uid INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, type, start));").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_media_holes_v2 ON media_holes_v2(uid, type, end);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 23").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_holes_v2(uid INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, type, start));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_media_holes_v2 ON media_holes_v2(uid, type, end);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 23").stepThis().dispose();
             i7 = 23;
         }
         if (i7 == 23 || i7 == 24) {
-            this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid != 0 AND type >= 0 AND start IN (0, 1)").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 25").stepThis().dispose();
+            messagesStorage.database.executeFast("DELETE FROM media_holes_v2 WHERE uid != 0 AND type >= 0 AND start IN (0, 1)").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 25").stepThis().dispose();
             i7 = 25;
         }
         if (i7 == 25 || i7 == 26) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 27").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 27").stepThis().dispose();
             i7 = 27;
         }
         if (i7 == 27) {
-            this.database.executeFast("ALTER TABLE web_recent_v3 ADD COLUMN document BLOB default NULL").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 28").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE web_recent_v3 ADD COLUMN document BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 28").stepThis().dispose();
             i7 = 28;
         }
         if (i7 == 28 || i7 == 29) {
-            this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
-            this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 30").stepThis().dispose();
+            messagesStorage.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 30").stepThis().dispose();
             i7 = 30;
         }
         if (i7 == 30) {
-            this.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS chat_settings_pinned_idx ON chat_settings_v2(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS users_data(uid INTEGER PRIMARY KEY, about TEXT)").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 31").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS chat_settings_pinned_idx ON chat_settings_v2(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS users_data(uid INTEGER PRIMARY KEY, about TEXT)").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 31").stepThis().dispose();
             i7 = 31;
         }
         if (i7 == 31) {
-            this.database.executeFast("DROP TABLE IF EXISTS bot_recent;").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS chat_hints(did INTEGER, type INTEGER, rating REAL, date INTEGER, PRIMARY KEY(did, type))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS chat_hints_rating_idx ON chat_hints(rating);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 32").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS bot_recent;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_hints(did INTEGER, type INTEGER, rating REAL, date INTEGER, PRIMARY KEY(did, type))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS chat_hints_rating_idx ON chat_hints(rating);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 32").stepThis().dispose();
             i7 = 32;
         }
         if (i7 == 32) {
-            this.database.executeFast("DROP INDEX IF EXISTS uid_mid_idx_imp_messages;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_imp_idx_messages;").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 33").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_idx_imp_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_imp_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 33").stepThis().dispose();
             i7 = 33;
         }
         if (i7 == 33) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 34").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 34").stepThis().dispose();
             i7 = 34;
         }
         if (i7 == 34) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 35").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 35").stepThis().dispose();
             i7 = 35;
         }
         if (i7 == 35) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 36").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 36").stepThis().dispose();
             i7 = 36;
         }
         if (i7 == 36) {
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN in_seq_no INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 37").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN in_seq_no INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 37").stepThis().dispose();
             i7 = 37;
         }
         if (i7 == 37) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS botcache(id TEXT PRIMARY KEY, date INTEGER, data BLOB)").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS botcache_date_idx ON botcache(date);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 38").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS botcache(id TEXT PRIMARY KEY, date INTEGER, data BLOB)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS botcache_date_idx ON botcache(date);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 38").stepThis().dispose();
             i7 = 38;
         }
         if (i7 == 38) {
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
             i7 = 39;
         }
         if (i7 == 39) {
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN admin_id INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 40").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN admin_id INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 40").stepThis().dispose();
             i7 = 40;
         }
         if (i7 == 40) {
             fixNotificationSettings();
-            this.database.executeFast("PRAGMA user_version = 41").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 41").stepThis().dispose();
             i7 = 41;
         }
         if (i7 == 41) {
-            this.database.executeFast("ALTER TABLE messages ADD COLUMN mention INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE user_contacts_v6 ADD COLUMN imported INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages ON messages(uid, mention, read_state);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 42").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN mention INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE user_contacts_v6 ADD COLUMN imported INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages ON messages(uid, mention, read_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 42").stepThis().dispose();
             i7 = 42;
         }
         if (i7 == 42) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 43").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 43").stepThis().dispose();
             i7 = 43;
         }
         if (i7 == 43) {
-            this.database.executeFast("PRAGMA user_version = 44").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 44").stepThis().dispose();
             i7 = 44;
         }
         if (i7 == 44) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS user_contacts_v7(key TEXT PRIMARY KEY, uid INTEGER, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v7(key TEXT, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (key, phone))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v7(sphone, deleted);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 45").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_contacts_v7(key TEXT PRIMARY KEY, uid INTEGER, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v7(key TEXT, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (key, phone))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v7(sphone, deleted);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 45").stepThis().dispose();
             i7 = 45;
         }
         if (i7 == 45) {
-            this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN mtproto_seq INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 46").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN mtproto_seq INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 46").stepThis().dispose();
             i7 = 46;
         }
         if (i7 == 46) {
-            this.database.executeFast("DELETE FROM botcache WHERE 1").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 47").stepThis().dispose();
+            messagesStorage.database.executeFast("DELETE FROM botcache WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 47").stepThis().dispose();
             i7 = 47;
         }
         if (i7 == 47) {
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN flags INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 48").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN flags INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 48").stepThis().dispose();
             i7 = 48;
         }
         if (i7 == 48) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS unread_push_messages(uid INTEGER, mid INTEGER, random INTEGER, date INTEGER, data BLOB, fm TEXT, name TEXT, uname TEXT, flags INTEGER, PRIMARY KEY(uid, mid))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_date ON unread_push_messages(date);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 49").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS unread_push_messages(uid INTEGER, mid INTEGER, random INTEGER, date INTEGER, data BLOB, fm TEXT, name TEXT, uname TEXT, flags INTEGER, PRIMARY KEY(uid, mid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_date ON unread_push_messages(date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 49").stepThis().dispose();
             i7 = 49;
         }
         if (i7 == 49) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS user_settings(uid INTEGER PRIMARY KEY, info BLOB, pinned INTEGER)").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS user_settings_pinned_idx ON user_settings(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 50").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_settings(uid INTEGER PRIMARY KEY, info BLOB, pinned INTEGER)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS user_settings_pinned_idx ON user_settings(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 50").stepThis().dispose();
             i7 = 50;
         }
         if (i7 == 50) {
-            this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE sent_files_v2 ADD COLUMN parent TEXT").stepThis().dispose();
-            this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE download_queue ADD COLUMN parent TEXT").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 51").stepThis().dispose();
+            messagesStorage.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE sent_files_v2 ADD COLUMN parent TEXT").stepThis().dispose();
+            messagesStorage.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE download_queue ADD COLUMN parent TEXT").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 51").stepThis().dispose();
             i7 = 51;
         }
         if (i7 == 51) {
-            this.database.executeFast("ALTER TABLE media_counts_v2 ADD COLUMN old INTEGER").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 52").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE media_counts_v2 ADD COLUMN old INTEGER").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 52").stepThis().dispose();
             i7 = 52;
         }
         if (i7 == 52) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls_v2(id);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 53").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls_v2(id);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 53").stepThis().dispose();
             i7 = 53;
         }
         if (i7 == 53) {
-            this.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN online INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 54").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN online INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 54").stepThis().dispose();
             i7 = 54;
         }
         if (i7 == 54) {
-            this.database.executeFast("DROP TABLE IF EXISTS wallpapers;").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 55").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS wallpapers;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 55").stepThis().dispose();
             i7 = 55;
         }
         if (i7 == 55) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS wallpapers2(uid INTEGER PRIMARY KEY, data BLOB, num INTEGER)").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS wallpapers_num ON wallpapers2(num);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 56").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS wallpapers2(uid INTEGER PRIMARY KEY, data BLOB, num INTEGER)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS wallpapers_num ON wallpapers2(num);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 56").stepThis().dispose();
             i7 = 56;
         }
         if (i7 == 56 || i7 == 57) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS emoji_keywords_v2(lang TEXT, keyword TEXT, emoji TEXT, PRIMARY KEY(lang, keyword, emoji));").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS emoji_keywords_info_v2(lang TEXT PRIMARY KEY, alias TEXT, version INTEGER);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 58").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS emoji_keywords_v2(lang TEXT, keyword TEXT, emoji TEXT, PRIMARY KEY(lang, keyword, emoji));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS emoji_keywords_info_v2(lang TEXT PRIMARY KEY, alias TEXT, version INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 58").stepThis().dispose();
             i7 = 58;
         }
         if (i7 == 58) {
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS emoji_keywords_v2_keyword ON emoji_keywords_v2(keyword);").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE emoji_keywords_info_v2 ADD COLUMN date INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 59").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS emoji_keywords_v2_keyword ON emoji_keywords_v2(keyword);").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE emoji_keywords_info_v2 ADD COLUMN date INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 59").stepThis().dispose();
             i7 = 59;
         }
         if (i7 == 59) {
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN folder_id INTEGER default 0").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE dialogs ADD COLUMN data BLOB default NULL").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS folder_id_idx_dialogs ON dialogs(folder_id);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 60").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN folder_id INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN data BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS folder_id_idx_dialogs ON dialogs(folder_id);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 60").stepThis().dispose();
             i7 = 60;
         }
         if (i7 == 60) {
-            this.database.executeFast("DROP TABLE IF EXISTS channel_admins;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS blocked_users;").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 61").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS channel_admins;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS blocked_users;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 61").stepThis().dispose();
             i7 = 61;
         }
         if (i7 == 61) {
-            this.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages;").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages2 ON messages(mid, send_state, date);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 62").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages2 ON messages(mid, send_state, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 62").stepThis().dispose();
             i7 = 62;
         }
         if (i7 == 62) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS scheduled_messages(mid INTEGER PRIMARY KEY, uid INTEGER, send_state INTEGER, date INTEGER, data BLOB, ttl INTEGER, replydata BLOB)").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages ON scheduled_messages(mid, send_state, date);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages ON scheduled_messages(uid, date);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 63").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS scheduled_messages(mid INTEGER PRIMARY KEY, uid INTEGER, send_state INTEGER, date INTEGER, data BLOB, ttl INTEGER, replydata BLOB)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages ON scheduled_messages(mid, send_state, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages ON scheduled_messages(uid, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 63").stepThis().dispose();
             i7 = 63;
         }
         if (i7 == 63) {
-            this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 64").stepThis().dispose();
+            messagesStorage.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 64").stepThis().dispose();
             i7 = 64;
         }
         if (i7 == 64) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_filter(id INTEGER PRIMARY KEY, ord INTEGER, unread_count INTEGER, flags INTEGER, title TEXT)").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_filter_ep(id INTEGER, peer INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 65").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_filter(id INTEGER PRIMARY KEY, ord INTEGER, unread_count INTEGER, flags INTEGER, title TEXT)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_filter_ep(id INTEGER, peer INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 65").stepThis().dispose();
             i7 = 65;
         }
         if (i7 == 65) {
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS flags_idx_dialogs ON dialogs(flags);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 66").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS flags_idx_dialogs ON dialogs(flags);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 66").stepThis().dispose();
             i7 = 66;
         }
         if (i7 == 66) {
-            this.database.executeFast("CREATE TABLE dialog_filter_pin_v2(id INTEGER, peer INTEGER, pin INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 67").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE dialog_filter_pin_v2(id INTEGER, peer INTEGER, pin INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 67").stepThis().dispose();
             i7 = 67;
         }
         if (i7 == 67) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_dice(emoji TEXT PRIMARY KEY, data BLOB, date INTEGER);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 68").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_dice(emoji TEXT PRIMARY KEY, data BLOB, date INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 68").stepThis().dispose();
             i7 = 68;
         }
         if (i7 == 68) {
-            executeNoException("ALTER TABLE messages ADD COLUMN forwards INTEGER default 0");
-            this.database.executeFast("PRAGMA user_version = 69").stepThis().dispose();
+            messagesStorage.executeNoException("ALTER TABLE messages ADD COLUMN forwards INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 69").stepThis().dispose();
             i7 = 69;
         }
         if (i7 == 69) {
-            executeNoException("ALTER TABLE messages ADD COLUMN replies_data BLOB default NULL");
-            executeNoException("ALTER TABLE messages ADD COLUMN thread_reply_id INTEGER default 0");
-            this.database.executeFast("PRAGMA user_version = 70").stepThis().dispose();
+            messagesStorage.executeNoException("ALTER TABLE messages ADD COLUMN replies_data BLOB default NULL");
+            messagesStorage.executeNoException("ALTER TABLE messages ADD COLUMN thread_reply_id INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 70").stepThis().dispose();
             i7 = 70;
         }
         if (i7 == 70) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS chat_pinned_v2(uid INTEGER, mid INTEGER, data BLOB, PRIMARY KEY (uid, mid));").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 71").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_pinned_v2(uid INTEGER, mid INTEGER, data BLOB, PRIMARY KEY (uid, mid));").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 71").stepThis().dispose();
             i7 = 71;
         }
         if (i7 == 71) {
-            executeNoException("ALTER TABLE sharing_locations ADD COLUMN proximity INTEGER default 0");
-            this.database.executeFast("PRAGMA user_version = 72").stepThis().dispose();
+            messagesStorage.executeNoException("ALTER TABLE sharing_locations ADD COLUMN proximity INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 72").stepThis().dispose();
             i7 = 72;
         }
         if (i7 == 72) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS chat_pinned_count(uid INTEGER PRIMARY KEY, count INTEGER, end INTEGER);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 73").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_pinned_count(uid INTEGER PRIMARY KEY, count INTEGER, end INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 73").stepThis().dispose();
             i7 = 73;
         }
         if (i7 == 73) {
-            executeNoException("ALTER TABLE chat_settings_v2 ADD COLUMN inviter INTEGER default 0");
-            this.database.executeFast("PRAGMA user_version = 74").stepThis().dispose();
+            messagesStorage.executeNoException("ALTER TABLE chat_settings_v2 ADD COLUMN inviter INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 74").stepThis().dispose();
             i7 = 74;
         }
         if (i7 == 74) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS shortcut_widget(id INTEGER, did INTEGER, ord INTEGER, PRIMARY KEY (id, did));").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS shortcut_widget_did ON shortcut_widget(did);").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 75").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS shortcut_widget(id INTEGER, did INTEGER, ord INTEGER, PRIMARY KEY (id, did));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS shortcut_widget_did ON shortcut_widget(did);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 75").stepThis().dispose();
             i7 = 75;
         }
         if (i7 == 75) {
-            executeNoException("ALTER TABLE chat_settings_v2 ADD COLUMN links INTEGER default 0");
-            this.database.executeFast("PRAGMA user_version = 76").stepThis().dispose();
+            messagesStorage.executeNoException("ALTER TABLE chat_settings_v2 ADD COLUMN links INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 76").stepThis().dispose();
             i7 = 76;
         }
         if (i7 == 76) {
-            executeNoException("ALTER TABLE enc_tasks_v2 ADD COLUMN media INTEGER default -1");
-            this.database.executeFast("PRAGMA user_version = 77").stepThis().dispose();
+            messagesStorage.executeNoException("ALTER TABLE enc_tasks_v2 ADD COLUMN media INTEGER default -1");
+            messagesStorage.database.executeFast("PRAGMA user_version = 77").stepThis().dispose();
             i7 = 77;
         }
         if (i7 == 77) {
-            this.database.executeFast("DROP TABLE IF EXISTS channel_admins_v2;").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins_v3(did INTEGER, uid INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 78").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS channel_admins_v2;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins_v3(did INTEGER, uid INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 78").stepThis().dispose();
             i7 = 78;
         }
         if (i7 == 78) {
-            this.database.executeFast("DROP TABLE IF EXISTS bot_info;").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS bot_info_v2(uid INTEGER, dialogId INTEGER, info BLOB, PRIMARY KEY(uid, dialogId))").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 79").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS bot_info;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS bot_info_v2(uid INTEGER, dialogId INTEGER, info BLOB, PRIMARY KEY(uid, dialogId))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 79").stepThis().dispose();
             i7 = 79;
         }
         int i13 = 3;
         if (i7 == 79) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v3(mid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, media))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v3 ON enc_tasks_v3(date);").stepThis().dispose();
-            this.database.beginTransaction();
-            SQLiteCursor queryFinalized3 = this.database.queryFinalized("SELECT mid, date, media FROM enc_tasks_v2 WHERE 1", new Object[0]);
-            SQLitePreparedStatement executeFast3 = this.database.executeFast("REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)");
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v3(mid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, media))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v3 ON enc_tasks_v3(date);").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
+            SQLiteCursor queryFinalized3 = messagesStorage.database.queryFinalized("SELECT mid, date, media FROM enc_tasks_v2 WHERE 1", new Object[0]);
+            SQLitePreparedStatement executeFast3 = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)");
             if (queryFinalized3.next()) {
                 long longValue = queryFinalized3.longValue(0);
                 int intValue3 = queryFinalized3.intValue(1);
@@ -1033,28 +1040,28 @@ public class MessagesStorage extends BaseController {
             }
             executeFast3.dispose();
             queryFinalized3.dispose();
-            this.database.commitTransaction();
-            this.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks_v2;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS enc_tasks_v2;").stepThis().dispose();
-            this.database.executeFast("PRAGMA user_version = 80").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks_v2;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS enc_tasks_v2;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 80").stepThis().dispose();
             i7 = 80;
         }
         int i14 = 5;
         if (i7 == 80) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS scheduled_messages_v2(mid INTEGER, uid INTEGER, send_state INTEGER, date INTEGER, data BLOB, ttl INTEGER, replydata BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages_v2 ON scheduled_messages_v2(mid, send_state, date);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages_v2 ON scheduled_messages_v2(uid, date);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid_v2 ON bot_keyboard(mid, uid);").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS bot_keyboard_idx_mid;").stepThis().dispose();
-            this.database.beginTransaction();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS scheduled_messages_v2(mid INTEGER, uid INTEGER, send_state INTEGER, date INTEGER, data BLOB, ttl INTEGER, replydata BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages_v2 ON scheduled_messages_v2(mid, send_state, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages_v2 ON scheduled_messages_v2(uid, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid_v2 ON bot_keyboard(mid, uid);").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS bot_keyboard_idx_mid;").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
             try {
-                sQLiteCursor7 = this.database.queryFinalized("SELECT mid, uid, send_state, date, data, ttl, replydata FROM scheduled_messages_v2 WHERE 1", new Object[0]);
+                sQLiteCursor7 = messagesStorage.database.queryFinalized("SELECT mid, uid, send_state, date, data, ttl, replydata FROM scheduled_messages_v2 WHERE 1", new Object[0]);
             } catch (Exception e2) {
                 FileLog.e((Throwable) e2);
                 sQLiteCursor7 = null;
             }
             if (sQLiteCursor7 != null) {
-                SQLitePreparedStatement executeFast4 = this.database.executeFast("REPLACE INTO scheduled_messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?)");
+                SQLitePreparedStatement executeFast4 = messagesStorage.database.executeFast("REPLACE INTO scheduled_messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?)");
                 while (sQLiteCursor7.next()) {
                     NativeByteBuffer byteBufferValue3 = sQLiteCursor7.byteBufferValue(i6);
                     if (byteBufferValue3 != null) {
@@ -1089,25 +1096,25 @@ public class MessagesStorage extends BaseController {
                 sQLiteCursor7.dispose();
                 executeFast4.dispose();
             }
-            this.database.executeFast("DROP INDEX IF EXISTS send_state_idx_scheduled_messages;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS uid_date_idx_scheduled_messages;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS scheduled_messages;").stepThis().dispose();
-            this.database.commitTransaction();
-            this.database.executeFast("PRAGMA user_version = 81").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_scheduled_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_idx_scheduled_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS scheduled_messages;").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("PRAGMA user_version = 81").stepThis().dispose();
             i7 = 81;
         }
         if (i7 == 81) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS media_v3(mid INTEGER, uid INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_v3 ON media_v3(uid, mid, type, date);").stepThis().dispose();
-            this.database.beginTransaction();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_v3(mid INTEGER, uid INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_v3 ON media_v3(uid, mid, type, date);").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
             try {
-                sQLiteCursor6 = this.database.queryFinalized("SELECT mid, uid, date, type, data FROM media_v2 WHERE 1", new Object[0]);
+                sQLiteCursor6 = messagesStorage.database.queryFinalized("SELECT mid, uid, date, type, data FROM media_v2 WHERE 1", new Object[0]);
             } catch (Exception e3) {
                 FileLog.e((Throwable) e3);
                 sQLiteCursor6 = null;
             }
             if (sQLiteCursor6 != null) {
-                SQLitePreparedStatement executeFast5 = this.database.executeFast("REPLACE INTO media_v3 VALUES(?, ?, ?, ?, ?)");
+                SQLitePreparedStatement executeFast5 = messagesStorage.database.executeFast("REPLACE INTO media_v3 VALUES(?, ?, ?, ?, ?)");
                 while (sQLiteCursor6.next()) {
                     NativeByteBuffer byteBufferValue5 = sQLiteCursor6.byteBufferValue(4);
                     if (byteBufferValue5 != null) {
@@ -1131,29 +1138,29 @@ public class MessagesStorage extends BaseController {
                 sQLiteCursor6.dispose();
                 executeFast5.dispose();
             }
-            this.database.executeFast("DROP INDEX IF EXISTS uid_mid_type_date_idx_media;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS media_v2;").stepThis().dispose();
-            this.database.commitTransaction();
-            this.database.executeFast("PRAGMA user_version = 82").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_type_date_idx_media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS media_v2;").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("PRAGMA user_version = 82").stepThis().dispose();
             i7 = 82;
         }
         if (i7 == 82) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS randoms_v2(random_id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (random_id, mid, uid))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms_v2 ON randoms_v2(mid, uid);").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v4(mid INTEGER, uid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, uid, media))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v4 ON enc_tasks_v4(date);").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id_v2 ON polls_v2(id);").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS webpage_pending_v2(id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (id, mid, uid));").stepThis().dispose();
-            this.database.beginTransaction();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS randoms_v2(random_id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (random_id, mid, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms_v2 ON randoms_v2(mid, uid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v4(mid INTEGER, uid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, uid, media))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v4 ON enc_tasks_v4(date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id_v2 ON polls_v2(id);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS webpage_pending_v2(id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (id, mid, uid));").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
             try {
-                sQLiteCursor2 = this.database.queryFinalized("SELECT r.random_id, r.mid, m.uid FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE 1", new Object[0]);
+                sQLiteCursor2 = messagesStorage.database.queryFinalized("SELECT r.random_id, r.mid, m.uid FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE 1", new Object[0]);
             } catch (Exception e4) {
                 FileLog.e((Throwable) e4);
                 sQLiteCursor2 = null;
             }
             if (sQLiteCursor2 != null) {
-                SQLitePreparedStatement executeFast6 = this.database.executeFast("REPLACE INTO randoms_v2 VALUES(?, ?, ?)");
+                SQLitePreparedStatement executeFast6 = messagesStorage.database.executeFast("REPLACE INTO randoms_v2 VALUES(?, ?, ?)");
                 while (sQLiteCursor2.next()) {
                     long longValue4 = sQLiteCursor2.longValue(0);
                     int intValue12 = sQLiteCursor2.intValue(1);
@@ -1171,13 +1178,13 @@ public class MessagesStorage extends BaseController {
                 executeFast6.dispose();
             }
             try {
-                sQLiteCursor3 = this.database.queryFinalized("SELECT p.mid, m.uid, p.id FROM polls as p INNER JOIN messages as m ON p.mid = m.mid WHERE 1", new Object[0]);
+                sQLiteCursor3 = messagesStorage.database.queryFinalized("SELECT p.mid, m.uid, p.id FROM polls as p INNER JOIN messages as m ON p.mid = m.mid WHERE 1", new Object[0]);
             } catch (Exception e5) {
                 FileLog.e((Throwable) e5);
                 sQLiteCursor3 = null;
             }
             if (sQLiteCursor3 != null) {
-                SQLitePreparedStatement executeFast7 = this.database.executeFast("REPLACE INTO polls_v2 VALUES(?, ?, ?)");
+                SQLitePreparedStatement executeFast7 = messagesStorage.database.executeFast("REPLACE INTO polls_v2 VALUES(?, ?, ?)");
                 while (sQLiteCursor3.next()) {
                     int intValue13 = sQLiteCursor3.intValue(0);
                     long longValue6 = sQLiteCursor3.longValue(1);
@@ -1195,13 +1202,13 @@ public class MessagesStorage extends BaseController {
                 executeFast7.dispose();
             }
             try {
-                sQLiteCursor4 = this.database.queryFinalized("SELECT wp.id, wp.mid, m.uid FROM webpage_pending as wp INNER JOIN messages as m ON wp.mid = m.mid WHERE 1", new Object[0]);
+                sQLiteCursor4 = messagesStorage.database.queryFinalized("SELECT wp.id, wp.mid, m.uid FROM webpage_pending as wp INNER JOIN messages as m ON wp.mid = m.mid WHERE 1", new Object[0]);
             } catch (Exception e6) {
                 FileLog.e((Throwable) e6);
                 sQLiteCursor4 = null;
             }
             if (sQLiteCursor4 != null) {
-                SQLitePreparedStatement executeFast8 = this.database.executeFast("REPLACE INTO webpage_pending_v2 VALUES(?, ?, ?)");
+                SQLitePreparedStatement executeFast8 = messagesStorage.database.executeFast("REPLACE INTO webpage_pending_v2 VALUES(?, ?, ?)");
                 while (sQLiteCursor4.next()) {
                     long longValue8 = sQLiteCursor4.longValue(0);
                     int intValue14 = sQLiteCursor4.intValue(1);
@@ -1219,13 +1226,13 @@ public class MessagesStorage extends BaseController {
                 executeFast8.dispose();
             }
             try {
-                sQLiteCursor5 = this.database.queryFinalized("SELECT et.mid, m.uid, et.date, et.media FROM enc_tasks_v3 as et INNER JOIN messages as m ON et.mid = m.mid WHERE 1", new Object[0]);
+                sQLiteCursor5 = messagesStorage.database.queryFinalized("SELECT et.mid, m.uid, et.date, et.media FROM enc_tasks_v3 as et INNER JOIN messages as m ON et.mid = m.mid WHERE 1", new Object[0]);
             } catch (Exception e7) {
                 FileLog.e((Throwable) e7);
                 sQLiteCursor5 = null;
             }
             if (sQLiteCursor5 != null) {
-                SQLitePreparedStatement executeFast9 = this.database.executeFast("REPLACE INTO enc_tasks_v4 VALUES(?, ?, ?, ?)");
+                SQLitePreparedStatement executeFast9 = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v4 VALUES(?, ?, ?, ?)");
                 while (sQLiteCursor5.next()) {
                     int intValue15 = sQLiteCursor5.intValue(0);
                     long longValue10 = sQLiteCursor5.longValue(1);
@@ -1244,36 +1251,36 @@ public class MessagesStorage extends BaseController {
                 sQLiteCursor5.dispose();
                 executeFast9.dispose();
             }
-            this.database.executeFast("DROP INDEX IF EXISTS mid_idx_randoms;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS randoms;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks_v3;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS enc_tasks_v3;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS polls_id;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS polls;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS webpage_pending;").stepThis().dispose();
-            this.database.commitTransaction();
-            this.database.executeFast("PRAGMA user_version = 83").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_idx_randoms;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS randoms;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks_v3;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS enc_tasks_v3;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS polls_id;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS polls;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS webpage_pending;").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("PRAGMA user_version = 83").stepThis().dispose();
             i7 = 83;
         }
         if (i7 == 83) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS messages_v2(mid INTEGER, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, PRIMARY KEY(mid, uid))").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_v2 ON messages_v2(uid, mid, read_state, out);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages_v2 ON messages_v2(uid, date, mid);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages_v2 ON messages_v2(mid, out);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages_v2 ON messages_v2(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages_v2 ON messages_v2(mid, send_state, date);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_v2 ON messages_v2(uid, mention, read_state);").stepThis().dispose();
-            this.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_v2 ON messages_v2(mid, is_channel);").stepThis().dispose();
-            this.database.beginTransaction();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS messages_v2(mid INTEGER, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, PRIMARY KEY(mid, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_v2 ON messages_v2(uid, mid, read_state, out);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages_v2 ON messages_v2(uid, date, mid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages_v2 ON messages_v2(mid, out);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages_v2 ON messages_v2(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages_v2 ON messages_v2(mid, send_state, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_v2 ON messages_v2(uid, mention, read_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_v2 ON messages_v2(mid, is_channel);").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
             try {
-                sQLiteCursor = this.database.queryFinalized("SELECT mid, uid, read_state, send_state, date, data, out, ttl, media, replydata, imp, mention, forwards, replies_data, thread_reply_id FROM messages WHERE 1", new Object[0]);
+                sQLiteCursor = messagesStorage.database.queryFinalized("SELECT mid, uid, read_state, send_state, date, data, out, ttl, media, replydata, imp, mention, forwards, replies_data, thread_reply_id FROM messages WHERE 1", new Object[0]);
             } catch (Exception e8) {
                 FileLog.e((Throwable) e8);
                 sQLiteCursor = null;
             }
             if (sQLiteCursor != null) {
                 try {
-                    SQLitePreparedStatement executeFast10 = this.database.executeFast("REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    SQLitePreparedStatement executeFast10 = messagesStorage.database.executeFast("REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                     while (sQLiteCursor.next()) {
                         NativeByteBuffer byteBufferValue6 = sQLiteCursor.byteBufferValue(5);
                         if (byteBufferValue6 != null) {
@@ -1377,18 +1384,21 @@ public class MessagesStorage extends BaseController {
                             i9 = 2;
                             i10 = 1;
                             i13 = 3;
+                            messagesStorage = this;
                         }
                     }
                     sQLiteCursor.dispose();
                     executeFast10.dispose();
                 } catch (Exception e9) {
                     e = e9;
+                    messagesStorage = this;
                     FileLog.e((Throwable) e);
-                    return;
+                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda19(messagesStorage));
                 }
             }
-            SQLiteCursor queryFinalized4 = this.database.queryFinalized("SELECT did, last_mid, last_mid_i FROM dialogs WHERE 1", new Object[0]);
-            SQLitePreparedStatement executeFast11 = this.database.executeFast("UPDATE dialogs SET last_mid = ?, last_mid_i = ? WHERE did = ?");
+            messagesStorage = this;
+            SQLiteCursor queryFinalized4 = messagesStorage.database.queryFinalized("SELECT did, last_mid, last_mid_i FROM dialogs WHERE 1", new Object[0]);
+            SQLitePreparedStatement executeFast11 = messagesStorage.database.executeFast("UPDATE dialogs SET last_mid = ?, last_mid_i = ? WHERE did = ?");
             ArrayList arrayList = null;
             ArrayList arrayList2 = null;
             while (queryFinalized4.next()) {
@@ -1414,8 +1424,8 @@ public class MessagesStorage extends BaseController {
             }
             executeFast11.dispose();
             queryFinalized4.dispose();
-            SQLiteCursor queryFinalized5 = this.database.queryFinalized("SELECT uid, mid FROM unread_push_messages WHERE 1", new Object[0]);
-            SQLitePreparedStatement executeFast12 = this.database.executeFast("UPDATE unread_push_messages SET mid = ? WHERE uid = ? AND mid = ?");
+            SQLiteCursor queryFinalized5 = messagesStorage.database.queryFinalized("SELECT uid, mid FROM unread_push_messages WHERE 1", new Object[0]);
+            SQLitePreparedStatement executeFast12 = messagesStorage.database.executeFast("UPDATE unread_push_messages SET mid = ? WHERE uid = ? AND mid = ?");
             while (queryFinalized5.next()) {
                 long longValue13 = queryFinalized5.longValue(0);
                 int intValue29 = queryFinalized5.intValue(1);
@@ -1428,9 +1438,9 @@ public class MessagesStorage extends BaseController {
             executeFast12.dispose();
             queryFinalized5.dispose();
             if (arrayList != null) {
-                SQLitePreparedStatement executeFast13 = this.database.executeFast("UPDATE dialogs SET did = ? WHERE did = ?");
-                SQLitePreparedStatement executeFast14 = this.database.executeFast("UPDATE dialog_filter_pin_v2 SET peer = ? WHERE peer = ?");
-                SQLitePreparedStatement executeFast15 = this.database.executeFast("UPDATE dialog_filter_ep SET peer = ? WHERE peer = ?");
+                SQLitePreparedStatement executeFast13 = messagesStorage.database.executeFast("UPDATE dialogs SET did = ? WHERE did = ?");
+                SQLitePreparedStatement executeFast14 = messagesStorage.database.executeFast("UPDATE dialog_filter_pin_v2 SET peer = ? WHERE peer = ?");
+                SQLitePreparedStatement executeFast15 = messagesStorage.database.executeFast("UPDATE dialog_filter_ep SET peer = ? WHERE peer = ?");
                 int size = arrayList.size();
                 for (int i20 = 0; i20 < size; i20++) {
                     long intValue30 = (long) ((Integer) arrayList.get(i20)).intValue();
@@ -1454,7 +1464,7 @@ public class MessagesStorage extends BaseController {
                 executeFast15.dispose();
             }
             if (arrayList2 != null) {
-                SQLitePreparedStatement executeFast16 = this.database.executeFast("UPDATE dialogs SET did = ? WHERE did = ?");
+                SQLitePreparedStatement executeFast16 = messagesStorage.database.executeFast("UPDATE dialogs SET did = ? WHERE did = ?");
                 int size2 = arrayList2.size();
                 for (int i21 = 0; i21 < size2; i21++) {
                     int intValue31 = ((Integer) arrayList2.get(i21)).intValue();
@@ -1466,16 +1476,22 @@ public class MessagesStorage extends BaseController {
                 }
                 executeFast16.dispose();
             }
-            this.database.executeFast("DROP INDEX IF EXISTS uid_mid_read_out_idx_messages;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_idx_messages;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS mid_out_idx_messages;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS task_idx_messages;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages2;").stepThis().dispose();
-            this.database.executeFast("DROP INDEX IF EXISTS uid_mention_idx_messages;").stepThis().dispose();
-            this.database.executeFast("DROP TABLE IF EXISTS messages;").stepThis().dispose();
-            this.database.commitTransaction();
-            this.database.executeFast("PRAGMA user_version = 84").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_read_out_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_out_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS task_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages2;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mention_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS messages;").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("PRAGMA user_version = 84").stepThis().dispose();
         }
+        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda19(messagesStorage));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateDbToLastVersion$2() {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.onDatabaseMigration, Boolean.FALSE);
     }
 
     private void executeNoException(String str) {
@@ -1530,29 +1546,29 @@ public class MessagesStorage extends BaseController {
     }
 
     public void cleanup(boolean z) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda172(this, z));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda175(this, z));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$cleanup$3(boolean z) {
+    public /* synthetic */ void lambda$cleanup$5(boolean z) {
         cleanupInternal(true);
         openDatabase(1);
         if (z) {
-            Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda9(this));
+            Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda8(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$cleanup$2() {
+    public /* synthetic */ void lambda$cleanup$4() {
         getMessagesController().getDifference();
     }
 
     public void saveSecretParams(int i, int i2, byte[] bArr) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda33(this, i, i2, bArr));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda35(this, i, i2, bArr));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveSecretParams$4(int i, int i2, byte[] bArr) {
+    public /* synthetic */ void lambda$saveSecretParams$6(int i, int i2, byte[] bArr) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE params SET lsv = ?, sg = ?, pbytes = ? WHERE id = 1");
             int i3 = 1;
@@ -1575,11 +1591,11 @@ public class MessagesStorage extends BaseController {
     }
 
     private void fixNotificationSettings() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda16(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda12(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$fixNotificationSettings$5() {
+    public /* synthetic */ void lambda$fixNotificationSettings$7() {
         try {
             LongSparseArray longSparseArray = new LongSparseArray();
             Map<String, ?> all = MessagesController.getNotificationsSettings(this.currentAccount).getAll();
@@ -1626,12 +1642,12 @@ public class MessagesStorage extends BaseController {
             return 0;
         }
         long andAdd = this.lastTaskId.getAndAdd(1);
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda96(this, andAdd, nativeByteBuffer));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda98(this, andAdd, nativeByteBuffer));
         return andAdd;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createPendingTask$6(long j, NativeByteBuffer nativeByteBuffer) {
+    public /* synthetic */ void lambda$createPendingTask$8(long j, NativeByteBuffer nativeByteBuffer) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO pending_tasks VALUES(?, ?)");
             executeFast.bindLong(1, j);
@@ -1648,11 +1664,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void removePendingTask(long j) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda56(this, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda57(this, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$removePendingTask$7(long j) {
+    public /* synthetic */ void lambda$removePendingTask$9(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM pending_tasks WHERE id = " + j).stepThis().dispose();
@@ -1662,11 +1678,11 @@ public class MessagesStorage extends BaseController {
     }
 
     private void loadPendingTasks() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda7(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda17(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$27() {
+    public /* synthetic */ void lambda$loadPendingTasks$29() {
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT id, data FROM pending_tasks WHERE 1", new Object[0]);
             while (queryFinalized.next()) {
@@ -1679,12 +1695,12 @@ public class MessagesStorage extends BaseController {
                             case 0:
                                 TLRPC$Chat TLdeserialize = TLRPC$Chat.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                                 if (TLdeserialize != null) {
-                                    Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda147(this, TLdeserialize, longValue));
+                                    Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda149(this, TLdeserialize, longValue));
                                     break;
                                 }
                                 break;
                             case 1:
-                                Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda63(this, (long) byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), longValue));
+                                Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda65(this, (long) byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), longValue));
                                 break;
                             case 2:
                             case 5:
@@ -1713,16 +1729,16 @@ public class MessagesStorage extends BaseController {
                                 if (readInt32 >= 14) {
                                     tLRPC$TL_dialog.folder_id = byteBufferValue.readInt32(false);
                                 }
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda152(this, tLRPC$TL_dialog, TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda154(this, tLRPC$TL_dialog, TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
                                 break;
                             case 3:
                                 getSendMessagesHelper().sendGame(TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), (TLRPC$TL_inputMediaGame) TLRPC$InputMedia.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), byteBufferValue.readInt64(false), longValue);
                                 break;
                             case 4:
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda103(this, byteBufferValue.readInt64(false), byteBufferValue.readBool(false), TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda105(this, byteBufferValue.readInt64(false), byteBufferValue.readBool(false), TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
                                 break;
                             case 6:
-                                Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda65(this, (long) byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), longValue, TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false)));
+                                Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda68(this, (long) byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), longValue, TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false)));
                                 break;
                             case 7:
                                 long readInt322 = (long) byteBufferValue.readInt32(false);
@@ -1730,19 +1746,19 @@ public class MessagesStorage extends BaseController {
                                 TLObject TLdeserialize2 = TLRPC$TL_messages_deleteMessages.TLdeserialize(byteBufferValue, readInt323, false);
                                 TLObject TLdeserialize3 = TLdeserialize2 == null ? TLRPC$TL_channels_deleteMessages.TLdeserialize(byteBufferValue, readInt323, false) : TLdeserialize2;
                                 if (TLdeserialize3 != null) {
-                                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda82(this, readInt322, longValue, TLdeserialize3));
+                                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda84(this, readInt322, longValue, TLdeserialize3));
                                     break;
                                 } else {
                                     removePendingTask(longValue);
                                     break;
                                 }
                             case 9:
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda97(this, byteBufferValue.readInt64(false), TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda99(this, byteBufferValue.readInt64(false), TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
                                 break;
                             case 11:
                                 int readInt324 = byteBufferValue.readInt32(false);
                                 long readInt325 = (long) byteBufferValue.readInt32(false);
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda68(this, readInt325, readInt324, readInt325 != 0 ? TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false) : null, byteBufferValue.readInt32(false), longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda69(this, readInt325, readInt324, readInt325 != 0 ? TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false) : null, byteBufferValue.readInt32(false), longValue));
                                 break;
                             case 12:
                             case 19:
@@ -1750,10 +1766,10 @@ public class MessagesStorage extends BaseController {
                                 removePendingTask(longValue);
                                 break;
                             case 13:
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda102(this, byteBufferValue.readInt64(false), byteBufferValue.readBool(false), byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), byteBufferValue.readBool(false), TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda104(this, byteBufferValue.readInt64(false), byteBufferValue.readBool(false), byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), byteBufferValue.readBool(false), TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
                                 break;
                             case 15:
-                                Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda159(this, TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                                Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda161(this, TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
                                 break;
                             case 16:
                                 int readInt326 = byteBufferValue.readInt32(false);
@@ -1762,7 +1778,7 @@ public class MessagesStorage extends BaseController {
                                 for (int i = 0; i < readInt327; i++) {
                                     arrayList.add(TLRPC$InputDialogPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false));
                                 }
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda50(this, readInt326, arrayList, longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda52(this, readInt326, arrayList, longValue));
                                 break;
                             case 17:
                                 int readInt328 = byteBufferValue.readInt32(false);
@@ -1771,14 +1787,14 @@ public class MessagesStorage extends BaseController {
                                 for (int i2 = 0; i2 < readInt329; i2++) {
                                     arrayList2.add(TLRPC$TL_inputFolderPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false));
                                 }
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda51(this, readInt328, arrayList2, longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda53(this, readInt328, arrayList2, longValue));
                                 break;
                             case 18:
                                 long readInt64 = byteBufferValue.readInt64(false);
                                 byteBufferValue.readInt32(false);
                                 TLRPC$TL_messages_deleteScheduledMessages TLdeserialize4 = TLRPC$TL_messages_deleteScheduledMessages.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                                 if (TLdeserialize4 != null) {
-                                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda80(this, readInt64, longValue, TLdeserialize4));
+                                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda82(this, readInt64, longValue, TLdeserialize4));
                                     break;
                                 } else {
                                     removePendingTask(longValue);
@@ -1796,14 +1812,14 @@ public class MessagesStorage extends BaseController {
                                 boolean readBool = byteBufferValue.readBool(false);
                                 overrideWallpaperInfo.slug = byteBufferValue.readString(false);
                                 overrideWallpaperInfo.originalFileName = byteBufferValue.readString(false);
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda171(this, overrideWallpaperInfo, readBool, longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda173(this, overrideWallpaperInfo, readBool, longValue));
                                 break;
                             case 22:
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda160(this, TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda162(this, TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
                                 break;
                             case 23:
                                 long readInt642 = byteBufferValue.readInt64(false);
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda67(this, readInt642, byteBufferValue.readInt32(false), (DialogObject.isEncryptedDialog(readInt642) || !DialogObject.isChatDialog(readInt642) || !byteBufferValue.hasRemaining()) ? null : TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), byteBufferValue.readInt32(false), longValue));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda70(this, readInt642, byteBufferValue.readInt32(false), (DialogObject.isEncryptedDialog(readInt642) || !DialogObject.isChatDialog(readInt642) || !byteBufferValue.hasRemaining()) ? null : TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), byteBufferValue.readInt32(false), longValue));
                                 break;
                             case 24:
                                 long readInt643 = byteBufferValue.readInt64(false);
@@ -1811,18 +1827,18 @@ public class MessagesStorage extends BaseController {
                                 TLObject TLdeserialize5 = TLRPC$TL_messages_deleteMessages.TLdeserialize(byteBufferValue, readInt3210, false);
                                 TLObject TLdeserialize6 = TLdeserialize5 == null ? TLRPC$TL_channels_deleteMessages.TLdeserialize(byteBufferValue, readInt3210, false) : TLdeserialize5;
                                 if (TLdeserialize6 != null) {
-                                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda81(this, readInt643, longValue, TLdeserialize6));
+                                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda83(this, readInt643, longValue, TLdeserialize6));
                                     break;
                                 } else {
                                     removePendingTask(longValue);
                                     break;
                                 }
                             case 25:
-                                Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda66(this, byteBufferValue.readInt64(false), byteBufferValue.readInt32(false), longValue, TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false)));
+                                Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda67(this, byteBufferValue.readInt64(false), byteBufferValue.readInt32(false), longValue, TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false)));
                                 break;
                         }
                     } else {
-                        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda53(this, byteBufferValue.readInt32(false), byteBufferValue.readBool(false), longValue));
+                        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda55(this, byteBufferValue.readInt32(false), byteBufferValue.readBool(false), longValue));
                     }
                     byteBufferValue.reuse();
                 }
@@ -1834,106 +1850,106 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$8(TLRPC$Chat tLRPC$Chat, long j) {
+    public /* synthetic */ void lambda$loadPendingTasks$10(TLRPC$Chat tLRPC$Chat, long j) {
         getMessagesController().loadUnknownChannel(tLRPC$Chat, j);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$9(long j, int i, long j2) {
+    public /* synthetic */ void lambda$loadPendingTasks$11(long j, int i, long j2) {
         getMessagesController().getChannelDifference(j, i, j2, (TLRPC$InputChannel) null);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$10(TLRPC$Dialog tLRPC$Dialog, TLRPC$InputPeer tLRPC$InputPeer, long j) {
+    public /* synthetic */ void lambda$loadPendingTasks$12(TLRPC$Dialog tLRPC$Dialog, TLRPC$InputPeer tLRPC$InputPeer, long j) {
         getMessagesController().checkLastDialogMessage(tLRPC$Dialog, tLRPC$InputPeer, j);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$11(long j, boolean z, TLRPC$InputPeer tLRPC$InputPeer, long j2) {
+    public /* synthetic */ void lambda$loadPendingTasks$13(long j, boolean z, TLRPC$InputPeer tLRPC$InputPeer, long j2) {
         getMessagesController().pinDialog(j, z, tLRPC$InputPeer, j2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$12(long j, int i, long j2, TLRPC$InputChannel tLRPC$InputChannel) {
+    public /* synthetic */ void lambda$loadPendingTasks$14(long j, int i, long j2, TLRPC$InputChannel tLRPC$InputChannel) {
         getMessagesController().getChannelDifference(j, i, j2, tLRPC$InputChannel);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$13(long j, int i, long j2, TLRPC$InputChannel tLRPC$InputChannel) {
+    public /* synthetic */ void lambda$loadPendingTasks$15(long j, int i, long j2, TLRPC$InputChannel tLRPC$InputChannel) {
         getMessagesController().getChannelDifference(j, i, j2, tLRPC$InputChannel);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$14(long j, long j2, TLObject tLObject) {
+    public /* synthetic */ void lambda$loadPendingTasks$16(long j, long j2, TLObject tLObject) {
         getMessagesController().deleteMessages((ArrayList<Integer>) null, (ArrayList<Long>) null, (TLRPC$EncryptedChat) null, -j, true, false, false, j2, tLObject);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$15(long j, long j2, TLObject tLObject) {
+    public /* synthetic */ void lambda$loadPendingTasks$17(long j, long j2, TLObject tLObject) {
         getMessagesController().deleteMessages((ArrayList<Integer>) null, (ArrayList<Long>) null, (TLRPC$EncryptedChat) null, j, true, false, false, j2, tLObject);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$16(long j, TLRPC$InputPeer tLRPC$InputPeer, long j2) {
+    public /* synthetic */ void lambda$loadPendingTasks$18(long j, TLRPC$InputPeer tLRPC$InputPeer, long j2) {
         getMessagesController().markDialogAsUnread(j, tLRPC$InputPeer, j2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$17(long j, int i, TLRPC$InputChannel tLRPC$InputChannel, int i2, long j2) {
+    public /* synthetic */ void lambda$loadPendingTasks$19(long j, int i, TLRPC$InputChannel tLRPC$InputChannel, int i2, long j2) {
         getMessagesController().markMessageAsRead2(-j, i, tLRPC$InputChannel, i2, j2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$18(long j, int i, TLRPC$InputChannel tLRPC$InputChannel, int i2, long j2) {
+    public /* synthetic */ void lambda$loadPendingTasks$20(long j, int i, TLRPC$InputChannel tLRPC$InputChannel, int i2, long j2) {
         getMessagesController().markMessageAsRead2(j, i, tLRPC$InputChannel, i2, j2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$19(Theme.OverrideWallpaperInfo overrideWallpaperInfo, boolean z, long j) {
+    public /* synthetic */ void lambda$loadPendingTasks$21(Theme.OverrideWallpaperInfo overrideWallpaperInfo, boolean z, long j) {
         getMessagesController().saveWallpaperToServer((File) null, overrideWallpaperInfo, z, j);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$20(long j, boolean z, int i, int i2, boolean z2, TLRPC$InputPeer tLRPC$InputPeer, long j2) {
+    public /* synthetic */ void lambda$loadPendingTasks$22(long j, boolean z, int i, int i2, boolean z2, TLRPC$InputPeer tLRPC$InputPeer, long j2) {
         getMessagesController().deleteDialog(j, z ? 1 : 0, i, i2, z2, tLRPC$InputPeer, j2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$21(TLRPC$InputPeer tLRPC$InputPeer, long j) {
+    public /* synthetic */ void lambda$loadPendingTasks$23(TLRPC$InputPeer tLRPC$InputPeer, long j) {
         getMessagesController().loadUnknownDialog(tLRPC$InputPeer, j);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$22(int i, ArrayList arrayList, long j) {
+    public /* synthetic */ void lambda$loadPendingTasks$24(int i, ArrayList arrayList, long j) {
         getMessagesController().reorderPinnedDialogs(i, arrayList, j);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$23(int i, ArrayList arrayList, long j) {
+    public /* synthetic */ void lambda$loadPendingTasks$25(int i, ArrayList arrayList, long j) {
         getMessagesController().addDialogToFolder((ArrayList<Long>) null, i, -1, arrayList, j);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$24(long j, long j2, TLObject tLObject) {
+    public /* synthetic */ void lambda$loadPendingTasks$26(long j, long j2, TLObject tLObject) {
         getMessagesController().deleteMessages((ArrayList<Integer>) null, (ArrayList<Long>) null, (TLRPC$EncryptedChat) null, j, true, true, false, j2, tLObject);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$25(TLRPC$InputPeer tLRPC$InputPeer, long j) {
+    public /* synthetic */ void lambda$loadPendingTasks$27(TLRPC$InputPeer tLRPC$InputPeer, long j) {
         getMessagesController().reloadMentionsCountForChannel(tLRPC$InputPeer, j);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPendingTasks$26(int i, boolean z, long j) {
+    public /* synthetic */ void lambda$loadPendingTasks$28(int i, boolean z, long j) {
         getSecretChatHelper().declineSecretChat(i, z, j);
     }
 
     public void saveChannelPts(long j, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda35(this, i, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda37(this, i, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveChannelPts$28(int i, long j) {
+    public /* synthetic */ void lambda$saveChannelPts$30(int i, long j) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET pts = ? WHERE did = ?");
             executeFast.bindInteger(1, i);
@@ -1947,7 +1963,7 @@ public class MessagesStorage extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: saveDiffParamsInternal */
-    public void lambda$saveDiffParams$29(int i, int i2, int i3, int i4) {
+    public void lambda$saveDiffParams$31(int i, int i2, int i3, int i4) {
         try {
             if (this.lastSavedSeq != i || this.lastSavedPts != i2 || this.lastSavedDate != i3 || this.lastQtsValue != i4) {
                 SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE params SET seq = ?, pts = ?, date = ?, qts = ? WHERE id = 1");
@@ -1968,24 +1984,24 @@ public class MessagesStorage extends BaseController {
     }
 
     public void saveDiffParams(int i, int i2, int i3, int i4) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda30(this, i, i2, i3, i4));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda32(this, i, i2, i3, i4));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMutedDialogsFiltersCounters$30() {
+    public /* synthetic */ void lambda$updateMutedDialogsFiltersCounters$32() {
         resetAllUnreadCounters(true);
     }
 
     public void updateMutedDialogsFiltersCounters() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda13(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda16(this));
     }
 
     public void setDialogFlags(long j, long j2) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda74(this, j, j2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda77(this, j, j2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setDialogFlags$31(long j, long j2) {
+    public /* synthetic */ void lambda$setDialogFlags$33(long j, long j2) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT flags FROM dialog_settings WHERE did = " + j, new Object[0]);
@@ -2001,11 +2017,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void putPushMessage(MessageObject messageObject) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda140(this, messageObject));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda142(this, messageObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putPushMessage$32(MessageObject messageObject) {
+    public /* synthetic */ void lambda$putPushMessage$34(MessageObject messageObject) {
         try {
             NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(messageObject.messageOwner.getObjectSize());
             messageObject.messageOwner.serializeToStream(nativeByteBuffer);
@@ -2064,7 +2080,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$readAllDialogs$34(int i) {
+    public /* synthetic */ void lambda$readAllDialogs$36(int i) {
         SQLiteCursor sQLiteCursor;
         try {
             ArrayList arrayList = new ArrayList();
@@ -2112,14 +2128,14 @@ public class MessagesStorage extends BaseController {
             if (!arrayList2.isEmpty()) {
                 getChatsInternal(TextUtils.join(",", arrayList2), arrayList5);
             }
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda135(this, arrayList4, arrayList5, arrayList6, longSparseArray));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda137(this, arrayList4, arrayList5, arrayList6, longSparseArray));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$readAllDialogs$33(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$readAllDialogs$35(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, LongSparseArray longSparseArray) {
         getMessagesController().putUsers(arrayList, true);
         getMessagesController().putChats(arrayList2, true);
         getMessagesController().putEncryptedChats(arrayList3, true);
@@ -2273,11 +2289,11 @@ public class MessagesStorage extends BaseController {
     }
 
     private void loadDialogFilters() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda12(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda14(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadDialogFilters$36() {
+    public /* synthetic */ void lambda$loadDialogFilters$38() {
         TLRPC$messages_Dialogs tLRPC$messages_Dialogs;
         SQLiteCursor sQLiteCursor;
         try {
@@ -2350,7 +2366,7 @@ public class MessagesStorage extends BaseController {
                 }
             }
             queryFinalized.dispose();
-            Collections.sort(this.dialogFilters, MessagesStorage$$ExternalSyntheticLambda187.INSTANCE);
+            Collections.sort(this.dialogFilters, MessagesStorage$$ExternalSyntheticLambda188.INSTANCE);
             if (z) {
                 calcUnreadCounters(true);
             }
@@ -2379,7 +2395,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$loadDialogFilters$35(MessagesController.DialogFilter dialogFilter, MessagesController.DialogFilter dialogFilter2) {
+    public static /* synthetic */ int lambda$loadDialogFilters$37(MessagesController.DialogFilter dialogFilter, MessagesController.DialogFilter dialogFilter2) {
         int i = dialogFilter.order;
         int i2 = dialogFilter2.order;
         if (i > i2) {
@@ -3394,7 +3410,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void checkLoadedRemoteFilters(TLRPC$Vector tLRPC$Vector) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda166(this, tLRPC$Vector));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda168(this, tLRPC$Vector));
     }
 
     /* access modifiers changed from: private */
@@ -3409,7 +3425,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:90:0x0192 A[Catch:{ Exception -> 0x05fc }] */
     /* JADX WARNING: Removed duplicated region for block: B:98:0x01b6 A[Catch:{ Exception -> 0x05fc }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$checkLoadedRemoteFilters$38(org.telegram.tgnet.TLRPC$Vector r39) {
+    public /* synthetic */ void lambda$checkLoadedRemoteFilters$40(org.telegram.tgnet.TLRPC$Vector r39) {
         /*
             r38 = this;
             r12 = r38
@@ -3581,7 +3597,7 @@ public class MessagesStorage extends BaseController {
             r2.<init>()     // Catch:{ Exception -> 0x05fc }
             org.telegram.messenger.support.LongSparseIntArray r11 = r8.pinnedDialogs     // Catch:{ Exception -> 0x05fc }
             r29 = r6
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda185 r6 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda185     // Catch:{ Exception -> 0x05fc }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda186 r6 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda186     // Catch:{ Exception -> 0x05fc }
             r6.<init>(r11)     // Catch:{ Exception -> 0x05fc }
             java.util.Collections.sort(r7, r6)     // Catch:{ Exception -> 0x05fc }
             int r6 = r7.size()     // Catch:{ Exception -> 0x05fc }
@@ -4200,7 +4216,7 @@ public class MessagesStorage extends BaseController {
             r8 = r23
             r9 = r26
             r10 = r30
-            r1.lambda$processLoadedFilterPeers$40(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x0600 }
+            r1.lambda$processLoadedFilterPeers$42(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x0600 }
             goto L_0x0604
         L_0x05de:
             r11 = r8
@@ -4228,11 +4244,11 @@ public class MessagesStorage extends BaseController {
         L_0x0604:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkLoadedRemoteFilters$38(org.telegram.tgnet.TLRPC$Vector):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkLoadedRemoteFilters$40(org.telegram.tgnet.TLRPC$Vector):void");
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$checkLoadedRemoteFilters$37(LongSparseIntArray longSparseIntArray, Long l, Long l2) {
+    public static /* synthetic */ int lambda$checkLoadedRemoteFilters$39(LongSparseIntArray longSparseIntArray, Long l, Long l2) {
         int i = longSparseIntArray.get(l.longValue());
         int i2 = longSparseIntArray.get(l2.longValue());
         if (i > i2) {
@@ -4243,14 +4259,14 @@ public class MessagesStorage extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: processLoadedFilterPeersInternal */
-    public void lambda$processLoadedFilterPeers$40(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, ArrayList<MessagesController.DialogFilter> arrayList3, SparseArray<MessagesController.DialogFilter> sparseArray, ArrayList<Integer> arrayList4, HashMap<Integer, HashSet<Long>> hashMap, HashMap<Integer, HashSet<Long>> hashMap2, HashSet<Integer> hashSet) {
+    public void lambda$processLoadedFilterPeers$42(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, ArrayList<MessagesController.DialogFilter> arrayList3, SparseArray<MessagesController.DialogFilter> sparseArray, ArrayList<Integer> arrayList4, HashMap<Integer, HashSet<Long>> hashMap, HashMap<Integer, HashSet<Long>> hashMap2, HashSet<Integer> hashSet) {
         ArrayList<TLRPC$User> arrayList5 = arrayList;
         putUsersAndChats(arrayList, arrayList2, true, false);
         int size = sparseArray.size();
         int i = 0;
         boolean z = false;
         while (i < size) {
-            lambda$deleteDialogFilter$41(sparseArray.valueAt(i));
+            lambda$deleteDialogFilter$43(sparseArray.valueAt(i));
             i++;
             z = true;
         }
@@ -4299,7 +4315,7 @@ public class MessagesStorage extends BaseController {
             }
         }
         if (z2) {
-            Collections.sort(this.dialogFilters, MessagesStorage$$ExternalSyntheticLambda186.INSTANCE);
+            Collections.sort(this.dialogFilters, MessagesStorage$$ExternalSyntheticLambda189.INSTANCE);
             saveDialogFiltersOrderInternal();
         }
         int i4 = z ? 1 : 2;
@@ -4308,7 +4324,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$processLoadedFilterPeersInternal$39(MessagesController.DialogFilter dialogFilter, MessagesController.DialogFilter dialogFilter2) {
+    public static /* synthetic */ int lambda$processLoadedFilterPeersInternal$41(MessagesController.DialogFilter dialogFilter, MessagesController.DialogFilter dialogFilter2) {
         int i = dialogFilter.order;
         int i2 = dialogFilter2.order;
         if (i > i2) {
@@ -4319,12 +4335,12 @@ public class MessagesStorage extends BaseController {
 
     /* access modifiers changed from: protected */
     public void processLoadedFilterPeers(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, ArrayList<MessagesController.DialogFilter> arrayList3, SparseArray<MessagesController.DialogFilter> sparseArray, ArrayList<Integer> arrayList4, HashMap<Integer, HashSet<Long>> hashMap, HashMap<Integer, HashSet<Long>> hashMap2, HashSet<Integer> hashSet) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda169(this, tLRPC$messages_Dialogs, tLRPC$messages_Dialogs2, arrayList, arrayList2, arrayList3, sparseArray, arrayList4, hashMap, hashMap2, hashSet));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda171(this, tLRPC$messages_Dialogs, tLRPC$messages_Dialogs2, arrayList, arrayList2, arrayList3, sparseArray, arrayList4, hashMap, hashMap2, hashSet));
     }
 
     /* access modifiers changed from: private */
     /* renamed from: deleteDialogFilterInternal */
-    public void lambda$deleteDialogFilter$41(MessagesController.DialogFilter dialogFilter) {
+    public void lambda$deleteDialogFilter$43(MessagesController.DialogFilter dialogFilter) {
         try {
             this.dialogFilters.remove(dialogFilter);
             this.dialogFiltersMap.remove(dialogFilter.id);
@@ -4340,22 +4356,22 @@ public class MessagesStorage extends BaseController {
     }
 
     public void deleteDialogFilter(MessagesController.DialogFilter dialogFilter) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda142(this, dialogFilter));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda144(this, dialogFilter));
     }
 
     public void saveDialogFilter(MessagesController.DialogFilter dialogFilter, boolean z, boolean z2) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda143(this, dialogFilter, z, z2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda145(this, dialogFilter, z, z2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveDialogFilter$43(MessagesController.DialogFilter dialogFilter, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$saveDialogFilter$45(MessagesController.DialogFilter dialogFilter, boolean z, boolean z2) {
         saveDialogFilterInternal(dialogFilter, z, z2);
         calcUnreadCounters(false);
-        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda17(this));
+        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda20(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveDialogFilter$42() {
+    public /* synthetic */ void lambda$saveDialogFilter$44() {
         ArrayList<MessagesController.DialogFilter> arrayList = getMessagesController().dialogFilters;
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
@@ -4517,11 +4533,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void loadUnreadMessages() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda19(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda11(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadUnreadMessages$45() {
+    public /* synthetic */ void lambda$loadUnreadMessages$47() {
         String str;
         ArrayList arrayList;
         ArrayList arrayList2;
@@ -4763,23 +4779,23 @@ public class MessagesStorage extends BaseController {
                 arrayList = arrayList14;
             }
             Collections.reverse(arrayList10);
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda112(this, longSparseArray, arrayList10, arrayList11, arrayList3, arrayList2, arrayList));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda114(this, longSparseArray, arrayList10, arrayList11, arrayList3, arrayList2, arrayList));
         } catch (Exception e3) {
             FileLog.e((Throwable) e3);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadUnreadMessages$44(LongSparseArray longSparseArray, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5) {
+    public /* synthetic */ void lambda$loadUnreadMessages$46(LongSparseArray longSparseArray, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5) {
         getNotificationsController().processLoadedUnreadMessages(longSparseArray, arrayList, arrayList2, arrayList3, arrayList4, arrayList5);
     }
 
     public void putWallpapers(ArrayList<TLRPC$WallPaper> arrayList, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda45(this, i, arrayList));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda49(this, i, arrayList));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putWallpapers$46(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$putWallpapers$48(int i, ArrayList arrayList) {
         SQLitePreparedStatement sQLitePreparedStatement;
         if (i == 1) {
             try {
@@ -4821,11 +4837,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void deleteWallpaper(long j) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda55(this, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda61(this, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteWallpaper$47(long j) {
+    public /* synthetic */ void lambda$deleteWallpaper$49(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM wallpapers2 WHERE uid = " + j).stepThis().dispose();
@@ -4839,7 +4855,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getWallpapers$49() {
+    public /* synthetic */ void lambda$getWallpapers$51() {
         SQLiteCursor sQLiteCursor = null;
         try {
             sQLiteCursor = this.database.queryFinalized("SELECT data FROM wallpapers2 WHERE 1 ORDER BY num ASC", new Object[0]);
@@ -4872,13 +4888,13 @@ public class MessagesStorage extends BaseController {
     public void addRecentLocalFile(String str, String str2, TLRPC$Document tLRPC$Document) {
         if (str != null && str.length() != 0) {
             if ((str2 != null && str2.length() != 0) || tLRPC$Document != null) {
-                this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda153(this, tLRPC$Document, str, str2));
+                this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda155(this, tLRPC$Document, str, str2));
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$addRecentLocalFile$50(TLRPC$Document tLRPC$Document, String str, String str2) {
+    public /* synthetic */ void lambda$addRecentLocalFile$52(TLRPC$Document tLRPC$Document, String str, String str2) {
         if (tLRPC$Document != null) {
             try {
                 SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE web_recent_v3 SET document = ? WHERE image_url = ?");
@@ -4913,7 +4929,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:38:0x00d8 A[Catch:{ Exception -> 0x00e1 }] */
     /* JADX WARNING: Removed duplicated region for block: B:45:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$deleteUserChatHistory$53(long r18, long r20) {
+    public /* synthetic */ void lambda$deleteUserChatHistory$55(long r18, long r20) {
         /*
             r17 = this;
             r8 = r17
@@ -4996,7 +5012,7 @@ public class MessagesStorage extends BaseController {
         L_0x0097:
             r7.dispose()     // Catch:{ Exception -> 0x00e1 }
             r8.deleteFromDownloadQueue(r15, r12)     // Catch:{ Exception -> 0x00e1 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda132 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda132     // Catch:{ Exception -> 0x00e1 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda134 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda134     // Catch:{ Exception -> 0x00e1 }
             r1 = r0
             r2 = r17
             r3 = r14
@@ -5009,7 +5025,7 @@ public class MessagesStorage extends BaseController {
             r1 = r17
             r2 = r18
             r4 = r11
-            r1.lambda$markMessagesAsDeleted$162(r2, r4, r5, r6)     // Catch:{ Exception -> 0x00e1 }
+            r1.lambda$markMessagesAsDeleted$164(r2, r4, r5, r6)     // Catch:{ Exception -> 0x00e1 }
             boolean r0 = org.telegram.messenger.DialogObject.isChatDialog(r18)     // Catch:{ Exception -> 0x00e1 }
             if (r0 == 0) goto L_0x00be
             long r0 = -r9
@@ -5022,13 +5038,13 @@ public class MessagesStorage extends BaseController {
             r1 = r17
             r2 = r18
             r6 = r11
-            r1.lambda$updateDialogsWithDeletedMessages$161(r2, r4, r6, r7)     // Catch:{ Exception -> 0x00e1 }
+            r1.lambda$updateDialogsWithDeletedMessages$163(r2, r4, r6, r7)     // Catch:{ Exception -> 0x00e1 }
             org.telegram.messenger.FileLoader r0 = r17.getFileLoader()     // Catch:{ Exception -> 0x00e1 }
             r1 = 0
             r0.deleteFiles(r13, r1)     // Catch:{ Exception -> 0x00e1 }
             boolean r0 = r11.isEmpty()     // Catch:{ Exception -> 0x00e1 }
             if (r0 != 0) goto L_0x00e5
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda131 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda131     // Catch:{ Exception -> 0x00e1 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda132 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda132     // Catch:{ Exception -> 0x00e1 }
             r0.<init>(r8, r11, r9)     // Catch:{ Exception -> 0x00e1 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x00e1 }
             goto L_0x00e5
@@ -5038,17 +5054,17 @@ public class MessagesStorage extends BaseController {
         L_0x00e5:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteUserChatHistory$53(long, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteUserChatHistory$55(long, long):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteUserChatHistory$51(ArrayList arrayList, long j, ArrayList arrayList2) {
+    public /* synthetic */ void lambda$deleteUserChatHistory$53(ArrayList arrayList, long j, ArrayList arrayList2) {
         getFileLoader().cancelLoadFiles(arrayList);
         getMessagesController().markDialogMessageAsDeleted(j, arrayList2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteUserChatHistory$52(ArrayList arrayList, long j) {
+    public /* synthetic */ void lambda$deleteUserChatHistory$54(ArrayList arrayList, long j) {
         NotificationCenter notificationCenter = getNotificationCenter();
         int i = NotificationCenter.messagesDeleted;
         Object[] objArr = new Object[3];
@@ -5137,7 +5153,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void deleteDialog(long j, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda36(this, i, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda40(this, i, j));
     }
 
     /* access modifiers changed from: private */
@@ -5145,7 +5161,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:76:0x0286 A[Catch:{ Exception -> 0x0471 }] */
     /* JADX WARNING: Removed duplicated region for block: B:82:0x02a5 A[Catch:{ Exception -> 0x0471 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$deleteDialog$56(int r25, long r26) {
+    public /* synthetic */ void lambda$deleteDialog$58(int r25, long r26) {
         /*
             r24 = this;
             r7 = r24
@@ -5263,7 +5279,7 @@ public class MessagesStorage extends BaseController {
         L_0x00c8:
             r18.dispose()     // Catch:{ Exception -> 0x0471 }
             r7.deleteFromDownloadQueue(r12, r15)     // Catch:{ Exception -> 0x0471 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda125 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda125     // Catch:{ Exception -> 0x0471 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda119 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda119     // Catch:{ Exception -> 0x0471 }
             r0.<init>(r7, r13)     // Catch:{ Exception -> 0x0471 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0471 }
             org.telegram.messenger.FileLoader r0 = r24.getFileLoader()     // Catch:{ Exception -> 0x0471 }
@@ -5620,7 +5636,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.messenger.MediaDataController r0 = r24.getMediaDataController()     // Catch:{ Exception -> 0x0471 }
             r1 = 0
             r0.clearBotKeyboard(r9, r1)     // Catch:{ Exception -> 0x0471 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda15 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda15     // Catch:{ Exception -> 0x0471 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda18 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda18     // Catch:{ Exception -> 0x0471 }
             r0.<init>(r7)     // Catch:{ Exception -> 0x0471 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0471 }
             r1 = 0
@@ -5633,25 +5649,25 @@ public class MessagesStorage extends BaseController {
         L_0x0475:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteDialog$56(int, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteDialog$58(int, long):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteDialog$54(ArrayList arrayList) {
+    public /* synthetic */ void lambda$deleteDialog$56(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteDialog$55() {
+    public /* synthetic */ void lambda$deleteDialog$57() {
         getNotificationCenter().postNotificationName(NotificationCenter.needReloadRecentDialogsSearch, new Object[0]);
     }
 
     public void onDeleteQueryComplete(long j) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda57(this, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda58(this, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDeleteQueryComplete$57(long j) {
+    public /* synthetic */ void lambda$onDeleteQueryComplete$59(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM media_counts_v2 WHERE uid = " + j).stepThis().dispose();
@@ -5661,11 +5677,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getDialogPhotos(long j, int i, int i2, int i3) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda40(this, i2, j, i, i3));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda42(this, i2, j, i, i3));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDialogPhotos$59(int i, long j, int i2, int i3) {
+    public /* synthetic */ void lambda$getDialogPhotos$61(int i, long j, int i2, int i3) {
         SQLiteCursor sQLiteCursor;
         if (i != 0) {
             try {
@@ -5693,20 +5709,20 @@ public class MessagesStorage extends BaseController {
             }
         }
         sQLiteCursor.dispose();
-        Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda170(this, tLRPC$TL_photos_photos, arrayList, j, i2, i, i3));
+        Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda172(this, tLRPC$TL_photos_photos, arrayList, j, i2, i, i3));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDialogPhotos$58(TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList arrayList, long j, int i, int i2, int i3) {
+    public /* synthetic */ void lambda$getDialogPhotos$60(TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList arrayList, long j, int i, int i2, int i3) {
         getMessagesController().processLoadedUserPhotos(tLRPC$photos_Photos, arrayList, j, i, i2, true, i3);
     }
 
     public void clearUserPhotos(long j) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda58(this, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda59(this, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearUserPhotos$60(long j) {
+    public /* synthetic */ void lambda$clearUserPhotos$62(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM user_photos WHERE uid = " + j).stepThis().dispose();
@@ -5716,11 +5732,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void clearUserPhoto(long j, long j2) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda73(this, j, j2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda78(this, j, j2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearUserPhoto$61(long j, long j2) {
+    public /* synthetic */ void lambda$clearUserPhoto$63(long j, long j2) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM user_photos WHERE uid = " + j + " AND id = " + j2).stepThis().dispose();
@@ -5730,13 +5746,13 @@ public class MessagesStorage extends BaseController {
     }
 
     public void resetDialogs(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i, int i2, int i3, int i4, int i5, LongSparseArray<TLRPC$Dialog> longSparseArray, LongSparseArray<MessageObject> longSparseArray2, TLRPC$Message tLRPC$Message, int i6) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda168(this, tLRPC$messages_Dialogs, i6, i2, i3, i4, i5, tLRPC$Message, i, longSparseArray, longSparseArray2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda170(this, tLRPC$messages_Dialogs, i6, i2, i3, i4, i5, tLRPC$Message, i, longSparseArray, longSparseArray2));
     }
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:77:0x02cb A[Catch:{ Exception -> 0x0312 }, LOOP:7: B:75:0x02c8->B:77:0x02cb, LOOP_END] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$resetDialogs$63(org.telegram.tgnet.TLRPC$messages_Dialogs r31, int r32, int r33, int r34, int r35, int r36, org.telegram.tgnet.TLRPC$Message r37, int r38, androidx.collection.LongSparseArray r39, androidx.collection.LongSparseArray r40) {
+    public /* synthetic */ void lambda$resetDialogs$65(org.telegram.tgnet.TLRPC$messages_Dialogs r31, int r32, int r33, int r34, int r35, int r36, org.telegram.tgnet.TLRPC$Message r37, int r38, androidx.collection.LongSparseArray r39, androidx.collection.LongSparseArray r40) {
         /*
             r30 = this;
             r1 = r30
@@ -5790,7 +5806,7 @@ public class MessagesStorage extends BaseController {
             r5.add(r10)     // Catch:{ Exception -> 0x0312 }
             goto L_0x004c
         L_0x0079:
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda184 r10 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda184     // Catch:{ Exception -> 0x0312 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda187 r10 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda187     // Catch:{ Exception -> 0x0312 }
             r10.<init>(r4)     // Catch:{ Exception -> 0x0312 }
             java.util.Collections.sort(r5, r10)     // Catch:{ Exception -> 0x0312 }
         L_0x0081:
@@ -5952,7 +5968,7 @@ public class MessagesStorage extends BaseController {
             r6 = r34
             r7 = r35
             r8 = r36
-            r1.lambda$saveDiffParams$29(r5, r6, r7, r8)     // Catch:{ Exception -> 0x0312 }
+            r1.lambda$saveDiffParams$31(r5, r6, r7, r8)     // Catch:{ Exception -> 0x0312 }
             org.telegram.messenger.UserConfig r2 = r30.getUserConfig()     // Catch:{ Exception -> 0x0312 }
             int r2 = r2.getTotalDialogsCount(r9)     // Catch:{ Exception -> 0x0312 }
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r0.dialogs     // Catch:{ Exception -> 0x0312 }
@@ -6091,11 +6107,11 @@ public class MessagesStorage extends BaseController {
         L_0x0316:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$resetDialogs$63(org.telegram.tgnet.TLRPC$messages_Dialogs, int, int, int, int, int, org.telegram.tgnet.TLRPC$Message, int, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$resetDialogs$65(org.telegram.tgnet.TLRPC$messages_Dialogs, int, int, int, int, int, org.telegram.tgnet.TLRPC$Message, int, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$resetDialogs$62(LongSparseIntArray longSparseIntArray, Long l, Long l2) {
+    public static /* synthetic */ int lambda$resetDialogs$64(LongSparseIntArray longSparseIntArray, Long l, Long l2) {
         int i = longSparseIntArray.get(l.longValue());
         int i2 = longSparseIntArray.get(l2.longValue());
         if (i < i2) {
@@ -6106,12 +6122,12 @@ public class MessagesStorage extends BaseController {
 
     public void putDialogPhotos(long j, TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList<TLRPC$Message> arrayList) {
         if (tLRPC$photos_Photos != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda100(this, j, tLRPC$photos_Photos, arrayList));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda102(this, j, tLRPC$photos_Photos, arrayList));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putDialogPhotos$64(long j, TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList arrayList) {
+    public /* synthetic */ void lambda$putDialogPhotos$66(long j, TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList arrayList) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM user_photos WHERE uid = " + j).stepThis().dispose();
@@ -6144,7 +6160,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void emptyMessagesMedia(long j, ArrayList<Integer> arrayList) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda130(this, arrayList, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda133(this, arrayList, j));
     }
 
     /* access modifiers changed from: private */
@@ -6161,7 +6177,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:60:0x0190 A[Catch:{ Exception -> 0x01b4 }] */
     /* JADX WARNING: Removed duplicated region for block: B:73:0x0193 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$emptyMessagesMedia$67(java.util.ArrayList r18, long r19) {
+    public /* synthetic */ void lambda$emptyMessagesMedia$69(java.util.ArrayList r18, long r19) {
         /*
             r17 = this;
             r7 = r17
@@ -6371,11 +6387,11 @@ public class MessagesStorage extends BaseController {
             goto L_0x00bf
         L_0x0198:
             r1.dispose()     // Catch:{ Exception -> 0x01b4 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda118 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda118     // Catch:{ Exception -> 0x01b4 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda124 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda124     // Catch:{ Exception -> 0x01b4 }
             r1.<init>(r7, r10)     // Catch:{ Exception -> 0x01b4 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x01b4 }
         L_0x01a3:
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda120 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda120     // Catch:{ Exception -> 0x01b4 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda130 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda130     // Catch:{ Exception -> 0x01b4 }
             r1.<init>(r7, r8)     // Catch:{ Exception -> 0x01b4 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x01b4 }
             org.telegram.messenger.FileLoader r1 = r17.getFileLoader()     // Catch:{ Exception -> 0x01b4 }
@@ -6388,27 +6404,27 @@ public class MessagesStorage extends BaseController {
         L_0x01b8:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$emptyMessagesMedia$67(java.util.ArrayList, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$emptyMessagesMedia$69(java.util.ArrayList, long):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$emptyMessagesMedia$65(ArrayList arrayList) {
+    public /* synthetic */ void lambda$emptyMessagesMedia$67(ArrayList arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
             getNotificationCenter().postNotificationName(NotificationCenter.updateMessageMedia, arrayList.get(i));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$emptyMessagesMedia$66(ArrayList arrayList) {
+    public /* synthetic */ void lambda$emptyMessagesMedia$68(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
     public void updateMessagePollResults(long j, TLRPC$Poll tLRPC$Poll, TLRPC$PollResults tLRPC$PollResults) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda98(this, j, tLRPC$Poll, tLRPC$PollResults));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda100(this, j, tLRPC$Poll, tLRPC$PollResults));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessagePollResults$68(long j, TLRPC$Poll tLRPC$Poll, TLRPC$PollResults tLRPC$PollResults) {
+    public /* synthetic */ void lambda$updateMessagePollResults$70(long j, TLRPC$Poll tLRPC$Poll, TLRPC$PollResults tLRPC$PollResults) {
         int i;
         ArrayList arrayList;
         TLRPC$Poll tLRPC$Poll2 = tLRPC$Poll;
@@ -6497,11 +6513,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateMessageReactions(long j, int i, TLRPC$TL_messageReactions tLRPC$TL_messageReactions) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda43(this, i, j, tLRPC$TL_messageReactions));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda45(this, i, j, tLRPC$TL_messageReactions));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageReactions$69(int i, long j, TLRPC$TL_messageReactions tLRPC$TL_messageReactions) {
+    public /* synthetic */ void lambda$updateMessageReactions$71(int i, long j, TLRPC$TL_messageReactions tLRPC$TL_messageReactions) {
         NativeByteBuffer byteBufferValue;
         try {
             this.database.beginTransaction();
@@ -6534,7 +6550,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getNewTask(LongSparseArray<ArrayList<Integer>> longSparseArray, LongSparseArray<ArrayList<Integer>> longSparseArray2) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda110(this, longSparseArray, longSparseArray2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda112(this, longSparseArray, longSparseArray2));
     }
 
     /* access modifiers changed from: private */
@@ -6546,7 +6562,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:31:0x00c6 A[Catch:{ Exception -> 0x003e }] */
     /* JADX WARNING: Removed duplicated region for block: B:39:0x00ce A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getNewTask$70(androidx.collection.LongSparseArray r13, androidx.collection.LongSparseArray r14) {
+    public /* synthetic */ void lambda$getNewTask$72(androidx.collection.LongSparseArray r13, androidx.collection.LongSparseArray r14) {
         /*
             r12 = this;
             java.lang.String r0 = ","
@@ -6667,15 +6683,15 @@ public class MessagesStorage extends BaseController {
         L_0x00e6:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getNewTask$70(androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getNewTask$72(androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
     }
 
     public void markMentionMessageAsRead(long j, int i, long j2) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda42(this, i, j, j2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda44(this, i, j, j2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMentionMessageAsRead$71(int i, long j, long j2) {
+    public /* synthetic */ void lambda$markMentionMessageAsRead$73(int i, long j, long j2) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             Locale locale = Locale.US;
@@ -6697,11 +6713,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void markMessageAsMention(long j, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda34(this, i, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda36(this, i, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessageAsMention$72(int i, long j) {
+    public /* synthetic */ void lambda$markMessageAsMention$74(int i, long j) {
         try {
             this.database.executeFast(String.format(Locale.US, "UPDATE messages_v2 SET mention = 1, read_state = read_state & ~2 WHERE mid = %d AND uid = %d", new Object[]{Integer.valueOf(i), Long.valueOf(j)})).stepThis().dispose();
         } catch (Exception e) {
@@ -6710,11 +6726,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void resetMentionsCount(long j, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda60(this, j, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda62(this, j, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$resetMentionsCount$73(long j, int i) {
+    public /* synthetic */ void lambda$resetMentionsCount$75(long j, int i) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT unread_count_i FROM dialogs WHERE did = " + j, new Object[0]);
@@ -6738,18 +6754,18 @@ public class MessagesStorage extends BaseController {
     }
 
     public void createTaskForMid(long j, int i, int i2, int i3, int i4, boolean z) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda31(this, i2, i3, i4, i, z, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda33(this, i2, i3, i4, i, z, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createTaskForMid$75(int i, int i2, int i3, int i4, boolean z, long j) {
+    public /* synthetic */ void lambda$createTaskForMid$77(int i, int i2, int i3, int i4, boolean z, long j) {
         try {
             int max = Math.max(i, i2) + i3;
             SparseArray sparseArray = new SparseArray();
             ArrayList arrayList = new ArrayList();
             arrayList.add(Integer.valueOf(i4));
             sparseArray.put(max, arrayList);
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda175(this, z, j, arrayList));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda177(this, z, j, arrayList));
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO enc_tasks_v4 VALUES(?, ?, ?, ?)");
             for (int i5 = 0; i5 < sparseArray.size(); i5++) {
                 int keyAt = sparseArray.keyAt(i5);
@@ -6772,7 +6788,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createTaskForMid$74(boolean z, long j, ArrayList arrayList) {
+    public /* synthetic */ void lambda$createTaskForMid$76(boolean z, long j, ArrayList arrayList) {
         if (!z) {
             markMessagesContentAsRead(j, arrayList, 0);
         }
@@ -6780,11 +6796,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void createTaskForSecretChat(int i, int i2, int i3, int i4, ArrayList<Long> arrayList) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda48(this, i, arrayList, i4, i2, i3));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda50(this, i, arrayList, i4, i2, i3));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createTaskForSecretChat$77(int i, ArrayList arrayList, int i2, int i3, int i4) {
+    public /* synthetic */ void lambda$createTaskForSecretChat$79(int i, ArrayList arrayList, int i2, int i3, int i4) {
         SQLiteCursor sQLiteCursor;
         ArrayList arrayList2 = arrayList;
         try {
@@ -6822,7 +6838,7 @@ public class MessagesStorage extends BaseController {
             }
             sQLiteCursor.dispose();
             if (arrayList2 != null) {
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda85(this, makeEncryptedDialogId, arrayList3));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda87(this, makeEncryptedDialogId, arrayList3));
             }
             if (sparseArray.size() != 0) {
                 this.database.beginTransaction();
@@ -6850,7 +6866,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createTaskForSecretChat$76(long j, ArrayList arrayList) {
+    public /* synthetic */ void lambda$createTaskForSecretChat$78(long j, ArrayList arrayList) {
         markMessagesContentAsRead(j, arrayList, 0);
         getNotificationCenter().postNotificationName(NotificationCenter.messagesReadContent, Long.valueOf(j), arrayList);
     }
@@ -8595,7 +8611,7 @@ public class MessagesStorage extends BaseController {
             goto L_0x0413
         L_0x0ac1:
             r1 = r0
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda18 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda18
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda21 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda21
             r0.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
@@ -8607,7 +8623,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateFiltersReadCounter$78() {
+    public /* synthetic */ void lambda$updateFiltersReadCounter$80() {
         ArrayList<MessagesController.DialogFilter> arrayList = getMessagesController().dialogFilters;
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
@@ -8977,25 +8993,25 @@ public class MessagesStorage extends BaseController {
             return;
         }
         if (z) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda145(this, longSparseIntArray, longSparseIntArray2, longSparseArray));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda147(this, longSparseIntArray, longSparseIntArray2, longSparseArray));
         } else {
             updateDialogsWithReadMessagesInternal((ArrayList<Integer>) null, longSparseIntArray, longSparseIntArray2, longSparseArray);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateDialogsWithReadMessages$79(LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$updateDialogsWithReadMessages$81(LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, LongSparseArray longSparseArray) {
         updateDialogsWithReadMessagesInternal((ArrayList<Integer>) null, longSparseIntArray, longSparseIntArray2, longSparseArray);
     }
 
     public void updateChatParticipants(TLRPC$ChatParticipants tLRPC$ChatParticipants) {
         if (tLRPC$ChatParticipants != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda151(this, tLRPC$ChatParticipants));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda153(this, tLRPC$ChatParticipants));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatParticipants$81(TLRPC$ChatParticipants tLRPC$ChatParticipants) {
+    public /* synthetic */ void lambda$updateChatParticipants$83(TLRPC$ChatParticipants tLRPC$ChatParticipants) {
         NativeByteBuffer byteBufferValue;
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -9012,7 +9028,7 @@ public class MessagesStorage extends BaseController {
             queryFinalized.dispose();
             if (tLRPC$ChatFull instanceof TLRPC$TL_chatFull) {
                 tLRPC$ChatFull.participants = tLRPC$ChatParticipants;
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda148(this, tLRPC$ChatFull));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda150(this, tLRPC$ChatFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$ChatFull.getObjectSize());
                 tLRPC$ChatFull.serializeToStream(nativeByteBuffer);
@@ -9032,7 +9048,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatParticipants$80(TLRPC$ChatFull tLRPC$ChatFull) {
+    public /* synthetic */ void lambda$updateChatParticipants$82(TLRPC$ChatFull tLRPC$ChatFull) {
         NotificationCenter notificationCenter = getNotificationCenter();
         int i = NotificationCenter.chatInfoDidLoad;
         Boolean bool = Boolean.FALSE;
@@ -9040,11 +9056,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void loadChannelAdmins(long j) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda59(this, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda60(this, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadChannelAdmins$82(long j) {
+    public /* synthetic */ void lambda$loadChannelAdmins$84(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT uid, data FROM channel_admins_v3 WHERE did = " + j, new Object[0]);
@@ -9067,11 +9083,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void putChannelAdmins(long j, LongSparseArray<TLRPC$ChannelParticipant> longSparseArray) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda83(this, j, longSparseArray));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda85(this, j, longSparseArray));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putChannelAdmins$83(long j, LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$putChannelAdmins$85(long j, LongSparseArray longSparseArray) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM channel_admins_v3 WHERE did = " + j).stepThis().dispose();
@@ -9097,11 +9113,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateChannelUsers(long j, ArrayList<TLRPC$ChannelParticipant> arrayList) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda86(this, j, arrayList));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda88(this, j, arrayList));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChannelUsers$84(long j, ArrayList arrayList) {
+    public /* synthetic */ void lambda$updateChannelUsers$86(long j, ArrayList arrayList) {
         long j2 = -j;
         try {
             this.database.executeFast("DELETE FROM channel_users_v2 WHERE did = " + j2).stepThis().dispose();
@@ -9131,12 +9147,12 @@ public class MessagesStorage extends BaseController {
 
     public void saveBotCache(String str, TLObject tLObject) {
         if (tLObject != null && !TextUtils.isEmpty(str)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda146(this, tLObject, str));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda148(this, tLObject, str));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveBotCache$85(TLObject tLObject, String str) {
+    public /* synthetic */ void lambda$saveBotCache$87(TLObject tLObject, String str) {
         int i;
         try {
             int currentTime = getConnectionsManager().getCurrentTime();
@@ -9173,7 +9189,7 @@ public class MessagesStorage extends BaseController {
 
     public void getBotCache(String str, RequestDelegate requestDelegate) {
         if (str != null && requestDelegate != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda44(this, getConnectionsManager().getCurrentTime(), str, requestDelegate));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda46(this, getConnectionsManager().getCurrentTime(), str, requestDelegate));
         }
     }
 
@@ -9193,7 +9209,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A[ExcHandler: all (th java.lang.Throwable), Splitter:B:1:0x0001] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getBotCache$86(int r5, java.lang.String r6, org.telegram.tgnet.RequestDelegate r7) {
+    public /* synthetic */ void lambda$getBotCache$88(int r5, java.lang.String r6, org.telegram.tgnet.RequestDelegate r7) {
         /*
             r4 = this;
             r0 = 0
@@ -9263,17 +9279,17 @@ public class MessagesStorage extends BaseController {
             r7.run(r1, r0)
             throw r5
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getBotCache$86(int, java.lang.String, org.telegram.tgnet.RequestDelegate):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getBotCache$88(int, java.lang.String, org.telegram.tgnet.RequestDelegate):void");
     }
 
     public void loadUserInfo(TLRPC$User tLRPC$User, boolean z, int i, int i2) {
         if (tLRPC$User != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda165(this, tLRPC$User, z, i));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda167(this, tLRPC$User, z, i));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadUserInfo$87(TLRPC$User tLRPC$User, boolean z, int i) {
+    public /* synthetic */ void lambda$loadUserInfo$89(TLRPC$User tLRPC$User, boolean z, int i) {
         boolean z2;
         int i2;
         TLRPC$UserFull tLRPC$UserFull;
@@ -9436,11 +9452,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateUserInfo(TLRPC$UserFull tLRPC$UserFull, boolean z) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda180(this, z, tLRPC$UserFull));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda182(this, z, tLRPC$UserFull));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateUserInfo$88(boolean z, TLRPC$UserFull tLRPC$UserFull) {
+    public /* synthetic */ void lambda$updateUserInfo$90(boolean z, TLRPC$UserFull tLRPC$UserFull) {
         if (z) {
             try {
                 SQLiteDatabase sQLiteDatabase = this.database;
@@ -9479,7 +9495,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveChatInviter$89(long j, long j2) {
+    public /* synthetic */ void lambda$saveChatInviter$91(long j, long j2) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE chat_settings_v2 SET inviter = ? WHERE uid = ?");
             executeFast.requery();
@@ -9493,11 +9509,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void saveChatLinksCount(long j, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda39(this, i, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda38(this, i, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveChatLinksCount$90(int i, long j) {
+    public /* synthetic */ void lambda$saveChatLinksCount$92(int i, long j) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE chat_settings_v2 SET links = ? WHERE uid = ?");
             executeFast.requery();
@@ -9511,11 +9527,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateChatInfo(TLRPC$ChatFull tLRPC$ChatFull, boolean z) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda150(this, tLRPC$ChatFull, z));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda152(this, tLRPC$ChatFull, z));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatInfo$91(TLRPC$ChatFull tLRPC$ChatFull, boolean z) {
+    public /* synthetic */ void lambda$updateChatInfo$93(TLRPC$ChatFull tLRPC$ChatFull, boolean z) {
         int i;
         int i2;
         try {
@@ -9579,11 +9595,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateChatOnlineCount(long j, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda38(this, i, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda41(this, i, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatOnlineCount$92(int i, long j) {
+    public /* synthetic */ void lambda$updateChatOnlineCount$94(int i, long j) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE chat_settings_v2 SET online = ? WHERE uid = ?");
             executeFast.requery();
@@ -9597,11 +9613,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updatePinnedMessages(long j, ArrayList<Integer> arrayList, boolean z, int i, int i2, boolean z2, HashMap<Integer, MessageObject> hashMap) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda179(this, z, hashMap, i2, j, arrayList, i, z2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda181(this, z, hashMap, i2, j, arrayList, i, z2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updatePinnedMessages$95(boolean z, HashMap hashMap, int i, long j, ArrayList arrayList, int i2, boolean z2) {
+    public /* synthetic */ void lambda$updatePinnedMessages$97(boolean z, HashMap hashMap, int i, long j, ArrayList arrayList, int i2, boolean z2) {
         int i3;
         boolean z3;
         int i4;
@@ -9691,7 +9707,7 @@ public class MessagesStorage extends BaseController {
                 executeFast2.bindInteger(3, i9);
                 executeFast2.step();
                 executeFast2.dispose();
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda89(this, j, arrayList, hashMap, i, i11, z5));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda91(this, j, arrayList, hashMap, i, i11, z5));
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
@@ -9746,26 +9762,26 @@ public class MessagesStorage extends BaseController {
             executeFast3.bindInteger(3, i3);
             executeFast3.step();
             executeFast3.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda88(this, j, arrayList, hashMap, i, i4, z3));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda90(this, j, arrayList, hashMap, i, i4, z3));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updatePinnedMessages$93(long j, ArrayList arrayList, HashMap hashMap, int i, int i2, boolean z) {
+    public /* synthetic */ void lambda$updatePinnedMessages$95(long j, ArrayList arrayList, HashMap hashMap, int i, int i2, boolean z) {
         getNotificationCenter().postNotificationName(NotificationCenter.didLoadPinnedMessages, Long.valueOf(j), arrayList, Boolean.TRUE, null, hashMap, Integer.valueOf(i), Integer.valueOf(i2), Boolean.valueOf(z));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updatePinnedMessages$94(long j, ArrayList arrayList, HashMap hashMap, int i, int i2, boolean z) {
+    public /* synthetic */ void lambda$updatePinnedMessages$96(long j, ArrayList arrayList, HashMap hashMap, int i, int i2, boolean z) {
         getNotificationCenter().postNotificationName(NotificationCenter.didLoadPinnedMessages, Long.valueOf(j), arrayList, Boolean.FALSE, null, hashMap, Integer.valueOf(i), Integer.valueOf(i2), Boolean.valueOf(z));
     }
 
     public void updateChatInfo(long j, long j2, int i, long j3, int i2) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda64(this, j, i, j2, j3, i2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda66(this, j, i, j2, j3, i2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatInfo$97(long j, int i, long j2, long j3, int i2) {
+    public /* synthetic */ void lambda$updateChatInfo$99(long j, int i, long j2, long j3, int i2) {
         TLRPC$ChatParticipant tLRPC$ChatParticipant;
         NativeByteBuffer byteBufferValue;
         long j4 = j;
@@ -9833,7 +9849,7 @@ public class MessagesStorage extends BaseController {
                     }
                 }
                 tLRPC$ChatFull.participants.version = i2;
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda149(this, tLRPC$ChatFull));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda151(this, tLRPC$ChatFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$ChatFull.getObjectSize());
                 tLRPC$ChatFull.serializeToStream(nativeByteBuffer);
@@ -9853,7 +9869,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatInfo$96(TLRPC$ChatFull tLRPC$ChatFull) {
+    public /* synthetic */ void lambda$updateChatInfo$98(TLRPC$ChatFull tLRPC$ChatFull) {
         NotificationCenter notificationCenter = getNotificationCenter();
         int i = NotificationCenter.chatInfoDidLoad;
         Boolean bool = Boolean.FALSE;
@@ -9863,7 +9879,7 @@ public class MessagesStorage extends BaseController {
     public boolean isMigratedChat(long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda105(this, j, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda107(this, j, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -9873,7 +9889,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$isMigratedChat$98(long j, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$isMigratedChat$100(long j, boolean[] zArr, CountDownLatch countDownLatch) {
         NativeByteBuffer byteBufferValue;
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -9899,7 +9915,7 @@ public class MessagesStorage extends BaseController {
     public boolean hasInviteMeMessage(long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda107(this, j, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda108(this, j, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -9909,7 +9925,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$hasInviteMeMessage$99(long j, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$hasInviteMeMessage$101(long j, boolean[] zArr, CountDownLatch countDownLatch) {
         try {
             long clientUserId = getUserConfig().getClientUserId();
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -10403,7 +10419,7 @@ public class MessagesStorage extends BaseController {
 
     public TLRPC$ChatFull loadChatInfo(long j, boolean z, CountDownLatch countDownLatch, boolean z2, boolean z3, int i) {
         TLRPC$ChatFull[] tLRPC$ChatFullArr = new TLRPC$ChatFull[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda182(this, tLRPC$ChatFullArr, j, z, z2, z3, i, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda184(this, tLRPC$ChatFullArr, j, z, z2, z3, i, countDownLatch));
         if (countDownLatch != null) {
             try {
                 countDownLatch.await();
@@ -10414,7 +10430,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadChatInfo$100(TLRPC$ChatFull[] tLRPC$ChatFullArr, long j, boolean z, boolean z2, boolean z3, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$loadChatInfo$102(TLRPC$ChatFull[] tLRPC$ChatFullArr, long j, boolean z, boolean z2, boolean z3, int i, CountDownLatch countDownLatch) {
         tLRPC$ChatFullArr[0] = loadChatInfoInternal(j, z, z2, z3, i);
         if (countDownLatch != null) {
             countDownLatch.countDown();
@@ -10422,11 +10438,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void processPendingRead(long j, int i, int i2, int i3) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda62(this, j, i, i3, this.lastSavedDate, i2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda64(this, j, i, i3, this.lastSavedDate, i2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processPendingRead$101(long j, int i, int i2, int i3, int i4) {
+    public /* synthetic */ void lambda$processPendingRead$103(long j, int i, int i2, int i3, int i4) {
         int i5;
         int i6;
         int i7;
@@ -10510,12 +10526,12 @@ public class MessagesStorage extends BaseController {
 
     public void putContacts(ArrayList<TLRPC$TL_contact> arrayList, boolean z) {
         if (!arrayList.isEmpty() || z) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda178(this, z, new ArrayList(arrayList)));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda180(this, z, new ArrayList(arrayList)));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putContacts$102(boolean z, ArrayList arrayList) {
+    public /* synthetic */ void lambda$putContacts$104(boolean z, ArrayList arrayList) {
         if (z) {
             try {
                 this.database.executeFast("DELETE FROM contacts WHERE 1").stepThis().dispose();
@@ -10543,12 +10559,12 @@ public class MessagesStorage extends BaseController {
 
     public void deleteContacts(ArrayList<Long> arrayList) {
         if (arrayList != null && !arrayList.isEmpty()) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda117(this, arrayList));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda122(this, arrayList));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteContacts$103(ArrayList arrayList) {
+    public /* synthetic */ void lambda$deleteContacts$105(ArrayList arrayList) {
         try {
             String join = TextUtils.join(",", arrayList);
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -10560,12 +10576,12 @@ public class MessagesStorage extends BaseController {
 
     public void applyPhoneBookUpdates(String str, String str2) {
         if (!TextUtils.isEmpty(str)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda115(this, str, str2));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda117(this, str, str2));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$applyPhoneBookUpdates$104(String str, String str2) {
+    public /* synthetic */ void lambda$applyPhoneBookUpdates$106(String str, String str2) {
         try {
             if (str.length() != 0) {
                 this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v7 SET deleted = 0 WHERE sphone IN(%s)", new Object[]{str})).stepThis().dispose();
@@ -10583,12 +10599,12 @@ public class MessagesStorage extends BaseController {
             return;
         }
         if (!hashMap.isEmpty() || z || z2) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda139(this, hashMap, z));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda141(this, hashMap, z));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putCachedPhoneBook$105(HashMap hashMap, boolean z) {
+    public /* synthetic */ void lambda$putCachedPhoneBook$107(HashMap hashMap, boolean z) {
         try {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d(this.currentAccount + " save contacts to db " + hashMap.size());
@@ -10638,7 +10654,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getCachedPhoneBook(boolean z) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda173(this, z));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda174(this, z));
     }
 
     /* access modifiers changed from: private */
@@ -10652,7 +10668,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:83:0x015e A[Catch:{ Exception -> 0x01f0, all -> 0x01ee }] */
     /* JADX WARNING: Removed duplicated region for block: B:87:0x016f A[Catch:{ Exception -> 0x01f0, all -> 0x01ee }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getCachedPhoneBook$106(boolean r25) {
+    public /* synthetic */ void lambda$getCachedPhoneBook$108(boolean r25) {
         /*
             r24 = this;
             r1 = r24
@@ -10947,15 +10963,15 @@ public class MessagesStorage extends BaseController {
         L_0x0229:
             goto L_0x0228
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$106(boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$108(boolean):void");
     }
 
     public void getContacts() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda6(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda15(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getContacts$107() {
+    public /* synthetic */ void lambda$getContacts$109() {
         ArrayList arrayList = new ArrayList();
         ArrayList arrayList2 = new ArrayList();
         try {
@@ -10984,11 +11000,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getUnsentMessages(int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda28(this, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda23(this, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getUnsentMessages$108(int i) {
+    public /* synthetic */ void lambda$getUnsentMessages$110(int i) {
         int i2;
         try {
             SparseArray sparseArray = new SparseArray();
@@ -11122,7 +11138,7 @@ public class MessagesStorage extends BaseController {
     public boolean checkMessageByRandomId(long j) {
         boolean[] zArr = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda106(this, j, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda109(this, j, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -11136,7 +11152,7 @@ public class MessagesStorage extends BaseController {
         if (r0 == null) goto L_0x002f;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$checkMessageByRandomId$109(long r7, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
+    public /* synthetic */ void lambda$checkMessageByRandomId$111(long r7, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
         /*
             r6 = this;
             r0 = 0
@@ -11173,13 +11189,13 @@ public class MessagesStorage extends BaseController {
         L_0x0038:
             throw r7
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageByRandomId$109(long, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageByRandomId$111(long, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public boolean checkMessageId(long j, int i) {
         boolean[] zArr = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda72(this, j, i, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda74(this, j, i, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -11193,7 +11209,7 @@ public class MessagesStorage extends BaseController {
         if (r0 == null) goto L_0x0036;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$checkMessageId$110(long r6, int r8, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
+    public /* synthetic */ void lambda$checkMessageId$112(long r6, int r8, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
         /*
             r5 = this;
             r0 = 0
@@ -11233,15 +11249,15 @@ public class MessagesStorage extends BaseController {
         L_0x003f:
             throw r6
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$110(long, int, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$112(long, int, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public void getUnreadMention(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda93(this, j, intCallback));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda95(this, j, intCallback));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getUnreadMention$112(long j, IntCallback intCallback) {
+    public /* synthetic */ void lambda$getUnreadMention$114(long j, IntCallback intCallback) {
         try {
             int i = 0;
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT MIN(mid) FROM messages_v2 WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(j)}), new Object[0]);
@@ -11249,18 +11265,18 @@ public class MessagesStorage extends BaseController {
                 i = queryFinalized.intValue(0);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda2(intCallback, i));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda1(intCallback, i));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
     }
 
     public void getMessagesCount(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda95(this, j, intCallback));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda96(this, j, intCallback));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getMessagesCount$114(long j, IntCallback intCallback) {
+    public /* synthetic */ void lambda$getMessagesCount$116(long j, IntCallback intCallback) {
         try {
             int i = 0;
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT COUNT(mid) FROM messages_v2 WHERE uid = %d", new Object[]{Long.valueOf(j)}), new Object[0]);
@@ -14310,7 +14326,7 @@ public class MessagesStorage extends BaseController {
             r23 = 0
         L_0x1287:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r4 = r15.messages     // Catch:{ Exception -> 0x148d }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda188 r6 = org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda188.INSTANCE     // Catch:{ Exception -> 0x148d }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda190 r6 = org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda190.INSTANCE     // Catch:{ Exception -> 0x148d }
             java.util.Collections.sort(r4, r6)     // Catch:{ Exception -> 0x148d }
             boolean r4 = org.telegram.messenger.DialogObject.isEncryptedDialog(r47)     // Catch:{ Exception -> 0x148d }
             if (r4 != 0) goto L_0x12d1
@@ -14702,7 +14718,7 @@ public class MessagesStorage extends BaseController {
             int r1 = r1.size()
         L_0x1535:
             r4 = r1
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda163 r25 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda163
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda165 r25 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda165
             r1 = r25
             r2 = r46
             r3 = r6
@@ -14725,7 +14741,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$getMessagesInternal$115(TLRPC$Message tLRPC$Message, TLRPC$Message tLRPC$Message2) {
+    public static /* synthetic */ int lambda$getMessagesInternal$117(TLRPC$Message tLRPC$Message, TLRPC$Message tLRPC$Message2) {
         int i;
         int i2;
         int i3 = tLRPC$Message.id;
@@ -14759,28 +14775,28 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getMessagesInternal$116(TLRPC$TL_messages_messages tLRPC$TL_messages_messages, int i, long j, long j2, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, boolean z, boolean z2, int i11, int i12, boolean z3, int i13, boolean z4) {
+    public /* synthetic */ void lambda$getMessagesInternal$118(TLRPC$TL_messages_messages tLRPC$TL_messages_messages, int i, long j, long j2, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, boolean z, boolean z2, int i11, int i12, boolean z3, int i13, boolean z4) {
         getMessagesController().processLoadedMessages(tLRPC$TL_messages_messages, i, j, j2, i2, i3, i4, true, i5, i6, i7, i8, i9, i10, z, z2 ? 1 : 0, i11, i12, z3, i13, z4);
     }
 
     public void getMessages(long j, long j2, boolean z, int i, int i2, int i3, int i4, int i5, int i6, boolean z2, int i7, int i8, boolean z3) {
-        MessagesStorage$$ExternalSyntheticLambda77 messagesStorage$$ExternalSyntheticLambda77 = r0;
+        MessagesStorage$$ExternalSyntheticLambda79 messagesStorage$$ExternalSyntheticLambda79 = r0;
         DispatchQueue dispatchQueue = this.storageQueue;
-        MessagesStorage$$ExternalSyntheticLambda77 messagesStorage$$ExternalSyntheticLambda772 = new MessagesStorage$$ExternalSyntheticLambda77(this, j, j2, i, i2, i3, i4, i5, i6, z2, i7, i8, z3);
-        dispatchQueue.postRunnable(messagesStorage$$ExternalSyntheticLambda77);
+        MessagesStorage$$ExternalSyntheticLambda79 messagesStorage$$ExternalSyntheticLambda792 = new MessagesStorage$$ExternalSyntheticLambda79(this, j, j2, i, i2, i3, i4, i5, i6, z2, i7, i8, z3);
+        dispatchQueue.postRunnable(messagesStorage$$ExternalSyntheticLambda79);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getMessages$117(long j, long j2, int i, int i2, int i3, int i4, int i5, int i6, boolean z, int i7, int i8, boolean z2) {
+    public /* synthetic */ void lambda$getMessages$119(long j, long j2, int i, int i2, int i3, int i4, int i5, int i6, boolean z, int i7, int i8, boolean z2) {
         Utilities.stageQueue.postRunnable(getMessagesInternal(j, j2, i, i2, i3, i4, i5, i6, z, i7, i8, z2));
     }
 
     public void clearSentMedia() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda8(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda6(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearSentMedia$118() {
+    public /* synthetic */ void lambda$clearSentMedia$120() {
         try {
             this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
         } catch (Exception e) {
@@ -14794,7 +14810,7 @@ public class MessagesStorage extends BaseController {
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Object[] objArr = new Object[2];
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda114(this, str, i, objArr, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda116(this, str, i, objArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -14807,7 +14823,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getSentFile$119(String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getSentFile$121(String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
         NativeByteBuffer byteBufferValue;
         try {
             String MD5 = Utilities.MD5(str);
@@ -14862,11 +14878,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void putWidgetDialogs(int i, ArrayList<Long> arrayList) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda46(this, i, arrayList));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda48(this, i, arrayList));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putWidgetDialogs$120(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$putWidgetDialogs$122(int i, ArrayList arrayList) {
         try {
             this.database.beginTransaction();
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -14897,11 +14913,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void clearWidgetDialogs(int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda23(this, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda25(this, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearWidgetDialogs$121(int i) {
+    public /* synthetic */ void lambda$clearWidgetDialogs$123(int i) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM shortcut_widget WHERE id = " + i).stepThis().dispose();
@@ -14912,7 +14928,7 @@ public class MessagesStorage extends BaseController {
 
     public void getWidgetDialogIds(int i, int i2, ArrayList<Long> arrayList, ArrayList<TLRPC$User> arrayList2, ArrayList<TLRPC$Chat> arrayList3, boolean z) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda52(this, i, arrayList, arrayList2, arrayList3, z, i2, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda54(this, i, arrayList, arrayList2, arrayList3, z, i2, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -14921,7 +14937,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getWidgetDialogIds$122(int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, boolean z, int i2, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getWidgetDialogIds$124(int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, boolean z, int i2, CountDownLatch countDownLatch) {
         try {
             ArrayList arrayList4 = new ArrayList();
             ArrayList arrayList5 = new ArrayList();
@@ -14992,7 +15008,7 @@ public class MessagesStorage extends BaseController {
 
     public void getWidgetDialogs(int i, int i2, ArrayList<Long> arrayList, LongSparseArray<TLRPC$Dialog> longSparseArray, LongSparseArray<TLRPC$Message> longSparseArray2, ArrayList<TLRPC$User> arrayList2, ArrayList<TLRPC$Chat> arrayList3) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda49(this, i, arrayList, i2, longSparseArray, longSparseArray2, arrayList3, arrayList2, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda51(this, i, arrayList, i2, longSparseArray, longSparseArray2, arrayList3, arrayList2, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15001,7 +15017,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getWidgetDialogs$123(int i, ArrayList arrayList, int i2, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, ArrayList arrayList2, ArrayList arrayList3, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getWidgetDialogs$125(int i, ArrayList arrayList, int i2, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, ArrayList arrayList2, ArrayList arrayList3, CountDownLatch countDownLatch) {
         boolean z;
         SQLiteCursor sQLiteCursor;
         ArrayList arrayList4 = arrayList;
@@ -15111,7 +15127,7 @@ public class MessagesStorage extends BaseController {
 
     public void putSentFile(String str, TLObject tLObject, int i, String str2) {
         if (str != null && tLObject != null && str2 != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda116(this, str, tLObject, i, str2));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda118(this, str, tLObject, i, str2));
         }
     }
 
@@ -15122,7 +15138,7 @@ public class MessagesStorage extends BaseController {
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$putSentFile$124(java.lang.String r5, org.telegram.tgnet.TLObject r6, int r7, java.lang.String r8) {
+    public /* synthetic */ void lambda$putSentFile$126(java.lang.String r5, org.telegram.tgnet.TLObject r6, int r7, java.lang.String r8) {
         /*
             r4 = this;
             r0 = 0
@@ -15198,17 +15214,17 @@ public class MessagesStorage extends BaseController {
         L_0x0075:
             goto L_0x0074
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$124(java.lang.String, org.telegram.tgnet.TLObject, int, java.lang.String):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$126(java.lang.String, org.telegram.tgnet.TLObject, int, java.lang.String):void");
     }
 
     public void updateEncryptedChatSeq(TLRPC$EncryptedChat tLRPC$EncryptedChat, boolean z) {
         if (tLRPC$EncryptedChat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda158(this, tLRPC$EncryptedChat, z));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda160(this, tLRPC$EncryptedChat, z));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateEncryptedChatSeq$125(TLRPC$EncryptedChat tLRPC$EncryptedChat, boolean z) {
+    public /* synthetic */ void lambda$updateEncryptedChatSeq$127(TLRPC$EncryptedChat tLRPC$EncryptedChat, boolean z) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             sQLitePreparedStatement = this.database.executeFast("UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ?, mtproto_seq = ? WHERE uid = ?");
@@ -15239,12 +15255,12 @@ public class MessagesStorage extends BaseController {
 
     public void updateEncryptedChatTTL(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         if (tLRPC$EncryptedChat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda156(this, tLRPC$EncryptedChat));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda157(this, tLRPC$EncryptedChat));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateEncryptedChatTTL$126(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChatTTL$128(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             sQLitePreparedStatement = this.database.executeFast("UPDATE enc_chats SET ttl = ? WHERE uid = ?");
@@ -15267,12 +15283,12 @@ public class MessagesStorage extends BaseController {
 
     public void updateEncryptedChatLayer(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         if (tLRPC$EncryptedChat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda154(this, tLRPC$EncryptedChat));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda156(this, tLRPC$EncryptedChat));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateEncryptedChatLayer$127(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChatLayer$129(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             sQLitePreparedStatement = this.database.executeFast("UPDATE enc_chats SET layer = ? WHERE uid = ?");
@@ -15295,12 +15311,12 @@ public class MessagesStorage extends BaseController {
 
     public void updateEncryptedChat(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         if (tLRPC$EncryptedChat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda155(this, tLRPC$EncryptedChat));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda158(this, tLRPC$EncryptedChat));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateEncryptedChat$128(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChat$130(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         byte[] bArr;
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
@@ -15373,11 +15389,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void isDialogHasTopMessage(long j, Runnable runnable) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda84(this, j, runnable));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda86(this, j, runnable));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$isDialogHasTopMessage$129(long j, Runnable runnable) {
+    public /* synthetic */ void lambda$isDialogHasTopMessage$131(long j, Runnable runnable) {
         boolean z = false;
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT last_mid FROM dialogs WHERE did = %d", new Object[]{Long.valueOf(j)}), new Object[0]);
@@ -15396,7 +15412,7 @@ public class MessagesStorage extends BaseController {
     public boolean hasAuthMessage(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda54(this, i, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda56(this, i, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15406,7 +15422,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$hasAuthMessage$130(int i, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$hasAuthMessage$132(int i, boolean[] zArr, CountDownLatch countDownLatch) {
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages_v2 WHERE uid = 777000 AND date = %d AND mid < 0 LIMIT 1", new Object[]{Integer.valueOf(i)}), new Object[0]);
             zArr[0] = queryFinalized.next();
@@ -15422,12 +15438,12 @@ public class MessagesStorage extends BaseController {
 
     public void getEncryptedChat(long j, CountDownLatch countDownLatch, ArrayList<TLObject> arrayList) {
         if (countDownLatch != null && arrayList != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda90(this, j, arrayList, countDownLatch));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda92(this, j, arrayList, countDownLatch));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getEncryptedChat$131(long j, ArrayList arrayList, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getEncryptedChat$133(long j, ArrayList arrayList, CountDownLatch countDownLatch) {
         try {
             ArrayList arrayList2 = new ArrayList();
             ArrayList arrayList3 = new ArrayList();
@@ -15451,12 +15467,12 @@ public class MessagesStorage extends BaseController {
 
     public void putEncryptedChat(TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$User tLRPC$User, TLRPC$Dialog tLRPC$Dialog) {
         if (tLRPC$EncryptedChat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda157(this, tLRPC$EncryptedChat, tLRPC$User, tLRPC$Dialog));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda159(this, tLRPC$EncryptedChat, tLRPC$User, tLRPC$Dialog));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putEncryptedChat$132(TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$User tLRPC$User, TLRPC$Dialog tLRPC$Dialog) {
+    public /* synthetic */ void lambda$putEncryptedChat$134(TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$User tLRPC$User, TLRPC$Dialog tLRPC$Dialog) {
         byte[] bArr;
         TLRPC$EncryptedChat tLRPC$EncryptedChat2 = tLRPC$EncryptedChat;
         TLRPC$User tLRPC$User2 = tLRPC$User;
@@ -15633,12 +15649,12 @@ public class MessagesStorage extends BaseController {
 
     public void updateChatDefaultBannedRights(long j, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, int i) {
         if (tLRPC$TL_chatBannedRights != null && j != 0) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda69(this, j, i, tLRPC$TL_chatBannedRights));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda71(this, j, i, tLRPC$TL_chatBannedRights));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatDefaultBannedRights$133(long j, int i, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights) {
+    public /* synthetic */ void lambda$updateChatDefaultBannedRights$135(long j, int i, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights) {
         NativeByteBuffer byteBufferValue;
         TLRPC$Chat tLRPC$Chat = null;
         try {
@@ -15835,7 +15851,7 @@ public class MessagesStorage extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: putUsersAndChatsInternal */
-    public void lambda$putUsersAndChats$134(ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z) {
+    public void lambda$putUsersAndChats$136(ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z) {
         if (z) {
             try {
                 this.database.beginTransaction();
@@ -15856,18 +15872,18 @@ public class MessagesStorage extends BaseController {
             return;
         }
         if (z2) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda136(this, arrayList, arrayList2, z));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda138(this, arrayList, arrayList2, z));
         } else {
-            lambda$putUsersAndChats$134(arrayList, arrayList2, z);
+            lambda$putUsersAndChats$136(arrayList, arrayList2, z);
         }
     }
 
     public void removeFromDownloadQueue(long j, int i, boolean z) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda174(this, z, i, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda176(this, z, i, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$removeFromDownloadQueue$135(boolean z, int i, long j) {
+    public /* synthetic */ void lambda$removeFromDownloadQueue$137(boolean z, int i, long j) {
         if (z) {
             try {
                 SQLiteDatabase sQLiteDatabase = this.database;
@@ -15909,21 +15925,21 @@ public class MessagesStorage extends BaseController {
             if (z) {
                 this.database.commitTransaction();
             }
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda128(this, arrayList));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda126(this, arrayList));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteFromDownloadQueue$136(ArrayList arrayList) {
+    public /* synthetic */ void lambda$deleteFromDownloadQueue$138(ArrayList arrayList) {
         getDownloadController().cancelDownloading(arrayList);
     }
 
     public void clearDownloadQueue(int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda22(this, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda28(this, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearDownloadQueue$137(int i) {
+    public /* synthetic */ void lambda$clearDownloadQueue$139(int i) {
         if (i == 0) {
             try {
                 this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
@@ -15936,7 +15952,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getDownloadQueue(int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda20(this, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda29(this, i));
     }
 
     /* access modifiers changed from: private */
@@ -15944,7 +15960,7 @@ public class MessagesStorage extends BaseController {
         r3 = r5.ttl_seconds;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getDownloadQueue$139(int r9) {
+    public /* synthetic */ void lambda$getDownloadQueue$141(int r9) {
         /*
             r8 = this;
             java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x0096 }
@@ -16033,11 +16049,11 @@ public class MessagesStorage extends BaseController {
         L_0x009a:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDownloadQueue$139(int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDownloadQueue$141(int):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDownloadQueue$138(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$getDownloadQueue$140(int i, ArrayList arrayList) {
         getDownloadController().processDownloadObjects(i, arrayList);
     }
 
@@ -16063,12 +16079,12 @@ public class MessagesStorage extends BaseController {
 
     public void putWebPages(LongSparseArray<TLRPC$WebPage> longSparseArray) {
         if (!isEmpty((LongSparseArray<?>) longSparseArray)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda109(this, longSparseArray));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda110(this, longSparseArray));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putWebPages$141(LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$putWebPages$143(LongSparseArray longSparseArray) {
         LongSparseArray longSparseArray2 = longSparseArray;
         try {
             ArrayList arrayList = new ArrayList();
@@ -16150,7 +16166,7 @@ public class MessagesStorage extends BaseController {
                 executeFast.dispose();
                 executeFast2.dispose();
                 this.database.commitTransaction();
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda124(this, arrayList));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda125(this, arrayList));
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -16158,12 +16174,12 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putWebPages$140(ArrayList arrayList) {
+    public /* synthetic */ void lambda$putWebPages$142(ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.didReceivedWebpages, arrayList);
     }
 
     public void overwriteChannel(long j, TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda70(this, j, i, tLRPC$TL_updates_channelDifferenceTooLong));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda72(this, j, i, tLRPC$TL_updates_channelDifferenceTooLong));
     }
 
     /* access modifiers changed from: private */
@@ -16172,7 +16188,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:15:0x0183 A[Catch:{ Exception -> 0x0196 }] */
     /* JADX WARNING: Removed duplicated region for block: B:21:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$overwriteChannel$143(long r19, int r21, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong r22) {
+    public /* synthetic */ void lambda$overwriteChannel$145(long r19, int r21, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong r22) {
         /*
             r18 = this;
             r9 = r18
@@ -16324,7 +16340,7 @@ public class MessagesStorage extends BaseController {
             r15 = 1
             r8 = r17
             r1.updateDialogsWithDeletedMessages(r2, r4, r6, r7, r8)     // Catch:{ Exception -> 0x0196 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda99 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda99     // Catch:{ Exception -> 0x0196 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda101 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda101     // Catch:{ Exception -> 0x0196 }
             r1.<init>(r9, r13, r12)     // Catch:{ Exception -> 0x0196 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x0196 }
             if (r16 == 0) goto L_0x019a
@@ -16343,22 +16359,22 @@ public class MessagesStorage extends BaseController {
         L_0x019a:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$overwriteChannel$143(long, int, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$overwriteChannel$145(long, int, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$overwriteChannel$142(long j, TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong) {
+    public /* synthetic */ void lambda$overwriteChannel$144(long j, TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong) {
         getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), Boolean.TRUE, tLRPC$TL_updates_channelDifferenceTooLong);
     }
 
     public void putChannelViews(LongSparseArray<SparseIntArray> longSparseArray, LongSparseArray<SparseIntArray> longSparseArray2, LongSparseArray<SparseArray<TLRPC$MessageReplies>> longSparseArray3, boolean z) {
         if (!isEmpty((LongSparseArray<?>) longSparseArray) || !isEmpty((LongSparseArray<?>) longSparseArray2) || !isEmpty((LongSparseArray<?>) longSparseArray3)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda111(this, longSparseArray, longSparseArray2, longSparseArray3, z));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda113(this, longSparseArray, longSparseArray2, longSparseArray3, z));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putChannelViews$144(LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3, boolean z) {
+    public /* synthetic */ void lambda$putChannelViews$146(LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3, boolean z) {
         TLRPC$TL_messageReplies tLRPC$TL_messageReplies;
         int i;
         int i2;
@@ -16505,7 +16521,7 @@ public class MessagesStorage extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: updateRepliesMaxReadIdInternal */
-    public void lambda$updateRepliesMaxReadId$145(long j, int i, int i2) {
+    public void lambda$updateRepliesMaxReadId$147(long j, int i, int i2) {
         NativeByteBuffer byteBufferValue;
         long j2 = -j;
         try {
@@ -16536,18 +16552,18 @@ public class MessagesStorage extends BaseController {
 
     public void updateRepliesMaxReadId(long j, int i, int i2, boolean z) {
         if (z) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda61(this, j, i, i2));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda63(this, j, i, i2));
         } else {
-            lambda$updateRepliesMaxReadId$145(j, i, i2);
+            lambda$updateRepliesMaxReadId$147(j, i, i2);
         }
     }
 
     public void updateRepliesCount(long j, int i, ArrayList<TLRPC$Peer> arrayList, int i2, int i3) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda41(this, i, j, i3, arrayList, i2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda43(this, i, j, i3, arrayList, i2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateRepliesCount$146(int i, long j, int i2, ArrayList arrayList, int i3) {
+    public /* synthetic */ void lambda$updateRepliesCount$148(int i, long j, int i2, ArrayList arrayList, int i3) {
         NativeByteBuffer byteBufferValue;
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE messages_v2 SET replies_data = ? WHERE mid = ? AND uid = ?");
@@ -16593,11 +16609,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateMessageVerifyFlags(ArrayList<TLRPC$Message> arrayList) {
-        Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda122(this, arrayList));
+        Utilities.stageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda123(this, arrayList));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageVerifyFlags$147(ArrayList arrayList) {
+    public /* synthetic */ void lambda$updateMessageVerifyFlags$149(ArrayList arrayList) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE messages_v2 SET imp = ? WHERE mid = ? AND uid = ?");
@@ -16647,7 +16663,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:91:0x026d A[Catch:{ Exception -> 0x010d }] */
     /* renamed from: putMessagesInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void lambda$putMessages$149(java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r42, boolean r43, boolean r44, int r45, boolean r46, boolean r47) {
+    public void lambda$putMessages$151(java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r42, boolean r43, boolean r44, int r45, boolean r46, boolean r47) {
         /*
             r41 = this;
             r1 = r41
@@ -18183,7 +18199,7 @@ public class MessagesStorage extends BaseController {
             r3 = r37
             r2.processDialogsUpdateRead(r3, r4)     // Catch:{ Exception -> 0x010d }
             if (r38 == 0) goto L_0x0b9b
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda26 r2 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda26     // Catch:{ Exception -> 0x010d }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda22 r2 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda22     // Catch:{ Exception -> 0x010d }
             r3 = r38
             r2.<init>(r1, r3)     // Catch:{ Exception -> 0x010d }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x010d }
@@ -18195,11 +18211,11 @@ public class MessagesStorage extends BaseController {
         L_0x0ba2:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$149(java.util.ArrayList, boolean, boolean, int, boolean, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$151(java.util.ArrayList, boolean, boolean, int, boolean, boolean):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putMessagesInternal$148(int i) {
+    public /* synthetic */ void lambda$putMessagesInternal$150(int i) {
         getDownloadController().newDownloadObjectsAvailable(i);
     }
 
@@ -18210,19 +18226,19 @@ public class MessagesStorage extends BaseController {
     public void putMessages(ArrayList<TLRPC$Message> arrayList, boolean z, boolean z2, boolean z3, int i, boolean z4, boolean z5) {
         if (arrayList.size() != 0) {
             if (z2) {
-                this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda138(this, arrayList, z, z3, i, z4, z5));
+                this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda140(this, arrayList, z, z3, i, z4, z5));
                 return;
             }
-            lambda$putMessages$149(arrayList, z, z3, i, z4, z5);
+            lambda$putMessages$151(arrayList, z, z3, i, z4, z5);
         }
     }
 
     public void markMessageAsSendError(TLRPC$Message tLRPC$Message, boolean z) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda161(this, tLRPC$Message, z));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda163(this, tLRPC$Message, z));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessageAsSendError$150(TLRPC$Message tLRPC$Message, boolean z) {
+    public /* synthetic */ void lambda$markMessageAsSendError$152(TLRPC$Message tLRPC$Message, boolean z) {
         try {
             long j = (long) tLRPC$Message.id;
             if (z) {
@@ -18236,11 +18252,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void setMessageSeq(int i, int i2, int i3) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda29(this, i, i2, i3));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda31(this, i, i2, i3));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setMessageSeq$151(int i, int i2, int i3) {
+    public /* synthetic */ void lambda$setMessageSeq$153(int i, int i2, int i3) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO messages_seq VALUES(?, ?, ?)");
             executeFast.requery();
@@ -18393,7 +18409,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:98:0x018f A[Catch:{ Exception -> 0x019a, all -> 0x0197 }] */
     /* renamed from: updateMessageStateAndIdInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public long[] lambda$updateMessageStateAndId$153(long r20, long r22, java.lang.Integer r24, int r25, int r26, int r27) {
+    public long[] lambda$updateMessageStateAndId$155(long r20, long r22, java.lang.Integer r24, int r25, int r26, int r27) {
         /*
             r19 = this;
             r1 = r19
@@ -18534,7 +18550,7 @@ public class MessagesStorage extends BaseController {
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Update> r3 = r2.updates
             r3.add(r0)
             org.telegram.messenger.DispatchQueue r0 = org.telegram.messenger.Utilities.stageQueue
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda164 r3 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda164
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda166 r3 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda166
             r3.<init>(r1, r2)
             r0.postRunnable(r3)
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0118 }
@@ -18888,25 +18904,25 @@ public class MessagesStorage extends BaseController {
         L_0x0343:
             goto L_0x0342
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageStateAndId$153(long, long, java.lang.Integer, int, int, int):long[]");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageStateAndId$155(long, long, java.lang.Integer, int, int, int):long[]");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageStateAndIdInternal$152(TLRPC$TL_updates tLRPC$TL_updates) {
+    public /* synthetic */ void lambda$updateMessageStateAndIdInternal$154(TLRPC$TL_updates tLRPC$TL_updates) {
         getMessagesController().processUpdates(tLRPC$TL_updates, false);
     }
 
     public long[] updateMessageStateAndId(long j, long j2, Integer num, int i, int i2, boolean z, int i3) {
         if (z) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda78(this, j, j2, num, i, i2, i3));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda80(this, j, j2, num, i, i2, i3));
             return null;
         }
-        return lambda$updateMessageStateAndId$153(j, j2, num, i, i2, i3);
+        return lambda$updateMessageStateAndId$155(j, j2, num, i, i2, i3);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: updateUsersInternal */
-    public void lambda$updateUsers$154(ArrayList<TLRPC$User> arrayList, boolean z, boolean z2) {
+    public void lambda$updateUsers$156(ArrayList<TLRPC$User> arrayList, boolean z, boolean z2) {
         if (z) {
             if (z2) {
                 try {
@@ -18988,16 +19004,16 @@ public class MessagesStorage extends BaseController {
     public void updateUsers(ArrayList<TLRPC$User> arrayList, boolean z, boolean z2, boolean z3) {
         if (arrayList != null && !arrayList.isEmpty()) {
             if (z3) {
-                this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda137(this, arrayList, z, z2));
+                this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda139(this, arrayList, z, z2));
             } else {
-                lambda$updateUsers$154(arrayList, z, z2);
+                lambda$updateUsers$156(arrayList, z, z2);
             }
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: markMessagesAsReadInternal */
-    public void lambda$markMessagesAsRead$156(LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, SparseIntArray sparseIntArray) {
+    public void lambda$markMessagesAsRead$158(LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, SparseIntArray sparseIntArray) {
         LongSparseIntArray longSparseIntArray3 = longSparseIntArray;
         LongSparseIntArray longSparseIntArray4 = longSparseIntArray2;
         SparseIntArray sparseIntArray2 = sparseIntArray;
@@ -19066,12 +19082,12 @@ public class MessagesStorage extends BaseController {
 
     public void markMessagesContentAsRead(long j, ArrayList<Integer> arrayList, int i) {
         if (!isEmpty((List<?>) arrayList)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda87(this, j, arrayList, i));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda89(this, j, arrayList, i));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessagesContentAsRead$155(long j, ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$markMessagesContentAsRead$157(long j, ArrayList arrayList, int i) {
         if (j == 0) {
             try {
                 LongSparseArray longSparseArray = new LongSparseArray();
@@ -19100,20 +19116,20 @@ public class MessagesStorage extends BaseController {
 
     public void markMessagesAsRead(LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, SparseIntArray sparseIntArray, boolean z) {
         if (z) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda144(this, longSparseIntArray, longSparseIntArray2, sparseIntArray));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda146(this, longSparseIntArray, longSparseIntArray2, sparseIntArray));
         } else {
-            lambda$markMessagesAsRead$156(longSparseIntArray, longSparseIntArray2, sparseIntArray);
+            lambda$markMessagesAsRead$158(longSparseIntArray, longSparseIntArray2, sparseIntArray);
         }
     }
 
     public void markMessagesAsDeletedByRandoms(ArrayList<Long> arrayList) {
         if (!arrayList.isEmpty()) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda123(this, arrayList));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda120(this, arrayList));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$158(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$160(ArrayList arrayList) {
         try {
             String join = TextUtils.join(",", arrayList);
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid, uid FROM randoms_v2 WHERE random_id IN(%s)", new Object[]{join}), new Object[0]);
@@ -19133,10 +19149,10 @@ public class MessagesStorage extends BaseController {
                 for (int i = 0; i < size; i++) {
                     long keyAt = longSparseArray.keyAt(i);
                     ArrayList arrayList3 = (ArrayList) longSparseArray.valueAt(i);
-                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda121(this, arrayList3));
+                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda128(this, arrayList3));
                     updateDialogsWithReadMessagesInternal(arrayList3, (LongSparseIntArray) null, (LongSparseIntArray) null, (LongSparseArray<ArrayList<Integer>>) null);
-                    lambda$markMessagesAsDeleted$162(keyAt, arrayList3, true, false);
-                    lambda$updateDialogsWithDeletedMessages$161(keyAt, 0, arrayList3, (ArrayList<Long>) null);
+                    lambda$markMessagesAsDeleted$164(keyAt, arrayList3, true, false);
+                    lambda$updateDialogsWithDeletedMessages$163(keyAt, 0, arrayList3, (ArrayList<Long>) null);
                 }
             }
         } catch (Exception e) {
@@ -19145,7 +19161,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$157(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$159(ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, 0L, Boolean.FALSE);
     }
 
@@ -19166,14 +19182,14 @@ public class MessagesStorage extends BaseController {
                 i = queryFinalized.intValue(0);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda113(this, l, i));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda115(this, l, i));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$broadcastScheduledMessagesChange$159(Long l, int i) {
+    public /* synthetic */ void lambda$broadcastScheduledMessagesChange$161(Long l, int i) {
         getNotificationCenter().postNotificationName(NotificationCenter.scheduledMessagesUpdated, l, Integer.valueOf(i));
     }
 
@@ -19187,7 +19203,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:76:0x0285 A[Catch:{ Exception -> 0x05cf }] */
     /* renamed from: markMessagesAsDeletedInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public java.util.ArrayList<java.lang.Long> lambda$markMessagesAsDeleted$162(long r30, java.util.ArrayList<java.lang.Integer> r32, boolean r33, boolean r34) {
+    public java.util.ArrayList<java.lang.Long> lambda$markMessagesAsDeleted$164(long r30, java.util.ArrayList<java.lang.Integer> r32, boolean r33, boolean r34) {
         /*
             r29 = this;
             r7 = r29
@@ -19427,7 +19443,7 @@ public class MessagesStorage extends BaseController {
             r9.dispose()     // Catch:{ Exception -> 0x05cf }
             r1 = 1
             r7.deleteFromDownloadQueue(r10, r1)     // Catch:{ Exception -> 0x05cf }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda127 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda127     // Catch:{ Exception -> 0x05cf }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda121 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda121     // Catch:{ Exception -> 0x05cf }
             r0.<init>(r7, r11)     // Catch:{ Exception -> 0x05cf }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x05cf }
             org.telegram.messenger.FileLoader r0 = r29.getFileLoader()     // Catch:{ Exception -> 0x05cf }
@@ -19888,11 +19904,11 @@ public class MessagesStorage extends BaseController {
             r1 = 0
             return r1
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsDeleted$162(long, java.util.ArrayList, boolean, boolean):java.util.ArrayList");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsDeleted$164(long, java.util.ArrayList, boolean, boolean):java.util.ArrayList");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessagesAsDeletedInternal$160(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedInternal$162(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
@@ -19906,7 +19922,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Multi-variable type inference failed */
     /* renamed from: updateDialogsWithDeletedMessagesInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void lambda$updateDialogsWithDeletedMessages$161(long r20, long r22, java.util.ArrayList<java.lang.Integer> r24, java.util.ArrayList<java.lang.Long> r25) {
+    public void lambda$updateDialogsWithDeletedMessages$163(long r20, long r22, java.util.ArrayList<java.lang.Integer> r24, java.util.ArrayList<java.lang.Long> r25) {
         /*
             r19 = this;
             r1 = r19
@@ -20203,15 +20219,15 @@ public class MessagesStorage extends BaseController {
         L_0x0288:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateDialogsWithDeletedMessages$161(long, long, java.util.ArrayList, java.util.ArrayList):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateDialogsWithDeletedMessages$163(long, long, java.util.ArrayList, java.util.ArrayList):void");
     }
 
     public void updateDialogsWithDeletedMessages(long j, long j2, ArrayList<Integer> arrayList, ArrayList<Long> arrayList2, boolean z) {
         if (z) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda79(this, j, j2, arrayList, arrayList2));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda81(this, j, j2, arrayList, arrayList2));
             return;
         }
-        lambda$updateDialogsWithDeletedMessages$161(j, j2, arrayList, arrayList2);
+        lambda$updateDialogsWithDeletedMessages$163(j, j2, arrayList, arrayList2);
     }
 
     public ArrayList<Long> markMessagesAsDeleted(long j, ArrayList<Integer> arrayList, boolean z, boolean z2, boolean z3) {
@@ -20219,26 +20235,26 @@ public class MessagesStorage extends BaseController {
             return null;
         }
         if (!z) {
-            return lambda$markMessagesAsDeleted$162(j, arrayList, z2, z3);
+            return lambda$markMessagesAsDeleted$164(j, arrayList, z2, z3);
         }
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda91(this, j, arrayList, z2, z3));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda93(this, j, arrayList, z2, z3));
         return null;
     }
 
     /* JADX WARNING: type inference failed for: r6v0 */
-    /* JADX WARNING: type inference failed for: r6v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r6v1, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r15v5 */
     /* JADX WARNING: type inference failed for: r15v10 */
     /* JADX WARNING: type inference failed for: r6v24 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [boolean, int] */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x0109 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:53:0x01d8 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x01dd A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:57:0x01e3 A[Catch:{ Exception -> 0x0286 }] */
     /* renamed from: markMessagesAsDeletedInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public java.util.ArrayList<java.lang.Long> lambda$markMessagesAsDeleted$164(long r20, int r22, boolean r23) {
+    public java.util.ArrayList<java.lang.Long> lambda$markMessagesAsDeleted$166(long r20, int r22, boolean r23) {
         /*
             r19 = this;
             r7 = r19
@@ -20360,7 +20376,7 @@ public class MessagesStorage extends BaseController {
             r1 = r19
             r2 = r7
             r1.deleteFromDownloadQueue(r12, r15)     // Catch:{ Exception -> 0x0286 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda119 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda119     // Catch:{ Exception -> 0x0286 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda129 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda129     // Catch:{ Exception -> 0x0286 }
             r0.<init>(r1, r11)     // Catch:{ Exception -> 0x0286 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0286 }
             org.telegram.messenger.FileLoader r0 = r19.getFileLoader()     // Catch:{ Exception -> 0x0286 }
@@ -20532,19 +20548,19 @@ public class MessagesStorage extends BaseController {
             r0 = 0
             return r0
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsDeleted$164(long, int, boolean):java.util.ArrayList");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsDeleted$166(long, int, boolean):java.util.ArrayList");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessagesAsDeletedInternal$163(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedInternal$165(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
     public ArrayList<Long> markMessagesAsDeleted(long j, int i, boolean z, boolean z2) {
         if (!z) {
-            return lambda$markMessagesAsDeleted$164(j, i, z2);
+            return lambda$markMessagesAsDeleted$166(j, i, z2);
         }
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda71(this, j, i, z2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda73(this, j, i, z2));
         return null;
     }
 
@@ -20821,7 +20837,7 @@ public class MessagesStorage extends BaseController {
 
     public void replaceMessageIfExists(TLRPC$Message tLRPC$Message, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z) {
         if (tLRPC$Message != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda162(this, tLRPC$Message, z, arrayList, arrayList2));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda164(this, tLRPC$Message, z, arrayList, arrayList2));
         }
     }
 
@@ -20851,7 +20867,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:79:0x01c8 A[Catch:{ Exception -> 0x01c2 }] */
     /* JADX WARNING: Removed duplicated region for block: B:85:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$replaceMessageIfExists$166(org.telegram.tgnet.TLRPC$Message r16, boolean r17, java.util.ArrayList r18, java.util.ArrayList r19) {
+    public /* synthetic */ void lambda$replaceMessageIfExists$168(org.telegram.tgnet.TLRPC$Message r16, boolean r17, java.util.ArrayList r18, java.util.ArrayList r19) {
         /*
             r15 = this;
             r1 = r15
@@ -21077,7 +21093,7 @@ public class MessagesStorage extends BaseController {
             java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x01c2 }
             r0.<init>()     // Catch:{ Exception -> 0x01c2 }
             r0.add(r9)     // Catch:{ Exception -> 0x01c2 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda141 r2 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda141     // Catch:{ Exception -> 0x01c2 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda143 r2 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda143     // Catch:{ Exception -> 0x01c2 }
             r2.<init>(r15, r9, r0)     // Catch:{ Exception -> 0x01c2 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x01c2 }
             goto L_0x01cf
@@ -21097,16 +21113,16 @@ public class MessagesStorage extends BaseController {
         L_0x01cf:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$166(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$168(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$replaceMessageIfExists$165(MessageObject messageObject, ArrayList arrayList) {
+    public /* synthetic */ void lambda$replaceMessageIfExists$167(MessageObject messageObject, ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.replaceMessagesObjects, Long.valueOf(messageObject.getDialogId()), arrayList);
     }
 
     public void putMessages(TLRPC$messages_Messages tLRPC$messages_Messages, long j, int i, int i2, boolean z, boolean z2) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda176(this, z2, j, tLRPC$messages_Messages, i, i2, z));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda178(this, z2, j, tLRPC$messages_Messages, i, i2, z));
     }
 
     /* access modifiers changed from: private */
@@ -21137,7 +21153,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0288 A[Catch:{ Exception -> 0x06ac }] */
     /* JADX WARNING: Removed duplicated region for block: B:82:0x0291 A[Catch:{ Exception -> 0x06ac }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$putMessages$168(boolean r39, long r40, org.telegram.tgnet.TLRPC$messages_Messages r42, int r43, int r44, boolean r45) {
+    public /* synthetic */ void lambda$putMessages$170(boolean r39, long r40, org.telegram.tgnet.TLRPC$messages_Messages r42, int r43, int r44, boolean r45) {
         /*
             r38 = this;
             r9 = r38
@@ -21960,7 +21976,7 @@ public class MessagesStorage extends BaseController {
             r1 = r29
             r2 = 0
             r9.deleteFromDownloadQueue(r1, r2)     // Catch:{ Exception -> 0x06ac }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda126 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda126     // Catch:{ Exception -> 0x06ac }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda127 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda127     // Catch:{ Exception -> 0x06ac }
             r4 = r27
             r1.<init>(r9, r4)     // Catch:{ Exception -> 0x06ac }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x06ac }
@@ -22016,11 +22032,11 @@ public class MessagesStorage extends BaseController {
         L_0x06b0:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$168(boolean, long, org.telegram.tgnet.TLRPC$messages_Messages, int, int, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$170(boolean, long, org.telegram.tgnet.TLRPC$messages_Messages, int, int, boolean):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putMessages$167(ArrayList arrayList) {
+    public /* synthetic */ void lambda$putMessages$169(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
@@ -22218,7 +22234,7 @@ public class MessagesStorage extends BaseController {
         L_0x002d:
             r6 = r0
             org.telegram.messenger.DispatchQueue r11 = r7.storageQueue
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda32 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda32
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda34 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda34
             r1 = r0
             r2 = r7
             r3 = r8
@@ -22250,7 +22266,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:89:0x0237 A[Catch:{ Exception -> 0x02a3 }] */
     /* JADX WARNING: Removed duplicated region for block: B:92:0x024f A[Catch:{ Exception -> 0x02a3 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getDialogs$170(int r23, int r24, int r25, long[] r26) {
+    public /* synthetic */ void lambda$getDialogs$172(int r23, int r24, int r25, long[] r26) {
         /*
             r22 = this;
             r1 = r22
@@ -22663,7 +22679,7 @@ public class MessagesStorage extends BaseController {
         L_0x0355:
             r5 = 0
         L_0x0356:
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda108 r6 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda108     // Catch:{ Exception -> 0x03a2 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda111 r6 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda111     // Catch:{ Exception -> 0x03a2 }
             r6.<init>(r1, r5)     // Catch:{ Exception -> 0x03a2 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)     // Catch:{ Exception -> 0x03a2 }
         L_0x035e:
@@ -22730,11 +22746,11 @@ public class MessagesStorage extends BaseController {
         L_0x03ce:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogs$170(int, int, int, long[]):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogs$172(int, int, int, long[]):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDialogs$169(LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$getDialogs$171(LongSparseArray longSparseArray) {
         MediaDataController mediaDataController = getMediaDataController();
         mediaDataController.clearDraftsFolderIds();
         if (longSparseArray != null) {
@@ -23337,11 +23353,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getDialogFolderId(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda92(this, j, intCallback));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda94(this, j, intCallback));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDialogFolderId$172(long j, IntCallback intCallback) {
+    public /* synthetic */ void lambda$getDialogFolderId$174(long j, IntCallback intCallback) {
         try {
             int i = -1;
             if (this.unknownDialogsIds.get(j) == null) {
@@ -23351,7 +23367,7 @@ public class MessagesStorage extends BaseController {
                 }
                 queryFinalized.dispose();
             }
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda1(intCallback, i));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda2(intCallback, i));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -23359,12 +23375,12 @@ public class MessagesStorage extends BaseController {
 
     public void setDialogsFolderId(ArrayList<TLRPC$TL_folderPeer> arrayList, ArrayList<TLRPC$TL_inputFolderPeer> arrayList2, long j, int i) {
         if (arrayList != null || arrayList2 != null || j != 0) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda134(this, arrayList, arrayList2, i, j));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda136(this, arrayList, arrayList2, i, j));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setDialogsFolderId$173(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
+    public /* synthetic */ void lambda$setDialogsFolderId$175(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET folder_id = ?, pinned = ? WHERE did = ?");
@@ -23401,7 +23417,7 @@ public class MessagesStorage extends BaseController {
             }
             executeFast.dispose();
             this.database.commitTransaction();
-            lambda$checkIfFolderEmpty$175(1);
+            lambda$checkIfFolderEmpty$177(1);
             resetAllUnreadCounters(false);
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -23410,7 +23426,7 @@ public class MessagesStorage extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: checkIfFolderEmptyInternal */
-    public void lambda$checkIfFolderEmpty$175(int i) {
+    public void lambda$checkIfFolderEmpty$177(int i) {
         try {
             boolean z = true;
             SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT did FROM dialogs WHERE folder_id = ?", Integer.valueOf(i));
@@ -23435,7 +23451,7 @@ public class MessagesStorage extends BaseController {
             z = false;
             queryFinalized.dispose();
             if (z) {
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda24(this, i));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda30(this, i));
                 SQLiteDatabase sQLiteDatabase = this.database;
                 sQLiteDatabase.executeFast("DELETE FROM dialogs WHERE did = " + DialogObject.makeFolderDialogId(i)).stepThis().dispose();
             }
@@ -23445,20 +23461,20 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkIfFolderEmptyInternal$174(int i) {
+    public /* synthetic */ void lambda$checkIfFolderEmptyInternal$176(int i) {
         getMessagesController().onFolderEmpty(i);
     }
 
     public void checkIfFolderEmpty(int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda21(this, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda24(this, i));
     }
 
     public void unpinAllDialogsExceptNew(ArrayList<Long> arrayList, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda129(this, arrayList, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda131(this, arrayList, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$176(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$178(ArrayList arrayList, int i) {
         try {
             ArrayList arrayList2 = new ArrayList();
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT did, folder_id FROM dialogs WHERE pinned > 0 AND did NOT IN (%s)", new Object[]{TextUtils.join(",", arrayList)}), new Object[0]);
@@ -23486,7 +23502,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void setDialogUnread(long j, boolean z) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda101(this, j, z));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda103(this, j, z));
     }
 
     /* access modifiers changed from: private */
@@ -23513,7 +23529,7 @@ public class MessagesStorage extends BaseController {
      */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [B:6:0x0027, B:10:0x002e] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$setDialogUnread$177(long r6, boolean r8) {
+    public /* synthetic */ void lambda$setDialogUnread$179(long r6, boolean r8) {
         /*
             r5 = this;
             r0 = 0
@@ -23578,7 +23594,7 @@ public class MessagesStorage extends BaseController {
         L_0x0064:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$177(long, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$179(long, boolean):void");
     }
 
     private void resetAllUnreadCounters(boolean z) {
@@ -23592,11 +23608,11 @@ public class MessagesStorage extends BaseController {
             }
         }
         calcUnreadCounters(false);
-        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda14(this));
+        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda7(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$resetAllUnreadCounters$178() {
+    public /* synthetic */ void lambda$resetAllUnreadCounters$180() {
         ArrayList<MessagesController.DialogFilter> arrayList = getMessagesController().dialogFilters;
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
@@ -23608,11 +23624,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void setDialogPinned(long j, int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda37(this, i, j));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda39(this, i, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setDialogPinned$179(int i, long j) {
+    public /* synthetic */ void lambda$setDialogPinned$181(int i, long j) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
             executeFast.bindInteger(1, i);
@@ -23625,11 +23641,11 @@ public class MessagesStorage extends BaseController {
     }
 
     public void setDialogsPinned(ArrayList<Long> arrayList, ArrayList<Integer> arrayList2) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda133(this, arrayList, arrayList2));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda135(this, arrayList, arrayList2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setDialogsPinned$180(ArrayList arrayList, ArrayList arrayList2) {
+    public /* synthetic */ void lambda$setDialogsPinned$182(ArrayList arrayList, ArrayList arrayList2) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
             int size = arrayList.size();
@@ -23647,12 +23663,12 @@ public class MessagesStorage extends BaseController {
 
     public void putDialogs(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
         if (!tLRPC$messages_Dialogs.dialogs.isEmpty()) {
-            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda167(this, tLRPC$messages_Dialogs, i));
+            this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda169(this, tLRPC$messages_Dialogs, i));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putDialogs$181(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
+    public /* synthetic */ void lambda$putDialogs$183(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
         putDialogsInternal(tLRPC$messages_Dialogs, i);
         try {
             loadUnreadMessages();
@@ -23662,7 +23678,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getDialogMaxMessageId(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda94(this, j, intCallback));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda97(this, j, intCallback));
     }
 
     /* access modifiers changed from: private */
@@ -23670,7 +23686,7 @@ public class MessagesStorage extends BaseController {
         if (r1 == null) goto L_0x0036;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getDialogMaxMessageId$183(long r6, org.telegram.messenger.MessagesStorage.IntCallback r8) {
+    public /* synthetic */ void lambda$getDialogMaxMessageId$185(long r6, org.telegram.messenger.MessagesStorage.IntCallback r8) {
         /*
             r5 = this;
             r0 = 1
@@ -23711,13 +23727,13 @@ public class MessagesStorage extends BaseController {
         L_0x0044:
             throw r6
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogMaxMessageId$183(long, org.telegram.messenger.MessagesStorage$IntCallback):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogMaxMessageId$185(long, org.telegram.messenger.MessagesStorage$IntCallback):void");
     }
 
     public int getDialogReadMax(boolean z, long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = {0};
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda177(this, z, j, numArr, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda179(this, z, j, numArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -23731,7 +23747,7 @@ public class MessagesStorage extends BaseController {
         if (r1 == null) goto L_0x0054;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getDialogReadMax$184(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
+    public /* synthetic */ void lambda$getDialogReadMax$186(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
         /*
             r4 = this;
             r0 = 0
@@ -23783,13 +23799,13 @@ public class MessagesStorage extends BaseController {
         L_0x005d:
             throw r5
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$184(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$186(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public int getChannelPtsSync(long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = {0};
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda104(this, j, numArr, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda106(this, j, numArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -23803,7 +23819,7 @@ public class MessagesStorage extends BaseController {
         if (r0 == null) goto L_0x0038;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getChannelPtsSync$185(long r5, java.lang.Integer[] r7, java.util.concurrent.CountDownLatch r8) {
+    public /* synthetic */ void lambda$getChannelPtsSync$187(long r5, java.lang.Integer[] r7, java.util.concurrent.CountDownLatch r8) {
         /*
             r4 = this;
             r0 = 0
@@ -23847,13 +23863,13 @@ public class MessagesStorage extends BaseController {
         L_0x0046:
             throw r5
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$185(long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$187(long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public TLRPC$User getUserSync(long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         TLRPC$User[] tLRPC$UserArr = new TLRPC$User[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda183(this, tLRPC$UserArr, j, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda185(this, tLRPC$UserArr, j, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -23863,7 +23879,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getUserSync$186(TLRPC$User[] tLRPC$UserArr, long j, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getUserSync$188(TLRPC$User[] tLRPC$UserArr, long j, CountDownLatch countDownLatch) {
         tLRPC$UserArr[0] = getUser(j);
         countDownLatch.countDown();
     }
@@ -23871,7 +23887,7 @@ public class MessagesStorage extends BaseController {
     public TLRPC$Chat getChatSync(long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         TLRPC$Chat[] tLRPC$ChatArr = new TLRPC$Chat[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda181(this, tLRPC$ChatArr, j, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda183(this, tLRPC$ChatArr, j, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -23881,7 +23897,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getChatSync$187(TLRPC$Chat[] tLRPC$ChatArr, long j, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getChatSync$189(TLRPC$Chat[] tLRPC$ChatArr, long j, CountDownLatch countDownLatch) {
         tLRPC$ChatArr[0] = getChat(j);
         countDownLatch.countDown();
     }
@@ -23975,7 +23991,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627469(0x7f0e0dcd, float:1.8882203E38)
+            r8 = 2131627473(0x7f0e0dd1, float:1.8882211E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"
@@ -24578,7 +24594,7 @@ public class MessagesStorage extends BaseController {
             int r2 = r2 + 1
             goto L_0x0511
         L_0x052b:
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda189 r2 = org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda189.INSTANCE     // Catch:{ Exception -> 0x0654 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda191 r2 = org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda191.INSTANCE     // Catch:{ Exception -> 0x0654 }
             java.util.Collections.sort(r0, r2)     // Catch:{ Exception -> 0x0654 }
             r2 = 0
         L_0x0531:
@@ -24734,7 +24750,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$localSearch$188(DialogsSearchAdapter.DialogSearchResult dialogSearchResult, DialogsSearchAdapter.DialogSearchResult dialogSearchResult2) {
+    public static /* synthetic */ int lambda$localSearch$190(DialogsSearchAdapter.DialogSearchResult dialogSearchResult, DialogsSearchAdapter.DialogSearchResult dialogSearchResult2) {
         int i = dialogSearchResult.date;
         int i2 = dialogSearchResult2.date;
         if (i < i2) {

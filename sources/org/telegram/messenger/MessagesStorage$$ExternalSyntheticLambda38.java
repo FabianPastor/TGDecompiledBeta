@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda38 im
     }
 
     public final void run() {
-        this.f$0.lambda$updateChatOnlineCount$92(this.f$1, this.f$2);
+        this.f$0.lambda$saveChatLinksCount$92(this.f$1, this.f$2);
     }
 }

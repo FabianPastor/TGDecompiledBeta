@@ -1,20 +1,17 @@
 package org.telegram.ui;
 
 import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$TL_payments_bankCardData;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda30 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC$TL_payments_bankCardData f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda30(ChatActivity chatActivity, TLRPC$TL_payments_bankCardData tLRPC$TL_payments_bankCardData, String str) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda30(ChatActivity chatActivity, boolean z) {
         this.f$0 = chatActivity;
-        this.f$1 = tLRPC$TL_payments_bankCardData;
-        this.f$2 = str;
+        this.f$1 = z;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didPressMessageUrl$157(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$checkRecordLocked$140(this.f$1, dialogInterface, i);
     }
 }

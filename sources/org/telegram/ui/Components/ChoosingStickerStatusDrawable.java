@@ -8,6 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ChoosingStickerStatusDrawable extends StatusDrawable {
+    int color;
     Paint fillPaint;
     boolean increment = true;
     private long lastUpdateTime = 0;
@@ -48,8 +49,11 @@ public class ChoosingStickerStatusDrawable extends StatusDrawable {
     }
 
     public void setColor(int i) {
-        this.fillPaint.setColor(i);
-        this.strokePaint.setColor(i);
+        if (this.color != i) {
+            this.fillPaint.setColor(i);
+            this.strokePaint.setColor(i);
+        }
+        this.color = i;
     }
 
     public void draw(Canvas canvas) {

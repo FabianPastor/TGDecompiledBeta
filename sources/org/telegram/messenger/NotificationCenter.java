@@ -141,6 +141,7 @@ public class NotificationCenter {
     public static final int newSuggestionsAvailable;
     public static final int notificationsCountUpdated;
     public static final int notificationsSettingsUpdated;
+    public static final int onDatabaseMigration;
     public static final int openArticle;
     public static final int openedChatChanged;
     public static final int paymentFinished;
@@ -773,8 +774,11 @@ public class NotificationCenter {
         int i184 = i183 + 1;
         totalEvents = i184;
         showBulletin = i183;
-        totalEvents = i184 + 1;
+        int i185 = i184 + 1;
+        totalEvents = i185;
         appUpdateAvailable = i184;
+        totalEvents = i185 + 1;
+        onDatabaseMigration = i185;
     }
 
     private static class DelayedPost {

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
@@ -50,6 +51,7 @@ public class ActionBarPopupWindow extends PopupWindow {
     public boolean isClosingAnimated;
     private ViewTreeObserver.OnScrollChangedListener mSuperScrollListener;
     private ViewTreeObserver mViewTreeObserver;
+    private long outEmptyTime = -1;
     /* access modifiers changed from: private */
     public boolean pauseNotifications;
     /* access modifiers changed from: private */
@@ -643,14 +645,19 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
         AnimatorSet animatorSet3 = new AnimatorSet();
         this.windowAnimatorSet = animatorSet3;
-        Animator[] animatorArr = new Animator[2];
-        Property property = View.TRANSLATION_Y;
-        float[] fArr = new float[1];
-        fArr[0] = (float) AndroidUtilities.dp((actionBarPopupWindowLayout == null || !actionBarPopupWindowLayout.shownFromBotton) ? -5.0f : 5.0f);
-        animatorArr[0] = ObjectAnimator.ofFloat(viewGroup, property, fArr);
-        animatorArr[1] = ObjectAnimator.ofFloat(viewGroup, View.ALPHA, new float[]{0.0f});
-        animatorSet3.playTogether(animatorArr);
-        this.windowAnimatorSet.setDuration((long) this.dismissAnimationDuration);
+        if (this.outEmptyTime > 0) {
+            animatorSet3.playTogether(new Animator[]{ValueAnimator.ofFloat(new float[]{0.0f, 1.0f})});
+            this.windowAnimatorSet.setDuration(this.outEmptyTime);
+        } else {
+            Animator[] animatorArr = new Animator[2];
+            Property property = View.TRANSLATION_Y;
+            float[] fArr = new float[1];
+            fArr[0] = (float) AndroidUtilities.dp((actionBarPopupWindowLayout == null || !actionBarPopupWindowLayout.shownFromBotton) ? -5.0f : 5.0f);
+            animatorArr[0] = ObjectAnimator.ofFloat(viewGroup, property, fArr);
+            animatorArr[1] = ObjectAnimator.ofFloat(viewGroup, View.ALPHA, new float[]{0.0f});
+            animatorSet3.playTogether(animatorArr);
+            this.windowAnimatorSet.setDuration((long) this.dismissAnimationDuration);
+        }
         this.windowAnimatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 AnimatorSet unused = ActionBarPopupWindow.this.windowAnimatorSet = null;
@@ -670,5 +677,9 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.popupAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.popupAnimationIndex, (int[]) null);
         }
         this.windowAnimatorSet.start();
+    }
+
+    public void setEmptyOutAnimation(long j) {
+        this.outEmptyTime = j;
     }
 }

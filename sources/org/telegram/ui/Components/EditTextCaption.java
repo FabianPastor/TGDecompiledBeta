@@ -137,7 +137,7 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     public void makeSelectedUrl() {
         int i;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), this.resourcesProvider);
         builder.setTitle(LocaleController.getString("CreateLink", NUM));
         AnonymousClass2 r1 = new EditTextBoldCursor(this, getContext()) {
             /* access modifiers changed from: protected */

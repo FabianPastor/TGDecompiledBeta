@@ -1,20 +1,18 @@
 package org.telegram.ui;
 
+import android.content.Context;
 import android.view.View;
-import java.util.ArrayList;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda58 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ Context f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda58(ChatActivity chatActivity, int i, ArrayList arrayList) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda58(ChatActivity chatActivity, Context context) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
-        this.f$2 = arrayList;
+        this.f$1 = context;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createMenu$115(this.f$1, this.f$2, view);
+        this.f$0.lambda$createView$23(this.f$1, view);
     }
 }

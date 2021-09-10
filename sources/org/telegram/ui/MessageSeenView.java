@@ -3,6 +3,7 @@ package org.telegram.ui;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
@@ -79,6 +80,8 @@ public class MessageSeenView extends FrameLayout {
         this.avatarsImageView.setAlpha(0.0f);
         this.titleView.setAlpha(0.0f);
         ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_getMessageReadParticipants, new MessageSeenView$$ExternalSyntheticLambda3(this, i));
+        setBackground(Theme.createRadSelectorDrawable(Theme.getColor("dialogButtonSelector"), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f)));
+        setEnabled(false);
     }
 
     /* access modifiers changed from: private */
@@ -158,6 +161,7 @@ public class MessageSeenView extends FrameLayout {
     }
 
     private void updateView() {
+        setEnabled(this.users.size() > 0);
         for (int i = 0; i < 3; i++) {
             if (i < this.users.size()) {
                 this.avatarsImageView.setObject(i, this.currentAccount, this.users.get(i));
@@ -186,13 +190,26 @@ public class MessageSeenView extends FrameLayout {
     public RecyclerListView createListView() {
         RecyclerListView recyclerListView = new RecyclerListView(getContext());
         recyclerListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerListView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
+                int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
+                if (childAdapterPosition == 0) {
+                    rect.top = AndroidUtilities.dp(4.0f);
+                }
+                if (childAdapterPosition == MessageSeenView.this.users.size() - 1) {
+                    rect.bottom = AndroidUtilities.dp(4.0f);
+                }
+            }
+        });
         recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() {
             public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
                 return true;
             }
 
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                return new RecyclerListView.Holder(new UserCell(viewGroup.getContext()));
+                UserCell userCell = new UserCell(viewGroup.getContext());
+                userCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+                return new RecyclerListView.Holder(userCell);
             }
 
             public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
@@ -222,13 +239,13 @@ public class MessageSeenView extends FrameLayout {
             textView.setTextSize(1, 16.0f);
             this.nameView.setLines(1);
             this.nameView.setEllipsize(TextUtils.TruncateAt.END);
-            addView(this.nameView, LayoutHelper.createFrame(-2, -2.0f, 19, 62.0f, 0.0f, 13.0f, 0.0f));
+            addView(this.nameView, LayoutHelper.createFrame(-2, -2.0f, 19, 59.0f, 0.0f, 13.0f, 0.0f));
             this.nameView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
         }
 
         /* access modifiers changed from: protected */
         public void onMeasure(int i, int i2) {
-            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM));
         }
 
         public void setUser(TLRPC$User tLRPC$User) {

@@ -1,16 +1,19 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda157(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$createMenu$112(keyEvent);
+    public final void didSetColor() {
+        this.f$0.lambda$getThemeDescriptions$164();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

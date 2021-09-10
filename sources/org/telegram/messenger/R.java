@@ -710,6 +710,7 @@ public final class R {
         public static final int msg_addphoto = NUM;
         public static final int msg_allowspeak = NUM;
         public static final int msg_archive = NUM;
+        public static final int msg_arrow_back = NUM;
         public static final int msg_arrowright = NUM;
         public static final int msg_background = NUM;
         public static final int msg_bio = NUM;
@@ -1641,6 +1642,7 @@ public final class R {
         public static final int contacts_sync_on = NUM;
         public static final int copy = NUM;
         public static final int dartloop = NUM;
+        public static final int db_migration_placeholder = NUM;
         public static final int default_pattern = NUM;
         public static final int diceloop = NUM;
         public static final int download_arrow = NUM;
@@ -3092,6 +3094,7 @@ public final class R {
         public static final int DistanceUnitsKilometers = NUM;
         public static final int DistanceUnitsMiles = NUM;
         public static final int DistanceUnitsTitle = NUM;
+        public static final int DoNoSetTheme = NUM;
         public static final int DocumentsTitle = NUM;
         public static final int Done = NUM;
         public static final int Draft = NUM;
@@ -4489,6 +4492,9 @@ public final class R {
         public static final int OpenUrlOption1 = NUM;
         public static final int OpenUrlOption2 = NUM;
         public static final int OpenUrlTitle = NUM;
+        public static final int OptimizingTelegram = NUM;
+        public static final int OptimizingTelegramDescription1 = NUM;
+        public static final int OptimizingTelegramDescription2 = NUM;
         public static final int OptionHint = NUM;
         public static final int Option_few = NUM;
         public static final int Option_many = NUM;
@@ -5588,6 +5594,10 @@ public final class R {
         public static final int SponsoredMessageAlertText = NUM;
         public static final int SponsoredMessageAlertTitle = NUM;
         public static final int SponsoredMessageInfo = NUM;
+        public static final int SponsoredMessageInfoDescription1 = NUM;
+        public static final int SponsoredMessageInfoDescription2 = NUM;
+        public static final int SponsoredMessageInfoDescription3 = NUM;
+        public static final int SponsoredMessageInfoDescription4 = NUM;
         public static final int Start = NUM;
         public static final int StartDayAt = NUM;
         public static final int StartDayYearAt = NUM;

@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda87 imple
     }
 
     public final void run() {
-        this.f$0.lambda$startMessageUnselect$80();
+        this.f$0.checkEditTimer();
     }
 }

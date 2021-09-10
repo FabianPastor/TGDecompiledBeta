@@ -2,13 +2,13 @@ package org.telegram.messenger;
 
 import org.telegram.messenger.ImageLoader;
 
-public final /* synthetic */ class ImageLoader$3$$ExternalSyntheticLambda7 implements Runnable {
-    public final /* synthetic */ ImageLoader.AnonymousClass3 f$0;
+public final /* synthetic */ class ImageLoader$4$$ExternalSyntheticLambda7 implements Runnable {
+    public final /* synthetic */ ImageLoader.AnonymousClass4 f$0;
     public final /* synthetic */ String f$1;
     public final /* synthetic */ int f$2;
     public final /* synthetic */ int f$3;
 
-    public /* synthetic */ ImageLoader$3$$ExternalSyntheticLambda7(ImageLoader.AnonymousClass3 r1, String str, int i, int i2) {
+    public /* synthetic */ ImageLoader$4$$ExternalSyntheticLambda7(ImageLoader.AnonymousClass4 r1, String str, int i, int i2) {
         this.f$0 = r1;
         this.f$1 = str;
         this.f$2 = i;
