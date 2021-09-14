@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda30
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$blockPeer$62(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$hidePromoDialog$98(tLObject, tLRPC$TL_error);
     }
 }

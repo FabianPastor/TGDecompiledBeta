@@ -53,7 +53,7 @@ public final class Bulletin {
     public int currentBottomOffset;
     /* access modifiers changed from: private */
     public Delegate currentDelegate;
-    private final int duration;
+    private int duration;
     private final Runnable hideRunnable = new Bulletin$$ExternalSyntheticLambda2(this);
     /* access modifiers changed from: private */
     public final Layout layout;
@@ -62,12 +62,13 @@ public final class Bulletin {
     private final ParentLayout parentLayout;
     /* access modifiers changed from: private */
     public boolean showing;
+    public int tag;
 
     public interface Delegate {
 
         /* renamed from: org.telegram.ui.Components.Bulletin$Delegate$-CC  reason: invalid class name */
         public final /* synthetic */ class CC {
-            public static int $default$getBottomOffset(Delegate delegate) {
+            public static int $default$getBottomOffset(Delegate delegate, int i) {
                 return 0;
             }
 
@@ -81,7 +82,7 @@ public final class Bulletin {
             }
         }
 
-        int getBottomOffset();
+        int getBottomOffset(int i);
 
         void onHide(Bulletin bulletin);
 
@@ -150,6 +151,10 @@ public final class Bulletin {
         return visibleBulletin;
     }
 
+    public void setDuration(int i) {
+        this.duration = i;
+    }
+
     public Bulletin show() {
         if (!this.showing && this.containerLayout != null) {
             this.showing = true;
@@ -167,7 +172,7 @@ public final class Bulletin {
                             Bulletin.this.layout.onShow();
                             Delegate unused = Bulletin.this.currentDelegate = (Delegate) Bulletin.delegates.get(Bulletin.this.containerLayout);
                             Bulletin bulletin = Bulletin.this;
-                            bulletin.currentBottomOffset = bulletin.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset() : 0;
+                            bulletin.currentBottomOffset = bulletin.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset(Bulletin.this.tag) : 0;
                             if (Bulletin.this.currentDelegate != null) {
                                 Bulletin.this.currentDelegate.onShow(Bulletin.this);
                             }
@@ -732,7 +737,7 @@ public final class Bulletin {
             Delegate delegate2 = this.delegate;
             float f = 0.0f;
             if (delegate2 != null) {
-                f = 0.0f + ((float) delegate2.getBottomOffset());
+                f = 0.0f + ((float) delegate2.getBottomOffset(this.bulletin.tag));
             }
             setTranslationY((-f) + this.inOutOffset);
         }
@@ -870,7 +875,7 @@ public final class Bulletin {
                 super.dispatchDraw(canvas);
                 return;
             }
-            int measuredHeight = ((View) getParent()).getMeasuredHeight() - this.delegate.getBottomOffset();
+            int measuredHeight = ((View) getParent()).getMeasuredHeight() - this.delegate.getBottomOffset(this.bulletin.tag);
             canvas.save();
             canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - (((int) (getY() + ((float) getMeasuredHeight()))) - measuredHeight));
             this.background.draw(canvas);

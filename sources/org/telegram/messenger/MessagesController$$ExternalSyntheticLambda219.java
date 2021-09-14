@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda21
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadAppConfig$15(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadSuggestedFilters$11(tLObject, tLRPC$TL_error);
     }
 }

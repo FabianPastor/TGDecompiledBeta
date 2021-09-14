@@ -15,6 +15,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda57 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createMenu$114(this.f$1, this.f$2, view);
+        this.f$0.lambda$createMenu$113(this.f$1, this.f$2, view);
     }
 }

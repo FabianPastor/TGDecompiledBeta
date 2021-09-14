@@ -1,14 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.messenger.MessagesStorage;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda193 implements Runnable {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda193 INSTANCE = new MessagesController$$ExternalSyntheticLambda193();
+    public final /* synthetic */ MessagesStorage.BooleanCallback f$0;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda193() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda193(MessagesStorage.BooleanCallback booleanCallback) {
+        this.f$0 = booleanCallback;
     }
 
     public final void run() {
-        Theme.checkAutoNightThemeConditions();
+        MessagesController.lambda$convertToGigaGroup$208(this.f$0);
     }
 }

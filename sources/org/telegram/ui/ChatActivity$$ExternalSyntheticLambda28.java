@@ -20,6 +20,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda28 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showOpenGameAlert$141(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
+        this.f$0.lambda$showOpenGameAlert$140(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
     }
 }

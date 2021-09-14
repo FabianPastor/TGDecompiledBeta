@@ -31,8 +31,12 @@ public class ChatThemeController extends BaseController {
 
     public static void init() {
         SharedPreferences sharedPreferences = getSharedPreferences();
-        themesHash = sharedPreferences.getInt("hash", 0);
-        lastReloadTimeMs = sharedPreferences.getLong("lastReload", 0);
+        themesHash = 0;
+        lastReloadTimeMs = 0;
+        if (!BuildVars.DEBUG_VERSION) {
+            sharedPreferences.getInt("hash", 0);
+            lastReloadTimeMs = sharedPreferences.getLong("lastReload", 0);
+        }
         allChatThemes = getAllChatThemesFromPrefs();
         Emoji.preloadEmoji("❌");
         if (!allChatThemes.isEmpty()) {

@@ -2191,6 +2191,10 @@ public class ActionBarLayout extends FrameLayout {
         HashMap<String, Integer> colors;
         String[] keysToSave;
 
+        public /* synthetic */ void applyServiceShaderMatrix(int i, int i2, float f, float f2) {
+            Theme.ResourcesProvider.CC.$default$applyServiceShaderMatrix(this, i, i2, f, f2);
+        }
+
         public /* synthetic */ int getColorOrDefault(String str) {
             return Theme.ResourcesProvider.CC.$default$getColorOrDefault(this, str);
         }

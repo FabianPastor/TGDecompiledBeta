@@ -3057,6 +3057,7 @@
     <public type="string" name="EncryptionRejected" id="NUM" />
     <public type="string" name="English" id="NUM" />
     <public type="string" name="Enhance" id="NUM" />
+    <public type="string" name="EnjoyngAnimations" id="NUM" />
     <public type="string" name="EnterChannelName" id="NUM" />
     <public type="string" name="EnterCode" id="NUM" />
     <public type="string" name="EnterCurrentPasscode" id="NUM" />
@@ -3655,6 +3656,7 @@
     <public type="string" name="InvoiceCantForwardSecretChat" id="NUM" />
     <public type="string" name="InvoiceCantSendSecretChat" id="NUM" />
     <public type="string" name="IsChoosingSticker" id="NUM" />
+    <public type="string" name="IsEnjoyngAnimations" id="NUM" />
     <public type="string" name="IsRecordingAudio" id="NUM" />
     <public type="string" name="IsRecordingRound" id="NUM" />
     <public type="string" name="IsRecordingVideo" id="NUM" />
@@ -3938,6 +3940,7 @@
     <public type="string" name="MessageScheduledUntilOnline" id="NUM" />
     <public type="string" name="MessageScheduledVote" id="NUM" />
     <public type="string" name="MessageScheduledVoteResults" id="NUM" />
+    <public type="string" name="MessageSeenTooltipMessage" id="NUM" />
     <public type="string" name="MessageSeen_few" id="NUM" />
     <public type="string" name="MessageSeen_many" id="NUM" />
     <public type="string" name="MessageSeen_one" id="NUM" />
@@ -5627,6 +5630,7 @@
     <public type="string" name="TextSelectionHit" id="NUM" />
     <public type="string" name="TextSizeHeader" id="NUM" />
     <public type="string" name="Theme" id="NUM" />
+    <public type="string" name="ThemeAlsoAppliedForHint" id="NUM" />
     <public type="string" name="ThemeArcticBlue" id="NUM" />
     <public type="string" name="ThemeClassic" id="NUM" />
     <public type="string" name="ThemeCreateHelp" id="NUM" />

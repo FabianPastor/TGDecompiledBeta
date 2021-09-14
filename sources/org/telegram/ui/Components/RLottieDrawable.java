@@ -1779,4 +1779,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     public void setInvalidateOnProgressSet(boolean z) {
         this.invalidateOnProgressSet = z;
     }
+
+    public boolean isGeneratingCache() {
+        return this.cacheGenerateTask != null;
+    }
 }

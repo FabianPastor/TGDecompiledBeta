@@ -1,19 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$messages_Dialogs;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserFull;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda166 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$messages_Dialogs f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ TLRPC$UserFull f$1;
+    public final /* synthetic */ TLRPC$User f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda166(MessagesController messagesController, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda166(MessagesController messagesController, TLRPC$UserFull tLRPC$UserFull, TLRPC$User tLRPC$User, int i) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$messages_Dialogs;
-        this.f$2 = i;
+        this.f$1 = tLRPC$UserFull;
+        this.f$2 = tLRPC$User;
+        this.f$3 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$migrateDialogs$163(this.f$1, this.f$2);
+        this.f$0.lambda$loadFullUser$42(this.f$1, this.f$2, this.f$3);
     }
 }

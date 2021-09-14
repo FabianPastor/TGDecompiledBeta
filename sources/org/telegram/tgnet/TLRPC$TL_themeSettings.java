@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_themeSettings extends TLRPC$ThemeSettings {
-    public static int constructor = -NUM;
+    public static int constructor = -94849324;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);

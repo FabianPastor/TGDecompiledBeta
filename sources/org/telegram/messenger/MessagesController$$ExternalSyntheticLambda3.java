@@ -15,6 +15,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda3 
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$checkCanOpenChat$315(this.f$1, this.f$2, dialogInterface);
+        this.f$0.lambda$checkCanOpenChat$317(this.f$1, this.f$2, dialogInterface);
     }
 }

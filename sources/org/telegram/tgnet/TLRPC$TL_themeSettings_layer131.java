@@ -1,6 +1,6 @@
 package org.telegram.tgnet;
 
-public class TLRPC$TL_themeSettings_layer131 extends TLRPC$TL_themeSettings {
+public class TLRPC$TL_themeSettings_layer131 extends TLRPC$ThemeSettings {
     public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {

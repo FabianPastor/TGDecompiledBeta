@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda31
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$processUpdates$285(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$reportSpam$49(tLObject, tLRPC$TL_error);
     }
 }

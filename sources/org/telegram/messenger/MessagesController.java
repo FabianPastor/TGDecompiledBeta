@@ -244,6 +244,8 @@ import org.telegram.tgnet.TLRPC$TL_restrictionReason;
 import org.telegram.tgnet.TLRPC$TL_sendMessageCancelAction;
 import org.telegram.tgnet.TLRPC$TL_sendMessageChooseContactAction;
 import org.telegram.tgnet.TLRPC$TL_sendMessageChooseStickerAction;
+import org.telegram.tgnet.TLRPC$TL_sendMessageEmojiInteraction;
+import org.telegram.tgnet.TLRPC$TL_sendMessageEmojiInteractionSeen;
 import org.telegram.tgnet.TLRPC$TL_sendMessageGamePlayAction;
 import org.telegram.tgnet.TLRPC$TL_sendMessageGeoLocationAction;
 import org.telegram.tgnet.TLRPC$TL_sendMessageRecordAudioAction;
@@ -265,6 +267,7 @@ import org.telegram.tgnet.TLRPC$TL_updateChannelReadMessagesContents;
 import org.telegram.tgnet.TLRPC$TL_updateChannelTooLong;
 import org.telegram.tgnet.TLRPC$TL_updateChannelUserTyping;
 import org.telegram.tgnet.TLRPC$TL_updateChannelWebPage;
+import org.telegram.tgnet.TLRPC$TL_updateChatUserTyping;
 import org.telegram.tgnet.TLRPC$TL_updateDeleteChannelMessages;
 import org.telegram.tgnet.TLRPC$TL_updateDeleteMessages;
 import org.telegram.tgnet.TLRPC$TL_updateEditChannelMessage;
@@ -287,6 +290,7 @@ import org.telegram.tgnet.TLRPC$TL_updateReadHistoryInbox;
 import org.telegram.tgnet.TLRPC$TL_updateReadHistoryOutbox;
 import org.telegram.tgnet.TLRPC$TL_updateReadMessagesContents;
 import org.telegram.tgnet.TLRPC$TL_updateServiceNotification;
+import org.telegram.tgnet.TLRPC$TL_updateUserTyping;
 import org.telegram.tgnet.TLRPC$TL_updateWebPage;
 import org.telegram.tgnet.TLRPC$TL_updatesCombined;
 import org.telegram.tgnet.TLRPC$TL_updates_differenceSlice;
@@ -351,6 +355,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public static int UPDATE_MASK_CHAT_MEMBERS = 32;
     public static int UPDATE_MASK_CHAT_NAME = 16;
     public static int UPDATE_MASK_CHECK = 65536;
+    public static int UPDATE_MASK_EMOJI_INTERACTIONS = 262144;
     public static int UPDATE_MASK_MESSAGE_TEXT = 32768;
     public static int UPDATE_MASK_NAME = 1;
     public static int UPDATE_MASK_NEW_MESSAGE = 2048;
@@ -428,6 +433,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public ConcurrentHashMap<Long, Integer> dialogs_read_outbox_max = new ConcurrentHashMap<>(100, 1.0f, 2);
     public HashSet<String> diceEmojies;
     public HashMap<String, DiceFrameSuccess> diceSuccess;
+    public HashMap<Long, ArrayList<TLRPC$TL_sendMessageEmojiInteraction>> emojiInteractions;
     private SharedPreferences emojiPreferences;
     public HashMap<String, EmojiSound> emojiSounds;
     public boolean enableJoined;
@@ -550,7 +556,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public boolean saveGifsWithStickers;
     public int secretWebpagePreview;
     public DialogFilter[] selectedDialogFilter = new DialogFilter[2];
-    public LongSparseArray<SparseArray<Boolean>>[] sendingTypings = new LongSparseArray[11];
+    public LongSparseArray<SparseArray<Boolean>>[] sendingTypings = new LongSparseArray[12];
     private SparseBooleanArray serverDialogsEndReached;
     private LongSparseIntArray shortPollChannels = new LongSparseIntArray();
     private LongSparseIntArray shortPollOnlines = new LongSparseIntArray();
@@ -1097,7 +1103,7 @@ public class MessagesController extends BaseController implements NotificationCe
         this.loadingPinnedDialogs = new SparseIntArray();
         this.faqSearchArray = new ArrayList<>();
         this.suggestContacts = true;
-        this.themeCheckRunnable = MessagesController$$ExternalSyntheticLambda193.INSTANCE;
+        this.themeCheckRunnable = MessagesController$$ExternalSyntheticLambda195.INSTANCE;
         this.passwordCheckRunnable = new MessagesController$$ExternalSyntheticLambda12(this);
         this.uploadingThemes = new HashMap<>();
         this.maxBroadcastCount = 100;
@@ -1105,9 +1111,10 @@ public class MessagesController extends BaseController implements NotificationCe
         this.gifSearchEmojies = new ArrayList<>();
         this.diceSuccess = new HashMap<>();
         this.emojiSounds = new HashMap<>();
-        this.dialogDateComparator = new MessagesController$$ExternalSyntheticLambda194(this);
-        this.dialogComparator = new MessagesController$$ExternalSyntheticLambda195(this);
-        this.updatesComparator = new MessagesController$$ExternalSyntheticLambda196(this);
+        this.emojiInteractions = new HashMap<>();
+        this.dialogDateComparator = new MessagesController$$ExternalSyntheticLambda196(this);
+        this.dialogComparator = new MessagesController$$ExternalSyntheticLambda197(this);
+        this.updatesComparator = new MessagesController$$ExternalSyntheticLambda198(this);
         this.DIALOGS_LOAD_TYPE_CACHE = 1;
         this.DIALOGS_LOAD_TYPE_CHANNEL = 2;
         this.DIALOGS_LOAD_TYPE_UNKNOWN = 3;
@@ -1115,7 +1122,7 @@ public class MessagesController extends BaseController implements NotificationCe
         ImageLoader.getInstance();
         getMessagesStorage();
         getLocationController();
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda10(this));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda11(this));
         addSupportUser();
         if (this.currentAccount == 0) {
             this.notificationsPreferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
@@ -1320,7 +1327,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     private void sendLoadPeersRequest(TLObject tLObject, ArrayList<TLObject> arrayList, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList<TLRPC$User> arrayList2, ArrayList<TLRPC$Chat> arrayList3, ArrayList<DialogFilter> arrayList4, SparseArray<DialogFilter> sparseArray, ArrayList<Integer> arrayList5, HashMap<Integer, HashSet<Long>> hashMap, HashMap<Integer, HashSet<Long>> hashMap2, HashSet<Integer> hashSet) {
-        getConnectionsManager().sendRequest(tLObject, new MessagesController$$ExternalSyntheticLambda280(this, arrayList3, arrayList2, tLRPC$messages_Dialogs, tLRPC$messages_Dialogs2, arrayList, tLObject, arrayList4, sparseArray, arrayList5, hashMap, hashMap2, hashSet));
+        getConnectionsManager().sendRequest(tLObject, new MessagesController$$ExternalSyntheticLambda282(this, arrayList3, arrayList2, tLRPC$messages_Dialogs, tLRPC$messages_Dialogs2, arrayList, tLObject, arrayList4, sparseArray, arrayList5, hashMap, hashMap2, hashSet));
     }
 
     /* access modifiers changed from: private */
@@ -1455,7 +1462,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     /* access modifiers changed from: protected */
     public void processLoadedDialogFilters(ArrayList<DialogFilter> arrayList, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList<TLRPC$User> arrayList2, ArrayList<TLRPC$Chat> arrayList3, ArrayList<TLRPC$EncryptedChat> arrayList4, int i) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda170(this, tLRPC$messages_Dialogs, arrayList4, tLRPC$messages_Dialogs2, i, arrayList, arrayList2, arrayList3));
+        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda172(this, tLRPC$messages_Dialogs, arrayList4, tLRPC$messages_Dialogs2, i, arrayList, arrayList2, arrayList3));
     }
 
     /* access modifiers changed from: private */
@@ -1813,7 +1820,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 DialogFilter dialogFilter = this.dialogFilters.get(i3);
                 this.dialogFiltersById.put(dialogFilter.id, dialogFilter);
             }
-            Collections.sort(this.dialogFilters, MessagesController$$ExternalSyntheticLambda198.INSTANCE);
+            Collections.sort(this.dialogFilters, MessagesController$$ExternalSyntheticLambda200.INSTANCE);
             putUsers(arrayList2, true);
             putChats(arrayList3, true);
             this.dialogFiltersLoaded = true;
@@ -1941,7 +1948,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public void loadSuggestedFilters() {
         if (!this.loadingSuggestedFilters) {
             this.loadingSuggestedFilters = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_messages_getSuggestedDialogFilters(), new MessagesController$$ExternalSyntheticLambda218(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_messages_getSuggestedDialogFilters(), new MessagesController$$ExternalSyntheticLambda219(this));
         }
     }
 
@@ -1971,7 +1978,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     getUserConfig().filtersLoaded = false;
                     getUserConfig().saveConfig(false);
                 }
-                getConnectionsManager().sendRequest(new TLRPC$TL_messages_getDialogFilters(), new MessagesController$$ExternalSyntheticLambda211(this));
+                getConnectionsManager().sendRequest(new TLRPC$TL_messages_getDialogFilters(), new MessagesController$$ExternalSyntheticLambda212(this));
             }
         }
     }
@@ -2053,7 +2060,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private void loadAppConfig() {
         if (!this.loadingAppConfig) {
             this.loadingAppConfig = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_help_getAppConfig(), new MessagesController$$ExternalSyntheticLambda219(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_help_getAppConfig(), new MessagesController$$ExternalSyntheticLambda220(this));
         }
     }
 
@@ -3296,7 +3303,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else {
                 tLRPC$TL_help_dismissSuggestion.peer = getInputPeer(j);
             }
-            getConnectionsManager().sendRequest(tLRPC$TL_help_dismissSuggestion, MessagesController$$ExternalSyntheticLambda321.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_help_dismissSuggestion, MessagesController$$ExternalSyntheticLambda323.INSTANCE);
         }
     }
 
@@ -3733,7 +3740,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             themeInfo.uploadedThumb = null;
                             tLRPC$TL_theme = themeInfo.info;
                         }
-                        getConnectionsManager().sendRequest(tLRPC$TL_account_uploadTheme, new MessagesController$$ExternalSyntheticLambda290(this, tLRPC$TL_theme, themeInfo, tLRPC$TL_inputThemeSettings, themeAccent));
+                        getConnectionsManager().sendRequest(tLRPC$TL_account_uploadTheme, new MessagesController$$ExternalSyntheticLambda292(this, tLRPC$TL_theme, themeInfo, tLRPC$TL_inputThemeSettings, themeAccent));
                         return;
                     }
                     return;
@@ -3746,13 +3753,13 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_wallPaperSettings.blur = overrideWallpaperInfo.isBlurred;
                 tLRPC$TL_wallPaperSettings.motion = overrideWallpaperInfo.isMotion;
                 tLRPC$TL_account_uploadWallPaper.settings = tLRPC$TL_wallPaperSettings;
-                getConnectionsManager().sendRequest(tLRPC$TL_account_uploadWallPaper, new MessagesController$$ExternalSyntheticLambda296(this, overrideWallpaperInfo, tLRPC$TL_wallPaperSettings));
+                getConnectionsManager().sendRequest(tLRPC$TL_account_uploadWallPaper, new MessagesController$$ExternalSyntheticLambda298(this, overrideWallpaperInfo, tLRPC$TL_wallPaperSettings));
                 return;
             }
             TLRPC$TL_photos_uploadProfilePhoto tLRPC$TL_photos_uploadProfilePhoto = new TLRPC$TL_photos_uploadProfilePhoto();
             tLRPC$TL_photos_uploadProfilePhoto.file = tLRPC$InputFile3;
             tLRPC$TL_photos_uploadProfilePhoto.flags |= 1;
-            getConnectionsManager().sendRequest(tLRPC$TL_photos_uploadProfilePhoto, new MessagesController$$ExternalSyntheticLambda205(this));
+            getConnectionsManager().sendRequest(tLRPC$TL_photos_uploadProfilePhoto, new MessagesController$$ExternalSyntheticLambda207(this));
         } else if (i == NotificationCenter.fileUploadFailed) {
             String str4 = objArr[0];
             String str5 = this.uploadingAvatar;
@@ -3851,7 +3858,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 ArrayList arrayList2 = new ArrayList();
                 arrayList2.add(user);
                 getMessagesStorage().putUsersAndChats(arrayList2, (ArrayList<TLRPC$Chat>) null, false, true);
-                AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda8(this));
+                AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda9(this));
             }
         }
     }
@@ -3873,7 +3880,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } catch (Exception unused) {
             }
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda165(this, tLRPC$WallPaper, tLRPC$TL_wallPaperSettings, overrideWallpaperInfo, file));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda167(this, tLRPC$WallPaper, tLRPC$TL_wallPaperSettings, overrideWallpaperInfo, file));
     }
 
     /* access modifiers changed from: private */
@@ -3917,7 +3924,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     tLRPC$TL_account_createTheme.settings = tLRPC$TL_inputThemeSettings;
                     tLRPC$TL_account_createTheme.flags |= 8;
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_account_createTheme, new MessagesController$$ExternalSyntheticLambda298(this, themeInfo, themeAccent));
+                getConnectionsManager().sendRequest(tLRPC$TL_account_createTheme, new MessagesController$$ExternalSyntheticLambda300(this, themeInfo, themeAccent));
                 return;
             }
             TLRPC$TL_account_updateTheme tLRPC$TL_account_updateTheme = new TLRPC$TL_account_updateTheme();
@@ -3939,10 +3946,10 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_account_updateTheme.flags = i3 | 8;
             }
             tLRPC$TL_account_updateTheme.format = "android";
-            getConnectionsManager().sendRequest(tLRPC$TL_account_updateTheme, new MessagesController$$ExternalSyntheticLambda297(this, themeInfo, themeAccent));
+            getConnectionsManager().sendRequest(tLRPC$TL_account_updateTheme, new MessagesController$$ExternalSyntheticLambda299(this, themeInfo, themeAccent));
             return;
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda181(this, themeInfo, themeAccent));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda183(this, themeInfo, themeAccent));
     }
 
     /* access modifiers changed from: private */
@@ -4282,7 +4289,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 return;
             }
         }
-        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda188(this, z, z2, j));
+        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda190(this, z, z2, j));
     }
 
     /* access modifiers changed from: private */
@@ -4732,7 +4739,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 TLRPC$TL_phone_getGroupCall tLRPC$TL_phone_getGroupCall = new TLRPC$TL_phone_getGroupCall();
                 tLRPC$TL_phone_getGroupCall.call = chatFull.call;
                 tLRPC$TL_phone_getGroupCall.limit = 20;
-                getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupCall, new MessagesController$$ExternalSyntheticLambda264(this, j, runnable));
+                getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupCall, new MessagesController$$ExternalSyntheticLambda266(this, j, runnable));
             }
         }
         if (call == null || !(call.call instanceof TLRPC$TL_groupCallDiscarded)) {
@@ -4801,7 +4808,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             }
             if (!tLRPC$TL_messages_getPeerDialogs.peers.isEmpty()) {
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda212(this));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda213(this));
             }
         }
     }
@@ -4890,7 +4897,7 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_channels_getParticipants.channel = getInputChannel(j);
             tLRPC$TL_channels_getParticipants.limit = 100;
             tLRPC$TL_channels_getParticipants.filter = new TLRPC$TL_channelParticipantsAdmins();
-            getConnectionsManager().sendRequest(tLRPC$TL_channels_getParticipants, new MessagesController$$ExternalSyntheticLambda253(this, j));
+            getConnectionsManager().sendRequest(tLRPC$TL_channels_getParticipants, new MessagesController$$ExternalSyntheticLambda255(this, j));
         }
     }
 
@@ -4983,7 +4990,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r10.reloadDialogsReadValue(r0, r5)
         L_0x0067:
             org.telegram.tgnet.ConnectionsManager r0 = r10.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda282 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda282
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda284 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda284
             r2 = r1
             r3 = r10
             r7 = r11
@@ -5098,7 +5105,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (this.dialogs_read_inbox_max.get(Long.valueOf(j)) == null || this.dialogs_read_outbox_max.get(Long.valueOf(j)) == null) {
                     reloadDialogsReadValue((ArrayList<TLRPC$Dialog>) null, j);
                 }
-                getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_users_getFullUser, new MessagesController$$ExternalSyntheticLambda291(this, tLRPC$User, i)), i);
+                getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_users_getFullUser, new MessagesController$$ExternalSyntheticLambda293(this, tLRPC$User, i)), i);
             }
         }
     }
@@ -5108,10 +5115,10 @@ public class MessagesController extends BaseController implements NotificationCe
         if (tLRPC$TL_error == null) {
             TLRPC$UserFull tLRPC$UserFull = (TLRPC$UserFull) tLObject;
             getMessagesStorage().updateUserInfo(tLRPC$UserFull, false);
-            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda164(this, tLRPC$UserFull, tLRPC$User, i));
+            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda166(this, tLRPC$UserFull, tLRPC$User, i));
             return;
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda163(this, tLRPC$User));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda165(this, tLRPC$User));
     }
 
     /* access modifiers changed from: private */
@@ -5229,7 +5236,7 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x0070:
             r1.addAll(r6)
             org.telegram.tgnet.ConnectionsManager r9 = r8.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda273 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda273
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda275 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda275
             r1 = r7
             r2 = r8
             r3 = r10
@@ -5337,7 +5344,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 } else {
                     tLRPC$TL_messages_hidePeerSettingsBar.peer = getInputPeer(-tLRPC$Chat.id);
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_hidePeerSettingsBar, MessagesController$$ExternalSyntheticLambda317.INSTANCE);
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_hidePeerSettingsBar, MessagesController$$ExternalSyntheticLambda319.INSTANCE);
             }
         }
     }
@@ -5354,7 +5361,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     tLRPC$TL_messages_reportEncryptedSpam.peer = tLRPC$TL_inputEncryptedChat;
                     tLRPC$TL_inputEncryptedChat.chat_id = tLRPC$EncryptedChat.id;
                     tLRPC$TL_inputEncryptedChat.access_hash = tLRPC$EncryptedChat.access_hash;
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_reportEncryptedSpam, MessagesController$$ExternalSyntheticLambda309.INSTANCE, 2);
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_reportEncryptedSpam, MessagesController$$ExternalSyntheticLambda311.INSTANCE, 2);
                 }
             } else if (z) {
                 TLRPC$TL_account_reportPeer tLRPC$TL_account_reportPeer = new TLRPC$TL_account_reportPeer();
@@ -5365,7 +5372,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 tLRPC$TL_account_reportPeer.message = "";
                 tLRPC$TL_account_reportPeer.reason = new TLRPC$TL_inputReportReasonGeoIrrelevant();
-                getConnectionsManager().sendRequest(tLRPC$TL_account_reportPeer, MessagesController$$ExternalSyntheticLambda308.INSTANCE, 2);
+                getConnectionsManager().sendRequest(tLRPC$TL_account_reportPeer, MessagesController$$ExternalSyntheticLambda310.INSTANCE, 2);
             } else {
                 TLRPC$TL_messages_reportSpam tLRPC$TL_messages_reportSpam = new TLRPC$TL_messages_reportSpam();
                 if (tLRPC$Chat != null) {
@@ -5373,7 +5380,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 } else if (tLRPC$User != null) {
                     tLRPC$TL_messages_reportSpam.peer = getInputPeer(tLRPC$User.id);
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_reportSpam, MessagesController$$ExternalSyntheticLambda323.INSTANCE, 2);
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_reportSpam, MessagesController$$ExternalSyntheticLambda325.INSTANCE, 2);
             }
         }
     }
@@ -5432,7 +5439,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     } else {
                         tLRPC$TL_messages_getPeerSettings.peer = getInputPeer(-tLRPC$Chat.id);
                     }
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerSettings, new MessagesController$$ExternalSyntheticLambda248(this, j));
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerSettings, new MessagesController$$ExternalSyntheticLambda250(this, j));
                 } else if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("dialog bar already hidden for " + j);
                 }
@@ -5675,7 +5682,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_photos_getUserPhotos.offset = 0;
                 tLRPC$TL_photos_getUserPhotos.max_id = (long) i2;
                 tLRPC$TL_photos_getUserPhotos.user_id = getInputUser(user);
-                getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_photos_getUserPhotos, new MessagesController$$ExternalSyntheticLambda257(this, j, i, i2, i3)), i3);
+                getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_photos_getUserPhotos, new MessagesController$$ExternalSyntheticLambda259(this, j, i, i2, i3)), i3);
             }
         } else if (j < 0) {
             TLRPC$TL_messages_search tLRPC$TL_messages_search = new TLRPC$TL_messages_search();
@@ -5684,7 +5691,7 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_messages_search.offset_id = i2;
             tLRPC$TL_messages_search.q = "";
             tLRPC$TL_messages_search.peer = getInputPeer(j);
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_search, new MessagesController$$ExternalSyntheticLambda256(this, j, i, i2, i3)), i3);
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_search, new MessagesController$$ExternalSyntheticLambda258(this, j, i, i2, i3)), i3);
         }
     }
 
@@ -5754,7 +5761,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else {
                 tLRPC$TL_contacts_block.id = getInputPeer(tLRPC$Chat);
             }
-            getConnectionsManager().sendRequest(tLRPC$TL_contacts_block, MessagesController$$ExternalSyntheticLambda307.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_contacts_block, MessagesController$$ExternalSyntheticLambda309.INSTANCE);
         }
     }
 
@@ -5768,7 +5775,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_channels_editBanned.participant = getInputPeer(tLRPC$Chat);
             }
             tLRPC$TL_channels_editBanned.banned_rights = tLRPC$TL_chatBannedRights;
-            getConnectionsManager().sendRequest(tLRPC$TL_channels_editBanned, new MessagesController$$ExternalSyntheticLambda270(this, j, baseFragment, tLRPC$TL_channels_editBanned, z));
+            getConnectionsManager().sendRequest(tLRPC$TL_channels_editBanned, new MessagesController$$ExternalSyntheticLambda272(this, j, baseFragment, tLRPC$TL_channels_editBanned, z));
         }
     }
 
@@ -5796,7 +5803,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_channels_toggleSlowMode tLRPC$TL_channels_toggleSlowMode = new TLRPC$TL_channels_toggleSlowMode();
         tLRPC$TL_channels_toggleSlowMode.seconds = i;
         tLRPC$TL_channels_toggleSlowMode.channel = getInputChannel(j);
-        getConnectionsManager().sendRequest(tLRPC$TL_channels_toggleSlowMode, new MessagesController$$ExternalSyntheticLambda252(this, j));
+        getConnectionsManager().sendRequest(tLRPC$TL_channels_toggleSlowMode, new MessagesController$$ExternalSyntheticLambda254(this, j));
     }
 
     /* access modifiers changed from: private */
@@ -5817,7 +5824,7 @@ public class MessagesController extends BaseController implements NotificationCe
             TLRPC$TL_messages_editChatDefaultBannedRights tLRPC$TL_messages_editChatDefaultBannedRights = new TLRPC$TL_messages_editChatDefaultBannedRights();
             tLRPC$TL_messages_editChatDefaultBannedRights.peer = getInputPeer(-j);
             tLRPC$TL_messages_editChatDefaultBannedRights.banned_rights = tLRPC$TL_chatBannedRights;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_editChatDefaultBannedRights, new MessagesController$$ExternalSyntheticLambda272(this, j, baseFragment, tLRPC$TL_messages_editChatDefaultBannedRights, z));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_editChatDefaultBannedRights, new MessagesController$$ExternalSyntheticLambda274(this, j, baseFragment, tLRPC$TL_messages_editChatDefaultBannedRights, z));
         }
     }
 
@@ -5852,18 +5859,18 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_channels_editAdmin.user_id = getInputUser(tLRPC$User2);
                 tLRPC$TL_channels_editAdmin.admin_rights = tLRPC$TL_chatAdminRights2;
                 tLRPC$TL_channels_editAdmin.rank = str;
-                getConnectionsManager().sendRequest(tLRPC$TL_channels_editAdmin, new MessagesController$$ExternalSyntheticLambda269(this, j, baseFragment, tLRPC$TL_channels_editAdmin, z));
+                getConnectionsManager().sendRequest(tLRPC$TL_channels_editAdmin, new MessagesController$$ExternalSyntheticLambda271(this, j, baseFragment, tLRPC$TL_channels_editAdmin, z));
                 return;
             }
             TLRPC$TL_messages_editChatAdmin tLRPC$TL_messages_editChatAdmin = new TLRPC$TL_messages_editChatAdmin();
             tLRPC$TL_messages_editChatAdmin.chat_id = j;
             tLRPC$TL_messages_editChatAdmin.user_id = getInputUser(tLRPC$User2);
             tLRPC$TL_messages_editChatAdmin.is_admin = tLRPC$TL_chatAdminRights2.change_info || tLRPC$TL_chatAdminRights2.delete_messages || tLRPC$TL_chatAdminRights2.ban_users || tLRPC$TL_chatAdminRights2.invite_users || tLRPC$TL_chatAdminRights2.pin_messages || tLRPC$TL_chatAdminRights2.add_admins || tLRPC$TL_chatAdminRights2.manage_call;
-            MessagesController$$ExternalSyntheticLambda271 messagesController$$ExternalSyntheticLambda271 = new MessagesController$$ExternalSyntheticLambda271(this, j, baseFragment, tLRPC$TL_messages_editChatAdmin);
+            MessagesController$$ExternalSyntheticLambda273 messagesController$$ExternalSyntheticLambda273 = new MessagesController$$ExternalSyntheticLambda273(this, j, baseFragment, tLRPC$TL_messages_editChatAdmin);
             if (!tLRPC$TL_messages_editChatAdmin.is_admin || !z2) {
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_editChatAdmin, messagesController$$ExternalSyntheticLambda271);
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_editChatAdmin, messagesController$$ExternalSyntheticLambda273);
             } else {
-                addUserToChat(j, tLRPC$User, 0, (String) null, baseFragment, new MessagesController$$ExternalSyntheticLambda152(this, tLRPC$TL_messages_editChatAdmin, messagesController$$ExternalSyntheticLambda271));
+                addUserToChat(j, tLRPC$User, 0, (String) null, baseFragment, new MessagesController$$ExternalSyntheticLambda152(this, tLRPC$TL_messages_editChatAdmin, messagesController$$ExternalSyntheticLambda273));
             }
         }
     }
@@ -5939,7 +5946,7 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_contacts_unblock.id = getInputPeer(tLRPC$Chat);
         }
         getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
-        getConnectionsManager().sendRequest(tLRPC$TL_contacts_unblock, MessagesController$$ExternalSyntheticLambda318.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_contacts_unblock, MessagesController$$ExternalSyntheticLambda320.INSTANCE);
     }
 
     public void getBlockedPeers(boolean z) {
@@ -5954,7 +5961,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             tLRPC$TL_contacts_getBlocked.offset = i;
             tLRPC$TL_contacts_getBlocked.limit = z ? 20 : 100;
-            getConnectionsManager().sendRequest(tLRPC$TL_contacts_getBlocked, new MessagesController$$ExternalSyntheticLambda301(this, z, tLRPC$TL_contacts_getBlocked));
+            getConnectionsManager().sendRequest(tLRPC$TL_contacts_getBlocked, new MessagesController$$ExternalSyntheticLambda303(this, z, tLRPC$TL_contacts_getBlocked));
         }
     }
 
@@ -5997,14 +6004,14 @@ public class MessagesController extends BaseController implements NotificationCe
                 user.photo = getUserConfig().getCurrentUser().photo;
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                 getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(UPDATE_MASK_ALL));
-                getConnectionsManager().sendRequest(tLRPC$TL_photos_updateProfilePhoto, new MessagesController$$ExternalSyntheticLambda225(this));
+                getConnectionsManager().sendRequest(tLRPC$TL_photos_updateProfilePhoto, new MessagesController$$ExternalSyntheticLambda227(this));
                 return;
             }
             return;
         }
         TLRPC$TL_photos_deletePhotos tLRPC$TL_photos_deletePhotos = new TLRPC$TL_photos_deletePhotos();
         tLRPC$TL_photos_deletePhotos.id.add(tLRPC$InputPhoto);
-        getConnectionsManager().sendRequest(tLRPC$TL_photos_deletePhotos, MessagesController$$ExternalSyntheticLambda320.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_photos_deletePhotos, MessagesController$$ExternalSyntheticLambda322.INSTANCE);
     }
 
     /* access modifiers changed from: private */
@@ -6063,7 +6070,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 return;
             }
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda173(this, tLRPC$photos_Photos, z, j, i, i3, arrayList));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda175(this, tLRPC$photos_Photos, z, j, i, i3, arrayList));
     }
 
     /* access modifiers changed from: private */
@@ -6088,7 +6095,7 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_inputTheme.access_hash = tLRPC$TL_theme.access_hash;
             tLRPC$TL_account_saveTheme.theme = tLRPC$TL_inputTheme;
             tLRPC$TL_account_saveTheme.unsave = z2;
-            getConnectionsManager().sendRequest(tLRPC$TL_account_saveTheme, MessagesController$$ExternalSyntheticLambda306.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_account_saveTheme, MessagesController$$ExternalSyntheticLambda308.INSTANCE);
             getConnectionsManager().resumeNetworkMaybe();
         }
         if (!z2) {
@@ -6111,7 +6118,7 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_account_installTheme.theme = tLRPC$TL_inputTheme;
             tLRPC$TL_account_installTheme.flags |= 2;
         }
-        getConnectionsManager().sendRequest(tLRPC$TL_account_installTheme, MessagesController$$ExternalSyntheticLambda314.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_account_installTheme, MessagesController$$ExternalSyntheticLambda316.INSTANCE);
         if (!TextUtils.isEmpty(str)) {
             TLRPC$TL_account_installWallPaper tLRPC$TL_account_installWallPaper = new TLRPC$TL_account_installWallPaper();
             TLRPC$TL_inputWallPaperSlug tLRPC$TL_inputWallPaperSlug = new TLRPC$TL_inputWallPaperSlug();
@@ -6121,7 +6128,7 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_account_installWallPaper.settings = tLRPC$TL_wallPaperSettings;
             tLRPC$TL_wallPaperSettings.blur = z2;
             tLRPC$TL_wallPaperSettings.motion = z3;
-            getConnectionsManager().sendRequest(tLRPC$TL_account_installWallPaper, MessagesController$$ExternalSyntheticLambda313.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_account_installWallPaper, MessagesController$$ExternalSyntheticLambda315.INSTANCE);
         }
     }
 
@@ -6373,7 +6380,7 @@ public class MessagesController extends BaseController implements NotificationCe
             long r13 = r12.createPendingTask(r10)
         L_0x0146:
             org.telegram.tgnet.ConnectionsManager r10 = r9.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda247 r12 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda247
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda249 r12 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda249
             r12.<init>(r9, r13)
             r10.sendRequest(r6, r12)
         L_0x0152:
@@ -6606,12 +6613,12 @@ public class MessagesController extends BaseController implements NotificationCe
                             FileLog.e((Throwable) e);
                             j6 = getMessagesStorage().createPendingTask(nativeByteBuffer4);
                             tLRPC$TL_messages_deleteScheduledMessages = tLRPC$TL_messages_deleteScheduledMessages2;
-                            getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteScheduledMessages, new MessagesController$$ExternalSyntheticLambda245(this, j6));
+                            getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteScheduledMessages, new MessagesController$$ExternalSyntheticLambda247(this, j6));
                         }
                         j6 = getMessagesStorage().createPendingTask(nativeByteBuffer4);
                         tLRPC$TL_messages_deleteScheduledMessages = tLRPC$TL_messages_deleteScheduledMessages2;
                     }
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteScheduledMessages, new MessagesController$$ExternalSyntheticLambda245(this, j6));
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteScheduledMessages, new MessagesController$$ExternalSyntheticLambda247(this, j6));
                 } else if (j3 != 0) {
                     if (tLObject2 != null) {
                         tLRPC$TL_channels_deleteMessages = (TLRPC$TL_channels_deleteMessages) tLObject2;
@@ -6635,12 +6642,12 @@ public class MessagesController extends BaseController implements NotificationCe
                             FileLog.e((Throwable) e);
                             j5 = getMessagesStorage().createPendingTask(nativeByteBuffer3);
                             tLRPC$TL_channels_deleteMessages = tLRPC$TL_channels_deleteMessages2;
-                            getConnectionsManager().sendRequest(tLRPC$TL_channels_deleteMessages, new MessagesController$$ExternalSyntheticLambda261(this, j3, j5));
+                            getConnectionsManager().sendRequest(tLRPC$TL_channels_deleteMessages, new MessagesController$$ExternalSyntheticLambda263(this, j3, j5));
                         }
                         j5 = getMessagesStorage().createPendingTask(nativeByteBuffer3);
                         tLRPC$TL_channels_deleteMessages = tLRPC$TL_channels_deleteMessages2;
                     }
-                    getConnectionsManager().sendRequest(tLRPC$TL_channels_deleteMessages, new MessagesController$$ExternalSyntheticLambda261(this, j3, j5));
+                    getConnectionsManager().sendRequest(tLRPC$TL_channels_deleteMessages, new MessagesController$$ExternalSyntheticLambda263(this, j3, j5));
                 } else {
                     if (arrayList6 == null || tLRPC$EncryptedChat2 == null || arrayList2.isEmpty()) {
                         nativeByteBuffer = null;
@@ -6670,12 +6677,12 @@ public class MessagesController extends BaseController implements NotificationCe
                             FileLog.e((Throwable) e);
                             j4 = getMessagesStorage().createPendingTask(nativeByteBuffer2);
                             tLRPC$TL_messages_deleteMessages = tLRPC$TL_messages_deleteMessages2;
-                            getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteMessages, new MessagesController$$ExternalSyntheticLambda246(this, j4));
+                            getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteMessages, new MessagesController$$ExternalSyntheticLambda248(this, j4));
                         }
                         j4 = getMessagesStorage().createPendingTask(nativeByteBuffer2);
                         tLRPC$TL_messages_deleteMessages = tLRPC$TL_messages_deleteMessages2;
                     }
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteMessages, new MessagesController$$ExternalSyntheticLambda246(this, j4));
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_deleteMessages, new MessagesController$$ExternalSyntheticLambda248(this, j4));
                 }
             }
         }
@@ -6717,7 +6724,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (tLRPC$Chat != null || tLRPC$User != null) {
             TLRPC$TL_messages_unpinAllMessages tLRPC$TL_messages_unpinAllMessages = new TLRPC$TL_messages_unpinAllMessages();
             tLRPC$TL_messages_unpinAllMessages.peer = getInputPeer(tLRPC$Chat != null ? -tLRPC$Chat.id : tLRPC$User.id);
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_unpinAllMessages, new MessagesController$$ExternalSyntheticLambda283(this, tLRPC$Chat, tLRPC$User));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_unpinAllMessages, new MessagesController$$ExternalSyntheticLambda285(this, tLRPC$Chat, tLRPC$User));
         }
     }
 
@@ -6743,7 +6750,7 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_messages_updatePinnedMessage.unpin = z;
             tLRPC$TL_messages_updatePinnedMessage.silent = !z3;
             tLRPC$TL_messages_updatePinnedMessage.pm_oneside = z2;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_updatePinnedMessage, new MessagesController$$ExternalSyntheticLambda240(this, i, tLRPC$Chat, tLRPC$User, z));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_updatePinnedMessage, new MessagesController$$ExternalSyntheticLambda242(this, i, tLRPC$Chat, tLRPC$User, z));
         }
     }
 
@@ -6764,7 +6771,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_channels_deleteUserHistory tLRPC$TL_channels_deleteUserHistory = new TLRPC$TL_channels_deleteUserHistory();
         tLRPC$TL_channels_deleteUserHistory.channel = getInputChannel(tLRPC$Chat);
         tLRPC$TL_channels_deleteUserHistory.user_id = getInputUser(tLRPC$User);
-        getConnectionsManager().sendRequest(tLRPC$TL_channels_deleteUserHistory, new MessagesController$$ExternalSyntheticLambda284(this, tLRPC$Chat, tLRPC$User));
+        getConnectionsManager().sendRequest(tLRPC$TL_channels_deleteUserHistory, new MessagesController$$ExternalSyntheticLambda286(this, tLRPC$Chat, tLRPC$User));
     }
 
     /* access modifiers changed from: private */
@@ -6902,7 +6909,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (this.promoDialog != null) {
             TLRPC$TL_help_hidePromoData tLRPC$TL_help_hidePromoData = new TLRPC$TL_help_hidePromoData();
             tLRPC$TL_help_hidePromoData.peer = getInputPeer(this.promoDialog.id);
-            getConnectionsManager().sendRequest(tLRPC$TL_help_hidePromoData, MessagesController$$ExternalSyntheticLambda305.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_help_hidePromoData, MessagesController$$ExternalSyntheticLambda307.INSTANCE);
             Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda17(this));
             removePromoDialog();
         }
@@ -6929,7 +6936,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_messages_setHistoryTTL tLRPC$TL_messages_setHistoryTTL = new TLRPC$TL_messages_setHistoryTTL();
         tLRPC$TL_messages_setHistoryTTL.peer = getInputPeer(j);
         tLRPC$TL_messages_setHistoryTTL.period = i;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_setHistoryTTL, new MessagesController$$ExternalSyntheticLambda216(this));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_setHistoryTTL, new MessagesController$$ExternalSyntheticLambda217(this));
         TLRPC$ChatFull tLRPC$ChatFull = null;
         if (j > 0) {
             tLRPC$UserFull = getUserFull(j);
@@ -7001,7 +7008,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r0 != r2) goto L_0x0034
             if (r31 != 0) goto L_0x0034
             org.telegram.messenger.MessagesStorage r0 = r26.getMessagesStorage()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda202 r10 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda202
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda204 r10 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda204
             r1 = r10
             r2 = r26
             r3 = r27
@@ -7396,7 +7403,7 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x031a:
             r1.max_id = r8
             org.telegram.tgnet.ConnectionsManager r2 = r26.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda254 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda254
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda256 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda256
             r3.<init>(r11, r14)
             r2.sendRequest(r1, r3, r0)
             goto L_0x037b
@@ -7417,7 +7424,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r5.just_clear = r2
             r5.revoke = r9
             org.telegram.tgnet.ConnectionsManager r6 = r26.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda262 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda262
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda264 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda264
             r1 = r3
             r2 = r26
             r0 = r3
@@ -7503,7 +7510,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_inputDocument.file_reference = new byte[0];
             }
             tLRPC$TL_messages_saveGif.unsave = false;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_saveGif, new MessagesController$$ExternalSyntheticLambda277(this, obj, tLRPC$TL_messages_saveGif));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_saveGif, new MessagesController$$ExternalSyntheticLambda279(this, obj, tLRPC$TL_messages_saveGif));
         }
     }
 
@@ -7528,7 +7535,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             tLRPC$TL_messages_saveRecentSticker.unsave = false;
             tLRPC$TL_messages_saveRecentSticker.attached = z;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_saveRecentSticker, new MessagesController$$ExternalSyntheticLambda278(this, obj, tLRPC$TL_messages_saveRecentSticker));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_saveRecentSticker, new MessagesController$$ExternalSyntheticLambda280(this, obj, tLRPC$TL_messages_saveRecentSticker));
         }
     }
 
@@ -7547,7 +7554,7 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_channels_getParticipants.filter = new TLRPC$TL_channelParticipantsRecent();
             tLRPC$TL_channels_getParticipants.offset = 0;
             tLRPC$TL_channels_getParticipants.limit = 32;
-            getConnectionsManager().sendRequest(tLRPC$TL_channels_getParticipants, new MessagesController$$ExternalSyntheticLambda276(this, l));
+            getConnectionsManager().sendRequest(tLRPC$TL_channels_getParticipants, new MessagesController$$ExternalSyntheticLambda278(this, l));
         }
     }
 
@@ -7574,7 +7581,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void processChatInfo(long j, TLRPC$ChatFull tLRPC$ChatFull, ArrayList<TLRPC$User> arrayList, boolean z, boolean z2, boolean z3, ArrayList<Integer> arrayList2, HashMap<Integer, MessageObject> hashMap, int i, boolean z4) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda185(this, z, j, z3, z2, tLRPC$ChatFull, arrayList, arrayList2, hashMap, i, z4));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda187(this, z, j, z3, z2, tLRPC$ChatFull, arrayList, arrayList2, hashMap, i, z4));
     }
 
     /* access modifiers changed from: private */
@@ -7608,7 +7615,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void processUserInfo(TLRPC$User tLRPC$User, TLRPC$UserFull tLRPC$UserFull, boolean z, boolean z2, int i, ArrayList<Integer> arrayList, HashMap<Integer, MessageObject> hashMap, int i2, boolean z3) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda187(this, z, tLRPC$User, i, z2, tLRPC$UserFull, arrayList, hashMap, i2, z3));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda189(this, z, tLRPC$User, i, z2, tLRPC$UserFull, arrayList, hashMap, i2, z3));
     }
 
     /* access modifiers changed from: private */
@@ -7655,7 +7662,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     TLRPC$TL_account_updateStatus tLRPC$TL_account_updateStatus = new TLRPC$TL_account_updateStatus();
                     tLRPC$TL_account_updateStatus.offline = true;
-                    this.statusRequest = getConnectionsManager().sendRequest(tLRPC$TL_account_updateStatus, new MessagesController$$ExternalSyntheticLambda223(this));
+                    this.statusRequest = getConnectionsManager().sendRequest(tLRPC$TL_account_updateStatus, new MessagesController$$ExternalSyntheticLambda224(this));
                 }
             } else if (ApplicationLoader.mainInterfacePausedStageQueueTime != 0 && Math.abs(ApplicationLoader.mainInterfacePausedStageQueueTime - System.currentTimeMillis()) > 1000 && this.statusSettingState != 1 && (this.lastStatusUpdateTime == 0 || Math.abs(System.currentTimeMillis() - this.lastStatusUpdateTime) >= 55000 || this.offlineSent)) {
                 this.statusSettingState = 1;
@@ -7664,7 +7671,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 TLRPC$TL_account_updateStatus tLRPC$TL_account_updateStatus2 = new TLRPC$TL_account_updateStatus();
                 tLRPC$TL_account_updateStatus2.offline = false;
-                this.statusRequest = getConnectionsManager().sendRequest(tLRPC$TL_account_updateStatus2, new MessagesController$$ExternalSyntheticLambda208(this));
+                this.statusRequest = getConnectionsManager().sendRequest(tLRPC$TL_account_updateStatus2, new MessagesController$$ExternalSyntheticLambda210(this));
             }
             if (this.updatesQueueChannels.size() != 0) {
                 for (int i5 = 0; i5 < this.updatesQueueChannels.size(); i5++) {
@@ -7697,7 +7704,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     tLRPC$TL_messages_getMessagesViews.peer = getInputPeer(keyAt2);
                     tLRPC$TL_messages_getMessagesViews.id = this.channelViewsToSend.valueAt(i7);
                     tLRPC$TL_messages_getMessagesViews.increment = i7 == 0;
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessagesViews, new MessagesController$$ExternalSyntheticLambda268(this, keyAt2, tLRPC$TL_messages_getMessagesViews));
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessagesViews, new MessagesController$$ExternalSyntheticLambda270(this, keyAt2, tLRPC$TL_messages_getMessagesViews));
                     i7++;
                 }
                 this.channelViewsToSend.clear();
@@ -7752,7 +7759,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     TLRPC$TL_messages_getOnlines tLRPC$TL_messages_getOnlines = new TLRPC$TL_messages_getOnlines();
                     tLRPC$TL_messages_getOnlines.peer = getInputPeer(-keyAt4);
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_getOnlines, new MessagesController$$ExternalSyntheticLambda243(this, keyAt4));
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_getOnlines, new MessagesController$$ExternalSyntheticLambda245(this, keyAt4));
                 }
                 i9++;
             }
@@ -8005,7 +8012,7 @@ public class MessagesController extends BaseController implements NotificationCe
             int r6 = r13.getId()
             r5.msg_id = r6
             org.telegram.tgnet.ConnectionsManager r6 = r17.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda299 r9 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda299
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda301 r9 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda301
             r9.<init>(r0, r14)
             r6.sendRequest(r5, r9)
         L_0x0098:
@@ -8091,7 +8098,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private void checkTosUpdate() {
         if (this.nextTosCheckTime <= getConnectionsManager().getCurrentTime() && !this.checkingTosUpdate && getUserConfig().isClientActivated()) {
             this.checkingTosUpdate = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_help_getTermsOfServiceUpdate(), new MessagesController$$ExternalSyntheticLambda206(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_help_getTermsOfServiceUpdate(), new MessagesController$$ExternalSyntheticLambda208(this));
         }
     }
 
@@ -8116,7 +8123,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void checkPromoInfo(boolean z) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda182(this, z));
+        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda184(this, z));
     }
 
     /* access modifiers changed from: private */
@@ -8144,13 +8151,13 @@ public class MessagesController extends BaseController implements NotificationCe
             int i = this.lastCheckPromoId + 1;
             this.lastCheckPromoId = i;
             this.checkingPromoInfo = true;
-            this.checkingPromoInfoRequestId = getConnectionsManager().sendRequest(new TLRPC$TL_help_getPromoData(), new MessagesController$$ExternalSyntheticLambda239(this, i, string, string2));
+            this.checkingPromoInfoRequestId = getConnectionsManager().sendRequest(new TLRPC$TL_help_getPromoData(), new MessagesController$$ExternalSyntheticLambda241(this, i, string, string2));
             if (z2) {
                 this.promoDialogId = 0;
                 this.proxyDialogAddress = null;
                 this.nextPromoInfoCheckTime = getConnectionsManager().getCurrentTime() + 3600;
                 getGlobalMainSettings().edit().putLong("proxy_dialog", this.promoDialogId).remove("proxyDialogAddress").putInt("nextPromoInfoCheckTime", this.nextPromoInfoCheckTime).commit();
-                AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda9(this));
+                AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda10(this));
             }
         }
     }
@@ -8363,7 +8370,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r0.commit()
             r6.checkingPromoInfoRequestId = r12
             r6.checkingPromoInfo = r12
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda9 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda9
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda10 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda10
             r0.<init>(r6)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
         L_0x015b:
@@ -8428,7 +8435,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
         tLRPC$TL_messages_getPeerDialogs.peers.add(tLRPC$TL_inputDialogPeer);
-        this.checkingPromoInfoRequestId = getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda241(this, i, tLRPC$TL_help_promoData, j));
+        this.checkingPromoInfoRequestId = getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda243(this, i, tLRPC$TL_help_promoData, j));
     }
 
     /* access modifiers changed from: private */
@@ -8573,6 +8580,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     private void updatePrintingStrings() {
         String str;
+        String str2;
         int i;
         int i2;
         LongSparseArray longSparseArray = new LongSparseArray();
@@ -8587,9 +8595,9 @@ public class MessagesController extends BaseController implements NotificationCe
                 SparseArray sparseArray2 = new SparseArray();
                 longSparseArray.put(l.longValue(), sparseArray);
                 longSparseArray2.put(l.longValue(), sparseArray2);
-                String str2 = "IsTypingGroup";
+                String str3 = "IsTypingGroup";
                 if (l.longValue() > 0 || isEncryptedDialog || arrayList.size() == 1) {
-                    String str3 = str2;
+                    String str4 = str3;
                     PrintingUser printingUser = (PrintingUser) arrayList.get(0);
                     TLRPC$User user = getUser(Long.valueOf(printingUser.userId));
                     if (user != null) {
@@ -8671,6 +8679,15 @@ public class MessagesController extends BaseController implements NotificationCe
                                 sparseArray.put(num.intValue(), LocaleController.formatString("IsSelectingContact", NUM, getUserNameForTyping(user)));
                             }
                             sparseArray2.put(num.intValue(), 0);
+                        } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageEmojiInteractionSeen) {
+                            String str5 = ((TLRPC$TL_sendMessageEmojiInteractionSeen) tLRPC$SendMessageAction).emoticon;
+                            if (l.longValue() >= 0 || isEncryptedDialog) {
+                                str = LocaleController.formatString("EnjoyngAnimations", NUM, str5);
+                            } else {
+                                str = LocaleController.formatString("IsEnjoyngAnimations", NUM, getUserNameForTyping(user), str5);
+                            }
+                            sparseArray.put(num.intValue(), str);
+                            sparseArray2.put(num.intValue(), 5);
                         } else if (tLRPC$SendMessageAction instanceof TLRPC$TL_sendMessageChooseStickerAction) {
                             if (l.longValue() >= 0 || isEncryptedDialog) {
                                 sparseArray.put(num.intValue(), LocaleController.getString("ChoosingSticker", NUM));
@@ -8682,7 +8699,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             if (l.longValue() >= 0 || isEncryptedDialog) {
                                 sparseArray.put(num.intValue(), LocaleController.getString("Typing", NUM));
                             } else {
-                                sparseArray.put(num.intValue(), LocaleController.formatString(str3, NUM, getUserNameForTyping(user)));
+                                sparseArray.put(num.intValue(), LocaleController.formatString(str4, NUM, getUserNameForTyping(user)));
                             }
                             sparseArray2.put(num.intValue(), 0);
                         }
@@ -8693,11 +8710,11 @@ public class MessagesController extends BaseController implements NotificationCe
                     int i3 = 0;
                     while (true) {
                         if (!it.hasNext()) {
-                            str = str2;
+                            str2 = str3;
                             i = i3;
                             break;
                         }
-                        str = str2;
+                        str2 = str3;
                         TLRPC$User user2 = getUser(Long.valueOf(((PrintingUser) it.next()).userId));
                         if (user2 != null) {
                             if (sb.length() != 0) {
@@ -8711,11 +8728,11 @@ public class MessagesController extends BaseController implements NotificationCe
                             break;
                         }
                         i3 = i;
-                        str2 = str;
+                        str3 = str2;
                     }
                     if (sb.length() != 0) {
                         if (i == 1) {
-                            sparseArray.put(num.intValue(), LocaleController.formatString(str, NUM, sb.toString()));
+                            sparseArray.put(num.intValue(), LocaleController.formatString(str2, NUM, sb.toString()));
                         } else if (arrayList.size() > 2) {
                             String pluralString = LocaleController.getPluralString("AndMoreTypingGroup", arrayList.size() - 2);
                             try {
@@ -8777,6 +8794,10 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean sendTyping(long j, int i, int i2, int i3) {
+        return sendTyping(j, i, i2, (String) null, i3);
+    }
+
+    public boolean sendTyping(long j, int i, int i2, String str, int i3) {
         TLRPC$Chat chat;
         long j2 = j;
         int i4 = i;
@@ -8848,9 +8869,13 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_messages_setTyping.action = new TLRPC$TL_sendMessageUploadAudioAction();
             } else if (i5 == 10) {
                 tLRPC$TL_messages_setTyping.action = new TLRPC$TL_sendMessageChooseStickerAction();
+            } else if (i5 == 11) {
+                TLRPC$TL_sendMessageEmojiInteractionSeen tLRPC$TL_sendMessageEmojiInteractionSeen = new TLRPC$TL_sendMessageEmojiInteractionSeen();
+                tLRPC$TL_sendMessageEmojiInteractionSeen.emoticon = str;
+                tLRPC$TL_messages_setTyping.action = tLRPC$TL_sendMessageEmojiInteractionSeen;
             }
             sparseArray.put(i4, Boolean.TRUE);
-            int sendRequest = getConnectionsManager().sendRequest(tLRPC$TL_messages_setTyping, new MessagesController$$ExternalSyntheticLambda238(this, i2, j, i), 2);
+            int sendRequest = getConnectionsManager().sendRequest(tLRPC$TL_messages_setTyping, new MessagesController$$ExternalSyntheticLambda240(this, i2, j, i), 2);
             if (i6 != 0) {
                 getConnectionsManager().bindRequestToGuid(sendRequest, i6);
             }
@@ -8867,7 +8892,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_inputEncryptedChat.access_hash = encryptedChat.access_hash;
                 tLRPC$TL_messages_setEncryptedTyping.typing = true;
                 sparseArray.put(i4, Boolean.TRUE);
-                int sendRequest2 = getConnectionsManager().sendRequest(tLRPC$TL_messages_setEncryptedTyping, new MessagesController$$ExternalSyntheticLambda237(this, i2, j, i), 2);
+                int sendRequest2 = getConnectionsManager().sendRequest(tLRPC$TL_messages_setEncryptedTyping, new MessagesController$$ExternalSyntheticLambda239(this, i2, j, i), 2);
                 if (i6 != 0) {
                     getConnectionsManager().bindRequestToGuid(sendRequest2, i6);
                 }
@@ -8939,12 +8964,12 @@ public class MessagesController extends BaseController implements NotificationCe
                     TLRPC$TL_messages_getScheduledHistory tLRPC$TL_messages_getScheduledHistory = new TLRPC$TL_messages_getScheduledHistory();
                     tLRPC$TL_messages_getScheduledHistory.peer = getInputPeer(j);
                     tLRPC$TL_messages_getScheduledHistory.hash = (long) i18;
-                    MessagesController$$ExternalSyntheticLambda235 messagesController$$ExternalSyntheticLambda235 = r0;
+                    MessagesController$$ExternalSyntheticLambda237 messagesController$$ExternalSyntheticLambda237 = r0;
                     ConnectionsManager connectionsManager = getConnectionsManager();
                     TLRPC$TL_messages_getScheduledHistory tLRPC$TL_messages_getScheduledHistory2 = tLRPC$TL_messages_getScheduledHistory;
                     int i26 = i20;
-                    MessagesController$$ExternalSyntheticLambda235 messagesController$$ExternalSyntheticLambda2352 = new MessagesController$$ExternalSyntheticLambda235(this, i2, i3, j, j2, i, i5, i11, i7, i12, i13, i6, i8, i9, i10, z3, i14, z5);
-                    getConnectionsManager().bindRequestToGuid(connectionsManager.sendRequest(tLRPC$TL_messages_getScheduledHistory2, messagesController$$ExternalSyntheticLambda235), i5);
+                    MessagesController$$ExternalSyntheticLambda237 messagesController$$ExternalSyntheticLambda2372 = new MessagesController$$ExternalSyntheticLambda237(this, i2, i3, j, j2, i, i5, i11, i7, i12, i13, i6, i8, i9, i10, z3, i14, z5);
+                    getConnectionsManager().bindRequestToGuid(connectionsManager.sendRequest(tLRPC$TL_messages_getScheduledHistory2, messagesController$$ExternalSyntheticLambda237), i5);
                     return;
                 }
                 int i27 = i20;
@@ -8968,14 +8993,14 @@ public class MessagesController extends BaseController implements NotificationCe
                         tLRPC$TL_messages_getHistory.offset_id = i16;
                         tLRPC$TL_messages_getHistory.offset_date = i17;
                         TLRPC$TL_messages_getHistory tLRPC$TL_messages_getHistory2 = tLRPC$TL_messages_getHistory;
-                        getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory2, new MessagesController$$ExternalSyntheticLambda258(this, j, i, i2, i3, j2, i5, i11, i7, i12, i13, i6, i9, i10, z3, i14, z5, tLRPC$TL_messages_getHistory2)), i5);
+                        getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory2, new MessagesController$$ExternalSyntheticLambda260(this, j, i, i2, i3, j2, i5, i11, i7, i12, i13, i6, i9, i10, z3, i14, z5, tLRPC$TL_messages_getHistory2)), i5);
                         return;
                     }
                     tLRPC$TL_messages_getHistory.limit = i15;
                     tLRPC$TL_messages_getHistory.offset_id = i16;
                     tLRPC$TL_messages_getHistory.offset_date = i17;
                     TLRPC$TL_messages_getHistory tLRPC$TL_messages_getHistory22 = tLRPC$TL_messages_getHistory;
-                    getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory22, new MessagesController$$ExternalSyntheticLambda258(this, j, i, i2, i3, j2, i5, i11, i7, i12, i13, i6, i9, i10, z3, i14, z5, tLRPC$TL_messages_getHistory22)), i5);
+                    getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory22, new MessagesController$$ExternalSyntheticLambda260(this, j, i, i2, i3, j2, i5, i11, i7, i12, i13, i6, i9, i10, z3, i14, z5, tLRPC$TL_messages_getHistory22)), i5);
                     return;
                 }
                 TLRPC$TL_messages_getPeerDialogs tLRPC$TL_messages_getPeerDialogs = r13;
@@ -8984,7 +9009,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 TLRPC$TL_inputDialogPeer tLRPC$TL_inputDialogPeer = new TLRPC$TL_inputDialogPeer();
                 tLRPC$TL_inputDialogPeer.peer = inputPeer;
                 tLRPC$TL_messages_getPeerDialogs2.peers.add(tLRPC$TL_inputDialogPeer);
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs2, new MessagesController$$ExternalSyntheticLambda263(this, j, j2, z, i, i2, i3, i4, i5, i6, i9, i10, i11, i13, z3, z5, tLRPC$TL_messages_getPeerDialogs));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs2, new MessagesController$$ExternalSyntheticLambda265(this, j, j2, z, i, i2, i3, i4, i5, i6, i9, i10, i11, i13, z3, z5, tLRPC$TL_messages_getPeerDialogs));
             }
         } else if (i22 == 0) {
             TLRPC$TL_messages_getReplies tLRPC$TL_messages_getReplies = new TLRPC$TL_messages_getReplies();
@@ -9005,10 +9030,10 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             tLRPC$TL_messages_getReplies.limit = i15;
             tLRPC$TL_messages_getReplies.offset_id = i16;
-            MessagesController$$ExternalSyntheticLambda234 messagesController$$ExternalSyntheticLambda234 = r0;
+            MessagesController$$ExternalSyntheticLambda236 messagesController$$ExternalSyntheticLambda236 = r0;
             TLRPC$TL_messages_getReplies tLRPC$TL_messages_getReplies2 = tLRPC$TL_messages_getReplies;
-            MessagesController$$ExternalSyntheticLambda234 messagesController$$ExternalSyntheticLambda2342 = new MessagesController$$ExternalSyntheticLambda234(this, i, i2, i3, i11, i6, j, j2, i5, i7, i12, i13, i9, i10, z3, i14, z5, tLRPC$TL_messages_getReplies2);
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getReplies2, messagesController$$ExternalSyntheticLambda234), i5);
+            MessagesController$$ExternalSyntheticLambda236 messagesController$$ExternalSyntheticLambda2362 = new MessagesController$$ExternalSyntheticLambda236(this, i, i2, i3, i11, i6, j, j2, i5, i7, i12, i13, i9, i10, z3, i14, z5, tLRPC$TL_messages_getReplies2);
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getReplies2, messagesController$$ExternalSyntheticLambda236), i5);
         }
     }
 
@@ -9187,7 +9212,7 @@ public class MessagesController extends BaseController implements NotificationCe
             arrayList2.addAll(arrayList);
             TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview = new TLRPC$TL_messages_getWebPagePreview();
             tLRPC$TL_messages_getWebPagePreview.message = str;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_getWebPagePreview, new MessagesController$$ExternalSyntheticLambda281(this, hashMap2, str, longSparseArray, j, z));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getWebPagePreview, new MessagesController$$ExternalSyntheticLambda283(this, hashMap2, str, longSparseArray, j, z));
         }
     }
 
@@ -9828,7 +9853,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.String r0 = r0.toString()
             org.telegram.messenger.FileLog.d(r0)
         L_0x045d:
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda172 r24 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda172
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda174 r24 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda174
             r14 = r36
             r0 = r24
             r1 = r30
@@ -9916,7 +9941,7 @@ public class MessagesController extends BaseController implements NotificationCe
             getNotificationCenter().postNotificationName(NotificationCenter.scheduledMessagesUpdated, Long.valueOf(j), Integer.valueOf(arrayList.size()));
         }
         if (!DialogObject.isEncryptedDialog(j)) {
-            getMediaDataController().loadReplyMessagesForMessages(arrayList, j, i17 == 1, new MessagesController$$ExternalSyntheticLambda183(this, z3, i5, i6, z, z4, i7, j, i4, arrayList, i13, i8, i9, i2, i10, i11, i12, i));
+            getMediaDataController().loadReplyMessagesForMessages(arrayList, j, i17 == 1, new MessagesController$$ExternalSyntheticLambda185(this, z3, i5, i6, z, z4, i7, j, i4, arrayList, i13, i8, i9, i2, i10, i11, i12, i));
             z5 = true;
         } else {
             z5 = true;
@@ -9956,7 +9981,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (this.hintDialogs.isEmpty() && !TextUtils.isEmpty(this.installReferer)) {
             TLRPC$TL_help_getRecentMeUrls tLRPC$TL_help_getRecentMeUrls = new TLRPC$TL_help_getRecentMeUrls();
             tLRPC$TL_help_getRecentMeUrls.referer = this.installReferer;
-            getConnectionsManager().sendRequest(tLRPC$TL_help_getRecentMeUrls, new MessagesController$$ExternalSyntheticLambda215(this));
+            getConnectionsManager().sendRequest(tLRPC$TL_help_getRecentMeUrls, new MessagesController$$ExternalSyntheticLambda216(this));
         }
     }
 
@@ -10226,7 +10251,7 @@ public class MessagesController extends BaseController implements NotificationCe
             boolean r0 = r0.isEmpty()
             if (r0 != 0) goto L_0x0143
             org.telegram.tgnet.ConnectionsManager r0 = r23.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda255 r4 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda255
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda257 r4 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda257
             r4.<init>(r1, r2)
             r0.sendRequest(r9, r4)
             org.telegram.messenger.MessagesStorage r2 = r23.getMessagesStorage()
@@ -10356,7 +10381,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     tLRPC$TL_messages_getDialogs.offset_peer.access_hash = dialogLoadOffsets[5];
                 }
             }
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_getDialogs, new MessagesController$$ExternalSyntheticLambda236(this, i4, i6, runnable));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getDialogs, new MessagesController$$ExternalSyntheticLambda238(this, i4, i6, runnable));
         }
     }
 
@@ -10408,7 +10433,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 } else {
                     tLRPC$TL_account_getNotifySettings.peer = new TLRPC$TL_inputNotifyBroadcasts();
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_account_getNotifySettings, new MessagesController$$ExternalSyntheticLambda228(this, i));
+                getConnectionsManager().sendRequest(tLRPC$TL_account_getNotifySettings, new MessagesController$$ExternalSyntheticLambda230(this, i));
             }
         }
         if (!getUserConfig().notificationsSignUpSettingsLoaded) {
@@ -10460,7 +10485,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public void loadSignUpNotificationsSettings() {
         if (!this.loadingNotificationSignUpSettings) {
             this.loadingNotificationSignUpSettings = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_account_getContactSignUpNotification(), new MessagesController$$ExternalSyntheticLambda221(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_account_getContactSignUpNotification(), new MessagesController$$ExternalSyntheticLambda222(this));
         }
     }
 
@@ -10516,11 +10541,11 @@ public class MessagesController extends BaseController implements NotificationCe
                         FileLog.e((Throwable) e);
                         nativeByteBuffer = nativeByteBuffer2;
                         j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda260(this, j, peerDialogId));
+                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda262(this, j, peerDialogId));
                     }
                     j = getMessagesStorage().createPendingTask(nativeByteBuffer);
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda260(this, j, peerDialogId));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda262(this, j, peerDialogId));
             }
         }
     }
@@ -10649,12 +10674,12 @@ public class MessagesController extends BaseController implements NotificationCe
                 int i7 = i2;
                 int i8 = i3;
                 int i9 = i4;
-                getConnectionsManager().sendRequest(new TLRPC$TL_messages_getPinnedDialogs(), new MessagesController$$ExternalSyntheticLambda233(this, i6, i7, i8, i9));
+                getConnectionsManager().sendRequest(new TLRPC$TL_messages_getPinnedDialogs(), new MessagesController$$ExternalSyntheticLambda235(this, i6, i7, i8, i9));
                 TLRPC$TL_messages_getDialogs tLRPC$TL_messages_getDialogs = new TLRPC$TL_messages_getDialogs();
                 tLRPC$TL_messages_getDialogs.limit = 100;
                 tLRPC$TL_messages_getDialogs.exclude_pinned = true;
                 tLRPC$TL_messages_getDialogs.offset_peer = new TLRPC$TL_inputPeerEmpty();
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_getDialogs, new MessagesController$$ExternalSyntheticLambda232(this, i6, i7, i8, i9));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_getDialogs, new MessagesController$$ExternalSyntheticLambda234(this, i6, i7, i8, i9));
             }
         } else if (this.resetDialogsPinned != null && (tLRPC$messages_Dialogs = this.resetDialogsAll) != null) {
             int size = tLRPC$messages_Dialogs.messages.size();
@@ -10780,7 +10805,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getMessagesStorage().setLastDateValue(i2);
         getMessagesStorage().setLastQtsValue(i3);
         getDifference();
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda168(this, tLRPC$messages_Dialogs, longSparseArray, longSparseArray2));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda170(this, tLRPC$messages_Dialogs, longSparseArray, longSparseArray2));
     }
 
     /* access modifiers changed from: private */
@@ -10888,14 +10913,14 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 tLRPC$TL_messages_getDialogs.offset_peer.access_hash = j4;
             }
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_getDialogs, new MessagesController$$ExternalSyntheticLambda230(this, i));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getDialogs, new MessagesController$$ExternalSyntheticLambda232(this, i));
         }
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$migrateDialogs$165(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
-            getMessagesStorage().getStorageQueue().postRunnable(new MessagesController$$ExternalSyntheticLambda166(this, (TLRPC$messages_Dialogs) tLObject, i));
+            getMessagesStorage().getStorageQueue().postRunnable(new MessagesController$$ExternalSyntheticLambda168(this, (TLRPC$messages_Dialogs) tLObject, i));
         } else {
             AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda23(this));
         }
@@ -11411,7 +11436,7 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x041f:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda18 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda18
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda19 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda19
             r1 = r35
             r0.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
@@ -11484,7 +11509,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r14.dialogs
             int r0 = r0.size()
             if (r0 != 0) goto L_0x006b
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda167 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda167
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda169 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda169
             r0 = r7
             r1 = r33
             r2 = r36
@@ -12716,14 +12741,14 @@ public class MessagesController extends BaseController implements NotificationCe
                 TLRPC$TL_messages_getUnreadMentions tLRPC$TL_messages_getUnreadMentions = new TLRPC$TL_messages_getUnreadMentions();
                 tLRPC$TL_messages_getUnreadMentions.peer = tLRPC$InputPeer;
                 tLRPC$TL_messages_getUnreadMentions.limit = 1;
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_getUnreadMentions, new MessagesController$$ExternalSyntheticLambda288(this, tLRPC$InputPeer, j));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_getUnreadMentions, new MessagesController$$ExternalSyntheticLambda290(this, tLRPC$InputPeer, j));
             }
             j = getMessagesStorage().createPendingTask(nativeByteBuffer);
         }
         TLRPC$TL_messages_getUnreadMentions tLRPC$TL_messages_getUnreadMentions2 = new TLRPC$TL_messages_getUnreadMentions();
         tLRPC$TL_messages_getUnreadMentions2.peer = tLRPC$InputPeer;
         tLRPC$TL_messages_getUnreadMentions2.limit = 1;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_getUnreadMentions2, new MessagesController$$ExternalSyntheticLambda288(this, tLRPC$InputPeer, j));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_getUnreadMentions2, new MessagesController$$ExternalSyntheticLambda290(this, tLRPC$InputPeer, j));
     }
 
     /* access modifiers changed from: private */
@@ -12742,7 +12767,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void reloadMentionsCountForChannels(ArrayList<Long> arrayList) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda93(this, arrayList));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda95(this, arrayList));
     }
 
     /* access modifiers changed from: private */
@@ -12888,11 +12913,11 @@ public class MessagesController extends BaseController implements NotificationCe
                         e = exc;
                         FileLog.e((Throwable) e);
                         j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory, new MessagesController$$ExternalSyntheticLambda287(this, tLRPC$Dialog, j));
+                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory, new MessagesController$$ExternalSyntheticLambda289(this, tLRPC$Dialog, j));
                     }
                     j = getMessagesStorage().createPendingTask(nativeByteBuffer);
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory, new MessagesController$$ExternalSyntheticLambda287(this, tLRPC$Dialog, j));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory, new MessagesController$$ExternalSyntheticLambda289(this, tLRPC$Dialog, j));
             }
         }
     }
@@ -12976,7 +13001,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void processDialogsUpdate(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, ArrayList<TLRPC$EncryptedChat> arrayList, boolean z) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda171(this, tLRPC$messages_Dialogs, z));
+        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda173(this, tLRPC$messages_Dialogs, z));
     }
 
     /* access modifiers changed from: private */
@@ -13194,7 +13219,7 @@ public class MessagesController extends BaseController implements NotificationCe
             goto L_0x00d4
         L_0x01a8:
             r8 = r16
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda169 r9 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda169
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda171 r9 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda171
             r0 = r9
             r1 = r18
             r2 = r19
@@ -13637,12 +13662,12 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_channels_readMessageContents.channel = inputChannel;
                 if (inputChannel != null) {
                     tLRPC$TL_channels_readMessageContents.id.add(Integer.valueOf(messageObject.getId()));
-                    getConnectionsManager().sendRequest(tLRPC$TL_channels_readMessageContents, MessagesController$$ExternalSyntheticLambda311.INSTANCE);
+                    getConnectionsManager().sendRequest(tLRPC$TL_channels_readMessageContents, MessagesController$$ExternalSyntheticLambda313.INSTANCE);
                 }
             } else {
                 TLRPC$TL_messages_readMessageContents tLRPC$TL_messages_readMessageContents = new TLRPC$TL_messages_readMessageContents();
                 tLRPC$TL_messages_readMessageContents.id.add(Integer.valueOf(messageObject.getId()));
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_readMessageContents, new MessagesController$$ExternalSyntheticLambda222(this));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_readMessageContents, new MessagesController$$ExternalSyntheticLambda223(this));
             }
         }
     }
@@ -13663,14 +13688,14 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_channels_readMessageContents.channel = inputChannel;
             if (inputChannel != null) {
                 tLRPC$TL_channels_readMessageContents.id.add(Integer.valueOf(i));
-                getConnectionsManager().sendRequest(tLRPC$TL_channels_readMessageContents, MessagesController$$ExternalSyntheticLambda315.INSTANCE);
+                getConnectionsManager().sendRequest(tLRPC$TL_channels_readMessageContents, MessagesController$$ExternalSyntheticLambda317.INSTANCE);
                 return;
             }
             return;
         }
         TLRPC$TL_messages_readMessageContents tLRPC$TL_messages_readMessageContents = new TLRPC$TL_messages_readMessageContents();
         tLRPC$TL_messages_readMessageContents.id.add(Integer.valueOf(i));
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_readMessageContents, new MessagesController$$ExternalSyntheticLambda207(this));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_readMessageContents, new MessagesController$$ExternalSyntheticLambda209(this));
     }
 
     /* access modifiers changed from: private */
@@ -13770,7 +13795,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Integer r3 = java.lang.Integer.valueOf(r17)
             r2.add(r3)
             org.telegram.tgnet.ConnectionsManager r2 = r14.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda249 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda249
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda251 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda251
             r3.<init>(r14, r12)
             r2.sendRequest(r0, r3)
             goto L_0x00b2
@@ -13781,7 +13806,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Integer r3 = java.lang.Integer.valueOf(r17)
             r2.add(r3)
             org.telegram.tgnet.ConnectionsManager r2 = r14.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda244 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda244
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda246 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda246
             r3.<init>(r14, r12)
             r2.sendRequest(r0, r3)
         L_0x00b2:
@@ -13847,7 +13872,7 @@ public class MessagesController extends BaseController implements NotificationCe
             int r6 = r6.maxId
             r0.read_max_id = r6
             org.telegram.tgnet.ConnectionsManager r6 = r5.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda316 r1 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda316.INSTANCE
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda318 r1 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda318.INSTANCE
             r6.sendRequest(r0, r1)
             goto L_0x00a2
         L_0x0029:
@@ -13876,7 +13901,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r0 = r1
         L_0x005a:
             org.telegram.tgnet.ConnectionsManager r6 = r5.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda224 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda224
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda226 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda226
             r1.<init>(r5)
             r6.sendRequest(r0, r1)
             goto L_0x00a2
@@ -13904,7 +13929,7 @@ public class MessagesController extends BaseController implements NotificationCe
             int r6 = r6.maxDate
             r1.max_date = r6
             org.telegram.tgnet.ConnectionsManager r6 = r5.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda322 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda322.INSTANCE
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda324 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda324.INSTANCE
             r6.sendRequest(r1, r0)
         L_0x00a2:
             return
@@ -13980,7 +14005,7 @@ public class MessagesController extends BaseController implements NotificationCe
             getMessagesStorage().resetMentionsCount(j, 0);
             TLRPC$TL_messages_readMentions tLRPC$TL_messages_readMentions = new TLRPC$TL_messages_readMentions();
             tLRPC$TL_messages_readMentions.peer = getInputPeer(j);
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_readMentions, MessagesController$$ExternalSyntheticLambda319.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_readMentions, MessagesController$$ExternalSyntheticLambda321.INSTANCE);
         }
     }
 
@@ -14263,7 +14288,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     tLRPC$TL_messages_createChat.users.add(getInputUser(user));
                 }
             }
-            return getConnectionsManager().sendRequest(tLRPC$TL_messages_createChat, new MessagesController$$ExternalSyntheticLambda295(this, baseFragment, tLRPC$TL_messages_createChat), 2);
+            return getConnectionsManager().sendRequest(tLRPC$TL_messages_createChat, new MessagesController$$ExternalSyntheticLambda297(this, baseFragment, tLRPC$TL_messages_createChat), 2);
         } else if (!z && i != 2 && i != 4) {
             return 0;
         } else {
@@ -14287,7 +14312,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_channels_createChannel.address = str3;
                 tLRPC$TL_channels_createChannel.flags |= 4;
             }
-            return getConnectionsManager().sendRequest(tLRPC$TL_channels_createChannel, new MessagesController$$ExternalSyntheticLambda293(this, baseFragment, tLRPC$TL_channels_createChannel), 2);
+            return getConnectionsManager().sendRequest(tLRPC$TL_channels_createChannel, new MessagesController$$ExternalSyntheticLambda295(this, baseFragment, tLRPC$TL_channels_createChannel), 2);
         }
     }
 
@@ -14299,7 +14324,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
         processUpdates(tLRPC$Updates, false);
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda160(this, tLRPC$Updates));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda162(this, tLRPC$Updates));
     }
 
     /* access modifiers changed from: private */
@@ -14328,7 +14353,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
         processUpdates(tLRPC$Updates, false);
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda161(this, tLRPC$Updates));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda163(this, tLRPC$Updates));
     }
 
     /* access modifiers changed from: private */
@@ -14353,7 +14378,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_messages_migrateChat tLRPC$TL_messages_migrateChat = new TLRPC$TL_messages_migrateChat();
         tLRPC$TL_messages_migrateChat.chat_id = j;
         AlertDialog alertDialog = context != null ? new AlertDialog(context, 3) : null;
-        int sendRequest = getConnectionsManager().sendRequest(tLRPC$TL_messages_migrateChat, new MessagesController$$ExternalSyntheticLambda275(this, context, alertDialog, longCallback, baseFragment, tLRPC$TL_messages_migrateChat));
+        int sendRequest = getConnectionsManager().sendRequest(tLRPC$TL_messages_migrateChat, new MessagesController$$ExternalSyntheticLambda277(this, context, alertDialog, longCallback, baseFragment, tLRPC$TL_messages_migrateChat));
         if (alertDialog != null) {
             alertDialog.setOnCancelListener(new MessagesController$$ExternalSyntheticLambda2(this, sendRequest));
             try {
@@ -14371,7 +14396,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
             processUpdates(tLRPC$Updates, false);
-            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda192(longCallback, tLRPC$Updates));
+            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda194(longCallback, tLRPC$Updates));
             return;
         }
         AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda111(this, longCallback, context, alertDialog, tLRPC$TL_error, baseFragment, tLRPC$TL_messages_migrateChat));
@@ -14425,7 +14450,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_channels_convertToGigagroup tLRPC$TL_channels_convertToGigagroup = new TLRPC$TL_channels_convertToGigagroup();
         tLRPC$TL_channels_convertToGigagroup.channel = getInputChannel(tLRPC$Chat);
         AlertDialog alertDialog = context != null ? new AlertDialog(context, 3) : null;
-        int sendRequest = getConnectionsManager().sendRequest(tLRPC$TL_channels_convertToGigagroup, new MessagesController$$ExternalSyntheticLambda274(this, context, alertDialog, booleanCallback, baseFragment, tLRPC$TL_channels_convertToGigagroup));
+        int sendRequest = getConnectionsManager().sendRequest(tLRPC$TL_channels_convertToGigagroup, new MessagesController$$ExternalSyntheticLambda276(this, context, alertDialog, booleanCallback, baseFragment, tLRPC$TL_channels_convertToGigagroup));
         if (alertDialog != null) {
             alertDialog.setOnCancelListener(new MessagesController$$ExternalSyntheticLambda0(this, sendRequest));
             try {
@@ -14442,7 +14467,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda5(context, alertDialog));
             }
             processUpdates((TLRPC$Updates) tLObject, false);
-            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda191(booleanCallback));
+            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda193(booleanCallback));
             return;
         }
         AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda110(this, booleanCallback, context, alertDialog, tLRPC$TL_error, baseFragment, tLRPC$TL_channels_convertToGigagroup));
@@ -14491,7 +14516,7 @@ public class MessagesController extends BaseController implements NotificationCe
             TLRPC$TL_channels_inviteToChannel tLRPC$TL_channels_inviteToChannel = new TLRPC$TL_channels_inviteToChannel();
             tLRPC$TL_channels_inviteToChannel.channel = getInputChannel(j);
             tLRPC$TL_channels_inviteToChannel.users = arrayList;
-            getConnectionsManager().sendRequest(tLRPC$TL_channels_inviteToChannel, new MessagesController$$ExternalSyntheticLambda294(this, baseFragment, tLRPC$TL_channels_inviteToChannel));
+            getConnectionsManager().sendRequest(tLRPC$TL_channels_inviteToChannel, new MessagesController$$ExternalSyntheticLambda296(this, baseFragment, tLRPC$TL_channels_inviteToChannel));
         }
     }
 
@@ -14513,14 +14538,14 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_channels_toggleSignatures tLRPC$TL_channels_toggleSignatures = new TLRPC$TL_channels_toggleSignatures();
         tLRPC$TL_channels_toggleSignatures.channel = getInputChannel(j);
         tLRPC$TL_channels_toggleSignatures.enabled = z;
-        getConnectionsManager().sendRequest(tLRPC$TL_channels_toggleSignatures, new MessagesController$$ExternalSyntheticLambda213(this), 64);
+        getConnectionsManager().sendRequest(tLRPC$TL_channels_toggleSignatures, new MessagesController$$ExternalSyntheticLambda214(this), 64);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$toogleChannelSignatures$215(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             processUpdates((TLRPC$Updates) tLObject, false);
-            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda19(this));
+            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda20(this));
         }
     }
 
@@ -14533,7 +14558,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_channels_togglePreHistoryHidden tLRPC$TL_channels_togglePreHistoryHidden = new TLRPC$TL_channels_togglePreHistoryHidden();
         tLRPC$TL_channels_togglePreHistoryHidden.channel = getInputChannel(j);
         tLRPC$TL_channels_togglePreHistoryHidden.enabled = z;
-        getConnectionsManager().sendRequest(tLRPC$TL_channels_togglePreHistoryHidden, new MessagesController$$ExternalSyntheticLambda214(this), 64);
+        getConnectionsManager().sendRequest(tLRPC$TL_channels_togglePreHistoryHidden, new MessagesController$$ExternalSyntheticLambda215(this), 64);
     }
 
     /* access modifiers changed from: private */
@@ -14553,7 +14578,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_messages_editChatAbout tLRPC$TL_messages_editChatAbout = new TLRPC$TL_messages_editChatAbout();
         tLRPC$TL_messages_editChatAbout.peer = getInputPeer(-j);
         tLRPC$TL_messages_editChatAbout.about = str;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_editChatAbout, new MessagesController$$ExternalSyntheticLambda286(this, tLRPC$ChatFull, str), 64);
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_editChatAbout, new MessagesController$$ExternalSyntheticLambda288(this, tLRPC$ChatFull, str), 64);
     }
 
     /* access modifiers changed from: private */
@@ -14577,7 +14602,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_channels_updateUsername tLRPC$TL_channels_updateUsername = new TLRPC$TL_channels_updateUsername();
         tLRPC$TL_channels_updateUsername.channel = getInputChannel(j);
         tLRPC$TL_channels_updateUsername.username = str;
-        getConnectionsManager().sendRequest(tLRPC$TL_channels_updateUsername, new MessagesController$$ExternalSyntheticLambda265(this, j, str), 64);
+        getConnectionsManager().sendRequest(tLRPC$TL_channels_updateUsername, new MessagesController$$ExternalSyntheticLambda267(this, j, str), 64);
     }
 
     /* access modifiers changed from: private */
@@ -14609,7 +14634,7 @@ public class MessagesController extends BaseController implements NotificationCe
             tLRPC$TL_messages_startBot.peer = getInputPeer(tLRPC$User.id);
             tLRPC$TL_messages_startBot.start_param = str;
             tLRPC$TL_messages_startBot.random_id = Utilities.random.nextLong();
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_startBot, new MessagesController$$ExternalSyntheticLambda217(this));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_startBot, new MessagesController$$ExternalSyntheticLambda218(this));
         }
     }
 
@@ -14719,7 +14744,7 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x0098:
             r11 = r0
             org.telegram.tgnet.ConnectionsManager r12 = r14.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda300 r13 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda300
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda302 r13 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda302
             r0 = r13
             r1 = r14
             r4 = r15
@@ -14872,7 +14897,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r9.<init>()
             r9.chat_id = r7
             org.telegram.tgnet.ConnectionsManager r7 = r6.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda304 r8 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda304.INSTANCE
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda306 r8 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda306.INSTANCE
             r7.sendRequest(r9, r8)
             return
         L_0x0084:
@@ -14890,7 +14915,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r6.deleteDialog(r11, r0, r13)
         L_0x009e:
             org.telegram.tgnet.ConnectionsManager r11 = r6.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda302 r12 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda302
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda304 r12 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda304
             r0 = r12
             r1 = r6
             r3 = r9
@@ -14943,7 +14968,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r0.title = r4
         L_0x001f:
             org.telegram.tgnet.ConnectionsManager r2 = r1.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda204 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda204
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda206 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda206
             r3.<init>(r1)
             r4 = 64
             r2.sendRequest(r0, r3, r4)
@@ -15023,7 +15048,7 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x0057:
             r8 = r3
             org.telegram.tgnet.ConnectionsManager r9 = r11.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda289 r10 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda289
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda291 r10 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda291
             r0 = r10
             r1 = r11
             r2 = r14
@@ -15122,7 +15147,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     tLRPC$TL_account_unregisterDevice.other_uids.add(Long.valueOf(instance.getClientUserId()));
                 }
             }
-            getConnectionsManager().sendRequest(tLRPC$TL_account_unregisterDevice, MessagesController$$ExternalSyntheticLambda312.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_account_unregisterDevice, MessagesController$$ExternalSyntheticLambda314.INSTANCE);
         }
     }
 
@@ -15130,7 +15155,7 @@ public class MessagesController extends BaseController implements NotificationCe
         boolean z = true;
         if (i == 1) {
             unregistedPush();
-            getConnectionsManager().sendRequest(new TLRPC$TL_auth_logOut(), new MessagesController$$ExternalSyntheticLambda226(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_auth_logOut(), new MessagesController$$ExternalSyntheticLambda228(this));
         } else {
             getConnectionsManager().cleanup(i == 2);
         }
@@ -15185,7 +15210,7 @@ public class MessagesController extends BaseController implements NotificationCe
             this.gettingAppChangelog = true;
             TLRPC$TL_help_getAppChangelog tLRPC$TL_help_getAppChangelog = new TLRPC$TL_help_getAppChangelog();
             tLRPC$TL_help_getAppChangelog.prev_app_version = SharedConfig.lastUpdateVersion;
-            getConnectionsManager().sendRequest(tLRPC$TL_help_getAppChangelog, new MessagesController$$ExternalSyntheticLambda220(this));
+            getConnectionsManager().sendRequest(tLRPC$TL_help_getAppChangelog, new MessagesController$$ExternalSyntheticLambda221(this));
         }
     }
 
@@ -15225,7 +15250,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         }
                     }
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_account_registerDevice, new MessagesController$$ExternalSyntheticLambda279(this, str));
+                getConnectionsManager().sendRequest(tLRPC$TL_account_registerDevice, new MessagesController$$ExternalSyntheticLambda281(this, str));
             }
         }
     }
@@ -15240,7 +15265,7 @@ public class MessagesController extends BaseController implements NotificationCe
             SharedConfig.pushString = str;
             getUserConfig().saveConfig(false);
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda20(this));
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda21(this));
     }
 
     /* access modifiers changed from: private */
@@ -15251,7 +15276,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public void loadCurrentState() {
         if (!this.updatingState) {
             this.updatingState = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_updates_getState(), new MessagesController$$ExternalSyntheticLambda210(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_updates_getState(), new MessagesController$$ExternalSyntheticLambda211(this));
         }
     }
 
@@ -15334,7 +15359,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 this.updatesQueueChannels.remove(j);
                 return;
             }
-            Collections.sort(arrayList, MessagesController$$ExternalSyntheticLambda200.INSTANCE);
+            Collections.sort(arrayList, MessagesController$$ExternalSyntheticLambda202.INSTANCE);
             if (i == 2) {
                 this.channelsPts.put(j, ((TLRPC$Updates) arrayList.get(0)).pts);
             }
@@ -15386,13 +15411,13 @@ public class MessagesController extends BaseController implements NotificationCe
         ArrayList<TLRPC$Updates> arrayList;
         if (i == 0) {
             arrayList = this.updatesQueueSeq;
-            Collections.sort(arrayList, new MessagesController$$ExternalSyntheticLambda197(this));
+            Collections.sort(arrayList, new MessagesController$$ExternalSyntheticLambda199(this));
         } else if (i == 1) {
             arrayList = this.updatesQueuePts;
-            Collections.sort(arrayList, MessagesController$$ExternalSyntheticLambda201.INSTANCE);
+            Collections.sort(arrayList, MessagesController$$ExternalSyntheticLambda203.INSTANCE);
         } else if (i == 2) {
             arrayList = this.updatesQueueQts;
-            Collections.sort(arrayList, MessagesController$$ExternalSyntheticLambda199.INSTANCE);
+            Collections.sort(arrayList, MessagesController$$ExternalSyntheticLambda201.INSTANCE);
         } else {
             arrayList = null;
         }
@@ -15479,11 +15504,11 @@ public class MessagesController extends BaseController implements NotificationCe
                         e = exc;
                         FileLog.e((Throwable) e);
                         j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda267(this, j, tLRPC$Chat));
+                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda269(this, j, tLRPC$Chat));
                     }
                     j = getMessagesStorage().createPendingTask(nativeByteBuffer);
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda267(this, j, tLRPC$Chat));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs, new MessagesController$$ExternalSyntheticLambda269(this, j, tLRPC$Chat));
             } else if (j != 0) {
                 getMessagesStorage().removePendingTask(j);
             }
@@ -15713,7 +15738,7 @@ public class MessagesController extends BaseController implements NotificationCe
             org.telegram.messenger.FileLog.d(r1)
         L_0x00f0:
             org.telegram.tgnet.ConnectionsManager r9 = r16.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda259 r10 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda259
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda261 r10 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda261
             r1 = r10
             r2 = r16
             r3 = r17
@@ -15765,7 +15790,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             }
             getMessagesStorage().putUsersAndChats(tLRPC$updates_ChannelDifference.users, tLRPC$updates_ChannelDifference.chats, true, true);
-            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda174(this, tLRPC$updates_ChannelDifference));
+            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda176(this, tLRPC$updates_ChannelDifference));
             getMessagesStorage().getStorageQueue().postRunnable(new MessagesController$$ExternalSyntheticLambda101(this, arrayList, j, tLRPC$updates_ChannelDifference, tLRPC$Chat, longSparseArray, i, j2));
         } else if (tLRPC$TL_error2 != null) {
             AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda140(this, tLRPC$TL_error2, j3));
@@ -15801,7 +15826,7 @@ public class MessagesController extends BaseController implements NotificationCe
         } else {
             long j4 = j;
         }
-        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda175(this, tLRPC$updates_ChannelDifference, j, tLRPC$Chat, longSparseArray, i, j2));
+        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda177(this, tLRPC$updates_ChannelDifference, j, tLRPC$Chat, longSparseArray, i, j2));
     }
 
     /* access modifiers changed from: private */
@@ -16008,7 +16033,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r2 = 0
             goto L_0x0106
         L_0x0184:
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda76 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda76
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda77 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda77
             r0.<init>(r6, r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             org.telegram.messenger.MessagesStorage r0 = r22.getMessagesStorage()
@@ -16203,7 +16228,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 FileLog.d("start getDifference with date = " + i2 + " pts = " + i + " qts = " + i3);
             }
             getConnectionsManager().setIsUpdating(true);
-            getConnectionsManager().sendRequest(tLRPC$TL_updates_getDifference, new MessagesController$$ExternalSyntheticLambda231(this, i2, i3));
+            getConnectionsManager().sendRequest(tLRPC$TL_updates_getDifference, new MessagesController$$ExternalSyntheticLambda233(this, i2, i3));
         }
     }
 
@@ -16213,7 +16238,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (tLRPC$TL_error == null) {
             TLRPC$updates_Difference tLRPC$updates_Difference = (TLRPC$updates_Difference) tLObject;
             if (tLRPC$updates_Difference instanceof TLRPC$TL_updates_differenceTooLong) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda177(this, tLRPC$updates_Difference, i, i2));
+                AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda179(this, tLRPC$updates_Difference, i, i2));
                 return;
             }
             if (tLRPC$updates_Difference instanceof TLRPC$TL_updates_differenceSlice) {
@@ -16254,8 +16279,8 @@ public class MessagesController extends BaseController implements NotificationCe
                     i3++;
                 }
             }
-            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda176(this, tLRPC$updates_Difference));
-            getMessagesStorage().getStorageQueue().postRunnable(new MessagesController$$ExternalSyntheticLambda179(this, tLRPC$updates_Difference, arrayList, longSparseArray, longSparseArray2));
+            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda178(this, tLRPC$updates_Difference));
+            getMessagesStorage().getStorageQueue().postRunnable(new MessagesController$$ExternalSyntheticLambda181(this, tLRPC$updates_Difference, arrayList, longSparseArray, longSparseArray2));
             return;
         }
         this.gettingDifference = false;
@@ -16294,7 +16319,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda74(this, sparseArray));
             }
         }
-        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda178(this, tLRPC$updates_Difference2, longSparseArray, longSparseArray2));
+        Utilities.stageQueue.postRunnable(new MessagesController$$ExternalSyntheticLambda180(this, tLRPC$updates_Difference2, longSparseArray, longSparseArray2));
     }
 
     /* access modifiers changed from: private */
@@ -16694,11 +16719,11 @@ public class MessagesController extends BaseController implements NotificationCe
                         FileLog.e((Throwable) e);
                         nativeByteBuffer = nativeByteBuffer2;
                         j2 = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tLRPC$TL_messages_markDialogUnread, new MessagesController$$ExternalSyntheticLambda250(this, j2));
+                        getConnectionsManager().sendRequest(tLRPC$TL_messages_markDialogUnread, new MessagesController$$ExternalSyntheticLambda252(this, j2));
                     }
                     j2 = getMessagesStorage().createPendingTask(nativeByteBuffer);
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_markDialogUnread, new MessagesController$$ExternalSyntheticLambda250(this, j2));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_markDialogUnread, new MessagesController$$ExternalSyntheticLambda252(this, j2));
             }
         }
     }
@@ -16713,7 +16738,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public void loadUnreadDialogs() {
         if (!this.loadingUnreadDialogs && !getUserConfig().unreadDialogsLoaded) {
             this.loadingUnreadDialogs = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_messages_getDialogUnreadMarks(), new MessagesController$$ExternalSyntheticLambda227(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_messages_getDialogUnreadMarks(), new MessagesController$$ExternalSyntheticLambda229(this));
         }
     }
 
@@ -16805,14 +16830,14 @@ public class MessagesController extends BaseController implements NotificationCe
                         FileLog.e((Throwable) e);
                         nativeByteBuffer = nativeByteBuffer2;
                         j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tLRPC$TL_messages_reorderPinnedDialogs, new MessagesController$$ExternalSyntheticLambda242(this, j));
+                        getConnectionsManager().sendRequest(tLRPC$TL_messages_reorderPinnedDialogs, new MessagesController$$ExternalSyntheticLambda244(this, j));
                     }
                 } catch (Exception e2) {
                     e = e2;
                     FileLog.e((Throwable) e);
                     nativeByteBuffer = nativeByteBuffer2;
                     j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_reorderPinnedDialogs, new MessagesController$$ExternalSyntheticLambda242(this, j));
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_reorderPinnedDialogs, new MessagesController$$ExternalSyntheticLambda244(this, j));
                 }
                 j = getMessagesStorage().createPendingTask(nativeByteBuffer);
             } else {
@@ -16821,7 +16846,7 @@ public class MessagesController extends BaseController implements NotificationCe
         } else {
             tLRPC$TL_messages_reorderPinnedDialogs.order = arrayList;
         }
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_reorderPinnedDialogs, new MessagesController$$ExternalSyntheticLambda242(this, j));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_reorderPinnedDialogs, new MessagesController$$ExternalSyntheticLambda244(this, j));
     }
 
     /* access modifiers changed from: private */
@@ -16890,7 +16915,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         FileLog.e((Throwable) e);
                         nativeByteBuffer = nativeByteBuffer2;
                         j3 = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tLRPC$TL_messages_toggleDialogPin, new MessagesController$$ExternalSyntheticLambda251(this, j3));
+                        getConnectionsManager().sendRequest(tLRPC$TL_messages_toggleDialogPin, new MessagesController$$ExternalSyntheticLambda253(this, j3));
                         getMessagesStorage().setDialogPinned(j4, tLRPC$Dialog.pinnedNum);
                         return true;
                     }
@@ -16898,7 +16923,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 } else {
                     j3 = j2;
                 }
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_toggleDialogPin, new MessagesController$$ExternalSyntheticLambda251(this, j3));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_toggleDialogPin, new MessagesController$$ExternalSyntheticLambda253(this, j3));
             }
             getMessagesStorage().setDialogPinned(j4, tLRPC$Dialog.pinnedNum);
             return true;
@@ -16921,7 +16946,7 @@ public class MessagesController extends BaseController implements NotificationCe
             this.loadingPinnedDialogs.put(i, 1);
             TLRPC$TL_messages_getPinnedDialogs tLRPC$TL_messages_getPinnedDialogs = new TLRPC$TL_messages_getPinnedDialogs();
             tLRPC$TL_messages_getPinnedDialogs.folder_id = i;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_getPinnedDialogs, new MessagesController$$ExternalSyntheticLambda229(this, i));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getPinnedDialogs, new MessagesController$$ExternalSyntheticLambda231(this, i));
         }
     }
 
@@ -17132,7 +17157,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 arrayList.add(new MessageObject(this.currentAccount, tLRPC$TL_messageService, true, false));
                 getMessagesStorage().getStorageQueue().postRunnable(new MessagesController$$ExternalSyntheticLambda89(this, arrayList));
                 getMessagesStorage().putMessages((ArrayList<TLRPC$Message>) arrayList2, true, true, false, 0, false);
-                AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda67(this, j, arrayList));
+                AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda66(this, j, arrayList));
             }
         }
     }
@@ -17202,7 +17227,7 @@ public class MessagesController extends BaseController implements NotificationCe
             TLRPC$TL_channels_getParticipant tLRPC$TL_channels_getParticipant = new TLRPC$TL_channels_getParticipant();
             tLRPC$TL_channels_getParticipant.channel = getInputChannel(j);
             tLRPC$TL_channels_getParticipant.participant = getInputPeer(getUserConfig().getClientUserId());
-            getConnectionsManager().sendRequest(tLRPC$TL_channels_getParticipant, new MessagesController$$ExternalSyntheticLambda285(this, chat, z, j));
+            getConnectionsManager().sendRequest(tLRPC$TL_channels_getParticipant, new MessagesController$$ExternalSyntheticLambda287(this, chat, z, j));
         }
     }
 
@@ -18600,7 +18625,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r2 == 0) goto L_0x08e4
             r26.updatePrintingStrings()
         L_0x08e4:
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda184 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda184
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda186 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda186
             r0 = r7
             r1 = r26
             r5 = r10
@@ -18614,7 +18639,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r0 == 0) goto L_0x08fd
             r26.updatePrintingStrings()
         L_0x08fd:
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda186 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda186
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda188 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda188
             r1.<init>(r6, r0, r7, r10)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
         L_0x0905:
@@ -18622,7 +18647,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r0 != 0) goto L_0x091b
             org.telegram.messenger.MessagesStorage r0 = r26.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r0 = r0.getStorageQueue()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda94 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda94
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda96 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda96
             r1.<init>(r6, r10)
             r0.postRunnable(r1)
         L_0x091b:
@@ -18736,7 +18761,7 @@ public class MessagesController extends BaseController implements NotificationCe
             int r1 = r1.getLastQtsValue()
             r0.max_qts = r1
             org.telegram.tgnet.ConnectionsManager r1 = r26.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda310 r2 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda310.INSTANCE
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda312 r2 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda312.INSTANCE
             r1.sendRequest(r0, r2)
         L_0x0a02:
             if (r9 == 0) goto L_0x0a0c
@@ -18820,46 +18845,44 @@ public class MessagesController extends BaseController implements NotificationCe
         return z;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:926:0x13c3, code lost:
-        if (r1.action.user_id == r31) goto L_0x120e;
+    /* JADX WARNING: Code restructure failed: missing block: B:932:0x13ce, code lost:
+        if (r1.action.user_id == r31) goto L_0x1223;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:1002:0x151f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1005:0x1542  */
-    /* JADX WARNING: Removed duplicated region for block: B:1007:0x1547  */
-    /* JADX WARNING: Removed duplicated region for block: B:1011:0x1550  */
-    /* JADX WARNING: Removed duplicated region for block: B:1012:0x1557  */
-    /* JADX WARNING: Removed duplicated region for block: B:1015:0x1562  */
-    /* JADX WARNING: Removed duplicated region for block: B:1028:0x158f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1089:0x179f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1094:0x17c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1099:0x17f2  */
-    /* JADX WARNING: Removed duplicated region for block: B:1104:0x1819  */
-    /* JADX WARNING: Removed duplicated region for block: B:1109:0x183f  */
-    /* JADX WARNING: Removed duplicated region for block: B:746:0x1069  */
-    /* JADX WARNING: Removed duplicated region for block: B:749:0x106e  */
-    /* JADX WARNING: Removed duplicated region for block: B:753:0x1083  */
-    /* JADX WARNING: Removed duplicated region for block: B:803:0x118a  */
-    /* JADX WARNING: Removed duplicated region for block: B:835:0x1252  */
-    /* JADX WARNING: Removed duplicated region for block: B:844:0x127d  */
-    /* JADX WARNING: Removed duplicated region for block: B:846:0x1281  */
-    /* JADX WARNING: Removed duplicated region for block: B:879:0x12f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:912:0x1383  */
-    /* JADX WARNING: Removed duplicated region for block: B:916:0x1391  */
-    /* JADX WARNING: Removed duplicated region for block: B:933:0x13db  */
-    /* JADX WARNING: Removed duplicated region for block: B:950:0x1426  */
-    /* JADX WARNING: Removed duplicated region for block: B:958:0x1448  */
-    /* JADX WARNING: Removed duplicated region for block: B:959:0x144e  */
-    /* JADX WARNING: Removed duplicated region for block: B:963:0x1459  */
-    /* JADX WARNING: Removed duplicated region for block: B:974:0x14ae  */
-    /* JADX WARNING: Removed duplicated region for block: B:998:0x1512  */
+    /* JADX WARNING: Removed duplicated region for block: B:1003:0x1519  */
+    /* JADX WARNING: Removed duplicated region for block: B:1007:0x1526  */
+    /* JADX WARNING: Removed duplicated region for block: B:1010:0x1543  */
+    /* JADX WARNING: Removed duplicated region for block: B:1012:0x1548  */
+    /* JADX WARNING: Removed duplicated region for block: B:1016:0x1551  */
+    /* JADX WARNING: Removed duplicated region for block: B:1017:0x1558  */
+    /* JADX WARNING: Removed duplicated region for block: B:1020:0x1563  */
+    /* JADX WARNING: Removed duplicated region for block: B:1033:0x1590  */
+    /* JADX WARNING: Removed duplicated region for block: B:1034:0x1596  */
+    /* JADX WARNING: Removed duplicated region for block: B:1095:0x17a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1100:0x17d0  */
+    /* JADX WARNING: Removed duplicated region for block: B:1105:0x17fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:1110:0x1823  */
+    /* JADX WARNING: Removed duplicated region for block: B:1115:0x1849  */
+    /* JADX WARNING: Removed duplicated region for block: B:1143:0x1392 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:810:0x119f  */
+    /* JADX WARNING: Removed duplicated region for block: B:842:0x1264  */
+    /* JADX WARNING: Removed duplicated region for block: B:851:0x128f  */
+    /* JADX WARNING: Removed duplicated region for block: B:853:0x1293  */
+    /* JADX WARNING: Removed duplicated region for block: B:886:0x1305  */
+    /* JADX WARNING: Removed duplicated region for block: B:922:0x139c  */
+    /* JADX WARNING: Removed duplicated region for block: B:939:0x13e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:955:0x142e  */
+    /* JADX WARNING: Removed duplicated region for block: B:963:0x1450  */
+    /* JADX WARNING: Removed duplicated region for block: B:964:0x1456  */
+    /* JADX WARNING: Removed duplicated region for block: B:968:0x1461  */
+    /* JADX WARNING: Removed duplicated region for block: B:979:0x14b5  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean processUpdateArray(java.util.ArrayList<org.telegram.tgnet.TLRPC$Update> r67, java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r68, java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r69, boolean r70, int r71) {
+    public boolean processUpdateArray(java.util.ArrayList<org.telegram.tgnet.TLRPC$Update> r66, java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r67, java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r68, boolean r69, int r70) {
         /*
-            r66 = this;
-            r15 = r66
-            r0 = r68
-            r1 = r69
-            boolean r2 = r67.isEmpty()
+            r65 = this;
+            r15 = r65
+            r0 = r67
+            r1 = r68
+            boolean r2 = r66.isEmpty()
             r14 = 1
             if (r2 == 0) goto L_0x001a
             if (r0 != 0) goto L_0x0011
@@ -18875,7 +18898,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r0 == 0) goto L_0x003e
             j$.util.concurrent.ConcurrentHashMap r4 = new j$.util.concurrent.ConcurrentHashMap
             r4.<init>()
-            int r5 = r68.size()
+            int r5 = r67.size()
             r6 = 0
         L_0x002a:
             if (r6 >= r5) goto L_0x0040
@@ -18892,7 +18915,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r1 == 0) goto L_0x0060
             j$.util.concurrent.ConcurrentHashMap r5 = new j$.util.concurrent.ConcurrentHashMap
             r5.<init>()
-            int r6 = r69.size()
+            int r6 = r68.size()
             r7 = 0
         L_0x004c:
             if (r7 >= r6) goto L_0x0062
@@ -18914,11 +18937,11 @@ public class MessagesController extends BaseController implements NotificationCe
             r5.<init>(r15, r0, r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r5)
         L_0x006f:
-            org.telegram.messenger.UserConfig r0 = r66.getUserConfig()
+            org.telegram.messenger.UserConfig r0 = r65.getUserConfig()
             long r0 = r0.getClientUserId()
-            int r11 = r67.size()
+            int r11 = r66.size()
             r16 = 0
-            r68 = r0
+            r67 = r0
             r30 = r2
             r0 = r16
             r1 = r0
@@ -18941,17 +18964,17 @@ public class MessagesController extends BaseController implements NotificationCe
             r27 = r24
             r29 = r27
             r35 = r29
-            r38 = r35
+            r37 = r35
+            r38 = r37
             r39 = r38
             r40 = r39
-            r41 = r40
             r14 = 0
             r17 = 0
             r26 = 0
         L_0x00ae:
-            if (r14 >= r11) goto L_0x15bd
+            if (r14 >= r11) goto L_0x15c4
             r28 = r11
-            r11 = r67
+            r11 = r66
             java.lang.Object r32 = r11.get(r14)
             r33 = r5
             r5 = r32
@@ -18974,17 +18997,17 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x00df:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewMessage
             java.lang.String r8 = " channelId = "
-            r44 = r8
-            r43 = r9
-            if (r6 != 0) goto L_0x1199
+            r43 = r8
+            r42 = r9
+            if (r6 != 0) goto L_0x11ae
             boolean r8 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewChannelMessage
-            if (r8 != 0) goto L_0x1199
+            if (r8 != 0) goto L_0x11ae
             boolean r8 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewScheduledMessage
             if (r8 == 0) goto L_0x00f3
-            goto L_0x1199
+            goto L_0x11ae
         L_0x00f3:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateReadMessagesContents
-            if (r6 == 0) goto L_0x012d
+            if (r6 == 0) goto L_0x012e
             org.telegram.tgnet.TLRPC$TL_updateReadMessagesContents r5 = (org.telegram.tgnet.TLRPC$TL_updateReadMessagesContents) r5
             if (r13 != 0) goto L_0x0101
             androidx.collection.LongSparseArray r6 = new androidx.collection.LongSparseArray
@@ -19005,77 +19028,78 @@ public class MessagesController extends BaseController implements NotificationCe
             r36 = r0
         L_0x011a:
             r0 = r4
-            r47 = r14
+            r47 = r13
+            r46 = r14
+        L_0x011f:
             r6 = r32
             r5 = r33
             r8 = r34
-            r9 = r43
-        L_0x0125:
-            r37 = 0
-        L_0x0127:
+            r9 = r42
+            r13 = 0
+        L_0x0128:
             r33 = r30
-        L_0x0129:
-            r31 = r68
-            goto L_0x15b0
-        L_0x012d:
+        L_0x012a:
+            r31 = r67
+            goto L_0x15b5
+        L_0x012e:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChannelReadMessagesContents
-            if (r6 == 0) goto L_0x0154
+            if (r6 == 0) goto L_0x0155
             org.telegram.tgnet.TLRPC$TL_updateChannelReadMessagesContents r5 = (org.telegram.tgnet.TLRPC$TL_updateChannelReadMessagesContents) r5
-            if (r13 != 0) goto L_0x013b
+            if (r13 != 0) goto L_0x013c
             androidx.collection.LongSparseArray r6 = new androidx.collection.LongSparseArray
             r6.<init>()
             r13 = r6
-        L_0x013b:
+        L_0x013c:
             long r8 = r5.channel_id
             long r8 = -r8
             java.lang.Object r6 = r13.get(r8)
             java.util.ArrayList r6 = (java.util.ArrayList) r6
-            if (r6 != 0) goto L_0x014e
+            if (r6 != 0) goto L_0x014f
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             r13.put(r8, r6)
-        L_0x014e:
+        L_0x014f:
             java.util.ArrayList<java.lang.Integer> r5 = r5.messages
             r6.addAll(r5)
             goto L_0x0118
-        L_0x0154:
+        L_0x0155:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateReadHistoryInbox
-            if (r6 == 0) goto L_0x01b8
+            if (r6 == 0) goto L_0x01b9
             org.telegram.tgnet.TLRPC$TL_updateReadHistoryInbox r5 = (org.telegram.tgnet.TLRPC$TL_updateReadHistoryInbox) r5
-            if (r0 != 0) goto L_0x0161
+            if (r0 != 0) goto L_0x0162
             org.telegram.messenger.support.LongSparseIntArray r0 = new org.telegram.messenger.support.LongSparseIntArray
             r0.<init>()
-        L_0x0161:
+        L_0x0162:
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer
             long r8 = r6.chat_id
-            r44 = 0
-            int r36 = (r8 > r44 ? 1 : (r8 == r44 ? 0 : -1))
-            if (r36 == 0) goto L_0x0177
+            r43 = 0
+            int r36 = (r8 > r43 ? 1 : (r8 == r43 ? 0 : -1))
+            if (r36 == 0) goto L_0x0178
             long r8 = -r8
             int r6 = r5.max_id
             r0.put(r8, r6)
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer
             long r8 = r6.chat_id
             long r8 = -r8
-            goto L_0x0182
-        L_0x0177:
+            goto L_0x0183
+        L_0x0178:
             long r8 = r6.user_id
             int r6 = r5.max_id
             r0.put(r8, r6)
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer
             long r8 = r6.user_id
-        L_0x0182:
+        L_0x0183:
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r6 = r15.dialogs_read_inbox_max
             r36 = r0
             java.lang.Long r0 = java.lang.Long.valueOf(r8)
             java.lang.Object r0 = r6.get(r0)
             java.lang.Integer r0 = (java.lang.Integer) r0
-            if (r0 != 0) goto L_0x019f
-            org.telegram.messenger.MessagesStorage r0 = r66.getMessagesStorage()
+            if (r0 != 0) goto L_0x01a0
+            org.telegram.messenger.MessagesStorage r0 = r65.getMessagesStorage()
             r6 = 0
             int r0 = r0.getDialogReadMax(r6, r8)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-        L_0x019f:
+        L_0x01a0:
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r6 = r15.dialogs_read_inbox_max
             java.lang.Long r8 = java.lang.Long.valueOf(r8)
             int r0 = r0.intValue()
@@ -19084,19 +19108,19 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r6.put(r8, r0)
             goto L_0x011a
-        L_0x01b8:
+        L_0x01b9:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateReadHistoryOutbox
-            if (r6 == 0) goto L_0x0271
+            if (r6 == 0) goto L_0x0273
             org.telegram.tgnet.TLRPC$TL_updateReadHistoryOutbox r5 = (org.telegram.tgnet.TLRPC$TL_updateReadHistoryOutbox) r5
-            if (r1 != 0) goto L_0x01c5
+            if (r1 != 0) goto L_0x01c6
             org.telegram.messenger.support.LongSparseIntArray r1 = new org.telegram.messenger.support.LongSparseIntArray
             r1.<init>()
-        L_0x01c5:
+        L_0x01c6:
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer
             long r8 = r6.chat_id
-            r44 = 0
-            int r36 = (r8 > r44 ? 1 : (r8 == r44 ? 0 : -1))
-            if (r36 == 0) goto L_0x01dd
+            r43 = 0
+            int r36 = (r8 > r43 ? 1 : (r8 == r43 ? 0 : -1))
+            if (r36 == 0) goto L_0x01de
             long r8 = -r8
             int r6 = r5.max_id
             r1.put(r8, r6)
@@ -19104,8 +19128,8 @@ public class MessagesController extends BaseController implements NotificationCe
             long r8 = r6.chat_id
             long r8 = -r8
             r36 = r1
-            goto L_0x022c
-        L_0x01dd:
+            goto L_0x022d
+        L_0x01de:
             long r8 = r6.user_id
             int r6 = r5.max_id
             r1.put(r8, r6)
@@ -19113,45 +19137,45 @@ public class MessagesController extends BaseController implements NotificationCe
             long r8 = r6.user_id
             java.lang.Long r6 = java.lang.Long.valueOf(r8)
             org.telegram.tgnet.TLRPC$User r6 = r15.getUser(r6)
-            if (r6 == 0) goto L_0x0226
+            if (r6 == 0) goto L_0x0227
             org.telegram.tgnet.TLRPC$UserStatus r6 = r6.status
-            if (r6 == 0) goto L_0x0226
+            if (r6 == 0) goto L_0x0227
             int r6 = r6.expires
-            if (r6 > 0) goto L_0x0226
-            org.telegram.tgnet.ConnectionsManager r6 = r66.getConnectionsManager()
+            if (r6 > 0) goto L_0x0227
+            org.telegram.tgnet.ConnectionsManager r6 = r65.getConnectionsManager()
             int r6 = r6.getCurrentTime()
-            int r6 = r6 - r71
+            int r6 = r6 - r70
             int r6 = java.lang.Math.abs(r6)
             r36 = r1
             r1 = 30
-            if (r6 >= r1) goto L_0x0228
+            if (r6 >= r1) goto L_0x0229
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r1 = r15.onlinePrivacy
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer
-            r44 = r8
+            r43 = r8
             long r8 = r6.user_id
             java.lang.Long r6 = java.lang.Long.valueOf(r8)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r71)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r70)
             r1.put(r6, r8)
             int r1 = UPDATE_MASK_STATUS
             r17 = r17 | r1
-            goto L_0x022a
-        L_0x0226:
+            goto L_0x022b
+        L_0x0227:
             r36 = r1
-        L_0x0228:
-            r44 = r8
-        L_0x022a:
-            r8 = r44
-        L_0x022c:
+        L_0x0229:
+            r43 = r8
+        L_0x022b:
+            r8 = r43
+        L_0x022d:
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r1 = r15.dialogs_read_outbox_max
             java.lang.Long r6 = java.lang.Long.valueOf(r8)
             java.lang.Object r1 = r1.get(r6)
             java.lang.Integer r1 = (java.lang.Integer) r1
-            if (r1 != 0) goto L_0x0247
-            org.telegram.messenger.MessagesStorage r1 = r66.getMessagesStorage()
+            if (r1 != 0) goto L_0x0248
+            org.telegram.messenger.MessagesStorage r1 = r65.getMessagesStorage()
             r6 = 1
             int r1 = r1.getDialogReadMax(r6, r8)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-        L_0x0247:
+        L_0x0248:
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r6 = r15.dialogs_read_outbox_max
             java.lang.Long r8 = java.lang.Long.valueOf(r8)
             int r1 = r1.intValue()
@@ -19159,375 +19183,369 @@ public class MessagesController extends BaseController implements NotificationCe
             int r1 = java.lang.Math.max(r1, r5)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r6.put(r8, r1)
-            r47 = r14
+            r47 = r13
+            r46 = r14
             r6 = r32
             r5 = r33
             r8 = r34
             r1 = r36
-            r9 = r43
-            r37 = 0
+            r9 = r42
+            r13 = 0
             r36 = r0
             r0 = r4
-            goto L_0x0127
-        L_0x0271:
+            goto L_0x0128
+        L_0x0273:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDeleteMessages
-            if (r6 == 0) goto L_0x0297
+            if (r6 == 0) goto L_0x0299
             org.telegram.tgnet.TLRPC$TL_updateDeleteMessages r5 = (org.telegram.tgnet.TLRPC$TL_updateDeleteMessages) r5
-            if (r2 != 0) goto L_0x027e
+            if (r2 != 0) goto L_0x0280
             androidx.collection.LongSparseArray r2 = new androidx.collection.LongSparseArray
             r2.<init>()
-        L_0x027e:
+        L_0x0280:
             r8 = 0
             java.lang.Object r6 = r2.get(r8)
             java.util.ArrayList r6 = (java.util.ArrayList) r6
-            if (r6 != 0) goto L_0x0290
+            if (r6 != 0) goto L_0x0292
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             r2.put(r8, r6)
-        L_0x0290:
+        L_0x0292:
             java.util.ArrayList<java.lang.Integer> r5 = r5.messages
             r6.addAll(r5)
             goto L_0x0118
-        L_0x0297:
+        L_0x0299:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDeleteScheduledMessages
-            if (r6 == 0) goto L_0x02d8
+            if (r6 == 0) goto L_0x02d0
             org.telegram.tgnet.TLRPC$TL_updateDeleteScheduledMessages r5 = (org.telegram.tgnet.TLRPC$TL_updateDeleteScheduledMessages) r5
-            if (r3 != 0) goto L_0x02a4
+            if (r3 != 0) goto L_0x02a6
             androidx.collection.LongSparseArray r3 = new androidx.collection.LongSparseArray
             r3.<init>()
-        L_0x02a4:
+        L_0x02a6:
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer
             long r8 = org.telegram.messenger.MessageObject.getPeerId(r6)
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer
-            r48 = r13
-            r47 = r14
+            r47 = r13
+            r46 = r14
             long r13 = org.telegram.messenger.MessageObject.getPeerId(r6)
             java.lang.Object r6 = r3.get(r13)
             java.util.ArrayList r6 = (java.util.ArrayList) r6
-            if (r6 != 0) goto L_0x02c4
+            if (r6 != 0) goto L_0x02c6
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             r3.put(r8, r6)
-        L_0x02c4:
+        L_0x02c6:
             java.util.ArrayList<java.lang.Integer> r5 = r5.messages
             r6.addAll(r5)
             r36 = r0
             r0 = r4
-        L_0x02cc:
-            r6 = r32
-            r5 = r33
-            r8 = r34
-            r9 = r43
-            r13 = r48
-            goto L_0x0125
-        L_0x02d8:
-            r48 = r13
-            r47 = r14
+            goto L_0x011f
+        L_0x02d0:
+            r47 = r13
+            r46 = r14
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateUserTyping
-            if (r6 != 0) goto L_0x0ff0
+            if (r6 != 0) goto L_0x0fd5
             boolean r8 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChatUserTyping
-            if (r8 != 0) goto L_0x0ff0
+            if (r8 != 0) goto L_0x0fd5
             boolean r8 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChannelUserTyping
-            if (r8 == 0) goto L_0x02ea
-            goto L_0x0ff0
-        L_0x02ea:
+            if (r8 == 0) goto L_0x02e2
+            goto L_0x0fd5
+        L_0x02e2:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChatParticipants
-            if (r6 == 0) goto L_0x0309
+            if (r6 == 0) goto L_0x0302
             org.telegram.tgnet.TLRPC$TL_updateChatParticipants r5 = (org.telegram.tgnet.TLRPC$TL_updateChatParticipants) r5
             int r6 = UPDATE_MASK_CHAT_MEMBERS
             r17 = r17 | r6
-            if (r22 != 0) goto L_0x02fc
+            if (r22 != 0) goto L_0x02f4
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x02fe
-        L_0x02fc:
+            goto L_0x02f6
+        L_0x02f4:
             r6 = r22
-        L_0x02fe:
+        L_0x02f6:
             org.telegram.tgnet.TLRPC$ChatParticipants r5 = r5.participants
             r6.add(r5)
             r36 = r0
             r0 = r4
             r22 = r6
-            goto L_0x02cc
-        L_0x0309:
+            goto L_0x011f
+        L_0x0302:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateUserStatus
-            if (r6 == 0) goto L_0x0324
+            if (r6 == 0) goto L_0x031e
             int r6 = UPDATE_MASK_STATUS
             r17 = r17 | r6
-            if (r18 != 0) goto L_0x0319
+            if (r18 != 0) goto L_0x0312
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x031b
-        L_0x0319:
+            goto L_0x0314
+        L_0x0312:
             r6 = r18
-        L_0x031b:
+        L_0x0314:
             r6.add(r5)
-        L_0x031e:
+        L_0x0317:
             r36 = r0
             r0 = r4
             r18 = r6
-            goto L_0x02cc
-        L_0x0324:
+            goto L_0x011f
+        L_0x031e:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateUserName
-            if (r6 == 0) goto L_0x033a
+            if (r6 == 0) goto L_0x0334
             int r6 = UPDATE_MASK_NAME
             r17 = r17 | r6
-            if (r18 != 0) goto L_0x0334
+            if (r18 != 0) goto L_0x032e
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0336
-        L_0x0334:
+            goto L_0x0330
+        L_0x032e:
             r6 = r18
-        L_0x0336:
+        L_0x0330:
             r6.add(r5)
-            goto L_0x031e
-        L_0x033a:
+            goto L_0x0317
+        L_0x0334:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateUserPhoto
-            if (r6 == 0) goto L_0x035c
+            if (r6 == 0) goto L_0x0356
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateUserPhoto r6 = (org.telegram.tgnet.TLRPC$TL_updateUserPhoto) r6
             int r8 = UPDATE_MASK_AVATAR
             r17 = r17 | r8
-            org.telegram.messenger.MessagesStorage r8 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r8 = r65.getMessagesStorage()
             long r13 = r6.user_id
             r8.clearUserPhotos(r13)
-            if (r18 != 0) goto L_0x0356
+            if (r18 != 0) goto L_0x0350
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0358
-        L_0x0356:
+            goto L_0x0352
+        L_0x0350:
             r6 = r18
-        L_0x0358:
+        L_0x0352:
             r6.add(r5)
-            goto L_0x031e
-        L_0x035c:
+            goto L_0x0317
+        L_0x0356:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateUserPhone
-            if (r6 == 0) goto L_0x0372
+            if (r6 == 0) goto L_0x036c
             int r6 = UPDATE_MASK_PHONE
             r17 = r17 | r6
-            if (r18 != 0) goto L_0x036c
+            if (r18 != 0) goto L_0x0366
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x036e
-        L_0x036c:
+            goto L_0x0368
+        L_0x0366:
             r6 = r18
-        L_0x036e:
+        L_0x0368:
             r6.add(r5)
-            goto L_0x031e
-        L_0x0372:
+            goto L_0x0317
+        L_0x036c:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePeerSettings
-            if (r6 == 0) goto L_0x03ff
+            if (r6 == 0) goto L_0x03f9
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updatePeerSettings r6 = (org.telegram.tgnet.TLRPC$TL_updatePeerSettings) r6
-            if (r7 != 0) goto L_0x0380
+            if (r7 != 0) goto L_0x037a
             java.util.ArrayList r7 = new java.util.ArrayList
             r7.<init>()
-        L_0x0380:
+        L_0x037a:
             org.telegram.tgnet.TLRPC$Peer r8 = r6.peer
             boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r9 == 0) goto L_0x03f0
+            if (r9 == 0) goto L_0x03ea
             long r8 = r8.user_id
             java.lang.Long r8 = java.lang.Long.valueOf(r8)
             java.lang.Object r8 = r4.get(r8)
             org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC$User) r8
-            if (r8 == 0) goto L_0x03f0
+            if (r8 == 0) goto L_0x03ea
             boolean r8 = r8.contact
             r9 = -1
-            if (r8 == 0) goto L_0x03c5
+            if (r8 == 0) goto L_0x03bf
             org.telegram.tgnet.TLRPC$Peer r8 = r6.peer
             long r13 = r8.user_id
             long r13 = -r13
             java.lang.Long r8 = java.lang.Long.valueOf(r13)
             int r8 = r7.indexOf(r8)
-            if (r8 == r9) goto L_0x03ab
+            if (r8 == r9) goto L_0x03a5
             r7.remove(r8)
-        L_0x03ab:
+        L_0x03a5:
             org.telegram.tgnet.TLRPC$Peer r8 = r6.peer
             long r8 = r8.user_id
             java.lang.Long r8 = java.lang.Long.valueOf(r8)
             boolean r8 = r7.contains(r8)
-            if (r8 != 0) goto L_0x03f0
+            if (r8 != 0) goto L_0x03ea
             org.telegram.tgnet.TLRPC$Peer r6 = r6.peer
             long r8 = r6.user_id
             java.lang.Long r6 = java.lang.Long.valueOf(r8)
             r7.add(r6)
-            goto L_0x03f0
-        L_0x03c5:
+            goto L_0x03ea
+        L_0x03bf:
             org.telegram.tgnet.TLRPC$Peer r8 = r6.peer
             long r13 = r8.user_id
             java.lang.Long r8 = java.lang.Long.valueOf(r13)
             int r8 = r7.indexOf(r8)
-            if (r8 == r9) goto L_0x03d6
+            if (r8 == r9) goto L_0x03d0
             r7.remove(r8)
-        L_0x03d6:
+        L_0x03d0:
             org.telegram.tgnet.TLRPC$Peer r8 = r6.peer
             long r8 = r8.user_id
             java.lang.Long r8 = java.lang.Long.valueOf(r8)
             boolean r8 = r7.contains(r8)
-            if (r8 != 0) goto L_0x03f0
+            if (r8 != 0) goto L_0x03ea
             org.telegram.tgnet.TLRPC$Peer r6 = r6.peer
             long r8 = r6.user_id
             long r8 = -r8
             java.lang.Long r6 = java.lang.Long.valueOf(r8)
             r7.add(r6)
-        L_0x03f0:
-            if (r18 != 0) goto L_0x03f8
+        L_0x03ea:
+            if (r18 != 0) goto L_0x03f2
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x03fa
-        L_0x03f8:
+            goto L_0x03f4
+        L_0x03f2:
             r6 = r18
-        L_0x03fa:
+        L_0x03f4:
             r6.add(r5)
-            goto L_0x031e
-        L_0x03ff:
+            goto L_0x0317
+        L_0x03f9:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewEncryptedMessage
-            if (r6 == 0) goto L_0x04fd
-            org.telegram.messenger.SecretChatHelper r6 = r66.getSecretChatHelper()
+            if (r6 == 0) goto L_0x04f4
+            org.telegram.messenger.SecretChatHelper r6 = r65.getSecretChatHelper()
             org.telegram.tgnet.TLRPC$TL_updateNewEncryptedMessage r5 = (org.telegram.tgnet.TLRPC$TL_updateNewEncryptedMessage) r5
             org.telegram.tgnet.TLRPC$EncryptedMessage r8 = r5.message
             java.util.ArrayList r13 = r6.decryptMessage(r8)
-            if (r13 == 0) goto L_0x04db
+            if (r13 == 0) goto L_0x04d5
             boolean r6 = r13.isEmpty()
-            if (r6 != 0) goto L_0x04db
+            if (r6 != 0) goto L_0x04d5
             org.telegram.tgnet.TLRPC$EncryptedMessage r5 = r5.message
             int r5 = r5.chat_id
             long r5 = (long) r5
             long r8 = org.telegram.messenger.DialogObject.makeEncryptedDialogId(r5)
-            if (r10 != 0) goto L_0x0429
+            if (r10 != 0) goto L_0x0423
             androidx.collection.LongSparseArray r5 = new androidx.collection.LongSparseArray
             r5.<init>()
             r14 = r5
-            goto L_0x042a
-        L_0x0429:
+            goto L_0x0424
+        L_0x0423:
             r14 = r10
-        L_0x042a:
+        L_0x0424:
             java.lang.Object r5 = r14.get(r8)
             java.util.ArrayList r5 = (java.util.ArrayList) r5
-            if (r5 != 0) goto L_0x043a
+            if (r5 != 0) goto L_0x0434
             java.util.ArrayList r5 = new java.util.ArrayList
             r5.<init>()
             r14.put(r8, r5)
-        L_0x043a:
+        L_0x0434:
             r10 = r5
             int r6 = r13.size()
             r5 = 0
-        L_0x0440:
-            if (r5 >= r6) goto L_0x04ca
+        L_0x043a:
+            if (r5 >= r6) goto L_0x04c4
             java.lang.Object r36 = r13.get(r5)
-            r49 = r3
+            r48 = r3
             r3 = r36
             org.telegram.tgnet.TLRPC$Message r3 = (org.telegram.tgnet.TLRPC$Message) r3
             org.telegram.messenger.ImageLoader.saveMessageThumbs(r3)
-            if (r35 != 0) goto L_0x0456
+            if (r35 != 0) goto L_0x0450
             java.util.ArrayList r35 = new java.util.ArrayList
             r35.<init>()
-        L_0x0456:
+        L_0x0450:
             r36 = r13
             r13 = r35
             r13.add(r3)
-            r42 = r5
+            r41 = r5
             java.util.ArrayList<java.lang.Long> r5 = r15.createdDialogIds
-            r44 = r6
+            r43 = r6
             java.lang.Long r6 = java.lang.Long.valueOf(r8)
             boolean r35 = r5.contains(r6)
             org.telegram.messenger.MessageObject r6 = new org.telegram.messenger.MessageObject
             int r5 = r15.currentAccount
-            r45 = r14
+            r44 = r14
             r14 = r33
-            r33 = r42
-            r42 = r5
+            r33 = r41
+            r41 = r5
             r5 = r6
-            r46 = r13
-            r50 = r14
+            r45 = r13
+            r49 = r14
             r13 = r32
-            r32 = r44
+            r32 = r43
             r14 = r6
-            r6 = r42
-            r51 = r7
+            r6 = r41
+            r50 = r7
             r7 = r3
-            r52 = r8
+            r51 = r8
             r3 = r34
             r8 = r4
-            r54 = r3
-            r3 = r43
+            r53 = r3
+            r3 = r42
             r9 = r12
-            r43 = r13
+            r42 = r13
             r13 = r10
             r10 = r35
             r11 = r35
             r5.<init>((int) r6, (org.telegram.tgnet.TLRPC$Message) r7, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User>) r8, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat>) r9, (boolean) r10, (boolean) r11)
             r13.add(r14)
-            if (r27 != 0) goto L_0x04a5
+            if (r27 != 0) goto L_0x049f
             java.util.ArrayList r5 = new java.util.ArrayList
             r5.<init>()
-            goto L_0x04a7
-        L_0x04a5:
+            goto L_0x04a1
+        L_0x049f:
             r5 = r27
-        L_0x04a7:
+        L_0x04a1:
             r5.add(r14)
             int r6 = r33 + 1
-            r11 = r67
+            r11 = r66
             r27 = r5
             r5 = r6
             r10 = r13
             r6 = r32
             r13 = r36
-            r32 = r43
-            r14 = r45
-            r35 = r46
-            r33 = r50
-            r7 = r51
-            r8 = r52
-            r34 = r54
-            r43 = r3
-            r3 = r49
-            goto L_0x0440
-        L_0x04ca:
-            r49 = r3
-            r51 = r7
-            r45 = r14
-            r50 = r33
-            r54 = r34
-            r3 = r43
-            r43 = r32
-            r10 = r45
-            goto L_0x04e7
-        L_0x04db:
-            r49 = r3
-            r51 = r7
-            r50 = r33
-            r54 = r34
-            r3 = r43
-            r43 = r32
-        L_0x04e7:
+            r32 = r42
+            r14 = r44
+            r35 = r45
+            r33 = r49
+            r7 = r50
+            r8 = r51
+            r34 = r53
+            r42 = r3
+            r3 = r48
+            goto L_0x043a
+        L_0x04c4:
+            r48 = r3
+            r50 = r7
+            r44 = r14
+            r49 = r33
+            r53 = r34
+            r3 = r42
+            r42 = r32
+            r10 = r44
+            goto L_0x04e1
+        L_0x04d5:
+            r48 = r3
+            r50 = r7
+            r49 = r33
+            r53 = r34
+            r3 = r42
+            r42 = r32
+        L_0x04e1:
             r36 = r0
             r9 = r3
             r0 = r4
             r33 = r30
-        L_0x04ed:
-            r6 = r43
-            r13 = r48
-            r3 = r49
-            r5 = r50
-            r7 = r51
-            r8 = r54
-            r37 = 0
-            goto L_0x0129
-        L_0x04fd:
-            r49 = r3
-            r51 = r7
-            r50 = r33
-            r54 = r34
-            r3 = r43
-            r43 = r32
+        L_0x04e7:
+            r6 = r42
+            r3 = r48
+            r5 = r49
+            r7 = r50
+            r8 = r53
+            r13 = 0
+            goto L_0x012a
+        L_0x04f4:
+            r48 = r3
+            r50 = r7
+            r49 = r33
+            r53 = r34
+            r3 = r42
+            r42 = r32
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateEncryptedChatTyping
-            if (r6 == 0) goto L_0x05cd
+            if (r6 == 0) goto L_0x05c4
             org.telegram.tgnet.TLRPC$TL_updateEncryptedChatTyping r5 = (org.telegram.tgnet.TLRPC$TL_updateEncryptedChatTyping) r5
             int r6 = r5.chat_id
             r7 = 1
             org.telegram.tgnet.TLRPC$EncryptedChat r6 = r15.getEncryptedChatDB(r6, r7)
-            if (r6 == 0) goto L_0x05bf
+            if (r6 == 0) goto L_0x05b6
             int r5 = r5.chat_id
             long r7 = (long) r5
             long r7 = org.telegram.messenger.DialogObject.makeEncryptedDialogId(r7)
@@ -19535,52 +19553,52 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Long r9 = java.lang.Long.valueOf(r7)
             java.lang.Object r5 = r5.get(r9)
             j$.util.concurrent.ConcurrentHashMap r5 = (j$.util.concurrent.ConcurrentHashMap) r5
-            if (r5 != 0) goto L_0x053b
+            if (r5 != 0) goto L_0x0532
             j$.util.concurrent.ConcurrentHashMap r5 = new j$.util.concurrent.ConcurrentHashMap
             r5.<init>()
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.util.ArrayList<org.telegram.messenger.MessagesController$PrintingUser>>> r9 = r15.printingUsers
             java.lang.Long r7 = java.lang.Long.valueOf(r7)
             r9.put(r7, r5)
-        L_0x053b:
+        L_0x0532:
             r7 = 0
             java.lang.Integer r8 = java.lang.Integer.valueOf(r7)
             java.lang.Object r8 = r5.get(r8)
             java.util.ArrayList r8 = (java.util.ArrayList) r8
-            if (r8 != 0) goto L_0x0554
+            if (r8 != 0) goto L_0x054b
             java.util.ArrayList r8 = new java.util.ArrayList
             r8.<init>()
             java.lang.Integer r9 = java.lang.Integer.valueOf(r7)
             r5.put(r9, r8)
-        L_0x0554:
+        L_0x054b:
             int r5 = r8.size()
             r7 = 0
-        L_0x0559:
-            if (r7 >= r5) goto L_0x057f
+        L_0x0550:
+            if (r7 >= r5) goto L_0x0576
             java.lang.Object r9 = r8.get(r7)
             org.telegram.messenger.MessagesController$PrintingUser r9 = (org.telegram.messenger.MessagesController.PrintingUser) r9
             long r13 = r9.userId
             r32 = r10
             long r10 = r6.user_id
             int r33 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1))
-            if (r33 != 0) goto L_0x0578
+            if (r33 != 0) goto L_0x056f
             r13 = r30
             r9.lastTime = r13
             org.telegram.tgnet.TLRPC$TL_sendMessageTypingAction r5 = new org.telegram.tgnet.TLRPC$TL_sendMessageTypingAction
             r5.<init>()
             r9.action = r5
             r5 = 1
-            goto L_0x0584
-        L_0x0578:
+            goto L_0x057b
+        L_0x056f:
             r13 = r30
             int r7 = r7 + 1
             r10 = r32
-            goto L_0x0559
-        L_0x057f:
+            goto L_0x0550
+        L_0x0576:
             r32 = r10
             r13 = r30
             r5 = 0
-        L_0x0584:
-            if (r5 != 0) goto L_0x059d
+        L_0x057b:
+            if (r5 != 0) goto L_0x0594
             org.telegram.messenger.MessagesController$PrintingUser r5 = new org.telegram.messenger.MessagesController$PrintingUser
             r5.<init>()
             long r9 = r6.user_id
@@ -19591,175 +19609,175 @@ public class MessagesController extends BaseController implements NotificationCe
             r5.action = r7
             r8.add(r5)
             r26 = 1
-        L_0x059d:
-            org.telegram.tgnet.ConnectionsManager r5 = r66.getConnectionsManager()
+        L_0x0594:
+            org.telegram.tgnet.ConnectionsManager r5 = r65.getConnectionsManager()
             int r5 = r5.getCurrentTime()
-            int r5 = r5 - r71
+            int r5 = r5 - r70
             int r5 = java.lang.Math.abs(r5)
             r7 = 30
-            if (r5 >= r7) goto L_0x05c3
+            if (r5 >= r7) goto L_0x05ba
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r5 = r15.onlinePrivacy
             long r6 = r6.user_id
             java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r71)
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r70)
             r5.put(r6, r7)
-            goto L_0x05c3
-        L_0x05bf:
+            goto L_0x05ba
+        L_0x05b6:
             r32 = r10
             r13 = r30
-        L_0x05c3:
+        L_0x05ba:
             r36 = r0
             r9 = r3
             r0 = r4
-        L_0x05c7:
+        L_0x05be:
             r33 = r13
-        L_0x05c9:
+        L_0x05c0:
             r10 = r32
-            goto L_0x04ed
-        L_0x05cd:
+            goto L_0x04e7
+        L_0x05c4:
             r32 = r10
             r13 = r30
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateEncryptedMessagesRead
-            if (r6 == 0) goto L_0x05fe
+            if (r6 == 0) goto L_0x05f5
             org.telegram.tgnet.TLRPC$TL_updateEncryptedMessagesRead r5 = (org.telegram.tgnet.TLRPC$TL_updateEncryptedMessagesRead) r5
-            r11 = r39
-            if (r11 != 0) goto L_0x05e1
+            r11 = r38
+            if (r11 != 0) goto L_0x05d8
             android.util.SparseIntArray r6 = new android.util.SparseIntArray
             r6.<init>()
             r11 = r6
-        L_0x05e1:
+        L_0x05d8:
             int r6 = r5.chat_id
             int r7 = r5.max_date
             r11.put(r6, r7)
-            r10 = r41
-            if (r10 != 0) goto L_0x05f2
+            r10 = r40
+            if (r10 != 0) goto L_0x05e9
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             r10 = r6
-        L_0x05f2:
+        L_0x05e9:
             r10.add(r5)
             r36 = r0
             r9 = r3
             r0 = r4
-            r41 = r10
-            r39 = r11
-            goto L_0x05c7
-        L_0x05fe:
-            r11 = r39
-            r10 = r41
+            r40 = r10
+            r38 = r11
+            goto L_0x05be
+        L_0x05f5:
+            r11 = r38
+            r10 = r40
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChatParticipantAdd
-            if (r6 == 0) goto L_0x063b
+            if (r6 == 0) goto L_0x0632
             org.telegram.tgnet.TLRPC$TL_updateChatParticipantAdd r5 = (org.telegram.tgnet.TLRPC$TL_updateChatParticipantAdd) r5
-            org.telegram.messenger.MessagesStorage r55 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r54 = r65.getMessagesStorage()
             long r6 = r5.chat_id
             long r8 = r5.user_id
-            r60 = 0
+            r59 = 0
             r31 = r10
             r30 = r11
             long r10 = r5.inviter_id
             int r5 = r5.version
-            r56 = r6
-            r58 = r8
-            r61 = r10
-            r63 = r5
-            r55.updateChatInfo(r56, r58, r60, r61, r63)
-        L_0x0625:
-            r41 = r3
+            r55 = r6
+            r57 = r8
+            r60 = r10
+            r62 = r5
+            r54.updateChatInfo(r55, r57, r59, r60, r62)
+        L_0x061c:
+            r40 = r3
             r10 = r13
-            r13 = r27
-            r39 = r30
-            r64 = r31
+            r38 = r30
+            r63 = r31
             r14 = r32
-            r31 = r68
-            r68 = r0
-            r69 = r1
-            r27 = r2
+            r31 = r67
+            r67 = r0
+            r68 = r1
             r0 = r4
-            goto L_0x120e
-        L_0x063b:
+            r30 = r27
+            r27 = r2
+            goto L_0x1223
+        L_0x0632:
             r31 = r10
             r30 = r11
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChatParticipantDelete
-            if (r6 == 0) goto L_0x065d
+            if (r6 == 0) goto L_0x0654
             org.telegram.tgnet.TLRPC$TL_updateChatParticipantDelete r5 = (org.telegram.tgnet.TLRPC$TL_updateChatParticipantDelete) r5
-            org.telegram.messenger.MessagesStorage r55 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r54 = r65.getMessagesStorage()
             long r6 = r5.chat_id
             long r8 = r5.user_id
-            r60 = 1
-            r61 = 0
+            r59 = 1
+            r60 = 0
             int r5 = r5.version
-            r56 = r6
-            r58 = r8
-            r63 = r5
-            r55.updateChatInfo(r56, r58, r60, r61, r63)
-            goto L_0x0625
-        L_0x065d:
+            r55 = r6
+            r57 = r8
+            r62 = r5
+            r54.updateChatInfo(r55, r57, r59, r60, r62)
+            goto L_0x061c
+        L_0x0654:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDcOptions
-            if (r6 != 0) goto L_0x0fcf
+            if (r6 != 0) goto L_0x0fba
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateConfig
-            if (r6 == 0) goto L_0x0667
-            goto L_0x0fcf
-        L_0x0667:
+            if (r6 == 0) goto L_0x065e
+            goto L_0x0fba
+        L_0x065e:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateEncryption
-            if (r6 == 0) goto L_0x0675
-            org.telegram.messenger.SecretChatHelper r6 = r66.getSecretChatHelper()
+            if (r6 == 0) goto L_0x066c
+            org.telegram.messenger.SecretChatHelper r6 = r65.getSecretChatHelper()
             org.telegram.tgnet.TLRPC$TL_updateEncryption r5 = (org.telegram.tgnet.TLRPC$TL_updateEncryption) r5
             r6.processUpdateEncryption(r5, r4)
-            goto L_0x0625
-        L_0x0675:
+            goto L_0x061c
+        L_0x066c:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePeerBlocked
-            if (r6 == 0) goto L_0x068c
+            if (r6 == 0) goto L_0x0683
             org.telegram.tgnet.TLRPC$TL_updatePeerBlocked r5 = (org.telegram.tgnet.TLRPC$TL_updatePeerBlocked) r5
-            org.telegram.messenger.MessagesStorage r6 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r6 = r65.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r6 = r6.getStorageQueue()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda157 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda157
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda158 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda158
             r7.<init>(r15, r5)
             r6.postRunnable(r7)
-            goto L_0x0625
-        L_0x068c:
+            goto L_0x061c
+        L_0x0683:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNotifySettings
-            if (r6 == 0) goto L_0x06ab
-            if (r18 != 0) goto L_0x0698
+            if (r6 == 0) goto L_0x06a2
+            if (r18 != 0) goto L_0x068f
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x069a
-        L_0x0698:
+            goto L_0x0691
+        L_0x068f:
             r6 = r18
-        L_0x069a:
+        L_0x0691:
             r6.add(r5)
             r36 = r0
             r9 = r3
             r0 = r4
             r18 = r6
             r33 = r13
-            r39 = r30
-            r41 = r31
-            goto L_0x05c9
-        L_0x06ab:
+            r38 = r30
+            r40 = r31
+            goto L_0x05c0
+        L_0x06a2:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateServiceNotification
-            if (r6 == 0) goto L_0x07b3
+            if (r6 == 0) goto L_0x07aa
             org.telegram.tgnet.TLRPC$TL_updateServiceNotification r5 = (org.telegram.tgnet.TLRPC$TL_updateServiceNotification) r5
             boolean r6 = r5.popup
-            if (r6 == 0) goto L_0x06c7
+            if (r6 == 0) goto L_0x06be
             java.lang.String r6 = r5.message
-            if (r6 == 0) goto L_0x06c7
+            if (r6 == 0) goto L_0x06be
             int r6 = r6.length()
-            if (r6 <= 0) goto L_0x06c7
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda159 r6 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda159
+            if (r6 <= 0) goto L_0x06be
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda160 r6 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda160
             r6.<init>(r15, r5)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)
-        L_0x06c7:
+        L_0x06be:
             int r6 = r5.flags
             r7 = 2
             r6 = r6 & r7
-            if (r6 == 0) goto L_0x07a0
+            if (r6 == 0) goto L_0x0797
             org.telegram.tgnet.TLRPC$TL_message r11 = new org.telegram.tgnet.TLRPC$TL_message
             r11.<init>()
-            org.telegram.messenger.UserConfig r6 = r66.getUserConfig()
+            org.telegram.messenger.UserConfig r6 = r65.getUserConfig()
             int r6 = r6.getNewMessageId()
             r11.id = r6
             r11.local_id = r6
-            org.telegram.messenger.UserConfig r6 = r66.getUserConfig()
+            org.telegram.messenger.UserConfig r6 = r65.getUserConfig()
             r7 = 0
             r6.saveConfig(r7)
             r6 = 1
@@ -19767,16 +19785,16 @@ public class MessagesController extends BaseController implements NotificationCe
             r6 = 256(0x100, float:3.59E-43)
             r11.flags = r6
             int r6 = r5.inbox_date
-            if (r6 == 0) goto L_0x06f4
+            if (r6 == 0) goto L_0x06eb
             r11.date = r6
-            goto L_0x06fe
-        L_0x06f4:
+            goto L_0x06f5
+        L_0x06eb:
             long r6 = java.lang.System.currentTimeMillis()
             r8 = 1000(0x3e8, double:4.94E-321)
             long r6 = r6 / r8
             int r7 = (int) r6
             r11.date = r7
-        L_0x06fe:
+        L_0x06f5:
             org.telegram.tgnet.TLRPC$TL_peerUser r6 = new org.telegram.tgnet.TLRPC$TL_peerUser
             r6.<init>()
             r11.from_id = r6
@@ -19785,34 +19803,34 @@ public class MessagesController extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$TL_peerUser r6 = new org.telegram.tgnet.TLRPC$TL_peerUser
             r6.<init>()
             r11.peer_id = r6
-            org.telegram.messenger.UserConfig r9 = r66.getUserConfig()
+            org.telegram.messenger.UserConfig r9 = r65.getUserConfig()
             long r9 = r9.getClientUserId()
             r6.user_id = r9
             r11.dialog_id = r7
             org.telegram.tgnet.TLRPC$MessageMedia r6 = r5.media
-            if (r6 == 0) goto L_0x0729
+            if (r6 == 0) goto L_0x0720
             r11.media = r6
             int r6 = r11.flags
             r6 = r6 | 512(0x200, float:7.175E-43)
             r11.flags = r6
-        L_0x0729:
+        L_0x0720:
             java.lang.String r6 = r5.message
             r11.message = r6
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r5 = r5.entities
-            if (r5 == 0) goto L_0x0739
+            if (r5 == 0) goto L_0x0730
             r11.entities = r5
             int r5 = r11.flags
             r5 = r5 | 128(0x80, float:1.794E-43)
             r11.flags = r5
-        L_0x0739:
-            if (r35 != 0) goto L_0x0742
+        L_0x0730:
+            if (r35 != 0) goto L_0x0739
             java.util.ArrayList r5 = new java.util.ArrayList
             r5.<init>()
             r10 = r5
-            goto L_0x0744
-        L_0x0742:
+            goto L_0x073b
+        L_0x0739:
             r10 = r35
-        L_0x0744:
+        L_0x073b:
             r10.add(r11)
             java.util.ArrayList<java.lang.Long> r5 = r15.createdDialogIds
             long r6 = r11.dialog_id
@@ -19823,262 +19841,258 @@ public class MessagesController extends BaseController implements NotificationCe
             r5 = r9
             r7 = r11
             r8 = r4
-            r52 = r13
+            r51 = r13
             r13 = r9
             r9 = r12
             r35 = r10
-            r64 = r31
+            r63 = r31
             r14 = r32
             r10 = r33
-            r39 = r30
+            r38 = r30
             r30 = r4
             r4 = r11
             r11 = r33
             r5.<init>((int) r6, (org.telegram.tgnet.TLRPC$Message) r7, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User>) r8, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat>) r9, (boolean) r10, (boolean) r11)
-            if (r14 != 0) goto L_0x0779
+            if (r14 != 0) goto L_0x0770
             androidx.collection.LongSparseArray r5 = new androidx.collection.LongSparseArray
             r5.<init>()
             r10 = r5
-            goto L_0x077a
-        L_0x0779:
+            goto L_0x0771
+        L_0x0770:
             r10 = r14
-        L_0x077a:
+        L_0x0771:
             long r5 = r4.dialog_id
             java.lang.Object r5 = r10.get(r5)
             java.util.ArrayList r5 = (java.util.ArrayList) r5
-            if (r5 != 0) goto L_0x078e
+            if (r5 != 0) goto L_0x0785
             java.util.ArrayList r5 = new java.util.ArrayList
             r5.<init>()
             long r6 = r4.dialog_id
             r10.put(r6, r5)
-        L_0x078e:
+        L_0x0785:
             r5.add(r13)
             r4 = r27
-            if (r4 != 0) goto L_0x079a
+            if (r4 != 0) goto L_0x0791
             java.util.ArrayList r4 = new java.util.ArrayList
             r4.<init>()
-        L_0x079a:
+        L_0x0791:
             r4.add(r13)
             r27 = r4
-            goto L_0x07ad
-        L_0x07a0:
-            r52 = r13
-            r39 = r30
-            r64 = r31
+            goto L_0x07a4
+        L_0x0797:
+            r51 = r13
+            r38 = r30
+            r63 = r31
             r14 = r32
             r30 = r4
             r4 = r27
             r10 = r14
-        L_0x07ad:
-            r31 = r68
+        L_0x07a4:
+            r31 = r67
             r36 = r0
             r9 = r3
-            goto L_0x07da
-        L_0x07b3:
-            r52 = r13
-            r39 = r30
-            r64 = r31
+            goto L_0x07d1
+        L_0x07aa:
+            r51 = r13
+            r38 = r30
+            r63 = r31
             r14 = r32
             r30 = r4
             r4 = r27
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDialogPinned
-            if (r6 == 0) goto L_0x07f0
-            if (r18 != 0) goto L_0x07cb
+            if (r6 == 0) goto L_0x07df
+            if (r18 != 0) goto L_0x07c2
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x07cd
-        L_0x07cb:
+            goto L_0x07c4
+        L_0x07c2:
             r6 = r18
-        L_0x07cd:
+        L_0x07c4:
             r6.add(r5)
-        L_0x07d0:
-            r31 = r68
+        L_0x07c7:
+            r31 = r67
             r36 = r0
             r9 = r3
             r27 = r4
             r18 = r6
-        L_0x07d9:
+        L_0x07d0:
             r10 = r14
-        L_0x07da:
+        L_0x07d1:
             r0 = r30
-            r6 = r43
-        L_0x07de:
-            r13 = r48
-            r3 = r49
-            r5 = r50
-        L_0x07e4:
-            r7 = r51
-            r33 = r52
-            r8 = r54
-            r41 = r64
-            r37 = 0
-            goto L_0x15b0
-        L_0x07f0:
+            r6 = r42
+        L_0x07d5:
+            r3 = r48
+            r5 = r49
+        L_0x07d9:
+            r7 = r50
+            r33 = r51
+            goto L_0x1238
+        L_0x07df:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePinnedDialogs
-            if (r6 == 0) goto L_0x0802
-            if (r18 != 0) goto L_0x07fc
+            if (r6 == 0) goto L_0x07f1
+            if (r18 != 0) goto L_0x07eb
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x07fe
-        L_0x07fc:
+            goto L_0x07ed
+        L_0x07eb:
             r6 = r18
-        L_0x07fe:
+        L_0x07ed:
             r6.add(r5)
-            goto L_0x07d0
-        L_0x0802:
+            goto L_0x07c7
+        L_0x07f1:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateFolderPeers
-            if (r6 == 0) goto L_0x081a
+            if (r6 == 0) goto L_0x0809
             org.telegram.tgnet.TLRPC$TL_updateFolderPeers r5 = (org.telegram.tgnet.TLRPC$TL_updateFolderPeers) r5
-            if (r3 != 0) goto L_0x080f
+            if (r3 != 0) goto L_0x07fe
             java.util.ArrayList r3 = new java.util.ArrayList
             r3.<init>()
-        L_0x080f:
+        L_0x07fe:
             r9 = r3
             r9.add(r5)
-            r31 = r68
+            r31 = r67
             r36 = r0
             r27 = r4
-            goto L_0x07d9
-        L_0x081a:
+            goto L_0x07d0
+        L_0x0809:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePrivacy
-            if (r6 == 0) goto L_0x082c
-            if (r18 != 0) goto L_0x0826
+            if (r6 == 0) goto L_0x081b
+            if (r18 != 0) goto L_0x0815
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0828
-        L_0x0826:
+            goto L_0x0817
+        L_0x0815:
             r6 = r18
-        L_0x0828:
+        L_0x0817:
             r6.add(r5)
-            goto L_0x07d0
-        L_0x082c:
+            goto L_0x07c7
+        L_0x081b:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateWebPage
-            if (r6 == 0) goto L_0x084d
+            if (r6 == 0) goto L_0x083c
             org.telegram.tgnet.TLRPC$TL_updateWebPage r5 = (org.telegram.tgnet.TLRPC$TL_updateWebPage) r5
-            r13 = r38
-            if (r13 != 0) goto L_0x083c
+            r13 = r37
+            if (r13 != 0) goto L_0x082b
             androidx.collection.LongSparseArray r6 = new androidx.collection.LongSparseArray
             r6.<init>()
             r13 = r6
-        L_0x083c:
+        L_0x082b:
             org.telegram.tgnet.TLRPC$WebPage r5 = r5.webpage
             long r6 = r5.id
             r13.put(r6, r5)
-        L_0x0843:
-            r31 = r68
+        L_0x0832:
+            r31 = r67
             r36 = r0
             r9 = r3
             r27 = r4
-        L_0x084a:
-            r38 = r13
-            goto L_0x07d9
-        L_0x084d:
-            r13 = r38
+        L_0x0839:
+            r37 = r13
+            goto L_0x07d0
+        L_0x083c:
+            r13 = r37
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChannelWebPage
-            if (r6 == 0) goto L_0x0865
+            if (r6 == 0) goto L_0x0854
             org.telegram.tgnet.TLRPC$TL_updateChannelWebPage r5 = (org.telegram.tgnet.TLRPC$TL_updateChannelWebPage) r5
-            if (r13 != 0) goto L_0x085d
+            if (r13 != 0) goto L_0x084c
             androidx.collection.LongSparseArray r6 = new androidx.collection.LongSparseArray
             r6.<init>()
             r13 = r6
-        L_0x085d:
+        L_0x084c:
             org.telegram.tgnet.TLRPC$WebPage r5 = r5.webpage
             long r6 = r5.id
             r13.put(r6, r5)
-            goto L_0x0843
-        L_0x0865:
+            goto L_0x0832
+        L_0x0854:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChannelTooLong
-            if (r6 == 0) goto L_0x090d
+            if (r6 == 0) goto L_0x08fd
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateChannelTooLong r6 = (org.telegram.tgnet.TLRPC$TL_updateChannelTooLong) r6
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x0889
+            if (r7 == 0) goto L_0x0878
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             r7.append(r5)
-            r8 = r44
+            r8 = r43
             r7.append(r8)
             long r8 = r6.channel_id
             r7.append(r8)
             java.lang.String r5 = r7.toString()
             org.telegram.messenger.FileLog.d(r5)
-        L_0x0889:
+        L_0x0878:
             org.telegram.messenger.support.LongSparseIntArray r5 = r15.channelsPts
             long r7 = r6.channel_id
             r9 = 0
             int r5 = r5.get(r7, r9)
-            if (r5 != 0) goto L_0x08e3
-            org.telegram.messenger.MessagesStorage r5 = r66.getMessagesStorage()
+            if (r5 != 0) goto L_0x08d2
+            org.telegram.messenger.MessagesStorage r5 = r65.getMessagesStorage()
             long r7 = r6.channel_id
             int r5 = r5.getChannelPtsSync(r7)
-            if (r5 != 0) goto L_0x08dc
+            if (r5 != 0) goto L_0x08cb
             long r7 = r6.channel_id
             java.lang.Long r7 = java.lang.Long.valueOf(r7)
             java.lang.Object r7 = r12.get(r7)
             org.telegram.tgnet.TLRPC$Chat r7 = (org.telegram.tgnet.TLRPC$Chat) r7
-            if (r7 == 0) goto L_0x08b2
+            if (r7 == 0) goto L_0x08a1
             boolean r8 = r7.min
-            if (r8 == 0) goto L_0x08bc
-        L_0x08b2:
+            if (r8 == 0) goto L_0x08ab
+        L_0x08a1:
             long r7 = r6.channel_id
             java.lang.Long r7 = java.lang.Long.valueOf(r7)
             org.telegram.tgnet.TLRPC$Chat r7 = r15.getChat(r7)
-        L_0x08bc:
-            if (r7 == 0) goto L_0x08c2
+        L_0x08ab:
+            if (r7 == 0) goto L_0x08b1
             boolean r8 = r7.min
-            if (r8 == 0) goto L_0x08d0
-        L_0x08c2:
-            org.telegram.messenger.MessagesStorage r7 = r66.getMessagesStorage()
+            if (r8 == 0) goto L_0x08bf
+        L_0x08b1:
+            org.telegram.messenger.MessagesStorage r7 = r65.getMessagesStorage()
             long r8 = r6.channel_id
             org.telegram.tgnet.TLRPC$Chat r7 = r7.getChatSync(r8)
             r8 = 1
             r15.putChat(r7, r8)
-        L_0x08d0:
-            if (r7 == 0) goto L_0x08e3
+        L_0x08bf:
+            if (r7 == 0) goto L_0x08d2
             boolean r8 = r7.min
-            if (r8 != 0) goto L_0x08e3
+            if (r8 != 0) goto L_0x08d2
             r8 = 0
             r15.loadUnknownChannel(r7, r8)
-            goto L_0x08e3
-        L_0x08dc:
+            goto L_0x08d2
+        L_0x08cb:
             org.telegram.messenger.support.LongSparseIntArray r7 = r15.channelsPts
             long r8 = r6.channel_id
             r7.put(r8, r5)
-        L_0x08e3:
-            if (r5 == 0) goto L_0x08fa
+        L_0x08d2:
+            if (r5 == 0) goto L_0x08e9
             int r7 = r6.flags
             r8 = 1
             r7 = r7 & r8
-            if (r7 == 0) goto L_0x08f5
+            if (r7 == 0) goto L_0x08e4
             int r7 = r6.pts
-            if (r7 <= r5) goto L_0x08fa
+            if (r7 <= r5) goto L_0x08e9
             long r5 = r6.channel_id
             r15.getChannelDifference(r5)
-            goto L_0x08fa
-        L_0x08f5:
+            goto L_0x08e9
+        L_0x08e4:
             long r5 = r6.channel_id
             r15.getChannelDifference(r5)
-        L_0x08fa:
-            r31 = r68
-            r68 = r0
-            r69 = r1
+        L_0x08e9:
+            r31 = r67
+            r67 = r0
+            r68 = r1
             r27 = r2
-            r41 = r3
-        L_0x0904:
-            r38 = r13
+            r40 = r3
+        L_0x08f3:
+            r37 = r13
             r0 = r30
-            r10 = r52
-            r13 = r4
-            goto L_0x120e
-        L_0x090d:
-            r8 = r44
+            r10 = r51
+            r30 = r4
+            goto L_0x1223
+        L_0x08fd:
+            r8 = r43
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateReadChannelInbox
-            if (r6 == 0) goto L_0x0958
+            if (r6 == 0) goto L_0x0948
             org.telegram.tgnet.TLRPC$TL_updateReadChannelInbox r5 = (org.telegram.tgnet.TLRPC$TL_updateReadChannelInbox) r5
-            if (r0 != 0) goto L_0x091c
+            if (r0 != 0) goto L_0x090c
             org.telegram.messenger.support.LongSparseIntArray r0 = new org.telegram.messenger.support.LongSparseIntArray
             r0.<init>()
-        L_0x091c:
+        L_0x090c:
             long r6 = r5.channel_id
             long r6 = -r6
             int r8 = r5.max_id
@@ -20087,12 +20101,12 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Long r9 = java.lang.Long.valueOf(r6)
             java.lang.Object r8 = r8.get(r9)
             java.lang.Integer r8 = (java.lang.Integer) r8
-            if (r8 != 0) goto L_0x093f
-            org.telegram.messenger.MessagesStorage r8 = r66.getMessagesStorage()
+            if (r8 != 0) goto L_0x092f
+            org.telegram.messenger.MessagesStorage r8 = r65.getMessagesStorage()
             r9 = 0
             int r8 = r8.getDialogReadMax(r9, r6)
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-        L_0x093f:
+        L_0x092f:
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r9 = r15.dialogs_read_inbox_max
             java.lang.Long r6 = java.lang.Long.valueOf(r6)
             int r7 = r8.intValue()
@@ -20100,14 +20114,14 @@ public class MessagesController extends BaseController implements NotificationCe
             int r5 = java.lang.Math.max(r7, r5)
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             r9.put(r6, r5)
-            goto L_0x0843
-        L_0x0958:
+            goto L_0x0832
+        L_0x0948:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateReadChannelOutbox
-            if (r6 == 0) goto L_0x09bd
+            if (r6 == 0) goto L_0x09ad
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateReadChannelOutbox r6 = (org.telegram.tgnet.TLRPC$TL_updateReadChannelOutbox) r6
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x097a
+            if (r7 == 0) goto L_0x096a
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             r7.append(r5)
@@ -20116,11 +20130,11 @@ public class MessagesController extends BaseController implements NotificationCe
             r7.append(r8)
             java.lang.String r5 = r7.toString()
             org.telegram.messenger.FileLog.d(r5)
-        L_0x097a:
-            if (r1 != 0) goto L_0x0981
+        L_0x096a:
+            if (r1 != 0) goto L_0x0971
             org.telegram.messenger.support.LongSparseIntArray r1 = new org.telegram.messenger.support.LongSparseIntArray
             r1.<init>()
-        L_0x0981:
+        L_0x0971:
             long r7 = r6.channel_id
             long r7 = -r7
             int r5 = r6.max_id
@@ -20129,12 +20143,12 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Long r9 = java.lang.Long.valueOf(r7)
             java.lang.Object r5 = r5.get(r9)
             java.lang.Integer r5 = (java.lang.Integer) r5
-            if (r5 != 0) goto L_0x09a4
-            org.telegram.messenger.MessagesStorage r5 = r66.getMessagesStorage()
+            if (r5 != 0) goto L_0x0994
+            org.telegram.messenger.MessagesStorage r5 = r65.getMessagesStorage()
             r9 = 1
             int r5 = r5.getDialogReadMax(r9, r7)
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
-        L_0x09a4:
+        L_0x0994:
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r9 = r15.dialogs_read_outbox_max
             java.lang.Long r7 = java.lang.Long.valueOf(r7)
             int r5 = r5.intValue()
@@ -20142,14 +20156,14 @@ public class MessagesController extends BaseController implements NotificationCe
             int r5 = java.lang.Math.max(r5, r6)
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             r9.put(r7, r5)
-            goto L_0x0843
-        L_0x09bd:
+            goto L_0x0832
+        L_0x09ad:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDeleteChannelMessages
-            if (r6 == 0) goto L_0x0a00
+            if (r6 == 0) goto L_0x09f0
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateDeleteChannelMessages r6 = (org.telegram.tgnet.TLRPC$TL_updateDeleteChannelMessages) r6
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x09df
+            if (r7 == 0) goto L_0x09cf
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             r7.append(r5)
@@ -20158,28 +20172,28 @@ public class MessagesController extends BaseController implements NotificationCe
             r7.append(r8)
             java.lang.String r5 = r7.toString()
             org.telegram.messenger.FileLog.d(r5)
-        L_0x09df:
-            if (r2 != 0) goto L_0x09e6
+        L_0x09cf:
+            if (r2 != 0) goto L_0x09d6
             androidx.collection.LongSparseArray r2 = new androidx.collection.LongSparseArray
             r2.<init>()
-        L_0x09e6:
+        L_0x09d6:
             long r7 = r6.channel_id
             long r7 = -r7
             java.lang.Object r5 = r2.get(r7)
             java.util.ArrayList r5 = (java.util.ArrayList) r5
-            if (r5 != 0) goto L_0x09f9
+            if (r5 != 0) goto L_0x09e9
             java.util.ArrayList r5 = new java.util.ArrayList
             r5.<init>()
             r2.put(r7, r5)
-        L_0x09f9:
+        L_0x09e9:
             java.util.ArrayList<java.lang.Integer> r6 = r6.messages
             r5.addAll(r6)
-            goto L_0x0843
-        L_0x0a00:
+            goto L_0x0832
+        L_0x09f0:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChannel
-            if (r6 == 0) goto L_0x0a30
+            if (r6 == 0) goto L_0x0a20
             boolean r6 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r6 == 0) goto L_0x0a22
+            if (r6 == 0) goto L_0x0a12
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateChannel r6 = (org.telegram.tgnet.TLRPC$TL_updateChannel) r6
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
@@ -20190,41 +20204,41 @@ public class MessagesController extends BaseController implements NotificationCe
             r7.append(r8)
             java.lang.String r6 = r7.toString()
             org.telegram.messenger.FileLog.d(r6)
-        L_0x0a22:
-            if (r18 != 0) goto L_0x0a2a
+        L_0x0a12:
+            if (r18 != 0) goto L_0x0a1a
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0a2c
-        L_0x0a2a:
+            goto L_0x0a1c
+        L_0x0a1a:
             r6 = r18
-        L_0x0a2c:
+        L_0x0a1c:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0a30:
+            goto L_0x0a31
+        L_0x0a20:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChat
-            if (r6 == 0) goto L_0x0a4c
-            if (r18 != 0) goto L_0x0a3c
+            if (r6 == 0) goto L_0x0a3c
+            if (r18 != 0) goto L_0x0a2c
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0a3e
-        L_0x0a3c:
+            goto L_0x0a2e
+        L_0x0a2c:
             r6 = r18
-        L_0x0a3e:
+        L_0x0a2e:
             r6.add(r5)
-        L_0x0a41:
-            r31 = r68
+        L_0x0a31:
+            r31 = r67
             r36 = r0
             r9 = r3
             r27 = r4
             r18 = r6
-            goto L_0x084a
-        L_0x0a4c:
+            goto L_0x0839
+        L_0x0a3c:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChannelMessageViews
-            if (r6 == 0) goto L_0x0aa1
+            if (r6 == 0) goto L_0x0a91
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateChannelMessageViews r6 = (org.telegram.tgnet.TLRPC$TL_updateChannelMessageViews) r6
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x0a6e
+            if (r7 == 0) goto L_0x0a5e
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             r7.append(r5)
@@ -20233,42 +20247,42 @@ public class MessagesController extends BaseController implements NotificationCe
             r7.append(r8)
             java.lang.String r5 = r7.toString()
             org.telegram.messenger.FileLog.d(r5)
-        L_0x0a6e:
-            if (r43 != 0) goto L_0x0a76
+        L_0x0a5e:
+            if (r42 != 0) goto L_0x0a66
             androidx.collection.LongSparseArray r5 = new androidx.collection.LongSparseArray
             r5.<init>()
-            goto L_0x0a78
-        L_0x0a76:
-            r5 = r43
-        L_0x0a78:
+            goto L_0x0a68
+        L_0x0a66:
+            r5 = r42
+        L_0x0a68:
             long r7 = r6.channel_id
             long r7 = -r7
             java.lang.Object r9 = r5.get(r7)
             android.util.SparseIntArray r9 = (android.util.SparseIntArray) r9
-            if (r9 != 0) goto L_0x0a8b
+            if (r9 != 0) goto L_0x0a7b
             android.util.SparseIntArray r9 = new android.util.SparseIntArray
             r9.<init>()
             r5.put(r7, r9)
-        L_0x0a8b:
+        L_0x0a7b:
             int r7 = r6.id
             int r6 = r6.views
             r9.put(r7, r6)
-            r31 = r68
+            r31 = r67
             r36 = r0
             r9 = r3
             r27 = r4
             r6 = r5
-            r38 = r13
+            r37 = r13
             r10 = r14
             r0 = r30
-            goto L_0x07de
-        L_0x0aa1:
+            goto L_0x07d5
+        L_0x0a91:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChannelMessageForwards
-            if (r6 == 0) goto L_0x0afb
+            if (r6 == 0) goto L_0x0ae9
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateChannelMessageForwards r6 = (org.telegram.tgnet.TLRPC$TL_updateChannelMessageForwards) r6
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x0ac3
+            if (r7 == 0) goto L_0x0ab3
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             r7.append(r5)
@@ -20277,159 +20291,158 @@ public class MessagesController extends BaseController implements NotificationCe
             r7.append(r8)
             java.lang.String r5 = r7.toString()
             org.telegram.messenger.FileLog.d(r5)
-        L_0x0ac3:
-            if (r50 != 0) goto L_0x0acb
+        L_0x0ab3:
+            if (r49 != 0) goto L_0x0abb
             androidx.collection.LongSparseArray r5 = new androidx.collection.LongSparseArray
             r5.<init>()
-            goto L_0x0acd
-        L_0x0acb:
-            r5 = r50
-        L_0x0acd:
+            goto L_0x0abd
+        L_0x0abb:
+            r5 = r49
+        L_0x0abd:
             long r7 = r6.channel_id
             long r7 = -r7
             java.lang.Object r9 = r5.get(r7)
             android.util.SparseIntArray r9 = (android.util.SparseIntArray) r9
-            if (r9 != 0) goto L_0x0ae0
+            if (r9 != 0) goto L_0x0ad0
             android.util.SparseIntArray r9 = new android.util.SparseIntArray
             r9.<init>()
             r5.put(r7, r9)
-        L_0x0ae0:
+        L_0x0ad0:
             int r7 = r6.id
             int r6 = r6.forwards
             r9.put(r7, r6)
-            r31 = r68
+            r31 = r67
             r36 = r0
             r9 = r3
             r27 = r4
-            r38 = r13
+            r37 = r13
             r10 = r14
             r0 = r30
-            r6 = r43
-            r13 = r48
-            r3 = r49
-            goto L_0x07e4
-        L_0x0afb:
+            r6 = r42
+            r3 = r48
+            goto L_0x07d9
+        L_0x0ae9:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChatParticipantAdmin
-            if (r6 == 0) goto L_0x0b23
+            if (r6 == 0) goto L_0x0b11
             org.telegram.tgnet.TLRPC$TL_updateChatParticipantAdmin r5 = (org.telegram.tgnet.TLRPC$TL_updateChatParticipantAdmin) r5
-            org.telegram.messenger.MessagesStorage r55 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r54 = r65.getMessagesStorage()
             long r6 = r5.chat_id
             long r8 = r5.user_id
-            r60 = 2
+            r59 = 2
             boolean r10 = r5.is_admin
-            if (r10 == 0) goto L_0x0b14
+            if (r10 == 0) goto L_0x0b02
             r10 = 1
-            r61 = r10
-            goto L_0x0b16
-        L_0x0b14:
-            r61 = 0
-        L_0x0b16:
+            r60 = r10
+            goto L_0x0b04
+        L_0x0b02:
+            r60 = 0
+        L_0x0b04:
             int r5 = r5.version
-            r56 = r6
-            r58 = r8
-            r63 = r5
-            r55.updateChatInfo(r56, r58, r60, r61, r63)
-            goto L_0x08fa
-        L_0x0b23:
+            r55 = r6
+            r57 = r8
+            r62 = r5
+            r54.updateChatInfo(r55, r57, r59, r60, r62)
+            goto L_0x08e9
+        L_0x0b11:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChatDefaultBannedRights
-            if (r6 == 0) goto L_0x0b51
+            if (r6 == 0) goto L_0x0b3f
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateChatDefaultBannedRights r6 = (org.telegram.tgnet.TLRPC$TL_updateChatDefaultBannedRights) r6
             org.telegram.tgnet.TLRPC$Peer r7 = r6.peer
             long r8 = r7.channel_id
             r10 = 0
             int r27 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r27 == 0) goto L_0x0b35
-            goto L_0x0b37
-        L_0x0b35:
+            if (r27 == 0) goto L_0x0b23
+            goto L_0x0b25
+        L_0x0b23:
             long r8 = r7.chat_id
-        L_0x0b37:
-            org.telegram.messenger.MessagesStorage r7 = r66.getMessagesStorage()
+        L_0x0b25:
+            org.telegram.messenger.MessagesStorage r7 = r65.getMessagesStorage()
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r10 = r6.default_banned_rights
             int r6 = r6.version
             r7.updateChatDefaultBannedRights(r8, r10, r6)
-            if (r18 != 0) goto L_0x0b4a
+            if (r18 != 0) goto L_0x0b38
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0b4c
-        L_0x0b4a:
+            goto L_0x0b3a
+        L_0x0b38:
             r6 = r18
-        L_0x0b4c:
+        L_0x0b3a:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0b51:
+            goto L_0x0a31
+        L_0x0b3f:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateStickerSets
-            if (r6 == 0) goto L_0x0b64
-            if (r18 != 0) goto L_0x0b5d
+            if (r6 == 0) goto L_0x0b52
+            if (r18 != 0) goto L_0x0b4b
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0b5f
-        L_0x0b5d:
+            goto L_0x0b4d
+        L_0x0b4b:
             r6 = r18
-        L_0x0b5f:
+        L_0x0b4d:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0b64:
+            goto L_0x0a31
+        L_0x0b52:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateStickerSetsOrder
-            if (r6 == 0) goto L_0x0b77
-            if (r18 != 0) goto L_0x0b70
+            if (r6 == 0) goto L_0x0b65
+            if (r18 != 0) goto L_0x0b5e
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0b72
-        L_0x0b70:
+            goto L_0x0b60
+        L_0x0b5e:
             r6 = r18
-        L_0x0b72:
+        L_0x0b60:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0b77:
+            goto L_0x0a31
+        L_0x0b65:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewStickerSet
-            if (r6 == 0) goto L_0x0b8a
-            if (r18 != 0) goto L_0x0b83
+            if (r6 == 0) goto L_0x0b78
+            if (r18 != 0) goto L_0x0b71
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0b85
-        L_0x0b83:
+            goto L_0x0b73
+        L_0x0b71:
             r6 = r18
-        L_0x0b85:
+        L_0x0b73:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0b8a:
+            goto L_0x0a31
+        L_0x0b78:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDraftMessage
-            if (r6 == 0) goto L_0x0b9d
-            if (r18 != 0) goto L_0x0b96
+            if (r6 == 0) goto L_0x0b8b
+            if (r18 != 0) goto L_0x0b84
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0b98
-        L_0x0b96:
+            goto L_0x0b86
+        L_0x0b84:
             r6 = r18
-        L_0x0b98:
+        L_0x0b86:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0b9d:
+            goto L_0x0a31
+        L_0x0b8b:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateSavedGifs
-            if (r6 == 0) goto L_0x0bb0
-            if (r18 != 0) goto L_0x0ba9
+            if (r6 == 0) goto L_0x0b9e
+            if (r18 != 0) goto L_0x0b97
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0bab
-        L_0x0ba9:
+            goto L_0x0b99
+        L_0x0b97:
             r6 = r18
-        L_0x0bab:
+        L_0x0b99:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0bb0:
+            goto L_0x0a31
+        L_0x0b9e:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateEditChannelMessage
-            if (r6 != 0) goto L_0x0e40
+            if (r6 != 0) goto L_0x0e2e
             boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateEditMessage
-            if (r7 == 0) goto L_0x0bba
-            goto L_0x0e40
-        L_0x0bba:
+            if (r7 == 0) goto L_0x0ba8
+            goto L_0x0e2e
+        L_0x0ba8:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePinnedChannelMessages
-            if (r6 == 0) goto L_0x0bfa
+            if (r6 == 0) goto L_0x0be8
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updatePinnedChannelMessages r6 = (org.telegram.tgnet.TLRPC$TL_updatePinnedChannelMessages) r6
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x0bdc
+            if (r7 == 0) goto L_0x0bca
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             r7.append(r5)
@@ -20438,77 +20451,77 @@ public class MessagesController extends BaseController implements NotificationCe
             r7.append(r8)
             java.lang.String r5 = r7.toString()
             org.telegram.messenger.FileLog.d(r5)
-        L_0x0bdc:
-            org.telegram.messenger.MessagesStorage r55 = r66.getMessagesStorage()
+        L_0x0bca:
+            org.telegram.messenger.MessagesStorage r54 = r65.getMessagesStorage()
             long r7 = r6.channel_id
             long r7 = -r7
             java.util.ArrayList<java.lang.Integer> r5 = r6.messages
             boolean r6 = r6.pinned
-            r60 = -1
+            r59 = -1
+            r60 = 0
             r61 = 0
             r62 = 0
-            r63 = 0
-            r56 = r7
-            r58 = r5
-            r59 = r6
-            r55.updatePinnedMessages(r56, r58, r59, r60, r61, r62, r63)
-            goto L_0x08fa
-        L_0x0bfa:
+            r55 = r7
+            r57 = r5
+            r58 = r6
+            r54.updatePinnedMessages(r55, r57, r58, r59, r60, r61, r62)
+            goto L_0x08e9
+        L_0x0be8:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePinnedMessages
-            if (r6 == 0) goto L_0x0c1f
+            if (r6 == 0) goto L_0x0c0d
             org.telegram.tgnet.TLRPC$TL_updatePinnedMessages r5 = (org.telegram.tgnet.TLRPC$TL_updatePinnedMessages) r5
-            org.telegram.messenger.MessagesStorage r55 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r54 = r65.getMessagesStorage()
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer
-            long r56 = org.telegram.messenger.MessageObject.getPeerId(r6)
+            long r55 = org.telegram.messenger.MessageObject.getPeerId(r6)
             java.util.ArrayList<java.lang.Integer> r6 = r5.messages
             boolean r5 = r5.pinned
-            r60 = -1
+            r59 = -1
+            r60 = 0
             r61 = 0
             r62 = 0
-            r63 = 0
-            r58 = r6
-            r59 = r5
-            r55.updatePinnedMessages(r56, r58, r59, r60, r61, r62, r63)
-            goto L_0x08fa
-        L_0x0c1f:
+            r57 = r6
+            r58 = r5
+            r54.updatePinnedMessages(r55, r57, r58, r59, r60, r61, r62)
+            goto L_0x08e9
+        L_0x0c0d:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateReadFeaturedStickers
             if (r6 == 0) goto L_0x0CLASSNAME
-            if (r18 != 0) goto L_0x0c2b
+            if (r18 != 0) goto L_0x0CLASSNAME
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0c2d
-        L_0x0c2b:
+            goto L_0x0c1b
+        L_0x0CLASSNAME:
             r6 = r18
-        L_0x0c2d:
+        L_0x0c1b:
             r6.add(r5)
-            goto L_0x0a41
+            goto L_0x0a31
         L_0x0CLASSNAME:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePhoneCall
             if (r6 == 0) goto L_0x0CLASSNAME
-            if (r18 != 0) goto L_0x0c3e
+            if (r18 != 0) goto L_0x0c2c
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0CLASSNAME
-        L_0x0c3e:
+            goto L_0x0c2e
+        L_0x0c2c:
             r6 = r18
-        L_0x0CLASSNAME:
+        L_0x0c2e:
             r6.add(r5)
-            goto L_0x0a41
+            goto L_0x0a31
         L_0x0CLASSNAME:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateGroupCallParticipants
             if (r6 == 0) goto L_0x0CLASSNAME
-            if (r18 != 0) goto L_0x0CLASSNAME
+            if (r18 != 0) goto L_0x0c3f
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             goto L_0x0CLASSNAME
-        L_0x0CLASSNAME:
+        L_0x0c3f:
             r6 = r18
         L_0x0CLASSNAME:
             r6.add(r5)
-            goto L_0x0a41
+            goto L_0x0a31
         L_0x0CLASSNAME:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateGroupCall
-            if (r6 == 0) goto L_0x0c6b
+            if (r6 == 0) goto L_0x0CLASSNAME
             if (r18 != 0) goto L_0x0CLASSNAME
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
@@ -20517,130 +20530,130 @@ public class MessagesController extends BaseController implements NotificationCe
             r6 = r18
         L_0x0CLASSNAME:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0c6b:
-            boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateGroupCallConnection
-            if (r6 == 0) goto L_0x0CLASSNAME
-            goto L_0x08fa
+            goto L_0x0a31
         L_0x0CLASSNAME:
+            boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateGroupCallConnection
+            if (r6 == 0) goto L_0x0c5f
+            goto L_0x08e9
+        L_0x0c5f:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateBotCommands
             if (r6 == 0) goto L_0x0CLASSNAME
-            if (r18 != 0) goto L_0x0c7d
+            if (r18 != 0) goto L_0x0c6b
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0c7f
-        L_0x0c7d:
+            goto L_0x0c6d
+        L_0x0c6b:
             r6 = r18
-        L_0x0c7f:
+        L_0x0c6d:
             r6.add(r5)
-            goto L_0x0a41
+            goto L_0x0a31
         L_0x0CLASSNAME:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePhoneCallSignalingData
             if (r6 == 0) goto L_0x0CLASSNAME
-            if (r18 != 0) goto L_0x0CLASSNAME
+            if (r18 != 0) goto L_0x0c7e
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             goto L_0x0CLASSNAME
-        L_0x0CLASSNAME:
+        L_0x0c7e:
             r6 = r18
         L_0x0CLASSNAME:
             r6.add(r5)
-            goto L_0x0a41
+            goto L_0x0a31
         L_0x0CLASSNAME:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateLangPack
-            if (r6 == 0) goto L_0x0ca7
+            if (r6 == 0) goto L_0x0CLASSNAME
             org.telegram.tgnet.TLRPC$TL_updateLangPack r5 = (org.telegram.tgnet.TLRPC$TL_updateLangPack) r5
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda156 r6 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda156
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda157 r6 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda157
             r6.<init>(r15, r5)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)
-            goto L_0x08fa
-        L_0x0ca7:
+            goto L_0x08e9
+        L_0x0CLASSNAME:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateLangPackTooLong
-            if (r6 == 0) goto L_0x0cbb
+            if (r6 == 0) goto L_0x0ca9
             org.telegram.tgnet.TLRPC$TL_updateLangPackTooLong r5 = (org.telegram.tgnet.TLRPC$TL_updateLangPackTooLong) r5
             org.telegram.messenger.LocaleController r6 = org.telegram.messenger.LocaleController.getInstance()
             int r7 = r15.currentAccount
             java.lang.String r5 = r5.lang_code
             r8 = 0
             r6.reloadCurrentRemoteLocale(r7, r5, r8)
-            goto L_0x08fa
-        L_0x0cbb:
+            goto L_0x08e9
+        L_0x0ca9:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateFavedStickers
-            if (r6 == 0) goto L_0x0cce
-            if (r18 != 0) goto L_0x0cc7
+            if (r6 == 0) goto L_0x0cbc
+            if (r18 != 0) goto L_0x0cb5
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0cc9
-        L_0x0cc7:
+            goto L_0x0cb7
+        L_0x0cb5:
             r6 = r18
-        L_0x0cc9:
+        L_0x0cb7:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0cce:
+            goto L_0x0a31
+        L_0x0cbc:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateContactsReset
-            if (r6 == 0) goto L_0x0ce1
-            if (r18 != 0) goto L_0x0cda
+            if (r6 == 0) goto L_0x0ccf
+            if (r18 != 0) goto L_0x0cc8
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0cdc
-        L_0x0cda:
+            goto L_0x0cca
+        L_0x0cc8:
             r6 = r18
-        L_0x0cdc:
+        L_0x0cca:
             r6.add(r5)
-            goto L_0x0a41
-        L_0x0ce1:
+            goto L_0x0a31
+        L_0x0ccf:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChannelAvailableMessages
-            if (r6 == 0) goto L_0x0d0c
+            if (r6 == 0) goto L_0x0cfa
             org.telegram.tgnet.TLRPC$TL_updateChannelAvailableMessages r5 = (org.telegram.tgnet.TLRPC$TL_updateChannelAvailableMessages) r5
-            r11 = r40
-            if (r11 != 0) goto L_0x0cf1
+            r11 = r39
+            if (r11 != 0) goto L_0x0cdf
             org.telegram.messenger.support.LongSparseIntArray r6 = new org.telegram.messenger.support.LongSparseIntArray
             r6.<init>()
             r11 = r6
-        L_0x0cf1:
+        L_0x0cdf:
             long r6 = r5.channel_id
             long r6 = -r6
             r8 = 0
             int r9 = r11.get(r6, r8)
-            if (r9 == 0) goto L_0x0cff
+            if (r9 == 0) goto L_0x0ced
             int r8 = r5.available_min_id
-            if (r9 >= r8) goto L_0x0d04
-        L_0x0cff:
+            if (r9 >= r8) goto L_0x0cf2
+        L_0x0ced:
             int r5 = r5.available_min_id
             r11.put(r6, r5)
-        L_0x0d04:
-            r31 = r68
+        L_0x0cf2:
+            r31 = r67
             r36 = r0
             r9 = r3
             r27 = r4
-            goto L_0x0d28
-        L_0x0d0c:
-            r11 = r40
+            goto L_0x0d16
+        L_0x0cfa:
+            r11 = r39
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDialogUnreadMark
-            if (r6 == 0) goto L_0x0d2c
-            if (r18 != 0) goto L_0x0d1a
+            if (r6 == 0) goto L_0x0d1a
+            if (r18 != 0) goto L_0x0d08
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0d1c
-        L_0x0d1a:
+            goto L_0x0d0a
+        L_0x0d08:
             r6 = r18
-        L_0x0d1c:
+        L_0x0d0a:
             r6.add(r5)
-        L_0x0d1f:
-            r31 = r68
+        L_0x0d0d:
+            r31 = r67
             r36 = r0
             r9 = r3
             r27 = r4
             r18 = r6
-        L_0x0d28:
-            r40 = r11
-            goto L_0x084a
-        L_0x0d2c:
+        L_0x0d16:
+            r39 = r11
+            goto L_0x0839
+        L_0x0d1a:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateMessagePoll
-            if (r6 == 0) goto L_0x0d75
+            if (r6 == 0) goto L_0x0d63
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateMessagePoll r6 = (org.telegram.tgnet.TLRPC$TL_updateMessagePoll) r6
-            org.telegram.messenger.SendMessagesHelper r7 = r66.getSendMessagesHelper()
+            org.telegram.messenger.SendMessagesHelper r7 = r65.getSendMessagesHelper()
             long r8 = r6.poll_id
             long r7 = r7.getVoteSendTime(r8)
             long r9 = android.os.SystemClock.elapsedRealtime()
@@ -20648,41 +20661,53 @@ public class MessagesController extends BaseController implements NotificationCe
             long r7 = java.lang.Math.abs(r9)
             r9 = 600(0x258, double:2.964E-321)
             int r27 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r27 >= 0) goto L_0x0d5a
-        L_0x0d4c:
-            r31 = r68
-            r68 = r0
-            r69 = r1
+            if (r27 >= 0) goto L_0x0d48
+        L_0x0d3a:
+            r31 = r67
+            r67 = r0
+            r68 = r1
             r27 = r2
-            r41 = r3
-            r40 = r11
-            goto L_0x0904
-        L_0x0d5a:
-            org.telegram.messenger.MessagesStorage r7 = r66.getMessagesStorage()
+            r40 = r3
+            r39 = r11
+            goto L_0x08f3
+        L_0x0d48:
+            org.telegram.messenger.MessagesStorage r7 = r65.getMessagesStorage()
             long r8 = r6.poll_id
             org.telegram.tgnet.TLRPC$Poll r10 = r6.poll
             org.telegram.tgnet.TLRPC$PollResults r6 = r6.results
             r7.updateMessagePollResults(r8, r10, r6)
-            if (r18 != 0) goto L_0x0d6f
+            if (r18 != 0) goto L_0x0d5d
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0d71
-        L_0x0d6f:
+            goto L_0x0d5f
+        L_0x0d5d:
             r6 = r18
-        L_0x0d71:
+        L_0x0d5f:
             r6.add(r5)
-            goto L_0x0d1f
-        L_0x0d75:
+            goto L_0x0d0d
+        L_0x0d63:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateMessageReactions
-            if (r6 == 0) goto L_0x0d9b
+            if (r6 == 0) goto L_0x0d89
             r6 = r5
             org.telegram.tgnet.TLRPC$TL_updateMessageReactions r6 = (org.telegram.tgnet.TLRPC$TL_updateMessageReactions) r6
             org.telegram.tgnet.TLRPC$Peer r7 = r6.peer
             long r7 = org.telegram.messenger.MessageObject.getPeerId(r7)
-            org.telegram.messenger.MessagesStorage r9 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r9 = r65.getMessagesStorage()
             int r10 = r6.msg_id
             org.telegram.tgnet.TLRPC$TL_messageReactions r6 = r6.reactions
             r9.updateMessageReactions(r7, r10, r6)
+            if (r18 != 0) goto L_0x0d83
+            java.util.ArrayList r6 = new java.util.ArrayList
+            r6.<init>()
+            goto L_0x0d85
+        L_0x0d83:
+            r6 = r18
+        L_0x0d85:
+            r6.add(r5)
+            goto L_0x0d0d
+        L_0x0d89:
+            boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePeerLocated
+            if (r6 == 0) goto L_0x0d9c
             if (r18 != 0) goto L_0x0d95
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
@@ -20691,112 +20716,100 @@ public class MessagesController extends BaseController implements NotificationCe
             r6 = r18
         L_0x0d97:
             r6.add(r5)
-            goto L_0x0d1f
-        L_0x0d9b:
-            boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePeerLocated
-            if (r6 == 0) goto L_0x0dae
-            if (r18 != 0) goto L_0x0da7
-            java.util.ArrayList r6 = new java.util.ArrayList
-            r6.<init>()
-            goto L_0x0da9
-        L_0x0da7:
-            r6 = r18
-        L_0x0da9:
-            r6.add(r5)
-            goto L_0x0d1f
-        L_0x0dae:
+            goto L_0x0d0d
+        L_0x0d9c:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateTheme
-            if (r6 == 0) goto L_0x0dc1
-            if (r18 != 0) goto L_0x0dba
+            if (r6 == 0) goto L_0x0daf
+            if (r18 != 0) goto L_0x0da8
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0dbc
-        L_0x0dba:
+            goto L_0x0daa
+        L_0x0da8:
             r6 = r18
-        L_0x0dbc:
+        L_0x0daa:
             r6.add(r5)
-            goto L_0x0d1f
-        L_0x0dc1:
+            goto L_0x0d0d
+        L_0x0daf:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateGeoLiveViewed
-            if (r6 == 0) goto L_0x0dce
-            org.telegram.messenger.LocationController r5 = r66.getLocationController()
+            if (r6 == 0) goto L_0x0dbc
+            org.telegram.messenger.LocationController r5 = r65.getLocationController()
             r5.setNewLocationEndWatchTime()
-            goto L_0x0d4c
-        L_0x0dce:
+            goto L_0x0d3a
+        L_0x0dbc:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDialogFilter
-            if (r6 == 0) goto L_0x0de1
-            if (r18 != 0) goto L_0x0dda
+            if (r6 == 0) goto L_0x0dcf
+            if (r18 != 0) goto L_0x0dc8
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0ddc
-        L_0x0dda:
+            goto L_0x0dca
+        L_0x0dc8:
             r6 = r18
-        L_0x0ddc:
+        L_0x0dca:
             r6.add(r5)
-            goto L_0x0d1f
-        L_0x0de1:
+            goto L_0x0d0d
+        L_0x0dcf:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDialogFilterOrder
-            if (r6 == 0) goto L_0x0df4
-            if (r18 != 0) goto L_0x0ded
+            if (r6 == 0) goto L_0x0de2
+            if (r18 != 0) goto L_0x0ddb
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0def
-        L_0x0ded:
+            goto L_0x0ddd
+        L_0x0ddb:
             r6 = r18
-        L_0x0def:
+        L_0x0ddd:
             r6.add(r5)
-            goto L_0x0d1f
-        L_0x0df4:
+            goto L_0x0d0d
+        L_0x0de2:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateDialogFilters
-            if (r6 == 0) goto L_0x0e07
-            if (r18 != 0) goto L_0x0e00
+            if (r6 == 0) goto L_0x0df5
+            if (r18 != 0) goto L_0x0dee
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0e02
-        L_0x0e00:
+            goto L_0x0df0
+        L_0x0dee:
             r6 = r18
-        L_0x0e02:
+        L_0x0df0:
             r6.add(r5)
-            goto L_0x0d1f
-        L_0x0e07:
+            goto L_0x0d0d
+        L_0x0df5:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateReadChannelDiscussionInbox
-            if (r6 == 0) goto L_0x0e1a
-            if (r18 != 0) goto L_0x0e13
+            if (r6 == 0) goto L_0x0e08
+            if (r18 != 0) goto L_0x0e01
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0e15
-        L_0x0e13:
+            goto L_0x0e03
+        L_0x0e01:
             r6 = r18
-        L_0x0e15:
+        L_0x0e03:
             r6.add(r5)
-            goto L_0x0d1f
-        L_0x0e1a:
+            goto L_0x0d0d
+        L_0x0e08:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateReadChannelDiscussionOutbox
-            if (r6 == 0) goto L_0x0e2d
-            if (r18 != 0) goto L_0x0e26
+            if (r6 == 0) goto L_0x0e1b
+            if (r18 != 0) goto L_0x0e14
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0e28
-        L_0x0e26:
+            goto L_0x0e16
+        L_0x0e14:
             r6 = r18
-        L_0x0e28:
+        L_0x0e16:
             r6.add(r5)
-            goto L_0x0d1f
-        L_0x0e2d:
+            goto L_0x0d0d
+        L_0x0e1b:
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updatePeerHistoryTTL
-            if (r6 == 0) goto L_0x0d4c
-            if (r18 != 0) goto L_0x0e39
+            if (r6 == 0) goto L_0x0d3a
+            if (r18 != 0) goto L_0x0e27
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-            goto L_0x0e3b
-        L_0x0e39:
+            goto L_0x0e29
+        L_0x0e27:
             r6 = r18
-        L_0x0e3b:
+        L_0x0e29:
             r6.add(r5)
-            goto L_0x0d1f
-        L_0x0e40:
-            r11 = r40
-            if (r6 == 0) goto L_0x0e7b
+            goto L_0x0d0d
+        L_0x0e2e:
+            r11 = r39
+            if (r6 == 0) goto L_0x0e69
             org.telegram.tgnet.TLRPC$TL_updateEditChannelMessage r5 = (org.telegram.tgnet.TLRPC$TL_updateEditChannelMessage) r5
             org.telegram.tgnet.TLRPC$Message r5 = r5.message
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer_id
@@ -20804,124 +20817,124 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Long r6 = java.lang.Long.valueOf(r6)
             java.lang.Object r6 = r12.get(r6)
             org.telegram.tgnet.TLRPC$Chat r6 = (org.telegram.tgnet.TLRPC$Chat) r6
-            if (r6 != 0) goto L_0x0e64
+            if (r6 != 0) goto L_0x0e52
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer_id
             long r6 = r6.channel_id
             java.lang.Long r6 = java.lang.Long.valueOf(r6)
             org.telegram.tgnet.TLRPC$Chat r6 = r15.getChat(r6)
-        L_0x0e64:
-            if (r6 != 0) goto L_0x0e77
-            org.telegram.messenger.MessagesStorage r6 = r66.getMessagesStorage()
+        L_0x0e52:
+            if (r6 != 0) goto L_0x0e65
+            org.telegram.messenger.MessagesStorage r6 = r65.getMessagesStorage()
             org.telegram.tgnet.TLRPC$Peer r7 = r5.peer_id
             long r7 = r7.channel_id
             org.telegram.tgnet.TLRPC$Chat r6 = r6.getChatSync(r7)
             r7 = 1
             r15.putChat(r6, r7)
-            goto L_0x0e78
-        L_0x0e77:
+            goto L_0x0e66
+        L_0x0e65:
             r7 = 1
-        L_0x0e78:
-            r31 = r68
-            goto L_0x0e8f
-        L_0x0e7b:
+        L_0x0e66:
+            r31 = r67
+            goto L_0x0e7d
+        L_0x0e69:
             r7 = 1
             org.telegram.tgnet.TLRPC$TL_updateEditMessage r5 = (org.telegram.tgnet.TLRPC$TL_updateEditMessage) r5
             org.telegram.tgnet.TLRPC$Message r5 = r5.message
             long r8 = r5.dialog_id
-            r31 = r68
+            r31 = r67
             int r6 = (r8 > r31 ? 1 : (r8 == r31 ? 0 : -1))
-            if (r6 != 0) goto L_0x0e8f
+            if (r6 != 0) goto L_0x0e7d
             r6 = 0
             r5.unread = r6
             r5.media_unread = r6
             r5.out = r7
-        L_0x0e8f:
+        L_0x0e7d:
             r10 = r5
             boolean r5 = r10.out
-            if (r5 != 0) goto L_0x0ea3
+            if (r5 != 0) goto L_0x0e91
             org.telegram.tgnet.TLRPC$Peer r5 = r10.from_id
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r6 == 0) goto L_0x0ea3
+            if (r6 == 0) goto L_0x0e91
             long r5 = r5.user_id
             int r7 = (r5 > r31 ? 1 : (r5 == r31 ? 0 : -1))
-            if (r7 != 0) goto L_0x0ea3
+            if (r7 != 0) goto L_0x0e91
             r5 = 1
             r10.out = r5
-        L_0x0ea3:
-            if (r70 != 0) goto L_0x0f0b
+        L_0x0e91:
+            if (r69 != 0) goto L_0x0ef9
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r5 = r10.entities
             int r5 = r5.size()
             r6 = 0
-        L_0x0eac:
-            if (r6 >= r5) goto L_0x0f0b
+        L_0x0e9a:
+            if (r6 >= r5) goto L_0x0ef9
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r7 = r10.entities
             java.lang.Object r7 = r7.get(r6)
             org.telegram.tgnet.TLRPC$MessageEntity r7 = (org.telegram.tgnet.TLRPC$MessageEntity) r7
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMentionName
-            if (r8 == 0) goto L_0x0efc
+            if (r8 == 0) goto L_0x0eea
             org.telegram.tgnet.TLRPC$TL_messageEntityMentionName r7 = (org.telegram.tgnet.TLRPC$TL_messageEntityMentionName) r7
             long r7 = r7.user_id
             java.lang.Long r9 = java.lang.Long.valueOf(r7)
-            r68 = r0
+            r67 = r0
             r0 = r30
             java.lang.Object r9 = r0.get(r9)
             org.telegram.tgnet.TLRPC$User r9 = (org.telegram.tgnet.TLRPC$User) r9
-            r69 = r1
-            if (r9 == 0) goto L_0x0ed4
+            r68 = r1
+            if (r9 == 0) goto L_0x0ec2
             boolean r1 = r9.min
-            if (r1 == 0) goto L_0x0edc
-        L_0x0ed4:
+            if (r1 == 0) goto L_0x0eca
+        L_0x0ec2:
             java.lang.Long r1 = java.lang.Long.valueOf(r7)
             org.telegram.tgnet.TLRPC$User r9 = r15.getUser(r1)
-        L_0x0edc:
-            if (r9 == 0) goto L_0x0ee2
+        L_0x0eca:
+            if (r9 == 0) goto L_0x0ed0
             boolean r1 = r9.min
-            if (r1 == 0) goto L_0x0ef8
-        L_0x0ee2:
-            org.telegram.messenger.MessagesStorage r1 = r66.getMessagesStorage()
+            if (r1 == 0) goto L_0x0ee6
+        L_0x0ed0:
+            org.telegram.messenger.MessagesStorage r1 = r65.getMessagesStorage()
             org.telegram.tgnet.TLRPC$User r1 = r1.getUserSync(r7)
-            if (r1 == 0) goto L_0x0ef3
+            if (r1 == 0) goto L_0x0ee1
             boolean r7 = r1.min
-            if (r7 == 0) goto L_0x0ef3
+            if (r7 == 0) goto L_0x0ee1
             r9 = r16
-            goto L_0x0ef4
-        L_0x0ef3:
+            goto L_0x0ee2
+        L_0x0ee1:
             r9 = r1
-        L_0x0ef4:
+        L_0x0ee2:
             r1 = 1
             r15.putUser(r9, r1)
-        L_0x0ef8:
-            if (r9 != 0) goto L_0x0var_
+        L_0x0ee6:
+            if (r9 != 0) goto L_0x0ef0
             r1 = 0
             return r1
-        L_0x0efc:
-            r68 = r0
-            r69 = r1
+        L_0x0eea:
+            r67 = r0
+            r68 = r1
             r0 = r30
-        L_0x0var_:
+        L_0x0ef0:
             int r6 = r6 + 1
-            r1 = r69
+            r1 = r68
             r30 = r0
-            r0 = r68
-            goto L_0x0eac
-        L_0x0f0b:
-            r68 = r0
-            r69 = r1
+            r0 = r67
+            goto L_0x0e9a
+        L_0x0ef9:
+            r67 = r0
+            r68 = r1
             r0 = r30
             org.telegram.messenger.MessageObject.getDialogId(r10)
             boolean r1 = r10.out
-            if (r1 == 0) goto L_0x0f1b
+            if (r1 == 0) goto L_0x0var_
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r1 = r15.dialogs_read_outbox_max
-            goto L_0x0f1d
-        L_0x0f1b:
+            goto L_0x0f0b
+        L_0x0var_:
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r1 = r15.dialogs_read_inbox_max
-        L_0x0f1d:
+        L_0x0f0b:
             long r5 = r10.dialog_id
             java.lang.Long r5 = java.lang.Long.valueOf(r5)
             java.lang.Object r5 = r1.get(r5)
             java.lang.Integer r5 = (java.lang.Integer) r5
             if (r5 != 0) goto L_0x0var_
-            org.telegram.messenger.MessagesStorage r5 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r5 = r65.getMessagesStorage()
             boolean r6 = r10.out
             long r7 = r10.dialog_id
             int r5 = r5.getDialogReadMax(r6, r7)
@@ -20932,30 +20945,30 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x0var_:
             int r1 = r5.intValue()
             int r5 = r10.id
-            if (r1 >= r5) goto L_0x0f4e
+            if (r1 >= r5) goto L_0x0f3c
             r1 = 1
-            goto L_0x0f4f
-        L_0x0f4e:
+            goto L_0x0f3d
+        L_0x0f3c:
             r1 = 0
-        L_0x0f4f:
+        L_0x0f3d:
             r10.unread = r1
             long r5 = r10.dialog_id
             int r1 = (r5 > r31 ? 1 : (r5 == r31 ? 0 : -1))
-            if (r1 != 0) goto L_0x0f5f
+            if (r1 != 0) goto L_0x0f4d
             r1 = 1
             r10.out = r1
             r1 = 0
             r10.unread = r1
             r10.media_unread = r1
-        L_0x0f5f:
+        L_0x0f4d:
             boolean r1 = r10.out
-            if (r1 == 0) goto L_0x0f6d
+            if (r1 == 0) goto L_0x0f5b
             java.lang.String r1 = r10.message
-            if (r1 != 0) goto L_0x0f6d
+            if (r1 != 0) goto L_0x0f5b
             java.lang.String r1 = ""
             r10.message = r1
             r10.attachPath = r1
-        L_0x0f6d:
+        L_0x0f5b:
             org.telegram.messenger.ImageLoader.saveMessageThumbs(r10)
             java.util.ArrayList<java.lang.Long> r1 = r15.createdDialogIds
             long r5 = r10.dialog_id
@@ -20969,271 +20982,291 @@ public class MessagesController extends BaseController implements NotificationCe
             r27 = r2
             r2 = r9
             r9 = r12
-            r38 = r13
+            r37 = r13
             r13 = r10
             r10 = r1
-            r40 = r11
+            r39 = r11
             r11 = r1
             r5.<init>((int) r6, (org.telegram.tgnet.TLRPC$Message) r7, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User>) r8, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat>) r9, (boolean) r10, (boolean) r11)
-            if (r54 != 0) goto L_0x0f9a
+            if (r53 != 0) goto L_0x0var_
             androidx.collection.LongSparseArray r1 = new androidx.collection.LongSparseArray
             r1.<init>()
             r8 = r1
-            goto L_0x0f9c
-        L_0x0f9a:
-            r8 = r54
-        L_0x0f9c:
+            goto L_0x0f8a
+        L_0x0var_:
+            r8 = r53
+        L_0x0f8a:
             long r5 = r13.dialog_id
             java.lang.Object r1 = r8.get(r5)
             java.util.ArrayList r1 = (java.util.ArrayList) r1
-            if (r1 != 0) goto L_0x0fb0
+            if (r1 != 0) goto L_0x0f9e
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             long r5 = r13.dialog_id
             r8.put(r5, r1)
-        L_0x0fb0:
+        L_0x0f9e:
             r1.add(r2)
-            r36 = r68
-            r1 = r69
+            r36 = r67
+            r1 = r68
             r9 = r3
             r10 = r14
             r2 = r27
-            r6 = r43
-            r13 = r48
-            r3 = r49
-            r5 = r50
-            r7 = r51
-            r33 = r52
-            r41 = r64
-            r37 = 0
+            r6 = r42
+            r3 = r48
+            r5 = r49
+            r7 = r50
+            r33 = r51
+            r40 = r63
+            r13 = 0
             r27 = r4
-            goto L_0x15b0
-        L_0x0fcf:
-            r52 = r13
-            r39 = r30
-            r64 = r31
+            goto L_0x15b5
+        L_0x0fba:
+            r51 = r13
+            r38 = r30
+            r63 = r31
             r14 = r32
-            r31 = r68
-            r68 = r0
-            r69 = r1
+            r31 = r67
+            r67 = r0
+            r68 = r1
             r0 = r4
             r4 = r27
             r27 = r2
-            org.telegram.tgnet.ConnectionsManager r1 = r66.getConnectionsManager()
+            org.telegram.tgnet.ConnectionsManager r1 = r65.getConnectionsManager()
             r1.updateDcSettings()
-            r41 = r3
-            r13 = r4
-        L_0x0fec:
-            r10 = r52
-            goto L_0x120e
-        L_0x0ff0:
-            r49 = r3
-            r51 = r7
+            goto L_0x1028
+        L_0x0fd5:
+            r48 = r3
+            r50 = r7
             r14 = r10
-            r52 = r30
-            r50 = r33
-            r54 = r34
-            r64 = r41
-            r3 = r43
-            r43 = r32
-            r31 = r68
-            r68 = r0
-            r69 = r1
+            r51 = r30
+            r49 = r33
+            r53 = r34
+            r63 = r40
+            r3 = r42
+            r42 = r32
+            r31 = r67
+            r67 = r0
+            r68 = r1
             r0 = r4
             r4 = r27
             r27 = r2
             boolean r1 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateChannelUserTyping
-            if (r1 == 0) goto L_0x1032
+            if (r1 == 0) goto L_0x1014
             org.telegram.tgnet.TLRPC$TL_updateChannelUserTyping r5 = (org.telegram.tgnet.TLRPC$TL_updateChannelUserTyping) r5
             org.telegram.tgnet.TLRPC$Peer r1 = r5.from_id
             long r6 = r1.user_id
             r8 = 0
             int r2 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r2 == 0) goto L_0x101d
-            goto L_0x1028
-        L_0x101d:
+            if (r2 == 0) goto L_0x1002
+            goto L_0x100d
+        L_0x1002:
             long r6 = r1.channel_id
             int r2 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r2 == 0) goto L_0x1025
+            if (r2 == 0) goto L_0x100a
             long r6 = -r6
-            goto L_0x1028
-        L_0x1025:
+            goto L_0x100d
+        L_0x100a:
             long r1 = r1.chat_id
             long r6 = -r1
-        L_0x1028:
+        L_0x100d:
             long r1 = r5.channel_id
             org.telegram.tgnet.TLRPC$SendMessageAction r8 = r5.action
             int r5 = r5.top_msg_id
-            r41 = r3
-            r13 = r4
-            goto L_0x1040
-        L_0x1032:
-            if (r6 == 0) goto L_0x1043
+            goto L_0x105e
+        L_0x1014:
+            if (r6 == 0) goto L_0x1034
             org.telegram.tgnet.TLRPC$TL_updateUserTyping r5 = (org.telegram.tgnet.TLRPC$TL_updateUserTyping) r5
             long r6 = r5.user_id
             org.telegram.tgnet.TLRPC$SendMessageAction r8 = r5.action
-            r41 = r3
-            r13 = r4
+            boolean r1 = r8 instanceof org.telegram.tgnet.TLRPC$TL_sendMessageEmojiInteraction
+            if (r1 == 0) goto L_0x1030
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda161 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda161
+            r1.<init>(r15, r5)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
+        L_0x1028:
+            r40 = r3
+            r30 = r4
+            r10 = r51
+            goto L_0x1223
+        L_0x1030:
             r1 = 0
+        L_0x1032:
             r5 = 0
-        L_0x1040:
-            r9 = 0
-            goto L_0x1064
-        L_0x1043:
+            goto L_0x105e
+        L_0x1034:
             org.telegram.tgnet.TLRPC$TL_updateChatUserTyping r5 = (org.telegram.tgnet.TLRPC$TL_updateChatUserTyping) r5
             long r1 = r5.chat_id
             org.telegram.tgnet.TLRPC$Peer r6 = r5.from_id
             long r7 = r6.user_id
             r9 = 0
             int r11 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r11 == 0) goto L_0x1053
+            if (r11 == 0) goto L_0x1044
             r6 = r7
-            goto L_0x105e
-        L_0x1053:
+            goto L_0x104f
+        L_0x1044:
             long r7 = r6.channel_id
             int r11 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r11 == 0) goto L_0x105b
+            if (r11 == 0) goto L_0x104c
             long r6 = -r7
-            goto L_0x105e
-        L_0x105b:
+            goto L_0x104f
+        L_0x104c:
             long r6 = r6.chat_id
             long r6 = -r6
-        L_0x105e:
+        L_0x104f:
             org.telegram.tgnet.TLRPC$SendMessageAction r8 = r5.action
-            r41 = r3
-            r13 = r4
-            r5 = 0
-        L_0x1064:
-            long r3 = -r1
-            int r11 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r11 != 0) goto L_0x106a
-            r3 = r6
-        L_0x106a:
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_sendMessageHistoryImportAction
-            if (r9 == 0) goto L_0x1083
-            if (r20 != 0) goto L_0x1076
+            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_sendMessageEmojiInteraction
+            if (r9 == 0) goto L_0x1032
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda156 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda156
+            r1.<init>(r15, r5)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
+            goto L_0x1028
+        L_0x105e:
+            long r9 = -r1
+            r33 = 0
+            int r11 = (r9 > r33 ? 1 : (r9 == r33 ? 0 : -1))
+            if (r11 != 0) goto L_0x1066
+            r9 = r6
+        L_0x1066:
+            boolean r11 = r8 instanceof org.telegram.tgnet.TLRPC$TL_sendMessageHistoryImportAction
+            if (r11 == 0) goto L_0x107e
+            if (r20 != 0) goto L_0x1072
             org.telegram.messenger.support.LongSparseIntArray r1 = new org.telegram.messenger.support.LongSparseIntArray
             r1.<init>()
-            goto L_0x1078
-        L_0x1076:
+            goto L_0x1074
+        L_0x1072:
             r1 = r20
-        L_0x1078:
+        L_0x1074:
             org.telegram.tgnet.TLRPC$TL_sendMessageHistoryImportAction r8 = (org.telegram.tgnet.TLRPC$TL_sendMessageHistoryImportAction) r8
             int r2 = r8.progress
-            r1.put(r3, r2)
+            r1.put(r9, r2)
             r20 = r1
-            goto L_0x0fec
-        L_0x1083:
-            org.telegram.messenger.UserConfig r9 = r66.getUserConfig()
-            long r9 = r9.getClientUserId()
-            int r11 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
-            if (r11 == 0) goto L_0x0fec
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_speakingInGroupCallAction
-            if (r9 == 0) goto L_0x10bd
-            r9 = 0
-            int r3 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
-            if (r3 == 0) goto L_0x1116
-            if (r19 != 0) goto L_0x10a1
-            androidx.collection.LongSparseArray r3 = new androidx.collection.LongSparseArray
-            r3.<init>()
-            goto L_0x10a3
-        L_0x10a1:
-            r3 = r19
-        L_0x10a3:
-            java.lang.Object r4 = r3.get(r1)
-            java.util.ArrayList r4 = (java.util.ArrayList) r4
-            if (r4 != 0) goto L_0x10b3
-            java.util.ArrayList r4 = new java.util.ArrayList
-            r4.<init>()
-            r3.put(r1, r4)
-        L_0x10b3:
+            goto L_0x1028
+        L_0x107e:
+            org.telegram.messenger.UserConfig r11 = r65.getUserConfig()
+            long r33 = r11.getClientUserId()
+            int r11 = (r6 > r33 ? 1 : (r6 == r33 ? 0 : -1))
+            if (r11 == 0) goto L_0x1028
+            boolean r11 = r8 instanceof org.telegram.tgnet.TLRPC$TL_speakingInGroupCallAction
+            if (r11 == 0) goto L_0x10c2
+            r33 = 0
+            int r5 = (r1 > r33 ? 1 : (r1 == r33 ? 0 : -1))
+            if (r5 == 0) goto L_0x10bd
+            if (r19 != 0) goto L_0x109c
+            androidx.collection.LongSparseArray r5 = new androidx.collection.LongSparseArray
+            r5.<init>()
+            goto L_0x109e
+        L_0x109c:
+            r5 = r19
+        L_0x109e:
+            java.lang.Object r8 = r5.get(r1)
+            java.util.ArrayList r8 = (java.util.ArrayList) r8
+            if (r8 != 0) goto L_0x10ae
+            java.util.ArrayList r8 = new java.util.ArrayList
+            r8.<init>()
+            r5.put(r1, r8)
+        L_0x10ae:
             java.lang.Long r1 = java.lang.Long.valueOf(r6)
-            r4.add(r1)
-            r19 = r3
-            goto L_0x1116
+            r8.add(r1)
+            r40 = r3
+            r30 = r4
+            r19 = r5
+            goto L_0x1127
         L_0x10bd:
+            r40 = r3
+            r30 = r4
+            goto L_0x1127
+        L_0x10c2:
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.util.ArrayList<org.telegram.messenger.MessagesController$PrintingUser>>> r1 = r15.printingUsers
-            java.lang.Long r2 = java.lang.Long.valueOf(r3)
+            java.lang.Long r2 = java.lang.Long.valueOf(r9)
             java.lang.Object r1 = r1.get(r2)
             j$.util.concurrent.ConcurrentHashMap r1 = (j$.util.concurrent.ConcurrentHashMap) r1
-            if (r1 == 0) goto L_0x10d6
+            if (r1 == 0) goto L_0x10db
             java.lang.Integer r2 = java.lang.Integer.valueOf(r5)
             java.lang.Object r2 = r1.get(r2)
             java.util.ArrayList r2 = (java.util.ArrayList) r2
-            goto L_0x10d8
-        L_0x10d6:
+            goto L_0x10dd
+        L_0x10db:
             r2 = r16
-        L_0x10d8:
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_sendMessageCancelAction
-            if (r9 == 0) goto L_0x1119
-            if (r2 == 0) goto L_0x1116
+        L_0x10dd:
+            boolean r11 = r8 instanceof org.telegram.tgnet.TLRPC$TL_sendMessageCancelAction
+            if (r11 == 0) goto L_0x112a
+            if (r2 == 0) goto L_0x10bd
             int r8 = r2.size()
-            r9 = 0
-        L_0x10e3:
-            if (r9 >= r8) goto L_0x10fa
-            java.lang.Object r10 = r2.get(r9)
-            org.telegram.messenger.MessagesController$PrintingUser r10 = (org.telegram.messenger.MessagesController.PrintingUser) r10
-            long r10 = r10.userId
-            int r30 = (r10 > r6 ? 1 : (r10 == r6 ? 0 : -1))
-            if (r30 != 0) goto L_0x10f7
-            r2.remove(r9)
+            r11 = 0
+        L_0x10e8:
+            if (r11 >= r8) goto L_0x1107
+            java.lang.Object r13 = r2.get(r11)
+            org.telegram.messenger.MessagesController$PrintingUser r13 = (org.telegram.messenger.MessagesController.PrintingUser) r13
+            r40 = r3
+            r30 = r4
+            long r3 = r13.userId
+            int r13 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1))
+            if (r13 != 0) goto L_0x1100
+            r2.remove(r11)
             r26 = 1
-            goto L_0x10fa
-        L_0x10f7:
-            int r9 = r9 + 1
-            goto L_0x10e3
-        L_0x10fa:
+            goto L_0x110b
+        L_0x1100:
+            int r11 = r11 + 1
+            r4 = r30
+            r3 = r40
+            goto L_0x10e8
+        L_0x1107:
+            r40 = r3
+            r30 = r4
+        L_0x110b:
             boolean r2 = r2.isEmpty()
-            if (r2 == 0) goto L_0x1116
+            if (r2 == 0) goto L_0x1127
             java.lang.Integer r2 = java.lang.Integer.valueOf(r5)
             r1.remove(r2)
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x1116
+            if (r1 == 0) goto L_0x1127
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.util.ArrayList<org.telegram.messenger.MessagesController$PrintingUser>>> r1 = r15.printingUsers
-            java.lang.Long r2 = java.lang.Long.valueOf(r3)
+            java.lang.Long r2 = java.lang.Long.valueOf(r9)
             r1.remove(r2)
-        L_0x1116:
-            r10 = r52
-            goto L_0x1178
-        L_0x1119:
-            if (r1 != 0) goto L_0x1129
+        L_0x1127:
+            r10 = r51
+            goto L_0x118d
+        L_0x112a:
+            r40 = r3
+            r30 = r4
+            if (r1 != 0) goto L_0x113e
             j$.util.concurrent.ConcurrentHashMap r1 = new j$.util.concurrent.ConcurrentHashMap
             r1.<init>()
-            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.util.ArrayList<org.telegram.messenger.MessagesController$PrintingUser>>> r9 = r15.printingUsers
-            java.lang.Long r3 = java.lang.Long.valueOf(r3)
-            r9.put(r3, r1)
-        L_0x1129:
-            if (r2 != 0) goto L_0x1137
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.util.ArrayList<org.telegram.messenger.MessagesController$PrintingUser>>> r3 = r15.printingUsers
+            java.lang.Long r4 = java.lang.Long.valueOf(r9)
+            r3.put(r4, r1)
+        L_0x113e:
+            if (r2 != 0) goto L_0x114c
             java.util.ArrayList r2 = new java.util.ArrayList
             r2.<init>()
             java.lang.Integer r3 = java.lang.Integer.valueOf(r5)
             r1.put(r3, r2)
-        L_0x1137:
+        L_0x114c:
             java.util.Iterator r1 = r2.iterator()
-        L_0x113b:
+        L_0x1150:
             boolean r3 = r1.hasNext()
-            if (r3 == 0) goto L_0x1163
+            if (r3 == 0) goto L_0x1178
             java.lang.Object r3 = r1.next()
             org.telegram.messenger.MessagesController$PrintingUser r3 = (org.telegram.messenger.MessagesController.PrintingUser) r3
             long r4 = r3.userId
             int r9 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r9 != 0) goto L_0x113b
-            r10 = r52
+            if (r9 != 0) goto L_0x1150
+            r10 = r51
             r3.lastTime = r10
             org.telegram.tgnet.TLRPC$SendMessageAction r1 = r3.action
             java.lang.Class r1 = r1.getClass()
             java.lang.Class r4 = r8.getClass()
-            if (r1 == r4) goto L_0x115f
+            if (r1 == r4) goto L_0x1174
             r26 = 1
-        L_0x115f:
+        L_0x1174:
             r3.action = r8
             r1 = 1
-            goto L_0x1166
-        L_0x1163:
-            r10 = r52
+            goto L_0x117b
+        L_0x1178:
+            r10 = r51
             r1 = 0
-        L_0x1166:
-            if (r1 != 0) goto L_0x1178
+        L_0x117b:
+            if (r1 != 0) goto L_0x118d
             org.telegram.messenger.MessagesController$PrintingUser r1 = new org.telegram.messenger.MessagesController$PrintingUser
             r1.<init>()
             r1.userId = r6
@@ -21241,55 +21274,55 @@ public class MessagesController extends BaseController implements NotificationCe
             r1.action = r8
             r2.add(r1)
             r26 = 1
-        L_0x1178:
-            org.telegram.tgnet.ConnectionsManager r1 = r66.getConnectionsManager()
+        L_0x118d:
+            org.telegram.tgnet.ConnectionsManager r1 = r65.getConnectionsManager()
             int r1 = r1.getCurrentTime()
-            int r1 = r1 - r71
+            int r1 = r1 - r70
             int r1 = java.lang.Math.abs(r1)
             r2 = 30
-            if (r1 >= r2) goto L_0x120e
+            if (r1 >= r2) goto L_0x1223
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r1 = r15.onlinePrivacy
             java.lang.Long r2 = java.lang.Long.valueOf(r6)
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r71)
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r70)
             r1.put(r2, r3)
-            goto L_0x120e
-        L_0x1199:
-            r49 = r3
-            r51 = r7
-            r48 = r13
-            r47 = r14
-            r13 = r27
-            r50 = r33
-            r54 = r34
-            r64 = r41
-            r41 = r43
-            r8 = r44
-            r27 = r2
+            goto L_0x1223
+        L_0x11ae:
+            r48 = r3
+            r50 = r7
+            r47 = r13
+            r46 = r14
+            r49 = r33
+            r53 = r34
+            r63 = r40
+            r40 = r42
+            r8 = r43
             r14 = r10
             r10 = r30
-            r43 = r32
-            r31 = r68
-            r68 = r0
-            r69 = r1
+            r42 = r32
+            r31 = r67
+            r67 = r0
+            r68 = r1
             r0 = r4
-            if (r6 == 0) goto L_0x11c3
+            r30 = r27
+            r27 = r2
+            if (r6 == 0) goto L_0x11d8
             r1 = r5
             org.telegram.tgnet.TLRPC$TL_updateNewMessage r1 = (org.telegram.tgnet.TLRPC$TL_updateNewMessage) r1
             org.telegram.tgnet.TLRPC$Message r1 = r1.message
-            goto L_0x120a
-        L_0x11c3:
+            goto L_0x121f
+        L_0x11d8:
             boolean r1 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewScheduledMessage
-            if (r1 == 0) goto L_0x11cd
+            if (r1 == 0) goto L_0x11e2
             r1 = r5
             org.telegram.tgnet.TLRPC$TL_updateNewScheduledMessage r1 = (org.telegram.tgnet.TLRPC$TL_updateNewScheduledMessage) r1
             org.telegram.tgnet.TLRPC$Message r1 = r1.message
-            goto L_0x120a
-        L_0x11cd:
+            goto L_0x121f
+        L_0x11e2:
             r1 = r5
             org.telegram.tgnet.TLRPC$TL_updateNewChannelMessage r1 = (org.telegram.tgnet.TLRPC$TL_updateNewChannelMessage) r1
             org.telegram.tgnet.TLRPC$Message r1 = r1.message
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r2 == 0) goto L_0x11ef
+            if (r2 == 0) goto L_0x1204
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             r2.append(r5)
@@ -21299,96 +21332,95 @@ public class MessagesController extends BaseController implements NotificationCe
             r2.append(r3)
             java.lang.String r2 = r2.toString()
             org.telegram.messenger.FileLog.d(r2)
-        L_0x11ef:
+        L_0x1204:
             boolean r2 = r1.out
-            if (r2 != 0) goto L_0x120a
+            if (r2 != 0) goto L_0x121f
             org.telegram.tgnet.TLRPC$Peer r2 = r1.from_id
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r3 == 0) goto L_0x120a
+            if (r3 == 0) goto L_0x121f
             long r2 = r2.user_id
-            org.telegram.messenger.UserConfig r4 = r66.getUserConfig()
+            org.telegram.messenger.UserConfig r4 = r65.getUserConfig()
             long r6 = r4.getClientUserId()
             int r4 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r4 != 0) goto L_0x120a
+            if (r4 != 0) goto L_0x121f
             r2 = 1
             r1.out = r2
-        L_0x120a:
+        L_0x121f:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
-            if (r2 == 0) goto L_0x122d
-        L_0x120e:
-            r36 = r68
-            r1 = r69
+            if (r2 == 0) goto L_0x123f
+        L_0x1223:
+            r36 = r67
+            r1 = r68
             r33 = r10
             r10 = r14
             r2 = r27
-            r9 = r41
-            r6 = r43
-            r3 = r49
-            r5 = r50
-            r7 = r51
-            r8 = r54
-            r41 = r64
-            r37 = 0
-        L_0x1227:
-            r27 = r13
-            r13 = r48
-            goto L_0x15b0
-        L_0x122d:
+            r27 = r30
+            r9 = r40
+            r6 = r42
+            r3 = r48
+            r5 = r49
+            r7 = r50
+        L_0x1238:
+            r8 = r53
+            r40 = r63
+            r13 = 0
+            goto L_0x15b5
+        L_0x123f:
             org.telegram.tgnet.TLRPC$Peer r2 = r1.peer_id
             long r3 = r2.channel_id
-            r45 = 0
-            int r6 = (r3 > r45 ? 1 : (r3 == r45 ? 0 : -1))
-            if (r6 == 0) goto L_0x123a
-        L_0x1237:
-            r6 = r45
-            goto L_0x124e
-        L_0x123a:
+            r44 = 0
+            int r6 = (r3 > r44 ? 1 : (r3 == r44 ? 0 : -1))
+            if (r6 == 0) goto L_0x124c
+        L_0x1249:
+            r6 = r44
+            goto L_0x1260
+        L_0x124c:
             long r3 = r2.chat_id
-            int r6 = (r3 > r45 ? 1 : (r3 == r45 ? 0 : -1))
-            if (r6 == 0) goto L_0x1241
-            goto L_0x1237
-        L_0x1241:
+            int r6 = (r3 > r44 ? 1 : (r3 == r44 ? 0 : -1))
+            if (r6 == 0) goto L_0x1253
+            goto L_0x1249
+        L_0x1253:
             long r2 = r2.user_id
-            int r4 = (r2 > r45 ? 1 : (r2 == r45 ? 0 : -1))
-            if (r4 == 0) goto L_0x124b
+            int r4 = (r2 > r44 ? 1 : (r2 == r44 ? 0 : -1))
+            if (r4 == 0) goto L_0x125d
             r6 = r2
-            r3 = r45
-            goto L_0x124e
-        L_0x124b:
-            r3 = r45
+            r3 = r44
+            goto L_0x1260
+        L_0x125d:
+            r3 = r44
             r6 = r3
-        L_0x124e:
-            int r2 = (r3 > r45 ? 1 : (r3 == r45 ? 0 : -1))
-            if (r2 == 0) goto L_0x127d
+        L_0x1260:
+            int r2 = (r3 > r44 ? 1 : (r3 == r44 ? 0 : -1))
+            if (r2 == 0) goto L_0x128f
             java.lang.Long r2 = java.lang.Long.valueOf(r3)
             java.lang.Object r2 = r12.get(r2)
             org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2
-            if (r2 == 0) goto L_0x1262
+            if (r2 == 0) goto L_0x1274
             boolean r8 = r2.min
-            if (r8 == 0) goto L_0x126a
-        L_0x1262:
+            if (r8 == 0) goto L_0x127c
+        L_0x1274:
             java.lang.Long r2 = java.lang.Long.valueOf(r3)
             org.telegram.tgnet.TLRPC$Chat r2 = r15.getChat(r2)
-        L_0x126a:
-            if (r2 == 0) goto L_0x1270
+        L_0x127c:
+            if (r2 == 0) goto L_0x1282
             boolean r8 = r2.min
-            if (r8 == 0) goto L_0x127f
-        L_0x1270:
-            org.telegram.messenger.MessagesStorage r2 = r66.getMessagesStorage()
+            if (r8 == 0) goto L_0x1291
+        L_0x1282:
+            org.telegram.messenger.MessagesStorage r2 = r65.getMessagesStorage()
             org.telegram.tgnet.TLRPC$Chat r2 = r2.getChatSync(r3)
             r8 = 1
             r15.putChat(r2, r8)
-            goto L_0x127f
-        L_0x127d:
+            goto L_0x1291
+        L_0x128f:
             r2 = r16
-        L_0x127f:
-            if (r70 != 0) goto L_0x138b
+        L_0x1291:
+            if (r69 != 0) goto L_0x1396
             r8 = 0
-            int r30 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
-            if (r30 == 0) goto L_0x12a3
-            if (r2 != 0) goto L_0x12a3
+            int r13 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
+            if (r13 == 0) goto L_0x12b5
+            if (r2 != 0) goto L_0x12b5
             boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r0 == 0) goto L_0x12a1
+            if (r0 == 0) goto L_0x12b3
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r1 = "not found chat "
@@ -21396,97 +21428,96 @@ public class MessagesController extends BaseController implements NotificationCe
             r0.append(r3)
             java.lang.String r0 = r0.toString()
             org.telegram.messenger.FileLog.d(r0)
-        L_0x12a1:
+        L_0x12b3:
             r0 = 0
             return r0
-        L_0x12a3:
+        L_0x12b5:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r3 = r1.entities
             int r3 = r3.size()
             int r3 = r3 + 3
             r4 = 0
-        L_0x12ac:
-            if (r4 >= r3) goto L_0x138b
-            if (r4 == 0) goto L_0x12eb
+        L_0x12be:
+            if (r4 >= r3) goto L_0x1396
+            if (r4 == 0) goto L_0x12fd
             r8 = 1
-            if (r4 != r8) goto L_0x12c5
+            if (r4 != r8) goto L_0x12d7
             org.telegram.tgnet.TLRPC$Peer r6 = r1.from_id
             boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r7 == 0) goto L_0x12bc
+            if (r7 == 0) goto L_0x12ce
             long r6 = r6.user_id
-            goto L_0x12be
-        L_0x12bc:
+            goto L_0x12d0
+        L_0x12ce:
             r6 = 0
-        L_0x12be:
+        L_0x12d0:
             boolean r8 = r1.post
-            if (r8 == 0) goto L_0x12eb
+            if (r8 == 0) goto L_0x12fd
             r8 = 2
             r9 = 1
-            goto L_0x12ed
-        L_0x12c5:
+            goto L_0x12ff
+        L_0x12d7:
             r8 = 2
-            if (r4 != r8) goto L_0x12d8
+            if (r4 != r8) goto L_0x12ea
             org.telegram.tgnet.TLRPC$MessageFwdHeader r6 = r1.fwd_from
-            if (r6 == 0) goto L_0x12d5
+            if (r6 == 0) goto L_0x12e7
             org.telegram.tgnet.TLRPC$Peer r6 = r6.from_id
             boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r7 == 0) goto L_0x12d5
+            if (r7 == 0) goto L_0x12e7
             long r6 = r6.user_id
-            goto L_0x12ec
-        L_0x12d5:
+            goto L_0x12fe
+        L_0x12e7:
             r6 = 0
-            goto L_0x12ec
-        L_0x12d8:
+            goto L_0x12fe
+        L_0x12ea:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r6 = r1.entities
             int r7 = r4 + -3
             java.lang.Object r6 = r6.get(r7)
             org.telegram.tgnet.TLRPC$MessageEntity r6 = (org.telegram.tgnet.TLRPC$MessageEntity) r6
             boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMentionName
-            if (r7 == 0) goto L_0x12d5
+            if (r7 == 0) goto L_0x12e7
             org.telegram.tgnet.TLRPC$TL_messageEntityMentionName r6 = (org.telegram.tgnet.TLRPC$TL_messageEntityMentionName) r6
             long r6 = r6.user_id
-            goto L_0x12ec
-        L_0x12eb:
+            goto L_0x12fe
+        L_0x12fd:
             r8 = 2
-        L_0x12ec:
+        L_0x12fe:
             r9 = 0
-        L_0x12ed:
+        L_0x12ff:
             r33 = 0
-            int r30 = (r6 > r33 ? 1 : (r6 == r33 ? 0 : -1))
-            if (r30 <= 0) goto L_0x1383
-            java.lang.Long r8 = java.lang.Long.valueOf(r6)
-            java.lang.Object r8 = r0.get(r8)
-            org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC$User) r8
-            r30 = r3
-            if (r8 == 0) goto L_0x1307
-            if (r9 != 0) goto L_0x130f
-            boolean r3 = r8.min
-            if (r3 == 0) goto L_0x130f
-        L_0x1307:
-            java.lang.Long r3 = java.lang.Long.valueOf(r6)
-            org.telegram.tgnet.TLRPC$User r8 = r15.getUser(r3)
-        L_0x130f:
-            if (r8 == 0) goto L_0x1317
-            if (r9 != 0) goto L_0x132f
-            boolean r3 = r8.min
-            if (r3 == 0) goto L_0x132f
+            int r13 = (r6 > r33 ? 1 : (r6 == r33 ? 0 : -1))
+            if (r13 <= 0) goto L_0x1392
+            java.lang.Long r13 = java.lang.Long.valueOf(r6)
+            java.lang.Object r13 = r0.get(r13)
+            org.telegram.tgnet.TLRPC$User r13 = (org.telegram.tgnet.TLRPC$User) r13
+            if (r13 == 0) goto L_0x1317
+            if (r9 != 0) goto L_0x131f
+            boolean r8 = r13.min
+            if (r8 == 0) goto L_0x131f
         L_0x1317:
-            org.telegram.messenger.MessagesStorage r3 = r66.getMessagesStorage()
-            org.telegram.tgnet.TLRPC$User r3 = r3.getUserSync(r6)
-            if (r3 == 0) goto L_0x132a
-            if (r9 != 0) goto L_0x132a
-            boolean r8 = r3.min
-            if (r8 == 0) goto L_0x132a
-            r8 = r16
-            goto L_0x132b
-        L_0x132a:
-            r8 = r3
-        L_0x132b:
-            r3 = 1
-            r15.putUser(r8, r3)
-        L_0x132f:
-            if (r8 != 0) goto L_0x134b
+            java.lang.Long r8 = java.lang.Long.valueOf(r6)
+            org.telegram.tgnet.TLRPC$User r13 = r15.getUser(r8)
+        L_0x131f:
+            if (r13 == 0) goto L_0x1327
+            if (r9 != 0) goto L_0x133f
+            boolean r8 = r13.min
+            if (r8 == 0) goto L_0x133f
+        L_0x1327:
+            org.telegram.messenger.MessagesStorage r8 = r65.getMessagesStorage()
+            org.telegram.tgnet.TLRPC$User r8 = r8.getUserSync(r6)
+            if (r8 == 0) goto L_0x133a
+            if (r9 != 0) goto L_0x133a
+            boolean r9 = r8.min
+            if (r9 == 0) goto L_0x133a
+            r13 = r16
+            goto L_0x133b
+        L_0x133a:
+            r13 = r8
+        L_0x133b:
+            r8 = 1
+            r15.putUser(r13, r8)
+        L_0x133f:
+            if (r13 != 0) goto L_0x135b
             boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r0 == 0) goto L_0x1349
+            if (r0 == 0) goto L_0x1359
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r1 = "not found user "
@@ -21494,157 +21525,150 @@ public class MessagesController extends BaseController implements NotificationCe
             r0.append(r6)
             java.lang.String r0 = r0.toString()
             org.telegram.messenger.FileLog.d(r0)
-        L_0x1349:
+        L_0x1359:
             r0 = 0
             return r0
-        L_0x134b:
-            boolean r3 = r1.out
-            if (r3 != 0) goto L_0x1385
-            r3 = 1
-            if (r4 != r3) goto L_0x1385
-            org.telegram.tgnet.TLRPC$UserStatus r3 = r8.status
-            if (r3 == 0) goto L_0x1385
-            int r3 = r3.expires
-            if (r3 > 0) goto L_0x1385
-            org.telegram.tgnet.ConnectionsManager r3 = r66.getConnectionsManager()
-            int r3 = r3.getCurrentTime()
-            int r8 = r1.date
-            int r3 = r3 - r8
-            int r3 = java.lang.Math.abs(r3)
-            r8 = 30
-            if (r3 >= r8) goto L_0x1385
-            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r3 = r15.onlinePrivacy
-            java.lang.Long r9 = java.lang.Long.valueOf(r6)
-            int r8 = r1.date
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-            r3.put(r9, r8)
-            int r3 = UPDATE_MASK_STATUS
-            r3 = r17 | r3
-            r17 = r3
-            goto L_0x1385
-        L_0x1383:
-            r30 = r3
-        L_0x1385:
+        L_0x135b:
+            boolean r8 = r1.out
+            if (r8 != 0) goto L_0x1392
+            r8 = 1
+            if (r4 != r8) goto L_0x1392
+            org.telegram.tgnet.TLRPC$UserStatus r8 = r13.status
+            if (r8 == 0) goto L_0x1392
+            int r8 = r8.expires
+            if (r8 > 0) goto L_0x1392
+            org.telegram.tgnet.ConnectionsManager r8 = r65.getConnectionsManager()
+            int r8 = r8.getCurrentTime()
+            int r9 = r1.date
+            int r8 = r8 - r9
+            int r8 = java.lang.Math.abs(r8)
+            r9 = 30
+            if (r8 >= r9) goto L_0x1392
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r8 = r15.onlinePrivacy
+            java.lang.Long r13 = java.lang.Long.valueOf(r6)
+            int r9 = r1.date
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r8.put(r13, r9)
+            int r8 = UPDATE_MASK_STATUS
+            r8 = r17 | r8
+            r17 = r8
+        L_0x1392:
             int r4 = r4 + 1
-            r3 = r30
-            goto L_0x12ac
-        L_0x138b:
+            goto L_0x12be
+        L_0x1396:
             org.telegram.tgnet.TLRPC$MessageAction r3 = r1.action
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatDeleteUser
-            if (r4 == 0) goto L_0x13c7
+            if (r4 == 0) goto L_0x13d2
             long r3 = r3.user_id
             java.lang.Long r3 = java.lang.Long.valueOf(r3)
             java.lang.Object r3 = r0.get(r3)
             org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3
-            if (r3 == 0) goto L_0x13b1
+            if (r3 == 0) goto L_0x13bc
             boolean r3 = r3.bot
-            if (r3 == 0) goto L_0x13b1
+            if (r3 == 0) goto L_0x13bc
             org.telegram.tgnet.TLRPC$TL_replyKeyboardHide r3 = new org.telegram.tgnet.TLRPC$TL_replyKeyboardHide
             r3.<init>()
             r1.reply_markup = r3
             int r3 = r1.flags
             r3 = r3 | 64
             r1.flags = r3
-            goto L_0x13c7
-        L_0x13b1:
+            goto L_0x13d2
+        L_0x13bc:
             org.telegram.tgnet.TLRPC$Peer r3 = r1.from_id
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r4 == 0) goto L_0x13c7
+            if (r4 == 0) goto L_0x13d2
             long r3 = r3.user_id
             int r6 = (r3 > r31 ? 1 : (r3 == r31 ? 0 : -1))
-            if (r6 != 0) goto L_0x13c7
+            if (r6 != 0) goto L_0x13d2
             org.telegram.tgnet.TLRPC$MessageAction r3 = r1.action
             long r3 = r3.user_id
             int r6 = (r3 > r31 ? 1 : (r3 == r31 ? 0 : -1))
-            if (r6 != 0) goto L_0x13c7
-            goto L_0x120e
-        L_0x13c7:
+            if (r6 != 0) goto L_0x13d2
+            goto L_0x1223
+        L_0x13d2:
             org.telegram.messenger.ImageLoader.saveMessageThumbs(r1)
             org.telegram.messenger.MessageObject.getDialogId(r1)
             boolean r3 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewChannelMessage
-            if (r3 == 0) goto L_0x1426
+            if (r3 == 0) goto L_0x142e
             org.telegram.tgnet.TLRPC$TL_messageReplyHeader r3 = r1.reply_to
-            if (r3 == 0) goto L_0x1426
+            if (r3 == 0) goto L_0x142e
             org.telegram.tgnet.TLRPC$MessageAction r3 = r1.action
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPinMessage
-            if (r3 != 0) goto L_0x1426
-            r9 = r23
-            if (r9 != 0) goto L_0x13e5
+            if (r3 != 0) goto L_0x142e
+            r13 = r23
+            if (r13 != 0) goto L_0x13f0
             androidx.collection.LongSparseArray r3 = new androidx.collection.LongSparseArray
             r3.<init>()
-            goto L_0x13e6
-        L_0x13e5:
-            r3 = r9
-        L_0x13e6:
+            r13 = r3
+        L_0x13f0:
+            long r3 = r1.dialog_id
+            java.lang.Object r3 = r13.get(r3)
+            android.util.SparseArray r3 = (android.util.SparseArray) r3
+            if (r3 != 0) goto L_0x1404
+            android.util.SparseArray r3 = new android.util.SparseArray
+            r3.<init>()
             long r6 = r1.dialog_id
+            r13.put(r6, r3)
+        L_0x1404:
+            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r4 = r1.reply_to
+            int r6 = r4.reply_to_top_id
+            if (r6 == 0) goto L_0x140b
+            goto L_0x140d
+        L_0x140b:
+            int r6 = r4.reply_to_msg_id
+        L_0x140d:
             java.lang.Object r4 = r3.get(r6)
-            android.util.SparseArray r4 = (android.util.SparseArray) r4
-            if (r4 != 0) goto L_0x13fa
-            android.util.SparseArray r4 = new android.util.SparseArray
+            org.telegram.tgnet.TLRPC$MessageReplies r4 = (org.telegram.tgnet.TLRPC$MessageReplies) r4
+            if (r4 != 0) goto L_0x141d
+            org.telegram.tgnet.TLRPC$TL_messageReplies r4 = new org.telegram.tgnet.TLRPC$TL_messageReplies
             r4.<init>()
-            long r6 = r1.dialog_id
             r3.put(r6, r4)
-        L_0x13fa:
-            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r6 = r1.reply_to
-            int r7 = r6.reply_to_top_id
-            if (r7 == 0) goto L_0x1401
-            goto L_0x1403
-        L_0x1401:
-            int r7 = r6.reply_to_msg_id
-        L_0x1403:
-            java.lang.Object r6 = r4.get(r7)
-            org.telegram.tgnet.TLRPC$MessageReplies r6 = (org.telegram.tgnet.TLRPC$MessageReplies) r6
-            if (r6 != 0) goto L_0x1413
-            org.telegram.tgnet.TLRPC$TL_messageReplies r6 = new org.telegram.tgnet.TLRPC$TL_messageReplies
-            r6.<init>()
-            r4.put(r7, r6)
-        L_0x1413:
-            org.telegram.tgnet.TLRPC$Peer r4 = r1.from_id
-            if (r4 == 0) goto L_0x141d
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r7 = r6.recent_repliers
-            r8 = 0
-            r7.add(r8, r4)
         L_0x141d:
-            int r4 = r6.replies
-            r7 = 1
-            int r4 = r4 + r7
-            r6.replies = r4
-            r23 = r3
-            goto L_0x142a
-        L_0x1426:
-            r9 = r23
-            r23 = r9
-        L_0x142a:
+            org.telegram.tgnet.TLRPC$Peer r3 = r1.from_id
+            if (r3 == 0) goto L_0x1427
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r6 = r4.recent_repliers
+            r7 = 0
+            r6.add(r7, r3)
+        L_0x1427:
+            int r3 = r4.replies
+            r6 = 1
+            int r3 = r3 + r6
+            r4.replies = r3
+            goto L_0x1430
+        L_0x142e:
+            r13 = r23
+        L_0x1430:
+            r23 = r13
             java.util.ArrayList<java.lang.Long> r3 = r15.createdDialogIds
             long r6 = r1.dialog_id
             java.lang.Long r4 = java.lang.Long.valueOf(r6)
             boolean r3 = r3.contains(r4)
-            if (r3 == 0) goto L_0x1455
+            if (r3 == 0) goto L_0x145d
             long r3 = r1.grouped_id
             r6 = 0
             int r8 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1))
-            if (r8 != 0) goto L_0x1455
+            if (r8 != 0) goto L_0x145d
             org.telegram.messenger.ImageLoader$MessageThumb r3 = org.telegram.messenger.ImageLoader.generateMessageThumb(r1)
-            if (r3 == 0) goto L_0x1455
-            if (r24 != 0) goto L_0x144e
+            if (r3 == 0) goto L_0x145d
+            if (r24 != 0) goto L_0x1456
             java.util.ArrayList r4 = new java.util.ArrayList
             r4.<init>()
-            goto L_0x1450
-        L_0x144e:
+            goto L_0x1458
+        L_0x1456:
             r4 = r24
-        L_0x1450:
+        L_0x1458:
             r4.add(r3)
             r24 = r4
-        L_0x1455:
+        L_0x145d:
             boolean r3 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewScheduledMessage
-            if (r3 == 0) goto L_0x14ae
-            if (r29 != 0) goto L_0x1461
+            if (r3 == 0) goto L_0x14b5
+            if (r29 != 0) goto L_0x1469
             java.util.ArrayList r2 = new java.util.ArrayList
             r2.<init>()
-            goto L_0x1463
-        L_0x1461:
+            goto L_0x146b
+        L_0x1469:
             r2 = r29
-        L_0x1463:
+        L_0x146b:
             r2.add(r1)
             java.util.ArrayList<java.lang.Long> r3 = r15.createdScheduledDialogIds
             long r4 = r1.dialog_id
@@ -21662,51 +21686,51 @@ public class MessagesController extends BaseController implements NotificationCe
             r5.<init>((int) r6, (org.telegram.tgnet.TLRPC$Message) r7, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User>) r8, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat>) r9, (boolean) r10, (boolean) r11)
             r3 = 1
             r4.scheduled = r3
-            if (r21 != 0) goto L_0x148c
+            if (r21 != 0) goto L_0x1494
             androidx.collection.LongSparseArray r3 = new androidx.collection.LongSparseArray
             r3.<init>()
-            goto L_0x148e
-        L_0x148c:
+            goto L_0x1496
+        L_0x1494:
             r3 = r21
-        L_0x148e:
+        L_0x1496:
             long r5 = r1.dialog_id
             java.lang.Object r5 = r3.get(r5)
             java.util.ArrayList r5 = (java.util.ArrayList) r5
-            if (r5 != 0) goto L_0x14a2
+            if (r5 != 0) goto L_0x14aa
             java.util.ArrayList r5 = new java.util.ArrayList
             r5.<init>()
             long r6 = r1.dialog_id
             r3.put(r6, r5)
-        L_0x14a2:
+        L_0x14aa:
             r5.add(r4)
             r29 = r2
             r21 = r3
             r10 = r14
-            r37 = 0
-            goto L_0x159a
-        L_0x14ae:
+            r13 = 0
+            goto L_0x159f
+        L_0x14b5:
             r33 = r10
-            if (r35 != 0) goto L_0x14b8
+            if (r35 != 0) goto L_0x14bf
             java.util.ArrayList r3 = new java.util.ArrayList
             r3.<init>()
-            goto L_0x14ba
-        L_0x14b8:
+            goto L_0x14c1
+        L_0x14bf:
             r3 = r35
-        L_0x14ba:
+        L_0x14c1:
             r3.add(r1)
             boolean r4 = r1.out
-            if (r4 == 0) goto L_0x14c4
+            if (r4 == 0) goto L_0x14cb
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r4 = r15.dialogs_read_outbox_max
-            goto L_0x14c6
-        L_0x14c4:
+            goto L_0x14cd
+        L_0x14cb:
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r4 = r15.dialogs_read_inbox_max
-        L_0x14c6:
+        L_0x14cd:
             long r5 = r1.dialog_id
             java.lang.Long r5 = java.lang.Long.valueOf(r5)
             java.lang.Object r5 = r4.get(r5)
             java.lang.Integer r5 = (java.lang.Integer) r5
-            if (r5 != 0) goto L_0x14ed
-            org.telegram.messenger.MessagesStorage r5 = r66.getMessagesStorage()
+            if (r5 != 0) goto L_0x14f4
+            org.telegram.messenger.MessagesStorage r5 = r65.getMessagesStorage()
             boolean r6 = r1.out
             long r7 = r1.dialog_id
             int r5 = r5.getDialogReadMax(r6, r7)
@@ -21714,227 +21738,227 @@ public class MessagesController extends BaseController implements NotificationCe
             long r6 = r1.dialog_id
             java.lang.Long r6 = java.lang.Long.valueOf(r6)
             r4.put(r6, r5)
-        L_0x14ed:
+        L_0x14f4:
             int r4 = r5.intValue()
             int r5 = r1.id
-            if (r4 >= r5) goto L_0x1509
-            if (r2 == 0) goto L_0x14fd
+            if (r4 >= r5) goto L_0x1510
+            if (r2 == 0) goto L_0x1504
             boolean r4 = org.telegram.messenger.ChatObject.isNotInChat(r2)
-            if (r4 != 0) goto L_0x1509
-        L_0x14fd:
+            if (r4 != 0) goto L_0x1510
+        L_0x1504:
             org.telegram.tgnet.TLRPC$MessageAction r4 = r1.action
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatMigrateTo
-            if (r5 != 0) goto L_0x1509
+            if (r5 != 0) goto L_0x1510
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChannelCreate
-            if (r4 != 0) goto L_0x1509
+            if (r4 != 0) goto L_0x1510
             r4 = 1
-            goto L_0x150a
-        L_0x1509:
+            goto L_0x1511
+        L_0x1510:
             r4 = 0
-        L_0x150a:
+        L_0x1511:
             r1.unread = r4
             long r4 = r1.dialog_id
             int r6 = (r4 > r31 ? 1 : (r4 == r31 ? 0 : -1))
-            if (r6 != 0) goto L_0x151f
+            if (r6 != 0) goto L_0x1526
             boolean r6 = r1.from_scheduled
-            r11 = 0
-            if (r6 != 0) goto L_0x1519
-            r1.unread = r11
-        L_0x1519:
-            r1.media_unread = r11
+            r13 = 0
+            if (r6 != 0) goto L_0x1520
+            r1.unread = r13
+        L_0x1520:
+            r1.media_unread = r13
             r6 = 1
             r1.out = r6
-            goto L_0x1520
-        L_0x151f:
-            r11 = 0
-        L_0x1520:
+            goto L_0x1527
+        L_0x1526:
+            r13 = 0
+        L_0x1527:
             java.util.ArrayList<java.lang.Long> r6 = r15.createdDialogIds
             java.lang.Long r4 = java.lang.Long.valueOf(r4)
-            boolean r4 = r6.contains(r4)
-            org.telegram.messenger.MessageObject r10 = new org.telegram.messenger.MessageObject
+            boolean r11 = r6.contains(r4)
+            org.telegram.messenger.MessageObject r4 = new org.telegram.messenger.MessageObject
             int r6 = r15.currentAccount
-            r5 = r10
+            r5 = r4
             r7 = r1
             r8 = r0
             r9 = r12
-            r30 = r3
-            r3 = r10
-            r10 = r4
-            r37 = 0
-            r11 = r4
+            r10 = r11
             r5.<init>((int) r6, (org.telegram.tgnet.TLRPC$Message) r7, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User>) r8, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat>) r9, (boolean) r10, (boolean) r11)
-            int r4 = r3.type
-            r5 = 11
-            if (r4 != r5) goto L_0x1547
-            int r4 = UPDATE_MASK_CHAT_AVATAR
-        L_0x1544:
-            r17 = r17 | r4
-            goto L_0x154e
-        L_0x1547:
-            r5 = 10
-            if (r4 != r5) goto L_0x154e
-            int r4 = UPDATE_MASK_CHAT_NAME
-            goto L_0x1544
-        L_0x154e:
-            if (r14 != 0) goto L_0x1557
-            androidx.collection.LongSparseArray r4 = new androidx.collection.LongSparseArray
-            r4.<init>()
-            r10 = r4
-            goto L_0x1558
-        L_0x1557:
-            r10 = r14
+            int r5 = r4.type
+            r6 = 11
+            if (r5 != r6) goto L_0x1548
+            int r5 = UPDATE_MASK_CHAT_AVATAR
+        L_0x1545:
+            r17 = r17 | r5
+            goto L_0x154f
+        L_0x1548:
+            r6 = 10
+            if (r5 != r6) goto L_0x154f
+            int r5 = UPDATE_MASK_CHAT_NAME
+            goto L_0x1545
+        L_0x154f:
+            if (r14 != 0) goto L_0x1558
+            androidx.collection.LongSparseArray r5 = new androidx.collection.LongSparseArray
+            r5.<init>()
+            r10 = r5
+            goto L_0x1559
         L_0x1558:
-            long r4 = r1.dialog_id
-            java.lang.Object r4 = r10.get(r4)
-            java.util.ArrayList r4 = (java.util.ArrayList) r4
-            if (r4 != 0) goto L_0x156c
-            java.util.ArrayList r4 = new java.util.ArrayList
-            r4.<init>()
+            r10 = r14
+        L_0x1559:
             long r5 = r1.dialog_id
-            r10.put(r5, r4)
-        L_0x156c:
-            r4.add(r3)
-            boolean r1 = r3.isOut()
-            if (r1 == 0) goto L_0x157b
-            org.telegram.tgnet.TLRPC$Message r1 = r3.messageOwner
+            java.lang.Object r5 = r10.get(r5)
+            java.util.ArrayList r5 = (java.util.ArrayList) r5
+            if (r5 != 0) goto L_0x156d
+            java.util.ArrayList r5 = new java.util.ArrayList
+            r5.<init>()
+            long r6 = r1.dialog_id
+            r10.put(r6, r5)
+        L_0x156d:
+            r5.add(r4)
+            boolean r1 = r4.isOut()
+            if (r1 == 0) goto L_0x157c
+            org.telegram.tgnet.TLRPC$Message r1 = r4.messageOwner
             boolean r1 = r1.from_scheduled
-            if (r1 == 0) goto L_0x1598
-        L_0x157b:
-            boolean r1 = r3.isUnread()
-            if (r1 == 0) goto L_0x1598
-            if (r2 == 0) goto L_0x158d
+            if (r1 == 0) goto L_0x159d
+        L_0x157c:
+            boolean r1 = r4.isUnread()
+            if (r1 == 0) goto L_0x159d
+            if (r2 == 0) goto L_0x158e
             boolean r1 = org.telegram.messenger.ChatObject.isNotInChat(r2)
-            if (r1 != 0) goto L_0x1598
+            if (r1 != 0) goto L_0x159d
             boolean r1 = r2.min
-            if (r1 != 0) goto L_0x1598
-        L_0x158d:
-            if (r13 != 0) goto L_0x1595
+            if (r1 != 0) goto L_0x159d
+        L_0x158e:
+            if (r30 != 0) goto L_0x1596
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-            r13 = r1
-        L_0x1595:
-            r13.add(r3)
+            goto L_0x1598
+        L_0x1596:
+            r1 = r30
         L_0x1598:
-            r35 = r30
-        L_0x159a:
-            r36 = r68
-            r1 = r69
+            r1.add(r4)
+            r30 = r1
+        L_0x159d:
+            r35 = r3
+        L_0x159f:
+            r36 = r67
+            r1 = r68
             r2 = r27
-            r9 = r41
-            r6 = r43
-            r3 = r49
-            r5 = r50
-            r7 = r51
-            r8 = r54
-            r41 = r64
-            goto L_0x1227
-        L_0x15b0:
-            int r14 = r47 + 1
+            r27 = r30
+            r9 = r40
+            r6 = r42
+            r3 = r48
+            r5 = r49
+            r7 = r50
+            r8 = r53
+            r40 = r63
+        L_0x15b5:
+            int r14 = r46 + 1
             r4 = r0
             r11 = r28
-            r68 = r31
+            r67 = r31
             r30 = r33
             r0 = r36
+            r13 = r47
             goto L_0x00ae
-        L_0x15bd:
-            r68 = r0
-            r69 = r1
-            r49 = r3
+        L_0x15c4:
+            r67 = r0
+            r68 = r1
+            r48 = r3
             r0 = r4
-            r50 = r5
-            r43 = r6
-            r51 = r7
-            r54 = r8
+            r49 = r5
+            r42 = r6
+            r50 = r7
+            r53 = r8
             r14 = r10
-            r48 = r13
-            r13 = r27
-            r64 = r41
-            r37 = 0
+            r47 = r13
+            r13 = r23
+            r30 = r27
+            r63 = r40
+            r23 = 0
             r27 = r2
-            r41 = r9
-            r9 = r23
-            if (r14 == 0) goto L_0x15f9
+            r40 = r9
+            if (r14 == 0) goto L_0x1600
             int r1 = r14.size()
             r6 = 0
-        L_0x15e2:
-            if (r6 >= r1) goto L_0x15f9
+        L_0x15e9:
+            if (r6 >= r1) goto L_0x1600
             long r2 = r14.keyAt(r6)
             java.lang.Object r4 = r14.valueAt(r6)
             java.util.ArrayList r4 = (java.util.ArrayList) r4
             boolean r2 = r15.updatePrintingUsersWithNewMessages(r2, r4)
-            if (r2 == 0) goto L_0x15f6
+            if (r2 == 0) goto L_0x15fd
             r26 = 1
-        L_0x15f6:
+        L_0x15fd:
             int r6 = r6 + 1
-            goto L_0x15e2
-        L_0x15f9:
-            r12 = r26
-            if (r12 == 0) goto L_0x1600
-            r66.updatePrintingStrings()
+            goto L_0x15e9
         L_0x1600:
-            r11 = r51
-            if (r11 == 0) goto L_0x160b
-            org.telegram.messenger.ContactsController r1 = r66.getContactsController()
+            r12 = r26
+            if (r12 == 0) goto L_0x1607
+            r65.updatePrintingStrings()
+        L_0x1607:
+            r11 = r50
+            if (r11 == 0) goto L_0x1612
+            org.telegram.messenger.ContactsController r1 = r65.getContactsController()
             r1.processContactsUpdates(r11, r0)
-        L_0x160b:
-            if (r13 == 0) goto L_0x161e
-            org.telegram.messenger.MessagesStorage r0 = r66.getMessagesStorage()
+        L_0x1612:
+            if (r30 == 0) goto L_0x1626
+            org.telegram.messenger.MessagesStorage r0 = r65.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r0 = r0.getStorageQueue()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda95 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda95
-            r2 = r13
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda94 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda94
+            r2 = r30
             r1.<init>(r15, r2)
             r0.postRunnable(r1)
-        L_0x161e:
-            if (r29 == 0) goto L_0x1637
-            org.telegram.messenger.MessagesStorage r28 = r66.getMessagesStorage()
+        L_0x1626:
+            if (r29 == 0) goto L_0x163f
+            org.telegram.messenger.MessagesStorage r28 = r65.getMessagesStorage()
             r30 = 1
             r31 = 1
             r32 = 0
-            org.telegram.messenger.DownloadController r0 = r66.getDownloadController()
+            org.telegram.messenger.DownloadController r0 = r65.getDownloadController()
             int r33 = r0.getAutodownloadMask()
             r34 = 1
             r28.putMessages((java.util.ArrayList<org.telegram.tgnet.TLRPC$Message>) r29, (boolean) r30, (boolean) r31, (boolean) r32, (int) r33, (boolean) r34)
-        L_0x1637:
-            if (r35 == 0) goto L_0x1664
-            org.telegram.messenger.StatsController r0 = r66.getStatsController()
+        L_0x163f:
+            if (r35 == 0) goto L_0x166c
+            org.telegram.messenger.StatsController r0 = r65.getStatsController()
             int r1 = org.telegram.messenger.ApplicationLoader.getCurrentNetworkType()
             int r2 = r35.size()
             r3 = 1
             r0.incrementReceivedItemsCount(r1, r3, r2)
-            org.telegram.messenger.MessagesStorage r30 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r30 = r65.getMessagesStorage()
             r32 = 1
             r33 = 1
             r34 = 0
-            org.telegram.messenger.DownloadController r0 = r66.getDownloadController()
+            org.telegram.messenger.DownloadController r0 = r65.getDownloadController()
             int r0 = r0.getAutodownloadMask()
             r36 = 0
             r31 = r35
             r35 = r0
             r30.putMessages((java.util.ArrayList<org.telegram.tgnet.TLRPC$Message>) r31, (boolean) r32, (boolean) r33, (boolean) r34, (int) r35, (boolean) r36)
-        L_0x1664:
-            if (r54 == 0) goto L_0x16be
-            int r0 = r54.size()
+        L_0x166c:
+            if (r53 == 0) goto L_0x16c6
+            int r0 = r53.size()
             r6 = 0
-        L_0x166b:
-            if (r6 >= r0) goto L_0x16ab
+        L_0x1673:
+            if (r6 >= r0) goto L_0x16b3
             org.telegram.tgnet.TLRPC$TL_messages_messages r1 = new org.telegram.tgnet.TLRPC$TL_messages_messages
             r1.<init>()
-            r8 = r54
+            r8 = r53
             java.lang.Object r2 = r8.valueAt(r6)
             java.util.ArrayList r2 = (java.util.ArrayList) r2
             int r3 = r2.size()
             r4 = 0
-        L_0x167f:
-            if (r4 >= r3) goto L_0x1691
+        L_0x1687:
+            if (r4 >= r3) goto L_0x1699
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r5 = r1.messages
             java.lang.Object r7 = r2.get(r4)
             org.telegram.messenger.MessageObject r7 = (org.telegram.messenger.MessageObject) r7
             org.telegram.tgnet.TLRPC$Message r7 = r7.messageOwner
             r5.add(r7)
             int r4 = r4 + 1
-            goto L_0x167f
-        L_0x1691:
-            org.telegram.messenger.MessagesStorage r28 = r66.getMessagesStorage()
+            goto L_0x1687
+        L_0x1699:
+            org.telegram.messenger.MessagesStorage r28 = r65.getMessagesStorage()
             long r30 = r8.keyAt(r6)
             r32 = -2
             r33 = 0
@@ -21943,42 +21967,42 @@ public class MessagesController extends BaseController implements NotificationCe
             r29 = r1
             r28.putMessages((org.telegram.tgnet.TLRPC$messages_Messages) r29, (long) r30, (int) r32, (int) r33, (boolean) r34, (boolean) r35)
             int r6 = r6 + 1
-            r54 = r8
-            goto L_0x166b
-        L_0x16ab:
-            r8 = r54
-            org.telegram.messenger.MessagesStorage r0 = r66.getMessagesStorage()
+            r53 = r8
+            goto L_0x1673
+        L_0x16b3:
+            r8 = r53
+            org.telegram.messenger.MessagesStorage r0 = r65.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r0 = r0.getStorageQueue()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda77 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda77
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda79 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda79
             r1.<init>(r15, r8)
             r0.postRunnable(r1)
-            goto L_0x16c0
-        L_0x16be:
-            r8 = r54
-        L_0x16c0:
-            if (r43 != 0) goto L_0x16cd
-            if (r50 != 0) goto L_0x16cd
-            if (r9 == 0) goto L_0x16c7
-            goto L_0x16cd
-        L_0x16c7:
-            r13 = r43
-            r10 = r50
+            goto L_0x16c8
+        L_0x16c6:
+            r8 = r53
+        L_0x16c8:
+            if (r42 != 0) goto L_0x16d5
+            if (r49 != 0) goto L_0x16d5
+            if (r13 == 0) goto L_0x16cf
+            goto L_0x16d5
+        L_0x16cf:
+            r10 = r42
+            r9 = r49
             r7 = 1
-            goto L_0x16d9
-        L_0x16cd:
-            org.telegram.messenger.MessagesStorage r0 = r66.getMessagesStorage()
-            r13 = r43
-            r10 = r50
+            goto L_0x16e1
+        L_0x16d5:
+            org.telegram.messenger.MessagesStorage r0 = r65.getMessagesStorage()
+            r10 = r42
+            r9 = r49
             r7 = 1
-            r0.putChannelViews(r13, r10, r9, r7)
-        L_0x16d9:
-            if (r41 == 0) goto L_0x16fe
-            int r0 = r41.size()
+            r0.putChannelViews(r10, r9, r13, r7)
+        L_0x16e1:
+            if (r40 == 0) goto L_0x1706
+            int r0 = r40.size()
             r6 = 0
-        L_0x16e0:
-            if (r6 >= r0) goto L_0x16fe
-            org.telegram.messenger.MessagesStorage r28 = r66.getMessagesStorage()
-            r3 = r41
+        L_0x16e8:
+            if (r6 >= r0) goto L_0x1706
+            org.telegram.messenger.MessagesStorage r28 = r65.getMessagesStorage()
+            r3 = r40
             java.lang.Object r1 = r3.get(r6)
             org.telegram.tgnet.TLRPC$TL_updateFolderPeers r1 = (org.telegram.tgnet.TLRPC$TL_updateFolderPeers) r1
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_folderPeer> r1 = r1.folder_peers
@@ -21988,169 +22012,170 @@ public class MessagesController extends BaseController implements NotificationCe
             r29 = r1
             r28.setDialogsFolderId(r29, r30, r31, r33)
             int r6 = r6 + 1
-            goto L_0x16e0
-        L_0x16fe:
-            r3 = r41
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda38 r23 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda38
-            r6 = r68
-            r0 = r23
-            r5 = r69
-            r1 = r66
+            goto L_0x16e8
+        L_0x1706:
+            r3 = r40
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda38 r25 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda38
+            r6 = r67
+            r0 = r25
+            r5 = r68
+            r1 = r65
             r4 = r27
             r2 = r17
             r17 = r3
             r16 = r8
-            r8 = r49
+            r8 = r48
             r3 = r18
             r4 = r19
-            r5 = r71
+            r5 = r70
             r6 = r20
             r18 = 1
-            r7 = r38
+            r7 = r37
             r8 = r14
-            r19 = r9
+            r14 = r9
             r9 = r17
-            r14 = r10
+            r17 = r10
             r10 = r21
-            r17 = r11
+            r19 = r11
             r11 = r16
-            r16 = r13
-            r65 = r38
+            r23 = r13
+            r16 = r17
+            r64 = r37
             r20 = 0
-            r13 = r17
+            r13 = r19
             r17 = r14
             r14 = r22
             r15 = r16
             r16 = r17
-            r17 = r19
+            r17 = r23
             r18 = r24
             r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r23)
-            org.telegram.messenger.MessagesStorage r0 = r66.getMessagesStorage()
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r25)
+            org.telegram.messenger.MessagesStorage r0 = r65.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r9 = r0.getStorageQueue()
             org.telegram.messenger.MessagesController$$ExternalSyntheticLambda114 r10 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda114
             r0 = r10
-            r2 = r68
-            r3 = r69
-            r4 = r39
-            r5 = r48
+            r2 = r67
+            r3 = r68
+            r4 = r38
+            r5 = r47
             r6 = r27
-            r7 = r49
-            r8 = r40
+            r7 = r48
+            r8 = r39
             r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8)
             r9.postRunnable(r10)
-            r0 = r65
-            if (r0 == 0) goto L_0x1770
-            org.telegram.messenger.MessagesStorage r1 = r66.getMessagesStorage()
+            r0 = r64
+            if (r0 == 0) goto L_0x177a
+            org.telegram.messenger.MessagesStorage r1 = r65.getMessagesStorage()
             r1.putWebPages(r0)
-        L_0x1770:
-            r0 = r68
-            r1 = r69
-            r2 = r39
-            if (r0 != 0) goto L_0x1783
-            if (r1 != 0) goto L_0x1783
-            r13 = r48
-            if (r2 != 0) goto L_0x1785
-            if (r13 == 0) goto L_0x1781
-            goto L_0x1785
-        L_0x1781:
-            r4 = 1
-            goto L_0x179d
-        L_0x1783:
-            r13 = r48
-        L_0x1785:
-            if (r0 != 0) goto L_0x178e
-            if (r1 != 0) goto L_0x178e
-            if (r13 == 0) goto L_0x178c
-            goto L_0x178e
-        L_0x178c:
-            r4 = 1
-            goto L_0x1796
-        L_0x178e:
-            org.telegram.messenger.MessagesStorage r3 = r66.getMessagesStorage()
-            r4 = 1
-            r3.updateDialogsWithReadMessages(r0, r1, r13, r4)
+        L_0x177a:
+            r0 = r67
+            r1 = r68
+            r2 = r38
+            if (r0 != 0) goto L_0x178d
+            if (r1 != 0) goto L_0x178d
+            r3 = r47
+            if (r2 != 0) goto L_0x178f
+            if (r3 == 0) goto L_0x178b
+            goto L_0x178f
+        L_0x178b:
+            r5 = 1
+            goto L_0x17a7
+        L_0x178d:
+            r3 = r47
+        L_0x178f:
+            if (r0 != 0) goto L_0x1798
+            if (r1 != 0) goto L_0x1798
+            if (r3 == 0) goto L_0x1796
+            goto L_0x1798
         L_0x1796:
-            org.telegram.messenger.MessagesStorage r3 = r66.getMessagesStorage()
-            r3.markMessagesAsRead(r0, r1, r2, r4)
-        L_0x179d:
-            if (r13 == 0) goto L_0x17c2
-            org.telegram.tgnet.ConnectionsManager r0 = r66.getConnectionsManager()
+            r5 = 1
+            goto L_0x17a0
+        L_0x1798:
+            org.telegram.messenger.MessagesStorage r4 = r65.getMessagesStorage()
+            r5 = 1
+            r4.updateDialogsWithReadMessages(r0, r1, r3, r5)
+        L_0x17a0:
+            org.telegram.messenger.MessagesStorage r4 = r65.getMessagesStorage()
+            r4.markMessagesAsRead(r0, r1, r2, r5)
+        L_0x17a7:
+            if (r3 == 0) goto L_0x17cc
+            org.telegram.tgnet.ConnectionsManager r0 = r65.getConnectionsManager()
             int r0 = r0.getCurrentTime()
-            int r1 = r13.size()
-            r2 = 0
-        L_0x17ac:
-            if (r2 >= r1) goto L_0x17c2
-            long r5 = r13.keyAt(r2)
-            java.lang.Object r3 = r13.valueAt(r2)
-            java.util.ArrayList r3 = (java.util.ArrayList) r3
-            org.telegram.messenger.MessagesStorage r7 = r66.getMessagesStorage()
-            r7.markMessagesContentAsRead(r5, r3, r0)
-            int r2 = r2 + 1
-            goto L_0x17ac
-        L_0x17c2:
+            int r1 = r3.size()
+            r13 = 0
+        L_0x17b6:
+            if (r13 >= r1) goto L_0x17cc
+            long r6 = r3.keyAt(r13)
+            java.lang.Object r2 = r3.valueAt(r13)
+            java.util.ArrayList r2 = (java.util.ArrayList) r2
+            org.telegram.messenger.MessagesStorage r4 = r65.getMessagesStorage()
+            r4.markMessagesContentAsRead(r6, r2, r0)
+            int r13 = r13 + 1
+            goto L_0x17b6
+        L_0x17cc:
             r2 = r27
-            if (r2 == 0) goto L_0x17ec
+            if (r2 == 0) goto L_0x17f6
             int r0 = r2.size()
             r13 = 0
-        L_0x17cb:
-            if (r13 >= r0) goto L_0x17ec
-            long r5 = r2.keyAt(r13)
+        L_0x17d5:
+            if (r13 >= r0) goto L_0x17f6
+            long r3 = r2.keyAt(r13)
             java.lang.Object r1 = r2.valueAt(r13)
             java.util.ArrayList r1 = (java.util.ArrayList) r1
-            org.telegram.messenger.MessagesStorage r3 = r66.getMessagesStorage()
-            org.telegram.messenger.DispatchQueue r3 = r3.getStorageQueue()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda66 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda66
-            r8 = r66
-            r7.<init>(r8, r5, r1)
-            r3.postRunnable(r7)
+            org.telegram.messenger.MessagesStorage r6 = r65.getMessagesStorage()
+            org.telegram.messenger.DispatchQueue r6 = r6.getStorageQueue()
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda67 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda67
+            r8 = r65
+            r7.<init>(r8, r3, r1)
+            r6.postRunnable(r7)
             int r13 = r13 + 1
-            goto L_0x17cb
-        L_0x17ec:
-            r8 = r66
-            r3 = r49
-            if (r3 == 0) goto L_0x1815
+            goto L_0x17d5
+        L_0x17f6:
+            r8 = r65
+            r3 = r48
+            if (r3 == 0) goto L_0x181f
             int r0 = r3.size()
             r13 = 0
-        L_0x17f7:
-            if (r13 >= r0) goto L_0x1815
+        L_0x1801:
+            if (r13 >= r0) goto L_0x181f
             long r22 = r3.keyAt(r13)
             java.lang.Object r1 = r3.valueAt(r13)
             r24 = r1
             java.util.ArrayList r24 = (java.util.ArrayList) r24
-            org.telegram.messenger.MessagesStorage r21 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r21 = r65.getMessagesStorage()
             r25 = 1
             r26 = 0
             r27 = 1
             r21.markMessagesAsDeleted(r22, r24, r25, r26, r27)
             int r13 = r13 + 1
-            goto L_0x17f7
-        L_0x1815:
-            r0 = r40
-            if (r0 == 0) goto L_0x183b
+            goto L_0x1801
+        L_0x181f:
+            r0 = r39
+            if (r0 == 0) goto L_0x1845
             int r1 = r0.size()
             r13 = 0
-        L_0x181e:
-            if (r13 >= r1) goto L_0x183b
+        L_0x1828:
+            if (r13 >= r1) goto L_0x1845
             long r2 = r0.keyAt(r13)
-            int r5 = r0.valueAt(r13)
-            org.telegram.messenger.MessagesStorage r6 = r66.getMessagesStorage()
+            int r4 = r0.valueAt(r13)
+            org.telegram.messenger.MessagesStorage r6 = r65.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r6 = r6.getStorageQueue()
             org.telegram.messenger.MessagesController$$ExternalSyntheticLambda57 r7 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda57
-            r7.<init>(r8, r2, r5)
+            r7.<init>(r8, r2, r4)
             r6.postRunnable(r7)
             int r13 = r13 + 1
-            goto L_0x181e
-        L_0x183b:
-            r0 = r64
-            if (r0 == 0) goto L_0x1864
+            goto L_0x1828
+        L_0x1845:
+            r0 = r63
+            if (r0 == 0) goto L_0x186e
             int r1 = r0.size()
             r13 = 0
-        L_0x1844:
-            if (r13 >= r1) goto L_0x1864
+        L_0x184e:
+            if (r13 >= r1) goto L_0x186e
             java.lang.Object r2 = r0.get(r13)
             org.telegram.tgnet.TLRPC$TL_updateEncryptedMessagesRead r2 = (org.telegram.tgnet.TLRPC$TL_updateEncryptedMessagesRead) r2
-            org.telegram.messenger.MessagesStorage r14 = r66.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r14 = r65.getMessagesStorage()
             int r15 = r2.chat_id
             int r3 = r2.max_date
             int r2 = r2.date
@@ -22160,9 +22185,9 @@ public class MessagesController extends BaseController implements NotificationCe
             r17 = r2
             r14.createTaskForSecretChat(r15, r16, r17, r18, r19)
             int r13 = r13 + 1
-            goto L_0x1844
-        L_0x1864:
-            return r4
+            goto L_0x184e
+        L_0x186e:
+            return r5
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.processUpdateArray(java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, boolean, int):boolean");
     }
@@ -22180,12 +22205,22 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$290(TLRPC$TL_updatePeerBlocked tLRPC$TL_updatePeerBlocked) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda158(this, tLRPC$TL_updatePeerBlocked));
+    public /* synthetic */ void lambda$processUpdateArray$289(TLRPC$TL_updateUserTyping tLRPC$TL_updateUserTyping) {
+        getNotificationCenter().postNotificationName(NotificationCenter.onEmojiInteractionsReceived, Long.valueOf(tLRPC$TL_updateUserTyping.user_id), tLRPC$TL_updateUserTyping.action);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$289(TLRPC$TL_updatePeerBlocked tLRPC$TL_updatePeerBlocked) {
+    public /* synthetic */ void lambda$processUpdateArray$290(TLRPC$TL_updateChatUserTyping tLRPC$TL_updateChatUserTyping) {
+        getNotificationCenter().postNotificationName(NotificationCenter.onEmojiInteractionsReceived, Long.valueOf(-tLRPC$TL_updateChatUserTyping.chat_id), tLRPC$TL_updateChatUserTyping.action);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$processUpdateArray$292(TLRPC$TL_updatePeerBlocked tLRPC$TL_updatePeerBlocked) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda159(this, tLRPC$TL_updatePeerBlocked));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$processUpdateArray$291(TLRPC$TL_updatePeerBlocked tLRPC$TL_updatePeerBlocked) {
         long peerId = MessageObject.getPeerId(tLRPC$TL_updatePeerBlocked.peer_id);
         if (!tLRPC$TL_updatePeerBlocked.blocked) {
             this.blockePeers.delete(peerId);
@@ -22196,67 +22231,67 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$291(TLRPC$TL_updateServiceNotification tLRPC$TL_updateServiceNotification) {
+    public /* synthetic */ void lambda$processUpdateArray$293(TLRPC$TL_updateServiceNotification tLRPC$TL_updateServiceNotification) {
         getNotificationCenter().postNotificationName(NotificationCenter.needShowAlert, 2, tLRPC$TL_updateServiceNotification.message, tLRPC$TL_updateServiceNotification.type);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$292(TLRPC$TL_updateLangPack tLRPC$TL_updateLangPack) {
+    public /* synthetic */ void lambda$processUpdateArray$294(TLRPC$TL_updateLangPack tLRPC$TL_updateLangPack) {
         LocaleController.getInstance().saveRemoteLocaleStringsForCurrentLocale(tLRPC$TL_updateLangPack.difference, this.currentAccount);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$293(ArrayList arrayList) {
+    public /* synthetic */ void lambda$processUpdateArray$295(ArrayList arrayList) {
         getNotificationsController().processNewMessages(arrayList, true, false, (CountDownLatch) null);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$294(ArrayList arrayList) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda96(this, arrayList));
+    public /* synthetic */ void lambda$processUpdateArray$296(ArrayList arrayList) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda93(this, arrayList));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$295(LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$processUpdateArray$297(LongSparseArray longSparseArray) {
         getNotificationsController().processEditedMessages(longSparseArray);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$296(LongSparseArray longSparseArray) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda79(this, longSparseArray));
+    public /* synthetic */ void lambda$processUpdateArray$298(LongSparseArray longSparseArray) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda76(this, longSparseArray));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$297(TLRPC$User tLRPC$User) {
+    public /* synthetic */ void lambda$processUpdateArray$299(TLRPC$User tLRPC$User) {
         getContactsController().addContactToPhoneBook(tLRPC$User, true);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$298() {
+    public /* synthetic */ void lambda$processUpdateArray$300() {
         getNotificationsController().deleteNotificationChannelGlobal(0);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$299() {
+    public /* synthetic */ void lambda$processUpdateArray$301() {
         getNotificationsController().deleteNotificationChannelGlobal(1);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$300() {
+    public /* synthetic */ void lambda$processUpdateArray$302() {
         getNotificationsController().deleteNotificationChannelGlobal(2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$301(TLRPC$TL_updateChannel tLRPC$TL_updateChannel) {
+    public /* synthetic */ void lambda$processUpdateArray$303(TLRPC$TL_updateChannel tLRPC$TL_updateChannel) {
         getChannelDifference(tLRPC$TL_updateChannel.channel_id, 1, 0, (TLRPC$InputChannel) null);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$302(TLRPC$Chat tLRPC$Chat) {
+    public /* synthetic */ void lambda$processUpdateArray$304(TLRPC$Chat tLRPC$Chat) {
         getNotificationCenter().postNotificationName(NotificationCenter.channelRightsUpdated, tLRPC$Chat);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$303(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$processUpdateArray$305(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             processUpdates((TLRPC$Updates) tLObject, false);
         }
@@ -22273,7 +22308,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:613:0x0e72  */
     /* JADX WARNING: Removed duplicated region for block: B:660:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$processUpdateArray$304(int r39, java.util.ArrayList r40, androidx.collection.LongSparseArray r41, int r42, org.telegram.messenger.support.LongSparseIntArray r43, androidx.collection.LongSparseArray r44, androidx.collection.LongSparseArray r45, java.util.ArrayList r46, androidx.collection.LongSparseArray r47, androidx.collection.LongSparseArray r48, boolean r49, java.util.ArrayList r50, java.util.ArrayList r51, androidx.collection.LongSparseArray r52, androidx.collection.LongSparseArray r53, androidx.collection.LongSparseArray r54, java.util.ArrayList r55) {
+    public /* synthetic */ void lambda$processUpdateArray$306(int r39, java.util.ArrayList r40, androidx.collection.LongSparseArray r41, int r42, org.telegram.messenger.support.LongSparseIntArray r43, androidx.collection.LongSparseArray r44, androidx.collection.LongSparseArray r45, java.util.ArrayList r46, androidx.collection.LongSparseArray r47, androidx.collection.LongSparseArray r48, boolean r49, java.util.ArrayList r50, java.util.ArrayList r51, androidx.collection.LongSparseArray r52, androidx.collection.LongSparseArray r53, androidx.collection.LongSparseArray r54, java.util.ArrayList r55) {
         /*
             r38 = this;
             r8 = r38
@@ -22630,7 +22665,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.String r2 = r0.phone
             r1.phone = r2
             org.telegram.messenger.DispatchQueue r2 = org.telegram.messenger.Utilities.phoneBookQueue
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda162 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda162
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda164 r3 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda164
             r3.<init>(r8, r1)
             r2.postRunnable(r3)
             boolean r1 = org.telegram.messenger.UserObject.isUserSelf(r1)
@@ -22864,7 +22899,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.String r0 = "overwrite_private"
             r2 = 1
             r1.putBoolean(r0, r2)
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda11 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda11
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda8 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda8
             r0.<init>(r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             goto L_0x04c8
@@ -22895,7 +22930,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.String r0 = "overwrite_channel"
             r2 = 1
             r1.putBoolean(r0, r2)
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda21 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda21
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda18 r0 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda18
             r0.<init>(r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
         L_0x04c8:
@@ -23399,7 +23434,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r0.<init>()
             r1.reason = r0
             org.telegram.tgnet.ConnectionsManager r0 = r38.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda209 r2 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda209
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda225 r2 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda225
             r2.<init>(r8)
             r0.sendRequest(r1, r2)
             goto L_0x04d3
@@ -24190,11 +24225,11 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x0e79:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$304(int, java.util.ArrayList, androidx.collection.LongSparseArray, int, org.telegram.messenger.support.LongSparseIntArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, boolean, java.util.ArrayList, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$306(int, java.util.ArrayList, androidx.collection.LongSparseArray, int, org.telegram.messenger.support.LongSparseIntArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, boolean, java.util.ArrayList, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$306(LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, SparseIntArray sparseIntArray, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3, LongSparseIntArray longSparseIntArray3) {
+    public /* synthetic */ void lambda$processUpdateArray$308(LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, SparseIntArray sparseIntArray, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3, LongSparseIntArray longSparseIntArray3) {
         AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda115(this, longSparseIntArray, longSparseIntArray2, sparseIntArray, longSparseArray, longSparseArray2, longSparseArray3, longSparseIntArray3));
     }
 
@@ -24203,7 +24238,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (org.telegram.messenger.ChatObject.isChannel(getChat(java.lang.Long.valueOf(r5))) != false) goto L_0x025f;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$processUpdateArray$305(org.telegram.messenger.support.LongSparseIntArray r20, org.telegram.messenger.support.LongSparseIntArray r21, android.util.SparseIntArray r22, androidx.collection.LongSparseArray r23, androidx.collection.LongSparseArray r24, androidx.collection.LongSparseArray r25, org.telegram.messenger.support.LongSparseIntArray r26) {
+    public /* synthetic */ void lambda$processUpdateArray$307(org.telegram.messenger.support.LongSparseIntArray r20, org.telegram.messenger.support.LongSparseIntArray r21, android.util.SparseIntArray r22, androidx.collection.LongSparseArray r23, androidx.collection.LongSparseArray r24, androidx.collection.LongSparseArray r25, org.telegram.messenger.support.LongSparseIntArray r26) {
         /*
             r19 = this;
             r0 = r19
@@ -24543,17 +24578,17 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x02ca:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$305(org.telegram.messenger.support.LongSparseIntArray, org.telegram.messenger.support.LongSparseIntArray, android.util.SparseIntArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, org.telegram.messenger.support.LongSparseIntArray):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$307(org.telegram.messenger.support.LongSparseIntArray, org.telegram.messenger.support.LongSparseIntArray, android.util.SparseIntArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, org.telegram.messenger.support.LongSparseIntArray):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$307(long j, ArrayList arrayList) {
+    public /* synthetic */ void lambda$processUpdateArray$309(long j, ArrayList arrayList) {
         long j2 = j;
         getMessagesStorage().updateDialogsWithDeletedMessages(j2, -j, arrayList, getMessagesStorage().markMessagesAsDeleted(j, arrayList, false, true, false), false);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processUpdateArray$308(long j, int i) {
+    public /* synthetic */ void lambda$processUpdateArray$310(long j, int i) {
         long j2 = j;
         getMessagesStorage().updateDialogsWithDeletedMessages(j2, -j, new ArrayList(), getMessagesStorage().markMessagesAsDeleted(j, i, false, true), false);
     }
@@ -24602,13 +24637,13 @@ public class MessagesController extends BaseController implements NotificationCe
             this.sponsoredMessages.put(j, sponsoredMessagesInfo2);
             TLRPC$TL_channels_getSponsoredMessages tLRPC$TL_channels_getSponsoredMessages = new TLRPC$TL_channels_getSponsoredMessages();
             tLRPC$TL_channels_getSponsoredMessages.channel = getInputChannel(chat);
-            getConnectionsManager().sendRequest(tLRPC$TL_channels_getSponsoredMessages, new MessagesController$$ExternalSyntheticLambda266(this, j, sponsoredMessagesInfo2));
+            getConnectionsManager().sendRequest(tLRPC$TL_channels_getSponsoredMessages, new MessagesController$$ExternalSyntheticLambda268(this, j, sponsoredMessagesInfo2));
         }
         return null;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getSponsoredMessages$311(long j, SponsoredMessagesInfo sponsoredMessagesInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$getSponsoredMessages$313(long j, SponsoredMessagesInfo sponsoredMessagesInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ArrayList arrayList = null;
         if (tLObject != null) {
             TLRPC$TL_messages_sponsoredMessages tLRPC$TL_messages_sponsoredMessages = (TLRPC$TL_messages_sponsoredMessages) tLObject;
@@ -24654,13 +24689,13 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getSponsoredMessages$309(TLRPC$TL_messages_sponsoredMessages tLRPC$TL_messages_sponsoredMessages) {
+    public /* synthetic */ void lambda$getSponsoredMessages$311(TLRPC$TL_messages_sponsoredMessages tLRPC$TL_messages_sponsoredMessages) {
         putUsers(tLRPC$TL_messages_sponsoredMessages.users, false);
         putChats(tLRPC$TL_messages_sponsoredMessages.chats, false);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getSponsoredMessages$310(ArrayList arrayList, long j, SponsoredMessagesInfo sponsoredMessagesInfo) {
+    public /* synthetic */ void lambda$getSponsoredMessages$312(ArrayList arrayList, long j, SponsoredMessagesInfo sponsoredMessagesInfo) {
         if (arrayList == null) {
             this.sponsoredMessages.remove(j);
             return;
@@ -25142,7 +25177,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r4.put(r0, r10)
         L_0x0309:
             org.telegram.messenger.MessagesStorage r10 = r24.getMessagesStorage()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda203 r11 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda203
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda205 r11 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda205
             r0 = r11
             r1 = r24
             r4 = r25
@@ -25251,7 +25286,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateInterfaceWithMessages$312(TLRPC$Dialog tLRPC$Dialog, int i, long j, int i2) {
+    public /* synthetic */ void lambda$updateInterfaceWithMessages$314(TLRPC$Dialog tLRPC$Dialog, int i, long j, int i2) {
         if (i2 != -1) {
             if (i2 != 0) {
                 tLRPC$Dialog.folder_id = i2;
@@ -25784,7 +25819,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r1.add(r15)
         L_0x00c1:
             org.telegram.tgnet.ConnectionsManager r15 = r12.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda292 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda292
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda294 r1 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda294
             r1.<init>(r12, r0, r14, r13)
             int r13 = r15.sendRequest(r2, r1)
             org.telegram.messenger.MessagesController$$ExternalSyntheticLambda3 r15 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda3
@@ -25800,14 +25835,14 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkCanOpenChat$314(AlertDialog alertDialog, BaseFragment baseFragment, Bundle bundle, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$checkCanOpenChat$316(AlertDialog alertDialog, BaseFragment baseFragment, Bundle bundle, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda180(this, alertDialog, tLObject, baseFragment, bundle));
+            AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda182(this, alertDialog, tLObject, baseFragment, bundle));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkCanOpenChat$313(AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, Bundle bundle) {
+    public /* synthetic */ void lambda$checkCanOpenChat$315(AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, Bundle bundle) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -25821,7 +25856,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkCanOpenChat$315(int i, BaseFragment baseFragment, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$checkCanOpenChat$317(int i, BaseFragment baseFragment, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
         baseFragment.setVisibleDialog((Dialog) null);
     }
@@ -25918,10 +25953,10 @@ public class MessagesController extends BaseController implements NotificationCe
             r1.<init>()
             r1.username = r6
             org.telegram.tgnet.ConnectionsManager r6 = r5.getConnectionsManager()
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda303 r2 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda303
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda305 r2 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda305
             r2.<init>(r5, r0, r7, r8)
             int r6 = r6.sendRequest(r1, r2)
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda189 r8 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda189
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda191 r8 = new org.telegram.messenger.MessagesController$$ExternalSyntheticLambda191
             r8.<init>(r5, r0, r6, r7)
             r6 = 500(0x1f4, double:2.47E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r6)
@@ -25932,12 +25967,12 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$openByUserName$317(AlertDialog[] alertDialogArr, BaseFragment baseFragment, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda190(this, alertDialogArr, baseFragment, tLRPC$TL_error, tLObject, i));
+    public /* synthetic */ void lambda$openByUserName$319(AlertDialog[] alertDialogArr, BaseFragment baseFragment, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda192(this, alertDialogArr, baseFragment, tLRPC$TL_error, tLObject, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$openByUserName$316(AlertDialog[] alertDialogArr, BaseFragment baseFragment, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
+    public /* synthetic */ void lambda$openByUserName$318(AlertDialog[] alertDialogArr, BaseFragment baseFragment, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
         try {
             alertDialogArr[0].dismiss();
         } catch (Exception unused) {
@@ -25964,7 +25999,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$openByUserName$319(AlertDialog[] alertDialogArr, int i, BaseFragment baseFragment) {
+    public /* synthetic */ void lambda$openByUserName$321(AlertDialog[] alertDialogArr, int i, BaseFragment baseFragment) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnCancelListener(new MessagesController$$ExternalSyntheticLambda1(this, i));
             baseFragment.showDialog(alertDialogArr[0]);
@@ -25972,7 +26007,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$openByUserName$318(int i, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$openByUserName$320(int i, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
     }
 
@@ -26047,12 +26082,12 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$ensureMessagesLoaded$321(MessagesStorage messagesStorage, long j, long j2, int i, MessagesLoadedCallback messagesLoadedCallback) {
+    public /* synthetic */ void lambda$ensureMessagesLoaded$323(MessagesStorage messagesStorage, long j, long j2, int i, MessagesLoadedCallback messagesLoadedCallback) {
         AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda130(this, messagesStorage.getChat(j), j2, i, messagesLoadedCallback));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$ensureMessagesLoaded$320(TLRPC$Chat tLRPC$Chat, long j, int i, MessagesLoadedCallback messagesLoadedCallback) {
+    public /* synthetic */ void lambda$ensureMessagesLoaded$322(TLRPC$Chat tLRPC$Chat, long j, int i, MessagesLoadedCallback messagesLoadedCallback) {
         if (tLRPC$Chat != null) {
             getMessagesController().putChat(tLRPC$Chat, true);
             ensureMessagesLoaded(j, i, messagesLoadedCallback);

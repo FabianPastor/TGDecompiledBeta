@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda95
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdateArray$294(this.f$1);
+        this.f$0.lambda$reloadMentionsCountForChannels$171(this.f$1);
     }
 }

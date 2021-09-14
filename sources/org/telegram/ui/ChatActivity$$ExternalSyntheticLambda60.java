@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda60 imple
     }
 
     public final void onClick(View view) {
-        ChatActivity.lambda$showRequestUrlAlert$150(this.f$0, view);
+        ChatActivity.lambda$showRequestUrlAlert$149(this.f$0, view);
     }
 }

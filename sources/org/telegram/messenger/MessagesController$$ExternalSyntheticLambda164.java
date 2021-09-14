@@ -1,22 +1,17 @@
 package org.telegram.messenger;
 
 import org.telegram.tgnet.TLRPC$User;
-import org.telegram.tgnet.TLRPC$UserFull;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda164 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$UserFull f$1;
-    public final /* synthetic */ TLRPC$User f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ TLRPC$User f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda164(MessagesController messagesController, TLRPC$UserFull tLRPC$UserFull, TLRPC$User tLRPC$User, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda164(MessagesController messagesController, TLRPC$User tLRPC$User) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$UserFull;
-        this.f$2 = tLRPC$User;
-        this.f$3 = i;
+        this.f$1 = tLRPC$User;
     }
 
     public final void run() {
-        this.f$0.lambda$loadFullUser$42(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$processUpdateArray$299(this.f$1);
     }
 }

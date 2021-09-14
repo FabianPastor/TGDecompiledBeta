@@ -1432,6 +1432,7 @@
     <string name="EncryptionRejected">Secret chat cancelled</string>
     <string name="English">English</string>
     <string name="Enhance">Enhance</string>
+    <string name="EnjoyngAnimations">**oo** enjoying %1$s animations</string>
     <string name="EnterChannelName">Channel name</string>
     <string name="EnterCode">Enter code</string>
     <string name="EnterCurrentPasscode">Enter your current passcode</string>
@@ -2030,6 +2031,7 @@
     <string name="InvoiceCantForwardSecretChat">Sorry, invoices can’t be forwarded to secret chats.</string>
     <string name="InvoiceCantSendSecretChat">Sorry, invoices can’t be sent to secret chats.</string>
     <string name="IsChoosingSticker">%1$s is ch**oo**sing a sticker</string>
+    <string name="IsEnjoyngAnimations">%1$s is **oo** enjoying %2$s animations</string>
     <string name="IsRecordingAudio">%1$s is recording a voice message...</string>
     <string name="IsRecordingRound">%1$s is recording a video message...</string>
     <string name="IsRecordingVideo">%1$s is recording video...</string>
@@ -2313,6 +2315,7 @@
     <string name="MessageScheduledUntilOnline">Scheduled until online</string>
     <string name="MessageScheduledVote">Voting will become available after the message is published.</string>
     <string name="MessageScheduledVoteResults">Poll results will become available after the message is published.</string>
+    <string name="MessageSeenTooltipMessage">To protect privacy, views for message are stored only for **7 day**</string>
     <string name="MessageSeen_few">%1$d Seen</string>
     <string name="MessageSeen_many">%1$d Seen</string>
     <string name="MessageSeen_one">Seen</string>
@@ -4002,6 +4005,7 @@
     <string name="TextSelectionHit">Hold the **word**, then move the cursor to select more text to copy.</string>
     <string name="TextSizeHeader">Message text size</string>
     <string name="Theme">Theme</string>
+    <string name="ThemeAlsoAppliedForHint">Theme is also applied for **%s**.</string>
     <string name="ThemeArcticBlue">Arctic</string>
     <string name="ThemeClassic">Classic</string>
     <string name="ThemeCreateHelp">Anyone can install your theme using this link. When you change the theme, it will be updated for all users who installed it.\10\10The theme will be based on your currently selected theme and wallpaper.</string>

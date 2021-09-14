@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
@@ -23,6 +24,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_getMessageReadParticipants;
 import org.telegram.tgnet.TLRPC$TL_users_getUsers;
@@ -79,62 +81,80 @@ public class MessageSeenView extends FrameLayout {
         this.iconView.setImageDrawable(mutate);
         this.avatarsImageView.setAlpha(0.0f);
         this.titleView.setAlpha(0.0f);
-        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_getMessageReadParticipants, new MessageSeenView$$ExternalSyntheticLambda3(this, i));
+        long j = 0;
+        TLRPC$Peer tLRPC$Peer = messageObject.messageOwner.from_id;
+        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_getMessageReadParticipants, new MessageSeenView$$ExternalSyntheticLambda3(this, tLRPC$Peer != null ? tLRPC$Peer.user_id : j, i));
         setBackground(Theme.createRadSelectorDrawable(Theme.getColor("dialogButtonSelector"), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f)));
         setEnabled(false);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$3(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new MessageSeenView$$ExternalSyntheticLambda1(this, tLRPC$TL_error, tLObject, i));
+    public /* synthetic */ void lambda$new$3(long j, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new MessageSeenView$$ExternalSyntheticLambda1(this, tLRPC$TL_error, tLObject, j, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$2(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
+    public /* synthetic */ void lambda$new$2(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, long j, int i) {
         if (tLRPC$TL_error == null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
             ArrayList arrayList = new ArrayList();
+            HashMap hashMap = new HashMap();
+            ArrayList arrayList2 = new ArrayList();
             int size = tLRPC$Vector.objects.size();
-            for (int i2 = 0; i2 < size; i2++) {
-                Object obj = tLRPC$Vector.objects.get(i2);
+            int i2 = 0;
+            for (int i3 = 0; i3 < size; i3++) {
+                Object obj = tLRPC$Vector.objects.get(i3);
                 if (obj instanceof Long) {
                     Long l = (Long) obj;
-                    TLRPC$User user = MessagesController.getInstance(i).getUser(l);
-                    if (user == null) {
-                        arrayList.add(l);
-                    } else {
-                        this.peerIds.add(l);
-                        this.users.add(user);
+                    if (j != l.longValue()) {
+                        TLRPC$User user = MessagesController.getInstance(i).getUser(l);
+                        arrayList2.add(l);
+                        if (user == null) {
+                            arrayList.add(l);
+                        } else {
+                            hashMap.put(l, user);
+                        }
                     }
                 }
             }
             if (arrayList.isEmpty()) {
+                while (i2 < arrayList2.size()) {
+                    this.peerIds.add((Long) arrayList2.get(i2));
+                    this.users.add((TLRPC$User) hashMap.get(arrayList2.get(i2)));
+                    i2++;
+                }
                 updateView();
                 return;
             }
             TLRPC$TL_users_getUsers tLRPC$TL_users_getUsers = new TLRPC$TL_users_getUsers();
-            for (int i3 = 0; i3 < arrayList.size(); i3++) {
-                tLRPC$TL_users_getUsers.id.add(MessagesController.getInstance(i).getInputUser(((Long) arrayList.get(i3)).longValue()));
+            while (i2 < arrayList.size()) {
+                tLRPC$TL_users_getUsers.id.add(MessagesController.getInstance(i).getInputUser(((Long) arrayList.get(i2)).longValue()));
+                i2++;
             }
-            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_users_getUsers, new MessageSeenView$$ExternalSyntheticLambda2(this, i));
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_users_getUsers, new MessageSeenView$$ExternalSyntheticLambda2(this, i, hashMap, arrayList2));
             return;
         }
         updateView();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new MessageSeenView$$ExternalSyntheticLambda0(this, tLObject, i));
+    public /* synthetic */ void lambda$new$1(int i, HashMap hashMap, ArrayList arrayList, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new MessageSeenView$$ExternalSyntheticLambda0(this, tLObject, i, hashMap, arrayList));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(TLObject tLObject, int i) {
-        TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
-        for (int i2 = 0; i2 < tLRPC$Vector.objects.size(); i2++) {
-            TLRPC$User tLRPC$User = (TLRPC$User) tLRPC$Vector.objects.get(i2);
-            MessagesController.getInstance(i).putUser(tLRPC$User, false);
-            this.peerIds.add(Long.valueOf(tLRPC$User.id));
-            this.users.add(tLRPC$User);
+    public /* synthetic */ void lambda$new$0(TLObject tLObject, int i, HashMap hashMap, ArrayList arrayList) {
+        if (tLObject != null) {
+            TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
+            for (int i2 = 0; i2 < tLRPC$Vector.objects.size(); i2++) {
+                TLRPC$User tLRPC$User = (TLRPC$User) tLRPC$Vector.objects.get(i2);
+                MessagesController.getInstance(i).putUser(tLRPC$User, false);
+                hashMap.put(Long.valueOf(tLRPC$User.id), tLRPC$User);
+            }
+            for (int i3 = 0; i3 < arrayList.size(); i3++) {
+                this.peerIds.add((Long) arrayList.get(i3));
+                this.users.add((TLRPC$User) hashMap.get(arrayList.get(i3)));
+            }
         }
         updateView();
     }

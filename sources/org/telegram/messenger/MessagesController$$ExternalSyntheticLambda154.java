@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda15
     }
 
     public final void run() {
-        this.f$0.lambda$getSponsoredMessages$309(this.f$1);
+        this.f$0.lambda$getSponsoredMessages$311(this.f$1);
     }
 }

@@ -168,7 +168,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             org.telegram.ui.Components.UsersAlertBase$SearchField r2 = r7.searchView
             org.telegram.ui.Components.EditTextBoldCursor r2 = r2.searchEditText
             java.lang.String r3 = "SearchForChats"
-            r6 = 2131627498(0x7f0e0dea, float:1.8882262E38)
+            r6 = 2131627501(0x7f0e0ded, float:1.8882268E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r6)
             r2.setHint(r3)
             android.view.ViewConfiguration r2 = android.view.ViewConfiguration.get(r17)
@@ -326,7 +326,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r0.setScaleX(r2)
             r0.setScaleY(r2)
             r0.setAlpha(r2)
-            r2 = 2131626380(0x7f0e098c, float:1.8879995E38)
+            r2 = 2131626383(0x7f0e098f, float:1.888E38)
             java.lang.String r4 = "Next"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setContentDescription(r2)
@@ -1326,7 +1326,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             L_0x0172:
                 android.view.View r12 = r12.itemView
                 org.telegram.ui.Cells.GroupCreateSectionCell r12 = (org.telegram.ui.Cells.GroupCreateSectionCell) r12
-                r13 = 2131625772(0x7f0e072c, float:1.8878761E38)
+                r13 = 2131625773(0x7f0e072d, float:1.8878763E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)

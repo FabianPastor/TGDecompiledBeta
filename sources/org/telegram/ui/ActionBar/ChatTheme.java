@@ -14,6 +14,7 @@ import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatThemeController;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
@@ -21,8 +22,6 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ResultCallback;
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_chatTheme;
 import org.telegram.tgnet.TLRPC$TL_theme;
 import org.telegram.tgnet.TLRPC$TL_themeSettings;
@@ -158,9 +157,7 @@ public class ChatTheme {
     }
 
     public void loadWallpaperThumb(boolean z, ResultCallback<Pair<Long, Bitmap>> resultCallback) {
-        ArrayList<TLRPC$PhotoSize> arrayList;
         TLRPC$WallPaper wallpaper = getWallpaper(z);
-        TLRPC$PhotoSize tLRPC$PhotoSize = null;
         if (wallpaper == null) {
             resultCallback.onComplete(null);
             return;
@@ -176,13 +173,9 @@ public class ChatTheme {
             }
         }
         if (wallpaperThumbBitmap == null) {
-            TLRPC$Document tLRPC$Document = wallpaper.document;
-            if (!(tLRPC$Document == null || (arrayList = tLRPC$Document.thumbs) == null || arrayList.isEmpty())) {
-                tLRPC$PhotoSize = wallpaper.document.thumbs.get(0);
-            }
-            ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$PhotoSize, wallpaper.document);
+            ImageLocation forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(wallpaper.document.thumbs, 120), wallpaper.document);
             ImageReceiver imageReceiver = new ImageReceiver();
-            imageReceiver.setImage(forDocument, (String) null, (Drawable) null, (String) null, (Object) null, 1);
+            imageReceiver.setImage(forDocument, "120_80", (Drawable) null, (String) null, (Object) null, 1);
             imageReceiver.setDelegate(new ChatTheme$$ExternalSyntheticLambda2(resultCallback, j, wallpaperThumbFile));
             ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
         } else if (resultCallback != null) {

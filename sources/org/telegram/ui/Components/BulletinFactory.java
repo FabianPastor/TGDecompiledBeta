@@ -148,14 +148,14 @@ public final class BulletinFactory {
         return create(lottieLayout, 1500);
     }
 
-    public Bulletin createErrorBulletin(String str) {
-        return createErrorBulletin(str, (Theme.ResourcesProvider) null);
+    public Bulletin createErrorBulletin(CharSequence charSequence) {
+        return createErrorBulletin(charSequence, (Theme.ResourcesProvider) null);
     }
 
-    public Bulletin createErrorBulletin(String str, Theme.ResourcesProvider resourcesProvider2) {
+    public Bulletin createErrorBulletin(CharSequence charSequence, Theme.ResourcesProvider resourcesProvider2) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2);
         lottieLayout.setAnimation(NUM, new String[0]);
-        lottieLayout.textView.setText(str);
+        lottieLayout.textView.setText(charSequence);
         lottieLayout.textView.setSingleLine(false);
         lottieLayout.textView.setMaxLines(2);
         return create(lottieLayout, 1500);
@@ -212,7 +212,7 @@ public final class BulletinFactory {
             android.app.Activity r1 = r9.getParentActivity()
             r0.<init>(r1, r11)
             java.lang.String r11 = "Hours"
-            r1 = 2131626611(0x7f0e0a73, float:1.8880463E38)
+            r1 = 2131626614(0x7f0e0a76, float:1.888047E38)
             java.lang.String r2 = "NotificationsMutedForHint"
             r3 = 4
             r4 = 3
@@ -224,7 +224,7 @@ public final class BulletinFactory {
             if (r10 == r5) goto L_0x003a
             if (r10 == r4) goto L_0x0030
             if (r10 != r3) goto L_0x002a
-            r10 = 2131626632(0x7f0e0a88, float:1.8880506E38)
+            r10 = 2131626635(0x7f0e0a8b, float:1.8880512E38)
             java.lang.String r11 = "NotificationsUnmutedHint"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r11 = 0
@@ -234,7 +234,7 @@ public final class BulletinFactory {
             r9.<init>()
             throw r9
         L_0x0030:
-            r10 = 2131626612(0x7f0e0a74, float:1.8880465E38)
+            r10 = 2131626615(0x7f0e0a77, float:1.8880471E38)
             java.lang.String r11 = "NotificationsMutedHint"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x0064
@@ -334,12 +334,12 @@ public final class BulletinFactory {
             r10[r5] = r0
             r9.setAnimation(r4, r6, r6, r10)
             android.widget.TextView r10 = r9.titleTextView
-            r0 = 2131627089(0x7f0e0CLASSNAME, float:1.8881433E38)
+            r0 = 2131627092(0x7f0e0CLASSNAME, float:1.8881439E38)
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)
             android.widget.TextView r10 = r9.subtitleTextView
-            r0 = 2131627090(0x7f0e0CLASSNAME, float:1.8881435E38)
+            r0 = 2131627093(0x7f0e0CLASSNAME, float:1.888144E38)
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)

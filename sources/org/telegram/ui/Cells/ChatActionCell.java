@@ -3,11 +3,8 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
@@ -64,9 +61,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     private ArrayList<Integer> lineHeights;
     private ArrayList<Integer> lineWidths;
     private String overrideBackground;
-    private int overrideColor;
-    private ColorFilter overrideColorFilter;
+    private Paint overrideBackgroundPaint;
     private String overrideText;
+    private TextPaint overrideTextPaint;
     private URLSpan pressedLink;
     private int previousWidth;
     private RectF rect;
@@ -112,6 +109,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         void needOpenUserProfile(long j);
     }
 
+    public interface ThemeDelegate extends Theme.ResourcesProvider {
+    }
+
     public void onFailedDownload(String str, boolean z) {
     }
 
@@ -123,19 +123,6 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     }
 
     public void onProgressUpload(String str, long j, long j2, boolean z) {
-    }
-
-    public interface ThemeDelegate extends Theme.ResourcesProvider {
-        void applyServiceShaderMatrix(int i, int i2, float f, float f2);
-
-        int getCurrentColor();
-
-        /* renamed from: org.telegram.ui.Cells.ChatActionCell$ThemeDelegate$-CC  reason: invalid class name */
-        public final /* synthetic */ class CC {
-            public static void $default$applyServiceShaderMatrix(ThemeDelegate _this, int i, int i2, float f, float f2) {
-                Theme.applyServiceShaderMatrix(i, i2, f, f2);
-            }
-        }
     }
 
     public ChatActionCell(Context context) {
@@ -609,12 +596,18 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             String str = this.overrideBackground;
             if (str != null) {
                 int themedColor = getThemedColor(str);
-                if (themedColor != this.overrideColor) {
-                    this.overrideColor = themedColor;
-                    this.overrideColorFilter = new PorterDuffColorFilter(this.overrideColor, PorterDuff.Mode.MULTIPLY);
+                if (this.overrideBackgroundPaint == null) {
+                    Paint paint3 = new Paint(1);
+                    this.overrideBackgroundPaint = paint3;
+                    paint3.setColor(themedColor);
+                    TextPaint textPaint3 = new TextPaint(1);
+                    this.overrideTextPaint = textPaint3;
+                    textPaint3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                    this.overrideTextPaint.setTextSize((float) AndroidUtilities.dp((float) (Math.max(16, SharedConfig.fontSize) - 2)));
+                    this.overrideTextPaint.setColor(getThemedColor(this.overrideText));
                 }
-                themedPaint.setColor(this.overrideColor);
-                textPaint2.setColor(getThemedColor(this.overrideText));
+                themedPaint = this.overrideBackgroundPaint;
+                textPaint2 = this.overrideTextPaint;
             }
             if (this.invalidatePath) {
                 this.invalidatePath = false;
@@ -647,40 +640,39 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 this.backgroundPath.reset();
                 float f4 = (float) measuredWidth;
                 this.backgroundPath.moveTo(f4, (float) dp3);
-                int i12 = dp2;
+                int i12 = 0;
                 int i13 = 0;
-                int i14 = 0;
-                while (i13 < lineCount) {
-                    int intValue2 = this.lineWidths.get(i13).intValue();
-                    int i15 = dp5;
-                    int lineBottom = this.textLayout.getLineBottom(i13);
-                    TextPaint textPaint3 = textPaint2;
-                    int i16 = lineCount - 1;
-                    if (i13 < i16) {
+                while (i12 < lineCount) {
+                    int intValue2 = this.lineWidths.get(i12).intValue();
+                    int i14 = dp2;
+                    int lineBottom = this.textLayout.getLineBottom(i12);
+                    TextPaint textPaint4 = textPaint2;
+                    int i15 = lineCount - 1;
+                    if (i12 < i15) {
                         paint2 = themedPaint;
-                        i = this.lineWidths.get(i13 + 1).intValue();
+                        i = this.lineWidths.get(i12 + 1).intValue();
                     } else {
                         paint2 = themedPaint;
                         i = 0;
                     }
-                    int i17 = lineBottom - i14;
-                    if (i13 == 0 || intValue2 > i7) {
+                    int i16 = lineBottom - i13;
+                    if (i12 == 0 || intValue2 > i7) {
                         f = 3.0f;
-                        i17 += AndroidUtilities.dp(3.0f);
+                        i16 += AndroidUtilities.dp(3.0f);
                     } else {
                         f = 3.0f;
                     }
-                    if (i13 == i16 || intValue2 > i) {
-                        i17 += AndroidUtilities.dp(f);
+                    if (i12 == i15 || intValue2 > i) {
+                        i16 += AndroidUtilities.dp(f);
                     }
                     float f5 = (((float) intValue2) / 2.0f) + f4;
-                    int i18 = (i13 == i16 || intValue2 >= i || i13 == 0 || intValue2 >= i7) ? i12 : i15;
-                    if (i13 == 0 || intValue2 > i7) {
+                    int i17 = (i12 == i15 || intValue2 >= i || i12 == 0 || intValue2 >= i7) ? i14 : dp5;
+                    if (i12 == 0 || intValue2 > i7) {
                         f2 = f4;
                         i3 = lineCount;
+                        i5 = lineBottom;
                         i2 = i7;
                         i4 = measuredWidth;
-                        i5 = lineBottom;
                         this.rect.set((f5 - ((float) dp4)) - ((float) dp), (float) dp3, ((float) i11) + f5, (float) ((dp * 2) + dp3));
                         this.backgroundPath.arcTo(this.rect, -90.0f, 90.0f);
                     } else {
@@ -690,83 +682,83 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                             float f6 = ((float) i11) + f5;
                             i4 = measuredWidth;
                             i3 = lineCount;
-                            int i19 = i18 * 2;
+                            int i18 = i17 * 2;
                             i2 = i7;
-                            this.rect.set(f6, (float) dp3, ((float) i19) + f6, (float) (i19 + dp3));
+                            this.rect.set(f6, (float) dp3, ((float) i18) + f6, (float) (i18 + dp3));
                             this.backgroundPath.arcTo(this.rect, -90.0f, -90.0f);
                         } else {
                             i3 = lineCount;
+                            i5 = lineBottom;
                             i2 = i7;
                             i4 = measuredWidth;
-                            i5 = lineBottom;
                         }
                     }
-                    dp3 += i17;
-                    if (i13 == i16 || intValue2 >= i) {
+                    dp3 += i16;
+                    if (i12 == i15 || intValue2 >= i) {
                         f3 = 3.0f;
                     } else {
                         f3 = 3.0f;
                         dp3 -= AndroidUtilities.dp(3.0f);
-                        i17 -= AndroidUtilities.dp(3.0f);
+                        i16 -= AndroidUtilities.dp(3.0f);
                     }
-                    if (i13 != 0 && intValue2 < i2) {
+                    if (i12 != 0 && intValue2 < i2) {
                         dp3 -= AndroidUtilities.dp(f3);
-                        i17 -= AndroidUtilities.dp(f3);
+                        i16 -= AndroidUtilities.dp(f3);
                     }
-                    this.lineHeights.add(Integer.valueOf(i17));
-                    if (i13 == i16 || intValue2 > i) {
+                    this.lineHeights.add(Integer.valueOf(i16));
+                    if (i12 == i15 || intValue2 > i) {
                         this.rect.set((f5 - ((float) dp4)) - ((float) dp), (float) (dp3 - (dp * 2)), f5 + ((float) i11), (float) dp3);
                         this.backgroundPath.arcTo(this.rect, 0.0f, 90.0f);
                     } else if (intValue2 < i) {
                         float f7 = f5 + ((float) i11);
-                        int i20 = i18 * 2;
-                        this.rect.set(f7, (float) (dp3 - i20), ((float) i20) + f7, (float) dp3);
+                        int i19 = i17 * 2;
+                        this.rect.set(f7, (float) (dp3 - i19), ((float) i19) + f7, (float) dp3);
                         this.backgroundPath.arcTo(this.rect, 180.0f, -90.0f);
                     }
-                    i13++;
+                    i12++;
                     Canvas canvas3 = canvas;
                     i7 = intValue2;
-                    dp5 = i15;
-                    textPaint2 = textPaint3;
+                    dp2 = i14;
+                    textPaint2 = textPaint4;
                     themedPaint = paint2;
                     f4 = f2;
-                    i14 = i5;
+                    i13 = i5;
                     measuredWidth = i4;
                     lineCount = i3;
                 }
                 paint = themedPaint;
                 textPaint = textPaint2;
+                int i20 = dp2;
                 int i21 = measuredWidth;
-                int i22 = dp5;
-                int i23 = lineCount - 1;
-                int i24 = i23;
-                while (i24 >= 0) {
-                    int intValue3 = i24 != 0 ? this.lineWidths.get(i24 - 1).intValue() : 0;
-                    int intValue4 = this.lineWidths.get(i24).intValue();
-                    int intValue5 = i24 != i23 ? this.lineWidths.get(i24 + 1).intValue() : 0;
-                    this.textLayout.getLineBottom(i24);
+                int i22 = lineCount - 1;
+                int i23 = i22;
+                while (i23 >= 0) {
+                    int intValue3 = i23 != 0 ? this.lineWidths.get(i23 - 1).intValue() : 0;
+                    int intValue4 = this.lineWidths.get(i23).intValue();
+                    int intValue5 = i23 != i22 ? this.lineWidths.get(i23 + 1).intValue() : 0;
+                    this.textLayout.getLineBottom(i23);
                     float f8 = (float) (i21 - (intValue4 / 2));
-                    int i25 = (i24 == i23 || intValue4 >= intValue5 || i24 == 0 || intValue4 >= intValue3) ? i12 : i22;
-                    if (i24 == i23 || intValue4 > intValue5) {
+                    int i24 = (i23 == i22 || intValue4 >= intValue5 || i23 == 0 || intValue4 >= intValue3) ? i20 : dp5;
+                    if (i23 == i22 || intValue4 > intValue5) {
                         this.rect.set(f8 - ((float) i11), (float) (dp3 - (dp * 2)), ((float) dp4) + f8 + ((float) dp), (float) dp3);
                         this.backgroundPath.arcTo(this.rect, 90.0f, 90.0f);
                     } else if (intValue4 < intValue5) {
                         float f9 = f8 - ((float) i11);
-                        int i26 = i25 * 2;
-                        this.rect.set(f9 - ((float) i26), (float) (dp3 - i26), f9, (float) dp3);
+                        int i25 = i24 * 2;
+                        this.rect.set(f9 - ((float) i25), (float) (dp3 - i25), f9, (float) dp3);
                         this.backgroundPath.arcTo(this.rect, 90.0f, -90.0f);
                     }
-                    dp3 -= this.lineHeights.get(i24).intValue();
-                    if (i24 == 0 || intValue4 > intValue3) {
+                    dp3 -= this.lineHeights.get(i23).intValue();
+                    if (i23 == 0 || intValue4 > intValue3) {
                         this.rect.set(f8 - ((float) i11), (float) dp3, f8 + ((float) dp4) + ((float) dp), (float) ((dp * 2) + dp3));
                         this.backgroundPath.arcTo(this.rect, 180.0f, 90.0f);
                     } else if (intValue4 < intValue3) {
                         float var_ = f8 - ((float) i11);
-                        int i27 = i25 * 2;
-                        this.rect.set(var_ - ((float) i27), (float) dp3, var_, (float) (i27 + dp3));
+                        int i26 = i24 * 2;
+                        this.rect.set(var_ - ((float) i26), (float) dp3, var_, (float) (i26 + dp3));
                         this.backgroundPath.arcTo(this.rect, 0.0f, -90.0f);
                     }
-                    i24--;
+                    i23--;
                 }
                 this.backgroundPath.close();
             } else {
@@ -783,24 +775,17 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 Theme.applyServiceShaderMatrix(getMeasuredWidth(), this.backgroundHeight, 0.0f, this.viewTop + ((float) AndroidUtilities.dp(4.0f)));
             }
             Canvas canvas4 = canvas;
-            Paint paint3 = paint;
-            canvas4.drawPath(this.backgroundPath, paint3);
+            canvas4.drawPath(this.backgroundPath, paint);
             if (hasGradientService()) {
                 canvas4.drawPath(this.backgroundPath, Theme.chat_actionBackgroundGradientDarkenPaint);
             }
             canvas.save();
             canvas4.translate((float) this.textXLeft, (float) this.textY);
-            TextPaint textPaint4 = textPaint;
-            if (this.textLayout.getPaint() != textPaint4) {
+            if (this.textLayout.getPaint() != textPaint) {
                 buildLayout();
             }
             this.textLayout.draw(canvas4);
             canvas.restore();
-            if (this.overrideColorFilter == null) {
-                ThemeDelegate themeDelegate3 = this.themeDelegate;
-                paint3.setColor(themeDelegate3 != null ? themeDelegate3.getCurrentColor() : Theme.currentColor);
-                textPaint4.setColor(getThemedColor("chat_serviceText"));
-            }
         }
     }
 

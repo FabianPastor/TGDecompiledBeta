@@ -3196,6 +3196,7 @@ public final class R {
         public static final int EncryptionRejected = NUM;
         public static final int English = NUM;
         public static final int Enhance = NUM;
+        public static final int EnjoyngAnimations = NUM;
         public static final int EnterChannelName = NUM;
         public static final int EnterCode = NUM;
         public static final int EnterCurrentPasscode = NUM;
@@ -3794,6 +3795,7 @@ public final class R {
         public static final int InvoiceCantForwardSecretChat = NUM;
         public static final int InvoiceCantSendSecretChat = NUM;
         public static final int IsChoosingSticker = NUM;
+        public static final int IsEnjoyngAnimations = NUM;
         public static final int IsRecordingAudio = NUM;
         public static final int IsRecordingRound = NUM;
         public static final int IsRecordingVideo = NUM;
@@ -4077,6 +4079,7 @@ public final class R {
         public static final int MessageScheduledUntilOnline = NUM;
         public static final int MessageScheduledVote = NUM;
         public static final int MessageScheduledVoteResults = NUM;
+        public static final int MessageSeenTooltipMessage = NUM;
         public static final int MessageSeen_few = NUM;
         public static final int MessageSeen_many = NUM;
         public static final int MessageSeen_one = NUM;
@@ -5766,6 +5769,7 @@ public final class R {
         public static final int TextSelectionHit = NUM;
         public static final int TextSizeHeader = NUM;
         public static final int Theme = NUM;
+        public static final int ThemeAlsoAppliedForHint = NUM;
         public static final int ThemeArcticBlue = NUM;
         public static final int ThemeClassic = NUM;
         public static final int ThemeCreateHelp = NUM;

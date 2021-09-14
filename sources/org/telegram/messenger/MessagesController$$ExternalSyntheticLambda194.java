@@ -1,16 +1,18 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLRPC$Updates;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda194 implements Comparator {
-    public final /* synthetic */ MessagesController f$0;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda194 implements Runnable {
+    public final /* synthetic */ MessagesStorage.LongCallback f$0;
+    public final /* synthetic */ TLRPC$Updates f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda194(MessagesController messagesController) {
-        this.f$0 = messagesController;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda194(MessagesStorage.LongCallback longCallback, TLRPC$Updates tLRPC$Updates) {
+        this.f$0 = longCallback;
+        this.f$1 = tLRPC$Updates;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$new$1((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
+    public final void run() {
+        MessagesController.lambda$convertToMegaGroup$203(this.f$0, this.f$1);
     }
 }

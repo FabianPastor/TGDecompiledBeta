@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
@@ -497,6 +498,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 int intValue = MessagesController.getInstance(this.currentAccount).getPrintingStringType(this.parentFragment.getDialogId(), this.parentFragment.getThreadId()).intValue();
                 if (intValue == 5) {
                     this.subtitleTextView.replaceTextWithDrawable(this.statusDrawables[intValue], "**oo**");
+                    this.statusDrawables[intValue].setColor(getThemedColor("chat_status"));
                     this.subtitleTextView.setLeftDrawable((Drawable) null);
                 } else {
                     this.subtitleTextView.replaceTextWithDrawable((Drawable) null, (String) null);
@@ -578,8 +580,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             this.subtitleTextView.setAlpha(1.0f);
                         }
                     }
+                    str = MessagesController.getInstance(this.currentAccount).getPrintingStringType(this.parentFragment.getDialogId(), this.parentFragment.getThreadId()).intValue() == 5 ? Emoji.replaceEmoji(printingString, this.subtitleTextView.getTextPaint().getFontMetricsInt(), AndroidUtilities.dp(15.0f), false) : printingString;
                     setTypingAnimation(true);
-                    str = printingString;
                     z2 = true;
                 } else if (!this.parentFragment.isThreadChat()) {
                     setTypingAnimation(false);

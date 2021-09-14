@@ -18,6 +18,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda153 impl
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$processSelectedOption$132(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$processSelectedOption$131(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

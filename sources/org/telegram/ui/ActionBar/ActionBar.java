@@ -1947,12 +1947,14 @@ public class ActionBar extends FrameLayout {
                         return super.createAnimator(viewGroup, transitionValues, transitionValues2);
                     }
                     AnimatorSet animatorSet = new AnimatorSet();
-                    Animator createAnimator = super.createAnimator(viewGroup, transitionValues, transitionValues2);
-                    float floatValue = ((Float) transitionValues.values.get("text_size")).floatValue() / ((Float) transitionValues2.values.get("text_size")).floatValue();
-                    transitionValues.view.setScaleX(floatValue);
-                    transitionValues.view.setScaleY(floatValue);
-                    if (createAnimator != null) {
-                        animatorSet.playTogether(new Animator[]{createAnimator});
+                    if (transitionValues2 != null) {
+                        Animator createAnimator = super.createAnimator(viewGroup, transitionValues, transitionValues2);
+                        float floatValue = ((Float) transitionValues.values.get("text_size")).floatValue() / ((Float) transitionValues2.values.get("text_size")).floatValue();
+                        transitionValues.view.setScaleX(floatValue);
+                        transitionValues.view.setScaleY(floatValue);
+                        if (createAnimator != null) {
+                            animatorSet.playTogether(new Animator[]{createAnimator});
+                        }
                     }
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(transitionValues.view, View.SCALE_X, new float[]{1.0f})});
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(transitionValues.view, View.SCALE_Y, new float[]{1.0f})});

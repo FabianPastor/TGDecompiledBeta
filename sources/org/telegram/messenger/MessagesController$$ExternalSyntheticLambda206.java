@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda20
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$checkTosUpdate$123(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$changeChatTitle$230(tLObject, tLRPC$TL_error);
     }
 }
