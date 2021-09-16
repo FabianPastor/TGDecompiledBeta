@@ -8480,9 +8480,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (SharedConfig.isAppUpdateAvailable() && FileLoader.getAttachFileName(SharedConfig.pendingAppUpdate.document).equals(str)) {
                 updateMenuButton(true);
             }
-        } else if (i != NotificationCenter.onDatabaseMigration) {
-        } else {
-            if (!objArr[0].booleanValue()) {
+        } else if (i == NotificationCenter.onDatabaseMigration) {
+            boolean booleanValue2 = objArr[0].booleanValue();
+            if (this.fragmentView == null) {
+                return;
+            }
+            if (!booleanValue2) {
                 final View view = this.databaseMigrationHint;
                 if (view != null) {
                     view.animate().setListener((Animator.AnimatorListener) null).cancel();

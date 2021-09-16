@@ -2019,13 +2019,14 @@ public class LoginActivity extends BaseFragment {
                 CountrySelectActivity.Country country = null;
                 int i = 0;
                 while (true) {
-                    if (i >= this.countriesArray.size()) {
-                        break;
-                    } else if (this.countriesArray.get(i).name.equals(str)) {
-                        country = this.countriesArray.get(i);
-                        break;
-                    } else {
+                    if (i < this.countriesArray.size()) {
+                        if (this.countriesArray.get(i) != null && this.countriesArray.get(i).name.equals(str)) {
+                            country = this.countriesArray.get(i);
+                            break;
+                        }
                         i++;
+                    } else {
+                        break;
                     }
                 }
                 if (country != null) {

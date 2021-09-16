@@ -36614,7 +36614,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         this.chatThemeBottomSheet = null;
         this.chatListView.setOnInterceptTouchListener((RecyclerListView.OnInterceptTouchListener) null);
         setChildrenEnabled(this.contentView, true);
-        ChatThemeController.clearWallpaperImages();
         ChatThemeController.clearWallpaperThumbImages();
     }
 

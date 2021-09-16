@@ -740,7 +740,8 @@ public final class Bulletin {
             Delegate delegate2 = this.delegate;
             float f = 0.0f;
             if (delegate2 != null) {
-                f = 0.0f + ((float) delegate2.getBottomOffset(this.bulletin.tag));
+                Bulletin bulletin2 = this.bulletin;
+                f = 0.0f + ((float) delegate2.getBottomOffset(bulletin2 != null ? bulletin2.tag : 0));
             }
             setTranslationY((-f) + this.inOutOffset);
         }

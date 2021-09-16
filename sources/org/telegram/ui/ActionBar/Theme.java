@@ -2499,21 +2499,18 @@ public class Theme {
                     i4 = Theme.changeColorAccent(themeInfo, i, num3.intValue());
                 }
                 long j3 = themeAccent2.backgroundGradientOverrideColor3;
-                int i5 = (int) j3;
-                if (i5 == 0 && j3 == 0 && (num2 = themeFileValues.get("key_chat_wallpaper_gradient_to3")) != null) {
-                    i5 = Theme.changeColorAccent(themeInfo, i, num2.intValue());
+                if (((int) j3) == 0 && j3 == 0 && (num2 = themeFileValues.get("key_chat_wallpaper_gradient_to3")) != null) {
+                    Theme.changeColorAccent(themeInfo, i, num2.intValue());
                 }
                 if (i2 == 0 && (num = themeFileValues.get("chat_wallpaper")) != null) {
                     i2 = Theme.changeColorAccent(themeInfo, i, num.intValue());
                 }
-                if (i4 != 0) {
-                    MotionBackgroundDrawable.getPatternColor(i2, i3, i4, i5);
-                } else if (i3 != 0) {
-                    obj = new BackgroundGradientDrawable(BackgroundGradientDrawable.getGradientOrientation(themeAccent2.backgroundRotation), new int[]{i2, i3});
-                    AndroidUtilities.getPatternColor(AndroidUtilities.getAverageColor(i2, i3));
-                } else {
-                    obj = new ColorDrawable(i2);
-                    AndroidUtilities.getPatternColor(i2);
+                if (i4 == 0) {
+                    if (i3 != 0) {
+                        obj = new BackgroundGradientDrawable(BackgroundGradientDrawable.getGradientOrientation(themeAccent2.backgroundRotation), new int[]{i2, i3});
+                    } else {
+                        obj = new ColorDrawable(i2);
+                    }
                 }
                 if (bitmap == null) {
                     if (z) {
@@ -3134,7 +3131,7 @@ public class Theme {
             } else if (TextUtils.isEmpty(this.patternSlug)) {
                 return null;
             } else {
-                return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s_v2.jpg", new Object[]{this.parentTheme.getKey(), Integer.valueOf(this.id), this.patternSlug}));
+                return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s_v6_dubug.jpg", new Object[]{this.parentTheme.getKey(), Integer.valueOf(this.id), this.patternSlug}));
             }
         }
 
@@ -16567,19 +16564,31 @@ public class Theme {
     }
 
     public static void loadWallpaper() {
+        TLRPC$Document tLRPC$Document;
         boolean z;
         File file;
         float f;
         float f2;
+        TLRPC$ThemeSettings tLRPC$ThemeSettings;
+        TLRPC$WallPaper tLRPC$WallPaper;
         if (wallpaper == null) {
             ThemeInfo themeInfo = currentTheme;
             boolean z2 = themeInfo.firstAccentIsDefault && themeInfo.currentAccentId == DEFALT_THEME_ACCENT_ID;
             ThemeAccent accent = themeInfo.getAccent(false);
+            TLRPC$Document tLRPC$Document2 = null;
             if (accent != null) {
-                file = accent.getPathToWallpaper();
-                z = accent.patternMotion;
+                File pathToWallpaper = accent.getPathToWallpaper();
+                boolean z3 = accent.patternMotion;
+                TLRPC$TL_theme tLRPC$TL_theme = accent.info;
+                if (!(tLRPC$TL_theme == null || (tLRPC$ThemeSettings = tLRPC$TL_theme.settings) == null || (tLRPC$WallPaper = tLRPC$ThemeSettings.wallpaper) == null)) {
+                    tLRPC$Document2 = tLRPC$WallPaper.document;
+                }
+                tLRPC$Document = tLRPC$Document2;
+                file = pathToWallpaper;
+                z = z3;
             } else {
                 file = null;
+                tLRPC$Document = null;
                 z = false;
             }
             ThemeInfo themeInfo2 = currentTheme;
@@ -16592,22 +16601,22 @@ public class Theme {
                 f = (float) themeInfo2.patternIntensity;
                 int i = (int) f;
                 DispatchQueue dispatchQueue = Utilities.searchQueue;
-                Theme$$ExternalSyntheticLambda5 theme$$ExternalSyntheticLambda5 = new Theme$$ExternalSyntheticLambda5(overrideWallpaperInfo, file, i, z2, z);
+                Theme$$ExternalSyntheticLambda5 theme$$ExternalSyntheticLambda5 = new Theme$$ExternalSyntheticLambda5(overrideWallpaperInfo, file, i, z2, z, tLRPC$Document);
                 wallpaperLoadTask = theme$$ExternalSyntheticLambda5;
                 dispatchQueue.postRunnable(theme$$ExternalSyntheticLambda5);
             }
             f = f2 * 100.0f;
             int i2 = (int) f;
             DispatchQueue dispatchQueue2 = Utilities.searchQueue;
-            Theme$$ExternalSyntheticLambda5 theme$$ExternalSyntheticLambda52 = new Theme$$ExternalSyntheticLambda5(overrideWallpaperInfo, file, i2, z2, z);
+            Theme$$ExternalSyntheticLambda5 theme$$ExternalSyntheticLambda52 = new Theme$$ExternalSyntheticLambda5(overrideWallpaperInfo, file, i2, z2, z, tLRPC$Document);
             wallpaperLoadTask = theme$$ExternalSyntheticLambda52;
             dispatchQueue2.postRunnable(theme$$ExternalSyntheticLambda52);
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$loadWallpaper$8(OverrideWallpaperInfo overrideWallpaperInfo, File file, int i, boolean z, boolean z2) {
-        BackgroundDrawableSettings createBackgroundDrawable = createBackgroundDrawable(currentTheme, overrideWallpaperInfo, currentColors, file, themedWallpaperLink, themedWallpaperFileOffset, i, previousPhase, z, hasPreviousTheme, isApplyingAccent, z2);
+    public static /* synthetic */ void lambda$loadWallpaper$8(OverrideWallpaperInfo overrideWallpaperInfo, File file, int i, boolean z, boolean z2, TLRPC$Document tLRPC$Document) {
+        BackgroundDrawableSettings createBackgroundDrawable = createBackgroundDrawable(currentTheme, overrideWallpaperInfo, currentColors, file, themedWallpaperLink, themedWallpaperFileOffset, i, previousPhase, z, hasPreviousTheme, isApplyingAccent, z2, tLRPC$Document);
         Boolean bool = createBackgroundDrawable.isWallpaperMotion;
         isWallpaperMotion = bool != null ? bool.booleanValue() : isWallpaperMotion;
         Boolean bool2 = createBackgroundDrawable.isPatternWallpaper;
@@ -16628,232 +16637,260 @@ public class Theme {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewWallpapper, new Object[0]);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0046  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x004c  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x0047  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x004d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static org.telegram.ui.ActionBar.Theme.BackgroundDrawableSettings createBackgroundDrawable(org.telegram.ui.ActionBar.Theme.ThemeInfo r12, java.util.HashMap<java.lang.String, java.lang.Integer> r13, java.lang.String r14, int r15) {
+    public static org.telegram.ui.ActionBar.Theme.BackgroundDrawableSettings createBackgroundDrawable(org.telegram.ui.ActionBar.Theme.ThemeInfo r13, java.util.HashMap<java.lang.String, java.lang.Integer> r14, java.lang.String r15, int r16) {
         /*
-            boolean r1 = r12.firstAccentIsDefault
+            r0 = r13
+            boolean r1 = r0.firstAccentIsDefault
             r2 = 1
             r3 = 0
-            if (r1 == 0) goto L_0x000e
-            int r1 = r12.currentAccentId
+            if (r1 == 0) goto L_0x000f
+            int r1 = r0.currentAccentId
             int r4 = DEFALT_THEME_ACCENT_ID
-            if (r1 != r4) goto L_0x000e
+            if (r1 != r4) goto L_0x000f
             r8 = 1
-            goto L_0x000f
-        L_0x000e:
-            r8 = 0
+            goto L_0x0010
         L_0x000f:
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = r12.getAccent(r3)
-            if (r1 == 0) goto L_0x001a
+            r8 = 0
+        L_0x0010:
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = r13.getAccent(r3)
+            if (r1 == 0) goto L_0x001b
             java.io.File r4 = r1.getPathToWallpaper()
-            goto L_0x001b
-        L_0x001a:
-            r4 = 0
+            goto L_0x001c
         L_0x001b:
-            if (r1 == 0) goto L_0x0023
+            r4 = 0
+        L_0x001c:
+            if (r1 == 0) goto L_0x0024
             boolean r5 = r1.patternMotion
-            if (r5 == 0) goto L_0x0023
+            if (r5 == 0) goto L_0x0024
             r11 = 1
-            goto L_0x0024
-        L_0x0023:
-            r11 = 0
+            goto L_0x0025
         L_0x0024:
-            org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r2 = r12.overrideWallpaper
+            r11 = 0
+        L_0x0025:
+            org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r2 = r0.overrideWallpaper
             r3 = 1120403456(0x42CLASSNAME, float:100.0)
-            if (r2 == 0) goto L_0x0031
+            if (r2 == 0) goto L_0x0032
             float r1 = r2.intensity
-        L_0x002c:
+        L_0x002d:
             float r1 = r1 * r3
-        L_0x002e:
+        L_0x002f:
             int r1 = (int) r1
             r6 = r1
-            goto L_0x003a
-        L_0x0031:
-            if (r1 == 0) goto L_0x0036
+            goto L_0x003b
+        L_0x0032:
+            if (r1 == 0) goto L_0x0037
             float r1 = r1.patternIntensity
-            goto L_0x002c
-        L_0x0036:
-            int r1 = r12.patternIntensity
+            goto L_0x002d
+        L_0x0037:
+            int r1 = r0.patternIntensity
             float r1 = (float) r1
-            goto L_0x002e
-        L_0x003a:
+            goto L_0x002f
+        L_0x003b:
             java.util.HashMap<java.lang.String, java.lang.Integer> r1 = currentColorsNoAccent
             java.lang.String r3 = "wallpaperFileOffset"
             java.lang.Object r1 = r1.get(r3)
             java.lang.Integer r1 = (java.lang.Integer) r1
-            if (r1 == 0) goto L_0x004c
+            if (r1 == 0) goto L_0x004d
             int r1 = r1.intValue()
             r5 = r1
-            goto L_0x004e
-        L_0x004c:
+            goto L_0x004f
+        L_0x004d:
             r1 = -1
             r5 = -1
-        L_0x004e:
+        L_0x004f:
             r9 = 0
             r10 = 0
-            r0 = r12
+            r12 = 0
+            r0 = r13
             r1 = r2
-            r2 = r13
+            r2 = r14
             r3 = r4
-            r4 = r14
-            r7 = r15
-            org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings r0 = createBackgroundDrawable(r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
+            r4 = r15
+            r7 = r16
+            org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings r0 = createBackgroundDrawable(r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createBackgroundDrawable(org.telegram.ui.ActionBar.Theme$ThemeInfo, java.util.HashMap, java.lang.String, int):org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x02bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0301  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static org.telegram.ui.ActionBar.Theme.BackgroundDrawableSettings createBackgroundDrawable(org.telegram.ui.ActionBar.Theme.ThemeInfo r22, org.telegram.ui.ActionBar.Theme.OverrideWallpaperInfo r23, java.util.HashMap<java.lang.String, java.lang.Integer> r24, java.io.File r25, java.lang.String r26, int r27, int r28, int r29, boolean r30, boolean r31, boolean r32, boolean r33) {
+    public static org.telegram.ui.ActionBar.Theme.BackgroundDrawableSettings createBackgroundDrawable(org.telegram.ui.ActionBar.Theme.ThemeInfo r23, org.telegram.ui.ActionBar.Theme.OverrideWallpaperInfo r24, java.util.HashMap<java.lang.String, java.lang.Integer> r25, java.io.File r26, java.lang.String r27, int r28, int r29, int r30, boolean r31, boolean r32, boolean r33, boolean r34, org.telegram.tgnet.TLRPC$Document r35) {
         /*
-            r0 = r22
-            r1 = r23
-            r2 = r24
-            r3 = r27
-            r4 = r29
-            org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings r5 = new org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings
-            r5.<init>()
-            android.graphics.drawable.Drawable r6 = wallpaper
-            r5.wallpaper = r6
-            r6 = 1
-            r7 = 0
-            if (r31 == 0) goto L_0x0019
-            if (r32 == 0) goto L_0x001d
-        L_0x0019:
-            if (r1 == 0) goto L_0x001d
-            r8 = 1
-            goto L_0x001e
-        L_0x001d:
-            r8 = 0
-        L_0x001e:
-            if (r1 == 0) goto L_0x0042
-            boolean r9 = r1.isMotion
-            java.lang.Boolean r9 = java.lang.Boolean.valueOf(r9)
-            r5.isWallpaperMotion = r9
-            int r9 = r1.color
-            if (r9 == 0) goto L_0x003a
-            boolean r9 = r23.isDefault()
-            if (r9 != 0) goto L_0x003a
-            boolean r9 = r23.isColor()
-            if (r9 != 0) goto L_0x003a
+            r0 = r23
+            r1 = r24
+            r2 = r25
+            r3 = r26
+            r4 = r28
+            r5 = r29
+            r6 = r30
+            r7 = r35
+            org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings r8 = new org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings
+            r8.<init>()
+            android.graphics.drawable.Drawable r9 = wallpaper
+            r8.wallpaper = r9
             r9 = 1
-            goto L_0x003b
-        L_0x003a:
-            r9 = 0
-        L_0x003b:
-            java.lang.Boolean r9 = java.lang.Boolean.valueOf(r9)
-            r5.isPatternWallpaper = r9
+            r10 = 0
+            if (r32 == 0) goto L_0x001f
+            if (r33 == 0) goto L_0x0023
+        L_0x001f:
+            if (r1 == 0) goto L_0x0023
+            r11 = 1
+            goto L_0x0024
+        L_0x0023:
+            r11 = 0
+        L_0x0024:
+            if (r1 == 0) goto L_0x0048
+            boolean r12 = r1.isMotion
+            java.lang.Boolean r12 = java.lang.Boolean.valueOf(r12)
+            r8.isWallpaperMotion = r12
+            int r12 = r1.color
+            if (r12 == 0) goto L_0x0040
+            boolean r12 = r24.isDefault()
+            if (r12 != 0) goto L_0x0040
+            boolean r12 = r24.isColor()
+            if (r12 != 0) goto L_0x0040
+            r12 = 1
+            goto L_0x0041
+        L_0x0040:
+            r12 = 0
+        L_0x0041:
+            java.lang.Boolean r12 = java.lang.Boolean.valueOf(r12)
+            r8.isPatternWallpaper = r12
+            goto L_0x005d
+        L_0x0048:
+            boolean r12 = r0.isMotion
+            java.lang.Boolean r12 = java.lang.Boolean.valueOf(r12)
+            r8.isWallpaperMotion = r12
+            int r12 = r0.patternBgColor
+            if (r12 == 0) goto L_0x0056
+            r12 = 1
             goto L_0x0057
-        L_0x0042:
-            boolean r9 = r0.isMotion
-            java.lang.Boolean r9 = java.lang.Boolean.valueOf(r9)
-            r5.isWallpaperMotion = r9
-            int r9 = r0.patternBgColor
-            if (r9 == 0) goto L_0x0050
-            r9 = 1
-            goto L_0x0051
-        L_0x0050:
-            r9 = 0
-        L_0x0051:
-            java.lang.Boolean r9 = java.lang.Boolean.valueOf(r9)
-            r5.isPatternWallpaper = r9
+        L_0x0056:
+            r12 = 0
         L_0x0057:
-            r9 = 100
-            r11 = 2
-            if (r8 != 0) goto L_0x01d1
-            if (r30 == 0) goto L_0x0060
-            r8 = 0
-            goto L_0x0068
-        L_0x0060:
-            java.lang.String r8 = "chat_wallpaper"
-            java.lang.Object r8 = r2.get(r8)
-            java.lang.Integer r8 = (java.lang.Integer) r8
-        L_0x0068:
-            java.lang.String r12 = "key_chat_wallpaper_gradient_to3"
+            java.lang.Boolean r12 = java.lang.Boolean.valueOf(r12)
+            r8.isPatternWallpaper = r12
+        L_0x005d:
+            r14 = 2
+            if (r11 != 0) goto L_0x020c
+            if (r31 == 0) goto L_0x0064
+            r15 = 0
+            goto L_0x006c
+        L_0x0064:
+            java.lang.String r15 = "chat_wallpaper"
+            java.lang.Object r15 = r2.get(r15)
+            java.lang.Integer r15 = (java.lang.Integer) r15
+        L_0x006c:
+            java.lang.String r11 = "key_chat_wallpaper_gradient_to3"
+            java.lang.Object r11 = r2.get(r11)
+            java.lang.Integer r11 = (java.lang.Integer) r11
+            if (r11 != 0) goto L_0x007a
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r10)
+        L_0x007a:
+            java.lang.String r12 = "key_chat_wallpaper_gradient_to2"
             java.lang.Object r12 = r2.get(r12)
             java.lang.Integer r12 = (java.lang.Integer) r12
-            if (r12 != 0) goto L_0x0076
-            java.lang.Integer r12 = java.lang.Integer.valueOf(r7)
-        L_0x0076:
-            java.lang.String r13 = "key_chat_wallpaper_gradient_to2"
+            java.lang.String r13 = "chat_wallpaper_gradient_to"
             java.lang.Object r13 = r2.get(r13)
             java.lang.Integer r13 = (java.lang.Integer) r13
-            java.lang.String r14 = "chat_wallpaper_gradient_to"
-            java.lang.Object r14 = r2.get(r14)
-            java.lang.Integer r14 = (java.lang.Integer) r14
-            if (r25 == 0) goto L_0x00e2
-            boolean r15 = r25.exists()
-            if (r15 == 0) goto L_0x00e2
-            if (r8 == 0) goto L_0x00c4
-            if (r14 == 0) goto L_0x00c4
-            if (r13 == 0) goto L_0x00c4
-            org.telegram.ui.Components.MotionBackgroundDrawable r0 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x00dc }
-            int r17 = r8.intValue()     // Catch:{ all -> 0x00dc }
-            int r18 = r14.intValue()     // Catch:{ all -> 0x00dc }
-            int r19 = r13.intValue()     // Catch:{ all -> 0x00dc }
-            int r20 = r12.intValue()     // Catch:{ all -> 0x00dc }
-            r21 = 0
-            r16 = r0
-            r16.<init>(r17, r18, r19, r20, r21)     // Catch:{ all -> 0x00dc }
-            java.lang.String r2 = r25.getAbsolutePath()     // Catch:{ all -> 0x00dc }
-            android.graphics.Bitmap r2 = android.graphics.BitmapFactory.decodeFile(r2)     // Catch:{ all -> 0x00dc }
-            r3 = r28
-            r0.setPatternBitmap(r3, r2)     // Catch:{ all -> 0x00dc }
-            int r2 = r0.getPatternColor()     // Catch:{ all -> 0x00dc }
-            r0.setPatternColorFilter(r2)     // Catch:{ all -> 0x00dc }
-            r5.wallpaper = r0     // Catch:{ all -> 0x00dc }
-            goto L_0x00ce
-        L_0x00c4:
-            java.lang.String r0 = r25.getAbsolutePath()     // Catch:{ all -> 0x00dc }
-            android.graphics.drawable.Drawable r0 = android.graphics.drawable.Drawable.createFromPath(r0)     // Catch:{ all -> 0x00dc }
-            r5.wallpaper = r0     // Catch:{ all -> 0x00dc }
-        L_0x00ce:
-            java.lang.Boolean r0 = java.lang.Boolean.valueOf(r33)     // Catch:{ all -> 0x00dc }
-            r5.isWallpaperMotion = r0     // Catch:{ all -> 0x00dc }
-            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x00dc }
-            r5.isPatternWallpaper = r0     // Catch:{ all -> 0x00dc }
-            r5.isCustomTheme = r0     // Catch:{ all -> 0x00dc }
-            goto L_0x01d1
-        L_0x00dc:
+            if (r3 == 0) goto L_0x00e4
+            boolean r16 = r26.exists()
+            if (r16 == 0) goto L_0x00e4
+            if (r15 == 0) goto L_0x00c6
+            if (r13 == 0) goto L_0x00c6
+            if (r12 == 0) goto L_0x00c6
+            org.telegram.ui.Components.MotionBackgroundDrawable r0 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x00de }
+            int r18 = r15.intValue()     // Catch:{ all -> 0x00de }
+            int r19 = r13.intValue()     // Catch:{ all -> 0x00de }
+            int r20 = r12.intValue()     // Catch:{ all -> 0x00de }
+            int r21 = r11.intValue()     // Catch:{ all -> 0x00de }
+            r22 = 0
+            r17 = r0
+            r17.<init>(r18, r19, r20, r21, r22)     // Catch:{ all -> 0x00de }
+            java.lang.String r2 = r26.getAbsolutePath()     // Catch:{ all -> 0x00de }
+            android.graphics.Bitmap r2 = android.graphics.BitmapFactory.decodeFile(r2)     // Catch:{ all -> 0x00de }
+            r0.setPatternBitmap(r5, r2)     // Catch:{ all -> 0x00de }
+            int r2 = r0.getPatternColor()     // Catch:{ all -> 0x00de }
+            r0.setPatternColorFilter(r2)     // Catch:{ all -> 0x00de }
+            r8.wallpaper = r0     // Catch:{ all -> 0x00de }
+            goto L_0x00d0
+        L_0x00c6:
+            java.lang.String r0 = r26.getAbsolutePath()     // Catch:{ all -> 0x00de }
+            android.graphics.drawable.Drawable r0 = android.graphics.drawable.Drawable.createFromPath(r0)     // Catch:{ all -> 0x00de }
+            r8.wallpaper = r0     // Catch:{ all -> 0x00de }
+        L_0x00d0:
+            java.lang.Boolean r0 = java.lang.Boolean.valueOf(r34)     // Catch:{ all -> 0x00de }
+            r8.isWallpaperMotion = r0     // Catch:{ all -> 0x00de }
+            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x00de }
+            r8.isPatternWallpaper = r0     // Catch:{ all -> 0x00de }
+            r8.isCustomTheme = r0     // Catch:{ all -> 0x00de }
+            goto L_0x020c
+        L_0x00de:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x01d1
-        L_0x00e2:
-            if (r8 == 0) goto L_0x015d
+            goto L_0x020c
+        L_0x00e4:
+            if (r15 == 0) goto L_0x0198
             java.lang.String r0 = "chat_wallpaper_gradient_rotation"
             java.lang.Object r0 = r2.get(r0)
             java.lang.Integer r0 = (java.lang.Integer) r0
-            if (r0 != 0) goto L_0x00f4
+            if (r0 != 0) goto L_0x00f6
             r0 = 45
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-        L_0x00f4:
-            if (r14 == 0) goto L_0x0116
-            if (r13 == 0) goto L_0x0116
-            org.telegram.ui.Components.MotionBackgroundDrawable r0 = new org.telegram.ui.Components.MotionBackgroundDrawable
-            int r16 = r8.intValue()
-            int r17 = r14.intValue()
+        L_0x00f6:
+            if (r13 == 0) goto L_0x014f
+            if (r12 == 0) goto L_0x014f
+            org.telegram.ui.Components.MotionBackgroundDrawable r2 = new org.telegram.ui.Components.MotionBackgroundDrawable
+            int r17 = r15.intValue()
             int r18 = r13.intValue()
             int r19 = r12.intValue()
-            r20 = 0
-            r15 = r0
-            r15.<init>(r16, r17, r18, r19, r20)
-            r0.setPhase(r4)
-            r5.wallpaper = r0
-            goto L_0x0157
-        L_0x0116:
-            if (r14 == 0) goto L_0x014c
-            boolean r2 = r14.equals(r8)
-            if (r2 == 0) goto L_0x011f
-            goto L_0x014c
-        L_0x011f:
-            int[] r2 = new int[r11]
-            int r3 = r8.intValue()
-            r2[r7] = r3
-            int r3 = r14.intValue()
-            r2[r6] = r3
+            int r20 = r11.intValue()
+            r21 = 0
+            r16 = r2
+            r16.<init>(r17, r18, r19, r20, r21)
+            if (r3 == 0) goto L_0x0145
+            if (r7 == 0) goto L_0x0145
+            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r9)
+            r4 = 1135869952(0x43b40000, float:360.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r7 = 1142947840(0x44200000, float:640.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            android.graphics.Bitmap r11 = org.telegram.messenger.SvgHelper.getBitmap((java.io.File) r0, (int) r4, (int) r7, (boolean) r10)
+            if (r11 == 0) goto L_0x0146
+            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x013d }
+            r0.<init>(r3)     // Catch:{ Exception -> 0x013d }
+            android.graphics.Bitmap$CompressFormat r3 = android.graphics.Bitmap.CompressFormat.PNG     // Catch:{ Exception -> 0x013d }
+            r4 = 87
+            r11.compress(r3, r4, r0)     // Catch:{ Exception -> 0x013d }
+            r0.close()     // Catch:{ Exception -> 0x013d }
+            goto L_0x0146
+        L_0x013d:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+            r0.printStackTrace()
+            goto L_0x0146
+        L_0x0145:
+            r11 = 0
+        L_0x0146:
+            r2.setPatternBitmap(r5, r11)
+            r2.setPhase(r6)
+            r8.wallpaper = r2
+            goto L_0x0192
+        L_0x014f:
+            if (r13 == 0) goto L_0x0187
+            boolean r2 = r13.equals(r15)
+            if (r2 == 0) goto L_0x0158
+            goto L_0x0187
+        L_0x0158:
+            int[] r2 = new int[r14]
+            int r3 = r15.intValue()
+            r2[r10] = r3
+            int r3 = r13.intValue()
+            r2[r9] = r3
             int r0 = r0.intValue()
             android.graphics.drawable.GradientDrawable$Orientation r0 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r0)
             org.telegram.ui.Components.BackgroundGradientDrawable r3 = new org.telegram.ui.Components.BackgroundGradientDrawable
@@ -16861,202 +16898,207 @@ public class Theme {
             org.telegram.ui.ActionBar.Theme$11 r0 = new org.telegram.ui.ActionBar.Theme$11
             r0.<init>()
             org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r2 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()
-            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r0 = r3.startDithering(r2, r0, r9)
+            r4 = 100
+            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r0 = r3.startDithering(r2, r0, r4)
             backgroundGradientDisposable = r0
-            r5.wallpaper = r3
-            goto L_0x0157
-        L_0x014c:
+            r8.wallpaper = r3
+            goto L_0x0192
+        L_0x0187:
             android.graphics.drawable.ColorDrawable r0 = new android.graphics.drawable.ColorDrawable
-            int r2 = r8.intValue()
+            int r2 = r15.intValue()
             r0.<init>(r2)
-            r5.wallpaper = r0
-        L_0x0157:
+            r8.wallpaper = r0
+        L_0x0192:
             java.lang.Boolean r0 = java.lang.Boolean.TRUE
-            r5.isCustomTheme = r0
-            goto L_0x01d1
-        L_0x015d:
-            if (r26 == 0) goto L_0x0199
-            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x0194 }
-            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x0194 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0194 }
-            r3.<init>()     // Catch:{ Exception -> 0x0194 }
-            java.lang.String r8 = org.telegram.messenger.Utilities.MD5(r26)     // Catch:{ Exception -> 0x0194 }
-            r3.append(r8)     // Catch:{ Exception -> 0x0194 }
-            java.lang.String r8 = ".wp"
-            r3.append(r8)     // Catch:{ Exception -> 0x0194 }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0194 }
-            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x0194 }
-            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0194 }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x0194 }
-            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r7)     // Catch:{ Exception -> 0x0194 }
-            if (r0 == 0) goto L_0x01d1
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ Exception -> 0x0194 }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x0194 }
-            r5.wallpaper = r2     // Catch:{ Exception -> 0x0194 }
-            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x0194 }
-            r5.isCustomTheme = r0     // Catch:{ Exception -> 0x0194 }
-            goto L_0x01d1
-        L_0x0194:
+            r8.isCustomTheme = r0
+            goto L_0x020c
+        L_0x0198:
+            if (r27 == 0) goto L_0x01d4
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x01cf }
+            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x01cf }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01cf }
+            r3.<init>()     // Catch:{ Exception -> 0x01cf }
+            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r27)     // Catch:{ Exception -> 0x01cf }
+            r3.append(r4)     // Catch:{ Exception -> 0x01cf }
+            java.lang.String r4 = ".wp"
+            r3.append(r4)     // Catch:{ Exception -> 0x01cf }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x01cf }
+            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x01cf }
+            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ Exception -> 0x01cf }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x01cf }
+            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r10)     // Catch:{ Exception -> 0x01cf }
+            if (r0 == 0) goto L_0x020c
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ Exception -> 0x01cf }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x01cf }
+            r8.wallpaper = r2     // Catch:{ Exception -> 0x01cf }
+            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x01cf }
+            r8.isCustomTheme = r0     // Catch:{ Exception -> 0x01cf }
+            goto L_0x020c
+        L_0x01cf:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x01d1
-        L_0x0199:
-            if (r3 <= 0) goto L_0x01d1
+            goto L_0x020c
+        L_0x01d4:
+            if (r4 <= 0) goto L_0x020c
             java.lang.String r2 = r0.pathToFile
-            if (r2 != 0) goto L_0x01a3
+            if (r2 != 0) goto L_0x01de
             java.lang.String r2 = r0.assetName
-            if (r2 == 0) goto L_0x01d1
-        L_0x01a3:
-            java.lang.String r2 = r0.assetName     // Catch:{ all -> 0x01cd }
-            if (r2 == 0) goto L_0x01ac
-            java.io.File r0 = getAssetFile(r2)     // Catch:{ all -> 0x01cd }
-            goto L_0x01b4
-        L_0x01ac:
-            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x01cd }
-            java.lang.String r0 = r0.pathToFile     // Catch:{ all -> 0x01cd }
-            r2.<init>(r0)     // Catch:{ all -> 0x01cd }
+            if (r2 == 0) goto L_0x020c
+        L_0x01de:
+            java.lang.String r2 = r0.assetName     // Catch:{ all -> 0x0208 }
+            if (r2 == 0) goto L_0x01e7
+            java.io.File r0 = getAssetFile(r2)     // Catch:{ all -> 0x0208 }
+            goto L_0x01ef
+        L_0x01e7:
+            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x0208 }
+            java.lang.String r0 = r0.pathToFile     // Catch:{ all -> 0x0208 }
+            r2.<init>(r0)     // Catch:{ all -> 0x0208 }
             r0 = r2
-        L_0x01b4:
-            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ all -> 0x01cd }
-            r2.<init>(r0)     // Catch:{ all -> 0x01cd }
-            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r3)     // Catch:{ all -> 0x01cd }
-            if (r0 == 0) goto L_0x01d1
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x01cd }
-            r2.<init>(r0)     // Catch:{ all -> 0x01cd }
-            wallpaper = r2     // Catch:{ all -> 0x01cd }
-            r5.wallpaper = r2     // Catch:{ all -> 0x01cd }
-            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x01cd }
-            r5.isCustomTheme = r0     // Catch:{ all -> 0x01cd }
-            goto L_0x01d1
-        L_0x01cd:
+        L_0x01ef:
+            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ all -> 0x0208 }
+            r2.<init>(r0)     // Catch:{ all -> 0x0208 }
+            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r4)     // Catch:{ all -> 0x0208 }
+            if (r0 == 0) goto L_0x020c
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0208 }
+            r2.<init>(r0)     // Catch:{ all -> 0x0208 }
+            wallpaper = r2     // Catch:{ all -> 0x0208 }
+            r8.wallpaper = r2     // Catch:{ all -> 0x0208 }
+            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x0208 }
+            r8.isCustomTheme = r0     // Catch:{ all -> 0x0208 }
+            goto L_0x020c
+        L_0x0208:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x01d1:
-            android.graphics.drawable.Drawable r0 = r5.wallpaper
-            if (r0 != 0) goto L_0x02c8
-            if (r1 == 0) goto L_0x01da
+        L_0x020c:
+            android.graphics.drawable.Drawable r0 = r8.wallpaper
+            if (r0 != 0) goto L_0x030d
+            if (r1 == 0) goto L_0x0215
             int r0 = r1.color
-            goto L_0x01db
-        L_0x01da:
+            goto L_0x0216
+        L_0x0215:
             r0 = 0
-        L_0x01db:
-            if (r1 == 0) goto L_0x02ac
-            boolean r2 = r23.isDefault()     // Catch:{ all -> 0x02b7 }
-            if (r2 == 0) goto L_0x01e5
-            goto L_0x02ac
-        L_0x01e5:
-            boolean r2 = r23.isColor()     // Catch:{ all -> 0x02b7 }
-            if (r2 == 0) goto L_0x01ef
-            int r2 = r1.gradientColor1     // Catch:{ all -> 0x02b7 }
-            if (r2 == 0) goto L_0x02b8
-        L_0x01ef:
-            if (r0 == 0) goto L_0x0276
-            boolean r2 = isPatternWallpaper     // Catch:{ all -> 0x02b7 }
-            if (r2 == 0) goto L_0x01f9
-            int r2 = r1.gradientColor2     // Catch:{ all -> 0x02b7 }
-            if (r2 == 0) goto L_0x0276
-        L_0x01f9:
-            int r2 = r1.gradientColor1     // Catch:{ all -> 0x02b7 }
-            if (r2 == 0) goto L_0x0249
-            int r3 = r1.gradientColor2     // Catch:{ all -> 0x02b7 }
-            if (r3 == 0) goto L_0x0249
-            org.telegram.ui.Components.MotionBackgroundDrawable r2 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x02b7 }
-            int r13 = r1.color     // Catch:{ all -> 0x02b7 }
-            int r14 = r1.gradientColor1     // Catch:{ all -> 0x02b7 }
-            int r15 = r1.gradientColor2     // Catch:{ all -> 0x02b7 }
-            int r3 = r1.gradientColor3     // Catch:{ all -> 0x02b7 }
-            r17 = 0
-            r12 = r2
-            r16 = r3
-            r12.<init>(r13, r14, r15, r16, r17)     // Catch:{ all -> 0x02b7 }
-            r2.setPhase(r4)     // Catch:{ all -> 0x02b7 }
-            java.lang.Boolean r3 = r5.isPatternWallpaper     // Catch:{ all -> 0x02b7 }
-            boolean r3 = r3.booleanValue()     // Catch:{ all -> 0x02b7 }
-            if (r3 == 0) goto L_0x0246
-            java.io.File r3 = new java.io.File     // Catch:{ all -> 0x02b7 }
-            java.io.File r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x02b7 }
-            java.lang.String r6 = r1.fileName     // Catch:{ all -> 0x02b7 }
-            r3.<init>(r4, r6)     // Catch:{ all -> 0x02b7 }
-            boolean r4 = r3.exists()     // Catch:{ all -> 0x02b7 }
-            if (r4 == 0) goto L_0x0246
-            float r1 = r1.intensity     // Catch:{ all -> 0x02b7 }
+        L_0x0216:
+            if (r1 == 0) goto L_0x02f1
+            boolean r2 = r24.isDefault()     // Catch:{ all -> 0x02fc }
+            if (r2 == 0) goto L_0x0220
+            goto L_0x02f1
+        L_0x0220:
+            boolean r2 = r24.isColor()     // Catch:{ all -> 0x02fc }
+            if (r2 == 0) goto L_0x022a
+            int r2 = r1.gradientColor1     // Catch:{ all -> 0x02fc }
+            if (r2 == 0) goto L_0x02fd
+        L_0x022a:
+            if (r0 == 0) goto L_0x02bb
+            boolean r2 = isPatternWallpaper     // Catch:{ all -> 0x02fc }
+            if (r2 == 0) goto L_0x0234
+            int r2 = r1.gradientColor2     // Catch:{ all -> 0x02fc }
+            if (r2 == 0) goto L_0x02bb
+        L_0x0234:
+            int r2 = r1.gradientColor1     // Catch:{ all -> 0x02fc }
+            if (r2 == 0) goto L_0x028c
+            int r3 = r1.gradientColor2     // Catch:{ all -> 0x02fc }
+            if (r3 == 0) goto L_0x028c
+            org.telegram.ui.Components.MotionBackgroundDrawable r2 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x02fc }
+            int r3 = r1.color     // Catch:{ all -> 0x02fc }
+            int r4 = r1.gradientColor1     // Catch:{ all -> 0x02fc }
+            int r5 = r1.gradientColor2     // Catch:{ all -> 0x02fc }
+            int r7 = r1.gradientColor3     // Catch:{ all -> 0x02fc }
+            r21 = 0
+            r16 = r2
+            r17 = r3
+            r18 = r4
+            r19 = r5
+            r20 = r7
+            r16.<init>(r17, r18, r19, r20, r21)     // Catch:{ all -> 0x02fc }
+            r2.setPhase(r6)     // Catch:{ all -> 0x02fc }
+            java.lang.Boolean r3 = r8.isPatternWallpaper     // Catch:{ all -> 0x02fc }
+            boolean r3 = r3.booleanValue()     // Catch:{ all -> 0x02fc }
+            if (r3 == 0) goto L_0x0288
+            java.io.File r3 = new java.io.File     // Catch:{ all -> 0x02fc }
+            java.io.File r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x02fc }
+            java.lang.String r5 = r1.fileName     // Catch:{ all -> 0x02fc }
+            r3.<init>(r4, r5)     // Catch:{ all -> 0x02fc }
+            boolean r4 = r3.exists()     // Catch:{ all -> 0x02fc }
+            if (r4 == 0) goto L_0x0288
+            float r1 = r1.intensity     // Catch:{ all -> 0x02fc }
             r4 = 1120403456(0x42CLASSNAME, float:100.0)
             float r1 = r1 * r4
-            int r1 = (int) r1     // Catch:{ all -> 0x02b7 }
-            java.io.FileInputStream r4 = new java.io.FileInputStream     // Catch:{ all -> 0x02b7 }
-            r4.<init>(r3)     // Catch:{ all -> 0x02b7 }
-            android.graphics.Bitmap r3 = loadScreenSizedBitmap(r4, r7)     // Catch:{ all -> 0x02b7 }
-            r2.setPatternBitmap(r1, r3)     // Catch:{ all -> 0x02b7 }
-            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x02b7 }
-            r5.isCustomTheme = r1     // Catch:{ all -> 0x02b7 }
-        L_0x0246:
-            r5.wallpaper = r2     // Catch:{ all -> 0x02b7 }
-            goto L_0x02b8
-        L_0x0249:
-            if (r2 == 0) goto L_0x026e
-            int[] r3 = new int[r11]     // Catch:{ all -> 0x02b7 }
-            r3[r7] = r0     // Catch:{ all -> 0x02b7 }
-            r3[r6] = r2     // Catch:{ all -> 0x02b7 }
-            int r1 = r1.rotation     // Catch:{ all -> 0x02b7 }
-            android.graphics.drawable.GradientDrawable$Orientation r1 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r1)     // Catch:{ all -> 0x02b7 }
-            org.telegram.ui.Components.BackgroundGradientDrawable r2 = new org.telegram.ui.Components.BackgroundGradientDrawable     // Catch:{ all -> 0x02b7 }
-            r2.<init>(r1, r3)     // Catch:{ all -> 0x02b7 }
-            org.telegram.ui.ActionBar.Theme$12 r1 = new org.telegram.ui.ActionBar.Theme$12     // Catch:{ all -> 0x02b7 }
-            r1.<init>()     // Catch:{ all -> 0x02b7 }
-            org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r3 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()     // Catch:{ all -> 0x02b7 }
-            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r1 = r2.startDithering(r3, r1, r9)     // Catch:{ all -> 0x02b7 }
-            backgroundGradientDisposable = r1     // Catch:{ all -> 0x02b7 }
-            r5.wallpaper = r2     // Catch:{ all -> 0x02b7 }
-            goto L_0x02b8
-        L_0x026e:
-            android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x02b7 }
-            r1.<init>(r0)     // Catch:{ all -> 0x02b7 }
-            r5.wallpaper = r1     // Catch:{ all -> 0x02b7 }
-            goto L_0x02b8
-        L_0x0276:
-            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x02b7 }
-            java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x02b7 }
-            java.lang.String r1 = r1.fileName     // Catch:{ all -> 0x02b7 }
-            r2.<init>(r3, r1)     // Catch:{ all -> 0x02b7 }
-            boolean r1 = r2.exists()     // Catch:{ all -> 0x02b7 }
-            if (r1 == 0) goto L_0x029d
-            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ all -> 0x02b7 }
-            r1.<init>(r2)     // Catch:{ all -> 0x02b7 }
-            android.graphics.Bitmap r1 = loadScreenSizedBitmap(r1, r7)     // Catch:{ all -> 0x02b7 }
-            if (r1 == 0) goto L_0x029d
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x02b7 }
-            r2.<init>(r1)     // Catch:{ all -> 0x02b7 }
-            r5.wallpaper = r2     // Catch:{ all -> 0x02b7 }
-            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x02b7 }
-            r5.isCustomTheme = r1     // Catch:{ all -> 0x02b7 }
-        L_0x029d:
-            android.graphics.drawable.Drawable r1 = r5.wallpaper     // Catch:{ all -> 0x02b7 }
-            if (r1 != 0) goto L_0x02b8
-            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x02b7 }
-            r5.wallpaper = r1     // Catch:{ all -> 0x02b7 }
-            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x02b7 }
-            r5.isCustomTheme = r1     // Catch:{ all -> 0x02b7 }
-            goto L_0x02b8
-        L_0x02ac:
-            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x02b7 }
-            r5.wallpaper = r1     // Catch:{ all -> 0x02b7 }
-            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x02b7 }
-            r5.isCustomTheme = r1     // Catch:{ all -> 0x02b7 }
-            goto L_0x02b8
-        L_0x02b7:
-        L_0x02b8:
-            android.graphics.drawable.Drawable r1 = r5.wallpaper
-            if (r1 != 0) goto L_0x02c8
-            if (r0 != 0) goto L_0x02c1
+            int r1 = (int) r1     // Catch:{ all -> 0x02fc }
+            java.io.FileInputStream r4 = new java.io.FileInputStream     // Catch:{ all -> 0x02fc }
+            r4.<init>(r3)     // Catch:{ all -> 0x02fc }
+            android.graphics.Bitmap r3 = loadScreenSizedBitmap(r4, r10)     // Catch:{ all -> 0x02fc }
+            r2.setPatternBitmap(r1, r3)     // Catch:{ all -> 0x02fc }
+            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x02fc }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x02fc }
+        L_0x0288:
+            r8.wallpaper = r2     // Catch:{ all -> 0x02fc }
+            goto L_0x02fd
+        L_0x028c:
+            if (r2 == 0) goto L_0x02b3
+            int[] r3 = new int[r14]     // Catch:{ all -> 0x02fc }
+            r3[r10] = r0     // Catch:{ all -> 0x02fc }
+            r3[r9] = r2     // Catch:{ all -> 0x02fc }
+            int r1 = r1.rotation     // Catch:{ all -> 0x02fc }
+            android.graphics.drawable.GradientDrawable$Orientation r1 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r1)     // Catch:{ all -> 0x02fc }
+            org.telegram.ui.Components.BackgroundGradientDrawable r2 = new org.telegram.ui.Components.BackgroundGradientDrawable     // Catch:{ all -> 0x02fc }
+            r2.<init>(r1, r3)     // Catch:{ all -> 0x02fc }
+            org.telegram.ui.ActionBar.Theme$12 r1 = new org.telegram.ui.ActionBar.Theme$12     // Catch:{ all -> 0x02fc }
+            r1.<init>()     // Catch:{ all -> 0x02fc }
+            org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r3 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()     // Catch:{ all -> 0x02fc }
+            r4 = 100
+            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r1 = r2.startDithering(r3, r1, r4)     // Catch:{ all -> 0x02fc }
+            backgroundGradientDisposable = r1     // Catch:{ all -> 0x02fc }
+            r8.wallpaper = r2     // Catch:{ all -> 0x02fc }
+            goto L_0x02fd
+        L_0x02b3:
+            android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x02fc }
+            r1.<init>(r0)     // Catch:{ all -> 0x02fc }
+            r8.wallpaper = r1     // Catch:{ all -> 0x02fc }
+            goto L_0x02fd
+        L_0x02bb:
+            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x02fc }
+            java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x02fc }
+            java.lang.String r1 = r1.fileName     // Catch:{ all -> 0x02fc }
+            r2.<init>(r3, r1)     // Catch:{ all -> 0x02fc }
+            boolean r1 = r2.exists()     // Catch:{ all -> 0x02fc }
+            if (r1 == 0) goto L_0x02e2
+            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ all -> 0x02fc }
+            r1.<init>(r2)     // Catch:{ all -> 0x02fc }
+            android.graphics.Bitmap r1 = loadScreenSizedBitmap(r1, r10)     // Catch:{ all -> 0x02fc }
+            if (r1 == 0) goto L_0x02e2
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x02fc }
+            r2.<init>(r1)     // Catch:{ all -> 0x02fc }
+            r8.wallpaper = r2     // Catch:{ all -> 0x02fc }
+            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x02fc }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x02fc }
+        L_0x02e2:
+            android.graphics.drawable.Drawable r1 = r8.wallpaper     // Catch:{ all -> 0x02fc }
+            if (r1 != 0) goto L_0x02fd
+            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x02fc }
+            r8.wallpaper = r1     // Catch:{ all -> 0x02fc }
+            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x02fc }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x02fc }
+            goto L_0x02fd
+        L_0x02f1:
+            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x02fc }
+            r8.wallpaper = r1     // Catch:{ all -> 0x02fc }
+            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x02fc }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x02fc }
+            goto L_0x02fd
+        L_0x02fc:
+        L_0x02fd:
+            android.graphics.drawable.Drawable r1 = r8.wallpaper
+            if (r1 != 0) goto L_0x030d
+            if (r0 != 0) goto L_0x0306
             r0 = -2693905(0xffffffffffd6e4ef, float:NaN)
-        L_0x02c1:
+        L_0x0306:
             android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
             r1.<init>(r0)
-            r5.wallpaper = r1
-        L_0x02c8:
-            return r5
+            r8.wallpaper = r1
+        L_0x030d:
+            return r8
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createBackgroundDrawable(org.telegram.ui.ActionBar.Theme$ThemeInfo, org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo, java.util.HashMap, java.io.File, java.lang.String, int, int, int, boolean, boolean, boolean, boolean):org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createBackgroundDrawable(org.telegram.ui.ActionBar.Theme$ThemeInfo, org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo, java.util.HashMap, java.io.File, java.lang.String, int, int, int, boolean, boolean, boolean, boolean, org.telegram.tgnet.TLRPC$Document):org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings");
     }
 
     public static Drawable createDefaultWallpaper() {
@@ -17136,7 +17178,7 @@ public class Theme {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00f8 A[SYNTHETIC, Splitter:B:52:0x00f8] */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x016f A[SYNTHETIC, Splitter:B:91:0x016f] */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0176 A[SYNTHETIC, Splitter:B:91:0x0176] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static android.graphics.drawable.Drawable getThemedWallpaper(boolean r17, android.view.View r18) {
         /*
@@ -17269,24 +17311,24 @@ public class Theme {
         L_0x00f5:
             r1 = 0
         L_0x00f6:
-            if (r10 == 0) goto L_0x0187
-            java.io.FileInputStream r6 = new java.io.FileInputStream     // Catch:{ all -> 0x0168 }
-            r6.<init>(r10)     // Catch:{ all -> 0x0168 }
-            java.nio.channels.FileChannel r7 = r6.getChannel()     // Catch:{ all -> 0x0166 }
-            long r8 = (long) r1     // Catch:{ all -> 0x0166 }
-            r7.position(r8)     // Catch:{ all -> 0x0166 }
-            android.graphics.BitmapFactory$Options r1 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0166 }
-            r1.<init>()     // Catch:{ all -> 0x0166 }
+            if (r10 == 0) goto L_0x018e
+            java.io.FileInputStream r6 = new java.io.FileInputStream     // Catch:{ all -> 0x016f }
+            r6.<init>(r10)     // Catch:{ all -> 0x016f }
+            java.nio.channels.FileChannel r7 = r6.getChannel()     // Catch:{ all -> 0x016d }
+            long r8 = (long) r1     // Catch:{ all -> 0x016d }
+            r7.position(r8)     // Catch:{ all -> 0x016d }
+            android.graphics.BitmapFactory$Options r1 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x016d }
+            r1.<init>()     // Catch:{ all -> 0x016d }
             r7 = 1120403456(0x42CLASSNAME, float:100.0)
             if (r0 == 0) goto L_0x012a
-            r1.inJustDecodeBounds = r3     // Catch:{ all -> 0x0166 }
-            int r0 = r1.outWidth     // Catch:{ all -> 0x0166 }
-            float r0 = (float) r0     // Catch:{ all -> 0x0166 }
-            int r8 = r1.outHeight     // Catch:{ all -> 0x0166 }
-            float r8 = (float) r8     // Catch:{ all -> 0x0166 }
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)     // Catch:{ all -> 0x0166 }
+            r1.inJustDecodeBounds = r3     // Catch:{ all -> 0x016d }
+            int r0 = r1.outWidth     // Catch:{ all -> 0x016d }
+            float r0 = (float) r0     // Catch:{ all -> 0x016d }
+            int r8 = r1.outHeight     // Catch:{ all -> 0x016d }
+            float r8 = (float) r8     // Catch:{ all -> 0x016d }
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)     // Catch:{ all -> 0x016d }
         L_0x011a:
-            float r10 = (float) r9     // Catch:{ all -> 0x0166 }
+            float r10 = (float) r9     // Catch:{ all -> 0x016d }
             int r11 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1))
             if (r11 > 0) goto L_0x0123
             int r10 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
@@ -17298,73 +17340,75 @@ public class Theme {
             float r8 = r8 / r10
             goto L_0x011a
         L_0x012a:
-            r1.inJustDecodeBounds = r4     // Catch:{ all -> 0x0166 }
-            r1.inSampleSize = r3     // Catch:{ all -> 0x0166 }
-            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeStream(r6, r5, r1)     // Catch:{ all -> 0x0166 }
-            if (r2 == 0) goto L_0x0151
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r1 = currentTheme     // Catch:{ all -> 0x0166 }
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = r1.getAccent(r4)     // Catch:{ all -> 0x0166 }
+            r1.inJustDecodeBounds = r4     // Catch:{ all -> 0x016d }
+            r1.inSampleSize = r3     // Catch:{ all -> 0x016d }
+            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeStream(r6, r5, r1)     // Catch:{ all -> 0x016d }
+            if (r2 == 0) goto L_0x0158
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r1 = currentTheme     // Catch:{ all -> 0x016d }
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = r1.getAccent(r4)     // Catch:{ all -> 0x016d }
             if (r1 == 0) goto L_0x0142
-            float r1 = r1.patternIntensity     // Catch:{ all -> 0x0166 }
+            float r1 = r1.patternIntensity     // Catch:{ all -> 0x016d }
             float r1 = r1 * r7
-            int r1 = (int) r1     // Catch:{ all -> 0x0166 }
+            int r1 = (int) r1     // Catch:{ all -> 0x016d }
             goto L_0x0144
         L_0x0142:
             r1 = 100
         L_0x0144:
-            r2.setPatternBitmap(r1, r0)     // Catch:{ all -> 0x0166 }
-            r6.close()     // Catch:{ Exception -> 0x014b }
-            goto L_0x0150
-        L_0x014b:
+            r2.setPatternBitmap(r1, r0)     // Catch:{ all -> 0x016d }
+            int r0 = r2.getPatternColor()     // Catch:{ all -> 0x016d }
+            r2.setPatternColorFilter(r0)     // Catch:{ all -> 0x016d }
+            r6.close()     // Catch:{ Exception -> 0x0152 }
+            goto L_0x0157
+        L_0x0152:
             r0 = move-exception
             r1 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x0150:
+        L_0x0157:
             return r2
-        L_0x0151:
-            if (r0 == 0) goto L_0x0162
-            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0166 }
-            r1.<init>(r0)     // Catch:{ all -> 0x0166 }
-            r6.close()     // Catch:{ Exception -> 0x015c }
-            goto L_0x0161
-        L_0x015c:
+        L_0x0158:
+            if (r0 == 0) goto L_0x0169
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x016d }
+            r1.<init>(r0)     // Catch:{ all -> 0x016d }
+            r6.close()     // Catch:{ Exception -> 0x0163 }
+            goto L_0x0168
+        L_0x0163:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x0161:
-            return r1
-        L_0x0162:
-            r6.close()     // Catch:{ Exception -> 0x0173 }
-            goto L_0x0187
-        L_0x0166:
-            r0 = move-exception
-            goto L_0x016a
         L_0x0168:
+            return r1
+        L_0x0169:
+            r6.close()     // Catch:{ Exception -> 0x017a }
+            goto L_0x018e
+        L_0x016d:
+            r0 = move-exception
+            goto L_0x0171
+        L_0x016f:
             r0 = move-exception
             r6 = r5
-        L_0x016a:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0179 }
-            if (r6 == 0) goto L_0x0187
-            r6.close()     // Catch:{ Exception -> 0x0173 }
-            goto L_0x0187
-        L_0x0173:
+        L_0x0171:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0180 }
+            if (r6 == 0) goto L_0x018e
+            r6.close()     // Catch:{ Exception -> 0x017a }
+            goto L_0x018e
+        L_0x017a:
             r0 = move-exception
             r1 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-            goto L_0x0187
-        L_0x0179:
+            goto L_0x018e
+        L_0x0180:
             r0 = move-exception
             r1 = r0
-            if (r6 == 0) goto L_0x0186
-            r6.close()     // Catch:{ Exception -> 0x0181 }
-            goto L_0x0186
-        L_0x0181:
+            if (r6 == 0) goto L_0x018d
+            r6.close()     // Catch:{ Exception -> 0x0188 }
+            goto L_0x018d
+        L_0x0188:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x0186:
+        L_0x018d:
             throw r1
-        L_0x0187:
+        L_0x018e:
             return r5
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.getThemedWallpaper(boolean, android.view.View):android.graphics.drawable.Drawable");

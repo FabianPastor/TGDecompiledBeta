@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BlendMode;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -3150,18 +3149,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 File pathToWallpaper = this.accent.getPathToWallpaper();
                 Drawable background = this.backgroundImage.getBackground();
                 Bitmap bitmap = this.backgroundImage.getImageReceiver().getBitmap();
-                Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(createBitmap);
-                if (!(background instanceof MotionBackgroundDrawable)) {
-                    background.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                    background.draw(canvas);
-                }
-                Paint paint = new Paint(2);
-                paint.setColorFilter(new PorterDuffColorFilter(this.patternColor, this.blendMode));
-                paint.setAlpha((int) (Math.abs(this.currentIntensity) * 255.0f));
-                canvas.drawBitmap(bitmap, 0.0f, 0.0f, paint);
                 FileOutputStream fileOutputStream = new FileOutputStream(pathToWallpaper);
-                createBitmap.compress(background instanceof MotionBackgroundDrawable ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG, 87, fileOutputStream);
+                bitmap.compress(background instanceof MotionBackgroundDrawable ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG, 87, fileOutputStream);
                 fileOutputStream.close();
             } catch (Throwable th) {
                 FileLog.e(th);
