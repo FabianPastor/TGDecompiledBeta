@@ -2688,6 +2688,7 @@ public final class R {
         public static final int ChatSettings = NUM;
         public static final int ChatThemeChangedTo = NUM;
         public static final int ChatThemeChangedYou = NUM;
+        public static final int ChatThemeDayNightSwitchTooltip = NUM;
         public static final int ChatThemeDisabled = NUM;
         public static final int ChatThemeDisabledYou = NUM;
         public static final int ChatThemeSaveDialogApply = NUM;
@@ -3167,6 +3168,7 @@ public final class R {
         public static final int Emoji6 = NUM;
         public static final int Emoji7 = NUM;
         public static final int Emoji8 = NUM;
+        public static final int EmojiInteractionTapHint = NUM;
         public static final int EmojiSuggestions = NUM;
         public static final int EmojiSuggestionsInfo = NUM;
         public static final int EmojiSuggestionsUrl = NUM;
@@ -5770,6 +5772,7 @@ public final class R {
         public static final int TextSizeHeader = NUM;
         public static final int Theme = NUM;
         public static final int ThemeAlsoAppliedForHint = NUM;
+        public static final int ThemeAlsoDisabledForHint = NUM;
         public static final int ThemeArcticBlue = NUM;
         public static final int ThemeClassic = NUM;
         public static final int ThemeCreateHelp = NUM;

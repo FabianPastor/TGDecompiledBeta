@@ -205,7 +205,7 @@ public class WallpaperCell extends FrameLayout {
                     }
                     if ("d".equals(colorWallpaper.slug)) {
                         if (colorWallpaper.defaultCache == null) {
-                            colorWallpaper.defaultCache = SvgHelper.getBitmap(NUM, 100, 180, i);
+                            colorWallpaper.defaultCache = SvgHelper.getBitmap(NUM, 100, 180, -16777216);
                         }
                         this.imageView.setImageBitmap(colorWallpaper.defaultCache);
                         this.imageView.getImageReceiver().setAlpha(Math.abs(colorWallpaper.intensity));

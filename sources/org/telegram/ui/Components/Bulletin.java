@@ -342,7 +342,10 @@ public final class Bulletin {
     }
 
     public void updatePosition() {
-        this.layout.updatePosition();
+        Layout layout2 = this.layout;
+        if (layout2 != null) {
+            layout2.updatePosition();
+        }
     }
 
     private static abstract class ParentLayout extends FrameLayout {

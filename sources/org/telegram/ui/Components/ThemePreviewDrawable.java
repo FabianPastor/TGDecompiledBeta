@@ -137,7 +137,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r26 = r3
             r24 = r11
             r2 = 120(0x78, float:1.68E-43)
-            if (r14 == 0) goto L_0x0274
+            if (r14 == 0) goto L_0x0269
             if (r15 != 0) goto L_0x012f
             android.graphics.drawable.ColorDrawable r3 = new android.graphics.drawable.ColorDrawable
             int r4 = r14.intValue()
@@ -183,7 +183,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r8 = 0
             r3.setBounds(r8, r2, r5, r6)
             r3.draw(r10)
-            if (r0 == 0) goto L_0x0271
+            if (r0 == 0) goto L_0x0266
             java.lang.String r3 = r1.mime_type
             java.lang.String r5 = "application/x-tgwallpattern"
             boolean r3 = r5.equals(r3)
@@ -247,69 +247,64 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             java.lang.String r0 = r33.getAbsolutePath()
             android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r0, r3)
         L_0x0204:
-            if (r0 == 0) goto L_0x0271
+            if (r0 == 0) goto L_0x0266
             android.graphics.Paint r3 = new android.graphics.Paint
             r5 = 2
             r3.<init>(r5)
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r5 = r1.accent
-            float r5 = r5.patternIntensity
-            r6 = 0
-            int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r5 < 0) goto L_0x021f
-            android.graphics.PorterDuffColorFilter r5 = new android.graphics.PorterDuffColorFilter
-            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.SRC_IN
-            r5.<init>(r4, r8)
-            r3.setColorFilter(r5)
-        L_0x021f:
-            r4 = 1132396544(0x437var_, float:255.0)
             org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = r1.accent
             float r1 = r1.patternIntensity
-            float r1 = java.lang.Math.abs(r1)
-            float r1 = r1 * r4
-            int r1 = (int) r1
+            r5 = 0
+            int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
+            if (r1 < 0) goto L_0x021f
+            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.SRC_IN
+            r1.<init>(r4, r6)
+            r3.setColorFilter(r1)
+        L_0x021f:
+            r1 = 255(0xff, float:3.57E-43)
             r3.setAlpha(r1)
             r1 = 1141637120(0x440CLASSNAME, float:560.0)
             int r4 = r0.getWidth()
             float r4 = (float) r4
             float r1 = r1 / r4
             r4 = 1143570432(0x44298000, float:678.0)
-            int r5 = r0.getHeight()
-            float r5 = (float) r5
-            float r4 = r4 / r5
+            int r6 = r0.getHeight()
+            float r6 = (float) r6
+            float r4 = r4 / r6
             float r1 = java.lang.Math.max(r1, r4)
             int r4 = r0.getWidth()
             float r4 = (float) r4
             float r4 = r4 * r1
             int r4 = (int) r4
-            int r5 = r0.getHeight()
-            float r5 = (float) r5
-            float r5 = r5 * r1
-            int r5 = (int) r5
+            int r6 = r0.getHeight()
+            float r6 = (float) r6
+            float r6 = r6 * r1
+            int r6 = (int) r6
             r8 = 560(0x230, float:7.85E-43)
             int r4 = 560 - r4
             r8 = 2
             int r4 = r4 / r8
             r11 = 678(0x2a6, float:9.5E-43)
-            int r5 = 678 - r5
-            int r5 = r5 / r8
+            int r6 = 678 - r6
+            int r6 = r6 / r8
             r10.save()
             float r4 = (float) r4
-            float r5 = (float) r5
-            r10.translate(r4, r5)
+            float r6 = (float) r6
+            r10.translate(r4, r6)
             r10.scale(r1, r1)
-            r10.drawBitmap(r0, r6, r6, r3)
+            r10.drawBitmap(r0, r5, r5, r3)
             r10.restore()
-            goto L_0x0272
-        L_0x0271:
+            goto L_0x0267
+        L_0x0266:
             r8 = 2
-        L_0x0272:
+        L_0x0267:
             r0 = 1
-            goto L_0x0276
-        L_0x0274:
+            goto L_0x026b
+        L_0x0269:
             r8 = 2
             r0 = 0
-        L_0x0276:
-            if (r0 != 0) goto L_0x0296
+        L_0x026b:
+            if (r0 != 0) goto L_0x028b
             int r0 = r9.getWidth()
             int r1 = r9.getHeight()
             int r1 = r1 - r2
@@ -320,10 +315,10 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r11 = 0
             r0.setBounds(r11, r2, r1, r3)
             r0.draw(r10)
-            goto L_0x0297
-        L_0x0296:
+            goto L_0x028c
+        L_0x028b:
             r11 = 0
-        L_0x0297:
+        L_0x028c:
             r0 = r25
             r1 = r26
             r0.setColor(r1)
@@ -339,7 +334,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r11 = 2
             r8 = r0
             r3.drawRect(r4, r5, r6, r7, r8)
-            if (r21 == 0) goto L_0x02cd
+            if (r21 == 0) goto L_0x02c2
             r3 = 13
             int r4 = r21.getIntrinsicHeight()
             int r4 = 120 - r4
@@ -351,8 +346,8 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r7 = r21
             r7.setBounds(r3, r4, r5, r6)
             r7.draw(r10)
-        L_0x02cd:
-            if (r24 == 0) goto L_0x02f3
+        L_0x02c2:
+            if (r24 == 0) goto L_0x02e8
             int r3 = r9.getWidth()
             int r4 = r24.getIntrinsicWidth()
             int r3 = r3 - r4
@@ -367,7 +362,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r7 = r24
             r7.setBounds(r3, r4, r5, r6)
             r7.draw(r10)
-        L_0x02f3:
+        L_0x02e8:
             r3 = 1
             r4 = r12[r3]
             r5 = 216(0xd8, float:3.03E-43)
@@ -427,7 +422,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r8 = r0
             r3.drawRect(r4, r5, r6, r7, r8)
             r0 = 22
-            if (r22 == 0) goto L_0x0393
+            if (r22 == 0) goto L_0x0388
             int r1 = r9.getHeight()
             int r1 = r1 - r2
             int r3 = r22.getIntrinsicHeight()
@@ -441,8 +436,8 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r5 = r22
             r5.setBounds(r0, r1, r3, r4)
             r5.draw(r10)
-        L_0x0393:
-            if (r23 == 0) goto L_0x03bd
+        L_0x0388:
+            if (r23 == 0) goto L_0x03b2
             int r1 = r9.getWidth()
             int r3 = r23.getIntrinsicWidth()
             int r1 = r1 - r3
@@ -460,7 +455,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r4 = r23
             r4.setBounds(r1, r0, r2, r3)
             r4.draw(r10)
-        L_0x03bd:
+        L_0x03b2:
             return r9
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemePreviewDrawable.createPreview(java.io.File, org.telegram.messenger.DocumentObject$ThemeDocument):android.graphics.Bitmap");

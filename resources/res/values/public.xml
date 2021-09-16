@@ -2549,6 +2549,7 @@
     <public type="string" name="ChatSettings" id="NUM" />
     <public type="string" name="ChatThemeChangedTo" id="NUM" />
     <public type="string" name="ChatThemeChangedYou" id="NUM" />
+    <public type="string" name="ChatThemeDayNightSwitchTooltip" id="NUM" />
     <public type="string" name="ChatThemeDisabled" id="NUM" />
     <public type="string" name="ChatThemeDisabledYou" id="NUM" />
     <public type="string" name="ChatThemeSaveDialogApply" id="NUM" />
@@ -3028,6 +3029,7 @@
     <public type="string" name="Emoji6" id="NUM" />
     <public type="string" name="Emoji7" id="NUM" />
     <public type="string" name="Emoji8" id="NUM" />
+    <public type="string" name="EmojiInteractionTapHint" id="NUM" />
     <public type="string" name="EmojiSuggestions" id="NUM" />
     <public type="string" name="EmojiSuggestionsInfo" id="NUM" />
     <public type="string" name="EmojiSuggestionsUrl" id="NUM" />
@@ -5631,6 +5633,7 @@
     <public type="string" name="TextSizeHeader" id="NUM" />
     <public type="string" name="Theme" id="NUM" />
     <public type="string" name="ThemeAlsoAppliedForHint" id="NUM" />
+    <public type="string" name="ThemeAlsoDisabledForHint" id="NUM" />
     <public type="string" name="ThemeArcticBlue" id="NUM" />
     <public type="string" name="ThemeClassic" id="NUM" />
     <public type="string" name="ThemeCreateHelp" id="NUM" />

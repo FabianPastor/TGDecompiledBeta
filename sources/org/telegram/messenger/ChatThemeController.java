@@ -71,8 +71,8 @@ public class ChatThemeController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x00a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:23:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:13:0x00a6 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:25:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static /* synthetic */ void lambda$requestAllChatThemes$2(org.telegram.tgnet.TLObject r7, org.telegram.tgnet.ResultCallback r8, org.telegram.tgnet.TLRPC$TL_error r9, boolean r10) {
         /*
@@ -147,24 +147,28 @@ public class ChatThemeController extends BaseController {
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
             r7 = 1
         L_0x00a4:
-            if (r7 != 0) goto L_0x00cb
-            if (r10 == 0) goto L_0x00af
+            if (r7 != 0) goto L_0x00d5
+            if (r10 == 0) goto L_0x00b9
+            java.lang.Object r7 = r0.get(r1)
+            org.telegram.ui.ActionBar.ChatTheme r7 = (org.telegram.ui.ActionBar.ChatTheme) r7
+            boolean r7 = r7.isDefault
+            if (r7 != 0) goto L_0x00b9
             org.telegram.ui.ActionBar.ChatTheme r7 = org.telegram.ui.ActionBar.ChatTheme.getDefault()
             r0.add(r1, r7)
-        L_0x00af:
+        L_0x00b9:
             java.util.Iterator r7 = r0.iterator()
-        L_0x00b3:
+        L_0x00bd:
             boolean r9 = r7.hasNext()
-            if (r9 == 0) goto L_0x00c3
+            if (r9 == 0) goto L_0x00cd
             java.lang.Object r9 = r7.next()
             org.telegram.ui.ActionBar.ChatTheme r9 = (org.telegram.ui.ActionBar.ChatTheme) r9
             r9.initColors()
-            goto L_0x00b3
-        L_0x00c3:
+            goto L_0x00bd
+        L_0x00cd:
             org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda0 r7 = new org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda0
             r7.<init>(r0, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
-        L_0x00cb:
+        L_0x00d5:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatThemeController.lambda$requestAllChatThemes$2(org.telegram.tgnet.TLObject, org.telegram.tgnet.ResultCallback, org.telegram.tgnet.TLRPC$TL_error, boolean):void");
@@ -179,7 +183,7 @@ public class ChatThemeController extends BaseController {
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$requestAllChatThemes$5(boolean z, ResultCallback resultCallback) {
         ArrayList<ChatTheme> arrayList = new ArrayList<>(allChatThemes);
-        if (z) {
+        if (z && !((ChatTheme) arrayList.get(0)).isDefault) {
             arrayList.add(0, ChatTheme.getDefault());
         }
         for (ChatTheme initColors : arrayList) {

@@ -16,6 +16,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Layout;
@@ -45,17 +46,22 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ResultCallback;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_theme;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$WallPaperSettings;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.ChatTheme;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class ChatThemeBottomSheet extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
@@ -74,6 +80,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     /* access modifiers changed from: private */
     public final RLottieImageView darkThemeView;
     private boolean forceDark;
+    HintView hintView;
     private boolean isApplyClicked;
     /* access modifiers changed from: private */
     public boolean isLightDarkChangeAnimation;
@@ -129,7 +136,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r6.setLines(r3)
             r6.setSingleLine(r3)
             java.lang.String r7 = "SelectTheme"
-            r8 = 2131627562(0x7f0e0e2a, float:1.8882392E38)
+            r8 = 2131627564(0x7f0e0e2c, float:1.8882396E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
             r6.setText(r7)
             java.lang.String r7 = "dialogTextBlack"
@@ -224,7 +231,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r9.setPadding(r11, r4, r2, r4)
-            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda5 r2 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda5
+            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda6 r2 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda6
             r2.<init>(r0, r1)
             r9.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r2)
             r11 = -1
@@ -279,7 +286,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             android.widget.TextView r2 = r0.resetTextView
             org.telegram.ui.ActionBar.ChatTheme r1 = r22.getCurrentTheme()
             if (r1 != 0) goto L_0x01e5
-            r1 = 2131625270(0x7f0e0536, float:1.8877743E38)
+            r1 = 2131625271(0x7f0e0537, float:1.8877745E38)
             java.lang.String r10 = "DoNoSetTheme"
             goto L_0x01ea
         L_0x01e5:
@@ -425,6 +432,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
 
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
+        int i;
         super.onCreate(bundle);
         ChatThemeController.preloadAllWallpaperThumbs(true);
         ChatThemeController.preloadAllWallpaperThumbs(false);
@@ -449,6 +457,29 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         } else {
             onDataLoaded(cachedThemes);
         }
+        if (this.chatActivity.getCurrentUser() != null && (i = SharedConfig.dayNightThemeSwitchHintCount) > 0) {
+            SharedConfig.updateDayNightThemeSwitchHintCount(i - 1);
+            HintView hintView2 = new HintView(getContext(), 9, this.chatActivity.getResourceProvider());
+            this.hintView = hintView2;
+            hintView2.setVisibility(4);
+            this.hintView.setShowingDuration(5000);
+            this.hintView.setBottomOffset(-AndroidUtilities.dp(8.0f));
+            this.hintView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ChatThemeDayNightSwitchTooltip", NUM, this.chatActivity.getCurrentUser().first_name)));
+            AndroidUtilities.runOnUIThread(new ChatThemeBottomSheet$$ExternalSyntheticLambda4(this), 1500);
+            this.container.addView(this.hintView, LayoutHelper.createFrame(-2, -2.0f, 51, 10.0f, 0.0f, 10.0f, 0.0f));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onCreate$3() {
+        this.hintView.showForView(this.darkThemeView, true);
+    }
+
+    public void onContainerTranslationYChanged(float f) {
+        HintView hintView2 = this.hintView;
+        if (hintView2 != null) {
+            hintView2.hide();
+        }
     }
 
     public void onBackPressed() {
@@ -468,8 +499,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), this.resourcesProvider);
             builder.setTitle(LocaleController.getString("ChatThemeSaveDialogTitle", NUM));
             builder.setSubtitle(LocaleController.getString("ChatThemeSaveDialogText", NUM));
-            builder.setPositiveButton(LocaleController.getString("ChatThemeSaveDialogApply", NUM), new ChatThemeBottomSheet$$ExternalSyntheticLambda1(this));
-            builder.setNegativeButton(LocaleController.getString("ChatThemeSaveDialogDiscard", NUM), new ChatThemeBottomSheet$$ExternalSyntheticLambda0(this));
+            builder.setPositiveButton(LocaleController.getString("ChatThemeSaveDialogApply", NUM), new ChatThemeBottomSheet$$ExternalSyntheticLambda0(this));
+            builder.setNegativeButton(LocaleController.getString("ChatThemeSaveDialogDiscard", NUM), new ChatThemeBottomSheet$$ExternalSyntheticLambda1(this));
             builder.show();
             return;
         }
@@ -477,12 +508,12 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$close$3(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$close$4(DialogInterface dialogInterface, int i) {
         applySelectedTheme();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$close$4(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$close$5(DialogInterface dialogInterface, int i) {
         dismiss();
     }
 
@@ -608,11 +639,11 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         this.changeDayNightViewAnimator.setInterpolator(Easings.easeInOutQuad);
         this.changeDayNightViewAnimator.start();
         frameLayout.addView(this.changeDayNightView, new ViewGroup.LayoutParams(-1, -1));
-        AndroidUtilities.runOnUIThread(new ChatThemeBottomSheet$$ExternalSyntheticLambda4(this, z));
+        AndroidUtilities.runOnUIThread(new ChatThemeBottomSheet$$ExternalSyntheticLambda5(this, z));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setupLightDarkTheme$5(boolean z) {
+    public /* synthetic */ void lambda$setupLightDarkTheme$6(boolean z) {
         Adapter adapter2 = this.adapter;
         if (adapter2 != null && adapter2.items != null) {
             setForceDark(z, true);
@@ -708,6 +739,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                     this.layoutManager.scrollToPositionWithOffset(Math.min(i2, this.adapter.items.size() - 1), 0);
                 }
             } else {
+                this.resetTextView.setAlpha(1.0f);
+                this.applyTextView.setAlpha(1.0f);
                 this.adapter.setSelectedItem(0);
                 this.layoutManager.scrollToPositionWithOffset(0, 0);
             }
@@ -769,92 +802,43 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         }
     }
 
-    /* JADX WARNING: type inference failed for: r11v0, types: [org.telegram.tgnet.TLRPC$Document] */
-    /* JADX WARNING: type inference failed for: r1v7, types: [org.telegram.tgnet.TLRPC$Document] */
-    /* JADX WARNING: Multi-variable type inference failed */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void applySelectedTheme() {
-        /*
-            r13 = this;
-            org.telegram.ui.Components.ChatThemeBottomSheet$ChatThemeItem r0 = r13.selectedItem
-            r1 = 0
-            if (r0 == 0) goto L_0x00a1
-            org.telegram.ui.ActionBar.ChatTheme r0 = r0.chatTheme
-            if (r0 == 0) goto L_0x0012
-            boolean r2 = r0.isDefault
-            if (r2 != 0) goto L_0x0012
-            java.lang.String r2 = r0.getEmoticon()
-            goto L_0x0013
-        L_0x0012:
-            r2 = r1
-        L_0x0013:
-            int r3 = r13.currentAccount
-            org.telegram.messenger.ChatThemeController r3 = org.telegram.messenger.ChatThemeController.getInstance(r3)
-            org.telegram.ui.ChatActivity r4 = r13.chatActivity
-            long r4 = r4.getDialogId()
-            r6 = 1
-            r3.setDialogTheme(r4, r2, r6)
-            if (r0 == 0) goto L_0x0037
-            boolean r3 = r0.isDefault
-            if (r3 != 0) goto L_0x0037
-            org.telegram.ui.ChatActivity$ThemeDelegate r3 = r13.themeDelegate
-            boolean r4 = r13.getResultIsDark()
-            java.lang.Boolean r4 = java.lang.Boolean.valueOf(r4)
-            r3.setCurrentTheme(r0, r6, r4)
-            goto L_0x0048
-        L_0x0037:
-            org.telegram.ui.ChatActivity$ThemeDelegate r0 = r13.themeDelegate
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r3 = r3.isDark()
-            java.lang.Boolean r3 = java.lang.Boolean.valueOf(r3)
-            r0.setCurrentTheme(r1, r6, r3)
-        L_0x0048:
-            r13.isApplyClicked = r6
-            org.telegram.ui.ChatActivity r0 = r13.chatActivity
-            org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            if (r0 == 0) goto L_0x00a1
-            boolean r3 = android.text.TextUtils.isEmpty(r2)
-            if (r3 == 0) goto L_0x005a
-            java.lang.String r2 = "❌"
-        L_0x005a:
-            if (r2 == 0) goto L_0x0066
-            int r1 = r13.currentAccount
-            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
-            org.telegram.tgnet.TLRPC$Document r1 = r1.getEmojiAnimatedSticker(r2)
-        L_0x0066:
-            r11 = r1
-            org.telegram.ui.Components.StickerSetBulletinLayout r1 = new org.telegram.ui.Components.StickerSetBulletinLayout
-            android.content.Context r8 = r13.getContext()
-            r9 = 0
-            r10 = -1
-            org.telegram.ui.ChatActivity r2 = r13.chatActivity
-            org.telegram.ui.ActionBar.Theme$ResourcesProvider r12 = r2.getResourceProvider()
-            r7 = r1
-            r7.<init>(r8, r9, r10, r11, r12)
-            android.widget.TextView r2 = r1.subtitleTextView
-            r3 = 8
-            r2.setVisibility(r3)
-            android.widget.TextView r2 = r1.titleTextView
-            r3 = 2131627947(0x7f0e0fab, float:1.8883173E38)
-            java.lang.Object[] r4 = new java.lang.Object[r6]
-            r5 = 0
-            java.lang.String r0 = r0.first_name
-            r4[r5] = r0
-            java.lang.String r0 = "ThemeAlsoAppliedForHint"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
-            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
-            r2.setText(r0)
-            org.telegram.ui.ChatActivity r0 = r13.chatActivity
-            r2 = 2750(0xabe, float:3.854E-42)
-            org.telegram.ui.Components.Bulletin r1 = org.telegram.ui.Components.Bulletin.make((org.telegram.ui.ActionBar.BaseFragment) r0, (org.telegram.ui.Components.Bulletin.Layout) r1, (int) r2)
-        L_0x00a1:
-            r13.dismiss()
-            if (r1 == 0) goto L_0x00a9
-            r1.show()
-        L_0x00a9:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatThemeBottomSheet.applySelectedTheme():void");
+        boolean z;
+        ChatThemeItem chatThemeItem = this.selectedItem;
+        Bulletin bulletin = null;
+        if (chatThemeItem != null) {
+            ChatTheme chatTheme = chatThemeItem.chatTheme;
+            String emoticon = (chatTheme == null || chatTheme.isDefault) ? null : chatTheme.getEmoticon();
+            ChatThemeController.getInstance(this.currentAccount).setDialogTheme(this.chatActivity.getDialogId(), emoticon, true);
+            if (chatTheme == null || chatTheme.isDefault) {
+                this.themeDelegate.setCurrentTheme((ChatTheme) null, true, Boolean.valueOf(Theme.getActiveTheme().isDark()));
+            } else {
+                this.themeDelegate.setCurrentTheme(chatTheme, true, Boolean.valueOf(getResultIsDark()));
+            }
+            this.isApplyClicked = true;
+            TLRPC$User currentUser = this.chatActivity.getCurrentUser();
+            if (currentUser != null) {
+                if (TextUtils.isEmpty(emoticon)) {
+                    emoticon = "❌";
+                    z = true;
+                } else {
+                    z = false;
+                }
+                StickerSetBulletinLayout stickerSetBulletinLayout = new StickerSetBulletinLayout(getContext(), (TLObject) null, -1, emoticon != null ? MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(emoticon) : null, this.chatActivity.getResourceProvider());
+                stickerSetBulletinLayout.subtitleTextView.setVisibility(8);
+                if (z) {
+                    stickerSetBulletinLayout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ThemeAlsoDisabledForHint", NUM, currentUser.first_name)));
+                } else {
+                    stickerSetBulletinLayout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ThemeAlsoAppliedForHint", NUM, currentUser.first_name)));
+                }
+                stickerSetBulletinLayout.titleTextView.setTypeface((Typeface) null);
+                bulletin = Bulletin.make((BaseFragment) this.chatActivity, (Bulletin.Layout) stickerSetBulletinLayout, 2750);
+            }
+        }
+        dismiss();
+        if (bulletin != null) {
+            bulletin.show();
+        }
     }
 
     private boolean hasChanges() {
@@ -1099,7 +1083,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             public /* synthetic */ void lambda$setItem$0(long j, int i, Pair pair) {
                 MotionBackgroundDrawable previewDrawable;
                 if (pair != null && ((Long) pair.first).longValue() == j && (previewDrawable = getPreviewDrawable()) != null) {
-                    previewDrawable.setPatternBitmap(i, (Bitmap) pair.second);
+                    previewDrawable.setPatternBitmap(i >= 0 ? 100 : -100, (Bitmap) pair.second);
+                    previewDrawable.setPatternColorFilter(previewDrawable.getPatternColor());
                 }
             }
 
@@ -1184,8 +1169,9 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                         if (i4 == -16777216) {
                             i4 = 0;
                         }
-                        previewDrawable.setPatternBitmap(tLRPC$WallPaperSettings.intensity);
+                        previewDrawable.setPatternBitmap(tLRPC$WallPaperSettings.intensity >= 0 ? 100 : -100);
                         previewDrawable.setColors(i, i2, i3, i4, false);
+                        previewDrawable.setPatternColorFilter(previewDrawable.getPatternColor());
                     }
                     invalidate();
                 }

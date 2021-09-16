@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$ThemeDelegate$$ExternalSynthetic
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.setPatternIntensity(((Float) valueAnimator.getAnimatedValue()).floatValue());
+        this.f$0.setPatternAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 }

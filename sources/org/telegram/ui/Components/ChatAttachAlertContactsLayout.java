@@ -293,7 +293,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 boolean r12 = android.text.TextUtils.isEmpty(r12)
                 if (r12 == 0) goto L_0x00ec
                 org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-                r0 = 2131626638(0x7f0e0a8e, float:1.8880518E38)
+                r0 = 2131626640(0x7f0e0a90, float:1.8880522E38)
                 java.lang.String r1 = "NumberUnknown"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r12.setText(r0)
