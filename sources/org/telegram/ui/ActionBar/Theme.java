@@ -517,7 +517,7 @@ public class Theme {
     }
 
     public static class MessageDrawable extends Drawable {
-        public static MotionBackgroundDrawable[] motionBackground = new MotionBackgroundDrawable[2];
+        public static MotionBackgroundDrawable[] motionBackground = new MotionBackgroundDrawable[3];
         private int alpha;
         private Drawable[][] backgroundDrawable;
         private int[][] backgroundDrawableColor;
@@ -551,6 +551,7 @@ public class Theme {
         private Paint selectedPaint;
         private Drawable[] shadowDrawable;
         private int[] shadowDrawableColor;
+        public boolean themePreview;
         private int topY;
         Drawable transitionDrawable;
         int transitionDrawableColor;
@@ -624,6 +625,9 @@ public class Theme {
 
         /* access modifiers changed from: protected */
         public int getColor(String str) {
+            if (this.currentType == 2) {
+                return Theme.getColor(str);
+            }
             ResourcesProvider resourcesProvider2 = this.resourcesProvider;
             Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
             return color != null ? color.intValue() : Theme.getColor(str);
@@ -631,6 +635,9 @@ public class Theme {
 
         /* access modifiers changed from: protected */
         public Integer getCurrentColor(String str) {
+            if (this.currentType == 2) {
+                return Integer.valueOf(Theme.getColor(str));
+            }
             ResourcesProvider resourcesProvider2 = this.resourcesProvider;
             return resourcesProvider2 != null ? resourcesProvider2.getCurrentColor(str) : (Integer) Theme.currentColors.get(str);
         }
@@ -639,14 +646,15 @@ public class Theme {
             setTop(i, i2, i3, i3, z, z2);
         }
 
+        /* JADX WARNING: Removed duplicated region for block: B:103:0x028b  */
         /* JADX WARNING: Removed duplicated region for block: B:21:0x0061  */
         /* JADX WARNING: Removed duplicated region for block: B:23:0x0067  */
         /* JADX WARNING: Removed duplicated region for block: B:25:0x006d  */
         /* JADX WARNING: Removed duplicated region for block: B:27:0x0073  */
         /* JADX WARNING: Removed duplicated region for block: B:30:0x007c  */
         /* JADX WARNING: Removed duplicated region for block: B:31:0x007e  */
-        /* JADX WARNING: Removed duplicated region for block: B:70:0x0144  */
-        /* JADX WARNING: Removed duplicated region for block: B:88:0x023e  */
+        /* JADX WARNING: Removed duplicated region for block: B:40:0x0094  */
+        /* JADX WARNING: Removed duplicated region for block: B:85:0x0194  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void setTop(int r34, int r35, int r36, int r37, boolean r38, boolean r39) {
             /*
@@ -717,52 +725,93 @@ public class Theme {
                 if (r9 != 0) goto L_0x0077
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r5)
             L_0x0077:
-                int r2 = r0.currentType
+                boolean r2 = r0.themePreview
                 r11 = 2
-                if (r2 != r11) goto L_0x007e
-                r2 = 1
-                goto L_0x007f
+                if (r2 == 0) goto L_0x007e
+                r2 = 2
+                goto L_0x0085
             L_0x007e:
+                int r2 = r0.currentType
+                if (r2 != r11) goto L_0x0084
+                r2 = 1
+                goto L_0x0085
+            L_0x0084:
                 r2 = 0
-            L_0x007f:
-                boolean r12 = r0.isCrossfadeBackground
-                r15 = -1
-                if (r12 == 0) goto L_0x0115
+            L_0x0085:
                 int r12 = r7.intValue()
-                if (r12 == 0) goto L_0x0115
-                if (r10 == 0) goto L_0x0115
+                r13 = 3
+                if (r12 == 0) goto L_0x00aa
+                if (r10 == 0) goto L_0x00aa
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r12 = motionBackground
+                r14 = r12[r2]
+                if (r14 == 0) goto L_0x00aa
+                r12 = r12[r2]
+                int[] r12 = r12.getColors()
+                r14 = r12[r5]
+                r0.currentColor = r14
+                r14 = r12[r4]
+                r0.currentGradientColor1 = r14
+                r14 = r12[r11]
+                r0.currentGradientColor2 = r14
+                r12 = r12[r13]
+                r0.currentGradientColor3 = r12
+            L_0x00aa:
+                boolean r12 = r0.isCrossfadeBackground
+                r14 = 1065353216(0x3var_, float:1.0)
+                r15 = -1
+                if (r12 == 0) goto L_0x0165
+                int r12 = r7.intValue()
+                if (r12 == 0) goto L_0x0165
+                if (r10 == 0) goto L_0x0165
                 int r3 = r0.currentBackgroundHeight
-                if (r8 != r3) goto L_0x00b7
+                if (r8 != r3) goto L_0x00e4
                 android.graphics.Shader r3 = r0.crosfadeFromBitmapShader
-                if (r3 == 0) goto L_0x00b7
+                if (r3 == 0) goto L_0x00e4
                 int r3 = r0.currentColor
-                if (r3 != r1) goto L_0x00b7
+                if (r3 != r1) goto L_0x00e4
                 int r3 = r0.currentGradientColor1
-                int r4 = r6.intValue()
-                if (r3 != r4) goto L_0x00b7
+                int r12 = r6.intValue()
+                if (r3 != r12) goto L_0x00e4
                 int r3 = r0.currentGradientColor2
-                int r4 = r7.intValue()
-                if (r3 != r4) goto L_0x00b7
+                int r12 = r7.intValue()
+                if (r3 != r12) goto L_0x00e4
                 int r3 = r0.currentGradientColor3
-                int r4 = r9.intValue()
-                if (r3 != r4) goto L_0x00b7
+                int r12 = r9.intValue()
+                if (r3 != r12) goto L_0x00e4
                 boolean r3 = r0.currentAnimateGradient
-                if (r3 == r10) goto L_0x00b5
-                goto L_0x00b7
-            L_0x00b5:
+                if (r3 == r10) goto L_0x00e2
+                goto L_0x00e4
+            L_0x00e2:
                 r5 = -1
-                goto L_0x00ef
-            L_0x00b7:
+                goto L_0x013f
+            L_0x00e4:
                 r3 = 60
-                r4 = 80
-                android.graphics.Bitmap$Config r11 = android.graphics.Bitmap.Config.ARGB_8888
-                android.graphics.Bitmap r3 = android.graphics.Bitmap.createBitmap(r3, r4, r11)
+                r12 = 80
+                android.graphics.Bitmap$Config r13 = android.graphics.Bitmap.Config.ARGB_8888
+                android.graphics.Bitmap r3 = android.graphics.Bitmap.createBitmap(r3, r12, r13)
                 r0.crosfadeFromBitmap = r3
                 android.graphics.BitmapShader r3 = new android.graphics.BitmapShader
-                android.graphics.Bitmap r4 = r0.crosfadeFromBitmap
-                android.graphics.Shader$TileMode r11 = android.graphics.Shader.TileMode.CLAMP
-                r3.<init>(r4, r11, r11)
+                android.graphics.Bitmap r12 = r0.crosfadeFromBitmap
+                android.graphics.Shader$TileMode r13 = android.graphics.Shader.TileMode.CLAMP
+                r3.<init>(r12, r13, r13)
                 r0.crosfadeFromBitmapShader = r3
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
+                r12 = r3[r2]
+                if (r12 != 0) goto L_0x011e
+                org.telegram.ui.Components.MotionBackgroundDrawable r12 = new org.telegram.ui.Components.MotionBackgroundDrawable
+                r12.<init>()
+                r3[r2] = r12
+                int r3 = r0.currentType
+                if (r3 == r11) goto L_0x0113
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
+                r3 = r3[r2]
+                r3.setPostInvalidateParent(r4)
+            L_0x0113:
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
+                r3 = r3[r2]
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                r3.setRoundRadius(r4)
+            L_0x011e:
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
                 r11 = r3[r2]
                 int r13 = r6.intValue()
@@ -777,7 +826,7 @@ public class Theme {
                 android.graphics.Shader r3 = r0.crosfadeFromBitmapShader
                 android.graphics.Matrix r4 = r0.matrix
                 r3.setLocalMatrix(r4)
-            L_0x00ef:
+            L_0x013f:
                 android.graphics.Shader r3 = r0.crosfadeFromBitmapShader
                 r0.gradientShader = r3
                 android.graphics.Paint r4 = r0.paint
@@ -792,50 +841,49 @@ public class Theme {
                 r0.currentGradientColor2 = r1
                 int r1 = r9.intValue()
                 r0.currentGradientColor3 = r1
-                goto L_0x0254
-            L_0x0115:
+                goto L_0x02a1
+            L_0x0165:
                 r5 = -1
                 int r12 = r6.intValue()
-                if (r12 == 0) goto L_0x023e
+                if (r12 == 0) goto L_0x028b
                 android.graphics.Shader r12 = r0.gradientShader
-                if (r12 == 0) goto L_0x0144
+                if (r12 == 0) goto L_0x0194
                 int r12 = r0.currentBackgroundHeight
-                if (r8 != r12) goto L_0x0144
+                if (r8 != r12) goto L_0x0194
                 int r12 = r0.currentColor
-                if (r12 != r1) goto L_0x0144
+                if (r12 != r1) goto L_0x0194
                 int r12 = r0.currentGradientColor1
-                int r13 = r6.intValue()
-                if (r12 != r13) goto L_0x0144
+                int r15 = r6.intValue()
+                if (r12 != r15) goto L_0x0194
                 int r12 = r0.currentGradientColor2
-                int r13 = r7.intValue()
-                if (r12 != r13) goto L_0x0144
+                int r15 = r7.intValue()
+                if (r12 != r15) goto L_0x0194
                 int r12 = r0.currentGradientColor3
-                int r13 = r9.intValue()
-                if (r12 != r13) goto L_0x0144
+                int r15 = r9.intValue()
+                if (r12 != r15) goto L_0x0194
                 boolean r12 = r0.currentAnimateGradient
-                if (r12 == r10) goto L_0x023e
-            L_0x0144:
+                if (r12 == r10) goto L_0x028b
+            L_0x0194:
                 int r3 = r7.intValue()
-                if (r3 == 0) goto L_0x0190
-                if (r10 == 0) goto L_0x0190
+                if (r3 == 0) goto L_0x01de
+                if (r10 == 0) goto L_0x01de
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
                 r12 = r3[r2]
-                if (r12 != 0) goto L_0x0171
+                if (r12 != 0) goto L_0x01bf
                 org.telegram.ui.Components.MotionBackgroundDrawable r12 = new org.telegram.ui.Components.MotionBackgroundDrawable
                 r12.<init>()
                 r3[r2] = r12
                 int r3 = r0.currentType
-                if (r3 == r11) goto L_0x0164
+                if (r3 == r11) goto L_0x01b4
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
                 r3 = r3[r2]
                 r3.setPostInvalidateParent(r4)
-            L_0x0164:
+            L_0x01b4:
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
                 r3 = r3[r2]
-                r4 = 1065353216(0x3var_, float:1.0)
-                int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r3.setRoundRadius(r4)
-            L_0x0171:
+            L_0x01bf:
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
                 r3 = r3[r2]
                 int r4 = r6.intValue()
@@ -846,23 +894,22 @@ public class Theme {
                 r3 = r3[r2]
                 android.graphics.BitmapShader r3 = r3.getBitmapShader()
                 r0.gradientShader = r3
-                goto L_0x021b
-            L_0x0190:
+                goto L_0x0268
+            L_0x01de:
                 int r3 = r7.intValue()
-                if (r3 == 0) goto L_0x01f8
+                if (r3 == 0) goto L_0x0245
                 int r3 = r9.intValue()
-                r12 = 3
-                if (r3 == 0) goto L_0x01ce
+                if (r3 == 0) goto L_0x021b
                 r3 = 4
                 int[] r3 = new int[r3]
-                r13 = 0
-                r3[r13] = r1
-                int r13 = r6.intValue()
-                r3[r4] = r13
+                r12 = 0
+                r3[r12] = r1
+                int r12 = r6.intValue()
+                r3[r4] = r12
                 int r4 = r7.intValue()
                 r3[r11] = r4
                 int r4 = r9.intValue()
-                r3[r12] = r4
+                r3[r13] = r4
                 android.graphics.LinearGradient r4 = new android.graphics.LinearGradient
                 r18 = 0
                 r19 = 0
@@ -875,9 +922,9 @@ public class Theme {
                 r22 = r3
                 r17.<init>(r18, r19, r20, r21, r22, r23, r24)
                 r0.gradientShader = r4
-                goto L_0x021b
-            L_0x01ce:
-                int[] r3 = new int[r12]
+                goto L_0x0268
+            L_0x021b:
+                int[] r3 = new int[r13]
                 r12 = 0
                 r3[r12] = r1
                 int r12 = r6.intValue()
@@ -896,8 +943,8 @@ public class Theme {
                 r30 = r3
                 r25.<init>(r26, r27, r28, r29, r30, r31, r32)
                 r0.gradientShader = r4
-                goto L_0x021b
-            L_0x01f8:
+                goto L_0x0268
+            L_0x0245:
                 int[] r3 = new int[r11]
                 r11 = 0
                 r3[r11] = r1
@@ -915,7 +962,7 @@ public class Theme {
                 r22 = r3
                 r17.<init>(r18, r19, r20, r21, r22, r23, r24)
                 r0.gradientShader = r4
-            L_0x021b:
+            L_0x0268:
                 android.graphics.Paint r3 = r0.paint
                 android.graphics.Shader r4 = r0.gradientShader
                 r3.setShader(r4)
@@ -929,45 +976,45 @@ public class Theme {
                 r0.currentGradientColor3 = r1
                 android.graphics.Paint r1 = r0.paint
                 r1.setColor(r5)
-                goto L_0x0254
-            L_0x023e:
+                goto L_0x02a1
+            L_0x028b:
                 int r4 = r6.intValue()
-                if (r4 != 0) goto L_0x0254
+                if (r4 != 0) goto L_0x02a1
                 android.graphics.Shader r4 = r0.gradientShader
-                if (r4 == 0) goto L_0x024f
+                if (r4 == 0) goto L_0x029c
                 r0.gradientShader = r3
                 android.graphics.Paint r4 = r0.paint
                 r4.setShader(r3)
-            L_0x024f:
+            L_0x029c:
                 android.graphics.Paint r3 = r0.paint
                 r3.setColor(r1)
-            L_0x0254:
+            L_0x02a1:
                 android.graphics.Shader r1 = r0.gradientShader
                 boolean r3 = r1 instanceof android.graphics.BitmapShader
-                if (r3 == 0) goto L_0x026f
+                if (r3 == 0) goto L_0x02bc
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
                 r2 = r3[r2]
                 boolean r1 = r1 instanceof android.graphics.BitmapShader
-                if (r1 == 0) goto L_0x0265
-                r13 = r37
-                goto L_0x0266
-            L_0x0265:
-                r13 = 0
-            L_0x0266:
-                int r1 = r8 - r13
+                if (r1 == 0) goto L_0x02b2
+                r12 = r37
+                goto L_0x02b3
+            L_0x02b2:
+                r12 = 0
+            L_0x02b3:
+                int r1 = r8 - r12
                 r3 = r35
                 r4 = 0
                 r2.setBounds(r4, r4, r3, r1)
-                goto L_0x0270
-            L_0x026f:
+                goto L_0x02bd
+            L_0x02bc:
                 r4 = 0
-            L_0x0270:
+            L_0x02bd:
                 r0.currentBackgroundHeight = r8
                 android.graphics.Shader r1 = r0.gradientShader
                 boolean r1 = r1 instanceof android.graphics.BitmapShader
-                if (r1 == 0) goto L_0x027a
+                if (r1 == 0) goto L_0x02c7
                 r4 = r37
-            L_0x027a:
+            L_0x02c7:
                 int r1 = r34 - r4
                 r0.topY = r1
                 r1 = r38
@@ -2464,6 +2511,7 @@ public class Theme {
 
         private Bitmap createWallpaperForAccent(Bitmap bitmap, boolean z, File file, ThemeAccent themeAccent) {
             Bitmap bitmap2;
+            int i;
             Bitmap bitmap3;
             Integer num;
             Integer num2;
@@ -2472,45 +2520,49 @@ public class Theme {
             ThemeAccent themeAccent2 = themeAccent;
             try {
                 File pathToWallpaper = themeAccent.getPathToWallpaper();
-                Object obj = null;
+                Drawable drawable = null;
                 if (pathToWallpaper == null) {
                     return null;
                 }
                 ThemeInfo themeInfo = themeAccent2.parentTheme;
                 HashMap<String, Integer> themeFileValues = Theme.getThemeFileValues((File) null, themeInfo.assetName, (String[]) null);
-                int i = themeAccent2.accentColor;
-                int i2 = (int) themeAccent2.backgroundOverrideColor;
+                int i2 = themeAccent2.accentColor;
+                int i3 = (int) themeAccent2.backgroundOverrideColor;
                 long j = themeAccent2.backgroundGradientOverrideColor1;
-                int i3 = (int) j;
-                if (i3 == 0 && j == 0) {
-                    if (i2 != 0) {
-                        i = i2;
+                int i4 = (int) j;
+                if (i4 == 0 && j == 0) {
+                    if (i3 != 0) {
+                        i2 = i3;
                     }
                     Integer num4 = themeFileValues.get("chat_wallpaper_gradient_to");
                     if (num4 != null) {
-                        i3 = Theme.changeColorAccent(themeInfo, i, num4.intValue());
+                        i4 = Theme.changeColorAccent(themeInfo, i2, num4.intValue());
                     }
                 } else {
-                    i = 0;
+                    i2 = 0;
                 }
                 long j2 = themeAccent2.backgroundGradientOverrideColor2;
-                int i4 = (int) j2;
-                if (i4 == 0 && j2 == 0 && (num3 = themeFileValues.get("key_chat_wallpaper_gradient_to2")) != null) {
-                    i4 = Theme.changeColorAccent(themeInfo, i, num3.intValue());
+                int i5 = (int) j2;
+                if (i5 == 0 && j2 == 0 && (num3 = themeFileValues.get("key_chat_wallpaper_gradient_to2")) != null) {
+                    i5 = Theme.changeColorAccent(themeInfo, i2, num3.intValue());
                 }
                 long j3 = themeAccent2.backgroundGradientOverrideColor3;
-                if (((int) j3) == 0 && j3 == 0 && (num2 = themeFileValues.get("key_chat_wallpaper_gradient_to3")) != null) {
-                    Theme.changeColorAccent(themeInfo, i, num2.intValue());
+                int i6 = (int) j3;
+                if (i6 == 0 && j3 == 0 && (num2 = themeFileValues.get("key_chat_wallpaper_gradient_to3")) != null) {
+                    i6 = Theme.changeColorAccent(themeInfo, i2, num2.intValue());
                 }
-                if (i2 == 0 && (num = themeFileValues.get("chat_wallpaper")) != null) {
-                    i2 = Theme.changeColorAccent(themeInfo, i, num.intValue());
+                if (i3 == 0 && (num = themeFileValues.get("chat_wallpaper")) != null) {
+                    i3 = Theme.changeColorAccent(themeInfo, i2, num.intValue());
                 }
-                if (i4 == 0) {
-                    if (i3 != 0) {
-                        obj = new BackgroundGradientDrawable(BackgroundGradientDrawable.getGradientOrientation(themeAccent2.backgroundRotation), new int[]{i2, i3});
-                    } else {
-                        obj = new ColorDrawable(i2);
-                    }
+                if (i5 != 0) {
+                    i = MotionBackgroundDrawable.getPatternColor(i3, i4, i5, i6);
+                } else if (i4 != 0) {
+                    Drawable backgroundGradientDrawable = new BackgroundGradientDrawable(BackgroundGradientDrawable.getGradientOrientation(themeAccent2.backgroundRotation), new int[]{i3, i4});
+                    i = AndroidUtilities.getPatternColor(AndroidUtilities.getAverageColor(i3, i4));
+                    drawable = backgroundGradientDrawable;
+                } else {
+                    drawable = new ColorDrawable(i3);
+                    i = AndroidUtilities.getPatternColor(i3);
                 }
                 if (bitmap == null) {
                     if (z) {
@@ -2522,14 +2574,26 @@ public class Theme {
                 } else {
                     bitmap2 = bitmap;
                 }
-                try {
+                if (drawable != null) {
+                    try {
+                        Bitmap createBitmap = Bitmap.createBitmap(bitmap2.getWidth(), bitmap2.getHeight(), Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(createBitmap);
+                        drawable.setBounds(0, 0, bitmap2.getWidth(), bitmap2.getHeight());
+                        drawable.draw(canvas);
+                        Paint paint = new Paint(2);
+                        paint.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.SRC_IN));
+                        paint.setAlpha((int) (Math.abs(themeAccent2.patternIntensity) * 255.0f));
+                        canvas.drawBitmap(bitmap2, 0.0f, 0.0f, paint);
+                        createBitmap.compress(Bitmap.CompressFormat.JPEG, 87, new FileOutputStream(pathToWallpaper));
+                    } catch (Throwable th) {
+                        th = th;
+                        FileLog.e(th);
+                        return bitmap2;
+                    }
+                } else {
                     FileOutputStream fileOutputStream = new FileOutputStream(pathToWallpaper);
-                    bitmap2.compress(obj == null ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG, 87, fileOutputStream);
+                    bitmap2.compress(Bitmap.CompressFormat.PNG, 87, fileOutputStream);
                     fileOutputStream.close();
-                } catch (Throwable th) {
-                    th = th;
-                    FileLog.e(th);
-                    return bitmap2;
                 }
                 return bitmap2;
             } catch (Throwable th2) {
@@ -2608,33 +2672,36 @@ public class Theme {
         ThemeAccent() {
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:110:0x0408, code lost:
-            if (org.telegram.messenger.AndroidUtilities.getColorDistance(-1, r15.containsKey("chat_outLoader") ? r15.get("chat_outLoader").intValue() : 0) < 5000) goto L_0x040c;
+        /* JADX WARNING: Code restructure failed: missing block: B:32:0x00d0, code lost:
+            r7 = r12.parentTheme.accentBaseColor;
+         */
+        /* JADX WARNING: Code restructure failed: missing block: B:35:0x00d8, code lost:
+            r7 = r12.accentColor;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public boolean fillAccentColors(java.util.HashMap<java.lang.String, java.lang.Integer> r14, java.util.HashMap<java.lang.String, java.lang.Integer> r15) {
+        public boolean fillAccentColors(java.util.HashMap<java.lang.String, java.lang.Integer> r13, java.util.HashMap<java.lang.String, java.lang.Integer> r14) {
             /*
-                r13 = this;
+                r12 = this;
                 r0 = 1
                 float[] r1 = org.telegram.ui.ActionBar.Theme.getTempHsv(r0)
                 r2 = 2
                 float[] r2 = org.telegram.ui.ActionBar.Theme.getTempHsv(r2)
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r13.parentTheme
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r12.parentTheme
                 int r3 = r3.accentBaseColor
                 android.graphics.Color.colorToHSV(r3, r1)
-                int r3 = r13.accentColor
+                int r3 = r12.accentColor
                 android.graphics.Color.colorToHSV(r3, r2)
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r13.parentTheme
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r12.parentTheme
                 boolean r3 = r3.isDark()
-                int r4 = r13.accentColor
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = r13.parentTheme
+                int r4 = r12.accentColor
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = r12.parentTheme
                 int r5 = r5.accentBaseColor
                 if (r4 != r5) goto L_0x0028
-                int r4 = r13.accentColor2
+                int r4 = r12.accentColor2
                 if (r4 == 0) goto L_0x0090
             L_0x0028:
                 java.util.HashSet r4 = new java.util.HashSet
-                java.util.Set r5 = r14.keySet()
+                java.util.Set r5 = r13.keySet()
                 r4.<init>(r5)
                 java.util.HashMap r5 = org.telegram.ui.ActionBar.Theme.defaultColors
                 java.util.Set r5 = r5.keySet()
@@ -2647,14 +2714,14 @@ public class Theme {
                 if (r5 == 0) goto L_0x0090
                 java.lang.Object r5 = r4.next()
                 java.lang.String r5 = (java.lang.String) r5
-                java.lang.Object r6 = r14.get(r5)
+                java.lang.Object r6 = r13.get(r5)
                 java.lang.Integer r6 = (java.lang.Integer) r6
                 if (r6 != 0) goto L_0x006e
                 java.util.HashMap r7 = org.telegram.ui.ActionBar.Theme.fallbackKeys
                 java.lang.Object r7 = r7.get(r5)
                 java.lang.String r7 = (java.lang.String) r7
                 if (r7 == 0) goto L_0x006e
-                java.lang.Object r7 = r14.get(r7)
+                java.lang.Object r7 = r13.get(r7)
                 if (r7 == 0) goto L_0x006e
                 goto L_0x0047
             L_0x006e:
@@ -2668,456 +2735,422 @@ public class Theme {
                 int r6 = r6.intValue()
                 if (r7 == r6) goto L_0x0047
                 java.lang.Integer r6 = java.lang.Integer.valueOf(r7)
-                r15.put(r5, r6)
+                r14.put(r5, r6)
                 goto L_0x0047
             L_0x0090:
-                int r4 = r13.myMessagesAccentColor
+                int r4 = r12.myMessagesAccentColor
                 java.lang.String r5 = "chat_outBubble"
+                if (r4 != 0) goto L_0x009a
+                int r6 = r12.accentColor
+                if (r6 == 0) goto L_0x00cd
+            L_0x009a:
+                int r6 = r12.myMessagesGradientAccentColor1
+                if (r6 == 0) goto L_0x00cd
+                if (r4 == 0) goto L_0x00a1
+                goto L_0x00a3
+            L_0x00a1:
+                int r4 = r12.accentColor
+            L_0x00a3:
+                java.lang.Object r6 = r13.get(r5)
+                java.lang.Integer r6 = (java.lang.Integer) r6
+                if (r6 != 0) goto L_0x00b5
+                java.util.HashMap r6 = org.telegram.ui.ActionBar.Theme.defaultColors
+                java.lang.Object r6 = r6.get(r5)
+                java.lang.Integer r6 = (java.lang.Integer) r6
+            L_0x00b5:
+                int r7 = r6.intValue()
+                int r7 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r1, r2, r7, r3)
+                org.telegram.messenger.AndroidUtilities.getColorDistance(r4, r7)
+                int r7 = r12.myMessagesGradientAccentColor1
+                org.telegram.messenger.AndroidUtilities.getColorDistance(r4, r7)
+                int r6 = r6.intValue()
+                int r4 = org.telegram.ui.ActionBar.Theme.getAccentColor(r1, r6, r4)
+            L_0x00cd:
                 r6 = 0
-                if (r4 != 0) goto L_0x009b
-                int r7 = r13.accentColor
-                if (r7 == 0) goto L_0x00db
-            L_0x009b:
-                int r7 = r13.myMessagesGradientAccentColor1
-                if (r7 == 0) goto L_0x00db
-                if (r4 == 0) goto L_0x00a2
-                goto L_0x00a4
-            L_0x00a2:
-                int r4 = r13.accentColor
-            L_0x00a4:
-                java.lang.Object r7 = r14.get(r5)
-                java.lang.Integer r7 = (java.lang.Integer) r7
-                if (r7 != 0) goto L_0x00b6
-                java.util.HashMap r7 = org.telegram.ui.ActionBar.Theme.defaultColors
-                java.lang.Object r7 = r7.get(r5)
-                java.lang.Integer r7 = (java.lang.Integer) r7
-            L_0x00b6:
-                int r8 = r7.intValue()
-                int r8 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r1, r2, r8, r3)
-                int r8 = org.telegram.messenger.AndroidUtilities.getColorDistance(r4, r8)
-                int r9 = r13.myMessagesGradientAccentColor1
-                int r9 = org.telegram.messenger.AndroidUtilities.getColorDistance(r4, r9)
-                r10 = 35000(0x88b8, float:4.9045E-41)
-                if (r8 > r10) goto L_0x00d1
-                if (r9 > r10) goto L_0x00d1
-                r8 = 1
-                goto L_0x00d2
-            L_0x00d1:
-                r8 = 0
-            L_0x00d2:
-                int r7 = r7.intValue()
-                int r4 = org.telegram.ui.ActionBar.Theme.getAccentColor(r1, r7, r4)
-                goto L_0x00dc
-            L_0x00db:
-                r8 = 0
-            L_0x00dc:
-                if (r4 == 0) goto L_0x00ee
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r7 = r13.parentTheme
+                if (r4 == 0) goto L_0x00e0
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r7 = r12.parentTheme
                 int r7 = r7.accentBaseColor
-                if (r7 == 0) goto L_0x00e6
-                if (r4 != r7) goto L_0x00ec
-            L_0x00e6:
-                int r7 = r13.accentColor
-                if (r7 == 0) goto L_0x00ee
-                if (r7 == r4) goto L_0x00ee
-            L_0x00ec:
+                if (r7 == 0) goto L_0x00d8
+                if (r4 != r7) goto L_0x00de
+            L_0x00d8:
+                int r7 = r12.accentColor
+                if (r7 == 0) goto L_0x00e0
+                if (r7 == r4) goto L_0x00e0
+            L_0x00de:
                 r7 = 1
-                goto L_0x00ef
-            L_0x00ee:
+                goto L_0x00e1
+            L_0x00e0:
                 r7 = 0
+            L_0x00e1:
+                if (r7 != 0) goto L_0x00e7
+                int r8 = r12.accentColor2
+                if (r8 == 0) goto L_0x019f
+            L_0x00e7:
+                int r8 = r12.accentColor2
+                if (r8 == 0) goto L_0x00ef
+                android.graphics.Color.colorToHSV(r8, r2)
+                goto L_0x00f2
             L_0x00ef:
-                if (r7 != 0) goto L_0x00f5
-                int r9 = r13.accentColor2
-                if (r9 == 0) goto L_0x01ad
-            L_0x00f5:
-                int r9 = r13.accentColor2
-                if (r9 == 0) goto L_0x00fd
-                android.graphics.Color.colorToHSV(r9, r2)
-                goto L_0x0100
-            L_0x00fd:
                 android.graphics.Color.colorToHSV(r4, r2)
-            L_0x0100:
-                java.util.HashSet r9 = org.telegram.ui.ActionBar.Theme.myMessagesColorKeys
-                java.util.Iterator r9 = r9.iterator()
-            L_0x0108:
-                boolean r10 = r9.hasNext()
-                if (r10 == 0) goto L_0x0154
-                java.lang.Object r10 = r9.next()
-                java.lang.String r10 = (java.lang.String) r10
-                java.lang.Object r11 = r14.get(r10)
-                java.lang.Integer r11 = (java.lang.Integer) r11
-                if (r11 != 0) goto L_0x012f
-                java.util.HashMap r12 = org.telegram.ui.ActionBar.Theme.fallbackKeys
-                java.lang.Object r12 = r12.get(r10)
-                java.lang.String r12 = (java.lang.String) r12
-                if (r12 == 0) goto L_0x012f
-                java.lang.Object r12 = r14.get(r12)
-                if (r12 == 0) goto L_0x012f
-                goto L_0x0108
-            L_0x012f:
-                if (r11 != 0) goto L_0x013b
-                java.util.HashMap r11 = org.telegram.ui.ActionBar.Theme.defaultColors
-                java.lang.Object r11 = r11.get(r10)
-                java.lang.Integer r11 = (java.lang.Integer) r11
-            L_0x013b:
-                if (r11 != 0) goto L_0x013e
-                goto L_0x0108
-            L_0x013e:
-                int r12 = r11.intValue()
-                int r12 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r1, r2, r12, r3)
-                int r11 = r11.intValue()
-                if (r12 == r11) goto L_0x0108
-                java.lang.Integer r11 = java.lang.Integer.valueOf(r12)
-                r15.put(r10, r11)
-                goto L_0x0108
-            L_0x0154:
-                if (r7 == 0) goto L_0x01ad
+            L_0x00f2:
+                java.util.HashSet r8 = org.telegram.ui.ActionBar.Theme.myMessagesColorKeys
+                java.util.Iterator r8 = r8.iterator()
+            L_0x00fa:
+                boolean r9 = r8.hasNext()
+                if (r9 == 0) goto L_0x0146
+                java.lang.Object r9 = r8.next()
+                java.lang.String r9 = (java.lang.String) r9
+                java.lang.Object r10 = r13.get(r9)
+                java.lang.Integer r10 = (java.lang.Integer) r10
+                if (r10 != 0) goto L_0x0121
+                java.util.HashMap r11 = org.telegram.ui.ActionBar.Theme.fallbackKeys
+                java.lang.Object r11 = r11.get(r9)
+                java.lang.String r11 = (java.lang.String) r11
+                if (r11 == 0) goto L_0x0121
+                java.lang.Object r11 = r13.get(r11)
+                if (r11 == 0) goto L_0x0121
+                goto L_0x00fa
+            L_0x0121:
+                if (r10 != 0) goto L_0x012d
+                java.util.HashMap r10 = org.telegram.ui.ActionBar.Theme.defaultColors
+                java.lang.Object r10 = r10.get(r9)
+                java.lang.Integer r10 = (java.lang.Integer) r10
+            L_0x012d:
+                if (r10 != 0) goto L_0x0130
+                goto L_0x00fa
+            L_0x0130:
+                int r11 = r10.intValue()
+                int r11 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r1, r2, r11, r3)
+                int r10 = r10.intValue()
+                if (r11 == r10) goto L_0x00fa
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r11)
+                r14.put(r9, r10)
+                goto L_0x00fa
+            L_0x0146:
+                if (r7 == 0) goto L_0x019f
                 android.graphics.Color.colorToHSV(r4, r2)
                 java.util.HashSet r4 = org.telegram.ui.ActionBar.Theme.myMessagesBubblesColorKeys
                 java.util.Iterator r4 = r4.iterator()
-            L_0x0161:
+            L_0x0153:
                 boolean r7 = r4.hasNext()
-                if (r7 == 0) goto L_0x01ad
+                if (r7 == 0) goto L_0x019f
                 java.lang.Object r7 = r4.next()
                 java.lang.String r7 = (java.lang.String) r7
-                java.lang.Object r9 = r14.get(r7)
-                java.lang.Integer r9 = (java.lang.Integer) r9
-                if (r9 != 0) goto L_0x0188
-                java.util.HashMap r10 = org.telegram.ui.ActionBar.Theme.fallbackKeys
-                java.lang.Object r10 = r10.get(r7)
-                java.lang.String r10 = (java.lang.String) r10
-                if (r10 == 0) goto L_0x0188
-                java.lang.Object r10 = r14.get(r10)
-                if (r10 == 0) goto L_0x0188
-                goto L_0x0161
-            L_0x0188:
-                if (r9 != 0) goto L_0x0194
-                java.util.HashMap r9 = org.telegram.ui.ActionBar.Theme.defaultColors
+                java.lang.Object r8 = r13.get(r7)
+                java.lang.Integer r8 = (java.lang.Integer) r8
+                if (r8 != 0) goto L_0x017a
+                java.util.HashMap r9 = org.telegram.ui.ActionBar.Theme.fallbackKeys
                 java.lang.Object r9 = r9.get(r7)
-                java.lang.Integer r9 = (java.lang.Integer) r9
-            L_0x0194:
-                if (r9 != 0) goto L_0x0197
-                goto L_0x0161
-            L_0x0197:
-                int r10 = r9.intValue()
-                int r10 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r1, r2, r10, r3)
-                int r9 = r9.intValue()
-                if (r10 == r9) goto L_0x0161
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r10)
-                r15.put(r7, r9)
-                goto L_0x0161
-            L_0x01ad:
-                r14 = -1
-                java.lang.String r1 = "chat_outLoader"
-                if (r8 != 0) goto L_0x03ee
-                int r2 = r13.myMessagesGradientAccentColor1
-                if (r2 == 0) goto L_0x03ee
-                int r3 = r13.myMessagesGradientAccentColor2
-                if (r3 == 0) goto L_0x01dd
-                int r3 = r13.myMessagesAccentColor
-                int r2 = org.telegram.messenger.AndroidUtilities.getAverageColor(r3, r2)
-                int r3 = r13.myMessagesGradientAccentColor2
-                int r2 = org.telegram.messenger.AndroidUtilities.getAverageColor(r2, r3)
-                int r3 = r13.myMessagesGradientAccentColor3
-                if (r3 == 0) goto L_0x01ce
-                int r2 = org.telegram.messenger.AndroidUtilities.getAverageColor(r2, r3)
+                java.lang.String r9 = (java.lang.String) r9
+                if (r9 == 0) goto L_0x017a
+                java.lang.Object r9 = r13.get(r9)
+                if (r9 == 0) goto L_0x017a
+                goto L_0x0153
+            L_0x017a:
+                if (r8 != 0) goto L_0x0186
+                java.util.HashMap r8 = org.telegram.ui.ActionBar.Theme.defaultColors
+                java.lang.Object r8 = r8.get(r7)
+                java.lang.Integer r8 = (java.lang.Integer) r8
+            L_0x0186:
+                if (r8 != 0) goto L_0x0189
+                goto L_0x0153
+            L_0x0189:
+                int r9 = r8.intValue()
+                int r9 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r1, r2, r9, r3)
+                int r8 = r8.intValue()
+                if (r9 == r8) goto L_0x0153
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r9)
+                r14.put(r7, r8)
+                goto L_0x0153
+            L_0x019f:
+                int r13 = r12.myMessagesGradientAccentColor1
+                if (r13 == 0) goto L_0x03db
+                int r1 = r12.myMessagesGradientAccentColor2
+                if (r1 == 0) goto L_0x01c8
+                int r1 = r12.myMessagesAccentColor
+                int r13 = org.telegram.messenger.AndroidUtilities.getAverageColor(r1, r13)
+                int r1 = r12.myMessagesGradientAccentColor2
+                int r13 = org.telegram.messenger.AndroidUtilities.getAverageColor(r13, r1)
+                int r1 = r12.myMessagesGradientAccentColor3
+                if (r1 == 0) goto L_0x01bb
+                int r13 = org.telegram.messenger.AndroidUtilities.getAverageColor(r13, r1)
+            L_0x01bb:
+                float r13 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r13)
+                r1 = 1060403937(0x3var_ae1, float:0.705)
+                int r13 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+                if (r13 <= 0) goto L_0x01ce
+                r6 = 1
+                goto L_0x01ce
+            L_0x01c8:
+                int r1 = r12.myMessagesAccentColor
+                boolean r6 = org.telegram.ui.ActionBar.Theme.useBlackText(r1, r13)
             L_0x01ce:
-                float r2 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r2)
-                r3 = 1060403937(0x3var_ae1, float:0.705)
-                int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 <= 0) goto L_0x01db
-                r2 = 1
-                goto L_0x01e3
-            L_0x01db:
-                r2 = 0
-                goto L_0x01e3
-            L_0x01dd:
-                int r3 = r13.myMessagesAccentColor
-                boolean r2 = org.telegram.ui.ActionBar.Theme.useBlackText(r3, r2)
-            L_0x01e3:
-                if (r2 == 0) goto L_0x01ee
-                r2 = -14606047(0xfffffffffvar_, float:-2.1417772E38)
-                r3 = -11184811(0xfffffffffvar_, float:-2.8356863E38)
-                r4 = 1291845632(0x4d000000, float:1.34217728E8)
-                goto L_0x01f5
-            L_0x01ee:
-                r3 = -1118482(0xffffffffffeeeeee, float:NaN)
-                r4 = 1308622847(0x4dffffff, float:5.3687088E8)
-                r2 = -1
-            L_0x01f5:
-                int r7 = r13.accentColor2
-                if (r7 != 0) goto L_0x03ca
-                java.lang.Integer r7 = java.lang.Integer.valueOf(r4)
-                java.lang.String r9 = "chat_outAudioProgress"
-                r15.put(r9, r7)
-                java.lang.Integer r7 = java.lang.Integer.valueOf(r4)
-                java.lang.String r9 = "chat_outAudioSelectedProgress"
-                r15.put(r9, r7)
-                java.lang.Integer r7 = java.lang.Integer.valueOf(r4)
-                java.lang.String r9 = "chat_outAudioSeekbar"
-                r15.put(r9, r7)
-                java.lang.Integer r7 = java.lang.Integer.valueOf(r4)
-                java.lang.String r9 = "chat_outAudioCacheSeekbar"
-                r15.put(r9, r7)
-                java.lang.Integer r7 = java.lang.Integer.valueOf(r4)
-                java.lang.String r9 = "chat_outAudioSeekbarSelected"
-                r15.put(r9, r7)
-                java.lang.Integer r7 = java.lang.Integer.valueOf(r2)
-                java.lang.String r9 = "chat_outAudioSeekbarFill"
-                r15.put(r9, r7)
-                java.lang.Integer r7 = java.lang.Integer.valueOf(r4)
-                java.lang.String r9 = "chat_outVoiceSeekbar"
-                r15.put(r9, r7)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
-                java.lang.String r7 = "chat_outVoiceSeekbarSelected"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outVoiceSeekbarFill"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_messageLinkOut"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outForwardedNameText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outViaBotNameText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outReplyLine"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outReplyNameText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outPreviewLine"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outSiteNameText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outInstant"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outInstantSelected"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outPreviewInstantText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outPreviewInstantSelectedText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outViews"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outViewsSelected"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outAudioTitleText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outFileNameText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outContactNameText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outAudioPerfomerText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outAudioPerfomerSelectedText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outSentCheck"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outSentCheckSelected"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outSentCheckRead"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outSentCheckReadSelected"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outSentClock"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outSentClockSelected"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outMenu"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outMenuSelected"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outTimeText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
-                java.lang.String r7 = "chat_outTimeSelectedText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-                java.lang.String r7 = "chat_outAudioDurationText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-                java.lang.String r7 = "chat_outAudioDurationSelectedText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-                java.lang.String r7 = "chat_outContactPhoneText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-                java.lang.String r7 = "chat_outContactPhoneSelectedText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-                java.lang.String r7 = "chat_outFileInfoText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-                java.lang.String r7 = "chat_outFileInfoSelectedText"
-                r15.put(r7, r4)
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-                java.lang.String r7 = "chat_outVenueInfoText"
-                r15.put(r7, r4)
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                java.lang.String r4 = "chat_outVenueInfoSelectedText"
-                r15.put(r4, r3)
+                if (r6 == 0) goto L_0x01d9
+                r13 = -14606047(0xfffffffffvar_, float:-2.1417772E38)
+                r1 = -11184811(0xfffffffffvar_, float:-2.8356863E38)
+                r2 = 1291845632(0x4d000000, float:1.34217728E8)
+                goto L_0x01e0
+            L_0x01d9:
+                r13 = -1
+                r1 = -1118482(0xffffffffffeeeeee, float:NaN)
+                r2 = 1308622847(0x4dffffff, float:5.3687088E8)
+            L_0x01e0:
+                int r3 = r12.accentColor2
+                if (r3 != 0) goto L_0x03b7
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r2)
-                r15.put(r1, r3)
+                java.lang.String r4 = "chat_outAudioProgress"
+                r14.put(r4, r3)
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r2)
-                java.lang.String r4 = "chat_outLoaderSelected"
-                r15.put(r4, r3)
-                int r3 = r13.myMessagesAccentColor
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                java.lang.String r4 = "chat_outFileProgress"
-                r15.put(r4, r3)
-                int r3 = r13.myMessagesAccentColor
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                java.lang.String r4 = "chat_outFileProgressSelected"
-                r15.put(r4, r3)
-                int r3 = r13.myMessagesAccentColor
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                java.lang.String r4 = "chat_outMediaIcon"
-                r15.put(r4, r3)
-                int r3 = r13.myMessagesAccentColor
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                java.lang.String r4 = "chat_outMediaIconSelected"
-                r15.put(r4, r3)
-            L_0x03ca:
+                java.lang.String r4 = "chat_outAudioSelectedProgress"
+                r14.put(r4, r3)
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r2)
-                java.lang.String r4 = "chat_outReplyMessageText"
-                r15.put(r4, r3)
+                java.lang.String r4 = "chat_outAudioSeekbar"
+                r14.put(r4, r3)
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r2)
-                java.lang.String r4 = "chat_outReplyMediaMessageText"
-                r15.put(r4, r3)
+                java.lang.String r4 = "chat_outAudioCacheSeekbar"
+                r14.put(r4, r3)
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r2)
-                java.lang.String r4 = "chat_outReplyMediaMessageSelectedText"
-                r15.put(r4, r3)
+                java.lang.String r4 = "chat_outAudioSeekbarSelected"
+                r14.put(r4, r3)
+                java.lang.Integer r3 = java.lang.Integer.valueOf(r13)
+                java.lang.String r4 = "chat_outAudioSeekbarFill"
+                r14.put(r4, r3)
+                java.lang.Integer r3 = java.lang.Integer.valueOf(r2)
+                java.lang.String r4 = "chat_outVoiceSeekbar"
+                r14.put(r4, r3)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-                java.lang.String r3 = "chat_messageTextOut"
-                r15.put(r3, r2)
-            L_0x03ee:
-                if (r8 == 0) goto L_0x040b
-                boolean r2 = r15.containsKey(r1)
-                if (r2 == 0) goto L_0x0401
-                java.lang.Object r1 = r15.get(r1)
-                java.lang.Integer r1 = (java.lang.Integer) r1
-                int r1 = r1.intValue()
-                goto L_0x0402
-            L_0x0401:
-                r1 = 0
-            L_0x0402:
-                int r14 = org.telegram.messenger.AndroidUtilities.getColorDistance(r14, r1)
-                r1 = 5000(0x1388, float:7.006E-42)
-                if (r14 >= r1) goto L_0x040b
-                goto L_0x040c
-            L_0x040b:
-                r6 = r8
-            L_0x040c:
-                int r14 = r13.myMessagesAccentColor
-                if (r14 == 0) goto L_0x044b
-                int r1 = r13.myMessagesGradientAccentColor1
-                if (r1 == 0) goto L_0x044b
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
-                r15.put(r5, r14)
-                int r14 = r13.myMessagesGradientAccentColor1
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
+                java.lang.String r3 = "chat_outVoiceSeekbarSelected"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outVoiceSeekbarFill"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_messageLinkOut"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outForwardedNameText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outViaBotNameText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outReplyLine"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outReplyNameText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outPreviewLine"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outSiteNameText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outInstant"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outInstantSelected"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outPreviewInstantText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outPreviewInstantSelectedText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outViews"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outViewsSelected"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outAudioTitleText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outFileNameText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outContactNameText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outAudioPerfomerText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outAudioPerfomerSelectedText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outSentCheck"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outSentCheckSelected"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outSentCheckRead"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outSentCheckReadSelected"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outSentClock"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outSentClockSelected"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outMenu"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outMenuSelected"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outTimeText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r13)
+                java.lang.String r3 = "chat_outTimeSelectedText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
+                java.lang.String r3 = "chat_outAudioDurationText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
+                java.lang.String r3 = "chat_outAudioDurationSelectedText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
+                java.lang.String r3 = "chat_outContactPhoneText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
+                java.lang.String r3 = "chat_outContactPhoneSelectedText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
+                java.lang.String r3 = "chat_outFileInfoText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
+                java.lang.String r3 = "chat_outFileInfoSelectedText"
+                r14.put(r3, r2)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
+                java.lang.String r3 = "chat_outVenueInfoText"
+                r14.put(r3, r2)
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                java.lang.String r2 = "chat_outVenueInfoSelectedText"
+                r14.put(r2, r1)
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r13)
+                java.lang.String r2 = "chat_outLoader"
+                r14.put(r2, r1)
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r13)
+                java.lang.String r2 = "chat_outLoaderSelected"
+                r14.put(r2, r1)
+                int r1 = r12.myMessagesAccentColor
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                java.lang.String r2 = "chat_outFileProgress"
+                r14.put(r2, r1)
+                int r1 = r12.myMessagesAccentColor
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                java.lang.String r2 = "chat_outFileProgressSelected"
+                r14.put(r2, r1)
+                int r1 = r12.myMessagesAccentColor
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                java.lang.String r2 = "chat_outMediaIcon"
+                r14.put(r2, r1)
+                int r1 = r12.myMessagesAccentColor
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                java.lang.String r2 = "chat_outMediaIconSelected"
+                r14.put(r2, r1)
+            L_0x03b7:
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r13)
+                java.lang.String r2 = "chat_outReplyMessageText"
+                r14.put(r2, r1)
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r13)
+                java.lang.String r2 = "chat_outReplyMediaMessageText"
+                r14.put(r2, r1)
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r13)
+                java.lang.String r2 = "chat_outReplyMediaMessageSelectedText"
+                r14.put(r2, r1)
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
+                java.lang.String r1 = "chat_messageTextOut"
+                r14.put(r1, r13)
+            L_0x03db:
+                int r13 = r12.myMessagesAccentColor
+                if (r13 == 0) goto L_0x041a
+                int r1 = r12.myMessagesGradientAccentColor1
+                if (r1 == 0) goto L_0x041a
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
+                r14.put(r5, r13)
+                int r13 = r12.myMessagesGradientAccentColor1
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
                 java.lang.String r1 = "chat_outBubbleGradient"
-                r15.put(r1, r14)
-                int r14 = r13.myMessagesGradientAccentColor2
-                if (r14 == 0) goto L_0x0440
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
+                r14.put(r1, r13)
+                int r13 = r12.myMessagesGradientAccentColor2
+                if (r13 == 0) goto L_0x040f
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
                 java.lang.String r1 = "chat_outBubbleGradient2"
-                r15.put(r1, r14)
-                int r14 = r13.myMessagesGradientAccentColor3
-                if (r14 == 0) goto L_0x0440
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
+                r14.put(r1, r13)
+                int r13 = r12.myMessagesGradientAccentColor3
+                if (r13 == 0) goto L_0x040f
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
                 java.lang.String r1 = "chat_outBubbleGradient3"
-                r15.put(r1, r14)
-            L_0x0440:
-                boolean r14 = r13.myMessagesAnimated
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
+                r14.put(r1, r13)
+            L_0x040f:
+                boolean r13 = r12.myMessagesAnimated
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
                 java.lang.String r1 = "chat_outBubbleGradientAnimated"
-                r15.put(r1, r14)
-            L_0x044b:
-                long r1 = r13.backgroundOverrideColor
-                int r14 = (int) r1
+                r14.put(r1, r13)
+            L_0x041a:
+                long r1 = r12.backgroundOverrideColor
+                int r13 = (int) r1
                 java.lang.String r3 = "chat_wallpaper"
                 r4 = 0
-                if (r14 == 0) goto L_0x045c
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
-                r15.put(r3, r14)
-                goto L_0x0463
-            L_0x045c:
-                int r14 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-                if (r14 == 0) goto L_0x0463
-                r15.remove(r3)
-            L_0x0463:
-                long r1 = r13.backgroundGradientOverrideColor1
-                int r14 = (int) r1
+                if (r13 == 0) goto L_0x042b
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
+                r14.put(r3, r13)
+                goto L_0x0432
+            L_0x042b:
+                int r13 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
+                if (r13 == 0) goto L_0x0432
+                r14.remove(r3)
+            L_0x0432:
+                long r1 = r12.backgroundGradientOverrideColor1
+                int r13 = (int) r1
                 java.lang.String r3 = "chat_wallpaper_gradient_to"
-                if (r14 == 0) goto L_0x0472
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
-                r15.put(r3, r14)
-                goto L_0x0479
-            L_0x0472:
-                int r14 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-                if (r14 == 0) goto L_0x0479
-                r15.remove(r3)
-            L_0x0479:
-                long r1 = r13.backgroundGradientOverrideColor2
-                int r14 = (int) r1
+                if (r13 == 0) goto L_0x0441
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
+                r14.put(r3, r13)
+                goto L_0x0448
+            L_0x0441:
+                int r13 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
+                if (r13 == 0) goto L_0x0448
+                r14.remove(r3)
+            L_0x0448:
+                long r1 = r12.backgroundGradientOverrideColor2
+                int r13 = (int) r1
                 java.lang.String r3 = "key_chat_wallpaper_gradient_to2"
-                if (r14 == 0) goto L_0x0488
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
-                r15.put(r3, r14)
-                goto L_0x048f
-            L_0x0488:
-                int r14 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-                if (r14 == 0) goto L_0x048f
-                r15.remove(r3)
-            L_0x048f:
-                long r1 = r13.backgroundGradientOverrideColor3
-                int r14 = (int) r1
+                if (r13 == 0) goto L_0x0457
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
+                r14.put(r3, r13)
+                goto L_0x045e
+            L_0x0457:
+                int r13 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
+                if (r13 == 0) goto L_0x045e
+                r14.remove(r3)
+            L_0x045e:
+                long r1 = r12.backgroundGradientOverrideColor3
+                int r13 = (int) r1
                 java.lang.String r3 = "key_chat_wallpaper_gradient_to3"
-                if (r14 == 0) goto L_0x049e
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
-                r15.put(r3, r14)
-                goto L_0x04a5
-            L_0x049e:
-                int r14 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-                if (r14 == 0) goto L_0x04a5
-                r15.remove(r3)
-            L_0x04a5:
-                int r14 = r13.backgroundRotation
+                if (r13 == 0) goto L_0x046d
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
+                r14.put(r3, r13)
+                goto L_0x0474
+            L_0x046d:
+                int r13 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
+                if (r13 == 0) goto L_0x0474
+                r14.remove(r3)
+            L_0x0474:
+                int r13 = r12.backgroundRotation
                 r1 = 45
-                if (r14 == r1) goto L_0x04b4
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
+                if (r13 == r1) goto L_0x0483
+                java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
                 java.lang.String r1 = "chat_wallpaper_gradient_rotation"
-                r15.put(r1, r14)
-            L_0x04b4:
-                r14 = r6 ^ 1
-                return r14
+                r14.put(r1, r13)
+            L_0x0483:
+                return r0
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.ThemeAccent.fillAccentColors(java.util.HashMap, java.util.HashMap):boolean");
         }
@@ -3131,7 +3164,7 @@ public class Theme {
             } else if (TextUtils.isEmpty(this.patternSlug)) {
                 return null;
             } else {
-                return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s_v6_dubug.jpg", new Object[]{this.parentTheme.getKey(), Integer.valueOf(this.id), this.patternSlug}));
+                return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s_v8_dubug.jpg", new Object[]{this.parentTheme.getKey(), Integer.valueOf(this.id), this.patternSlug}));
             }
         }
 
@@ -4493,6 +4526,10 @@ public class Theme {
             public static int $default$getColorOrDefault(ResourcesProvider _this, String str) {
                 Integer color = _this.getColor(str);
                 return color != null ? color.intValue() : Theme.getColor(str);
+            }
+
+            public static Integer $default$getCurrentColor(ResourcesProvider _this, String str) {
+                return _this.getColor(str);
             }
 
             public static void $default$applyServiceShaderMatrix(ResourcesProvider _this, int i, int i2, float f, float f2) {
@@ -16716,7 +16753,7 @@ public class Theme {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createBackgroundDrawable(org.telegram.ui.ActionBar.Theme$ThemeInfo, java.util.HashMap, java.lang.String, int):org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x0301  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0307  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static org.telegram.ui.ActionBar.Theme.BackgroundDrawableSettings createBackgroundDrawable(org.telegram.ui.ActionBar.Theme.ThemeInfo r23, org.telegram.ui.ActionBar.Theme.OverrideWallpaperInfo r24, java.util.HashMap<java.lang.String, java.lang.Integer> r25, java.io.File r26, java.lang.String r27, int r28, int r29, int r30, boolean r31, boolean r32, boolean r33, boolean r34, org.telegram.tgnet.TLRPC$Document r35) {
         /*
@@ -16776,7 +16813,7 @@ public class Theme {
             r8.isPatternWallpaper = r12
         L_0x005d:
             r14 = 2
-            if (r11 != 0) goto L_0x020c
+            if (r11 != 0) goto L_0x0212
             if (r31 == 0) goto L_0x0064
             r15 = 0
             goto L_0x006c
@@ -16792,58 +16829,60 @@ public class Theme {
             java.lang.Integer r11 = java.lang.Integer.valueOf(r10)
         L_0x007a:
             java.lang.String r12 = "key_chat_wallpaper_gradient_to2"
+            java.lang.Object r13 = r2.get(r12)
+            java.lang.Integer r13 = (java.lang.Integer) r13
             java.lang.Object r12 = r2.get(r12)
             java.lang.Integer r12 = (java.lang.Integer) r12
             java.lang.String r13 = "chat_wallpaper_gradient_to"
             java.lang.Object r13 = r2.get(r13)
             java.lang.Integer r13 = (java.lang.Integer) r13
-            if (r3 == 0) goto L_0x00e4
+            if (r3 == 0) goto L_0x00ea
             boolean r16 = r26.exists()
-            if (r16 == 0) goto L_0x00e4
-            if (r15 == 0) goto L_0x00c6
-            if (r13 == 0) goto L_0x00c6
-            if (r12 == 0) goto L_0x00c6
-            org.telegram.ui.Components.MotionBackgroundDrawable r0 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x00de }
-            int r18 = r15.intValue()     // Catch:{ all -> 0x00de }
-            int r19 = r13.intValue()     // Catch:{ all -> 0x00de }
-            int r20 = r12.intValue()     // Catch:{ all -> 0x00de }
-            int r21 = r11.intValue()     // Catch:{ all -> 0x00de }
+            if (r16 == 0) goto L_0x00ea
+            if (r15 == 0) goto L_0x00cc
+            if (r13 == 0) goto L_0x00cc
+            if (r12 == 0) goto L_0x00cc
+            org.telegram.ui.Components.MotionBackgroundDrawable r0 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x00e4 }
+            int r18 = r15.intValue()     // Catch:{ all -> 0x00e4 }
+            int r19 = r13.intValue()     // Catch:{ all -> 0x00e4 }
+            int r20 = r12.intValue()     // Catch:{ all -> 0x00e4 }
+            int r21 = r11.intValue()     // Catch:{ all -> 0x00e4 }
             r22 = 0
             r17 = r0
-            r17.<init>(r18, r19, r20, r21, r22)     // Catch:{ all -> 0x00de }
-            java.lang.String r2 = r26.getAbsolutePath()     // Catch:{ all -> 0x00de }
-            android.graphics.Bitmap r2 = android.graphics.BitmapFactory.decodeFile(r2)     // Catch:{ all -> 0x00de }
-            r0.setPatternBitmap(r5, r2)     // Catch:{ all -> 0x00de }
-            int r2 = r0.getPatternColor()     // Catch:{ all -> 0x00de }
-            r0.setPatternColorFilter(r2)     // Catch:{ all -> 0x00de }
-            r8.wallpaper = r0     // Catch:{ all -> 0x00de }
-            goto L_0x00d0
-        L_0x00c6:
-            java.lang.String r0 = r26.getAbsolutePath()     // Catch:{ all -> 0x00de }
-            android.graphics.drawable.Drawable r0 = android.graphics.drawable.Drawable.createFromPath(r0)     // Catch:{ all -> 0x00de }
-            r8.wallpaper = r0     // Catch:{ all -> 0x00de }
-        L_0x00d0:
-            java.lang.Boolean r0 = java.lang.Boolean.valueOf(r34)     // Catch:{ all -> 0x00de }
-            r8.isWallpaperMotion = r0     // Catch:{ all -> 0x00de }
-            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x00de }
-            r8.isPatternWallpaper = r0     // Catch:{ all -> 0x00de }
-            r8.isCustomTheme = r0     // Catch:{ all -> 0x00de }
-            goto L_0x020c
-        L_0x00de:
+            r17.<init>(r18, r19, r20, r21, r22)     // Catch:{ all -> 0x00e4 }
+            java.lang.String r2 = r26.getAbsolutePath()     // Catch:{ all -> 0x00e4 }
+            android.graphics.Bitmap r2 = android.graphics.BitmapFactory.decodeFile(r2)     // Catch:{ all -> 0x00e4 }
+            r0.setPatternBitmap(r5, r2)     // Catch:{ all -> 0x00e4 }
+            int r2 = r0.getPatternColor()     // Catch:{ all -> 0x00e4 }
+            r0.setPatternColorFilter(r2)     // Catch:{ all -> 0x00e4 }
+            r8.wallpaper = r0     // Catch:{ all -> 0x00e4 }
+            goto L_0x00d6
+        L_0x00cc:
+            java.lang.String r0 = r26.getAbsolutePath()     // Catch:{ all -> 0x00e4 }
+            android.graphics.drawable.Drawable r0 = android.graphics.drawable.Drawable.createFromPath(r0)     // Catch:{ all -> 0x00e4 }
+            r8.wallpaper = r0     // Catch:{ all -> 0x00e4 }
+        L_0x00d6:
+            java.lang.Boolean r0 = java.lang.Boolean.valueOf(r34)     // Catch:{ all -> 0x00e4 }
+            r8.isWallpaperMotion = r0     // Catch:{ all -> 0x00e4 }
+            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x00e4 }
+            r8.isPatternWallpaper = r0     // Catch:{ all -> 0x00e4 }
+            r8.isCustomTheme = r0     // Catch:{ all -> 0x00e4 }
+            goto L_0x0212
+        L_0x00e4:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x020c
-        L_0x00e4:
-            if (r15 == 0) goto L_0x0198
+            goto L_0x0212
+        L_0x00ea:
+            if (r15 == 0) goto L_0x019e
             java.lang.String r0 = "chat_wallpaper_gradient_rotation"
             java.lang.Object r0 = r2.get(r0)
             java.lang.Integer r0 = (java.lang.Integer) r0
-            if (r0 != 0) goto L_0x00f6
+            if (r0 != 0) goto L_0x00fc
             r0 = 45
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-        L_0x00f6:
-            if (r13 == 0) goto L_0x014f
-            if (r12 == 0) goto L_0x014f
+        L_0x00fc:
+            if (r13 == 0) goto L_0x0155
+            if (r12 == 0) goto L_0x0155
             org.telegram.ui.Components.MotionBackgroundDrawable r2 = new org.telegram.ui.Components.MotionBackgroundDrawable
             int r17 = r15.intValue()
             int r18 = r13.intValue()
@@ -16852,40 +16891,40 @@ public class Theme {
             r21 = 0
             r16 = r2
             r16.<init>(r17, r18, r19, r20, r21)
-            if (r3 == 0) goto L_0x0145
-            if (r7 == 0) goto L_0x0145
+            if (r3 == 0) goto L_0x014b
+            if (r7 == 0) goto L_0x014b
             java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r9)
             r4 = 1135869952(0x43b40000, float:360.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r7 = 1142947840(0x44200000, float:640.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             android.graphics.Bitmap r11 = org.telegram.messenger.SvgHelper.getBitmap((java.io.File) r0, (int) r4, (int) r7, (boolean) r10)
-            if (r11 == 0) goto L_0x0146
-            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x013d }
-            r0.<init>(r3)     // Catch:{ Exception -> 0x013d }
-            android.graphics.Bitmap$CompressFormat r3 = android.graphics.Bitmap.CompressFormat.PNG     // Catch:{ Exception -> 0x013d }
+            if (r11 == 0) goto L_0x014c
+            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0143 }
+            r0.<init>(r3)     // Catch:{ Exception -> 0x0143 }
+            android.graphics.Bitmap$CompressFormat r3 = android.graphics.Bitmap.CompressFormat.PNG     // Catch:{ Exception -> 0x0143 }
             r4 = 87
-            r11.compress(r3, r4, r0)     // Catch:{ Exception -> 0x013d }
-            r0.close()     // Catch:{ Exception -> 0x013d }
-            goto L_0x0146
-        L_0x013d:
+            r11.compress(r3, r4, r0)     // Catch:{ Exception -> 0x0143 }
+            r0.close()     // Catch:{ Exception -> 0x0143 }
+            goto L_0x014c
+        L_0x0143:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r0.printStackTrace()
-            goto L_0x0146
-        L_0x0145:
+            goto L_0x014c
+        L_0x014b:
             r11 = 0
-        L_0x0146:
+        L_0x014c:
             r2.setPatternBitmap(r5, r11)
             r2.setPhase(r6)
             r8.wallpaper = r2
-            goto L_0x0192
-        L_0x014f:
-            if (r13 == 0) goto L_0x0187
+            goto L_0x0198
+        L_0x0155:
+            if (r13 == 0) goto L_0x018d
             boolean r2 = r13.equals(r15)
-            if (r2 == 0) goto L_0x0158
-            goto L_0x0187
-        L_0x0158:
+            if (r2 == 0) goto L_0x015e
+            goto L_0x018d
+        L_0x015e:
             int[] r2 = new int[r14]
             int r3 = r15.intValue()
             r2[r10] = r3
@@ -16902,200 +16941,200 @@ public class Theme {
             org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r0 = r3.startDithering(r2, r0, r4)
             backgroundGradientDisposable = r0
             r8.wallpaper = r3
-            goto L_0x0192
-        L_0x0187:
+            goto L_0x0198
+        L_0x018d:
             android.graphics.drawable.ColorDrawable r0 = new android.graphics.drawable.ColorDrawable
             int r2 = r15.intValue()
             r0.<init>(r2)
             r8.wallpaper = r0
-        L_0x0192:
+        L_0x0198:
             java.lang.Boolean r0 = java.lang.Boolean.TRUE
             r8.isCustomTheme = r0
-            goto L_0x020c
-        L_0x0198:
-            if (r27 == 0) goto L_0x01d4
-            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x01cf }
-            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x01cf }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01cf }
-            r3.<init>()     // Catch:{ Exception -> 0x01cf }
-            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r27)     // Catch:{ Exception -> 0x01cf }
-            r3.append(r4)     // Catch:{ Exception -> 0x01cf }
+            goto L_0x0212
+        L_0x019e:
+            if (r27 == 0) goto L_0x01da
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x01d5 }
+            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x01d5 }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01d5 }
+            r3.<init>()     // Catch:{ Exception -> 0x01d5 }
+            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r27)     // Catch:{ Exception -> 0x01d5 }
+            r3.append(r4)     // Catch:{ Exception -> 0x01d5 }
             java.lang.String r4 = ".wp"
-            r3.append(r4)     // Catch:{ Exception -> 0x01cf }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x01cf }
-            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x01cf }
-            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ Exception -> 0x01cf }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x01cf }
-            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r10)     // Catch:{ Exception -> 0x01cf }
-            if (r0 == 0) goto L_0x020c
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ Exception -> 0x01cf }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x01cf }
-            r8.wallpaper = r2     // Catch:{ Exception -> 0x01cf }
-            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x01cf }
-            r8.isCustomTheme = r0     // Catch:{ Exception -> 0x01cf }
-            goto L_0x020c
-        L_0x01cf:
+            r3.append(r4)     // Catch:{ Exception -> 0x01d5 }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x01d5 }
+            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x01d5 }
+            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ Exception -> 0x01d5 }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x01d5 }
+            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r10)     // Catch:{ Exception -> 0x01d5 }
+            if (r0 == 0) goto L_0x0212
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ Exception -> 0x01d5 }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x01d5 }
+            r8.wallpaper = r2     // Catch:{ Exception -> 0x01d5 }
+            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x01d5 }
+            r8.isCustomTheme = r0     // Catch:{ Exception -> 0x01d5 }
+            goto L_0x0212
+        L_0x01d5:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x020c
-        L_0x01d4:
-            if (r4 <= 0) goto L_0x020c
+            goto L_0x0212
+        L_0x01da:
+            if (r4 <= 0) goto L_0x0212
             java.lang.String r2 = r0.pathToFile
-            if (r2 != 0) goto L_0x01de
+            if (r2 != 0) goto L_0x01e4
             java.lang.String r2 = r0.assetName
-            if (r2 == 0) goto L_0x020c
-        L_0x01de:
-            java.lang.String r2 = r0.assetName     // Catch:{ all -> 0x0208 }
-            if (r2 == 0) goto L_0x01e7
-            java.io.File r0 = getAssetFile(r2)     // Catch:{ all -> 0x0208 }
-            goto L_0x01ef
-        L_0x01e7:
-            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x0208 }
-            java.lang.String r0 = r0.pathToFile     // Catch:{ all -> 0x0208 }
-            r2.<init>(r0)     // Catch:{ all -> 0x0208 }
+            if (r2 == 0) goto L_0x0212
+        L_0x01e4:
+            java.lang.String r2 = r0.assetName     // Catch:{ all -> 0x020e }
+            if (r2 == 0) goto L_0x01ed
+            java.io.File r0 = getAssetFile(r2)     // Catch:{ all -> 0x020e }
+            goto L_0x01f5
+        L_0x01ed:
+            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x020e }
+            java.lang.String r0 = r0.pathToFile     // Catch:{ all -> 0x020e }
+            r2.<init>(r0)     // Catch:{ all -> 0x020e }
             r0 = r2
-        L_0x01ef:
-            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ all -> 0x0208 }
-            r2.<init>(r0)     // Catch:{ all -> 0x0208 }
-            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r4)     // Catch:{ all -> 0x0208 }
-            if (r0 == 0) goto L_0x020c
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0208 }
-            r2.<init>(r0)     // Catch:{ all -> 0x0208 }
-            wallpaper = r2     // Catch:{ all -> 0x0208 }
-            r8.wallpaper = r2     // Catch:{ all -> 0x0208 }
-            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x0208 }
-            r8.isCustomTheme = r0     // Catch:{ all -> 0x0208 }
-            goto L_0x020c
-        L_0x0208:
+        L_0x01f5:
+            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ all -> 0x020e }
+            r2.<init>(r0)     // Catch:{ all -> 0x020e }
+            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r4)     // Catch:{ all -> 0x020e }
+            if (r0 == 0) goto L_0x0212
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x020e }
+            r2.<init>(r0)     // Catch:{ all -> 0x020e }
+            wallpaper = r2     // Catch:{ all -> 0x020e }
+            r8.wallpaper = r2     // Catch:{ all -> 0x020e }
+            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x020e }
+            r8.isCustomTheme = r0     // Catch:{ all -> 0x020e }
+            goto L_0x0212
+        L_0x020e:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x020c:
+        L_0x0212:
             android.graphics.drawable.Drawable r0 = r8.wallpaper
-            if (r0 != 0) goto L_0x030d
-            if (r1 == 0) goto L_0x0215
+            if (r0 != 0) goto L_0x0313
+            if (r1 == 0) goto L_0x021b
             int r0 = r1.color
-            goto L_0x0216
-        L_0x0215:
+            goto L_0x021c
+        L_0x021b:
             r0 = 0
-        L_0x0216:
-            if (r1 == 0) goto L_0x02f1
-            boolean r2 = r24.isDefault()     // Catch:{ all -> 0x02fc }
-            if (r2 == 0) goto L_0x0220
-            goto L_0x02f1
-        L_0x0220:
-            boolean r2 = r24.isColor()     // Catch:{ all -> 0x02fc }
-            if (r2 == 0) goto L_0x022a
-            int r2 = r1.gradientColor1     // Catch:{ all -> 0x02fc }
-            if (r2 == 0) goto L_0x02fd
-        L_0x022a:
-            if (r0 == 0) goto L_0x02bb
-            boolean r2 = isPatternWallpaper     // Catch:{ all -> 0x02fc }
-            if (r2 == 0) goto L_0x0234
-            int r2 = r1.gradientColor2     // Catch:{ all -> 0x02fc }
-            if (r2 == 0) goto L_0x02bb
-        L_0x0234:
-            int r2 = r1.gradientColor1     // Catch:{ all -> 0x02fc }
-            if (r2 == 0) goto L_0x028c
-            int r3 = r1.gradientColor2     // Catch:{ all -> 0x02fc }
-            if (r3 == 0) goto L_0x028c
-            org.telegram.ui.Components.MotionBackgroundDrawable r2 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x02fc }
-            int r3 = r1.color     // Catch:{ all -> 0x02fc }
-            int r4 = r1.gradientColor1     // Catch:{ all -> 0x02fc }
-            int r5 = r1.gradientColor2     // Catch:{ all -> 0x02fc }
-            int r7 = r1.gradientColor3     // Catch:{ all -> 0x02fc }
+        L_0x021c:
+            if (r1 == 0) goto L_0x02f7
+            boolean r2 = r24.isDefault()     // Catch:{ all -> 0x0302 }
+            if (r2 == 0) goto L_0x0226
+            goto L_0x02f7
+        L_0x0226:
+            boolean r2 = r24.isColor()     // Catch:{ all -> 0x0302 }
+            if (r2 == 0) goto L_0x0230
+            int r2 = r1.gradientColor1     // Catch:{ all -> 0x0302 }
+            if (r2 == 0) goto L_0x0303
+        L_0x0230:
+            if (r0 == 0) goto L_0x02c1
+            boolean r2 = isPatternWallpaper     // Catch:{ all -> 0x0302 }
+            if (r2 == 0) goto L_0x023a
+            int r2 = r1.gradientColor2     // Catch:{ all -> 0x0302 }
+            if (r2 == 0) goto L_0x02c1
+        L_0x023a:
+            int r2 = r1.gradientColor1     // Catch:{ all -> 0x0302 }
+            if (r2 == 0) goto L_0x0292
+            int r3 = r1.gradientColor2     // Catch:{ all -> 0x0302 }
+            if (r3 == 0) goto L_0x0292
+            org.telegram.ui.Components.MotionBackgroundDrawable r2 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x0302 }
+            int r3 = r1.color     // Catch:{ all -> 0x0302 }
+            int r4 = r1.gradientColor1     // Catch:{ all -> 0x0302 }
+            int r5 = r1.gradientColor2     // Catch:{ all -> 0x0302 }
+            int r7 = r1.gradientColor3     // Catch:{ all -> 0x0302 }
             r21 = 0
             r16 = r2
             r17 = r3
             r18 = r4
             r19 = r5
             r20 = r7
-            r16.<init>(r17, r18, r19, r20, r21)     // Catch:{ all -> 0x02fc }
-            r2.setPhase(r6)     // Catch:{ all -> 0x02fc }
-            java.lang.Boolean r3 = r8.isPatternWallpaper     // Catch:{ all -> 0x02fc }
-            boolean r3 = r3.booleanValue()     // Catch:{ all -> 0x02fc }
-            if (r3 == 0) goto L_0x0288
-            java.io.File r3 = new java.io.File     // Catch:{ all -> 0x02fc }
-            java.io.File r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x02fc }
-            java.lang.String r5 = r1.fileName     // Catch:{ all -> 0x02fc }
-            r3.<init>(r4, r5)     // Catch:{ all -> 0x02fc }
-            boolean r4 = r3.exists()     // Catch:{ all -> 0x02fc }
-            if (r4 == 0) goto L_0x0288
-            float r1 = r1.intensity     // Catch:{ all -> 0x02fc }
+            r16.<init>(r17, r18, r19, r20, r21)     // Catch:{ all -> 0x0302 }
+            r2.setPhase(r6)     // Catch:{ all -> 0x0302 }
+            java.lang.Boolean r3 = r8.isPatternWallpaper     // Catch:{ all -> 0x0302 }
+            boolean r3 = r3.booleanValue()     // Catch:{ all -> 0x0302 }
+            if (r3 == 0) goto L_0x028e
+            java.io.File r3 = new java.io.File     // Catch:{ all -> 0x0302 }
+            java.io.File r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x0302 }
+            java.lang.String r5 = r1.fileName     // Catch:{ all -> 0x0302 }
+            r3.<init>(r4, r5)     // Catch:{ all -> 0x0302 }
+            boolean r4 = r3.exists()     // Catch:{ all -> 0x0302 }
+            if (r4 == 0) goto L_0x028e
+            float r1 = r1.intensity     // Catch:{ all -> 0x0302 }
             r4 = 1120403456(0x42CLASSNAME, float:100.0)
             float r1 = r1 * r4
-            int r1 = (int) r1     // Catch:{ all -> 0x02fc }
-            java.io.FileInputStream r4 = new java.io.FileInputStream     // Catch:{ all -> 0x02fc }
-            r4.<init>(r3)     // Catch:{ all -> 0x02fc }
-            android.graphics.Bitmap r3 = loadScreenSizedBitmap(r4, r10)     // Catch:{ all -> 0x02fc }
-            r2.setPatternBitmap(r1, r3)     // Catch:{ all -> 0x02fc }
-            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x02fc }
-            r8.isCustomTheme = r1     // Catch:{ all -> 0x02fc }
-        L_0x0288:
-            r8.wallpaper = r2     // Catch:{ all -> 0x02fc }
-            goto L_0x02fd
-        L_0x028c:
-            if (r2 == 0) goto L_0x02b3
-            int[] r3 = new int[r14]     // Catch:{ all -> 0x02fc }
-            r3[r10] = r0     // Catch:{ all -> 0x02fc }
-            r3[r9] = r2     // Catch:{ all -> 0x02fc }
-            int r1 = r1.rotation     // Catch:{ all -> 0x02fc }
-            android.graphics.drawable.GradientDrawable$Orientation r1 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r1)     // Catch:{ all -> 0x02fc }
-            org.telegram.ui.Components.BackgroundGradientDrawable r2 = new org.telegram.ui.Components.BackgroundGradientDrawable     // Catch:{ all -> 0x02fc }
-            r2.<init>(r1, r3)     // Catch:{ all -> 0x02fc }
-            org.telegram.ui.ActionBar.Theme$12 r1 = new org.telegram.ui.ActionBar.Theme$12     // Catch:{ all -> 0x02fc }
-            r1.<init>()     // Catch:{ all -> 0x02fc }
-            org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r3 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()     // Catch:{ all -> 0x02fc }
+            int r1 = (int) r1     // Catch:{ all -> 0x0302 }
+            java.io.FileInputStream r4 = new java.io.FileInputStream     // Catch:{ all -> 0x0302 }
+            r4.<init>(r3)     // Catch:{ all -> 0x0302 }
+            android.graphics.Bitmap r3 = loadScreenSizedBitmap(r4, r10)     // Catch:{ all -> 0x0302 }
+            r2.setPatternBitmap(r1, r3)     // Catch:{ all -> 0x0302 }
+            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x0302 }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x0302 }
+        L_0x028e:
+            r8.wallpaper = r2     // Catch:{ all -> 0x0302 }
+            goto L_0x0303
+        L_0x0292:
+            if (r2 == 0) goto L_0x02b9
+            int[] r3 = new int[r14]     // Catch:{ all -> 0x0302 }
+            r3[r10] = r0     // Catch:{ all -> 0x0302 }
+            r3[r9] = r2     // Catch:{ all -> 0x0302 }
+            int r1 = r1.rotation     // Catch:{ all -> 0x0302 }
+            android.graphics.drawable.GradientDrawable$Orientation r1 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r1)     // Catch:{ all -> 0x0302 }
+            org.telegram.ui.Components.BackgroundGradientDrawable r2 = new org.telegram.ui.Components.BackgroundGradientDrawable     // Catch:{ all -> 0x0302 }
+            r2.<init>(r1, r3)     // Catch:{ all -> 0x0302 }
+            org.telegram.ui.ActionBar.Theme$12 r1 = new org.telegram.ui.ActionBar.Theme$12     // Catch:{ all -> 0x0302 }
+            r1.<init>()     // Catch:{ all -> 0x0302 }
+            org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r3 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()     // Catch:{ all -> 0x0302 }
             r4 = 100
-            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r1 = r2.startDithering(r3, r1, r4)     // Catch:{ all -> 0x02fc }
-            backgroundGradientDisposable = r1     // Catch:{ all -> 0x02fc }
-            r8.wallpaper = r2     // Catch:{ all -> 0x02fc }
-            goto L_0x02fd
-        L_0x02b3:
-            android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x02fc }
-            r1.<init>(r0)     // Catch:{ all -> 0x02fc }
-            r8.wallpaper = r1     // Catch:{ all -> 0x02fc }
-            goto L_0x02fd
-        L_0x02bb:
-            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x02fc }
-            java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x02fc }
-            java.lang.String r1 = r1.fileName     // Catch:{ all -> 0x02fc }
-            r2.<init>(r3, r1)     // Catch:{ all -> 0x02fc }
-            boolean r1 = r2.exists()     // Catch:{ all -> 0x02fc }
-            if (r1 == 0) goto L_0x02e2
-            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ all -> 0x02fc }
-            r1.<init>(r2)     // Catch:{ all -> 0x02fc }
-            android.graphics.Bitmap r1 = loadScreenSizedBitmap(r1, r10)     // Catch:{ all -> 0x02fc }
-            if (r1 == 0) goto L_0x02e2
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x02fc }
-            r2.<init>(r1)     // Catch:{ all -> 0x02fc }
-            r8.wallpaper = r2     // Catch:{ all -> 0x02fc }
-            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x02fc }
-            r8.isCustomTheme = r1     // Catch:{ all -> 0x02fc }
-        L_0x02e2:
-            android.graphics.drawable.Drawable r1 = r8.wallpaper     // Catch:{ all -> 0x02fc }
-            if (r1 != 0) goto L_0x02fd
-            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x02fc }
-            r8.wallpaper = r1     // Catch:{ all -> 0x02fc }
-            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x02fc }
-            r8.isCustomTheme = r1     // Catch:{ all -> 0x02fc }
-            goto L_0x02fd
-        L_0x02f1:
-            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x02fc }
-            r8.wallpaper = r1     // Catch:{ all -> 0x02fc }
-            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x02fc }
-            r8.isCustomTheme = r1     // Catch:{ all -> 0x02fc }
-            goto L_0x02fd
-        L_0x02fc:
-        L_0x02fd:
+            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r1 = r2.startDithering(r3, r1, r4)     // Catch:{ all -> 0x0302 }
+            backgroundGradientDisposable = r1     // Catch:{ all -> 0x0302 }
+            r8.wallpaper = r2     // Catch:{ all -> 0x0302 }
+            goto L_0x0303
+        L_0x02b9:
+            android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x0302 }
+            r1.<init>(r0)     // Catch:{ all -> 0x0302 }
+            r8.wallpaper = r1     // Catch:{ all -> 0x0302 }
+            goto L_0x0303
+        L_0x02c1:
+            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x0302 }
+            java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x0302 }
+            java.lang.String r1 = r1.fileName     // Catch:{ all -> 0x0302 }
+            r2.<init>(r3, r1)     // Catch:{ all -> 0x0302 }
+            boolean r1 = r2.exists()     // Catch:{ all -> 0x0302 }
+            if (r1 == 0) goto L_0x02e8
+            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ all -> 0x0302 }
+            r1.<init>(r2)     // Catch:{ all -> 0x0302 }
+            android.graphics.Bitmap r1 = loadScreenSizedBitmap(r1, r10)     // Catch:{ all -> 0x0302 }
+            if (r1 == 0) goto L_0x02e8
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0302 }
+            r2.<init>(r1)     // Catch:{ all -> 0x0302 }
+            r8.wallpaper = r2     // Catch:{ all -> 0x0302 }
+            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x0302 }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x0302 }
+        L_0x02e8:
+            android.graphics.drawable.Drawable r1 = r8.wallpaper     // Catch:{ all -> 0x0302 }
+            if (r1 != 0) goto L_0x0303
+            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x0302 }
+            r8.wallpaper = r1     // Catch:{ all -> 0x0302 }
+            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x0302 }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x0302 }
+            goto L_0x0303
+        L_0x02f7:
+            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x0302 }
+            r8.wallpaper = r1     // Catch:{ all -> 0x0302 }
+            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x0302 }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x0302 }
+            goto L_0x0303
+        L_0x0302:
+        L_0x0303:
             android.graphics.drawable.Drawable r1 = r8.wallpaper
-            if (r1 != 0) goto L_0x030d
-            if (r0 != 0) goto L_0x0306
+            if (r1 != 0) goto L_0x0313
+            if (r0 != 0) goto L_0x030c
             r0 = -2693905(0xffffffffffd6e4ef, float:NaN)
-        L_0x0306:
+        L_0x030c:
             android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
             r1.<init>(r0)
             r8.wallpaper = r1
-        L_0x030d:
+        L_0x0313:
             return r8
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createBackgroundDrawable(org.telegram.ui.ActionBar.Theme$ThemeInfo, org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo, java.util.HashMap, java.io.File, java.lang.String, int, int, int, boolean, boolean, boolean, boolean, org.telegram.tgnet.TLRPC$Document):org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings");

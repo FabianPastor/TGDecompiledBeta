@@ -27,6 +27,7 @@ import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,10 +86,11 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     /* access modifiers changed from: private */
     public boolean isLightDarkChangeAnimation;
     private final LinearLayoutManager layoutManager;
+    private final boolean originalIsDark;
     private final ChatTheme originalTheme;
     /* access modifiers changed from: private */
     public int prevSelectedPosition = -1;
-    private final RadialProgressView progressView;
+    private final FlickerLoadingView progressView;
     /* access modifiers changed from: private */
     public final RecyclerListView recyclerView;
     private TextView resetTextView;
@@ -116,6 +118,9 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r0.themeDelegate = r1
             org.telegram.ui.ActionBar.ChatTheme r2 = r22.getCurrentTheme()
             r0.originalTheme = r2
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+            boolean r2 = r2.isDark()
+            r0.originalIsDark = r2
             org.telegram.ui.Components.ChatThemeBottomSheet$Adapter r2 = new org.telegram.ui.Components.ChatThemeBottomSheet$Adapter
             r2.<init>(r1)
             r0.adapter = r2
@@ -181,59 +186,67 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r9.beginApplyLayerColors()
             r0.setDarkButtonColor(r8)
             r9.commitApplyLayerColors()
-            org.telegram.ui.Components.RLottieImageView r11 = new org.telegram.ui.Components.RLottieImageView
-            android.content.Context r12 = r20.getContext()
-            r11.<init>(r12)
-            r0.darkThemeView = r11
-            r11.setAnimation(r9)
+            org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
+            android.content.Context r11 = r20.getContext()
+            r8.<init>(r11)
+            r0.darkThemeView = r8
+            r8.setAnimation(r9)
             android.widget.ImageView$ScaleType r9 = android.widget.ImageView.ScaleType.CENTER
-            r11.setScaleType(r9)
+            r8.setScaleType(r9)
             org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda2 r9 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda2
             r9.<init>(r0)
-            r11.setOnClickListener(r9)
-            r12 = 44
-            r13 = 1110441984(0x42300000, float:44.0)
-            r14 = 8388661(0x800035, float:1.1755018E-38)
+            r8.setOnClickListener(r9)
+            r11 = 44
+            r12 = 1110441984(0x42300000, float:44.0)
+            r13 = 8388661(0x800035, float:1.1755018E-38)
+            r14 = 0
             r15 = 0
-            r16 = 0
-            r17 = 1088421888(0x40e00000, float:7.0)
-            r18 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
-            r5.addView(r11, r9)
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r9 = r9.isDark()
-            r9 = r9 ^ r3
-            r0.forceDark = r9
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r9 = r9.isDark()
-            r0.setForceDark(r9, r4)
-            org.telegram.ui.Components.ChatThemeBottomSheet$1 r9 = new org.telegram.ui.Components.ChatThemeBottomSheet$1
-            android.content.Context r11 = r20.getContext()
-            r9.<init>(r0, r11)
-            r0.scroller = r9
-            org.telegram.ui.Components.RecyclerListView r9 = new org.telegram.ui.Components.RecyclerListView
-            android.content.Context r11 = r20.getContext()
-            r9.<init>(r11)
-            r0.recyclerView = r9
-            r9.setAdapter(r2)
-            r9.setClipChildren(r4)
-            r9.setClipToPadding(r4)
-            r9.setHasFixedSize(r3)
+            r16 = 1088421888(0x40e00000, float:7.0)
+            r17 = 0
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r5.addView(r8, r9)
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+            boolean r8 = r8.isDark()
+            r8 = r8 ^ r3
+            r0.forceDark = r8
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+            boolean r8 = r8.isDark()
+            r0.setForceDark(r8, r4)
+            org.telegram.ui.Components.ChatThemeBottomSheet$1 r8 = new org.telegram.ui.Components.ChatThemeBottomSheet$1
+            android.content.Context r9 = r20.getContext()
+            r8.<init>(r0, r9)
+            r0.scroller = r8
+            org.telegram.ui.Components.RecyclerListView r8 = new org.telegram.ui.Components.RecyclerListView
+            android.content.Context r9 = r20.getContext()
+            r8.<init>(r9)
+            r0.recyclerView = r8
+            r8.setAdapter(r2)
+            r8.setClipChildren(r4)
+            r8.setClipToPadding(r4)
+            r8.setHasFixedSize(r3)
             r2 = 0
-            r9.setItemAnimator(r2)
-            r9.setNestedScrollingEnabled(r4)
+            r8.setItemAnimator(r2)
+            r8.setNestedScrollingEnabled(r4)
             androidx.recyclerview.widget.LinearLayoutManager r2 = new androidx.recyclerview.widget.LinearLayoutManager
-            android.content.Context r11 = r20.getContext()
-            r2.<init>(r11, r4, r4)
+            android.content.Context r9 = r20.getContext()
+            r2.<init>(r9, r4, r4)
             r0.layoutManager = r2
-            r9.setLayoutManager(r2)
+            r8.setLayoutManager(r2)
             r2 = 1094713344(0x41400000, float:12.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r9.setPadding(r11, r4, r2, r4)
+            r8.setPadding(r9, r4, r2, r4)
             org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda6 r2 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda6
             r2.<init>(r0, r1)
-            r9.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r2)
+            r8.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r2)
+            org.telegram.ui.Components.FlickerLoadingView r2 = new org.telegram.ui.Components.FlickerLoadingView
+            android.content.Context r9 = r20.getContext()
+            org.telegram.ui.ActionBar.Theme$ResourcesProvider r11 = r0.resourcesProvider
+            r2.<init>(r9, r11)
+            r0.progressView = r2
+            r9 = 14
+            r2.setViewType(r9)
+            r2.setVisibility(r4)
             r11 = -1
             r12 = 1120927744(0x42d00000, float:104.0)
             r13 = 8388611(0x800003, float:1.1754948E-38)
@@ -241,135 +254,119 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r15 = 1110441984(0x42300000, float:44.0)
             r16 = 0
             r17 = 0
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
-            r5.addView(r9, r2)
-            android.view.View r2 = new android.view.View
-            android.content.Context r9 = r20.getContext()
-            r2.<init>(r9)
-            r0.applyButton = r2
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            int r6 = r0.getThemedColor(r6)
-            java.lang.String r10 = "featuredStickers_addButtonPressed"
-            int r10 = r0.getThemedColor(r10)
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorRoundRectDrawable(r9, r6, r10)
-            r2.setBackground(r6)
-            r6 = 4
-            r2.setVisibility(r6)
-            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda3 r9 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda3
-            r9.<init>(r0)
-            r2.setOnClickListener(r9)
-            r10 = -1
-            r11 = 1111490560(0x42400000, float:48.0)
-            r12 = 8388611(0x800003, float:1.1754948E-38)
-            r13 = 1098907648(0x41800000, float:16.0)
-            r14 = 1126301696(0x43220000, float:162.0)
-            r15 = 1098907648(0x41800000, float:16.0)
-            r16 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
             r5.addView(r2, r9)
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r5.addView(r8, r2)
+            android.view.View r2 = new android.view.View
+            android.content.Context r8 = r20.getContext()
+            r2.<init>(r8)
+            r0.applyButton = r2
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r6 = r0.getThemedColor(r6)
+            java.lang.String r9 = "featuredStickers_addButtonPressed"
+            int r9 = r0.getThemedColor(r9)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorRoundRectDrawable(r8, r6, r9)
+            r2.setBackground(r6)
+            r2.setEnabled(r4)
+            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda3 r4 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda3
+            r4.<init>(r0)
+            r2.setOnClickListener(r4)
+            r8 = -1
+            r9 = 1111490560(0x42400000, float:48.0)
+            r10 = 8388611(0x800003, float:1.1754948E-38)
+            r11 = 1098907648(0x41800000, float:16.0)
+            r12 = 1126301696(0x43220000, float:162.0)
+            r13 = 1098907648(0x41800000, float:16.0)
+            r14 = 1098907648(0x41800000, float:16.0)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
+            r5.addView(r2, r4)
             android.widget.TextView r2 = new android.widget.TextView
-            android.content.Context r9 = r20.getContext()
-            r2.<init>(r9)
+            android.content.Context r4 = r20.getContext()
+            r2.<init>(r4)
             r0.resetTextView = r2
-            r9 = 0
-            r2.setAlpha(r9)
+            r4 = 0
+            r2.setAlpha(r4)
             android.widget.TextView r2 = r0.resetTextView
-            android.text.TextUtils$TruncateAt r9 = android.text.TextUtils.TruncateAt.END
-            r2.setEllipsize(r9)
+            android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END
+            r2.setEllipsize(r4)
             android.widget.TextView r2 = r0.resetTextView
-            r9 = 17
-            r2.setGravity(r9)
+            r4 = 17
+            r2.setGravity(r4)
             android.widget.TextView r2 = r0.resetTextView
             r2.setLines(r3)
             android.widget.TextView r2 = r0.resetTextView
             r2.setSingleLine(r3)
             android.widget.TextView r2 = r0.resetTextView
             org.telegram.ui.ActionBar.ChatTheme r1 = r22.getCurrentTheme()
-            if (r1 != 0) goto L_0x01e5
+            if (r1 != 0) goto L_0x0209
             r1 = 2131625271(0x7f0e0537, float:1.8877745E38)
-            java.lang.String r10 = "DoNoSetTheme"
-            goto L_0x01ea
-        L_0x01e5:
+            java.lang.String r6 = "DoNoSetTheme"
+            goto L_0x020e
+        L_0x0209:
             r1 = 2131624855(0x7f0e0397, float:1.8876901E38)
-            java.lang.String r10 = "ChatResetTheme"
-        L_0x01ea:
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r1)
+            java.lang.String r6 = "ChatResetTheme"
+        L_0x020e:
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r2.setText(r1)
             android.widget.TextView r1 = r0.resetTextView
             java.lang.String r2 = "featuredStickers_buttonText"
-            int r10 = r0.getThemedColor(r2)
-            r1.setTextColor(r10)
+            int r6 = r0.getThemedColor(r2)
+            r1.setTextColor(r6)
             android.widget.TextView r1 = r0.resetTextView
-            r10 = 1097859072(0x41700000, float:15.0)
-            r1.setTextSize(r3, r10)
+            r6 = 1097859072(0x41700000, float:15.0)
+            r1.setTextSize(r3, r6)
             android.widget.TextView r1 = r0.resetTextView
-            android.graphics.Typeface r11 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
-            r1.setTypeface(r11)
+            android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r1.setTypeface(r8)
             android.widget.TextView r1 = r0.resetTextView
-            r1.setVisibility(r6)
+            r8 = 4
+            r1.setVisibility(r8)
             android.widget.TextView r1 = r0.resetTextView
-            r11 = -1
-            r12 = 1111490560(0x42400000, float:48.0)
-            r13 = 8388611(0x800003, float:1.1754948E-38)
-            r14 = 1098907648(0x41800000, float:16.0)
-            r15 = 1126301696(0x43220000, float:162.0)
-            r16 = 1098907648(0x41800000, float:16.0)
-            r17 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
-            r5.addView(r1, r11)
-            android.widget.TextView r1 = new android.widget.TextView
-            android.content.Context r11 = r20.getContext()
-            r1.<init>(r11)
-            r0.applyTextView = r1
-            android.text.TextUtils$TruncateAt r11 = android.text.TextUtils.TruncateAt.END
-            r1.setEllipsize(r11)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setGravity(r9)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setLines(r3)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setSingleLine(r3)
-            android.widget.TextView r1 = r0.applyTextView
-            r9 = 2131624830(0x7f0e037e, float:1.887685E38)
-            java.lang.String r11 = "ChatApplyTheme"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
-            r1.setText(r9)
-            android.widget.TextView r1 = r0.applyTextView
-            int r2 = r0.getThemedColor(r2)
-            r1.setTextColor(r2)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setTextSize(r3, r10)
-            android.widget.TextView r1 = r0.applyTextView
-            android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
-            r1.setTypeface(r2)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setVisibility(r6)
-            android.widget.TextView r1 = r0.applyTextView
             r9 = -1
             r10 = 1111490560(0x42400000, float:48.0)
             r11 = 8388611(0x800003, float:1.1754948E-38)
             r12 = 1098907648(0x41800000, float:16.0)
             r13 = 1126301696(0x43220000, float:162.0)
+            r14 = 1098907648(0x41800000, float:16.0)
             r15 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
-            r5.addView(r1, r2)
-            r1 = 1108344832(0x42100000, float:36.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            org.telegram.ui.Components.RadialProgressView r1 = new org.telegram.ui.Components.RadialProgressView
-            android.content.Context r2 = r20.getContext()
-            org.telegram.ui.ActionBar.Theme$ResourcesProvider r3 = r0.resourcesProvider
-            r1.<init>(r2, r3)
-            r0.progressView = r1
-            r1.setProgressColor(r8)
-            r1.setSize(r9)
-            r1.setVisibility(r4)
-            float r10 = (float) r9
-            r11 = 17
-            r12 = 0
-            r13 = 1090519040(0x41000000, float:8.0)
-            r14 = 0
-            r15 = 0
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            r5.addView(r1, r9)
+            android.widget.TextView r1 = new android.widget.TextView
+            android.content.Context r9 = r20.getContext()
+            r1.<init>(r9)
+            r0.applyTextView = r1
+            android.text.TextUtils$TruncateAt r9 = android.text.TextUtils.TruncateAt.END
+            r1.setEllipsize(r9)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setGravity(r4)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setLines(r3)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setSingleLine(r3)
+            android.widget.TextView r1 = r0.applyTextView
+            r4 = 2131624830(0x7f0e037e, float:1.887685E38)
+            java.lang.String r9 = "ChatApplyTheme"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
+            r1.setText(r4)
+            android.widget.TextView r1 = r0.applyTextView
+            int r2 = r0.getThemedColor(r2)
+            r1.setTextColor(r2)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setTextSize(r3, r6)
+            android.widget.TextView r1 = r0.applyTextView
+            android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r1.setTypeface(r2)
+            android.widget.TextView r1 = r0.applyTextView
+            r1.setVisibility(r8)
+            android.widget.TextView r1 = r0.applyTextView
+            r6 = -1
+            r7 = 1111490560(0x42400000, float:48.0)
+            r8 = 8388611(0x800003, float:1.1754948E-38)
+            r9 = 1098907648(0x41800000, float:16.0)
+            r10 = 1126301696(0x43220000, float:162.0)
+            r11 = 1098907648(0x41800000, float:16.0)
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7, r8, r9, r10, r11, r12)
             r5.addView(r1, r2)
             return
         */
@@ -397,7 +394,12 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 this.resetTextView.animate().alpha(0.0f).setDuration(300).start();
                 this.applyTextView.animate().alpha(1.0f).setDuration(300).start();
             }
-            themeDelegate2.setCurrentTheme(this.selectedItem.chatTheme, true, Boolean.valueOf(this.forceDark));
+            ChatTheme chatTheme2 = this.selectedItem.chatTheme;
+            if (chatTheme2.isDefault) {
+                themeDelegate2.setCurrentTheme((ChatTheme) null, true, Boolean.valueOf(this.forceDark));
+            } else {
+                themeDelegate2.setCurrentTheme(chatTheme2, true, Boolean.valueOf(this.forceDark));
+            }
             this.adapter.setSelectedItem(i);
             this.containerView.postDelayed(new Runnable() {
                 public void run() {
@@ -421,7 +423,9 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                     chatThemeView.cancelAnimation();
                 }
             }
-            ((Adapter.ChatThemeView) view).playEmojiAnimation();
+            if (!((ChatThemeItem) this.adapter.items.get(i)).chatTheme.isDefault) {
+                ((Adapter.ChatThemeView) view).playEmojiAnimation();
+            }
         }
     }
 
@@ -490,7 +494,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         super.dismiss();
         if (!this.isApplyClicked) {
-            this.themeDelegate.setCurrentTheme(this.originalTheme, true, Boolean.valueOf(getResultIsDark()));
+            this.themeDelegate.setCurrentTheme(this.originalTheme, true, Boolean.valueOf(this.originalIsDark));
         }
     }
 
@@ -650,7 +654,12 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             ChatThemeItem chatThemeItem = this.selectedItem;
             if (chatThemeItem != null) {
                 this.isLightDarkChangeAnimation = true;
-                this.themeDelegate.setCurrentTheme(chatThemeItem.chatTheme, false, Boolean.valueOf(z));
+                ChatTheme chatTheme = chatThemeItem.chatTheme;
+                if (chatTheme.isDefault) {
+                    this.themeDelegate.setCurrentTheme((ChatTheme) null, false, Boolean.valueOf(z));
+                } else {
+                    this.themeDelegate.setCurrentTheme(chatTheme, false, Boolean.valueOf(z));
+                }
             }
             Adapter adapter3 = this.adapter;
             if (adapter3 != null && adapter3.items != null) {
@@ -678,6 +687,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     /* access modifiers changed from: private */
     public void onDataLoaded(List<ChatTheme> list) {
         if (list != null && !list.isEmpty()) {
+            boolean z = false;
             ChatThemeItem chatThemeItem = new ChatThemeItem(list.get(0));
             ArrayList arrayList = new ArrayList(list.size());
             ChatTheme currentTheme = this.themeDelegate.getCurrentTheme();
@@ -716,7 +726,10 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 arrayList.add(chatThemeItem2);
             }
             this.adapter.setItems(arrayList);
-            this.applyButton.setVisibility(0);
+            this.applyButton.setEnabled(true);
+            this.applyTextView.setAlpha(0.0f);
+            this.resetTextView.setAlpha(0.0f);
+            this.recyclerView.setAlpha(0.0f);
             this.applyTextView.setVisibility(0);
             this.resetTextView.setVisibility(0);
             this.darkThemeView.setVisibility(0);
@@ -739,12 +752,19 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                     this.layoutManager.scrollToPositionWithOffset(Math.min(i2, this.adapter.items.size() - 1), 0);
                 }
             } else {
-                this.resetTextView.setAlpha(1.0f);
-                this.applyTextView.setAlpha(1.0f);
                 this.adapter.setSelectedItem(0);
                 this.layoutManager.scrollToPositionWithOffset(0, 0);
+                z = true;
             }
-            this.progressView.setVisibility(8);
+            float f = 1.0f;
+            this.recyclerView.animate().alpha(1.0f).setDuration(150).start();
+            this.resetTextView.animate().alpha(z ? 1.0f : 0.0f).setDuration(150).start();
+            ViewPropertyAnimator animate = this.applyTextView.animate();
+            if (z) {
+                f = 0.0f;
+            }
+            animate.alpha(f).setDuration(150).start();
+            this.progressView.animate().alpha(0.0f).setListener(new HideViewAfterAnimation(this.progressView)).setDuration(150).start();
         }
     }
 
@@ -805,15 +825,19 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     private void applySelectedTheme() {
         boolean z;
         ChatThemeItem chatThemeItem = this.selectedItem;
+        ChatTheme chatTheme = chatThemeItem.chatTheme;
         Bulletin bulletin = null;
-        if (chatThemeItem != null) {
-            ChatTheme chatTheme = chatThemeItem.chatTheme;
-            String emoticon = (chatTheme == null || chatTheme.isDefault) ? null : chatTheme.getEmoticon();
+        if (chatTheme.isDefault) {
+            chatTheme = null;
+        }
+        if (!(chatThemeItem == null || this.themeDelegate.getCurrentTheme() == chatTheme)) {
+            ChatTheme chatTheme2 = this.selectedItem.chatTheme;
+            String emoticon = (chatTheme2 == null || chatTheme2.isDefault) ? null : chatTheme2.getEmoticon();
             ChatThemeController.getInstance(this.currentAccount).setDialogTheme(this.chatActivity.getDialogId(), emoticon, true);
-            if (chatTheme == null || chatTheme.isDefault) {
-                this.themeDelegate.setCurrentTheme((ChatTheme) null, true, Boolean.valueOf(Theme.getActiveTheme().isDark()));
+            if (chatTheme2 == null || chatTheme2.isDefault) {
+                this.themeDelegate.setCurrentTheme((ChatTheme) null, true, Boolean.valueOf(this.originalIsDark));
             } else {
-                this.themeDelegate.setCurrentTheme(chatTheme, true, Boolean.valueOf(getResultIsDark()));
+                this.themeDelegate.setCurrentTheme(chatTheme2, true, Boolean.valueOf(this.originalIsDark));
             }
             this.isApplyClicked = true;
             TLRPC$User currentUser = this.chatActivity.getCurrentUser();
@@ -860,10 +884,6 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             str2 = str;
         }
         return !ObjectsCompat$$ExternalSyntheticBackport0.m(emoticon, str2);
-    }
-
-    private boolean getResultIsDark() {
-        return Theme.getActiveTheme().isDark();
     }
 
     @SuppressLint({"NotifyDataSetChanged"})

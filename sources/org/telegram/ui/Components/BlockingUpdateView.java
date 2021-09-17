@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.text.SpannableStringBuilder;
@@ -39,6 +41,7 @@ import org.telegram.tgnet.TLRPC$TL_help_appUpdate;
 import org.telegram.tgnet.TLRPC$TL_help_getAppUpdate;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 public class BlockingUpdateView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private FrameLayout acceptButton;
@@ -47,6 +50,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     private int accountNum;
     private TLRPC$TL_help_appUpdate appUpdate;
     private String fileName;
+    Drawable gradientDrawableBottom = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]{Theme.getColor("windowBackgroundWhite"), 0});
+    Drawable gradientDrawableTop = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Theme.getColor("windowBackgroundWhite"), 0});
     private int pressCount;
     /* access modifiers changed from: private */
     public AnimatorSet progressAnimation;
@@ -54,6 +59,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     public RadialProgress radialProgress;
     /* access modifiers changed from: private */
     public FrameLayout radialProgressView;
+    private ScrollView scrollView;
     private TextView textView;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -64,19 +70,23 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         int i = Build.VERSION.SDK_INT;
         int i2 = i >= 21 ? (int) (((float) AndroidUtilities.statusBarHeight) / AndroidUtilities.density) : 0;
         FrameLayout frameLayout = new FrameLayout(context2);
-        frameLayout.setBackgroundColor(-11556378);
         addView(frameLayout, new FrameLayout.LayoutParams(-1, AndroidUtilities.dp(176.0f) + (i >= 21 ? AndroidUtilities.statusBarHeight : 0)));
-        ImageView imageView = new ImageView(context2);
-        imageView.setImageResource(NUM);
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setPadding(0, 0, 0, AndroidUtilities.dp(14.0f));
-        frameLayout.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) i2, 0.0f, 0.0f));
-        imageView.setOnClickListener(new BlockingUpdateView$$ExternalSyntheticLambda1(this));
-        ScrollView scrollView = new ScrollView(context2);
-        AndroidUtilities.setScrollViewEdgeEffectColor(scrollView, Theme.getColor("actionBarDefault"));
-        addView(scrollView, LayoutHelper.createFrame(-1, -1.0f, 51, 27.0f, (float) (i2 + 206), 27.0f, 130.0f));
+        RLottieImageView rLottieImageView = new RLottieImageView(context2);
+        rLottieImageView.setAnimation(NUM, 108, 108);
+        rLottieImageView.playAnimation();
+        rLottieImageView.getAnimatedDrawable().setAutoRepeat(1);
+        rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
+        rLottieImageView.setPadding(0, 0, 0, AndroidUtilities.dp(14.0f));
+        frameLayout.addView(rLottieImageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) i2, 0.0f, 0.0f));
+        rLottieImageView.setOnClickListener(new BlockingUpdateView$$ExternalSyntheticLambda1(this));
         FrameLayout frameLayout2 = new FrameLayout(context2);
-        scrollView.addView(frameLayout2, LayoutHelper.createScroll(-1, -2, 17));
+        ScrollView scrollView2 = new ScrollView(context2);
+        this.scrollView = scrollView2;
+        AndroidUtilities.setScrollViewEdgeEffectColor(scrollView2, Theme.getColor("actionBarDefault"));
+        this.scrollView.setPadding(0, AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f));
+        this.scrollView.setClipToPadding(false);
+        addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f, 51, 27.0f, (float) (i2 + 178), 27.0f, 130.0f));
+        this.scrollView.addView(frameLayout2);
         TextView textView2 = new TextView(context2);
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         textView2.setTextSize(1, 20.0f);
@@ -93,11 +103,39 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.textView.setGravity(49);
         this.textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         frameLayout2.addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 44.0f, 0.0f, 0.0f));
-        FrameLayout frameLayout3 = new FrameLayout(context2);
-        this.acceptButton = frameLayout3;
-        frameLayout3.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), -11491093, -12346402));
+        AnonymousClass1 r3 = new FrameLayout(this, context2) {
+            CellFlickerDrawable cellFlickerDrawable;
+
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                if (this.cellFlickerDrawable == null) {
+                    CellFlickerDrawable cellFlickerDrawable2 = new CellFlickerDrawable();
+                    this.cellFlickerDrawable = cellFlickerDrawable2;
+                    cellFlickerDrawable2.drawFrame = false;
+                    cellFlickerDrawable2.repeatProgress = 2.0f;
+                }
+                this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
+                RectF rectF = AndroidUtilities.rectTmp;
+                rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+                this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f));
+                invalidate();
+            }
+
+            /* access modifiers changed from: protected */
+            public void onMeasure(int i, int i2) {
+                if (View.MeasureSpec.getSize(i) > AndroidUtilities.dp(260.0f)) {
+                    super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(320.0f), NUM), i2);
+                } else {
+                    super.onMeasure(i, i2);
+                }
+            }
+        };
+        this.acceptButton = r3;
+        r3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        this.acceptButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
         this.acceptButton.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-        addView(this.acceptButton, LayoutHelper.createFrame(-2, 42.0f, 81, 0.0f, 0.0f, 0.0f, 45.0f));
+        addView(this.acceptButton, LayoutHelper.createFrame(-2, 46.0f, 81, 0.0f, 0.0f, 0.0f, 45.0f));
         this.acceptButton.setOnClickListener(new BlockingUpdateView$$ExternalSyntheticLambda2(this));
         TextView textView4 = new TextView(context2);
         this.acceptTextView = textView4;
@@ -106,7 +144,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.acceptTextView.setTextColor(-1);
         this.acceptTextView.setTextSize(1, 14.0f);
         this.acceptButton.addView(this.acceptTextView, LayoutHelper.createFrame(-2, -2, 17));
-        AnonymousClass1 r3 = new FrameLayout(context2) {
+        AnonymousClass2 r32 = new FrameLayout(context2) {
             /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
@@ -121,8 +159,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 BlockingUpdateView.this.radialProgress.draw(canvas);
             }
         };
-        this.radialProgressView = r3;
-        r3.setWillNotDraw(false);
+        this.radialProgressView = r32;
+        r32.setWillNotDraw(false);
         this.radialProgressView.setAlpha(0.0f);
         this.radialProgressView.setScaleX(0.1f);
         this.radialProgressView.setScaleY(0.1f);
@@ -324,5 +362,14 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             SharedConfig.pendingAppUpdate = null;
             SharedConfig.saveConfig();
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        this.gradientDrawableTop.setBounds(this.scrollView.getLeft(), this.scrollView.getTop(), this.scrollView.getRight(), this.scrollView.getTop() + AndroidUtilities.dp(16.0f));
+        this.gradientDrawableTop.draw(canvas);
+        this.gradientDrawableBottom.setBounds(this.scrollView.getLeft(), this.scrollView.getBottom() - AndroidUtilities.dp(18.0f), this.scrollView.getRight(), this.scrollView.getBottom());
+        this.gradientDrawableBottom.draw(canvas);
     }
 }

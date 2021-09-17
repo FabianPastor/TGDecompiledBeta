@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 7.0.1
-SHA1-Digest-Manifest: Y9313gJunwgVjYisbKvLZyb0xY0=
+SHA1-Digest-Manifest: gKH0TfcKqQkl8cXXbHdOn1O7MNM=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: YlVwrc0hobd6hMyhQG09Ey2DlOo=
+SHA1-Digest: CDfQPYKN28f9u7R9HBNeu8GivJ4=
 
 Name: META-INF/androidx.annotation_annotation-experimental.version
 SHA1-Digest: 4Tx/OE4OYuecGI9+583MUWSivc0=
@@ -10516,7 +10516,7 @@ Name: assets/fonts/rmono.ttf
 SHA1-Digest: DRPsXBqw99JCQnYgoW+b7lejCF4=
 
 Name: assets/night.attheme
-SHA1-Digest: O3fsI02MFXceOZRZWeId0BHhKTk=
+SHA1-Digest: yy58ZK/49RpBUzshSicwSj1esEg=
 
 Name: assets/secureid_ocr_nn.dat
 SHA1-Digest: NqKe5SgnDZ6x81LrUFDah/g9v14=
@@ -10525,13 +10525,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: 22IVe82CdiQNqO9UNAWL76dYssY=
+SHA1-Digest: YNbXJxXVSSGN83ZHbc4Ewx15zLo=
 
 Name: classes2.dex
 SHA1-Digest: nOWdtYGhTSRrzxVBacpQ1vT+eeo=
 
 Name: classes3.dex
-SHA1-Digest: mkhm6YqgPp2bO74qOE6qQUuB1AQ=
+SHA1-Digest: U+iXjw28qr8DWB5Uo1JOcDp8Cv8=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -14197,7 +14197,7 @@ Name: res/Hr1.png
 SHA1-Digest: x20BcwVWlzM21mAWveIxXMnYF7Q=
 
 Name: res/Hs.jpg
-SHA1-Digest: xYUvH0r2LvTuyAgc+cmhHlGTTpQ=
+SHA1-Digest: 4baB7xxz1FbFuDJ7WqRjDv0YphI=
 
 Name: res/Hu.png
 SHA1-Digest: KrxpTw/NKiEMCFk20SU6KQFUfJ0=

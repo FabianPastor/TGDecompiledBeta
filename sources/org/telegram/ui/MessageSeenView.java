@@ -56,7 +56,8 @@ public class MessageSeenView extends FrameLayout {
         this.isVoice = messageObject.isRoundVideo() || messageObject.isVoice();
         FlickerLoadingView flickerLoadingView2 = new FlickerLoadingView(context);
         this.flickerLoadingView = flickerLoadingView2;
-        flickerLoadingView2.setViewType(13);
+        flickerLoadingView2.setColors("actionBarDefaultSubmenuBackground", "listSelectorSDK21", (String) null);
+        this.flickerLoadingView.setViewType(13);
         this.flickerLoadingView.setIsSingleCell(false);
         addView(this.flickerLoadingView, LayoutHelper.createFrame(-2, -1.0f));
         TextView textView = new TextView(context);
@@ -171,7 +172,7 @@ public class MessageSeenView extends FrameLayout {
             this.ignoreLayout = true;
             this.flickerLoadingView.setVisibility(8);
             super.onMeasure(i, i2);
-            this.flickerLoadingView.getLayoutParams().width = getMeasuredWidth() - AndroidUtilities.dp(16.0f);
+            this.flickerLoadingView.getLayoutParams().width = getMeasuredWidth();
             this.flickerLoadingView.setVisibility(0);
             this.ignoreLayout = false;
             super.onMeasure(i, i2);

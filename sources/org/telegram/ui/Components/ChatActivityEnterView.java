@@ -193,6 +193,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public AnimatorSet audioVideoButtonAnimation;
     /* access modifiers changed from: private */
     public FrameLayout audioVideoButtonContainer;
+    Paint backgroundPaint;
     /* access modifiers changed from: private */
     public ImageView botButton;
     private ReplaceableIconDrawable botButtonDrawable;
@@ -2763,6 +2764,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             }
         };
+        this.backgroundPaint = new Paint();
         this.topViewUpdateListener = new ChatActivityEnterView$$ExternalSyntheticLambda2(this);
         this.botCommandLastPosition = -1;
         this.resourcesProvider = resourcesProvider3;
@@ -4417,7 +4419,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         int intrinsicHeight = Theme.chat_composeShadowDrawable.getIntrinsicHeight() + i;
         Theme.chat_composeShadowDrawable.setBounds(0, i, getMeasuredWidth(), intrinsicHeight);
         Theme.chat_composeShadowDrawable.draw(canvas);
-        canvas.drawRect(0.0f, (float) intrinsicHeight, (float) getWidth(), (float) getHeight(), getThemedPaint("paintChatComposeBackground"));
+        this.backgroundPaint.setColor(getThemedColor("chat_messagePanelBackground"));
+        canvas.drawRect(0.0f, (float) intrinsicHeight, (float) getWidth(), (float) getHeight(), this.backgroundPaint);
     }
 
     /* access modifiers changed from: private */
@@ -11901,11 +11904,5 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
-    }
-
-    private Paint getThemedPaint(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Paint paint2 = resourcesProvider2 != null ? resourcesProvider2.getPaint(str) : null;
-        return paint2 != null ? paint2 : Theme.getThemePaint(str);
     }
 }

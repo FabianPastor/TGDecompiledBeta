@@ -902,7 +902,7 @@ public final class FloatingToolbar {
             return new LinearLayout(this.mContext) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
-                    if (FloatingToolbarPopup.this.isOverflowAnimating()) {
+                    if (FloatingToolbarPopup.this.isOverflowAnimating() && FloatingToolbarPopup.this.mMainPanelSize != null) {
                         i = View.MeasureSpec.makeMeasureSpec(FloatingToolbarPopup.this.mMainPanelSize.getWidth(), NUM);
                     }
                     super.onMeasure(i, i2);

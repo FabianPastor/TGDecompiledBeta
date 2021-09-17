@@ -217,6 +217,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
     public AnimatorSet messagesPlayViewAnimator;
     /* access modifiers changed from: private */
     public AnimatorSet motionAnimation;
+    Theme.MessageDrawable msgOutDrawable;
+    Theme.MessageDrawable msgOutDrawableSelected;
+    Theme.MessageDrawable msgOutMediaDrawable;
+    Theme.MessageDrawable msgOutMediaDrawableSelected;
     /* access modifiers changed from: private */
     public boolean nightTheme;
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
@@ -308,6 +312,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
     public ThemePreviewActivity(Object obj, Bitmap bitmap, boolean z, boolean z2) {
         this.useDefaultThemeForButtons = true;
         this.colorType = 1;
+        this.msgOutDrawable = new Theme.MessageDrawable(0, true, false);
+        this.msgOutDrawableSelected = new Theme.MessageDrawable(0, true, true);
+        this.msgOutMediaDrawable = new Theme.MessageDrawable(1, true, false);
+        this.msgOutMediaDrawableSelected = new Theme.MessageDrawable(1, true, true);
         this.lastPickedColorNum = -1;
         this.applyColorAction = new ThemePreviewActivity$$ExternalSyntheticLambda14(this);
         this.patternLayout = new FrameLayout[2];
@@ -338,6 +346,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 }
             }
         }
+        this.msgOutDrawable.themePreview = true;
+        this.msgOutMediaDrawable.themePreview = true;
+        this.msgOutDrawableSelected.themePreview = true;
+        this.msgOutMediaDrawableSelected.themePreview = true;
     }
 
     public ThemePreviewActivity(Theme.ThemeInfo themeInfo) {
@@ -347,6 +359,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
     public ThemePreviewActivity(Theme.ThemeInfo themeInfo, boolean z, int i, boolean z2, boolean z3) {
         this.useDefaultThemeForButtons = true;
         this.colorType = 1;
+        this.msgOutDrawable = new Theme.MessageDrawable(0, true, false);
+        this.msgOutDrawableSelected = new Theme.MessageDrawable(0, true, true);
+        this.msgOutMediaDrawable = new Theme.MessageDrawable(1, true, false);
+        this.msgOutMediaDrawableSelected = new Theme.MessageDrawable(1, true, true);
         this.lastPickedColorNum = -1;
         this.applyColorAction = new ThemePreviewActivity$$ExternalSyntheticLambda14(this);
         this.patternLayout = new FrameLayout[2];
@@ -401,6 +417,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             Theme.applyThemeTemporary(this.applyingTheme, true);
         }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.goingToPreviewTheme, new Object[0]);
+        this.msgOutDrawable.themePreview = true;
+        this.msgOutMediaDrawable.themePreview = true;
+        this.msgOutDrawableSelected.themePreview = true;
+        this.msgOutMediaDrawableSelected.themePreview = true;
     }
 
     public void setInitialModes(boolean z, boolean z2) {
@@ -6002,33 +6022,35 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             /*
                 r3 = this;
                 r4 = -1
-                if (r5 != 0) goto L_0x0014
+                if (r5 != 0) goto L_0x0019
                 org.telegram.ui.Cells.ChatMessageCell r5 = new org.telegram.ui.Cells.ChatMessageCell
                 android.content.Context r0 = r3.mContext
-                r5.<init>(r0)
-                org.telegram.ui.ThemePreviewActivity$MessagesAdapter$1 r0 = new org.telegram.ui.ThemePreviewActivity$MessagesAdapter$1
-                r0.<init>(r3)
-                r5.setDelegate(r0)
-                goto L_0x0099
-            L_0x0014:
-                r0 = 1
-                if (r5 != r0) goto L_0x0027
-                org.telegram.ui.Cells.ChatActionCell r5 = new org.telegram.ui.Cells.ChatActionCell
-                android.content.Context r0 = r3.mContext
-                r5.<init>(r0)
+                org.telegram.ui.ThemePreviewActivity$MessagesAdapter$1 r1 = new org.telegram.ui.ThemePreviewActivity$MessagesAdapter$1
+                r1.<init>()
+                r5.<init>(r0, r1)
                 org.telegram.ui.ThemePreviewActivity$MessagesAdapter$2 r0 = new org.telegram.ui.ThemePreviewActivity$MessagesAdapter$2
                 r0.<init>(r3)
                 r5.setDelegate(r0)
-                goto L_0x0099
-            L_0x0027:
+                goto L_0x009e
+            L_0x0019:
+                r0 = 1
+                if (r5 != r0) goto L_0x002c
+                org.telegram.ui.Cells.ChatActionCell r5 = new org.telegram.ui.Cells.ChatActionCell
+                android.content.Context r0 = r3.mContext
+                r5.<init>(r0)
+                org.telegram.ui.ThemePreviewActivity$MessagesAdapter$3 r0 = new org.telegram.ui.ThemePreviewActivity$MessagesAdapter$3
+                r0.<init>(r3)
+                r5.setDelegate(r0)
+                goto L_0x009e
+            L_0x002c:
                 r0 = 2
                 r1 = 17
                 r2 = 76
-                if (r5 != r0) goto L_0x0064
+                if (r5 != r0) goto L_0x0069
                 org.telegram.ui.ThemePreviewActivity r5 = r3.this$0
                 android.widget.FrameLayout r5 = r5.backgroundButtonsContainer
                 android.view.ViewParent r5 = r5.getParent()
-                if (r5 == 0) goto L_0x004f
+                if (r5 == 0) goto L_0x0054
                 org.telegram.ui.ThemePreviewActivity r5 = r3.this$0
                 android.widget.FrameLayout r5 = r5.backgroundButtonsContainer
                 android.view.ViewParent r5 = r5.getParent()
@@ -6036,36 +6058,36 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 org.telegram.ui.ThemePreviewActivity r0 = r3.this$0
                 android.widget.FrameLayout r0 = r0.backgroundButtonsContainer
                 r5.removeView(r0)
-            L_0x004f:
-                org.telegram.ui.ThemePreviewActivity$MessagesAdapter$3 r5 = new org.telegram.ui.ThemePreviewActivity$MessagesAdapter$3
-                android.content.Context r0 = r3.mContext
-                r5.<init>(r3, r0)
-                org.telegram.ui.ThemePreviewActivity r0 = r3.this$0
-                android.widget.FrameLayout r0 = r0.backgroundButtonsContainer
-                android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r2, r1)
-                r5.addView(r0, r1)
-                goto L_0x0099
-            L_0x0064:
-                org.telegram.ui.ThemePreviewActivity r5 = r3.this$0
-                android.widget.FrameLayout r5 = r5.messagesButtonsContainer
-                android.view.ViewParent r5 = r5.getParent()
-                if (r5 == 0) goto L_0x0085
-                org.telegram.ui.ThemePreviewActivity r5 = r3.this$0
-                android.widget.FrameLayout r5 = r5.messagesButtonsContainer
-                android.view.ViewParent r5 = r5.getParent()
-                android.view.ViewGroup r5 = (android.view.ViewGroup) r5
-                org.telegram.ui.ThemePreviewActivity r0 = r3.this$0
-                android.widget.FrameLayout r0 = r0.messagesButtonsContainer
-                r5.removeView(r0)
-            L_0x0085:
+            L_0x0054:
                 org.telegram.ui.ThemePreviewActivity$MessagesAdapter$4 r5 = new org.telegram.ui.ThemePreviewActivity$MessagesAdapter$4
                 android.content.Context r0 = r3.mContext
                 r5.<init>(r3, r0)
                 org.telegram.ui.ThemePreviewActivity r0 = r3.this$0
+                android.widget.FrameLayout r0 = r0.backgroundButtonsContainer
+                android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r2, r1)
+                r5.addView(r0, r1)
+                goto L_0x009e
+            L_0x0069:
+                org.telegram.ui.ThemePreviewActivity r5 = r3.this$0
+                android.widget.FrameLayout r5 = r5.messagesButtonsContainer
+                android.view.ViewParent r5 = r5.getParent()
+                if (r5 == 0) goto L_0x008a
+                org.telegram.ui.ThemePreviewActivity r5 = r3.this$0
+                android.widget.FrameLayout r5 = r5.messagesButtonsContainer
+                android.view.ViewParent r5 = r5.getParent()
+                android.view.ViewGroup r5 = (android.view.ViewGroup) r5
+                org.telegram.ui.ThemePreviewActivity r0 = r3.this$0
+                android.widget.FrameLayout r0 = r0.messagesButtonsContainer
+                r5.removeView(r0)
+            L_0x008a:
+                org.telegram.ui.ThemePreviewActivity$MessagesAdapter$5 r5 = new org.telegram.ui.ThemePreviewActivity$MessagesAdapter$5
+                android.content.Context r0 = r3.mContext
+                r5.<init>(r3, r0)
+                org.telegram.ui.ThemePreviewActivity r0 = r3.this$0
                 android.widget.FrameLayout r0 = r0.messagesButtonsContainer
                 android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r2, r1)
                 r5.addView(r0, r1)
-            L_0x0099:
+            L_0x009e:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r0 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r1 = -2
                 r0.<init>((int) r4, (int) r1)
@@ -6305,10 +6327,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgInSelectedDrawable, Theme.chat_msgInMediaSelectedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inBubbleSelected"));
             arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, Theme.chat_msgInDrawable.getShadowDrawables(), (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inBubbleShadow"));
             arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, Theme.chat_msgInMediaDrawable.getShadowDrawables(), (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inBubbleShadow"));
-            arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubble"));
-            arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleGradient"));
-            arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleGradient2"));
-            arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleGradient3"));
+            arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{this.msgOutDrawable, this.msgOutMediaDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubble"));
+            arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{this.msgOutDrawable, this.msgOutMediaDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleGradient"));
+            arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{this.msgOutDrawable, this.msgOutMediaDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleGradient2"));
+            arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{this.msgOutDrawable, this.msgOutMediaDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleGradient3"));
             arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgOutSelectedDrawable, Theme.chat_msgOutMediaSelectedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleSelected"));
             arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, Theme.chat_msgOutDrawable.getShadowDrawables(), (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleShadow"));
             arrayList.add(new ThemeDescription(this.listView2, 0, new Class[]{ChatMessageCell.class}, (Paint) null, Theme.chat_msgOutMediaDrawable.getShadowDrawables(), (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleShadow"));

@@ -1514,7 +1514,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:54:0x019d, code lost:
-        r23 = r8;
+        r23 = r9;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void cancelSendingMessage(java.util.ArrayList<org.telegram.messenger.MessageObject> r26) {
@@ -1536,19 +1536,19 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x0019:
             int r10 = r26.size()
             r12 = 1
-            if (r6 >= r10) goto L_0x01ae
-            java.lang.Object r10 = r1.get(r6)
-            org.telegram.messenger.MessageObject r10 = (org.telegram.messenger.MessageObject) r10
-            boolean r13 = r10.scheduled
-            if (r13 == 0) goto L_0x002f
-            long r8 = r10.getDialogId()
+            if (r6 >= r10) goto L_0x01b0
+            java.lang.Object r8 = r1.get(r6)
+            org.telegram.messenger.MessageObject r8 = (org.telegram.messenger.MessageObject) r8
+            boolean r9 = r8.scheduled
+            if (r9 == 0) goto L_0x002b
             r11 = 1
-        L_0x002f:
-            int r13 = r10.getId()
+        L_0x002b:
+            long r9 = r8.getDialogId()
+            int r13 = r8.getId()
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             r5.add(r13)
-            int r13 = r10.getId()
-            boolean r14 = r10.scheduled
+            int r13 = r8.getId()
+            boolean r14 = r8.scheduled
             org.telegram.tgnet.TLRPC$Message r13 = r0.removeFromSendingMessages(r13, r14)
             if (r13 == 0) goto L_0x004f
             org.telegram.tgnet.ConnectionsManager r14 = r25.getConnectionsManager()
@@ -1586,10 +1586,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.Object r12 = r12.get(r13)
             org.telegram.messenger.MessageObject r12 = (org.telegram.messenger.MessageObject) r12
             int r14 = r12.getId()
-            int r15 = r10.getId()
+            int r15 = r8.getId()
             if (r14 != r15) goto L_0x00a7
-            int r7 = r10.getId()
-            boolean r14 = r10.scheduled
+            int r7 = r8.getId()
+            boolean r14 = r8.scheduled
             r0.removeFromUploadingMessages(r7, r14)
             r7 = r13
             goto L_0x00aa
@@ -1625,7 +1625,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r13.remove(r7)
         L_0x00e2:
             org.telegram.messenger.MediaController r7 = org.telegram.messenger.MediaController.getInstance()
-            r7.cancelVideoConvert(r10)
+            r7.cancelVideoConvert(r8)
             java.util.HashMap<java.lang.Object, java.lang.Object> r7 = r4.extraHashMap
             java.lang.Object r7 = r7.get(r12)
             java.lang.String r7 = (java.lang.String) r7
@@ -1639,7 +1639,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             goto L_0x019d
         L_0x0103:
             int r7 = r4.finalGroupMessage
-            int r12 = r10.getId()
+            int r12 = r8.getId()
             if (r7 != r12) goto L_0x014b
             java.util.ArrayList<org.telegram.messenger.MessageObject> r7 = r4.messageObjects
             int r12 = r7.size()
@@ -1660,36 +1660,36 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$Message r7 = r7.messageOwner
             r12.add(r7)
             org.telegram.messenger.MessagesStorage r13 = r25.getMessagesStorage()
-            r23 = r8
-            long r7 = r4.peer
+            r23 = r9
+            long r9 = r4.peer
             r17 = -2
             r18 = 0
             r19 = 0
-            r15 = r7
+            r15 = r9
             r20 = r11
             r13.putMessages((org.telegram.tgnet.TLRPC$messages_Messages) r14, (long) r15, (int) r17, (int) r18, (boolean) r19, (boolean) r20)
             goto L_0x014d
         L_0x014b:
-            r23 = r8
+            r23 = r9
         L_0x014d:
             boolean r7 = r3.contains(r4)
             if (r7 != 0) goto L_0x019f
             r3.add(r4)
             goto L_0x019f
         L_0x0157:
-            r23 = r8
+            r23 = r9
             org.telegram.messenger.MessageObject r7 = r4.obj
             int r7 = r7.getId()
-            int r8 = r10.getId()
-            if (r7 != r8) goto L_0x0192
-            int r7 = r10.getId()
-            boolean r8 = r10.scheduled
-            r0.removeFromUploadingMessages(r7, r8)
+            int r9 = r8.getId()
+            if (r7 != r9) goto L_0x0192
+            int r7 = r8.getId()
+            boolean r9 = r8.scheduled
+            r0.removeFromUploadingMessages(r7, r9)
             r14.remove(r15)
             r4.sendDelayedRequests()
             org.telegram.messenger.MediaController r7 = org.telegram.messenger.MediaController.getInstance()
-            org.telegram.messenger.MessageObject r8 = r4.obj
-            r7.cancelVideoConvert(r8)
+            org.telegram.messenger.MessageObject r9 = r4.obj
+            r7.cancelVideoConvert(r9)
             int r7 = r14.size()
             if (r7 != 0) goto L_0x019f
             java.lang.Object r7 = r13.getKey()
@@ -1702,82 +1702,83 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x0192:
             int r15 = r15 + 1
             r7 = r22
-            r8 = r23
+            r9 = r23
             r12 = 1
             goto L_0x006c
         L_0x019b:
             r22 = r7
         L_0x019d:
-            r23 = r8
+            r23 = r9
         L_0x019f:
             r7 = r22
         L_0x01a1:
-            r8 = r23
+            r9 = r23
             r12 = 1
             goto L_0x0059
         L_0x01a6:
             r22 = r7
-            r23 = r8
+            r23 = r9
             int r6 = r6 + 1
+            r8 = r23
             goto L_0x0019
-        L_0x01ae:
+        L_0x01b0:
             r4 = 0
-        L_0x01af:
+        L_0x01b1:
             int r6 = r2.size()
-            if (r4 >= r6) goto L_0x01dd
+            if (r4 >= r6) goto L_0x01df
             java.lang.Object r6 = r2.get(r4)
             java.lang.String r6 = (java.lang.String) r6
             java.lang.String r10 = "http"
             boolean r10 = r6.startsWith(r10)
-            if (r10 == 0) goto L_0x01cb
+            if (r10 == 0) goto L_0x01cd
             org.telegram.messenger.ImageLoader r10 = org.telegram.messenger.ImageLoader.getInstance()
             r10.cancelLoadHttpFile(r6)
-            goto L_0x01d2
-        L_0x01cb:
+            goto L_0x01d4
+        L_0x01cd:
             org.telegram.messenger.FileLoader r10 = r25.getFileLoader()
             r10.cancelFileUpload(r6, r7)
-        L_0x01d2:
+        L_0x01d4:
             r0.stopVideoService(r6)
             java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$DelayedMessage>> r10 = r0.delayedMessages
             r10.remove(r6)
             int r4 = r4 + 1
-            goto L_0x01af
-        L_0x01dd:
+            goto L_0x01b1
+        L_0x01df:
             int r2 = r3.size()
             r4 = 0
-        L_0x01e2:
-            if (r4 >= r2) goto L_0x01f2
+        L_0x01e4:
+            if (r4 >= r2) goto L_0x01f4
             java.lang.Object r6 = r3.get(r4)
             org.telegram.messenger.SendMessagesHelper$DelayedMessage r6 = (org.telegram.messenger.SendMessagesHelper.DelayedMessage) r6
             r7 = 1
             r10 = 0
             r0.sendReadyToSendGroup(r6, r10, r7)
             int r4 = r4 + 1
-            goto L_0x01e2
-        L_0x01f2:
+            goto L_0x01e4
+        L_0x01f4:
             r7 = 1
             r10 = 0
             int r2 = r26.size()
-            if (r2 != r7) goto L_0x021a
+            if (r2 != r7) goto L_0x021c
             java.lang.Object r2 = r1.get(r10)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             boolean r2 = r2.isEditing()
-            if (r2 == 0) goto L_0x021a
+            if (r2 == 0) goto L_0x021c
             java.lang.Object r2 = r1.get(r10)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r2.previousMedia
-            if (r2 == 0) goto L_0x021a
+            if (r2 == 0) goto L_0x021c
             java.lang.Object r1 = r1.get(r10)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
             r0.revertEditingMessageObject(r1)
-            goto L_0x0224
-        L_0x021a:
+            goto L_0x0226
+        L_0x021c:
             org.telegram.messenger.MessagesController r4 = r25.getMessagesController()
             r6 = 0
             r7 = 0
             r10 = 0
             r4.deleteMessages(r5, r6, r7, r8, r10, r11)
-        L_0x0224:
+        L_0x0226:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.cancelSendingMessage(java.util.ArrayList):void");

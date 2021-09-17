@@ -16062,4 +16062,8 @@ public class EmojiData {
     public static boolean isCofinEmoji(String str) {
         return "⚰".equals(str);
     }
+
+    public static boolean hasEmojiSupportVibration(String str) {
+        return isHeartEmoji(str) || isPeachEmoji(str) || isCofinEmoji(str);
+    }
 }

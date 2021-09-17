@@ -158,28 +158,28 @@ public class ChatTheme {
 
     public void loadWallpaperThumb(boolean z, ResultCallback<Pair<Long, Bitmap>> resultCallback) {
         TLRPC$WallPaper wallpaper = getWallpaper(z);
-        if (wallpaper == null) {
-            resultCallback.onComplete(null);
-            return;
-        }
-        long j = getTlTheme(z).id;
-        Bitmap wallpaperThumbBitmap = ChatThemeController.getWallpaperThumbBitmap(j);
-        File wallpaperThumbFile = getWallpaperThumbFile(j);
-        if (wallpaperThumbBitmap == null && wallpaperThumbFile.exists() && wallpaperThumbFile.length() > 0) {
-            try {
-                wallpaperThumbBitmap = BitmapFactory.decodeFile(wallpaperThumbFile.getAbsolutePath());
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
+        if (wallpaper != null || resultCallback == null) {
+            long j = getTlTheme(z).id;
+            Bitmap wallpaperThumbBitmap = ChatThemeController.getWallpaperThumbBitmap(j);
+            File wallpaperThumbFile = getWallpaperThumbFile(j);
+            if (wallpaperThumbBitmap == null && wallpaperThumbFile.exists() && wallpaperThumbFile.length() > 0) {
+                try {
+                    wallpaperThumbBitmap = BitmapFactory.decodeFile(wallpaperThumbFile.getAbsolutePath());
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
+                }
             }
-        }
-        if (wallpaperThumbBitmap == null) {
-            ImageLocation forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(wallpaper.document.thumbs, 120), wallpaper.document);
-            ImageReceiver imageReceiver = new ImageReceiver();
-            imageReceiver.setImage(forDocument, "120_80", (Drawable) null, (String) null, (Object) null, 1);
-            imageReceiver.setDelegate(new ChatTheme$$ExternalSyntheticLambda2(resultCallback, j, wallpaperThumbFile));
-            ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
-        } else if (resultCallback != null) {
-            resultCallback.onComplete(new Pair(Long.valueOf(j), wallpaperThumbBitmap));
+            if (wallpaperThumbBitmap == null) {
+                ImageLocation forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(wallpaper.document.thumbs, 120), wallpaper.document);
+                ImageReceiver imageReceiver = new ImageReceiver();
+                imageReceiver.setImage(forDocument, "120_80", (Drawable) null, (String) null, (Object) null, 1);
+                imageReceiver.setDelegate(new ChatTheme$$ExternalSyntheticLambda2(resultCallback, j, wallpaperThumbFile));
+                ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
+            } else if (resultCallback != null) {
+                resultCallback.onComplete(new Pair(Long.valueOf(j), wallpaperThumbBitmap));
+            }
+        } else {
+            resultCallback.onComplete(null);
         }
     }
 

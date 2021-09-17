@@ -1,20 +1,20 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
+import android.util.Pair;
 import org.telegram.tgnet.ResultCallback;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatThemeController$$ExternalSyntheticLambda5 implements RequestDelegate {
-    public final /* synthetic */ ResultCallback f$0;
-    public final /* synthetic */ boolean f$1;
+public final /* synthetic */ class ChatThemeController$$ExternalSyntheticLambda5 implements ResultCallback {
+    public static final /* synthetic */ ChatThemeController$$ExternalSyntheticLambda5 INSTANCE = new ChatThemeController$$ExternalSyntheticLambda5();
 
-    public /* synthetic */ ChatThemeController$$ExternalSyntheticLambda5(ResultCallback resultCallback, boolean z) {
-        this.f$0 = resultCallback;
-        this.f$1 = z;
+    private /* synthetic */ ChatThemeController$$ExternalSyntheticLambda5() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        ChatThemeController.chatThemeQueue.postRunnable(new ChatThemeController$$ExternalSyntheticLambda3(tLObject, this.f$0, tLRPC$TL_error, this.f$1));
+    public final void onComplete(Object obj) {
+        ChatThemeController.lambda$preloadAllWallpaperImages$4((Pair) obj);
+    }
+
+    public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
+        ResultCallback.CC.$default$onError((ResultCallback) this, tLRPC$TL_error);
     }
 }

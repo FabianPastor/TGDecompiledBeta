@@ -3085,9 +3085,9 @@ public class MediaDataController extends BaseController {
                 }
                 tLRPC$TL_messages_search.filter = new TLRPC$TL_inputMessagesFilterEmpty();
                 ConnectionsManager connectionsManager = getConnectionsManager();
-                MediaDataController$$ExternalSyntheticLambda132 mediaDataController$$ExternalSyntheticLambda132 = r0;
-                MediaDataController$$ExternalSyntheticLambda132 mediaDataController$$ExternalSyntheticLambda1322 = new MediaDataController$$ExternalSyntheticLambda132(this, j2, tLRPC$TL_messages_search, j, i, i2, i3, tLRPC$User, tLRPC$Chat, z2);
-                this.mergeReqId = connectionsManager.sendRequest(tLRPC$TL_messages_search, mediaDataController$$ExternalSyntheticLambda132, 2);
+                MediaDataController$$ExternalSyntheticLambda133 mediaDataController$$ExternalSyntheticLambda133 = r0;
+                MediaDataController$$ExternalSyntheticLambda133 mediaDataController$$ExternalSyntheticLambda1332 = new MediaDataController$$ExternalSyntheticLambda133(this, j2, tLRPC$TL_messages_search, j, i, i2, i3, tLRPC$User, tLRPC$Chat, z2);
+                this.mergeReqId = connectionsManager.sendRequest(tLRPC$TL_messages_search, mediaDataController$$ExternalSyntheticLambda133, 2);
                 return;
             }
             return;
@@ -5736,7 +5736,7 @@ public class MediaDataController extends BaseController {
             r2.<init>()     // Catch:{ Exception -> 0x01c9 }
             r2.id = r1     // Catch:{ Exception -> 0x01c9 }
             org.telegram.tgnet.ConnectionsManager r1 = r17.getConnectionsManager()     // Catch:{ Exception -> 0x01c9 }
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda131 r3 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda131     // Catch:{ Exception -> 0x01c9 }
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda132 r3 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda132     // Catch:{ Exception -> 0x01c9 }
             r4 = r17
             r3.<init>(r4, r5, r2)     // Catch:{ Exception -> 0x01c7 }
             r1.sendRequest(r2, r3)     // Catch:{ Exception -> 0x01c7 }
@@ -6231,7 +6231,7 @@ public class MediaDataController extends BaseController {
                         i = size2;
                         TLRPC$TL_messages_getMessages tLRPC$TL_messages_getMessages = new TLRPC$TL_messages_getMessages();
                         tLRPC$TL_messages_getMessages.id = (ArrayList) longSparseArray4.valueAt(i4);
-                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages, new MediaDataController$$ExternalSyntheticLambda133(this, longSparseArray, j, z, runnable));
+                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages, new MediaDataController$$ExternalSyntheticLambda131(this, j, longSparseArray, z, runnable));
                     }
                     i4++;
                     LongSparseArray longSparseArray5 = longSparseArray;
@@ -6263,9 +6263,15 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadReplyMessagesForMessages$116(LongSparseArray longSparseArray, long j, boolean z, Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadReplyMessagesForMessages$116(long j, LongSparseArray longSparseArray, boolean z, Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
+            for (int i = 0; i < tLRPC$messages_Messages.messages.size(); i++) {
+                TLRPC$Message tLRPC$Message = tLRPC$messages_Messages.messages.get(i);
+                if (tLRPC$Message.dialog_id == 0) {
+                    tLRPC$Message.dialog_id = j;
+                }
+            }
             ImageLoader.saveMessagesThumbs(tLRPC$messages_Messages.messages);
             broadcastReplyMessages(tLRPC$messages_Messages.messages, longSparseArray, tLRPC$messages_Messages.users, tLRPC$messages_Messages.chats, j, false);
             getMessagesStorage().putUsersAndChats(tLRPC$messages_Messages.users, tLRPC$messages_Messages.chats, true, true);

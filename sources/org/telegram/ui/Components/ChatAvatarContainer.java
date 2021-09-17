@@ -43,6 +43,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private BackupImageView avatarImageView;
     private int currentAccount;
     private int currentConnectionState;
+    StatusDrawable currentTypingDrawable;
     private boolean[] isOnline;
     private CharSequence lastSubtitle;
     private String lastSubtitleColorKey;
@@ -505,6 +506,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     this.statusDrawables[intValue].setColor(getThemedColor("chat_status"));
                     this.subtitleTextView.setLeftDrawable((Drawable) this.statusDrawables[intValue]);
                 }
+                this.currentTypingDrawable = this.statusDrawables[intValue];
                 while (true) {
                     StatusDrawable[] statusDrawableArr = this.statusDrawables;
                     if (i < statusDrawableArr.length) {
@@ -522,6 +524,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 FileLog.e((Throwable) e);
             }
         } else {
+            this.currentTypingDrawable = null;
             this.subtitleTextView.setLeftDrawable((Drawable) null);
             this.subtitleTextView.replaceTextWithDrawable((Drawable) null, (String) null);
             while (true) {
@@ -884,5 +887,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    public void updateColors() {
+        StatusDrawable statusDrawable = this.currentTypingDrawable;
+        if (statusDrawable != null) {
+            statusDrawable.setColor(getThemedColor("chat_status"));
+        }
     }
 }
