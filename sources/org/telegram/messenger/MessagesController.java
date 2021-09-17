@@ -24234,8 +24234,8 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:89:0x025a, code lost:
-        if (org.telegram.messenger.ChatObject.isChannel(getChat(java.lang.Long.valueOf(r5))) != false) goto L_0x025f;
+    /* JADX WARNING: Code restructure failed: missing block: B:89:0x0259, code lost:
+        if (org.telegram.messenger.ChatObject.isChannel(getChat(java.lang.Long.valueOf(r5))) != false) goto L_0x025e;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$processUpdateArray$307(org.telegram.messenger.support.LongSparseIntArray r20, org.telegram.messenger.support.LongSparseIntArray r21, android.util.SparseIntArray r22, androidx.collection.LongSparseArray r23, androidx.collection.LongSparseArray r24, androidx.collection.LongSparseArray r25, org.telegram.messenger.support.LongSparseIntArray r26) {
@@ -24420,16 +24420,16 @@ public class MessagesController extends BaseController implements NotificationCe
             goto L_0x0157
         L_0x017a:
             r3 = 3
-            if (r12 == 0) goto L_0x0227
+            if (r12 == 0) goto L_0x0226
             int r5 = r24.size()
             r6 = 0
         L_0x0182:
-            if (r6 >= r5) goto L_0x0220
+            if (r6 >= r5) goto L_0x021f
             long r7 = r12.keyAt(r6)
             java.lang.Object r9 = r12.valueAt(r6)
             java.util.ArrayList r9 = (java.util.ArrayList) r9
             if (r9 != 0) goto L_0x0192
-            goto L_0x021c
+            goto L_0x021b
         L_0x0192:
             org.telegram.messenger.NotificationCenter r10 = r19.getNotificationCenter()
             int r11 = org.telegram.messenger.NotificationCenter.messagesDeleted
@@ -24447,7 +24447,7 @@ public class MessagesController extends BaseController implements NotificationCe
             int r7 = r9.size()
             r8 = 0
         L_0x01b6:
-            if (r8 >= r7) goto L_0x021c
+            if (r8 >= r7) goto L_0x021b
             java.lang.Object r10 = r9.get(r8)
             java.lang.Integer r10 = (java.lang.Integer) r10
             android.util.SparseArray<org.telegram.messenger.MessageObject> r11 = r0.dialogMessagesByIds
@@ -24475,72 +24475,71 @@ public class MessagesController extends BaseController implements NotificationCe
             goto L_0x01b6
         L_0x01f4:
             androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r1 = r0.dialogMessage
-            long r7 = -r7
             java.lang.Object r1 = r1.get(r7)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
-            if (r1 == 0) goto L_0x021c
+            if (r1 == 0) goto L_0x021b
             int r2 = r9.size()
             r7 = 0
-        L_0x0204:
-            if (r7 >= r2) goto L_0x021c
+        L_0x0203:
+            if (r7 >= r2) goto L_0x021b
             int r8 = r1.getId()
             java.lang.Object r10 = r9.get(r7)
             java.lang.Integer r10 = (java.lang.Integer) r10
             int r10 = r10.intValue()
-            if (r8 != r10) goto L_0x0219
+            if (r8 != r10) goto L_0x0218
             r1.deleted = r15
-            goto L_0x021c
-        L_0x0219:
+            goto L_0x021b
+        L_0x0218:
             int r7 = r7 + 1
-            goto L_0x0204
-        L_0x021c:
+            goto L_0x0203
+        L_0x021b:
             int r6 = r6 + 1
             goto L_0x0182
-        L_0x0220:
+        L_0x021f:
             org.telegram.messenger.NotificationsController r1 = r19.getNotificationsController()
             r1.removeDeletedMessagesFromNotifications(r12)
-        L_0x0227:
-            if (r13 == 0) goto L_0x0270
+        L_0x0226:
+            if (r13 == 0) goto L_0x026f
             int r1 = r25.size()
             r2 = 0
-        L_0x022e:
-            if (r2 >= r1) goto L_0x0270
+        L_0x022d:
+            if (r2 >= r1) goto L_0x026f
             long r5 = r13.keyAt(r2)
             java.lang.Object r7 = r13.valueAt(r2)
             java.util.ArrayList r7 = (java.util.ArrayList) r7
-            if (r7 != 0) goto L_0x023d
-            goto L_0x026d
-        L_0x023d:
+            if (r7 != 0) goto L_0x023c
+            goto L_0x026c
+        L_0x023c:
             org.telegram.messenger.NotificationCenter r8 = r19.getNotificationCenter()
             int r9 = org.telegram.messenger.NotificationCenter.messagesDeleted
             java.lang.Object[] r10 = new java.lang.Object[r3]
             r10[r16] = r7
             boolean r7 = org.telegram.messenger.DialogObject.isChatDialog(r5)
-            if (r7 == 0) goto L_0x025d
+            if (r7 == 0) goto L_0x025c
             long r5 = -r5
             java.lang.Long r7 = java.lang.Long.valueOf(r5)
             org.telegram.tgnet.TLRPC$Chat r7 = r0.getChat(r7)
             boolean r7 = org.telegram.messenger.ChatObject.isChannel(r7)
-            if (r7 == 0) goto L_0x025d
-            goto L_0x025f
-        L_0x025d:
+            if (r7 == 0) goto L_0x025c
+            goto L_0x025e
+        L_0x025c:
             r5 = 0
-        L_0x025f:
+        L_0x025e:
             java.lang.Long r5 = java.lang.Long.valueOf(r5)
             r10[r15] = r5
             java.lang.Boolean r5 = java.lang.Boolean.TRUE
             r6 = 2
             r10[r6] = r5
             r8.postNotificationName(r9, r10)
-        L_0x026d:
+        L_0x026c:
             int r2 = r2 + 1
-            goto L_0x022e
-        L_0x0270:
-            if (r14 == 0) goto L_0x02b7
+            goto L_0x022d
+        L_0x026f:
+            if (r14 == 0) goto L_0x02b6
             int r1 = r26.size()
             r2 = 0
-        L_0x0277:
-            if (r2 >= r1) goto L_0x02b0
+        L_0x0276:
+            if (r2 >= r1) goto L_0x02af
             long r5 = r14.keyAt(r2)
             int r3 = r14.valueAt(r2)
             long r5 = -r5
@@ -24556,26 +24555,26 @@ public class MessagesController extends BaseController implements NotificationCe
             androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r7 = r0.dialogMessage
             java.lang.Object r5 = r7.get(r5)
             org.telegram.messenger.MessageObject r5 = (org.telegram.messenger.MessageObject) r5
-            if (r5 == 0) goto L_0x02ad
+            if (r5 == 0) goto L_0x02ac
             int r6 = r5.getId()
-            if (r6 > r3) goto L_0x02ad
+            if (r6 > r3) goto L_0x02ac
             r5.deleted = r15
-            goto L_0x02b0
-        L_0x02ad:
+            goto L_0x02af
+        L_0x02ac:
             int r2 = r2 + 1
-            goto L_0x0277
-        L_0x02b0:
+            goto L_0x0276
+        L_0x02af:
             org.telegram.messenger.NotificationsController r1 = r19.getNotificationsController()
             r1.removeDeletedHisoryFromNotifications(r14)
-        L_0x02b7:
-            if (r4 == 0) goto L_0x02ca
+        L_0x02b6:
+            if (r4 == 0) goto L_0x02c9
             org.telegram.messenger.NotificationCenter r1 = r19.getNotificationCenter()
             int r2 = org.telegram.messenger.NotificationCenter.updateInterfaces
             java.lang.Object[] r3 = new java.lang.Object[r15]
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             r3[r16] = r4
             r1.postNotificationName(r2, r3)
-        L_0x02ca:
+        L_0x02c9:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$307(org.telegram.messenger.support.LongSparseIntArray, org.telegram.messenger.support.LongSparseIntArray, android.util.SparseIntArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, org.telegram.messenger.support.LongSparseIntArray):void");

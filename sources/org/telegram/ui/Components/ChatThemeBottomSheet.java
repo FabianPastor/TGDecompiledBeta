@@ -826,18 +826,16 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         boolean z;
         ChatThemeItem chatThemeItem = this.selectedItem;
         ChatTheme chatTheme = chatThemeItem.chatTheme;
+        boolean z2 = chatTheme.isDefault;
         Bulletin bulletin = null;
-        if (chatTheme.isDefault) {
-            chatTheme = null;
-        }
-        if (!(chatThemeItem == null || this.themeDelegate.getCurrentTheme() == chatTheme)) {
-            ChatTheme chatTheme2 = this.selectedItem.chatTheme;
-            String emoticon = (chatTheme2 == null || chatTheme2.isDefault) ? null : chatTheme2.getEmoticon();
+        ChatTheme chatTheme2 = z2 ? null : chatTheme;
+        if (!(chatThemeItem == null || chatTheme2 == this.originalTheme)) {
+            String emoticon = (chatTheme == null || z2) ? null : chatTheme.getEmoticon();
             ChatThemeController.getInstance(this.currentAccount).setDialogTheme(this.chatActivity.getDialogId(), emoticon, true);
-            if (chatTheme2 == null || chatTheme2.isDefault) {
+            if (chatTheme == null || chatTheme.isDefault) {
                 this.themeDelegate.setCurrentTheme((ChatTheme) null, true, Boolean.valueOf(this.originalIsDark));
             } else {
-                this.themeDelegate.setCurrentTheme(chatTheme2, true, Boolean.valueOf(this.originalIsDark));
+                this.themeDelegate.setCurrentTheme(chatTheme, true, Boolean.valueOf(this.originalIsDark));
             }
             this.isApplyClicked = true;
             TLRPC$User currentUser = this.chatActivity.getCurrentUser();
