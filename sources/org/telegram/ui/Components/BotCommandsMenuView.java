@@ -64,7 +64,7 @@ public class BotCommandsMenuView extends View {
 
     private void updateColors() {
         this.paint.setColor(Theme.getColor("chat_messagePanelVoiceBackground"));
-        int color = Theme.getColor("windowBackgroundWhite");
+        int color = Theme.getColor("chat_messagePanelVoicePressed");
         this.backDrawable.setBackColor(color);
         this.backDrawable.setIconColor(color);
         this.textPaint.setColor(color);

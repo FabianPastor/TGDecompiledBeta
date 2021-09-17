@@ -53,6 +53,7 @@ public class MotionBackgroundDrawable extends Drawable {
     private Paint paint2 = new Paint(2);
     private Paint paint3 = new Paint();
     private WeakReference<View> parentView;
+    private float patternAlpha = 1.0f;
     private Bitmap patternBitmap;
     private Rect patternBounds = new Rect();
     private ColorFilter patternColorFilter;
@@ -372,6 +373,7 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public void setPatternAlpha(float f) {
+        this.patternAlpha = f;
         invalidateParent();
     }
 
@@ -456,9 +458,9 @@ public class MotionBackgroundDrawable extends Drawable {
                         if (this.legacyBitmap2 != null) {
                             float var_ = this.posAnimationProgress;
                             if (var_ != 1.0f) {
-                                this.paint.setAlpha((int) (((float) this.alpha) * (1.0f - var_)));
+                                this.paint.setAlpha((int) (((float) this.alpha) * this.patternAlpha * (1.0f - var_)));
                                 canvas.drawBitmap(this.legacyBitmap2, (Rect) null, this.rect, this.paint);
-                                this.paint.setAlpha((int) (((float) this.alpha) * this.posAnimationProgress));
+                                this.paint.setAlpha((int) (((float) this.alpha) * this.patternAlpha * this.posAnimationProgress));
                                 canvas.drawBitmap(this.legacyBitmap, (Rect) null, this.rect, this.paint);
                                 this.paint.setAlpha(this.alpha);
                             }
@@ -479,7 +481,7 @@ public class MotionBackgroundDrawable extends Drawable {
                     this.matrix.preScale(max3, max3);
                     this.gradientShader.setLocalMatrix(this.matrix);
                     this.paint2.setColorFilter((ColorFilter) null);
-                    this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha)));
+                    this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));
                     this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
                     RectF rectF = this.rect;
                     int i3 = this.roundRadius;
@@ -513,7 +515,7 @@ public class MotionBackgroundDrawable extends Drawable {
                 float var_ = (height2 - var_) / 2.0f;
                 this.rect.set(var_, var_, var_ + var_, var_ + var_);
                 this.paint2.setColorFilter(this.patternColorFilter);
-                this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha)));
+                this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));
                 canvas.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
             }
         }
@@ -523,7 +525,7 @@ public class MotionBackgroundDrawable extends Drawable {
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:83:0x00fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0145  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x014c  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateAnimation() {
         /*
@@ -546,7 +548,7 @@ public class MotionBackgroundDrawable extends Drawable {
             float r1 = r0.posAnimationProgress
             r2 = 1065353216(0x3var_, float:1.0)
             int r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0166
+            if (r5 >= 0) goto L_0x016d
             boolean r5 = r0.rotatingPreview
             r6 = 2
             r7 = 7
@@ -691,31 +693,36 @@ public class MotionBackgroundDrawable extends Drawable {
             r13 = r3
         L_0x00f2:
             boolean r1 = r0.postInvalidateParent
-            if (r1 != 0) goto L_0x0145
+            if (r1 != 0) goto L_0x014c
             boolean r1 = r0.rotatingPreview
             if (r1 == 0) goto L_0x00fb
-            goto L_0x0145
+            goto L_0x014c
         L_0x00fb:
             boolean r1 = useLegacyBitmap
+            if (r1 == 0) goto L_0x0104
+            int r1 = r0.intensity
+            if (r1 >= 0) goto L_0x0104
+            goto L_0x016a
+        L_0x0104:
             r1 = 0
             int r2 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
-            if (r2 == 0) goto L_0x0139
+            if (r2 == 0) goto L_0x0140
             r2 = 1051372203(0x3eaaaaab, float:0.33333334)
             float r3 = r13 / r2
             int r3 = (int) r3
             r4 = 0
-            if (r3 != 0) goto L_0x0113
+            if (r3 != 0) goto L_0x011a
             android.graphics.Canvas r5 = r0.gradientCanvas
             android.graphics.Bitmap r6 = r0.gradientFromBitmap
             r5.drawBitmap(r6, r1, r1, r4)
-            goto L_0x011e
-        L_0x0113:
+            goto L_0x0125
+        L_0x011a:
             android.graphics.Canvas r5 = r0.gradientCanvas
             android.graphics.Bitmap[] r6 = r0.gradientToBitmap
             int r7 = r3 + -1
             r6 = r6[r7]
             r5.drawBitmap(r6, r1, r1, r4)
-        L_0x011e:
+        L_0x0125:
             float r4 = (float) r3
             float r4 = r4 * r2
             float r13 = r13 - r4
@@ -730,15 +737,15 @@ public class MotionBackgroundDrawable extends Drawable {
             r3 = r4[r3]
             android.graphics.Paint r4 = r0.paint3
             r2.drawBitmap(r3, r1, r1, r4)
-            goto L_0x0163
-        L_0x0139:
+            goto L_0x016a
+        L_0x0140:
             android.graphics.Canvas r2 = r0.gradientCanvas
             android.graphics.Bitmap[] r3 = r0.gradientToBitmap
             r3 = r3[r6]
             android.graphics.Paint r4 = r0.paint3
             r2.drawBitmap(r3, r1, r1, r4)
-            goto L_0x0163
-        L_0x0145:
+            goto L_0x016a
+        L_0x014c:
             android.graphics.Bitmap r10 = r0.currentBitmap
             r11 = 1
             int r12 = r0.phase
@@ -751,9 +758,9 @@ public class MotionBackgroundDrawable extends Drawable {
             r17 = r1
             org.telegram.messenger.Utilities.generateGradient(r10, r11, r12, r13, r14, r15, r16, r17)
             r0.invalidateLegacy = r9
-        L_0x0163:
+        L_0x016a:
             r18.invalidateParent()
-        L_0x0166:
+        L_0x016d:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MotionBackgroundDrawable.updateAnimation():void");

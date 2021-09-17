@@ -6482,7 +6482,7 @@ public class MessagesStorage extends BaseController {
                                     executeFast.requery();
                                     executeFast.bindByteBuffer(1, nativeByteBuffer);
                                     executeFast.bindInteger(2, num.intValue());
-                                    executeFast.bindLong(2, keyAt);
+                                    executeFast.bindLong(3, keyAt);
                                     executeFast.step();
                                     nativeByteBuffer.reuse();
                                 }

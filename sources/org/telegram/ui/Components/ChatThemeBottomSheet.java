@@ -839,7 +839,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             }
             this.isApplyClicked = true;
             TLRPC$User currentUser = this.chatActivity.getCurrentUser();
-            if (currentUser != null) {
+            if (currentUser != null && !currentUser.self) {
                 if (TextUtils.isEmpty(emoticon)) {
                     emoticon = "❌";
                     z = true;

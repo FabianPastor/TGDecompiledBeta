@@ -184,12 +184,12 @@ public class AvatarsImageView extends FrameLayout {
             ImageReceiver unused = this.currentStates[i].imageReceiver = new ImageReceiver(this);
             this.currentStates[i].imageReceiver.setRoundRadius(AndroidUtilities.dp(12.0f));
             AvatarDrawable unused2 = this.currentStates[i].avatarDrawable = new AvatarDrawable();
-            this.currentStates[i].avatarDrawable.setTextSize(AndroidUtilities.dp(9.0f));
+            this.currentStates[i].avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
             this.animatingStates[i] = new DrawingState();
             ImageReceiver unused3 = this.animatingStates[i].imageReceiver = new ImageReceiver(this);
             this.animatingStates[i].imageReceiver.setRoundRadius(AndroidUtilities.dp(12.0f));
             AvatarDrawable unused4 = this.animatingStates[i].avatarDrawable = new AvatarDrawable();
-            this.animatingStates[i].avatarDrawable.setTextSize(AndroidUtilities.dp(9.0f));
+            this.animatingStates[i].avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
         }
         this.isInCall = z;
         setWillNotDraw(false);
