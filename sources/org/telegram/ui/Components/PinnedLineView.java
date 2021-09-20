@@ -35,14 +35,16 @@ public class PinnedLineView extends View {
     Paint paint = new Paint(1);
     RectF rectF = new RectF();
     boolean replaceInProgress;
+    private final Theme.ResourcesProvider resourcesProvider;
     Paint selectedPaint = new Paint(1);
     int selectedPosition = -1;
     private float startOffsetFrom;
     private float startOffsetTo;
     int totalCount = 0;
 
-    public PinnedLineView(Context context) {
+    public PinnedLineView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         this.paint.setStyle(Paint.Style.FILL);
         this.paint.setStrokeCap(Paint.Cap.ROUND);
         this.selectedPaint.setStyle(Paint.Style.FILL);
@@ -57,10 +59,10 @@ public class PinnedLineView extends View {
     }
 
     public void updateColors() {
-        int color2 = Theme.getColor("chat_topPanelLine");
-        this.color = color2;
-        this.paint.setColor(ColorUtils.setAlphaComponent(color2, (int) ((((float) Color.alpha(color2)) / 255.0f) * 112.0f)));
-        this.selectedPaint.setColor(Theme.getColor("chat_topPanelLine"));
+        int themedColor = getThemedColor("chat_topPanelLine");
+        this.color = themedColor;
+        this.paint.setColor(ColorUtils.setAlphaComponent(themedColor, (int) ((((float) Color.alpha(themedColor)) / 255.0f) * 112.0f)));
+        this.selectedPaint.setColor(this.color);
     }
 
     /* access modifiers changed from: private */
@@ -89,11 +91,7 @@ public class PinnedLineView extends View {
             invalidate();
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.animator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PinnedLineView.this.lambda$selectPosition$0$PinnedLineView(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new PinnedLineView$$ExternalSyntheticLambda0(this));
             this.animator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     PinnedLineView pinnedLineView = PinnedLineView.this;
@@ -114,8 +112,7 @@ public class PinnedLineView extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$selectPosition$0 */
-    public /* synthetic */ void lambda$selectPosition$0$PinnedLineView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$selectPosition$0(ValueAnimator valueAnimator) {
         this.animationProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -279,11 +276,7 @@ public class PinnedLineView extends View {
             invalidate();
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.animator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PinnedLineView.this.lambda$set$1$PinnedLineView(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new PinnedLineView$$ExternalSyntheticLambda1(this));
             this.animator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     PinnedLineView pinnedLineView = PinnedLineView.this;
@@ -306,9 +299,14 @@ public class PinnedLineView extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$set$1 */
-    public /* synthetic */ void lambda$set$1$PinnedLineView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$set$1(ValueAnimator valueAnimator) {
         this.animationProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color2 = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color2 != null ? color2.intValue() : Theme.getColor(str);
     }
 }

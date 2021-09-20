@@ -24,14 +24,17 @@ import android.graphics.SweepGradient;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Property;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -73,7 +76,6 @@ public class ThemeEditorView {
     private final int editorHeight = AndroidUtilities.dp(54.0f);
     /* access modifiers changed from: private */
     public final int editorWidth = AndroidUtilities.dp(54.0f);
-    private boolean hidden;
     /* access modifiers changed from: private */
     public Activity parentActivity;
     private SharedPreferences preferences;
@@ -191,248 +193,88 @@ public class ThemeEditorView {
                 this.clearSearchImageView.setAlpha(0.0f);
                 this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(-6182737, PorterDuff.Mode.MULTIPLY));
                 addView(this.clearSearchImageView, LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f));
-                this.clearSearchImageView.setOnClickListener(
-                /*  JADX ERROR: Method code generation error
-                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00b8: INVOKE  
-                      (wrap: android.widget.ImageView : 0x00b1: IGET  (r0v11 android.widget.ImageView) = 
-                      (r11v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField A[THIS])
-                     org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchField.clearSearchImageView android.widget.ImageView)
-                      (wrap: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$HcA_6SfCers13rez8m4VSvqCYfM : 0x00b5: CONSTRUCTOR  (r1v15 org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$HcA_6SfCers13rez8m4VSvqCYfM) = 
-                      (r11v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField A[THIS])
-                     call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$HcA_6SfCers13rez8m4VSvqCYfM.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField):void type: CONSTRUCTOR)
-                     android.widget.ImageView.setOnClickListener(android.view.View$OnClickListener):void type: VIRTUAL in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchField.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert, android.content.Context):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00b5: CONSTRUCTOR  (r1v15 org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$HcA_6SfCers13rez8m4VSvqCYfM) = 
-                      (r11v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField A[THIS])
-                     call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$HcA_6SfCers13rez8m4VSvqCYfM.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchField.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert, android.content.Context):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                    	... 59 more
-                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$HcA_6SfCers13rez8m4VSvqCYfM, state: NOT_LOADED
-                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	... 65 more
-                    */
-                /*
-                    this = this;
-                    org.telegram.ui.Components.ThemeEditorView.EditorAlert.this = r12
-                    r11.<init>(r13)
-                    android.view.View r0 = new android.view.View
-                    r0.<init>(r13)
-                    r1 = 1099956224(0x41900000, float:18.0)
-                    int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                    r2 = -854795(0xfffffffffff2f4f5, float:NaN)
-                    android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createRoundRectDrawable(r1, r2)
-                    r0.setBackgroundDrawable(r1)
-                    r2 = -1
-                    r3 = 1108344832(0x42100000, float:36.0)
-                    r4 = 51
-                    r5 = 1096810496(0x41600000, float:14.0)
-                    r6 = 1093664768(0x41300000, float:11.0)
-                    r7 = 1096810496(0x41600000, float:14.0)
-                    r8 = 0
-                    android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8)
-                    r11.addView(r0, r1)
-                    android.widget.ImageView r0 = new android.widget.ImageView
-                    r0.<init>(r13)
-                    android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
-                    r0.setScaleType(r1)
-                    r1 = 2131166056(0x7var_, float:1.7946347E38)
-                    r0.setImageResource(r1)
-                    android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
-                    android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.MULTIPLY
-                    r3 = -6182737(0xffffffffffa1a8af, float:NaN)
-                    r1.<init>(r3, r2)
-                    r0.setColorFilter(r1)
-                    r4 = 36
-                    r5 = 1108344832(0x42100000, float:36.0)
-                    r6 = 51
-                    r7 = 1098907648(0x41800000, float:16.0)
-                    r8 = 1093664768(0x41300000, float:11.0)
-                    r9 = 0
-                    r10 = 0
-                    android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r5, r6, r7, r8, r9, r10)
-                    r11.addView(r0, r1)
-                    android.widget.ImageView r0 = new android.widget.ImageView
-                    r0.<init>(r13)
-                    r11.clearSearchImageView = r0
-                    android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
-                    r0.setScaleType(r1)
-                    android.widget.ImageView r0 = r11.clearSearchImageView
-                    org.telegram.ui.Components.CloseProgressDrawable2 r1 = new org.telegram.ui.Components.CloseProgressDrawable2
-                    r1.<init>()
-                    r0.setImageDrawable(r1)
-                    r0 = 1088421888(0x40e00000, float:7.0)
-                    int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-                    r1.setSide(r0)
-                    android.widget.ImageView r0 = r11.clearSearchImageView
-                    r1 = 1036831949(0x3dcccccd, float:0.1)
-                    r0.setScaleX(r1)
-                    android.widget.ImageView r0 = r11.clearSearchImageView
-                    r0.setScaleY(r1)
-                    android.widget.ImageView r0 = r11.clearSearchImageView
-                    r1 = 0
-                    r0.setAlpha(r1)
-                    android.widget.ImageView r0 = r11.clearSearchImageView
-                    android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
-                    android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.MULTIPLY
-                    r1.<init>(r3, r2)
-                    r0.setColorFilter(r1)
-                    android.widget.ImageView r0 = r11.clearSearchImageView
-                    r1 = 36
-                    r2 = 1108344832(0x42100000, float:36.0)
-                    r3 = 53
-                    r4 = 1096810496(0x41600000, float:14.0)
-                    r5 = 1093664768(0x41300000, float:11.0)
-                    r6 = 1096810496(0x41600000, float:14.0)
-                    r7 = 0
-                    android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r2, r3, r4, r5, r6, r7)
-                    r11.addView(r0, r1)
-                    android.widget.ImageView r0 = r11.clearSearchImageView
-                    org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$HcA_6SfCers13rez8m4VSvqCYfM r1 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$HcA_6SfCers13rez8m4VSvqCYfM
-                    r1.<init>(r11)
-                    r0.setOnClickListener(r1)
-                    org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField$1 r0 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField$1
-                    r0.<init>(r13, r12)
-                    r11.searchEditText = r0
-                    r13 = 1
-                    r1 = 1098907648(0x41800000, float:16.0)
-                    r0.setTextSize(r13, r1)
-                    org.telegram.ui.Components.EditTextBoldCursor r0 = r11.searchEditText
-                    r1 = -6774617(0xfffffffffvar_a0a7, float:NaN)
-                    r0.setHintTextColor(r1)
-                    org.telegram.ui.Components.EditTextBoldCursor r0 = r11.searchEditText
-                    r1 = -14540254(0xfffffffffvar_, float:-2.1551216E38)
-                    r0.setTextColor(r1)
-                    org.telegram.ui.Components.EditTextBoldCursor r0 = r11.searchEditText
-                    r1 = 0
-                    r0.setBackgroundDrawable(r1)
-                    org.telegram.ui.Components.EditTextBoldCursor r0 = r11.searchEditText
-                    r1 = 0
-                    r0.setPadding(r1, r1, r1, r1)
-                    org.telegram.ui.Components.EditTextBoldCursor r0 = r11.searchEditText
-                    r0.setMaxLines(r13)
-                    org.telegram.ui.Components.EditTextBoldCursor r0 = r11.searchEditText
-                    r0.setLines(r13)
-                    org.telegram.ui.Components.EditTextBoldCursor r0 = r11.searchEditText
-                    r0.setSingleLine(r13)
-                    org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
-                    r0 = 268435459(0x10000003, float:2.5243558E-29)
-                    r13.setImeOptions(r0)
-                    org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
-                    java.lang.String r0 = "Search"
-                    r1 = 2131627457(0x7f0e0dc1, float:1.8882179E38)
-                    java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r1)
-                    r13.setHint(r0)
-                    org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
-                    r0 = -11491093(0xfffffffffvar_a8eb, float:-2.773565E38)
-                    r13.setCursorColor(r0)
-                    org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
-                    r0 = 1101004800(0x41a00000, float:20.0)
-                    int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-                    r13.setCursorSize(r0)
-                    org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
-                    r0 = 1069547520(0x3fCLASSNAME, float:1.5)
-                    r13.setCursorWidth(r0)
-                    org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
-                    r0 = -1
-                    r1 = 1109393408(0x42200000, float:40.0)
-                    r2 = 51
-                    r3 = 1113063424(0x42580000, float:54.0)
-                    r4 = 1091567616(0x41100000, float:9.0)
-                    r5 = 1110966272(0x42380000, float:46.0)
-                    r6 = 0
-                    android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r1, r2, r3, r4, r5, r6)
-                    r11.addView(r13, r0)
-                    org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
-                    org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField$2 r0 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField$2
-                    r0.<init>(r12)
-                    r13.addTextChangedListener(r0)
-                    org.telegram.ui.Components.EditTextBoldCursor r12 = r11.searchEditText
-                    org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$10O1jd-x8vAg85L8UTaAubOCh1s r13 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$10O1jd-x8vAg85L8UTaAubOCh1s
-                    r13.<init>(r11)
-                    r12.setOnEditorActionListener(r13)
-                    return
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchField.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert, android.content.Context):void");
+                this.clearSearchImageView.setOnClickListener(new ThemeEditorView$EditorAlert$SearchField$$ExternalSyntheticLambda0(this));
+                AnonymousClass1 r0 = new EditTextBoldCursor(context, EditorAlert.this) {
+                    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                        MotionEvent obtain = MotionEvent.obtain(motionEvent);
+                        obtain.setLocation(obtain.getRawX(), obtain.getRawY() - EditorAlert.this.containerView.getTranslationY());
+                        EditorAlert.this.listView.dispatchTouchEvent(obtain);
+                        obtain.recycle();
+                        return super.dispatchTouchEvent(motionEvent);
+                    }
+                };
+                this.searchEditText = r0;
+                r0.setTextSize(1, 16.0f);
+                this.searchEditText.setHintTextColor(-6774617);
+                this.searchEditText.setTextColor(-14540254);
+                this.searchEditText.setBackgroundDrawable((Drawable) null);
+                this.searchEditText.setPadding(0, 0, 0, 0);
+                this.searchEditText.setMaxLines(1);
+                this.searchEditText.setLines(1);
+                this.searchEditText.setSingleLine(true);
+                this.searchEditText.setImeOptions(NUM);
+                this.searchEditText.setHint(LocaleController.getString("Search", NUM));
+                this.searchEditText.setCursorColor(-11491093);
+                this.searchEditText.setCursorSize(AndroidUtilities.dp(20.0f));
+                this.searchEditText.setCursorWidth(1.5f);
+                addView(this.searchEditText, LayoutHelper.createFrame(-1, 40.0f, 51, 54.0f, 9.0f, 46.0f, 0.0f));
+                this.searchEditText.addTextChangedListener(new TextWatcher(EditorAlert.this) {
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                    }
+
+                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                    }
+
+                    public void afterTextChanged(Editable editable) {
+                        boolean z = true;
+                        boolean z2 = SearchField.this.searchEditText.length() > 0;
+                        float f = 0.0f;
+                        if (SearchField.this.clearSearchImageView.getAlpha() == 0.0f) {
+                            z = false;
+                        }
+                        if (z2 != z) {
+                            ViewPropertyAnimator animate = SearchField.this.clearSearchImageView.animate();
+                            float f2 = 1.0f;
+                            if (z2) {
+                                f = 1.0f;
+                            }
+                            ViewPropertyAnimator scaleX = animate.alpha(f).setDuration(150).scaleX(z2 ? 1.0f : 0.1f);
+                            if (!z2) {
+                                f2 = 0.1f;
+                            }
+                            scaleX.scaleY(f2).start();
+                        }
+                        String obj = SearchField.this.searchEditText.getText().toString();
+                        if (obj.length() != 0) {
+                            if (EditorAlert.this.searchEmptyView != null) {
+                                EditorAlert.this.searchEmptyView.setText(LocaleController.getString("NoResult", NUM));
+                            }
+                        } else if (EditorAlert.this.listView.getAdapter() != EditorAlert.this.listAdapter) {
+                            int access$600 = EditorAlert.this.getCurrentTop();
+                            EditorAlert.this.searchEmptyView.setText(LocaleController.getString("NoChats", NUM));
+                            EditorAlert.this.searchEmptyView.showTextView();
+                            EditorAlert.this.listView.setAdapter(EditorAlert.this.listAdapter);
+                            EditorAlert.this.listAdapter.notifyDataSetChanged();
+                            if (access$600 > 0) {
+                                EditorAlert.this.layoutManager.scrollToPositionWithOffset(0, -access$600);
+                            }
+                        }
+                        if (EditorAlert.this.searchAdapter != null) {
+                            EditorAlert.this.searchAdapter.searchDialogs(obj);
+                        }
+                    }
+                });
+                this.searchEditText.setOnEditorActionListener(new ThemeEditorView$EditorAlert$SearchField$$ExternalSyntheticLambda1(this));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$new$0 */
-            public /* synthetic */ void lambda$new$0$ThemeEditorView$EditorAlert$SearchField(View view) {
+            public /* synthetic */ void lambda$new$0(View view) {
                 this.searchEditText.setText("");
                 AndroidUtilities.showKeyboard(this.searchEditText);
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$new$1 */
-            public /* synthetic */ boolean lambda$new$1$ThemeEditorView$EditorAlert$SearchField(TextView textView, int i, KeyEvent keyEvent) {
+            public /* synthetic */ boolean lambda$new$1(TextView textView, int i, KeyEvent keyEvent) {
                 if (keyEvent == null) {
                     return false;
                 }
@@ -647,7 +489,7 @@ public class ThemeEditorView {
                     r9.addTextChangedListener(r10)
                     org.telegram.ui.Components.EditTextBoldCursor[] r9 = r0.colorEditText
                     r9 = r9[r7]
-                    org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$ColorPicker$9GqZntGKrZv16q2vFNB7k5l9ag8 r10 = org.telegram.ui.Components.$$Lambda$ThemeEditorView$EditorAlert$ColorPicker$9GqZntGKrZv16q2vFNB7k5l9ag8.INSTANCE
+                    org.telegram.ui.Components.ThemeEditorView$EditorAlert$ColorPicker$$ExternalSyntheticLambda0 r10 = org.telegram.ui.Components.ThemeEditorView$EditorAlert$ColorPicker$$ExternalSyntheticLambda0.INSTANCE
                     r9.setOnEditorActionListener(r10)
                     int r7 = r7 + 1
                     goto L_0x0081
@@ -657,7 +499,8 @@ public class ThemeEditorView {
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.EditorAlert.ColorPicker.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert, android.content.Context):void");
             }
 
-            static /* synthetic */ boolean lambda$new$0(TextView textView, int i, KeyEvent keyEvent) {
+            /* access modifiers changed from: private */
+            public static /* synthetic */ boolean lambda$new$0(TextView textView, int i, KeyEvent keyEvent) {
                 if (i != 6) {
                     return false;
                 }
@@ -1145,7 +988,7 @@ public class ThemeEditorView {
                 android.animation.AnimatorSet[] r4 = new android.animation.AnimatorSet[r4]
                 r0.shadowAnimation = r4
                 android.content.res.Resources r4 = r18.getResources()
-                r5 = 2131166044(0x7var_c, float:1.7946322E38)
+                r5 = 2131166048(0x7var_, float:1.794633E38)
                 android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
                 android.graphics.drawable.Drawable r4 = r4.mutate()
                 r0.shadowDrawable = r4
@@ -1197,7 +1040,7 @@ public class ThemeEditorView {
                 org.telegram.ui.Components.RecyclerListView r4 = r0.listView
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$ListAdapter r9 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$ListAdapter
                 r10 = r19
-                r9.<init>(r2, r10)
+                r9.<init>(r0, r2, r10)
                 r0.listAdapter = r9
                 r4.setAdapter(r9)
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter r4 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter
@@ -1212,8 +1055,8 @@ public class ThemeEditorView {
                 org.telegram.ui.Components.RecyclerListView r4 = r0.listView
                 r4.setLayoutAnimation(r9)
                 org.telegram.ui.Components.RecyclerListView r4 = r0.listView
-                org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$O5hdgeqbZb0M_VcxiNeMNa7o3Vw r9 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$O5hdgeqbZb0M_VcxiNeMNa7o3Vw
-                r9.<init>()
+                org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda5 r9 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda5
+                r9.<init>(r0)
                 r4.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r9)
                 org.telegram.ui.Components.RecyclerListView r4 = r0.listView
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$3 r9 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$3
@@ -1227,7 +1070,7 @@ public class ThemeEditorView {
                 r1.showTextView()
                 org.telegram.ui.Components.EmptyTextProgressView r1 = r0.searchEmptyView
                 java.lang.String r4 = "NoResult"
-                r9 = 2131626408(0x7f0e09a8, float:1.8880051E38)
+                r9 = 2131626438(0x7f0e09c6, float:1.8880112E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
                 r1.setText(r4)
                 org.telegram.ui.Components.RecyclerListView r1 = r0.listView
@@ -1326,7 +1169,7 @@ public class ThemeEditorView {
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r15, r5, r9, r5)
                 java.lang.String r9 = "CloseEditor"
-                r15 = 2131624958(0x7f0e03fe, float:1.887711E38)
+                r15 = 2131624971(0x7f0e040b, float:1.8877137E38)
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r15)
                 java.lang.String r9 = r9.toUpperCase()
                 r1.setText(r9)
@@ -1337,8 +1180,8 @@ public class ThemeEditorView {
                 r11 = -2
                 android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r8)
                 r15.addView(r1, r4)
-                org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$7p_HW4PD7VHMCM7xEz7ehRvhgjw r4 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$7p_HW4PD7VHMCM7xEz7ehRvhgjw
-                r4.<init>()
+                org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda1 r4 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda1
+                r4.<init>(r0)
                 r1.setOnClickListener(r4)
                 android.widget.TextView r1 = new android.widget.TextView
                 r1.<init>(r2)
@@ -1351,7 +1194,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r15, r5)
                 java.lang.String r4 = "SaveTheme"
-                r15 = 2131627439(0x7f0e0daf, float:1.8882142E38)
+                r15 = 2131627472(0x7f0e0dd0, float:1.888221E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r15)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1361,8 +1204,8 @@ public class ThemeEditorView {
                 r15 = 53
                 android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r15)
                 r4.addView(r1, r8)
-                org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$dHz7BMGjIAhbmi_G8NhEXxGCNRM r4 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$dHz7BMGjIAhbmi_G8NhEXxGCNRM
-                r4.<init>()
+                org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda3 r4 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda3
+                r4.<init>(r0)
                 r1.setOnClickListener(r4)
                 android.widget.FrameLayout r1 = new android.widget.FrameLayout
                 r1.<init>(r2)
@@ -1398,8 +1241,8 @@ public class ThemeEditorView {
                 r8 = 51
                 android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r8)
                 r4.addView(r1, r15)
-                org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$hW04JYniAptAOlWceRjl0q3qmwg r4 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$hW04JYniAptAOlWceRjl0q3qmwg
-                r4.<init>()
+                org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda4 r4 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda4
+                r4.<init>(r0)
                 r1.setOnClickListener(r4)
                 android.widget.LinearLayout r1 = new android.widget.LinearLayout
                 r1.<init>(r2)
@@ -1419,7 +1262,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r8, r5, r15, r5)
                 java.lang.String r8 = "Default"
-                r15 = 2131625135(0x7f0e04af, float:1.887747E38)
+                r15 = 2131625148(0x7f0e04bc, float:1.8877496E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r15)
                 java.lang.String r8 = r8.toUpperCase()
                 r4.setText(r8)
@@ -1428,8 +1271,8 @@ public class ThemeEditorView {
                 r8 = 51
                 android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r8)
                 r1.addView(r4, r15)
-                org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$6bYjD5WZZU2NLveKog9yVMpod2M r8 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$6bYjD5WZZU2NLveKog9yVMpod2M
-                r8.<init>()
+                org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda0 r8 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda0
+                r8.<init>(r0)
                 r4.setOnClickListener(r8)
                 android.widget.TextView r4 = new android.widget.TextView
                 r4.<init>(r2)
@@ -1442,7 +1285,7 @@ public class ThemeEditorView {
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r2, r5, r3, r5)
                 java.lang.String r2 = "Save"
-                r3 = 2131627435(0x7f0e0dab, float:1.8882134E38)
+                r3 = 2131627468(0x7f0e0dcc, float:1.8882201E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
                 java.lang.String r2 = r2.toUpperCase()
                 r4.setText(r2)
@@ -1451,8 +1294,8 @@ public class ThemeEditorView {
                 r2 = 51
                 android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r2)
                 r1.addView(r4, r2)
-                org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$W2-jYIlRWnRMAK65uZtlY8G98l4 r1 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$W2-jYIlRWnRMAK65uZtlY8G98l4
-                r1.<init>()
+                org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda2
+                r1.<init>(r0)
                 r4.setOnClickListener(r1)
                 return
             */
@@ -1460,8 +1303,7 @@ public class ThemeEditorView {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ThemeEditorView$EditorAlert(View view, int i) {
+        public /* synthetic */ void lambda$new$0(View view, int i) {
             if (i != 0) {
                 RecyclerView.Adapter adapter = this.listView.getAdapter();
                 ListAdapter listAdapter2 = this.listAdapter;
@@ -1487,14 +1329,12 @@ public class ThemeEditorView {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$1 */
-        public /* synthetic */ void lambda$new$1$ThemeEditorView$EditorAlert(View view) {
+        public /* synthetic */ void lambda$new$1(View view) {
             dismiss();
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$2 */
-        public /* synthetic */ void lambda$new$2$ThemeEditorView$EditorAlert(View view) {
+        public /* synthetic */ void lambda$new$2(View view) {
             Theme.saveCurrentTheme(this.this$0.themeInfo, true, false, false);
             setOnDismissListener((DialogInterface.OnDismissListener) null);
             dismiss();
@@ -1502,8 +1342,7 @@ public class ThemeEditorView {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$3 */
-        public /* synthetic */ void lambda$new$3$ThemeEditorView$EditorAlert(View view) {
+        public /* synthetic */ void lambda$new$3(View view) {
             for (int i = 0; i < this.this$0.currentThemeDesription.size(); i++) {
                 ((ThemeDescription) this.this$0.currentThemeDesription.get(i)).setPreviousColor();
             }
@@ -1511,8 +1350,7 @@ public class ThemeEditorView {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$4 */
-        public /* synthetic */ void lambda$new$4$ThemeEditorView$EditorAlert(View view) {
+        public /* synthetic */ void lambda$new$4(View view) {
             for (int i = 0; i < this.this$0.currentThemeDesription.size(); i++) {
                 ((ThemeDescription) this.this$0.currentThemeDesription.get(i)).setDefaultColor();
             }
@@ -1520,8 +1358,7 @@ public class ThemeEditorView {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$5 */
-        public /* synthetic */ void lambda$new$5$ThemeEditorView$EditorAlert(View view) {
+        public /* synthetic */ void lambda$new$5(View view) {
             setColorPickerVisible(false);
         }
 
@@ -1806,110 +1643,11 @@ public class ThemeEditorView {
             }
 
             private void updateSearchResults(ArrayList<ArrayList<ThemeDescription>> arrayList, ArrayList<CharSequence> arrayList2, int i) {
-                AndroidUtilities.runOnUIThread(
-                /*  JADX ERROR: Method code generation error
-                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0005: INVOKE  
-                      (wrap: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$f2ZEOVW0JnFD5dbGFZ2fs_RyvZ4 : 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$f2ZEOVW0JnFD5dbGFZ2fs_RyvZ4) = 
-                      (r1v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter A[THIS])
-                      (r4v0 'i' int)
-                      (r2v0 'arrayList' java.util.ArrayList<java.util.ArrayList<org.telegram.ui.ActionBar.ThemeDescription>>)
-                      (r3v0 'arrayList2' java.util.ArrayList<java.lang.CharSequence>)
-                     call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$f2ZEOVW0JnFD5dbGFZ2fs_RyvZ4.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, int, java.util.ArrayList, java.util.ArrayList):void type: CONSTRUCTOR)
-                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.updateSearchResults(java.util.ArrayList, java.util.ArrayList, int):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$f2ZEOVW0JnFD5dbGFZ2fs_RyvZ4) = 
-                      (r1v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter A[THIS])
-                      (r4v0 'i' int)
-                      (r2v0 'arrayList' java.util.ArrayList<java.util.ArrayList<org.telegram.ui.ActionBar.ThemeDescription>>)
-                      (r3v0 'arrayList2' java.util.ArrayList<java.lang.CharSequence>)
-                     call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$f2ZEOVW0JnFD5dbGFZ2fs_RyvZ4.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, int, java.util.ArrayList, java.util.ArrayList):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.updateSearchResults(java.util.ArrayList, java.util.ArrayList, int):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                    	... 59 more
-                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$f2ZEOVW0JnFD5dbGFZ2fs_RyvZ4, state: NOT_LOADED
-                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	... 65 more
-                    */
-                /*
-                    this = this;
-                    org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$f2ZEOVW0JnFD5dbGFZ2fs_RyvZ4 r0 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$f2ZEOVW0JnFD5dbGFZ2fs_RyvZ4
-                    r0.<init>(r1, r4, r2, r3)
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-                    return
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.updateSearchResults(java.util.ArrayList, java.util.ArrayList, int):void");
+                AndroidUtilities.runOnUIThread(new ThemeEditorView$EditorAlert$SearchAdapter$$ExternalSyntheticLambda0(this, i, arrayList, arrayList2));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$updateSearchResults$0 */
-            public /* synthetic */ void lambda$updateSearchResults$0$ThemeEditorView$EditorAlert$SearchAdapter(int i, ArrayList arrayList, ArrayList arrayList2) {
+            public /* synthetic */ void lambda$updateSearchResults$0(int i, ArrayList arrayList, ArrayList arrayList2) {
                 if (i == this.lastSearchId) {
                     if (EditorAlert.this.listView.getAdapter() != EditorAlert.this.searchAdapter) {
                         EditorAlert editorAlert = EditorAlert.this;
@@ -1954,951 +1692,806 @@ public class ThemeEditorView {
                     }
                     int i = this.lastSearchId + 1;
                     this.lastSearchId = i;
-                    this.searchRunnable = 
-                    /*  JADX ERROR: Method code generation error
-                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002f: IPUT  
-                          (wrap: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$0AlTYKfK1LurH-v0JsFx_OKo_MY : 0x002c: CONSTRUCTOR  (r1v0 org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$0AlTYKfK1LurH-v0JsFx_OKo_MY) = 
-                          (r3v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter A[THIS])
-                          (r4v0 'str' java.lang.String)
-                          (r0v4 'i' int)
-                         call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$0AlTYKfK1LurH-v0JsFx_OKo_MY.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, java.lang.String, int):void type: CONSTRUCTOR)
-                          (r3v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter A[THIS])
-                         org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchRunnable java.lang.Runnable in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchDialogs(java.lang.String):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002c: CONSTRUCTOR  (r1v0 org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$0AlTYKfK1LurH-v0JsFx_OKo_MY) = 
-                          (r3v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter A[THIS])
-                          (r4v0 'str' java.lang.String)
-                          (r0v4 'i' int)
-                         call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$0AlTYKfK1LurH-v0JsFx_OKo_MY.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, java.lang.String, int):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchDialogs(java.lang.String):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:429)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	... 70 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$0AlTYKfK1LurH-v0JsFx_OKo_MY, state: NOT_LOADED
-                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	... 74 more
-                        */
-                    /*
-                        this = this;
-                        if (r4 == 0) goto L_0x000b
-                        java.lang.String r0 = r3.lastSearchText
-                        boolean r0 = r4.equals(r0)
-                        if (r0 == 0) goto L_0x000b
-                        return
-                    L_0x000b:
-                        r3.lastSearchText = r4
-                        java.lang.Runnable r0 = r3.searchRunnable
-                        if (r0 == 0) goto L_0x001b
-                        org.telegram.messenger.DispatchQueue r0 = org.telegram.messenger.Utilities.searchQueue
-                        java.lang.Runnable r1 = r3.searchRunnable
-                        r0.cancelRunnable(r1)
-                        r0 = 0
-                        r3.searchRunnable = r0
-                    L_0x001b:
-                        if (r4 == 0) goto L_0x003b
-                        int r0 = r4.length()
-                        if (r0 != 0) goto L_0x0024
-                        goto L_0x003b
-                    L_0x0024:
-                        int r0 = r3.lastSearchId
-                        int r0 = r0 + 1
-                        r3.lastSearchId = r0
-                        org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$0AlTYKfK1LurH-v0JsFx_OKo_MY r1 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$0AlTYKfK1LurH-v0JsFx_OKo_MY
-                        r1.<init>(r3, r4, r0)
-                        r3.searchRunnable = r1
-                        org.telegram.messenger.DispatchQueue r4 = org.telegram.messenger.Utilities.searchQueue
-                        java.lang.Runnable r0 = r3.searchRunnable
-                        r1 = 300(0x12c, double:1.48E-321)
-                        r4.postRunnable(r0, r1)
-                        goto L_0x004f
-                    L_0x003b:
-                        java.util.ArrayList<java.util.ArrayList<org.telegram.ui.ActionBar.ThemeDescription>> r4 = r3.searchResult
-                        r4.clear()
-                        org.telegram.ui.Components.ThemeEditorView$EditorAlert r4 = org.telegram.ui.Components.ThemeEditorView.EditorAlert.this
-                        int r0 = r4.getCurrentTop()
-                        int unused = r4.topBeforeSwitch = r0
-                        r4 = -1
-                        r3.lastSearchId = r4
-                        r3.notifyDataSetChanged()
-                    L_0x004f:
-                        return
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchDialogs(java.lang.String):void");
-                }
-
-                public int getItemCount() {
-                    if (this.searchResult.isEmpty()) {
-                        return 0;
-                    }
-                    return this.searchResult.size() + 1;
-                }
-
-                public ArrayList<ThemeDescription> getItem(int i) {
-                    if (i < 0 || i >= this.searchResult.size()) {
-                        return null;
-                    }
-                    return this.searchResult.get(i);
-                }
-
-                public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                    View view;
-                    if (i != 0) {
-                        view = new View(this.context);
-                        view.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(56.0f)));
-                    } else {
-                        view = new TextColorThemeCell(this.context);
-                        view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-                    }
-                    return new RecyclerListView.Holder(view);
-                }
-
-                public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-                    if (viewHolder.getItemViewType() == 0) {
-                        int i2 = i - 1;
-                        int i3 = 0;
-                        ThemeDescription themeDescription = (ThemeDescription) this.searchResult.get(i2).get(0);
-                        if (!themeDescription.getCurrentKey().equals("chat_wallpaper")) {
-                            i3 = themeDescription.getSetColor();
-                        }
-                        ((TextColorThemeCell) viewHolder.itemView).setTextAndColor(this.searchNames.get(i2), i3);
-                    }
+                    this.searchRunnable = new ThemeEditorView$EditorAlert$SearchAdapter$$ExternalSyntheticLambda1(this, str, i);
+                    Utilities.searchQueue.postRunnable(this.searchRunnable, 300);
                 }
             }
 
-            private class ListAdapter extends RecyclerListView.SelectionAdapter {
-                private Context context;
-                /* access modifiers changed from: private */
-                public ArrayList<ArrayList<ThemeDescription>> items = new ArrayList<>();
-
-                public int getItemViewType(int i) {
-                    return i == 0 ? 1 : 0;
+            public int getItemCount() {
+                if (this.searchResult.isEmpty()) {
+                    return 0;
                 }
+                return this.searchResult.size() + 1;
+            }
 
-                public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-                    return true;
+            public ArrayList<ThemeDescription> getItem(int i) {
+                if (i < 0 || i >= this.searchResult.size()) {
+                    return null;
                 }
+                return this.searchResult.get(i);
+            }
 
-                public ListAdapter(Context context2, ArrayList<ThemeDescription> arrayList) {
-                    this.context = context2;
-                    HashMap hashMap = new HashMap();
-                    int size = arrayList.size();
-                    for (int i = 0; i < size; i++) {
-                        ThemeDescription themeDescription = arrayList.get(i);
-                        String currentKey = themeDescription.getCurrentKey();
-                        ArrayList arrayList2 = (ArrayList) hashMap.get(currentKey);
-                        if (arrayList2 == null) {
-                            arrayList2 = new ArrayList();
-                            hashMap.put(currentKey, arrayList2);
-                            this.items.add(arrayList2);
-                        }
-                        arrayList2.add(themeDescription);
-                    }
-                    if (Build.VERSION.SDK_INT >= 26 && !hashMap.containsKey("windowBackgroundGray")) {
-                        ArrayList arrayList3 = new ArrayList();
-                        arrayList3.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
-                        this.items.add(arrayList3);
-                    }
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+                View view;
+                if (i != 0) {
+                    view = new View(this.context);
+                    view.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(56.0f)));
+                } else {
+                    view = new TextColorThemeCell(this.context);
+                    view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
                 }
+                return new RecyclerListView.Holder(view);
+            }
 
-                public int getItemCount() {
-                    if (this.items.isEmpty()) {
-                        return 0;
+            public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+                if (viewHolder.getItemViewType() == 0) {
+                    int i2 = i - 1;
+                    int i3 = 0;
+                    ThemeDescription themeDescription = (ThemeDescription) this.searchResult.get(i2).get(0);
+                    if (!themeDescription.getCurrentKey().equals("chat_wallpaper")) {
+                        i3 = themeDescription.getSetColor();
                     }
-                    return this.items.size() + 1;
-                }
-
-                public ArrayList<ThemeDescription> getItem(int i) {
-                    if (i < 0 || i >= this.items.size()) {
-                        return null;
-                    }
-                    return this.items.get(i);
-                }
-
-                public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                    View view;
-                    if (i != 0) {
-                        view = new View(this.context);
-                        view.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(56.0f)));
-                    } else {
-                        view = new TextColorThemeCell(this.context);
-                        view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-                    }
-                    return new RecyclerListView.Holder(view);
-                }
-
-                public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-                    if (viewHolder.getItemViewType() == 0) {
-                        int i2 = 0;
-                        ThemeDescription themeDescription = (ThemeDescription) this.items.get(i - 1).get(0);
-                        if (!themeDescription.getCurrentKey().equals("chat_wallpaper")) {
-                            i2 = themeDescription.getSetColor();
-                        }
-                        ((TextColorThemeCell) viewHolder.itemView).setTextAndColor(themeDescription.getTitle(), i2);
-                    }
+                    ((TextColorThemeCell) viewHolder.itemView).setTextAndColor(this.searchNames.get(i2), i3);
                 }
             }
         }
 
-        public void show(Activity activity, Theme.ThemeInfo themeInfo2) {
-            if (Instance != null) {
-                Instance.destroy();
+        private class ListAdapter extends RecyclerListView.SelectionAdapter {
+            private Context context;
+            /* access modifiers changed from: private */
+            public ArrayList<ArrayList<ThemeDescription>> items = new ArrayList<>();
+
+            public int getItemViewType(int i) {
+                return i == 0 ? 1 : 0;
             }
-            this.hidden = false;
-            this.themeInfo = themeInfo2;
-            this.windowView = new FrameLayout(activity) {
-                private boolean dragging;
-                private float startX;
-                private float startY;
 
-                static /* synthetic */ void lambda$onTouchEvent$0(DialogInterface dialogInterface) {
-                }
+            public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+                return true;
+            }
 
-                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                    return true;
-                }
-
-                /* JADX WARNING: Code restructure failed: missing block: B:29:0x0088, code lost:
-                    if (r6.fragmentsStack.isEmpty() != false) goto L_0x008a;
-                 */
-                /* JADX WARNING: Removed duplicated region for block: B:32:0x008d  */
-                /* JADX WARNING: Removed duplicated region for block: B:34:0x0093  */
-                /* Code decompiled incorrectly, please refer to instructions dump. */
-                public boolean onTouchEvent(android.view.MotionEvent r11) {
-                    /*
-                        r10 = this;
-                        float r0 = r11.getRawX()
-                        float r1 = r11.getRawY()
-                        int r2 = r11.getAction()
-                        r3 = 2
-                        r4 = 0
-                        r5 = 1
-                        if (r2 != 0) goto L_0x0017
-                        r10.startX = r0
-                        r10.startY = r1
-                        goto L_0x00e8
-                    L_0x0017:
-                        int r2 = r11.getAction()
-                        if (r2 != r3) goto L_0x004a
-                        boolean r2 = r10.dragging
-                        if (r2 != 0) goto L_0x004a
-                        float r2 = r10.startX
-                        float r2 = r2 - r0
-                        float r2 = java.lang.Math.abs(r2)
-                        r6 = 1050253722(0x3e99999a, float:0.3)
-                        float r7 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r6, r5)
-                        int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-                        if (r2 >= 0) goto L_0x0042
-                        float r2 = r10.startY
-                        float r2 = r2 - r1
-                        float r2 = java.lang.Math.abs(r2)
-                        float r6 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r6, r4)
-                        int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-                        if (r2 < 0) goto L_0x00e8
-                    L_0x0042:
-                        r10.dragging = r5
-                        r10.startX = r0
-                        r10.startY = r1
-                        goto L_0x00e8
-                    L_0x004a:
-                        int r2 = r11.getAction()
-                        if (r2 != r5) goto L_0x00e8
-                        boolean r2 = r10.dragging
-                        if (r2 != 0) goto L_0x00e8
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        org.telegram.ui.Components.ThemeEditorView$EditorAlert r2 = r2.editorAlert
-                        if (r2 != 0) goto L_0x00e8
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.app.Activity r2 = r2.parentActivity
-                        org.telegram.ui.LaunchActivity r2 = (org.telegram.ui.LaunchActivity) r2
-                        boolean r6 = org.telegram.messenger.AndroidUtilities.isTablet()
-                        r7 = 0
-                        if (r6 == 0) goto L_0x008a
-                        org.telegram.ui.ActionBar.ActionBarLayout r6 = r2.getLayersActionBarLayout()
-                        if (r6 == 0) goto L_0x007a
-                        java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = r6.fragmentsStack
-                        boolean r8 = r8.isEmpty()
-                        if (r8 == 0) goto L_0x007a
-                        r6 = r7
-                    L_0x007a:
-                        if (r6 != 0) goto L_0x008b
-                        org.telegram.ui.ActionBar.ActionBarLayout r6 = r2.getRightActionBarLayout()
-                        if (r6 == 0) goto L_0x008b
-                        java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = r6.fragmentsStack
-                        boolean r8 = r8.isEmpty()
-                        if (r8 == 0) goto L_0x008b
-                    L_0x008a:
-                        r6 = r7
-                    L_0x008b:
-                        if (r6 != 0) goto L_0x0091
-                        org.telegram.ui.ActionBar.ActionBarLayout r6 = r2.getActionBarLayout()
-                    L_0x0091:
-                        if (r6 == 0) goto L_0x00e8
-                        java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r6.fragmentsStack
-                        boolean r2 = r2.isEmpty()
-                        if (r2 != 0) goto L_0x00a9
-                        java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r6.fragmentsStack
-                        int r6 = r2.size()
-                        int r6 = r6 - r5
-                        java.lang.Object r2 = r2.get(r6)
-                        r7 = r2
-                        org.telegram.ui.ActionBar.BaseFragment r7 = (org.telegram.ui.ActionBar.BaseFragment) r7
-                    L_0x00a9:
-                        if (r7 == 0) goto L_0x00e8
-                        java.util.ArrayList r2 = r7.getThemeDescriptions()
-                        if (r2 == 0) goto L_0x00e8
-                        org.telegram.ui.Components.ThemeEditorView r6 = org.telegram.ui.Components.ThemeEditorView.this
-                        org.telegram.ui.Components.ThemeEditorView$EditorAlert r7 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert
-                        org.telegram.ui.Components.ThemeEditorView r8 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.app.Activity r9 = r8.parentActivity
-                        r7.<init>(r8, r9, r2)
-                        org.telegram.ui.Components.ThemeEditorView.EditorAlert unused = r6.editorAlert = r7
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        org.telegram.ui.Components.ThemeEditorView$EditorAlert r2 = r2.editorAlert
-                        org.telegram.ui.Components.-$$Lambda$ThemeEditorView$1$2v3WZDTt6HobbCzO8Hyuvi4NqYo r6 = org.telegram.ui.Components.$$Lambda$ThemeEditorView$1$2v3WZDTt6HobbCzO8Hyuvi4NqYo.INSTANCE
-                        r2.setOnDismissListener(r6)
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        org.telegram.ui.Components.ThemeEditorView$EditorAlert r2 = r2.editorAlert
-                        org.telegram.ui.Components.-$$Lambda$ThemeEditorView$1$nyAeTH8X8G64R_GYzVABKX3oCog r6 = new org.telegram.ui.Components.-$$Lambda$ThemeEditorView$1$nyAeTH8X8G64R_GYzVABKX3oCog
-                        r6.<init>()
-                        r2.setOnDismissListener(r6)
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        org.telegram.ui.Components.ThemeEditorView$EditorAlert r2 = r2.editorAlert
-                        r2.show()
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        r2.hide()
-                    L_0x00e8:
-                        boolean r2 = r10.dragging
-                        if (r2 == 0) goto L_0x022c
-                        int r2 = r11.getAction()
-                        if (r2 != r3) goto L_0x021f
-                        float r11 = r10.startX
-                        float r11 = r0 - r11
-                        float r2 = r10.startY
-                        float r2 = r1 - r2
-                        org.telegram.ui.Components.ThemeEditorView r6 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r6 = r6.windowLayoutParams
-                        int r7 = r6.x
-                        float r7 = (float) r7
-                        float r7 = r7 + r11
-                        int r11 = (int) r7
-                        r6.x = r11
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
-                        int r6 = r11.y
-                        float r6 = (float) r6
-                        float r6 = r6 + r2
-                        int r2 = (int) r6
-                        r11.y = r2
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        int r11 = r11.editorWidth
-                        int r11 = r11 / r3
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
-                        int r2 = r2.x
-                        int r3 = -r11
-                        if (r2 >= r3) goto L_0x012f
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
-                        r2.x = r3
-                        goto L_0x015d
-                    L_0x012f:
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
-                        int r2 = r2.x
-                        android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
-                        int r3 = r3.x
-                        org.telegram.ui.Components.ThemeEditorView r6 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r6 = r6.windowLayoutParams
-                        int r6 = r6.width
-                        int r3 = r3 - r6
-                        int r3 = r3 + r11
-                        if (r2 <= r3) goto L_0x015d
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
-                        android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
-                        int r3 = r3.x
-                        org.telegram.ui.Components.ThemeEditorView r6 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r6 = r6.windowLayoutParams
-                        int r6 = r6.width
-                        int r3 = r3 - r6
-                        int r3 = r3 + r11
-                        r2.x = r3
-                    L_0x015d:
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
-                        int r2 = r2.x
-                        r3 = 1056964608(0x3var_, float:0.5)
-                        r6 = 1065353216(0x3var_, float:1.0)
-                        if (r2 >= 0) goto L_0x017a
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
-                        int r2 = r2.x
-                        float r2 = (float) r2
-                        float r11 = (float) r11
-                        float r2 = r2 / r11
-                        float r2 = r2 * r3
-                        float r6 = r6 + r2
-                        goto L_0x01ad
-                    L_0x017a:
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
-                        int r2 = r2.x
-                        android.graphics.Point r7 = org.telegram.messenger.AndroidUtilities.displaySize
-                        int r7 = r7.x
-                        org.telegram.ui.Components.ThemeEditorView r8 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r8 = r8.windowLayoutParams
-                        int r8 = r8.width
-                        int r7 = r7 - r8
-                        if (r2 <= r7) goto L_0x01ad
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
-                        int r2 = r2.x
-                        android.graphics.Point r7 = org.telegram.messenger.AndroidUtilities.displaySize
-                        int r7 = r7.x
-                        int r2 = r2 - r7
-                        org.telegram.ui.Components.ThemeEditorView r7 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r7 = r7.windowLayoutParams
-                        int r7 = r7.width
-                        int r2 = r2 + r7
-                        float r2 = (float) r2
-                        float r11 = (float) r11
-                        float r2 = r2 / r11
-                        float r2 = r2 * r3
-                        float r6 = r6 - r2
-                    L_0x01ad:
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.widget.FrameLayout r11 = r11.windowView
-                        float r11 = r11.getAlpha()
-                        int r11 = (r11 > r6 ? 1 : (r11 == r6 ? 0 : -1))
-                        if (r11 == 0) goto L_0x01c4
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.widget.FrameLayout r11 = r11.windowView
-                        r11.setAlpha(r6)
-                    L_0x01c4:
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
-                        int r11 = r11.y
-                        if (r11 >= 0) goto L_0x01d7
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
-                        r11.y = r4
-                        goto L_0x0205
-                    L_0x01d7:
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
-                        int r11 = r11.y
-                        android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
-                        int r2 = r2.y
-                        org.telegram.ui.Components.ThemeEditorView r3 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r3 = r3.windowLayoutParams
-                        int r3 = r3.height
-                        int r2 = r2 - r3
-                        int r2 = r2 + r4
-                        if (r11 <= r2) goto L_0x0205
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
-                        android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
-                        int r2 = r2.y
-                        org.telegram.ui.Components.ThemeEditorView r3 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r3 = r3.windowLayoutParams
-                        int r3 = r3.height
-                        int r2 = r2 - r3
-                        int r2 = r2 + r4
-                        r11.y = r2
-                    L_0x0205:
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager r11 = r11.windowManager
-                        org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.widget.FrameLayout r2 = r2.windowView
-                        org.telegram.ui.Components.ThemeEditorView r3 = org.telegram.ui.Components.ThemeEditorView.this
-                        android.view.WindowManager$LayoutParams r3 = r3.windowLayoutParams
-                        r11.updateViewLayout(r2, r3)
-                        r10.startX = r0
-                        r10.startY = r1
-                        goto L_0x022c
-                    L_0x021f:
-                        int r11 = r11.getAction()
-                        if (r11 != r5) goto L_0x022c
-                        r10.dragging = r4
-                        org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
-                        r11.animateToBoundsMaybe()
-                    L_0x022c:
-                        return r5
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.AnonymousClass1.onTouchEvent(android.view.MotionEvent):boolean");
-                }
-
-                /* access modifiers changed from: private */
-                /* renamed from: lambda$onTouchEvent$1 */
-                public /* synthetic */ void lambda$onTouchEvent$1$ThemeEditorView$1(DialogInterface dialogInterface) {
-                    EditorAlert unused = ThemeEditorView.this.editorAlert = null;
-                    ThemeEditorView.this.show();
-                }
-            };
-            this.windowManager = (WindowManager) activity.getSystemService("window");
-            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
-            this.preferences = sharedPreferences;
-            int i = sharedPreferences.getInt("sidex", 1);
-            int i2 = this.preferences.getInt("sidey", 0);
-            float f = this.preferences.getFloat("px", 0.0f);
-            float f2 = this.preferences.getFloat("py", 0.0f);
-            try {
-                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                this.windowLayoutParams = layoutParams;
-                int i3 = this.editorWidth;
-                layoutParams.width = i3;
-                layoutParams.height = this.editorHeight;
-                layoutParams.x = getSideCoord(true, i, f, i3);
-                this.windowLayoutParams.y = getSideCoord(false, i2, f2, this.editorHeight);
-                WindowManager.LayoutParams layoutParams2 = this.windowLayoutParams;
-                layoutParams2.format = -3;
-                layoutParams2.gravity = 51;
-                layoutParams2.type = 99;
-                layoutParams2.flags = 16777736;
-                this.windowManager.addView(this.windowView, layoutParams2);
-                this.wallpaperUpdater = new WallpaperUpdater(activity, (BaseFragment) null, new WallpaperUpdater.WallpaperUpdaterDelegate() {
-                    public void didSelectWallpaper(File file, Bitmap bitmap, boolean z) {
-                        Theme.setThemeWallpaper(ThemeEditorView.this.themeInfo, bitmap, file);
+            public ListAdapter(EditorAlert editorAlert, Context context2, ArrayList<ThemeDescription> arrayList) {
+                this.context = context2;
+                HashMap hashMap = new HashMap();
+                int size = arrayList.size();
+                for (int i = 0; i < size; i++) {
+                    ThemeDescription themeDescription = arrayList.get(i);
+                    String currentKey = themeDescription.getCurrentKey();
+                    ArrayList arrayList2 = (ArrayList) hashMap.get(currentKey);
+                    if (arrayList2 == null) {
+                        arrayList2 = new ArrayList();
+                        hashMap.put(currentKey, arrayList2);
+                        this.items.add(arrayList2);
                     }
+                    arrayList2.add(themeDescription);
+                }
+                if (Build.VERSION.SDK_INT >= 26 && !hashMap.containsKey("windowBackgroundGray")) {
+                    ArrayList arrayList3 = new ArrayList();
+                    arrayList3.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
+                    this.items.add(arrayList3);
+                }
+            }
 
-                    public void needOpenColorPicker() {
-                        for (int i = 0; i < ThemeEditorView.this.currentThemeDesription.size(); i++) {
-                            ThemeDescription themeDescription = (ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(i);
-                            themeDescription.startEditing();
-                            if (i == 0) {
-                                ThemeEditorView.this.editorAlert.colorPicker.setColor(themeDescription.getCurrentColor());
-                            }
-                        }
-                        ThemeEditorView.this.editorAlert.setColorPickerVisible(true);
+            public int getItemCount() {
+                if (this.items.isEmpty()) {
+                    return 0;
+                }
+                return this.items.size() + 1;
+            }
+
+            public ArrayList<ThemeDescription> getItem(int i) {
+                if (i < 0 || i >= this.items.size()) {
+                    return null;
+                }
+                return this.items.get(i);
+            }
+
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+                View view;
+                if (i != 0) {
+                    view = new View(this.context);
+                    view.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(56.0f)));
+                } else {
+                    view = new TextColorThemeCell(this.context);
+                    view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+                }
+                return new RecyclerListView.Holder(view);
+            }
+
+            public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+                if (viewHolder.getItemViewType() == 0) {
+                    int i2 = 0;
+                    ThemeDescription themeDescription = (ThemeDescription) this.items.get(i - 1).get(0);
+                    if (!themeDescription.getCurrentKey().equals("chat_wallpaper")) {
+                        i2 = themeDescription.getSetColor();
                     }
-                });
-                Instance = this;
-                this.parentActivity = activity;
-                showWithAnimation();
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
-            }
-        }
-
-        private void showWithAnimation() {
-            this.windowView.setBackgroundResource(NUM);
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_X, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_Y, new float[]{0.0f, 1.0f})});
-            animatorSet.setInterpolator(this.decelerateInterpolator);
-            animatorSet.setDuration(150);
-            animatorSet.start();
-        }
-
-        private static int getSideCoord(boolean z, int i, float f, int i2) {
-            int i3;
-            int i4;
-            if (z) {
-                i3 = AndroidUtilities.displaySize.x;
-            } else {
-                i3 = AndroidUtilities.displaySize.y - i2;
-                i2 = ActionBar.getCurrentActionBarHeight();
-            }
-            int i5 = i3 - i2;
-            if (i == 0) {
-                i4 = AndroidUtilities.dp(10.0f);
-            } else if (i == 1) {
-                i4 = i5 - AndroidUtilities.dp(10.0f);
-            } else {
-                i4 = Math.round(((float) (i5 - AndroidUtilities.dp(20.0f))) * f) + AndroidUtilities.dp(10.0f);
-            }
-            return !z ? i4 + ActionBar.getCurrentActionBarHeight() : i4;
-        }
-
-        /* access modifiers changed from: private */
-        public void hide() {
-            if (this.parentActivity != null) {
-                try {
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, View.ALPHA, new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_X, new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_Y, new float[]{1.0f, 0.0f})});
-                    animatorSet.setInterpolator(this.decelerateInterpolator);
-                    animatorSet.setDuration(150);
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animator) {
-                            if (ThemeEditorView.this.windowView != null) {
-                                ThemeEditorView.this.windowView.setBackground((Drawable) null);
-                                ThemeEditorView.this.windowManager.removeView(ThemeEditorView.this.windowView);
-                            }
-                        }
-                    });
-                    animatorSet.start();
-                    this.hidden = true;
-                } catch (Exception unused) {
+                    ((TextColorThemeCell) viewHolder.itemView).setTextAndColor(themeDescription.getTitle(), i2);
                 }
             }
-        }
-
-        /* access modifiers changed from: private */
-        public void show() {
-            if (this.parentActivity != null) {
-                try {
-                    this.windowManager.addView(this.windowView, this.windowLayoutParams);
-                    this.hidden = false;
-                    showWithAnimation();
-                } catch (Exception unused) {
-                }
-            }
-        }
-
-        public void close() {
-            try {
-                this.windowManager.removeView(this.windowView);
-            } catch (Exception unused) {
-            }
-            this.parentActivity = null;
-        }
-
-        public void onConfigurationChanged() {
-            int i = this.preferences.getInt("sidex", 1);
-            int i2 = this.preferences.getInt("sidey", 0);
-            float f = this.preferences.getFloat("px", 0.0f);
-            float f2 = this.preferences.getFloat("py", 0.0f);
-            this.windowLayoutParams.x = getSideCoord(true, i, f, this.editorWidth);
-            this.windowLayoutParams.y = getSideCoord(false, i2, f2, this.editorHeight);
-            try {
-                if (this.windowView.getParent() != null) {
-                    this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
-                }
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
-            }
-        }
-
-        public void onActivityResult(int i, int i2, Intent intent) {
-            WallpaperUpdater wallpaperUpdater2 = this.wallpaperUpdater;
-            if (wallpaperUpdater2 != null) {
-                wallpaperUpdater2.onActivityResult(i, i2, intent);
-            }
-        }
-
-        /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x010e  */
-        /* JADX WARNING: Removed duplicated region for block: B:45:0x0178  */
-        /* JADX WARNING: Removed duplicated region for block: B:53:? A[RETURN, SYNTHETIC] */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void animateToBoundsMaybe() {
-            /*
-                r16 = this;
-                r0 = r16
-                int r1 = r0.editorWidth
-                r2 = 1
-                r3 = 0
-                r4 = 0
-                int r1 = getSideCoord(r2, r3, r4, r1)
-                int r5 = r0.editorWidth
-                int r5 = getSideCoord(r2, r2, r4, r5)
-                int r6 = r0.editorHeight
-                int r6 = getSideCoord(r3, r3, r4, r6)
-                int r7 = r0.editorHeight
-                int r7 = getSideCoord(r3, r2, r4, r7)
-                android.content.SharedPreferences r8 = r0.preferences
-                android.content.SharedPreferences$Editor r8 = r8.edit()
-                r9 = 1101004800(0x41a00000, float:20.0)
-                int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-                android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
-                int r10 = r10.x
-                int r10 = r1 - r10
-                int r10 = java.lang.Math.abs(r10)
-                java.lang.String r12 = "sidex"
-                java.lang.String r13 = "x"
-                r14 = 1065353216(0x3var_, float:1.0)
-                if (r10 <= r9) goto L_0x00de
-                android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
-                int r10 = r10.x
-                if (r10 >= 0) goto L_0x004a
-                int r15 = r0.editorWidth
-                int r15 = -r15
-                int r15 = r15 / 4
-                if (r10 <= r15) goto L_0x004a
-                goto L_0x00de
-            L_0x004a:
-                int r10 = r5 - r10
-                int r10 = java.lang.Math.abs(r10)
-                if (r10 <= r9) goto L_0x00b1
-                android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
-                int r10 = r10.x
-                android.graphics.Point r15 = org.telegram.messenger.AndroidUtilities.displaySize
-                int r15 = r15.x
-                int r4 = r0.editorWidth
-                int r11 = r15 - r4
-                if (r10 <= r11) goto L_0x0068
-                int r4 = r4 / 4
-                int r4 = r4 * 3
-                int r15 = r15 - r4
-                if (r10 >= r15) goto L_0x0068
-                goto L_0x00b1
-            L_0x0068:
-                android.widget.FrameLayout r4 = r0.windowView
-                float r4 = r4.getAlpha()
-                int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
-                if (r4 == 0) goto L_0x009d
-                java.util.ArrayList r1 = new java.util.ArrayList
-                r1.<init>()
-                android.view.WindowManager$LayoutParams r4 = r0.windowLayoutParams
-                int r4 = r4.x
-                if (r4 >= 0) goto L_0x008c
-                int[] r4 = new int[r2]
-                int r5 = r0.editorWidth
-                int r5 = -r5
-                r4[r3] = r5
-                android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r0, r13, r4)
-                r1.add(r4)
-                goto L_0x009b
-            L_0x008c:
-                int[] r4 = new int[r2]
-                android.graphics.Point r5 = org.telegram.messenger.AndroidUtilities.displaySize
-                int r5 = r5.x
-                r4[r3] = r5
-                android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r0, r13, r4)
-                r1.add(r4)
-            L_0x009b:
-                r4 = 1
-                goto L_0x010c
-            L_0x009d:
-                android.view.WindowManager$LayoutParams r4 = r0.windowLayoutParams
-                int r4 = r4.x
-                int r4 = r4 - r1
-                float r4 = (float) r4
-                int r5 = r5 - r1
-                float r1 = (float) r5
-                float r4 = r4 / r1
-                java.lang.String r1 = "px"
-                r8.putFloat(r1, r4)
-                r1 = 2
-                r8.putInt(r12, r1)
-                r1 = 0
-                goto L_0x010b
-            L_0x00b1:
-                java.util.ArrayList r1 = new java.util.ArrayList
-                r1.<init>()
-                r8.putInt(r12, r2)
-                android.widget.FrameLayout r4 = r0.windowView
-                float r4 = r4.getAlpha()
-                int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
-                if (r4 == 0) goto L_0x00d2
-                android.widget.FrameLayout r4 = r0.windowView
-                android.util.Property r10 = android.view.View.ALPHA
-                float[] r11 = new float[r2]
-                r11[r3] = r14
-                android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofFloat(r4, r10, r11)
-                r1.add(r4)
-            L_0x00d2:
-                int[] r4 = new int[r2]
-                r4[r3] = r5
-                android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r0, r13, r4)
-                r1.add(r4)
-                goto L_0x010b
-            L_0x00de:
-                java.util.ArrayList r4 = new java.util.ArrayList
-                r4.<init>()
-                r8.putInt(r12, r3)
-                android.widget.FrameLayout r5 = r0.windowView
-                float r5 = r5.getAlpha()
-                int r5 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1))
-                if (r5 == 0) goto L_0x00ff
-                android.widget.FrameLayout r5 = r0.windowView
-                android.util.Property r10 = android.view.View.ALPHA
-                float[] r11 = new float[r2]
-                r11[r3] = r14
-                android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11)
-                r4.add(r5)
-            L_0x00ff:
-                int[] r5 = new int[r2]
-                r5[r3] = r1
-                android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofInt(r0, r13, r5)
-                r4.add(r1)
-                r1 = r4
-            L_0x010b:
-                r4 = 0
-            L_0x010c:
-                if (r4 != 0) goto L_0x0176
-                android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
-                int r5 = r5.y
-                int r5 = r6 - r5
-                int r5 = java.lang.Math.abs(r5)
-                java.lang.String r10 = "y"
-                java.lang.String r11 = "sidey"
-                if (r5 <= r9) goto L_0x015e
-                android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
-                int r5 = r5.y
-                int r12 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
-                if (r5 > r12) goto L_0x0129
-                goto L_0x015e
-            L_0x0129:
-                android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
-                int r5 = r5.y
-                int r5 = r7 - r5
-                int r5 = java.lang.Math.abs(r5)
-                if (r5 > r9) goto L_0x014b
-                if (r1 != 0) goto L_0x013c
-                java.util.ArrayList r1 = new java.util.ArrayList
-                r1.<init>()
-            L_0x013c:
-                r8.putInt(r11, r2)
-                int[] r5 = new int[r2]
-                r5[r3] = r7
-                android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5)
-                r1.add(r5)
-                goto L_0x0173
-            L_0x014b:
-                android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
-                int r5 = r5.y
-                int r5 = r5 - r6
-                float r5 = (float) r5
-                int r7 = r7 - r6
-                float r6 = (float) r7
-                float r5 = r5 / r6
-                java.lang.String r6 = "py"
-                r8.putFloat(r6, r5)
-                r5 = 2
-                r8.putInt(r11, r5)
-                goto L_0x0173
-            L_0x015e:
-                if (r1 != 0) goto L_0x0165
-                java.util.ArrayList r1 = new java.util.ArrayList
-                r1.<init>()
-            L_0x0165:
-                r8.putInt(r11, r3)
-                int[] r5 = new int[r2]
-                r5[r3] = r6
-                android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5)
-                r1.add(r5)
-            L_0x0173:
-                r8.commit()
-            L_0x0176:
-                if (r1 == 0) goto L_0x01b2
-                android.view.animation.DecelerateInterpolator r5 = r0.decelerateInterpolator
-                if (r5 != 0) goto L_0x0183
-                android.view.animation.DecelerateInterpolator r5 = new android.view.animation.DecelerateInterpolator
-                r5.<init>()
-                r0.decelerateInterpolator = r5
-            L_0x0183:
-                android.animation.AnimatorSet r5 = new android.animation.AnimatorSet
-                r5.<init>()
-                android.view.animation.DecelerateInterpolator r6 = r0.decelerateInterpolator
-                r5.setInterpolator(r6)
-                r6 = 150(0x96, double:7.4E-322)
-                r5.setDuration(r6)
-                if (r4 == 0) goto L_0x01ac
-                android.widget.FrameLayout r4 = r0.windowView
-                android.util.Property r6 = android.view.View.ALPHA
-                float[] r2 = new float[r2]
-                r7 = 0
-                r2[r3] = r7
-                android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r4, r6, r2)
-                r1.add(r2)
-                org.telegram.ui.Components.ThemeEditorView$4 r2 = new org.telegram.ui.Components.ThemeEditorView$4
-                r2.<init>()
-                r5.addListener(r2)
-            L_0x01ac:
-                r5.playTogether(r1)
-                r5.start()
-            L_0x01b2:
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.animateToBoundsMaybe():void");
-        }
-
-        @Keep
-        public int getX() {
-            return this.windowLayoutParams.x;
-        }
-
-        @Keep
-        public int getY() {
-            return this.windowLayoutParams.y;
-        }
-
-        @Keep
-        public void setX(int i) {
-            WindowManager.LayoutParams layoutParams = this.windowLayoutParams;
-            layoutParams.x = i;
-            this.windowManager.updateViewLayout(this.windowView, layoutParams);
-        }
-
-        @Keep
-        public void setY(int i) {
-            WindowManager.LayoutParams layoutParams = this.windowLayoutParams;
-            layoutParams.y = i;
-            this.windowManager.updateViewLayout(this.windowView, layoutParams);
         }
     }
+
+    public void show(Activity activity, Theme.ThemeInfo themeInfo2) {
+        if (Instance != null) {
+            Instance.destroy();
+        }
+        this.themeInfo = themeInfo2;
+        this.windowView = new FrameLayout(activity) {
+            private boolean dragging;
+            private float startX;
+            private float startY;
+
+            /* access modifiers changed from: private */
+            public static /* synthetic */ void lambda$onTouchEvent$0(DialogInterface dialogInterface) {
+            }
+
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                return true;
+            }
+
+            /* JADX WARNING: Code restructure failed: missing block: B:29:0x0088, code lost:
+                if (r6.fragmentsStack.isEmpty() != false) goto L_0x008a;
+             */
+            /* JADX WARNING: Removed duplicated region for block: B:32:0x008d  */
+            /* JADX WARNING: Removed duplicated region for block: B:34:0x0093  */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
+            public boolean onTouchEvent(android.view.MotionEvent r11) {
+                /*
+                    r10 = this;
+                    float r0 = r11.getRawX()
+                    float r1 = r11.getRawY()
+                    int r2 = r11.getAction()
+                    r3 = 2
+                    r4 = 0
+                    r5 = 1
+                    if (r2 != 0) goto L_0x0017
+                    r10.startX = r0
+                    r10.startY = r1
+                    goto L_0x00e8
+                L_0x0017:
+                    int r2 = r11.getAction()
+                    if (r2 != r3) goto L_0x004a
+                    boolean r2 = r10.dragging
+                    if (r2 != 0) goto L_0x004a
+                    float r2 = r10.startX
+                    float r2 = r2 - r0
+                    float r2 = java.lang.Math.abs(r2)
+                    r6 = 1050253722(0x3e99999a, float:0.3)
+                    float r7 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r6, r5)
+                    int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
+                    if (r2 >= 0) goto L_0x0042
+                    float r2 = r10.startY
+                    float r2 = r2 - r1
+                    float r2 = java.lang.Math.abs(r2)
+                    float r6 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r6, r4)
+                    int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
+                    if (r2 < 0) goto L_0x00e8
+                L_0x0042:
+                    r10.dragging = r5
+                    r10.startX = r0
+                    r10.startY = r1
+                    goto L_0x00e8
+                L_0x004a:
+                    int r2 = r11.getAction()
+                    if (r2 != r5) goto L_0x00e8
+                    boolean r2 = r10.dragging
+                    if (r2 != 0) goto L_0x00e8
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    org.telegram.ui.Components.ThemeEditorView$EditorAlert r2 = r2.editorAlert
+                    if (r2 != 0) goto L_0x00e8
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.app.Activity r2 = r2.parentActivity
+                    org.telegram.ui.LaunchActivity r2 = (org.telegram.ui.LaunchActivity) r2
+                    boolean r6 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    r7 = 0
+                    if (r6 == 0) goto L_0x008a
+                    org.telegram.ui.ActionBar.ActionBarLayout r6 = r2.getLayersActionBarLayout()
+                    if (r6 == 0) goto L_0x007a
+                    java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = r6.fragmentsStack
+                    boolean r8 = r8.isEmpty()
+                    if (r8 == 0) goto L_0x007a
+                    r6 = r7
+                L_0x007a:
+                    if (r6 != 0) goto L_0x008b
+                    org.telegram.ui.ActionBar.ActionBarLayout r6 = r2.getRightActionBarLayout()
+                    if (r6 == 0) goto L_0x008b
+                    java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = r6.fragmentsStack
+                    boolean r8 = r8.isEmpty()
+                    if (r8 == 0) goto L_0x008b
+                L_0x008a:
+                    r6 = r7
+                L_0x008b:
+                    if (r6 != 0) goto L_0x0091
+                    org.telegram.ui.ActionBar.ActionBarLayout r6 = r2.getActionBarLayout()
+                L_0x0091:
+                    if (r6 == 0) goto L_0x00e8
+                    java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r6.fragmentsStack
+                    boolean r2 = r2.isEmpty()
+                    if (r2 != 0) goto L_0x00a9
+                    java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r6.fragmentsStack
+                    int r6 = r2.size()
+                    int r6 = r6 - r5
+                    java.lang.Object r2 = r2.get(r6)
+                    r7 = r2
+                    org.telegram.ui.ActionBar.BaseFragment r7 = (org.telegram.ui.ActionBar.BaseFragment) r7
+                L_0x00a9:
+                    if (r7 == 0) goto L_0x00e8
+                    java.util.ArrayList r2 = r7.getThemeDescriptions()
+                    if (r2 == 0) goto L_0x00e8
+                    org.telegram.ui.Components.ThemeEditorView r6 = org.telegram.ui.Components.ThemeEditorView.this
+                    org.telegram.ui.Components.ThemeEditorView$EditorAlert r7 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert
+                    org.telegram.ui.Components.ThemeEditorView r8 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.app.Activity r9 = r8.parentActivity
+                    r7.<init>(r8, r9, r2)
+                    org.telegram.ui.Components.ThemeEditorView.EditorAlert unused = r6.editorAlert = r7
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    org.telegram.ui.Components.ThemeEditorView$EditorAlert r2 = r2.editorAlert
+                    org.telegram.ui.Components.ThemeEditorView$1$$ExternalSyntheticLambda1 r6 = org.telegram.ui.Components.ThemeEditorView$1$$ExternalSyntheticLambda1.INSTANCE
+                    r2.setOnDismissListener(r6)
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    org.telegram.ui.Components.ThemeEditorView$EditorAlert r2 = r2.editorAlert
+                    org.telegram.ui.Components.ThemeEditorView$1$$ExternalSyntheticLambda0 r6 = new org.telegram.ui.Components.ThemeEditorView$1$$ExternalSyntheticLambda0
+                    r6.<init>(r10)
+                    r2.setOnDismissListener(r6)
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    org.telegram.ui.Components.ThemeEditorView$EditorAlert r2 = r2.editorAlert
+                    r2.show()
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    r2.hide()
+                L_0x00e8:
+                    boolean r2 = r10.dragging
+                    if (r2 == 0) goto L_0x022c
+                    int r2 = r11.getAction()
+                    if (r2 != r3) goto L_0x021f
+                    float r11 = r10.startX
+                    float r11 = r0 - r11
+                    float r2 = r10.startY
+                    float r2 = r1 - r2
+                    org.telegram.ui.Components.ThemeEditorView r6 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r6 = r6.windowLayoutParams
+                    int r7 = r6.x
+                    float r7 = (float) r7
+                    float r7 = r7 + r11
+                    int r11 = (int) r7
+                    r6.x = r11
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
+                    int r6 = r11.y
+                    float r6 = (float) r6
+                    float r6 = r6 + r2
+                    int r2 = (int) r6
+                    r11.y = r2
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    int r11 = r11.editorWidth
+                    int r11 = r11 / r3
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
+                    int r2 = r2.x
+                    int r3 = -r11
+                    if (r2 >= r3) goto L_0x012f
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
+                    r2.x = r3
+                    goto L_0x015d
+                L_0x012f:
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
+                    int r2 = r2.x
+                    android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
+                    int r3 = r3.x
+                    org.telegram.ui.Components.ThemeEditorView r6 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r6 = r6.windowLayoutParams
+                    int r6 = r6.width
+                    int r3 = r3 - r6
+                    int r3 = r3 + r11
+                    if (r2 <= r3) goto L_0x015d
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
+                    android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
+                    int r3 = r3.x
+                    org.telegram.ui.Components.ThemeEditorView r6 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r6 = r6.windowLayoutParams
+                    int r6 = r6.width
+                    int r3 = r3 - r6
+                    int r3 = r3 + r11
+                    r2.x = r3
+                L_0x015d:
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
+                    int r2 = r2.x
+                    r3 = 1056964608(0x3var_, float:0.5)
+                    r6 = 1065353216(0x3var_, float:1.0)
+                    if (r2 >= 0) goto L_0x017a
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
+                    int r2 = r2.x
+                    float r2 = (float) r2
+                    float r11 = (float) r11
+                    float r2 = r2 / r11
+                    float r2 = r2 * r3
+                    float r6 = r6 + r2
+                    goto L_0x01ad
+                L_0x017a:
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
+                    int r2 = r2.x
+                    android.graphics.Point r7 = org.telegram.messenger.AndroidUtilities.displaySize
+                    int r7 = r7.x
+                    org.telegram.ui.Components.ThemeEditorView r8 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r8 = r8.windowLayoutParams
+                    int r8 = r8.width
+                    int r7 = r7 - r8
+                    if (r2 <= r7) goto L_0x01ad
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
+                    int r2 = r2.x
+                    android.graphics.Point r7 = org.telegram.messenger.AndroidUtilities.displaySize
+                    int r7 = r7.x
+                    int r2 = r2 - r7
+                    org.telegram.ui.Components.ThemeEditorView r7 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r7 = r7.windowLayoutParams
+                    int r7 = r7.width
+                    int r2 = r2 + r7
+                    float r2 = (float) r2
+                    float r11 = (float) r11
+                    float r2 = r2 / r11
+                    float r2 = r2 * r3
+                    float r6 = r6 - r2
+                L_0x01ad:
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.widget.FrameLayout r11 = r11.windowView
+                    float r11 = r11.getAlpha()
+                    int r11 = (r11 > r6 ? 1 : (r11 == r6 ? 0 : -1))
+                    if (r11 == 0) goto L_0x01c4
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.widget.FrameLayout r11 = r11.windowView
+                    r11.setAlpha(r6)
+                L_0x01c4:
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
+                    int r11 = r11.y
+                    if (r11 >= 0) goto L_0x01d7
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
+                    r11.y = r4
+                    goto L_0x0205
+                L_0x01d7:
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
+                    int r11 = r11.y
+                    android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
+                    int r2 = r2.y
+                    org.telegram.ui.Components.ThemeEditorView r3 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r3 = r3.windowLayoutParams
+                    int r3 = r3.height
+                    int r2 = r2 - r3
+                    int r2 = r2 + r4
+                    if (r11 <= r2) goto L_0x0205
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r11 = r11.windowLayoutParams
+                    android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
+                    int r2 = r2.y
+                    org.telegram.ui.Components.ThemeEditorView r3 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r3 = r3.windowLayoutParams
+                    int r3 = r3.height
+                    int r2 = r2 - r3
+                    int r2 = r2 + r4
+                    r11.y = r2
+                L_0x0205:
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager r11 = r11.windowManager
+                    org.telegram.ui.Components.ThemeEditorView r2 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.widget.FrameLayout r2 = r2.windowView
+                    org.telegram.ui.Components.ThemeEditorView r3 = org.telegram.ui.Components.ThemeEditorView.this
+                    android.view.WindowManager$LayoutParams r3 = r3.windowLayoutParams
+                    r11.updateViewLayout(r2, r3)
+                    r10.startX = r0
+                    r10.startY = r1
+                    goto L_0x022c
+                L_0x021f:
+                    int r11 = r11.getAction()
+                    if (r11 != r5) goto L_0x022c
+                    r10.dragging = r4
+                    org.telegram.ui.Components.ThemeEditorView r11 = org.telegram.ui.Components.ThemeEditorView.this
+                    r11.animateToBoundsMaybe()
+                L_0x022c:
+                    return r5
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.AnonymousClass1.onTouchEvent(android.view.MotionEvent):boolean");
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onTouchEvent$1(DialogInterface dialogInterface) {
+                EditorAlert unused = ThemeEditorView.this.editorAlert = null;
+                ThemeEditorView.this.show();
+            }
+        };
+        this.windowManager = (WindowManager) activity.getSystemService("window");
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
+        this.preferences = sharedPreferences;
+        int i = sharedPreferences.getInt("sidex", 1);
+        int i2 = this.preferences.getInt("sidey", 0);
+        float f = this.preferences.getFloat("px", 0.0f);
+        float f2 = this.preferences.getFloat("py", 0.0f);
+        try {
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            this.windowLayoutParams = layoutParams;
+            int i3 = this.editorWidth;
+            layoutParams.width = i3;
+            layoutParams.height = this.editorHeight;
+            layoutParams.x = getSideCoord(true, i, f, i3);
+            this.windowLayoutParams.y = getSideCoord(false, i2, f2, this.editorHeight);
+            WindowManager.LayoutParams layoutParams2 = this.windowLayoutParams;
+            layoutParams2.format = -3;
+            layoutParams2.gravity = 51;
+            layoutParams2.type = 99;
+            layoutParams2.flags = 16777736;
+            this.windowManager.addView(this.windowView, layoutParams2);
+            this.wallpaperUpdater = new WallpaperUpdater(activity, (BaseFragment) null, new WallpaperUpdater.WallpaperUpdaterDelegate() {
+                public void didSelectWallpaper(File file, Bitmap bitmap, boolean z) {
+                    Theme.setThemeWallpaper(ThemeEditorView.this.themeInfo, bitmap, file);
+                }
+
+                public void needOpenColorPicker() {
+                    for (int i = 0; i < ThemeEditorView.this.currentThemeDesription.size(); i++) {
+                        ThemeDescription themeDescription = (ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(i);
+                        themeDescription.startEditing();
+                        if (i == 0) {
+                            ThemeEditorView.this.editorAlert.colorPicker.setColor(themeDescription.getCurrentColor());
+                        }
+                    }
+                    ThemeEditorView.this.editorAlert.setColorPickerVisible(true);
+                }
+            });
+            Instance = this;
+            this.parentActivity = activity;
+            showWithAnimation();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
+    private void showWithAnimation() {
+        this.windowView.setBackgroundResource(NUM);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_X, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_Y, new float[]{0.0f, 1.0f})});
+        animatorSet.setInterpolator(this.decelerateInterpolator);
+        animatorSet.setDuration(150);
+        animatorSet.start();
+    }
+
+    private static int getSideCoord(boolean z, int i, float f, int i2) {
+        int i3;
+        int i4;
+        if (z) {
+            i3 = AndroidUtilities.displaySize.x;
+        } else {
+            i3 = AndroidUtilities.displaySize.y - i2;
+            i2 = ActionBar.getCurrentActionBarHeight();
+        }
+        int i5 = i3 - i2;
+        if (i == 0) {
+            i4 = AndroidUtilities.dp(10.0f);
+        } else if (i == 1) {
+            i4 = i5 - AndroidUtilities.dp(10.0f);
+        } else {
+            i4 = Math.round(((float) (i5 - AndroidUtilities.dp(20.0f))) * f) + AndroidUtilities.dp(10.0f);
+        }
+        return !z ? i4 + ActionBar.getCurrentActionBarHeight() : i4;
+    }
+
+    /* access modifiers changed from: private */
+    public void hide() {
+        if (this.parentActivity != null) {
+            try {
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, View.ALPHA, new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_X, new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_Y, new float[]{1.0f, 0.0f})});
+                animatorSet.setInterpolator(this.decelerateInterpolator);
+                animatorSet.setDuration(150);
+                animatorSet.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        if (ThemeEditorView.this.windowView != null) {
+                            ThemeEditorView.this.windowView.setBackground((Drawable) null);
+                            ThemeEditorView.this.windowManager.removeView(ThemeEditorView.this.windowView);
+                        }
+                    }
+                });
+                animatorSet.start();
+            } catch (Exception unused) {
+            }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public void show() {
+        if (this.parentActivity != null) {
+            try {
+                this.windowManager.addView(this.windowView, this.windowLayoutParams);
+                showWithAnimation();
+            } catch (Exception unused) {
+            }
+        }
+    }
+
+    public void close() {
+        try {
+            this.windowManager.removeView(this.windowView);
+        } catch (Exception unused) {
+        }
+        this.parentActivity = null;
+    }
+
+    public void onConfigurationChanged() {
+        int i = this.preferences.getInt("sidex", 1);
+        int i2 = this.preferences.getInt("sidey", 0);
+        float f = this.preferences.getFloat("px", 0.0f);
+        float f2 = this.preferences.getFloat("py", 0.0f);
+        this.windowLayoutParams.x = getSideCoord(true, i, f, this.editorWidth);
+        this.windowLayoutParams.y = getSideCoord(false, i2, f2, this.editorHeight);
+        try {
+            if (this.windowView.getParent() != null) {
+                this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
+    public void onActivityResult(int i, int i2, Intent intent) {
+        WallpaperUpdater wallpaperUpdater2 = this.wallpaperUpdater;
+        if (wallpaperUpdater2 != null) {
+            wallpaperUpdater2.onActivityResult(i, i2, intent);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x010e  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x0178  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:? A[RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void animateToBoundsMaybe() {
+        /*
+            r16 = this;
+            r0 = r16
+            int r1 = r0.editorWidth
+            r2 = 1
+            r3 = 0
+            r4 = 0
+            int r1 = getSideCoord(r2, r3, r4, r1)
+            int r5 = r0.editorWidth
+            int r5 = getSideCoord(r2, r2, r4, r5)
+            int r6 = r0.editorHeight
+            int r6 = getSideCoord(r3, r3, r4, r6)
+            int r7 = r0.editorHeight
+            int r7 = getSideCoord(r3, r2, r4, r7)
+            android.content.SharedPreferences r8 = r0.preferences
+            android.content.SharedPreferences$Editor r8 = r8.edit()
+            r9 = 1101004800(0x41a00000, float:20.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
+            int r10 = r10.x
+            int r10 = r1 - r10
+            int r10 = java.lang.Math.abs(r10)
+            java.lang.String r12 = "sidex"
+            java.lang.String r13 = "x"
+            r14 = 1065353216(0x3var_, float:1.0)
+            if (r10 <= r9) goto L_0x00de
+            android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
+            int r10 = r10.x
+            if (r10 >= 0) goto L_0x004a
+            int r15 = r0.editorWidth
+            int r15 = -r15
+            int r15 = r15 / 4
+            if (r10 <= r15) goto L_0x004a
+            goto L_0x00de
+        L_0x004a:
+            int r10 = r5 - r10
+            int r10 = java.lang.Math.abs(r10)
+            if (r10 <= r9) goto L_0x00b1
+            android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
+            int r10 = r10.x
+            android.graphics.Point r15 = org.telegram.messenger.AndroidUtilities.displaySize
+            int r15 = r15.x
+            int r4 = r0.editorWidth
+            int r11 = r15 - r4
+            if (r10 <= r11) goto L_0x0068
+            int r4 = r4 / 4
+            int r4 = r4 * 3
+            int r15 = r15 - r4
+            if (r10 >= r15) goto L_0x0068
+            goto L_0x00b1
+        L_0x0068:
+            android.widget.FrameLayout r4 = r0.windowView
+            float r4 = r4.getAlpha()
+            int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
+            if (r4 == 0) goto L_0x009d
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            android.view.WindowManager$LayoutParams r4 = r0.windowLayoutParams
+            int r4 = r4.x
+            if (r4 >= 0) goto L_0x008c
+            int[] r4 = new int[r2]
+            int r5 = r0.editorWidth
+            int r5 = -r5
+            r4[r3] = r5
+            android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r0, r13, r4)
+            r1.add(r4)
+            goto L_0x009b
+        L_0x008c:
+            int[] r4 = new int[r2]
+            android.graphics.Point r5 = org.telegram.messenger.AndroidUtilities.displaySize
+            int r5 = r5.x
+            r4[r3] = r5
+            android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r0, r13, r4)
+            r1.add(r4)
+        L_0x009b:
+            r4 = 1
+            goto L_0x010c
+        L_0x009d:
+            android.view.WindowManager$LayoutParams r4 = r0.windowLayoutParams
+            int r4 = r4.x
+            int r4 = r4 - r1
+            float r4 = (float) r4
+            int r5 = r5 - r1
+            float r1 = (float) r5
+            float r4 = r4 / r1
+            java.lang.String r1 = "px"
+            r8.putFloat(r1, r4)
+            r1 = 2
+            r8.putInt(r12, r1)
+            r1 = 0
+            goto L_0x010b
+        L_0x00b1:
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r8.putInt(r12, r2)
+            android.widget.FrameLayout r4 = r0.windowView
+            float r4 = r4.getAlpha()
+            int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
+            if (r4 == 0) goto L_0x00d2
+            android.widget.FrameLayout r4 = r0.windowView
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r2]
+            r11[r3] = r14
+            android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofFloat(r4, r10, r11)
+            r1.add(r4)
+        L_0x00d2:
+            int[] r4 = new int[r2]
+            r4[r3] = r5
+            android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r0, r13, r4)
+            r1.add(r4)
+            goto L_0x010b
+        L_0x00de:
+            java.util.ArrayList r4 = new java.util.ArrayList
+            r4.<init>()
+            r8.putInt(r12, r3)
+            android.widget.FrameLayout r5 = r0.windowView
+            float r5 = r5.getAlpha()
+            int r5 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1))
+            if (r5 == 0) goto L_0x00ff
+            android.widget.FrameLayout r5 = r0.windowView
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r2]
+            r11[r3] = r14
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11)
+            r4.add(r5)
+        L_0x00ff:
+            int[] r5 = new int[r2]
+            r5[r3] = r1
+            android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofInt(r0, r13, r5)
+            r4.add(r1)
+            r1 = r4
+        L_0x010b:
+            r4 = 0
+        L_0x010c:
+            if (r4 != 0) goto L_0x0176
+            android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
+            int r5 = r5.y
+            int r5 = r6 - r5
+            int r5 = java.lang.Math.abs(r5)
+            java.lang.String r10 = "y"
+            java.lang.String r11 = "sidey"
+            if (r5 <= r9) goto L_0x015e
+            android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
+            int r5 = r5.y
+            int r12 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
+            if (r5 > r12) goto L_0x0129
+            goto L_0x015e
+        L_0x0129:
+            android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
+            int r5 = r5.y
+            int r5 = r7 - r5
+            int r5 = java.lang.Math.abs(r5)
+            if (r5 > r9) goto L_0x014b
+            if (r1 != 0) goto L_0x013c
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+        L_0x013c:
+            r8.putInt(r11, r2)
+            int[] r5 = new int[r2]
+            r5[r3] = r7
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5)
+            r1.add(r5)
+            goto L_0x0173
+        L_0x014b:
+            android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
+            int r5 = r5.y
+            int r5 = r5 - r6
+            float r5 = (float) r5
+            int r7 = r7 - r6
+            float r6 = (float) r7
+            float r5 = r5 / r6
+            java.lang.String r6 = "py"
+            r8.putFloat(r6, r5)
+            r5 = 2
+            r8.putInt(r11, r5)
+            goto L_0x0173
+        L_0x015e:
+            if (r1 != 0) goto L_0x0165
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+        L_0x0165:
+            r8.putInt(r11, r3)
+            int[] r5 = new int[r2]
+            r5[r3] = r6
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5)
+            r1.add(r5)
+        L_0x0173:
+            r8.commit()
+        L_0x0176:
+            if (r1 == 0) goto L_0x01b2
+            android.view.animation.DecelerateInterpolator r5 = r0.decelerateInterpolator
+            if (r5 != 0) goto L_0x0183
+            android.view.animation.DecelerateInterpolator r5 = new android.view.animation.DecelerateInterpolator
+            r5.<init>()
+            r0.decelerateInterpolator = r5
+        L_0x0183:
+            android.animation.AnimatorSet r5 = new android.animation.AnimatorSet
+            r5.<init>()
+            android.view.animation.DecelerateInterpolator r6 = r0.decelerateInterpolator
+            r5.setInterpolator(r6)
+            r6 = 150(0x96, double:7.4E-322)
+            r5.setDuration(r6)
+            if (r4 == 0) goto L_0x01ac
+            android.widget.FrameLayout r4 = r0.windowView
+            android.util.Property r6 = android.view.View.ALPHA
+            float[] r2 = new float[r2]
+            r7 = 0
+            r2[r3] = r7
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r4, r6, r2)
+            r1.add(r2)
+            org.telegram.ui.Components.ThemeEditorView$4 r2 = new org.telegram.ui.Components.ThemeEditorView$4
+            r2.<init>()
+            r5.addListener(r2)
+        L_0x01ac:
+            r5.playTogether(r1)
+            r5.start()
+        L_0x01b2:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.animateToBoundsMaybe():void");
+    }
+
+    @Keep
+    public int getX() {
+        return this.windowLayoutParams.x;
+    }
+
+    @Keep
+    public int getY() {
+        return this.windowLayoutParams.y;
+    }
+
+    @Keep
+    public void setX(int i) {
+        WindowManager.LayoutParams layoutParams = this.windowLayoutParams;
+        layoutParams.x = i;
+        this.windowManager.updateViewLayout(this.windowView, layoutParams);
+    }
+
+    @Keep
+    public void setY(int i) {
+        WindowManager.LayoutParams layoutParams = this.windowLayoutParams;
+        layoutParams.y = i;
+        this.windowManager.updateViewLayout(this.windowView, layoutParams);
+    }
+}

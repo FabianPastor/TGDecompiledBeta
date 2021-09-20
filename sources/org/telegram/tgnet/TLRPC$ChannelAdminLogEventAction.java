@@ -7,9 +7,6 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case -1895328189:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionStopPoll();
                 break;
-            case -1569748965:
-                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeLinkedChat();
-                break;
             case -1312568665:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeStickerSet();
                 break;
@@ -45,6 +42,9 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
                 break;
             case -26672755:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeTheme();
+                break;
+            case 84703944:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeLinkedChat();
                 break;
             case 241923758:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeLocation();

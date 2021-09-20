@@ -12,34 +12,17 @@ import org.telegram.ui.Components.RLottieImageView;
 
 public class GroupCallStatusIcon {
     Callback callback;
-    private Runnable checkRaiseRunnable = new Runnable() {
-        public final void run() {
-            GroupCallStatusIcon.this.lambda$new$3$GroupCallStatusIcon();
-        }
-    };
+    private Runnable checkRaiseRunnable = new GroupCallStatusIcon$$ExternalSyntheticLambda2(this);
     RLottieImageView iconView;
     boolean isSpeaking;
-    boolean lastMuted;
     boolean lastRaisedHand;
     RLottieDrawable micDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), true, (int[]) null);
     private boolean mutedByMe;
     TLRPC$TL_groupCallParticipant participant;
-    private Runnable raiseHandCallback = new Runnable() {
-        public final void run() {
-            GroupCallStatusIcon.this.lambda$new$1$GroupCallStatusIcon();
-        }
-    };
-    private Runnable shakeHandCallback = new Runnable() {
-        public final void run() {
-            GroupCallStatusIcon.this.lambda$new$0$GroupCallStatusIcon();
-        }
-    };
+    private Runnable raiseHandCallback = new GroupCallStatusIcon$$ExternalSyntheticLambda0(this);
+    private Runnable shakeHandCallback = new GroupCallStatusIcon$$ExternalSyntheticLambda3(this);
     RLottieDrawable shakeHandDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(15.0f), AndroidUtilities.dp(15.0f), true, (int[]) null);
-    private Runnable updateRunnable = new Runnable() {
-        public final void run() {
-            GroupCallStatusIcon.this.lambda$new$2$GroupCallStatusIcon();
-        }
-    };
+    private Runnable updateRunnable = new GroupCallStatusIcon$$ExternalSyntheticLambda1(this);
     boolean updateRunnableScheduled;
 
     public interface Callback {
@@ -47,8 +30,7 @@ public class GroupCallStatusIcon {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$GroupCallStatusIcon() {
+    public /* synthetic */ void lambda$new$0() {
         this.shakeHandDrawable.setOnFinishCallback((Runnable) null, 0);
         this.micDrawable.setOnFinishCallback((Runnable) null, 0);
         RLottieImageView rLottieImageView = this.iconView;
@@ -58,8 +40,7 @@ public class GroupCallStatusIcon {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$GroupCallStatusIcon() {
+    public /* synthetic */ void lambda$new$1() {
         int nextInt = Utilities.random.nextInt(100);
         int i = 540;
         int i2 = 420;
@@ -87,8 +68,7 @@ public class GroupCallStatusIcon {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$GroupCallStatusIcon() {
+    public /* synthetic */ void lambda$new$2() {
         this.isSpeaking = false;
         Callback callback2 = this.callback;
         if (callback2 != null) {
@@ -115,8 +95,7 @@ public class GroupCallStatusIcon {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$GroupCallStatusIcon() {
+    public /* synthetic */ void lambda$new$3() {
         updateIcon(true);
     }
 
@@ -186,7 +165,6 @@ public class GroupCallStatusIcon {
                 this.iconView.invalidate();
             }
             this.iconView.setAnimation(this.micDrawable);
-            this.lastMuted = z6;
             this.lastRaisedHand = z7;
             if (this.mutedByMe != z5) {
                 this.mutedByMe = z5;

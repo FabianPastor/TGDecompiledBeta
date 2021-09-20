@@ -33,7 +33,6 @@ import org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.Components.CircularViewPager;
-import org.telegram.ui.Components.ProfileGalleryView;
 import org.telegram.ui.PinchToZoomHelper;
 import org.telegram.ui.ProfileActivity;
 
@@ -265,7 +264,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.reloadDialogPhotos);
-        MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) j, 80, 0, true, i);
+        MessagesController.getInstance(this.currentAccount).loadDialogPhotos(j, 80, 0, true, i);
     }
 
     public void onDestroy() {
@@ -432,10 +431,10 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         if (imageLocation3 == null || imageLocation3.location.local_id != imageLocation.location.local_id) {
             if (!this.imagesLocations.isEmpty()) {
                 this.prevImageLocation = imageLocation;
-                MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) this.dialogId, 80, 0, true, this.parentClassGuid);
+                MessagesController.getInstance(this.currentAccount).loadDialogPhotos(this.dialogId, 80, 0, true, this.parentClassGuid);
                 return true;
             }
-            MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) this.dialogId, 80, 0, true, this.parentClassGuid);
+            MessagesController.getInstance(this.currentAccount).loadDialogPhotos(this.dialogId, 80, 0, true, this.parentClassGuid);
         }
         if (!this.imagesLocations.isEmpty()) {
             return false;
@@ -688,8 +687,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:53:0x0182, code lost:
-        if (r3 != false) goto L_0x0205;
+    /* JADX WARNING: Code restructure failed: missing block: B:53:0x0187, code lost:
+        if (r4 != false) goto L_0x020b;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void didReceivedNotification(int r17, int r18, java.lang.Object... r19) {
@@ -701,22 +700,21 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             r3 = 2
             r4 = 1
             r5 = 0
-            if (r1 != r2) goto L_0x0260
+            if (r1 != r2) goto L_0x0264
             r1 = 3
             r1 = r19[r1]
             java.lang.Integer r1 = (java.lang.Integer) r1
             int r1 = r1.intValue()
             r2 = r19[r5]
-            java.lang.Integer r2 = (java.lang.Integer) r2
-            int r7 = r2.intValue()
-            long r8 = (long) r7
-            long r10 = r0.dialogId
-            int r2 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r2 != 0) goto L_0x030d
+            java.lang.Long r2 = (java.lang.Long) r2
+            long r7 = r2.longValue()
+            long r9 = r0.dialogId
+            int r2 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
+            if (r2 != 0) goto L_0x0313
             int r2 = r0.parentClassGuid
-            if (r2 != r1) goto L_0x030d
+            if (r2 != r1) goto L_0x0313
             org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter r1 = r0.adapter
-            if (r1 == 0) goto L_0x030d
+            if (r1 == 0) goto L_0x0313
             r1 = r19[r3]
             java.lang.Boolean r1 = (java.lang.Boolean) r1
             boolean r1 = r1.booleanValue()
@@ -739,314 +737,320 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             r3.clear()
             java.util.ArrayList<java.lang.Float> r3 = r0.imagesUploadProgress
             r3.clear()
-            r3 = 0
-            if (r7 >= 0) goto L_0x00fb
-            int r6 = r0.currentAccount
-            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
-            int r8 = -r7
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-            org.telegram.tgnet.TLRPC$Chat r6 = r6.getChat(r8)
-            org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForUserOrChat(r6, r5)
-            if (r8 == 0) goto L_0x00fc
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r9 = r0.imagesLocations
-            r9.add(r8)
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r9 = r0.thumbsLocations
-            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForUserOrChat(r6, r4)
-            r9.add(r6)
-            java.util.ArrayList<java.lang.String> r6 = r0.thumbsFileNames
-            r6.add(r3)
-            org.telegram.tgnet.TLRPC$ChatFull r6 = r0.chatInfo
-            if (r6 == 0) goto L_0x00dc
-            org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r9 = r8.location
-            org.telegram.tgnet.TLRPC$Photo r6 = r6.chat_photo
-            boolean r6 = org.telegram.messenger.FileLoader.isSamePhoto((org.telegram.tgnet.TLRPC$FileLocation) r9, (org.telegram.tgnet.TLRPC$Photo) r6)
-            if (r6 == 0) goto L_0x00dc
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r6 = r0.photos
-            org.telegram.tgnet.TLRPC$ChatFull r9 = r0.chatInfo
-            org.telegram.tgnet.TLRPC$Photo r9 = r9.chat_photo
-            r6.add(r9)
-            org.telegram.tgnet.TLRPC$ChatFull r6 = r0.chatInfo
-            org.telegram.tgnet.TLRPC$Photo r6 = r6.chat_photo
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r6 = r6.video_sizes
-            boolean r6 = r6.isEmpty()
-            if (r6 != 0) goto L_0x00d1
-            org.telegram.tgnet.TLRPC$ChatFull r6 = r0.chatInfo
-            org.telegram.tgnet.TLRPC$Photo r6 = r6.chat_photo
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r6 = r6.video_sizes
-            java.lang.Object r6 = r6.get(r5)
-            org.telegram.tgnet.TLRPC$VideoSize r6 = (org.telegram.tgnet.TLRPC$VideoSize) r6
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r9 = r0.videoLocations
+            boolean r3 = org.telegram.messenger.DialogObject.isChatDialog(r7)
+            r6 = 0
+            if (r3 == 0) goto L_0x00fe
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            long r9 = -r7
+            java.lang.Long r9 = java.lang.Long.valueOf(r9)
+            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r9)
+            org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForUserOrChat(r3, r5)
+            if (r9 == 0) goto L_0x00ff
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r10 = r0.imagesLocations
+            r10.add(r9)
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r10 = r0.thumbsLocations
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForUserOrChat(r3, r4)
+            r10.add(r3)
+            java.util.ArrayList<java.lang.String> r3 = r0.thumbsFileNames
+            r3.add(r6)
+            org.telegram.tgnet.TLRPC$ChatFull r3 = r0.chatInfo
+            if (r3 == 0) goto L_0x00df
+            org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r10 = r9.location
+            org.telegram.tgnet.TLRPC$Photo r3 = r3.chat_photo
+            boolean r3 = org.telegram.messenger.FileLoader.isSamePhoto((org.telegram.tgnet.TLRPC$FileLocation) r10, (org.telegram.tgnet.TLRPC$Photo) r3)
+            if (r3 == 0) goto L_0x00df
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r3 = r0.photos
             org.telegram.tgnet.TLRPC$ChatFull r10 = r0.chatInfo
             org.telegram.tgnet.TLRPC$Photo r10 = r10.chat_photo
-            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r6, (org.telegram.tgnet.TLRPC$Photo) r10)
-            r9.add(r10)
-            java.util.ArrayList<java.lang.String> r9 = r0.videoFileNames
-            java.lang.String r6 = org.telegram.messenger.FileLoader.getAttachFileName(r6)
-            r9.add(r6)
-            goto L_0x00eb
-        L_0x00d1:
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r6 = r0.videoLocations
-            r6.add(r3)
-            java.util.ArrayList<java.lang.String> r6 = r0.videoFileNames
-            r6.add(r3)
-            goto L_0x00eb
-        L_0x00dc:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r6 = r0.photos
-            r6.add(r3)
-            java.util.ArrayList<java.lang.String> r6 = r0.videoFileNames
-            r6.add(r3)
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r6 = r0.videoLocations
-            r6.add(r3)
-        L_0x00eb:
-            java.util.ArrayList<java.lang.Integer> r6 = r0.imagesLocationsSizes
-            r9 = -1
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-            r6.add(r9)
-            java.util.ArrayList<java.lang.Float> r6 = r0.imagesUploadProgress
-            r6.add(r3)
-            goto L_0x00fc
-        L_0x00fb:
-            r8 = r3
-        L_0x00fc:
-            r6 = 0
-        L_0x00fd:
-            int r9 = r2.size()
-            if (r6 >= r9) goto L_0x020e
-            java.lang.Object r9 = r2.get(r6)
-            org.telegram.tgnet.TLRPC$Photo r9 = (org.telegram.tgnet.TLRPC$Photo) r9
-            if (r9 == 0) goto L_0x0207
-            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_photoEmpty
-            if (r10 != 0) goto L_0x0207
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r10 = r9.sizes
-            if (r10 != 0) goto L_0x0115
-            goto L_0x0207
-        L_0x0115:
-            r11 = 50
-            org.telegram.tgnet.TLRPC$PhotoSize r10 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r10, r11)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r11 = r9.sizes
-            int r11 = r11.size()
-            r12 = 0
-        L_0x0122:
-            if (r12 >= r11) goto L_0x0135
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r13 = r9.sizes
-            java.lang.Object r13 = r13.get(r12)
-            org.telegram.tgnet.TLRPC$PhotoSize r13 = (org.telegram.tgnet.TLRPC$PhotoSize) r13
-            boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
-            if (r14 == 0) goto L_0x0132
-            r10 = r13
-            goto L_0x0135
-        L_0x0132:
-            int r12 = r12 + 1
-            goto L_0x0122
-        L_0x0135:
-            if (r8 == 0) goto L_0x0186
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r11 = r9.sizes
-            int r11 = r11.size()
-            r12 = 0
-        L_0x013e:
-            if (r12 >= r11) goto L_0x0181
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r13 = r9.sizes
-            java.lang.Object r13 = r13.get(r12)
-            org.telegram.tgnet.TLRPC$PhotoSize r13 = (org.telegram.tgnet.TLRPC$PhotoSize) r13
-            org.telegram.tgnet.TLRPC$FileLocation r13 = r13.location
-            if (r13 == 0) goto L_0x017c
-            int r14 = r13.local_id
-            org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r15 = r8.location
-            int r4 = r15.local_id
-            if (r14 != r4) goto L_0x017c
-            long r13 = r13.volume_id
-            long r3 = r15.volume_id
-            int r15 = (r13 > r3 ? 1 : (r13 == r3 ? 0 : -1))
-            if (r15 != 0) goto L_0x017c
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r3 = r0.photos
-            r3.set(r5, r9)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r9.video_sizes
+            r3.add(r10)
+            org.telegram.tgnet.TLRPC$ChatFull r3 = r0.chatInfo
+            org.telegram.tgnet.TLRPC$Photo r3 = r3.chat_photo
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r3.video_sizes
             boolean r3 = r3.isEmpty()
-            if (r3 != 0) goto L_0x017a
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.videoLocations
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r9.video_sizes
-            java.lang.Object r4 = r4.get(r5)
-            org.telegram.tgnet.TLRPC$VideoSize r4 = (org.telegram.tgnet.TLRPC$VideoSize) r4
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r9)
-            r3.set(r5, r4)
-        L_0x017a:
-            r3 = 1
-            goto L_0x0182
-        L_0x017c:
-            int r12 = r12 + 1
-            r3 = 0
-            r4 = 1
-            goto L_0x013e
-        L_0x0181:
-            r3 = 0
-        L_0x0182:
-            if (r3 == 0) goto L_0x0186
-            goto L_0x0205
-        L_0x0186:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r9.sizes
-            r4 = 640(0x280, float:8.97E-43)
-            org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r4)
-            if (r3 == 0) goto L_0x0205
-            int r4 = r9.dc_id
-            if (r4 == 0) goto L_0x019c
-            org.telegram.tgnet.TLRPC$FileLocation r11 = r3.location
-            r11.dc_id = r4
-            byte[] r4 = r9.file_reference
-            r11.file_reference = r4
-        L_0x019c:
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r3, (org.telegram.tgnet.TLRPC$Photo) r9)
-            if (r4 == 0) goto L_0x0205
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r11 = r0.imagesLocations
-            r11.add(r4)
-            java.util.ArrayList<java.lang.String> r4 = r0.thumbsFileNames
-            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
-            if (r11 == 0) goto L_0x01af
-            r11 = r3
-            goto L_0x01b0
-        L_0x01af:
-            r11 = r10
-        L_0x01b0:
-            java.lang.String r11 = org.telegram.messenger.FileLoader.getAttachFileName(r11)
-            r4.add(r11)
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.thumbsLocations
-            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r10, (org.telegram.tgnet.TLRPC$Photo) r9)
-            r4.add(r10)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r9.video_sizes
-            boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x01e4
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r9.video_sizes
-            java.lang.Object r4 = r4.get(r5)
-            org.telegram.tgnet.TLRPC$VideoSize r4 = (org.telegram.tgnet.TLRPC$VideoSize) r4
+            if (r3 != 0) goto L_0x00d4
+            org.telegram.tgnet.TLRPC$ChatFull r3 = r0.chatInfo
+            org.telegram.tgnet.TLRPC$Photo r3 = r3.chat_photo
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r3.video_sizes
+            java.lang.Object r3 = r3.get(r5)
+            org.telegram.tgnet.TLRPC$VideoSize r3 = (org.telegram.tgnet.TLRPC$VideoSize) r3
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r10 = r0.videoLocations
-            org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r9)
+            org.telegram.tgnet.TLRPC$ChatFull r11 = r0.chatInfo
+            org.telegram.tgnet.TLRPC$Photo r11 = r11.chat_photo
+            org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r3, (org.telegram.tgnet.TLRPC$Photo) r11)
             r10.add(r11)
             java.util.ArrayList<java.lang.String> r10 = r0.videoFileNames
-            java.lang.String r4 = org.telegram.messenger.FileLoader.getAttachFileName(r4)
-            r10.add(r4)
-            r10 = 0
-            goto L_0x01ef
-        L_0x01e4:
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.videoLocations
-            r10 = 0
-            r4.add(r10)
-            java.util.ArrayList<java.lang.String> r4 = r0.videoFileNames
-            r4.add(r10)
-        L_0x01ef:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r4 = r0.photos
-            r4.add(r9)
-            java.util.ArrayList<java.lang.Integer> r4 = r0.imagesLocationsSizes
-            int r3 = r3.size
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-            r4.add(r3)
-            java.util.ArrayList<java.lang.Float> r3 = r0.imagesUploadProgress
+            java.lang.String r3 = org.telegram.messenger.FileLoader.getAttachFileName(r3)
+            r10.add(r3)
+            goto L_0x00ee
+        L_0x00d4:
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.videoLocations
+            r3.add(r6)
+            java.util.ArrayList<java.lang.String> r3 = r0.videoFileNames
+            r3.add(r6)
+            goto L_0x00ee
+        L_0x00df:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r3 = r0.photos
+            r3.add(r6)
+            java.util.ArrayList<java.lang.String> r3 = r0.videoFileNames
+            r3.add(r6)
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.videoLocations
+            r3.add(r6)
+        L_0x00ee:
+            java.util.ArrayList<java.lang.Integer> r3 = r0.imagesLocationsSizes
+            r10 = -1
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             r3.add(r10)
-            goto L_0x0208
-        L_0x0205:
-            r10 = 0
-            goto L_0x0208
-        L_0x0207:
-            r10 = r3
-        L_0x0208:
-            int r6 = r6 + 1
-            r3 = r10
+            java.util.ArrayList<java.lang.Float> r3 = r0.imagesUploadProgress
+            r3.add(r6)
+            goto L_0x00ff
+        L_0x00fe:
+            r9 = r6
+        L_0x00ff:
+            r3 = 0
+        L_0x0100:
+            int r10 = r2.size()
+            if (r3 >= r10) goto L_0x0212
+            java.lang.Object r10 = r2.get(r3)
+            org.telegram.tgnet.TLRPC$Photo r10 = (org.telegram.tgnet.TLRPC$Photo) r10
+            if (r10 == 0) goto L_0x020c
+            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC$TL_photoEmpty
+            if (r11 != 0) goto L_0x020c
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r11 = r10.sizes
+            if (r11 != 0) goto L_0x0118
+            goto L_0x020c
+        L_0x0118:
+            r12 = 50
+            org.telegram.tgnet.TLRPC$PhotoSize r11 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r11, r12)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r12 = r10.sizes
+            int r12 = r12.size()
+            r13 = 0
+        L_0x0125:
+            if (r13 >= r12) goto L_0x0138
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r14 = r10.sizes
+            java.lang.Object r14 = r14.get(r13)
+            org.telegram.tgnet.TLRPC$PhotoSize r14 = (org.telegram.tgnet.TLRPC$PhotoSize) r14
+            boolean r15 = r14 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
+            if (r15 == 0) goto L_0x0135
+            r11 = r14
+            goto L_0x0138
+        L_0x0135:
+            int r13 = r13 + 1
+            goto L_0x0125
+        L_0x0138:
+            if (r9 == 0) goto L_0x018b
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r12 = r10.sizes
+            int r12 = r12.size()
+            r13 = 0
+        L_0x0141:
+            if (r13 >= r12) goto L_0x0186
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r14 = r10.sizes
+            java.lang.Object r14 = r14.get(r13)
+            org.telegram.tgnet.TLRPC$PhotoSize r14 = (org.telegram.tgnet.TLRPC$PhotoSize) r14
+            org.telegram.tgnet.TLRPC$FileLocation r14 = r14.location
+            if (r14 == 0) goto L_0x0180
+            int r15 = r14.local_id
+            org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r4 = r9.location
+            int r6 = r4.local_id
+            if (r15 != r6) goto L_0x0180
+            long r14 = r14.volume_id
+            long r5 = r4.volume_id
+            int r4 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
+            if (r4 != 0) goto L_0x0180
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r4 = r0.photos
+            r5 = 0
+            r4.set(r5, r10)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r10.video_sizes
+            boolean r4 = r4.isEmpty()
+            if (r4 != 0) goto L_0x017e
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.videoLocations
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r6 = r10.video_sizes
+            java.lang.Object r6 = r6.get(r5)
+            org.telegram.tgnet.TLRPC$VideoSize r6 = (org.telegram.tgnet.TLRPC$VideoSize) r6
+            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r6, (org.telegram.tgnet.TLRPC$Photo) r10)
+            r4.set(r5, r6)
+        L_0x017e:
             r4 = 1
-            goto L_0x00fd
-        L_0x020e:
+            goto L_0x0187
+        L_0x0180:
+            int r13 = r13 + 1
+            r4 = 1
+            r5 = 0
+            r6 = 0
+            goto L_0x0141
+        L_0x0186:
+            r4 = 0
+        L_0x0187:
+            if (r4 == 0) goto L_0x018b
+            goto L_0x020b
+        L_0x018b:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r10.sizes
+            r5 = 640(0x280, float:8.97E-43)
+            org.telegram.tgnet.TLRPC$PhotoSize r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5)
+            if (r4 == 0) goto L_0x020b
+            int r5 = r10.dc_id
+            if (r5 == 0) goto L_0x01a1
+            org.telegram.tgnet.TLRPC$FileLocation r6 = r4.location
+            r6.dc_id = r5
+            byte[] r5 = r10.file_reference
+            r6.file_reference = r5
+        L_0x01a1:
+            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r10)
+            if (r5 == 0) goto L_0x020b
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r6 = r0.imagesLocations
+            r6.add(r5)
+            java.util.ArrayList<java.lang.String> r5 = r0.thumbsFileNames
+            boolean r6 = r11 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
+            if (r6 == 0) goto L_0x01b4
+            r6 = r4
+            goto L_0x01b5
+        L_0x01b4:
+            r6 = r11
+        L_0x01b5:
+            java.lang.String r6 = org.telegram.messenger.FileLoader.getAttachFileName(r6)
+            r5.add(r6)
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r5 = r0.thumbsLocations
+            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r11, (org.telegram.tgnet.TLRPC$Photo) r10)
+            r5.add(r6)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r5 = r10.video_sizes
+            boolean r5 = r5.isEmpty()
+            if (r5 != 0) goto L_0x01ea
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r5 = r10.video_sizes
+            r6 = 0
+            java.lang.Object r5 = r5.get(r6)
+            org.telegram.tgnet.TLRPC$VideoSize r5 = (org.telegram.tgnet.TLRPC$VideoSize) r5
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r6 = r0.videoLocations
+            org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r5, (org.telegram.tgnet.TLRPC$Photo) r10)
+            r6.add(r11)
+            java.util.ArrayList<java.lang.String> r6 = r0.videoFileNames
+            java.lang.String r5 = org.telegram.messenger.FileLoader.getAttachFileName(r5)
+            r6.add(r5)
+            r6 = 0
+            goto L_0x01f5
+        L_0x01ea:
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r5 = r0.videoLocations
+            r6 = 0
+            r5.add(r6)
+            java.util.ArrayList<java.lang.String> r5 = r0.videoFileNames
+            r5.add(r6)
+        L_0x01f5:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r5 = r0.photos
+            r5.add(r10)
+            java.util.ArrayList<java.lang.Integer> r5 = r0.imagesLocationsSizes
+            int r4 = r4.size
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            r5.add(r4)
+            java.util.ArrayList<java.lang.Float> r4 = r0.imagesUploadProgress
+            r4.add(r6)
+            goto L_0x020c
+        L_0x020b:
+            r6 = 0
+        L_0x020c:
+            int r3 = r3 + 1
+            r4 = 1
+            r5 = 0
+            goto L_0x0100
+        L_0x0212:
             r16.loadNeighboringThumbs()
             androidx.viewpager.widget.PagerAdapter r2 = r16.getAdapter()
             r2.notifyDataSetChanged()
             boolean r2 = r0.isProfileFragment
+            if (r2 == 0) goto L_0x022c
+            boolean r2 = r0.scrolledByUser
             if (r2 == 0) goto L_0x0228
-            boolean r2 = r0.scrolledByUser
-            if (r2 == 0) goto L_0x0224
             boolean r2 = r0.forceResetPosition
-            if (r2 == 0) goto L_0x023a
-        L_0x0224:
-            r16.resetCurrentItem()
-            goto L_0x023a
+            if (r2 == 0) goto L_0x023e
         L_0x0228:
+            r16.resetCurrentItem()
+            goto L_0x023e
+        L_0x022c:
             boolean r2 = r0.scrolledByUser
-            if (r2 == 0) goto L_0x0230
+            if (r2 == 0) goto L_0x0234
             boolean r2 = r0.forceResetPosition
-            if (r2 == 0) goto L_0x023a
-        L_0x0230:
+            if (r2 == 0) goto L_0x023e
+        L_0x0234:
             r16.resetCurrentItem()
             androidx.viewpager.widget.PagerAdapter r2 = r16.getAdapter()
             r2.notifyDataSetChanged()
-        L_0x023a:
-            r0.forceResetPosition = r5
-            if (r1 == 0) goto L_0x024e
+        L_0x023e:
+            r2 = 0
+            r0.forceResetPosition = r2
+            if (r1 == 0) goto L_0x0252
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r1)
-            r8 = 80
-            r9 = 0
+            r9 = 80
+            r10 = 0
             r11 = 0
             int r12 = r0.parentClassGuid
-            r6.loadDialogPhotos(r7, r8, r9, r11, r12)
-        L_0x024e:
+            r6.loadDialogPhotos(r7, r9, r10, r11, r12)
+        L_0x0252:
             org.telegram.ui.Components.ProfileGalleryView$Callback r1 = r0.callback
-            if (r1 == 0) goto L_0x0255
+            if (r1 == 0) goto L_0x0259
             r1.onPhotosLoaded()
-        L_0x0255:
+        L_0x0259:
             org.telegram.messenger.ImageLocation r1 = r0.currentUploadingImageLocation
-            if (r1 == 0) goto L_0x030d
+            if (r1 == 0) goto L_0x0313
             org.telegram.messenger.ImageLocation r2 = r0.curreantUploadingThumbLocation
             r0.addUploadingImage(r1, r2)
-            goto L_0x030d
-        L_0x0260:
+            goto L_0x0313
+        L_0x0264:
             int r2 = org.telegram.messenger.NotificationCenter.fileLoaded
             r4 = 1065353216(0x3var_, float:1.0)
-            if (r1 != r2) goto L_0x029d
-            r1 = r19[r5]
+            if (r1 != r2) goto L_0x02a3
+            r2 = 0
+            r1 = r19[r2]
             java.lang.String r1 = (java.lang.String) r1
-        L_0x026a:
+            r5 = 0
+        L_0x0270:
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             int r2 = r2.size()
-            if (r5 >= r2) goto L_0x030d
+            if (r5 >= r2) goto L_0x0313
             java.util.ArrayList<java.lang.String> r2 = r0.videoFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
-            if (r2 != 0) goto L_0x0284
+            if (r2 != 0) goto L_0x028a
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
-        L_0x0284:
-            if (r2 == 0) goto L_0x029a
+        L_0x028a:
+            if (r2 == 0) goto L_0x02a0
             boolean r2 = android.text.TextUtils.equals(r1, r2)
-            if (r2 == 0) goto L_0x029a
+            if (r2 == 0) goto L_0x02a0
             android.util.SparseArray<org.telegram.ui.Components.RadialProgress2> r2 = r0.radialProgresses
             java.lang.Object r2 = r2.get(r5)
             org.telegram.ui.Components.RadialProgress2 r2 = (org.telegram.ui.Components.RadialProgress2) r2
-            if (r2 == 0) goto L_0x029a
+            if (r2 == 0) goto L_0x02a0
             r3 = 1
             r2.setProgress(r4, r3)
-        L_0x029a:
+        L_0x02a0:
             int r5 = r5 + 1
-            goto L_0x026a
-        L_0x029d:
+            goto L_0x0270
+        L_0x02a3:
             int r2 = org.telegram.messenger.NotificationCenter.fileLoadProgressChanged
-            if (r1 != r2) goto L_0x02f1
-            r1 = r19[r5]
+            if (r1 != r2) goto L_0x02f9
+            r2 = 0
+            r1 = r19[r2]
             java.lang.String r1 = (java.lang.String) r1
-        L_0x02a5:
+            r5 = 0
+        L_0x02ad:
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             int r2 = r2.size()
-            if (r5 >= r2) goto L_0x030d
+            if (r5 >= r2) goto L_0x0313
             java.util.ArrayList<java.lang.String> r2 = r0.videoFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
-            if (r2 != 0) goto L_0x02bf
+            if (r2 != 0) goto L_0x02c7
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
-        L_0x02bf:
-            if (r2 == 0) goto L_0x02ed
+        L_0x02c7:
+            if (r2 == 0) goto L_0x02f5
             boolean r2 = android.text.TextUtils.equals(r1, r2)
-            if (r2 == 0) goto L_0x02ed
+            if (r2 == 0) goto L_0x02f5
             android.util.SparseArray<org.telegram.ui.Components.RadialProgress2> r2 = r0.radialProgresses
             java.lang.Object r2 = r2.get(r5)
             org.telegram.ui.Components.RadialProgress2 r2 = (org.telegram.ui.Components.RadialProgress2) r2
-            if (r2 == 0) goto L_0x02ed
+            if (r2 == 0) goto L_0x02f5
             r6 = 1
             r7 = r19[r6]
             java.lang.Long r7 = (java.lang.Long) r7
@@ -1059,29 +1063,28 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             float r7 = r7 / r8
             float r7 = java.lang.Math.min(r4, r7)
             r2.setProgress(r7, r6)
-            goto L_0x02ee
-        L_0x02ed:
+            goto L_0x02f6
+        L_0x02f5:
             r6 = 1
-        L_0x02ee:
+        L_0x02f6:
             int r5 = r5 + 1
-            goto L_0x02a5
-        L_0x02f1:
+            goto L_0x02ad
+        L_0x02f9:
             int r2 = org.telegram.messenger.NotificationCenter.reloadDialogPhotos
-            if (r1 != r2) goto L_0x030d
+            if (r1 != r2) goto L_0x0313
             int r1 = r0.settingMainPhoto
-            if (r1 == 0) goto L_0x02fa
+            if (r1 == 0) goto L_0x0302
             return
-        L_0x02fa:
+        L_0x0302:
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r1)
             long r3 = r0.dialogId
-            int r3 = (int) r3
-            r4 = 80
-            r5 = 0
+            r5 = 80
+            r6 = 0
             r7 = 1
             int r8 = r0.parentClassGuid
-            r2.loadDialogPhotos(r3, r4, r5, r7, r8)
-        L_0x030d:
+            r2.loadDialogPhotos(r3, r5, r6, r7, r8)
+        L_0x0313:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ProfileGalleryView.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -1093,7 +1096,6 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         public final ArrayList<BackupImageView> imageViews = new ArrayList<>();
         /* access modifiers changed from: private */
         public final ArrayList<Item> objects = new ArrayList<>();
-        private final ActionBar parentActionBar;
         /* access modifiers changed from: private */
         public BackupImageView parentAvatarImageView;
         private final Paint placeholderPaint;
@@ -1101,7 +1103,6 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         public ViewPagerAdapter(Context context2, ProfileActivity.AvatarImageView avatarImageView, ActionBar actionBar) {
             this.context = context2;
             this.parentAvatarImageView = avatarImageView;
-            this.parentActionBar = actionBar;
             Paint paint = new Paint(1);
             this.placeholderPaint = paint;
             paint.setColor(-16777216);
@@ -1157,7 +1158,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                 org.telegram.ui.Components.ProfileGalleryView$TextureStubView r2 = new org.telegram.ui.Components.ProfileGalleryView$TextureStubView
                 org.telegram.ui.Components.ProfileGalleryView r4 = org.telegram.ui.Components.ProfileGalleryView.this
                 android.content.Context r5 = r0.context
-                r2.<init>(r5)
+                r2.<init>(r4, r5)
                 android.view.View unused = r3.textureViewStubView = r2
             L_0x0031:
                 android.view.View r2 = r3.textureViewStubView
@@ -1562,7 +1563,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             reset();
             this.dialogId = j;
             if (j != 0) {
-                MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) j, 80, 0, true, this.parentClassGuid);
+                MessagesController.getInstance(this.currentAccount).loadDialogPhotos(j, 80, 0, true, this.parentClassGuid);
                 return;
             }
             return;
@@ -1699,11 +1700,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                         ofFloat.setStartDelay(j);
                         this.radialProgressHideAnimator.setDuration((long) (this.radialProgressHideAnimatorStartValue * 250.0f));
                         this.radialProgressHideAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                        this.radialProgressHideAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                ProfileGalleryView.AvatarImageView.this.lambda$onDraw$0$ProfileGalleryView$AvatarImageView(valueAnimator);
-                            }
-                        });
+                        this.radialProgressHideAnimator.addUpdateListener(new ProfileGalleryView$AvatarImageView$$ExternalSyntheticLambda0(this));
                         this.radialProgressHideAnimator.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 RadialProgress2 unused = AvatarImageView.this.radialProgress = null;
@@ -1741,8 +1738,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onDraw$0 */
-        public /* synthetic */ void lambda$onDraw$0$ProfileGalleryView$AvatarImageView(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$onDraw$0(ValueAnimator valueAnimator) {
             this.radialProgress.setOverrideAlpha(AndroidUtilities.lerp(this.radialProgressHideAnimatorStartValue, 0.0f, valueAnimator.getAnimatedFraction()));
         }
 
@@ -1763,7 +1759,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     private class TextureStubView extends View {
-        public TextureStubView(Context context) {
+        public TextureStubView(ProfileGalleryView profileGalleryView, Context context) {
             super(context);
         }
     }

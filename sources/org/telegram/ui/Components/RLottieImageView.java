@@ -13,7 +13,6 @@ public class RLottieImageView extends ImageView {
     private RLottieDrawable drawable;
     private HashMap<String, Integer> layerColors;
     private boolean playing;
-    private boolean startOnAttach;
 
     public RLottieImageView(Context context) {
         super(context);
@@ -124,8 +123,6 @@ public class RLottieImageView extends ImageView {
             this.playing = true;
             if (this.attachedToWindow) {
                 rLottieDrawable.start();
-            } else {
-                this.startOnAttach = true;
             }
         }
     }
@@ -136,8 +133,6 @@ public class RLottieImageView extends ImageView {
             this.playing = false;
             if (this.attachedToWindow) {
                 rLottieDrawable.stop();
-            } else {
-                this.startOnAttach = false;
             }
         }
     }

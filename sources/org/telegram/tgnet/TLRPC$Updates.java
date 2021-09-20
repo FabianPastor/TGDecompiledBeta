@@ -3,12 +3,12 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public abstract class TLRPC$Updates extends TLObject {
-    public int chat_id;
+    public long chat_id;
     public ArrayList<TLRPC$Chat> chats = new ArrayList<>();
     public int date;
     public ArrayList<TLRPC$MessageEntity> entities = new ArrayList<>();
     public int flags;
-    public int from_id;
+    public long from_id;
     public TLRPC$MessageFwdHeader fwd_from;
     public int id;
     public TLRPC$MessageMedia media;
@@ -25,9 +25,9 @@ public abstract class TLRPC$Updates extends TLObject {
     public int ttl_period;
     public TLRPC$Update update;
     public ArrayList<TLRPC$Update> updates = new ArrayList<>();
-    public int user_id;
+    public long user_id;
     public ArrayList<TLRPC$User> users = new ArrayList<>();
-    public int via_bot_id;
+    public long via_bot_id;
 
     public static TLRPC$Updates TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Updates tLRPC$Updates;
@@ -38,10 +38,10 @@ public abstract class TLRPC$Updates extends TLObject {
             case -484987010:
                 tLRPC$Updates = new TLRPC$TL_updatesTooLong();
                 break;
-            case -84936653:
+            case 826001400:
                 tLRPC$Updates = new TLRPC$TL_updateShortMessage();
                 break;
-            case 290961496:
+            case 1299050149:
                 tLRPC$Updates = new TLRPC$TL_updateShortChatMessage();
                 break;
             case 1918567619:

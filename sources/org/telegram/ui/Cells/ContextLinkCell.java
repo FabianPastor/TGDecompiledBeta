@@ -51,7 +51,6 @@ import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.PhotoViewer;
 
 public class ContextLinkCell extends FrameLayout implements DownloadController.FileDownloadProgressListener {
-    private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
     public final Property<ContextLinkCell, Float> IMAGE_SCALE;
     private int TAG;
     /* access modifiers changed from: private */
@@ -97,6 +96,10 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     }
 
     public void onProgressUpload(String str, long j, long j2, boolean z) {
+    }
+
+    static {
+        new AccelerateInterpolator(0.5f);
     }
 
     public ContextLinkCell(Context context) {
@@ -1049,7 +1052,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
             tLRPC$TL_message.from_id = tLRPC$TL_peerUser;
             TLRPC$Peer tLRPC$Peer = tLRPC$TL_message.peer_id;
-            int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
+            long clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
             tLRPC$TL_peerUser.user_id = clientUserId;
             tLRPC$Peer.user_id = clientUserId;
             tLRPC$TL_message.date = (int) (System.currentTimeMillis() / 1000);

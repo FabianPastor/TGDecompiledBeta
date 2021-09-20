@@ -1,54 +1,64 @@
 package j$.util.stream;
 
-import j$.time.a;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
+import j$.util.function.Consumer;
+import j$.util.function.j;
+import j$.util.function.k;
+import j$.util.function.l;
 
-final class N2<T> extends F2<T> {
-    private ArrayList d;
+class N2 implements T2, CLASSNAMEl3 {
+    private int a;
+    final /* synthetic */ int b;
+    final /* synthetic */ j c;
 
-    N2(A2 a2, Comparator comparator) {
-        super(a2, comparator);
+    N2(int i, j jVar) {
+        this.b = i;
+        this.c = jVar;
     }
 
-    public void accept(Object obj) {
-        this.d.add(obj);
+    public /* synthetic */ void accept(double d) {
+        CLASSNAMEp1.f(this);
+        throw null;
     }
 
-    public void l() {
-        a.B(this.d, this.b);
-        this.a.m((long) this.d.size());
-        if (!this.c) {
-            ArrayList arrayList = this.d;
-            A2 a2 = this.a;
-            a2.getClass();
-            a.r(arrayList, new CLASSNAMEb(a2));
-        } else {
-            Iterator it = this.d.iterator();
-            while (it.hasNext()) {
-                Object next = it.next();
-                if (this.a.o()) {
-                    break;
-                }
-                this.a.accept(next);
-            }
-        }
-        this.a.l();
-        this.d = null;
+    public void accept(int i) {
+        this.a = this.c.applyAsInt(this.a, i);
     }
 
-    public void m(long j) {
-        ArrayList arrayList;
-        if (j < NUM) {
-            if (j >= 0) {
-                int i = (int) j;
-            } else {
-                arrayList = new ArrayList();
-            }
-            this.d = arrayList;
-            return;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEp1.e(this);
+        throw null;
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    /* renamed from: b */
+    public /* synthetic */ void accept(Integer num) {
+        CLASSNAMEp1.b(this, num);
+    }
+
+    public Object get() {
+        return Integer.valueOf(this.a);
+    }
+
+    public void h(T2 t2) {
+        accept(((N2) t2).a);
+    }
+
+    public l l(l lVar) {
+        lVar.getClass();
+        return new k(this, lVar);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b;
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

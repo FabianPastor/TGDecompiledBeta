@@ -3,10 +3,10 @@ package org.telegram.ui;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.util.LongSparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
@@ -28,7 +27,6 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.ArchivedStickersActivity;
 import org.telegram.ui.Cells.ArchivedStickerSetCell;
 import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
@@ -130,11 +128,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         recyclerListView2.setLayoutManager(linearLayoutManager);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ArchivedStickersActivity.this.lambda$createView$0$ArchivedStickersActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ArchivedStickersActivity$$ExternalSyntheticLambda3(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 if (!ArchivedStickersActivity.this.loadingStickers && !ArchivedStickersActivity.this.endReached && ArchivedStickersActivity.this.layoutManager.findLastVisibleItemPosition() > ArchivedStickersActivity.this.stickersLoadingRow - 2) {
@@ -146,8 +140,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$ArchivedStickersActivity(final View view, int i) {
+    public /* synthetic */ void lambda$createView$0(final View view, int i) {
         TLRPC$InputStickerSet tLRPC$InputStickerSet;
         if (i >= this.stickersStartRow && i < this.stickersEndRow && getParentActivity() != null) {
             final TLRPC$StickerSetCovered tLRPC$StickerSetCovered = this.sets.get(i - this.stickersStartRow);
@@ -160,7 +153,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             }
             TLRPC$InputStickerSet tLRPC$InputStickerSet2 = tLRPC$InputStickerSet;
             tLRPC$InputStickerSet2.access_hash = tLRPC$StickerSetCovered.set.access_hash;
-            StickersAlert stickersAlert = new StickersAlert(getParentActivity(), this, tLRPC$InputStickerSet2, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null);
+            StickersAlert stickersAlert = new StickersAlert((Context) getParentActivity(), (BaseFragment) this, tLRPC$InputStickerSet2, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null);
             stickersAlert.setInstallDelegate(new StickersAlert.StickersAlertInstallDelegate() {
                 public void onStickerSetUninstalled() {
                 }
@@ -237,35 +230,17 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 z = false;
             }
             tLRPC$TL_messages_getArchivedStickers.masks = z;
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getArchivedStickers, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ArchivedStickersActivity.this.lambda$getStickers$2$ArchivedStickersActivity(tLObject, tLRPC$TL_error);
-                }
-            }), this.classGuid);
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getArchivedStickers, new ArchivedStickersActivity$$ExternalSyntheticLambda2(this)), this.classGuid);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getStickers$2 */
-    public /* synthetic */ void lambda$getStickers$2$ArchivedStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                ArchivedStickersActivity.this.lambda$getStickers$1$ArchivedStickersActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$getStickers$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ArchivedStickersActivity$$ExternalSyntheticLambda0(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getStickers$1 */
-    public /* synthetic */ void lambda$getStickers$1$ArchivedStickersActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$getStickers$1(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             lambda$processResponse$3((TLRPC$TL_messages_archivedStickers) tLObject);
         }
@@ -291,17 +266,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             }
             return;
         }
-        this.doOnTransitionEnd = new Runnable(tLRPC$TL_messages_archivedStickers) {
-            public final /* synthetic */ TLRPC$TL_messages_archivedStickers f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ArchivedStickersActivity.this.lambda$processResponse$3$ArchivedStickersActivity(this.f$1);
-            }
-        };
+        this.doOnTransitionEnd = new ArchivedStickersActivity$$ExternalSyntheticLambda1(this, tLRPC$TL_messages_archivedStickers);
     }
 
     /* access modifiers changed from: protected */
@@ -400,17 +365,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                     }
                     archivedStickerSetCell.setDrawProgress(z, false);
                 }
-                archivedStickerSetCell.setOnCheckedChangeListener(new ArchivedStickerSetCell.OnCheckedChangeListener(tLRPC$StickerSetCovered) {
-                    public final /* synthetic */ TLRPC$StickerSetCovered f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onCheckedChanged(ArchivedStickerSetCell archivedStickerSetCell, boolean z) {
-                        ArchivedStickersActivity.ListAdapter.this.lambda$onBindViewHolder$0$ArchivedStickersActivity$ListAdapter(this.f$1, archivedStickerSetCell, z);
-                    }
-                });
+                archivedStickerSetCell.setOnCheckedChangeListener(new ArchivedStickersActivity$ListAdapter$$ExternalSyntheticLambda0(this, tLRPC$StickerSetCovered));
             } else if (getItemViewType(i) == 2) {
                 TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
                 if (i == ArchivedStickersActivity.this.archiveInfoRow) {
@@ -426,8 +381,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onBindViewHolder$0 */
-        public /* synthetic */ void lambda$onBindViewHolder$0$ArchivedStickersActivity$ListAdapter(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, ArchivedStickerSetCell archivedStickerSetCell, boolean z) {
+        public /* synthetic */ void lambda$onBindViewHolder$0(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, ArchivedStickerSetCell archivedStickerSetCell, boolean z) {
             if (z) {
                 archivedStickerSetCell.setChecked(false, false, false);
                 if (ArchivedStickersActivity.this.installingStickerSets.indexOfKey(tLRPC$StickerSetCovered.set.id) < 0) {

@@ -73,19 +73,14 @@ public class DrawerLayoutContainer extends FrameLayout {
         setFocusableInTouchMode(true);
         if (Build.VERSION.SDK_INT >= 21) {
             setFitsSystemWindows(true);
-            setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-                public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-                    return DrawerLayoutContainer.this.lambda$new$0$DrawerLayoutContainer(view, windowInsets);
-                }
-            });
+            setOnApplyWindowInsetsListener(new DrawerLayoutContainer$$ExternalSyntheticLambda0(this));
             setSystemUiVisibility(1280);
         }
         this.shadowLeft = getResources().getDrawable(NUM);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ WindowInsets lambda$new$0$DrawerLayoutContainer(View view, WindowInsets windowInsets) {
+    public /* synthetic */ WindowInsets lambda$new$0(View view, WindowInsets windowInsets) {
         DrawerLayoutContainer drawerLayoutContainer = (DrawerLayoutContainer) view;
         if (AndroidUtilities.statusBarHeight != windowInsets.getSystemWindowInsetTop()) {
             drawerLayoutContainer.requestLayout();

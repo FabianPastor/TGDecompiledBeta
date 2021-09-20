@@ -20,7 +20,7 @@ public class TLRPC$TL_theme_layer131 extends TLRPC$TL_theme {
             this.document = TLRPC$Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 8) != 0) {
-            this.settings = TLRPC$TL_themeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.settings = TLRPC$ThemeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         this.installs_count = abstractSerializedData.readInt32(z);
     }

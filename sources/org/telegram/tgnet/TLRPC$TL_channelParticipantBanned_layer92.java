@@ -13,8 +13,8 @@ public class TLRPC$TL_channelParticipantBanned_layer92 extends TLRPC$TL_channelP
         this.left = z2;
         TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
         this.peer = tLRPC$TL_peerUser;
-        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
-        this.kicked_by = abstractSerializedData.readInt32(z);
+        tLRPC$TL_peerUser.user_id = (long) abstractSerializedData.readInt32(z);
+        this.kicked_by = (long) abstractSerializedData.readInt32(z);
         this.date = abstractSerializedData.readInt32(z);
         TLRPC$TL_channelBannedRights_layer92 TLdeserialize = TLRPC$TL_channelBannedRights_layer92.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.banned_rights_layer92 = TLdeserialize;
@@ -26,8 +26,8 @@ public class TLRPC$TL_channelParticipantBanned_layer92 extends TLRPC$TL_channelP
         int i = this.left ? this.flags | 1 : this.flags & -2;
         this.flags = i;
         abstractSerializedData.writeInt32(i);
-        abstractSerializedData.writeInt32(this.peer.user_id);
-        abstractSerializedData.writeInt32(this.kicked_by);
+        abstractSerializedData.writeInt32((int) this.peer.user_id);
+        abstractSerializedData.writeInt32((int) this.kicked_by);
         abstractSerializedData.writeInt32(this.date);
         this.banned_rights_layer92.serializeToStream(abstractSerializedData);
     }

@@ -1,66 +1,43 @@
 package j$.util.stream;
 
-import j$.time.a;
-import j$.util.function.CLASSNAMEf;
+import j$.util.N;
 import j$.util.function.Consumer;
-import j$.util.function.p;
-import j$.util.function.q;
-import j$.util.stream.A2;
+import j$.util.function.m;
+import j$.util.x;
+import j$.util.y;
 
-class X1 implements CLASSNAMEu2<Double, Double, X1>, A2.e {
-    private double a;
-    final /* synthetic */ double b;
-    final /* synthetic */ p c;
-
-    X1(double d, p pVar) {
-        this.b = d;
-        this.c = pVar;
+final class X1 extends CLASSNAMEb2 implements CLASSNAMEv1 {
+    X1() {
     }
 
-    public void accept(double d) {
-        this.a = this.c.applyAsDouble(this.a, d);
+    /* renamed from: a */
+    public /* synthetic */ void i(Double[] dArr, int i) {
+        CLASSNAMEp1.h(this, dArr, i);
     }
 
-    public /* synthetic */ void accept(int i) {
-        a.a(this);
-        throw null;
+    public A1 b(int i) {
+        throw new IndexOutOfBoundsException();
     }
 
-    public /* synthetic */ void accept(long j) {
-        a.b(this);
-        throw null;
+    public Object e() {
+        return CLASSNAMEy2.g;
     }
 
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
+    /* renamed from: f */
+    public /* synthetic */ CLASSNAMEv1 r(long j, long j2, m mVar) {
+        return CLASSNAMEp1.n(this, j, j2, mVar);
     }
 
-    /* renamed from: b */
-    public /* synthetic */ void accept(Double d) {
-        Q1.a(this, d);
+    public /* synthetic */ void forEach(Consumer consumer) {
+        CLASSNAMEp1.k(this, consumer);
     }
 
-    public Object get() {
-        return Double.valueOf(this.a);
+    public x spliterator() {
+        return N.b();
     }
 
-    public void h(CLASSNAMEu2 u2Var) {
-        accept(((X1) u2Var).a);
-    }
-
-    public q j(q qVar) {
-        qVar.getClass();
-        return new CLASSNAMEf(this, qVar);
-    }
-
-    public void l() {
-    }
-
-    public void m(long j) {
-        this.a = this.b;
-    }
-
-    public /* synthetic */ boolean o() {
-        return false;
+    /* renamed from: spliterator  reason: collision with other method in class */
+    public y m1180spliterator() {
+        return N.b();
     }
 }

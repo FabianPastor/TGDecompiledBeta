@@ -22,6 +22,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
     private int bottomPadding;
     private int fixedSize;
     private String linkTextColorKey;
+    private final Theme.ResourcesProvider resourcesProvider;
     private CharSequence text;
     private TextView textView;
     private int topPadding;
@@ -35,15 +36,24 @@ public class TextInfoPrivacyCell extends FrameLayout {
     }
 
     public TextInfoPrivacyCell(Context context) {
-        this(context, 21);
+        this(context, 21, (Theme.ResourcesProvider) null);
+    }
+
+    public TextInfoPrivacyCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, 21, resourcesProvider2);
     }
 
     public TextInfoPrivacyCell(Context context, int i) {
+        this(context, i, (Theme.ResourcesProvider) null);
+    }
+
+    public TextInfoPrivacyCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.linkTextColorKey = "windowBackgroundWhiteLinkText";
         this.topPadding = 10;
         this.bottomPadding = 17;
-        AnonymousClass1 r0 = new TextView(context) {
+        this.resourcesProvider = resourcesProvider2;
+        AnonymousClass1 r12 = new TextView(context) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 TextInfoPrivacyCell.this.onTextDraw();
@@ -51,14 +61,14 @@ public class TextInfoPrivacyCell extends FrameLayout {
                 TextInfoPrivacyCell.this.afterTextDraw();
             }
         };
-        this.textView = r0;
-        r0.setTextSize(1, 14.0f);
+        this.textView = r12;
+        r12.setTextSize(1, 14.0f);
         int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(17.0f));
         this.textView.setMovementMethod(LinkMovementMethod.getInstance());
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
-        this.textView.setLinkTextColor(Theme.getColor(this.linkTextColorKey));
+        this.textView.setTextColor(getThemedColor("windowBackgroundWhiteGrayText4"));
+        this.textView.setLinkTextColor(getThemedColor(this.linkTextColorKey));
         this.textView.setImportantForAccessibility(2);
         float f = (float) i;
         addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i2) | 48, f, 0.0f, f, 0.0f));
@@ -125,7 +135,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
     }
 
     public void setTextColor(String str) {
-        this.textView.setTextColor(Theme.getColor(str));
+        this.textView.setTextColor(getThemedColor(str));
         this.textView.setTag(str);
     }
 
@@ -160,5 +170,11 @@ public class TextInfoPrivacyCell extends FrameLayout {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName(TextView.class.getName());
         accessibilityNodeInfo.setText(this.text);
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

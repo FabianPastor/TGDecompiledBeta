@@ -1,46 +1,19 @@
 package j$.util.stream;
 
-import java.util.Arrays;
+import j$.util.function.o;
 
-final class Q2 extends E2 {
-    private long[] c;
-    private int d;
+class Q2 extends V2 {
+    final /* synthetic */ o b;
+    final /* synthetic */ long c;
 
-    Q2(A2 a2) {
-        super(a2);
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    Q2(CLASSNAMEf4 f4Var, o oVar, long j) {
+        super(f4Var);
+        this.b = oVar;
+        this.c = j;
     }
 
-    public void accept(long j) {
-        long[] jArr = this.c;
-        int i = this.d;
-        this.d = i + 1;
-        jArr[i] = j;
-    }
-
-    public void l() {
-        int i = 0;
-        Arrays.sort(this.c, 0, this.d);
-        this.a.m((long) this.d);
-        if (!this.b) {
-            while (i < this.d) {
-                this.a.accept(this.c[i]);
-                i++;
-            }
-        } else {
-            while (i < this.d && !this.a.o()) {
-                this.a.accept(this.c[i]);
-                i++;
-            }
-        }
-        this.a.l();
-        this.c = null;
-    }
-
-    public void m(long j) {
-        if (j < NUM) {
-            this.c = new long[((int) j)];
-            return;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    public T2 a() {
+        return new R2(this.c, this.b);
     }
 }

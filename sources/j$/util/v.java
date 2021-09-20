@@ -1,11 +1,16 @@
 package j$.util;
 
-import java.security.AccessController;
+import j$.util.function.Consumer;
+import j$.util.function.l;
 
-final class v {
-    static final boolean a = ((Boolean) AccessController.doPrivileged(i.a)).booleanValue();
+public interface v extends x {
+    boolean b(Consumer consumer);
 
-    static void a(Class cls, String str) {
-        throw new UnsupportedOperationException(cls + " tripwire tripped but logging not supported: " + str);
-    }
+    void c(l lVar);
+
+    void forEachRemaining(Consumer consumer);
+
+    boolean g(l lVar);
+
+    v trySplit();
 }

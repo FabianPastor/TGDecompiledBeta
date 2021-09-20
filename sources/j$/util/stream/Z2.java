@@ -1,69 +1,111 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
+import j$.lang.a;
+import j$.util.function.A;
+import j$.util.function.B;
+import j$.util.function.C;
 import j$.util.function.Consumer;
-import j$.util.function.J;
-import j$.util.function.q;
-import j$.util.r;
-import j$.util.stream.S2;
+import j$.util.function.y;
 
-final class Z2<P_IN> extends W2<P_IN, Double, S2.b> implements Spliterator.a {
-    Z2(T1 t1, Spliterator spliterator, boolean z) {
-        super(t1, spliterator, z);
+class Z2 extends CLASSNAMEj3 {
+    public final /* synthetic */ int b = 5;
+    final /* synthetic */ Object c;
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public Z2(K k, CLASSNAMEn3 n3Var) {
+        super(n3Var);
+        this.c = k;
     }
 
-    Z2(T1 t1, J j, boolean z) {
-        super(t1, j, z);
-    }
-
-    public /* synthetic */ boolean b(Consumer consumer) {
-        return r.e(this, consumer);
-    }
-
-    /* renamed from: e */
-    public void forEachRemaining(q qVar) {
-        if (this.h != null || this.i) {
-            do {
-            } while (tryAdvance(qVar));
-            return;
+    public void accept(Object obj) {
+        switch (this.b) {
+            case 0:
+                ((Consumer) ((L) this.c).m).accept(obj);
+                this.a.accept(obj);
+                return;
+            case 1:
+                if (((y) ((L) this.c).m).test(obj)) {
+                    this.a.accept(obj);
+                    return;
+                }
+                return;
+            case 2:
+                this.a.accept(((CLASSNAMEb3) this.c).m.apply(obj));
+                return;
+            case 3:
+                this.a.accept(((B) ((M) this.c).m).applyAsInt(obj));
+                return;
+            case 4:
+                this.a.accept(((C) ((N) this.c).m).applyAsLong(obj));
+                return;
+            case 5:
+                this.a.accept(((A) ((K) this.c).m).applyAsDouble(obj));
+                return;
+            default:
+                Stream stream = (Stream) ((CLASSNAMEb3) this.c).m.apply(obj);
+                if (stream != null) {
+                    try {
+                        ((Stream) stream.sequential()).forEach(this.a);
+                    } catch (Throwable unused) {
+                        break;
+                    }
+                }
+                if (stream != null) {
+                    stream.close();
+                    return;
+                }
+                return;
         }
-        qVar.getClass();
-        h();
-        this.b.t0(new CLASSNAMEl0(qVar), this.d);
-        this.i = true;
+        throw th;
     }
 
-    public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        r.a(this, consumer);
-    }
-
-    /* access modifiers changed from: package-private */
-    public void j() {
-        S2.b bVar = new S2.b();
-        this.h = bVar;
-        this.e = this.b.u0(new T0(bVar));
-        this.f = new CLASSNAMEy0(this);
-    }
-
-    /* access modifiers changed from: package-private */
-    public W2 k(Spliterator spliterator) {
-        return new Z2(this.b, spliterator, this.a);
-    }
-
-    /* renamed from: n */
-    public boolean tryAdvance(q qVar) {
-        qVar.getClass();
-        boolean a = a();
-        if (a) {
-            S2.b bVar = (S2.b) this.h;
-            long j = this.g;
-            int v = bVar.v(j);
-            qVar.accept((bVar.c == 0 && v == 0) ? ((double[]) bVar.e)[(int) j] : ((double[][]) bVar.f)[v][(int) (j - bVar.d[v])]);
+    public void n(long j) {
+        switch (this.b) {
+            case 1:
+                this.a.n(-1);
+                return;
+            case 6:
+                this.a.n(-1);
+                return;
+            default:
+                this.a.n(j);
+                return;
         }
-        return a;
     }
 
-    public Spliterator.a trySplit() {
-        return (Spliterator.a) super.trySplit();
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public Z2(L l, CLASSNAMEn3 n3Var) {
+        super(n3Var);
+        this.c = l;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public Z2(L l, CLASSNAMEn3 n3Var, a aVar) {
+        super(n3Var);
+        this.c = l;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public Z2(M m, CLASSNAMEn3 n3Var) {
+        super(n3Var);
+        this.c = m;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public Z2(N n, CLASSNAMEn3 n3Var) {
+        super(n3Var);
+        this.c = n;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public Z2(CLASSNAMEb3 b3Var, CLASSNAMEn3 n3Var) {
+        super(n3Var);
+        this.c = b3Var;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public Z2(CLASSNAMEb3 b3Var, CLASSNAMEn3 n3Var, a aVar) {
+        super(n3Var);
+        this.c = b3Var;
     }
 }

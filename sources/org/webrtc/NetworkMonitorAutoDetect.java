@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.webrtc.NetworkChangeDetector;
-import org.webrtc.NetworkMonitorAutoDetect;
 
 public class NetworkMonitorAutoDetect extends BroadcastReceiver implements NetworkChangeDetector {
     private static final long INVALID_NET_ID = -1;
@@ -345,11 +344,7 @@ public class NetworkMonitorAutoDetect extends BroadcastReceiver implements Netwo
             context2.registerReceiver(this, intentFilter);
             if (Build.VERSION.SDK_INT > 28) {
                 WifiP2pManager wifiP2pManager = (WifiP2pManager) context2.getSystemService("wifip2p");
-                wifiP2pManager.requestGroupInfo(wifiP2pManager.initialize(context2, context2.getMainLooper(), (WifiP2pManager.ChannelListener) null), new WifiP2pManager.GroupInfoListener() {
-                    public final void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
-                        NetworkMonitorAutoDetect.WifiDirectManagerDelegate.this.lambda$new$0$NetworkMonitorAutoDetect$WifiDirectManagerDelegate(wifiP2pGroup);
-                    }
-                });
+                wifiP2pManager.requestGroupInfo(wifiP2pManager.initialize(context2, context2.getMainLooper(), (WifiP2pManager.ChannelListener) null), new NetworkMonitorAutoDetect$WifiDirectManagerDelegate$$ExternalSyntheticLambda0(this));
             }
         }
 

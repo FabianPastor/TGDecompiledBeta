@@ -38,18 +38,13 @@ public class PhotoEditRadioCell extends FrameLayout {
             radioButton.setSize(AndroidUtilities.dp(20.0f));
             radioButton.setTag(Integer.valueOf(i));
             this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / ((float) this.tintShadowColors.length)));
-            radioButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PhotoEditRadioCell.this.lambda$new$0$PhotoEditRadioCell(view);
-                }
-            });
+            radioButton.setOnClickListener(new PhotoEditRadioCell$$ExternalSyntheticLambda0(this));
         }
         addView(this.tintButtonsContainer, LayoutHelper.createFrame(-1, 40.0f, 51, 96.0f, 0.0f, 24.0f, 0.0f));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$PhotoEditRadioCell(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         RadioButton radioButton = (RadioButton) view;
         if (this.currentType == 0) {
             this.currentColor = this.tintShadowColors[((Integer) radioButton.getTag()).intValue()];

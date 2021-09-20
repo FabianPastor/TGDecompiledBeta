@@ -134,17 +134,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         }
         r0.setImageDrawable(drawable);
         r0.setScaleType(ImageView.ScaleType.CENTER);
-        r0.setOnClickListener(new View.OnClickListener(i) {
-            public final /* synthetic */ int f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                PagerSlidingTabStrip.this.lambda$addIconTab$0$PagerSlidingTabStrip(this.f$1, view);
-            }
-        });
+        r0.setOnClickListener(new PagerSlidingTabStrip$$ExternalSyntheticLambda0(this, i));
         this.tabsContainer.addView(r0);
         if (i != this.currentPosition) {
             z = false;
@@ -154,8 +144,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addIconTab$0 */
-    public /* synthetic */ void lambda$addIconTab$0$PagerSlidingTabStrip(int i, View view) {
+    public /* synthetic */ void lambda$addIconTab$0(int i, View view) {
         if (!(this.pager.getAdapter() instanceof IconTabProvider) || ((IconTabProvider) this.pager.getAdapter()).canScrollToTab(i)) {
             this.pager.setCurrentItem(i, false);
         }
@@ -267,11 +256,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public void onSizeChanged(int i, int i2, int i3, int i4) {
         if (!this.shouldExpand) {
-            post(new Runnable() {
-                public final void run() {
-                    PagerSlidingTabStrip.this.notifyDataSetChanged();
-                }
-            });
+            post(new PagerSlidingTabStrip$$ExternalSyntheticLambda1(this));
         }
     }
 

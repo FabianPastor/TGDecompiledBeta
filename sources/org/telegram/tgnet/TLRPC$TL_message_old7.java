@@ -17,7 +17,7 @@ public class TLRPC$TL_message_old7 extends TLRPC$TL_message {
         if ((this.flags & 256) != 0) {
             TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
             this.from_id = tLRPC$TL_peerUser;
-            tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
+            tLRPC$TL_peerUser.user_id = (long) abstractSerializedData.readInt32(z);
         }
         TLRPC$Peer TLdeserialize = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.peer_id = TLdeserialize;
@@ -90,7 +90,7 @@ public class TLRPC$TL_message_old7 extends TLRPC$TL_message {
         abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt32(this.id);
         if ((this.flags & 256) != 0) {
-            abstractSerializedData.writeInt32(this.from_id.user_id);
+            abstractSerializedData.writeInt32((int) this.from_id.user_id);
         }
         this.peer_id.serializeToStream(abstractSerializedData);
         if ((this.flags & 4) != 0) {

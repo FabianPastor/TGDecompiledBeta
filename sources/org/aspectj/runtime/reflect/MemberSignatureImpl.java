@@ -1,8 +1,6 @@
 package org.aspectj.runtime.reflect;
 
-import org.aspectj.lang.Signature;
-
-abstract class MemberSignatureImpl extends SignatureImpl implements Signature {
+abstract class MemberSignatureImpl extends SignatureImpl {
     MemberSignatureImpl(int i, String str, Class cls) {
         super(i, str, cls);
     }

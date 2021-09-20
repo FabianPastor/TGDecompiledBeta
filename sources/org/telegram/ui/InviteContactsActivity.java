@@ -53,7 +53,6 @@ import org.telegram.ui.Components.GroupCreateDividerItemDecoration;
 import org.telegram.ui.Components.GroupCreateSpan;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.InviteContactsActivity;
 
 public class InviteContactsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, View.OnClickListener {
     /* access modifiers changed from: private */
@@ -449,7 +448,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         this.editText.setHintText(LocaleController.getString("SearchFriends", NUM));
-        this.editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+        this.editText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 return false;
             }
@@ -529,11 +528,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         this.decoration = groupCreateDividerItemDecoration;
         recyclerListView3.addItemDecoration(groupCreateDividerItemDecoration);
         viewGroup.addView(this.listView);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                InviteContactsActivity.this.lambda$createView$0$InviteContactsActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new InviteContactsActivity$$ExternalSyntheticLambda3(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -556,11 +551,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         frameLayout.setBackgroundColor(Theme.getColor("contacts_inviteBackground"));
         this.counterView.setVisibility(4);
         viewGroup.addView(this.counterView, LayoutHelper.createFrame(-1, 48, 83));
-        this.counterView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                InviteContactsActivity.this.lambda$createView$1$InviteContactsActivity(view);
-            }
-        });
+        this.counterView.setOnClickListener(new InviteContactsActivity$$ExternalSyntheticLambda0(this));
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(0);
         this.counterView.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 17));
@@ -589,60 +580,59 @@ public class InviteContactsActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:10:0x003a, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:10:0x003b, code lost:
         r4 = (org.telegram.ui.Cells.InviteUserCell) r4;
      */
-    /* renamed from: lambda$createView$0 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$0$InviteContactsActivity(android.view.View r4, int r5) {
+    public /* synthetic */ void lambda$createView$0(android.view.View r4, int r5) {
         /*
             r3 = this;
-            if (r5 != 0) goto L_0x0035
+            if (r5 != 0) goto L_0x0036
             boolean r5 = r3.searching
-            if (r5 != 0) goto L_0x0035
-            android.content.Intent r4 = new android.content.Intent     // Catch:{ Exception -> 0x0030 }
+            if (r5 != 0) goto L_0x0036
+            android.content.Intent r4 = new android.content.Intent     // Catch:{ Exception -> 0x0031 }
             java.lang.String r5 = "android.intent.action.SEND"
-            r4.<init>(r5)     // Catch:{ Exception -> 0x0030 }
+            r4.<init>(r5)     // Catch:{ Exception -> 0x0031 }
             java.lang.String r5 = "text/plain"
-            r4.setType(r5)     // Catch:{ Exception -> 0x0030 }
-            int r5 = r3.currentAccount     // Catch:{ Exception -> 0x0030 }
-            org.telegram.messenger.ContactsController r5 = org.telegram.messenger.ContactsController.getInstance(r5)     // Catch:{ Exception -> 0x0030 }
+            r4.setType(r5)     // Catch:{ Exception -> 0x0031 }
+            int r5 = r3.currentAccount     // Catch:{ Exception -> 0x0031 }
+            org.telegram.messenger.ContactsController r5 = org.telegram.messenger.ContactsController.getInstance(r5)     // Catch:{ Exception -> 0x0031 }
             r0 = 0
-            java.lang.String r5 = r5.getInviteText(r0)     // Catch:{ Exception -> 0x0030 }
+            java.lang.String r5 = r5.getInviteText(r0)     // Catch:{ Exception -> 0x0031 }
             java.lang.String r0 = "android.intent.extra.TEXT"
-            r4.putExtra(r0, r5)     // Catch:{ Exception -> 0x0030 }
-            android.app.Activity r0 = r3.getParentActivity()     // Catch:{ Exception -> 0x0030 }
-            android.content.Intent r4 = android.content.Intent.createChooser(r4, r5)     // Catch:{ Exception -> 0x0030 }
+            r4.putExtra(r0, r5)     // Catch:{ Exception -> 0x0031 }
+            android.app.Activity r0 = r3.getParentActivity()     // Catch:{ Exception -> 0x0031 }
+            android.content.Intent r4 = android.content.Intent.createChooser(r4, r5)     // Catch:{ Exception -> 0x0031 }
             r5 = 500(0x1f4, float:7.0E-43)
-            r0.startActivityForResult(r4, r5)     // Catch:{ Exception -> 0x0030 }
-            goto L_0x0034
-        L_0x0030:
+            r0.startActivityForResult(r4, r5)     // Catch:{ Exception -> 0x0031 }
+            goto L_0x0035
+        L_0x0031:
             r4 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
-        L_0x0034:
-            return
         L_0x0035:
-            boolean r5 = r4 instanceof org.telegram.ui.Cells.InviteUserCell
-            if (r5 != 0) goto L_0x003a
             return
-        L_0x003a:
+        L_0x0036:
+            boolean r5 = r4 instanceof org.telegram.ui.Cells.InviteUserCell
+            if (r5 != 0) goto L_0x003b
+            return
+        L_0x003b:
             org.telegram.ui.Cells.InviteUserCell r4 = (org.telegram.ui.Cells.InviteUserCell) r4
             org.telegram.messenger.ContactsController$Contact r5 = r4.getContact()
-            if (r5 != 0) goto L_0x0043
+            if (r5 != 0) goto L_0x0044
             return
-        L_0x0043:
+        L_0x0044:
             java.util.HashMap<java.lang.String, org.telegram.ui.Components.GroupCreateSpan> r0 = r3.selectedContacts
             java.lang.String r1 = r5.key
             boolean r0 = r0.containsKey(r1)
-            if (r0 == 0) goto L_0x005d
+            if (r0 == 0) goto L_0x005e
             java.util.HashMap<java.lang.String, org.telegram.ui.Components.GroupCreateSpan> r1 = r3.selectedContacts
             java.lang.String r5 = r5.key
             java.lang.Object r5 = r1.get(r5)
             org.telegram.ui.Components.GroupCreateSpan r5 = (org.telegram.ui.Components.GroupCreateSpan) r5
             org.telegram.ui.InviteContactsActivity$SpansContainer r1 = r3.spansContainer
             r1.removeSpan(r5)
-            goto L_0x0070
-        L_0x005d:
+            goto L_0x0071
+        L_0x005e:
             org.telegram.ui.Components.GroupCreateSpan r1 = new org.telegram.ui.Components.GroupCreateSpan
             org.telegram.ui.Components.EditTextBoldCursor r2 = r3.editText
             android.content.Context r2 = r2.getContext()
@@ -650,37 +640,36 @@ public class InviteContactsActivity extends BaseFragment implements Notification
             org.telegram.ui.InviteContactsActivity$SpansContainer r5 = r3.spansContainer
             r5.addSpan(r1)
             r1.setOnClickListener(r3)
-        L_0x0070:
+        L_0x0071:
             r3.updateHint()
             boolean r5 = r3.searching
-            if (r5 != 0) goto L_0x0082
+            if (r5 != 0) goto L_0x0083
             boolean r5 = r3.searchWas
-            if (r5 == 0) goto L_0x007c
-            goto L_0x0082
-        L_0x007c:
+            if (r5 == 0) goto L_0x007d
+            goto L_0x0083
+        L_0x007d:
             r5 = 1
             r0 = r0 ^ r5
             r4.setChecked(r0, r5)
-            goto L_0x0087
-        L_0x0082:
+            goto L_0x0088
+        L_0x0083:
             org.telegram.ui.Components.EditTextBoldCursor r4 = r3.editText
             org.telegram.messenger.AndroidUtilities.showKeyboard(r4)
-        L_0x0087:
+        L_0x0088:
             org.telegram.ui.Components.EditTextBoldCursor r4 = r3.editText
             int r4 = r4.length()
-            if (r4 <= 0) goto L_0x0095
+            if (r4 <= 0) goto L_0x0096
             org.telegram.ui.Components.EditTextBoldCursor r4 = r3.editText
             r5 = 0
             r4.setText(r5)
-        L_0x0095:
+        L_0x0096:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.lambda$createView$0$InviteContactsActivity(android.view.View, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.lambda$createView$0(android.view.View, int):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$InviteContactsActivity(View view) {
+    public /* synthetic */ void lambda$createView$1(View view) {
         try {
             StringBuilder sb = new StringBuilder();
             int i = 0;
@@ -791,7 +780,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
     private void fetchContacts() {
         ArrayList<ContactsController.Contact> arrayList = new ArrayList<>(ContactsController.getInstance(this.currentAccount).phoneBookContacts);
         this.phoneBookContacts = arrayList;
-        Collections.sort(arrayList, $$Lambda$InviteContactsActivity$Ru5puXqrUe1r3wwQuyLjB6t5oo.INSTANCE);
+        Collections.sort(arrayList, InviteContactsActivity$$ExternalSyntheticLambda1.INSTANCE);
         EmptyTextProgressView emptyTextProgressView = this.emptyView;
         if (emptyTextProgressView != null) {
             emptyTextProgressView.showTextView();
@@ -802,7 +791,8 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         }
     }
 
-    static /* synthetic */ int lambda$fetchContacts$2(ContactsController.Contact contact, ContactsController.Contact contact2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$fetchContacts$2(ContactsController.Contact contact, ContactsController.Contact contact2) {
         int i = contact.imported;
         int i2 = contact2.imported;
         if (i > i2) {
@@ -933,261 +923,12 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
                     }
-                    AndroidUtilities.runOnUIThread(
-                    /*  JADX ERROR: Method code generation error
-                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x001b: INVOKE  
-                          (wrap: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$_rvKnSkIBFA5uAscq3zEsKKda8g : 0x0018: CONSTRUCTOR  (r1v0 org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$_rvKnSkIBFA5uAscq3zEsKKda8g) = 
-                          (r2v0 'this' org.telegram.ui.InviteContactsActivity$InviteAdapter$1 A[THIS])
-                          (wrap: java.lang.String : 0x0014: IGET  (r0v0 java.lang.String) = 
-                          (r2v0 'this' org.telegram.ui.InviteContactsActivity$InviteAdapter$1 A[THIS])
-                         org.telegram.ui.InviteContactsActivity.InviteAdapter.1.val$query java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$_rvKnSkIBFA5uAscq3zEsKKda8g.<init>(org.telegram.ui.InviteContactsActivity$InviteAdapter$1, java.lang.String):void type: CONSTRUCTOR)
-                         org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.InviteContactsActivity.InviteAdapter.1.run():void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0018: CONSTRUCTOR  (r1v0 org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$_rvKnSkIBFA5uAscq3zEsKKda8g) = 
-                          (r2v0 'this' org.telegram.ui.InviteContactsActivity$InviteAdapter$1 A[THIS])
-                          (wrap: java.lang.String : 0x0014: IGET  (r0v0 java.lang.String) = 
-                          (r2v0 'this' org.telegram.ui.InviteContactsActivity$InviteAdapter$1 A[THIS])
-                         org.telegram.ui.InviteContactsActivity.InviteAdapter.1.val$query java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$_rvKnSkIBFA5uAscq3zEsKKda8g.<init>(org.telegram.ui.InviteContactsActivity$InviteAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.InviteContactsActivity.InviteAdapter.1.run():void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	... 80 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$_rvKnSkIBFA5uAscq3zEsKKda8g, state: NOT_LOADED
-                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	... 86 more
-                        */
-                    /*
-                        this = this;
-                        org.telegram.ui.InviteContactsActivity$InviteAdapter r0 = org.telegram.ui.InviteContactsActivity.InviteAdapter.this     // Catch:{ Exception -> 0x0010 }
-                        java.util.Timer r0 = r0.searchTimer     // Catch:{ Exception -> 0x0010 }
-                        r0.cancel()     // Catch:{ Exception -> 0x0010 }
-                        org.telegram.ui.InviteContactsActivity$InviteAdapter r0 = org.telegram.ui.InviteContactsActivity.InviteAdapter.this     // Catch:{ Exception -> 0x0010 }
-                        r1 = 0
-                        java.util.Timer unused = r0.searchTimer = r1     // Catch:{ Exception -> 0x0010 }
-                        goto L_0x0014
-                    L_0x0010:
-                        r0 = move-exception
-                        org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-                    L_0x0014:
-                        java.lang.String r0 = r7
-                        org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$_rvKnSkIBFA5uAscq3zEsKKda8g r1 = new org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$_rvKnSkIBFA5uAscq3zEsKKda8g
-                        r1.<init>(r2, r0)
-                        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
-                        return
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.InviteAdapter.AnonymousClass1.run():void");
+                    AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$1$$ExternalSyntheticLambda1(this, str));
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$run$1 */
-                public /* synthetic */ void lambda$run$1$InviteContactsActivity$InviteAdapter$1(String str) {
-                    Utilities.searchQueue.postRunnable(
-                    /*  JADX ERROR: Method code generation error
-                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0007: INVOKE  
-                          (wrap: org.telegram.messenger.DispatchQueue : 0x0000: SGET  (r0v0 org.telegram.messenger.DispatchQueue) =  org.telegram.messenger.Utilities.searchQueue org.telegram.messenger.DispatchQueue)
-                          (wrap: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0 : 0x0004: CONSTRUCTOR  (r1v0 org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0) = 
-                          (r2v0 'this' org.telegram.ui.InviteContactsActivity$InviteAdapter$1 A[THIS])
-                          (r3v0 'str' java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0.<init>(org.telegram.ui.InviteContactsActivity$InviteAdapter$1, java.lang.String):void type: CONSTRUCTOR)
-                         org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable):boolean type: VIRTUAL in method: org.telegram.ui.InviteContactsActivity.InviteAdapter.1.lambda$run$1(java.lang.String):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0004: CONSTRUCTOR  (r1v0 org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0) = 
-                          (r2v0 'this' org.telegram.ui.InviteContactsActivity$InviteAdapter$1 A[THIS])
-                          (r3v0 'str' java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0.<init>(org.telegram.ui.InviteContactsActivity$InviteAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.InviteContactsActivity.InviteAdapter.1.lambda$run$1(java.lang.String):void, dex: classes3.dex
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                        	... 80 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0, state: NOT_LOADED
-                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                        	... 86 more
-                        */
-                    /*
-                        this = this;
-                        org.telegram.messenger.DispatchQueue r0 = org.telegram.messenger.Utilities.searchQueue
-                        org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0 r1 = new org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Q-wyCne2-SJvar_RGN3xSXB52cw0
-                        r1.<init>(r2, r3)
-                        r0.postRunnable(r1)
-                        return
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.InviteAdapter.AnonymousClass1.lambda$run$1$InviteContactsActivity$InviteAdapter$1(java.lang.String):void");
+                public /* synthetic */ void lambda$run$1(String str) {
+                    Utilities.searchQueue.postRunnable(new InviteContactsActivity$InviteAdapter$1$$ExternalSyntheticLambda0(this, str));
                 }
 
                 /* access modifiers changed from: private */
@@ -1196,9 +937,8 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                  */
                 /* JADX WARNING: Removed duplicated region for block: B:36:0x00da A[LOOP:1: B:23:0x008a->B:36:0x00da, LOOP_END] */
                 /* JADX WARNING: Removed duplicated region for block: B:43:0x00cb A[SYNTHETIC] */
-                /* renamed from: lambda$run$0 */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
-                public /* synthetic */ void lambda$run$0$InviteContactsActivity$InviteAdapter$1(java.lang.String r17) {
+                public /* synthetic */ void lambda$run$0(java.lang.String r17) {
                     /*
                         r16 = this;
                         r0 = r16
@@ -1312,31 +1052,18 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                         r3.updateSearchResults(r1, r2)
                         return
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.InviteAdapter.AnonymousClass1.lambda$run$0$InviteContactsActivity$InviteAdapter$1(java.lang.String):void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.InviteAdapter.AnonymousClass1.lambda$run$0(java.lang.String):void");
                 }
             }, 200, 300);
         }
 
         /* access modifiers changed from: private */
         public void updateSearchResults(ArrayList<ContactsController.Contact> arrayList, ArrayList<CharSequence> arrayList2) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ ArrayList f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    InviteContactsActivity.InviteAdapter.this.lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$$ExternalSyntheticLambda0(this, arrayList, arrayList2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$0 */
-        public /* synthetic */ void lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter(ArrayList arrayList, ArrayList arrayList2) {
+        public /* synthetic */ void lambda$updateSearchResults$0(ArrayList arrayList, ArrayList arrayList2) {
             if (this.searching) {
                 this.searchResult = arrayList;
                 this.searchResultNames = arrayList2;
@@ -1359,11 +1086,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$InviteContactsActivity$rqiQl5w_88ejYhQ1YmXgZeZ0YZM r10 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                InviteContactsActivity.this.lambda$getThemeDescriptions$3$InviteContactsActivity();
-            }
-        };
+        InviteContactsActivity$$ExternalSyntheticLambda2 inviteContactsActivity$$ExternalSyntheticLambda2 = new InviteContactsActivity$$ExternalSyntheticLambda2(this);
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -1391,14 +1114,14 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{InviteUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$InviteContactsActivity$rqiQl5w_88ejYhQ1YmXgZeZ0YZM r8 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        InviteContactsActivity$$ExternalSyntheticLambda2 inviteContactsActivity$$ExternalSyntheticLambda22 = inviteContactsActivity$$ExternalSyntheticLambda2;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, inviteContactsActivity$$ExternalSyntheticLambda22, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, inviteContactsActivity$$ExternalSyntheticLambda22, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, inviteContactsActivity$$ExternalSyntheticLambda22, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, inviteContactsActivity$$ExternalSyntheticLambda22, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, inviteContactsActivity$$ExternalSyntheticLambda22, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, inviteContactsActivity$$ExternalSyntheticLambda22, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, inviteContactsActivity$$ExternalSyntheticLambda22, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{InviteTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{InviteTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
         arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanBackground"));
@@ -1415,8 +1138,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$3 */
-    public /* synthetic */ void lambda$getThemeDescriptions$3$InviteContactsActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$3() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

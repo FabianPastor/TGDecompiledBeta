@@ -154,23 +154,12 @@ public class FilterGLThread extends DispatchQueue {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setFilterGLThreadDelegate$0 */
-    public /* synthetic */ void lambda$setFilterGLThreadDelegate$0$FilterGLThread(FilterShaders.FilterShadersDelegate filterShadersDelegate) {
+    public /* synthetic */ void lambda$setFilterGLThreadDelegate$0(FilterShaders.FilterShadersDelegate filterShadersDelegate) {
         this.filterShaders.setDelegate(filterShadersDelegate);
     }
 
     public void setFilterGLThreadDelegate(FilterShaders.FilterShadersDelegate filterShadersDelegate) {
-        postRunnable(new Runnable(filterShadersDelegate) {
-            public final /* synthetic */ FilterShaders.FilterShadersDelegate f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                FilterGLThread.this.lambda$setFilterGLThreadDelegate$0$FilterGLThread(this.f$1);
-            }
-        });
+        postRunnable(new FilterGLThread$$ExternalSyntheticLambda5(this, filterShadersDelegate));
     }
 
     private boolean initGL() {
@@ -267,21 +256,13 @@ public class FilterGLThread extends DispatchQueue {
                         Matrix.setIdentityM(this.videoTextureMatrix, 0);
                         SurfaceTexture surfaceTexture3 = new SurfaceTexture(this.videoTexture[0]);
                         this.videoSurfaceTexture = surfaceTexture3;
-                        surfaceTexture3.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
-                            public final void onFrameAvailable(SurfaceTexture surfaceTexture) {
-                                FilterGLThread.this.lambda$initGL$1$FilterGLThread(surfaceTexture);
-                            }
-                        });
+                        surfaceTexture3.setOnFrameAvailableListener(new FilterGLThread$$ExternalSyntheticLambda0(this));
                         GLES20.glBindTexture(36197, this.videoTexture[0]);
                         GLES20.glTexParameterf(36197, 10240, 9729.0f);
                         GLES20.glTexParameterf(36197, 10241, 9728.0f);
                         GLES20.glTexParameteri(36197, 10242, 33071);
                         GLES20.glTexParameteri(36197, 10243, 33071);
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public final void run() {
-                                FilterGLThread.this.lambda$initGL$2$FilterGLThread();
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new FilterGLThread$$ExternalSyntheticLambda1(this));
                     }
                     if (!this.filterShaders.create()) {
                         finish();
@@ -309,36 +290,21 @@ public class FilterGLThread extends DispatchQueue {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initGL$1 */
-    public /* synthetic */ void lambda$initGL$1$FilterGLThread(SurfaceTexture surfaceTexture2) {
+    public /* synthetic */ void lambda$initGL$1(SurfaceTexture surfaceTexture2) {
         requestRender(false, true, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initGL$2 */
-    public /* synthetic */ void lambda$initGL$2$FilterGLThread() {
+    public /* synthetic */ void lambda$initGL$2() {
         this.videoDelegate.onVideoSurfaceCreated(this.videoSurfaceTexture);
     }
 
     public void setVideoSize(int i, int i2) {
-        postRunnable(new Runnable(i, i2) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ int f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                FilterGLThread.this.lambda$setVideoSize$3$FilterGLThread(this.f$1, this.f$2);
-            }
-        });
+        postRunnable(new FilterGLThread$$ExternalSyntheticLambda3(this, i, i2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setVideoSize$3 */
-    public /* synthetic */ void lambda$setVideoSize$3$FilterGLThread(int i, int i2) {
+    public /* synthetic */ void lambda$setVideoSize$3(int i, int i2) {
         if (this.videoWidth != i || this.videoHeight != i2) {
             this.videoWidth = i;
             this.videoHeight = i2;
@@ -410,19 +376,7 @@ public class FilterGLThread extends DispatchQueue {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Bitmap[] bitmapArr = new Bitmap[1];
         try {
-            if (postRunnable(new Runnable(bitmapArr, countDownLatch) {
-                public final /* synthetic */ Bitmap[] f$1;
-                public final /* synthetic */ CountDownLatch f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    FilterGLThread.this.lambda$getTexture$4$FilterGLThread(this.f$1, this.f$2);
-                }
-            })) {
+            if (postRunnable(new FilterGLThread$$ExternalSyntheticLambda7(this, bitmapArr, countDownLatch))) {
                 countDownLatch.await();
             }
         } catch (Exception e) {
@@ -432,8 +386,7 @@ public class FilterGLThread extends DispatchQueue {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getTexture$4 */
-    public /* synthetic */ void lambda$getTexture$4$FilterGLThread(Bitmap[] bitmapArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getTexture$4(Bitmap[] bitmapArr, CountDownLatch countDownLatch) {
         GLES20.glBindFramebuffer(36160, this.filterShaders.getRenderFrameBuffer());
         GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.filterShaders.getRenderTexture(this.blurred ^ true ? 1 : 0), 0);
         GLES20.glClear(0);
@@ -444,16 +397,11 @@ public class FilterGLThread extends DispatchQueue {
     }
 
     public void shutdown() {
-        postRunnable(new Runnable() {
-            public final void run() {
-                FilterGLThread.this.lambda$shutdown$5$FilterGLThread();
-            }
-        });
+        postRunnable(new FilterGLThread$$ExternalSyntheticLambda2(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$shutdown$5 */
-    public /* synthetic */ void lambda$shutdown$5$FilterGLThread() {
+    public /* synthetic */ void lambda$shutdown$5() {
         finish();
         Looper myLooper = Looper.myLooper();
         if (myLooper != null) {
@@ -462,24 +410,11 @@ public class FilterGLThread extends DispatchQueue {
     }
 
     public void setSurfaceTextureSize(int i, int i2) {
-        postRunnable(new Runnable(i, i2) {
-            public final /* synthetic */ int f$1;
-            public final /* synthetic */ int f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                FilterGLThread.this.lambda$setSurfaceTextureSize$6$FilterGLThread(this.f$1, this.f$2);
-            }
-        });
+        postRunnable(new FilterGLThread$$ExternalSyntheticLambda4(this, i, i2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setSurfaceTextureSize$6 */
-    public /* synthetic */ void lambda$setSurfaceTextureSize$6$FilterGLThread(int i, int i2) {
+    public /* synthetic */ void lambda$setSurfaceTextureSize$6(int i, int i2) {
         this.surfaceWidth = i;
         this.surfaceHeight = i2;
     }
@@ -494,26 +429,11 @@ public class FilterGLThread extends DispatchQueue {
     }
 
     public void requestRender(boolean z, boolean z2, boolean z3) {
-        postRunnable(new Runnable(z, z3, z2) {
-            public final /* synthetic */ boolean f$1;
-            public final /* synthetic */ boolean f$2;
-            public final /* synthetic */ boolean f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                FilterGLThread.this.lambda$requestRender$7$FilterGLThread(this.f$1, this.f$2, this.f$3);
-            }
-        });
+        postRunnable(new FilterGLThread$$ExternalSyntheticLambda6(this, z, z3, z2));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$requestRender$7 */
-    public /* synthetic */ void lambda$requestRender$7$FilterGLThread(boolean z, boolean z2, boolean z3) {
+    public /* synthetic */ void lambda$requestRender$7(boolean z, boolean z2, boolean z3) {
         if (z) {
             this.filterShaders.requestUpdateBlurTexture();
         }

@@ -1,29 +1,23 @@
 package j$.util.function;
 
-public final /* synthetic */ class k implements Predicate {
-    public final /* synthetic */ Predicate a;
-    public final /* synthetic */ Predicate b;
+public final /* synthetic */ class k implements l {
+    public final /* synthetic */ l a;
+    public final /* synthetic */ l b;
 
-    public /* synthetic */ k(Predicate predicate, Predicate predicate2) {
-        this.a = predicate;
-        this.b = predicate2;
+    public /* synthetic */ k(l lVar, l lVar2) {
+        this.a = lVar;
+        this.b = lVar2;
     }
 
-    public Predicate a(Predicate predicate) {
-        predicate.getClass();
-        return new k(this, predicate);
+    public final void accept(int i) {
+        l lVar = this.a;
+        l lVar2 = this.b;
+        lVar.accept(i);
+        lVar2.accept(i);
     }
 
-    public Predicate b(Predicate predicate) {
-        predicate.getClass();
-        return new m(this, predicate);
-    }
-
-    public Predicate negate() {
-        return new l(this);
-    }
-
-    public final boolean test(Object obj) {
-        return this.a.test(obj) || this.b.test(obj);
+    public l l(l lVar) {
+        lVar.getClass();
+        return new k(this, lVar);
     }
 }

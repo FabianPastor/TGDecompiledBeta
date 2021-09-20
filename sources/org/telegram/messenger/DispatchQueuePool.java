@@ -72,41 +72,17 @@ public class DispatchQueuePool {
         this.totalTasksCount++;
         this.busyQueues.add(dispatchQueue);
         this.busyQueuesMap.put(dispatchQueue.index, this.busyQueuesMap.get(dispatchQueue.index, 0) + 1);
-        dispatchQueue.postRunnable(new Runnable(runnable, dispatchQueue) {
-            public final /* synthetic */ Runnable f$1;
-            public final /* synthetic */ DispatchQueue f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                DispatchQueuePool.this.lambda$execute$1$DispatchQueuePool(this.f$1, this.f$2);
-            }
-        });
+        dispatchQueue.postRunnable(new DispatchQueuePool$$ExternalSyntheticLambda0(this, runnable, dispatchQueue));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$execute$1 */
-    public /* synthetic */ void lambda$execute$1$DispatchQueuePool(Runnable runnable, DispatchQueue dispatchQueue) {
+    public /* synthetic */ void lambda$execute$1(Runnable runnable, DispatchQueue dispatchQueue) {
         runnable.run();
-        AndroidUtilities.runOnUIThread(new Runnable(dispatchQueue) {
-            public final /* synthetic */ DispatchQueue f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                DispatchQueuePool.this.lambda$execute$0$DispatchQueuePool(this.f$1);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new DispatchQueuePool$$ExternalSyntheticLambda1(this, dispatchQueue));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$execute$0 */
-    public /* synthetic */ void lambda$execute$0$DispatchQueuePool(DispatchQueue dispatchQueue) {
+    public /* synthetic */ void lambda$execute$0(DispatchQueue dispatchQueue) {
         this.totalTasksCount--;
         int i = this.busyQueuesMap.get(dispatchQueue.index) - 1;
         if (i == 0) {

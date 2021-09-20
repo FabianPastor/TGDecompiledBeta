@@ -129,7 +129,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r0.setApplyTopPadding(r3)
             r0.setApplyBottomPadding(r3)
             android.content.res.Resources r5 = r21.getResources()
-            r6 = 2131166044(0x7var_c, float:1.7946322E38)
+            r6 = 2131166048(0x7var_, float:1.794633E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             r0.shadowDrawable = r5
@@ -368,8 +368,8 @@ public class UpdateAppAlertDialog extends BottomSheet {
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r8, r4, r6)
             r2.setText(r4, r3)
             android.view.View r4 = r2.background
-            org.telegram.ui.Components.-$$Lambda$UpdateAppAlertDialog$Ec_n2Ko6Hg9ZZ70gVv2vh1xFpmo r6 = new org.telegram.ui.Components.-$$Lambda$UpdateAppAlertDialog$Ec_n2Ko6Hg9ZZ70gVv2vh1xFpmo
-            r6.<init>()
+            org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda0 r6 = new org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda0
+            r6.<init>(r0)
             r4.setOnClickListener(r6)
             r8 = -1
             r9 = 1112014848(0x42480000, float:50.0)
@@ -387,8 +387,8 @@ public class UpdateAppAlertDialog extends BottomSheet {
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r2.setText(r1, r3)
             android.view.View r1 = r2.background
-            org.telegram.ui.Components.-$$Lambda$UpdateAppAlertDialog$iWt6wiHetSsFroTsHnr4U-PRsrQ r3 = new org.telegram.ui.Components.-$$Lambda$UpdateAppAlertDialog$iWt6wiHetSsFroTsHnr4U-PRsrQ
-            r3.<init>()
+            org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda1
+            r3.<init>(r0)
             r1.setOnClickListener(r3)
             r6 = -1
             r7 = 1112014848(0x42480000, float:50.0)
@@ -403,15 +403,13 @@ public class UpdateAppAlertDialog extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$UpdateAppAlertDialog(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", 1, 1);
         dismiss();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$UpdateAppAlertDialog(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         dismiss();
     }
 

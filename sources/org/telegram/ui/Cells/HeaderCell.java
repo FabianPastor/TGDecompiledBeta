@@ -19,22 +19,33 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class HeaderCell extends FrameLayout {
     private int height;
+    private final Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
     private SimpleTextView textView2;
 
     public HeaderCell(Context context) {
-        this(context, "windowBackgroundWhiteBlueHeader", 21, 15, false);
+        this(context, "windowBackgroundWhiteBlueHeader", 21, 15, false, (Theme.ResourcesProvider) null);
+    }
+
+    public HeaderCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, "windowBackgroundWhiteBlueHeader", 21, 15, false, resourcesProvider2);
     }
 
     public HeaderCell(Context context, int i) {
-        this(context, "windowBackgroundWhiteBlueHeader", i, 15, false);
+        this(context, "windowBackgroundWhiteBlueHeader", i, 15, false, (Theme.ResourcesProvider) null);
+    }
+
+    public HeaderCell(Context context, String str, int i, int i2, boolean z) {
+        this(context, str, i, i2, z, (Theme.ResourcesProvider) null);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public HeaderCell(Context context, String str, int i, int i2, boolean z) {
+    public HeaderCell(Context context, String str, int i, int i2, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        String str2 = str;
         int i3 = i2;
         this.height = 40;
+        this.resourcesProvider = resourcesProvider2;
         TextView textView3 = new TextView(getContext());
         this.textView = textView3;
         textView3.setTextSize(1, 15.0f);
@@ -43,8 +54,8 @@ public class HeaderCell extends FrameLayout {
         int i4 = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setMinHeight(AndroidUtilities.dp((float) (this.height - i3)));
-        this.textView.setTextColor(Theme.getColor(str));
-        this.textView.setTag(str);
+        this.textView.setTextColor(getThemedColor(str2));
+        this.textView.setTag(str2);
         float f = (float) i;
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, f, (float) i3, f, 0.0f));
         if (z) {
@@ -112,5 +123,11 @@ public class HeaderCell extends FrameLayout {
         if (Build.VERSION.SDK_INT >= 19 && (collectionItemInfo = accessibilityNodeInfo.getCollectionItemInfo()) != null) {
             accessibilityNodeInfo.setCollectionItemInfo(AccessibilityNodeInfo.CollectionItemInfo.obtain(collectionItemInfo.getRowIndex(), collectionItemInfo.getRowSpan(), collectionItemInfo.getColumnIndex(), collectionItemInfo.getColumnSpan(), true));
         }
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

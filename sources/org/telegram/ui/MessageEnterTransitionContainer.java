@@ -10,11 +10,7 @@ import org.telegram.messenger.NotificationCenter;
 @SuppressLint({"ViewConstructor"})
 public class MessageEnterTransitionContainer extends View {
     private final int currentAccount;
-    Runnable hideRunnable = new Runnable() {
-        public final void run() {
-            MessageEnterTransitionContainer.this.lambda$new$0$MessageEnterTransitionContainer();
-        }
-    };
+    Runnable hideRunnable = new MessageEnterTransitionContainer$$ExternalSyntheticLambda0(this);
     private ArrayList<Transition> transitions = new ArrayList<>();
 
     public interface Transition {
@@ -22,8 +18,7 @@ public class MessageEnterTransitionContainer extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$MessageEnterTransitionContainer() {
+    public /* synthetic */ void lambda$new$0() {
         setVisibility(8);
     }
 

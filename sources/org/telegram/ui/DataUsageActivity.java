@@ -35,11 +35,10 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ScrollSlidingTextTabStrip;
-import org.telegram.ui.DataUsageActivity;
 
 public class DataUsageActivity extends BaseFragment {
     /* access modifiers changed from: private */
-    public static final Interpolator interpolator = $$Lambda$DataUsageActivity$P_yBFhbppGMoCdEu34gwLaeJwR4.INSTANCE;
+    public static final Interpolator interpolator = DataUsageActivity$$ExternalSyntheticLambda1.INSTANCE;
     /* access modifiers changed from: private */
     public boolean animatingForward;
     /* access modifiers changed from: private */
@@ -62,7 +61,8 @@ public class DataUsageActivity extends BaseFragment {
     public ViewPage[] viewPages = new ViewPage[2];
     private ListAdapter wifiAdapter;
 
-    static /* synthetic */ float lambda$static$0(float f) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ float lambda$static$0(float f) {
         float f2 = f - 1.0f;
         return (f2 * f2 * f2 * f2 * f2) + 1.0f;
     }
@@ -75,7 +75,7 @@ public class DataUsageActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public int selectedType;
 
-        public ViewPage(Context context) {
+        public ViewPage(DataUsageActivity dataUsageActivity, Context context) {
             super(context);
         }
     }
@@ -479,7 +479,7 @@ public class DataUsageActivity extends BaseFragment {
             r0.addView(r8, LayoutHelper.createFrame(-1, -1.0f));
             ViewPage[] viewPageArr2 = this.viewPages;
             viewPageArr2[i] = r8;
-            LinearLayoutManager access$2802 = viewPageArr2[i].layoutManager = new LinearLayoutManager(context, 1, false) {
+            LinearLayoutManager access$2802 = viewPageArr2[i].layoutManager = new LinearLayoutManager(this, context, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
@@ -493,17 +493,7 @@ public class DataUsageActivity extends BaseFragment {
             this.viewPages[i].listView.setLayoutManager(access$2802);
             ViewPage[] viewPageArr3 = this.viewPages;
             viewPageArr3[i].addView(viewPageArr3[i].listView, LayoutHelper.createFrame(-1, -1.0f));
-            this.viewPages[i].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(recyclerListView) {
-                public final /* synthetic */ RecyclerListView f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onItemClick(View view, int i) {
-                    DataUsageActivity.this.lambda$createView$2$DataUsageActivity(this.f$1, view, i);
-                }
-            });
+            this.viewPages[i].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new DataUsageActivity$$ExternalSyntheticLambda2(this, recyclerListView));
             this.viewPages[i].listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                     if (i != 1) {
@@ -553,25 +543,14 @@ public class DataUsageActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$DataUsageActivity(RecyclerListView recyclerListView, View view, int i) {
+    public /* synthetic */ void lambda$createView$2(RecyclerListView recyclerListView, View view, int i) {
         if (getParentActivity() != null) {
             ListAdapter listAdapter = (ListAdapter) recyclerListView.getAdapter();
             if (i == listAdapter.resetRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                 builder.setTitle(LocaleController.getString("ResetStatisticsAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetStatisticsAlert", NUM));
-                builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener(listAdapter) {
-                    public final /* synthetic */ DataUsageActivity.ListAdapter f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        DataUsageActivity.this.lambda$createView$1$DataUsageActivity(this.f$1, dialogInterface, i);
-                    }
-                });
+                builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DataUsageActivity$$ExternalSyntheticLambda0(this, listAdapter));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 AlertDialog create = builder.create();
                 showDialog(create);
@@ -584,8 +563,7 @@ public class DataUsageActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$DataUsageActivity(ListAdapter listAdapter, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$1(ListAdapter listAdapter, DialogInterface dialogInterface, int i) {
         StatsController.getInstance(this.currentAccount).resetStats(listAdapter.currentType);
         listAdapter.notifyDataSetChanged();
     }
@@ -1000,7 +978,7 @@ public class DataUsageActivity extends BaseFragment {
                 view = new TextSettingsCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i != 2) {
-                view = i != 3 ? null : new TextInfoPrivacyCell(this.mContext);
+                view = new TextInfoPrivacyCell(this.mContext);
             } else {
                 view = new HeaderCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));

@@ -39,7 +39,7 @@ public abstract class TLRPC$Message extends TLObject {
     public long random_id;
     public TLRPC$TL_messageReactions reactions;
     public int realId;
-    public TLRPC$TL_messageReplies replies;
+    public TLRPC$MessageReplies replies;
     public TLRPC$Message replyMessage;
     public TLRPC$ReplyMarkup reply_markup;
     public TLRPC$TL_messageReplyHeader reply_to;
@@ -53,7 +53,7 @@ public abstract class TLRPC$Message extends TLObject {
     public int ttl;
     public int ttl_period;
     public boolean unread;
-    public int via_bot_id;
+    public long via_bot_id;
     public String via_bot_name;
     public int views;
     public boolean with_my_score;
@@ -63,6 +63,9 @@ public abstract class TLRPC$Message extends TLObject {
         switch (i) {
             case -2082087340:
                 tLRPC$Message = new TLRPC$TL_messageEmpty_layer122();
+                break;
+            case -2049520670:
+                tLRPC$Message = new TLRPC$TL_message();
                 break;
             case -1868117372:
                 tLRPC$Message = new TLRPC$TL_messageEmpty();
@@ -86,7 +89,7 @@ public abstract class TLRPC$Message extends TLObject {
                 tLRPC$Message = new TLRPC$TL_message_old3();
                 break;
             case -1125940270:
-                tLRPC$Message = new TLRPC$TL_message();
+                tLRPC$Message = new TLRPC$TL_message_layer131();
                 break;
             case -1066691065:
                 tLRPC$Message = new TLRPC$TL_messageService_layer48();
@@ -167,14 +170,25 @@ public abstract class TLRPC$Message extends TLObject {
         throw new RuntimeException(String.format("can't parse magic %x in Message", new Object[]{Integer.valueOf(i)}));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x00a1  */
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x0124  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Code restructure failed: missing block: B:37:0x005d, code lost:
+        if (r9 == r13) goto L_0x005f;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:42:0x0067, code lost:
+        if (r11.send_state != 3) goto L_0x0069;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:44:0x006b, code lost:
+        if (r11.legacy != false) goto L_0x006d;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0045  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0063  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x00aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x012e  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void readAttachPath(org.telegram.tgnet.AbstractSerializedData r8, int r9) {
+    public void readAttachPath(org.telegram.tgnet.AbstractSerializedData r12, long r13) {
         /*
-            r7 = this;
-            org.telegram.tgnet.TLRPC$MessageMedia r0 = r7.media
+            r11 = this;
+            org.telegram.tgnet.TLRPC$MessageMedia r0 = r11.media
             r1 = 0
             r2 = 1
             if (r0 == 0) goto L_0x0010
@@ -187,10 +201,10 @@ public abstract class TLRPC$Message extends TLObject {
         L_0x0010:
             r0 = 0
         L_0x0011:
-            java.lang.String r3 = r7.message
+            java.lang.String r3 = r11.message
             boolean r3 = android.text.TextUtils.isEmpty(r3)
             if (r3 != 0) goto L_0x003f
-            org.telegram.tgnet.TLRPC$MessageMedia r3 = r7.media
+            org.telegram.tgnet.TLRPC$MessageMedia r3 = r11.media
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto_old
             if (r4 != 0) goto L_0x0033
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto_layer68
@@ -204,7 +218,7 @@ public abstract class TLRPC$Message extends TLObject {
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument_layer74
             if (r3 == 0) goto L_0x003f
         L_0x0033:
-            java.lang.String r3 = r7.message
+            java.lang.String r3 = r11.message
             java.lang.String r4 = "-1"
             boolean r3 = r3.startsWith(r4)
             if (r3 == 0) goto L_0x003f
@@ -213,130 +227,134 @@ public abstract class TLRPC$Message extends TLObject {
         L_0x003f:
             r3 = 0
         L_0x0040:
-            boolean r4 = r7.out
+            boolean r4 = r11.out
             r5 = 3
-            if (r4 != 0) goto L_0x0057
-            org.telegram.tgnet.TLRPC$Peer r4 = r7.peer_id
-            if (r4 == 0) goto L_0x0061
-            org.telegram.tgnet.TLRPC$Peer r6 = r7.from_id
-            if (r6 == 0) goto L_0x0061
-            int r4 = r4.user_id
-            if (r4 == 0) goto L_0x0061
-            int r6 = r6.user_id
-            if (r4 != r6) goto L_0x0061
-            if (r6 != r9) goto L_0x0061
-        L_0x0057:
-            int r9 = r7.id
-            if (r9 < 0) goto L_0x0065
-            if (r0 != 0) goto L_0x0065
-            int r9 = r7.send_state
-            if (r9 == r5) goto L_0x0065
-        L_0x0061:
-            boolean r9 = r7.legacy
-            if (r9 == 0) goto L_0x011a
-        L_0x0065:
-            r9 = 2
-            if (r0 == 0) goto L_0x009b
-            if (r3 == 0) goto L_0x009b
-            java.lang.String r0 = r7.message
-            int r0 = r0.length()
-            r3 = 6
-            if (r0 <= r3) goto L_0x008b
-            java.lang.String r0 = r7.message
-            char r0 = r0.charAt(r9)
-            r3 = 95
-            if (r0 != r3) goto L_0x008b
+            if (r4 != 0) goto L_0x005f
+            org.telegram.tgnet.TLRPC$Peer r4 = r11.peer_id
+            if (r4 == 0) goto L_0x0069
+            org.telegram.tgnet.TLRPC$Peer r6 = r11.from_id
+            if (r6 == 0) goto L_0x0069
+            long r7 = r4.user_id
+            r9 = 0
+            int r4 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
+            if (r4 == 0) goto L_0x0069
+            long r9 = r6.user_id
+            int r4 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
+            if (r4 != 0) goto L_0x0069
+            int r4 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1))
+            if (r4 != 0) goto L_0x0069
+        L_0x005f:
+            int r13 = r11.id
+            if (r13 < 0) goto L_0x006d
+            if (r0 != 0) goto L_0x006d
+            int r13 = r11.send_state
+            if (r13 == r5) goto L_0x006d
+        L_0x0069:
+            boolean r13 = r11.legacy
+            if (r13 == 0) goto L_0x0124
+        L_0x006d:
+            r13 = 2
+            if (r0 == 0) goto L_0x00a4
+            if (r3 == 0) goto L_0x00a4
+            java.lang.String r14 = r11.message
+            int r14 = r14.length()
+            r0 = 6
+            if (r14 <= r0) goto L_0x0094
+            java.lang.String r14 = r11.message
+            char r14 = r14.charAt(r13)
+            r0 = 95
+            if (r14 != r0) goto L_0x0094
+            java.util.HashMap r14 = new java.util.HashMap
+            r14.<init>()
+            r11.params = r14
+            java.lang.String r0 = r11.message
+            java.lang.String r3 = "ve"
+            r14.put(r3, r0)
+        L_0x0094:
+            java.util.HashMap<java.lang.String, java.lang.String> r14 = r11.params
+            if (r14 != 0) goto L_0x00a0
+            java.lang.String r14 = r11.message
+            int r14 = r14.length()
+            if (r14 != r13) goto L_0x00a4
+        L_0x00a0:
+            java.lang.String r14 = ""
+            r11.message = r14
+        L_0x00a4:
+            int r14 = r12.remaining()
+            if (r14 <= 0) goto L_0x0124
+            java.lang.String r14 = r12.readString(r1)
+            r11.attachPath = r14
+            if (r14 == 0) goto L_0x0124
+            int r0 = r11.id
+            if (r0 < 0) goto L_0x00be
+            int r0 = r11.send_state
+            if (r0 == r5) goto L_0x00be
+            boolean r0 = r11.legacy
+            if (r0 == 0) goto L_0x011c
+        L_0x00be:
+            java.lang.String r0 = "||"
+            boolean r14 = r14.startsWith(r0)
+            if (r14 == 0) goto L_0x011c
+            java.lang.String r14 = r11.attachPath
+            java.lang.String r0 = "\\|\\|"
+            java.lang.String[] r14 = r14.split(r0)
+            int r0 = r14.length
+            if (r0 <= 0) goto L_0x0124
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = r11.params
+            if (r0 != 0) goto L_0x00dd
             java.util.HashMap r0 = new java.util.HashMap
             r0.<init>()
-            r7.params = r0
-            java.lang.String r3 = r7.message
-            java.lang.String r4 = "ve"
-            r0.put(r4, r3)
-        L_0x008b:
-            java.util.HashMap<java.lang.String, java.lang.String> r0 = r7.params
-            if (r0 != 0) goto L_0x0097
-            java.lang.String r0 = r7.message
-            int r0 = r0.length()
-            if (r0 != r9) goto L_0x009b
-        L_0x0097:
-            java.lang.String r0 = ""
-            r7.message = r0
-        L_0x009b:
-            int r0 = r8.remaining()
-            if (r0 <= 0) goto L_0x011a
-            java.lang.String r0 = r8.readString(r1)
-            r7.attachPath = r0
-            if (r0 == 0) goto L_0x011a
-            int r3 = r7.id
-            if (r3 < 0) goto L_0x00b5
-            int r3 = r7.send_state
-            if (r3 == r5) goto L_0x00b5
-            boolean r3 = r7.legacy
-            if (r3 == 0) goto L_0x0112
-        L_0x00b5:
-            java.lang.String r3 = "||"
-            boolean r0 = r0.startsWith(r3)
-            if (r0 == 0) goto L_0x0112
-            java.lang.String r0 = r7.attachPath
-            java.lang.String r3 = "\\|\\|"
-            java.lang.String[] r0 = r0.split(r3)
-            int r3 = r0.length
-            if (r3 <= 0) goto L_0x011a
-            java.util.HashMap<java.lang.String, java.lang.String> r3 = r7.params
-            if (r3 != 0) goto L_0x00d3
-            java.util.HashMap r3 = new java.util.HashMap
-            r3.<init>()
-            r7.params = r3
-        L_0x00d3:
-            r3 = 1
-        L_0x00d4:
-            int r4 = r0.length
-            int r4 = r4 - r2
-            if (r3 >= r4) goto L_0x00ef
-            r4 = r0[r3]
-            java.lang.String r5 = "\\|=\\|"
-            java.lang.String[] r4 = r4.split(r5)
-            int r5 = r4.length
-            if (r5 != r9) goto L_0x00ec
-            java.util.HashMap<java.lang.String, java.lang.String> r5 = r7.params
-            r6 = r4[r1]
-            r4 = r4[r2]
-            r5.put(r6, r4)
-        L_0x00ec:
-            int r3 = r3 + 1
-            goto L_0x00d4
-        L_0x00ef:
-            int r9 = r0.length
-            int r9 = r9 - r2
-            r9 = r0[r9]
-            java.lang.String r9 = r9.trim()
-            r7.attachPath = r9
-            boolean r9 = r7.legacy
-            if (r9 == 0) goto L_0x011a
-            java.util.HashMap<java.lang.String, java.lang.String> r9 = r7.params
-            java.lang.String r0 = "legacy_layer"
-            java.lang.Object r9 = r9.get(r0)
-            java.lang.CharSequence r9 = (java.lang.CharSequence) r9
-            java.lang.Integer r9 = org.telegram.messenger.Utilities.parseInt(r9)
-            int r9 = r9.intValue()
-            r7.layer = r9
-            goto L_0x011a
-        L_0x0112:
-            java.lang.String r9 = r7.attachPath
-            java.lang.String r9 = r9.trim()
-            r7.attachPath = r9
-        L_0x011a:
-            int r9 = r7.flags
-            r9 = r9 & 4
-            if (r9 == 0) goto L_0x012a
-            int r9 = r7.id
-            if (r9 >= 0) goto L_0x012a
-            int r8 = r8.readInt32(r1)
-            r7.fwd_msg_id = r8
-        L_0x012a:
+            r11.params = r0
+        L_0x00dd:
+            r0 = 1
+        L_0x00de:
+            int r3 = r14.length
+            int r3 = r3 - r2
+            if (r0 >= r3) goto L_0x00f9
+            r3 = r14[r0]
+            java.lang.String r4 = "\\|=\\|"
+            java.lang.String[] r3 = r3.split(r4)
+            int r4 = r3.length
+            if (r4 != r13) goto L_0x00f6
+            java.util.HashMap<java.lang.String, java.lang.String> r4 = r11.params
+            r5 = r3[r1]
+            r3 = r3[r2]
+            r4.put(r5, r3)
+        L_0x00f6:
+            int r0 = r0 + 1
+            goto L_0x00de
+        L_0x00f9:
+            int r13 = r14.length
+            int r13 = r13 - r2
+            r13 = r14[r13]
+            java.lang.String r13 = r13.trim()
+            r11.attachPath = r13
+            boolean r13 = r11.legacy
+            if (r13 == 0) goto L_0x0124
+            java.util.HashMap<java.lang.String, java.lang.String> r13 = r11.params
+            java.lang.String r14 = "legacy_layer"
+            java.lang.Object r13 = r13.get(r14)
+            java.lang.CharSequence r13 = (java.lang.CharSequence) r13
+            java.lang.Integer r13 = org.telegram.messenger.Utilities.parseInt(r13)
+            int r13 = r13.intValue()
+            r11.layer = r13
+            goto L_0x0124
+        L_0x011c:
+            java.lang.String r13 = r11.attachPath
+            java.lang.String r13 = r13.trim()
+            r11.attachPath = r13
+        L_0x0124:
+            int r13 = r11.flags
+            r13 = r13 & 4
+            if (r13 == 0) goto L_0x0134
+            int r13 = r11.id
+            if (r13 >= 0) goto L_0x0134
+            int r12 = r12.readInt32(r1)
+            r11.fwd_msg_id = r12
+        L_0x0134:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.TLRPC$Message.readAttachPath(org.telegram.tgnet.AbstractSerializedData, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.TLRPC$Message.readAttachPath(org.telegram.tgnet.AbstractSerializedData, long):void");
     }
 
     /* access modifiers changed from: protected */
@@ -362,8 +380,8 @@ public abstract class TLRPC$Message extends TLObject {
             if (this.params == null) {
                 this.params = new HashMap<>();
             }
-            this.layer = 132;
-            this.params.put("legacy_layer", "132");
+            this.layer = 133;
+            this.params.put("legacy_layer", "133");
         }
         if ((this.id < 0 || this.send_state == 3 || this.legacy) && (hashMap2 = this.params) != null && hashMap2.size() > 0) {
             for (Map.Entry next2 : this.params.entrySet()) {

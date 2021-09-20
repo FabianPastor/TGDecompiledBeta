@@ -1,6 +1,5 @@
 package j$.util;
 
-import j$.time.a;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Function;
@@ -64,11 +63,6 @@ public interface Map<K, V> {
             }
         }
 
-        public static Object $default$getOrDefault(java.util.Map map, Object obj, Object obj2) {
-            Object obj3 = map.get(obj);
-            return (obj3 != null || map.containsKey(obj)) ? obj3 : obj2;
-        }
-
         public static Object $default$merge(java.util.Map map, Object obj, Object obj2, BiFunction biFunction) {
             biFunction.getClass();
             obj2.getClass();
@@ -82,40 +76,6 @@ public interface Map<K, V> {
                 map.put(obj, obj2);
             }
             return obj2;
-        }
-
-        public static Object $default$putIfAbsent(java.util.Map map, Object obj, Object obj2) {
-            Object obj3 = map.get(obj);
-            return obj3 == null ? map.put(obj, obj2) : obj3;
-        }
-
-        public static boolean $default$remove(java.util.Map map, Object obj, Object obj2) {
-            Object obj3 = map.get(obj);
-            if (!a.u(obj3, obj2)) {
-                return false;
-            }
-            if (obj3 == null && !map.containsKey(obj)) {
-                return false;
-            }
-            map.remove(obj);
-            return true;
-        }
-
-        public static Object $default$replace(java.util.Map map, Object obj, Object obj2) {
-            Object obj3 = map.get(obj);
-            return (obj3 != null || map.containsKey(obj)) ? map.put(obj, obj2) : obj3;
-        }
-
-        public static boolean $default$replace(java.util.Map map, Object obj, Object obj2, Object obj3) {
-            Object obj4 = map.get(obj);
-            if (!a.u(obj4, obj2)) {
-                return false;
-            }
-            if (obj4 == null && !map.containsKey(obj)) {
-                return false;
-            }
-            map.put(obj, obj3);
-            return true;
         }
 
         public static void $default$replaceAll(java.util.Map map, BiFunction biFunction) {
@@ -137,62 +97,62 @@ public interface Map<K, V> {
     public interface Entry<K, V> {
         boolean equals(Object obj);
 
-        Object getKey();
+        K getKey();
 
-        Object getValue();
+        V getValue();
 
         int hashCode();
 
-        Object setValue(Object obj);
+        V setValue(V v);
     }
 
     void clear();
 
-    Object compute(Object obj, BiFunction biFunction);
+    V compute(K k, BiFunction<? super K, ? super V, ? extends V> biFunction);
 
-    Object computeIfAbsent(Object obj, Function function);
+    V computeIfAbsent(K k, Function<? super K, ? extends V> function);
 
-    Object computeIfPresent(Object obj, BiFunction biFunction);
+    V computeIfPresent(K k, BiFunction<? super K, ? super V, ? extends V> biFunction);
 
     boolean containsKey(Object obj);
 
     boolean containsValue(Object obj);
 
-    Set entrySet();
+    Set<Map.Entry<K, V>> entrySet();
 
     boolean equals(Object obj);
 
-    void forEach(BiConsumer biConsumer);
+    void forEach(BiConsumer<? super K, ? super V> biConsumer);
 
-    Object get(Object obj);
+    V get(Object obj);
 
-    Object getOrDefault(Object obj, Object obj2);
+    V getOrDefault(Object obj, V v);
 
     int hashCode();
 
     boolean isEmpty();
 
-    Set keySet();
+    Set<K> keySet();
 
-    Object merge(Object obj, Object obj2, BiFunction biFunction);
+    V merge(K k, V v, BiFunction<? super V, ? super V, ? extends V> biFunction);
 
-    Object put(Object obj, Object obj2);
+    V put(K k, V v);
 
-    void putAll(java.util.Map map);
+    void putAll(java.util.Map<? extends K, ? extends V> map);
 
-    Object putIfAbsent(Object obj, Object obj2);
+    V putIfAbsent(K k, V v);
 
-    Object remove(Object obj);
+    V remove(Object obj);
 
     boolean remove(Object obj, Object obj2);
 
-    Object replace(Object obj, Object obj2);
+    V replace(K k, V v);
 
-    boolean replace(Object obj, Object obj2, Object obj3);
+    boolean replace(K k, V v, V v2);
 
-    void replaceAll(BiFunction biFunction);
+    void replaceAll(BiFunction<? super K, ? super V, ? extends V> biFunction);
 
     int size();
 
-    Collection values();
+    Collection<V> values();
 }

@@ -1,16 +1,19 @@
 package j$.util.stream;
 
-import j$.util.stream.A2;
+import j$.util.function.d;
 
-abstract class C2 extends A2.a<Double> {
-    protected boolean b;
+class C2 extends V2 {
+    final /* synthetic */ d b;
+    final /* synthetic */ double c;
 
-    C2(A2 a2) {
-        super(a2);
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    C2(CLASSNAMEf4 f4Var, d dVar, double d) {
+        super(f4Var);
+        this.b = dVar;
+        this.c = d;
     }
 
-    public final boolean o() {
-        this.b = true;
-        return false;
+    public T2 a() {
+        return new D2(this.c, this.b);
     }
 }

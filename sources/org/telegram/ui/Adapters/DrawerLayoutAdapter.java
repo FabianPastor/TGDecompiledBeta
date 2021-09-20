@@ -112,7 +112,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
         if (itemViewType == 0) {
-            ((DrawerProfileCell) viewHolder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShown);
+            ((DrawerProfileCell) viewHolder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Long.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShown);
         } else if (itemViewType == 3) {
             DrawerActionCell drawerActionCell = (DrawerActionCell) viewHolder.itemView;
             int i2 = i - 2;
@@ -184,7 +184,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 this.accountNumbers.add(Integer.valueOf(i9));
             }
         }
-        Collections.sort(this.accountNumbers, $$Lambda$DrawerLayoutAdapter$pyljm01qtLl0BbFoRFh7svzDDE.INSTANCE);
+        Collections.sort(this.accountNumbers, DrawerLayoutAdapter$$ExternalSyntheticLambda0.INSTANCE);
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             int eventType = Theme.getEventType();
@@ -240,7 +240,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         }
     }
 
-    static /* synthetic */ int lambda$resetItems$0(Integer num, Integer num2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$resetItems$0(Integer num, Integer num2) {
         long j = (long) UserConfig.getInstance(num.intValue()).loginTime;
         long j2 = (long) UserConfig.getInstance(num2.intValue()).loginTime;
         if (j > j2) {

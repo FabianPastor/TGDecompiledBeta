@@ -1,32 +1,23 @@
 package j$.util.stream;
 
-import j$.util.function.Predicate;
-import j$.util.function.k;
-import j$.util.function.l;
-import j$.util.function.m;
-import j$.util.o;
+import j$.util.concurrent.a;
+import j$.util.function.BiConsumer;
 
-public final /* synthetic */ class S0 implements Predicate {
+public final /* synthetic */ class S0 implements BiConsumer {
     public static final /* synthetic */ S0 a = new S0();
 
     private /* synthetic */ S0() {
     }
 
-    public Predicate a(Predicate predicate) {
-        predicate.getClass();
-        return new k(this, predicate);
+    public final void accept(Object obj, Object obj2) {
+        long[] jArr = (long[]) obj;
+        long[] jArr2 = (long[]) obj2;
+        jArr[0] = jArr[0] + jArr2[0];
+        jArr[1] = jArr[1] + jArr2[1];
     }
 
-    public Predicate b(Predicate predicate) {
-        predicate.getClass();
-        return new m(this, predicate);
-    }
-
-    public Predicate negate() {
-        return new l(this);
-    }
-
-    public final boolean test(Object obj) {
-        return ((o) obj).c();
+    public BiConsumer b(BiConsumer biConsumer) {
+        biConsumer.getClass();
+        return new a((BiConsumer) this, biConsumer);
     }
 }

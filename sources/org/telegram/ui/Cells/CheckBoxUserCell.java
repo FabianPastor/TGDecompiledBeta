@@ -45,7 +45,7 @@ public class CheckBoxUserCell extends FrameLayout {
         this.imageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(36.0f));
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, (LocaleController.isRTL ? 5 : 3) | 48, 48.0f, 7.0f, 48.0f, 0.0f));
-        CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context, z);
+        CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context, z, (Theme.ResourcesProvider) null);
         this.checkBox = checkBoxSquare;
         boolean z3 = LocaleController.isRTL;
         addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, (!z3 ? 3 : i) | 48, (float) (z3 ? 0 : 21), 16.0f, (float) (!z3 ? 0 : i2), 0.0f));

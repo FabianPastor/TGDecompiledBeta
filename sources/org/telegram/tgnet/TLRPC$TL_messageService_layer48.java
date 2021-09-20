@@ -20,7 +20,7 @@ public class TLRPC$TL_messageService_layer48 extends TLRPC$TL_messageService {
         if ((this.flags & 256) != 0) {
             TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
             this.from_id = tLRPC$TL_peerUser;
-            tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
+            tLRPC$TL_peerUser.user_id = (long) abstractSerializedData.readInt32(z);
         }
         TLRPC$Peer TLdeserialize = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.peer_id = TLdeserialize;
@@ -48,7 +48,7 @@ public class TLRPC$TL_messageService_layer48 extends TLRPC$TL_messageService {
         abstractSerializedData.writeInt32(i6);
         abstractSerializedData.writeInt32(this.id);
         if ((this.flags & 256) != 0) {
-            abstractSerializedData.writeInt32(this.from_id.user_id);
+            abstractSerializedData.writeInt32((int) this.from_id.user_id);
         }
         this.peer_id.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.date);

@@ -17,28 +17,34 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class GraySectionCell extends FrameLayout {
+    private final Theme.ResourcesProvider resourcesProvider;
     private TextView rightTextView;
     private TextView textView;
 
     public GraySectionCell(Context context) {
+        this(context, (Theme.ResourcesProvider) null);
+    }
+
+    public GraySectionCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
-        setBackgroundColor(Theme.getColor("graySection"));
+        this.resourcesProvider = resourcesProvider2;
+        setBackgroundColor(getThemedColor("graySection"));
         TextView textView2 = new TextView(getContext());
         this.textView = textView2;
         textView2.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.textView.setTextColor(Theme.getColor("key_graySectionText"));
+        this.textView.setTextColor(getThemedColor("key_graySectionText"));
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
-        AnonymousClass1 r14 = new TextView(getContext()) {
+        AnonymousClass1 r13 = new TextView(this, getContext()) {
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
             }
         };
-        this.rightTextView = r14;
-        r14.setTextSize(1, 14.0f);
-        this.rightTextView.setTextColor(Theme.getColor("key_graySectionText"));
+        this.rightTextView = r13;
+        r13.setTextSize(1, 14.0f);
+        this.rightTextView.setTextColor(getThemedColor("key_graySectionText"));
         this.rightTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
         addView(this.rightTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
         ViewCompat.setAccessibilityHeading(this, true);
@@ -50,9 +56,9 @@ public class GraySectionCell extends FrameLayout {
     }
 
     public void setTextColor(String str) {
-        int color = Theme.getColor(str);
-        this.textView.setTextColor(color);
-        this.rightTextView.setTextColor(color);
+        int themedColor = getThemedColor(str);
+        this.textView.setTextColor(themedColor);
+        this.rightTextView.setTextColor(themedColor);
     }
 
     public void setText(String str) {
@@ -76,5 +82,11 @@ public class GraySectionCell extends FrameLayout {
 
     public TextView getTextView() {
         return this.textView;
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

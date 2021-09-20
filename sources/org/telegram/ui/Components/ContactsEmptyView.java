@@ -89,13 +89,13 @@ public class ContactsEmptyView extends LinearLayout implements NotificationCente
     }
 
     private void setSticker() {
-        TLRPC$TL_messages_stickerSet stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByName("tg_placeholders");
+        TLRPC$TL_messages_stickerSet stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByName("tg_placeholders_android");
         if (stickerSetByName == null) {
-            stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByEmojiOrName("tg_placeholders");
+            stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByEmojiOrName("tg_placeholders_android");
         }
         TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = stickerSetByName;
         if (tLRPC$TL_messages_stickerSet == null || tLRPC$TL_messages_stickerSet.documents.size() < 1) {
-            MediaDataController.getInstance(this.currentAccount).loadStickersByEmojiOrName("tg_placeholders", false, true);
+            MediaDataController.getInstance(this.currentAccount).loadStickersByEmojiOrName("tg_placeholders_android", false, true);
             this.stickerView.setImageDrawable(this.drawable);
             return;
         }
@@ -116,7 +116,7 @@ public class ContactsEmptyView extends LinearLayout implements NotificationCente
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.diceStickersDidLoad && "tg_placeholders".equals(objArr[0])) {
+        if (i == NotificationCenter.diceStickersDidLoad && "tg_placeholders_android".equals(objArr[0])) {
             setSticker();
         }
     }

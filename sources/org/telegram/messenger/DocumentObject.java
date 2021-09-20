@@ -10,8 +10,8 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_document;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeImageSize;
 import org.telegram.tgnet.TLRPC$TL_photoPathSize;
-import org.telegram.tgnet.TLRPC$TL_themeSettings;
 import org.telegram.tgnet.TLRPC$TL_wallPaper;
+import org.telegram.tgnet.TLRPC$ThemeSettings;
 import org.telegram.tgnet.TLRPC$WallPaper;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -20,14 +20,14 @@ public class DocumentObject {
     public static class ThemeDocument extends TLRPC$TL_document {
         public Theme.ThemeAccent accent;
         public Theme.ThemeInfo baseTheme;
-        public TLRPC$TL_themeSettings themeSettings;
+        public TLRPC$ThemeSettings themeSettings;
         public TLRPC$Document wallpaper;
 
-        public ThemeDocument(TLRPC$TL_themeSettings tLRPC$TL_themeSettings) {
-            this.themeSettings = tLRPC$TL_themeSettings;
-            Theme.ThemeInfo theme = Theme.getTheme(Theme.getBaseThemeKey(tLRPC$TL_themeSettings));
+        public ThemeDocument(TLRPC$ThemeSettings tLRPC$ThemeSettings) {
+            this.themeSettings = tLRPC$ThemeSettings;
+            Theme.ThemeInfo theme = Theme.getTheme(Theme.getBaseThemeKey(tLRPC$ThemeSettings));
             this.baseTheme = theme;
-            this.accent = theme.createNewAccent(tLRPC$TL_themeSettings);
+            this.accent = theme.createNewAccent(tLRPC$ThemeSettings);
             TLRPC$WallPaper tLRPC$WallPaper = this.themeSettings.wallpaper;
             if (tLRPC$WallPaper instanceof TLRPC$TL_wallPaper) {
                 TLRPC$Document tLRPC$Document = ((TLRPC$TL_wallPaper) tLRPC$WallPaper).document;

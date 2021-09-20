@@ -12,7 +12,6 @@ import android.os.Process;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -452,28 +451,17 @@ class WebRtcAudioRecord {
     private void scheduleLogRecordingConfigurationsTask(AudioRecord audioRecord2) {
         Logging.d("WebRtcAudioRecordExternal", "scheduleLogRecordingConfigurationsTask");
         if (Build.VERSION.SDK_INT >= 24) {
-            $$Lambda$WebRtcAudioRecord$lg6CuAUIs5U3enlajsxoI_3Bk r0 = new Callable(audioRecord2) {
-                public final /* synthetic */ AudioRecord f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final Object call() {
-                    return WebRtcAudioRecord.this.lambda$scheduleLogRecordingConfigurationsTask$0$WebRtcAudioRecord(this.f$1);
-                }
-            };
+            WebRtcAudioRecord$$ExternalSyntheticLambda0 webRtcAudioRecord$$ExternalSyntheticLambda0 = new WebRtcAudioRecord$$ExternalSyntheticLambda0(this, audioRecord2);
             ScheduledFuture<String> scheduledFuture = this.future;
             if (scheduledFuture != null && !scheduledFuture.isDone()) {
                 this.future.cancel(true);
             }
-            this.future = this.executor.schedule(r0, 100, TimeUnit.MILLISECONDS);
+            this.future = this.executor.schedule(webRtcAudioRecord$$ExternalSyntheticLambda0, 100, TimeUnit.MILLISECONDS);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$scheduleLogRecordingConfigurationsTask$0 */
-    public /* synthetic */ String lambda$scheduleLogRecordingConfigurationsTask$0$WebRtcAudioRecord(AudioRecord audioRecord2) throws Exception {
+    public /* synthetic */ String lambda$scheduleLogRecordingConfigurationsTask$0(AudioRecord audioRecord2) throws Exception {
         if (this.audioRecord == audioRecord2) {
             logRecordingConfigurations(audioRecord2, true);
             return "Scheduled task is done";

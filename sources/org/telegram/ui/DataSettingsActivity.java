@@ -24,7 +24,6 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_clearAllDrafts;
@@ -74,7 +73,6 @@ public class DataSettingsActivity extends BaseFragment {
     public int enableMkvRow;
     /* access modifiers changed from: private */
     public int enableStreamRow;
-    private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     /* access modifiers changed from: private */
@@ -241,29 +239,15 @@ public class DataSettingsActivity extends BaseFragment {
         RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;
         recyclerListView.setVerticalScrollBarEnabled(false);
-        RecyclerListView recyclerListView2 = this.listView;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
-        this.layoutManager = linearLayoutManager;
-        recyclerListView2.setLayoutManager(linearLayoutManager);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended(context) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onItemClick(View view, int i, float f, float f2) {
-                DataSettingsActivity.this.lambda$createView$6$DataSettingsActivity(this.f$1, view, i, f, f2);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new DataSettingsActivity$$ExternalSyntheticLambda6(this, context));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$6 */
-    public /* synthetic */ void lambda$createView$6$DataSettingsActivity(Context context, View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$createView$6(Context context, View view, int i, float f, float f2) {
         String str;
         String str2;
         DownloadController.Preset preset;
@@ -327,11 +311,7 @@ public class DataSettingsActivity extends BaseFragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                 builder.setTitle(LocaleController.getString("ResetAutomaticMediaDownloadAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetAutomaticMediaDownloadAlert", NUM));
-                builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener() {
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        DataSettingsActivity.this.lambda$createView$0$DataSettingsActivity(dialogInterface, i);
-                    }
-                });
+                builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DataSettingsActivity$$ExternalSyntheticLambda0(this));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 AlertDialog create = builder.create();
                 showDialog(create);
@@ -353,36 +333,12 @@ public class DataSettingsActivity extends BaseFragment {
                 } else if (i5 == 3) {
                     i2 = 1;
                 }
-                Dialog createSingleChoiceDialog = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DialogInterface.OnClickListener(globalMainSettings, i) {
-                    public final /* synthetic */ SharedPreferences f$1;
-                    public final /* synthetic */ int f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        DataSettingsActivity.this.lambda$createView$1$DataSettingsActivity(this.f$1, this.f$2, dialogInterface, i);
-                    }
-                });
+                Dialog createSingleChoiceDialog = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DataSettingsActivity$$ExternalSyntheticLambda2(this, globalMainSettings, i));
                 setVisibleDialog(createSingleChoiceDialog);
                 createSingleChoiceDialog.show();
             }
             i2 = 0;
-            Dialog createSingleChoiceDialog2 = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DialogInterface.OnClickListener(globalMainSettings, i) {
-                public final /* synthetic */ SharedPreferences f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    DataSettingsActivity.this.lambda$createView$1$DataSettingsActivity(this.f$1, this.f$2, dialogInterface, i);
-                }
-            });
+            Dialog createSingleChoiceDialog2 = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DataSettingsActivity$$ExternalSyntheticLambda2(this, globalMainSettings, i));
             setVisibleDialog(createSingleChoiceDialog2);
             createSingleChoiceDialog2.show();
         } else if (i == this.dataUsageRow) {
@@ -418,19 +374,7 @@ public class DataSettingsActivity extends BaseFragment {
                 radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
                 radioColorCell.setTextAndValue(absolutePath3, absolutePath3.startsWith(absolutePath));
                 linearLayout.addView(radioColorCell);
-                radioColorCell.setOnClickListener(new View.OnClickListener(absolutePath3, builder2) {
-                    public final /* synthetic */ String f$1;
-                    public final /* synthetic */ AlertDialog.Builder f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void onClick(View view) {
-                        DataSettingsActivity.this.lambda$createView$2$DataSettingsActivity(this.f$1, this.f$2, view);
-                    }
-                });
+                radioColorCell.setOnClickListener(new DataSettingsActivity$$ExternalSyntheticLambda3(this, absolutePath3, builder2));
             }
             builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             showDialog(builder2.create());
@@ -464,11 +408,7 @@ public class DataSettingsActivity extends BaseFragment {
             AlertDialog.Builder builder3 = new AlertDialog.Builder((Context) getParentActivity());
             builder3.setTitle(LocaleController.getString("AreYouSureClearDraftsTitle", NUM));
             builder3.setMessage(LocaleController.getString("AreYouSureClearDrafts", NUM));
-            builder3.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    DataSettingsActivity.this.lambda$createView$5$DataSettingsActivity(dialogInterface, i);
-                }
-            });
+            builder3.setPositiveButton(LocaleController.getString("Delete", NUM), new DataSettingsActivity$$ExternalSyntheticLambda1(this));
             builder3.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             AlertDialog create2 = builder3.create();
             showDialog(create2);
@@ -480,8 +420,7 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$DataSettingsActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$0(DialogInterface dialogInterface, int i) {
         String str;
         DownloadController.Preset preset;
         DownloadController.Preset preset2;
@@ -519,8 +458,7 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$DataSettingsActivity(SharedPreferences sharedPreferences, int i, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$createView$1(SharedPreferences sharedPreferences, int i, DialogInterface dialogInterface, int i2) {
         int i3 = 3;
         if (i2 == 0) {
             i3 = 0;
@@ -537,8 +475,7 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$DataSettingsActivity(String str, AlertDialog.Builder builder, View view) {
+    public /* synthetic */ void lambda$createView$2(String str, AlertDialog.Builder builder, View view) {
         SharedConfig.storageCacheDir = str;
         SharedConfig.saveConfig();
         ImageLoader.getInstance().checkMediaPaths();
@@ -547,29 +484,18 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$5 */
-    public /* synthetic */ void lambda$createView$5$DataSettingsActivity(DialogInterface dialogInterface, int i) {
-        getConnectionsManager().sendRequest(new TLRPC$TL_messages_clearAllDrafts(), new RequestDelegate() {
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                DataSettingsActivity.this.lambda$createView$4$DataSettingsActivity(tLObject, tLRPC$TL_error);
-            }
-        });
+    public /* synthetic */ void lambda$createView$5(DialogInterface dialogInterface, int i) {
+        getConnectionsManager().sendRequest(new TLRPC$TL_messages_clearAllDrafts(), new DataSettingsActivity$$ExternalSyntheticLambda5(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$DataSettingsActivity() {
+    public /* synthetic */ void lambda$createView$3() {
         getMediaDataController().clearAllDrafts(true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$DataSettingsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                DataSettingsActivity.this.lambda$createView$3$DataSettingsActivity();
-            }
-        });
+    public /* synthetic */ void lambda$createView$4(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new DataSettingsActivity$$ExternalSyntheticLambda4(this));
     }
 
     /* access modifiers changed from: protected */

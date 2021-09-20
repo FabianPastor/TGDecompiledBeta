@@ -1,5 +1,5 @@
 package j$.util.function;
 
 public interface o {
-    boolean a();
+    long applyAsLong(long j, long j2);
 }

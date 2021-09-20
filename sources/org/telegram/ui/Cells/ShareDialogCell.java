@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -20,7 +21,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
-import org.telegram.ui.Components.CheckBoxBase;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ShareDialogCell extends FrameLayout {
@@ -33,10 +33,12 @@ public class ShareDialogCell extends FrameLayout {
     private long lastUpdateTime;
     private TextView nameTextView;
     private float onlineProgress;
+    private final Theme.ResourcesProvider resourcesProvider;
     private TLRPC$User user;
 
-    public ShareDialogCell(Context context, int i) {
+    public ShareDialogCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         setWillNotDraw(false);
         this.currentType = i;
         BackupImageView backupImageView = new BackupImageView(context);
@@ -49,29 +51,24 @@ public class ShareDialogCell extends FrameLayout {
         }
         TextView textView = new TextView(context);
         this.nameTextView = textView;
-        textView.setTextColor(Theme.getColor(i == 1 ? "voipgroup_nameText" : "dialogTextBlack"));
+        textView.setTextColor(getThemedColor(i == 1 ? "voipgroup_nameText" : "dialogTextBlack"));
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(2);
         this.nameTextView.setGravity(49);
         this.nameTextView.setLines(2);
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, this.currentType == 2 ? 58.0f : 66.0f, 6.0f, 0.0f));
-        CheckBox2 checkBox2 = new CheckBox2(context, 21);
+        CheckBox2 checkBox2 = new CheckBox2(context, 21, resourcesProvider2);
         this.checkBox = checkBox2;
         checkBox2.setColor("dialogRoundCheckBox", i == 1 ? "voipgroup_inviteMembersBackground" : "dialogBackground", "dialogRoundCheckBoxCheck");
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(4);
-        this.checkBox.setProgressDelegate(new CheckBoxBase.ProgressDelegate() {
-            public final void setProgress(float f) {
-                ShareDialogCell.this.lambda$new$0$ShareDialogCell(f);
-            }
-        });
+        this.checkBox.setProgressDelegate(new ShareDialogCell$$ExternalSyntheticLambda0(this));
         addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 49, 19.0f, this.currentType == 2 ? -40.0f : 42.0f, 0.0f, 0.0f));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ShareDialogCell(float f) {
+    public /* synthetic */ void lambda$new$0(float f) {
         float progress = 1.0f - (this.checkBox.getProgress() * 0.143f);
         this.imageView.setScaleX(progress);
         this.imageView.setScaleY(progress);
@@ -83,9 +80,9 @@ public class ShareDialogCell extends FrameLayout {
         super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.currentType == 2 ? 95.0f : 103.0f), NUM));
     }
 
-    public void setDialog(int i, boolean z, CharSequence charSequence) {
-        if (i > 0) {
-            TLRPC$User user2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+    public void setDialog(long j, boolean z, CharSequence charSequence) {
+        if (DialogObject.isUserDialog(j)) {
+            TLRPC$User user2 = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(j));
             this.user = user2;
             this.avatarDrawable.setInfo(user2);
             if (this.currentType != 2 && UserObject.isReplyUser(this.user)) {
@@ -111,7 +108,7 @@ public class ShareDialogCell extends FrameLayout {
             }
         } else {
             this.user = null;
-            TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
+            TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(-j));
             if (charSequence != null) {
                 this.nameTextView.setText(charSequence);
             } else if (chat != null) {
@@ -122,7 +119,7 @@ public class ShareDialogCell extends FrameLayout {
             this.avatarDrawable.setInfo(chat);
             this.imageView.setForUserOrChat(chat, this.avatarDrawable);
         }
-        this.currentDialog = (long) i;
+        this.currentDialog = j;
         this.checkBox.setChecked(z, false);
     }
 
@@ -177,10 +174,10 @@ public class ShareDialogCell extends FrameLayout {
         L_0x0045:
             int r9 = r7.currentAccount
             org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r9)
-            j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.lang.Integer> r9 = r9.onlinePrivacy
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r9 = r9.onlinePrivacy
             org.telegram.tgnet.TLRPC$User r11 = r7.user
-            int r11 = r11.id
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
+            long r4 = r11.id
+            java.lang.Long r11 = java.lang.Long.valueOf(r4)
             boolean r9 = r9.containsKey(r11)
             if (r9 == 0) goto L_0x005d
         L_0x005b:
@@ -213,7 +210,7 @@ public class ShareDialogCell extends FrameLayout {
         L_0x008a:
             java.lang.String r0 = "windowBackgroundWhite"
         L_0x008c:
-            int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+            int r0 = r7.getThemedColor(r0)
             r5.setColor(r0)
             float r0 = (float) r4
             float r1 = (float) r1
@@ -226,7 +223,7 @@ public class ShareDialogCell extends FrameLayout {
             r8.drawCircle(r0, r1, r4, r5)
             android.graphics.Paint r4 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
             java.lang.String r5 = "chats_onlineCircle"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            int r5 = r7.getThemedColor(r5)
             r4.setColor(r5)
             r4 = 1084227584(0x40a00000, float:5.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -278,8 +275,14 @@ public class ShareDialogCell extends FrameLayout {
     public void onDraw(Canvas canvas) {
         int left = this.imageView.getLeft() + (this.imageView.getMeasuredWidth() / 2);
         int top = this.imageView.getTop() + (this.imageView.getMeasuredHeight() / 2);
-        Theme.checkboxSquare_checkPaint.setColor(Theme.getColor("dialogRoundCheckBox"));
+        Theme.checkboxSquare_checkPaint.setColor(getThemedColor("dialogRoundCheckBox"));
         Theme.checkboxSquare_checkPaint.setAlpha((int) (this.checkBox.getProgress() * 255.0f));
         canvas.drawCircle((float) left, (float) top, (float) AndroidUtilities.dp(this.currentType == 2 ? 24.0f : 28.0f), Theme.checkboxSquare_checkPaint);
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

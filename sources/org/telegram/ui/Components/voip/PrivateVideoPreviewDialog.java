@@ -298,11 +298,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             this.positiveButton.setForeground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_nameText"), 76)));
         }
         this.positiveButton.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f));
-        this.positiveButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PrivateVideoPreviewDialog.this.lambda$new$0$PrivateVideoPreviewDialog(view);
-            }
-        });
+        this.positiveButton.setOnClickListener(new PrivateVideoPreviewDialog$$ExternalSyntheticLambda0(this));
         addView(this.positiveButton, LayoutHelper.createFrame(-1, 48.0f, 80, 0.0f, 0.0f, 0.0f, 64.0f));
         LinearLayout linearLayout = new LinearLayout(context2);
         this.titlesLayout = linearLayout;
@@ -328,17 +324,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             } else {
                 this.titles[i].setText(LocaleController.getString("VoipBackCamera", NUM));
             }
-            this.titles[i].setOnClickListener(new View.OnClickListener(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    PrivateVideoPreviewDialog.this.lambda$new$1$PrivateVideoPreviewDialog(this.f$1, view);
-                }
-            });
+            this.titles[i].setOnClickListener(new PrivateVideoPreviewDialog$$ExternalSyntheticLambda1(this, i));
             i++;
         }
         setAlpha(0.0f);
@@ -348,7 +334,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             this.textureView.renderer.setMirror(sharedInstance.isFrontFaceCamera());
-            this.textureView.renderer.init(VideoCapturerDevice.getEglBase().getEglBaseContext(), new RendererCommon.RendererEvents() {
+            this.textureView.renderer.init(VideoCapturerDevice.getEglBase().getEglBaseContext(), new RendererCommon.RendererEvents(this) {
                 public void onFirstFrameRendered() {
                 }
 
@@ -368,24 +354,13 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             this.micIconView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             this.micEnabled = true;
             rLottieDrawable.setCurrentFrame(69);
-            this.micIconView.setOnClickListener(new View.OnClickListener(rLottieDrawable) {
-                public final /* synthetic */ RLottieDrawable f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    PrivateVideoPreviewDialog.this.lambda$new$2$PrivateVideoPreviewDialog(this.f$1, view);
-                }
-            });
+            this.micIconView.setOnClickListener(new PrivateVideoPreviewDialog$$ExternalSyntheticLambda2(this, rLottieDrawable));
             addView(this.micIconView, LayoutHelper.createFrame(48, 48.0f, 83, 24.0f, 0.0f, 0.0f, 136.0f));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$PrivateVideoPreviewDialog(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         if (!this.isDismissed) {
             if (this.currentPage != 0 || !this.needScreencast) {
                 dismiss(false, true);
@@ -396,14 +371,12 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$PrivateVideoPreviewDialog(int i, View view) {
+    public /* synthetic */ void lambda$new$1(int i, View view) {
         this.viewPager.setCurrentItem(i, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$PrivateVideoPreviewDialog(RLottieDrawable rLottieDrawable, View view) {
+    public /* synthetic */ void lambda$new$2(RLottieDrawable rLottieDrawable, View view) {
         boolean z = !this.micEnabled;
         this.micEnabled = z;
         if (z) {
@@ -667,7 +640,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 r0.<init>(r2)
                 android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
                 r0.setScaleType(r2)
-                r2 = 2131166013(0x7var_d, float:1.794626E38)
+                r2 = 2131166017(0x7var_, float:1.7946267E38)
                 r0.setImageResource(r2)
                 r3 = 82
                 r4 = 1118044160(0x42a40000, float:82.0)
@@ -682,7 +655,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r2 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this
                 android.content.Context r2 = r2.getContext()
                 r0.<init>(r2)
-                r2 = 2131628474(0x7f0e11ba, float:1.8884242E38)
+                r2 = 2131628514(0x7f0e11e2, float:1.8884323E38)
                 java.lang.String r3 = "VoipVideoPrivateScreenSharing"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)

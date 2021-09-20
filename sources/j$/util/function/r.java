@@ -1,5 +1,5 @@
 package j$.util.function;
 
-public interface r<R> {
-    Object apply(double d);
+public interface r {
+    Object apply(long j);
 }

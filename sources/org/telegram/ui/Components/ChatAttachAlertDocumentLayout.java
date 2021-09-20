@@ -23,15 +23,9 @@ import android.widget.EditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import j$.util.Comparator;
-import j$.util.function.Function;
-import j$.util.function.ToDoubleFunction;
-import j$.util.function.ToIntFunction;
-import j$.util.function.ToLongFunction;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import org.telegram.messenger.AccountInstance;
@@ -62,7 +56,6 @@ import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
 import org.telegram.ui.Components.ChatAttachAlert;
-import org.telegram.ui.Components.ChatAttachAlertDocumentLayout;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.FilteredSearchView;
 
@@ -99,21 +92,16 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     private int maxSelectedFiles = -1;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            $$Lambda$ChatAttachAlertDocumentLayout$1$f3hr_nbX6ALeTmaPbT6gulIKuc r3 = new Runnable() {
-                public final void run() {
-                    ChatAttachAlertDocumentLayout.AnonymousClass1.this.lambda$onReceive$0$ChatAttachAlertDocumentLayout$1();
-                }
-            };
+            ChatAttachAlertDocumentLayout$1$$ExternalSyntheticLambda0 chatAttachAlertDocumentLayout$1$$ExternalSyntheticLambda0 = new ChatAttachAlertDocumentLayout$1$$ExternalSyntheticLambda0(this);
             if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
-                ChatAttachAlertDocumentLayout.this.listView.postDelayed(r3, 1000);
+                ChatAttachAlertDocumentLayout.this.listView.postDelayed(chatAttachAlertDocumentLayout$1$$ExternalSyntheticLambda0, 1000);
             } else {
-                r3.run();
+                chatAttachAlertDocumentLayout$1$$ExternalSyntheticLambda0.run();
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onReceive$0 */
-        public /* synthetic */ void lambda$onReceive$0$ChatAttachAlertDocumentLayout$1() {
+        public /* synthetic */ void lambda$onReceive$0() {
             try {
                 if (ChatAttachAlertDocumentLayout.this.currentDir == null) {
                     ChatAttachAlertDocumentLayout.this.listRoots();
@@ -166,7 +154,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         void startMusicSelectActivity();
     }
 
-    static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -191,16 +180,14 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
     private static class HistoryEntry {
         File dir;
-        int scrollItem;
-        int scrollOffset;
         String title;
 
         private HistoryEntry() {
         }
     }
 
-    public ChatAttachAlertDocumentLayout(ChatAttachAlert chatAttachAlert, Context context, boolean z) {
-        super(chatAttachAlert, context);
+    public ChatAttachAlertDocumentLayout(ChatAttachAlert chatAttachAlert, Context context, boolean z, Theme.ResourcesProvider resourcesProvider) {
+        super(chatAttachAlert, context, resourcesProvider);
         this.allowMusic = z;
         this.sortByName = SharedConfig.sortFilesByName;
         loadRecentFiles();
@@ -253,16 +240,16 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searchItem.setContentDescription(LocaleController.getString("Search", NUM));
         EditTextBoldCursor searchField = this.searchItem.getSearchField();
-        searchField.setTextColor(Theme.getColor("dialogTextBlack"));
-        searchField.setCursorColor(Theme.getColor("dialogTextBlack"));
-        searchField.setHintTextColor(Theme.getColor("chat_messagePanelHint"));
+        searchField.setTextColor(getThemedColor("dialogTextBlack"));
+        searchField.setCursorColor(getThemedColor("dialogTextBlack"));
+        searchField.setHintTextColor(getThemedColor("chat_messagePanelHint"));
         ActionBarMenuItem addItem = createMenu.addItem(6, this.sortByName ? NUM : NUM);
         this.sortItem = addItem;
         addItem.setContentDescription(LocaleController.getString("AccDescrContactSorting", NUM));
-        FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
+        FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context, resourcesProvider);
         this.loadingView = flickerLoadingView;
         addView(flickerLoadingView);
-        AnonymousClass3 r13 = new StickerEmptyView(context, this.loadingView, 1) {
+        AnonymousClass3 r1 = new StickerEmptyView(context, this.loadingView, 1, resourcesProvider) {
             public void setTranslationY(float f) {
                 super.setTranslationY(f + ChatAttachAlertDocumentLayout.this.additionalTranslationY);
             }
@@ -271,11 +258,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 return super.getTranslationY() - ChatAttachAlertDocumentLayout.this.additionalTranslationY;
             }
         };
-        this.emptyView = r13;
-        addView(r13, LayoutHelper.createFrame(-1, -1.0f));
+        this.emptyView = r1;
+        addView(r1, LayoutHelper.createFrame(-1, -1.0f));
         this.emptyView.setVisibility(8);
-        this.emptyView.setOnTouchListener($$Lambda$ChatAttachAlertDocumentLayout$UzXO3YpFzwU2u1b1zfUtDODa94.INSTANCE);
-        RecyclerListView recyclerListView = new RecyclerListView(context);
+        this.emptyView.setOnTouchListener(ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda0.INSTANCE);
+        RecyclerListView recyclerListView = new RecyclerListView(context, resourcesProvider);
         this.listView = recyclerListView;
         recyclerListView.setSectionsType(2);
         this.listView.setVerticalScrollBarEnabled(false);
@@ -342,24 +329,12 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 boolean unused = chatAttachAlertDocumentLayout.scrolling = z;
             }
         });
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ChatAttachAlertDocumentLayout.this.lambda$new$1$ChatAttachAlertDocumentLayout(view, i);
-            }
-        });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return ChatAttachAlertDocumentLayout.this.lambda$new$2$ChatAttachAlertDocumentLayout(view, i);
-            }
-        });
-        FiltersView filtersView2 = new FiltersView(context);
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda3(this));
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda5(this));
+        FiltersView filtersView2 = new FiltersView(context, resourcesProvider);
         this.filtersView = filtersView2;
-        filtersView2.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ChatAttachAlertDocumentLayout.this.lambda$new$3$ChatAttachAlertDocumentLayout(view, i);
-            }
-        });
-        this.filtersView.setBackgroundColor(Theme.getColor("dialogBackground"));
+        filtersView2.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda4(this));
+        this.filtersView.setBackgroundColor(getThemedColor("dialogBackground"));
         addView(this.filtersView, LayoutHelper.createFrame(-1, -2, 48));
         this.filtersView.setTranslationY((float) (-AndroidUtilities.dp(44.0f)));
         this.filtersView.setVisibility(4);
@@ -372,9 +347,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Unknown variable types count: 1 */
-    /* renamed from: lambda$new$1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$new$1$ChatAttachAlertDocumentLayout(android.view.View r13, int r14) {
+    public /* synthetic */ void lambda$new$1(android.view.View r13, int r14) {
         /*
             r12 = this;
             org.telegram.ui.Components.RecyclerListView r0 = r12.listView
@@ -388,7 +362,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.Object r14 = r0.getItem(r14)
         L_0x0015:
             boolean r0 = r14 instanceof org.telegram.ui.Components.ChatAttachAlertDocumentLayout.ListItem
-            if (r0 == 0) goto L_0x010d
+            if (r0 == 0) goto L_0x0107
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r14 = (org.telegram.ui.Components.ChatAttachAlertDocumentLayout.ListItem) r14
             java.io.File r0 = r14.file
             r1 = 0
@@ -436,14 +410,14 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r13.presentFragment(r1)
             org.telegram.ui.Components.ChatAttachAlert r13 = r12.parentAlert
             r13.dismiss()
-            goto L_0x0110
+            goto L_0x010a
         L_0x006f:
             r14 = 2131165405(0x7var_dd, float:1.7945026E38)
             if (r13 != r14) goto L_0x007d
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r13 = r12.delegate
-            if (r13 == 0) goto L_0x0110
+            if (r13 == 0) goto L_0x010a
             r13.startMusicSelectActivity()
-            goto L_0x0110
+            goto L_0x010a
         L_0x007d:
             boolean r14 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
             if (r14 != 0) goto L_0x008d
@@ -451,7 +425,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             if (r13 != r14) goto L_0x008d
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r13 = r12.delegate
             r13.startDocumentSelectActivity()
-            goto L_0x0110
+            goto L_0x010a
         L_0x008d:
             int r13 = r12.getTopForScroll()
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r14 = r12.history
@@ -473,21 +447,19 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r12.updateSearchButton()
             androidx.recyclerview.widget.LinearLayoutManager r14 = r12.layoutManager
             r14.scrollToPositionWithOffset(r2, r13)
-            goto L_0x0110
+            goto L_0x010a
         L_0x00bb:
             boolean r3 = r0.isDirectory()
-            if (r3 == 0) goto L_0x0109
+            if (r3 == 0) goto L_0x0103
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry r13 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry
             r13.<init>()
             org.telegram.ui.Components.RecyclerListView r1 = r12.listView
             android.view.View r1 = r1.getChildAt(r2)
             org.telegram.ui.Components.RecyclerListView r2 = r12.listView
             androidx.recyclerview.widget.RecyclerView$ViewHolder r2 = r2.findContainingViewHolder(r1)
-            if (r2 == 0) goto L_0x0110
-            int r2 = r2.getAdapterPosition()
-            r13.scrollItem = r2
-            int r1 = r1.getTop()
-            r13.scrollOffset = r1
+            if (r2 == 0) goto L_0x010a
+            r2.getAdapterPosition()
+            r1.getTop()
             java.io.File r1 = r12.currentDir
             r13.dir = r1
             org.telegram.ui.Components.ChatAttachAlert r1 = r12.parentAlert
@@ -497,30 +469,29 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r1 = r12.history
             r1.add(r13)
             boolean r0 = r12.listFiles(r0)
-            if (r0 != 0) goto L_0x00ff
+            if (r0 != 0) goto L_0x00f9
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r14 = r12.history
             r14.remove(r13)
             return
-        L_0x00ff:
+        L_0x00f9:
             org.telegram.ui.Components.ChatAttachAlert r13 = r12.parentAlert
             org.telegram.ui.ActionBar.ActionBar r13 = r13.actionBar
             java.lang.String r14 = r14.title
             r13.setTitle(r14)
-            goto L_0x0110
-        L_0x0109:
+            goto L_0x010a
+        L_0x0103:
             r12.onItemClick(r13, r14)
-            goto L_0x0110
-        L_0x010d:
+            goto L_0x010a
+        L_0x0107:
             r12.onItemClick(r13, r14)
-        L_0x0110:
+        L_0x010a:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.lambda$new$1$ChatAttachAlertDocumentLayout(android.view.View, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.lambda$new$1(android.view.View, int):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ boolean lambda$new$2$ChatAttachAlertDocumentLayout(View view, int i) {
+    public /* synthetic */ boolean lambda$new$2(View view, int i) {
         Object obj;
         RecyclerView.Adapter adapter = this.listView.getAdapter();
         ListAdapter listAdapter2 = this.listAdapter;
@@ -533,8 +504,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$ChatAttachAlertDocumentLayout(View view, int i) {
+    public /* synthetic */ void lambda$new$3(View view, int i) {
         this.filtersView.cancelClickRunnables(true);
         this.searchAdapter.addSearchFilter(this.filtersView.getFilterAt(i));
     }
@@ -827,44 +797,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     private void sortRecentItems() {
-        Collections.sort(this.recentItems, new Object() {
-            public final int compare(Object obj, Object obj2) {
-                return ChatAttachAlertDocumentLayout.this.lambda$sortRecentItems$4$ChatAttachAlertDocumentLayout((ChatAttachAlertDocumentLayout.ListItem) obj, (ChatAttachAlertDocumentLayout.ListItem) obj2);
-            }
-
-            public /* synthetic */ Comparator reversed() {
-                return Comparator.CC.$default$reversed(this);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparing(Function function) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
-                return Comparator.CC.$default$thenComparing(this, function, comparator);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
-                return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
-                return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
-            }
-
-            public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
-                return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
-            }
-        });
+        Collections.sort(this.recentItems, new ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$sortRecentItems$4 */
-    public /* synthetic */ int lambda$sortRecentItems$4$ChatAttachAlertDocumentLayout(ListItem listItem, ListItem listItem2) {
+    public /* synthetic */ int lambda$sortRecentItems$4(ListItem listItem, ListItem listItem2) {
         if (this.sortByName) {
             return listItem.file.getName().compareToIgnoreCase(listItem2.file.getName());
         }
@@ -878,45 +815,12 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
     private void sortFileItems() {
         if (this.currentDir != null) {
-            Collections.sort(this.items, new Object() {
-                public final int compare(Object obj, Object obj2) {
-                    return ChatAttachAlertDocumentLayout.this.lambda$sortFileItems$5$ChatAttachAlertDocumentLayout((ChatAttachAlertDocumentLayout.ListItem) obj, (ChatAttachAlertDocumentLayout.ListItem) obj2);
-                }
-
-                public /* synthetic */ java.util.Comparator reversed() {
-                    return Comparator.CC.$default$reversed(this);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparing(Function function) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
-                    return Comparator.CC.$default$thenComparing(this, function, comparator);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
-                    return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
-                    return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
-                    return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
-                }
-            });
+            Collections.sort(this.items, new ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda2(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$sortFileItems$5 */
-    public /* synthetic */ int lambda$sortFileItems$5$ChatAttachAlertDocumentLayout(ListItem listItem, ListItem listItem2) {
+    public /* synthetic */ int lambda$sortFileItems$5(ListItem listItem, ListItem listItem2) {
         File file = listItem.file;
         if (file == null) {
             return -1;
@@ -1133,7 +1037,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     private void showErrorBox(String str) {
-        new AlertDialog.Builder(getContext()).setTitle(LocaleController.getString("AppName", NUM)).setMessage(str).setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null).show();
+        new AlertDialog.Builder(getContext(), this.resourcesProvider).setTitle(LocaleController.getString("AppName", NUM)).setMessage(str).setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null).show();
     }
 
     /* access modifiers changed from: private */
@@ -1157,10 +1061,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.util.HashSet r4 = new java.util.HashSet
             r4.<init>()
             boolean r0 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
-            r5 = 2131625911(0x7f0e07b7, float:1.8879043E38)
+            r5 = 2131625927(0x7f0e07c7, float:1.8879076E38)
             java.lang.String r6 = "InternalFolderInfo"
             r7 = 2131165406(0x7var_de, float:1.7945028E38)
-            r8 = 2131625912(0x7f0e07b8, float:1.8879045E38)
+            r8 = 2131625928(0x7f0e07c8, float:1.8879078E38)
             java.lang.String r9 = "InternalStorage"
             if (r0 != 0) goto L_0x003f
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
@@ -1179,10 +1083,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r10 = android.os.Environment.getExternalStorageState()
             java.lang.String r11 = "mounted"
             boolean r11 = r10.equals(r11)
-            r12 = 2131625501(0x7f0e061d, float:1.8878212E38)
+            r12 = 2131625517(0x7f0e062d, float:1.8878244E38)
             java.lang.String r13 = "ExternalFolderInfo"
             r14 = 2131165404(0x7var_dc, float:1.7945024E38)
-            r15 = 2131627456(0x7f0e0dc0, float:1.8882177E38)
+            r15 = 2131627489(0x7f0e0de1, float:1.8882244E38)
             java.lang.String r5 = "SdCard"
             if (r11 != 0) goto L_0x0068
             java.lang.String r11 = "mounted_ro"
@@ -1203,7 +1107,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r10.title = r8
             r10.icon = r7
-            r7 = 2131625911(0x7f0e07b7, float:1.8879043E38)
+            r7 = 2131625927(0x7f0e07c7, float:1.8879076E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10.subtitle = r6
         L_0x0093:
@@ -1293,7 +1197,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             goto L_0x016c
         L_0x0161:
             java.lang.String r8 = "ExternalStorage"
-            r9 = 2131625502(0x7f0e061e, float:1.8878214E38)
+            r9 = 2131625518(0x7f0e062e, float:1.8878246E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0182 }
             r0.title = r8     // Catch:{ Exception -> 0x0182 }
         L_0x016c:
@@ -1357,11 +1261,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         L_0x01d4:
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            r2 = 2131625732(0x7f0e0704, float:1.887868E38)
+            r2 = 2131625748(0x7f0e0714, float:1.8878713E38)
             java.lang.String r4 = "Gallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.title = r2
-            r2 = 2131625733(0x7f0e0705, float:1.8878682E38)
+            r2 = 2131625749(0x7f0e0715, float:1.8878715E38)
             java.lang.String r4 = "GalleryInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.subtitle = r2
@@ -1378,7 +1282,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r4 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.title = r2
-            r2 = 2131626306(0x7f0e0942, float:1.8879844E38)
+            r2 = 2131626336(0x7f0e0960, float:1.8879905E38)
             java.lang.String r4 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.subtitle = r2
@@ -1472,18 +1376,18 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             View view2;
             if (i != 0) {
                 if (i == 1) {
-                    view2 = new SharedDocumentCell(this.mContext, 1);
+                    view2 = new SharedDocumentCell(this.mContext, 1, ChatAttachAlertDocumentLayout.this.resourcesProvider);
                 } else if (i != 2) {
                     view = new View(this.mContext);
                 } else {
                     view2 = new ShadowSectionCell(this.mContext);
-                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(ChatAttachAlertDocumentLayout.this.getThemedColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     combinedDrawable.setFullsize(true);
                     view2.setBackgroundDrawable(combinedDrawable);
                 }
                 view = view2;
             } else {
-                view = new HeaderCell(this.mContext);
+                view = new HeaderCell(this.mContext, ChatAttachAlertDocumentLayout.this.resourcesProvider);
             }
             return new RecyclerListView.Holder(view);
         }
@@ -1541,7 +1445,6 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         private long currentSearchMaxDate;
         private long currentSearchMinDate;
         private boolean endReached;
-        private boolean firstLoading = true;
         /* access modifiers changed from: private */
         public boolean isLoading;
         private String lastMessagesSearchString;
@@ -1575,6 +1478,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         public void search(String str, boolean z) {
+            long j;
             Runnable runnable = this.localSearchRunnable;
             if (runnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
@@ -1589,72 +1493,46 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 }
                 notifyDataSetChanged();
             } else {
-                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$SVXF_0LRGzSJ2PW8PyIx1rhcirA r0 = new Runnable(str) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$search$1$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1);
-                    }
-                };
-                this.localSearchRunnable = r0;
-                AndroidUtilities.runOnUIThread(r0, 300);
+                ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda2 chatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda2 = new ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda2(this, str);
+                this.localSearchRunnable = chatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda2;
+                AndroidUtilities.runOnUIThread(chatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda2, 300);
             }
             if (!ChatAttachAlertDocumentLayout.this.canSelectOnlyImageFiles && ChatAttachAlertDocumentLayout.this.history.isEmpty()) {
-                long j = 0;
                 long j2 = 0;
-                int i = 0;
-                for (int i2 = 0; i2 < this.currentSearchFilters.size(); i2++) {
-                    FiltersView.MediaFilterData mediaFilterData = this.currentSearchFilters.get(i2);
-                    int i3 = mediaFilterData.filterType;
-                    if (i3 == 4) {
+                long j3 = 0;
+                long j4 = 0;
+                for (int i = 0; i < this.currentSearchFilters.size(); i++) {
+                    FiltersView.MediaFilterData mediaFilterData = this.currentSearchFilters.get(i);
+                    int i2 = mediaFilterData.filterType;
+                    if (i2 == 4) {
                         TLObject tLObject = mediaFilterData.chat;
                         if (tLObject instanceof TLRPC$User) {
-                            i = ((TLRPC$User) tLObject).id;
+                            j = ((TLRPC$User) tLObject).id;
                         } else if (tLObject instanceof TLRPC$Chat) {
-                            i = -((TLRPC$Chat) tLObject).id;
+                            j = -((TLRPC$Chat) tLObject).id;
                         }
-                    } else if (i3 == 6) {
+                        j4 = j;
+                    } else if (i2 == 6) {
                         FiltersView.DateData dateData = mediaFilterData.dateData;
-                        long j3 = dateData.minDate;
-                        j2 = dateData.maxDate;
-                        j = j3;
+                        j2 = dateData.minDate;
+                        j3 = dateData.maxDate;
                     }
                 }
-                searchGlobal((long) i, j, j2, FiltersView.filters[2], str, z);
+                searchGlobal(j4, j2, j3, FiltersView.filters[2], str, z);
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$search$1 */
-        public /* synthetic */ void lambda$search$1$ChatAttachAlertDocumentLayout$SearchAdapter(String str) {
+        public /* synthetic */ void lambda$search$1(String str) {
             ArrayList arrayList = new ArrayList(ChatAttachAlertDocumentLayout.this.items);
             if (ChatAttachAlertDocumentLayout.this.history.isEmpty()) {
                 arrayList.addAll(0, ChatAttachAlertDocumentLayout.this.recentItems);
             }
-            Utilities.searchQueue.postRunnable(new Runnable(str, !this.currentSearchFilters.isEmpty(), arrayList) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ boolean f$2;
-                public final /* synthetic */ ArrayList f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$search$0$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            Utilities.searchQueue.postRunnable(new ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda3(this, str, !this.currentSearchFilters.isEmpty(), arrayList));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$search$0 */
-        public /* synthetic */ void lambda$search$0$ChatAttachAlertDocumentLayout$SearchAdapter(String str, boolean z, ArrayList arrayList) {
+        public /* synthetic */ void lambda$search$0(String str, boolean z, ArrayList arrayList) {
             String lowerCase = str.trim().toLowerCase();
             if (lowerCase.length() == 0) {
                 updateSearchResults(new ArrayList(), str);
@@ -2028,7 +1906,6 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     ChatAttachAlertDocumentLayout.this.emptyView.setVisibility(0);
                     notifyDataSetChanged();
                     this.requestIndex++;
-                    this.firstLoading = true;
                     if (ChatAttachAlertDocumentLayout.this.listView.getPinnedHeader() != null) {
                         ChatAttachAlertDocumentLayout.this.listView.getPinnedHeader().setAlpha(0.0f);
                     }
@@ -2049,34 +1926,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 }
                 int i2 = 1 + this.requestIndex;
                 this.requestIndex = i2;
-                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$cioU8O3cdcU5q4AV2ge90ZpGrlA r14 = r0;
-                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$cioU8O3cdcU5q4AV2ge90ZpGrlA r0 = new Runnable(j, str, AccountInstance.getInstance(UserConfig.selectedAccount), j2, j3, z2, format, i2) {
-                    public final /* synthetic */ long f$1;
-                    public final /* synthetic */ String f$2;
-                    public final /* synthetic */ AccountInstance f$3;
-                    public final /* synthetic */ long f$4;
-                    public final /* synthetic */ long f$5;
-                    public final /* synthetic */ boolean f$6;
-                    public final /* synthetic */ String f$7;
-                    public final /* synthetic */ int f$8;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r4;
-                        this.f$3 = r5;
-                        this.f$4 = r6;
-                        this.f$5 = r8;
-                        this.f$6 = r10;
-                        this.f$7 = r11;
-                        this.f$8 = r12;
-                    }
-
-                    public final void run() {
-                        ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
-                    }
-                };
-                this.searchRunnable = r14;
-                AndroidUtilities.runOnUIThread(r14, (!z2 || this.messages.isEmpty()) ? 350 : 0);
+                ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda1 chatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda1 = r0;
+                ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda1 chatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda12 = new ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda1(this, j, str, AccountInstance.getInstance(UserConfig.selectedAccount), j2, j3, z2, format, i2);
+                this.searchRunnable = chatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda1;
+                AndroidUtilities.runOnUIThread(chatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda1, (!z2 || this.messages.isEmpty()) ? 350 : 0);
                 ChatAttachAlertDocumentLayout.this.loadingView.setViewType(3);
             }
         }
@@ -2089,9 +1942,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v9, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
         /* access modifiers changed from: private */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* renamed from: lambda$searchGlobal$4 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(long r21, java.lang.String r23, org.telegram.messenger.AccountInstance r24, long r25, long r27, boolean r29, java.lang.String r30, int r31) {
+        public /* synthetic */ void lambda$searchGlobal$4(long r21, java.lang.String r23, org.telegram.messenger.AccountInstance r24, long r25, long r27, boolean r29, java.lang.String r30, int r31) {
             /*
                 r20 = this;
                 r12 = r20
@@ -2103,7 +1955,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 r8 = 0
                 r2 = 0
                 int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-                if (r10 == 0) goto L_0x006b
+                if (r10 == 0) goto L_0x006a
                 org.telegram.tgnet.TLRPC$TL_messages_search r10 = new org.telegram.tgnet.TLRPC$TL_messages_search
                 r10.<init>()
                 r10.q = r3
@@ -2112,28 +1964,27 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 org.telegram.tgnet.TLRPC$MessagesFilter r0 = r0.filter
                 r10.filter = r0
                 org.telegram.messenger.MessagesController r0 = r24.getMessagesController()
-                int r11 = (int) r6
-                org.telegram.tgnet.TLRPC$InputPeer r0 = r0.getInputPeer((int) r11)
+                org.telegram.tgnet.TLRPC$InputPeer r0 = r0.getInputPeer((long) r6)
                 r10.peer = r0
                 int r0 = (r25 > r8 ? 1 : (r25 == r8 ? 0 : -1))
-                if (r0 <= 0) goto L_0x0035
+                if (r0 <= 0) goto L_0x0034
                 long r13 = r25 / r4
                 int r0 = (int) r13
                 r10.min_date = r0
-            L_0x0035:
+            L_0x0034:
                 int r0 = (r27 > r8 ? 1 : (r27 == r8 ? 0 : -1))
-                if (r0 <= 0) goto L_0x003e
+                if (r0 <= 0) goto L_0x003d
                 long r4 = r27 / r4
                 int r0 = (int) r4
                 r10.max_date = r0
-            L_0x003e:
-                if (r29 == 0) goto L_0x0065
+            L_0x003d:
+                if (r29 == 0) goto L_0x0064
                 java.lang.String r0 = r12.lastMessagesSearchString
                 boolean r0 = r3.equals(r0)
-                if (r0 == 0) goto L_0x0065
+                if (r0 == 0) goto L_0x0064
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
                 boolean r0 = r0.isEmpty()
-                if (r0 != 0) goto L_0x0065
+                if (r0 != 0) goto L_0x0064
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
                 int r1 = r0.size()
                 int r1 = r1 + -1
@@ -2141,16 +1992,16 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
                 int r0 = r0.getId()
                 r10.offset_id = r0
-                goto L_0x0067
-            L_0x0065:
+                goto L_0x0066
+            L_0x0064:
                 r10.offset_id = r1
-            L_0x0067:
+            L_0x0066:
                 r13 = r10
                 r10 = r2
-                goto L_0x0103
-            L_0x006b:
+                goto L_0x0106
+            L_0x006a:
                 boolean r10 = android.text.TextUtils.isEmpty(r23)
-                if (r10 != 0) goto L_0x008e
+                if (r10 != 0) goto L_0x008d
                 java.util.ArrayList r2 = new java.util.ArrayList
                 r2.<init>()
                 java.util.ArrayList r17 = new java.util.ArrayList
@@ -2163,7 +2014,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 r15 = r23
                 r16 = r2
                 r13.localSearch(r14, r15, r16, r17, r18, r19)
-            L_0x008e:
+            L_0x008d:
                 org.telegram.tgnet.TLRPC$TL_messages_searchGlobal r10 = new org.telegram.tgnet.TLRPC$TL_messages_searchGlobal
                 r10.<init>()
                 r10.limit = r0
@@ -2172,24 +2023,24 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 org.telegram.tgnet.TLRPC$MessagesFilter r0 = r0.filter
                 r10.filter = r0
                 int r0 = (r25 > r8 ? 1 : (r25 == r8 ? 0 : -1))
-                if (r0 <= 0) goto L_0x00a6
+                if (r0 <= 0) goto L_0x00a5
                 long r13 = r25 / r4
                 int r0 = (int) r13
                 r10.min_date = r0
-            L_0x00a6:
+            L_0x00a5:
                 int r0 = (r27 > r8 ? 1 : (r27 == r8 ? 0 : -1))
-                if (r0 <= 0) goto L_0x00af
+                if (r0 <= 0) goto L_0x00ae
                 long r4 = r27 / r4
                 int r0 = (int) r4
                 r10.max_date = r0
-            L_0x00af:
-                if (r29 == 0) goto L_0x00f6
+            L_0x00ae:
+                if (r29 == 0) goto L_0x00f9
                 java.lang.String r0 = r12.lastMessagesSearchString
                 boolean r0 = r3.equals(r0)
-                if (r0 == 0) goto L_0x00f6
+                if (r0 == 0) goto L_0x00f9
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
                 boolean r0 = r0.isEmpty()
-                if (r0 != 0) goto L_0x00f6
+                if (r0 != 0) goto L_0x00f9
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
                 int r1 = r0.size()
                 int r1 = r1 + -1
@@ -2201,30 +2052,32 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 r10.offset_rate = r1
                 org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
                 org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
-                int r1 = r0.channel_id
-                if (r1 == 0) goto L_0x00e3
-            L_0x00e1:
-                int r0 = -r1
-                goto L_0x00ea
-            L_0x00e3:
-                int r1 = r0.chat_id
-                if (r1 == 0) goto L_0x00e8
-                goto L_0x00e1
-            L_0x00e8:
-                int r0 = r0.user_id
-            L_0x00ea:
-                org.telegram.messenger.MessagesController r1 = r24.getMessagesController()
-                org.telegram.tgnet.TLRPC$InputPeer r0 = r1.getInputPeer((int) r0)
+                long r4 = r0.channel_id
+                int r1 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
+                if (r1 == 0) goto L_0x00e4
+            L_0x00e2:
+                long r0 = -r4
+                goto L_0x00ed
+            L_0x00e4:
+                long r4 = r0.chat_id
+                int r1 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
+                if (r1 == 0) goto L_0x00eb
+                goto L_0x00e2
+            L_0x00eb:
+                long r0 = r0.user_id
+            L_0x00ed:
+                org.telegram.messenger.MessagesController r4 = r24.getMessagesController()
+                org.telegram.tgnet.TLRPC$InputPeer r0 = r4.getInputPeer((long) r0)
                 r10.offset_peer = r0
-                goto L_0x0067
-            L_0x00f6:
+                goto L_0x0066
+            L_0x00f9:
                 r10.offset_rate = r1
                 r10.offset_id = r1
                 org.telegram.tgnet.TLRPC$TL_inputPeerEmpty r0 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty
                 r0.<init>()
                 r10.offset_peer = r0
-                goto L_0x0067
-            L_0x0103:
+                goto L_0x0066
+            L_0x0106:
                 r12.lastMessagesSearchString = r3
                 r0 = r30
                 r12.lastSearchFilterQueryString = r0
@@ -2233,7 +2086,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 java.lang.String r0 = r12.lastMessagesSearchString
                 org.telegram.ui.Adapters.FiltersView.fillTipDates(r0, r11)
                 org.telegram.tgnet.ConnectionsManager r14 = r24.getConnectionsManager()
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$obxFiEGr-eW7zt4KfvEib5HcL-A r15 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$obxFiEGr-eW7zt4KfvEib5HcL-A
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda5 r15 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda5
                 r0 = r15
                 r1 = r20
                 r2 = r24
@@ -2242,16 +2095,15 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 r5 = r29
                 r6 = r21
                 r8 = r25
-                r0.<init>(r2, r3, r4, r5, r6, r8, r10, r11)
+                r0.<init>(r1, r2, r3, r4, r5, r6, r8, r10, r11)
                 r14.sendRequest(r13, r15)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.SearchAdapter.lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(long, java.lang.String, org.telegram.messenger.AccountInstance, long, long, boolean, java.lang.String, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.SearchAdapter.lambda$searchGlobal$4(long, java.lang.String, org.telegram.messenger.AccountInstance, long, long, boolean, java.lang.String, int):void");
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$searchGlobal$3 */
-        public /* synthetic */ void lambda$searchGlobal$3$ChatAttachAlertDocumentLayout$SearchAdapter(AccountInstance accountInstance, String str, int i, boolean z, long j, long j2, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        public /* synthetic */ void lambda$searchGlobal$3(AccountInstance accountInstance, String str, int i, boolean z, long j, long j2, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             ArrayList arrayList3 = new ArrayList();
             if (tLRPC$TL_error == null) {
                 TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
@@ -2263,42 +2115,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 }
             }
             String str2 = str;
-            AndroidUtilities.runOnUIThread(new Runnable(i, tLRPC$TL_error, tLObject, accountInstance, z, str, arrayList3, j, j2, arrayList, arrayList2) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ ArrayList f$10;
-                public final /* synthetic */ ArrayList f$11;
-                public final /* synthetic */ TLRPC$TL_error f$2;
-                public final /* synthetic */ TLObject f$3;
-                public final /* synthetic */ AccountInstance f$4;
-                public final /* synthetic */ boolean f$5;
-                public final /* synthetic */ String f$6;
-                public final /* synthetic */ ArrayList f$7;
-                public final /* synthetic */ long f$8;
-                public final /* synthetic */ long f$9;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                    this.f$6 = r7;
-                    this.f$7 = r8;
-                    this.f$8 = r9;
-                    this.f$9 = r11;
-                    this.f$10 = r13;
-                    this.f$11 = r14;
-                }
-
-                public final void run() {
-                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$searchGlobal$2$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda0(this, i, tLRPC$TL_error, tLObject, accountInstance, z, str, arrayList3, j, j2, arrayList, arrayList2));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$searchGlobal$2 */
-        public /* synthetic */ void lambda$searchGlobal$2$ChatAttachAlertDocumentLayout$SearchAdapter(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, AccountInstance accountInstance, boolean z, String str, ArrayList arrayList, long j, long j2, ArrayList arrayList2, ArrayList arrayList3) {
+        public /* synthetic */ void lambda$searchGlobal$2(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, AccountInstance accountInstance, boolean z, String str, ArrayList arrayList, long j, long j2, ArrayList arrayList2, ArrayList arrayList3) {
             boolean z2;
             String str2 = str;
             ArrayList arrayList4 = arrayList2;
@@ -2380,7 +2201,6 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     this.localTipDates.addAll(arrayList3);
                     updateFiltersView(TextUtils.isEmpty(this.currentDataQuery), this.localTipChats, this.localTipDates, true);
                 }
-                this.firstLoading = false;
                 final View view = null;
                 final int i5 = -1;
                 for (int i6 = 0; i6 < size; i6++) {
@@ -2444,22 +2264,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         private void updateSearchResults(ArrayList<ListItem> arrayList, String str) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-                public final /* synthetic */ ArrayList f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$updateSearchResults$5$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ChatAttachAlertDocumentLayout$SearchAdapter$$ExternalSyntheticLambda4(this, arrayList));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$5 */
-        public /* synthetic */ void lambda$updateSearchResults$5$ChatAttachAlertDocumentLayout$SearchAdapter(ArrayList arrayList) {
+        public /* synthetic */ void lambda$updateSearchResults$5(ArrayList arrayList) {
             if (ChatAttachAlertDocumentLayout.this.searching && ChatAttachAlertDocumentLayout.this.listView.getAdapter() != ChatAttachAlertDocumentLayout.this.searchAdapter) {
                 ChatAttachAlertDocumentLayout.this.listView.setAdapter(ChatAttachAlertDocumentLayout.this.searchAdapter);
             }
@@ -2518,8 +2327,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             String str;
             GraySectionCell graySectionCell = (GraySectionCell) view;
             if (graySectionCell == null) {
-                graySectionCell = new GraySectionCell(this.mContext);
-                graySectionCell.setBackgroundColor(Theme.getColor("graySection") & -NUM);
+                graySectionCell = new GraySectionCell(this.mContext, ChatAttachAlertDocumentLayout.this.resourcesProvider);
+                graySectionCell.setBackgroundColor(ChatAttachAlertDocumentLayout.this.getThemedColor("graySection") & -NUM);
             }
             if (i == 0 || (i == 1 && this.searchResult.isEmpty())) {
                 graySectionCell.setAlpha(0.0f);
@@ -2553,41 +2362,47 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
             /*
                 r3 = this;
-                if (r5 == 0) goto L_0x0032
+                if (r5 == 0) goto L_0x003a
                 r4 = 2
                 r0 = 1
-                if (r5 == r0) goto L_0x0022
+                if (r5 == r0) goto L_0x0026
                 if (r5 == r4) goto L_0x0013
                 r1 = 4
-                if (r5 == r1) goto L_0x0022
+                if (r5 == r1) goto L_0x0026
                 android.view.View r4 = new android.view.View
                 android.content.Context r5 = r3.mContext
                 r4.<init>(r5)
-                goto L_0x0039
+                goto L_0x0045
             L_0x0013:
                 org.telegram.ui.Components.FlickerLoadingView r4 = new org.telegram.ui.Components.FlickerLoadingView
                 android.content.Context r5 = r3.mContext
-                r4.<init>(r5)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r1 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r1 = r1.resourcesProvider
+                r4.<init>(r5, r1)
                 r5 = 3
                 r4.setViewType(r5)
                 r4.setIsSingleCell(r0)
-                goto L_0x0039
-            L_0x0022:
+                goto L_0x0045
+            L_0x0026:
                 org.telegram.ui.Cells.SharedDocumentCell r1 = new org.telegram.ui.Cells.SharedDocumentCell
                 android.content.Context r2 = r3.mContext
-                if (r5 != r0) goto L_0x0029
+                if (r5 != r0) goto L_0x002d
                 r4 = 1
-            L_0x0029:
-                r1.<init>(r2, r4)
+            L_0x002d:
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r5 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r5 = r5.resourcesProvider
+                r1.<init>(r2, r4, r5)
                 r4 = 0
                 r1.setDrawDownloadIcon(r4)
                 r4 = r1
-                goto L_0x0039
-            L_0x0032:
+                goto L_0x0045
+            L_0x003a:
                 org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r5 = r3.mContext
-                r4.<init>(r5)
-            L_0x0039:
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r0 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r0 = r0.resourcesProvider
+                r4.<init>(r5, r0)
+            L_0x0045:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2

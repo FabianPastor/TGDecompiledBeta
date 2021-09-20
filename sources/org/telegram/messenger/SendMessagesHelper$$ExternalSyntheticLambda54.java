@@ -1,0 +1,25 @@
+package org.telegram.messenger;
+
+import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Message;
+
+public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda54 implements Runnable {
+    public final /* synthetic */ SendMessagesHelper f$0;
+    public final /* synthetic */ TLRPC$Message f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ TLObject f$3;
+    public final /* synthetic */ SendMessagesHelper.DelayedMessage f$4;
+
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda54(SendMessagesHelper sendMessagesHelper, TLRPC$Message tLRPC$Message, boolean z, TLObject tLObject, SendMessagesHelper.DelayedMessage delayedMessage) {
+        this.f$0 = sendMessagesHelper;
+        this.f$1 = tLRPC$Message;
+        this.f$2 = z;
+        this.f$3 = tLObject;
+        this.f$4 = delayedMessage;
+    }
+
+    public final void run() {
+        this.f$0.lambda$performSendMessageRequest$47(this.f$1, this.f$2, this.f$3, this.f$4);
+    }
+}

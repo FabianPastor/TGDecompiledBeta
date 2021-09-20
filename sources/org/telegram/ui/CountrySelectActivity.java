@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,11 +36,11 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.CountrySelectActivity;
 
 public class CountrySelectActivity extends BaseFragment {
     private CountrySelectActivityDelegate delegate;
     private EmptyTextProgressView emptyView;
+    private ArrayList<Country> existingCountries;
     /* access modifiers changed from: private */
     public RecyclerListView listView;
     /* access modifiers changed from: private */
@@ -52,17 +54,18 @@ public class CountrySelectActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public boolean searching;
 
-    public static class Country {
-        public String code;
-        public String name;
-        public String shortname;
-    }
-
     public interface CountrySelectActivityDelegate {
-        void didSelectCountry(String str, String str2);
+        void didSelectCountry(Country country);
     }
 
     public CountrySelectActivity(boolean z) {
+        this(z, (ArrayList<Country>) null);
+    }
+
+    public CountrySelectActivity(boolean z, ArrayList<Country> arrayList) {
+        if (arrayList != null && !arrayList.isEmpty()) {
+            this.existingCountries = new ArrayList<>(arrayList);
+        }
         this.needPhoneCode = z;
     }
 
@@ -109,7 +112,7 @@ public class CountrySelectActivity extends BaseFragment {
         }).setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searching = false;
         this.searchWas = false;
-        CountryAdapter countryAdapter = new CountryAdapter(context);
+        CountryAdapter countryAdapter = new CountryAdapter(context, this.existingCountries);
         this.listViewAdapter = countryAdapter;
         this.searchListViewAdapter = new CountrySearchAdapter(context, countryAdapter.getCountries());
         FrameLayout frameLayout = new FrameLayout(context);
@@ -135,11 +138,7 @@ public class CountrySelectActivity extends BaseFragment {
         }
         recyclerListView2.setVerticalScrollbarPosition(i);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                CountrySelectActivity.this.lambda$createView$0$CountrySelectActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new CountrySelectActivity$$ExternalSyntheticLambda0(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -151,8 +150,7 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$CountrySelectActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$0(View view, int i) {
         Country country;
         CountrySelectActivityDelegate countrySelectActivityDelegate;
         if (!this.searching || !this.searchWas) {
@@ -169,7 +167,7 @@ public class CountrySelectActivity extends BaseFragment {
         if (i >= 0) {
             finishFragment();
             if (country != null && (countrySelectActivityDelegate = this.delegate) != null) {
-                countrySelectActivityDelegate.didSelectCountry(country.name, country.shortname);
+                countrySelectActivityDelegate.didSelectCountry(country);
             }
         }
     }
@@ -186,44 +184,82 @@ public class CountrySelectActivity extends BaseFragment {
         this.delegate = countrySelectActivityDelegate;
     }
 
+    public static class Country {
+        public String code;
+        public String name;
+        public String shortname;
+
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || Country.class != obj.getClass()) {
+                return false;
+            }
+            Country country = (Country) obj;
+            if (!ObjectsCompat$$ExternalSyntheticBackport0.m(this.name, country.name) || !ObjectsCompat$$ExternalSyntheticBackport0.m(this.code, country.code)) {
+                return false;
+            }
+            return true;
+        }
+
+        public int hashCode() {
+            return Arrays.hashCode(new Object[]{this.name, this.code});
+        }
+    }
+
     public class CountryAdapter extends RecyclerListView.SectionsAdapter {
         private HashMap<String, ArrayList<Country>> countries = new HashMap<>();
         private Context mContext;
         private ArrayList<String> sortedCountries = new ArrayList<>();
 
-        public CountryAdapter(Context context) {
+        public CountryAdapter(Context context, ArrayList<Country> arrayList) {
             this.mContext = context;
-            try {
-                InputStream open = ApplicationLoader.applicationContext.getResources().getAssets().open("countries.txt");
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(open));
-                while (true) {
-                    String readLine = bufferedReader.readLine();
-                    if (readLine == null) {
-                        break;
-                    }
-                    String[] split = readLine.split(";");
-                    Country country = new Country();
-                    String str = split[2];
-                    country.name = str;
-                    country.code = split[0];
-                    country.shortname = split[1];
-                    String upperCase = str.substring(0, 1).toUpperCase();
-                    ArrayList arrayList = this.countries.get(upperCase);
-                    if (arrayList == null) {
-                        arrayList = new ArrayList();
-                        this.countries.put(upperCase, arrayList);
+            if (arrayList != null) {
+                for (int i = 0; i < arrayList.size(); i++) {
+                    Country country = arrayList.get(i);
+                    String upperCase = country.name.substring(0, 1).toUpperCase();
+                    ArrayList arrayList2 = this.countries.get(upperCase);
+                    if (arrayList2 == null) {
+                        arrayList2 = new ArrayList();
+                        this.countries.put(upperCase, arrayList2);
                         this.sortedCountries.add(upperCase);
                     }
-                    arrayList.add(country);
+                    arrayList2.add(country);
                 }
-                bufferedReader.close();
-                open.close();
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
+            } else {
+                try {
+                    InputStream open = ApplicationLoader.applicationContext.getResources().getAssets().open("countries.txt");
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(open));
+                    while (true) {
+                        String readLine = bufferedReader.readLine();
+                        if (readLine == null) {
+                            break;
+                        }
+                        String[] split = readLine.split(";");
+                        Country country2 = new Country();
+                        String str = split[2];
+                        country2.name = str;
+                        country2.code = split[0];
+                        country2.shortname = split[1];
+                        String upperCase2 = str.substring(0, 1).toUpperCase();
+                        ArrayList arrayList3 = this.countries.get(upperCase2);
+                        if (arrayList3 == null) {
+                            arrayList3 = new ArrayList();
+                            this.countries.put(upperCase2, arrayList3);
+                            this.sortedCountries.add(upperCase2);
+                        }
+                        arrayList3.add(country2);
+                    }
+                    bufferedReader.close();
+                    open.close();
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
+                }
             }
-            Collections.sort(this.sortedCountries, $$Lambda$Ds7dtVnGrflEw4LvNOxA0cDT4Y.INSTANCE);
+            Collections.sort(this.sortedCountries, ChangePhoneActivity$PhoneView$$ExternalSyntheticLambda6.INSTANCE);
             for (ArrayList<Country> sort : this.countries.values()) {
-                Collections.sort(sort, $$Lambda$CountrySelectActivity$CountryAdapter$dKjgdmEaEdtVLx1pfz_Hpxo_gOU.INSTANCE);
+                Collections.sort(sort, CountrySelectActivity$CountryAdapter$$ExternalSyntheticLambda0.INSTANCE);
             }
         }
 
@@ -384,22 +420,11 @@ public class CountrySelectActivity extends BaseFragment {
 
         /* access modifiers changed from: private */
         public void processSearch(String str) {
-            Utilities.searchQueue.postRunnable(new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    CountrySelectActivity.CountrySearchAdapter.this.lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter(this.f$1);
-                }
-            });
+            Utilities.searchQueue.postRunnable(new CountrySelectActivity$CountrySearchAdapter$$ExternalSyntheticLambda0(this, str));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$processSearch$0 */
-        public /* synthetic */ void lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter(String str) {
+        public /* synthetic */ void lambda$processSearch$0(String str) {
             if (str.trim().toLowerCase().length() == 0) {
                 updateSearchResults(new ArrayList());
                 return;
@@ -419,22 +444,11 @@ public class CountrySelectActivity extends BaseFragment {
         }
 
         private void updateSearchResults(ArrayList<Country> arrayList) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-                public final /* synthetic */ ArrayList f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    CountrySelectActivity.CountrySearchAdapter.this.lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new CountrySelectActivity$CountrySearchAdapter$$ExternalSyntheticLambda1(this, arrayList));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$1 */
-        public /* synthetic */ void lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter(ArrayList arrayList) {
+        public /* synthetic */ void lambda$updateSearchResults$1(ArrayList arrayList) {
             if (CountrySelectActivity.this.searching) {
                 this.searchResult = arrayList;
                 if (!(!CountrySelectActivity.this.searchWas || CountrySelectActivity.this.listView == null || CountrySelectActivity.this.listView.getAdapter() == CountrySelectActivity.this.searchListViewAdapter)) {

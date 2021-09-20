@@ -12,7 +12,7 @@ public class TLRPC$TL_channelForbidden_layer67 extends TLRPC$TL_channelForbidden
             z2 = false;
         }
         this.megagroup = z2;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.title = abstractSerializedData.readString(z);
     }
@@ -24,7 +24,7 @@ public class TLRPC$TL_channelForbidden_layer67 extends TLRPC$TL_channelForbidden
         int i2 = this.megagroup ? i | 256 : i & -257;
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeString(this.title);
     }

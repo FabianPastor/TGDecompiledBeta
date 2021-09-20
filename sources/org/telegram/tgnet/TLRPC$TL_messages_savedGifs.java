@@ -1,10 +1,10 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_messages_savedGifs extends TLRPC$messages_SavedGifs {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.hash = abstractSerializedData.readInt32(z);
+        this.hash = abstractSerializedData.readInt64(z);
         int readInt32 = abstractSerializedData.readInt32(z);
         int i = 0;
         if (readInt32 == NUM) {
@@ -25,7 +25,7 @@ public class TLRPC$TL_messages_savedGifs extends TLRPC$messages_SavedGifs {
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        abstractSerializedData.writeInt32(this.hash);
+        abstractSerializedData.writeInt64(this.hash);
         abstractSerializedData.writeInt32(NUM);
         int size = this.gifs.size();
         abstractSerializedData.writeInt32(size);

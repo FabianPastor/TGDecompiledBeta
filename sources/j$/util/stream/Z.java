@@ -1,24 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.BiFunction;
-import j$.util.function.CLASSNAMEb;
-import j$.util.function.Function;
-import j$.util.function.n;
-import j$.util.stream.R1;
-import j$.util.stream.S1;
+import j$.util.function.z;
 
-public final /* synthetic */ class Z implements n {
+public final /* synthetic */ class Z implements z {
     public static final /* synthetic */ Z a = new Z();
 
     private /* synthetic */ Z() {
     }
 
-    public BiFunction a(Function function) {
-        function.getClass();
-        return new CLASSNAMEb(this, function);
-    }
-
-    public final Object apply(Object obj, Object obj2) {
-        return new S1.f.a((R1.b) obj, (R1.b) obj2);
+    public final Object get() {
+        return new CLASSNAMEe0();
     }
 }

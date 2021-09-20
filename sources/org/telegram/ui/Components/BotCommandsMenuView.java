@@ -8,11 +8,11 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -64,7 +64,7 @@ public class BotCommandsMenuView extends View {
 
     private void updateColors() {
         this.paint.setColor(Theme.getColor("chat_messagePanelVoiceBackground"));
-        int color = Theme.getColor("windowBackgroundWhite");
+        int color = Theme.getColor("chat_messagePanelVoicePressed");
         this.backDrawable.setBackColor(color);
         this.backDrawable.setIconColor(color);
         this.textPaint.setColor(color);
@@ -265,11 +265,11 @@ public class BotCommandsMenuView extends View {
             return this.newResult.size();
         }
 
-        public void setBotInfo(SparseArray<TLRPC$BotInfo> sparseArray) {
+        public void setBotInfo(LongSparseArray<TLRPC$BotInfo> longSparseArray) {
             this.newResult.clear();
             this.newResultHelp.clear();
-            for (int i = 0; i < sparseArray.size(); i++) {
-                TLRPC$BotInfo valueAt = sparseArray.valueAt(i);
+            for (int i = 0; i < longSparseArray.size(); i++) {
+                TLRPC$BotInfo valueAt = longSparseArray.valueAt(i);
                 for (int i2 = 0; i2 < valueAt.commands.size(); i2++) {
                     TLRPC$TL_botCommand tLRPC$TL_botCommand = valueAt.commands.get(i2);
                     if (!(tLRPC$TL_botCommand == null || tLRPC$TL_botCommand.command == null)) {

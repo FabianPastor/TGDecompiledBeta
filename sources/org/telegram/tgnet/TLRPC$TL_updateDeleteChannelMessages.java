@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class TLRPC$TL_updateDeleteChannelMessages extends TLRPC$Update {
     public static int constructor = -NUM;
-    public int channel_id;
+    public long channel_id;
     public ArrayList<Integer> messages = new ArrayList<>();
     public int pts;
     public int pts_count;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.channel_id = abstractSerializedData.readInt32(z);
+        this.channel_id = abstractSerializedData.readInt64(z);
         int readInt32 = abstractSerializedData.readInt32(z);
         if (readInt32 == NUM) {
             int readInt322 = abstractSerializedData.readInt32(z);
@@ -26,7 +26,7 @@ public class TLRPC$TL_updateDeleteChannelMessages extends TLRPC$Update {
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        abstractSerializedData.writeInt32(this.channel_id);
+        abstractSerializedData.writeInt64(this.channel_id);
         abstractSerializedData.writeInt32(NUM);
         int size = this.messages.size();
         abstractSerializedData.writeInt32(size);

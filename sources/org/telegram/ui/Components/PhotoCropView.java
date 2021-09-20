@@ -54,6 +54,7 @@ public class PhotoCropView extends FrameLayout {
     public PhotoCropViewDelegate delegate;
     private float flashAlpha = 0.0f;
     private boolean inBubbleMode;
+    private final Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public AnimatorSet thumbAnimation;
     /* access modifiers changed from: private */
@@ -80,8 +81,9 @@ public class PhotoCropView extends FrameLayout {
         void onVideoThumbClick();
     }
 
-    public PhotoCropView(Context context) {
+    public PhotoCropView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         this.inBubbleMode = context instanceof BubbleActivity;
         CropView cropView2 = new CropView(context);
         this.cropView = cropView2;
@@ -189,7 +191,7 @@ public class PhotoCropView extends FrameLayout {
                 this.circlePaint.setAlpha((int) (this.flashAlpha * 255.0f));
                 canvas.drawCircle(actualRect.centerX(), actualRect.centerY(), actualRect.width() / 2.0f, this.circlePaint);
             }
-            this.circlePaint.setColor(Theme.getColor("dialogFloatingButton"));
+            this.circlePaint.setColor(getThemedColor("dialogFloatingButton"));
             this.circlePaint.setAlpha(Math.min(255, (int) (this.thumbAnimationProgress * 255.0f * this.thumbImageVisibleProgress)));
             canvas.drawCircle((float) (videoThumbX + i), (float) (measuredHeight + dp + AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(3.0f), this.circlePaint);
         }
@@ -381,5 +383,11 @@ public class PhotoCropView extends FrameLayout {
     public void invalidate() {
         super.invalidate();
         this.cropView.invalidate();
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

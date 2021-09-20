@@ -2,7 +2,7 @@ package j$.util.concurrent;
 
 import java.security.PrivilegedAction;
 
-class d implements PrivilegedAction<Boolean> {
+class d implements PrivilegedAction {
     d() {
     }
 

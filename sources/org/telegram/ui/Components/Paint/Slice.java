@@ -80,7 +80,7 @@ public class Slice {
                     fileInputStream.close();
                     return wrap;
                 }
-                boolean needsInput = inflater.needsInput();
+                inflater.needsInput();
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);

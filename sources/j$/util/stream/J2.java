@@ -1,28 +1,33 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import j$.util.function.x;
-import j$.util.stream.CLASSNAMEp1;
-import j$.util.stream.R1;
-import j$.util.stream.S1;
-import java.util.Arrays;
+import j$.util.function.BiConsumer;
+import j$.util.function.CLASSNAMEb;
+import j$.util.function.z;
+import j$.wrappers.J0;
 
-final class J2 extends CLASSNAMEp1.h<Double> {
-    J2(CLASSNAMEh1 h1Var) {
-        super(h1Var, U2.DOUBLE_VALUE, T2.l | T2.j);
+class J2 extends V2 {
+    final /* synthetic */ CLASSNAMEb b;
+    final /* synthetic */ BiConsumer c;
+    final /* synthetic */ z d;
+    final /* synthetic */ J0 e;
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    J2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, BiConsumer biConsumer, z zVar, J0 j0) {
+        super(f4Var);
+        this.b = bVar;
+        this.c = biConsumer;
+        this.d = zVar;
+        this.e = j0;
     }
 
-    public R1 D0(T1 t1, Spliterator spliterator, x xVar) {
-        if (T2.SORTED.d(t1.r0())) {
-            return t1.o0(spliterator, false, xVar);
+    public T2 a() {
+        return new K2(this.d, this.c, this.b);
+    }
+
+    public int b() {
+        if (this.e.b().contains(CLASSNAMEh.UNORDERED)) {
+            return CLASSNAMEe4.r;
         }
-        double[] dArr = (double[]) ((R1.b) t1.o0(spliterator, true, xVar)).e();
-        Arrays.sort(dArr);
-        return new S1.g(dArr);
-    }
-
-    public A2 G0(int i, A2 a2) {
-        a2.getClass();
-        return T2.SORTED.d(i) ? a2 : T2.SIZED.d(i) ? new O2(a2) : new G2(a2);
+        return 0;
     }
 }

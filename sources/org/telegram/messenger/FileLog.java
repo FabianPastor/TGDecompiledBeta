@@ -114,24 +114,13 @@ public class FileLog {
             ensureInitied();
             Log.e("tmessages", str, th);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable(str, th) {
-                    public final /* synthetic */ String f$0;
-                    public final /* synthetic */ Throwable f$1;
-
-                    {
-                        this.f$0 = r1;
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        FileLog.lambda$e$0(this.f$0, this.f$1);
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda3(str, th));
             }
         }
     }
 
-    static /* synthetic */ void lambda$e$0(String str, Throwable th) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$e$0(String str, Throwable th) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
             outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + str + "\n");
@@ -147,22 +136,13 @@ public class FileLog {
             ensureInitied();
             Log.e("tmessages", str);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable(str) {
-                    public final /* synthetic */ String f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void run() {
-                        FileLog.lambda$e$1(this.f$0);
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda1(str));
             }
         }
     }
 
-    static /* synthetic */ void lambda$e$1(String str) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$e$1(String str) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
             outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + str + "\n");
@@ -177,24 +157,15 @@ public class FileLog {
             ensureInitied();
             th.printStackTrace();
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable(th) {
-                    public final /* synthetic */ Throwable f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void run() {
-                        FileLog.lambda$e$2(this.f$0);
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda4(th));
             } else {
                 th.printStackTrace();
             }
         }
     }
 
-    static /* synthetic */ void lambda$e$2(Throwable th) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$e$2(Throwable th) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
             outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + th + "\n");
@@ -214,22 +185,13 @@ public class FileLog {
             ensureInitied();
             Log.d("tmessages", str);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable(str) {
-                    public final /* synthetic */ String f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void run() {
-                        FileLog.lambda$d$3(this.f$0);
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda0(str));
             }
         }
     }
 
-    static /* synthetic */ void lambda$d$3(String str) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$d$3(String str) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
             outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + str + "\n");
@@ -244,22 +206,13 @@ public class FileLog {
             ensureInitied();
             Log.w("tmessages", str);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable(str) {
-                    public final /* synthetic */ String f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void run() {
-                        FileLog.lambda$w$4(this.f$0);
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda2(str));
             }
         }
     }
 
-    static /* synthetic */ void lambda$w$4(String str) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$w$4(String str) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
             outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + str + "\n");

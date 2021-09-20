@@ -58,7 +58,6 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.video.MP4Builder;
 import org.telegram.messenger.video.Mp4Movie;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -476,18 +475,13 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             matrix2.invert(this.matrix);
             CameraGLThread cameraGLThread = this.cameraThread;
             if (cameraGLThread != null) {
-                cameraGLThread.postRunnable(new Runnable() {
-                    public final void run() {
-                        CameraView.this.lambda$checkPreviewMatrix$0$CameraView();
-                    }
-                });
+                cameraGLThread.postRunnable(new CameraView$$ExternalSyntheticLambda2(this));
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkPreviewMatrix$0 */
-    public /* synthetic */ void lambda$checkPreviewMatrix$0$CameraView() {
+    public /* synthetic */ void lambda$checkPreviewMatrix$0() {
         CameraGLThread cameraGLThread = this.cameraThread;
         if (cameraGLThread != null && cameraGLThread.currentSession != null) {
             int worldAngle = cameraGLThread.currentSession.getWorldAngle();
@@ -785,11 +779,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                         CameraView.this.textureBuffer.put(new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f}).position(0);
                         SurfaceTexture surfaceTexture3 = new SurfaceTexture(CameraView.this.cameraTexture[0]);
                         this.cameraSurface = surfaceTexture3;
-                        surfaceTexture3.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
-                            public final void onFrameAvailable(SurfaceTexture surfaceTexture) {
-                                CameraView.CameraGLThread.this.lambda$initGL$0$CameraView$CameraGLThread(surfaceTexture);
-                            }
-                        });
+                        surfaceTexture3.setOnFrameAvailableListener(new CameraView$CameraGLThread$$ExternalSyntheticLambda0(this));
                         CameraView.this.createCamera(this.cameraSurface);
                         return true;
                     }
@@ -807,8 +797,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$initGL$0 */
-        public /* synthetic */ void lambda$initGL$0$CameraView$CameraGLThread(SurfaceTexture surfaceTexture2) {
+        public /* synthetic */ void lambda$initGL$0(SurfaceTexture surfaceTexture2) {
             requestRender();
         }
 
@@ -915,11 +904,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                             CameraView cameraView3 = CameraView.this;
                             if (!cameraView3.firstFrameRendered) {
                                 cameraView3.firstFrameRendered = true;
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public final void run() {
-                                        CameraView.CameraGLThread.this.lambda$onDraw$1$CameraView$CameraGLThread();
-                                    }
-                                });
+                                AndroidUtilities.runOnUIThread(new CameraView$CameraGLThread$$ExternalSyntheticLambda2(this));
                             }
                         }
                     }
@@ -928,8 +913,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onDraw$1 */
-        public /* synthetic */ void lambda$onDraw$1$CameraView$CameraGLThread() {
+        public /* synthetic */ void lambda$onDraw$1() {
             CameraView.this.onFirstFrameRendered();
         }
 
@@ -970,11 +954,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                     GLES20.glTexParameteri(36197, 10243, 33071);
                     SurfaceTexture surfaceTexture3 = new SurfaceTexture(CameraView.this.cameraTexture[0]);
                     this.cameraSurface = surfaceTexture3;
-                    surfaceTexture3.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
-                        public final void onFrameAvailable(SurfaceTexture surfaceTexture) {
-                            CameraView.CameraGLThread.this.lambda$handleMessage$2$CameraView$CameraGLThread(surfaceTexture);
-                        }
-                    });
+                    surfaceTexture3.setOnFrameAvailableListener(new CameraView$CameraGLThread$$ExternalSyntheticLambda1(this));
                     CameraView.this.createCamera(this.cameraSurface);
                 } else if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("CameraView eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
@@ -1012,8 +992,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$handleMessage$2 */
-        public /* synthetic */ void lambda$handleMessage$2$CameraView$CameraGLThread(SurfaceTexture surfaceTexture2) {
+        public /* synthetic */ void lambda$handleMessage$2(SurfaceTexture surfaceTexture2) {
             requestRender();
         }
 
@@ -1079,22 +1058,11 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
 
     /* access modifiers changed from: private */
     public void createCamera(SurfaceTexture surfaceTexture) {
-        AndroidUtilities.runOnUIThread(new Runnable(surfaceTexture) {
-            public final /* synthetic */ SurfaceTexture f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                CameraView.this.lambda$createCamera$3$CameraView(this.f$1);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new CameraView$$ExternalSyntheticLambda3(this, surfaceTexture));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createCamera$3 */
-    public /* synthetic */ void lambda$createCamera$3$CameraView(SurfaceTexture surfaceTexture) {
+    public /* synthetic */ void lambda$createCamera$3(SurfaceTexture surfaceTexture) {
         if (this.cameraThread != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("CameraView create camera session");
@@ -1109,22 +1077,13 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 this.cameraSession = cameraSession2;
                 this.cameraThread.setCurrentSession(cameraSession2);
                 requestLayout();
-                CameraController.getInstance().open(this.cameraSession, surfaceTexture, new Runnable() {
-                    public final void run() {
-                        CameraView.this.lambda$createCamera$1$CameraView();
-                    }
-                }, new Runnable() {
-                    public final void run() {
-                        CameraView.this.lambda$createCamera$2$CameraView();
-                    }
-                });
+                CameraController.getInstance().open(this.cameraSession, surfaceTexture, new CameraView$$ExternalSyntheticLambda1(this), new CameraView$$ExternalSyntheticLambda0(this));
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createCamera$1 */
-    public /* synthetic */ void lambda$createCamera$1$CameraView() {
+    public /* synthetic */ void lambda$createCamera$1() {
         if (this.cameraSession != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("CameraView camera initied");
@@ -1135,8 +1094,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createCamera$2 */
-    public /* synthetic */ void lambda$createCamera$2$CameraView() {
+    public /* synthetic */ void lambda$createCamera$2() {
         this.cameraThread.setCurrentSession(this.cameraSession);
     }
 
@@ -2016,16 +1974,11 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             this.eglContext = EGL14.EGL_NO_CONTEXT;
             this.eglConfig = null;
             this.handler.exit();
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    CameraView.VideoRecorder.this.lambda$handleStopRecording$0$CameraView$VideoRecorder();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new CameraView$VideoRecorder$$ExternalSyntheticLambda0(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$handleStopRecording$0 */
-        public /* synthetic */ void lambda$handleStopRecording$0$CameraView$VideoRecorder() {
+        public /* synthetic */ void lambda$handleStopRecording$0() {
             CameraView.this.cameraSession.stopVideoRecording();
             CameraView.this.onRecordingFinishRunnable.run();
         }

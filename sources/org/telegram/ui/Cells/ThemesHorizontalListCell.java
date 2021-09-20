@@ -47,7 +47,6 @@ import org.telegram.tgnet.TLRPC$TL_wallPaper;
 import org.telegram.tgnet.TLRPC$WallPaper;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Cells.ThemesHorizontalListCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.RadioButton;
@@ -653,8 +652,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 r0.wallpaper = r2
                 int r2 = r3.account
                 org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
-                org.telegram.ui.Cells.-$$Lambda$ThemesHorizontalListCell$InnerThemeView$fddPqOuVBiJytpNKVrusBtqrcbM r3 = new org.telegram.ui.Cells.-$$Lambda$ThemesHorizontalListCell$InnerThemeView$fddPqOuVBiJytpNKVrusBtqrcbM
-                r3.<init>()
+                org.telegram.ui.Cells.ThemesHorizontalListCell$InnerThemeView$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Cells.ThemesHorizontalListCell$InnerThemeView$$ExternalSyntheticLambda1
+                r3.<init>(r1)
                 r2.sendRequest(r0, r3)
             L_0x0309:
                 r2 = 0
@@ -672,24 +671,12 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$parseTheme$1 */
-        public /* synthetic */ void lambda$parseTheme$1$ThemesHorizontalListCell$InnerThemeView(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-                public final /* synthetic */ TLObject f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    ThemesHorizontalListCell.InnerThemeView.this.lambda$parseTheme$0$ThemesHorizontalListCell$InnerThemeView(this.f$1);
-                }
-            });
+        public /* synthetic */ void lambda$parseTheme$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new ThemesHorizontalListCell$InnerThemeView$$ExternalSyntheticLambda0(this, tLObject));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$parseTheme$0 */
-        public /* synthetic */ void lambda$parseTheme$0$ThemesHorizontalListCell$InnerThemeView(TLObject tLObject) {
+        public /* synthetic */ void lambda$parseTheme$0(TLObject tLObject) {
             if (tLObject instanceof TLRPC$TL_wallPaper) {
                 TLRPC$WallPaper tLRPC$WallPaper = (TLRPC$WallPaper) tLObject;
                 String attachFileName = FileLoader.getAttachFileName(tLRPC$WallPaper.document);
@@ -1057,7 +1044,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         }
         setItemAnimator((RecyclerView.ItemAnimator) null);
         setLayoutAnimation((LayoutAnimationController) null);
-        this.horizontalLayoutManager = new LinearLayoutManager(context) {
+        this.horizontalLayoutManager = new LinearLayoutManager(this, context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
@@ -1069,21 +1056,12 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         ThemesListAdapter themesListAdapter = new ThemesListAdapter(context);
         this.adapter = themesListAdapter;
         setAdapter(themesListAdapter);
-        setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ThemesHorizontalListCell.this.lambda$new$0$ThemesHorizontalListCell(view, i);
-            }
-        });
-        setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return ThemesHorizontalListCell.this.lambda$new$1$ThemesHorizontalListCell(view, i);
-            }
-        });
+        setOnItemClickListener((RecyclerListView.OnItemClickListener) new ThemesHorizontalListCell$$ExternalSyntheticLambda2(this));
+        setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ThemesHorizontalListCell$$ExternalSyntheticLambda3(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ThemesHorizontalListCell(View view, int i) {
+    public /* synthetic */ void lambda$new$0(View view, int i) {
         selectTheme(((InnerThemeView) view).themeInfo);
         int left = view.getLeft();
         int right = view.getRight();
@@ -1095,8 +1073,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ boolean lambda$new$1$ThemesHorizontalListCell(View view, int i) {
+    public /* synthetic */ boolean lambda$new$1(View view, int i) {
         showOptionsForTheme(((InnerThemeView) view).themeInfo);
         return true;
     }
@@ -1306,19 +1283,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             if (themeInfo != null) {
                 this.loadingThemes.remove(str);
                 if (this.loadingWallpapers.remove(themeInfo) != null) {
-                    Utilities.globalQueue.postRunnable(new Runnable(themeInfo, file) {
-                        public final /* synthetic */ Theme.ThemeInfo f$1;
-                        public final /* synthetic */ File f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run() {
-                            ThemesHorizontalListCell.this.lambda$didReceivedNotification$3$ThemesHorizontalListCell(this.f$1, this.f$2);
-                        }
-                    });
+                    Utilities.globalQueue.postRunnable(new ThemesHorizontalListCell$$ExternalSyntheticLambda1(this, themeInfo, file));
                 } else {
                     lambda$didReceivedNotification$2(themeInfo);
                 }
@@ -1329,20 +1294,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$3 */
-    public /* synthetic */ void lambda$didReceivedNotification$3$ThemesHorizontalListCell(Theme.ThemeInfo themeInfo, File file) {
+    public /* synthetic */ void lambda$didReceivedNotification$3(Theme.ThemeInfo themeInfo, File file) {
         themeInfo.badWallpaper = !themeInfo.createBackground(file, themeInfo.pathToWallpaper);
-        AndroidUtilities.runOnUIThread(new Runnable(themeInfo) {
-            public final /* synthetic */ Theme.ThemeInfo f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ThemesHorizontalListCell.this.lambda$didReceivedNotification$2$ThemesHorizontalListCell(this.f$1);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ThemesHorizontalListCell$$ExternalSyntheticLambda0(this, themeInfo));
     }
 
     /* access modifiers changed from: private */

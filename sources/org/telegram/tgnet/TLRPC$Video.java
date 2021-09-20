@@ -13,7 +13,7 @@ public abstract class TLRPC$Video extends TLObject {
     public String mime_type;
     public int size;
     public TLRPC$PhotoSize thumb;
-    public int user_id;
+    public long user_id;
     public int w;
 
     public static TLRPC$Video TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {

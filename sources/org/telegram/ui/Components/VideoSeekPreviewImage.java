@@ -86,26 +86,13 @@ public class VideoSeekPreviewImage extends View {
             animatedFileDrawable.resetStream(false);
         }
         DispatchQueue dispatchQueue = Utilities.globalQueue;
-        $$Lambda$VideoSeekPreviewImage$g60CkZT71ETxRPl_quZCURAVemY r2 = new Runnable(f, j) {
-            public final /* synthetic */ float f$1;
-            public final /* synthetic */ long f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                VideoSeekPreviewImage.this.lambda$setProgress$1$VideoSeekPreviewImage(this.f$1, this.f$2);
-            }
-        };
-        this.progressRunnable = r2;
-        dispatchQueue.postRunnable(r2);
+        VideoSeekPreviewImage$$ExternalSyntheticLambda2 videoSeekPreviewImage$$ExternalSyntheticLambda2 = new VideoSeekPreviewImage$$ExternalSyntheticLambda2(this, f, j);
+        this.progressRunnable = videoSeekPreviewImage$$ExternalSyntheticLambda2;
+        dispatchQueue.postRunnable(videoSeekPreviewImage$$ExternalSyntheticLambda2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setProgress$1 */
-    public /* synthetic */ void lambda$setProgress$1$VideoSeekPreviewImage(float f, long j) {
+    public /* synthetic */ void lambda$setProgress$1(float f, long j) {
         int i;
         if (this.fileDrawable == null) {
             this.pendingProgress = f;
@@ -134,22 +121,11 @@ public class VideoSeekPreviewImage extends View {
                 frameAtTime = null;
             }
         }
-        AndroidUtilities.runOnUIThread(new Runnable(frameAtTime) {
-            public final /* synthetic */ Bitmap f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                VideoSeekPreviewImage.this.lambda$setProgress$0$VideoSeekPreviewImage(this.f$1);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new VideoSeekPreviewImage$$ExternalSyntheticLambda3(this, frameAtTime));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setProgress$0 */
-    public /* synthetic */ void lambda$setProgress$0$VideoSeekPreviewImage(Bitmap bitmap) {
+    public /* synthetic */ void lambda$setProgress$0(Bitmap bitmap) {
         int i;
         if (bitmap != null) {
             if (this.bitmapToDraw != null) {
@@ -191,25 +167,14 @@ public class VideoSeekPreviewImage extends View {
         if (uri != null && !uri.equals(this.videoUri)) {
             this.videoUri = uri;
             DispatchQueue dispatchQueue = Utilities.globalQueue;
-            $$Lambda$VideoSeekPreviewImage$lj2W0fe9RVE4Ns7EIj50QSS1lo r1 = new Runnable(uri) {
-                public final /* synthetic */ Uri f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    VideoSeekPreviewImage.this.lambda$open$3$VideoSeekPreviewImage(this.f$1);
-                }
-            };
-            this.loadRunnable = r1;
-            dispatchQueue.postRunnable(r1);
+            VideoSeekPreviewImage$$ExternalSyntheticLambda4 videoSeekPreviewImage$$ExternalSyntheticLambda4 = new VideoSeekPreviewImage$$ExternalSyntheticLambda4(this, uri);
+            this.loadRunnable = videoSeekPreviewImage$$ExternalSyntheticLambda4;
+            dispatchQueue.postRunnable(videoSeekPreviewImage$$ExternalSyntheticLambda4);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$open$3 */
-    public /* synthetic */ void lambda$open$3$VideoSeekPreviewImage(Uri uri) {
+    public /* synthetic */ void lambda$open$3(Uri uri) {
         String str;
         if ("tg".equals(uri.getScheme())) {
             int intValue = Utilities.parseInt(uri.getQueryParameter("account")).intValue();
@@ -241,16 +206,11 @@ public class VideoSeekPreviewImage extends View {
             setProgress(f, this.pixelWidth);
             this.pendingProgress = 0.0f;
         }
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                VideoSeekPreviewImage.this.lambda$open$2$VideoSeekPreviewImage();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new VideoSeekPreviewImage$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$open$2 */
-    public /* synthetic */ void lambda$open$2$VideoSeekPreviewImage() {
+    public /* synthetic */ void lambda$open$2() {
         this.loadRunnable = null;
         if (this.fileDrawable != null) {
             this.ready = true;
@@ -294,11 +254,7 @@ public class VideoSeekPreviewImage extends View {
         if (animatedFileDrawable != null) {
             animatedFileDrawable.resetStream(true);
         }
-        Utilities.globalQueue.postRunnable(new Runnable() {
-            public final void run() {
-                VideoSeekPreviewImage.this.lambda$close$4$VideoSeekPreviewImage();
-            }
-        });
+        Utilities.globalQueue.postRunnable(new VideoSeekPreviewImage$$ExternalSyntheticLambda0(this));
         setVisibility(4);
         this.bitmapToDraw = null;
         this.bitmapShader = null;
@@ -309,8 +265,7 @@ public class VideoSeekPreviewImage extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$close$4 */
-    public /* synthetic */ void lambda$close$4$VideoSeekPreviewImage() {
+    public /* synthetic */ void lambda$close$4() {
         this.pendingProgress = 0.0f;
         AnimatedFileDrawable animatedFileDrawable = this.fileDrawable;
         if (animatedFileDrawable != null) {

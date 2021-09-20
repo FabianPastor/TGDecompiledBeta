@@ -119,17 +119,12 @@ public class LogoutActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
-            public final void onItemClick(View view, int i, float f, float f2) {
-                LogoutActivity.this.lambda$createView$1$LogoutActivity(view, i, f, f2);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new LogoutActivity$$ExternalSyntheticLambda1(this));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$LogoutActivity(View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$createView$1(View view, int i, float f, float f2) {
         int i2 = 0;
         int i3 = -1;
         if (i == this.addAccountRow) {
@@ -159,11 +154,7 @@ public class LogoutActivity extends BaseFragment {
             getUserConfig();
             builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
             builder.setTitle(LocaleController.getString("LogOut", NUM));
-            builder.setPositiveButton(LocaleController.getString("LogOut", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    LogoutActivity.this.lambda$createView$0$LogoutActivity(dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("LogOut", NUM), new LogoutActivity$$ExternalSyntheticLambda0(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             AlertDialog create = builder.create();
             showDialog(create);
@@ -175,8 +166,7 @@ public class LogoutActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$LogoutActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$0(DialogInterface dialogInterface, int i) {
         MessagesController.getInstance(this.currentAccount).performLogout(1);
     }
 
@@ -253,13 +243,13 @@ public class LogoutActivity extends BaseFragment {
             /*
                 r2 = this;
                 java.lang.String r3 = "windowBackgroundWhite"
-                if (r4 == 0) goto L_0x004c
+                if (r4 == 0) goto L_0x004e
                 r0 = 1
-                if (r4 == r0) goto L_0x003a
+                if (r4 == r0) goto L_0x003c
                 r0 = 2
-                if (r4 == r0) goto L_0x0032
+                if (r4 == r0) goto L_0x0034
                 r0 = 3
-                if (r4 == r0) goto L_0x0023
+                if (r4 == r0) goto L_0x0025
                 org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
@@ -268,36 +258,36 @@ public class LogoutActivity extends BaseFragment {
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r0, (java.lang.String) r1)
                 r3.setBackgroundDrawable(r4)
-                goto L_0x005b
-            L_0x0023:
+                goto L_0x005d
+            L_0x0025:
                 org.telegram.ui.Cells.TextSettingsCell r4 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x005a
-            L_0x0032:
+                goto L_0x005c
+            L_0x0034:
                 org.telegram.ui.Cells.ShadowSectionCell r3 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
-                goto L_0x005b
-            L_0x003a:
+                goto L_0x005d
+            L_0x003c:
                 org.telegram.ui.Cells.TextDetailSettingsCell r4 = new org.telegram.ui.Cells.TextDetailSettingsCell
                 android.content.Context r1 = r2.mContext
                 r4.<init>(r1)
                 r4.setMultilineDetail(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x005a
-            L_0x004c:
+                goto L_0x005c
+            L_0x004e:
                 org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-            L_0x005a:
+            L_0x005c:
                 r3 = r4
-            L_0x005b:
+            L_0x005d:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2

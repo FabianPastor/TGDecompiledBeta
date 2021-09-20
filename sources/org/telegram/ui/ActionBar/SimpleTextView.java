@@ -22,7 +22,7 @@ import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Components.EmptyStubSpan;
 import org.telegram.ui.Components.StaticLayoutEx;
 
-public class SimpleTextView extends View implements Drawable.Callback {
+public class SimpleTextView extends View {
     private boolean buildFullLayout;
     private int currentScrollDelay;
     private int drawablePadding = AndroidUtilities.dp(4.0f);

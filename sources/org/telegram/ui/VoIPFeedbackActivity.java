@@ -12,11 +12,7 @@ public class VoIPFeedbackActivity extends Activity {
         super.onCreate(bundle);
         overridePendingTransition(0, 0);
         setContentView(new View(this));
-        VoIPHelper.showRateAlert(this, new Runnable() {
-            public final void run() {
-                VoIPFeedbackActivity.this.finish();
-            }
-        }, getIntent().getBooleanExtra("call_video", false), getIntent().getLongExtra("call_id", 0), getIntent().getLongExtra("call_access_hash", 0), getIntent().getIntExtra("account", 0), false);
+        VoIPHelper.showRateAlert(this, new VoIPFeedbackActivity$$ExternalSyntheticLambda0(this), getIntent().getBooleanExtra("call_video", false), getIntent().getLongExtra("call_id", 0), getIntent().getLongExtra("call_access_hash", 0), getIntent().getIntExtra("account", 0), false);
     }
 
     public void finish() {

@@ -126,11 +126,7 @@ public class SurfaceTextureHelper {
                 this.oesTextureId = generateTexture;
                 SurfaceTexture surfaceTexture2 = new SurfaceTexture(generateTexture);
                 this.surfaceTexture = surfaceTexture2;
-                setOnFrameAvailableListener(surfaceTexture2, new SurfaceTexture.OnFrameAvailableListener() {
-                    public final void onFrameAvailable(SurfaceTexture surfaceTexture) {
-                        SurfaceTextureHelper.this.lambda$new$0$SurfaceTextureHelper(surfaceTexture);
-                    }
-                }, handler2);
+                setOnFrameAvailableListener(surfaceTexture2, new SurfaceTextureHelper$$ExternalSyntheticLambda0(this), handler2);
             } catch (RuntimeException e) {
                 this.eglBase.release();
                 handler2.getLooper().quit();
@@ -142,8 +138,7 @@ public class SurfaceTextureHelper {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$SurfaceTextureHelper(SurfaceTexture surfaceTexture2) {
+    public /* synthetic */ void lambda$new$0(SurfaceTexture surfaceTexture2) {
         if (this.hasPendingTexture) {
             Logging.d("SurfaceTextureHelper", "A frame is already pending, dropping frame.");
         }
@@ -172,16 +167,11 @@ public class SurfaceTextureHelper {
     public void stopListening() {
         Logging.d("SurfaceTextureHelper", "stopListening()");
         this.handler.removeCallbacks(this.setListenerRunnable);
-        ThreadUtils.invokeAtFrontUninterruptibly(this.handler, (Runnable) new Runnable() {
-            public final void run() {
-                SurfaceTextureHelper.this.lambda$stopListening$1$SurfaceTextureHelper();
-            }
-        });
+        ThreadUtils.invokeAtFrontUninterruptibly(this.handler, (Runnable) new SurfaceTextureHelper$$ExternalSyntheticLambda3(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$stopListening$1 */
-    public /* synthetic */ void lambda$stopListening$1$SurfaceTextureHelper() {
+    public /* synthetic */ void lambda$stopListening$1() {
         this.listener = null;
         this.pendingListener = null;
     }
@@ -191,65 +181,36 @@ public class SurfaceTextureHelper {
             throw new IllegalArgumentException("Texture width must be positive, but was " + i);
         } else if (i2 > 0) {
             this.surfaceTexture.setDefaultBufferSize(i, i2);
-            this.handler.post(new Runnable(i, i2) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ int f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    SurfaceTextureHelper.this.lambda$setTextureSize$2$SurfaceTextureHelper(this.f$1, this.f$2);
-                }
-            });
+            this.handler.post(new SurfaceTextureHelper$$ExternalSyntheticLambda6(this, i, i2));
         } else {
             throw new IllegalArgumentException("Texture height must be positive, but was " + i2);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setTextureSize$2 */
-    public /* synthetic */ void lambda$setTextureSize$2$SurfaceTextureHelper(int i, int i2) {
+    public /* synthetic */ void lambda$setTextureSize$2(int i, int i2) {
         this.textureWidth = i;
         this.textureHeight = i2;
         tryDeliverTextureFrame();
     }
 
     public void forceFrame() {
-        this.handler.post(new Runnable() {
-            public final void run() {
-                SurfaceTextureHelper.this.lambda$forceFrame$3$SurfaceTextureHelper();
-            }
-        });
+        this.handler.post(new SurfaceTextureHelper$$ExternalSyntheticLambda2(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$forceFrame$3 */
-    public /* synthetic */ void lambda$forceFrame$3$SurfaceTextureHelper() {
+    public /* synthetic */ void lambda$forceFrame$3() {
         this.hasPendingTexture = true;
         tryDeliverTextureFrame();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setFrameRotation$4 */
-    public /* synthetic */ void lambda$setFrameRotation$4$SurfaceTextureHelper(int i) {
+    public /* synthetic */ void lambda$setFrameRotation$4(int i) {
         this.frameRotation = i;
     }
 
     public void setFrameRotation(int i) {
-        this.handler.post(new Runnable(i) {
-            public final /* synthetic */ int f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                SurfaceTextureHelper.this.lambda$setFrameRotation$4$SurfaceTextureHelper(this.f$1);
-            }
-        });
+        this.handler.post(new SurfaceTextureHelper$$ExternalSyntheticLambda5(this, i));
     }
 
     public SurfaceTexture getSurfaceTexture() {
@@ -262,16 +223,11 @@ public class SurfaceTextureHelper {
 
     /* access modifiers changed from: private */
     public void returnTextureFrame() {
-        this.handler.post(new Runnable() {
-            public final void run() {
-                SurfaceTextureHelper.this.lambda$returnTextureFrame$5$SurfaceTextureHelper();
-            }
-        });
+        this.handler.post(new SurfaceTextureHelper$$ExternalSyntheticLambda4(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$returnTextureFrame$5 */
-    public /* synthetic */ void lambda$returnTextureFrame$5$SurfaceTextureHelper() {
+    public /* synthetic */ void lambda$returnTextureFrame$5() {
         this.isTextureInUse = false;
         if (this.isQuitting) {
             release();
@@ -286,16 +242,11 @@ public class SurfaceTextureHelper {
 
     public void dispose() {
         Logging.d("SurfaceTextureHelper", "dispose()");
-        ThreadUtils.invokeAtFrontUninterruptibly(this.handler, (Runnable) new Runnable() {
-            public final void run() {
-                SurfaceTextureHelper.this.lambda$dispose$6$SurfaceTextureHelper();
-            }
-        });
+        ThreadUtils.invokeAtFrontUninterruptibly(this.handler, (Runnable) new SurfaceTextureHelper$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$dispose$6 */
-    public /* synthetic */ void lambda$dispose$6$SurfaceTextureHelper() {
+    public /* synthetic */ void lambda$dispose$6() {
         this.isQuitting = true;
         if (!this.isTextureInUse) {
             release();

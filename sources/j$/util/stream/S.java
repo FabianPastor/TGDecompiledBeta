@@ -1,25 +1,22 @@
 package j$.util.stream;
 
-import j$.util.function.BiConsumer;
-import j$.util.function.BiFunction;
-import j$.util.function.CLASSNAMEb;
-import j$.util.function.Function;
-import j$.util.function.n;
-
-public final /* synthetic */ class S implements n {
-    public final /* synthetic */ BiConsumer a;
-
-    public /* synthetic */ S(BiConsumer biConsumer) {
-        this.a = biConsumer;
+abstract class S extends T {
+    S(CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i) {
+        super(cVar, i);
     }
 
-    public BiFunction a(Function function) {
-        function.getClass();
-        return new CLASSNAMEb(this, function);
+    /* access modifiers changed from: package-private */
+    public final boolean G0() {
+        return false;
     }
 
-    public final Object apply(Object obj, Object obj2) {
-        this.a.accept(obj, obj2);
-        return obj;
+    public /* bridge */ /* synthetic */ U parallel() {
+        parallel();
+        return this;
+    }
+
+    public /* bridge */ /* synthetic */ U sequential() {
+        sequential();
+        return this;
     }
 }

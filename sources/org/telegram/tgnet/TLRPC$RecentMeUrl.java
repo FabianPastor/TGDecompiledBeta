@@ -1,20 +1,20 @@
 package org.telegram.tgnet;
 
 public abstract class TLRPC$RecentMeUrl extends TLObject {
-    public int chat_id;
+    public long chat_id;
     public TLRPC$ChatInvite chat_invite;
     public TLRPC$StickerSetCovered set;
     public String url;
-    public int user_id;
+    public long user_id;
 
     public static TLRPC$RecentMeUrl TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$RecentMeUrl tLRPC$RecentMeUrl;
         switch (i) {
-            case -1917045962:
-                tLRPC$RecentMeUrl = new TLRPC$TL_recentMeUrlUser();
-                break;
-            case -1608834311:
+            case -1294306862:
                 tLRPC$RecentMeUrl = new TLRPC$TL_recentMeUrlChat();
+                break;
+            case -1188296222:
+                tLRPC$RecentMeUrl = new TLRPC$TL_recentMeUrlUser();
                 break;
             case -1140172836:
                 tLRPC$RecentMeUrl = new TLRPC$TL_recentMeUrlStickerSet();

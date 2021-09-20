@@ -258,11 +258,7 @@ public class PinchToZoomHelper {
             }
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
             this.finishTransition = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    PinchToZoomHelper.this.lambda$finishZoom$0$PinchToZoomHelper(valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new PinchToZoomHelper$$ExternalSyntheticLambda0(this));
             this.finishTransition.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     PinchToZoomHelper pinchToZoomHelper = PinchToZoomHelper.this;
@@ -279,8 +275,7 @@ public class PinchToZoomHelper {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$finishZoom$0 */
-    public /* synthetic */ void lambda$finishZoom$0$PinchToZoomHelper(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$finishZoom$0(ValueAnimator valueAnimator) {
         this.finishProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidateViews();
     }
@@ -380,7 +375,7 @@ public class PinchToZoomHelper {
             if (Build.VERSION.SDK_INT >= 21) {
                 FrameLayout frameLayout = new FrameLayout(context);
                 this.videoPlayerContainer = frameLayout;
-                frameLayout.setOutlineProvider(new ViewOutlineProvider(PinchToZoomHelper.this) {
+                frameLayout.setOutlineProvider(new ViewOutlineProvider(this, PinchToZoomHelper.this) {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
                         ImageReceiver imageReceiver = (ImageReceiver) view.getTag(NUM);

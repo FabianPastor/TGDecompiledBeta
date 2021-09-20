@@ -106,56 +106,25 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 ArrayList arrayList = new ArrayList(this.mPendingMoves);
                 this.mMovesList.add(arrayList);
                 this.mPendingMoves.clear();
-                new Runnable(arrayList) {
-                    public final /* synthetic */ ArrayList f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        DialogsItemAnimator.this.lambda$runPendingAnimations$0$DialogsItemAnimator(this.f$1);
-                    }
-                }.run();
+                new DialogsItemAnimator$$ExternalSyntheticLambda2(this, arrayList).run();
             }
             if (z3) {
                 ArrayList arrayList2 = new ArrayList(this.mPendingChanges);
                 this.mChangesList.add(arrayList2);
                 this.mPendingChanges.clear();
-                new Runnable(arrayList2) {
-                    public final /* synthetic */ ArrayList f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        DialogsItemAnimator.this.lambda$runPendingAnimations$1$DialogsItemAnimator(this.f$1);
-                    }
-                }.run();
+                new DialogsItemAnimator$$ExternalSyntheticLambda0(this, arrayList2).run();
             }
             if (z4) {
                 ArrayList arrayList3 = new ArrayList(this.mPendingAdditions);
                 this.mAdditionsList.add(arrayList3);
                 this.mPendingAdditions.clear();
-                new Runnable(arrayList3) {
-                    public final /* synthetic */ ArrayList f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        DialogsItemAnimator.this.lambda$runPendingAnimations$2$DialogsItemAnimator(this.f$1);
-                    }
-                }.run();
+                new DialogsItemAnimator$$ExternalSyntheticLambda1(this, arrayList3).run();
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$runPendingAnimations$0 */
-    public /* synthetic */ void lambda$runPendingAnimations$0$DialogsItemAnimator(ArrayList arrayList) {
+    public /* synthetic */ void lambda$runPendingAnimations$0(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             MoveInfo moveInfo = (MoveInfo) it.next();
@@ -166,8 +135,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$runPendingAnimations$1 */
-    public /* synthetic */ void lambda$runPendingAnimations$1$DialogsItemAnimator(ArrayList arrayList) {
+    public /* synthetic */ void lambda$runPendingAnimations$1(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             animateChangeImpl((ChangeInfo) it.next());
@@ -177,8 +145,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$runPendingAnimations$2 */
-    public /* synthetic */ void lambda$runPendingAnimations$2$DialogsItemAnimator(ArrayList arrayList) {
+    public /* synthetic */ void lambda$runPendingAnimations$2(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             animateAddImpl((RecyclerView.ViewHolder) it.next());

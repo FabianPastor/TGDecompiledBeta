@@ -31,17 +31,7 @@ public class SmsReceiver extends BroadcastReceiver {
                                 SharedPreferences.Editor edit = sharedPreferences.edit();
                                 edit.putString("sms_hash_code", string + "|" + replace).commit();
                             }
-                            AndroidUtilities.runOnUIThread(new Runnable(replace) {
-                                public final /* synthetic */ String f$0;
-
-                                {
-                                    this.f$0 = r1;
-                                }
-
-                                public final void run() {
-                                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReceiveSmsCode, this.f$0);
-                                }
-                            });
+                            AndroidUtilities.runOnUIThread(new SmsReceiver$$ExternalSyntheticLambda0(replace));
                         }
                     }
                 }

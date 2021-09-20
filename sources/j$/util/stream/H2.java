@@ -1,55 +1,55 @@
 package j$.util.stream;
 
-import j$.util.stream.S2;
-import java.util.Arrays;
+import j$.util.function.BiFunction;
+import j$.util.function.CLASSNAMEb;
+import j$.util.function.Consumer;
 
-final class H2 extends D2 {
-    private S2.c c;
+class H2 extends U2 implements T2 {
+    final /* synthetic */ Object b;
+    final /* synthetic */ BiFunction c;
+    final /* synthetic */ CLASSNAMEb d;
 
-    H2(A2 a2) {
-        super(a2);
+    H2(Object obj, BiFunction biFunction, CLASSNAMEb bVar) {
+        this.b = obj;
+        this.c = biFunction;
+        this.d = bVar;
     }
 
-    public void accept(int i) {
-        this.c.accept(i);
+    public /* synthetic */ void accept(double d2) {
+        CLASSNAMEp1.f(this);
+        throw null;
     }
 
-    public void l() {
-        int[] iArr = (int[]) this.c.e();
-        Arrays.sort(iArr);
-        this.a.m((long) iArr.length);
-        int i = 0;
-        if (!this.b) {
-            int length = iArr.length;
-            while (i < length) {
-                this.a.accept(iArr[i]);
-                i++;
-            }
-        } else {
-            int length2 = iArr.length;
-            while (i < length2) {
-                int i2 = iArr[i];
-                if (this.a.o()) {
-                    break;
-                }
-                this.a.accept(i2);
-                i++;
-            }
-        }
-        this.a.l();
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEp1.d(this);
+        throw null;
     }
 
-    public void m(long j) {
-        S2.c cVar;
-        if (j < NUM) {
-            if (j > 0) {
-                int i = (int) j;
-            } else {
-                cVar = new S2.c();
-            }
-            this.c = cVar;
-            return;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEp1.e(this);
+        throw null;
+    }
+
+    public void accept(Object obj) {
+        this.a = this.c.apply(this.a, obj);
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    public void h(T2 t2) {
+        this.a = this.d.apply(this.a, ((H2) t2).a);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b;
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

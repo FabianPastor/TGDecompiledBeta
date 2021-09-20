@@ -13,29 +13,41 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RadialProgressView extends View {
-    private AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
+    private AccelerateInterpolator accelerateInterpolator;
     private float animatedProgress;
-    private RectF cicleRect = new RectF();
+    private RectF cicleRect;
     private float currentCircleLength;
     private float currentProgress;
     private float currentProgressTime;
-    private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
+    private DecelerateInterpolator decelerateInterpolator;
     private float drawingCircleLenght;
     private long lastUpdateTime;
-    private boolean noProgress = true;
+    private boolean noProgress;
     private float progressAnimationStart;
-    private int progressColor = Theme.getColor("progressCircle");
+    private int progressColor;
     private Paint progressPaint;
     private int progressTime;
     private float radOffset;
+    private final Theme.ResourcesProvider resourcesProvider;
     private boolean risingCircleLength;
-    private int size = AndroidUtilities.dp(40.0f);
+    private int size;
     private boolean toCircle;
     private float toCircleProgress;
     private boolean useSelfAlpha;
 
     public RadialProgressView(Context context) {
+        this(context, (Theme.ResourcesProvider) null);
+    }
+
+    public RadialProgressView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.cicleRect = new RectF();
+        this.noProgress = true;
+        this.resourcesProvider = resourcesProvider2;
+        this.size = AndroidUtilities.dp(40.0f);
+        this.progressColor = getThemedColor("progressCircle");
+        this.decelerateInterpolator = new DecelerateInterpolator();
+        this.accelerateInterpolator = new AccelerateInterpolator();
         Paint paint = new Paint(1);
         this.progressPaint = paint;
         paint.setStyle(Paint.Style.STROKE);
@@ -318,5 +330,11 @@ public class RadialProgressView extends View {
 
     public boolean isCircle() {
         return Math.abs(this.drawingCircleLenght) >= 360.0f;
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

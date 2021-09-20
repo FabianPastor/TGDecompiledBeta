@@ -16,21 +16,23 @@ import org.telegram.ui.Components.RadialProgressView;
 public class LocationLoadingCell extends FrameLayout {
     private ImageView imageView;
     private RadialProgressView progressBar;
+    private final Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
 
-    public LocationLoadingCell(Context context) {
+    public LocationLoadingCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
-        RadialProgressView radialProgressView = new RadialProgressView(context);
+        this.resourcesProvider = resourcesProvider2;
+        RadialProgressView radialProgressView = new RadialProgressView(context, resourcesProvider2);
         this.progressBar = radialProgressView;
         addView(radialProgressView, LayoutHelper.createFrame(-2, -2, 17));
         ImageView imageView2 = new ImageView(context);
         this.imageView = imageView2;
         imageView2.setImageResource(NUM);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), PorterDuff.Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogEmptyImage"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 24.0f));
         TextView textView2 = new TextView(context);
         this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("dialogEmptyText"));
+        textView2.setTextColor(getThemedColor("dialogEmptyText"));
         this.textView.setGravity(17);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextSize(1, 17.0f);
@@ -52,5 +54,11 @@ public class LocationLoadingCell extends FrameLayout {
             i = 4;
         }
         imageView2.setVisibility(i);
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

@@ -7,7 +7,7 @@ public class TLRPC$TL_channelFull_old extends TLRPC$TL_channelFull {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
         this.can_view_participants = (readInt32 & 8) != 0;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         this.about = abstractSerializedData.readString(z);
         if ((this.flags & 1) != 0) {
             this.participants_count = abstractSerializedData.readInt32(z);
@@ -34,7 +34,7 @@ public class TLRPC$TL_channelFull_old extends TLRPC$TL_channelFull {
         int i = this.can_view_participants ? this.flags | 8 : this.flags & -9;
         this.flags = i;
         abstractSerializedData.writeInt32(i);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         abstractSerializedData.writeString(this.about);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(this.participants_count);

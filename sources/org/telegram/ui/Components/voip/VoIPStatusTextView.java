@@ -15,12 +15,10 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.voip.VoIPStatusTextView;
 
 public class VoIPStatusTextView extends FrameLayout {
     boolean animationInProgress;
     ValueAnimator animator;
-    private boolean attachedToWindow;
     EllipsizeSpanAnimator ellipsizeAnimator;
     CharSequence nextTextToSet;
     TextView reconnectTextView;
@@ -155,8 +153,8 @@ public class VoIPStatusTextView extends FrameLayout {
             android.widget.TextView[] r4 = r3.textView
             r5 = r4[r1]
             r4 = r4[r0]
-            org.telegram.ui.Components.voip.-$$Lambda$VoIPStatusTextView$mtAEttNmC-ocRXhJkjo_R66BzxQ r6 = new org.telegram.ui.Components.voip.-$$Lambda$VoIPStatusTextView$mtAEttNmC-ocRXhJkjo_R66BzxQ
-            r6.<init>()
+            org.telegram.ui.Components.voip.VoIPStatusTextView$$ExternalSyntheticLambda1 r6 = new org.telegram.ui.Components.voip.VoIPStatusTextView$$ExternalSyntheticLambda1
+            r6.<init>(r3)
             r3.replaceViews(r5, r4, r6)
         L_0x00ba:
             return
@@ -165,8 +163,7 @@ public class VoIPStatusTextView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setText$0 */
-    public /* synthetic */ void lambda$setText$0$VoIPStatusTextView() {
+    public /* synthetic */ void lambda$setText$0() {
         TextView[] textViewArr = this.textView;
         TextView textView2 = textViewArr[0];
         textViewArr[0] = textViewArr[1];
@@ -210,19 +207,7 @@ public class VoIPStatusTextView extends FrameLayout {
         this.animationInProgress = true;
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
         this.animator = ofFloat;
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(view2, view) {
-            public final /* synthetic */ View f$0;
-            public final /* synthetic */ View f$1;
-
-            {
-                this.f$0 = r1;
-                this.f$1 = r2;
-            }
-
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                VoIPStatusTextView.lambda$replaceViews$1(this.f$0, this.f$1, valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new VoIPStatusTextView$$ExternalSyntheticLambda0(view2, view));
         this.animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 view.setVisibility(8);
@@ -250,19 +235,14 @@ public class VoIPStatusTextView extends FrameLayout {
                         voIPStatusTextView2.textView[1].setText(voIPStatusTextView2.nextTextToSet);
                         VoIPStatusTextView voIPStatusTextView3 = VoIPStatusTextView.this;
                         TextView[] textViewArr = voIPStatusTextView3.textView;
-                        voIPStatusTextView3.replaceViews(textViewArr[0], textViewArr[1], new Runnable() {
-                            public final void run() {
-                                VoIPStatusTextView.AnonymousClass1.this.lambda$onAnimationEnd$0$VoIPStatusTextView$1();
-                            }
-                        });
+                        voIPStatusTextView3.replaceViews(textViewArr[0], textViewArr[1], new VoIPStatusTextView$1$$ExternalSyntheticLambda0(this));
                     }
                     VoIPStatusTextView.this.nextTextToSet = null;
                 }
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onAnimationEnd$0 */
-            public /* synthetic */ void lambda$onAnimationEnd$0$VoIPStatusTextView$1() {
+            public /* synthetic */ void lambda$onAnimationEnd$0() {
                 TextView[] textViewArr = VoIPStatusTextView.this.textView;
                 TextView textView = textViewArr[0];
                 textViewArr[0] = textViewArr[1];
@@ -273,7 +253,8 @@ public class VoIPStatusTextView extends FrameLayout {
         this.animator.start();
     }
 
-    static /* synthetic */ void lambda$replaceViews$1(View view, View view2, ValueAnimator valueAnimator) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$replaceViews$1(View view, View view2, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         float f = (floatValue * 0.6f) + 0.4f;
         float f2 = 1.0f - floatValue;
@@ -325,14 +306,12 @@ public class VoIPStatusTextView extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        this.attachedToWindow = true;
         this.ellipsizeAnimator.onAttachedToWindow();
     }
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        this.attachedToWindow = false;
         this.ellipsizeAnimator.onDetachedFromWindow();
     }
 }

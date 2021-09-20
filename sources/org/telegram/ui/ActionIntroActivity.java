@@ -81,7 +81,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         void didFindQRCode(String str);
     }
 
-    static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -386,7 +387,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         this.fragmentView = r2;
         r2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         ViewGroup viewGroup = (ViewGroup) this.fragmentView;
-        viewGroup.setOnTouchListener($$Lambda$ActionIntroActivity$_rX8FzoEMbTJSa3AZ8TBqco66KY.INSTANCE);
+        viewGroup.setOnTouchListener(ActionIntroActivity$$ExternalSyntheticLambda4.INSTANCE);
         viewGroup.addView(this.actionBar);
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
         this.imageView = rLottieImageView;
@@ -473,7 +474,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     this.desctiptionLines[i9].setText(spannableStringBuilder);
                 } else if (i5 == 1) {
                     this.desctiptionLines[i9].setText(LocaleController.getString("AuthAnotherClientInfo2", NUM));
-                } else if (i5 == 2) {
+                } else {
                     this.desctiptionLines[i9].setText(LocaleController.getString("AuthAnotherClientInfo3", NUM));
                 }
                 if (LocaleController.isRTL) {
@@ -536,11 +537,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
         viewGroup.addView(this.buttonTextView);
-        this.buttonTextView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ActionIntroActivity.this.lambda$createView$2$ActionIntroActivity(view);
-            }
-        });
+        this.buttonTextView.setOnClickListener(new ActionIntroActivity$$ExternalSyntheticLambda3(this));
         int i10 = this.currentType;
         if (i10 == 0) {
             this.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -581,7 +578,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             this.imageView.setImageDrawable(new CombinedDrawable(this.drawable1, this.drawable2));
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
             UserConfig userConfig = getUserConfig();
-            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(userConfig.clientUserId));
+            TLRPC$User user = getMessagesController().getUser(Long.valueOf(userConfig.clientUserId));
             if (user == null) {
                 user = userConfig.getCurrentUser();
             }
@@ -617,8 +614,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$ActionIntroActivity(View view) {
+    public /* synthetic */ void lambda$createView$2(View view) {
         if (getParentActivity() != null) {
             int i = this.currentType;
             if (i == 0) {
@@ -632,11 +628,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", NUM));
                     builder.setMessage(LocaleController.getString("PhoneNumberAlert", NUM));
-                    builder.setPositiveButton(LocaleController.getString("Change", NUM), new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ActionIntroActivity.this.lambda$createView$1$ActionIntroActivity(dialogInterface, i);
-                        }
-                    });
+                    builder.setPositiveButton(LocaleController.getString("Change", NUM), new ActionIntroActivity$$ExternalSyntheticLambda2(this));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     showDialog(builder.create());
                 } else if (i == 4) {
@@ -655,9 +647,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 }
             } else if (this.currentGroupCreateAddress != null && this.currentGroupCreateLocation != null) {
                 Bundle bundle2 = new Bundle();
-                ArrayList arrayList = new ArrayList();
-                arrayList.add(Integer.valueOf(getUserConfig().getClientUserId()));
-                bundle2.putIntegerArrayList("result", arrayList);
+                bundle2.putLongArray("result", new long[]{getUserConfig().getClientUserId()});
                 bundle2.putInt("chatType", 4);
                 bundle2.putString("address", this.currentGroupCreateAddress);
                 bundle2.putParcelable("location", this.currentGroupCreateLocation);
@@ -667,8 +657,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$ActionIntroActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$1(DialogInterface dialogInterface, int i) {
         presentFragment(new ChangePhoneActivity(), true);
     }
 
@@ -743,20 +732,12 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", NUM));
-                        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
-                            public final void onClick(DialogInterface dialogInterface, int i) {
-                                ActionIntroActivity.this.lambda$onRequestPermissionsResultFragment$4$ActionIntroActivity(dialogInterface, i);
-                            }
-                        });
+                        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new ActionIntroActivity$$ExternalSyntheticLambda0(this));
                         builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
                         showDialog(builder.create());
                         return;
                     }
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public final void run() {
-                            ActionIntroActivity.this.lambda$onRequestPermissionsResultFragment$5$ActionIntroActivity();
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new ActionIntroActivity$$ExternalSyntheticLambda5(this));
                 }
             } else if (i != 34) {
             } else {
@@ -764,11 +745,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
                     builder2.setTitle(LocaleController.getString("AppName", NUM));
                     builder2.setMessage(LocaleController.getString("QRCodePermissionNoCamera", NUM));
-                    builder2.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ActionIntroActivity.this.lambda$onRequestPermissionsResultFragment$6$ActionIntroActivity(dialogInterface, i);
-                        }
-                    });
+                    builder2.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new ActionIntroActivity$$ExternalSyntheticLambda1(this));
                     builder2.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
                     builder2.show();
                     return;
@@ -779,8 +756,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onRequestPermissionsResultFragment$4 */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$4$ActionIntroActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$4(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
                 Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
@@ -793,14 +769,12 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onRequestPermissionsResultFragment$5 */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$5$ActionIntroActivity() {
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$5() {
         presentFragment(new PeopleNearbyActivity(), true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onRequestPermissionsResultFragment$6 */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$6$ActionIntroActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$6(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -829,20 +803,16 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ActionIntroActivity$u19EzaLWc0I3yBG2T03118n2Lc8 r8 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                ActionIntroActivity.this.updateColors();
-            }
-        };
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "windowBackgroundWhite"));
+        ActionIntroActivity$$ExternalSyntheticLambda6 actionIntroActivity$$ExternalSyntheticLambda6 = new ActionIntroActivity$$ExternalSyntheticLambda6(this);
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, actionIntroActivity$$ExternalSyntheticLambda6, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarWhiteSelector"));
-        arrayList.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, actionIntroActivity$$ExternalSyntheticLambda6, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.subtitleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
         arrayList.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_buttonText"));
-        arrayList.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "featuredStickers_addButton"));
+        arrayList.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, (Class[]) null, (Paint) null, (Drawable[]) null, actionIntroActivity$$ExternalSyntheticLambda6, "featuredStickers_addButton"));
         arrayList.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addButtonPressed"));
         arrayList.add(new ThemeDescription(this.desctiptionLines[0], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.desctiptionLines[1], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));

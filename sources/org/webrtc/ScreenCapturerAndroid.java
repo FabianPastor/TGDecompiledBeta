@@ -119,16 +119,11 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
 
     public synchronized void stopCapture() {
         checkNotDisposed();
-        ThreadUtils.invokeAtFrontUninterruptibly(this.surfaceTextureHelper.getHandler(), (Runnable) new Runnable() {
-            public final void run() {
-                ScreenCapturerAndroid.this.lambda$stopCapture$0$ScreenCapturerAndroid();
-            }
-        });
+        ThreadUtils.invokeAtFrontUninterruptibly(this.surfaceTextureHelper.getHandler(), (Runnable) new ScreenCapturerAndroid$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$stopCapture$0 */
-    public /* synthetic */ void lambda$stopCapture$0$ScreenCapturerAndroid() {
+    public /* synthetic */ void lambda$stopCapture$0() {
         this.surfaceTextureHelper.stopListening();
         this.capturerObserver.onCapturerStopped();
         VirtualDisplay virtualDisplay2 = this.virtualDisplay;
@@ -153,17 +148,12 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
         this.width = i;
         this.height = i2;
         if (this.virtualDisplay != null) {
-            ThreadUtils.invokeAtFrontUninterruptibly(this.surfaceTextureHelper.getHandler(), (Runnable) new Runnable() {
-                public final void run() {
-                    ScreenCapturerAndroid.this.lambda$changeCaptureFormat$1$ScreenCapturerAndroid();
-                }
-            });
+            ThreadUtils.invokeAtFrontUninterruptibly(this.surfaceTextureHelper.getHandler(), (Runnable) new ScreenCapturerAndroid$$ExternalSyntheticLambda0(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$changeCaptureFormat$1 */
-    public /* synthetic */ void lambda$changeCaptureFormat$1$ScreenCapturerAndroid() {
+    public /* synthetic */ void lambda$changeCaptureFormat$1() {
         this.virtualDisplay.release();
         createVirtualDisplay();
     }

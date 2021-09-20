@@ -19,7 +19,7 @@ public class TLRPC$TL_channel_layer48 extends TLRPC$TL_channel {
             z2 = true;
         }
         this.signatures = z2;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.title = abstractSerializedData.readString(z);
         if ((this.flags & 64) != 0) {
@@ -54,7 +54,7 @@ public class TLRPC$TL_channel_layer48 extends TLRPC$TL_channel {
         int i9 = this.signatures ? i8 | 2048 : i8 & -2049;
         this.flags = i9;
         abstractSerializedData.writeInt32(i9);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeString(this.title);
         if ((this.flags & 64) != 0) {

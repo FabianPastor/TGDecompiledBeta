@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.view.Surface;
 import android.view.TextureView;
-import org.telegram.ui.Components.FilterGLThread;
 import org.telegram.ui.Components.FilterShaders;
 
 public class VideoEditTextureView extends TextureView implements TextureView.SurfaceTextureListener {
@@ -61,11 +60,7 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
         int i3;
         if (this.eglThread == null && surfaceTexture != null && this.currentVideoPlayer != null) {
-            FilterGLThread filterGLThread = new FilterGLThread(surfaceTexture, new FilterGLThread.FilterGLThreadVideoDelegate() {
-                public final void onVideoSurfaceCreated(SurfaceTexture surfaceTexture) {
-                    VideoEditTextureView.this.lambda$onSurfaceTextureAvailable$0$VideoEditTextureView(surfaceTexture);
-                }
-            });
+            FilterGLThread filterGLThread = new FilterGLThread(surfaceTexture, new VideoEditTextureView$$ExternalSyntheticLambda1(this));
             this.eglThread = filterGLThread;
             int i4 = this.videoWidth;
             if (!(i4 == 0 || (i3 = this.videoHeight) == 0)) {
@@ -81,8 +76,7 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onSurfaceTextureAvailable$0 */
-    public /* synthetic */ void lambda$onSurfaceTextureAvailable$0$VideoEditTextureView(SurfaceTexture surfaceTexture) {
+    public /* synthetic */ void lambda$onSurfaceTextureAvailable$0(SurfaceTexture surfaceTexture) {
         if (this.currentVideoPlayer != null) {
             this.currentVideoPlayer.setSurface(new Surface(surfaceTexture));
         }
@@ -93,17 +87,12 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
         if (filterGLThread != null) {
             filterGLThread.setSurfaceTextureSize(i, i2);
             this.eglThread.requestRender(false, true, false);
-            this.eglThread.postRunnable(new Runnable() {
-                public final void run() {
-                    VideoEditTextureView.this.lambda$onSurfaceTextureSizeChanged$1$VideoEditTextureView();
-                }
-            });
+            this.eglThread.postRunnable(new VideoEditTextureView$$ExternalSyntheticLambda0(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onSurfaceTextureSizeChanged$1 */
-    public /* synthetic */ void lambda$onSurfaceTextureSizeChanged$1$VideoEditTextureView() {
+    public /* synthetic */ void lambda$onSurfaceTextureSizeChanged$1() {
         FilterGLThread filterGLThread = this.eglThread;
         if (filterGLThread != null) {
             filterGLThread.requestRender(false, true, false);

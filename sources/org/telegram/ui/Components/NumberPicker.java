@@ -23,7 +23,6 @@ import org.telegram.ui.ActionBar.Theme;
 public class NumberPicker extends LinearLayout {
     private int SELECTOR_MIDDLE_ITEM_INDEX;
     private int SELECTOR_WHEEL_ITEM_COUNT;
-    private SeekBarAccessibilityDelegate accessibilityDelegate;
     private boolean drawDividers;
     private Scroller mAdjustScroller;
     /* access modifiers changed from: private */
@@ -77,6 +76,7 @@ public class NumberPicker extends LinearLayout {
     public int mValue;
     private VelocityTracker mVelocityTracker;
     private boolean mWrapSelectorWheel;
+    private final Theme.ResourcesProvider resourcesProvider;
     private int textOffset;
 
     public interface Formatter {
@@ -128,7 +128,7 @@ public class NumberPicker extends LinearLayout {
         this.mSolidColor = 0;
         Paint paint = new Paint();
         this.mSelectionDivider = paint;
-        paint.setColor(Theme.getColor("dialogButton"));
+        paint.setColor(getThemedColor("dialogButton"));
         this.mSelectionDividerHeight = (int) TypedValue.applyDimension(1, 2.0f, getResources().getDisplayMetrics());
         this.mSelectionDividersDistance = (int) TypedValue.applyDimension(1, 48.0f, getResources().getDisplayMetrics());
         this.mMinHeight = -1;
@@ -145,7 +145,7 @@ public class NumberPicker extends LinearLayout {
             this.mInputText = textView;
             textView.setGravity(17);
             this.mInputText.setSingleLine(true);
-            this.mInputText.setTextColor(Theme.getColor("dialogTextBlack"));
+            this.mInputText.setTextColor(getThemedColor("dialogTextBlack"));
             this.mInputText.setBackgroundResource(0);
             this.mInputText.setTextSize(0, (float) this.mTextSize);
             this.mInputText.setVisibility(4);
@@ -165,7 +165,7 @@ public class NumberPicker extends LinearLayout {
             this.mAdjustScroller = new Scroller(getContext(), new DecelerateInterpolator(2.5f));
             updateInputTextView();
             setImportantForAccessibility(1);
-            AnonymousClass1 r0 = new SeekBarAccessibilityDelegate() {
+            setAccessibilityDelegate(new SeekBarAccessibilityDelegate() {
                 /* access modifiers changed from: protected */
                 public boolean canScrollBackward(View view) {
                     return true;
@@ -185,9 +185,7 @@ public class NumberPicker extends LinearLayout {
                     NumberPicker numberPicker = NumberPicker.this;
                     return numberPicker.getContentDescription(numberPicker.mValue);
                 }
-            };
-            this.accessibilityDelegate = r0;
-            setAccessibilityDelegate(r0);
+            });
             return;
         }
         throw new IllegalArgumentException("minHeight > maxHeight");
@@ -208,10 +206,18 @@ public class NumberPicker extends LinearLayout {
     }
 
     public NumberPicker(Context context) {
-        this(context, 18);
+        this(context, (Theme.ResourcesProvider) null);
+    }
+
+    public NumberPicker(Context context, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, 18, resourcesProvider2);
     }
 
     public NumberPicker(Context context, int i) {
+        this(context, i, (Theme.ResourcesProvider) null);
+    }
+
+    public NumberPicker(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.SELECTOR_WHEEL_ITEM_COUNT = 3;
         this.SELECTOR_MIDDLE_ITEM_INDEX = 3 / 2;
@@ -222,6 +228,7 @@ public class NumberPicker extends LinearLayout {
         this.mScrollState = 0;
         this.mLastHandledDownDpadKeyCode = -1;
         this.drawDividers = true;
+        this.resourcesProvider = resourcesProvider2;
         this.mTextSize = AndroidUtilities.dp((float) i);
         init();
     }
@@ -976,8 +983,6 @@ public class NumberPicker extends LinearLayout {
     }
 
     class PressedStateHelper implements Runnable {
-        private final int MODE_PRESS = 1;
-        private final int MODE_TAPPED = 2;
         private int mManagedButton;
         private int mMode;
 
@@ -1073,5 +1078,11 @@ public class NumberPicker extends LinearLayout {
     public void setDrawDividers(boolean z) {
         this.drawDividers = z;
         invalidate();
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

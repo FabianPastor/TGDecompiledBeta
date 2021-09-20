@@ -13,7 +13,6 @@ public class StackLinearChartData extends ChartData {
     public int simplifiedSize;
     public int[][] simplifiedY;
     int[] ySum;
-    SegmentTree ySumSegmentTree;
 
     public StackLinearChartData(JSONObject jSONObject, boolean z) throws JSONException {
         super(jSONObject);
@@ -57,7 +56,7 @@ public class StackLinearChartData extends ChartData {
                 iArr2[i5] = iArr2[i5] + this.lines.get(i6).y[i5];
             }
         }
-        this.ySumSegmentTree = new SegmentTree(this.ySum);
+        new SegmentTree(this.ySum);
     }
 
     public StackLinearChartData(ChartData chartData, long j) {
@@ -79,7 +78,7 @@ public class StackLinearChartData extends ChartData {
         this.xPercentage = new float[i3];
         this.lines = new ArrayList<>();
         for (int i4 = 0; i4 < chartData.lines.size(); i4++) {
-            ChartData.Line line = new ChartData.Line();
+            ChartData.Line line = new ChartData.Line(this);
             line.y = new int[i3];
             line.id = chartData.lines.get(i4).id;
             line.name = chartData.lines.get(i4).name;

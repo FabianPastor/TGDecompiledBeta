@@ -12,7 +12,6 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
     private SizeNotifierFrameLayoutPhotoDelegate delegate;
     private int keyboardHeight;
     private Rect rect = new Rect();
-    private boolean useSmoothKeyboard;
     private boolean withoutWindow;
 
     public interface SizeNotifierFrameLayoutPhotoDelegate {
@@ -21,7 +20,6 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
 
     public SizeNotifierFrameLayoutPhoto(Context context, boolean z) {
         super(context);
-        this.useSmoothKeyboard = z;
     }
 
     public void setDelegate(SizeNotifierFrameLayoutPhotoDelegate sizeNotifierFrameLayoutPhotoDelegate) {
@@ -62,23 +60,12 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
         if (this.delegate != null) {
             this.keyboardHeight = getKeyboardHeight();
             Point point = AndroidUtilities.displaySize;
-            post(new Runnable(point.x > point.y) {
-                public final /* synthetic */ boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    SizeNotifierFrameLayoutPhoto.this.lambda$notifyHeightChanged$0$SizeNotifierFrameLayoutPhoto(this.f$1);
-                }
-            });
+            post(new SizeNotifierFrameLayoutPhoto$$ExternalSyntheticLambda0(this, point.x > point.y));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$notifyHeightChanged$0 */
-    public /* synthetic */ void lambda$notifyHeightChanged$0$SizeNotifierFrameLayoutPhoto(boolean z) {
+    public /* synthetic */ void lambda$notifyHeightChanged$0(boolean z) {
         SizeNotifierFrameLayoutPhotoDelegate sizeNotifierFrameLayoutPhotoDelegate = this.delegate;
         if (sizeNotifierFrameLayoutPhotoDelegate != null) {
             sizeNotifierFrameLayoutPhotoDelegate.onSizeChanged(this.keyboardHeight, z);

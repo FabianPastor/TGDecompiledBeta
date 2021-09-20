@@ -1,14 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.z;
+import j$.util.function.m;
 
-public final /* synthetic */ class I implements z {
+public final /* synthetic */ class I implements m {
     public static final /* synthetic */ I a = new I();
 
     private /* synthetic */ I() {
     }
 
-    public final long applyAsLong(int i) {
-        return 1;
+    public final Object apply(int i) {
+        return new Double[i];
     }
 }

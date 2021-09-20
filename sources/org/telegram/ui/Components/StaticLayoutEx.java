@@ -22,6 +22,17 @@ public class StaticLayoutEx {
         return alignmentArr.length >= 5 ? alignmentArr[3] : Layout.Alignment.ALIGN_NORMAL;
     }
 
+    public static StaticLayout createStaticLayout2(CharSequence charSequence, TextPaint textPaint, int i, Layout.Alignment alignment, float f, float f2, boolean z, TextUtils.TruncateAt truncateAt, int i2, int i3) {
+        int i4 = i2;
+        if (Build.VERSION.SDK_INT >= 23) {
+            CharSequence charSequence2 = charSequence;
+            TextPaint textPaint2 = textPaint;
+            return StaticLayout.Builder.obtain(charSequence, 0, charSequence.length(), textPaint, i4).setAlignment(alignment).setLineSpacing(f2, f).setIncludePad(z).setEllipsize(TextUtils.TruncateAt.END).setEllipsizedWidth(i4).setMaxLines(i3).setBreakStrategy(1).setHyphenationFrequency(0).build();
+        }
+        CharSequence charSequence3 = charSequence;
+        return createStaticLayout(charSequence, 0, charSequence.length(), textPaint, i, alignment, f, f2, z, truncateAt, i2, i3, true);
+    }
+
     public static StaticLayout createStaticLayout(CharSequence charSequence, TextPaint textPaint, int i, Layout.Alignment alignment, float f, float f2, boolean z, TextUtils.TruncateAt truncateAt, int i2, int i3) {
         return createStaticLayout(charSequence, 0, charSequence.length(), textPaint, i, alignment, f, f2, z, truncateAt, i2, i3, true);
     }

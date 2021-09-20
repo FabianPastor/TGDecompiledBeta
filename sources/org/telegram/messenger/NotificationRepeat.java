@@ -13,17 +13,7 @@ public class NotificationRepeat extends IntentService {
         if (intent != null) {
             int intExtra = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
             if (UserConfig.isValidAccount(intExtra)) {
-                AndroidUtilities.runOnUIThread(new Runnable(intExtra) {
-                    public final /* synthetic */ int f$0;
-
-                    {
-                        this.f$0 = r1;
-                    }
-
-                    public final void run() {
-                        NotificationsController.getInstance(this.f$0).repeatNotificationMaybe();
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new NotificationRepeat$$ExternalSyntheticLambda0(intExtra));
             }
         }
     }

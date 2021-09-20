@@ -5,12 +5,12 @@ public class TLRPC$TL_messageActionChannelMigrateFrom extends TLRPC$MessageActio
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.title = abstractSerializedData.readString(z);
-        this.chat_id = abstractSerializedData.readInt32(z);
+        this.chat_id = abstractSerializedData.readInt64(z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeString(this.title);
-        abstractSerializedData.writeInt32(this.chat_id);
+        abstractSerializedData.writeInt64(this.chat_id);
     }
 }

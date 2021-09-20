@@ -3,8 +3,8 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_payments_paymentForm extends TLObject {
-    public static int constructor = -NUM;
-    public int bot_id;
+    public static int constructor = NUM;
+    public long bot_id;
     public boolean can_save_credentials;
     public int flags;
     public long form_id;
@@ -12,7 +12,7 @@ public class TLRPC$TL_payments_paymentForm extends TLObject {
     public TLRPC$TL_dataJSON native_params;
     public String native_provider;
     public boolean password_missing;
-    public int provider_id;
+    public long provider_id;
     public TLRPC$TL_paymentSavedCredentialsCard saved_credentials;
     public TLRPC$TL_paymentRequestedInfo saved_info;
     public String url;
@@ -37,9 +37,9 @@ public class TLRPC$TL_payments_paymentForm extends TLObject {
         this.can_save_credentials = (readInt32 & 4) != 0;
         this.password_missing = (readInt32 & 8) != 0;
         this.form_id = abstractSerializedData.readInt64(z);
-        this.bot_id = abstractSerializedData.readInt32(z);
+        this.bot_id = abstractSerializedData.readInt64(z);
         this.invoice = TLRPC$TL_invoice.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.provider_id = abstractSerializedData.readInt32(z);
+        this.provider_id = abstractSerializedData.readInt64(z);
         this.url = abstractSerializedData.readString(z);
         if ((this.flags & 16) != 0) {
             this.native_provider = abstractSerializedData.readString(z);
@@ -78,9 +78,9 @@ public class TLRPC$TL_payments_paymentForm extends TLObject {
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeInt64(this.form_id);
-        abstractSerializedData.writeInt32(this.bot_id);
+        abstractSerializedData.writeInt64(this.bot_id);
         this.invoice.serializeToStream(abstractSerializedData);
-        abstractSerializedData.writeInt32(this.provider_id);
+        abstractSerializedData.writeInt64(this.provider_id);
         abstractSerializedData.writeString(this.url);
         if ((this.flags & 16) != 0) {
             abstractSerializedData.writeString(this.native_provider);

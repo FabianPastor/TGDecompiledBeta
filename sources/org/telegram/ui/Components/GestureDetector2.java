@@ -9,7 +9,6 @@ import android.view.ViewConfiguration;
 
 public class GestureDetector2 {
     public static final int DOUBLE_TAP_TIMEOUT = ViewConfiguration.getDoubleTapTimeout();
-    private static final int LONGPRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
     private static final int TAP_TIMEOUT = ViewConfiguration.getTapTimeout();
     private boolean mAlwaysInBiggerTapRegion;
     private boolean mAlwaysInTapRegion;
@@ -66,6 +65,10 @@ public class GestureDetector2 {
         boolean onSingleTapUp(MotionEvent motionEvent);
 
         void onUp(MotionEvent motionEvent);
+    }
+
+    static {
+        ViewConfiguration.getLongPressTimeout();
     }
 
     private class GestureHandler extends Handler {

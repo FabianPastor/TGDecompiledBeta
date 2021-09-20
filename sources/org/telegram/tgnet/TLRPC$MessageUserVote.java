@@ -2,12 +2,14 @@ package org.telegram.tgnet;
 
 public abstract class TLRPC$MessageUserVote extends TLObject {
     public int date;
-    public int user_id;
+    public long user_id;
 
     public static TLRPC$MessageUserVote TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$MessageUserVote tLRPC$MessageUserVote;
-        if (i != -NUM) {
-            tLRPC$MessageUserVote = i != NUM ? i != NUM ? null : new TLRPC$TL_messageUserVoteInputOption() : new TLRPC$TL_messageUserVoteMultiple();
+        if (i == -NUM) {
+            tLRPC$MessageUserVote = new TLRPC$TL_messageUserVoteMultiple();
+        } else if (i != NUM) {
+            tLRPC$MessageUserVote = i != NUM ? null : new TLRPC$TL_messageUserVoteInputOption();
         } else {
             tLRPC$MessageUserVote = new TLRPC$TL_messageUserVote();
         }

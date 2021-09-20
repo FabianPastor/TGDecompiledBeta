@@ -1,7 +1,7 @@
 package j$.util.function;
 
 public interface q {
-    void accept(double d);
+    void accept(long j);
 
-    q j(q qVar);
+    q f(q qVar);
 }

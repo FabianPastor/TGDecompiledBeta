@@ -15,6 +15,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmojiReplacementCell;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -25,6 +26,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
     private String lastSearch;
     private String[] lastSearchKeyboardLanguage;
     private Context mContext;
+    private final Theme.ResourcesProvider resourcesProvider;
     private Runnable searchRunnable;
     private boolean visible;
 
@@ -40,11 +42,12 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         return false;
     }
 
-    public StickersAdapter(Context context, StickersAdapterDelegate stickersAdapterDelegate) {
+    public StickersAdapter(Context context, StickersAdapterDelegate stickersAdapterDelegate, Theme.ResourcesProvider resourcesProvider2) {
         int i = UserConfig.selectedAccount;
         this.currentAccount = i;
         this.mContext = context;
         this.delegate = stickersAdapterDelegate;
+        this.resourcesProvider = resourcesProvider2;
         MediaDataController.getInstance(i).checkStickers(0);
         MediaDataController.getInstance(this.currentAccount).checkStickers(1);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.newEmojiSuggestionsAvailable);
@@ -87,17 +90,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         this.lastSearchKeyboardLanguage = currentKeyboardLanguage;
         String str = this.lastSearch;
         cancelEmojiSearch();
-        this.searchRunnable = new Runnable(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                StickersAdapter.this.lambda$searchEmojiByKeyword$1$StickersAdapter(this.f$1);
-            }
-        };
+        this.searchRunnable = new StickersAdapter$$ExternalSyntheticLambda0(this, str);
         ArrayList<MediaDataController.KeywordResult> arrayList = this.keywordResults;
         if (arrayList == null || arrayList.isEmpty()) {
             AndroidUtilities.runOnUIThread(this.searchRunnable, 1000);
@@ -107,24 +100,12 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchEmojiByKeyword$1 */
-    public /* synthetic */ void lambda$searchEmojiByKeyword$1$StickersAdapter(String str) {
-        MediaDataController.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, str, true, new MediaDataController.KeywordResultCallback(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run(ArrayList arrayList, String str) {
-                StickersAdapter.this.lambda$searchEmojiByKeyword$0$StickersAdapter(this.f$1, arrayList, str);
-            }
-        });
+    public /* synthetic */ void lambda$searchEmojiByKeyword$1(String str) {
+        MediaDataController.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, str, true, new StickersAdapter$$ExternalSyntheticLambda1(this, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchEmojiByKeyword$0 */
-    public /* synthetic */ void lambda$searchEmojiByKeyword$0$StickersAdapter(String str, ArrayList arrayList, String str2) {
+    public /* synthetic */ void lambda$searchEmojiByKeyword$0(String str, ArrayList arrayList, String str2) {
         if (str.equals(this.lastSearch)) {
             if (!arrayList.isEmpty()) {
                 this.keywordResults = arrayList;
@@ -218,7 +199,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new RecyclerListView.Holder(new EmojiReplacementCell(this.mContext));
+        return new RecyclerListView.Holder(new EmojiReplacementCell(this.mContext, this.resourcesProvider));
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

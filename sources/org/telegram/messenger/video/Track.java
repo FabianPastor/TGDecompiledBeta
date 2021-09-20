@@ -259,7 +259,7 @@ public class Track {
     public void prepare() {
         int i;
         ArrayList arrayList = new ArrayList(this.samplePresentationTimes);
-        Collections.sort(this.samplePresentationTimes, $$Lambda$Track$8mSIxxOe3niqfdOUWm68l4l5AUI.INSTANCE);
+        Collections.sort(this.samplePresentationTimes, Track$$ExternalSyntheticLambda0.INSTANCE);
         this.sampleDurations = new long[this.samplePresentationTimes.size()];
         long j = Long.MAX_VALUE;
         long j2 = 0;
@@ -300,7 +300,8 @@ public class Track {
         }
     }
 
-    static /* synthetic */ int lambda$prepare$0(SamplePresentationTime samplePresentationTime, SamplePresentationTime samplePresentationTime2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$prepare$0(SamplePresentationTime samplePresentationTime, SamplePresentationTime samplePresentationTime2) {
         if (samplePresentationTime.presentationTime > samplePresentationTime2.presentationTime) {
             return 1;
         }

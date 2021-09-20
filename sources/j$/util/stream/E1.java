@@ -1,30 +1,68 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEn0;
-import j$.util.stream.A2;
-import j$.util.stream.CLASSNAMEz1;
+import j$.util.N;
+import j$.util.function.Consumer;
+import j$.util.function.m;
+import j$.util.y;
+import java.util.Arrays;
 
-class E1 extends CLASSNAMEz1.k<Long> {
-    final /* synthetic */ CLASSNAMEn0 l;
+class E1 implements B1 {
+    final Object[] a;
+    int b;
 
-    class a extends A2.c<Integer> {
-        a(A2 a2) {
-            super(a2);
+    E1(long j, m mVar) {
+        if (j < NUM) {
+            this.a = (Object[]) mVar.apply((int) j);
+            this.b = 0;
+            return;
         }
+        throw new IllegalArgumentException("Stream size exceeds max array size");
+    }
 
-        public void accept(long j) {
-            this.a.accept(E1.this.l.a(j));
+    E1(Object[] objArr) {
+        this.a = objArr;
+        this.b = objArr.length;
+    }
+
+    public B1 b(int i) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    public long count() {
+        return (long) this.b;
+    }
+
+    public void forEach(Consumer consumer) {
+        for (int i = 0; i < this.b; i++) {
+            consumer.accept(this.a[i]);
         }
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    E1(D1 d1, CLASSNAMEh1 h1Var, U2 u2, int i, CLASSNAMEn0 n0Var) {
-        super(h1Var, u2, i);
-        this.l = n0Var;
+    public void i(Object[] objArr, int i) {
+        System.arraycopy(this.a, 0, objArr, i, this.b);
     }
 
-    /* access modifiers changed from: package-private */
-    public A2 G0(int i, A2 a2) {
-        return new a(a2);
+    public /* synthetic */ int p() {
+        return 0;
+    }
+
+    public Object[] q(m mVar) {
+        Object[] objArr = this.a;
+        if (objArr.length == this.b) {
+            return objArr;
+        }
+        throw new IllegalStateException();
+    }
+
+    public /* synthetic */ B1 r(long j, long j2, m mVar) {
+        return CLASSNAMEp1.q(this, j, j2, mVar);
+    }
+
+    public y spliterator() {
+        return N.m(this.a, 0, this.b, 1040);
+    }
+
+    public String toString() {
+        return String.format("ArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
     }
 }

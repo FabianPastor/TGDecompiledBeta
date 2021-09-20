@@ -1,27 +1,26 @@
 package j$.util;
 
-import j$.time.a;
 import java.util.NoSuchElementException;
 
 public final class Optional<T> {
-    private static final Optional a = new Optional();
-    private final Object b;
+    private static final Optional b = new Optional();
+    private final Object a;
 
     private Optional() {
-        this.b = null;
+        this.a = null;
     }
 
     private Optional(Object obj) {
         obj.getClass();
-        this.b = obj;
+        this.a = obj;
     }
 
-    public static Optional empty() {
-        return a;
+    public static <T> Optional<T> empty() {
+        return b;
     }
 
-    public static Optional of(Object obj) {
-        return new Optional(obj);
+    public static <T> Optional<T> of(T t) {
+        return new Optional<>(t);
     }
 
     public boolean equals(Object obj) {
@@ -31,31 +30,31 @@ public final class Optional<T> {
         if (!(obj instanceof Optional)) {
             return false;
         }
-        return a.u(this.b, ((Optional) obj).b);
+        return CLASSNAMEa.x(this.a, ((Optional) obj).a);
     }
 
-    public Object get() {
-        Object obj = this.b;
-        if (obj != null) {
-            return obj;
+    public T get() {
+        T t = this.a;
+        if (t != null) {
+            return t;
         }
         throw new NoSuchElementException("No value present");
     }
 
     public int hashCode() {
-        Object obj = this.b;
-        if (obj == null) {
-            return 0;
+        Object obj = this.a;
+        if (obj != null) {
+            return obj.hashCode();
         }
-        return obj.hashCode();
+        return 0;
     }
 
     public boolean isPresent() {
-        return this.b != null;
+        return this.a != null;
     }
 
     public String toString() {
-        Object obj = this.b;
+        Object obj = this.a;
         if (obj == null) {
             return "Optional.empty";
         }

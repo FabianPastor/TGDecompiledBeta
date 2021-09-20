@@ -3,14 +3,14 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_messages_recentStickers extends TLRPC$messages_RecentStickers {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
     public ArrayList<Integer> dates = new ArrayList<>();
-    public int hash;
+    public long hash;
     public ArrayList<TLRPC$TL_stickerPack> packs = new ArrayList<>();
     public ArrayList<TLRPC$Document> stickers = new ArrayList<>();
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.hash = abstractSerializedData.readInt32(z);
+        this.hash = abstractSerializedData.readInt64(z);
         int readInt32 = abstractSerializedData.readInt32(z);
         if (readInt32 == NUM) {
             int readInt322 = abstractSerializedData.readInt32(z);
@@ -56,7 +56,7 @@ public class TLRPC$TL_messages_recentStickers extends TLRPC$messages_RecentStick
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        abstractSerializedData.writeInt32(this.hash);
+        abstractSerializedData.writeInt64(this.hash);
         abstractSerializedData.writeInt32(NUM);
         int size = this.packs.size();
         abstractSerializedData.writeInt32(size);

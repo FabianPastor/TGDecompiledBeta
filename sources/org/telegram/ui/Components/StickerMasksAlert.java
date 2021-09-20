@@ -233,7 +233,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r4.<init>(r2)
                 android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
                 r4.setScaleType(r7)
-                r7 = 2131166056(0x7var_, float:1.7946347E38)
+                r7 = 2131166060(0x7var_c, float:1.7946355E38)
                 r4.setImageResource(r7)
                 android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
                 android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
@@ -280,8 +280,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
                 r0.addView(r4, r5)
                 android.widget.ImageView r4 = r0.clearSearchImageView
-                org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$SearchField$yq5LYYDA5BGx-T2krbLhrbiZMXY r5 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$SearchField$yq5LYYDA5BGx-T2krbLhrbiZMXY
-                r5.<init>()
+                org.telegram.ui.Components.StickerMasksAlert$SearchField$$ExternalSyntheticLambda0 r5 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$$ExternalSyntheticLambda0
+                r5.<init>(r0)
                 r4.setOnClickListener(r5)
                 org.telegram.ui.Components.StickerMasksAlert$SearchField$1 r4 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$1
                 r4.<init>(r2, r1)
@@ -309,7 +309,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627485(0x7f0e0ddd, float:1.8882236E38)
+                r3 = 2131627518(0x7f0e0dfe, float:1.8882303E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -317,7 +317,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627461(0x7f0e0dc5, float:1.8882187E38)
+                r3 = 2131627494(0x7f0e0de6, float:1.8882254E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -326,7 +326,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627476(0x7f0e0dd4, float:1.8882218E38)
+                r3 = 2131627509(0x7f0e0df5, float:1.8882284E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -360,8 +360,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$StickerMasksAlert$SearchField(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             this.searchEditText.setText("");
             AndroidUtilities.showKeyboard(this.searchEditText);
         }
@@ -420,8 +419,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         }
     }
 
-    public StickerMasksAlert(Context context, boolean z) {
-        super(context, true);
+    public StickerMasksAlert(Context context, boolean z, Theme.ResourcesProvider resourcesProvider) {
+        super(context, true, resourcesProvider);
         this.behindKeyboardColorKey = null;
         this.behindKeyboardColor = -14342875;
         this.useLightStatusBar = false;
@@ -580,7 +579,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             }
 
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                return super.onInterceptTouchEvent(motionEvent) || ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, StickerMasksAlert.this.gridView, StickerMasksAlert.this.containerView.getMeasuredHeight(), StickerMasksAlert.this.contentPreviewViewerDelegate);
+                return super.onInterceptTouchEvent(motionEvent) || ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, StickerMasksAlert.this.gridView, StickerMasksAlert.this.containerView.getMeasuredHeight(), StickerMasksAlert.this.contentPreviewViewerDelegate, this.resourcesProvider);
             }
         };
         this.gridView = r1;
@@ -629,20 +628,12 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         StickersGridAdapter stickersGridAdapter2 = new StickersGridAdapter(context);
         this.stickersGridAdapter = stickersGridAdapter2;
         recyclerListView.setAdapter(stickersGridAdapter2);
-        this.gridView.setOnTouchListener(new View.OnTouchListener() {
-            public final boolean onTouch(View view, MotionEvent motionEvent) {
-                return StickerMasksAlert.this.lambda$new$0$StickerMasksAlert(view, motionEvent);
-            }
-        });
-        $$Lambda$StickerMasksAlert$WGeM9Yi9wjvnQLmh89fJcfmX90 r12 = new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                StickerMasksAlert.this.lambda$new$1$StickerMasksAlert(view, i);
-            }
-        };
-        this.stickersOnItemClickListener = r12;
-        this.gridView.setOnItemClickListener((RecyclerListView.OnItemClickListener) r12);
+        this.gridView.setOnTouchListener(new StickerMasksAlert$$ExternalSyntheticLambda2(this, resourcesProvider));
+        StickerMasksAlert$$ExternalSyntheticLambda3 stickerMasksAlert$$ExternalSyntheticLambda3 = new StickerMasksAlert$$ExternalSyntheticLambda3(this);
+        this.stickersOnItemClickListener = stickerMasksAlert$$ExternalSyntheticLambda3;
+        this.gridView.setOnItemClickListener((RecyclerListView.OnItemClickListener) stickerMasksAlert$$ExternalSyntheticLambda3);
         this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f));
-        this.stickersTab = new ScrollSlidingTabStrip(context) {
+        this.stickersTab = new ScrollSlidingTabStrip(this, context, resourcesProvider) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 if (getParent() != null) {
                     getParent().requestDisallowInterceptTouchEvent(true);
@@ -659,11 +650,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         this.stickersTab.setUnderlineColor(-16053493);
         this.stickersTab.setBackgroundColor(-14342875);
         this.containerView.addView(this.stickersTab, LayoutHelper.createFrame(-1, 48, 51));
-        this.stickersTab.setDelegate(new ScrollSlidingTabStrip.ScrollSlidingTabStripDelegate() {
-            public final void onPageSelected(int i) {
-                StickerMasksAlert.this.lambda$new$2$StickerMasksAlert(i);
-            }
-        });
+        this.stickersTab.setDelegate(new StickerMasksAlert$$ExternalSyntheticLambda4(this));
         this.gridView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -679,7 +666,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         view.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, -1907225));
         this.containerView.addView(view, LayoutHelper.createFrame(-1, 6.0f));
         if (!z) {
-            this.bottomTabContainer = new FrameLayout(context) {
+            this.bottomTabContainer = new FrameLayout(this, context) {
                 public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                     if (getParent() != null) {
                         getParent().requestDisallowInterceptTouchEvent(true);
@@ -698,7 +685,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(0);
             this.bottomTabContainer.addView(linearLayout, LayoutHelper.createFrame(-2, 48, 81));
-            AnonymousClass9 r13 = new ImageView(context) {
+            AnonymousClass9 r14 = new ImageView(this, context) {
                 public void setSelected(boolean z) {
                     super.setSelected(z);
                     Drawable background = getBackground();
@@ -708,8 +695,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     }
                 }
             };
-            this.stickersButton = r13;
-            r13.setScaleType(ImageView.ScaleType.CENTER);
+            this.stickersButton = r14;
+            r14.setScaleType(ImageView.ScaleType.CENTER);
             this.stickersButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, NUM, -1, -9520403));
             int i2 = Build.VERSION.SDK_INT;
             if (i2 >= 21) {
@@ -718,12 +705,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 this.stickersButton.setBackground(rippleDrawable);
             }
             linearLayout.addView(this.stickersButton, LayoutHelper.createLinear(70, 48));
-            this.stickersButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    StickerMasksAlert.this.lambda$new$3$StickerMasksAlert(view);
-                }
-            });
-            AnonymousClass10 r4 = new ImageView(context) {
+            this.stickersButton.setOnClickListener(new StickerMasksAlert$$ExternalSyntheticLambda1(this));
+            AnonymousClass10 r3 = new ImageView(this, context) {
                 public void setSelected(boolean z) {
                     super.setSelected(z);
                     Drawable background = getBackground();
@@ -733,8 +716,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     }
                 }
             };
-            this.masksButton = r4;
-            r4.setScaleType(ImageView.ScaleType.CENTER);
+            this.masksButton = r3;
+            r3.setScaleType(ImageView.ScaleType.CENTER);
             this.masksButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, NUM, -1, -9520403));
             if (i2 >= 21) {
                 RippleDrawable rippleDrawable2 = (RippleDrawable) Theme.createSelectorDrawable(NUM);
@@ -742,25 +725,19 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 this.masksButton.setBackground(rippleDrawable2);
             }
             linearLayout.addView(this.masksButton, LayoutHelper.createLinear(70, 48));
-            this.masksButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    StickerMasksAlert.this.lambda$new$4$StickerMasksAlert(view);
-                }
-            });
+            this.masksButton.setOnClickListener(new StickerMasksAlert$$ExternalSyntheticLambda0(this));
         }
         checkDocuments(true);
         reloadStickersAdapter();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ boolean lambda$new$0$StickerMasksAlert(View view, MotionEvent motionEvent) {
-        return ContentPreviewViewer.getInstance().onTouch(motionEvent, this.gridView, this.containerView.getMeasuredHeight(), this.stickersOnItemClickListener, this.contentPreviewViewerDelegate);
+    public /* synthetic */ boolean lambda$new$0(Theme.ResourcesProvider resourcesProvider, View view, MotionEvent motionEvent) {
+        return ContentPreviewViewer.getInstance().onTouch(motionEvent, this.gridView, this.containerView.getMeasuredHeight(), this.stickersOnItemClickListener, this.contentPreviewViewerDelegate, resourcesProvider);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$StickerMasksAlert(View view, int i) {
+    public /* synthetic */ void lambda$new$1(View view, int i) {
         if (view instanceof StickerEmojiCell) {
             ContentPreviewViewer.getInstance().reset();
             StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
@@ -770,8 +747,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$StickerMasksAlert(int i) {
+    public /* synthetic */ void lambda$new$2(int i) {
         int i2;
         if (i == this.recentTabBum) {
             i2 = this.stickersGridAdapter.getPositionForPack("recent");
@@ -800,8 +776,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$StickerMasksAlert(View view) {
+    public /* synthetic */ void lambda$new$3(View view) {
         if (this.currentType != 0) {
             this.currentType = 0;
             updateType();
@@ -809,8 +784,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$StickerMasksAlert(View view) {
+    public /* synthetic */ void lambda$new$4(View view) {
         if (this.currentType != 1) {
             this.currentType = 1;
             updateType();
@@ -1153,15 +1127,15 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             /*
                 r3 = this;
                 r4 = 0
-                if (r5 == 0) goto L_0x0042
+                if (r5 == 0) goto L_0x0048
                 r0 = 1
-                if (r5 == r0) goto L_0x003a
+                if (r5 == r0) goto L_0x0040
                 r0 = 2
                 if (r5 == r0) goto L_0x002c
                 r4 = 4
                 if (r5 == r4) goto L_0x000e
                 r4 = 0
-                goto L_0x004a
+                goto L_0x0050
             L_0x000e:
                 android.view.View r4 = new android.view.View
                 android.content.Context r5 = r3.context
@@ -1175,26 +1149,28 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 int r1 = r1 + r2
                 r5.<init>((int) r0, (int) r1)
                 r4.setLayoutParams(r5)
-                goto L_0x004a
+                goto L_0x0050
             L_0x002c:
                 org.telegram.ui.Cells.StickerSetNameCell r5 = new org.telegram.ui.Cells.StickerSetNameCell
                 android.content.Context r0 = r3.context
-                r5.<init>(r0, r4)
+                org.telegram.ui.Components.StickerMasksAlert r1 = org.telegram.ui.Components.StickerMasksAlert.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r1 = r1.resourcesProvider
+                r5.<init>(r0, r4, r1)
                 r4 = -7829368(0xfffffffffvar_, float:NaN)
                 r5.setTitleColor(r4)
-                goto L_0x0049
-            L_0x003a:
+                goto L_0x004f
+            L_0x0040:
                 org.telegram.ui.Cells.EmptyCell r4 = new org.telegram.ui.Cells.EmptyCell
                 android.content.Context r5 = r3.context
                 r4.<init>(r5)
-                goto L_0x004a
-            L_0x0042:
+                goto L_0x0050
+            L_0x0048:
                 org.telegram.ui.Components.StickerMasksAlert$StickersGridAdapter$1 r5 = new org.telegram.ui.Components.StickerMasksAlert$StickersGridAdapter$1
                 android.content.Context r0 = r3.context
-                r5.<init>(r0, r4)
-            L_0x0049:
+                r5.<init>(r3, r0, r4)
+            L_0x004f:
                 r4 = r5
-            L_0x004a:
+            L_0x0050:
                 org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r5.<init>(r4)
                 return r5
@@ -1525,7 +1501,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     r1 = 0
                     r0.cleared = r1
-                    int r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.access$4804(r0)
+                    int r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.access$4904(r0)
                     java.util.ArrayList r2 = new java.util.ArrayList
                     r2.<init>(r1)
                     android.util.LongSparseArray r3 = new android.util.LongSparseArray
@@ -1665,7 +1641,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     java.lang.String[] r6 = r6.lastSearchKeyboardLanguage
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r7 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     java.lang.String r7 = r7.searchQuery
-                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$CGFCI0mzPD1qQ8Wsn-8OTNv6a_0 r8 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$CGFCI0mzPD1qQ8Wsn-8OTNv6a_0
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda1 r8 = new org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda1
                     r8.<init>(r13, r0, r4)
                     r5.getEmojiSuggestions(r6, r7, r1, r8)
                 L_0x0171:
@@ -1740,94 +1716,94 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     r4 = 3
                     java.util.ArrayList r0 = r0.getStickerSets(r4)
                     int r4 = r0.size()
-                    r5 = 0
-                L_0x0220:
-                    if (r5 >= r4) goto L_0x029a
-                    java.lang.Object r7 = r0.get(r5)
-                    org.telegram.tgnet.TLRPC$TL_messages_stickerSet r7 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r7
-                    org.telegram.tgnet.TLRPC$StickerSet r8 = r7.set
+                L_0x021f:
+                    if (r1 >= r4) goto L_0x0299
+                    java.lang.Object r5 = r0.get(r1)
+                    org.telegram.tgnet.TLRPC$TL_messages_stickerSet r5 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r5
+                    org.telegram.tgnet.TLRPC$StickerSet r7 = r5.set
+                    java.lang.String r7 = r7.title
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r8 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    java.lang.String r8 = r8.searchQuery
+                    int r7 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r7, r8)
+                    if (r7 < 0) goto L_0x025f
+                    if (r7 == 0) goto L_0x0245
+                    org.telegram.tgnet.TLRPC$StickerSet r8 = r5.set
                     java.lang.String r8 = r8.title
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r9 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    java.lang.String r9 = r9.searchQuery
-                    int r8 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r8, r9)
-                    if (r8 < 0) goto L_0x0260
-                    if (r8 == 0) goto L_0x0246
-                    org.telegram.tgnet.TLRPC$StickerSet r9 = r7.set
-                    java.lang.String r9 = r9.title
-                    int r10 = r8 + -1
-                    char r9 = r9.charAt(r10)
-                    if (r9 != r6) goto L_0x0297
-                L_0x0246:
-                    r13.clear()
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r9 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    java.util.ArrayList r9 = r9.localPacks
-                    r9.add(r7)
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r9 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    java.util.HashMap r9 = r9.localPacksByName
-                    java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-                    r9.put(r7, r8)
-                    goto L_0x0297
-                L_0x0260:
-                    org.telegram.tgnet.TLRPC$StickerSet r8 = r7.set
-                    java.lang.String r8 = r8.short_name
-                    if (r8 == 0) goto L_0x0297
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r9 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    java.lang.String r9 = r9.searchQuery
-                    int r8 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r8, r9)
-                    if (r8 < 0) goto L_0x0297
-                    if (r8 == 0) goto L_0x0280
-                    org.telegram.tgnet.TLRPC$StickerSet r9 = r7.set
-                    java.lang.String r9 = r9.short_name
-                    int r8 = r8 + -1
-                    char r8 = r9.charAt(r8)
-                    if (r8 != r6) goto L_0x0297
-                L_0x0280:
+                    int r9 = r7 + -1
+                    char r8 = r8.charAt(r9)
+                    if (r8 != r6) goto L_0x0296
+                L_0x0245:
                     r13.clear()
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r8 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     java.util.ArrayList r8 = r8.localPacks
-                    r8.add(r7)
+                    r8.add(r5)
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r8 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    java.util.HashMap r8 = r8.localPacksByShortName
-                    java.lang.Boolean r9 = java.lang.Boolean.TRUE
-                    r8.put(r7, r9)
-                L_0x0297:
-                    int r5 = r5 + 1
-                    goto L_0x0220
-                L_0x029a:
+                    java.util.HashMap r8 = r8.localPacksByName
+                    java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
+                    r8.put(r5, r7)
+                    goto L_0x0296
+                L_0x025f:
+                    org.telegram.tgnet.TLRPC$StickerSet r7 = r5.set
+                    java.lang.String r7 = r7.short_name
+                    if (r7 == 0) goto L_0x0296
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r8 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    java.lang.String r8 = r8.searchQuery
+                    int r7 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r7, r8)
+                    if (r7 < 0) goto L_0x0296
+                    if (r7 == 0) goto L_0x027f
+                    org.telegram.tgnet.TLRPC$StickerSet r8 = r5.set
+                    java.lang.String r8 = r8.short_name
+                    int r7 = r7 + -1
+                    char r7 = r8.charAt(r7)
+                    if (r7 != r6) goto L_0x0296
+                L_0x027f:
+                    r13.clear()
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r7 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    java.util.ArrayList r7 = r7.localPacks
+                    r7.add(r5)
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r7 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    java.util.HashMap r7 = r7.localPacksByShortName
+                    java.lang.Boolean r8 = java.lang.Boolean.TRUE
+                    r7.put(r5, r8)
+                L_0x0296:
+                    int r1 = r1 + 1
+                    goto L_0x021f
+                L_0x0299:
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     java.lang.String r0 = r0.searchQuery
                     boolean r0 = org.telegram.messenger.Emoji.isValidEmoji(r0)
-                    if (r0 == 0) goto L_0x02dc
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r4 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    org.telegram.ui.Components.StickerMasksAlert r4 = org.telegram.ui.Components.StickerMasksAlert.this
-                    org.telegram.ui.Components.StickerMasksAlert$SearchField r4 = r4.stickersSearchField
-                    org.telegram.ui.Components.CloseProgressDrawable2 r4 = r4.progressDrawable
-                    r4.startAnimation()
-                    org.telegram.tgnet.TLRPC$TL_messages_getStickers r4 = new org.telegram.tgnet.TLRPC$TL_messages_getStickers
-                    r4.<init>()
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r5 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    java.lang.String r5 = r5.searchQuery
-                    r4.emoticon = r5
-                    r4.hash = r1
+                    if (r0 == 0) goto L_0x02dd
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r1 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    org.telegram.ui.Components.StickerMasksAlert r1 = org.telegram.ui.Components.StickerMasksAlert.this
+                    org.telegram.ui.Components.StickerMasksAlert$SearchField r1 = r1.stickersSearchField
+                    org.telegram.ui.Components.CloseProgressDrawable2 r1 = r1.progressDrawable
+                    r1.startAnimation()
+                    org.telegram.tgnet.TLRPC$TL_messages_getStickers r1 = new org.telegram.tgnet.TLRPC$TL_messages_getStickers
+                    r1.<init>()
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r4 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    java.lang.String r4 = r4.searchQuery
+                    r1.emoticon = r4
+                    r4 = 0
+                    r1.hash = r4
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r4 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.StickerMasksAlert r5 = org.telegram.ui.Components.StickerMasksAlert.this
                     int r5 = r5.currentAccount
                     org.telegram.tgnet.ConnectionsManager r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r5)
-                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$cwpchkeR_7Y3NsOXzwzO_RjnpXY r6 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$cwpchkeR_7Y3NsOXzwzO_RjnpXY
-                    r6.<init>(r13, r4, r2, r3)
-                    int r2 = r5.sendRequest(r4, r6)
-                    int unused = r1.reqId2 = r2
-                L_0x02dc:
-                    if (r0 == 0) goto L_0x02f6
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda2 r6 = new org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda2
+                    r6.<init>(r13, r1, r2, r3)
+                    int r1 = r5.sendRequest(r1, r6)
+                    int unused = r4.reqId2 = r1
+                L_0x02dd:
+                    if (r0 == 0) goto L_0x02f7
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     java.util.ArrayList r0 = r0.localPacks
                     boolean r0 = r0.isEmpty()
-                    if (r0 == 0) goto L_0x02f6
+                    if (r0 == 0) goto L_0x02f7
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     java.util.HashMap r0 = r0.emojiStickers
                     boolean r0 = r0.isEmpty()
-                    if (r0 != 0) goto L_0x031f
-                L_0x02f6:
+                    if (r0 != 0) goto L_0x0320
+                L_0x02f7:
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.StickerMasksAlert r0 = org.telegram.ui.Components.StickerMasksAlert.this
                     org.telegram.ui.Components.RecyclerListView r0 = r0.gridView
@@ -1835,7 +1811,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r1 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.StickerMasksAlert r1 = org.telegram.ui.Components.StickerMasksAlert.this
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r1 = r1.stickersSearchGridAdapter
-                    if (r0 == r1) goto L_0x031f
+                    if (r0 == r1) goto L_0x0320
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.StickerMasksAlert r0 = org.telegram.ui.Components.StickerMasksAlert.this
                     org.telegram.ui.Components.RecyclerListView r0 = r0.gridView
@@ -1843,7 +1819,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     org.telegram.ui.Components.StickerMasksAlert r1 = org.telegram.ui.Components.StickerMasksAlert.this
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r1 = r1.stickersSearchGridAdapter
                     r0.setAdapter(r1)
-                L_0x031f:
+                L_0x0320:
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     r0.notifyDataSetChanged()
                     return
@@ -1852,8 +1828,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$run$0 */
-            public /* synthetic */ void lambda$run$0$StickerMasksAlert$StickersSearchGridAdapter$1(int i, HashMap hashMap, ArrayList arrayList, String str) {
+            public /* synthetic */ void lambda$run$0(int i, HashMap hashMap, ArrayList arrayList, String str) {
                 if (i == StickersSearchGridAdapter.this.emojiSearchId) {
                     int size = arrayList.size();
                     boolean z = false;
@@ -1879,118 +1854,12 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$run$2 */
-            public /* synthetic */ void lambda$run$2$StickerMasksAlert$StickersSearchGridAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, ArrayList arrayList, LongSparseArray longSparseArray, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                AndroidUtilities.runOnUIThread(
-                /*  JADX ERROR: Method code generation error
-                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                      (wrap: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY) = 
-                      (r6v0 'this' org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1 A[THIS])
-                      (r7v0 'tLRPC$TL_messages_getStickers' org.telegram.tgnet.TLRPC$TL_messages_getStickers)
-                      (r10v0 'tLObject' org.telegram.tgnet.TLObject)
-                      (r8v0 'arrayList' java.util.ArrayList)
-                      (r9v0 'longSparseArray' android.util.LongSparseArray)
-                     call: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY.<init>(org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR)
-                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.1.lambda$run$2(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:98)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:480)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	at jadx.core.codegen.ClassGen.addInsnBody(ClassGen.java:437)
-                    	at jadx.core.codegen.ClassGen.addField(ClassGen.java:378)
-                    	at jadx.core.codegen.ClassGen.addFields(ClassGen.java:348)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:226)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY) = 
-                      (r6v0 'this' org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1 A[THIS])
-                      (r7v0 'tLRPC$TL_messages_getStickers' org.telegram.tgnet.TLRPC$TL_messages_getStickers)
-                      (r10v0 'tLObject' org.telegram.tgnet.TLObject)
-                      (r8v0 'arrayList' java.util.ArrayList)
-                      (r9v0 'longSparseArray' android.util.LongSparseArray)
-                     call: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY.<init>(org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter$1, org.telegram.tgnet.TLRPC$TL_messages_getStickers, org.telegram.tgnet.TLObject, java.util.ArrayList, android.util.LongSparseArray):void type: CONSTRUCTOR in method: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.1.lambda$run$2(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                    	... 57 more
-                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY, state: NOT_LOADED
-                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                    	... 63 more
-                    */
-                /*
-                    this = this;
-                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY r11 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$Wd12TsFIjKxnNmlQ3bYGL_o9hUY
-                    r0 = r11
-                    r1 = r6
-                    r2 = r7
-                    r3 = r10
-                    r4 = r8
-                    r5 = r9
-                    r0.<init>(r1, r2, r3, r4, r5)
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r11)
-                    return
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.AnonymousClass1.lambda$run$2$StickerMasksAlert$StickersSearchGridAdapter$1(org.telegram.tgnet.TLRPC$TL_messages_getStickers, java.util.ArrayList, android.util.LongSparseArray, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+            public /* synthetic */ void lambda$run$2(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, ArrayList arrayList, LongSparseArray longSparseArray, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                AndroidUtilities.runOnUIThread(new StickerMasksAlert$StickersSearchGridAdapter$1$$ExternalSyntheticLambda0(this, tLRPC$TL_messages_getStickers, tLObject, arrayList, longSparseArray));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$run$1 */
-            public /* synthetic */ void lambda$run$1$StickerMasksAlert$StickersSearchGridAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
+            public /* synthetic */ void lambda$run$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
                 if (tLRPC$TL_messages_getStickers.emoticon.equals(StickersSearchGridAdapter.this.searchQuery)) {
                     StickerMasksAlert.this.stickersSearchField.progressDrawable.stopAnimation();
                     int unused = StickersSearchGridAdapter.this.reqId2 = 0;
@@ -2025,7 +1894,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             return false;
         }
 
-        static /* synthetic */ int access$4804(StickersSearchGridAdapter stickersSearchGridAdapter) {
+        static /* synthetic */ int access$4904(StickersSearchGridAdapter stickersSearchGridAdapter) {
             int i = stickersSearchGridAdapter.emojiSearchId + 1;
             stickersSearchGridAdapter.emojiSearchId = i;
             return i;
@@ -2084,7 +1953,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 if (i == 1) {
                     r13 = new EmptyCell(this.context);
                 } else if (i == 2) {
-                    view = new StickerSetNameCell(this.context, false);
+                    view = new StickerSetNameCell(this.context, false, StickerMasksAlert.this.resourcesProvider);
                 } else if (i == 4) {
                     View view2 = new View(this.context);
                     view2.setLayoutParams(new RecyclerView.LayoutParams(-1, StickerMasksAlert.this.searchFieldHeight + AndroidUtilities.dp(48.0f)));
@@ -2113,7 +1982,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 }
                 return new RecyclerListView.Holder(r13);
             }
-            view = new StickerEmojiCell(this.context, false) {
+            view = new StickerEmojiCell(this, this.context, false) {
                 public void onMeasure(int i, int i2) {
                     super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
                 }

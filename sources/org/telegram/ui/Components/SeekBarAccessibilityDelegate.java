@@ -69,20 +69,10 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
             Runnable runnable = this.accessibilityEventRunnables.get(view);
             if (runnable == null) {
                 Map<View, Runnable> map = this.accessibilityEventRunnables;
-                $$Lambda$SeekBarAccessibilityDelegate$8IJe1316cK3QFfOcwBG4IAMvar_ r1 = new Runnable(view) {
-                    public final /* synthetic */ View f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        SeekBarAccessibilityDelegate.this.lambda$postAccessibilityEventRunnable$0$SeekBarAccessibilityDelegate(this.f$1);
-                    }
-                };
-                map.put(view, r1);
+                SeekBarAccessibilityDelegate$$ExternalSyntheticLambda0 seekBarAccessibilityDelegate$$ExternalSyntheticLambda0 = new SeekBarAccessibilityDelegate$$ExternalSyntheticLambda0(this, view);
+                map.put(view, seekBarAccessibilityDelegate$$ExternalSyntheticLambda0);
                 view.addOnAttachStateChangeListener(this.onAttachStateChangeListener);
-                runnable = r1;
+                runnable = seekBarAccessibilityDelegate$$ExternalSyntheticLambda0;
             } else {
                 view.removeCallbacks(runnable);
             }
@@ -91,8 +81,7 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$postAccessibilityEventRunnable$0 */
-    public /* synthetic */ void lambda$postAccessibilityEventRunnable$0$SeekBarAccessibilityDelegate(View view) {
+    public /* synthetic */ void lambda$postAccessibilityEventRunnable$0(View view) {
         sendAccessibilityEvent(view, 4);
     }
 

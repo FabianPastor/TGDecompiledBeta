@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.TLRPC$User;
@@ -35,12 +36,10 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ScrollSlidingTextTabStrip;
-import org.telegram.ui.ContactsActivity;
-import org.telegram.ui.DialogsActivity;
 
 public class DialogOrContactPickerActivity extends BaseFragment {
     /* access modifiers changed from: private */
-    public static final Interpolator interpolator = $$Lambda$DialogOrContactPickerActivity$BNBuvOxpf9s1z0J3_qv_mDYDOg.INSTANCE;
+    public static final Interpolator interpolator = DialogOrContactPickerActivity$$ExternalSyntheticLambda1.INSTANCE;
     /* access modifiers changed from: private */
     public boolean animatingForward;
     /* access modifiers changed from: private */
@@ -66,7 +65,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public ViewPage[] viewPages = new ViewPage[2];
 
-    static /* synthetic */ float lambda$static$0(float f) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ float lambda$static$0(float f) {
         float f2 = f - 1.0f;
         return (f2 * f2 * f2 * f2 * f2) + 1.0f;
     }
@@ -98,11 +98,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         bundle.putInt("dialogsType", 9);
         DialogsActivity dialogsActivity2 = new DialogsActivity(bundle);
         this.dialogsActivity = dialogsActivity2;
-        dialogsActivity2.setDelegate(new DialogsActivity.DialogsActivityDelegate() {
-            public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-                DialogOrContactPickerActivity.this.lambda$new$1$DialogOrContactPickerActivity(dialogsActivity, arrayList, charSequence, z);
-            }
-        });
+        dialogsActivity2.setDelegate(new DialogOrContactPickerActivity$$ExternalSyntheticLambda3(this));
         this.dialogsActivity.onFragmentCreate();
         Bundle bundle2 = new Bundle();
         bundle2.putBoolean("onlyUsers", true);
@@ -114,29 +110,22 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         bundle2.putBoolean("allowSelf", false);
         ContactsActivity contactsActivity2 = new ContactsActivity(bundle2);
         this.contactsActivity = contactsActivity2;
-        contactsActivity2.setDelegate(new ContactsActivity.ContactsActivityDelegate() {
-            public final void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
-                DialogOrContactPickerActivity.this.lambda$new$2$DialogOrContactPickerActivity(tLRPC$User, str, contactsActivity);
-            }
-        });
+        contactsActivity2.setDelegate(new DialogOrContactPickerActivity$$ExternalSyntheticLambda2(this));
         this.contactsActivity.onFragmentCreate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$DialogOrContactPickerActivity(DialogsActivity dialogsActivity2, ArrayList arrayList, CharSequence charSequence, boolean z) {
+    public /* synthetic */ void lambda$new$1(DialogsActivity dialogsActivity2, ArrayList arrayList, CharSequence charSequence, boolean z) {
         if (!arrayList.isEmpty()) {
             long longValue = ((Long) arrayList.get(0)).longValue();
-            int i = (int) longValue;
-            if (longValue > 0) {
-                showBlockAlert(getMessagesController().getUser(Integer.valueOf(i)));
+            if (DialogObject.isUserDialog(longValue)) {
+                showBlockAlert(getMessagesController().getUser(Long.valueOf(longValue)));
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$DialogOrContactPickerActivity(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity2) {
+    public /* synthetic */ void lambda$new$2(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity2) {
         showBlockAlert(tLRPC$User);
     }
 
@@ -699,17 +688,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("BlockUser", NUM));
             builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureBlockContact2", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name))));
-            builder.setPositiveButton(LocaleController.getString("BlockContact", NUM), new DialogInterface.OnClickListener(tLRPC$User) {
-                public final /* synthetic */ TLRPC$User f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    DialogOrContactPickerActivity.this.lambda$showBlockAlert$3$DialogOrContactPickerActivity(this.f$1, dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("BlockContact", NUM), new DialogOrContactPickerActivity$$ExternalSyntheticLambda0(this, tLRPC$User));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             AlertDialog create = builder.create();
             showDialog(create);
@@ -721,8 +700,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showBlockAlert$3 */
-    public /* synthetic */ void lambda$showBlockAlert$3$DialogOrContactPickerActivity(TLRPC$User tLRPC$User, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showBlockAlert$3(TLRPC$User tLRPC$User, DialogInterface dialogInterface, int i) {
         if (MessagesController.isSupportUser(tLRPC$User)) {
             AlertsCreator.showSimpleToast(this, LocaleController.getString("ErrorOccurred", NUM));
         } else {

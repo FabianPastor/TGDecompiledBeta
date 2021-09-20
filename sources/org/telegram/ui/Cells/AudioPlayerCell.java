@@ -45,6 +45,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
     private boolean miniButtonPressed;
     private int miniButtonState;
     private RadialProgress2 radialProgress;
+    private final Theme.ResourcesProvider resourcesProvider;
     private StaticLayout titleLayout;
     private int titleY = AndroidUtilities.dp(9.0f);
     private int viewType;
@@ -52,10 +53,11 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
     public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
-    public AudioPlayerCell(Context context, int i) {
+    public AudioPlayerCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         this.viewType = i;
-        RadialProgress2 radialProgress2 = new RadialProgress2(this);
+        RadialProgress2 radialProgress2 = new RadialProgress2(this, resourcesProvider2);
         this.radialProgress = radialProgress2;
         radialProgress2.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
@@ -290,7 +292,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             canvas.restore();
         }
         if (this.descriptionLayout != null) {
-            Theme.chat_contextResult_descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+            Theme.chat_contextResult_descriptionTextPaint.setColor(getThemedColor("windowBackgroundWhiteGrayText2"));
             canvas.save();
             if (!LocaleController.isRTL) {
                 f = (float) AndroidUtilities.leftBaseline;
@@ -299,7 +301,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             this.descriptionLayout.draw(canvas);
             canvas.restore();
         }
-        this.radialProgress.setProgressColor(Theme.getColor(this.buttonPressed ? "chat_inAudioSelectedProgress" : "chat_inAudioProgress"));
+        this.radialProgress.setProgressColor(getThemedColor(this.buttonPressed ? "chat_inAudioSelectedProgress" : "chat_inAudioProgress"));
         this.radialProgress.draw(canvas);
     }
 
@@ -346,7 +348,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
                 exists = true;
             }
             if (this.hasMiniProgress != 0) {
-                this.radialProgress.setMiniProgressBackgroundColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? "chat_outLoader" : "chat_inLoader"));
+                this.radialProgress.setMiniProgressBackgroundColor(getThemedColor(this.currentMessageObject.isOutOwner() ? "chat_outLoader" : "chat_inLoader"));
                 boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
                 if (!isPlayingMessage || (isPlayingMessage && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
@@ -436,5 +438,11 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             return;
         }
         accessibilityNodeInfo.setText(this.titleLayout.getText() + ", " + this.descriptionLayout.getText());
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

@@ -1,30 +1,57 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEl0;
-import j$.util.stream.A2;
-import j$.util.stream.CLASSNAMEp1;
+import j$.util.CLASSNAMEa;
+import j$.util.CLASSNAMEb;
+import j$.util.function.Consumer;
+import j$.util.function.m;
+import j$.util.y;
+import java.util.Collection;
 
-class F1 extends CLASSNAMEp1.i<Long> {
-    final /* synthetic */ CLASSNAMEl0 l;
+final class F1 implements B1 {
+    private final Collection a;
 
-    class a extends A2.c<Double> {
-        a(A2 a2) {
-            super(a2);
-        }
+    F1(Collection collection) {
+        this.a = collection;
+    }
 
-        public void accept(long j) {
-            this.a.accept(F1.this.l.a(j));
+    public B1 b(int i) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    public long count() {
+        return (long) this.a.size();
+    }
+
+    public void forEach(Consumer consumer) {
+        CLASSNAMEa.y(this.a, consumer);
+    }
+
+    public void i(Object[] objArr, int i) {
+        for (Object obj : this.a) {
+            objArr[i] = obj;
+            i++;
         }
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    F1(D1 d1, CLASSNAMEh1 h1Var, U2 u2, int i, CLASSNAMEl0 l0Var) {
-        super(h1Var, u2, i);
-        this.l = l0Var;
+    public /* synthetic */ int p() {
+        return 0;
     }
 
-    /* access modifiers changed from: package-private */
-    public A2 G0(int i, A2 a2) {
-        return new a(a2);
+    public Object[] q(m mVar) {
+        Collection collection = this.a;
+        return collection.toArray((Object[]) mVar.apply(collection.size()));
+    }
+
+    public /* synthetic */ B1 r(long j, long j2, m mVar) {
+        return CLASSNAMEp1.q(this, j, j2, mVar);
+    }
+
+    public y spliterator() {
+        Collection collection = this.a;
+        return (collection instanceof CLASSNAMEb ? ((CLASSNAMEb) collection).stream() : CLASSNAMEa.i(collection)).spliterator();
+    }
+
+    public String toString() {
+        return String.format("CollectionNode[%d][%s]", new Object[]{Integer.valueOf(this.a.size()), this.a});
     }
 }

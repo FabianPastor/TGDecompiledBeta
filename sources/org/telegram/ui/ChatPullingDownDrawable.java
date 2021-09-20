@@ -33,14 +33,14 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 
 public class ChatPullingDownDrawable implements NotificationCenter.NotificationCenterDelegate {
     boolean animateCheck;
-    boolean animateSwipeToRelease;
+    public boolean animateSwipeToRelease;
     Paint arrowPaint = new Paint(1);
     float bounceProgress;
     StaticLayout chatNameLayout;
     int chatNameWidth;
     float checkProgress;
     float circleRadius;
-    CounterView.CounterDrawable counterDrawable = new CounterView.CounterDrawable((View) null);
+    CounterView.CounterDrawable counterDrawable = new CounterView.CounterDrawable((View) null, (Theme.ResourcesProvider) null);
     private final int currentAccount;
     private final long currentDialog;
     public int dialogFilterId;
@@ -54,6 +54,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     ImageReceiver imageReceiver = new ImageReceiver();
     long lastHapticTime;
     float lastProgress;
+    public long lastShowingReleaseTime;
     int lastWidth;
     StaticLayout layout1;
     int layout1Width;
@@ -66,6 +67,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     View parentView;
     Path path = new Path();
     float progressToBottomPannel;
+    private final Theme.ResourcesProvider resourcesProvider;
     boolean showBottomPanel;
     AnimatorSet showReleaseAnimator;
     float swipeToReleaseProgress;
@@ -73,21 +75,24 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     TextPaint textPaint2 = new TextPaint(1);
     private Paint xRefPaint = new Paint(1);
 
-    public ChatPullingDownDrawable(int i, View view, long j, int i2, int i3) {
+    public ChatPullingDownDrawable(int i, View view, long j, int i2, int i3, Theme.ResourcesProvider resourcesProvider2) {
         this.fragmentView = view;
         this.currentAccount = i;
         this.currentDialog = j;
         this.folderId = i2;
         this.filterId = i3;
+        this.resourcesProvider = resourcesProvider2;
         this.arrowPaint.setStrokeWidth(AndroidUtilities.dpf2(2.8f));
         this.arrowPaint.setStrokeCap(Paint.Cap.ROUND);
         CounterView.CounterDrawable counterDrawable2 = this.counterDrawable;
         counterDrawable2.gravity = 3;
         counterDrawable2.setType(1);
         CounterView.CounterDrawable counterDrawable3 = this.counterDrawable;
-        counterDrawable3.circlePaint = Theme.chat_actionBackgroundPaint;
+        counterDrawable3.addServiceGradient = true;
+        counterDrawable3.circlePaint = getThemedPaint("paintChatActionBackground");
+        CounterView.CounterDrawable counterDrawable4 = this.counterDrawable;
         TextPaint textPaint3 = this.textPaint;
-        counterDrawable3.textPaint = textPaint3;
+        counterDrawable4.textPaint = textPaint3;
         textPaint3.setTextSize((float) AndroidUtilities.dp(13.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textPaint2.setTextSize((float) AndroidUtilities.dp(14.0f));
@@ -105,10 +110,10 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             this.dialogFolderId = iArr[1];
             this.dialogFilterId = iArr[2];
             this.emptyStub = false;
-            TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf((int) (-nextUnreadDialog.id)));
+            TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(-nextUnreadDialog.id));
             this.nextChat = chat;
             if (chat == null) {
-                MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf((int) nextUnreadDialog.id));
+                MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(nextUnreadDialog.id));
             }
             AvatarDrawable avatarDrawable = new AvatarDrawable();
             avatarDrawable.setInfo(this.nextChat);
@@ -117,6 +122,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             this.counterDrawable.setCount(nextUnreadDialog.unread_count, false);
             return;
         }
+        this.nextChat = null;
         this.drawFolderBackground = false;
         this.emptyStub = true;
     }
@@ -164,100 +170,109 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
 
     public void draw(Canvas canvas, View view, float f, float f2) {
         int i;
+        float f3;
         int i2;
         int i3;
+        float f4;
         Canvas canvas2 = canvas;
         View view2 = view;
-        float f3 = f;
+        float f5 = f;
         this.parentView = view2;
         this.counterDrawable.setParent(view2);
-        float dp = ((float) AndroidUtilities.dp(110.0f)) * f3;
+        float dp = ((float) AndroidUtilities.dp(110.0f)) * f5;
         if (dp >= ((float) AndroidUtilities.dp(8.0f))) {
-            float f4 = f3 < 0.2f ? 5.0f * f3 * f2 : f2;
+            float f6 = f5 < 0.2f ? 5.0f * f5 * f2 : f2;
             Theme.applyServiceShaderMatrix(this.lastWidth, view.getMeasuredHeight(), 0.0f, ((float) view.getMeasuredHeight()) - dp);
-            this.textPaint.setColor(Theme.getColor("chat_serviceText"));
-            this.arrowPaint.setColor(Theme.getColor("chat_serviceText"));
-            this.textPaint2.setColor(Theme.getColor("chat_messagePanelHint"));
-            int alpha = Theme.chat_actionBackgroundPaint.getAlpha();
+            this.textPaint.setColor(getThemedColor("chat_serviceText"));
+            this.arrowPaint.setColor(getThemedColor("chat_serviceText"));
+            this.textPaint2.setColor(getThemedColor("chat_messagePanelHint"));
+            int alpha = getThemedPaint("paintChatActionBackground").getAlpha();
             int alpha2 = Theme.chat_actionBackgroundGradientDarkenPaint.getAlpha();
             int alpha3 = this.textPaint.getAlpha();
             int alpha4 = this.arrowPaint.getAlpha();
-            Theme.chat_actionBackgroundGradientDarkenPaint.setAlpha((int) (((float) alpha2) * f4));
-            int i4 = (int) (((float) alpha) * f4);
-            Theme.chat_actionBackgroundPaint.setAlpha(i4);
-            int i5 = (int) (((float) alpha3) * f4);
+            Theme.chat_actionBackgroundGradientDarkenPaint.setAlpha((int) (((float) alpha2) * f6));
+            int i4 = (int) (((float) alpha) * f6);
+            getThemedPaint("paintChatActionBackground").setAlpha(i4);
+            int i5 = (int) (((float) alpha3) * f6);
             this.textPaint.setAlpha(i5);
-            this.imageReceiver.setAlpha(f4);
-            if ((f3 < 1.0f || this.lastProgress >= 1.0f) && (f3 >= 1.0f || this.lastProgress != 1.0f)) {
-                i = alpha2;
+            this.imageReceiver.setAlpha(f6);
+            if ((f5 < 1.0f || this.lastProgress >= 1.0f) && (f5 >= 1.0f || this.lastProgress != 1.0f)) {
+                i = alpha;
             } else {
                 long currentTimeMillis = System.currentTimeMillis();
-                i = alpha2;
+                i = alpha;
                 if (currentTimeMillis - this.lastHapticTime > 100) {
                     view2.performHapticFeedback(3, 2);
                     this.lastHapticTime = currentTimeMillis;
                 }
-                this.lastProgress = f3;
+                this.lastProgress = f5;
             }
-            if (f3 == 1.0f && !this.animateSwipeToRelease) {
+            if (f5 == 1.0f && !this.animateSwipeToRelease) {
                 this.animateSwipeToRelease = true;
                 this.animateCheck = true;
                 showReleaseState(true, view2);
-            } else if (f3 != 1.0f && this.animateSwipeToRelease) {
+                this.lastShowingReleaseTime = System.currentTimeMillis();
+            } else if (f5 != 1.0f && this.animateSwipeToRelease) {
                 this.animateSwipeToRelease = false;
                 showReleaseState(false, view2);
             }
-            float f5 = ((float) this.lastWidth) / 2.0f;
-            float f6 = this.bounceProgress * ((float) (-AndroidUtilities.dp(4.0f)));
+            float f7 = ((float) this.lastWidth) / 2.0f;
+            float f8 = this.bounceProgress * ((float) (-AndroidUtilities.dp(4.0f)));
             if (this.emptyStub) {
-                dp -= f6;
+                dp -= f8;
             }
-            float f7 = dp / 2.0f;
-            float max = Math.max(0.0f, Math.min(this.circleRadius, (f7 - (((float) AndroidUtilities.dp(16.0f)) * f3)) - ((float) AndroidUtilities.dp(4.0f))));
-            float max2 = ((Math.max(0.0f, Math.min(this.circleRadius * f3, f7 - (((float) AndroidUtilities.dp(8.0f)) * f3))) * 2.0f) - ((float) AndroidUtilities.dp2(16.0f))) * (1.0f - this.swipeToReleaseProgress);
-            float f8 = this.swipeToReleaseProgress;
-            float dp2 = max2 + (((float) AndroidUtilities.dp(56.0f)) * f8);
-            if (f8 < 1.0f || this.emptyStub) {
-                float f9 = -dp;
-                i3 = alpha3;
-                float dp3 = (((float) (-AndroidUtilities.dp(8.0f))) * (1.0f - this.swipeToReleaseProgress)) + ((((float) AndroidUtilities.dp(56.0f)) + f9) * this.swipeToReleaseProgress);
+            float f9 = dp / 2.0f;
+            float max = Math.max(0.0f, Math.min(this.circleRadius, (f9 - (((float) AndroidUtilities.dp(16.0f)) * f5)) - ((float) AndroidUtilities.dp(4.0f))));
+            float max2 = ((Math.max(0.0f, Math.min(this.circleRadius * f5, f9 - (((float) AndroidUtilities.dp(8.0f)) * f5))) * 2.0f) - ((float) AndroidUtilities.dp2(16.0f))) * (1.0f - this.swipeToReleaseProgress);
+            float var_ = this.swipeToReleaseProgress;
+            float dp2 = max2 + (((float) AndroidUtilities.dp(56.0f)) * var_);
+            if (var_ < 1.0f || this.emptyStub) {
+                float var_ = -dp;
+                i2 = alpha3;
+                i3 = alpha2;
+                float dp3 = (((float) (-AndroidUtilities.dp(8.0f))) * (1.0f - this.swipeToReleaseProgress)) + ((((float) AndroidUtilities.dp(56.0f)) + var_) * this.swipeToReleaseProgress);
                 RectF rectF = AndroidUtilities.rectTmp;
-                rectF.set(f5 - max, f9, max + f5, dp3);
+                rectF.set(f7 - max, var_, max + f7, dp3);
                 if (this.swipeToReleaseProgress > 0.0f && !this.emptyStub) {
                     float dp4 = ((float) AndroidUtilities.dp(16.0f)) * this.swipeToReleaseProgress;
                     rectF.inset(dp4, dp4);
                 }
                 drawBackground(canvas2, rectF);
-                float dp5 = ((((float) AndroidUtilities.dp(24.0f)) + f9) + (((float) AndroidUtilities.dp(8.0f)) * (1.0f - f3))) - (((float) AndroidUtilities.dp(36.0f)) * this.swipeToReleaseProgress);
+                float dp5 = ((((float) AndroidUtilities.dp(24.0f)) + var_) + (((float) AndroidUtilities.dp(8.0f)) * (1.0f - f5))) - (((float) AndroidUtilities.dp(36.0f)) * this.swipeToReleaseProgress);
                 canvas.save();
-                i2 = alpha;
+                f3 = dp;
                 rectF.inset((float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f));
                 canvas2.clipRect(rectF);
                 float var_ = this.swipeToReleaseProgress;
                 if (var_ > 0.0f) {
                     this.arrowPaint.setAlpha((int) ((1.0f - var_) * 255.0f));
                 }
-                drawArrow(canvas2, f5, dp5, ((float) AndroidUtilities.dp(24.0f)) * f3);
+                drawArrow(canvas2, f7, dp5, ((float) AndroidUtilities.dp(24.0f)) * f5);
                 if (this.emptyStub) {
+                    float dp22 = (((((float) (-AndroidUtilities.dp(8.0f))) - (((float) AndroidUtilities.dp2(8.0f)) * f5)) - dp2) * (1.0f - this.swipeToReleaseProgress)) + ((var_ - ((float) AndroidUtilities.dp(2.0f))) * this.swipeToReleaseProgress) + f8;
                     this.arrowPaint.setAlpha(alpha4);
-                    drawCheck(canvas2, f5, (((((float) (-AndroidUtilities.dp(8.0f))) - (((float) AndroidUtilities.dp2(8.0f)) * f3)) - dp2) * (1.0f - this.swipeToReleaseProgress)) + ((f9 - ((float) AndroidUtilities.dp(2.0f))) * this.swipeToReleaseProgress) + f6 + ((float) AndroidUtilities.dp(28.0f)));
+                    canvas.save();
+                    canvas2.scale(f5, f5, f7, ((float) AndroidUtilities.dp(28.0f)) + dp22);
+                    drawCheck(canvas2, f7, dp22 + ((float) AndroidUtilities.dp(28.0f)));
+                    canvas.restore();
                 }
                 canvas.restore();
             } else {
-                i2 = alpha;
-                i3 = alpha3;
+                f3 = dp;
+                i3 = alpha2;
+                i2 = alpha3;
             }
             if (this.chatNameLayout != null && this.swipeToReleaseProgress > 0.0f) {
-                Theme.chat_actionBackgroundPaint.setAlpha(i4);
+                getThemedPaint("paintChatActionBackground").setAlpha(i4);
                 this.textPaint.setAlpha(i5);
-                float dp6 = ((((float) AndroidUtilities.dp(20.0f)) * (1.0f - this.swipeToReleaseProgress)) - (((float) AndroidUtilities.dp(36.0f)) * this.swipeToReleaseProgress)) + f6;
+                float dp6 = ((((float) AndroidUtilities.dp(20.0f)) * (1.0f - this.swipeToReleaseProgress)) - (((float) AndroidUtilities.dp(36.0f)) * this.swipeToReleaseProgress)) + f8;
                 RectF rectF2 = AndroidUtilities.rectTmp;
                 int i6 = this.lastWidth;
                 int i7 = this.chatNameWidth;
                 rectF2.set(((float) (i6 - i7)) / 2.0f, dp6, ((float) i6) - (((float) (i6 - i7)) / 2.0f), ((float) this.chatNameLayout.getHeight()) + dp6);
                 rectF2.inset((float) (-AndroidUtilities.dp(8.0f)), (float) (-AndroidUtilities.dp(4.0f)));
-                canvas2.drawRoundRect(rectF2, (float) AndroidUtilities.dp(15.0f), (float) AndroidUtilities.dp(15.0f), Theme.chat_actionBackgroundPaint);
-                if (Theme.hasGradientService()) {
+                canvas2.drawRoundRect(rectF2, (float) AndroidUtilities.dp(15.0f), (float) AndroidUtilities.dp(15.0f), getThemedPaint("paintChatActionBackground"));
+                if (hasGradientService()) {
                     canvas2.drawRoundRect(rectF2, (float) AndroidUtilities.dp(15.0f), (float) AndroidUtilities.dp(15.0f), Theme.chat_actionBackgroundGradientDarkenPaint);
                 }
                 canvas.save();
@@ -265,17 +280,20 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
                 this.chatNameLayout.draw(canvas2);
                 canvas.restore();
             }
-            if (!this.emptyStub && dp2 > 0.0f) {
-                float dp22 = (((((float) (-AndroidUtilities.dp(8.0f))) - (((float) AndroidUtilities.dp2(8.0f)) * f3)) - dp2) * (1.0f - this.swipeToReleaseProgress)) + (((-dp) + ((float) AndroidUtilities.dp(4.0f))) * this.swipeToReleaseProgress) + f6;
+            if (this.emptyStub || dp2 <= 0.0f) {
+                f4 = 1.0f;
+            } else {
+                float dp23 = (((((float) (-AndroidUtilities.dp(8.0f))) - (((float) AndroidUtilities.dp2(8.0f)) * f5)) - dp2) * (1.0f - this.swipeToReleaseProgress)) + (((-f3) + ((float) AndroidUtilities.dp(4.0f))) * this.swipeToReleaseProgress) + f8;
                 float var_ = dp2 / 2.0f;
                 this.imageReceiver.setRoundRadius((int) var_);
-                this.imageReceiver.setImageCoords(f5 - var_, dp22, dp2, dp2);
+                this.imageReceiver.setImageCoords(f7 - var_, dp23, dp2, dp2);
                 if (this.swipeToReleaseProgress > 0.0f) {
+                    f4 = 1.0f;
                     canvas.saveLayerAlpha(this.imageReceiver.getImageX(), this.imageReceiver.getImageY(), this.imageReceiver.getImageWidth() + this.imageReceiver.getImageX(), this.imageReceiver.getImageHeight() + this.imageReceiver.getImageY(), 255, 31);
                     this.imageReceiver.draw(canvas2);
                     float var_ = this.swipeToReleaseProgress;
-                    canvas2.scale(var_, var_, ((float) AndroidUtilities.dp(12.0f)) + f5 + this.counterDrawable.getCenterX(), (dp22 - ((float) AndroidUtilities.dp(6.0f))) + ((float) AndroidUtilities.dp(14.0f)));
-                    canvas2.translate(((float) AndroidUtilities.dp(12.0f)) + f5, dp22 - ((float) AndroidUtilities.dp(6.0f)));
+                    canvas2.scale(var_, var_, ((float) AndroidUtilities.dp(12.0f)) + f7 + this.counterDrawable.getCenterX(), (dp23 - ((float) AndroidUtilities.dp(6.0f))) + ((float) AndroidUtilities.dp(14.0f)));
+                    canvas2.translate(((float) AndroidUtilities.dp(12.0f)) + f7, dp23 - ((float) AndroidUtilities.dp(6.0f)));
                     this.counterDrawable.updateBackgroundRect();
                     this.counterDrawable.rectF.inset((float) (-AndroidUtilities.dp(2.0f)), (float) (-AndroidUtilities.dp(2.0f)));
                     RectF rectF3 = this.counterDrawable.rectF;
@@ -283,19 +301,20 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
                     canvas.restore();
                     canvas.save();
                     float var_ = this.swipeToReleaseProgress;
-                    canvas2.scale(var_, var_, ((float) AndroidUtilities.dp(12.0f)) + f5 + this.counterDrawable.getCenterX(), (dp22 - ((float) AndroidUtilities.dp(6.0f))) + ((float) AndroidUtilities.dp(14.0f)));
-                    canvas2.translate(f5 + ((float) AndroidUtilities.dp(12.0f)), dp22 - ((float) AndroidUtilities.dp(6.0f)));
+                    canvas2.scale(var_, var_, ((float) AndroidUtilities.dp(12.0f)) + f7 + this.counterDrawable.getCenterX(), (dp23 - ((float) AndroidUtilities.dp(6.0f))) + ((float) AndroidUtilities.dp(14.0f)));
+                    canvas2.translate(f7 + ((float) AndroidUtilities.dp(12.0f)), dp23 - ((float) AndroidUtilities.dp(6.0f)));
                     this.counterDrawable.draw(canvas2);
                     canvas.restore();
                 } else {
+                    f4 = 1.0f;
                     this.imageReceiver.draw(canvas2);
                 }
             }
-            Theme.chat_actionBackgroundPaint.setAlpha(i2);
-            Theme.chat_actionBackgroundGradientDarkenPaint.setAlpha(i);
-            this.textPaint.setAlpha(i3);
+            getThemedPaint("paintChatActionBackground").setAlpha(i);
+            Theme.chat_actionBackgroundGradientDarkenPaint.setAlpha(i3);
+            this.textPaint.setAlpha(i2);
             this.arrowPaint.setAlpha(alpha4);
-            this.imageReceiver.setAlpha(1.0f);
+            this.imageReceiver.setAlpha(f4);
         }
     }
 
@@ -333,6 +352,8 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     }
 
     private void drawBackground(Canvas canvas, RectF rectF) {
+        Canvas canvas2 = canvas;
+        RectF rectF2 = rectF;
         if (this.drawFolderBackground) {
             this.path.reset();
             float width = rectF.width() * 0.2f;
@@ -340,7 +361,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             float width3 = rectF.width() * 0.03f;
             float f = width2 / 2.0f;
             float height = rectF.height() - width2;
-            this.path.moveTo(rectF.right, rectF.top + width + width2);
+            this.path.moveTo(rectF2.right, rectF2.top + width + width2);
             float f2 = -width;
             this.path.rQuadTo(0.0f, f2, f2, f2);
             float f3 = width * 2.0f;
@@ -360,19 +381,19 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             this.path.rQuadTo(width, 0.0f, width, f2);
             this.path.rLineTo(0.0f, -(height - f3));
             this.path.close();
-            canvas.drawPath(this.path, Theme.chat_actionBackgroundPaint);
-            if (Theme.hasGradientService()) {
-                canvas.drawPath(this.path, Theme.chat_actionBackgroundGradientDarkenPaint);
+            canvas2.drawPath(this.path, getThemedPaint("paintChatActionBackground"));
+            if (hasGradientService()) {
+                canvas2.drawPath(this.path, Theme.chat_actionBackgroundGradientDarkenPaint);
                 return;
             }
             return;
         }
-        RectF rectF2 = AndroidUtilities.rectTmp;
+        RectF rectF3 = AndroidUtilities.rectTmp;
         float f9 = this.circleRadius;
-        canvas.drawRoundRect(rectF2, f9, f9, Theme.chat_actionBackgroundPaint);
-        if (Theme.hasGradientService()) {
+        canvas2.drawRoundRect(rectF3, f9, f9, getThemedPaint("paintChatActionBackground"));
+        if (hasGradientService()) {
             float var_ = this.circleRadius;
-            canvas.drawRoundRect(rectF2, var_, var_, Theme.chat_actionBackgroundGradientDarkenPaint);
+            canvas2.drawRoundRect(rectF3, var_, var_, Theme.chat_actionBackgroundGradientDarkenPaint);
         }
     }
 
@@ -384,61 +405,21 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         }
         if (z) {
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.swipeToReleaseProgress, 1.0f});
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(view) {
-                public final /* synthetic */ View f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ChatPullingDownDrawable.this.lambda$showReleaseState$0$ChatPullingDownDrawable(this.f$1, valueAnimator);
-                }
-            });
+            ofFloat.addUpdateListener(new ChatPullingDownDrawable$$ExternalSyntheticLambda5(this, view));
             ofFloat.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
             ofFloat.setDuration(250);
             this.bounceProgress = 0.0f;
             ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(view) {
-                public final /* synthetic */ View f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ChatPullingDownDrawable.this.lambda$showReleaseState$1$ChatPullingDownDrawable(this.f$1, valueAnimator);
-                }
-            });
+            ofFloat2.addUpdateListener(new ChatPullingDownDrawable$$ExternalSyntheticLambda4(this, view));
             CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.EASE_BOTH;
             ofFloat2.setInterpolator(cubicBezierInterpolator);
             ofFloat2.setDuration(180);
             ValueAnimator ofFloat3 = ValueAnimator.ofFloat(new float[]{1.0f, -0.5f});
-            ofFloat3.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(view) {
-                public final /* synthetic */ View f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ChatPullingDownDrawable.this.lambda$showReleaseState$2$ChatPullingDownDrawable(this.f$1, valueAnimator);
-                }
-            });
+            ofFloat3.addUpdateListener(new ChatPullingDownDrawable$$ExternalSyntheticLambda3(this, view));
             ofFloat3.setInterpolator(cubicBezierInterpolator);
             ofFloat3.setDuration(120);
             ValueAnimator ofFloat4 = ValueAnimator.ofFloat(new float[]{-0.5f, 0.0f});
-            ofFloat4.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(view) {
-                public final /* synthetic */ View f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ChatPullingDownDrawable.this.lambda$showReleaseState$3$ChatPullingDownDrawable(this.f$1, valueAnimator);
-                }
-            });
+            ofFloat4.addUpdateListener(new ChatPullingDownDrawable$$ExternalSyntheticLambda6(this, view));
             ofFloat4.setInterpolator(cubicBezierInterpolator);
             ofFloat4.setDuration(100);
             AnimatorSet animatorSet2 = new AnimatorSet();
@@ -464,17 +445,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             return;
         }
         ValueAnimator ofFloat5 = ValueAnimator.ofFloat(new float[]{this.swipeToReleaseProgress, 0.0f});
-        ofFloat5.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(view) {
-            public final /* synthetic */ View f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                ChatPullingDownDrawable.this.lambda$showReleaseState$4$ChatPullingDownDrawable(this.f$1, valueAnimator);
-            }
-        });
+        ofFloat5.addUpdateListener(new ChatPullingDownDrawable$$ExternalSyntheticLambda2(this, view));
         ofFloat5.setInterpolator(CubicBezierInterpolator.DEFAULT);
         ofFloat5.setDuration(220);
         AnimatorSet animatorSet4 = new AnimatorSet();
@@ -484,37 +455,32 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showReleaseState$0 */
-    public /* synthetic */ void lambda$showReleaseState$0$ChatPullingDownDrawable(View view, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showReleaseState$0(View view, ValueAnimator valueAnimator) {
         this.swipeToReleaseProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         view.invalidate();
         this.fragmentView.invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showReleaseState$1 */
-    public /* synthetic */ void lambda$showReleaseState$1$ChatPullingDownDrawable(View view, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showReleaseState$1(View view, ValueAnimator valueAnimator) {
         this.bounceProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         view.invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showReleaseState$2 */
-    public /* synthetic */ void lambda$showReleaseState$2$ChatPullingDownDrawable(View view, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showReleaseState$2(View view, ValueAnimator valueAnimator) {
         this.bounceProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         view.invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showReleaseState$3 */
-    public /* synthetic */ void lambda$showReleaseState$3$ChatPullingDownDrawable(View view, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showReleaseState$3(View view, ValueAnimator valueAnimator) {
         this.bounceProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         view.invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showReleaseState$4 */
-    public /* synthetic */ void lambda$showReleaseState$4$ChatPullingDownDrawable(View view, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showReleaseState$4(View view, ValueAnimator valueAnimator) {
         this.swipeToReleaseProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.fragmentView.invalidate();
         view.invalidate();
@@ -577,7 +543,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         }
         for (int i5 = 0; i5 < arrayList.size(); i5++) {
             TLRPC$Dialog tLRPC$Dialog = arrayList.get(i5);
-            TLRPC$Chat chat = messagesController.getChat(Integer.valueOf(-((int) tLRPC$Dialog.id)));
+            TLRPC$Chat chat = messagesController.getChat(Long.valueOf(-tLRPC$Dialog.id));
             if (chat != null && tLRPC$Dialog.id != j && tLRPC$Dialog.unread_count > 0 && DialogObject.isChannel(tLRPC$Dialog) && !chat.megagroup && !messagesController.isPromoDialog(tLRPC$Dialog.id, false)) {
                 return tLRPC$Dialog;
             }
@@ -613,142 +579,136 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         return null;
     }
 
-    public int getChatId() {
+    public long getChatId() {
         return this.nextChat.id;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0069  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x00a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0063  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x00a1  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void drawBottomPanel(android.graphics.Canvas r14, int r15, int r16, int r17) {
+    public void drawBottomPanel(android.graphics.Canvas r12, int r13, int r14, int r15) {
         /*
-            r13 = this;
-            r0 = r13
-            r7 = r14
-            r8 = r15
-            boolean r1 = r0.showBottomPanel
-            r2 = 1037726734(0x3dda740e, float:0.10666667)
-            r9 = 0
-            r10 = 1065353216(0x3var_, float:1.0)
-            if (r1 == 0) goto L_0x0023
-            float r3 = r0.progressToBottomPannel
-            int r4 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-            if (r4 == 0) goto L_0x0023
-            float r3 = r3 + r2
-            r0.progressToBottomPannel = r3
-            int r1 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-            if (r1 <= 0) goto L_0x001d
-            r0.progressToBottomPannel = r10
-            goto L_0x003a
-        L_0x001d:
-            android.view.View r1 = r0.fragmentView
-            r1.invalidate()
-            goto L_0x003a
-        L_0x0023:
-            if (r1 != 0) goto L_0x003a
-            float r1 = r0.progressToBottomPannel
-            int r3 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
-            if (r3 == 0) goto L_0x003a
-            float r1 = r1 - r2
-            r0.progressToBottomPannel = r1
-            int r1 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
-            if (r1 >= 0) goto L_0x0035
-            r0.progressToBottomPannel = r9
-            goto L_0x003a
-        L_0x0035:
-            android.view.View r1 = r0.fragmentView
-            r1.invalidate()
-        L_0x003a:
-            android.graphics.Paint r1 = org.telegram.ui.ActionBar.Theme.chat_composeBackgroundPaint
-            int r11 = r1.getAlpha()
-            android.text.TextPaint r1 = r0.textPaint2
-            int r12 = r1.getAlpha()
-            android.graphics.Paint r1 = org.telegram.ui.ActionBar.Theme.chat_composeBackgroundPaint
-            float r2 = (float) r11
-            float r3 = r0.progressToBottomPannel
-            float r2 = r2 * r3
-            int r2 = (int) r2
-            r1.setAlpha(r2)
+            r11 = this;
+            boolean r0 = r11.showBottomPanel
+            r1 = 1037726734(0x3dda740e, float:0.10666667)
             r2 = 0
-            float r3 = (float) r8
-            r1 = r17
+            r3 = 1065353216(0x3var_, float:1.0)
+            if (r0 == 0) goto L_0x0020
+            float r4 = r11.progressToBottomPannel
+            int r5 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
+            if (r5 == 0) goto L_0x0020
+            float r4 = r4 + r1
+            r11.progressToBottomPannel = r4
+            int r0 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
+            if (r0 <= 0) goto L_0x001a
+            r11.progressToBottomPannel = r3
+            goto L_0x0037
+        L_0x001a:
+            android.view.View r0 = r11.fragmentView
+            r0.invalidate()
+            goto L_0x0037
+        L_0x0020:
+            if (r0 != 0) goto L_0x0037
+            float r0 = r11.progressToBottomPannel
+            int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r4 == 0) goto L_0x0037
+            float r0 = r0 - r1
+            r11.progressToBottomPannel = r0
+            int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r0 >= 0) goto L_0x0032
+            r11.progressToBottomPannel = r2
+            goto L_0x0037
+        L_0x0032:
+            android.view.View r0 = r11.fragmentView
+            r0.invalidate()
+        L_0x0037:
+            java.lang.String r0 = "paintChatComposeBackground"
+            android.graphics.Paint r0 = r11.getThemedPaint(r0)
+            int r1 = r0.getAlpha()
+            android.text.TextPaint r4 = r11.textPaint2
+            int r10 = r4.getAlpha()
             float r4 = (float) r1
-            r1 = r16
-            float r5 = (float) r1
-            android.graphics.Paint r6 = org.telegram.ui.ActionBar.Theme.chat_composeBackgroundPaint
-            r1 = r14
-            r1.drawRect(r2, r3, r4, r5, r6)
-            android.text.StaticLayout r1 = r0.layout1
-            r2 = 1073741824(0x40000000, float:2.0)
-            r3 = 1092616192(0x41200000, float:10.0)
-            r4 = 1099956224(0x41900000, float:18.0)
-            if (r1 == 0) goto L_0x00a3
-            float r1 = r0.swipeToReleaseProgress
-            int r5 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r5 >= 0) goto L_0x00a3
-            android.text.TextPaint r5 = r0.textPaint2
-            float r6 = (float) r12
-            float r1 = r10 - r1
-            float r6 = r6 * r1
-            float r1 = r0.progressToBottomPannel
-            float r6 = r6 * r1
-            int r1 = (int) r6
-            r5.setAlpha(r1)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r1 = r1 + r8
-            float r1 = (float) r1
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r5 = (float) r5
-            float r6 = r0.swipeToReleaseProgress
-            float r5 = r5 * r6
-            float r1 = r1 - r5
-            r14.save()
-            int r5 = r0.lastWidth
-            int r6 = r0.layout1Width
-            int r5 = r5 - r6
-            float r5 = (float) r5
-            float r5 = r5 / r2
-            r14.translate(r5, r1)
-            android.text.StaticLayout r1 = r0.layout1
-            r1.draw(r14)
-            r14.restore()
-        L_0x00a3:
-            android.text.StaticLayout r1 = r0.layout2
-            if (r1 == 0) goto L_0x00e0
-            float r1 = r0.swipeToReleaseProgress
-            int r5 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
-            if (r5 <= 0) goto L_0x00e0
-            android.text.TextPaint r5 = r0.textPaint2
-            float r6 = (float) r12
-            float r6 = r6 * r1
-            float r1 = r0.progressToBottomPannel
-            float r6 = r6 * r1
-            int r1 = (int) r6
-            r5.setAlpha(r1)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r1 = r1 + r8
-            float r1 = (float) r1
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r3 = (float) r3
-            float r4 = r0.swipeToReleaseProgress
-            float r10 = r10 - r4
-            float r3 = r3 * r10
-            float r1 = r1 + r3
-            r14.save()
-            int r3 = r0.lastWidth
-            int r4 = r0.layout2Width
-            int r3 = r3 - r4
-            float r3 = (float) r3
-            float r3 = r3 / r2
-            r14.translate(r3, r1)
-            android.text.StaticLayout r1 = r0.layout2
-            r1.draw(r14)
-            r14.restore()
-        L_0x00e0:
-            android.text.TextPaint r1 = r0.textPaint2
-            r1.setAlpha(r11)
-            android.graphics.Paint r1 = org.telegram.ui.ActionBar.Theme.chat_composeBackgroundPaint
-            r1.setAlpha(r11)
+            float r5 = r11.progressToBottomPannel
+            float r4 = r4 * r5
+            int r4 = (int) r4
+            r0.setAlpha(r4)
+            r5 = 0
+            float r6 = (float) r13
+            float r7 = (float) r15
+            float r8 = (float) r14
+            r4 = r12
+            r9 = r0
+            r4.drawRect(r5, r6, r7, r8, r9)
+            android.text.StaticLayout r14 = r11.layout1
+            r15 = 1073741824(0x40000000, float:2.0)
+            r4 = 1092616192(0x41200000, float:10.0)
+            r5 = 1099956224(0x41900000, float:18.0)
+            if (r14 == 0) goto L_0x009d
+            float r14 = r11.swipeToReleaseProgress
+            int r6 = (r14 > r3 ? 1 : (r14 == r3 ? 0 : -1))
+            if (r6 >= 0) goto L_0x009d
+            android.text.TextPaint r6 = r11.textPaint2
+            float r7 = (float) r10
+            float r14 = r3 - r14
+            float r7 = r7 * r14
+            float r14 = r11.progressToBottomPannel
+            float r7 = r7 * r14
+            int r14 = (int) r7
+            r6.setAlpha(r14)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r14 = r14 + r13
+            float r14 = (float) r14
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r6 = (float) r6
+            float r7 = r11.swipeToReleaseProgress
+            float r6 = r6 * r7
+            float r14 = r14 - r6
+            r12.save()
+            int r6 = r11.lastWidth
+            int r7 = r11.layout1Width
+            int r6 = r6 - r7
+            float r6 = (float) r6
+            float r6 = r6 / r15
+            r12.translate(r6, r14)
+            android.text.StaticLayout r14 = r11.layout1
+            r14.draw(r12)
+            r12.restore()
+        L_0x009d:
+            android.text.StaticLayout r14 = r11.layout2
+            if (r14 == 0) goto L_0x00da
+            float r14 = r11.swipeToReleaseProgress
+            int r2 = (r14 > r2 ? 1 : (r14 == r2 ? 0 : -1))
+            if (r2 <= 0) goto L_0x00da
+            android.text.TextPaint r2 = r11.textPaint2
+            float r6 = (float) r10
+            float r6 = r6 * r14
+            float r14 = r11.progressToBottomPannel
+            float r6 = r6 * r14
+            int r14 = (int) r6
+            r2.setAlpha(r14)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r13 = r13 + r14
+            float r13 = (float) r13
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r14 = (float) r14
+            float r2 = r11.swipeToReleaseProgress
+            float r3 = r3 - r2
+            float r14 = r14 * r3
+            float r13 = r13 + r14
+            r12.save()
+            int r14 = r11.lastWidth
+            int r2 = r11.layout2Width
+            int r14 = r14 - r2
+            float r14 = (float) r14
+            float r14 = r14 / r15
+            r12.translate(r14, r13)
+            android.text.StaticLayout r13 = r11.layout2
+            r13.draw(r12)
+            r12.restore()
+        L_0x00da:
+            android.text.TextPaint r12 = r11.textPaint2
+            r12.setAlpha(r1)
+            r0.setAlpha(r1)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatPullingDownDrawable.drawBottomPanel(android.graphics.Canvas, int, int, int):void");
@@ -776,17 +736,9 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         this.onAnimationFinishRunnable = runnable;
         this.showReleaseAnimator = new AnimatorSet();
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.swipeToReleaseProgress, 1.0f});
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                ChatPullingDownDrawable.this.lambda$runOnAnimationFinish$5$ChatPullingDownDrawable(valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new ChatPullingDownDrawable$$ExternalSyntheticLambda1(this));
         ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{this.bounceProgress, 0.0f});
-        ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                ChatPullingDownDrawable.this.lambda$runOnAnimationFinish$6$ChatPullingDownDrawable(valueAnimator);
-            }
-        });
+        ofFloat2.addUpdateListener(new ChatPullingDownDrawable$$ExternalSyntheticLambda0(this));
         this.showReleaseAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 ChatPullingDownDrawable chatPullingDownDrawable = ChatPullingDownDrawable.this;
@@ -811,8 +763,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$runOnAnimationFinish$5 */
-    public /* synthetic */ void lambda$runOnAnimationFinish$5$ChatPullingDownDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$runOnAnimationFinish$5(ValueAnimator valueAnimator) {
         this.swipeToReleaseProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.fragmentView.invalidate();
         View view = this.parentView;
@@ -822,8 +773,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$runOnAnimationFinish$6 */
-    public /* synthetic */ void lambda$runOnAnimationFinish$6$ChatPullingDownDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$runOnAnimationFinish$6(ValueAnimator valueAnimator) {
         this.bounceProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         View view = this.parentView;
         if (view != null) {
@@ -834,5 +784,22 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     public void reset() {
         this.checkProgress = 0.0f;
         this.animateCheck = false;
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    private Paint getThemedPaint(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Paint paint = resourcesProvider2 != null ? resourcesProvider2.getPaint(str) : null;
+        return paint != null ? paint : Theme.getThemePaint(str);
+    }
+
+    private boolean hasGradientService() {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        return resourcesProvider2 != null ? resourcesProvider2.hasGradientService() : Theme.hasGradientService();
     }
 }

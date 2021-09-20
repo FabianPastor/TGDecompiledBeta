@@ -64,16 +64,8 @@ public class CropRotationWheel extends FrameLayout {
         imageView.setImageResource(NUM);
         this.mirrorButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.mirrorButton.setScaleType(ImageView.ScaleType.CENTER);
-        this.mirrorButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                CropRotationWheel.this.lambda$new$0$CropRotationWheel(view);
-            }
-        });
-        this.mirrorButton.setOnLongClickListener(new View.OnLongClickListener() {
-            public final boolean onLongClick(View view) {
-                return CropRotationWheel.this.lambda$new$1$CropRotationWheel(view);
-            }
-        });
+        this.mirrorButton.setOnClickListener(new CropRotationWheel$$ExternalSyntheticLambda1(this));
+        this.mirrorButton.setOnLongClickListener(new CropRotationWheel$$ExternalSyntheticLambda3(this));
         this.mirrorButton.setContentDescription(LocaleController.getString("AccDescrMirror", NUM));
         addView(this.mirrorButton, LayoutHelper.createFrame(70, 64, 19));
         ImageView imageView2 = new ImageView(context);
@@ -81,11 +73,7 @@ public class CropRotationWheel extends FrameLayout {
         imageView2.setImageResource(NUM);
         this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.aspectRatioButton.setScaleType(ImageView.ScaleType.CENTER);
-        this.aspectRatioButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                CropRotationWheel.this.lambda$new$2$CropRotationWheel(view);
-            }
-        });
+        this.aspectRatioButton.setOnClickListener(new CropRotationWheel$$ExternalSyntheticLambda0(this));
         this.aspectRatioButton.setVisibility(8);
         this.aspectRatioButton.setContentDescription(LocaleController.getString("AccDescrAspectRatio", NUM));
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
@@ -94,11 +82,7 @@ public class CropRotationWheel extends FrameLayout {
         imageView3.setImageResource(NUM);
         this.rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.rotation90Button.setScaleType(ImageView.ScaleType.CENTER);
-        this.rotation90Button.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                CropRotationWheel.this.lambda$new$3$CropRotationWheel(view);
-            }
-        });
+        this.rotation90Button.setOnClickListener(new CropRotationWheel$$ExternalSyntheticLambda2(this));
         this.rotation90Button.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
         addView(this.rotation90Button, LayoutHelper.createFrame(70, 64, 21));
         TextView textView = new TextView(context);
@@ -110,8 +94,7 @@ public class CropRotationWheel extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$CropRotationWheel(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
             setMirrored(rotationWheelListener.mirror());
@@ -119,15 +102,13 @@ public class CropRotationWheel extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ boolean lambda$new$1$CropRotationWheel(View view) {
+    public /* synthetic */ boolean lambda$new$1(View view) {
         this.aspectRatioButton.callOnClick();
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$CropRotationWheel(View view) {
+    public /* synthetic */ void lambda$new$2(View view) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
             rotationWheelListener.aspectRatioPressed();
@@ -135,8 +116,7 @@ public class CropRotationWheel extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$CropRotationWheel(View view) {
+    public /* synthetic */ void lambda$new$3(View view) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
             setRotated(rotationWheelListener.rotate90Pressed());

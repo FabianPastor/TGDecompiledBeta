@@ -26,7 +26,6 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class StickerCell extends FrameLayout {
-    private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
     private boolean clearsInputField;
     private BackupImageView imageView;
     private long lastUpdateTime;
@@ -34,7 +33,10 @@ public class StickerCell extends FrameLayout {
     private float scale;
     private boolean scaled;
     private TLRPC$Document sticker;
-    private long time = 0;
+
+    static {
+        new AccelerateInterpolator(0.5f);
+    }
 
     public StickerCell(Context context) {
         super(context);

@@ -27,6 +27,9 @@ public abstract class TLRPC$SendMessageAction extends TLObject {
             case -1336228175:
                 tLRPC$SendMessageAction = new TLRPC$TL_sendMessageChooseStickerAction();
                 break;
+            case -1234857938:
+                tLRPC$SendMessageAction = new TLRPC$TL_sendMessageEmojiInteractionSeen();
+                break;
             case -774682074:
                 tLRPC$SendMessageAction = new TLRPC$TL_sendMessageUploadPhotoAction();
                 break;
@@ -62,6 +65,9 @@ public abstract class TLRPC$SendMessageAction extends TLObject {
                 break;
             case 608050278:
                 tLRPC$SendMessageAction = new TLRPC$TL_sendMessageUploadRoundAction();
+                break;
+            case 630664139:
+                tLRPC$SendMessageAction = new TLRPC$TL_sendMessageEmojiInteraction();
                 break;
             case 1653390447:
                 tLRPC$SendMessageAction = new TLRPC$TL_sendMessageChooseContactAction();

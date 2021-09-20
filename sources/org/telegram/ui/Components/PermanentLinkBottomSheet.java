@@ -15,7 +15,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -28,16 +27,13 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Components.LinkActionView;
 import org.telegram.ui.ManageLinksActivity;
 
 public class PermanentLinkBottomSheet extends BottomSheet {
-    private int chatId;
+    private long chatId;
     private BaseFragment fragment;
     private final RLottieImageView imageView;
-    TLRPC$ChatFull info;
     TLRPC$TL_chatInviteExported invite;
-    private boolean isChannel;
     private final LinkActionView linkActionView;
     boolean linkGenerating;
     RLottieDrawable linkIcon;
@@ -46,47 +42,29 @@ public class PermanentLinkBottomSheet extends BottomSheet {
     private final TextView titleView;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PermanentLinkBottomSheet(Context context, boolean z, BaseFragment baseFragment, TLRPC$ChatFull tLRPC$ChatFull, int i, boolean z2) {
+    public PermanentLinkBottomSheet(Context context, boolean z, BaseFragment baseFragment, TLRPC$ChatFull tLRPC$ChatFull, long j, boolean z2) {
         super(context, z);
         String str;
-        int i2;
+        int i;
         TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported;
         Context context2 = context;
         TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
-        boolean z3 = z2;
-        this.info = tLRPC$ChatFull2;
-        this.chatId = i;
-        this.isChannel = z3;
+        this.chatId = j;
         setAllowNestedScroll(true);
         setApplyBottomPadding(false);
-        LinkActionView linkActionView2 = new LinkActionView(context, baseFragment, this, i, true, z2);
+        LinkActionView linkActionView2 = new LinkActionView(context, baseFragment, this, j, true, z2);
         this.linkActionView = linkActionView2;
         linkActionView2.setPermanent(true);
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
         this.imageView = rLottieImageView;
-        RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(90.0f), AndroidUtilities.dp(90.0f), false, (int[]) null);
+        RLottieDrawable rLottieDrawable = r1;
+        RLottieDrawable rLottieDrawable2 = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(90.0f), AndroidUtilities.dp(90.0f), false, (int[]) null);
         this.linkIcon = rLottieDrawable;
         rLottieDrawable.setCustomEndFrame(42);
         rLottieImageView.setAnimation(this.linkIcon);
         linkActionView2.setUsers(0, (ArrayList<TLRPC$User>) null);
         linkActionView2.hideRevokeOption(true);
-        linkActionView2.setDelegate(new LinkActionView.Delegate() {
-            public /* synthetic */ void editLink() {
-                LinkActionView.Delegate.CC.$default$editLink(this);
-            }
-
-            public /* synthetic */ void removeLink() {
-                LinkActionView.Delegate.CC.$default$removeLink(this);
-            }
-
-            public final void revokeLink() {
-                PermanentLinkBottomSheet.this.lambda$new$0$PermanentLinkBottomSheet();
-            }
-
-            public /* synthetic */ void showUsersForPermanentLink() {
-                LinkActionView.Delegate.CC.$default$showUsersForPermanentLink(this);
-            }
-        });
+        linkActionView2.setDelegate(new PermanentLinkBottomSheet$$ExternalSyntheticLambda5(this));
         TextView textView = new TextView(context2);
         this.titleView = textView;
         textView.setText(LocaleController.getString("InviteLink", NUM));
@@ -95,14 +73,14 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         TextView textView2 = new TextView(context2);
         this.subtitle = textView2;
-        if (z3) {
-            i2 = NUM;
+        if (z2) {
+            i = NUM;
             str = "LinkInfoChannel";
         } else {
-            i2 = NUM;
+            i = NUM;
             str = "LinkInfo";
         }
-        textView2.setText(LocaleController.getString(str, i2));
+        textView2.setText(LocaleController.getString(str, i));
         textView2.setTextSize(14.0f);
         textView2.setGravity(1);
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
@@ -113,19 +91,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         textView3.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
         textView3.setBackground(Theme.createRadSelectorDrawable(ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhiteBlueText"), 76), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f)));
         textView3.setPadding(AndroidUtilities.dp(12.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(4.0f));
-        textView3.setOnClickListener(new View.OnClickListener(tLRPC$ChatFull2, baseFragment) {
-            public final /* synthetic */ TLRPC$ChatFull f$1;
-            public final /* synthetic */ BaseFragment f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void onClick(View view) {
-                PermanentLinkBottomSheet.this.lambda$new$1$PermanentLinkBottomSheet(this.f$1, this.f$2, view);
-            }
-        });
+        textView3.setOnClickListener(new PermanentLinkBottomSheet$$ExternalSyntheticLambda0(this, tLRPC$ChatFull2, baseFragment));
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
         linearLayout.addView(rLottieImageView, LayoutHelper.createLinear(90, 90, 1, 0, 24, 0, 0));
@@ -137,7 +103,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         nestedScrollView.setVerticalScrollBarEnabled(false);
         nestedScrollView.addView(linearLayout);
         setCustomView(nestedScrollView);
-        TLRPC$Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(Integer.valueOf(i));
+        TLRPC$Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(Long.valueOf(j));
         if (chat != null && chat.username != null) {
             linkActionView2.setLink("https://t.me/" + chat.username);
             textView3.setVisibility(8);
@@ -146,18 +112,16 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         } else {
             linkActionView2.setLink(tLRPC$TL_chatInviteExported.link);
         }
-        lambda$getThemeDescriptions$5();
+        updateColors();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$PermanentLinkBottomSheet() {
+    public /* synthetic */ void lambda$new$0() {
         generateLink(true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$PermanentLinkBottomSheet(TLRPC$ChatFull tLRPC$ChatFull, BaseFragment baseFragment, View view) {
+    public /* synthetic */ void lambda$new$1(TLRPC$ChatFull tLRPC$ChatFull, BaseFragment baseFragment, View view) {
         ManageLinksActivity manageLinksActivity = new ManageLinksActivity(tLRPC$ChatFull.id, 0, 0);
         manageLinksActivity.setInfo(tLRPC$ChatFull, tLRPC$ChatFull.exported_invite);
         baseFragment.presentFragment(manageLinksActivity);
@@ -170,43 +134,17 @@ public class PermanentLinkBottomSheet extends BottomSheet {
             TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
             tLRPC$TL_messages_exportChatInvite.legacy_revoke_permanent = true;
             tLRPC$TL_messages_exportChatInvite.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chatId);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate(z) {
-                public final /* synthetic */ boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    PermanentLinkBottomSheet.this.lambda$generateLink$3$PermanentLinkBottomSheet(this.f$1, tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_exportChatInvite, new PermanentLinkBottomSheet$$ExternalSyntheticLambda3(this, z));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$generateLink$3 */
-    public /* synthetic */ void lambda$generateLink$3$PermanentLinkBottomSheet(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, z) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ boolean f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                PermanentLinkBottomSheet.this.lambda$generateLink$2$PermanentLinkBottomSheet(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$generateLink$3(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PermanentLinkBottomSheet$$ExternalSyntheticLambda2(this, tLRPC$TL_error, tLObject, z));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$generateLink$2 */
-    public /* synthetic */ void lambda$generateLink$2$PermanentLinkBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
+    public /* synthetic */ void lambda$generateLink$2(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         if (tLRPC$TL_error == null) {
             this.invite = (TLRPC$TL_chatInviteExported) tLObject;
             TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(this.chatId);
@@ -227,39 +165,29 @@ public class PermanentLinkBottomSheet extends BottomSheet {
 
     public void show() {
         super.show();
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                PermanentLinkBottomSheet.this.lambda$show$4$PermanentLinkBottomSheet();
-            }
-        }, 50);
+        AndroidUtilities.runOnUIThread(new PermanentLinkBottomSheet$$ExternalSyntheticLambda1(this), 50);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$show$4 */
-    public /* synthetic */ void lambda$show$4$PermanentLinkBottomSheet() {
+    public /* synthetic */ void lambda$show$4() {
         this.linkIcon.start();
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$PermanentLinkBottomSheet$I7VwQbadlOghW5t3iJxait4QiEY r10 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                PermanentLinkBottomSheet.this.lambda$getThemeDescriptions$5$PermanentLinkBottomSheet();
-            }
-        };
+        PermanentLinkBottomSheet$$ExternalSyntheticLambda4 permanentLinkBottomSheet$$ExternalSyntheticLambda4 = new PermanentLinkBottomSheet$$ExternalSyntheticLambda4(this);
         arrayList.add(new ThemeDescription(this.titleView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.subtitle, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
         arrayList.add(new ThemeDescription(this.manage, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"));
-        $$Lambda$PermanentLinkBottomSheet$I7VwQbadlOghW5t3iJxait4QiEY r8 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "featuredStickers_addButton"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "featuredStickers_buttonText"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "windowBackgroundWhiteBlueText"));
+        PermanentLinkBottomSheet$$ExternalSyntheticLambda4 permanentLinkBottomSheet$$ExternalSyntheticLambda42 = permanentLinkBottomSheet$$ExternalSyntheticLambda4;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, permanentLinkBottomSheet$$ExternalSyntheticLambda42, "featuredStickers_addButton"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, permanentLinkBottomSheet$$ExternalSyntheticLambda42, "featuredStickers_buttonText"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, permanentLinkBottomSheet$$ExternalSyntheticLambda42, "windowBackgroundWhiteBlueText"));
         return arrayList;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: updateColors */
-    public void lambda$getThemeDescriptions$5() {
+    public void updateColors() {
         this.imageView.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(90.0f), Theme.getColor("featuredStickers_addButton")));
         this.manage.setBackground(Theme.createRadSelectorDrawable(ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhiteBlueText"), 76), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f)));
         int color = Theme.getColor("featuredStickers_buttonText");

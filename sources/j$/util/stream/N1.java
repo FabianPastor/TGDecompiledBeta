@@ -1,17 +1,22 @@
 package j$.util.stream;
 
-enum N1 {
-    ANY(true, true),
-    ALL(false, false),
-    NONE(true, false);
-    
-    /* access modifiers changed from: private */
-    public final boolean b;
-    /* access modifiers changed from: private */
-    public final boolean c;
+import j$.util.concurrent.a;
+import j$.util.function.BiFunction;
+import j$.util.function.CLASSNAMEb;
+import j$.util.function.Function;
 
-    private N1(boolean z, boolean z2) {
-        this.b = z;
-        this.c = z2;
+public final /* synthetic */ class N1 implements CLASSNAMEb {
+    public static final /* synthetic */ N1 a = new N1();
+
+    private /* synthetic */ N1() {
+    }
+
+    public BiFunction andThen(Function function) {
+        function.getClass();
+        return new a((BiFunction) this, function);
+    }
+
+    public final Object apply(Object obj, Object obj2) {
+        return new T1((B1) obj, (B1) obj2);
     }
 }

@@ -67,17 +67,7 @@ public class VideoFileRenderer implements VideoSink {
 
     public void onFrame(VideoFrame videoFrame) {
         videoFrame.retain();
-        this.renderThreadHandler.post(new Runnable(videoFrame) {
-            public final /* synthetic */ VideoFrame f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                VideoFileRenderer.this.lambda$onFrame$0$VideoFileRenderer(this.f$1);
-            }
-        });
+        this.renderThreadHandler.post(new VideoFileRenderer$$ExternalSyntheticLambda3(this, videoFrame));
     }
 
     /* access modifiers changed from: private */
@@ -99,24 +89,11 @@ public class VideoFileRenderer implements VideoSink {
         videoFrame.release();
         VideoFrame.I420Buffer i420 = cropAndScale.toI420();
         cropAndScale.release();
-        this.fileThreadHandler.post(new Runnable(i420, videoFrame) {
-            public final /* synthetic */ VideoFrame.I420Buffer f$1;
-            public final /* synthetic */ VideoFrame f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                VideoFileRenderer.this.lambda$renderFrameOnRenderThread$1$VideoFileRenderer(this.f$1, this.f$2);
-            }
-        });
+        this.fileThreadHandler.post(new VideoFileRenderer$$ExternalSyntheticLambda2(this, i420, videoFrame));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$renderFrameOnRenderThread$1 */
-    public /* synthetic */ void lambda$renderFrameOnRenderThread$1$VideoFileRenderer(VideoFrame.I420Buffer i420Buffer, VideoFrame videoFrame) {
+    public /* synthetic */ void lambda$renderFrameOnRenderThread$1(VideoFrame.I420Buffer i420Buffer, VideoFrame videoFrame) {
         YuvHelper.I420Rotate(i420Buffer.getDataY(), i420Buffer.getStrideY(), i420Buffer.getDataU(), i420Buffer.getStrideU(), i420Buffer.getDataV(), i420Buffer.getStrideV(), this.outputFrameBuffer, i420Buffer.getWidth(), i420Buffer.getHeight(), videoFrame.getRotation());
         i420Buffer.release();
         try {
@@ -130,23 +107,9 @@ public class VideoFileRenderer implements VideoSink {
 
     public void release() {
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.renderThreadHandler.post(new Runnable(countDownLatch) {
-            public final /* synthetic */ CountDownLatch f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                VideoFileRenderer.this.lambda$release$2$VideoFileRenderer(this.f$1);
-            }
-        });
+        this.renderThreadHandler.post(new VideoFileRenderer$$ExternalSyntheticLambda1(this, countDownLatch));
         ThreadUtils.awaitUninterruptibly(countDownLatch);
-        this.fileThreadHandler.post(new Runnable() {
-            public final void run() {
-                VideoFileRenderer.this.lambda$release$3$VideoFileRenderer();
-            }
-        });
+        this.fileThreadHandler.post(new VideoFileRenderer$$ExternalSyntheticLambda0(this));
         try {
             this.fileThread.join();
         } catch (InterruptedException e) {
@@ -156,8 +119,7 @@ public class VideoFileRenderer implements VideoSink {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$release$2 */
-    public /* synthetic */ void lambda$release$2$VideoFileRenderer(CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$release$2(CountDownLatch countDownLatch) {
         this.yuvConverter.release();
         this.eglBase.release();
         this.renderThread.quit();
@@ -165,8 +127,7 @@ public class VideoFileRenderer implements VideoSink {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$release$3 */
-    public /* synthetic */ void lambda$release$3$VideoFileRenderer() {
+    public /* synthetic */ void lambda$release$3() {
         try {
             this.videoOutFile.close();
             Logging.d("VideoFileRenderer", "Video written to disk as " + this.outputFileName + ". The number of frames is " + this.frameCount + " and the dimensions of the frames are " + this.outputFileWidth + "x" + this.outputFileHeight + ".");

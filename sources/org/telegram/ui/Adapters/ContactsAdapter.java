@@ -3,19 +3,13 @@ package org.telegram.ui.Adapters;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.RecyclerView;
-import j$.util.Comparator;
-import j$.util.function.Function;
-import j$.util.function.ToDoubleFunction;
-import j$.util.function.ToIntFunction;
-import j$.util.function.ToLongFunction;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
@@ -40,12 +34,12 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
-    private SparseArray<?> checkedMap;
+    private LongSparseArray<?> checkedMap;
     private int currentAccount = UserConfig.selectedAccount;
     private boolean disableSections;
     /* access modifiers changed from: private */
     public boolean hasGps;
-    private SparseArray<TLRPC$User> ignoreUsers;
+    private LongSparseArray<TLRPC$User> ignoreUsers;
     /* access modifiers changed from: private */
     public boolean isAdmin;
     private boolean isChannel;
@@ -59,11 +53,11 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
     private boolean scrolling;
     private int sortType;
 
-    public ContactsAdapter(Context context, int i, boolean z, SparseArray<TLRPC$User> sparseArray, int i2, boolean z2) {
+    public ContactsAdapter(Context context, int i, boolean z, LongSparseArray<TLRPC$User> longSparseArray, int i2, boolean z2) {
         this.mContext = context;
         this.onlyUsers = i;
         this.needPhonebook = z;
-        this.ignoreUsers = sparseArray;
+        this.ignoreUsers = longSparseArray;
         boolean z3 = true;
         this.isAdmin = i2 != 0;
         this.isChannel = i2 != 2 ? false : z3;
@@ -79,17 +73,17 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         if (i == 2) {
             if (this.onlineContacts == null || z) {
                 this.onlineContacts = new ArrayList<>(ContactsController.getInstance(this.currentAccount).contacts);
-                int i2 = UserConfig.getInstance(this.currentAccount).clientUserId;
-                int i3 = 0;
+                long j = UserConfig.getInstance(this.currentAccount).clientUserId;
+                int i2 = 0;
                 int size = this.onlineContacts.size();
                 while (true) {
-                    if (i3 >= size) {
+                    if (i2 >= size) {
                         break;
-                    } else if (this.onlineContacts.get(i3).user_id == i2) {
-                        this.onlineContacts.remove(i3);
+                    } else if (this.onlineContacts.get(i2).user_id == j) {
+                        this.onlineContacts.remove(i2);
                         break;
                     } else {
-                        i3++;
+                        i2++;
                     }
                 }
             }
@@ -103,45 +97,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         if (this.onlineContacts != null) {
             try {
                 int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                Collections.sort(this.onlineContacts, new Object(currentTime) {
-                    public final /* synthetic */ int f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final int compare(Object obj, Object obj2) {
-                        return ContactsAdapter.lambda$sortOnlineContacts$0(MessagesController.this, this.f$1, (TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
-                    }
-
-                    public /* synthetic */ Comparator reversed() {
-                        return Comparator.CC.$default$reversed(this);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparing(Function function) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
-                        return Comparator.CC.$default$thenComparing(this, function, comparator);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
-                        return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
-                        return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
-                    }
-
-                    public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
-                        return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
-                    }
-                });
+                Collections.sort(this.onlineContacts, new ContactsAdapter$$ExternalSyntheticLambda0(MessagesController.getInstance(this.currentAccount), currentTime));
                 notifyDataSetChanged();
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
@@ -149,19 +105,20 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         }
     }
 
+    /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:10:0x002b  */
     /* JADX WARNING: Removed duplicated region for block: B:19:0x003d A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x0048 A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0053 A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:38:0x005c A[ADDED_TO_REGION] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ int lambda$sortOnlineContacts$0(org.telegram.messenger.MessagesController r2, int r3, org.telegram.tgnet.TLRPC$TL_contact r4, org.telegram.tgnet.TLRPC$TL_contact r5) {
+    public static /* synthetic */ int lambda$sortOnlineContacts$0(org.telegram.messenger.MessagesController r2, int r3, org.telegram.tgnet.TLRPC$TL_contact r4, org.telegram.tgnet.TLRPC$TL_contact r5) {
         /*
-            int r5 = r5.user_id
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
+            long r0 = r5.user_id
+            java.lang.Long r5 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$User r5 = r2.getUser(r5)
-            int r4 = r4.user_id
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            long r0 = r4.user_id
+            java.lang.Long r4 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r4)
             r4 = 50000(0xCLASSNAME, float:7.0065E-41)
             r0 = 0
@@ -241,7 +198,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
             if (i < arrayList.size()) {
                 ArrayList arrayList2 = hashMap.get(arrayList.get(i));
                 if (i2 < arrayList2.size()) {
-                    return MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TLRPC$TL_contact) arrayList2.get(i2)).user_id));
+                    return MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(((TLRPC$TL_contact) arrayList2.get(i2)).user_id));
                 }
             }
             return null;
@@ -253,13 +210,13 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                 if (i3 < arrayList.size()) {
                     ArrayList arrayList3 = hashMap.get(arrayList.get(i3));
                     if (i2 < arrayList3.size()) {
-                        return MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TLRPC$TL_contact) arrayList3.get(i2)).user_id));
+                        return MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(((TLRPC$TL_contact) arrayList3.get(i2)).user_id));
                     }
                     return null;
                 }
             } else if (i == 1) {
                 if (i2 < this.onlineContacts.size()) {
-                    return MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.onlineContacts.get(i2).user_id));
+                    return MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.onlineContacts.get(i2).user_id));
                 }
                 return null;
             }
@@ -476,20 +433,20 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
             } else {
                 arrayList = (this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict).get((this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray).get(i - ((this.onlyUsers == 0 || this.isAdmin) ? 1 : 0)));
             }
-            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(arrayList.get(i2).user_id));
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(arrayList.get(i2).user_id));
             userCell.setData(user, (CharSequence) null, (CharSequence) null, 0);
-            SparseArray<?> sparseArray = this.checkedMap;
-            if (sparseArray != null) {
-                if (sparseArray.indexOfKey(user.id) >= 0) {
+            LongSparseArray<?> longSparseArray = this.checkedMap;
+            if (longSparseArray != null) {
+                if (longSparseArray.indexOfKey(user.id) >= 0) {
                     z = true;
                 }
                 userCell.setChecked(z, !this.scrolling);
             }
-            SparseArray<TLRPC$User> sparseArray2 = this.ignoreUsers;
-            if (sparseArray2 == null) {
+            LongSparseArray<TLRPC$User> longSparseArray2 = this.ignoreUsers;
+            if (longSparseArray2 == null) {
                 return;
             }
-            if (sparseArray2.indexOfKey(user.id) >= 0) {
+            if (longSparseArray2.indexOfKey(user.id) >= 0) {
                 userCell.setAlpha(0.5f);
             } else {
                 userCell.setAlpha(1.0f);

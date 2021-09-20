@@ -31,12 +31,9 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.NumberPicker;
-import org.telegram.ui.Components.ProximitySheet;
 
 public class ProximitySheet extends FrameLayout {
     private int backgroundPaddingLeft;
-    private Paint backgroundPaint = new Paint();
     private TextView buttonTextView;
     private ViewGroup containerView;
     /* access modifiers changed from: private */
@@ -56,7 +53,7 @@ public class ProximitySheet extends FrameLayout {
     private boolean maybeStartTracking = false;
     private Runnable onDismissCallback;
     private onRadiusPickerChange onRadiusChange;
-    private Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
+    private Interpolator openInterpolator;
     private boolean radiusSet;
     private Rect rect = new Rect();
     private boolean startedTracking = false;
@@ -68,7 +65,7 @@ public class ProximitySheet extends FrameLayout {
     private int touchSlop;
     private boolean useFastDismiss;
     /* access modifiers changed from: private */
-    public boolean useHardwareLayer = true;
+    public boolean useHardwareLayer;
     private boolean useImperialSystem;
     private VelocityTracker velocityTracker = null;
 
@@ -76,7 +73,8 @@ public class ProximitySheet extends FrameLayout {
         boolean run(boolean z, int i);
     }
 
-    static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -88,6 +86,9 @@ public class ProximitySheet extends FrameLayout {
     public ProximitySheet(Context context, TLRPC$User tLRPC$User, onRadiusPickerChange onradiuspickerchange, onRadiusPickerChange onradiuspickerchange2, Runnable runnable) {
         super(context);
         Context context2 = context;
+        new Paint();
+        this.useHardwareLayer = true;
+        this.openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
         setWillNotDraw(false);
         this.onDismissCallback = runnable;
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
@@ -96,7 +97,7 @@ public class ProximitySheet extends FrameLayout {
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         mutate.getPadding(rect2);
         this.backgroundPaddingLeft = rect2.left;
-        AnonymousClass1 r7 = new FrameLayout(getContext()) {
+        AnonymousClass1 r7 = new FrameLayout(this, getContext()) {
             public boolean hasOverlappingRendering() {
                 return false;
             }
@@ -153,7 +154,7 @@ public class ProximitySheet extends FrameLayout {
         textView.setTextSize(1, 20.0f);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 12.0f, 0.0f, 0.0f));
-        textView.setOnTouchListener($$Lambda$ProximitySheet$8JSgfDriR7Sm_A4W_RpmFrk2Nc0.INSTANCE);
+        textView.setOnTouchListener(ProximitySheet$$ExternalSyntheticLambda1.INSTANCE);
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
@@ -161,38 +162,26 @@ public class ProximitySheet extends FrameLayout {
         System.currentTimeMillis();
         FrameLayout frameLayout2 = new FrameLayout(context2);
         this.infoTextView = new TextView(context2);
-        this.buttonTextView = new TextView(context2) {
+        this.buttonTextView = new TextView(this, context2) {
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
             }
         };
         linearLayout.addView(this.kmPicker, LayoutHelper.createLinear(0, 270, 0.5f));
-        this.kmPicker.setFormatter(new NumberPicker.Formatter() {
-            public final String format(int i) {
-                return ProximitySheet.this.lambda$new$1$ProximitySheet(i);
-            }
-        });
+        this.kmPicker.setFormatter(new ProximitySheet$$ExternalSyntheticLambda2(this));
         this.kmPicker.setMinValue(0);
         this.kmPicker.setMaxValue(10);
         this.kmPicker.setWrapSelectorWheel(false);
         this.kmPicker.setTextOffset(AndroidUtilities.dp(20.0f));
-        $$Lambda$ProximitySheet$kSKhhel2xcOx0R5nKGVNYqXPQ r1 = new NumberPicker.OnValueChangeListener() {
-            public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-                ProximitySheet.this.lambda$new$2$ProximitySheet(numberPicker, i, i2);
-            }
-        };
-        this.kmPicker.setOnValueChangedListener(r1);
+        ProximitySheet$$ExternalSyntheticLambda4 proximitySheet$$ExternalSyntheticLambda4 = new ProximitySheet$$ExternalSyntheticLambda4(this);
+        this.kmPicker.setOnValueChangedListener(proximitySheet$$ExternalSyntheticLambda4);
         this.mPicker.setMinValue(0);
         this.mPicker.setMaxValue(10);
         this.mPicker.setWrapSelectorWheel(false);
         this.mPicker.setTextOffset(-AndroidUtilities.dp(20.0f));
         linearLayout.addView(this.mPicker, LayoutHelper.createLinear(0, 270, 0.5f));
-        this.mPicker.setFormatter(new NumberPicker.Formatter() {
-            public final String format(int i) {
-                return ProximitySheet.this.lambda$new$3$ProximitySheet(i);
-            }
-        });
-        this.mPicker.setOnValueChangedListener(r1);
+        this.mPicker.setFormatter(new ProximitySheet$$ExternalSyntheticLambda3(this));
+        this.mPicker.setOnValueChangedListener(proximitySheet$$ExternalSyntheticLambda4);
         this.kmPicker.setValue(0);
         this.mPicker.setValue(6);
         this.customView.addView(frameLayout2, LayoutHelper.createLinear(-1, 48, 83, 16, 15, 16, 16));
@@ -204,17 +193,7 @@ public class ProximitySheet extends FrameLayout {
         this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
         frameLayout2.addView(this.buttonTextView, LayoutHelper.createFrame(-1, 48.0f));
-        this.buttonTextView.setOnClickListener(new View.OnClickListener(onradiuspickerchange2) {
-            public final /* synthetic */ ProximitySheet.onRadiusPickerChange f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                ProximitySheet.this.lambda$new$4$ProximitySheet(this.f$1, view);
-            }
-        });
+        this.buttonTextView.setOnClickListener(new ProximitySheet$$ExternalSyntheticLambda0(this, onradiuspickerchange2));
         this.infoTextView.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
         this.infoTextView.setGravity(17);
         this.infoTextView.setTextColor(Theme.getColor("dialogTextGray2"));
@@ -227,8 +206,7 @@ public class ProximitySheet extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ String lambda$new$1$ProximitySheet(int i) {
+    public /* synthetic */ String lambda$new$1(int i) {
         if (this.useImperialSystem) {
             return LocaleController.formatString("MilesShort", NUM, Integer.valueOf(i));
         }
@@ -236,8 +214,7 @@ public class ProximitySheet extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$ProximitySheet(NumberPicker numberPicker, int i, int i2) {
+    public /* synthetic */ void lambda$new$2(NumberPicker numberPicker, int i, int i2) {
         try {
             performHapticFeedback(3, 2);
         } catch (Exception unused) {
@@ -246,8 +223,7 @@ public class ProximitySheet extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ String lambda$new$3$ProximitySheet(int i) {
+    public /* synthetic */ String lambda$new$3(int i) {
         if (this.useImperialSystem) {
             if (i == 1) {
                 return LocaleController.formatString("FootsShort", NUM, 250);
@@ -267,8 +243,7 @@ public class ProximitySheet extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$ProximitySheet(onRadiusPickerChange onradiuspickerchange, View view) {
+    public /* synthetic */ void lambda$new$4(onRadiusPickerChange onradiuspickerchange, View view) {
         if (this.buttonTextView.getTag() == null && onradiuspickerchange.run(true, (int) Math.max(1.0f, getValue()))) {
             dismiss();
         }
@@ -611,7 +586,6 @@ public class ProximitySheet extends FrameLayout {
         if (animatorSet != null) {
             animatorSet.cancel();
             this.currentSheetAnimation = null;
-            this.currentSheetAnimationType = 0;
         }
     }
 
@@ -623,7 +597,6 @@ public class ProximitySheet extends FrameLayout {
             }
             ViewGroup viewGroup = this.containerView;
             viewGroup.setTranslationY((float) viewGroup.getMeasuredHeight());
-            this.currentSheetAnimationType = 1;
             AnimatorSet animatorSet = new AnimatorSet();
             this.currentSheetAnimation = animatorSet;
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.containerView, View.TRANSLATION_Y, new float[]{0.0f})});
@@ -665,7 +638,6 @@ public class ProximitySheet extends FrameLayout {
         if (!this.dismissed) {
             this.dismissed = true;
             cancelSheetAnimation();
-            this.currentSheetAnimationType = 2;
             AnimatorSet animatorSet = new AnimatorSet();
             this.currentSheetAnimation = animatorSet;
             ViewGroup viewGroup = this.containerView;
@@ -683,18 +655,13 @@ public class ProximitySheet extends FrameLayout {
                     if (ProximitySheet.this.currentSheetAnimation != null && ProximitySheet.this.currentSheetAnimation.equals(animator)) {
                         AnimatorSet unused = ProximitySheet.this.currentSheetAnimation = null;
                         int unused2 = ProximitySheet.this.currentSheetAnimationType = 0;
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public final void run() {
-                                ProximitySheet.AnonymousClass6.this.lambda$onAnimationEnd$0$ProximitySheet$6();
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new ProximitySheet$6$$ExternalSyntheticLambda0(this));
                     }
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
                 }
 
                 /* access modifiers changed from: private */
-                /* renamed from: lambda$onAnimationEnd$0 */
-                public /* synthetic */ void lambda$onAnimationEnd$0$ProximitySheet$6() {
+                public /* synthetic */ void lambda$onAnimationEnd$0() {
                     try {
                         ProximitySheet.this.dismissInternal();
                     } catch (Exception e) {

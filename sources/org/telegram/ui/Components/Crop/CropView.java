@@ -61,7 +61,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     /* access modifiers changed from: private */
     public CropViewListener listener;
     private Matrix overlayMatrix;
-    private PaintingOverlay paintingOverlay;
     private RectF previousAreaRect;
     private float rotationStartScale;
     RectF sizeRect = new RectF(0.0f, 0.0f, 1280.0f, 1280.0f);
@@ -299,9 +298,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         this.areaView.setActualRect(f);
     }
 
-    public void setBitmap(Bitmap bitmap2, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay2, CropTransform cropTransform2, VideoEditTextureView videoEditTextureView2, final MediaController.CropState cropState) {
+    public void setBitmap(Bitmap bitmap2, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay, CropTransform cropTransform2, VideoEditTextureView videoEditTextureView2, final MediaController.CropState cropState) {
         this.freeform = z;
-        this.paintingOverlay = paintingOverlay2;
         this.videoEditTextureView = videoEditTextureView2;
         this.cropTransform = cropTransform2;
         this.bitmapRotation = i;
@@ -408,7 +406,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
 
     public void onHide() {
         this.videoEditTextureView = null;
-        this.paintingOverlay = null;
         this.isVisible = false;
     }
 
@@ -479,23 +476,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         float access$2200 = this.state.getOrientedWidth() * ((rectF.centerX() - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth());
         float centerY = ((rectF.centerY() - (((((float) this.imageView.getHeight()) - this.bottomPadding) + f2) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight();
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(f, fArr, access$2200, centerY) {
-            public final /* synthetic */ float f$1;
-            public final /* synthetic */ float[] f$2;
-            public final /* synthetic */ float f$3;
-            public final /* synthetic */ float f$4;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
-
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                CropView.this.lambda$fillAreaView$0$CropView(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new CropView$$ExternalSyntheticLambda1(this, f, fArr, access$2200, centerY));
         ofFloat.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (z2) {
@@ -508,8 +489,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$fillAreaView$0 */
-    public /* synthetic */ void lambda$fillAreaView$0$CropView(float f, float[] fArr, float f2, float f3, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$fillAreaView$0(float f, float[] fArr, float f2, float f3, ValueAnimator valueAnimator) {
         float floatValue = (((f - 1.0f) * ((Float) valueAnimator.getAnimatedValue()).floatValue()) + 1.0f) / fArr[0];
         fArr[0] = fArr[0] * floatValue;
         this.state.scale(floatValue, f2, f3);
@@ -671,23 +651,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                 if (Math.abs(f2 - 1.0f) >= 1.0E-5f || Math.abs(access$2700) >= 1.0E-5f || Math.abs(access$2800) >= 1.0E-5f) {
                     this.animating = true;
                     ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(access$2700, new float[]{1.0f, 0.0f, 0.0f}, access$2800, f2) {
-                        public final /* synthetic */ float f$1;
-                        public final /* synthetic */ float[] f$2;
-                        public final /* synthetic */ float f$3;
-                        public final /* synthetic */ float f$4;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                        }
-
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            CropView.this.lambda$fitContentInBounds$1$CropView(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
-                        }
-                    });
+                    ofFloat.addUpdateListener(new CropView$$ExternalSyntheticLambda0(this, access$2700, new float[]{1.0f, 0.0f, 0.0f}, access$2800, f2));
                     final boolean z5 = z4;
                     final boolean z6 = z;
                     final boolean z7 = z2;
@@ -714,8 +678,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$fitContentInBounds$1 */
-    public /* synthetic */ void lambda$fitContentInBounds$1$CropView(float f, float[] fArr, float f2, float f3, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$fitContentInBounds$1(float f, float[] fArr, float f2, float f3, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         float f4 = (f * floatValue) - fArr[1];
         fArr[1] = fArr[1] + f4;
@@ -1179,30 +1142,15 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                 }
                 i++;
             }
-            AlertDialog create = new AlertDialog.Builder(getContext()).setItems(strArr, new DialogInterface.OnClickListener(numArr) {
-                public final /* synthetic */ Integer[][] f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    CropView.this.lambda$showAspectRatioDialog$2$CropView(this.f$1, dialogInterface, i);
-                }
-            }).create();
+            AlertDialog create = new AlertDialog.Builder(getContext()).setItems(strArr, new CropView$$ExternalSyntheticLambda3(this, numArr)).create();
             create.setCanceledOnTouchOutside(true);
-            create.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public final void onCancel(DialogInterface dialogInterface) {
-                    CropView.this.lambda$showAspectRatioDialog$3$CropView(dialogInterface);
-                }
-            });
+            create.setOnCancelListener(new CropView$$ExternalSyntheticLambda2(this));
             create.show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showAspectRatioDialog$2 */
-    public /* synthetic */ void lambda$showAspectRatioDialog$2$CropView(Integer[][] numArr, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showAspectRatioDialog$2(Integer[][] numArr, DialogInterface dialogInterface, int i) {
         this.hasAspectRatioDialog = false;
         if (i == 0) {
             setLockedAspectRatio((this.state.getBaseRotation() % 180.0f != 0.0f ? this.state.getHeight() : this.state.getWidth()) / (this.state.getBaseRotation() % 180.0f != 0.0f ? this.state.getWidth() : this.state.getHeight()));
@@ -1219,8 +1167,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showAspectRatioDialog$3 */
-    public /* synthetic */ void lambda$showAspectRatioDialog$3$CropView(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showAspectRatioDialog$3(DialogInterface dialogInterface) {
         this.hasAspectRatioDialog = false;
     }
 

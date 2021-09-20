@@ -87,7 +87,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             backupImageView.getImageReceiver().setNeedsQualityThumb(true);
             this.imageView.getImageReceiver().setShouldGenerateQualityThumb(true);
             this.container.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
-            AnonymousClass1 r1 = new FrameLayout(context, SharedPhotoVideoCell.this) {
+            AnonymousClass1 r1 = new FrameLayout(this, context, SharedPhotoVideoCell.this) {
                 private RectF rect = new RectF();
 
                 /* access modifiers changed from: protected */
@@ -288,22 +288,13 @@ public class SharedPhotoVideoCell extends FrameLayout {
             addView(this.photoVideoViews[i2]);
             this.photoVideoViews[i2].setVisibility(4);
             this.photoVideoViews[i2].setTag(Integer.valueOf(i2));
-            this.photoVideoViews[i2].setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    SharedPhotoVideoCell.this.lambda$new$0$SharedPhotoVideoCell(view);
-                }
-            });
-            this.photoVideoViews[i2].setOnLongClickListener(new View.OnLongClickListener() {
-                public final boolean onLongClick(View view) {
-                    return SharedPhotoVideoCell.this.lambda$new$1$SharedPhotoVideoCell(view);
-                }
-            });
+            this.photoVideoViews[i2].setOnClickListener(new SharedPhotoVideoCell$$ExternalSyntheticLambda0(this));
+            this.photoVideoViews[i2].setOnLongClickListener(new SharedPhotoVideoCell$$ExternalSyntheticLambda1(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$SharedPhotoVideoCell(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         if (this.delegate != null) {
             int intValue = ((Integer) view.getTag()).intValue();
             this.delegate.didClickItem(this, this.indeces[intValue], this.messageObjects[intValue], intValue);
@@ -311,8 +302,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ boolean lambda$new$1$SharedPhotoVideoCell(View view) {
+    public /* synthetic */ boolean lambda$new$1(View view) {
         if (this.delegate == null) {
             return false;
         }

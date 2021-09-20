@@ -17,7 +17,7 @@ public abstract class TLRPC$User extends TLObject {
     public boolean fake;
     public String first_name;
     public int flags;
-    public int id;
+    public long id;
     public boolean inactive;
     public String lang_code;
     public String last_name;
@@ -38,7 +38,7 @@ public abstract class TLRPC$User extends TLObject {
         TLRPC$User tLRPC$User;
         switch (i) {
             case -1820043071:
-                tLRPC$User = new TLRPC$TL_user();
+                tLRPC$User = new TLRPC$TL_user_layer131();
                 break;
             case -1298475060:
                 tLRPC$User = new TLRPC$TL_userDeleted_old();
@@ -48,6 +48,9 @@ public abstract class TLRPC$User extends TLObject {
                 break;
             case -787638374:
                 tLRPC$User = new TLRPC$TL_user_layer65();
+                break;
+            case -742634630:
+                tLRPC$User = new TLRPC$TL_userEmpty();
                 break;
             case -704549510:
                 tLRPC$User = new TLRPC$TL_userDeleted_old2();
@@ -65,7 +68,7 @@ public abstract class TLRPC$User extends TLObject {
                 tLRPC$User = new TLRPC$TL_userSelf_old3();
                 break;
             case 537022650:
-                tLRPC$User = new TLRPC$TL_userEmpty();
+                tLRPC$User = new TLRPC$TL_userEmpty_layer131();
                 break;
             case 585404530:
                 tLRPC$User = new TLRPC$TL_user_old();
@@ -75,6 +78,9 @@ public abstract class TLRPC$User extends TLObject {
                 break;
             case 773059779:
                 tLRPC$User = new TLRPC$TL_user_layer104();
+                break;
+            case 1073147056:
+                tLRPC$User = new TLRPC$TL_user();
                 break;
             case 1377093789:
                 tLRPC$User = new TLRPC$TL_userForeign_old();

@@ -72,7 +72,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.ShareAlert;
-import org.telegram.ui.ThemeActivity;
+import org.telegram.ui.Components.SwipeGestureSettingsView;
 
 public class ThemeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
@@ -117,7 +117,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     public int enableAnimationsRow;
     private GpsLocationListener gpsLocationListener = new GpsLocationListener();
     boolean hasThemeAccents;
-    private LinearLayoutManager layoutManager;
     /* access modifiers changed from: private */
     public ListAdapter listAdapter;
     /* access modifiers changed from: private */
@@ -509,7 +508,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 }
             }
         }
-        Collections.sort(this.defaultThemes, $$Lambda$ThemeActivity$UM18aTc2VkvPUFpY4hL9yY8ZWDA.INSTANCE);
+        Collections.sort(this.defaultThemes, ThemeActivity$$ExternalSyntheticLambda7.INSTANCE);
         int i8 = 2;
         if (this.currentType == 0) {
             int i9 = this.rowCount;
@@ -871,11 +870,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 AlertDialog alertDialog3 = new AlertDialog(getParentActivity(), 3);
                 this.sharingProgressDialog = alertDialog3;
                 alertDialog3.setCanCacnel(true);
-                showDialog(this.sharingProgressDialog, new DialogInterface.OnDismissListener() {
-                    public final void onDismiss(DialogInterface dialogInterface) {
-                        ThemeActivity.this.lambda$didReceivedNotification$1$ThemeActivity(dialogInterface);
-                    }
-                });
+                showDialog(this.sharingProgressDialog, new ThemeActivity$$ExternalSyntheticLambda4(this));
             }
         } else if (i == NotificationCenter.needSetDayNightTheme) {
             updateMenuItem();
@@ -883,8 +878,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$1 */
-    public /* synthetic */ void lambda$didReceivedNotification$1$ThemeActivity(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$didReceivedNotification$1(DialogInterface dialogInterface) {
         this.sharingProgressDialog = null;
         this.sharingTheme = null;
         this.sharingAccent = null;
@@ -918,11 +912,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         builder.setTitle(LocaleController.getString("NewTheme", NUM));
                         builder.setMessage(LocaleController.getString("CreateNewThemeAlert", NUM));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-                        builder.setPositiveButton(LocaleController.getString("CreateTheme", NUM), new DialogInterface.OnClickListener() {
-                            public final void onClick(DialogInterface dialogInterface, int i) {
-                                ThemeActivity.AnonymousClass1.this.lambda$onItemClick$0$ThemeActivity$1(dialogInterface, i);
-                            }
-                        });
+                        builder.setPositiveButton(LocaleController.getString("CreateTheme", NUM), new ThemeActivity$1$$ExternalSyntheticLambda0(this));
                         ThemeActivity.this.showDialog(builder.create());
                     }
                 } else if (i == 2) {
@@ -943,11 +933,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) ThemeActivity.this.getParentActivity());
                     builder2.setTitle(LocaleController.getString("ThemeResetToDefaultsTitle", NUM));
                     builder2.setMessage(LocaleController.getString("ThemeResetToDefaultsText", NUM));
-                    builder2.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ThemeActivity.AnonymousClass1.this.lambda$onItemClick$1$ThemeActivity$1(dialogInterface, i);
-                        }
-                    });
+                    builder2.setPositiveButton(LocaleController.getString("Reset", NUM), new ThemeActivity$1$$ExternalSyntheticLambda1(this));
                     builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     AlertDialog create = builder2.create();
                     ThemeActivity.this.showDialog(create);
@@ -959,14 +945,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$0 */
-            public /* synthetic */ void lambda$onItemClick$0$ThemeActivity$1(DialogInterface dialogInterface, int i) {
+            public /* synthetic */ void lambda$onItemClick$0(DialogInterface dialogInterface, int i) {
                 AlertsCreator.createThemeCreateDialog(ThemeActivity.this, 0, (Theme.ThemeInfo) null, (Theme.ThemeAccent) null);
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$1 */
-            public /* synthetic */ void lambda$onItemClick$1$ThemeActivity$1(DialogInterface dialogInterface, int i) {
+            public /* synthetic */ void lambda$onItemClick$1(DialogInterface dialogInterface, int i) {
                 boolean access$500 = ThemeActivity.this.setFontSize(AndroidUtilities.isTablet() ? 18 : 16);
                 if (ThemeActivity.this.setBubbleRadius(10, true)) {
                     access$500 = true;
@@ -1018,24 +1002,17 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         this.fragmentView = frameLayout;
         RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
-        this.layoutManager = linearLayoutManager;
-        recyclerListView.setLayoutManager(linearLayoutManager);
+        recyclerListView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setAdapter(this.listAdapter);
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
-            public final void onItemClick(View view, int i, float f, float f2) {
-                ThemeActivity.this.lambda$createView$5$ThemeActivity(view, i, f, f2);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new ThemeActivity$$ExternalSyntheticLambda8(this));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$5 */
-    public /* synthetic */ void lambda$createView$5$ThemeActivity(View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$createView$5(View view, int i, float f, float f2) {
         int i2;
         int i3;
         String str;
@@ -1077,11 +1054,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             if (getParentActivity() != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                 builder.setTitle(LocaleController.getString("DistanceUnitsTitle", NUM));
-                builder.setItems(new CharSequence[]{LocaleController.getString("DistanceUnitsAutomatic", NUM), LocaleController.getString("DistanceUnitsKilometers", NUM), LocaleController.getString("DistanceUnitsMiles", NUM)}, new DialogInterface.OnClickListener() {
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        ThemeActivity.this.lambda$createView$2$ThemeActivity(dialogInterface, i);
-                    }
-                });
+                builder.setItems(new CharSequence[]{LocaleController.getString("DistanceUnitsAutomatic", NUM), LocaleController.getString("DistanceUnitsKilometers", NUM), LocaleController.getString("DistanceUnitsMiles", NUM)}, new ThemeActivity$$ExternalSyntheticLambda1(this));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 showDialog(builder.create());
             }
@@ -1100,17 +1073,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 if (getParentActivity() != null) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
                     builder2.setTitle(LocaleController.getString("SortBy", NUM));
-                    builder2.setItems(new CharSequence[]{LocaleController.getString("Default", NUM), LocaleController.getString("SortFirstName", NUM), LocaleController.getString("SortLastName", NUM)}, new DialogInterface.OnClickListener(i) {
-                        public final /* synthetic */ int f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ThemeActivity.this.lambda$createView$3$ThemeActivity(this.f$1, dialogInterface, i);
-                        }
-                    });
+                    builder2.setItems(new CharSequence[]{LocaleController.getString("Default", NUM), LocaleController.getString("SortFirstName", NUM), LocaleController.getString("SortLastName", NUM)}, new ThemeActivity$$ExternalSyntheticLambda3(this, i));
                     builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     showDialog(builder2.create());
                 }
@@ -1197,19 +1160,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         i3 = Theme.autoNightDayEndTime;
                         i2 = i3 / 60;
                     }
-                    showDialog(new TimePickerDialog(getParentActivity(), new TimePickerDialog.OnTimeSetListener(i, (TextSettingsCell) view) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ TextSettingsCell f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void onTimeSet(TimePicker timePicker, int i, int i2) {
-                            ThemeActivity.this.lambda$createView$4$ThemeActivity(this.f$1, this.f$2, timePicker, i, i2);
-                        }
-                    }, i2, i3 - (i2 * 60), true));
+                    showDialog(new TimePickerDialog(getParentActivity(), new ThemeActivity$$ExternalSyntheticLambda0(this, i, (TextSettingsCell) view), i2, i3 - (i2 * 60), true));
                 }
             } else if (i == this.scheduleUpdateLocationRow) {
                 updateSunTime((Location) null, true);
@@ -1218,8 +1169,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$ThemeActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$2(DialogInterface dialogInterface, int i) {
         SharedConfig.setDistanceSystemType(i);
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.distanceRow);
         if (findViewHolderForAdapterPosition != null) {
@@ -1228,8 +1178,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$ThemeActivity(int i, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$createView$3(int i, DialogInterface dialogInterface, int i2) {
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("sortContactsBy", i2);
         edit.commit();
@@ -1240,8 +1189,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$ThemeActivity(int i, TextSettingsCell textSettingsCell, TimePicker timePicker, int i2, int i3) {
+    public /* synthetic */ void lambda$createView$4(int i, TextSettingsCell textSettingsCell, TimePicker timePicker, int i2, int i3) {
         int i4 = (i2 * 60) + i3;
         if (i == this.scheduleFromRow) {
             Theme.autoNightDayStartTime = i4;
@@ -1302,11 +1250,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                             builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", NUM));
                             builder.setMessage(LocaleController.getString("GpsDisabledAlertText", NUM));
-                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new DialogInterface.OnClickListener() {
-                                public final void onClick(DialogInterface dialogInterface, int i) {
-                                    ThemeActivity.this.lambda$updateSunTime$6$ThemeActivity(dialogInterface, i);
-                                }
-                            });
+                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new ThemeActivity$$ExternalSyntheticLambda2(this));
                             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                             showDialog(builder.create());
                             return;
@@ -1344,11 +1288,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             Calendar instance = Calendar.getInstance();
             instance.setTimeInMillis(System.currentTimeMillis());
             Theme.autoNightLastSunCheckDay = instance.get(5);
-            Utilities.globalQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    ThemeActivity.this.lambda$updateSunTime$8$ThemeActivity();
-                }
-            });
+            Utilities.globalQueue.postRunnable(new ThemeActivity$$ExternalSyntheticLambda5(this));
             RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findViewHolderForAdapterPosition(this.scheduleLocationInfoRow);
             if (holder != null) {
                 View view = holder.itemView;
@@ -1366,8 +1306,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateSunTime$6 */
-    public /* synthetic */ void lambda$updateSunTime$6$ThemeActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$updateSunTime$6(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
                 getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
@@ -1377,8 +1316,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateSunTime$8 */
-    public /* synthetic */ void lambda$updateSunTime$8$ThemeActivity() {
+    public /* synthetic */ void lambda$updateSunTime$8() {
         String str = null;
         try {
             List<Address> fromLocation = new Geocoder(ApplicationLoader.applicationContext, Locale.getDefault()).getFromLocation(Theme.autoNightLocationLatitude, Theme.autoNightLocationLongitude, 1);
@@ -1387,22 +1325,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
         } catch (Exception unused) {
         }
-        AndroidUtilities.runOnUIThread(new Runnable(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ThemeActivity.this.lambda$updateSunTime$7$ThemeActivity(this.f$1);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ThemeActivity$$ExternalSyntheticLambda6(this, str));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateSunTime$7 */
-    public /* synthetic */ void lambda$updateSunTime$7$ThemeActivity(String str) {
+    public /* synthetic */ void lambda$updateSunTime$7(String str) {
         RecyclerListView.Holder holder;
         Theme.autoNightCityName = str;
         if (str == null) {
@@ -1710,17 +1637,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     z = z2;
                     charSequenceArr = charSequenceArr2;
                 }
-                builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener(themeInfo) {
-                    public final /* synthetic */ Theme.ThemeInfo f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onClick(DialogInterface dialogInterface, int i) {
-                        ThemeActivity.ListAdapter.this.lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(this.f$1, dialogInterface, i);
-                    }
-                });
+                builder.setItems(charSequenceArr, iArr, new ThemeActivity$ListAdapter$$ExternalSyntheticLambda2(this, themeInfo));
                 AlertDialog create = builder.create();
                 ThemeActivity.this.showDialog(create);
                 if (z) {
@@ -1731,15 +1648,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
         /* access modifiers changed from: private */
         /* JADX WARNING: Can't wrap try/catch for region: R(4:59|60|61|62) */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:61:0x0151 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:61:0x0152 */
         /* JADX WARNING: Removed duplicated region for block: B:34:0x00d8 A[SYNTHETIC, Splitter:B:34:0x00d8] */
         /* JADX WARNING: Removed duplicated region for block: B:39:0x00e3 A[SYNTHETIC, Splitter:B:39:0x00e3] */
         /* JADX WARNING: Removed duplicated region for block: B:50:0x0106  */
-        /* JADX WARNING: Removed duplicated region for block: B:55:0x0129 A[Catch:{ Exception -> 0x0176 }, RETURN] */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x012a A[Catch:{ Exception -> 0x0176 }] */
-        /* renamed from: lambda$showOptionsForTheme$1 */
+        /* JADX WARNING: Removed duplicated region for block: B:55:0x0129 A[Catch:{ Exception -> 0x0177 }, RETURN] */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x012a A[Catch:{ Exception -> 0x0177 }] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(org.telegram.ui.ActionBar.Theme.ThemeInfo r8, android.content.DialogInterface r9, int r10) {
+        public /* synthetic */ void lambda$showOptionsForTheme$1(org.telegram.ui.ActionBar.Theme.ThemeInfo r8, android.content.DialogInterface r9, int r10) {
             /*
                 r7 = this;
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this
@@ -1763,7 +1679,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r0[r9] = r8
                 r0[r2] = r1
                 r10.postNotificationName(r3, r0)
-                goto L_0x0213
+                goto L_0x0214
             L_0x002d:
                 java.lang.StringBuilder r9 = new java.lang.StringBuilder
                 r9.<init>()
@@ -1790,9 +1706,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r3 = r5
                 r0.<init>(r1, r2, r3, r4, r5, r6)
                 r8.showDialog(r9)
-                goto L_0x0213
+                goto L_0x0214
             L_0x0069:
-                if (r10 != r2) goto L_0x017c
+                if (r10 != r2) goto L_0x017d
                 java.lang.String r9 = r8.pathToFile
                 if (r9 != 0) goto L_0x00ec
                 java.lang.String r9 = r8.assetName
@@ -1885,51 +1801,51 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 java.io.File r0 = org.telegram.messenger.FileLoader.getDirectory(r0)
                 java.lang.String r8 = org.telegram.messenger.FileLoader.fixFileName(r8)
                 r9.<init>(r0, r8)
-                boolean r8 = org.telegram.messenger.AndroidUtilities.copyFile((java.io.File) r10, (java.io.File) r9)     // Catch:{ Exception -> 0x0176 }
+                boolean r8 = org.telegram.messenger.AndroidUtilities.copyFile((java.io.File) r10, (java.io.File) r9)     // Catch:{ Exception -> 0x0177 }
                 if (r8 != 0) goto L_0x012a
                 return
             L_0x012a:
-                android.content.Intent r8 = new android.content.Intent     // Catch:{ Exception -> 0x0176 }
+                android.content.Intent r8 = new android.content.Intent     // Catch:{ Exception -> 0x0177 }
                 java.lang.String r10 = "android.intent.action.SEND"
-                r8.<init>(r10)     // Catch:{ Exception -> 0x0176 }
+                r8.<init>(r10)     // Catch:{ Exception -> 0x0177 }
                 java.lang.String r10 = "text/xml"
-                r8.setType(r10)     // Catch:{ Exception -> 0x0176 }
-                int r10 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0176 }
+                r8.setType(r10)     // Catch:{ Exception -> 0x0177 }
+                int r10 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0177 }
                 r0 = 24
                 java.lang.String r1 = "android.intent.extra.STREAM"
-                if (r10 < r0) goto L_0x0159
-                org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0151 }
-                android.app.Activity r10 = r10.getParentActivity()     // Catch:{ Exception -> 0x0151 }
+                if (r10 < r0) goto L_0x015a
+                org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0152 }
+                android.app.Activity r10 = r10.getParentActivity()     // Catch:{ Exception -> 0x0152 }
                 java.lang.String r0 = "org.telegram.messenger.web.provider"
-                android.net.Uri r10 = androidx.core.content.FileProvider.getUriForFile(r10, r0, r9)     // Catch:{ Exception -> 0x0151 }
-                r8.putExtra(r1, r10)     // Catch:{ Exception -> 0x0151 }
-                r8.setFlags(r2)     // Catch:{ Exception -> 0x0151 }
-                goto L_0x0160
-            L_0x0151:
-                android.net.Uri r9 = android.net.Uri.fromFile(r9)     // Catch:{ Exception -> 0x0176 }
-                r8.putExtra(r1, r9)     // Catch:{ Exception -> 0x0176 }
-                goto L_0x0160
-            L_0x0159:
-                android.net.Uri r9 = android.net.Uri.fromFile(r9)     // Catch:{ Exception -> 0x0176 }
-                r8.putExtra(r1, r9)     // Catch:{ Exception -> 0x0176 }
-            L_0x0160:
-                org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0176 }
+                android.net.Uri r10 = androidx.core.content.FileProvider.getUriForFile(r10, r0, r9)     // Catch:{ Exception -> 0x0152 }
+                r8.putExtra(r1, r10)     // Catch:{ Exception -> 0x0152 }
+                r8.setFlags(r2)     // Catch:{ Exception -> 0x0152 }
+                goto L_0x0161
+            L_0x0152:
+                android.net.Uri r9 = android.net.Uri.fromFile(r9)     // Catch:{ Exception -> 0x0177 }
+                r8.putExtra(r1, r9)     // Catch:{ Exception -> 0x0177 }
+                goto L_0x0161
+            L_0x015a:
+                android.net.Uri r9 = android.net.Uri.fromFile(r9)     // Catch:{ Exception -> 0x0177 }
+                r8.putExtra(r1, r9)     // Catch:{ Exception -> 0x0177 }
+            L_0x0161:
+                org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0177 }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627623(0x7f0e0e67, float:1.8882516E38)
-                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x0176 }
-                android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x0176 }
+                r0 = 2131627657(0x7f0e0e89, float:1.8882585E38)
+                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x0177 }
+                android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x0177 }
                 r10 = 500(0x1f4, float:7.0E-43)
-                r9.startActivityForResult(r8, r10)     // Catch:{ Exception -> 0x0176 }
-                goto L_0x0213
-            L_0x0176:
+                r9.startActivityForResult(r8, r10)     // Catch:{ Exception -> 0x0177 }
+                goto L_0x0214
+            L_0x0177:
                 r8 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-                goto L_0x0213
-            L_0x017c:
-                if (r10 != r0) goto L_0x01a1
+                goto L_0x0214
+            L_0x017d:
+                if (r10 != r0) goto L_0x01a2
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this
                 org.telegram.ui.ActionBar.ActionBarLayout r9 = r9.parentLayout
-                if (r9 == 0) goto L_0x0213
+                if (r9 == 0) goto L_0x0214
                 org.telegram.ui.ActionBar.Theme.applyTheme(r8)
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this
                 org.telegram.ui.ActionBar.ActionBarLayout r9 = r9.parentLayout
@@ -1939,38 +1855,38 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.show(r10, r8)
-                goto L_0x0213
-            L_0x01a1:
+                goto L_0x0214
+            L_0x01a2:
                 r0 = 3
-                if (r10 != r0) goto L_0x01af
+                if (r10 != r0) goto L_0x01b0
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 org.telegram.ui.ThemeSetUrlActivity r0 = new org.telegram.ui.ThemeSetUrlActivity
                 r0.<init>(r8, r1, r9)
                 r10.presentFragment(r0)
-                goto L_0x0213
-            L_0x01af:
+                goto L_0x0214
+            L_0x01b0:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r9 = r9.getParentActivity()
-                if (r9 != 0) goto L_0x01b8
+                if (r9 != 0) goto L_0x01b9
                 return
-            L_0x01b8:
+            L_0x01b9:
                 org.telegram.ui.ActionBar.AlertDialog$Builder r9 = new org.telegram.ui.ActionBar.AlertDialog$Builder
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625196(0x7f0e04ec, float:1.8877593E38)
+                r10 = 2131625209(0x7f0e04f9, float:1.887762E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625195(0x7f0e04eb, float:1.8877591E38)
+                r10 = 2131625208(0x7f0e04f8, float:1.8877617E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131625137(0x7f0e04b1, float:1.8877473E38)
+                r10 = 2131625150(0x7f0e04be, float:1.88775E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
-                org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$4GGCTaKlztIhin-v1UmHzaQzF6I r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$4GGCTaKlztIhin-v1UmHzaQzF6I
-                r0.<init>(r8)
+                org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1
+                r0.<init>(r7, r8)
                 r9.setPositiveButton(r10, r0)
                 r8 = 2131624663(0x7f0e02d7, float:1.8876512E38)
                 java.lang.String r10 = "Cancel"
@@ -1982,19 +1898,18 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r9 = -1
                 android.view.View r8 = r8.getButton(r9)
                 android.widget.TextView r8 = (android.widget.TextView) r8
-                if (r8 == 0) goto L_0x0213
+                if (r8 == 0) goto L_0x0214
                 java.lang.String r9 = "dialogTextRed2"
                 int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
                 r8.setTextColor(r9)
-            L_0x0213:
+            L_0x0214:
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeActivity.ListAdapter.lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(org.telegram.ui.ActionBar.Theme$ThemeInfo, android.content.DialogInterface, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeActivity.ListAdapter.lambda$showOptionsForTheme$1(org.telegram.ui.ActionBar.Theme$ThemeInfo, android.content.DialogInterface, int):void");
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$showOptionsForTheme$0 */
-        public /* synthetic */ void lambda$showOptionsForTheme$0$ThemeActivity$ListAdapter(Theme.ThemeInfo themeInfo, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$showOptionsForTheme$0(Theme.ThemeInfo themeInfo, DialogInterface dialogInterface, int i) {
             MessagesController.getInstance(themeInfo.account).saveTheme(themeInfo, (Theme.ThemeAccent) null, themeInfo == Theme.getCurrentNightTheme(), true);
             if (Theme.deleteTheme(themeInfo)) {
                 ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true, true);
@@ -2003,8 +1918,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$2 */
-        public /* synthetic */ void lambda$onCreateViewHolder$2$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, RecyclerListView recyclerListView, View view, int i) {
+        public /* synthetic */ void lambda$onCreateViewHolder$2(ThemeAccentsListAdapter themeAccentsListAdapter, RecyclerListView recyclerListView, View view, int i) {
             Theme.ThemeInfo currentNightTheme = ThemeActivity.this.currentType == 1 ? Theme.getCurrentNightTheme() : Theme.getCurrentTheme();
             if (i == themeAccentsListAdapter.getItemCount() - 1) {
                 ThemeActivity themeActivity = ThemeActivity.this;
@@ -2052,8 +1966,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$5 */
-        public /* synthetic */ boolean lambda$onCreateViewHolder$5$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, View view, int i) {
+        public /* synthetic */ boolean lambda$onCreateViewHolder$5(ThemeAccentsListAdapter themeAccentsListAdapter, View view, int i) {
             if (i >= 0 && i < themeAccentsListAdapter.themeAccents.size()) {
                 Theme.ThemeAccent themeAccent = (Theme.ThemeAccent) themeAccentsListAdapter.themeAccents.get(i);
                 if (themeAccent.id >= 100) {
@@ -2064,19 +1977,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     TLRPC$TL_theme tLRPC$TL_theme = themeAccent.info;
                     charSequenceArr[2] = (tLRPC$TL_theme == null || !tLRPC$TL_theme.creator) ? null : LocaleController.getString("ThemeSetUrl", NUM);
                     charSequenceArr[3] = LocaleController.getString("DeleteTheme", NUM);
-                    builder.setItems(charSequenceArr, new int[]{NUM, NUM, NUM, NUM}, new DialogInterface.OnClickListener(themeAccent, themeAccentsListAdapter) {
-                        public final /* synthetic */ Theme.ThemeAccent f$1;
-                        public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ThemeActivity.ListAdapter.this.lambda$onCreateViewHolder$4$ThemeActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
-                        }
-                    });
+                    builder.setItems(charSequenceArr, new int[]{NUM, NUM, NUM, NUM}, new ThemeActivity$ListAdapter$$ExternalSyntheticLambda0(this, themeAccent, themeAccentsListAdapter));
                     AlertDialog create = builder.create();
                     ThemeActivity.this.showDialog(create);
                     create.setItemColor(create.getItemsCount() - 1, Theme.getColor("dialogTextRed2"), Theme.getColor("dialogRedIcon"));
@@ -2087,8 +1988,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$4 */
-        public /* synthetic */ void lambda$onCreateViewHolder$4$ThemeActivity$ListAdapter(Theme.ThemeAccent themeAccent, ThemeAccentsListAdapter themeAccentsListAdapter, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$onCreateViewHolder$4(Theme.ThemeAccent themeAccent, ThemeAccentsListAdapter themeAccentsListAdapter, DialogInterface dialogInterface, int i) {
             if (ThemeActivity.this.getParentActivity() != null) {
                 int i2 = 2;
                 if (i == 0) {
@@ -2111,19 +2011,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) ThemeActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("DeleteThemeTitle", NUM));
                     builder.setMessage(LocaleController.getString("DeleteThemeAlert", NUM));
-                    builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(themeAccentsListAdapter, themeAccent) {
-                        public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
-                        public final /* synthetic */ Theme.ThemeAccent f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            ThemeActivity.ListAdapter.this.lambda$onCreateViewHolder$3$ThemeActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
-                        }
-                    });
+                    builder.setPositiveButton(LocaleController.getString("Delete", NUM), new ThemeActivity$ListAdapter$$ExternalSyntheticLambda3(this, themeAccentsListAdapter, themeAccent));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     AlertDialog create = builder.create();
                     ThemeActivity.this.showDialog(create);
@@ -2136,8 +2024,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$3 */
-        public /* synthetic */ void lambda$onCreateViewHolder$3$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, Theme.ThemeAccent themeAccent, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$onCreateViewHolder$3(ThemeAccentsListAdapter themeAccentsListAdapter, Theme.ThemeAccent themeAccent, DialogInterface dialogInterface, int i) {
             if (Theme.deleteThemeAccent(themeAccentsListAdapter.currentTheme, themeAccent, true)) {
                 Theme.refreshThemeColors();
                 NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
@@ -2205,7 +2092,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 9:
-                    view = new ChatListCell(this.mContext) {
+                    view = new ChatListCell(this, this.mContext) {
                         /* access modifiers changed from: protected */
                         public void didSelectChatType(boolean z) {
                             SharedConfig.setUseThreeLinesLayout(z);
@@ -2241,7 +2128,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     recyclerListView.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(148.0f)));
                     break;
                 case 12:
-                    recyclerListView = new TintRecyclerListView(this.mContext) {
+                    recyclerListView = new TintRecyclerListView(this, this.mContext) {
                         public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                             if (!(getParent() == null || getParent().getParent() == null)) {
                                 getParent().getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(-1));
@@ -2260,30 +2147,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     recyclerListView.setLayoutManager(linearLayoutManager);
                     ThemeAccentsListAdapter themeAccentsListAdapter = new ThemeAccentsListAdapter(this.mContext);
                     recyclerListView.setAdapter(themeAccentsListAdapter);
-                    recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(themeAccentsListAdapter, recyclerListView) {
-                        public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
-                        public final /* synthetic */ RecyclerListView f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void onItemClick(View view, int i) {
-                            ThemeActivity.ListAdapter.this.lambda$onCreateViewHolder$2$ThemeActivity$ListAdapter(this.f$1, this.f$2, view, i);
-                        }
-                    });
-                    recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener(themeAccentsListAdapter) {
-                        public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final boolean onItemClick(View view, int i) {
-                            return ThemeActivity.ListAdapter.this.lambda$onCreateViewHolder$5$ThemeActivity$ListAdapter(this.f$1, view, i);
-                        }
-                    });
+                    recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ThemeActivity$ListAdapter$$ExternalSyntheticLambda4(this, themeAccentsListAdapter, recyclerListView));
+                    recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ThemeActivity$ListAdapter$$ExternalSyntheticLambda5(this, themeAccentsListAdapter));
                     recyclerListView.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(62.0f)));
                     break;
                 case 13:

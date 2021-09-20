@@ -52,13 +52,14 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     boolean paused;
     private String phone;
     /* access modifiers changed from: private */
-    public int user_id;
+    public long user_id;
 
     public interface ContactAddActivityDelegate {
         void didAddToContacts();
     }
 
-    static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -68,12 +69,12 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     public boolean onFragmentCreate() {
         getNotificationCenter().addObserver(this, NotificationCenter.updateInterfaces);
-        this.user_id = getArguments().getInt("user_id", 0);
+        this.user_id = getArguments().getLong("user_id", 0);
         this.phone = getArguments().getString("phone");
         this.addContact = getArguments().getBoolean("addContact", false);
         SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
         this.needAddException = notificationsSettings.getBoolean("dialog_bar_exception" + this.user_id, false);
-        if (getMessagesController().getUser(Integer.valueOf(this.user_id)) == null || !super.onFragmentCreate()) {
+        if (getMessagesController().getUser(Long.valueOf(this.user_id)) == null || !super.onFragmentCreate()) {
             return false;
         }
         return true;
@@ -99,14 +100,14 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 if (i == -1) {
                     ContactAddActivity.this.finishFragment();
                 } else if (i == 1 && ContactAddActivity.this.firstNameField.getText().length() != 0) {
-                    TLRPC$User user = ContactAddActivity.this.getMessagesController().getUser(Integer.valueOf(ContactAddActivity.this.user_id));
+                    TLRPC$User user = ContactAddActivity.this.getMessagesController().getUser(Long.valueOf(ContactAddActivity.this.user_id));
                     user.first_name = ContactAddActivity.this.firstNameField.getText().toString();
                     user.last_name = ContactAddActivity.this.lastNameField.getText().toString();
                     ContactAddActivity.this.getContactsController().addContact(user, ContactAddActivity.this.checkBoxCell != null && ContactAddActivity.this.checkBoxCell.isChecked());
                     SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(ContactAddActivity.this.currentAccount).edit();
                     edit.putInt("dialog_bar_vis3" + ContactAddActivity.this.user_id, 3).commit();
-                    ContactAddActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, 1);
-                    ContactAddActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, Long.valueOf((long) ContactAddActivity.this.user_id));
+                    ContactAddActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_NAME));
+                    ContactAddActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, Long.valueOf(ContactAddActivity.this.user_id));
                     ContactAddActivity.this.finishFragment();
                     if (ContactAddActivity.this.delegate != null) {
                         ContactAddActivity.this.delegate.didAddToContacts();
@@ -119,7 +120,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
         ((ScrollView) this.fragmentView).addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
-        linearLayout.setOnTouchListener($$Lambda$ContactAddActivity$xZiAGMz9R4iZiUVWOVvgIBQ7msg.INSTANCE);
+        linearLayout.setOnTouchListener(ContactAddActivity$$ExternalSyntheticLambda1.INSTANCE);
         FrameLayout frameLayout = new FrameLayout(context2);
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 24.0f, 0.0f));
         BackupImageView backupImageView = new BackupImageView(context2);
@@ -169,11 +170,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        this.firstNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                return ContactAddActivity.this.lambda$createView$1$ContactAddActivity(textView, i, keyEvent);
-            }
-        });
+        this.firstNameField.setOnEditorActionListener(new ContactAddActivity$$ExternalSyntheticLambda2(this));
         this.firstNameField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             boolean focued;
 
@@ -201,12 +198,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.lastNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
-        this.lastNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                return ContactAddActivity.this.lambda$createView$2$ContactAddActivity(textView, i, keyEvent);
-            }
-        });
-        TLRPC$User user = getMessagesController().getUser(Integer.valueOf(this.user_id));
+        this.lastNameField.setOnEditorActionListener(new ContactAddActivity$$ExternalSyntheticLambda3(this));
+        TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.user_id));
         if (user != null) {
             if (user.phone == null && (str = this.phone) != null) {
                 user.phone = PhoneFormat.stripExceptNumbers(str);
@@ -235,11 +228,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 checkBoxCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 this.checkBoxCell.setText(LocaleController.formatString("SharePhoneNumberWith", NUM, UserObject.getFirstName(user)), "", true, false);
                 this.checkBoxCell.setPadding(AndroidUtilities.dp(7.0f), 0, AndroidUtilities.dp(7.0f), 0);
-                this.checkBoxCell.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        ContactAddActivity.this.lambda$createView$3$ContactAddActivity(view);
-                    }
-                });
+                this.checkBoxCell.setOnClickListener(new ContactAddActivity$$ExternalSyntheticLambda0(this));
                 linearLayout.addView(this.checkBoxCell, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
             }
         }
@@ -247,8 +236,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ boolean lambda$createView$1$ContactAddActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createView$1(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -259,8 +247,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ boolean lambda$createView$2$ContactAddActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createView$2(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
         }
@@ -269,8 +256,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$ContactAddActivity(View view) {
+    public /* synthetic */ void lambda$createView$3(View view) {
         CheckBoxCell checkBoxCell2 = this.checkBoxCell;
         checkBoxCell2.setChecked(!checkBoxCell2.isChecked(), true);
     }
@@ -281,7 +267,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     private void updateAvatarLayout() {
         TLRPC$User user;
-        if (this.nameTextView != null && (user = getMessagesController().getUser(Integer.valueOf(this.user_id))) != null) {
+        if (this.nameTextView != null && (user = getMessagesController().getUser(Long.valueOf(this.user_id))) != null) {
             if (TextUtils.isEmpty(user.phone)) {
                 this.nameTextView.setText(LocaleController.getString("MobileHidden", NUM));
                 this.infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileHiddenExceptionInfo", NUM, UserObject.getFirstName(user))));
@@ -304,7 +290,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.updateInterfaces) {
             int intValue = objArr[0].intValue();
-            if ((intValue & 2) != 0 || (intValue & 4) != 0) {
+            if ((MessagesController.UPDATE_MASK_AVATAR & intValue) != 0 || (intValue & MessagesController.UPDATE_MASK_STATUS) != 0) {
                 updateAvatarLayout();
             }
         }
@@ -336,11 +322,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ContactAddActivity$SOaKXzA4ZHGsNoWooM8mGyCeTs r10 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                ContactAddActivity.this.lambda$getThemeDescriptions$4$ContactAddActivity();
-            }
-        };
+        ContactAddActivity$$ExternalSyntheticLambda4 contactAddActivity$$ExternalSyntheticLambda4 = new ContactAddActivity$$ExternalSyntheticLambda4(this);
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
@@ -357,23 +339,22 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         arrayList.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
         arrayList.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
         arrayList.add(new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
-        $$Lambda$ContactAddActivity$SOaKXzA4ZHGsNoWooM8mGyCeTs r8 = r10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, r8, "avatar_text"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        ContactAddActivity$$ExternalSyntheticLambda4 contactAddActivity$$ExternalSyntheticLambda42 = contactAddActivity$$ExternalSyntheticLambda4;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, contactAddActivity$$ExternalSyntheticLambda42, "avatar_text"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundPink"));
         return arrayList;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$4 */
-    public /* synthetic */ void lambda$getThemeDescriptions$4$ContactAddActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$4() {
         TLRPC$User user;
-        if (this.avatarImage != null && (user = getMessagesController().getUser(Integer.valueOf(this.user_id))) != null) {
+        if (this.avatarImage != null && (user = getMessagesController().getUser(Long.valueOf(this.user_id))) != null) {
             this.avatarDrawable.setInfo(user);
             this.avatarImage.invalidate();
         }

@@ -35,19 +35,19 @@ public class QRCodeBottomSheet extends BottomSheet {
             r2 = 0
             r0.<init>(r1, r2)
             java.lang.String r3 = "InviteByQRCode"
-            r4 = 2131625929(0x7f0e07c9, float:1.887908E38)
+            r4 = 2131625945(0x7f0e07d9, float:1.8879112E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r4 = 1
             r0.setTitle(r3, r4)
             org.telegram.ui.Components.QRCodeBottomSheet$1 r3 = new org.telegram.ui.Components.QRCodeBottomSheet$1
-            r3.<init>(r1)
+            r3.<init>(r0, r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.FIT_XY
             r3.setScaleType(r5)
             int r5 = android.os.Build.VERSION.SDK_INT
             r6 = 21
             if (r5 < r6) goto L_0x0030
             org.telegram.ui.Components.QRCodeBottomSheet$2 r5 = new org.telegram.ui.Components.QRCodeBottomSheet$2
-            r5.<init>()
+            r5.<init>(r0)
             r3.setOutlineProvider(r5)
             r3.setClipToOutline(r4)
         L_0x0030:
@@ -70,7 +70,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
             r6.setAutoRepeat(r4)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
-            r8 = 2131558471(0x7f0d0047, float:1.8742259E38)
+            r8 = 2131558472(0x7f0d0048, float:1.874226E38)
             r9 = 60
             r6.setAnimation(r8, r9, r9)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
@@ -122,12 +122,12 @@ public class QRCodeBottomSheet extends BottomSheet {
             java.lang.String r2 = "fonts/rmedium.ttf"
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r3.setTypeface(r2)
-            r2 = 2131627632(0x7f0e0e70, float:1.8882534E38)
+            r2 = 2131627666(0x7f0e0e92, float:1.8882603E38)
             java.lang.String r4 = "ShareQrCode"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r3.setText(r2)
-            org.telegram.ui.Components.-$$Lambda$QRCodeBottomSheet$2sIpc-sdD8tZ_UiJm7HWacIETqc r2 = new org.telegram.ui.Components.-$$Lambda$QRCodeBottomSheet$2sIpc-sdD8tZ_UiJm7HWacIETqc
-            r2.<init>(r1)
+            org.telegram.ui.Components.QRCodeBottomSheet$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Components.QRCodeBottomSheet$$ExternalSyntheticLambda0
+            r2.<init>(r0, r1)
             r3.setOnClickListener(r2)
             r6 = -1
             r7 = 48
@@ -149,8 +149,7 @@ public class QRCodeBottomSheet extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$QRCodeBottomSheet(Context context, View view) {
+    public /* synthetic */ void lambda$new$0(Context context, View view) {
         Uri imageUri = getImageUri(this.qrCode);
         if (imageUri != null) {
             Intent intent = new Intent("android.intent.action.SEND");

@@ -10,7 +10,6 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SnowflakesEffect {
-    final float angleDiff = 1.0471976f;
     private int color;
     private String colorKey = "actionBarDefaultTitle";
     private ArrayList<Particle> freeParticles = new ArrayList<>();

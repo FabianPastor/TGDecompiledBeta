@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -57,10 +56,7 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.DialogsActivity;
-import org.telegram.ui.NotificationsCustomSettingsActivity;
 import org.telegram.ui.NotificationsSettingsActivity;
-import org.telegram.ui.ProfileNotificationsActivity;
 
 public class NotificationsCustomSettingsActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -143,7 +139,6 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
 
     public View createView(Context context) {
         this.searching = false;
-        this.searchWas = false;
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.currentType == -1) {
@@ -218,11 +213,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         ListAdapter listAdapter = new ListAdapter(context);
         this.adapter = listAdapter;
         recyclerListView2.setAdapter(listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
-            public final void onItemClick(View view, int i, float f, float f2) {
-                NotificationsCustomSettingsActivity.this.lambda$createView$9$NotificationsCustomSettingsActivity(view, i, f, f2);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda10(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -238,44 +229,42 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$9 */
-    public /* synthetic */ void lambda$createView$9$NotificationsCustomSettingsActivity(View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$createView$9(View view, int i, float f, float f2) {
         NotificationsSettingsActivity.NotificationException notificationException;
         ArrayList<NotificationsSettingsActivity.NotificationException> arrayList;
         ArrayList<NotificationsSettingsActivity.NotificationException> arrayList2;
         NotificationsSettingsActivity.NotificationException notificationException2;
-        int i2;
+        long j;
         String str;
         boolean z;
         View view2 = view;
-        int i3 = i;
+        int i2 = i;
         if (getParentActivity() != null) {
             boolean z2 = false;
-            if (this.listView.getAdapter() == this.searchAdapter || (i3 >= this.exceptionsStartRow && i3 < this.exceptionsEndRow)) {
+            if (this.listView.getAdapter() == this.searchAdapter || (i2 >= this.exceptionsStartRow && i2 < this.exceptionsEndRow)) {
                 RecyclerView.Adapter adapter2 = this.listView.getAdapter();
                 SearchAdapter searchAdapter2 = this.searchAdapter;
                 if (adapter2 == searchAdapter2) {
-                    Object object = searchAdapter2.getObject(i3);
+                    Object object = searchAdapter2.getObject(i2);
                     if (object instanceof NotificationsSettingsActivity.NotificationException) {
                         arrayList2 = this.searchAdapter.searchResult;
                         notificationException2 = (NotificationsSettingsActivity.NotificationException) object;
                     } else {
                         boolean z3 = object instanceof TLRPC$User;
                         if (z3) {
-                            i2 = ((TLRPC$User) object).id;
+                            j = ((TLRPC$User) object).id;
                         } else {
-                            i2 = -((TLRPC$Chat) object).id;
+                            j = -((TLRPC$Chat) object).id;
                         }
-                        long j = (long) i2;
                         if (this.exceptionsDict.containsKey(Long.valueOf(j))) {
                             notificationException2 = this.exceptionsDict.get(Long.valueOf(j));
                         } else {
                             NotificationsSettingsActivity.NotificationException notificationException3 = new NotificationsSettingsActivity.NotificationException();
                             notificationException3.did = j;
                             if (z3) {
-                                notificationException3.did = (long) ((TLRPC$User) object).id;
+                                notificationException3.did = ((TLRPC$User) object).id;
                             } else {
-                                notificationException3.did = (long) (-((TLRPC$Chat) object).id);
+                                notificationException3.did = -((TLRPC$Chat) object).id;
                             }
                             notificationException2 = notificationException3;
                             z2 = true;
@@ -286,66 +275,42 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     arrayList = arrayList2;
                 } else {
                     ArrayList<NotificationsSettingsActivity.NotificationException> arrayList3 = this.exceptions;
-                    int i4 = i3 - this.exceptionsStartRow;
-                    if (i4 >= 0 && i4 < arrayList3.size()) {
+                    int i3 = i2 - this.exceptionsStartRow;
+                    if (i3 >= 0 && i3 < arrayList3.size()) {
                         arrayList = arrayList3;
-                        notificationException = arrayList3.get(i4);
+                        notificationException = arrayList3.get(i3);
                     } else {
                         return;
                     }
                 }
                 if (notificationException != null) {
-                    AlertsCreator.showCustomNotificationsDialog(this, notificationException.did, -1, (ArrayList<NotificationsSettingsActivity.NotificationException>) null, this.currentAccount, (MessagesStorage.IntCallback) null, new MessagesStorage.IntCallback(z2, arrayList, notificationException, i) {
-                        public final /* synthetic */ boolean f$1;
-                        public final /* synthetic */ ArrayList f$2;
-                        public final /* synthetic */ NotificationsSettingsActivity.NotificationException f$3;
-                        public final /* synthetic */ int f$4;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                        }
-
-                        public final void run(int i) {
-                            NotificationsCustomSettingsActivity.this.lambda$createView$0$NotificationsCustomSettingsActivity(this.f$1, this.f$2, this.f$3, this.f$4, i);
-                        }
-                    });
+                    AlertsCreator.showCustomNotificationsDialog(this, notificationException.did, -1, (ArrayList<NotificationsSettingsActivity.NotificationException>) null, this.currentAccount, (MessagesStorage.IntCallback) null, new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda8(this, z2, arrayList, notificationException, i));
                     return;
                 }
                 return;
             }
-            if (i3 == this.exceptionsAddRow) {
+            if (i2 == this.exceptionsAddRow) {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("onlySelect", true);
                 bundle.putBoolean("checkCanWrite", false);
-                int i5 = this.currentType;
-                if (i5 == 0) {
+                int i4 = this.currentType;
+                if (i4 == 0) {
                     bundle.putInt("dialogsType", 6);
-                } else if (i5 == 2) {
+                } else if (i4 == 2) {
                     bundle.putInt("dialogsType", 5);
                 } else {
                     bundle.putInt("dialogsType", 4);
                 }
                 DialogsActivity dialogsActivity = new DialogsActivity(bundle);
-                dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate() {
-                    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-                        NotificationsCustomSettingsActivity.this.lambda$createView$2$NotificationsCustomSettingsActivity(dialogsActivity, arrayList, charSequence, z);
-                    }
-                });
+                dialogsActivity.setDelegate(new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda11(this));
                 presentFragment(dialogsActivity);
             } else {
                 Uri uri = null;
-                if (i3 == this.deleteAllRow) {
+                if (i2 == this.deleteAllRow) {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setTitle(LocaleController.getString("NotificationsDeleteAllExceptionTitle", NUM));
                     builder.setMessage(LocaleController.getString("NotificationsDeleteAllExceptionAlert", NUM));
-                    builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            NotificationsCustomSettingsActivity.this.lambda$createView$3$NotificationsCustomSettingsActivity(dialogInterface, i);
-                        }
-                    });
+                    builder.setPositiveButton(LocaleController.getString("Delete", NUM), new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda0(this));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     AlertDialog create = builder.create();
                     showDialog(create);
@@ -353,44 +318,30 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     if (textView != null) {
                         textView.setTextColor(Theme.getColor("dialogTextRed2"));
                     }
-                } else if (i3 == this.alertRow) {
+                } else if (i2 == this.alertRow) {
                     boolean isGlobalNotificationsEnabled = getNotificationsController().isGlobalNotificationsEnabled(this.currentType);
                     NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) view2;
-                    RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i3);
+                    RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i2);
                     if (!isGlobalNotificationsEnabled) {
                         getNotificationsController().setGlobalNotificationsEnabled(this.currentType, 0);
-                        notificationsCheckCell.setChecked(!isGlobalNotificationsEnabled);
+                        notificationsCheckCell.setChecked(true);
                         if (findViewHolderForAdapterPosition != null) {
-                            this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i3);
+                            this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i2);
                         }
                         checkRowsEnabled();
                     } else {
-                        AlertsCreator.showCustomNotificationsDialog(this, 0, this.currentType, this.exceptions, this.currentAccount, new MessagesStorage.IntCallback(notificationsCheckCell, findViewHolderForAdapterPosition, i3) {
-                            public final /* synthetic */ NotificationsCheckCell f$1;
-                            public final /* synthetic */ RecyclerView.ViewHolder f$2;
-                            public final /* synthetic */ int f$3;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                                this.f$3 = r4;
-                            }
-
-                            public final void run(int i) {
-                                NotificationsCustomSettingsActivity.this.lambda$createView$4$NotificationsCustomSettingsActivity(this.f$1, this.f$2, this.f$3, i);
-                            }
-                        });
+                        AlertsCreator.showCustomNotificationsDialog(this, 0, this.currentType, this.exceptions, this.currentAccount, new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda7(this, notificationsCheckCell, findViewHolderForAdapterPosition, i2));
                     }
                     z2 = isGlobalNotificationsEnabled;
-                } else if (i3 == this.previewRow) {
+                } else if (i2 == this.previewRow) {
                     if (view.isEnabled()) {
                         SharedPreferences notificationsSettings = getNotificationsSettings();
                         SharedPreferences.Editor edit = notificationsSettings.edit();
-                        int i6 = this.currentType;
-                        if (i6 == 1) {
+                        int i5 = this.currentType;
+                        if (i5 == 1) {
                             z = notificationsSettings.getBoolean("EnablePreviewAll", true);
                             edit.putBoolean("EnablePreviewAll", !z);
-                        } else if (i6 == 0) {
+                        } else if (i5 == 0) {
                             z = notificationsSettings.getBoolean("EnablePreviewGroup", true);
                             edit.putBoolean("EnablePreviewGroup", !z);
                         } else {
@@ -403,7 +354,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     } else {
                         return;
                     }
-                } else if (i3 == this.messageSoundRow) {
+                } else if (i2 == this.messageSoundRow) {
                     if (view.isEnabled()) {
                         try {
                             SharedPreferences notificationsSettings2 = getNotificationsSettings();
@@ -414,10 +365,10 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                             intent.putExtra("android.intent.extra.ringtone.DEFAULT_URI", RingtoneManager.getDefaultUri(2));
                             Uri uri2 = Settings.System.DEFAULT_NOTIFICATION_URI;
                             String path = uri2 != null ? uri2.getPath() : null;
-                            int i7 = this.currentType;
-                            if (i7 == 1) {
+                            int i6 = this.currentType;
+                            if (i6 == 1) {
                                 str = notificationsSettings2.getString("GlobalSoundPath", path);
-                            } else if (i7 == 0) {
+                            } else if (i6 == 0) {
                                 str = notificationsSettings2.getString("GroupSoundPath", path);
                             } else {
                                 str = notificationsSettings2.getString("ChannelSoundPath", path);
@@ -426,75 +377,35 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                                 uri = str.equals(path) ? uri2 : Uri.parse(str);
                             }
                             intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", uri);
-                            startActivityForResult(intent, i3);
+                            startActivityForResult(intent, i2);
                         } catch (Exception e) {
                             FileLog.e((Throwable) e);
                         }
                     } else {
                         return;
                     }
-                } else if (i3 == this.messageLedRow) {
+                } else if (i2 == this.messageLedRow) {
                     if (view.isEnabled()) {
-                        showDialog(AlertsCreator.createColorSelectDialog(getParentActivity(), 0, this.currentType, new Runnable(i3) {
-                            public final /* synthetic */ int f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void run() {
-                                NotificationsCustomSettingsActivity.this.lambda$createView$5$NotificationsCustomSettingsActivity(this.f$1);
-                            }
-                        }));
+                        showDialog(AlertsCreator.createColorSelectDialog(getParentActivity(), 0, this.currentType, new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda2(this, i2)));
                     } else {
                         return;
                     }
-                } else if (i3 == this.messagePopupNotificationRow) {
+                } else if (i2 == this.messagePopupNotificationRow) {
                     if (view.isEnabled()) {
-                        showDialog(AlertsCreator.createPopupSelectDialog(getParentActivity(), this.currentType, new Runnable(i3) {
-                            public final /* synthetic */ int f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void run() {
-                                NotificationsCustomSettingsActivity.this.lambda$createView$6$NotificationsCustomSettingsActivity(this.f$1);
-                            }
-                        }));
+                        showDialog(AlertsCreator.createPopupSelectDialog(getParentActivity(), this.currentType, new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda3(this, i2)));
                     } else {
                         return;
                     }
-                } else if (i3 == this.messageVibrateRow) {
+                } else if (i2 == this.messageVibrateRow) {
                     if (view.isEnabled()) {
-                        int i8 = this.currentType;
-                        showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0, i8 == 1 ? "vibrate_messages" : i8 == 0 ? "vibrate_group" : "vibrate_channel", new Runnable(i3) {
-                            public final /* synthetic */ int f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void run() {
-                                NotificationsCustomSettingsActivity.this.lambda$createView$7$NotificationsCustomSettingsActivity(this.f$1);
-                            }
-                        }));
+                        int i7 = this.currentType;
+                        showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0, i7 == 1 ? "vibrate_messages" : i7 == 0 ? "vibrate_group" : "vibrate_channel", new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda4(this, i2)));
                     } else {
                         return;
                     }
-                } else if (i3 == this.messagePriorityRow) {
+                } else if (i2 == this.messagePriorityRow) {
                     if (view.isEnabled()) {
-                        showDialog(AlertsCreator.createPrioritySelectDialog(getParentActivity(), 0, this.currentType, new Runnable(i3) {
-                            public final /* synthetic */ int f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void run() {
-                                NotificationsCustomSettingsActivity.this.lambda$createView$8$NotificationsCustomSettingsActivity(this.f$1);
-                            }
-                        }));
+                        showDialog(AlertsCreator.createPrioritySelectDialog(getParentActivity(), 0, this.currentType, new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda5(this, i2)));
                     } else {
                         return;
                     }
@@ -507,8 +418,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$NotificationsCustomSettingsActivity(boolean z, ArrayList arrayList, NotificationsSettingsActivity.NotificationException notificationException, int i, int i2) {
+    public /* synthetic */ void lambda$createView$0(boolean z, ArrayList arrayList, NotificationsSettingsActivity.NotificationException notificationException, int i, int i2) {
         int indexOf;
         if (i2 != 0) {
             SharedPreferences notificationsSettings = getNotificationsSettings();
@@ -554,30 +464,23 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$NotificationsCustomSettingsActivity(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+    public /* synthetic */ void lambda$createView$2(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
         Bundle bundle = new Bundle();
         bundle.putLong("dialog_id", ((Long) arrayList.get(0)).longValue());
         bundle.putBoolean("exception", true);
         ProfileNotificationsActivity profileNotificationsActivity = new ProfileNotificationsActivity(bundle);
-        profileNotificationsActivity.setDelegate(new ProfileNotificationsActivity.ProfileNotificationsActivityDelegate() {
-            public final void didCreateNewException(NotificationsSettingsActivity.NotificationException notificationException) {
-                NotificationsCustomSettingsActivity.this.lambda$createView$1$NotificationsCustomSettingsActivity(notificationException);
-            }
-        });
+        profileNotificationsActivity.setDelegate(new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda12(this));
         presentFragment(profileNotificationsActivity, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$NotificationsCustomSettingsActivity(NotificationsSettingsActivity.NotificationException notificationException) {
+    public /* synthetic */ void lambda$createView$1(NotificationsSettingsActivity.NotificationException notificationException) {
         this.exceptions.add(0, notificationException);
         updateRows(true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$NotificationsCustomSettingsActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$3(DialogInterface dialogInterface, int i) {
         SharedPreferences.Editor edit = getNotificationsSettings().edit();
         int size = this.exceptions.size();
         for (int i2 = 0; i2 < size; i2++) {
@@ -602,8 +505,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$NotificationsCustomSettingsActivity(NotificationsCheckCell notificationsCheckCell, RecyclerView.ViewHolder viewHolder, int i, int i2) {
+    public /* synthetic */ void lambda$createView$4(NotificationsCheckCell notificationsCheckCell, RecyclerView.ViewHolder viewHolder, int i, int i2) {
         int i3;
         SharedPreferences notificationsSettings = getNotificationsSettings();
         int i4 = this.currentType;
@@ -627,8 +529,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$5 */
-    public /* synthetic */ void lambda$createView$5$NotificationsCustomSettingsActivity(int i) {
+    public /* synthetic */ void lambda$createView$5(int i) {
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i);
         if (findViewHolderForAdapterPosition != null) {
             this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i);
@@ -636,8 +537,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$6 */
-    public /* synthetic */ void lambda$createView$6$NotificationsCustomSettingsActivity(int i) {
+    public /* synthetic */ void lambda$createView$6(int i) {
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i);
         if (findViewHolderForAdapterPosition != null) {
             this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i);
@@ -645,8 +545,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$7 */
-    public /* synthetic */ void lambda$createView$7$NotificationsCustomSettingsActivity(int i) {
+    public /* synthetic */ void lambda$createView$7(int i) {
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i);
         if (findViewHolderForAdapterPosition != null) {
             this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i);
@@ -654,8 +553,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$8 */
-    public /* synthetic */ void lambda$createView$8$NotificationsCustomSettingsActivity(int i) {
+    public /* synthetic */ void lambda$createView$8(int i) {
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i);
         if (findViewHolderForAdapterPosition != null) {
             this.adapter.onBindViewHolder(findViewHolderForAdapterPosition, i);
@@ -705,34 +603,31 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     private void loadExceptions() {
-        getMessagesStorage().getStorageQueue().postRunnable(new Runnable() {
-            public final void run() {
-                NotificationsCustomSettingsActivity.this.lambda$loadExceptions$11$NotificationsCustomSettingsActivity();
-            }
-        });
+        getMessagesStorage().getStorageQueue().postRunnable(new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda1(this));
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v8, resolved type: java.util.ArrayList} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v33, resolved type: java.util.ArrayList} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v37, resolved type: java.util.ArrayList} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v10, resolved type: java.util.ArrayList} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v17, resolved type: org.telegram.messenger.MessagesStorage} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v43, resolved type: java.util.ArrayList} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v47, resolved type: java.util.ArrayList} */
+    /* JADX WARNING: type inference failed for: r4v9, types: [boolean] */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:21:0x00fb, code lost:
-        if (r8.deleted != false) goto L_0x0142;
+    /* JADX WARNING: Code restructure failed: missing block: B:23:0x0117, code lost:
+        if (r4.deleted != false) goto L_0x0185;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:48:0x0190, code lost:
-        if (r3.deleted != false) goto L_0x01af;
+    /* JADX WARNING: Code restructure failed: missing block: B:31:0x0141, code lost:
+        if (r4.deleted != false) goto L_0x0185;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x0265  */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0280 A[LOOP:3: B:112:0x027e->B:113:0x0280, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x0299  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0224  */
-    /* renamed from: lambda$loadExceptions$11 */
+    /* JADX WARNING: Removed duplicated region for block: B:104:0x0246  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x0260 A[LOOP:3: B:109:0x025e->B:110:0x0260, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0279  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0207  */
+    /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$loadExceptions$11$NotificationsCustomSettingsActivity() {
+    public /* synthetic */ void lambda$loadExceptions$11() {
         /*
-            r21 = this;
+            r22 = this;
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             java.util.ArrayList r7 = new java.util.ArrayList
@@ -753,358 +648,321 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             r5.<init>()
             java.util.ArrayList r9 = new java.util.ArrayList
             r9.<init>()
-            org.telegram.messenger.UserConfig r10 = r21.getUserConfig()
-            int r10 = r10.clientUserId
-            android.content.SharedPreferences r11 = r21.getNotificationsSettings()
-            java.util.Map r12 = r11.getAll()
-            java.util.Set r13 = r12.entrySet()
-            java.util.Iterator r13 = r13.iterator()
+            org.telegram.messenger.UserConfig r10 = r22.getUserConfig()
+            long r10 = r10.clientUserId
+            android.content.SharedPreferences r12 = r22.getNotificationsSettings()
+            java.util.Map r13 = r12.getAll()
+            java.util.Set r14 = r13.entrySet()
+            java.util.Iterator r14 = r14.iterator()
         L_0x0048:
-            boolean r14 = r13.hasNext()
-            if (r14 == 0) goto L_0x01bd
-            java.lang.Object r14 = r13.next()
-            java.util.Map$Entry r14 = (java.util.Map.Entry) r14
-            java.lang.Object r16 = r14.getKey()
-            r15 = r16
-            java.lang.String r15 = (java.lang.String) r15
-            r16 = r13
-            java.lang.String r13 = "notify2_"
-            boolean r17 = r15.startsWith(r13)
-            if (r17 == 0) goto L_0x01a5
-            r17 = r5
-            java.lang.String r5 = ""
-            java.lang.String r5 = r15.replace(r13, r5)
-            java.lang.Long r13 = org.telegram.messenger.Utilities.parseLong(r5)
-            r15 = r3
-            r18 = r4
-            long r3 = r13.longValue()
-            r19 = 0
-            int r13 = (r3 > r19 ? 1 : (r3 == r19 ? 0 : -1))
-            if (r13 == 0) goto L_0x019e
-            r13 = r7
-            r19 = r8
-            long r7 = (long) r10
-            int r20 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1))
-            if (r20 == 0) goto L_0x0197
-            org.telegram.ui.NotificationsSettingsActivity$NotificationException r7 = new org.telegram.ui.NotificationsSettingsActivity$NotificationException
-            r7.<init>()
-            r7.did = r3
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder
-            r8.<init>()
-            r20 = r10
-            java.lang.String r10 = "custom_"
-            r8.append(r10)
-            r8.append(r3)
-            java.lang.String r8 = r8.toString()
-            r10 = 0
-            boolean r8 = r11.getBoolean(r8, r10)
-            r7.hasCustom = r8
-            java.lang.Object r8 = r14.getValue()
-            java.lang.Integer r8 = (java.lang.Integer) r8
-            int r8 = r8.intValue()
-            r7.notify = r8
-            if (r8 == 0) goto L_0x00d5
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder
-            r8.<init>()
-            java.lang.String r10 = "notifyuntil_"
-            r8.append(r10)
-            r8.append(r5)
-            java.lang.String r5 = r8.toString()
-            java.lang.Object r5 = r12.get(r5)
-            java.lang.Integer r5 = (java.lang.Integer) r5
-            if (r5 == 0) goto L_0x00d5
-            int r5 = r5.intValue()
-            r7.muteUntil = r5
-        L_0x00d5:
-            int r5 = (int) r3
-            r14 = r11
-            r8 = 32
-            long r10 = r3 << r8
-            int r8 = (int) r10
-            if (r5 == 0) goto L_0x014f
-            if (r5 <= 0) goto L_0x0103
-            org.telegram.messenger.MessagesController r8 = r21.getMessagesController()
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r5)
-            org.telegram.tgnet.TLRPC$User r8 = r8.getUser(r10)
-            if (r8 != 0) goto L_0x00f9
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
-            r0.add(r5)
-            r1.put(r3, r7)
-            goto L_0x00fe
-        L_0x00f9:
-            boolean r3 = r8.deleted
-            if (r3 == 0) goto L_0x00fe
-            goto L_0x0142
-        L_0x00fe:
-            r6.add(r7)
-            goto L_0x019a
-        L_0x0103:
-            org.telegram.messenger.MessagesController r8 = r21.getMessagesController()
-            int r5 = -r5
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r5)
-            org.telegram.tgnet.TLRPC$Chat r8 = r8.getChat(r10)
-            if (r8 != 0) goto L_0x011d
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
-            r2.add(r5)
-            r1.put(r3, r7)
-            goto L_0x0142
-        L_0x011d:
-            boolean r3 = r8.left
-            if (r3 != 0) goto L_0x0142
-            boolean r3 = r8.kicked
-            if (r3 != 0) goto L_0x0142
-            org.telegram.tgnet.TLRPC$InputChannel r3 = r8.migrated_to
-            if (r3 == 0) goto L_0x012a
-            goto L_0x0142
-        L_0x012a:
-            boolean r3 = org.telegram.messenger.ChatObject.isChannel(r8)
-            if (r3 == 0) goto L_0x013b
-            boolean r3 = r8.megagroup
-            if (r3 != 0) goto L_0x013b
-            r11 = r19
-            r11.add(r7)
-            goto L_0x01a3
-        L_0x013b:
-            r11 = r19
-            r13.add(r7)
-            goto L_0x01a3
-        L_0x0142:
-            r7 = r13
-            r11 = r14
-            r3 = r15
-            r13 = r16
+            boolean r15 = r14.hasNext()
+            r16 = r5
+            if (r15 == 0) goto L_0x01a4
+            java.lang.Object r15 = r14.next()
+            java.util.Map$Entry r15 = (java.util.Map.Entry) r15
+            java.lang.Object r17 = r15.getKey()
             r5 = r17
+            java.lang.String r5 = (java.lang.String) r5
+            r17 = r14
+            java.lang.String r14 = "notify2_"
+            boolean r18 = r5.startsWith(r14)
+            if (r18 == 0) goto L_0x0194
+            r18 = r4
+            java.lang.String r4 = ""
+            java.lang.String r4 = r5.replace(r14, r4)
+            java.lang.Long r5 = org.telegram.messenger.Utilities.parseLong(r4)
+            r14 = r7
+            r19 = r8
+            long r7 = r5.longValue()
+            r20 = 0
+            int r5 = (r7 > r20 ? 1 : (r7 == r20 ? 0 : -1))
+            if (r5 == 0) goto L_0x018f
+            int r5 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1))
+            if (r5 == 0) goto L_0x018f
+            org.telegram.ui.NotificationsSettingsActivity$NotificationException r5 = new org.telegram.ui.NotificationsSettingsActivity$NotificationException
+            r5.<init>()
+            r5.did = r7
+            r20 = r10
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder
+            r10.<init>()
+            java.lang.String r11 = "custom_"
+            r10.append(r11)
+            r10.append(r7)
+            java.lang.String r10 = r10.toString()
+            r11 = 0
+            boolean r10 = r12.getBoolean(r10, r11)
+            r5.hasCustom = r10
+            java.lang.Object r10 = r15.getValue()
+            java.lang.Integer r10 = (java.lang.Integer) r10
+            int r10 = r10.intValue()
+            r5.notify = r10
+            if (r10 == 0) goto L_0x00d3
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder
+            r10.<init>()
+            java.lang.String r11 = "notifyuntil_"
+            r10.append(r11)
+            r10.append(r4)
+            java.lang.String r4 = r10.toString()
+            java.lang.Object r4 = r13.get(r4)
+            java.lang.Integer r4 = (java.lang.Integer) r4
+            if (r4 == 0) goto L_0x00d3
+            int r4 = r4.intValue()
+            r5.muteUntil = r4
+        L_0x00d3:
+            boolean r4 = org.telegram.messenger.DialogObject.isEncryptedDialog(r7)
+            if (r4 == 0) goto L_0x0120
+            int r4 = org.telegram.messenger.DialogObject.getEncryptedChatId(r7)
+            org.telegram.messenger.MessagesController r10 = r22.getMessagesController()
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r4)
+            org.telegram.tgnet.TLRPC$EncryptedChat r10 = r10.getEncryptedChat(r11)
+            if (r10 != 0) goto L_0x00f6
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            r3.add(r4)
+            r1.put(r7, r5)
+            goto L_0x011b
+        L_0x00f6:
+            org.telegram.messenger.MessagesController r4 = r22.getMessagesController()
+            long r7 = r10.user_id
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$User r4 = r4.getUser(r7)
+            if (r4 != 0) goto L_0x0115
+            long r7 = r10.user_id
+            java.lang.Long r4 = java.lang.Long.valueOf(r7)
+            r0.add(r4)
+            long r7 = r10.user_id
+            r1.put(r7, r5)
+            goto L_0x011b
+        L_0x0115:
+            boolean r4 = r4.deleted
+            if (r4 == 0) goto L_0x011b
+            goto L_0x0185
+        L_0x011b:
+            r6.add(r5)
+            goto L_0x0191
+        L_0x0120:
+            boolean r4 = org.telegram.messenger.DialogObject.isUserDialog(r7)
+            if (r4 == 0) goto L_0x0148
+            org.telegram.messenger.MessagesController r4 = r22.getMessagesController()
+            java.lang.Long r10 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$User r4 = r4.getUser(r10)
+            if (r4 != 0) goto L_0x013f
+            java.lang.Long r4 = java.lang.Long.valueOf(r7)
+            r0.add(r4)
+            r1.put(r7, r5)
+            goto L_0x0144
+        L_0x013f:
+            boolean r4 = r4.deleted
+            if (r4 == 0) goto L_0x0144
+            goto L_0x0185
+        L_0x0144:
+            r6.add(r5)
+            goto L_0x0191
+        L_0x0148:
+            org.telegram.messenger.MessagesController r4 = r22.getMessagesController()
+            long r10 = -r7
+            java.lang.Long r15 = java.lang.Long.valueOf(r10)
+            org.telegram.tgnet.TLRPC$Chat r4 = r4.getChat(r15)
+            if (r4 != 0) goto L_0x0162
+            java.lang.Long r4 = java.lang.Long.valueOf(r10)
+            r2.add(r4)
+            r1.put(r7, r5)
+            goto L_0x0185
+        L_0x0162:
+            boolean r7 = r4.left
+            if (r7 != 0) goto L_0x0185
+            boolean r7 = r4.kicked
+            if (r7 != 0) goto L_0x0185
+            org.telegram.tgnet.TLRPC$InputChannel r7 = r4.migrated_to
+            if (r7 == 0) goto L_0x016f
+            goto L_0x0185
+        L_0x016f:
+            boolean r7 = org.telegram.messenger.ChatObject.isChannel(r4)
+            if (r7 == 0) goto L_0x017f
+            boolean r4 = r4.megagroup
+            if (r4 != 0) goto L_0x017f
+            r8 = r19
+            r8.add(r5)
+            goto L_0x0199
+        L_0x017f:
+            r8 = r19
+            r14.add(r5)
+            goto L_0x0199
+        L_0x0185:
+            r7 = r14
+            r5 = r16
+            r14 = r17
             r4 = r18
             r8 = r19
-            goto L_0x01b9
-        L_0x014f:
-            r11 = r19
-            if (r8 == 0) goto L_0x01a3
-            org.telegram.messenger.MessagesController r5 = r21.getMessagesController()
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r8)
-            org.telegram.tgnet.TLRPC$EncryptedChat r5 = r5.getEncryptedChat(r10)
-            if (r5 != 0) goto L_0x016d
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r8)
-            r8 = r15
-            r8.add(r5)
-            r1.put(r3, r7)
-            goto L_0x0193
-        L_0x016d:
-            r8 = r15
-            org.telegram.messenger.MessagesController r3 = r21.getMessagesController()
-            int r4 = r5.user_id
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
-            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r4)
-            if (r3 != 0) goto L_0x018e
-            int r3 = r5.user_id
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-            r0.add(r3)
-            int r3 = r5.user_id
-            long r3 = (long) r3
-            r1.put(r3, r7)
-            goto L_0x0193
-        L_0x018e:
-            boolean r3 = r3.deleted
-            if (r3 == 0) goto L_0x0193
-            goto L_0x01af
-        L_0x0193:
-            r6.add(r7)
-            goto L_0x01af
-        L_0x0197:
+            goto L_0x01a0
+        L_0x018f:
             r20 = r10
-            r14 = r11
-        L_0x019a:
-            r8 = r15
-            r11 = r19
-            goto L_0x01af
-        L_0x019e:
-            r13 = r7
-            r20 = r10
-            r14 = r11
-            r11 = r8
-        L_0x01a3:
-            r8 = r15
-            goto L_0x01af
-        L_0x01a5:
+        L_0x0191:
+            r8 = r19
+            goto L_0x0199
+        L_0x0194:
             r18 = r4
-            r17 = r5
-            r13 = r7
+            r14 = r7
             r20 = r10
-            r14 = r11
-            r11 = r8
-            r8 = r3
-        L_0x01af:
-            r3 = r8
-            r8 = r11
-            r7 = r13
-            r11 = r14
-            r13 = r16
-            r5 = r17
+        L_0x0199:
+            r7 = r14
+            r5 = r16
+            r14 = r17
             r4 = r18
-        L_0x01b9:
+        L_0x01a0:
             r10 = r20
             goto L_0x0048
-        L_0x01bd:
+        L_0x01a4:
             r18 = r4
-            r17 = r5
-            r13 = r7
-            r11 = r8
-            r10 = 0
-            r8 = r3
-            int r3 = r1.size()
-            if (r3 == 0) goto L_0x02b9
-            boolean r3 = r8.isEmpty()     // Catch:{ Exception -> 0x0215 }
-            java.lang.String r4 = ","
-            if (r3 != 0) goto L_0x01de
-            org.telegram.messenger.MessagesStorage r3 = r21.getMessagesStorage()     // Catch:{ Exception -> 0x0215 }
-            java.lang.String r5 = android.text.TextUtils.join(r4, r8)     // Catch:{ Exception -> 0x0215 }
-            r3.getEncryptedChatsInternal(r5, r9, r0)     // Catch:{ Exception -> 0x0215 }
-        L_0x01de:
-            boolean r3 = r0.isEmpty()     // Catch:{ Exception -> 0x0215 }
-            if (r3 != 0) goto L_0x01f6
-            org.telegram.messenger.MessagesStorage r3 = r21.getMessagesStorage()     // Catch:{ Exception -> 0x01f2 }
-            java.lang.String r0 = android.text.TextUtils.join(r4, r0)     // Catch:{ Exception -> 0x01f2 }
-            r5 = r18
-            r3.getUsersInternal(r0, r5)     // Catch:{ Exception -> 0x0211 }
-            goto L_0x01f8
-        L_0x01f2:
+            r14 = r7
+            r11 = 0
+            int r4 = r1.size()
+            if (r4 == 0) goto L_0x029c
+            boolean r4 = r3.isEmpty()     // Catch:{ Exception -> 0x01f8 }
+            java.lang.String r5 = ","
+            if (r4 != 0) goto L_0x01c1
+            org.telegram.messenger.MessagesStorage r4 = r22.getMessagesStorage()     // Catch:{ Exception -> 0x01f8 }
+            java.lang.String r3 = android.text.TextUtils.join(r5, r3)     // Catch:{ Exception -> 0x01f8 }
+            r4.getEncryptedChatsInternal(r3, r9, r0)     // Catch:{ Exception -> 0x01f8 }
+        L_0x01c1:
+            boolean r3 = r0.isEmpty()     // Catch:{ Exception -> 0x01f8 }
+            if (r3 != 0) goto L_0x01d9
+            org.telegram.messenger.MessagesStorage r3 = r22.getMessagesStorage()     // Catch:{ Exception -> 0x01d5 }
+            java.lang.String r0 = android.text.TextUtils.join(r5, r0)     // Catch:{ Exception -> 0x01d5 }
+            r4 = r18
+            r3.getUsersInternal(r0, r4)     // Catch:{ Exception -> 0x01f4 }
+            goto L_0x01db
+        L_0x01d5:
             r0 = move-exception
-            r5 = r18
-            goto L_0x0212
-        L_0x01f6:
-            r5 = r18
+            r4 = r18
+            goto L_0x01f5
+        L_0x01d9:
+            r4 = r18
+        L_0x01db:
+            boolean r0 = r2.isEmpty()     // Catch:{ Exception -> 0x01f4 }
+            if (r0 != 0) goto L_0x01f1
+            org.telegram.messenger.MessagesStorage r0 = r22.getMessagesStorage()     // Catch:{ Exception -> 0x01f4 }
+            java.lang.String r2 = android.text.TextUtils.join(r5, r2)     // Catch:{ Exception -> 0x01f4 }
+            r5 = r16
+            r0.getChatsInternal(r2, r5)     // Catch:{ Exception -> 0x01ef }
+            goto L_0x0200
+        L_0x01ef:
+            r0 = move-exception
+            goto L_0x01fd
+        L_0x01f1:
+            r5 = r16
+            goto L_0x0200
+        L_0x01f4:
+            r0 = move-exception
+        L_0x01f5:
+            r5 = r16
+            goto L_0x01fd
         L_0x01f8:
-            boolean r0 = r2.isEmpty()     // Catch:{ Exception -> 0x0211 }
-            if (r0 != 0) goto L_0x020e
-            org.telegram.messenger.MessagesStorage r0 = r21.getMessagesStorage()     // Catch:{ Exception -> 0x0211 }
-            java.lang.String r2 = android.text.TextUtils.join(r4, r2)     // Catch:{ Exception -> 0x0211 }
-            r4 = r17
-            r0.getChatsInternal(r2, r4)     // Catch:{ Exception -> 0x020c }
-            goto L_0x021d
-        L_0x020c:
             r0 = move-exception
-            goto L_0x021a
-        L_0x020e:
-            r4 = r17
-            goto L_0x021d
-        L_0x0211:
-            r0 = move-exception
-        L_0x0212:
-            r4 = r17
-            goto L_0x021a
-        L_0x0215:
-            r0 = move-exception
-            r4 = r17
-            r5 = r18
-        L_0x021a:
+            r5 = r16
+            r4 = r18
+        L_0x01fd:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x021d:
-            int r0 = r4.size()
-            r2 = 0
-        L_0x0222:
-            if (r2 >= r0) goto L_0x025e
-            java.lang.Object r3 = r4.get(r2)
-            org.telegram.tgnet.TLRPC$Chat r3 = (org.telegram.tgnet.TLRPC$Chat) r3
-            boolean r7 = r3.left
-            if (r7 != 0) goto L_0x025b
-            boolean r7 = r3.kicked
-            if (r7 != 0) goto L_0x025b
-            org.telegram.tgnet.TLRPC$InputChannel r7 = r3.migrated_to
-            if (r7 == 0) goto L_0x0237
-            goto L_0x025b
-        L_0x0237:
-            int r7 = r3.id
-            int r7 = -r7
-            long r7 = (long) r7
-            java.lang.Object r7 = r1.get(r7)
-            org.telegram.ui.NotificationsSettingsActivity$NotificationException r7 = (org.telegram.ui.NotificationsSettingsActivity.NotificationException) r7
-            int r8 = r3.id
-            int r8 = -r8
-            long r14 = (long) r8
-            r1.remove(r14)
-            if (r7 == 0) goto L_0x025b
-            boolean r8 = org.telegram.messenger.ChatObject.isChannel(r3)
-            if (r8 == 0) goto L_0x0258
-            boolean r3 = r3.megagroup
-            if (r3 != 0) goto L_0x0258
-            r11.add(r7)
-            goto L_0x025b
-        L_0x0258:
-            r13.add(r7)
-        L_0x025b:
-            int r2 = r2 + 1
-            goto L_0x0222
-        L_0x025e:
+        L_0x0200:
             int r0 = r5.size()
             r2 = 0
-        L_0x0263:
-            if (r2 >= r0) goto L_0x0279
+        L_0x0205:
+            if (r2 >= r0) goto L_0x023f
             java.lang.Object r3 = r5.get(r2)
+            org.telegram.tgnet.TLRPC$Chat r3 = (org.telegram.tgnet.TLRPC$Chat) r3
+            boolean r7 = r3.left
+            if (r7 != 0) goto L_0x023c
+            boolean r7 = r3.kicked
+            if (r7 != 0) goto L_0x023c
+            org.telegram.tgnet.TLRPC$InputChannel r7 = r3.migrated_to
+            if (r7 == 0) goto L_0x021a
+            goto L_0x023c
+        L_0x021a:
+            long r12 = r3.id
+            long r12 = -r12
+            java.lang.Object r7 = r1.get(r12)
+            org.telegram.ui.NotificationsSettingsActivity$NotificationException r7 = (org.telegram.ui.NotificationsSettingsActivity.NotificationException) r7
+            long r12 = r3.id
+            long r12 = -r12
+            r1.remove(r12)
+            if (r7 == 0) goto L_0x023c
+            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r3)
+            if (r10 == 0) goto L_0x0239
+            boolean r3 = r3.megagroup
+            if (r3 != 0) goto L_0x0239
+            r8.add(r7)
+            goto L_0x023c
+        L_0x0239:
+            r14.add(r7)
+        L_0x023c:
+            int r2 = r2 + 1
+            goto L_0x0205
+        L_0x023f:
+            int r0 = r4.size()
+            r2 = 0
+        L_0x0244:
+            if (r2 >= r0) goto L_0x0259
+            java.lang.Object r3 = r4.get(r2)
             org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3
             boolean r7 = r3.deleted
-            if (r7 == 0) goto L_0x0270
-            goto L_0x0276
-        L_0x0270:
-            int r3 = r3.id
-            long r7 = (long) r3
-            r1.remove(r7)
-        L_0x0276:
+            if (r7 == 0) goto L_0x0251
+            goto L_0x0256
+        L_0x0251:
+            long r12 = r3.id
+            r1.remove(r12)
+        L_0x0256:
             int r2 = r2 + 1
-            goto L_0x0263
-        L_0x0279:
+            goto L_0x0244
+        L_0x0259:
             int r0 = r9.size()
             r2 = 0
-        L_0x027e:
-            if (r2 >= r0) goto L_0x0292
+        L_0x025e:
+            if (r2 >= r0) goto L_0x0273
             java.lang.Object r3 = r9.get(r2)
             org.telegram.tgnet.TLRPC$EncryptedChat r3 = (org.telegram.tgnet.TLRPC$EncryptedChat) r3
             int r3 = r3.id
-            long r7 = (long) r3
-            r3 = 32
-            long r7 = r7 << r3
-            r1.remove(r7)
+            long r12 = (long) r3
+            long r12 = org.telegram.messenger.DialogObject.makeEncryptedDialogId(r12)
+            r1.remove(r12)
             int r2 = r2 + 1
-            goto L_0x027e
-        L_0x0292:
+            goto L_0x025e
+        L_0x0273:
             int r0 = r1.size()
-            r15 = 0
-        L_0x0297:
-            if (r15 >= r0) goto L_0x02bd
-            long r2 = r1.keyAt(r15)
-            int r3 = (int) r2
-            if (r3 >= 0) goto L_0x02af
-            java.lang.Object r2 = r1.valueAt(r15)
-            r13.remove(r2)
-            java.lang.Object r2 = r1.valueAt(r15)
-            r11.remove(r2)
-            goto L_0x02b6
-        L_0x02af:
-            java.lang.Object r2 = r1.valueAt(r15)
+        L_0x0277:
+            if (r11 >= r0) goto L_0x02a0
+            long r2 = r1.keyAt(r11)
+            boolean r2 = org.telegram.messenger.DialogObject.isChatDialog(r2)
+            if (r2 == 0) goto L_0x0292
+            java.lang.Object r2 = r1.valueAt(r11)
+            r14.remove(r2)
+            java.lang.Object r2 = r1.valueAt(r11)
+            r8.remove(r2)
+            goto L_0x0299
+        L_0x0292:
+            java.lang.Object r2 = r1.valueAt(r11)
             r6.remove(r2)
-        L_0x02b6:
-            int r15 = r15 + 1
-            goto L_0x0297
-        L_0x02b9:
-            r4 = r17
-            r5 = r18
-        L_0x02bd:
-            org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$cUkvVuZl4hZFa8i4o3bnOROtDRE r0 = new org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$cUkvVuZl4hZFa8i4o3bnOROtDRE
+        L_0x0299:
+            int r11 = r11 + 1
+            goto L_0x0277
+        L_0x029c:
+            r5 = r16
+            r4 = r18
+        L_0x02a0:
+            org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda6 r0 = new org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda6
             r1 = r0
-            r2 = r21
-            r3 = r5
+            r2 = r22
+            r3 = r4
+            r4 = r5
             r5 = r9
-            r7 = r13
-            r8 = r11
-            r1.<init>(r3, r4, r5, r6, r7, r8)
+            r7 = r14
+            r1.<init>(r2, r3, r4, r5, r6, r7, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.lambda$loadExceptions$11$NotificationsCustomSettingsActivity():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.lambda$loadExceptions$11():void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadExceptions$10 */
-    public /* synthetic */ void lambda$loadExceptions$10$NotificationsCustomSettingsActivity(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5, ArrayList arrayList6) {
+    public /* synthetic */ void lambda$loadExceptions$10(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5, ArrayList arrayList6) {
         getMessagesController().putUsers(arrayList, true);
         getMessagesController().putChats(arrayList2, true);
         getMessagesController().putEncryptedChats(arrayList3, true);
@@ -1287,32 +1145,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             this.mContext = context;
             SearchAdapterHelper searchAdapterHelper2 = new SearchAdapterHelper(true);
             this.searchAdapterHelper = searchAdapterHelper2;
-            searchAdapterHelper2.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
-                public /* synthetic */ boolean canApplySearchResults(int i) {
-                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
-                }
-
-                public /* synthetic */ SparseArray getExcludeCallParticipants() {
-                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeCallParticipants(this);
-                }
-
-                public /* synthetic */ SparseArray getExcludeUsers() {
-                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
-                }
-
-                public final void onDataSetChanged(int i) {
-                    NotificationsCustomSettingsActivity.SearchAdapter.this.lambda$new$0$NotificationsCustomSettingsActivity$SearchAdapter(i);
-                }
-
-                public /* synthetic */ void onSetHashtags(ArrayList arrayList, HashMap hashMap) {
-                    SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$onSetHashtags(this, arrayList, hashMap);
-                }
-            });
+            searchAdapterHelper2.setDelegate(new NotificationsCustomSettingsActivity$SearchAdapter$$ExternalSyntheticLambda4(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$NotificationsCustomSettingsActivity$SearchAdapter(int i) {
+        public /* synthetic */ void lambda$new$0(int i) {
             if (this.searchRunnable == null && !this.searchAdapterHelper.isSearchInProgress()) {
                 NotificationsCustomSettingsActivity.this.emptyView.showTextView();
             }
@@ -1333,83 +1170,48 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 return;
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$NotificationsCustomSettingsActivity$SearchAdapter$wKH7EZWmFuFyynypPZLlXYXe6Y r1 = new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    NotificationsCustomSettingsActivity.SearchAdapter.this.lambda$searchDialogs$1$NotificationsCustomSettingsActivity$SearchAdapter(this.f$1);
-                }
-            };
-            this.searchRunnable = r1;
-            dispatchQueue.postRunnable(r1, 300);
+            NotificationsCustomSettingsActivity$SearchAdapter$$ExternalSyntheticLambda1 notificationsCustomSettingsActivity$SearchAdapter$$ExternalSyntheticLambda1 = new NotificationsCustomSettingsActivity$SearchAdapter$$ExternalSyntheticLambda1(this, str);
+            this.searchRunnable = notificationsCustomSettingsActivity$SearchAdapter$$ExternalSyntheticLambda1;
+            dispatchQueue.postRunnable(notificationsCustomSettingsActivity$SearchAdapter$$ExternalSyntheticLambda1, 300);
         }
 
         /* access modifiers changed from: private */
         /* renamed from: processSearch */
         public void lambda$searchDialogs$1(String str) {
-            AndroidUtilities.runOnUIThread(new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    NotificationsCustomSettingsActivity.SearchAdapter.this.lambda$processSearch$3$NotificationsCustomSettingsActivity$SearchAdapter(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new NotificationsCustomSettingsActivity$SearchAdapter$$ExternalSyntheticLambda0(this, str));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$processSearch$3 */
-        public /* synthetic */ void lambda$processSearch$3$NotificationsCustomSettingsActivity$SearchAdapter(String str) {
+        public /* synthetic */ void lambda$processSearch$3(String str) {
             this.searchAdapterHelper.queryServerSearch(str, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, false, 0, false, 0, 0);
-            Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(NotificationsCustomSettingsActivity.this.exceptions)) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ ArrayList f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    NotificationsCustomSettingsActivity.SearchAdapter.this.lambda$processSearch$2$NotificationsCustomSettingsActivity$SearchAdapter(this.f$1, this.f$2);
-                }
-            });
+            Utilities.searchQueue.postRunnable(new NotificationsCustomSettingsActivity$SearchAdapter$$ExternalSyntheticLambda2(this, str, new ArrayList(NotificationsCustomSettingsActivity.this.exceptions)));
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v3, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v0, resolved type: boolean} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v1, resolved type: boolean} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v2, resolved type: boolean} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v4, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v16, resolved type: org.telegram.tgnet.TLRPC$User} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v17, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v18, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v3, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v1, resolved type: boolean} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v2, resolved type: boolean} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v3, resolved type: boolean} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v4, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v12, resolved type: org.telegram.tgnet.TLRPC$User} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v22, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v23, resolved type: org.telegram.tgnet.TLRPC$Chat} */
         /* access modifiers changed from: private */
-        /* JADX WARNING: Code restructure failed: missing block: B:53:0x0146, code lost:
-            if (r10[r5].contains(" " + r3) == false) goto L_0x014b;
+        /* JADX WARNING: Code restructure failed: missing block: B:58:0x0169, code lost:
+            if (r10[r5].contains(" " + r15) == false) goto L_0x016e;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:59:0x0166, code lost:
-            if (r4.contains(" " + r3) != false) goto L_0x0168;
+        /* JADX WARNING: Code restructure failed: missing block: B:64:0x0189, code lost:
+            if (r6.contains(" " + r15) != false) goto L_0x018b;
          */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:48:0x011d  */
-        /* JADX WARNING: Removed duplicated region for block: B:74:0x01bd A[LOOP:1: B:47:0x011b->B:74:0x01bd, LOOP_END] */
-        /* JADX WARNING: Removed duplicated region for block: B:82:0x00be A[EDGE_INSN: B:82:0x00be->B:34:0x00be ?: BREAK  , SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:83:0x017e A[SYNTHETIC] */
-        /* renamed from: lambda$processSearch$2 */
+        /* JADX WARNING: Removed duplicated region for block: B:53:0x0140  */
+        /* JADX WARNING: Removed duplicated region for block: B:79:0x01e0 A[LOOP:1: B:52:0x013e->B:79:0x01e0, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:89:0x01a1 A[SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$processSearch$2$NotificationsCustomSettingsActivity$SearchAdapter(java.lang.String r21, java.util.ArrayList r22) {
+        public /* synthetic */ void lambda$processSearch$2(java.lang.String r20, java.util.ArrayList r21) {
             /*
-                r20 = this;
-                r0 = r20
-                java.lang.String r1 = r21.trim()
+                r19 = this;
+                r0 = r19
+                java.lang.String r1 = r20.trim()
                 java.lang.String r1 = r1.toLowerCase()
                 int r2 = r1.length()
                 if (r2 != 0) goto L_0x0023
@@ -1455,153 +1257,173 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String[] r10 = new java.lang.String[r9]
                 r11 = 0
             L_0x005b:
-                int r12 = r22.size()
-                if (r11 >= r12) goto L_0x01d5
-                r12 = r22
+                int r12 = r21.size()
+                if (r11 >= r12) goto L_0x01fd
+                r12 = r21
                 java.lang.Object r13 = r12.get(r11)
                 org.telegram.ui.NotificationsSettingsActivity$NotificationException r13 = (org.telegram.ui.NotificationsSettingsActivity.NotificationException) r13
                 long r14 = r13.did
-                int r9 = (int) r14
-                r16 = 32
-                long r14 = r14 >> r16
-                int r15 = (int) r14
-                if (r9 == 0) goto L_0x00c6
-                if (r9 <= 0) goto L_0x0097
+                boolean r14 = org.telegram.messenger.DialogObject.isEncryptedDialog(r14)
+                if (r14 == 0) goto L_0x00b0
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 org.telegram.messenger.MessagesController r14 = r14.getMessagesController()
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-                org.telegram.tgnet.TLRPC$User r9 = r14.getUser(r9)
-                boolean r14 = r9.deleted
-                if (r14 == 0) goto L_0x0088
-                goto L_0x00be
-            L_0x0088:
-                java.lang.String r14 = r9.first_name
-                java.lang.String r15 = r9.last_name
-                java.lang.String r14 = org.telegram.messenger.ContactsController.formatName(r14, r15)
-                r10[r5] = r14
-                java.lang.String r14 = r9.username
-                r10[r3] = r14
-                goto L_0x00f7
-            L_0x0097:
-                org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
-                org.telegram.messenger.MessagesController r14 = r14.getMessagesController()
-                int r9 = -r9
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-                org.telegram.tgnet.TLRPC$Chat r9 = r14.getChat(r9)
-                if (r9 == 0) goto L_0x00f6
-                boolean r14 = r9.left
-                if (r14 != 0) goto L_0x00be
-                boolean r14 = r9.kicked
-                if (r14 != 0) goto L_0x00be
-                org.telegram.tgnet.TLRPC$InputChannel r14 = r9.migrated_to
-                if (r14 == 0) goto L_0x00b5
-                goto L_0x00be
-            L_0x00b5:
-                java.lang.String r14 = r9.title
-                r10[r5] = r14
-                java.lang.String r14 = r9.username
-                r10[r3] = r14
-                goto L_0x00f7
-            L_0x00be:
-                r19 = r6
-                r18 = r7
+                long r3 = r13.did
+                int r3 = org.telegram.messenger.DialogObject.getEncryptedChatId(r3)
+                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
+                org.telegram.tgnet.TLRPC$EncryptedChat r3 = r14.getEncryptedChat(r3)
+                if (r3 == 0) goto L_0x00ad
+                org.telegram.ui.NotificationsCustomSettingsActivity r4 = org.telegram.ui.NotificationsCustomSettingsActivity.this
+                org.telegram.messenger.MessagesController r4 = r4.getMessagesController()
+                r16 = r6
+                long r5 = r3.user_id
+                java.lang.Long r3 = java.lang.Long.valueOf(r5)
+                org.telegram.tgnet.TLRPC$User r3 = r4.getUser(r3)
+                if (r3 == 0) goto L_0x0116
+                java.lang.String r4 = r3.first_name
+                java.lang.String r5 = r3.last_name
+                java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r4, r5)
+                r5 = 0
+                r10[r5] = r4
+                java.lang.String r3 = r3.username
+                r4 = 1
+                r10[r4] = r3
+                goto L_0x0116
+            L_0x00ad:
+                r16 = r6
+                goto L_0x0116
+            L_0x00b0:
+                r16 = r6
+                long r3 = r13.did
+                boolean r3 = org.telegram.messenger.DialogObject.isUserDialog(r3)
+                if (r3 == 0) goto L_0x00eb
+                org.telegram.ui.NotificationsCustomSettingsActivity r3 = org.telegram.ui.NotificationsCustomSettingsActivity.this
+                org.telegram.messenger.MessagesController r3 = r3.getMessagesController()
+                long r4 = r13.did
+                java.lang.Long r4 = java.lang.Long.valueOf(r4)
+                org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r4)
+                if (r3 == 0) goto L_0x00e3
+                boolean r4 = r3.deleted
+                if (r4 == 0) goto L_0x00d1
+                goto L_0x00e3
+            L_0x00d1:
+                java.lang.String r4 = r3.first_name
+                java.lang.String r5 = r3.last_name
+                java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r4, r5)
+                r5 = 0
+                r10[r5] = r4
+                java.lang.String r4 = r3.username
                 r5 = 1
-                r7 = 0
-                goto L_0x01ca
-            L_0x00c6:
-                org.telegram.ui.NotificationsCustomSettingsActivity r9 = org.telegram.ui.NotificationsCustomSettingsActivity.this
-                org.telegram.messenger.MessagesController r9 = r9.getMessagesController()
-                java.lang.Integer r14 = java.lang.Integer.valueOf(r15)
-                org.telegram.tgnet.TLRPC$EncryptedChat r9 = r9.getEncryptedChat(r14)
-                if (r9 == 0) goto L_0x00f6
-                org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
-                org.telegram.messenger.MessagesController r14 = r14.getMessagesController()
-                int r9 = r9.user_id
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-                org.telegram.tgnet.TLRPC$User r9 = r14.getUser(r9)
-                if (r9 == 0) goto L_0x00f6
-                java.lang.String r14 = r9.first_name
-                java.lang.String r15 = r9.last_name
-                java.lang.String r14 = org.telegram.messenger.ContactsController.formatName(r14, r15)
-                r10[r5] = r14
-                java.lang.String r9 = r9.username
-                r10[r3] = r9
-            L_0x00f6:
+                r10[r5] = r4
+                r5 = 0
+                goto L_0x0118
+            L_0x00e3:
+                r18 = r7
+                r17 = r16
+            L_0x00e7:
+                r5 = 1
                 r9 = 0
-            L_0x00f7:
-                r14 = r10[r5]
-                r15 = r10[r5]
-                java.lang.String r15 = r15.toLowerCase()
-                r10[r5] = r15
-                org.telegram.messenger.LocaleController r15 = org.telegram.messenger.LocaleController.getInstance()
-                r4 = r10[r5]
-                java.lang.String r4 = r15.getTranslitString(r4)
-                r15 = r10[r5]
-                if (r15 == 0) goto L_0x0118
-                r15 = r10[r5]
-                boolean r15 = r15.equals(r4)
-                if (r15 == 0) goto L_0x0118
-                r4 = 0
-            L_0x0118:
-                r15 = 0
-                r17 = 0
-            L_0x011b:
-                if (r15 >= r6) goto L_0x00be
-                r3 = r7[r15]
-                r18 = r10[r5]
-                r19 = r6
-                java.lang.String r6 = " "
-                if (r18 == 0) goto L_0x0149
-                r18 = r7
-                r7 = r10[r5]
-                boolean r7 = r7.startsWith(r3)
-                if (r7 != 0) goto L_0x0168
-                r7 = r10[r5]
-                java.lang.StringBuilder r5 = new java.lang.StringBuilder
-                r5.<init>()
-                r5.append(r6)
-                r5.append(r3)
-                java.lang.String r5 = r5.toString()
-                boolean r5 = r7.contains(r5)
-                if (r5 != 0) goto L_0x0168
-                goto L_0x014b
-            L_0x0149:
-                r18 = r7
-            L_0x014b:
-                if (r4 == 0) goto L_0x016b
-                boolean r5 = r4.startsWith(r3)
-                if (r5 != 0) goto L_0x0168
-                java.lang.StringBuilder r5 = new java.lang.StringBuilder
-                r5.<init>()
-                r5.append(r6)
-                r5.append(r3)
-                java.lang.String r5 = r5.toString()
-                boolean r5 = r4.contains(r5)
-                if (r5 == 0) goto L_0x016b
-            L_0x0168:
-                r5 = 1
+                goto L_0x01f2
+            L_0x00eb:
+                org.telegram.ui.NotificationsCustomSettingsActivity r3 = org.telegram.ui.NotificationsCustomSettingsActivity.this
+                org.telegram.messenger.MessagesController r3 = r3.getMessagesController()
+                long r4 = r13.did
+                long r4 = -r4
+                java.lang.Long r4 = java.lang.Long.valueOf(r4)
+                org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r4)
+                if (r3 == 0) goto L_0x0116
+                boolean r4 = r3.left
+                if (r4 != 0) goto L_0x00e3
+                boolean r4 = r3.kicked
+                if (r4 != 0) goto L_0x00e3
+                org.telegram.tgnet.TLRPC$InputChannel r4 = r3.migrated_to
+                if (r4 == 0) goto L_0x010b
+                goto L_0x00e3
+            L_0x010b:
+                java.lang.String r4 = r3.title
+                r5 = 0
+                r10[r5] = r4
+                java.lang.String r4 = r3.username
                 r6 = 1
-                goto L_0x017c
-            L_0x016b:
+                r10[r6] = r4
+                goto L_0x0118
+            L_0x0116:
+                r5 = 0
+                r3 = 0
+            L_0x0118:
+                r4 = r10[r5]
+                r6 = r10[r5]
+                java.lang.String r6 = r6.toLowerCase()
+                r10[r5] = r6
+                org.telegram.messenger.LocaleController r6 = org.telegram.messenger.LocaleController.getInstance()
+                r14 = r10[r5]
+                java.lang.String r6 = r6.getTranslitString(r14)
+                r14 = r10[r5]
+                if (r14 == 0) goto L_0x0139
+                r14 = r10[r5]
+                boolean r14 = r14.equals(r6)
+                if (r14 == 0) goto L_0x0139
+                r6 = 0
+            L_0x0139:
+                r9 = r16
+                r14 = 0
+                r16 = 0
+            L_0x013e:
+                if (r14 >= r9) goto L_0x01ec
+                r15 = r7[r14]
+                r17 = r10[r5]
+                r18 = r7
+                java.lang.String r7 = " "
+                if (r17 == 0) goto L_0x016c
+                r17 = r9
+                r9 = r10[r5]
+                boolean r9 = r9.startsWith(r15)
+                if (r9 != 0) goto L_0x018b
+                r9 = r10[r5]
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder
+                r5.<init>()
+                r5.append(r7)
+                r5.append(r15)
+                java.lang.String r5 = r5.toString()
+                boolean r5 = r9.contains(r5)
+                if (r5 != 0) goto L_0x018b
+                goto L_0x016e
+            L_0x016c:
+                r17 = r9
+            L_0x016e:
+                if (r6 == 0) goto L_0x018e
+                boolean r5 = r6.startsWith(r15)
+                if (r5 != 0) goto L_0x018b
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder
+                r5.<init>()
+                r5.append(r7)
+                r5.append(r15)
+                java.lang.String r5 = r5.toString()
+                boolean r5 = r6.contains(r5)
+                if (r5 == 0) goto L_0x018e
+            L_0x018b:
                 r5 = 1
-                r6 = r10[r5]
-                if (r6 == 0) goto L_0x017a
-                r6 = r10[r5]
-                boolean r6 = r6.startsWith(r3)
-                if (r6 == 0) goto L_0x017a
-                r6 = 2
-                goto L_0x017c
-            L_0x017a:
-                r6 = r17
-            L_0x017c:
-                if (r6 == 0) goto L_0x01bd
-                if (r6 != r5) goto L_0x018a
-                r4 = 0
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r14, r4, r3)
-                r8.add(r3)
-                r7 = 0
-                goto L_0x01b4
-            L_0x018a:
+                r7 = 1
+                goto L_0x019f
+            L_0x018e:
+                r5 = 1
+                r7 = r10[r5]
+                if (r7 == 0) goto L_0x019d
+                r7 = r10[r5]
+                boolean r7 = r7.startsWith(r15)
+                if (r7 == 0) goto L_0x019d
+                r7 = 2
+                goto L_0x019f
+            L_0x019d:
+                r7 = r16
+            L_0x019f:
+                if (r7 == 0) goto L_0x01e0
+                if (r7 != r5) goto L_0x01ad
+                r6 = 0
+                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r6, r15)
+                r8.add(r4)
+                r9 = 0
+                goto L_0x01d7
+            L_0x01ad:
                 java.lang.StringBuilder r4 = new java.lang.StringBuilder
                 r4.<init>()
                 java.lang.String r6 = "@"
@@ -1612,61 +1434,49 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.StringBuilder r7 = new java.lang.StringBuilder
                 r7.<init>()
                 r7.append(r6)
-                r7.append(r3)
-                java.lang.String r3 = r7.toString()
-                r7 = 0
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r7, r3)
-                r8.add(r3)
-            L_0x01b4:
+                r7.append(r15)
+                java.lang.String r6 = r7.toString()
+                r9 = 0
+                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r9, r6)
+                r8.add(r4)
+            L_0x01d7:
                 r2.add(r13)
-                if (r9 == 0) goto L_0x01ca
-                r1.add(r9)
-                goto L_0x01ca
-            L_0x01bd:
-                r7 = 0
-                int r15 = r15 + 1
-                r17 = r6
+                if (r3 == 0) goto L_0x01f2
+                r1.add(r3)
+                goto L_0x01f2
+            L_0x01e0:
+                r9 = 0
+                int r14 = r14 + 1
+                r16 = r7
+                r9 = r17
                 r7 = r18
-                r6 = r19
-                r3 = 1
                 r5 = 0
-                goto L_0x011b
-            L_0x01ca:
+                goto L_0x013e
+            L_0x01ec:
+                r18 = r7
+                r17 = r9
+                goto L_0x00e7
+            L_0x01f2:
                 int r11 = r11 + 1
+                r6 = r17
                 r7 = r18
-                r6 = r19
                 r3 = 1
                 r5 = 0
                 r9 = 2
                 goto L_0x005b
-            L_0x01d5:
+            L_0x01fd:
                 r0.updateSearchResults(r1, r2, r8)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.SearchAdapter.lambda$processSearch$2$NotificationsCustomSettingsActivity$SearchAdapter(java.lang.String, java.util.ArrayList):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.SearchAdapter.lambda$processSearch$2(java.lang.String, java.util.ArrayList):void");
         }
 
         private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<NotificationsSettingsActivity.NotificationException> arrayList2, ArrayList<CharSequence> arrayList3) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList2, arrayList3, arrayList) {
-                public final /* synthetic */ ArrayList f$1;
-                public final /* synthetic */ ArrayList f$2;
-                public final /* synthetic */ ArrayList f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run() {
-                    NotificationsCustomSettingsActivity.SearchAdapter.this.lambda$updateSearchResults$4$NotificationsCustomSettingsActivity$SearchAdapter(this.f$1, this.f$2, this.f$3);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new NotificationsCustomSettingsActivity$SearchAdapter$$ExternalSyntheticLambda3(this, arrayList2, arrayList3, arrayList));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$4 */
-        public /* synthetic */ void lambda$updateSearchResults$4$NotificationsCustomSettingsActivity$SearchAdapter(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
+        public /* synthetic */ void lambda$updateSearchResults$4(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
             if (NotificationsCustomSettingsActivity.this.searching) {
                 this.searchRunnable = null;
                 this.searchResult = arrayList;
@@ -1707,7 +1517,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.Cells.GraySectionCell r7 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r8 = r6.mContext
                 r7.<init>(r8)
-                goto L_0x001f
+                goto L_0x0020
             L_0x000a:
                 org.telegram.ui.Cells.UserCell r7 = new org.telegram.ui.Cells.UserCell
                 android.content.Context r1 = r6.mContext
@@ -1720,7 +1530,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r8 = "windowBackgroundWhite"
                 int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
                 r7.setBackgroundColor(r8)
-            L_0x001f:
+            L_0x0020:
                 org.telegram.ui.Components.RecyclerListView$Holder r8 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r8.<init>(r7)
                 return r8
@@ -1830,25 +1640,25 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r4 = 0
                 r5 = 1
                 switch(r0) {
-                    case 0: goto L_0x03e5;
-                    case 1: goto L_0x03a2;
-                    case 2: goto L_0x037c;
-                    case 3: goto L_0x032b;
-                    case 4: goto L_0x02e0;
-                    case 5: goto L_0x00f9;
-                    case 6: goto L_0x0056;
+                    case 0: goto L_0x03ec;
+                    case 1: goto L_0x03a9;
+                    case 2: goto L_0x0383;
+                    case 3: goto L_0x0332;
+                    case 4: goto L_0x02e6;
+                    case 5: goto L_0x00fc;
+                    case 6: goto L_0x0059;
                     case 7: goto L_0x000e;
                     default: goto L_0x000c;
                 }
             L_0x000c:
-                goto L_0x03fd
+                goto L_0x0404
             L_0x000e:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextCell r13 = (org.telegram.ui.Cells.TextCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.exceptionsAddRow
-                if (r14 != r0) goto L_0x003b
-                r14 = 2131626558(0x7f0e0a3e, float:1.8880356E38)
+                if (r14 != r0) goto L_0x003d
+                r14 = 2131626588(0x7f0e0a5c, float:1.8880416E38)
                 java.lang.String r0 = "NotificationsAddAnException"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r0 = 2131165249(0x7var_, float:1.794471E38)
@@ -1861,19 +1671,19 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r14 = "windowBackgroundWhiteBlueIcon"
                 java.lang.String r0 = "windowBackgroundWhiteBlueButton"
                 r13.setColors(r14, r0)
-                goto L_0x03fd
-            L_0x003b:
+                goto L_0x0404
+            L_0x003d:
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.deleteAllRow
-                if (r14 != r0) goto L_0x03fd
-                r14 = 2131626568(0x7f0e0a48, float:1.8880376E38)
+                if (r14 != r0) goto L_0x0404
+                r14 = 2131626598(0x7f0e0a66, float:1.8880437E38)
                 java.lang.String r0 = "NotificationsDeleteAllException"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14, r4)
                 java.lang.String r14 = "windowBackgroundWhiteRedText5"
                 r13.setColors(r1, r14)
-                goto L_0x03fd
-            L_0x0056:
+                goto L_0x0404
+            L_0x0059:
                 android.view.View r13 = r13.itemView
                 r6 = r13
                 org.telegram.ui.Cells.NotificationsCheckCell r6 = (org.telegram.ui.Cells.NotificationsCheckCell) r6
@@ -1884,61 +1694,61 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 android.content.SharedPreferences r13 = r13.getNotificationsSettings()
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x0082
-                r14 = 2131626578(0x7f0e0a52, float:1.8880396E38)
+                if (r14 != r5) goto L_0x0085
+                r14 = 2131626608(0x7f0e0a70, float:1.8880457E38)
                 java.lang.String r0 = "NotificationsForPrivateChats"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 java.lang.String r0 = "EnableAll2"
                 int r13 = r13.getInt(r0, r4)
-            L_0x0080:
+            L_0x0083:
                 r7 = r14
-                goto L_0x00aa
-            L_0x0082:
+                goto L_0x00ad
+            L_0x0085:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x009a
-                r14 = 2131626577(0x7f0e0a51, float:1.8880394E38)
+                if (r14 != 0) goto L_0x009d
+                r14 = 2131626607(0x7f0e0a6f, float:1.8880455E38)
                 java.lang.String r0 = "NotificationsForGroups"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 java.lang.String r0 = "EnableGroup2"
                 int r13 = r13.getInt(r0, r4)
-                goto L_0x0080
-            L_0x009a:
-                r14 = 2131626575(0x7f0e0a4f, float:1.888039E38)
+                goto L_0x0083
+            L_0x009d:
+                r14 = 2131626605(0x7f0e0a6d, float:1.888045E38)
                 java.lang.String r0 = "NotificationsForChannels"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 java.lang.String r0 = "EnableChannel2"
                 int r13 = r13.getInt(r0, r4)
-                goto L_0x0080
-            L_0x00aa:
+                goto L_0x0083
+            L_0x00ad:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 org.telegram.tgnet.ConnectionsManager r14 = r14.getConnectionsManager()
                 int r14 = r14.getCurrentTime()
-                if (r13 >= r14) goto L_0x00b8
+                if (r13 >= r14) goto L_0x00bb
                 r9 = 1
-                goto L_0x00b9
-            L_0x00b8:
+                goto L_0x00bc
+            L_0x00bb:
                 r9 = 0
-            L_0x00b9:
-                if (r9 == 0) goto L_0x00c9
-                r13 = 2131626591(0x7f0e0a5f, float:1.8880423E38)
+            L_0x00bc:
+                if (r9 == 0) goto L_0x00cc
+                r13 = 2131626621(0x7f0e0a7d, float:1.8880483E38)
                 java.lang.String r14 = "NotificationsOn"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
                 r8.append(r13)
-            L_0x00c7:
+            L_0x00ca:
                 r10 = 0
-                goto L_0x00f3
-            L_0x00c9:
+                goto L_0x00f6
+            L_0x00cc:
                 r0 = 31536000(0x1e13380, float:8.2725845E-38)
                 int r0 = r13 - r0
-                if (r0 < r14) goto L_0x00dd
-                r13 = 2131626589(0x7f0e0a5d, float:1.8880418E38)
+                if (r0 < r14) goto L_0x00e0
+                r13 = 2131626619(0x7f0e0a7b, float:1.888048E38)
                 java.lang.String r14 = "NotificationsOff"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
                 r8.append(r13)
-                goto L_0x00c7
-            L_0x00dd:
-                r14 = 2131626590(0x7f0e0a5e, float:1.888042E38)
+                goto L_0x00ca
+            L_0x00e0:
+                r14 = 2131626620(0x7f0e0a7c, float:1.8880481E38)
                 java.lang.Object[] r0 = new java.lang.Object[r5]
                 long r1 = (long) r13
                 java.lang.String r13 = org.telegram.messenger.LocaleController.stringForMessageListDate(r1)
@@ -1947,255 +1757,255 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r13 = org.telegram.messenger.LocaleController.formatString(r13, r14, r0)
                 r8.append(r13)
                 r10 = 2
-            L_0x00f3:
+            L_0x00f6:
                 r11 = 0
                 r6.setTextAndValueAndCheck(r7, r8, r9, r10, r11)
-                goto L_0x03fd
-            L_0x00f9:
+                goto L_0x0404
+            L_0x00fc:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextSettingsCell r13 = (org.telegram.ui.Cells.TextSettingsCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 android.content.SharedPreferences r0 = r0.getNotificationsSettings()
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.messageSoundRow
-                if (r14 != r1) goto L_0x015d
+                if (r14 != r1) goto L_0x0160
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                r1 = 2131627727(0x7f0e0ecf, float:1.8882727E38)
+                r1 = 2131627761(0x7f0e0ef1, float:1.8882796E38)
                 java.lang.String r2 = "SoundDefault"
-                if (r14 != r5) goto L_0x0123
+                if (r14 != r5) goto L_0x0126
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 java.lang.String r1 = "GlobalSound"
                 java.lang.String r14 = r0.getString(r1, r14)
-                goto L_0x0140
-            L_0x0123:
+                goto L_0x0143
+            L_0x0126:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x0136
+                if (r14 != 0) goto L_0x0139
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 java.lang.String r1 = "GroupSound"
                 java.lang.String r14 = r0.getString(r1, r14)
-                goto L_0x0140
-            L_0x0136:
+                goto L_0x0143
+            L_0x0139:
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 java.lang.String r1 = "ChannelSound"
                 java.lang.String r14 = r0.getString(r1, r14)
-            L_0x0140:
+            L_0x0143:
                 java.lang.String r0 = "NoSound"
                 boolean r1 = r14.equals(r0)
-                if (r1 == 0) goto L_0x014f
-                r14 = 2131626419(0x7f0e09b3, float:1.8880074E38)
+                if (r1 == 0) goto L_0x0152
+                r14 = 2131626449(0x7f0e09d1, float:1.8880135E38)
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-            L_0x014f:
-                r0 = 2131627726(0x7f0e0ece, float:1.8882725E38)
+            L_0x0152:
+                r0 = 2131627760(0x7f0e0ef0, float:1.8882794E38)
                 java.lang.String r1 = "Sound"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r0, r14, r5)
-                goto L_0x03fd
-            L_0x015d:
+                goto L_0x0404
+            L_0x0160:
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.messageVibrateRow
                 r2 = 4
-                if (r14 != r1) goto L_0x01f4
+                if (r14 != r1) goto L_0x01fa
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x0175
+                if (r14 != r5) goto L_0x0179
                 java.lang.String r14 = "vibrate_messages"
                 int r14 = r0.getInt(r14, r4)
-                goto L_0x018a
-            L_0x0175:
+                goto L_0x0190
+            L_0x0179:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x0184
+                if (r14 != 0) goto L_0x0189
                 java.lang.String r14 = "vibrate_group"
                 int r14 = r0.getInt(r14, r4)
-                goto L_0x018a
-            L_0x0184:
+                goto L_0x0190
+            L_0x0189:
                 java.lang.String r14 = "vibrate_channel"
                 int r14 = r0.getInt(r14, r4)
-            L_0x018a:
-                r0 = 2131628160(0x7f0e1080, float:1.8883605E38)
+            L_0x0190:
+                r0 = 2131628200(0x7f0e10a8, float:1.8883686E38)
                 java.lang.String r1 = "Vibrate"
-                if (r14 != 0) goto L_0x01a3
+                if (r14 != 0) goto L_0x01a9
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131628161(0x7f0e1081, float:1.8883607E38)
+                r0 = 2131628201(0x7f0e10a9, float:1.8883688E38)
                 java.lang.String r1 = "VibrationDefault"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x03fd
-            L_0x01a3:
-                if (r14 != r5) goto L_0x01b7
+                goto L_0x0404
+            L_0x01a9:
+                if (r14 != r5) goto L_0x01bd
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131627675(0x7f0e0e9b, float:1.8882621E38)
+                r0 = 2131627709(0x7f0e0ebd, float:1.888269E38)
                 java.lang.String r1 = "Short"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x03fd
-            L_0x01b7:
-                if (r14 != r3) goto L_0x01cb
+                goto L_0x0404
+            L_0x01bd:
+                if (r14 != r3) goto L_0x01d1
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131628162(0x7f0e1082, float:1.8883609E38)
+                r0 = 2131628202(0x7f0e10aa, float:1.888369E38)
                 java.lang.String r1 = "VibrationDisabled"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x03fd
-            L_0x01cb:
+                goto L_0x0404
+            L_0x01d1:
                 r3 = 3
-                if (r14 != r3) goto L_0x01e0
+                if (r14 != r3) goto L_0x01e6
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131626105(0x7f0e0879, float:1.8879437E38)
+                r0 = 2131626122(0x7f0e088a, float:1.8879471E38)
                 java.lang.String r1 = "Long"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x03fd
-            L_0x01e0:
-                if (r14 != r2) goto L_0x03fd
+                goto L_0x0404
+            L_0x01e6:
+                if (r14 != r2) goto L_0x0404
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131626623(0x7f0e0a7f, float:1.8880487E38)
+                r0 = 2131626653(0x7f0e0a9d, float:1.8880548E38)
                 java.lang.String r1 = "OnlyIfSilent"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x03fd
-            L_0x01f4:
+                goto L_0x0404
+            L_0x01fa:
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.messagePriorityRow
-                if (r14 != r1) goto L_0x0279
+                if (r14 != r1) goto L_0x027f
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x020b
+                if (r14 != r5) goto L_0x0211
                 java.lang.String r14 = "priority_messages"
                 int r14 = r0.getInt(r14, r5)
-                goto L_0x0220
-            L_0x020b:
+                goto L_0x0226
+            L_0x0211:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x021a
+                if (r14 != 0) goto L_0x0220
                 java.lang.String r14 = "priority_group"
                 int r14 = r0.getInt(r14, r5)
-                goto L_0x0220
-            L_0x021a:
+                goto L_0x0226
+            L_0x0220:
                 java.lang.String r14 = "priority_channel"
                 int r14 = r0.getInt(r14, r5)
-            L_0x0220:
-                r0 = 2131626580(0x7f0e0a54, float:1.88804E38)
+            L_0x0226:
+                r0 = 2131626610(0x7f0e0a72, float:1.8880461E38)
                 java.lang.String r1 = "NotificationsImportance"
-                if (r14 != 0) goto L_0x0239
+                if (r14 != 0) goto L_0x023f
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131626593(0x7f0e0a61, float:1.8880427E38)
+                r0 = 2131626623(0x7f0e0a7f, float:1.8880487E38)
                 java.lang.String r1 = "NotificationsPriorityHigh"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
-                goto L_0x03fd
-            L_0x0239:
-                if (r14 == r5) goto L_0x0267
-                if (r14 != r3) goto L_0x023e
-                goto L_0x0267
-            L_0x023e:
-                if (r14 != r2) goto L_0x0252
+                goto L_0x0404
+            L_0x023f:
+                if (r14 == r5) goto L_0x026d
+                if (r14 != r3) goto L_0x0244
+                goto L_0x026d
+            L_0x0244:
+                if (r14 != r2) goto L_0x0258
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131626594(0x7f0e0a62, float:1.8880429E38)
+                r0 = 2131626624(0x7f0e0a80, float:1.888049E38)
                 java.lang.String r1 = "NotificationsPriorityLow"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
-                goto L_0x03fd
-            L_0x0252:
+                goto L_0x0404
+            L_0x0258:
                 r2 = 5
-                if (r14 != r2) goto L_0x03fd
+                if (r14 != r2) goto L_0x0404
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131626595(0x7f0e0a63, float:1.888043E38)
+                r0 = 2131626625(0x7f0e0a81, float:1.8880491E38)
                 java.lang.String r1 = "NotificationsPriorityMedium"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
-                goto L_0x03fd
-            L_0x0267:
+                goto L_0x0404
+            L_0x026d:
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131626597(0x7f0e0a65, float:1.8880435E38)
+                r0 = 2131626627(0x7f0e0a83, float:1.8880496E38)
                 java.lang.String r1 = "NotificationsPriorityUrgent"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
-                goto L_0x03fd
-            L_0x0279:
+                goto L_0x0404
+            L_0x027f:
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.messagePopupNotificationRow
-                if (r14 != r1) goto L_0x03fd
+                if (r14 != r1) goto L_0x0404
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x0290
+                if (r14 != r5) goto L_0x0296
                 java.lang.String r14 = "popupAll"
                 int r14 = r0.getInt(r14, r4)
-                goto L_0x02a5
-            L_0x0290:
+                goto L_0x02ab
+            L_0x0296:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x029f
+                if (r14 != 0) goto L_0x02a5
                 java.lang.String r14 = "popupGroup"
                 int r14 = r0.getInt(r14, r4)
-                goto L_0x02a5
-            L_0x029f:
+                goto L_0x02ab
+            L_0x02a5:
                 java.lang.String r14 = "popupChannel"
                 int r14 = r0.getInt(r14, r4)
-            L_0x02a5:
-                if (r14 != 0) goto L_0x02b1
-                r14 = 2131626401(0x7f0e09a1, float:1.8880037E38)
+            L_0x02ab:
+                if (r14 != 0) goto L_0x02b7
+                r14 = 2131626431(0x7f0e09bf, float:1.8880098E38)
                 java.lang.String r0 = "NoPopup"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                goto L_0x02d2
-            L_0x02b1:
-                if (r14 != r5) goto L_0x02bd
-                r14 = 2131626625(0x7f0e0a81, float:1.8880491E38)
+                goto L_0x02d8
+            L_0x02b7:
+                if (r14 != r5) goto L_0x02c3
+                r14 = 2131626655(0x7f0e0a9f, float:1.8880552E38)
                 java.lang.String r0 = "OnlyWhenScreenOn"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                goto L_0x02d2
-            L_0x02bd:
-                if (r14 != r3) goto L_0x02c9
-                r14 = 2131626624(0x7f0e0a80, float:1.888049E38)
+                goto L_0x02d8
+            L_0x02c3:
+                if (r14 != r3) goto L_0x02cf
+                r14 = 2131626654(0x7f0e0a9e, float:1.888055E38)
                 java.lang.String r0 = "OnlyWhenScreenOff"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                goto L_0x02d2
-            L_0x02c9:
+                goto L_0x02d8
+            L_0x02cf:
                 r14 = 2131624257(0x7f0e0141, float:1.8875689E38)
                 java.lang.String r0 = "AlwaysShowPopup"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-            L_0x02d2:
-                r0 = 2131627098(0x7f0e0c5a, float:1.888145E38)
+            L_0x02d8:
+                r0 = 2131627131(0x7f0e0c7b, float:1.8881518E38)
                 java.lang.String r1 = "PopupNotification"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r0, r14, r5)
-                goto L_0x03fd
-            L_0x02e0:
+                goto L_0x0404
+            L_0x02e6:
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.deleteAllSectionRow
                 java.lang.String r1 = "windowBackgroundGrayShadow"
-                if (r14 == r0) goto L_0x031b
+                if (r14 == r0) goto L_0x0322
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.groupSection2Row
-                if (r14 != r0) goto L_0x02fa
+                if (r14 != r0) goto L_0x0301
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.exceptionsSection2Row
-                if (r0 == r2) goto L_0x031b
-            L_0x02fa:
+                if (r0 == r2) goto L_0x0322
+            L_0x0301:
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.exceptionsSection2Row
-                if (r14 != r0) goto L_0x030b
+                if (r14 != r0) goto L_0x0312
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.deleteAllRow
-                if (r14 != r2) goto L_0x030b
-                goto L_0x031b
-            L_0x030b:
+                if (r14 != r2) goto L_0x0312
+                goto L_0x0322
+            L_0x0312:
                 android.view.View r13 = r13.itemView
                 android.content.Context r14 = r12.mContext
                 r0 = 2131165448(0x7var_, float:1.7945113E38)
                 android.graphics.drawable.Drawable r14 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r14, (int) r0, (java.lang.String) r1)
                 r13.setBackgroundDrawable(r14)
-                goto L_0x03fd
-            L_0x031b:
+                goto L_0x0404
+            L_0x0322:
                 android.view.View r13 = r13.itemView
                 android.content.Context r14 = r12.mContext
                 r0 = 2131165449(0x7var_, float:1.7945115E38)
                 android.graphics.drawable.Drawable r14 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r14, (int) r0, (java.lang.String) r1)
                 r13.setBackgroundDrawable(r14)
-                goto L_0x03fd
-            L_0x032b:
+                goto L_0x0404
+            L_0x0332:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextColorCell r13 = (org.telegram.ui.Cells.TextColorCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
@@ -2203,39 +2013,39 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.currentType
                 r1 = -16776961(0xfffffffffvar_ff, float:-1.7014636E38)
-                if (r0 != r5) goto L_0x0347
+                if (r0 != r5) goto L_0x034e
                 java.lang.String r0 = "MessagesLed"
                 int r14 = r14.getInt(r0, r1)
-                goto L_0x035c
-            L_0x0347:
+                goto L_0x0363
+            L_0x034e:
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.currentType
-                if (r0 != 0) goto L_0x0356
+                if (r0 != 0) goto L_0x035d
                 java.lang.String r0 = "GroupLed"
                 int r14 = r14.getInt(r0, r1)
-                goto L_0x035c
-            L_0x0356:
+                goto L_0x0363
+            L_0x035d:
                 java.lang.String r0 = "ChannelLed"
                 int r14 = r14.getInt(r0, r1)
-            L_0x035c:
+            L_0x0363:
                 r0 = 9
-                if (r4 >= r0) goto L_0x036e
+                if (r4 >= r0) goto L_0x0375
                 int[] r0 = org.telegram.ui.Cells.TextColorCell.colorsToSave
                 r0 = r0[r4]
-                if (r0 != r14) goto L_0x036b
+                if (r0 != r14) goto L_0x0372
                 int[] r14 = org.telegram.ui.Cells.TextColorCell.colors
                 r14 = r14[r4]
-                goto L_0x036e
-            L_0x036b:
+                goto L_0x0375
+            L_0x0372:
                 int r4 = r4 + 1
-                goto L_0x035c
-            L_0x036e:
-                r0 = 2131626028(0x7f0e082c, float:1.887928E38)
+                goto L_0x0363
+            L_0x0375:
+                r0 = 2131626045(0x7f0e083d, float:1.8879315E38)
                 java.lang.String r1 = "LedColor"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndColor(r0, r14, r5)
-                goto L_0x03fd
-            L_0x037c:
+                goto L_0x0404
+            L_0x0383:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.UserCell r13 = (org.telegram.ui.Cells.UserCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
@@ -2248,52 +2058,52 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.NotificationsCustomSettingsActivity r2 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r2 = r2.exceptionsEndRow
                 int r2 = r2 - r5
-                if (r14 == r2) goto L_0x039e
+                if (r14 == r2) goto L_0x03a5
                 r4 = 1
-            L_0x039e:
+            L_0x03a5:
                 r13.setException(r0, r1, r4)
-                goto L_0x03fd
-            L_0x03a2:
+                goto L_0x0404
+            L_0x03a9:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextCheckCell r13 = (org.telegram.ui.Cells.TextCheckCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 android.content.SharedPreferences r0 = r0.getNotificationsSettings()
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.previewRow
-                if (r14 != r1) goto L_0x03fd
+                if (r14 != r1) goto L_0x0404
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x03c3
+                if (r14 != r5) goto L_0x03ca
                 java.lang.String r14 = "EnablePreviewAll"
                 boolean r14 = r0.getBoolean(r14, r5)
-                goto L_0x03d8
-            L_0x03c3:
+                goto L_0x03df
+            L_0x03ca:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x03d2
+                if (r14 != 0) goto L_0x03d9
                 java.lang.String r14 = "EnablePreviewGroup"
                 boolean r14 = r0.getBoolean(r14, r5)
-                goto L_0x03d8
-            L_0x03d2:
+                goto L_0x03df
+            L_0x03d9:
                 java.lang.String r14 = "EnablePreviewChannel"
                 boolean r14 = r0.getBoolean(r14, r5)
-            L_0x03d8:
-                r0 = 2131626224(0x7f0e08f0, float:1.8879678E38)
+            L_0x03df:
+                r0 = 2131626247(0x7f0e0907, float:1.8879725E38)
                 java.lang.String r1 = "MessagePreview"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndCheck(r0, r14, r5)
-                goto L_0x03fd
-            L_0x03e5:
+                goto L_0x0404
+            L_0x03ec:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.HeaderCell r13 = (org.telegram.ui.Cells.HeaderCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.messageSectionRow
-                if (r14 != r0) goto L_0x03fd
-                r14 = 2131627432(0x7f0e0da8, float:1.8882128E38)
+                if (r14 != r0) goto L_0x0404
+                r14 = 2131627465(0x7f0e0dc9, float:1.8882195E38)
                 java.lang.String r0 = "SETTINGS"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14)
-            L_0x03fd:
+            L_0x0404:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -2345,11 +2155,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$NotificationsCustomSettingsActivity$Q0JA7CkShx4ZcJ91r5xSgqVbIo r11 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                NotificationsCustomSettingsActivity.this.lambda$getThemeDescriptions$12$NotificationsCustomSettingsActivity();
-            }
-        };
+        NotificationsCustomSettingsActivity$$ExternalSyntheticLambda9 notificationsCustomSettingsActivity$$ExternalSyntheticLambda9 = new NotificationsCustomSettingsActivity$$ExternalSyntheticLambda9(this);
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextCheckCell.class, TextColorCell.class, TextSettingsCell.class, UserCell.class, NotificationsCheckCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -2366,20 +2172,20 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$NotificationsCustomSettingsActivity$Q0JA7CkShx4ZcJ91r5xSgqVbIo r9 = r11;
+        NotificationsCustomSettingsActivity$$ExternalSyntheticLambda9 notificationsCustomSettingsActivity$$ExternalSyntheticLambda92 = notificationsCustomSettingsActivity$$ExternalSyntheticLambda9;
         ThemeDescription themeDescription = r2;
-        ThemeDescription themeDescription2 = new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText");
+        ThemeDescription themeDescription2 = new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) notificationsCustomSettingsActivity$$ExternalSyntheticLambda92, "windowBackgroundWhiteGrayText");
         arrayList.add(themeDescription);
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) notificationsCustomSettingsActivity$$ExternalSyntheticLambda92, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$NotificationsCustomSettingsActivity$Q0JA7CkShx4ZcJ91r5xSgqVbIo r8 = r11;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        NotificationsCustomSettingsActivity$$ExternalSyntheticLambda9 notificationsCustomSettingsActivity$$ExternalSyntheticLambda93 = notificationsCustomSettingsActivity$$ExternalSyntheticLambda9;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, notificationsCustomSettingsActivity$$ExternalSyntheticLambda93, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, notificationsCustomSettingsActivity$$ExternalSyntheticLambda93, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, notificationsCustomSettingsActivity$$ExternalSyntheticLambda93, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, notificationsCustomSettingsActivity$$ExternalSyntheticLambda93, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, notificationsCustomSettingsActivity$$ExternalSyntheticLambda93, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, notificationsCustomSettingsActivity$$ExternalSyntheticLambda93, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, notificationsCustomSettingsActivity$$ExternalSyntheticLambda93, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
@@ -2397,8 +2203,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$12 */
-    public /* synthetic */ void lambda$getThemeDescriptions$12$NotificationsCustomSettingsActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$12() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

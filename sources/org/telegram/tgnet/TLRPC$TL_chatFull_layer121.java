@@ -9,7 +9,7 @@ public class TLRPC$TL_chatFull_layer121 extends TLRPC$TL_chatFull {
         int i = 0;
         this.can_set_username = (readInt32 & 128) != 0;
         this.has_scheduled = (readInt32 & 256) != 0;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         this.about = abstractSerializedData.readString(z);
         this.participants = TLRPC$ChatParticipants.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 4) != 0) {
@@ -54,7 +54,7 @@ public class TLRPC$TL_chatFull_layer121 extends TLRPC$TL_chatFull {
         int i2 = this.has_scheduled ? i | 256 : i & -257;
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         abstractSerializedData.writeString(this.about);
         this.participants.serializeToStream(abstractSerializedData);
         if ((this.flags & 4) != 0) {

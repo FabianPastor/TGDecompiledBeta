@@ -1,8 +1,12 @@
 package j$.util.stream;
 
-enum U2 {
-    REFERENCE,
-    INT_VALUE,
-    LONG_VALUE,
-    DOUBLE_VALUE
+abstract class U2 {
+    Object a;
+
+    U2() {
+    }
+
+    public Object get() {
+        return this.a;
+    }
 }

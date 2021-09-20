@@ -29,7 +29,7 @@ public class BrightnessControlCell extends FrameLayout {
         this.leftImageView = imageView;
         imageView.setImageResource(NUM);
         addView(this.leftImageView, LayoutHelper.createFrame(24, 24.0f, 51, 17.0f, 12.0f, 0.0f, 0.0f));
-        AnonymousClass1 r0 = new SeekBarView(context, true) {
+        AnonymousClass1 r0 = new SeekBarView(this, context, true, (Theme.ResourcesProvider) null) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);

@@ -1,29 +1,7 @@
 package org.telegram.tgnet;
 
-import java.util.ArrayList;
-
-public class TLRPC$TL_messageReplies extends TLObject {
-    public static int constructor = NUM;
-    public int channel_id;
-    public boolean comments;
-    public int flags;
-    public int max_id;
-    public int read_max_id;
-    public ArrayList<TLRPC$Peer> recent_repliers = new ArrayList<>();
-    public int replies;
-    public int replies_pts;
-
-    public static TLRPC$TL_messageReplies TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_messageReplies tLRPC$TL_messageReplies = new TLRPC$TL_messageReplies();
-            tLRPC$TL_messageReplies.readParams(abstractSerializedData, z);
-            return tLRPC$TL_messageReplies;
-        } else if (!z) {
-            return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_messageReplies", new Object[]{Integer.valueOf(i)}));
-        }
-    }
+public class TLRPC$TL_messageReplies extends TLRPC$MessageReplies {
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -52,7 +30,7 @@ public class TLRPC$TL_messageReplies extends TLObject {
             }
         }
         if ((this.flags & 1) != 0) {
-            this.channel_id = abstractSerializedData.readInt32(z);
+            this.channel_id = abstractSerializedData.readInt64(z);
         }
         if ((this.flags & 4) != 0) {
             this.max_id = abstractSerializedData.readInt32(z);
@@ -78,7 +56,7 @@ public class TLRPC$TL_messageReplies extends TLObject {
             }
         }
         if ((this.flags & 1) != 0) {
-            abstractSerializedData.writeInt32(this.channel_id);
+            abstractSerializedData.writeInt64(this.channel_id);
         }
         if ((this.flags & 4) != 0) {
             abstractSerializedData.writeInt32(this.max_id);

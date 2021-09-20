@@ -17,7 +17,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SearchCounterView extends View {
-    int animationType = -1;
+    int animationType;
     /* access modifiers changed from: private */
     public StaticLayout countAnimationInLayout;
     private boolean countAnimationIncrement;
@@ -40,13 +40,15 @@ public class SearchCounterView extends View {
     public float horizontalPadding;
     int lastH;
     RectF rectF = new RectF();
+    private final Theme.ResourcesProvider resourcesProvider;
     private int textColor;
     private String textColorKey = "chat_searchPanelText";
     TextPaint textPaint = new TextPaint(1);
     float x;
 
-    public SearchCounterView(Context context) {
+    public SearchCounterView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
     }
@@ -101,11 +103,7 @@ public class SearchCounterView extends View {
                 this.countChangeProgress = 0.0f;
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                 this.countAnimator = ofFloat;
-                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        SearchCounterView.this.lambda$setCount$0$SearchCounterView(valueAnimator);
-                    }
-                });
+                ofFloat.addUpdateListener(new SearchCounterView$$ExternalSyntheticLambda0(this));
                 this.countAnimator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         SearchCounterView searchCounterView = SearchCounterView.this;
@@ -117,7 +115,6 @@ public class SearchCounterView extends View {
                         SearchCounterView.this.invalidate();
                     }
                 });
-                this.animationType = 2;
                 this.countAnimator.setDuration(200);
                 this.countAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
                 if (this.countLayout != null) {
@@ -195,8 +192,7 @@ public class SearchCounterView extends View {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setCount$0 */
-    public /* synthetic */ void lambda$setCount$0$SearchCounterView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setCount$0(ValueAnimator valueAnimator) {
         this.countChangeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -205,7 +201,7 @@ public class SearchCounterView extends View {
     public void onDraw(Canvas canvas) {
         float f;
         super.onDraw(canvas);
-        int color = Theme.getColor(this.textColorKey);
+        int color = Theme.getColor(this.textColorKey, this.resourcesProvider);
         if (this.textColor != color) {
             this.textColor = color;
             this.textPaint.setColor(color);

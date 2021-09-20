@@ -22,7 +22,7 @@ public class TLRPC$TL_channel_layer104 extends TLRPC$TL_channel {
             z2 = true;
         }
         this.slowmode_enabled = z2;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = (long) abstractSerializedData.readInt32(z);
         if ((this.flags & 8192) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
         }
@@ -77,7 +77,7 @@ public class TLRPC$TL_channel_layer104 extends TLRPC$TL_channel {
         int i12 = this.slowmode_enabled ? i11 | 4194304 : i11 & -4194305;
         this.flags = i12;
         abstractSerializedData.writeInt32(i12);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt32((int) this.id);
         if ((this.flags & 8192) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
         }

@@ -103,17 +103,12 @@ public class JoinCallByUrlAlert extends BottomSheet {
         } else {
             bottomSheetCell.setText(LocaleController.getString("VoipGroupJoinVoiceChatUrl", NUM));
         }
-        bottomSheetCell.background.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                JoinCallByUrlAlert.this.lambda$new$0$JoinCallByUrlAlert(view);
-            }
-        });
+        bottomSheetCell.background.setOnClickListener(new JoinCallByUrlAlert$$ExternalSyntheticLambda0(this));
         linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50, 51, 0, 30, 0, 0));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$JoinCallByUrlAlert(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         this.joinAfterDismiss = true;
         dismiss();
     }

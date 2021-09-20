@@ -1,22 +1,47 @@
 package j$.util.stream;
 
-import j$.util.function.C;
-import j$.util.function.CLASSNAMEh;
-import j$.util.stream.D1;
+import j$.util.function.f;
+import j$.util.y;
 
-public final /* synthetic */ class P implements C {
-    public final /* synthetic */ D1.d.a a;
-
-    public /* synthetic */ P(D1.d.a aVar) {
-        this.a = aVar;
+class P extends T {
+    P(y yVar, int i, boolean z) {
+        super(yVar, i, z);
     }
 
-    public final void accept(long j) {
-        this.a.a.accept(j);
+    /* access modifiers changed from: package-private */
+    public final boolean G0() {
+        throw new UnsupportedOperationException();
     }
 
-    public C f(C c) {
-        c.getClass();
-        return new CLASSNAMEh(this, c);
+    /* access modifiers changed from: package-private */
+    public final CLASSNAMEn3 H0(int i, CLASSNAMEn3 n3Var) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void j(f fVar) {
+        if (!isParallel()) {
+            T.M0(J0()).e(fVar);
+        } else {
+            super.j(fVar);
+        }
+    }
+
+    public void l0(f fVar) {
+        if (!isParallel()) {
+            T.M0(J0()).e(fVar);
+            return;
+        }
+        fVar.getClass();
+        x0(new CLASSNAMEk0(fVar, true));
+    }
+
+    public /* bridge */ /* synthetic */ U parallel() {
+        parallel();
+        return this;
+    }
+
+    public /* bridge */ /* synthetic */ U sequential() {
+        sequential();
+        return this;
     }
 }

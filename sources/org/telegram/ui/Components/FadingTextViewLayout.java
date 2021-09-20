@@ -57,11 +57,7 @@ public class FadingTextViewLayout extends FrameLayout {
         this.animator = ofFloat;
         ofFloat.setDuration(200);
         ofFloat.setInterpolator((TimeInterpolator) null);
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                FadingTextViewLayout.this.lambda$new$0$FadingTextViewLayout(valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new FadingTextViewLayout$$ExternalSyntheticLambda0(this));
         ofFloat.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 FadingTextViewLayout.this.currentView.setLayerType(0, (Paint) null);
@@ -87,8 +83,7 @@ public class FadingTextViewLayout extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$FadingTextViewLayout(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
         float animatedFraction = valueAnimator.getAnimatedFraction();
         TextView textView = this.currentView;
         CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;

@@ -23,6 +23,7 @@ public class SearchField extends FrameLayout {
     /* access modifiers changed from: private */
     public ImageView clearSearchImageView;
     private CloseProgressDrawable2 progressDrawable;
+    private final Theme.ResourcesProvider resourcesProvider;
     private View searchBackground;
     /* access modifiers changed from: private */
     public EditTextBoldCursor searchEditText;
@@ -38,19 +39,16 @@ public class SearchField extends FrameLayout {
     public void processTouchEvent(MotionEvent motionEvent) {
     }
 
-    public SearchField(Context context) {
-        this(context, false);
-    }
-
-    public SearchField(Context context, boolean z) {
+    public SearchField(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         FrameLayout.LayoutParams layoutParams;
         FrameLayout.LayoutParams layoutParams2;
         FrameLayout.LayoutParams layoutParams3;
         FrameLayout.LayoutParams layoutParams4;
+        this.resourcesProvider = resourcesProvider2;
         View view = new View(context);
         this.searchBackground = view;
-        view.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("dialogSearchBackground")));
+        view.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), getThemedColor("dialogSearchBackground")));
         if (z) {
             layoutParams = LayoutHelper.createFrameRelatively(-1.0f, 36.0f, 8388659, 14.0f, 11.0f, 14.0f, 0.0f);
         } else {
@@ -61,7 +59,7 @@ public class SearchField extends FrameLayout {
         this.searchIconImageView = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.searchIconImageView.setImageResource(NUM);
-        this.searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogSearchIcon"), PorterDuff.Mode.MULTIPLY));
+        this.searchIconImageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogSearchIcon"), PorterDuff.Mode.MULTIPLY));
         if (z) {
             layoutParams2 = LayoutHelper.createFrameRelatively(36.0f, 36.0f, 8388659, 16.0f, 11.0f, 0.0f, 0.0f);
         } else {
@@ -79,19 +77,15 @@ public class SearchField extends FrameLayout {
         this.clearSearchImageView.setScaleX(0.1f);
         this.clearSearchImageView.setScaleY(0.1f);
         this.clearSearchImageView.setAlpha(0.0f);
-        this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogSearchIcon"), PorterDuff.Mode.MULTIPLY));
+        this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogSearchIcon"), PorterDuff.Mode.MULTIPLY));
         if (z) {
             layoutParams3 = LayoutHelper.createFrameRelatively(36.0f, 36.0f, 8388661, 14.0f, 11.0f, 14.0f, 0.0f);
         } else {
             layoutParams3 = LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f);
         }
         addView(this.clearSearchImageView, layoutParams3);
-        this.clearSearchImageView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                SearchField.this.lambda$new$0$SearchField(view);
-            }
-        });
-        AnonymousClass1 r0 = new EditTextBoldCursor(context) {
+        this.clearSearchImageView.setOnClickListener(new SearchField$$ExternalSyntheticLambda0(this));
+        AnonymousClass1 r14 = new EditTextBoldCursor(context) {
             public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                 SearchField.this.processTouchEvent(motionEvent);
                 return super.dispatchTouchEvent(motionEvent);
@@ -107,10 +101,10 @@ public class SearchField extends FrameLayout {
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.searchEditText = r0;
-        r0.setTextSize(1, 16.0f);
-        this.searchEditText.setHintTextColor(Theme.getColor("dialogSearchHint"));
-        this.searchEditText.setTextColor(Theme.getColor("dialogSearchText"));
+        this.searchEditText = r14;
+        r14.setTextSize(1, 16.0f);
+        this.searchEditText.setHintTextColor(getThemedColor("dialogSearchHint"));
+        this.searchEditText.setTextColor(getThemedColor("dialogSearchText"));
         this.searchEditText.setBackgroundDrawable((Drawable) null);
         this.searchEditText.setPadding(0, 0, 0, 0);
         this.searchEditText.setMaxLines(1);
@@ -118,7 +112,7 @@ public class SearchField extends FrameLayout {
         this.searchEditText.setSingleLine(true);
         this.searchEditText.setGravity((z ? LayoutHelper.getAbsoluteGravityStart() : 3) | 16);
         this.searchEditText.setImeOptions(NUM);
-        this.searchEditText.setCursorColor(Theme.getColor("featuredStickers_addedIcon"));
+        this.searchEditText.setCursorColor(getThemedColor("featuredStickers_addedIcon"));
         this.searchEditText.setCursorSize(AndroidUtilities.dp(20.0f));
         this.searchEditText.setCursorWidth(1.5f);
         if (z) {
@@ -157,23 +151,17 @@ public class SearchField extends FrameLayout {
                 searchField.onTextChange(searchField.searchEditText.getText().toString());
             }
         });
-        this.searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                return SearchField.this.lambda$new$1$SearchField(textView, i, keyEvent);
-            }
-        });
+        this.searchEditText.setOnEditorActionListener(new SearchField$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$SearchField(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         this.searchEditText.setText("");
         AndroidUtilities.showKeyboard(this.searchEditText);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ boolean lambda$new$1$SearchField(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$new$1(TextView textView, int i, KeyEvent keyEvent) {
         if (keyEvent == null) {
             return false;
         }
@@ -213,5 +201,11 @@ public class SearchField extends FrameLayout {
         list2.add(new ThemeDescription(this.searchEditText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchText"));
         list2.add(new ThemeDescription(this.searchEditText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchHint"));
         list2.add(new ThemeDescription(this.searchEditText, ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addedIcon"));
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

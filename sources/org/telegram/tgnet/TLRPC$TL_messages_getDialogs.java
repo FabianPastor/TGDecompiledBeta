@@ -5,7 +5,7 @@ public class TLRPC$TL_messages_getDialogs extends TLObject {
     public boolean exclude_pinned;
     public int flags;
     public int folder_id;
-    public int hash;
+    public long hash;
     public int limit;
     public int offset_date;
     public int offset_id;
@@ -27,6 +27,6 @@ public class TLRPC$TL_messages_getDialogs extends TLObject {
         abstractSerializedData.writeInt32(this.offset_id);
         this.offset_peer.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.limit);
-        abstractSerializedData.writeInt32(this.hash);
+        abstractSerializedData.writeInt64(this.hash);
     }
 }

@@ -13,7 +13,7 @@ public abstract class TLRPC$Photo extends TLObject {
     public boolean has_stickers;
     public long id;
     public ArrayList<TLRPC$PhotoSize> sizes = new ArrayList<>();
-    public int user_id;
+    public long user_id;
     public ArrayList<TLRPC$VideoSize> video_sizes = new ArrayList<>();
 
     public static TLRPC$Photo TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {

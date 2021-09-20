@@ -19,6 +19,7 @@ public class RoundVideoPlayingDrawable extends Drawable {
     private int progress2Direction = 1;
     private float progress3 = 0.32f;
     private int progress3Direction = 1;
+    private final Theme.ResourcesProvider resourcesProvider;
     private boolean started = false;
 
     public int getOpacity() {
@@ -28,7 +29,8 @@ public class RoundVideoPlayingDrawable extends Drawable {
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
-    public RoundVideoPlayingDrawable(View view) {
+    public RoundVideoPlayingDrawable(View view, Theme.ResourcesProvider resourcesProvider2) {
+        this.resourcesProvider = resourcesProvider2;
         this.parentView = view;
     }
 
@@ -85,7 +87,7 @@ public class RoundVideoPlayingDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        this.paint.setColor(Theme.getColor("chat_serviceText"));
+        this.paint.setColor(getThemedColor("chat_serviceText"));
         int i = this.alpha;
         if (i != 255) {
             Paint paint2 = this.paint;
@@ -114,5 +116,11 @@ public class RoundVideoPlayingDrawable extends Drawable {
 
     public int getIntrinsicHeight() {
         return AndroidUtilities.dp(12.0f);
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

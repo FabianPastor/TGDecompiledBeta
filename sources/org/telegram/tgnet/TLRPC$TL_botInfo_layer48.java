@@ -4,7 +4,7 @@ public class TLRPC$TL_botInfo_layer48 extends TLRPC$TL_botInfo {
     public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.user_id = abstractSerializedData.readInt32(z);
+        this.user_id = (long) abstractSerializedData.readInt32(z);
         this.version = abstractSerializedData.readInt32(z);
         abstractSerializedData.readString(z);
         this.description = abstractSerializedData.readString(z);
@@ -28,7 +28,7 @@ public class TLRPC$TL_botInfo_layer48 extends TLRPC$TL_botInfo {
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        abstractSerializedData.writeInt32(this.user_id);
+        abstractSerializedData.writeInt32((int) this.user_id);
         abstractSerializedData.writeInt32(this.version);
         abstractSerializedData.writeString("");
         abstractSerializedData.writeString(this.description);

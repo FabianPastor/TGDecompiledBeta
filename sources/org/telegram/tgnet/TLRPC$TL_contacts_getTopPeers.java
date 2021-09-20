@@ -10,7 +10,7 @@ public class TLRPC$TL_contacts_getTopPeers extends TLObject {
     public boolean forward_chats;
     public boolean forward_users;
     public boolean groups;
-    public int hash;
+    public long hash;
     public int limit;
     public int offset;
     public boolean phone_calls;
@@ -40,6 +40,6 @@ public class TLRPC$TL_contacts_getTopPeers extends TLObject {
         abstractSerializedData.writeInt32(i8);
         abstractSerializedData.writeInt32(this.offset);
         abstractSerializedData.writeInt32(this.limit);
-        abstractSerializedData.writeInt32(this.hash);
+        abstractSerializedData.writeInt64(this.hash);
     }
 }

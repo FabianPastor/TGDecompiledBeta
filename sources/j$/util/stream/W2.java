@@ -1,134 +1,42 @@
 package j$.util.stream;
 
-import j$.time.a;
-import j$.util.Spliterator;
-import j$.util.function.J;
-import j$.util.function.o;
-import j$.util.stream.CLASSNAMEj1;
-import java.util.Comparator;
+import j$.util.y;
+import java.util.concurrent.CountedCompleter;
 
-abstract class W2<P_IN, P_OUT, T_BUFFER extends CLASSNAMEj1> implements Spliterator<P_OUT> {
-    final boolean a;
-    final T1 b;
-    private J c;
-    Spliterator d;
-    A2 e;
-    o f;
-    long g;
-    CLASSNAMEj1 h;
-    boolean i;
+final class W2 extends CLASSNAMEf {
+    private final V2 h;
 
-    W2(T1 t1, Spliterator spliterator, boolean z) {
-        this.b = t1;
-        this.c = null;
-        this.d = spliterator;
-        this.a = z;
+    W2(V2 v2, CLASSNAMEz2 z2Var, y yVar) {
+        super(z2Var, yVar);
+        this.h = v2;
     }
 
-    W2(T1 t1, J j, boolean z) {
-        this.b = t1;
-        this.c = j;
+    W2(W2 w2, y yVar) {
+        super((CLASSNAMEf) w2, yVar);
+        this.h = w2.h;
+    }
+
+    /* access modifiers changed from: protected */
+    public Object a() {
+        CLASSNAMEz2 z2Var = this.a;
+        T2 a = this.h.a();
+        z2Var.u0(a, this.b);
+        return a;
+    }
+
+    /* access modifiers changed from: protected */
+    public CLASSNAMEf f(y yVar) {
+        return new W2(this, yVar);
+    }
+
+    public void onCompletion(CountedCompleter countedCompleter) {
+        if (!d()) {
+            T2 t2 = (T2) ((W2) this.d).b();
+            t2.h((T2) ((W2) this.e).b());
+            g(t2);
+        }
+        this.b = null;
+        this.e = null;
         this.d = null;
-        this.a = z;
-    }
-
-    private boolean f() {
-        while (this.h.count() == 0) {
-            if (this.e.o() || !this.f.a()) {
-                if (this.i) {
-                    return false;
-                }
-                this.e.l();
-                this.i = true;
-            }
-        }
-        return true;
-    }
-
-    /* access modifiers changed from: package-private */
-    public final boolean a() {
-        CLASSNAMEj1 j1Var = this.h;
-        boolean z = false;
-        if (j1Var != null) {
-            long j = this.g + 1;
-            this.g = j;
-            if (j < j1Var.count()) {
-                z = true;
-            }
-            if (z) {
-                return z;
-            }
-            this.g = 0;
-            this.h.clear();
-            return f();
-        } else if (this.i) {
-            return false;
-        } else {
-            h();
-            j();
-            this.g = 0;
-            this.e.m(this.d.getExactSizeIfKnown());
-            return f();
-        }
-    }
-
-    public final int characteristics() {
-        h();
-        int g2 = T2.g(this.b.r0()) & T2.a;
-        return (g2 & 64) != 0 ? (g2 & -16449) | (this.d.characteristics() & 16448) : g2;
-    }
-
-    public final long estimateSize() {
-        h();
-        return this.d.estimateSize();
-    }
-
-    public Comparator getComparator() {
-        if (a.f(this, 4)) {
-            return null;
-        }
-        throw new IllegalStateException();
-    }
-
-    public final long getExactSizeIfKnown() {
-        h();
-        if (T2.SIZED.d(this.b.r0())) {
-            return this.d.getExactSizeIfKnown();
-        }
-        return -1;
-    }
-
-    /* access modifiers changed from: package-private */
-    public final void h() {
-        if (this.d == null) {
-            this.d = (Spliterator) this.c.get();
-            this.c = null;
-        }
-    }
-
-    public /* synthetic */ boolean hasCharacteristics(int i2) {
-        return a.f(this, i2);
-    }
-
-    /* access modifiers changed from: package-private */
-    public abstract void j();
-
-    /* access modifiers changed from: package-private */
-    public abstract W2 k(Spliterator spliterator);
-
-    public final String toString() {
-        return String.format("%s[%s]", new Object[]{getClass().getName(), this.d});
-    }
-
-    public Spliterator trySplit() {
-        if (!this.a || this.i) {
-            return null;
-        }
-        h();
-        Spliterator trySplit = this.d.trySplit();
-        if (trySplit == null) {
-            return null;
-        }
-        return k(trySplit);
     }
 }

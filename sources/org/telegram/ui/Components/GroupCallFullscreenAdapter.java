@@ -147,14 +147,13 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
         private TLRPC$Chat currentChat;
         private TLRPC$User currentUser;
         String drawingName;
-        boolean hasAvatar;
         int lastColor;
         int lastWavesColor;
         RLottieImageView muteButton;
         String name;
         int nameWidth;
         TLRPC$TL_groupCallParticipant participant;
-        int peerId;
+        long peerId;
         float progress = 1.0f;
         GroupCallMiniTextureView renderer;
         boolean selected;
@@ -203,22 +202,20 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
         public void setParticipant(ChatObject.VideoParticipant videoParticipant2, TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant) {
             this.videoParticipant = videoParticipant2;
             this.participant = tLRPC$TL_groupCallParticipant;
-            int i = this.peerId;
-            int peerId2 = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
+            long j = this.peerId;
+            long peerId2 = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
             this.peerId = peerId2;
-            boolean z = false;
+            boolean z = true;
             if (peerId2 > 0) {
-                TLRPC$User user = AccountInstance.getInstance(GroupCallFullscreenAdapter.this.currentAccount).getMessagesController().getUser(Integer.valueOf(this.peerId));
+                TLRPC$User user = AccountInstance.getInstance(GroupCallFullscreenAdapter.this.currentAccount).getMessagesController().getUser(Long.valueOf(this.peerId));
                 this.currentUser = user;
                 this.currentChat = null;
                 this.avatarDrawable.setInfo(user);
                 this.name = UserObject.getFirstName(this.currentUser);
                 this.avatarImageView.getImageReceiver().setCurrentAccount(GroupCallFullscreenAdapter.this.currentAccount);
-                ImageLocation forUser = ImageLocation.getForUser(this.currentUser, 1);
-                this.hasAvatar = forUser != null;
-                this.avatarImageView.setImage(forUser, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
+                this.avatarImageView.setImage(ImageLocation.getForUser(this.currentUser, 1), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
             } else {
-                TLRPC$Chat chat = AccountInstance.getInstance(GroupCallFullscreenAdapter.this.currentAccount).getMessagesController().getChat(Integer.valueOf(-this.peerId));
+                TLRPC$Chat chat = AccountInstance.getInstance(GroupCallFullscreenAdapter.this.currentAccount).getMessagesController().getChat(Long.valueOf(-this.peerId));
                 this.currentChat = chat;
                 this.currentUser = null;
                 this.avatarDrawable.setInfo(chat);
@@ -226,15 +223,13 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                 if (tLRPC$Chat != null) {
                     this.name = tLRPC$Chat.title;
                     this.avatarImageView.getImageReceiver().setCurrentAccount(GroupCallFullscreenAdapter.this.currentAccount);
-                    ImageLocation forChat = ImageLocation.getForChat(this.currentChat, 1);
-                    this.hasAvatar = forChat != null;
-                    this.avatarImageView.setImage(forChat, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
+                    this.avatarImageView.setImage(ImageLocation.getForChat(this.currentChat, 1), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
                 }
             }
-            boolean z2 = i == this.peerId;
+            boolean z2 = j == this.peerId;
             if (videoParticipant2 == null) {
-                if (GroupCallFullscreenAdapter.this.renderersContainer.fullscreenPeerId == MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer)) {
-                    z = true;
+                if (GroupCallFullscreenAdapter.this.renderersContainer.fullscreenPeerId != MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer)) {
+                    z = false;
                 }
                 this.selected = z;
             } else if (GroupCallFullscreenAdapter.this.renderersContainer.fullscreenParticipant != null) {
@@ -397,7 +392,7 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
             }
         }
 
-        public int getPeerId() {
+        public long getPeerId() {
             return this.peerId;
         }
 
@@ -573,12 +568,12 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                 r10 = {0, NUM} // fill-array
                 android.animation.ValueAnimator r10 = android.animation.ValueAnimator.ofFloat(r10)
                 r9.colorAnimator = r10
-                org.telegram.ui.Components.-$$Lambda$GroupCallFullscreenAdapter$GroupCallUserCell$gtKr_PRIQv6oil_uEp6rPgiruuU r8 = new org.telegram.ui.Components.-$$Lambda$GroupCallFullscreenAdapter$GroupCallUserCell$gtKr_PRIQv6oil_uEp6rPgiruuU
+                org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell$$ExternalSyntheticLambda0 r8 = new org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell$$ExternalSyntheticLambda0
                 r2 = r8
                 r3 = r9
                 r5 = r0
                 r7 = r1
-                r2.<init>(r4, r5, r6, r7)
+                r2.<init>(r3, r4, r5, r6, r7)
                 r10.addUpdateListener(r8)
                 android.animation.ValueAnimator r10 = r9.colorAnimator
                 org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell$2 r2 = new org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell$2
@@ -593,8 +588,7 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateState$0 */
-        public /* synthetic */ void lambda$updateState$0$GroupCallFullscreenAdapter$GroupCallUserCell(int i, int i2, int i3, int i4, ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$updateState$0(int i, int i2, int i3, int i4, ValueAnimator valueAnimator) {
             this.lastColor = ColorUtils.blendARGB(i, i2, ((Float) valueAnimator.getAnimatedValue()).floatValue());
             this.lastWavesColor = ColorUtils.blendARGB(i3, i4, ((Float) valueAnimator.getAnimatedValue()).floatValue());
             this.muteButton.setColorFilter(new PorterDuffColorFilter(this.lastColor, PorterDuff.Mode.MULTIPLY));

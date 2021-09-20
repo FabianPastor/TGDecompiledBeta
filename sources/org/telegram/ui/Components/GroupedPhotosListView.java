@@ -59,7 +59,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     private ArrayList<ImageReceiver> unusedReceivers = new ArrayList<>();
 
     public interface GroupedPhotosListViewDelegate {
-        int getAvatarsDialogId();
+        long getAvatarsDialogId();
 
         int getCurrentAccount();
 
@@ -357,8 +357,8 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r2.<init>()
             r1.addListener(r2)
             android.animation.ValueAnimator r1 = r0.hideAnimator
-            org.telegram.ui.Components.-$$Lambda$GroupedPhotosListView$7-NsDyGZ3pLV0yOU9Kop-94BgDY r2 = new org.telegram.ui.Components.-$$Lambda$GroupedPhotosListView$7-NsDyGZ3pLV0yOU9Kop-94BgDY
-            r2.<init>()
+            org.telegram.ui.Components.GroupedPhotosListView$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Components.GroupedPhotosListView$$ExternalSyntheticLambda0
+            r2.<init>(r0)
             r1.addUpdateListener(r2)
             android.animation.ValueAnimator r1 = r0.hideAnimator
             r1.start()
@@ -393,8 +393,8 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r3.<init>()
             r2.addListener(r3)
             android.animation.ValueAnimator r2 = r0.showAnimator
-            org.telegram.ui.Components.-$$Lambda$GroupedPhotosListView$723f_7Q0nZO9TH7yNWaPMJ2nfJ0 r3 = new org.telegram.ui.Components.-$$Lambda$GroupedPhotosListView$723f_7Q0nZO9TH7yNWaPMJ2nfJ0
-            r3.<init>()
+            org.telegram.ui.Components.GroupedPhotosListView$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.GroupedPhotosListView$$ExternalSyntheticLambda1
+            r3.<init>(r0)
             r2.addUpdateListener(r3)
         L_0x01e3:
             r2 = -1
@@ -637,15 +637,13 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$fillList$0 */
-    public /* synthetic */ void lambda$fillList$0$GroupedPhotosListView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$fillList$0(ValueAnimator valueAnimator) {
         this.drawAlpha = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$fillList$1 */
-    public /* synthetic */ void lambda$fillList$1$GroupedPhotosListView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$fillList$1(ValueAnimator valueAnimator) {
         this.drawAlpha = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }

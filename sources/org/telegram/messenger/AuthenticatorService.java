@@ -14,8 +14,6 @@ public class AuthenticatorService extends Service {
     private static Authenticator authenticator;
 
     private static class Authenticator extends AbstractAccountAuthenticator {
-        private final Context context;
-
         public Bundle addAccount(AccountAuthenticatorResponse accountAuthenticatorResponse, String str, String str2, String[] strArr, Bundle bundle) throws NetworkErrorException {
             return null;
         }
@@ -44,9 +42,8 @@ public class AuthenticatorService extends Service {
             return null;
         }
 
-        public Authenticator(Context context2) {
-            super(context2);
-            this.context = context2;
+        public Authenticator(Context context) {
+            super(context);
         }
 
         public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account) throws NetworkErrorException {

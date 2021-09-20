@@ -1,7 +1,5 @@
 package org.webrtc;
 
-import org.webrtc.VideoSink;
-
 public class VideoSource extends MediaSource {
     private final CapturerObserver capturerObserver = new CapturerObserver() {
         public void onCapturerStarted(boolean z) {
@@ -130,15 +128,7 @@ public class VideoSource extends MediaSource {
             }
             this.videoProcessor = videoProcessor2;
             if (videoProcessor2 != null) {
-                videoProcessor2.setSink(new VideoSink() {
-                    public final void onFrame(VideoFrame videoFrame) {
-                        VideoSource.this.lambda$setVideoProcessor$1$VideoSource(videoFrame);
-                    }
-
-                    public /* synthetic */ void setParentSink(VideoSink videoSink) {
-                        VideoSink.CC.$default$setParentSink(this, videoSink);
-                    }
-                });
+                videoProcessor2.setSink(new VideoSource$$ExternalSyntheticLambda1(this));
                 if (this.isCapturerRunning) {
                     videoProcessor2.onCapturerStarted(true);
                 }
@@ -147,25 +137,13 @@ public class VideoSource extends MediaSource {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setVideoProcessor$0 */
-    public /* synthetic */ void lambda$setVideoProcessor$0$VideoSource(VideoFrame videoFrame) {
+    public /* synthetic */ void lambda$setVideoProcessor$0(VideoFrame videoFrame) {
         this.nativeAndroidVideoTrackSource.onFrameCaptured(videoFrame);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setVideoProcessor$1 */
-    public /* synthetic */ void lambda$setVideoProcessor$1$VideoSource(VideoFrame videoFrame) {
-        runWithReference(new Runnable(videoFrame) {
-            public final /* synthetic */ VideoFrame f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                VideoSource.this.lambda$setVideoProcessor$0$VideoSource(this.f$1);
-            }
-        });
+    public /* synthetic */ void lambda$setVideoProcessor$1(VideoFrame videoFrame) {
+        runWithReference(new VideoSource$$ExternalSyntheticLambda0(this, videoFrame));
     }
 
     public CapturerObserver getCapturerObserver() {

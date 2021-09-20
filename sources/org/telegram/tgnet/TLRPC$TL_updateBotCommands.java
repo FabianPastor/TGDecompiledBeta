@@ -3,14 +3,14 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_updateBotCommands extends TLRPC$Update {
-    public static int constructor = -NUM;
-    public int bot_id;
+    public static int constructor = NUM;
+    public long bot_id;
     public ArrayList<TLRPC$TL_botCommand> commands = new ArrayList<>();
     public TLRPC$Peer peer;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.peer = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.bot_id = abstractSerializedData.readInt32(z);
+        this.bot_id = abstractSerializedData.readInt64(z);
         int readInt32 = abstractSerializedData.readInt32(z);
         int i = 0;
         if (readInt32 == NUM) {
@@ -32,7 +32,7 @@ public class TLRPC$TL_updateBotCommands extends TLRPC$Update {
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         this.peer.serializeToStream(abstractSerializedData);
-        abstractSerializedData.writeInt32(this.bot_id);
+        abstractSerializedData.writeInt64(this.bot_id);
         abstractSerializedData.writeInt32(NUM);
         int size = this.commands.size();
         abstractSerializedData.writeInt32(size);

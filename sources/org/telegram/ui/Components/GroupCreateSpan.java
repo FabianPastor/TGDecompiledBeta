@@ -36,7 +36,7 @@ public class GroupCreateSpan extends View {
     private RectF rect;
     private int textWidth;
     private float textX;
-    private int uid;
+    private long uid;
 
     public GroupCreateSpan(Context context, Object obj) {
         this(context, obj, (ContactsController.Contact) null);
@@ -56,9 +56,9 @@ public class GroupCreateSpan extends View {
         if (r1.equals("non_contacts") != false) goto L_0x00af;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0217  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x021f  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x025a  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x021b  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0223  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x025e  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public GroupCreateSpan(android.content.Context r25, java.lang.Object r26, org.telegram.messenger.ContactsController.Contact r27) {
         /*
@@ -91,11 +91,11 @@ public class GroupCreateSpan extends View {
             r4.setTextSize(r5)
             boolean r4 = r1 instanceof java.lang.String
             r5 = 10
-            r6 = 2
-            r7 = 0
+            r6 = 0
+            r7 = 2
             r8 = 1
             r9 = 0
-            if (r4 == 0) goto L_0x0159
+            if (r4 == 0) goto L_0x015a
             java.lang.String r1 = (java.lang.String) r1
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
             r2.setSmallSize(r8)
@@ -182,87 +182,87 @@ public class GroupCreateSpan extends View {
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r2 = 11
             r1.setAvatarType(r2)
-            r1 = -2147483641(0xfffffffvar_, float:-9.8E-45)
+            r1 = -2147483641(0xfffffffvar_, double:NaN)
             r0.uid = r1
-            r1 = 2131625537(0x7f0e0641, float:1.8878285E38)
+            r1 = 2131625553(0x7f0e0651, float:1.8878317E38)
             java.lang.String r2 = "FilterArchived"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x0156
+            goto L_0x0157
         L_0x00c9:
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r1.setAvatarType(r5)
-            r1 = -2147483642(0xfffffffvar_, float:-8.4E-45)
+            r1 = -2147483642(0xfffffffvar_, double:NaN)
             r0.uid = r1
-            r1 = 2131625581(0x7f0e066d, float:1.8878374E38)
+            r1 = 2131625597(0x7f0e067d, float:1.8878406E38)
             java.lang.String r2 = "FilterRead"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x0156
+            goto L_0x0157
         L_0x00de:
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r2 = 9
             r1.setAvatarType(r2)
-            r1 = -2147483643(0xfffffffvar_, float:-7.0E-45)
+            r1 = -2147483643(0xfffffffvar_, double:NaN)
             r0.uid = r1
-            r1 = 2131625570(0x7f0e0662, float:1.8878352E38)
+            r1 = 2131625586(0x7f0e0672, float:1.8878384E38)
             java.lang.String r2 = "FilterMuted"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x0156
+            goto L_0x0157
         L_0x00f4:
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r1.setAvatarType(r3)
-            r1 = -2147483644(0xfffffffvar_, float:-5.6E-45)
+            r1 = -2147483644(0xfffffffvar_, double:NaN)
             r0.uid = r1
-            r1 = 2131625540(0x7f0e0644, float:1.887829E38)
+            r1 = 2131625556(0x7f0e0654, float:1.8878323E38)
             java.lang.String r2 = "FilterBots"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x0156
+            goto L_0x0157
         L_0x0108:
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r1.setAvatarType(r10)
-            r1 = -2147483645(0xfffffffvar_, float:-4.2E-45)
+            r1 = -2147483645(0xfffffffvar_, double:NaN)
             r0.uid = r1
-            r1 = 2131625541(0x7f0e0645, float:1.8878293E38)
+            r1 = 2131625557(0x7f0e0655, float:1.8878325E38)
             java.lang.String r2 = "FilterChannels"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x0156
+            goto L_0x0157
         L_0x011c:
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r1.setAvatarType(r11)
-            r1 = -2147483646(0xfffffffvar_, float:-2.8E-45)
+            r1 = -2147483646(0xfffffffvar_, double:NaN)
             r0.uid = r1
-            r1 = 2131625567(0x7f0e065f, float:1.8878346E38)
+            r1 = 2131625583(0x7f0e066f, float:1.8878378E38)
             java.lang.String r2 = "FilterGroups"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x0156
+            goto L_0x0157
         L_0x0130:
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r1.setAvatarType(r12)
-            r1 = -2147483647(0xfffffffvar_, float:-1.4E-45)
+            r1 = -2147483647(0xfffffffvar_, double:NaN)
             r0.uid = r1
-            r1 = 2131625580(0x7f0e066c, float:1.8878372E38)
+            r1 = 2131625596(0x7f0e067c, float:1.8878404E38)
             java.lang.String r2 = "FilterNonContacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x0156
+            goto L_0x0157
         L_0x0144:
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r1.setAvatarType(r13)
-            r1 = -2147483648(0xfffffffvar_, float:-0.0)
+            r1 = -2147483648(0xfffffffvar_, double:NaN)
             r0.uid = r1
-            r1 = 2131625550(0x7f0e064e, float:1.8878311E38)
+            r1 = 2131625566(0x7f0e065e, float:1.8878344E38)
             java.lang.String r2 = "FilterContacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-        L_0x0156:
+        L_0x0157:
             r14 = r9
-            goto L_0x01ea
-        L_0x0159:
+            goto L_0x01ee
+        L_0x015a:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$User
-            if (r3 == 0) goto L_0x01af
+            if (r3 == 0) goto L_0x01b0
             org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
-            int r2 = r1.id
+            long r2 = r1.id
             r0.uid = r2
             boolean r2 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r1)
-            if (r2 == 0) goto L_0x0180
-            r1 = 2131627326(0x7f0e0d3e, float:1.8881913E38)
+            if (r2 == 0) goto L_0x0181
+            r1 = 2131627359(0x7f0e0d5f, float:1.888198E38)
             java.lang.String r2 = "RepliesTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
@@ -270,21 +270,21 @@ public class GroupCreateSpan extends View {
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
             r3 = 12
             r2.setAvatarType(r3)
-        L_0x017e:
+        L_0x017f:
             r2 = r9
-            goto L_0x01ad
-        L_0x0180:
+            goto L_0x01ae
+        L_0x0181:
             boolean r2 = org.telegram.messenger.UserObject.isUserSelf(r1)
-            if (r2 == 0) goto L_0x019a
-            r1 = 2131627445(0x7f0e0db5, float:1.8882155E38)
+            if (r2 == 0) goto L_0x019b
+            r1 = 2131627478(0x7f0e0dd6, float:1.8882222E38)
             java.lang.String r2 = "SavedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
             r2.setSmallSize(r8)
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
             r2.setAvatarType(r8)
-            goto L_0x017e
-        L_0x019a:
+            goto L_0x017f
+        L_0x019b:
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
             r2.setInfo((org.telegram.tgnet.TLRPC$User) r1)
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r1)
@@ -293,42 +293,44 @@ public class GroupCreateSpan extends View {
             r23 = r2
             r2 = r1
             r1 = r23
-        L_0x01ad:
+        L_0x01ae:
             r14 = r2
-            goto L_0x01ea
-        L_0x01af:
+            goto L_0x01ee
+        L_0x01b0:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$Chat
-            if (r3 == 0) goto L_0x01c9
+            if (r3 == 0) goto L_0x01ca
             r9 = r1
             org.telegram.tgnet.TLRPC$Chat r9 = (org.telegram.tgnet.TLRPC$Chat) r9
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r1.setInfo((org.telegram.tgnet.TLRPC$Chat) r9)
-            int r1 = r9.id
-            int r1 = -r1
+            long r1 = r9.id
+            long r1 = -r1
             r0.uid = r1
             java.lang.String r1 = r9.title
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForUserOrChat(r9, r8)
             r14 = r9
             r9 = r2
-            goto L_0x01ea
-        L_0x01c9:
+            goto L_0x01ee
+        L_0x01ca:
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
-            java.lang.String r3 = r2.first_name
-            java.lang.String r4 = r2.last_name
-            r1.setInfo(r7, r3, r4)
+            r3 = 0
+            java.lang.String r8 = r2.first_name
+            java.lang.String r10 = r2.last_name
+            r1.setInfo(r3, r8, r10)
             int r1 = r2.contact_id
-            r0.uid = r1
+            long r3 = (long) r1
+            r0.uid = r3
             java.lang.String r1 = r2.key
             r0.key = r1
             java.lang.String r1 = r2.first_name
             boolean r1 = android.text.TextUtils.isEmpty(r1)
-            if (r1 != 0) goto L_0x01e6
+            if (r1 != 0) goto L_0x01ea
             java.lang.String r1 = r2.first_name
-            goto L_0x0156
-        L_0x01e6:
-            java.lang.String r1 = r2.last_name
-            goto L_0x0156
+            goto L_0x0157
         L_0x01ea:
+            java.lang.String r1 = r2.last_name
+            goto L_0x0157
+        L_0x01ee:
             org.telegram.messenger.ImageReceiver r2 = new org.telegram.messenger.ImageReceiver
             r2.<init>()
             r0.imageReceiver = r2
@@ -346,12 +348,12 @@ public class GroupCreateSpan extends View {
             r8 = 0
             r2.setImageCoords(r8, r8, r4, r3)
             boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r2 == 0) goto L_0x021f
+            if (r2 == 0) goto L_0x0223
             r2 = 1136066560(0x43b70000, float:366.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r2 = r2 / r6
-            goto L_0x0231
-        L_0x021f:
+            int r2 = r2 / r7
+            goto L_0x0235
+        L_0x0223:
             android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
             int r3 = r2.x
             int r2 = r2.y
@@ -359,8 +361,8 @@ public class GroupCreateSpan extends View {
             r3 = 1126432768(0x43240000, float:164.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r2 = r2 - r3
-            int r2 = r2 / r6
-        L_0x0231:
+            int r2 = r2 / r7
+        L_0x0235:
             r3 = 32
             java.lang.String r1 = r1.replace(r5, r3)
             android.text.TextPaint r3 = textPaint
@@ -378,18 +380,18 @@ public class GroupCreateSpan extends View {
             r15.<init>(r16, r17, r18, r19, r20, r21, r22)
             r0.nameLayout = r1
             int r1 = r1.getLineCount()
-            if (r1 <= 0) goto L_0x0271
+            if (r1 <= 0) goto L_0x0275
             android.text.StaticLayout r1 = r0.nameLayout
-            float r1 = r1.getLineWidth(r7)
+            float r1 = r1.getLineWidth(r6)
             double r1 = (double) r1
             double r1 = java.lang.Math.ceil(r1)
             int r1 = (int) r1
             r0.textWidth = r1
             android.text.StaticLayout r1 = r0.nameLayout
-            float r1 = r1.getLineLeft(r7)
+            float r1 = r1.getLineLeft(r6)
             float r1 = -r1
             r0.textX = r1
-        L_0x0271:
+        L_0x0275:
             org.telegram.messenger.ImageReceiver r8 = r0.imageReceiver
             org.telegram.ui.Components.AvatarDrawable r11 = r0.avatarDrawable
             r12 = 0
@@ -439,7 +441,7 @@ public class GroupCreateSpan extends View {
         }
     }
 
-    public int getUid() {
+    public long getUid() {
         return this.uid;
     }
 

@@ -21,17 +21,17 @@ public class ForwardingMessagesParams {
     public SparseBooleanArray selectedIds = new SparseBooleanArray();
     public boolean willSeeSenders;
 
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x0111  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x013e  */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x01b3 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x011d  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x014b  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x01c0 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public ForwardingMessagesParams(java.util.ArrayList<org.telegram.messenger.MessageObject> r18, long r19) {
+    public ForwardingMessagesParams(java.util.ArrayList<org.telegram.messenger.MessageObject> r20, long r21) {
         /*
-            r17 = this;
-            r6 = r17
-            r7 = r18
-            r17.<init>()
+            r19 = this;
+            r6 = r19
+            r7 = r20
+            r19.<init>()
             android.util.LongSparseArray r0 = new android.util.LongSparseArray
             r0.<init>()
             r6.groupedMessagesMap = r0
@@ -48,15 +48,15 @@ public class ForwardingMessagesParams {
             r8 = 0
             r6.hasCaption = r8
             r6.hasSenders = r8
-            boolean r0 = org.telegram.messenger.DialogObject.isSecretDialogId(r19)
+            boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r21)
             r6.isSecret = r0
             java.util.ArrayList r9 = new java.util.ArrayList
             r9.<init>()
             r10 = 0
         L_0x0036:
-            int r0 = r18.size()
+            int r0 = r20.size()
             r11 = 1
-            if (r10 >= r0) goto L_0x01b8
+            if (r10 >= r0) goto L_0x01c7
             java.lang.Object r0 = r7.get(r10)
             r12 = r0
             org.telegram.messenger.MessageObject r12 = (org.telegram.messenger.MessageObject) r12
@@ -88,104 +88,112 @@ public class ForwardingMessagesParams {
             r3.edit_date = r8
             r3.out = r11
             r3.unread = r8
-            int r1 = r0.via_bot_id
+            long r1 = r0.via_bot_id
             r3.via_bot_id = r1
             org.telegram.tgnet.TLRPC$ReplyMarkup r1 = r0.reply_markup
             r3.reply_markup = r1
             boolean r1 = r0.post
             r3.post = r1
-            boolean r0 = r0.legacy
-            r3.legacy = r0
+            boolean r1 = r0.legacy
+            r3.legacy = r1
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_restrictionReason> r0 = r0.restriction_reason
+            r3.restriction_reason = r0
             int r0 = r12.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
-            int r0 = r0.clientUserId
-            boolean r1 = r6.isSecret
+            long r0 = r0.clientUserId
+            boolean r2 = r6.isSecret
             r13 = 0
-            if (r1 != 0) goto L_0x00e6
-            org.telegram.tgnet.TLRPC$Message r1 = r12.messageOwner
-            org.telegram.tgnet.TLRPC$MessageFwdHeader r2 = r1.fwd_from
-            if (r2 == 0) goto L_0x00c0
+            if (r2 != 0) goto L_0x00f2
+            org.telegram.tgnet.TLRPC$Message r2 = r12.messageOwner
+            org.telegram.tgnet.TLRPC$MessageFwdHeader r4 = r2.fwd_from
+            if (r4 == 0) goto L_0x00c7
             boolean r0 = r12.isDice()
-            if (r0 != 0) goto L_0x00ac
+            if (r0 != 0) goto L_0x00b1
             r6.hasSenders = r11
-            goto L_0x00ae
-        L_0x00ac:
+            goto L_0x00b3
+        L_0x00b1:
             r6.willSeeSenders = r11
-        L_0x00ae:
-            org.telegram.tgnet.TLRPC$Peer r0 = r2.from_id
-            if (r0 != 0) goto L_0x00e7
-            java.lang.String r0 = r2.from_name
+        L_0x00b3:
+            org.telegram.tgnet.TLRPC$Peer r0 = r4.from_id
+            if (r0 != 0) goto L_0x00c4
+            java.lang.String r0 = r4.from_name
             boolean r0 = r9.contains(r0)
-            if (r0 != 0) goto L_0x00e7
-            java.lang.String r0 = r2.from_name
+            if (r0 != 0) goto L_0x00c4
+            java.lang.String r0 = r4.from_name
             r9.add(r0)
-            goto L_0x00e7
-        L_0x00c0:
-            org.telegram.tgnet.TLRPC$Peer r2 = r1.from_id
-            int r2 = r2.user_id
-            if (r2 == 0) goto L_0x00cf
-            long r4 = r1.dialog_id
-            long r14 = (long) r0
-            int r1 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
-            if (r1 != 0) goto L_0x00cf
-            if (r2 == r0) goto L_0x00e6
-        L_0x00cf:
-            org.telegram.tgnet.TLRPC$TL_messageFwdHeader r2 = new org.telegram.tgnet.TLRPC$TL_messageFwdHeader
-            r2.<init>()
+        L_0x00c4:
+            r17 = r9
+            goto L_0x00f5
+        L_0x00c7:
+            org.telegram.tgnet.TLRPC$Peer r4 = r2.from_id
+            long r4 = r4.user_id
+            int r16 = (r4 > r13 ? 1 : (r4 == r13 ? 0 : -1))
+            r17 = r9
+            if (r16 == 0) goto L_0x00db
+            long r8 = r2.dialog_id
+            int r2 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
+            if (r2 != 0) goto L_0x00db
+            int r2 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
+            if (r2 == 0) goto L_0x00f4
+        L_0x00db:
+            org.telegram.tgnet.TLRPC$TL_messageFwdHeader r4 = new org.telegram.tgnet.TLRPC$TL_messageFwdHeader
+            r4.<init>()
             org.telegram.tgnet.TLRPC$Message r0 = r12.messageOwner
             org.telegram.tgnet.TLRPC$Peer r0 = r0.from_id
-            r2.from_id = r0
+            r4.from_id = r0
             boolean r0 = r12.isDice()
-            if (r0 != 0) goto L_0x00e3
+            if (r0 != 0) goto L_0x00ef
             r6.hasSenders = r11
-            goto L_0x00e7
-        L_0x00e3:
+            goto L_0x00f5
+        L_0x00ef:
             r6.willSeeSenders = r11
-            goto L_0x00e7
-        L_0x00e6:
-            r2 = r13
-        L_0x00e7:
-            if (r2 == 0) goto L_0x00f1
-            r3.fwd_from = r2
+            goto L_0x00f5
+        L_0x00f2:
+            r17 = r9
+        L_0x00f4:
+            r4 = 0
+        L_0x00f5:
+            if (r4 == 0) goto L_0x00ff
+            r3.fwd_from = r4
             int r0 = r3.flags
             r0 = r0 | 4
             r3.flags = r0
-        L_0x00f1:
-            r14 = r19
-            r3.dialog_id = r14
+        L_0x00ff:
+            r8 = r21
+            r3.dialog_id = r8
             org.telegram.messenger.ForwardingMessagesParams$1 r5 = new org.telegram.messenger.ForwardingMessagesParams$1
             int r2 = r12.currentAccount
             r4 = 1
-            r16 = 0
+            r18 = 0
             r0 = r5
-            r1 = r17
-            r8 = r5
-            r5 = r16
+            r1 = r19
+            r15 = r5
+            r5 = r18
             r0.<init>(r2, r3, r4, r5)
-            r8.preview = r11
-            long r0 = r8.getGroupId()
-            r2 = 0
-            int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 == 0) goto L_0x0132
+            r15.preview = r11
+            long r0 = r15.getGroupId()
+            int r2 = (r0 > r13 ? 1 : (r0 == r13 ? 0 : -1))
+            if (r2 == 0) goto L_0x013f
             android.util.LongSparseArray<org.telegram.messenger.MessageObject$GroupedMessages> r0 = r6.groupedMessagesMap
-            long r1 = r8.getGroupId()
-            java.lang.Object r0 = r0.get(r1, r13)
+            long r1 = r15.getGroupId()
+            r3 = 0
+            java.lang.Object r0 = r0.get(r1, r3)
             org.telegram.messenger.MessageObject$GroupedMessages r0 = (org.telegram.messenger.MessageObject.GroupedMessages) r0
-            if (r0 != 0) goto L_0x012d
+            if (r0 != 0) goto L_0x013a
             org.telegram.messenger.MessageObject$GroupedMessages r0 = new org.telegram.messenger.MessageObject$GroupedMessages
             r0.<init>()
             android.util.LongSparseArray<org.telegram.messenger.MessageObject$GroupedMessages> r1 = r6.groupedMessagesMap
-            long r2 = r8.getGroupId()
+            long r2 = r15.getGroupId()
             r1.put(r2, r0)
-        L_0x012d:
+        L_0x013a:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r0.messages
-            r0.add(r8)
-        L_0x0132:
+            r0.add(r15)
+        L_0x013f:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r6.previewMessages
             r1 = 0
-            r0.add(r1, r8)
+            r0.add(r1, r15)
             boolean r0 = r12.isPoll()
-            if (r0 == 0) goto L_0x01b3
+            if (r0 == 0) goto L_0x01c0
             org.telegram.tgnet.TLRPC$Message r0 = r12.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             org.telegram.tgnet.TLRPC$TL_messageMediaPoll r0 = (org.telegram.tgnet.TLRPC$TL_messageMediaPoll) r0
@@ -202,120 +210,122 @@ public class ForwardingMessagesParams {
             int r4 = r4.total_voters
             r3.total_voters = r4
             r2.totalVotersCached = r4
-            org.telegram.tgnet.TLRPC$Message r3 = r8.messageOwner
+            org.telegram.tgnet.TLRPC$Message r3 = r15.messageOwner
             r3.media = r2
             boolean r3 = r12.canUnvote()
-            if (r3 == 0) goto L_0x01b3
+            if (r3 == 0) goto L_0x01c0
             org.telegram.tgnet.TLRPC$PollResults r3 = r0.results
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_pollAnswerVoters> r3 = r3.results
             int r3 = r3.size()
             r4 = 0
-        L_0x0173:
-            if (r4 >= r3) goto L_0x01b3
+        L_0x0180:
+            if (r4 >= r3) goto L_0x01c0
             org.telegram.tgnet.TLRPC$PollResults r5 = r0.results
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_pollAnswerVoters> r5 = r5.results
             java.lang.Object r5 = r5.get(r4)
             org.telegram.tgnet.TLRPC$TL_pollAnswerVoters r5 = (org.telegram.tgnet.TLRPC$TL_pollAnswerVoters) r5
-            boolean r8 = r5.chosen
-            if (r8 == 0) goto L_0x01a9
-            org.telegram.tgnet.TLRPC$TL_pollAnswerVoters r8 = new org.telegram.tgnet.TLRPC$TL_pollAnswerVoters
-            r8.<init>()
             boolean r11 = r5.chosen
-            r8.chosen = r11
-            boolean r11 = r5.correct
-            r8.correct = r11
-            int r11 = r5.flags
-            r8.flags = r11
-            byte[] r11 = r5.option
-            r8.option = r11
+            if (r11 == 0) goto L_0x01b6
+            org.telegram.tgnet.TLRPC$TL_pollAnswerVoters r11 = new org.telegram.tgnet.TLRPC$TL_pollAnswerVoters
+            r11.<init>()
+            boolean r12 = r5.chosen
+            r11.chosen = r12
+            boolean r12 = r5.correct
+            r11.correct = r12
+            int r12 = r5.flags
+            r11.flags = r12
+            byte[] r12 = r5.option
+            r11.option = r12
             int r5 = r5.voters
-            r8.voters = r5
+            r11.voters = r5
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_pollAnswerVoters> r5 = r6.pollChoosenAnswers
-            r5.add(r8)
+            r5.add(r11)
             org.telegram.tgnet.TLRPC$PollResults r5 = r2.results
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_pollAnswerVoters> r5 = r5.results
-            r5.add(r8)
-            goto L_0x01b0
-        L_0x01a9:
-            org.telegram.tgnet.TLRPC$PollResults r8 = r2.results
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_pollAnswerVoters> r8 = r8.results
-            r8.add(r5)
-        L_0x01b0:
+            r5.add(r11)
+            goto L_0x01bd
+        L_0x01b6:
+            org.telegram.tgnet.TLRPC$PollResults r11 = r2.results
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_pollAnswerVoters> r11 = r11.results
+            r11.add(r5)
+        L_0x01bd:
             int r4 = r4 + 1
-            goto L_0x0173
-        L_0x01b3:
+            goto L_0x0180
+        L_0x01c0:
             int r10 = r10 + 1
+            r9 = r17
             r8 = 0
             goto L_0x0036
-        L_0x01b8:
+        L_0x01c7:
+            r17 = r9
             r1 = 0
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
-            r2 = 1
-        L_0x01bf:
-            int r3 = r18.size()
-            if (r2 >= r3) goto L_0x0220
+            r2 = 0
+        L_0x01d0:
+            int r3 = r20.size()
+            if (r2 >= r3) goto L_0x0231
             java.lang.Object r3 = r7.get(r2)
             org.telegram.messenger.MessageObject r3 = (org.telegram.messenger.MessageObject) r3
             boolean r4 = r3.isFromUser()
-            if (r4 == 0) goto L_0x01d8
+            if (r4 == 0) goto L_0x01e9
             org.telegram.tgnet.TLRPC$Message r3 = r3.messageOwner
             org.telegram.tgnet.TLRPC$Peer r3 = r3.from_id
-            int r3 = r3.user_id
-            goto L_0x020c
-        L_0x01d8:
+            long r3 = r3.user_id
+            goto L_0x021d
+        L_0x01e9:
             int r4 = r3.currentAccount
             org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
             org.telegram.tgnet.TLRPC$Message r5 = r3.messageOwner
             org.telegram.tgnet.TLRPC$Peer r5 = r5.peer_id
-            int r5 = r5.channel_id
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
+            long r8 = r5.channel_id
+            java.lang.Long r5 = java.lang.Long.valueOf(r8)
             org.telegram.tgnet.TLRPC$Chat r4 = r4.getChat(r5)
             boolean r5 = org.telegram.messenger.ChatObject.isChannel(r4)
-            if (r5 == 0) goto L_0x0205
+            if (r5 == 0) goto L_0x0216
             boolean r4 = r4.megagroup
-            if (r4 == 0) goto L_0x0205
+            if (r4 == 0) goto L_0x0216
             boolean r4 = r3.isForwardedChannelPost()
-            if (r4 == 0) goto L_0x0205
+            if (r4 == 0) goto L_0x0216
             org.telegram.tgnet.TLRPC$Message r3 = r3.messageOwner
             org.telegram.tgnet.TLRPC$MessageFwdHeader r3 = r3.fwd_from
             org.telegram.tgnet.TLRPC$Peer r3 = r3.from_id
-            int r3 = r3.channel_id
-            goto L_0x020b
-        L_0x0205:
+            long r3 = r3.channel_id
+            goto L_0x021c
+        L_0x0216:
             org.telegram.tgnet.TLRPC$Message r3 = r3.messageOwner
             org.telegram.tgnet.TLRPC$Peer r3 = r3.peer_id
-            int r3 = r3.channel_id
-        L_0x020b:
-            int r3 = -r3
-        L_0x020c:
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-            boolean r4 = r0.contains(r4)
-            if (r4 != 0) goto L_0x021d
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-            r0.add(r3)
+            long r3 = r3.channel_id
+        L_0x021c:
+            long r3 = -r3
         L_0x021d:
-            int r2 = r2 + 1
-            goto L_0x01bf
-        L_0x0220:
-            int r0 = r0.size()
-            int r2 = r9.size()
-            int r0 = r0 + r2
-            if (r0 <= r11) goto L_0x022d
-            r6.multiplyUsers = r11
-        L_0x022d:
-            r8 = 0
+            java.lang.Long r5 = java.lang.Long.valueOf(r3)
+            boolean r5 = r0.contains(r5)
+            if (r5 != 0) goto L_0x022e
+            java.lang.Long r3 = java.lang.Long.valueOf(r3)
+            r0.add(r3)
         L_0x022e:
+            int r2 = r2 + 1
+            goto L_0x01d0
+        L_0x0231:
+            int r0 = r0.size()
+            int r2 = r17.size()
+            int r0 = r0 + r2
+            if (r0 <= r11) goto L_0x023e
+            r6.multiplyUsers = r11
+        L_0x023e:
+            r8 = 0
+        L_0x023f:
             android.util.LongSparseArray<org.telegram.messenger.MessageObject$GroupedMessages> r0 = r6.groupedMessagesMap
             int r0 = r0.size()
-            if (r8 >= r0) goto L_0x0244
+            if (r8 >= r0) goto L_0x0255
             android.util.LongSparseArray<org.telegram.messenger.MessageObject$GroupedMessages> r0 = r6.groupedMessagesMap
             java.lang.Object r0 = r0.valueAt(r8)
             org.telegram.messenger.MessageObject$GroupedMessages r0 = (org.telegram.messenger.MessageObject.GroupedMessages) r0
             r0.calculate()
             int r8 = r8 + 1
-            goto L_0x022e
-        L_0x0244:
+            goto L_0x023f
+        L_0x0255:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ForwardingMessagesParams.<init>(java.util.ArrayList, long):void");

@@ -5,17 +5,27 @@ import java.util.ArrayList;
 public abstract class TLRPC$BotInfo extends TLObject {
     public ArrayList<TLRPC$TL_botCommand> commands = new ArrayList<>();
     public String description;
-    public int user_id;
+    public long user_id;
     public int version;
 
     public static TLRPC$BotInfo TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$BotInfo tLRPC$BotInfo;
-        if (i == -NUM) {
-            tLRPC$BotInfo = new TLRPC$TL_botInfo();
-        } else if (i != -NUM) {
-            tLRPC$BotInfo = i != NUM ? null : new TLRPC$TL_botInfo_layer48();
-        } else {
-            tLRPC$BotInfo = new TLRPC$TL_botInfoEmpty_layer48();
+        switch (i) {
+            case -1729618630:
+                tLRPC$BotInfo = new TLRPC$TL_botInfo_layer131();
+                break;
+            case -1154598962:
+                tLRPC$BotInfo = new TLRPC$TL_botInfoEmpty_layer48();
+                break;
+            case 164583517:
+                tLRPC$BotInfo = new TLRPC$TL_botInfo_layer48();
+                break;
+            case 460632885:
+                tLRPC$BotInfo = new TLRPC$TL_botInfo();
+                break;
+            default:
+                tLRPC$BotInfo = null;
+                break;
         }
         if (tLRPC$BotInfo != null || !z) {
             if (tLRPC$BotInfo != null) {

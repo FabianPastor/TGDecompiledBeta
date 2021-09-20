@@ -7,11 +7,11 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -69,12 +69,12 @@ public class AdminLogFilterAlert extends BottomSheet {
     /* access modifiers changed from: private */
     public int scrollOffsetY;
     /* access modifiers changed from: private */
-    public SparseArray<TLRPC$User> selectedAdmins;
+    public LongSparseArray<TLRPC$User> selectedAdmins;
     /* access modifiers changed from: private */
     public Drawable shadowDrawable;
 
     public interface AdminLogFilterAlertDelegate {
-        void didSelectRights(TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, SparseArray<TLRPC$User> sparseArray);
+        void didSelectRights(TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, LongSparseArray<TLRPC$User> longSparseArray);
     }
 
     /* access modifiers changed from: protected */
@@ -82,7 +82,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         return false;
     }
 
-    public AdminLogFilterAlert(Context context, TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, SparseArray<TLRPC$User> sparseArray, boolean z) {
+    public AdminLogFilterAlert(Context context, TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, LongSparseArray<TLRPC$User> longSparseArray, boolean z) {
         super(context, false);
         int i;
         if (tLRPC$TL_channelAdminLogEventsFilter != null) {
@@ -105,8 +105,8 @@ public class AdminLogFilterAlert extends BottomSheet {
             tLRPC$TL_channelAdminLogEventsFilter2.group_call = tLRPC$TL_channelAdminLogEventsFilter.group_call;
             tLRPC$TL_channelAdminLogEventsFilter2.invites = tLRPC$TL_channelAdminLogEventsFilter.invites;
         }
-        if (sparseArray != null) {
-            this.selectedAdmins = sparseArray.clone();
+        if (longSparseArray != null) {
+            this.selectedAdmins = longSparseArray.clone();
         }
         this.isMegagroup = z;
         if (z) {
@@ -206,11 +206,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         viewGroup.setPadding(i9, 0, i9, 0);
         AnonymousClass2 r132 = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                boolean onInterceptTouchEvent = ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, AdminLogFilterAlert.this.listView, 0, (ContentPreviewViewer.ContentPreviewViewerDelegate) null);
-                if (super.onInterceptTouchEvent(motionEvent) || onInterceptTouchEvent) {
-                    return true;
-                }
-                return false;
+                return super.onInterceptTouchEvent(motionEvent) || ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, AdminLogFilterAlert.this.listView, 0, (ContentPreviewViewer.ContentPreviewViewerDelegate) null, this.resourcesProvider);
             }
 
             public void requestLayout() {
@@ -234,11 +230,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                 AdminLogFilterAlert.this.updateLayout();
             }
         });
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                AdminLogFilterAlert.this.lambda$new$0$AdminLogFilterAlert(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new AdminLogFilterAlert$$ExternalSyntheticLambda1(this));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View view = new View(context);
         view.setBackgroundResource(NUM);
@@ -248,18 +240,13 @@ public class AdminLogFilterAlert extends BottomSheet {
         bottomSheetCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         this.saveButton.setTextAndIcon((CharSequence) LocaleController.getString("Save", NUM).toUpperCase(), 0);
         this.saveButton.setTextColor(Theme.getColor("dialogTextBlue2"));
-        this.saveButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                AdminLogFilterAlert.this.lambda$new$1$AdminLogFilterAlert(view);
-            }
-        });
+        this.saveButton.setOnClickListener(new AdminLogFilterAlert$$ExternalSyntheticLambda0(this));
         this.containerView.addView(this.saveButton, LayoutHelper.createFrame(-1, 48, 83));
         this.adapter.notifyDataSetChanged();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$AdminLogFilterAlert(View view, int i) {
+    public /* synthetic */ void lambda$new$0(View view, int i) {
         if (view instanceof CheckBoxCell) {
             CheckBoxCell checkBoxCell = (CheckBoxCell) view;
             boolean isChecked = checkBoxCell.isChecked();
@@ -298,7 +285,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                 }
             } else if (i == this.allAdminsRow) {
                 if (isChecked) {
-                    this.selectedAdmins = new SparseArray<>();
+                    this.selectedAdmins = new LongSparseArray<>();
                 } else {
                     this.selectedAdmins = null;
                 }
@@ -389,13 +376,13 @@ public class AdminLogFilterAlert extends BottomSheet {
         } else if (view instanceof CheckBoxUserCell) {
             CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) view;
             if (this.selectedAdmins == null) {
-                this.selectedAdmins = new SparseArray<>();
+                this.selectedAdmins = new LongSparseArray<>();
                 RecyclerView.ViewHolder findViewHolderForAdapterPosition2 = this.listView.findViewHolderForAdapterPosition(this.allAdminsRow);
                 if (findViewHolderForAdapterPosition2 != null) {
                     ((CheckBoxCell) findViewHolderForAdapterPosition2.itemView).setChecked(false, true);
                 }
                 for (int i4 = 0; i4 < this.currentAdmins.size(); i4++) {
-                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(MessageObject.getPeerId(this.currentAdmins.get(i4).peer)));
+                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(this.currentAdmins.get(i4).peer)));
                     this.selectedAdmins.put(user.id, user);
                 }
             }
@@ -411,8 +398,7 @@ public class AdminLogFilterAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$AdminLogFilterAlert(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         this.delegate.didSelectRights(this.currentFilter, this.selectedAdmins);
         dismiss();
     }
@@ -484,7 +470,7 @@ public class AdminLogFilterAlert extends BottomSheet {
             FrameLayout frameLayout;
             FrameLayout frameLayout2;
             if (i == 0) {
-                frameLayout2 = new CheckBoxCell(this.context, 1, 21);
+                frameLayout2 = new CheckBoxCell(this.context, 1, 21, AdminLogFilterAlert.this.resourcesProvider);
             } else if (i == 1) {
                 ShadowSectionCell shadowSectionCell = new ShadowSectionCell(this.context, 18);
                 frameLayout2 = new FrameLayout(this.context);
@@ -569,7 +555,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                 }
             } else if (itemViewType == 2) {
                 CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) viewHolder.itemView;
-                int peerId = MessageObject.getPeerId(((TLRPC$ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((adapterPosition - AdminLogFilterAlert.this.allAdminsRow) - 1)).peer);
+                long peerId = MessageObject.getPeerId(((TLRPC$ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((adapterPosition - AdminLogFilterAlert.this.allAdminsRow) - 1)).peer);
                 if (AdminLogFilterAlert.this.selectedAdmins != null && AdminLogFilterAlert.this.selectedAdmins.indexOfKey(peerId) < 0) {
                     z = false;
                 }
@@ -667,8 +653,8 @@ public class AdminLogFilterAlert extends BottomSheet {
                 }
             } else if (itemViewType == 2) {
                 CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) viewHolder.itemView;
-                int peerId = MessageObject.getPeerId(((TLRPC$ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((i - AdminLogFilterAlert.this.allAdminsRow) - 1)).peer);
-                TLRPC$User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(peerId));
+                long peerId = MessageObject.getPeerId(((TLRPC$ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((i - AdminLogFilterAlert.this.allAdminsRow) - 1)).peer);
+                TLRPC$User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Long.valueOf(peerId));
                 boolean z4 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.indexOfKey(peerId) >= 0;
                 if (i != getItemCount() - 1) {
                     z = true;

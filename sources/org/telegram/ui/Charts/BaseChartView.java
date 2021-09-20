@@ -55,7 +55,6 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     public static final int SIGNATURE_TEXT_HEIGHT = AndroidUtilities.dp(18.0f);
     private static final float SIGNATURE_TEXT_SIZE = AndroidUtilities.dpf2(12.0f);
     public static final boolean USE_LINES;
-    private final int ANIM_DURATION = 400;
     ValueAnimator alphaAnimator;
     ValueAnimator alphaBottomAnimator;
     public boolean animateLegentTo = false;
@@ -91,11 +90,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     Paint emptyPaint = new Paint();
     public boolean enabled = true;
     int endXIndex;
-    private ValueAnimator.AnimatorUpdateListener heightUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-            BaseChartView.this.lambda$new$0$BaseChartView(valueAnimator);
-        }
-    };
+    private ValueAnimator.AnimatorUpdateListener heightUpdateListener = new BaseChartView$$ExternalSyntheticLambda1(this);
     int hintLinePaintAlpha;
     ArrayList<ChartHorizontalLinesData> horizontalLines = new ArrayList<>(10);
     boolean invalidatePickerChart = true;
@@ -110,11 +105,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     Paint linePaint = new Paint();
     public ArrayList<L> lines = new ArrayList<>();
     Animator maxValueAnimator;
-    private ValueAnimator.AnimatorUpdateListener minHeightUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-            BaseChartView.this.lambda$new$1$BaseChartView(valueAnimator);
-        }
-    };
+    private ValueAnimator.AnimatorUpdateListener minHeightUpdateListener = new BaseChartView$$ExternalSyntheticLambda0(this);
     private float minMaxUpdateStep;
     Path pathTmp = new Path();
     Animator pickerAnimator;
@@ -143,7 +134,6 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     public int pikerHeight = AndroidUtilities.dp(46.0f);
     boolean postTransition = false;
     Paint ripplePaint = new Paint(1);
-    protected float selectedCoordinate = -1.0f;
     protected int selectedIndex = -1;
     Paint selectedLinePaint = new Paint();
     public float selectionA = 0.0f;
@@ -223,15 +213,13 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$BaseChartView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
         this.currentMaxHeight = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$BaseChartView(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$1(ValueAnimator valueAnimator) {
         this.currentMinHeight = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -1396,17 +1384,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                         chartHorizontalLinesData.fixedAlpha = chartHorizontalLinesData.alpha;
                     }
                 }
-                ValueAnimator createAnimator = createAnimator(0.0f, 255.0f, new ValueAnimator.AnimatorUpdateListener(createHorizontalLinesData) {
-                    public final /* synthetic */ ChartHorizontalLinesData f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        BaseChartView.this.lambda$setMaxMinValue$2$BaseChartView(this.f$1, valueAnimator);
-                    }
-                });
+                ValueAnimator createAnimator = createAnimator(0.0f, 255.0f, new BaseChartView$$ExternalSyntheticLambda3(this, createHorizontalLinesData));
                 this.alphaAnimator = createAnimator;
                 createAnimator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
@@ -1420,8 +1398,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setMaxMinValue$2 */
-    public /* synthetic */ void lambda$setMaxMinValue$2$BaseChartView(ChartHorizontalLinesData chartHorizontalLinesData, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setMaxMinValue$2(ChartHorizontalLinesData chartHorizontalLinesData, ValueAnimator valueAnimator) {
         chartHorizontalLinesData.alpha = (int) ((Float) valueAnimator.getAnimatedValue()).floatValue();
         Iterator<ChartHorizontalLinesData> it = this.horizontalLines.iterator();
         while (it.hasNext()) {
@@ -1544,13 +1521,10 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             float f = this.chartFullWidth;
             float f2 = (this.pickerDelegate.pickerStart * f) - HORIZONTAL_PADDING;
             float f3 = (((float) i) + f2) / f;
-            this.selectedCoordinate = f3;
             if (f3 < 0.0f) {
                 this.selectedIndex = 0;
-                this.selectedCoordinate = 0.0f;
             } else if (f3 > 1.0f) {
                 this.selectedIndex = t.x.length - 1;
-                this.selectedCoordinate = 1.0f;
             } else {
                 int findIndex = t.findIndex(this.startXIndex, this.endXIndex, f3);
                 this.selectedIndex = findIndex;
@@ -1865,17 +1839,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                 if (this.bottomSignatureDate.size() > 2) {
                     this.bottomSignatureDate.remove(0);
                 }
-                ValueAnimator duration = createAnimator(0.0f, 1.0f, new ValueAnimator.AnimatorUpdateListener(chartBottomSignatureData3) {
-                    public final /* synthetic */ ChartBottomSignatureData f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        BaseChartView.this.lambda$updateDates$3$BaseChartView(this.f$1, valueAnimator);
-                    }
-                }).setDuration(200);
+                ValueAnimator duration = createAnimator(0.0f, 1.0f, new BaseChartView$$ExternalSyntheticLambda2(this, chartBottomSignatureData3)).setDuration(200);
                 this.alphaBottomAnimator = duration;
                 duration.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
@@ -1890,8 +1854,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateDates$3 */
-    public /* synthetic */ void lambda$updateDates$3$BaseChartView(ChartBottomSignatureData chartBottomSignatureData, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateDates$3(ChartBottomSignatureData chartBottomSignatureData, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         Iterator<ChartBottomSignatureData> it = this.bottomSignatureDate.iterator();
         while (it.hasNext()) {
@@ -1928,17 +1891,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             if (lineViewData.enabled && lineViewData.alpha != 1.0f) {
                 ValueAnimator valueAnimator4 = lineViewData.animatorIn;
                 if (valueAnimator4 == null || !valueAnimator4.isRunning()) {
-                    ValueAnimator createAnimator = createAnimator(lineViewData.alpha, 1.0f, new ValueAnimator.AnimatorUpdateListener(lineViewData) {
-                        public final /* synthetic */ LineViewData f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            BaseChartView.this.lambda$onCheckChanged$4$BaseChartView(this.f$1, valueAnimator);
-                        }
-                    });
+                    ValueAnimator createAnimator = createAnimator(lineViewData.alpha, 1.0f, new BaseChartView$$ExternalSyntheticLambda4(this, lineViewData));
                     lineViewData.animatorIn = createAnimator;
                     createAnimator.start();
                 } else {
@@ -1946,17 +1899,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                 }
             }
             if (!lineViewData.enabled && lineViewData.alpha != 0.0f && ((valueAnimator = lineViewData.animatorOut) == null || !valueAnimator.isRunning())) {
-                ValueAnimator createAnimator2 = createAnimator(lineViewData.alpha, 0.0f, new ValueAnimator.AnimatorUpdateListener(lineViewData) {
-                    public final /* synthetic */ LineViewData f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        BaseChartView.this.lambda$onCheckChanged$5$BaseChartView(this.f$1, valueAnimator);
-                    }
-                });
+                ValueAnimator createAnimator2 = createAnimator(lineViewData.alpha, 0.0f, new BaseChartView$$ExternalSyntheticLambda5(this, lineViewData));
                 lineViewData.animatorOut = createAnimator2;
                 createAnimator2.start();
             }
@@ -1971,16 +1914,14 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCheckChanged$4 */
-    public /* synthetic */ void lambda$onCheckChanged$4$BaseChartView(LineViewData lineViewData, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onCheckChanged$4(LineViewData lineViewData, ValueAnimator valueAnimator) {
         lineViewData.alpha = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.invalidatePickerChart = true;
         invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCheckChanged$5 */
-    public /* synthetic */ void lambda$onCheckChanged$5$BaseChartView(LineViewData lineViewData, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onCheckChanged$5(LineViewData lineViewData, ValueAnimator valueAnimator) {
         lineViewData.alpha = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.invalidatePickerChart = true;
         invalidate();

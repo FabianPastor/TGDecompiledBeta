@@ -13,7 +13,6 @@ import java.util.Iterator;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.MessagesController;
 import org.telegram.ui.Cells.ChatMessageCell;
-import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class RecyclerAnimationScrollHelper {
@@ -191,23 +190,7 @@ public class RecyclerAnimationScrollHelper {
                     RecyclerAnimationScrollHelper.this.animator.cancel();
                 }
                 ValueAnimator unused = RecyclerAnimationScrollHelper.this.animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                RecyclerAnimationScrollHelper.this.animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(arrayList, z3, i16, arrayList) {
-                    public final /* synthetic */ ArrayList f$1;
-                    public final /* synthetic */ boolean f$2;
-                    public final /* synthetic */ int f$3;
-                    public final /* synthetic */ ArrayList f$4;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                        this.f$4 = r5;
-                    }
-
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        RecyclerAnimationScrollHelper.AnonymousClass1.this.lambda$onLayoutChange$0$RecyclerAnimationScrollHelper$1(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
-                    }
-                });
+                RecyclerAnimationScrollHelper.this.animator.addUpdateListener(new RecyclerAnimationScrollHelper$1$$ExternalSyntheticLambda0(this, arrayList, z3, i16, arrayList));
                 RecyclerAnimationScrollHelper.this.animator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         if (RecyclerAnimationScrollHelper.this.animator != null) {
@@ -278,8 +261,7 @@ public class RecyclerAnimationScrollHelper {
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onLayoutChange$0 */
-            public /* synthetic */ void lambda$onLayoutChange$0$RecyclerAnimationScrollHelper$1(ArrayList arrayList, boolean z, int i, ArrayList arrayList2, ValueAnimator valueAnimator) {
+            public /* synthetic */ void lambda$onLayoutChange$0(ArrayList arrayList, boolean z, int i, ArrayList arrayList2, ValueAnimator valueAnimator) {
                 float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
                 int size = arrayList.size();
                 for (int i2 = 0; i2 < size; i2++) {

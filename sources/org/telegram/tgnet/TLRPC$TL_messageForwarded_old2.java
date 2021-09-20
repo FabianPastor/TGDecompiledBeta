@@ -20,13 +20,13 @@ public class TLRPC$TL_messageForwarded_old2 extends TLRPC$Message {
         TLRPC$TL_messageFwdHeader tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader();
         this.fwd_from = tLRPC$TL_messageFwdHeader;
         tLRPC$TL_messageFwdHeader.from_id = new TLRPC$TL_peerUser();
-        this.fwd_from.from_id.user_id = abstractSerializedData.readInt32(z);
+        this.fwd_from.from_id.user_id = (long) abstractSerializedData.readInt32(z);
         TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = this.fwd_from;
         tLRPC$MessageFwdHeader.flags |= 1;
         tLRPC$MessageFwdHeader.date = abstractSerializedData.readInt32(z);
         TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
         this.from_id = tLRPC$TL_peerUser;
-        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
+        tLRPC$TL_peerUser.user_id = (long) abstractSerializedData.readInt32(z);
         this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.date = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);
@@ -50,9 +50,9 @@ public class TLRPC$TL_messageForwarded_old2 extends TLRPC$Message {
         this.flags = i4;
         abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt32(this.id);
-        abstractSerializedData.writeInt32(this.fwd_from.from_id.user_id);
+        abstractSerializedData.writeInt32((int) this.fwd_from.from_id.user_id);
         abstractSerializedData.writeInt32(this.fwd_from.date);
-        abstractSerializedData.writeInt32(this.from_id.user_id);
+        abstractSerializedData.writeInt32((int) this.from_id.user_id);
         this.peer_id.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.date);
         abstractSerializedData.writeString(this.message);

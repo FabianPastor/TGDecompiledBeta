@@ -30,7 +30,7 @@ public class ChatListCell extends LinearLayout {
         private RectF rect = new RectF();
         private TextPaint textPaint;
 
-        public ListView(Context context, boolean z) {
+        public ListView(ChatListCell chatListCell, Context context, boolean z) {
             super(context);
             int i;
             String str;
@@ -47,7 +47,7 @@ public class ChatListCell extends LinearLayout {
             }
             setContentDescription(LocaleController.getString(str, i));
             this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
-            AnonymousClass1 r12 = new RadioButton(context, ChatListCell.this) {
+            AnonymousClass1 r12 = new RadioButton(context, chatListCell) {
                 public void invalidate() {
                     super.invalidate();
                     ListView.this.invalidate();
@@ -148,19 +148,9 @@ public class ChatListCell extends LinearLayout {
             ListView[] listViewArr = this.listView;
             if (i < listViewArr.length) {
                 boolean z = i == 1;
-                listViewArr[i] = new ListView(context, z);
+                listViewArr[i] = new ListView(this, context, z);
                 addView(this.listView[i], LayoutHelper.createLinear(-1, -1, 0.5f, i == 1 ? 10 : 0, 0, 0, 0));
-                this.listView[i].setOnClickListener(new View.OnClickListener(z) {
-                    public final /* synthetic */ boolean f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void onClick(View view) {
-                        ChatListCell.this.lambda$new$0$ChatListCell(this.f$1, view);
-                    }
-                });
+                this.listView[i].setOnClickListener(new ChatListCell$$ExternalSyntheticLambda0(this, z));
                 i++;
             } else {
                 return;
@@ -169,8 +159,7 @@ public class ChatListCell extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ChatListCell(boolean z, View view) {
+    public /* synthetic */ void lambda$new$0(boolean z, View view) {
         for (int i = 0; i < 2; i++) {
             this.listView[i].button.setChecked(this.listView[i] == view, true);
         }

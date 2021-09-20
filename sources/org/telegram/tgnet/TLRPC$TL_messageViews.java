@@ -4,7 +4,7 @@ public class TLRPC$TL_messageViews extends TLObject {
     public static int constructor = NUM;
     public int flags;
     public int forwards;
-    public TLRPC$TL_messageReplies replies;
+    public TLRPC$MessageReplies replies;
     public int views;
 
     public static TLRPC$TL_messageViews TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -29,7 +29,7 @@ public class TLRPC$TL_messageViews extends TLObject {
             this.forwards = abstractSerializedData.readInt32(z);
         }
         if ((this.flags & 4) != 0) {
-            this.replies = TLRPC$TL_messageReplies.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.replies = TLRPC$MessageReplies.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
     }
 

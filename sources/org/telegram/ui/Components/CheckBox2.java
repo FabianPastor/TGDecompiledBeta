@@ -5,14 +5,19 @@ import android.graphics.Canvas;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.CheckBox;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBoxBase;
 
 public class CheckBox2 extends View {
     private CheckBoxBase checkBoxBase;
 
     public CheckBox2(Context context, int i) {
+        this(context, i, (Theme.ResourcesProvider) null);
+    }
+
+    public CheckBox2(Context context, int i, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.checkBoxBase = new CheckBoxBase(this, i);
+        this.checkBoxBase = new CheckBoxBase(this, i, resourcesProvider);
     }
 
     public void setProgressDelegate(CheckBoxBase.ProgressDelegate progressDelegate) {

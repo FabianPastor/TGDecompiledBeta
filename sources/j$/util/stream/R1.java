@@ -1,69 +1,40 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import j$.util.function.C;
 import j$.util.function.Consumer;
-import j$.util.function.q;
-import j$.util.function.w;
-import j$.util.function.x;
-import j$.util.stream.A2;
+import j$.util.function.m;
+import j$.util.x;
+import j$.util.y;
 
-interface R1<T> {
-
-    public interface a<T> extends A2<T> {
-
-        /* renamed from: j$.util.stream.R1$a$a  reason: collision with other inner class name */
-        public interface CLASSNAMEa extends a<Double>, A2.e {
-            b a();
-        }
-
-        public interface b extends a<Integer>, A2.f {
-            c a();
-        }
-
-        public interface c extends a<Long>, A2.g {
-            d a();
-        }
-
-        R1 a();
+final class R1 extends S1 implements CLASSNAMEz1 {
+    R1(CLASSNAMEz1 z1Var, CLASSNAMEz1 z1Var2) {
+        super(z1Var, z1Var2);
     }
 
-    public interface b extends e<Double, q, double[], Spliterator.a, b> {
+    /* renamed from: a */
+    public /* synthetic */ void i(Long[] lArr, int i) {
+        CLASSNAMEp1.j(this, lArr, i);
     }
 
-    public interface c extends e<Integer, w, int[], Spliterator.b, c> {
+    /* renamed from: f */
+    public long[] c(int i) {
+        return new long[i];
     }
 
-    public interface d extends e<Long, C, long[], Spliterator.c, d> {
+    public /* synthetic */ void forEach(Consumer consumer) {
+        CLASSNAMEp1.m(this, consumer);
     }
 
-    public interface e<T, T_CONS, T_ARR, T_SPLITR extends Spliterator.d<T, T_CONS, T_SPLITR>, T_NODE extends e<T, T_CONS, T_ARR, T_SPLITR, T_NODE>> extends R1<T> {
-        e b(int i);
-
-        Object c(int i);
-
-        void d(Object obj, int i);
-
-        Object e();
-
-        void g(Object obj);
-
-        Spliterator.d spliterator();
+    /* renamed from: h */
+    public /* synthetic */ CLASSNAMEz1 r(long j, long j2, m mVar) {
+        return CLASSNAMEp1.p(this, j, j2, mVar);
     }
 
-    R1 b(int i);
+    public x spliterator() {
+        return new CLASSNAMEi2(this);
+    }
 
-    long count();
-
-    void forEach(Consumer consumer);
-
-    void i(Object[] objArr, int i);
-
-    int n();
-
-    Object[] p(x xVar);
-
-    R1 q(long j, long j2, x xVar);
-
-    Spliterator spliterator();
+    /* renamed from: spliterator  reason: collision with other method in class */
+    public y m1175spliterator() {
+        return new CLASSNAMEi2(this);
+    }
 }

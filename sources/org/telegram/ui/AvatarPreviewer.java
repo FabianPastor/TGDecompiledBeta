@@ -35,13 +35,10 @@ import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.AvatarPreviewer;
 import org.telegram.ui.Components.RadialProgress2;
 
 public class AvatarPreviewer {
     private static AvatarPreviewer INSTANCE;
-    private Callback callback;
-    private Context context;
     private Layout layout;
     private ViewGroup view;
     private boolean visible;
@@ -67,17 +64,16 @@ public class AvatarPreviewer {
         return (data == null || (data.imageLocation == null && data.thumbImageLocation == null)) ? false : true;
     }
 
-    public void show(ViewGroup viewGroup, Data data, Callback callback2) {
+    public void show(ViewGroup viewGroup, Data data, Callback callback) {
         Preconditions.checkNotNull(viewGroup);
         Preconditions.checkNotNull(data);
-        Preconditions.checkNotNull(callback2);
-        Context context2 = viewGroup.getContext();
+        Preconditions.checkNotNull(callback);
+        Context context = viewGroup.getContext();
         if (this.view != viewGroup) {
             close();
             this.view = viewGroup;
-            this.context = context2;
-            this.windowManager = (WindowManager) ContextCompat.getSystemService(context2, WindowManager.class);
-            this.layout = new Layout(context2, callback2) {
+            this.windowManager = (WindowManager) ContextCompat.getSystemService(context, WindowManager.class);
+            this.layout = new Layout(context, callback) {
                 /* access modifiers changed from: protected */
                 public void onHide() {
                     AvatarPreviewer.this.close();
@@ -109,9 +105,7 @@ public class AvatarPreviewer {
             this.layout = null;
             this.view.requestDisallowInterceptTouchEvent(false);
             this.view = null;
-            this.context = null;
             this.windowManager = null;
-            this.callback = null;
         }
     }
 
@@ -244,7 +238,7 @@ public class AvatarPreviewer {
 
         /* access modifiers changed from: protected */
         public void onReceiveNotification(Object... objArr) {
-            if (objArr[0].intValue() == ((TLRPC$User) this.argument).id) {
+            if (objArr[0].longValue() == ((TLRPC$User) this.argument).id) {
                 onResult(objArr[1]);
             }
         }
@@ -326,14 +320,13 @@ public class AvatarPreviewer {
 
     private static abstract class Layout extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
         private final Drawable arrowDrawable;
-        private final ColorDrawable backgroundDrawable = new ColorDrawable(NUM);
+        private final ColorDrawable backgroundDrawable;
         private final Callback callback;
-        private final int[] coords = new int[2];
         private float downY;
         private final ImageReceiver imageReceiver;
         private InfoLoadTask<?, ?> infoLoadTask;
         private WindowInsets insets;
-        private final Interpolator interpolator = new AccelerateDecelerateInterpolator();
+        private final Interpolator interpolator;
         private long lastUpdateTime;
         private MenuItem[] menuItems;
         private ValueAnimator moveAnimator;
@@ -343,7 +336,6 @@ public class AvatarPreviewer {
         private ValueAnimator progressShowAnimator;
         private final RadialProgress2 radialProgress;
         private final int radialProgressSize = AndroidUtilities.dp(64.0f);
-        private final Rect rect = new Rect();
         private boolean recycled;
         /* access modifiers changed from: private */
         public boolean showProgress;
@@ -356,6 +348,9 @@ public class AvatarPreviewer {
 
         public Layout(Context context, Callback callback2) {
             super(context);
+            new Rect();
+            this.interpolator = new AccelerateDecelerateInterpolator();
+            this.backgroundDrawable = new ColorDrawable(NUM);
             ImageReceiver imageReceiver2 = new ImageReceiver();
             this.imageReceiver = imageReceiver2;
             this.downY = -1.0f;
@@ -419,11 +414,7 @@ public class AvatarPreviewer {
                             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.moveProgress, 0.0f});
                             this.moveAnimator = ofFloat;
                             ofFloat.setDuration(200);
-                            this.moveAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    AvatarPreviewer.Layout.this.lambda$onTouchEvent$0$AvatarPreviewer$Layout(valueAnimator);
-                                }
-                            });
+                            this.moveAnimator.addUpdateListener(new AvatarPreviewer$Layout$$ExternalSyntheticLambda0(this));
                             this.moveAnimator.start();
                             showBottomSheet();
                         }
@@ -435,8 +426,7 @@ public class AvatarPreviewer {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onTouchEvent$0 */
-        public /* synthetic */ void lambda$onTouchEvent$0$AvatarPreviewer$Layout(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$onTouchEvent$0(ValueAnimator valueAnimator) {
             this.moveProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             invalidate();
         }
@@ -453,17 +443,9 @@ public class AvatarPreviewer {
                     iArr[i] = this.menuItems[i].iconResId;
                     i++;
                 } else {
-                    BottomSheet dimBehind = new BottomSheet.Builder(getContext()).setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener() {
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            AvatarPreviewer.Layout.this.lambda$showBottomSheet$1$AvatarPreviewer$Layout(dialogInterface, i);
-                        }
-                    }).setDimBehind(false);
+                    BottomSheet dimBehind = new BottomSheet.Builder(getContext()).setItems(charSequenceArr, iArr, new AvatarPreviewer$Layout$$ExternalSyntheticLambda3(this)).setDimBehind(false);
                     this.visibleSheet = dimBehind;
-                    dimBehind.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        public final void onDismiss(DialogInterface dialogInterface) {
-                            AvatarPreviewer.Layout.this.lambda$showBottomSheet$2$AvatarPreviewer$Layout(dialogInterface);
-                        }
-                    });
+                    dimBehind.setOnDismissListener(new AvatarPreviewer$Layout$$ExternalSyntheticLambda4(this));
                     this.visibleSheet.show();
                     return;
                 }
@@ -471,15 +453,13 @@ public class AvatarPreviewer {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$showBottomSheet$1 */
-        public /* synthetic */ void lambda$showBottomSheet$1$AvatarPreviewer$Layout(DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$showBottomSheet$1(DialogInterface dialogInterface, int i) {
             this.callback.onMenuClick(this.menuItems[i]);
             setShowing(false);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$showBottomSheet$2 */
-        public /* synthetic */ void lambda$showBottomSheet$2$AvatarPreviewer$Layout(DialogInterface dialogInterface) {
+        public /* synthetic */ void lambda$showBottomSheet$2(DialogInterface dialogInterface) {
             this.visibleSheet = null;
             setShowing(false);
         }
@@ -713,8 +693,8 @@ public class AvatarPreviewer {
                 r2.<init>()
                 r1.addListener(r2)
                 android.animation.ValueAnimator r1 = r9.progressHideAnimator
-                org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$j9KW4xPGuPhYhDk833i23cp7jBU r2 = new org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$j9KW4xPGuPhYhDk833i23cp7jBU
-                r2.<init>()
+                org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda1
+                r2.<init>(r9)
                 r1.addUpdateListener(r2)
                 android.animation.ValueAnimator r1 = r9.progressHideAnimator
                 r1.setDuration(r7)
@@ -731,8 +711,8 @@ public class AvatarPreviewer {
                 r1 = {0, NUM} // fill-array
                 android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
                 r9.progressShowAnimator = r1
-                org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$xkdpQNyrqjoJ20d9783m1FumdYM r2 = new org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$xkdpQNyrqjoJ20d9783m1FumdYM
-                r2.<init>()
+                org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda2
+                r2.<init>(r9)
                 r1.addUpdateListener(r2)
                 android.animation.ValueAnimator r1 = r9.progressShowAnimator
                 r1.setStartDelay(r7)
@@ -786,14 +766,12 @@ public class AvatarPreviewer {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onDraw$3 */
-        public /* synthetic */ void lambda$onDraw$3$AvatarPreviewer$Layout(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$onDraw$3(ValueAnimator valueAnimator) {
             invalidate();
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onDraw$4 */
-        public /* synthetic */ void lambda$onDraw$4$AvatarPreviewer$Layout(ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$onDraw$4(ValueAnimator valueAnimator) {
             invalidate();
         }
 
@@ -805,17 +783,7 @@ public class AvatarPreviewer {
             if (data.infoLoadTask != null) {
                 InfoLoadTask<?, ?> access$1100 = data.infoLoadTask;
                 this.infoLoadTask = access$1100;
-                access$1100.load(new Consumer(data) {
-                    public final /* synthetic */ AvatarPreviewer.Data f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void accept(Object obj) {
-                        AvatarPreviewer.Layout.this.lambda$setData$5$AvatarPreviewer$Layout(this.f$1, obj);
-                    }
-                });
+                access$1100.load(new AvatarPreviewer$Layout$$ExternalSyntheticLambda5(this, data));
             } else {
                 Data data2 = data;
             }
@@ -825,8 +793,7 @@ public class AvatarPreviewer {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$setData$5 */
-        public /* synthetic */ void lambda$setData$5$AvatarPreviewer$Layout(Data data, Object obj) {
+        public /* synthetic */ void lambda$setData$5(Data data, Object obj) {
             if (this.recycled) {
                 return;
             }

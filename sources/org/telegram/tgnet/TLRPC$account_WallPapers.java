@@ -3,10 +3,10 @@ package org.telegram.tgnet;
 public abstract class TLRPC$account_WallPapers extends TLObject {
     public static TLRPC$account_WallPapers TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$account_WallPapers tLRPC$account_WallPapers;
-        if (i != NUM) {
-            tLRPC$account_WallPapers = i != NUM ? null : new TLRPC$TL_account_wallPapers();
+        if (i != -NUM) {
+            tLRPC$account_WallPapers = i != NUM ? null : new TLRPC$TL_account_wallPapersNotModified();
         } else {
-            tLRPC$account_WallPapers = new TLRPC$TL_account_wallPapersNotModified();
+            tLRPC$account_WallPapers = new TLRPC$TL_account_wallPapers();
         }
         if (tLRPC$account_WallPapers != null || !z) {
             if (tLRPC$account_WallPapers != null) {

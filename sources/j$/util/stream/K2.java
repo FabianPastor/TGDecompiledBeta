@@ -1,28 +1,56 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import j$.util.function.x;
-import j$.util.stream.CLASSNAMEz1;
-import j$.util.stream.R1;
-import j$.util.stream.S1;
-import java.util.Arrays;
+import j$.util.function.BiConsumer;
+import j$.util.function.CLASSNAMEb;
+import j$.util.function.Consumer;
+import j$.util.function.z;
 
-final class K2 extends CLASSNAMEz1.j<Integer> {
-    K2(CLASSNAMEh1 h1Var) {
-        super(h1Var, U2.INT_VALUE, T2.l | T2.j);
+class K2 extends U2 implements T2 {
+    final /* synthetic */ z b;
+    final /* synthetic */ BiConsumer c;
+    final /* synthetic */ CLASSNAMEb d;
+
+    K2(z zVar, BiConsumer biConsumer, CLASSNAMEb bVar) {
+        this.b = zVar;
+        this.c = biConsumer;
+        this.d = bVar;
     }
 
-    public R1 D0(T1 t1, Spliterator spliterator, x xVar) {
-        if (T2.SORTED.d(t1.r0())) {
-            return t1.o0(spliterator, false, xVar);
-        }
-        int[] iArr = (int[]) ((R1.c) t1.o0(spliterator, true, xVar)).e();
-        Arrays.sort(iArr);
-        return new S1.l(iArr);
+    public /* synthetic */ void accept(double d2) {
+        CLASSNAMEp1.f(this);
+        throw null;
     }
 
-    public A2 G0(int i, A2 a2) {
-        a2.getClass();
-        return T2.SORTED.d(i) ? a2 : T2.SIZED.d(i) ? new P2(a2) : new H2(a2);
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEp1.d(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEp1.e(this);
+        throw null;
+    }
+
+    public void accept(Object obj) {
+        this.c.accept(this.a, obj);
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    public void h(T2 t2) {
+        this.a = this.d.apply(this.a, ((K2) t2).a);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b.get();
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

@@ -25,19 +25,20 @@ public class BotHelpCell extends View {
     private int height;
     private String oldText;
     private ClickableSpan pressedLink;
+    private final Theme.ResourcesProvider resourcesProvider;
     private StaticLayout textLayout;
     private int textX;
     private int textY;
     private LinkPath urlPath = new LinkPath();
-    public boolean wasDraw;
     private int width;
 
     public interface BotHelpCellDelegate {
         void didPressUrl(String str);
     }
 
-    public BotHelpCell(Context context) {
+    public BotHelpCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
     }
 
     public void setDelegate(BotHelpCellDelegate botHelpCellDelegate) {
@@ -274,13 +275,14 @@ public class BotHelpCell extends View {
             i = view.getMeasuredWidth();
             i2 = view.getMeasuredHeight();
         }
-        Theme.MessageDrawable messageDrawable = Theme.chat_msgInMediaDrawable;
-        int y = (int) getY();
-        messageDrawable.setTop(y, i, i2, false, false);
-        Theme.chat_msgInMediaDrawable.setBounds(width2, dp, this.width + width2, this.height + dp);
-        Theme.chat_msgInMediaDrawable.draw(canvas);
-        Theme.chat_msgTextPaint.setColor(Theme.getColor("chat_messageTextIn"));
-        Theme.chat_msgTextPaint.linkColor = Theme.getColor("chat_messageLinkIn");
+        int i3 = i2;
+        Theme.MessageDrawable messageDrawable = (Theme.MessageDrawable) getThemedDrawable("drawableMsgInMedia");
+        Theme.MessageDrawable messageDrawable2 = messageDrawable;
+        messageDrawable2.setTop((int) getY(), i, i3, false, false);
+        messageDrawable.setBounds(width2, dp, this.width + width2, this.height + dp);
+        messageDrawable.draw(canvas);
+        Theme.chat_msgTextPaint.setColor(getThemedColor("chat_messageTextIn"));
+        Theme.chat_msgTextPaint.linkColor = getThemedColor("chat_messageLinkIn");
         canvas.save();
         int dp2 = AndroidUtilities.dp(11.0f) + width2;
         this.textX = dp2;
@@ -295,13 +297,11 @@ public class BotHelpCell extends View {
             staticLayout.draw(canvas);
         }
         canvas.restore();
-        this.wasDraw = true;
     }
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        this.wasDraw = false;
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
@@ -315,5 +315,17 @@ public class BotHelpCell extends View {
 
     public void setAnimating(boolean z) {
         this.animating = z;
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    private Drawable getThemedDrawable(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Drawable drawable = resourcesProvider2 != null ? resourcesProvider2.getDrawable(str) : null;
+        return drawable != null ? drawable : Theme.getThemeDrawable(str);
     }
 }

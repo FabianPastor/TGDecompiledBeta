@@ -13,8 +13,7 @@ import org.telegram.tgnet.TLRPC$User;
 public class UserConfig extends BaseController {
     private static volatile UserConfig[] Instance = new UserConfig[3];
     public static final int MAX_ACCOUNT_COUNT = 3;
-    public static final int i_dialogsLoadOffsetAccess_1 = 5;
-    public static final int i_dialogsLoadOffsetAccess_2 = 6;
+    public static final int i_dialogsLoadOffsetAccess = 5;
     public static final int i_dialogsLoadOffsetChannelId = 4;
     public static final int i_dialogsLoadOffsetChatId = 3;
     public static final int i_dialogsLoadOffsetDate = 1;
@@ -23,7 +22,7 @@ public class UserConfig extends BaseController {
     public static int selectedAccount;
     public long autoDownloadConfigLoadTime;
     public int botRatingLoadTime;
-    public int clientUserId;
+    public long clientUserId;
     private boolean configLoaded;
     public boolean contactsReimported;
     public int contactsSavedCount;
@@ -39,11 +38,11 @@ public class UserConfig extends BaseController {
     public int lastSendMessageId = -210000;
     public int loginTime;
     public long migrateOffsetAccess = -1;
-    public int migrateOffsetChannelId = -1;
-    public int migrateOffsetChatId = -1;
+    public long migrateOffsetChannelId = -1;
+    public long migrateOffsetChatId = -1;
     public int migrateOffsetDate = -1;
     public int migrateOffsetId = -1;
-    public int migrateOffsetUserId = -1;
+    public long migrateOffsetUserId = -1;
     public boolean notificationsSettingsLoaded;
     public boolean notificationsSignUpSettingsLoaded;
     public int ratingLoadTime;
@@ -99,22 +98,11 @@ public class UserConfig extends BaseController {
     }
 
     public void saveConfig(boolean z) {
-        NotificationCenter.getInstance(this.currentAccount).doOnIdle(new Runnable(z) {
-            public final /* synthetic */ boolean f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                UserConfig.this.lambda$saveConfig$0$UserConfig(this.f$1);
-            }
-        });
+        NotificationCenter.getInstance(this.currentAccount).doOnIdle(new UserConfig$$ExternalSyntheticLambda0(this, z));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$saveConfig$0 */
-    public /* synthetic */ void lambda$saveConfig$0$UserConfig(boolean z) {
+    public /* synthetic */ void lambda$saveConfig$0(boolean z) {
         synchronized (this.sync) {
             try {
                 SharedPreferences.Editor edit = getPreferences().edit();
@@ -146,9 +134,9 @@ public class UserConfig extends BaseController {
                 edit.putInt("6migrateOffsetId", this.migrateOffsetId);
                 if (this.migrateOffsetId != -1) {
                     edit.putInt("6migrateOffsetDate", this.migrateOffsetDate);
-                    edit.putInt("6migrateOffsetUserId", this.migrateOffsetUserId);
-                    edit.putInt("6migrateOffsetChatId", this.migrateOffsetChatId);
-                    edit.putInt("6migrateOffsetChannelId", this.migrateOffsetChannelId);
+                    edit.putLong("6migrateOffsetUserId", this.migrateOffsetUserId);
+                    edit.putLong("6migrateOffsetChatId", this.migrateOffsetChatId);
+                    edit.putLong("6migrateOffsetChannelId", this.migrateOffsetChannelId);
                     edit.putLong("6migrateOffsetAccess", this.migrateOffsetAccess);
                 }
                 TLRPC$TL_help_termsOfService tLRPC$TL_help_termsOfService = this.unacceptedTermsOfService;
@@ -199,13 +187,13 @@ public class UserConfig extends BaseController {
         return z;
     }
 
-    public int getClientUserId() {
-        int i;
+    public long getClientUserId() {
+        long j;
         synchronized (this.sync) {
             TLRPC$User tLRPC$User = this.currentUser;
-            i = tLRPC$User != null ? tLRPC$User.id : 0;
+            j = tLRPC$User != null ? tLRPC$User.id : 0;
         }
-        return i;
+        return j;
     }
 
     public String getClientPhone() {
@@ -234,192 +222,192 @@ public class UserConfig extends BaseController {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x0127 A[Catch:{ Exception -> 0x0119 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0193 A[Catch:{ Exception -> 0x0119 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x012b A[Catch:{ Exception -> 0x011d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x0199 A[Catch:{ Exception -> 0x011d }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void loadConfig() {
         /*
             r10 = this;
             java.lang.Object r0 = r10.sync
             monitor-enter(r0)
-            boolean r1 = r10.configLoaded     // Catch:{ all -> 0x019b }
+            boolean r1 = r10.configLoaded     // Catch:{ all -> 0x01a1 }
             if (r1 == 0) goto L_0x0009
-            monitor-exit(r0)     // Catch:{ all -> 0x019b }
+            monitor-exit(r0)     // Catch:{ all -> 0x01a1 }
             return
         L_0x0009:
-            android.content.SharedPreferences r1 = r10.getPreferences()     // Catch:{ all -> 0x019b }
-            int r2 = r10.currentAccount     // Catch:{ all -> 0x019b }
+            android.content.SharedPreferences r1 = r10.getPreferences()     // Catch:{ all -> 0x01a1 }
+            int r2 = r10.currentAccount     // Catch:{ all -> 0x01a1 }
             r3 = 0
             if (r2 != 0) goto L_0x001a
             java.lang.String r2 = "selectedAccount"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x019b }
-            selectedAccount = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x01a1 }
+            selectedAccount = r2     // Catch:{ all -> 0x01a1 }
         L_0x001a:
             java.lang.String r2 = "registeredForPush"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.registeredForPush = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.registeredForPush = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "lastSendMessageId"
             r4 = -210000(0xfffffffffffccbb0, float:NaN)
-            int r2 = r1.getInt(r2, r4)     // Catch:{ all -> 0x019b }
-            r10.lastSendMessageId = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r4)     // Catch:{ all -> 0x01a1 }
+            r10.lastSendMessageId = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "contactsSavedCount"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.contactsSavedCount = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.contactsSavedCount = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "lastBroadcastId"
             r4 = -1
-            int r2 = r1.getInt(r2, r4)     // Catch:{ all -> 0x019b }
-            r10.lastBroadcastId = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r4)     // Catch:{ all -> 0x01a1 }
+            r10.lastBroadcastId = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "lastContactsSyncTime"
-            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x019b }
+            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x01a1 }
             r7 = 1000(0x3e8, double:4.94E-321)
             long r5 = r5 / r7
-            int r6 = (int) r5     // Catch:{ all -> 0x019b }
+            int r6 = (int) r5     // Catch:{ all -> 0x01a1 }
             r5 = 82800(0x14370, float:1.16028E-40)
             int r6 = r6 - r5
-            int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x019b }
-            r10.lastContactsSyncTime = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x01a1 }
+            r10.lastContactsSyncTime = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "lastHintsSyncTime"
-            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x019b }
+            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x01a1 }
             long r5 = r5 / r7
-            int r6 = (int) r5     // Catch:{ all -> 0x019b }
+            int r6 = (int) r5     // Catch:{ all -> 0x01a1 }
             r5 = 90000(0x15var_, float:1.26117E-40)
             int r6 = r6 - r5
-            int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x019b }
-            r10.lastHintsSyncTime = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x01a1 }
+            r10.lastHintsSyncTime = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "draftsLoaded"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.draftsLoaded = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.draftsLoaded = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "unreadDialogsLoaded"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.unreadDialogsLoaded = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.unreadDialogsLoaded = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "contactsReimported"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.contactsReimported = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.contactsReimported = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "ratingLoadTime"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.ratingLoadTime = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.ratingLoadTime = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "botRatingLoadTime"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.botRatingLoadTime = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.botRatingLoadTime = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "loginTime"
-            int r5 = r10.currentAccount     // Catch:{ all -> 0x019b }
-            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x019b }
-            r10.loginTime = r2     // Catch:{ all -> 0x019b }
+            int r5 = r10.currentAccount     // Catch:{ all -> 0x01a1 }
+            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x01a1 }
+            r10.loginTime = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "syncContacts"
             r5 = 1
-            boolean r2 = r1.getBoolean(r2, r5)     // Catch:{ all -> 0x019b }
-            r10.syncContacts = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r5)     // Catch:{ all -> 0x01a1 }
+            r10.syncContacts = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "suggestContacts"
-            boolean r2 = r1.getBoolean(r2, r5)     // Catch:{ all -> 0x019b }
-            r10.suggestContacts = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r5)     // Catch:{ all -> 0x01a1 }
+            r10.suggestContacts = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "hasSecureData"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.hasSecureData = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.hasSecureData = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "notificationsSettingsLoaded3"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.notificationsSettingsLoaded = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.notificationsSettingsLoaded = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "notificationsSignUpSettingsLoaded"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.notificationsSignUpSettingsLoaded = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.notificationsSignUpSettingsLoaded = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "autoDownloadConfigLoadTime"
             r6 = 0
-            long r8 = r1.getLong(r2, r6)     // Catch:{ all -> 0x019b }
-            r10.autoDownloadConfigLoadTime = r8     // Catch:{ all -> 0x019b }
+            long r8 = r1.getLong(r2, r6)     // Catch:{ all -> 0x01a1 }
+            r10.autoDownloadConfigLoadTime = r8     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "2dialogsLoadOffsetId"
-            boolean r2 = r1.contains(r2)     // Catch:{ all -> 0x019b }
-            if (r2 != 0) goto L_0x00dc
+            boolean r2 = r1.contains(r2)     // Catch:{ all -> 0x01a1 }
+            if (r2 != 0) goto L_0x00df
             java.lang.String r2 = "hasValidDialogLoadIds"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x019b }
-            if (r2 == 0) goto L_0x00da
-            goto L_0x00dc
-        L_0x00da:
-            r2 = 0
-            goto L_0x00dd
-        L_0x00dc:
-            r2 = 1
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x01a1 }
+            if (r2 == 0) goto L_0x00dd
+            goto L_0x00df
         L_0x00dd:
-            r10.hasValidDialogLoadIds = r2     // Catch:{ all -> 0x019b }
+            r2 = 0
+            goto L_0x00e0
+        L_0x00df:
+            r2 = 1
+        L_0x00e0:
+            r10.hasValidDialogLoadIds = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "sharingMyLocationUntil"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.sharingMyLocationUntil = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.sharingMyLocationUntil = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "lastMyLocationShareTime"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.lastMyLocationShareTime = r2     // Catch:{ all -> 0x019b }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.lastMyLocationShareTime = r2     // Catch:{ all -> 0x01a1 }
             java.lang.String r2 = "filtersLoaded"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x019b }
-            r10.filtersLoaded = r2     // Catch:{ all -> 0x019b }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x01a1 }
+            r10.filtersLoaded = r2     // Catch:{ all -> 0x01a1 }
             r2 = 0
             java.lang.String r8 = "terms"
-            java.lang.String r8 = r1.getString(r8, r2)     // Catch:{ Exception -> 0x0119 }
-            if (r8 == 0) goto L_0x011d
-            byte[] r8 = android.util.Base64.decode(r8, r3)     // Catch:{ Exception -> 0x0119 }
-            if (r8 == 0) goto L_0x011d
-            org.telegram.tgnet.SerializedData r9 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0119 }
-            r9.<init>((byte[]) r8)     // Catch:{ Exception -> 0x0119 }
-            int r8 = r9.readInt32(r3)     // Catch:{ Exception -> 0x0119 }
-            org.telegram.tgnet.TLRPC$TL_help_termsOfService r8 = org.telegram.tgnet.TLRPC$TL_help_termsOfService.TLdeserialize(r9, r8, r3)     // Catch:{ Exception -> 0x0119 }
-            r10.unacceptedTermsOfService = r8     // Catch:{ Exception -> 0x0119 }
-            r9.cleanup()     // Catch:{ Exception -> 0x0119 }
-            goto L_0x011d
-        L_0x0119:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)     // Catch:{ all -> 0x019b }
+            java.lang.String r8 = r1.getString(r8, r2)     // Catch:{ Exception -> 0x011d }
+            if (r8 == 0) goto L_0x0121
+            byte[] r8 = android.util.Base64.decode(r8, r3)     // Catch:{ Exception -> 0x011d }
+            if (r8 == 0) goto L_0x0121
+            org.telegram.tgnet.SerializedData r9 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x011d }
+            r9.<init>((byte[]) r8)     // Catch:{ Exception -> 0x011d }
+            int r8 = r9.readInt32(r3)     // Catch:{ Exception -> 0x011d }
+            org.telegram.tgnet.TLRPC$TL_help_termsOfService r8 = org.telegram.tgnet.TLRPC$TL_help_termsOfService.TLdeserialize(r9, r8, r3)     // Catch:{ Exception -> 0x011d }
+            r10.unacceptedTermsOfService = r8     // Catch:{ Exception -> 0x011d }
+            r9.cleanup()     // Catch:{ Exception -> 0x011d }
+            goto L_0x0121
         L_0x011d:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)     // Catch:{ all -> 0x01a1 }
+        L_0x0121:
             java.lang.String r8 = "6migrateOffsetId"
-            int r8 = r1.getInt(r8, r3)     // Catch:{ all -> 0x019b }
-            r10.migrateOffsetId = r8     // Catch:{ all -> 0x019b }
-            if (r8 == r4) goto L_0x014f
+            int r8 = r1.getInt(r8, r3)     // Catch:{ all -> 0x01a1 }
+            r10.migrateOffsetId = r8     // Catch:{ all -> 0x01a1 }
+            if (r8 == r4) goto L_0x0153
             java.lang.String r4 = "6migrateOffsetDate"
-            int r4 = r1.getInt(r4, r3)     // Catch:{ all -> 0x019b }
-            r10.migrateOffsetDate = r4     // Catch:{ all -> 0x019b }
+            int r4 = r1.getInt(r4, r3)     // Catch:{ all -> 0x01a1 }
+            r10.migrateOffsetDate = r4     // Catch:{ all -> 0x01a1 }
             java.lang.String r4 = "6migrateOffsetUserId"
-            int r4 = r1.getInt(r4, r3)     // Catch:{ all -> 0x019b }
-            r10.migrateOffsetUserId = r4     // Catch:{ all -> 0x019b }
+            long r8 = org.telegram.messenger.AndroidUtilities.getPrefIntOrLong(r1, r4, r6)     // Catch:{ all -> 0x01a1 }
+            r10.migrateOffsetUserId = r8     // Catch:{ all -> 0x01a1 }
             java.lang.String r4 = "6migrateOffsetChatId"
-            int r4 = r1.getInt(r4, r3)     // Catch:{ all -> 0x019b }
-            r10.migrateOffsetChatId = r4     // Catch:{ all -> 0x019b }
+            long r8 = org.telegram.messenger.AndroidUtilities.getPrefIntOrLong(r1, r4, r6)     // Catch:{ all -> 0x01a1 }
+            r10.migrateOffsetChatId = r8     // Catch:{ all -> 0x01a1 }
             java.lang.String r4 = "6migrateOffsetChannelId"
-            int r4 = r1.getInt(r4, r3)     // Catch:{ all -> 0x019b }
-            r10.migrateOffsetChannelId = r4     // Catch:{ all -> 0x019b }
+            long r8 = org.telegram.messenger.AndroidUtilities.getPrefIntOrLong(r1, r4, r6)     // Catch:{ all -> 0x01a1 }
+            r10.migrateOffsetChannelId = r8     // Catch:{ all -> 0x01a1 }
             java.lang.String r4 = "6migrateOffsetAccess"
-            long r6 = r1.getLong(r4, r6)     // Catch:{ all -> 0x019b }
-            r10.migrateOffsetAccess = r6     // Catch:{ all -> 0x019b }
-        L_0x014f:
+            long r6 = r1.getLong(r4, r6)     // Catch:{ all -> 0x01a1 }
+            r10.migrateOffsetAccess = r6     // Catch:{ all -> 0x01a1 }
+        L_0x0153:
             java.lang.String r4 = "tmpPassword"
-            java.lang.String r4 = r1.getString(r4, r2)     // Catch:{ all -> 0x019b }
-            if (r4 == 0) goto L_0x016f
-            byte[] r4 = android.util.Base64.decode(r4, r3)     // Catch:{ all -> 0x019b }
-            if (r4 == 0) goto L_0x016f
-            org.telegram.tgnet.SerializedData r6 = new org.telegram.tgnet.SerializedData     // Catch:{ all -> 0x019b }
-            r6.<init>((byte[]) r4)     // Catch:{ all -> 0x019b }
-            int r4 = r6.readInt32(r3)     // Catch:{ all -> 0x019b }
-            org.telegram.tgnet.TLRPC$TL_account_tmpPassword r4 = org.telegram.tgnet.TLRPC$TL_account_tmpPassword.TLdeserialize(r6, r4, r3)     // Catch:{ all -> 0x019b }
-            r10.tmpPassword = r4     // Catch:{ all -> 0x019b }
-            r6.cleanup()     // Catch:{ all -> 0x019b }
-        L_0x016f:
+            java.lang.String r4 = r1.getString(r4, r2)     // Catch:{ all -> 0x01a1 }
+            if (r4 == 0) goto L_0x0174
+            byte[] r4 = android.util.Base64.decode(r4, r3)     // Catch:{ all -> 0x01a1 }
+            if (r4 == 0) goto L_0x0174
+            org.telegram.tgnet.SerializedData r6 = new org.telegram.tgnet.SerializedData     // Catch:{ all -> 0x01a1 }
+            r6.<init>((byte[]) r4)     // Catch:{ all -> 0x01a1 }
+            int r4 = r6.readInt32(r3)     // Catch:{ all -> 0x01a1 }
+            org.telegram.tgnet.TLRPC$TL_account_tmpPassword r4 = org.telegram.tgnet.TLRPC$TL_account_tmpPassword.TLdeserialize(r6, r4, r3)     // Catch:{ all -> 0x01a1 }
+            r10.tmpPassword = r4     // Catch:{ all -> 0x01a1 }
+            r6.cleanup()     // Catch:{ all -> 0x01a1 }
+        L_0x0174:
             java.lang.String r4 = "user"
-            java.lang.String r1 = r1.getString(r4, r2)     // Catch:{ all -> 0x019b }
-            if (r1 == 0) goto L_0x018f
-            byte[] r1 = android.util.Base64.decode(r1, r3)     // Catch:{ all -> 0x019b }
-            if (r1 == 0) goto L_0x018f
-            org.telegram.tgnet.SerializedData r2 = new org.telegram.tgnet.SerializedData     // Catch:{ all -> 0x019b }
-            r2.<init>((byte[]) r1)     // Catch:{ all -> 0x019b }
-            int r1 = r2.readInt32(r3)     // Catch:{ all -> 0x019b }
-            org.telegram.tgnet.TLRPC$User r1 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r2, r1, r3)     // Catch:{ all -> 0x019b }
-            r10.currentUser = r1     // Catch:{ all -> 0x019b }
-            r2.cleanup()     // Catch:{ all -> 0x019b }
-        L_0x018f:
-            org.telegram.tgnet.TLRPC$User r1 = r10.currentUser     // Catch:{ all -> 0x019b }
-            if (r1 == 0) goto L_0x0197
-            int r1 = r1.id     // Catch:{ all -> 0x019b }
-            r10.clientUserId = r1     // Catch:{ all -> 0x019b }
-        L_0x0197:
-            r10.configLoaded = r5     // Catch:{ all -> 0x019b }
-            monitor-exit(r0)     // Catch:{ all -> 0x019b }
+            java.lang.String r1 = r1.getString(r4, r2)     // Catch:{ all -> 0x01a1 }
+            if (r1 == 0) goto L_0x0195
+            byte[] r1 = android.util.Base64.decode(r1, r3)     // Catch:{ all -> 0x01a1 }
+            if (r1 == 0) goto L_0x0195
+            org.telegram.tgnet.SerializedData r2 = new org.telegram.tgnet.SerializedData     // Catch:{ all -> 0x01a1 }
+            r2.<init>((byte[]) r1)     // Catch:{ all -> 0x01a1 }
+            int r1 = r2.readInt32(r3)     // Catch:{ all -> 0x01a1 }
+            org.telegram.tgnet.TLRPC$User r1 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r2, r1, r3)     // Catch:{ all -> 0x01a1 }
+            r10.currentUser = r1     // Catch:{ all -> 0x01a1 }
+            r2.cleanup()     // Catch:{ all -> 0x01a1 }
+        L_0x0195:
+            org.telegram.tgnet.TLRPC$User r1 = r10.currentUser     // Catch:{ all -> 0x01a1 }
+            if (r1 == 0) goto L_0x019d
+            long r1 = r1.id     // Catch:{ all -> 0x01a1 }
+            r10.clientUserId = r1     // Catch:{ all -> 0x01a1 }
+        L_0x019d:
+            r10.configLoaded = r5     // Catch:{ all -> 0x01a1 }
+            monitor-exit(r0)     // Catch:{ all -> 0x01a1 }
             return
-        L_0x019b:
+        L_0x01a1:
             r1 = move-exception
-            monitor-exit(r0)     // Catch:{ all -> 0x019b }
+            monitor-exit(r0)     // Catch:{ all -> 0x01a1 }
             throw r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.UserConfig.loadConfig():void");
@@ -538,7 +526,7 @@ public class UserConfig extends BaseController {
         edit.putInt(sb.toString(), i2).commit();
     }
 
-    public int[] getDialogLoadOffsets(int i) {
+    public long[] getDialogLoadOffsets(int i) {
         SharedPreferences preferences = getPreferences();
         StringBuilder sb = new StringBuilder();
         sb.append("2dialogsLoadOffsetId");
@@ -549,34 +537,38 @@ public class UserConfig extends BaseController {
         StringBuilder sb2 = new StringBuilder();
         sb2.append("2dialogsLoadOffsetDate");
         sb2.append(i == 0 ? obj : Integer.valueOf(i));
-        int i4 = preferences.getInt(sb2.toString(), this.hasValidDialogLoadIds ? 0 : -1);
-        StringBuilder sb3 = new StringBuilder();
-        sb3.append("2dialogsLoadOffsetUserId");
-        sb3.append(i == 0 ? obj : Integer.valueOf(i));
-        int i5 = preferences.getInt(sb3.toString(), this.hasValidDialogLoadIds ? 0 : -1);
-        StringBuilder sb4 = new StringBuilder();
-        sb4.append("2dialogsLoadOffsetChatId");
-        sb4.append(i == 0 ? obj : Integer.valueOf(i));
-        int i6 = preferences.getInt(sb4.toString(), this.hasValidDialogLoadIds ? 0 : -1);
-        StringBuilder sb5 = new StringBuilder();
-        sb5.append("2dialogsLoadOffsetChannelId");
-        sb5.append(i == 0 ? obj : Integer.valueOf(i));
-        String sb6 = sb5.toString();
+        String sb3 = sb2.toString();
         if (this.hasValidDialogLoadIds) {
             i2 = 0;
         }
-        int i7 = preferences.getInt(sb6, i2);
+        int i4 = preferences.getInt(sb3, i2);
+        StringBuilder sb4 = new StringBuilder();
+        sb4.append("2dialogsLoadOffsetUserId");
+        sb4.append(i == 0 ? obj : Integer.valueOf(i));
+        long j = -1;
+        long prefIntOrLong = AndroidUtilities.getPrefIntOrLong(preferences, sb4.toString(), this.hasValidDialogLoadIds ? 0 : -1);
+        StringBuilder sb5 = new StringBuilder();
+        sb5.append("2dialogsLoadOffsetChatId");
+        sb5.append(i == 0 ? obj : Integer.valueOf(i));
+        long prefIntOrLong2 = AndroidUtilities.getPrefIntOrLong(preferences, sb5.toString(), this.hasValidDialogLoadIds ? 0 : -1);
+        StringBuilder sb6 = new StringBuilder();
+        sb6.append("2dialogsLoadOffsetChannelId");
+        sb6.append(i == 0 ? obj : Integer.valueOf(i));
+        long prefIntOrLong3 = AndroidUtilities.getPrefIntOrLong(preferences, sb6.toString(), this.hasValidDialogLoadIds ? 0 : -1);
         StringBuilder sb7 = new StringBuilder();
         sb7.append("2dialogsLoadOffsetAccess");
         if (i != 0) {
             obj = Integer.valueOf(i);
         }
         sb7.append(obj);
-        long j = preferences.getLong(sb7.toString(), this.hasValidDialogLoadIds ? 0 : -1);
-        return new int[]{i3, i4, i5, i6, i7, (int) j, (int) (j >> 32)};
+        String sb8 = sb7.toString();
+        if (this.hasValidDialogLoadIds) {
+            j = 0;
+        }
+        return new long[]{(long) i3, (long) i4, prefIntOrLong, prefIntOrLong2, prefIntOrLong3, preferences.getLong(sb8, j)};
     }
 
-    public void setDialogsLoadOffset(int i, int i2, int i3, int i4, int i5, int i6, long j) {
+    public void setDialogsLoadOffset(int i, int i2, int i3, long j, long j2, long j3, long j4) {
         SharedPreferences.Editor edit = getPreferences().edit();
         StringBuilder sb = new StringBuilder();
         sb.append("2dialogsLoadOffsetId");
@@ -590,22 +582,22 @@ public class UserConfig extends BaseController {
         StringBuilder sb3 = new StringBuilder();
         sb3.append("2dialogsLoadOffsetUserId");
         sb3.append(i == 0 ? obj : Integer.valueOf(i));
-        edit.putInt(sb3.toString(), i4);
+        edit.putLong(sb3.toString(), j);
         StringBuilder sb4 = new StringBuilder();
         sb4.append("2dialogsLoadOffsetChatId");
         sb4.append(i == 0 ? obj : Integer.valueOf(i));
-        edit.putInt(sb4.toString(), i5);
+        edit.putLong(sb4.toString(), j2);
         StringBuilder sb5 = new StringBuilder();
         sb5.append("2dialogsLoadOffsetChannelId");
         sb5.append(i == 0 ? obj : Integer.valueOf(i));
-        edit.putInt(sb5.toString(), i6);
+        edit.putLong(sb5.toString(), j3);
         StringBuilder sb6 = new StringBuilder();
         sb6.append("2dialogsLoadOffsetAccess");
         if (i != 0) {
             obj = Integer.valueOf(i);
         }
         sb6.append(obj);
-        edit.putLong(sb6.toString(), j);
+        edit.putLong(sb6.toString(), j4);
         edit.putBoolean("hasValidDialogLoadIds", true);
         edit.commit();
     }

@@ -28,25 +28,20 @@ public class LocationSharingService extends Service implements NotificationCente
 
     public void onCreate() {
         super.onCreate();
-        Handler handler2 = new Handler();
-        this.handler = handler2;
-        $$Lambda$LocationSharingService$rEo5XTlGjnI11L_Xa3dc0W_3s0w r1 = new Runnable() {
-            public final void run() {
-                LocationSharingService.this.lambda$onCreate$1$LocationSharingService();
-            }
-        };
-        this.runnable = r1;
-        handler2.postDelayed(r1, 1000);
+        this.handler = new Handler();
+        LocationSharingService$$ExternalSyntheticLambda1 locationSharingService$$ExternalSyntheticLambda1 = new LocationSharingService$$ExternalSyntheticLambda1(this);
+        this.runnable = locationSharingService$$ExternalSyntheticLambda1;
+        this.handler.postDelayed(locationSharingService$$ExternalSyntheticLambda1, 1000);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreate$1 */
-    public /* synthetic */ void lambda$onCreate$1$LocationSharingService() {
+    public /* synthetic */ void lambda$onCreate$1() {
         this.handler.postDelayed(this.runnable, 1000);
-        Utilities.stageQueue.postRunnable($$Lambda$LocationSharingService$SKICh6z98ZyghBU5kqQN8wd42l8.INSTANCE);
+        Utilities.stageQueue.postRunnable(LocationSharingService$$ExternalSyntheticLambda2.INSTANCE);
     }
 
-    static /* synthetic */ void lambda$onCreate$0() {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onCreate$0() {
         for (int i = 0; i < 3; i++) {
             LocationController.getInstance(i).update();
         }
@@ -66,17 +61,12 @@ public class LocationSharingService extends Service implements NotificationCente
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         Handler handler2;
         if (i == NotificationCenter.liveLocationsChanged && (handler2 = this.handler) != null) {
-            handler2.post(new Runnable() {
-                public final void run() {
-                    LocationSharingService.this.lambda$didReceivedNotification$2$LocationSharingService();
-                }
-            });
+            handler2.post(new LocationSharingService$$ExternalSyntheticLambda0(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$2 */
-    public /* synthetic */ void lambda$didReceivedNotification$2$LocationSharingService() {
+    public /* synthetic */ void lambda$didReceivedNotification$2() {
         if (getInfos().isEmpty()) {
             stopSelf();
         } else {
@@ -102,13 +92,13 @@ public class LocationSharingService extends Service implements NotificationCente
             ArrayList<LocationController.SharingLocationInfo> infos = getInfos();
             if (infos.size() == 1) {
                 LocationController.SharingLocationInfo sharingLocationInfo = infos.get(0);
-                int dialogId = (int) sharingLocationInfo.messageObject.getDialogId();
+                long dialogId = sharingLocationInfo.messageObject.getDialogId();
                 int i = sharingLocationInfo.messageObject.currentAccount;
-                if (dialogId > 0) {
-                    str2 = UserObject.getFirstName(MessagesController.getInstance(i).getUser(Integer.valueOf(dialogId)));
+                if (DialogObject.isUserDialog(dialogId)) {
+                    str2 = UserObject.getFirstName(MessagesController.getInstance(i).getUser(Long.valueOf(dialogId)));
                     str = LocaleController.getString("AttachLiveLocationIsSharing", NUM);
                 } else {
-                    TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Integer.valueOf(-dialogId));
+                    TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Long.valueOf(-dialogId));
                     str2 = chat != null ? chat.title : "";
                     str = LocaleController.getString("AttachLiveLocationIsSharingChat", NUM);
                 }

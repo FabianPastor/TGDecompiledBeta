@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class TLRPC$PhoneCall extends TLObject {
     public long access_hash;
-    public int admin_id;
+    public long admin_id;
     public ArrayList<TLRPC$PhoneConnection> connections = new ArrayList<>();
     public int date;
     public int duration;
@@ -17,7 +17,7 @@ public abstract class TLRPC$PhoneCall extends TLObject {
     public boolean need_debug;
     public boolean need_rating;
     public boolean p2p_allowed;
-    public int participant_id;
+    public long participant_id;
     public TLRPC$PhoneCallProtocol protocol;
     public TLRPC$PhoneCallDiscardReason reason;
     public int receive_date;
@@ -27,17 +27,17 @@ public abstract class TLRPC$PhoneCall extends TLObject {
     public static TLRPC$PhoneCall TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$PhoneCall tLRPC$PhoneCall;
         switch (i) {
-            case -2025673089:
+            case -1770029977:
                 tLRPC$PhoneCall = new TLRPC$TL_phoneCall();
                 break;
-            case -2014659757:
+            case -987599081:
+                tLRPC$PhoneCall = new TLRPC$TL_phoneCallWaiting();
+                break;
+            case 347139340:
                 tLRPC$PhoneCall = new TLRPC$TL_phoneCallRequested();
                 break;
-            case -1719909046:
+            case 912311057:
                 tLRPC$PhoneCall = new TLRPC$TL_phoneCallAccepted();
-                break;
-            case 462375633:
-                tLRPC$PhoneCall = new TLRPC$TL_phoneCallWaiting();
                 break;
             case 1355435489:
                 tLRPC$PhoneCall = new TLRPC$TL_phoneCallDiscarded();

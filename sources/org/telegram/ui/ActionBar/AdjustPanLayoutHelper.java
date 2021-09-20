@@ -190,8 +190,8 @@ public class AdjustPanLayoutHelper {
             r5.animator = r6
         L_0x007d:
             android.animation.ValueAnimator r6 = r5.animator
-            org.telegram.ui.ActionBar.-$$Lambda$AdjustPanLayoutHelper$Wo8IIsq8vn0vmvYciiO9hV_i5D4 r7 = new org.telegram.ui.ActionBar.-$$Lambda$AdjustPanLayoutHelper$Wo8IIsq8vn0vmvYciiO9hV_i5D4
-            r7.<init>(r1, r4, r8)
+            org.telegram.ui.ActionBar.AdjustPanLayoutHelper$$ExternalSyntheticLambda0 r7 = new org.telegram.ui.ActionBar.AdjustPanLayoutHelper$$ExternalSyntheticLambda0
+            r7.<init>(r5, r1, r4, r8)
             r6.addUpdateListener(r7)
             r6 = 1
             r5.animationInProgress = r6
@@ -228,8 +228,7 @@ public class AdjustPanLayoutHelper {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$animateHeight$0 */
-    public /* synthetic */ void lambda$animateHeight$0$AdjustPanLayoutHelper(float f, float f2, boolean z, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$animateHeight$0(float f, float f2, boolean z, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         float f3 = (float) ((int) ((f * floatValue) + (f2 * (1.0f - floatValue))));
         this.parent.setTranslationY(f3);

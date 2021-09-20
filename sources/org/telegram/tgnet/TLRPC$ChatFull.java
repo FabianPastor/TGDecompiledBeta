@@ -23,13 +23,13 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public TLRPC$Peer groupcall_default_join_as;
     public boolean has_scheduled;
     public boolean hidden_prehistory;
-    public int id;
-    public int inviterId;
+    public long id;
+    public long inviterId;
     public int invitesCount;
     public int kicked_count;
-    public int linked_chat_id;
+    public long linked_chat_id;
     public TLRPC$ChannelLocation location;
-    public int migrated_from_chat_id;
+    public long migrated_from_chat_id;
     public int migrated_from_max_id;
     public TLRPC$PeerNotifySettings notify_settings;
     public int online_count;
@@ -72,6 +72,9 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 break;
             case -877254512:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer89();
+                break;
+            case -374179305:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull();
                 break;
             case -304961647:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer92();
@@ -122,9 +125,12 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer87();
                 break;
             case 793980732:
-                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer132();
                 break;
             case 1235264985:
+                tLRPC$ChatFull = new TLRPC$TL_chatFull_layer132();
+                break;
+            case 1304281241:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull();
                 break;
             case 1418477459:

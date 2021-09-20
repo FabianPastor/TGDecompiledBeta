@@ -34,12 +34,10 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -78,7 +76,8 @@ import org.telegram.ui.LaunchActivity;
 public class VoIPHelper {
     public static long lastCallTime;
 
-    static /* synthetic */ void lambda$showRateAlert$11(DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showRateAlert$11(DialogInterface dialogInterface, int i) {
     }
 
     public static void startCall(TLRPC$User tLRPC$User, boolean z, boolean z2, Activity activity, TLRPC$UserFull tLRPC$UserFull, AccountInstance accountInstance) {
@@ -113,19 +112,7 @@ public class VoIPHelper {
             if (z3) {
                 Intent intent = new Intent("android.settings.AIRPLANE_MODE_SETTINGS");
                 if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                    positiveButton.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new DialogInterface.OnClickListener(activity, intent) {
-                        public final /* synthetic */ Activity f$0;
-                        public final /* synthetic */ Intent f$1;
-
-                        {
-                            this.f$0 = r1;
-                            this.f$1 = r2;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            this.f$0.startActivity(this.f$1);
-                        }
-                    });
+                    positiveButton.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new VoIPHelper$$ExternalSyntheticLambda1(activity, intent));
                 }
             }
             try {
@@ -182,19 +169,7 @@ public class VoIPHelper {
                 if (z2) {
                     Intent intent = new Intent("android.settings.AIRPLANE_MODE_SETTINGS");
                     if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                        positiveButton.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new DialogInterface.OnClickListener(activity, intent) {
-                            public final /* synthetic */ Activity f$0;
-                            public final /* synthetic */ Intent f$1;
-
-                            {
-                                this.f$0 = r1;
-                                this.f$1 = r2;
-                            }
-
-                            public final void onClick(DialogInterface dialogInterface, int i) {
-                                this.f$0.startActivity(this.f$1);
-                            }
-                        });
+                        positiveButton.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new VoIPHelper$$ExternalSyntheticLambda2(activity, intent));
                     }
                 }
                 try {
@@ -234,14 +209,14 @@ public class VoIPHelper {
         if (tLRPC$User2 != null || tLRPC$Chat2 != null) {
             VoIPService sharedInstance = VoIPService.getSharedInstance();
             if (sharedInstance != null) {
-                int i3 = tLRPC$User2 != null ? tLRPC$User2.id : -tLRPC$Chat2.id;
-                int callerId = VoIPService.getSharedInstance().getCallerId();
-                if (callerId != i3 || sharedInstance.getAccount() != accountInstance.getCurrentAccount()) {
+                long j = tLRPC$User2 != null ? tLRPC$User2.id : -tLRPC$Chat2.id;
+                long callerId = VoIPService.getSharedInstance().getCallerId();
+                if (callerId != j || sharedInstance.getAccount() != accountInstance.getCurrentAccount()) {
                     String str6 = str;
                     if (callerId > 0) {
                         TLRPC$User user = sharedInstance.getUser();
                         str3 = ContactsController.formatName(user.first_name, user.last_name);
-                        if (i3 > 0) {
+                        if (j > 0) {
                             i = NUM;
                             str2 = "VoipOngoingAlert";
                         } else {
@@ -250,7 +225,7 @@ public class VoIPHelper {
                         }
                     } else {
                         str3 = sharedInstance.getChat().title;
-                        if (i3 > 0) {
+                        if (j > 0) {
                             i = NUM;
                             str2 = "VoipOngoingChatAlert2";
                         } else {
@@ -271,42 +246,17 @@ public class VoIPHelper {
                         i2 = NUM;
                         str5 = "VoipOngoingAlertTitle";
                     }
-                    builder.setTitle(LocaleController.getString(str5, i2)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(str2, i, str3, str4))).setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(tLRPC$Chat, str, z, z2, z3, activity, baseFragment, accountInstance) {
-                        public final /* synthetic */ TLRPC$Chat f$1;
-                        public final /* synthetic */ String f$2;
-                        public final /* synthetic */ boolean f$3;
-                        public final /* synthetic */ boolean f$4;
-                        public final /* synthetic */ boolean f$5;
-                        public final /* synthetic */ Activity f$6;
-                        public final /* synthetic */ BaseFragment f$7;
-                        public final /* synthetic */ AccountInstance f$8;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                            this.f$5 = r6;
-                            this.f$6 = r7;
-                            this.f$7 = r8;
-                            this.f$8 = r9;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            VoIPHelper.lambda$initiateCall$3(TLRPC$User.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, dialogInterface, i);
-                        }
-                    }).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).show();
+                    builder.setTitle(LocaleController.getString(str5, i2)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(str2, i, str3, str4))).setPositiveButton(LocaleController.getString("OK", NUM), new VoIPHelper$$ExternalSyntheticLambda5(tLRPC$User, tLRPC$Chat, str, z, z2, z3, activity, baseFragment, accountInstance)).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).show();
                 } else if (tLRPC$User2 != null || !(activity2 instanceof LaunchActivity)) {
                     activity2.startActivity(new Intent(activity2, LaunchActivity.class).setAction(tLRPC$User2 != null ? "voip" : "voip_chat"));
                 } else {
                     if (!TextUtils.isEmpty(str)) {
-                        String str7 = str;
                         sharedInstance.setGroupCallHash(str);
                     }
                     GroupCallActivity.create((LaunchActivity) activity2, AccountInstance.getInstance(UserConfig.selectedAccount), (TLRPC$Chat) null, (TLRPC$InputPeer) null, false, (String) null);
                 }
             } else {
-                String str8 = str;
+                String str7 = str;
                 if (VoIPService.callIShouldHavePutIntoIntent == null) {
                     doInitiateCall(tLRPC$User, tLRPC$Chat, str, (TLRPC$InputPeer) null, false, z, z2, z3, activity, baseFragment, accountInstance, true, true);
                 }
@@ -314,39 +264,17 @@ public class VoIPHelper {
         }
     }
 
-    static /* synthetic */ void lambda$initiateCall$3(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, String str, boolean z, boolean z2, boolean z3, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance, DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$initiateCall$3(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, String str, boolean z, boolean z2, boolean z3, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance, DialogInterface dialogInterface, int i) {
         if (VoIPService.getSharedInstance() != null) {
-            VoIPService.getSharedInstance().hangUp((Runnable) new Runnable(tLRPC$Chat, str, z, z2, z3, activity, baseFragment, accountInstance) {
-                public final /* synthetic */ TLRPC$Chat f$1;
-                public final /* synthetic */ String f$2;
-                public final /* synthetic */ boolean f$3;
-                public final /* synthetic */ boolean f$4;
-                public final /* synthetic */ boolean f$5;
-                public final /* synthetic */ Activity f$6;
-                public final /* synthetic */ BaseFragment f$7;
-                public final /* synthetic */ AccountInstance f$8;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                    this.f$6 = r7;
-                    this.f$7 = r8;
-                    this.f$8 = r9;
-                }
-
-                public final void run() {
-                    VoIPHelper.lambda$initiateCall$2(TLRPC$User.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
-                }
-            });
+            VoIPService.getSharedInstance().hangUp((Runnable) new VoIPHelper$$ExternalSyntheticLambda15(tLRPC$User, tLRPC$Chat, str, z, z2, z3, activity, baseFragment, accountInstance));
         } else {
             doInitiateCall(tLRPC$User, tLRPC$Chat, str, (TLRPC$InputPeer) null, false, z, z2, z3, activity, baseFragment, accountInstance, true, true);
         }
     }
 
-    static /* synthetic */ void lambda$initiateCall$2(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, String str, boolean z, boolean z2, boolean z3, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$initiateCall$2(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, String str, boolean z, boolean z2, boolean z3, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance) {
         lastCallTime = 0;
         doInitiateCall(tLRPC$User, tLRPC$Chat, str, (TLRPC$InputPeer) null, false, z, z2, z3, activity, baseFragment, accountInstance, true, true);
     }
@@ -375,33 +303,7 @@ public class VoIPHelper {
                 if (!z5 || tLRPC$Chat2 == null || z8 || (chatFull2 = accountInstance.getMessagesController().getChatFull(tLRPC$Chat2.id)) == null || (tLRPC$Peer = chatFull2.groupcall_default_join_as) == null) {
                     AccountInstance accountInstance2 = accountInstance;
                     if (z5 && tLRPC$Chat2 != null) {
-                        JoinCallAlert.open(activity, -tLRPC$Chat2.id, accountInstance, baseFragment, z8 ^ true ? 1 : 0, (TLRPC$Peer) null, new JoinCallAlert.JoinCallAlertDelegate(z4, activity, accountInstance, tLRPC$Chat, str, tLRPC$User, z2, z3, baseFragment) {
-                            public final /* synthetic */ boolean f$0;
-                            public final /* synthetic */ Activity f$1;
-                            public final /* synthetic */ AccountInstance f$2;
-                            public final /* synthetic */ TLRPC$Chat f$3;
-                            public final /* synthetic */ String f$4;
-                            public final /* synthetic */ TLRPC$User f$5;
-                            public final /* synthetic */ boolean f$6;
-                            public final /* synthetic */ boolean f$7;
-                            public final /* synthetic */ BaseFragment f$8;
-
-                            {
-                                this.f$0 = r1;
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                                this.f$3 = r4;
-                                this.f$4 = r5;
-                                this.f$5 = r6;
-                                this.f$6 = r7;
-                                this.f$7 = r8;
-                                this.f$8 = r9;
-                            }
-
-                            public final void didSelectChat(TLRPC$InputPeer tLRPC$InputPeer, boolean z, boolean z2) {
-                                VoIPHelper.lambda$doInitiateCall$5(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, tLRPC$InputPeer, z, z2);
-                            }
-                        });
+                        JoinCallAlert.open(activity, -tLRPC$Chat2.id, accountInstance, baseFragment, z8 ^ true ? 1 : 0, (TLRPC$Peer) null, new VoIPHelper$$ExternalSyntheticLambda20(z4, activity, accountInstance, tLRPC$Chat, str, tLRPC$User, z2, z3, baseFragment));
                     } else if (!z6 || z7 || !(tLRPC$InputPeer2 instanceof TLRPC$TL_inputPeerUser) || !ChatObject.shouldSendAnonymously(tLRPC$Chat) || (ChatObject.isChannel(tLRPC$Chat) && !tLRPC$Chat2.megagroup)) {
                         if (!(tLRPC$Chat2 == null || tLRPC$InputPeer2 == null || (chatFull = accountInstance.getMessagesController().getChatFull(tLRPC$Chat2.id)) == null)) {
                             if (tLRPC$InputPeer2 instanceof TLRPC$TL_inputPeerUser) {
@@ -475,68 +377,17 @@ public class VoIPHelper {
                             i2 = NUM;
                             str3 = "VoipGroupJoinAnonymouseAlert";
                         }
-                        title.setMessage(LocaleController.getString(str3, i2)).setPositiveButton(LocaleController.getString("VoipChatJoin", NUM), new DialogInterface.OnClickListener(tLRPC$Chat, str, tLRPC$InputPeer, z2, z3, z4, activity, baseFragment, accountInstance) {
-                            public final /* synthetic */ TLRPC$Chat f$1;
-                            public final /* synthetic */ String f$2;
-                            public final /* synthetic */ TLRPC$InputPeer f$3;
-                            public final /* synthetic */ boolean f$4;
-                            public final /* synthetic */ boolean f$5;
-                            public final /* synthetic */ boolean f$6;
-                            public final /* synthetic */ Activity f$7;
-                            public final /* synthetic */ BaseFragment f$8;
-                            public final /* synthetic */ AccountInstance f$9;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                                this.f$3 = r4;
-                                this.f$4 = r5;
-                                this.f$5 = r6;
-                                this.f$6 = r7;
-                                this.f$7 = r8;
-                                this.f$8 = r9;
-                                this.f$9 = r10;
-                            }
-
-                            public final void onClick(DialogInterface dialogInterface, int i) {
-                                VoIPHelper.doInitiateCall(TLRPC$User.this, this.f$1, this.f$2, this.f$3, false, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, false, false);
-                            }
-                        }).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).show();
+                        title.setMessage(LocaleController.getString(str3, i2)).setPositiveButton(LocaleController.getString("VoipChatJoin", NUM), new VoIPHelper$$ExternalSyntheticLambda4(tLRPC$User, tLRPC$Chat, str, tLRPC$InputPeer, z2, z3, z4, activity, baseFragment, accountInstance)).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).show();
                     }
                 } else {
-                    JoinCallAlert.checkFewUsers(activity2, -tLRPC$Chat2.id, accountInstance, new MessagesStorage.BooleanCallback(str, activity, tLRPC$Chat, tLRPC$User, accountInstance.getMessagesController().getInputPeer(MessageObject.getPeerId(tLRPC$Peer)), z2, z3, baseFragment, accountInstance) {
-                        public final /* synthetic */ String f$0;
-                        public final /* synthetic */ Activity f$1;
-                        public final /* synthetic */ TLRPC$Chat f$2;
-                        public final /* synthetic */ TLRPC$User f$3;
-                        public final /* synthetic */ TLRPC$InputPeer f$4;
-                        public final /* synthetic */ boolean f$5;
-                        public final /* synthetic */ boolean f$6;
-                        public final /* synthetic */ BaseFragment f$7;
-                        public final /* synthetic */ AccountInstance f$8;
-
-                        {
-                            this.f$0 = r1;
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                            this.f$5 = r6;
-                            this.f$6 = r7;
-                            this.f$7 = r8;
-                            this.f$8 = r9;
-                        }
-
-                        public final void run(boolean z) {
-                            VoIPHelper.lambda$doInitiateCall$4(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, z);
-                        }
-                    });
+                    JoinCallAlert.checkFewUsers(activity2, -tLRPC$Chat2.id, accountInstance, new VoIPHelper$$ExternalSyntheticLambda16(str, activity, tLRPC$Chat, tLRPC$User, accountInstance.getMessagesController().getInputPeer(MessageObject.getPeerId(tLRPC$Peer)), z2, z3, baseFragment, accountInstance));
                 }
             }
         }
     }
 
-    static /* synthetic */ void lambda$doInitiateCall$4(String str, Activity activity, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, TLRPC$InputPeer tLRPC$InputPeer, boolean z, boolean z2, BaseFragment baseFragment, AccountInstance accountInstance, boolean z3) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$doInitiateCall$4(String str, Activity activity, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, TLRPC$InputPeer tLRPC$InputPeer, boolean z, boolean z2, BaseFragment baseFragment, AccountInstance accountInstance, boolean z3) {
         BaseFragment baseFragment2 = baseFragment;
         if (z3 || str == null) {
             doInitiateCall(tLRPC$User, tLRPC$Chat, str, tLRPC$InputPeer, !z3, z, z2, false, activity, baseFragment, accountInstance, false, false);
@@ -562,7 +413,8 @@ public class VoIPHelper {
         }
     }
 
-    static /* synthetic */ void lambda$doInitiateCall$5(boolean z, Activity activity, AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, String str, TLRPC$User tLRPC$User, boolean z2, boolean z3, BaseFragment baseFragment, TLRPC$InputPeer tLRPC$InputPeer, boolean z4, boolean z5) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$doInitiateCall$5(boolean z, Activity activity, AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, String str, TLRPC$User tLRPC$User, boolean z2, boolean z3, BaseFragment baseFragment, TLRPC$InputPeer tLRPC$InputPeer, boolean z4, boolean z5) {
         BaseFragment baseFragment2 = baseFragment;
         if (z && z5) {
             GroupCallActivity.create((LaunchActivity) activity, accountInstance, tLRPC$Chat, tLRPC$InputPeer, z4, str);
@@ -604,37 +456,19 @@ public class VoIPHelper {
                 i2 = NUM;
                 str = "VoipNeedMicPermission";
             }
-            title.setMessage(LocaleController.getString(str, i2)).setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null).setNegativeButton(LocaleController.getString("Settings", NUM), new DialogInterface.OnClickListener(activity) {
-                public final /* synthetic */ Activity f$0;
-
-                {
-                    this.f$0 = r1;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    VoIPHelper.lambda$permissionDenied$7(this.f$0, dialogInterface, i);
-                }
-            }).show().setOnDismissListener(new DialogInterface.OnDismissListener(runnable) {
-                public final /* synthetic */ Runnable f$0;
-
-                {
-                    this.f$0 = r1;
-                }
-
-                public final void onDismiss(DialogInterface dialogInterface) {
-                    VoIPHelper.lambda$permissionDenied$8(this.f$0, dialogInterface);
-                }
-            });
+            title.setMessage(LocaleController.getString(str, i2)).setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null).setNegativeButton(LocaleController.getString("Settings", NUM), new VoIPHelper$$ExternalSyntheticLambda0(activity)).show().setOnDismissListener(new VoIPHelper$$ExternalSyntheticLambda7(runnable));
         }
     }
 
-    static /* synthetic */ void lambda$permissionDenied$7(Activity activity, DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$permissionDenied$7(Activity activity, DialogInterface dialogInterface, int i) {
         Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
         intent.setData(Uri.fromParts("package", activity.getPackageName(), (String) null));
         activity.startActivity(intent);
     }
 
-    static /* synthetic */ void lambda$permissionDenied$8(Runnable runnable, DialogInterface dialogInterface) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$permissionDenied$8(Runnable runnable, DialogInterface dialogInterface) {
         if (runnable != null) {
             runnable.run();
         }
@@ -702,7 +536,7 @@ public class VoIPHelper {
         linearLayout.addView(betterRatingView, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 0));
         LinearLayout linearLayout2 = new LinearLayout(context2);
         linearLayout2.setOrientation(1);
-        $$Lambda$VoIPHelper$ElnhII4qc_3AsgN3hLWyzMfVEE r8 = $$Lambda$VoIPHelper$ElnhII4qc_3AsgN3hLWyzMfVEE.INSTANCE;
+        VoIPHelper$$ExternalSyntheticLambda14 voIPHelper$$ExternalSyntheticLambda14 = VoIPHelper$$ExternalSyntheticLambda14.INSTANCE;
         String[] strArr = new String[9];
         strArr[0] = z ? "distorted_video" : null;
         strArr[1] = z ? "pixelated_video" : null;
@@ -752,7 +586,7 @@ public class VoIPHelper {
                         break;
                 }
                 checkBoxCell.setText(str, (String) null, false, false);
-                checkBoxCell.setOnClickListener(r8);
+                checkBoxCell.setOnClickListener(voIPHelper$$ExternalSyntheticLambda14);
                 checkBoxCell.setTag(strArr[i3]);
                 linearLayout2.addView(checkBoxCell);
             }
@@ -773,148 +607,66 @@ public class VoIPHelper {
         linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
         boolean[] zArr = {true};
         CheckBoxCell checkBoxCell2 = new CheckBoxCell(context2, 1);
-        $$Lambda$VoIPHelper$zp297l_60oRv4YSKJ7yXkjNAnVU r4 = new View.OnClickListener(zArr, checkBoxCell2) {
-            public final /* synthetic */ boolean[] f$0;
-            public final /* synthetic */ CheckBoxCell f$1;
-
-            {
-                this.f$0 = r1;
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                VoIPHelper.lambda$showRateAlert$10(this.f$0, this.f$1, view);
-            }
-        };
+        VoIPHelper$$ExternalSyntheticLambda13 voIPHelper$$ExternalSyntheticLambda13 = new VoIPHelper$$ExternalSyntheticLambda13(zArr, checkBoxCell2);
         checkBoxCell2.setText(LocaleController.getString("CallReportIncludeLogs", NUM), (String) null, true, false);
         checkBoxCell2.setClipToPadding(false);
-        checkBoxCell2.setOnClickListener(r4);
+        checkBoxCell2.setOnClickListener(voIPHelper$$ExternalSyntheticLambda13);
         linearLayout.addView(checkBoxCell2, LayoutHelper.createLinear(-1, -2, -8.0f, 0.0f, -8.0f, 0.0f));
         TextView textView2 = new TextView(context2);
         textView2.setTextSize(2, 14.0f);
         textView2.setTextColor(Theme.getColor("dialogTextGray3"));
         textView2.setText(LocaleController.getString("CallReportLogsExplain", NUM));
         textView2.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
-        textView2.setOnClickListener(r4);
+        textView2.setOnClickListener(voIPHelper$$ExternalSyntheticLambda13);
         linearLayout.addView(textView2);
         checkBoxCell2.setVisibility(8);
         textView2.setVisibility(8);
         if (!logFile.exists()) {
             zArr[0] = false;
         }
-        AlertDialog create = new AlertDialog.Builder(context2).setTitle(LocaleController.getString("CallMessageReportProblem", NUM)).setView(linearLayout).setPositiveButton(LocaleController.getString("Send", NUM), $$Lambda$VoIPHelper$zc_o5I9wFPzgBxnHDKWGlwtwgHM.INSTANCE).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).setOnDismissListener(new DialogInterface.OnDismissListener(runnable) {
-            public final /* synthetic */ Runnable f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void onDismiss(DialogInterface dialogInterface) {
-                VoIPHelper.lambda$showRateAlert$12(this.f$0, dialogInterface);
-            }
-        }).create();
+        AlertDialog create = new AlertDialog.Builder(context2).setTitle(LocaleController.getString("CallMessageReportProblem", NUM)).setView(linearLayout).setPositiveButton(LocaleController.getString("Send", NUM), VoIPHelper$$ExternalSyntheticLambda6.INSTANCE).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).setOnDismissListener(new VoIPHelper$$ExternalSyntheticLambda8(runnable)).create();
         if (BuildVars.LOGS_ENABLED && logFile.exists()) {
-            create.setNeutralButton("Send log", new DialogInterface.OnClickListener(context2, logFile) {
-                public final /* synthetic */ Context f$0;
-                public final /* synthetic */ File f$1;
-
-                {
-                    this.f$0 = r1;
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    VoIPHelper.lambda$showRateAlert$13(this.f$0, this.f$1, dialogInterface, i);
-                }
-            });
+            create.setNeutralButton("Send log", new VoIPHelper$$ExternalSyntheticLambda3(context2, logFile));
         }
         create.show();
         create.getWindow().setSoftInputMode(3);
         View button = create.getButton(-1);
         button.setEnabled(false);
-        betterRatingView.setOnRatingChangeListener(new BetterRatingView.OnRatingChangeListener(button) {
-            public final /* synthetic */ View f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void onRatingChanged(int i) {
-                VoIPHelper.lambda$showRateAlert$14(this.f$0, i);
-            }
-        });
-        $$Lambda$VoIPHelper$J37QO91ferKsFqpieBlycNmPKQ r27 = r0;
-        $$Lambda$VoIPHelper$J37QO91ferKsFqpieBlycNmPKQ r0 = new View.OnClickListener(betterRatingView, iArr, linearLayout2, editTextBoldCursor, zArr, j2, j, z2, i, logFile, context, create, textView, checkBoxCell2, textView2, button) {
-            public final /* synthetic */ BetterRatingView f$0;
-            public final /* synthetic */ int[] f$1;
-            public final /* synthetic */ Context f$10;
-            public final /* synthetic */ AlertDialog f$11;
-            public final /* synthetic */ TextView f$12;
-            public final /* synthetic */ CheckBoxCell f$13;
-            public final /* synthetic */ TextView f$14;
-            public final /* synthetic */ View f$15;
-            public final /* synthetic */ LinearLayout f$2;
-            public final /* synthetic */ EditTextBoldCursor f$3;
-            public final /* synthetic */ boolean[] f$4;
-            public final /* synthetic */ long f$5;
-            public final /* synthetic */ long f$6;
-            public final /* synthetic */ boolean f$7;
-            public final /* synthetic */ int f$8;
-            public final /* synthetic */ File f$9;
-
-            {
-                this.f$0 = r4;
-                this.f$1 = r5;
-                this.f$2 = r6;
-                this.f$3 = r7;
-                this.f$4 = r8;
-                this.f$5 = r9;
-                this.f$6 = r11;
-                this.f$7 = r13;
-                this.f$8 = r14;
-                this.f$9 = r15;
-                this.f$10 = r16;
-                this.f$11 = r17;
-                this.f$12 = r18;
-                this.f$13 = r19;
-                this.f$14 = r20;
-                this.f$15 = r21;
-            }
-
-            public final void onClick(View view) {
-                View view2 = view;
-                BetterRatingView betterRatingView = this.f$0;
-                BetterRatingView betterRatingView2 = betterRatingView;
-                VoIPHelper.lambda$showRateAlert$16(betterRatingView2, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, view2);
-            }
-        };
-        button.setOnClickListener(r27);
+        betterRatingView.setOnRatingChangeListener(new VoIPHelper$$ExternalSyntheticLambda19(button));
+        VoIPHelper$$ExternalSyntheticLambda12 voIPHelper$$ExternalSyntheticLambda12 = r0;
+        VoIPHelper$$ExternalSyntheticLambda12 voIPHelper$$ExternalSyntheticLambda122 = new VoIPHelper$$ExternalSyntheticLambda12(betterRatingView, iArr, linearLayout2, editTextBoldCursor, zArr, j2, j, z2, i, logFile, context, create, textView, checkBoxCell2, textView2, button);
+        button.setOnClickListener(voIPHelper$$ExternalSyntheticLambda12);
     }
 
-    static /* synthetic */ void lambda$showRateAlert$9(View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showRateAlert$9(View view) {
         CheckBoxCell checkBoxCell = (CheckBoxCell) view;
         checkBoxCell.setChecked(!checkBoxCell.isChecked(), true);
     }
 
-    static /* synthetic */ void lambda$showRateAlert$10(boolean[] zArr, CheckBoxCell checkBoxCell, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showRateAlert$10(boolean[] zArr, CheckBoxCell checkBoxCell, View view) {
         zArr[0] = !zArr[0];
         checkBoxCell.setChecked(zArr[0], true);
     }
 
-    static /* synthetic */ void lambda$showRateAlert$12(Runnable runnable, DialogInterface dialogInterface) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showRateAlert$12(Runnable runnable, DialogInterface dialogInterface) {
         if (runnable != null) {
             runnable.run();
         }
     }
 
-    static /* synthetic */ void lambda$showRateAlert$13(Context context, File file, DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showRateAlert$13(Context context, File file, DialogInterface dialogInterface, int i) {
         Intent intent = new Intent(context, LaunchActivity.class);
         intent.setAction("android.intent.action.SEND");
         intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(file));
         context.startActivity(intent);
     }
 
-    static /* synthetic */ void lambda$showRateAlert$14(View view, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showRateAlert$14(View view, int i) {
         int i2;
         String str;
         view.setEnabled(i > 0);
@@ -929,7 +681,8 @@ public class VoIPHelper {
         textView.setText(LocaleController.getString(str, i2).toUpperCase());
     }
 
-    static /* synthetic */ void lambda$showRateAlert$16(BetterRatingView betterRatingView, int[] iArr, LinearLayout linearLayout, EditTextBoldCursor editTextBoldCursor, boolean[] zArr, long j, long j2, boolean z, int i, File file, Context context, AlertDialog alertDialog, TextView textView, CheckBoxCell checkBoxCell, TextView textView2, View view, View view2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showRateAlert$16(BetterRatingView betterRatingView, int[] iArr, LinearLayout linearLayout, EditTextBoldCursor editTextBoldCursor, boolean[] zArr, long j, long j2, boolean z, int i, File file, Context context, AlertDialog alertDialog, TextView textView, CheckBoxCell checkBoxCell, TextView textView2, View view, View view2) {
         LinearLayout linearLayout2 = linearLayout;
         if (betterRatingView.getRating() >= 4 || iArr[0] == 1) {
             BetterRatingView betterRatingView2 = betterRatingView;
@@ -958,27 +711,7 @@ public class VoIPHelper {
             tLRPC$TL_inputPhoneCall.access_hash = j;
             tLRPC$TL_inputPhoneCall.id = j2;
             tLRPC$TL_phone_setCallRating.user_initiative = z;
-            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_phone_setCallRating, new RequestDelegate(i2, zArr, file, tLRPC$TL_phone_setCallRating, arrayList, context) {
-                public final /* synthetic */ int f$0;
-                public final /* synthetic */ boolean[] f$1;
-                public final /* synthetic */ File f$2;
-                public final /* synthetic */ TLRPC$TL_phone_setCallRating f$3;
-                public final /* synthetic */ ArrayList f$4;
-                public final /* synthetic */ Context f$5;
-
-                {
-                    this.f$0 = r1;
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    VoIPHelper.lambda$showRateAlert$15(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_phone_setCallRating, new VoIPHelper$$ExternalSyntheticLambda18(i2, zArr, file, tLRPC$TL_phone_setCallRating, arrayList, context));
             alertDialog.dismiss();
             return;
         }
@@ -996,7 +729,8 @@ public class VoIPHelper {
         ((TextView) view).setText(LocaleController.getString("Send", NUM).toUpperCase());
     }
 
-    static /* synthetic */ void lambda$showRateAlert$15(int i, boolean[] zArr, File file, TLRPC$TL_phone_setCallRating tLRPC$TL_phone_setCallRating, ArrayList arrayList, Context context, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showRateAlert$15(int i, boolean[] zArr, File file, TLRPC$TL_phone_setCallRating tLRPC$TL_phone_setCallRating, ArrayList arrayList, Context context, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         TLObject tLObject2 = tLObject;
         if (tLObject2 instanceof TLRPC$TL_updates) {
             MessagesController.getInstance(i).processUpdates((TLRPC$TL_updates) tLObject2, false);
@@ -1070,60 +804,25 @@ public class VoIPHelper {
         linearLayout.addView(textView, LayoutHelper.createLinear(-1, -2, 16.0f, 8.0f, 16.0f, 8.0f));
         TextCheckCell textCheckCell = new TextCheckCell(context);
         textCheckCell.setTextAndCheck("Force TCP", globalMainSettings.getBoolean("dbg_force_tcp_in_calls", false), false);
-        textCheckCell.setOnClickListener(new View.OnClickListener(globalMainSettings, textCheckCell) {
-            public final /* synthetic */ SharedPreferences f$0;
-            public final /* synthetic */ TextCheckCell f$1;
-
-            {
-                this.f$0 = r1;
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                VoIPHelper.lambda$showCallDebugSettings$17(this.f$0, this.f$1, view);
-            }
-        });
+        textCheckCell.setOnClickListener(new VoIPHelper$$ExternalSyntheticLambda9(globalMainSettings, textCheckCell));
         linearLayout.addView(textCheckCell);
         if (BuildVars.DEBUG_VERSION && BuildVars.LOGS_ENABLED) {
             TextCheckCell textCheckCell2 = new TextCheckCell(context);
             textCheckCell2.setTextAndCheck("Dump detailed stats", globalMainSettings.getBoolean("dbg_dump_call_stats", false), false);
-            textCheckCell2.setOnClickListener(new View.OnClickListener(globalMainSettings, textCheckCell2) {
-                public final /* synthetic */ SharedPreferences f$0;
-                public final /* synthetic */ TextCheckCell f$1;
-
-                {
-                    this.f$0 = r1;
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    VoIPHelper.lambda$showCallDebugSettings$18(this.f$0, this.f$1, view);
-                }
-            });
+            textCheckCell2.setOnClickListener(new VoIPHelper$$ExternalSyntheticLambda10(globalMainSettings, textCheckCell2));
             linearLayout.addView(textCheckCell2);
         }
         if (Build.VERSION.SDK_INT >= 26) {
             TextCheckCell textCheckCell3 = new TextCheckCell(context);
             textCheckCell3.setTextAndCheck("Enable ConnectionService", globalMainSettings.getBoolean("dbg_force_connection_service", false), false);
-            textCheckCell3.setOnClickListener(new View.OnClickListener(globalMainSettings, textCheckCell3) {
-                public final /* synthetic */ SharedPreferences f$0;
-                public final /* synthetic */ TextCheckCell f$1;
-
-                {
-                    this.f$0 = r1;
-                    this.f$1 = r2;
-                }
-
-                public final void onClick(View view) {
-                    VoIPHelper.lambda$showCallDebugSettings$19(this.f$0, this.f$1, view);
-                }
-            });
+            textCheckCell3.setOnClickListener(new VoIPHelper$$ExternalSyntheticLambda11(globalMainSettings, textCheckCell3));
             linearLayout.addView(textCheckCell3);
         }
         new AlertDialog.Builder(context).setTitle(LocaleController.getString("DebugMenuCallSettings", NUM)).setView(linearLayout).show();
     }
 
-    static /* synthetic */ void lambda$showCallDebugSettings$17(SharedPreferences sharedPreferences, TextCheckCell textCheckCell, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showCallDebugSettings$17(SharedPreferences sharedPreferences, TextCheckCell textCheckCell, View view) {
         boolean z = sharedPreferences.getBoolean("dbg_force_tcp_in_calls", false);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.putBoolean("dbg_force_tcp_in_calls", !z);
@@ -1131,7 +830,8 @@ public class VoIPHelper {
         textCheckCell.setChecked(!z);
     }
 
-    static /* synthetic */ void lambda$showCallDebugSettings$18(SharedPreferences sharedPreferences, TextCheckCell textCheckCell, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showCallDebugSettings$18(SharedPreferences sharedPreferences, TextCheckCell textCheckCell, View view) {
         boolean z = sharedPreferences.getBoolean("dbg_dump_call_stats", false);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.putBoolean("dbg_dump_call_stats", !z);
@@ -1139,7 +839,8 @@ public class VoIPHelper {
         textCheckCell.setChecked(!z);
     }
 
-    static /* synthetic */ void lambda$showCallDebugSettings$19(SharedPreferences sharedPreferences, TextCheckCell textCheckCell, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showCallDebugSettings$19(SharedPreferences sharedPreferences, TextCheckCell textCheckCell, View view) {
         boolean z = sharedPreferences.getBoolean("dbg_force_connection_service", false);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.putBoolean("dbg_force_connection_service", !z);
@@ -1197,21 +898,7 @@ public class VoIPHelper {
 
     public static void showGroupCallAlert(BaseFragment baseFragment, TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, boolean z, AccountInstance accountInstance) {
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
-            JoinCallAlert.checkFewUsers(baseFragment.getParentActivity(), -tLRPC$Chat.id, accountInstance, new MessagesStorage.BooleanCallback(tLRPC$InputPeer, baseFragment, accountInstance) {
-                public final /* synthetic */ TLRPC$InputPeer f$1;
-                public final /* synthetic */ BaseFragment f$2;
-                public final /* synthetic */ AccountInstance f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
-                public final void run(boolean z) {
-                    VoIPHelper.startCall(TLRPC$Chat.this, this.f$1, (String) null, true, this.f$2.getParentActivity(), this.f$2, this.f$3);
-                }
-            });
+            JoinCallAlert.checkFewUsers(baseFragment.getParentActivity(), -tLRPC$Chat.id, accountInstance, new VoIPHelper$$ExternalSyntheticLambda17(tLRPC$Chat, tLRPC$InputPeer, baseFragment, accountInstance));
         }
     }
 }

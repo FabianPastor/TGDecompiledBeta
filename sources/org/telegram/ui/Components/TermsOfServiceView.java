@@ -16,7 +16,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_account_deleteAccount;
 import org.telegram.tgnet.TLRPC$TL_boolTrue;
@@ -38,7 +37,8 @@ public class TermsOfServiceView extends FrameLayout {
         void onAcceptTerms(int i);
     }
 
-    static /* synthetic */ void lambda$accept$7(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$accept$7(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -89,11 +89,7 @@ public class TermsOfServiceView extends FrameLayout {
         textView4.setBackground(Theme.getRoundRectSelectorDrawable(Theme.getColor("windowBackgroundWhiteGrayText")));
         textView4.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
         addView(textView4, LayoutHelper.createFrame(-2, -2.0f, 83, 16.0f, 0.0f, 16.0f, 16.0f));
-        textView4.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                TermsOfServiceView.this.lambda$new$4$TermsOfServiceView(view);
-            }
-        });
+        textView4.setOnClickListener(new TermsOfServiceView$$ExternalSyntheticLambda4(this));
         TextView textView5 = new TextView(context2);
         textView5.setText(LocaleController.getString("Accept", NUM));
         textView5.setGravity(17);
@@ -103,11 +99,7 @@ public class TermsOfServiceView extends FrameLayout {
         textView5.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), -11491093, -12346402));
         textView5.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
         addView(textView5, LayoutHelper.createFrame(-2, 42.0f, 85, 16.0f, 0.0f, 16.0f, 16.0f));
-        textView5.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                TermsOfServiceView.this.lambda$new$6$TermsOfServiceView(view);
-            }
-        });
+        textView5.setOnClickListener(new TermsOfServiceView$$ExternalSyntheticLambda3(this));
         View view2 = new View(context2);
         view2.setBackgroundColor(Theme.getColor("divider"));
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-1, 1);
@@ -117,79 +109,42 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$TermsOfServiceView(View view) {
+    public /* synthetic */ void lambda$new$4(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         builder.setTitle(LocaleController.getString("TermsOfService", NUM));
-        builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                TermsOfServiceView.this.lambda$new$3$TermsOfServiceView(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", NUM), new TermsOfServiceView$$ExternalSyntheticLambda2(this));
         builder.setNegativeButton(LocaleController.getString("Back", NUM), (DialogInterface.OnClickListener) null);
         builder.setMessage(LocaleController.getString("TosUpdateDecline", NUM));
         builder.show();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$TermsOfServiceView(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$new$3(DialogInterface dialogInterface, int i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", NUM));
         builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setPositiveButton(LocaleController.getString("Deactivate", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                TermsOfServiceView.this.lambda$new$2$TermsOfServiceView(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("Deactivate", NUM), new TermsOfServiceView$$ExternalSyntheticLambda0(this));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.show();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$TermsOfServiceView(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$new$2(DialogInterface dialogInterface, int i) {
         AlertDialog alertDialog = new AlertDialog(getContext(), 3);
         alertDialog.setCanCacnel(false);
         TLRPC$TL_account_deleteAccount tLRPC$TL_account_deleteAccount = new TLRPC$TL_account_deleteAccount();
         tLRPC$TL_account_deleteAccount.reason = "Decline ToS update";
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteAccount, new RequestDelegate(alertDialog) {
-            public final /* synthetic */ AlertDialog f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                TermsOfServiceView.this.lambda$new$1$TermsOfServiceView(this.f$1, tLObject, tLRPC$TL_error);
-            }
-        });
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteAccount, new TermsOfServiceView$$ExternalSyntheticLambda6(this, alertDialog));
         alertDialog.show();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$TermsOfServiceView(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$TL_error) {
-            public final /* synthetic */ AlertDialog f$1;
-            public final /* synthetic */ TLObject f$2;
-            public final /* synthetic */ TLRPC$TL_error f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                TermsOfServiceView.this.lambda$new$0$TermsOfServiceView(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$new$1(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new TermsOfServiceView$$ExternalSyntheticLambda5(this, alertDialog, tLObject, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$TermsOfServiceView(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$new$0(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -211,16 +166,11 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$6 */
-    public /* synthetic */ void lambda$new$6$TermsOfServiceView(View view) {
+    public /* synthetic */ void lambda$new$6(View view) {
         if (this.currentTos.min_age_confirm != 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setTitle(LocaleController.getString("TosAgeTitle", NUM));
-            builder.setPositiveButton(LocaleController.getString("Agree", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    TermsOfServiceView.this.lambda$new$5$TermsOfServiceView(dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("Agree", NUM), new TermsOfServiceView$$ExternalSyntheticLambda1(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             builder.setMessage(LocaleController.formatString("TosAgeText", NUM, LocaleController.formatPluralString("Years", this.currentTos.min_age_confirm)));
             builder.show();
@@ -230,8 +180,7 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$5 */
-    public /* synthetic */ void lambda$new$5$TermsOfServiceView(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$new$5(DialogInterface dialogInterface, int i) {
         accept();
     }
 
@@ -239,7 +188,7 @@ public class TermsOfServiceView extends FrameLayout {
         this.delegate.onAcceptTerms(this.currentAccount);
         TLRPC$TL_help_acceptTermsOfService tLRPC$TL_help_acceptTermsOfService = new TLRPC$TL_help_acceptTermsOfService();
         tLRPC$TL_help_acceptTermsOfService.id = this.currentTos.id;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_help_acceptTermsOfService, $$Lambda$TermsOfServiceView$EN7x11RzdirM4dMmWp9ljW_KzQo.INSTANCE);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_help_acceptTermsOfService, TermsOfServiceView$$ExternalSyntheticLambda7.INSTANCE);
     }
 
     public void show(int i, TLRPC$TL_help_termsOfService tLRPC$TL_help_termsOfService) {

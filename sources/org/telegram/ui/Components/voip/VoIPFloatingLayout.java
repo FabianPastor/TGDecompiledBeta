@@ -27,8 +27,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 
 public class VoIPFloatingLayout extends FrameLayout {
-    private final float FLOATING_MODE_SCALE = 0.23f;
-    private boolean active = true;
+    private boolean active;
     public boolean alwaysFloating;
     public int bottomOffset;
     float bottomPadding;
@@ -44,31 +43,17 @@ public class VoIPFloatingLayout extends FrameLayout {
     boolean moving;
     ValueAnimator mutedAnimator;
     Drawable mutedDrawable;
-    Paint mutedPaint = new Paint(1);
-    float mutedProgress = 0.0f;
-    private ValueAnimator.AnimatorUpdateListener mutedUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-            VoIPFloatingLayout.this.lambda$new$0$VoIPFloatingLayout(valueAnimator);
-        }
-    };
+    Paint mutedPaint;
+    float mutedProgress;
+    private ValueAnimator.AnimatorUpdateListener mutedUpdateListener;
     /* access modifiers changed from: private */
-    public float overrideCornerRadius = -1.0f;
+    public float overrideCornerRadius;
     final Path path = new Path();
     /* access modifiers changed from: private */
-    public ValueAnimator.AnimatorUpdateListener progressUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        public void onAnimationUpdate(ValueAnimator valueAnimator) {
-            VoIPFloatingLayout.this.toFloatingModeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-            if (VoIPFloatingLayout.this.delegate != null) {
-                VoIPFloatingLayoutDelegate access$000 = VoIPFloatingLayout.this.delegate;
-                VoIPFloatingLayout voIPFloatingLayout = VoIPFloatingLayout.this;
-                access$000.onChange(voIPFloatingLayout.toFloatingModeProgress, voIPFloatingLayout.measuredAsFloatingMode);
-            }
-            VoIPFloatingLayout.this.invalidate();
-        }
-    };
+    public ValueAnimator.AnimatorUpdateListener progressUpdateListener;
     final RectF rectF = new RectF();
-    public float relativePositionToSetX = -1.0f;
-    float relativePositionToSetY = -1.0f;
+    public float relativePositionToSetX;
+    float relativePositionToSetY;
     float rightPadding;
     public float savedRelativePositionX;
     public float savedRelativePositionY;
@@ -83,13 +68,12 @@ public class VoIPFloatingLayout extends FrameLayout {
     public boolean switchingToFloatingMode;
     public boolean switchingToPip;
     View.OnClickListener tapListener;
-    float toFloatingModeProgress = 0.0f;
+    float toFloatingModeProgress;
     float topPadding;
     float touchSlop;
     private boolean uiVisible;
     public float updatePositionFromX;
     public float updatePositionFromY;
-    final Paint xRefPaint = new Paint(1);
 
     public interface VoIPFloatingLayoutDelegate {
         void onChange(float f, boolean z);
@@ -100,14 +84,33 @@ public class VoIPFloatingLayout extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$VoIPFloatingLayout(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
         this.mutedProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
     public VoIPFloatingLayout(Context context) {
         super(context);
+        new Paint(1);
+        this.mutedPaint = new Paint(1);
+        this.relativePositionToSetX = -1.0f;
+        this.relativePositionToSetY = -1.0f;
+        this.toFloatingModeProgress = 0.0f;
+        this.mutedProgress = 0.0f;
+        this.overrideCornerRadius = -1.0f;
+        this.active = true;
+        this.progressUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                VoIPFloatingLayout.this.toFloatingModeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+                if (VoIPFloatingLayout.this.delegate != null) {
+                    VoIPFloatingLayoutDelegate access$000 = VoIPFloatingLayout.this.delegate;
+                    VoIPFloatingLayout voIPFloatingLayout = VoIPFloatingLayout.this;
+                    access$000.onChange(voIPFloatingLayout.toFloatingModeProgress, voIPFloatingLayout.measuredAsFloatingMode);
+                }
+                VoIPFloatingLayout.this.invalidate();
+            }
+        };
+        this.mutedUpdateListener = new VoIPFloatingLayout$$ExternalSyntheticLambda0(this);
         this.touchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
         if (Build.VERSION.SDK_INT >= 21) {
             setOutlineProvider(new ViewOutlineProvider() {

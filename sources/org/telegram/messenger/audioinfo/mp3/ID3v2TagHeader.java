@@ -9,7 +9,6 @@ public class ID3v2TagHeader {
     private boolean compression;
     private int footerSize;
     private int headerSize;
-    private int paddingSize;
     private int revision;
     private int totalTagSize;
     private boolean unsynchronization;
@@ -25,7 +24,6 @@ public class ID3v2TagHeader {
         this.revision = 0;
         this.headerSize = 0;
         this.totalTagSize = 0;
-        this.paddingSize = 0;
         this.footerSize = 0;
         long position = positionInputStream.getPosition();
         ID3v2DataInput iD3v2DataInput = new ID3v2DataInput(positionInputStream);
@@ -48,7 +46,7 @@ public class ID3v2TagHeader {
                             int readInt = iD3v2DataInput.readInt();
                             iD3v2DataInput.readByte();
                             iD3v2DataInput.readByte();
-                            this.paddingSize = iD3v2DataInput.readInt();
+                            iD3v2DataInput.readInt();
                             iD3v2DataInput.skipFully((long) (readInt - 6));
                         } else {
                             iD3v2DataInput.skipFully((long) (iD3v2DataInput.readSyncsafeInt() - 4));

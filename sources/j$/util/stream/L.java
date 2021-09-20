@@ -1,16 +1,59 @@
 package j$.util.stream;
 
-import j$.util.function.H;
+import j$.lang.a;
+import j$.util.function.Consumer;
+import j$.util.function.g;
+import j$.util.function.m;
+import j$.util.function.r;
+import j$.util.function.y;
 
-public final /* synthetic */ class L implements H {
-    public static final /* synthetic */ L a = new L();
+class L extends CLASSNAMEe3 {
+    public final /* synthetic */ int l = 1;
+    final /* synthetic */ Object m;
 
-    private /* synthetic */ L() {
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public L(T t, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, g gVar) {
+        super(cVar, f4Var, i);
+        this.m = gVar;
     }
 
-    public final void accept(Object obj, int i) {
-        long[] jArr = (long[]) obj;
-        jArr[0] = jArr[0] + 1;
-        jArr[1] = jArr[1] + ((long) i);
+    /* access modifiers changed from: package-private */
+    public CLASSNAMEn3 H0(int i, CLASSNAMEn3 n3Var) {
+        switch (this.l) {
+            case 0:
+                return new J(this, n3Var);
+            case 1:
+                return new F0(this, n3Var);
+            case 2:
+                return new CLASSNAMEa1(this, n3Var);
+            case 3:
+                return new Z2(this, n3Var);
+            default:
+                return new Z2(this, n3Var, (a) null);
+        }
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public L(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, m mVar) {
+        super(cVar, f4Var, i);
+        this.m = mVar;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public L(CLASSNAMEe1 e1Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, r rVar) {
+        super(cVar, f4Var, i);
+        this.m = rVar;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public L(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, Consumer consumer) {
+        super(cVar, f4Var, i);
+        this.m = consumer;
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public L(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, y yVar) {
+        super(cVar, f4Var, i);
+        this.m = yVar;
     }
 }

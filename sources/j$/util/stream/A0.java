@@ -1,16 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.o;
+import j$.util.function.j;
 
-public final /* synthetic */ class A0 implements o {
-    public final /* synthetic */ b3 a;
+public final /* synthetic */ class A0 implements j {
+    public static final /* synthetic */ A0 a = new A0();
 
-    public /* synthetic */ A0(b3 b3Var) {
-        this.a = b3Var;
+    private /* synthetic */ A0() {
     }
 
-    public final boolean a() {
-        b3 b3Var = this.a;
-        return b3Var.d.b(b3Var.e);
+    public final int applyAsInt(int i, int i2) {
+        return Math.min(i, i2);
     }
 }

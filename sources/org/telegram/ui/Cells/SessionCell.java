@@ -166,7 +166,7 @@ public class SessionCell extends FrameLayout {
             this.detailTextView.setText(sb2);
         } else if (tLObject instanceof TLRPC$TL_webAuthorization) {
             TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization = (TLRPC$TL_webAuthorization) tLObject;
-            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tLRPC$TL_webAuthorization.bot_id));
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(tLRPC$TL_webAuthorization.bot_id));
             this.nameTextView.setText(tLRPC$TL_webAuthorization.domain);
             if (user != null) {
                 this.avatarDrawable.setInfo(user);

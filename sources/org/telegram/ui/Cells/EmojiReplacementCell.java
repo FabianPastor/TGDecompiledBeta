@@ -15,9 +15,11 @@ import org.telegram.ui.Components.LayoutHelper;
 public class EmojiReplacementCell extends FrameLayout {
     private String emoji;
     private ImageView imageView;
+    private final Theme.ResourcesProvider resourcesProvider;
 
-    public EmojiReplacementCell(Context context) {
+    public EmojiReplacementCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         ImageView imageView2 = new ImageView(context);
         this.imageView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
@@ -48,7 +50,7 @@ public class EmojiReplacementCell extends FrameLayout {
         Drawable background = getBackground();
         if (background != null) {
             background.setAlpha(230);
-            background.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel"), PorterDuff.Mode.MULTIPLY));
+            background.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_stickersHintPanel"), PorterDuff.Mode.MULTIPLY));
         }
     }
 
@@ -59,5 +61,11 @@ public class EmojiReplacementCell extends FrameLayout {
     public void invalidate() {
         super.invalidate();
         this.imageView.invalidate();
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

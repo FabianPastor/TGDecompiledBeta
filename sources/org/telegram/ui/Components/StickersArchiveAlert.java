@@ -57,19 +57,14 @@ public class StickersArchiveAlert extends AlertDialog.Builder {
         recyclerListView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
         recyclerListView.setGlowColor(-657673);
         linearLayout.addView(recyclerListView, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
-        setNegativeButton(LocaleController.getString("Close", NUM), $$Lambda$StickersArchiveAlert$UP1OYWR7IkBHdBnreRPz8HZ6nYI.INSTANCE);
+        setNegativeButton(LocaleController.getString("Close", NUM), StickersArchiveAlert$$ExternalSyntheticLambda1.INSTANCE);
         if (this.parentFragment != null) {
-            setPositiveButton(LocaleController.getString("Settings", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    StickersArchiveAlert.this.lambda$new$1$StickersArchiveAlert(dialogInterface, i);
-                }
-            });
+            setPositiveButton(LocaleController.getString("Settings", NUM), new StickersArchiveAlert$$ExternalSyntheticLambda0(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$StickersArchiveAlert(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$new$1(DialogInterface dialogInterface, int i) {
         this.parentFragment.presentFragment(new StickersActivity(this.currentType));
         dialogInterface.dismiss();
     }

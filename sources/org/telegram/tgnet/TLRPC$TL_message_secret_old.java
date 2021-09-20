@@ -20,7 +20,7 @@ public class TLRPC$TL_message_secret_old extends TLRPC$TL_message_secret {
         this.ttl = abstractSerializedData.readInt32(z);
         TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
         this.from_id = tLRPC$TL_peerUser;
-        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
+        tLRPC$TL_peerUser.user_id = (long) abstractSerializedData.readInt32(z);
         this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.date = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);
@@ -44,7 +44,7 @@ public class TLRPC$TL_message_secret_old extends TLRPC$TL_message_secret {
         abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt32(this.id);
         abstractSerializedData.writeInt32(this.ttl);
-        abstractSerializedData.writeInt32(this.from_id.user_id);
+        abstractSerializedData.writeInt32((int) this.from_id.user_id);
         this.peer_id.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.date);
         abstractSerializedData.writeString(this.message);

@@ -31,9 +31,10 @@ public class Emoji {
     public static Bitmap[][] emojiBmp = new Bitmap[8][];
     public static HashMap<String, String> emojiColor = new HashMap<>();
     private static int[] emojiCounts = {1906, 199, 123, 332, 128, 222, 292, 259};
+    public static float emojiDrawingYOffset;
     public static HashMap<String, Integer> emojiUseHistory = new HashMap<>();
     private static boolean inited = false;
-    private static Runnable invalidateUiRunnable = $$Lambda$Emoji$jetPe9LKmqTb2VDJvKzA7BWYlM.INSTANCE;
+    private static Runnable invalidateUiRunnable = Emoji$$ExternalSyntheticLambda1.INSTANCE;
     private static boolean[][] loadingEmoji = new boolean[8][];
     /* access modifiers changed from: private */
     public static Paint placeholderPaint;
@@ -82,24 +83,13 @@ public class Emoji {
             boolean[][] zArr = loadingEmoji;
             if (!zArr[b][s]) {
                 zArr[b][s] = true;
-                Utilities.globalQueue.postRunnable(new Runnable(b, s) {
-                    public final /* synthetic */ byte f$0;
-                    public final /* synthetic */ short f$1;
-
-                    {
-                        this.f$0 = r1;
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        Emoji.lambda$loadEmoji$1(this.f$0, this.f$1);
-                    }
-                });
+                Utilities.globalQueue.postRunnable(new Emoji$$ExternalSyntheticLambda0(b, s));
             }
         }
     }
 
-    static /* synthetic */ void lambda$loadEmoji$1(byte b, short s) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$loadEmoji$1(byte b, short s) {
         loadEmojiInternal(b, s);
         loadingEmoji[b][s] = false;
     }
@@ -799,13 +789,23 @@ public class Emoji {
 
         public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
             boolean z;
+            boolean z2 = true;
             if (paint.getAlpha() != 255) {
-                z = true;
                 getDrawable().setAlpha(paint.getAlpha());
+                z = true;
             } else {
                 z = false;
             }
+            if (Emoji.emojiDrawingYOffset != 0.0f) {
+                canvas.save();
+                canvas.translate(0.0f, Emoji.emojiDrawingYOffset);
+            } else {
+                z2 = false;
+            }
             super.draw(canvas, charSequence, i, i2, f, i3, i4, i5, paint);
+            if (z2) {
+                canvas.restore();
+            }
             if (z) {
                 getDrawable().setAlpha(255);
             }
@@ -831,14 +831,15 @@ public class Emoji {
         for (Map.Entry<String, Integer> key : emojiUseHistory.entrySet()) {
             recentEmoji.add((String) key.getKey());
         }
-        Collections.sort(recentEmoji, $$Lambda$Emoji$fUgiiBcGKG7t1AnnkIzP_HEo4.INSTANCE);
+        Collections.sort(recentEmoji, Emoji$$ExternalSyntheticLambda2.INSTANCE);
         while (recentEmoji.size() > 48) {
             ArrayList<String> arrayList = recentEmoji;
             arrayList.remove(arrayList.size() - 1);
         }
     }
 
-    static /* synthetic */ int lambda$sortEmoji$2(String str, String str2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$sortEmoji$2(String str, String str2) {
         Integer num = emojiUseHistory.get(str);
         Integer num2 = emojiUseHistory.get(str2);
         if (num == null) {

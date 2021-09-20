@@ -35,16 +35,11 @@ public class SlotsDrawable extends RLottieDrawable {
 
     public SlotsDrawable(String str, int i, int i2) {
         super(str, i, i2);
-        this.loadFrameRunnable = new Runnable() {
-            public final void run() {
-                SlotsDrawable.this.lambda$new$0$SlotsDrawable();
-            }
-        };
+        this.loadFrameRunnable = new SlotsDrawable$$ExternalSyntheticLambda6(this);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$SlotsDrawable() {
+    public /* synthetic */ void lambda$new$0() {
         int i;
         Runnable runnable;
         if (!this.isRecycled) {
@@ -204,36 +199,15 @@ public class SlotsDrawable extends RLottieDrawable {
         if (this.nativePtr == 0 && !this.loadingInBackground) {
             this.loadingInBackground = true;
             MessageObject messageObject = chatMessageCell.getMessageObject();
-            Utilities.globalQueue.postRunnable(new Runnable(tLRPC$TL_messages_stickerSet, chatMessageCell.getMessageObject().currentAccount, messageObject, chatMessageCell) {
-                public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
-                public final /* synthetic */ int f$2;
-                public final /* synthetic */ MessageObject f$3;
-                public final /* synthetic */ ChatMessageCell f$4;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
-
-                public final void run() {
-                    SlotsDrawable.this.lambda$setBaseDice$5$SlotsDrawable(this.f$1, this.f$2, this.f$3, this.f$4);
-                }
-            });
+            Utilities.globalQueue.postRunnable(new SlotsDrawable$$ExternalSyntheticLambda8(this, tLRPC$TL_messages_stickerSet, chatMessageCell.getMessageObject().currentAccount, messageObject, chatMessageCell));
         }
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setBaseDice$5 */
-    public /* synthetic */ void lambda$setBaseDice$5$SlotsDrawable(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, int i, MessageObject messageObject, ChatMessageCell chatMessageCell) {
+    public /* synthetic */ void lambda$setBaseDice$5(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, int i, MessageObject messageObject, ChatMessageCell chatMessageCell) {
         if (this.destroyAfterLoading) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    SlotsDrawable.this.lambda$setBaseDice$1$SlotsDrawable();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new SlotsDrawable$$ExternalSyntheticLambda5(this));
             return;
         }
         int i2 = 0;
@@ -257,23 +231,7 @@ public class SlotsDrawable extends RLottieDrawable {
                 TLRPC$Document tLRPC$Document = tLRPC$TL_messages_stickerSet.documents.get(i3);
                 String readRes = RLottieDrawable.readRes(FileLoader.getPathToAttach(tLRPC$Document, true), 0);
                 if (TextUtils.isEmpty(readRes)) {
-                    AndroidUtilities.runOnUIThread(new Runnable(i, messageObject, chatMessageCell, tLRPC$TL_messages_stickerSet) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ MessageObject f$2;
-                        public final /* synthetic */ ChatMessageCell f$3;
-                        public final /* synthetic */ TLRPC$TL_messages_stickerSet f$4;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                        }
-
-                        public final void run() {
-                            SlotsDrawable.lambda$setBaseDice$2(TLRPC$Document.this, this.f$1, this.f$2, this.f$3, this.f$4);
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new SlotsDrawable$$ExternalSyntheticLambda0(tLRPC$Document, i, messageObject, chatMessageCell, tLRPC$TL_messages_stickerSet));
                     z = true;
                 } else {
                     this.nativePtrs[i2] = RLottieDrawable.createWithJson(readRes, "dice", this.metaData, (int[]) null);
@@ -283,51 +241,33 @@ public class SlotsDrawable extends RLottieDrawable {
             i2++;
         }
         if (z) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    SlotsDrawable.this.lambda$setBaseDice$3$SlotsDrawable();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new SlotsDrawable$$ExternalSyntheticLambda2(this));
         } else {
-            AndroidUtilities.runOnUIThread(new Runnable(i, chatMessageCell) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ ChatMessageCell f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    SlotsDrawable.this.lambda$setBaseDice$4$SlotsDrawable(this.f$1, this.f$2);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new SlotsDrawable$$ExternalSyntheticLambda7(this, i, chatMessageCell));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setBaseDice$1 */
-    public /* synthetic */ void lambda$setBaseDice$1$SlotsDrawable() {
+    public /* synthetic */ void lambda$setBaseDice$1() {
         this.loadingInBackground = false;
         if (!this.secondLoadingInBackground && this.destroyAfterLoading) {
             recycle();
         }
     }
 
-    static /* synthetic */ void lambda$setBaseDice$2(TLRPC$Document tLRPC$Document, int i, MessageObject messageObject, ChatMessageCell chatMessageCell, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setBaseDice$2(TLRPC$Document tLRPC$Document, int i, MessageObject messageObject, ChatMessageCell chatMessageCell, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
         DownloadController.getInstance(i).addLoadingFileObserver(FileLoader.getAttachFileName(tLRPC$Document), messageObject, chatMessageCell);
         FileLoader.getInstance(i).loadFile(tLRPC$Document, tLRPC$TL_messages_stickerSet, 1, 1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setBaseDice$3 */
-    public /* synthetic */ void lambda$setBaseDice$3$SlotsDrawable() {
+    public /* synthetic */ void lambda$setBaseDice$3() {
         this.loadingInBackground = false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setBaseDice$4 */
-    public /* synthetic */ void lambda$setBaseDice$4$SlotsDrawable(int i, ChatMessageCell chatMessageCell) {
+    public /* synthetic */ void lambda$setBaseDice$4(int i, ChatMessageCell chatMessageCell) {
         this.loadingInBackground = false;
         if (this.secondLoadingInBackground || !this.destroyAfterLoading) {
             this.nativePtr = this.nativePtrs[0];
@@ -346,25 +286,7 @@ public class SlotsDrawable extends RLottieDrawable {
             MessageObject messageObject = chatMessageCell.getMessageObject();
             int i2 = chatMessageCell.getMessageObject().currentAccount;
             this.secondLoadingInBackground = true;
-            Utilities.globalQueue.postRunnable(new Runnable(tLRPC$TL_messages_stickerSet, i2, messageObject, chatMessageCell, z) {
-                public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
-                public final /* synthetic */ int f$2;
-                public final /* synthetic */ MessageObject f$3;
-                public final /* synthetic */ ChatMessageCell f$4;
-                public final /* synthetic */ boolean f$5;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r6;
-                }
-
-                public final void run() {
-                    SlotsDrawable.this.lambda$setDiceNumber$10$SlotsDrawable(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-                }
-            });
+            Utilities.globalQueue.postRunnable(new SlotsDrawable$$ExternalSyntheticLambda9(this, tLRPC$TL_messages_stickerSet, i2, messageObject, chatMessageCell, z));
         }
         return true;
     }
@@ -372,16 +294,15 @@ public class SlotsDrawable extends RLottieDrawable {
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:61:0x00be  */
     /* JADX WARNING: Removed duplicated region for block: B:62:0x00d1  */
-    /* renamed from: lambda$setDiceNumber$10 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$setDiceNumber$10$SlotsDrawable(org.telegram.tgnet.TLRPC$TL_messages_stickerSet r18, int r19, org.telegram.messenger.MessageObject r20, org.telegram.ui.Cells.ChatMessageCell r21, boolean r22) {
+    public /* synthetic */ void lambda$setDiceNumber$10(org.telegram.tgnet.TLRPC$TL_messages_stickerSet r18, int r19, org.telegram.messenger.MessageObject r20, org.telegram.ui.Cells.ChatMessageCell r21, boolean r22) {
         /*
             r17 = this;
             r0 = r17
             boolean r1 = r0.destroyAfterLoading
             if (r1 == 0) goto L_0x000f
-            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$bqf5Qeg-Zl-v1SK8e_n8by8HfhM r1 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$bqf5Qeg-Zl-v1SK8e_n8by8HfhM
-            r1.<init>()
+            org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda3 r1 = new org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda3
+            r1.<init>(r0)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
             return
         L_0x000f:
@@ -506,13 +427,13 @@ public class SlotsDrawable extends RLottieDrawable {
             java.lang.String r4 = org.telegram.ui.Components.RLottieDrawable.readRes(r4, r1)
             boolean r8 = android.text.TextUtils.isEmpty(r4)
             if (r8 == 0) goto L_0x00d1
-            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$var_sGcRSekH2IrvR4dU-xTTEDd4 r3 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$var_sGcRSekH2IrvR4dU-xTTEDd4
+            org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda1
             r11 = r3
             r13 = r19
             r14 = r20
             r15 = r21
             r16 = r18
-            r11.<init>(r13, r14, r15, r16)
+            r11.<init>(r12, r13, r14, r15, r16)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)
             r3 = 1
             goto L_0x0103
@@ -552,45 +473,43 @@ public class SlotsDrawable extends RLottieDrawable {
             goto L_0x0012
         L_0x0107:
             if (r3 == 0) goto L_0x0112
-            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$c4ZUeEoyv32UM2Hf0du5mp9LiQ0 r1 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$c4ZUeEoyv32UM2Hf0du5mp9LiQ0
-            r1.<init>()
+            org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda4 r1 = new org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda4
+            r1.<init>(r0)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
             return
         L_0x0112:
-            org.telegram.ui.Components.-$$Lambda$SlotsDrawable$ReXgvrSEBXnqzbP-Y3rnTvEii4Y r1 = new org.telegram.ui.Components.-$$Lambda$SlotsDrawable$ReXgvrSEBXnqzbP-Y3rnTvEii4Y
+            org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda10 r1 = new org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda10
             r2 = r19
             r3 = r21
             r4 = r22
-            r1.<init>(r4, r2, r3)
+            r1.<init>(r0, r4, r2, r3)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SlotsDrawable.lambda$setDiceNumber$10$SlotsDrawable(org.telegram.tgnet.TLRPC$TL_messages_stickerSet, int, org.telegram.messenger.MessageObject, org.telegram.ui.Cells.ChatMessageCell, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SlotsDrawable.lambda$setDiceNumber$10(org.telegram.tgnet.TLRPC$TL_messages_stickerSet, int, org.telegram.messenger.MessageObject, org.telegram.ui.Cells.ChatMessageCell, boolean):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setDiceNumber$6 */
-    public /* synthetic */ void lambda$setDiceNumber$6$SlotsDrawable() {
+    public /* synthetic */ void lambda$setDiceNumber$6() {
         this.secondLoadingInBackground = false;
         if (!this.loadingInBackground && this.destroyAfterLoading) {
             recycle();
         }
     }
 
-    static /* synthetic */ void lambda$setDiceNumber$7(TLRPC$Document tLRPC$Document, int i, MessageObject messageObject, ChatMessageCell chatMessageCell, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setDiceNumber$7(TLRPC$Document tLRPC$Document, int i, MessageObject messageObject, ChatMessageCell chatMessageCell, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
         DownloadController.getInstance(i).addLoadingFileObserver(FileLoader.getAttachFileName(tLRPC$Document), messageObject, chatMessageCell);
         FileLoader.getInstance(i).loadFile(tLRPC$Document, tLRPC$TL_messages_stickerSet, 1, 1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setDiceNumber$8 */
-    public /* synthetic */ void lambda$setDiceNumber$8$SlotsDrawable() {
+    public /* synthetic */ void lambda$setDiceNumber$8() {
         this.secondLoadingInBackground = false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setDiceNumber$9 */
-    public /* synthetic */ void lambda$setDiceNumber$9$SlotsDrawable(boolean z, int i, ChatMessageCell chatMessageCell) {
+    public /* synthetic */ void lambda$setDiceNumber$9(boolean z, int i, ChatMessageCell chatMessageCell) {
         if (z && this.nextRenderingBitmap == null && this.renderingBitmap == null && this.loadFrameTask == null) {
             this.isDice = 2;
             this.setLastFrame = true;

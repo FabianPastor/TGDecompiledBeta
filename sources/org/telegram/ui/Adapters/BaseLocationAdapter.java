@@ -4,13 +4,13 @@ import android.location.Location;
 import android.os.Build;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$BotInlineMessage;
 import org.telegram.tgnet.TLRPC$BotInlineResult;
@@ -70,44 +70,18 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
         }
         this.searchInProgress = true;
         DispatchQueue dispatchQueue = Utilities.searchQueue;
-        $$Lambda$BaseLocationAdapter$M5pEnfvG1qE0SmAACEhWNyquPlU r1 = new Runnable(str, location) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ Location f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                BaseLocationAdapter.this.lambda$searchDelayed$1$BaseLocationAdapter(this.f$1, this.f$2);
-            }
-        };
-        this.searchRunnable = r1;
-        dispatchQueue.postRunnable(r1, 400);
+        BaseLocationAdapter$$ExternalSyntheticLambda0 baseLocationAdapter$$ExternalSyntheticLambda0 = new BaseLocationAdapter$$ExternalSyntheticLambda0(this, str, location);
+        this.searchRunnable = baseLocationAdapter$$ExternalSyntheticLambda0;
+        dispatchQueue.postRunnable(baseLocationAdapter$$ExternalSyntheticLambda0, 400);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchDelayed$1 */
-    public /* synthetic */ void lambda$searchDelayed$1$BaseLocationAdapter(String str, Location location) {
-        AndroidUtilities.runOnUIThread(new Runnable(str, location) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ Location f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                BaseLocationAdapter.this.lambda$searchDelayed$0$BaseLocationAdapter(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$searchDelayed$1(String str, Location location) {
+        AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$ExternalSyntheticLambda1(this, str, location));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchDelayed$0 */
-    public /* synthetic */ void lambda$searchDelayed$0$BaseLocationAdapter(String str, Location location) {
+    public /* synthetic */ void lambda$searchDelayed$0(String str, Location location) {
         this.searchRunnable = null;
         this.lastSearchLocation = null;
         searchPlacesWithQuery(str, location, true);
@@ -118,35 +92,19 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
             this.searchingUser = true;
             TLRPC$TL_contacts_resolveUsername tLRPC$TL_contacts_resolveUsername = new TLRPC$TL_contacts_resolveUsername();
             tLRPC$TL_contacts_resolveUsername.username = MessagesController.getInstance(this.currentAccount).venueSearchBot;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_contacts_resolveUsername, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    BaseLocationAdapter.this.lambda$searchBotUser$3$BaseLocationAdapter(tLObject, tLRPC$TL_error);
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_contacts_resolveUsername, new BaseLocationAdapter$$ExternalSyntheticLambda4(this));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchBotUser$3 */
-    public /* synthetic */ void lambda$searchBotUser$3$BaseLocationAdapter(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$searchBotUser$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-                public final /* synthetic */ TLObject f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    BaseLocationAdapter.this.lambda$searchBotUser$2$BaseLocationAdapter(this.f$1);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$ExternalSyntheticLambda3(this, tLObject));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchBotUser$2 */
-    public /* synthetic */ void lambda$searchBotUser$2$BaseLocationAdapter(TLObject tLObject) {
+    public /* synthetic */ void lambda$searchBotUser$2(TLObject tLObject) {
         TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer = (TLRPC$TL_contacts_resolvedPeer) tLObject;
         MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_contacts_resolvedPeer.users, false);
         MessagesController.getInstance(this.currentAccount).putChats(tLRPC$TL_contacts_resolvedPeer.chats, false);
@@ -196,30 +154,19 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
                     tLRPC$TL_inputGeoPoint.lat = AndroidUtilities.fixLocationCoord(location.getLatitude());
                     tLRPC$TL_messages_getInlineBotResults.geo_point._long = AndroidUtilities.fixLocationCoord(location.getLongitude());
                     tLRPC$TL_messages_getInlineBotResults.flags |= 1;
-                    int i = (int) this.dialogId;
-                    if (i != 0) {
-                        tLRPC$TL_messages_getInlineBotResults.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(i);
-                    } else {
+                    if (DialogObject.isEncryptedDialog(this.dialogId)) {
                         tLRPC$TL_messages_getInlineBotResults.peer = new TLRPC$TL_inputPeerEmpty();
+                    } else {
+                        tLRPC$TL_messages_getInlineBotResults.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(this.dialogId);
                     }
-                    this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getInlineBotResults, new RequestDelegate(str) {
-                        public final /* synthetic */ String f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            BaseLocationAdapter.this.lambda$searchPlacesWithQuery$5$BaseLocationAdapter(this.f$1, tLObject, tLRPC$TL_error);
-                        }
-                    });
+                    this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getInlineBotResults, new BaseLocationAdapter$$ExternalSyntheticLambda5(this, str));
                     if (!z2 || Build.VERSION.SDK_INT < 19) {
                         notifyDataSetChanged();
                     } else if (!this.places.isEmpty() && !z3) {
                         int size = this.places.size() + 1;
-                        int i2 = itemCount - size;
-                        notifyItemInserted(i2);
-                        notifyItemRangeRemoved(i2, size);
+                        int i = itemCount - size;
+                        notifyItemInserted(i);
+                        notifyItemRangeRemoved(i, size);
                     } else if (!z3) {
                         notifyItemChanged(getItemCount() - 1);
                     }
@@ -231,28 +178,12 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchPlacesWithQuery$5 */
-    public /* synthetic */ void lambda$searchPlacesWithQuery$5$BaseLocationAdapter(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-            public final /* synthetic */ TLObject f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                BaseLocationAdapter.this.lambda$searchPlacesWithQuery$4$BaseLocationAdapter(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$searchPlacesWithQuery$5(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$ExternalSyntheticLambda2(this, str, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchPlacesWithQuery$4 */
-    public /* synthetic */ void lambda$searchPlacesWithQuery$4$BaseLocationAdapter(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$searchPlacesWithQuery$4(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.currentRequestNum = 0;
         this.searching = false;
         this.places.clear();

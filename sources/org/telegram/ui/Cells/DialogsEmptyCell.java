@@ -25,7 +25,8 @@ public class DialogsEmptyCell extends LinearLayout {
     private TextView emptyTextView2;
     private RLottieImageView imageView;
 
-    static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -33,16 +34,12 @@ public class DialogsEmptyCell extends LinearLayout {
         super(context);
         setGravity(17);
         setOrientation(1);
-        setOnTouchListener($$Lambda$DialogsEmptyCell$EZBh9dIKAqFHQ518PFNPpE9QmAU.INSTANCE);
+        setOnTouchListener(DialogsEmptyCell$$ExternalSyntheticLambda1.INSTANCE);
         RLottieImageView rLottieImageView = new RLottieImageView(context);
         this.imageView = rLottieImageView;
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
         addView(this.imageView, LayoutHelper.createFrame(100, 100.0f, 17, 52.0f, 4.0f, 52.0f, 0.0f));
-        this.imageView.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                DialogsEmptyCell.this.lambda$new$1$DialogsEmptyCell(view);
-            }
-        });
+        this.imageView.setOnClickListener(new DialogsEmptyCell$$ExternalSyntheticLambda0(this));
         TextView textView = new TextView(context);
         this.emptyTextView1 = textView;
         textView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
@@ -65,8 +62,7 @@ public class DialogsEmptyCell extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$DialogsEmptyCell(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         if (!this.imageView.isPlaying()) {
             this.imageView.setProgress(0.0f);
             this.imageView.playAnimation();
@@ -84,11 +80,11 @@ public class DialogsEmptyCell extends LinearLayout {
             return
         L_0x0005:
             r5.currentType = r6
-            r0 = 2131626365(0x7f0e097d, float:1.8879964E38)
+            r0 = 2131626395(0x7f0e099b, float:1.8880025E38)
             java.lang.String r1 = "NoChats"
             r2 = 0
             if (r6 != 0) goto L_0x0024
-            r6 = 2131626367(0x7f0e097f, float:1.8879968E38)
+            r6 = 2131626397(0x7f0e099d, float:1.888003E38)
             java.lang.String r3 = "NoChatsHelp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
             android.widget.TextView r3 = r5.emptyTextView1
@@ -101,7 +97,7 @@ public class DialogsEmptyCell extends LinearLayout {
         L_0x0024:
             r3 = 1
             if (r6 != r3) goto L_0x003a
-            r6 = 2131626366(0x7f0e097e, float:1.8879966E38)
+            r6 = 2131626396(0x7f0e099c, float:1.8880027E38)
             java.lang.String r3 = "NoChatsContactsHelp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
             android.widget.TextView r3 = r5.emptyTextView1
@@ -113,12 +109,12 @@ public class DialogsEmptyCell extends LinearLayout {
             if (r6 != r0) goto L_0x005d
             org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
             r6.setAutoRepeat(r2)
-            r6 = 2131558432(0x7f0d0020, float:1.874218E38)
-            r0 = 2131625578(0x7f0e066a, float:1.8878368E38)
+            r6 = 2131558433(0x7f0d0021, float:1.8742182E38)
+            r0 = 2131625594(0x7f0e067a, float:1.88784E38)
             java.lang.String r1 = "FilterNoChatsToDisplayInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             android.widget.TextView r1 = r5.emptyTextView1
-            r3 = 2131625577(0x7f0e0669, float:1.8878366E38)
+            r3 = 2131625593(0x7f0e0679, float:1.8878398E38)
             java.lang.String r4 = "FilterNoChatsToDisplay"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)
@@ -126,12 +122,12 @@ public class DialogsEmptyCell extends LinearLayout {
         L_0x005d:
             org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
             r6.setAutoRepeat(r3)
-            r6 = 2131558431(0x7f0d001f, float:1.8742178E38)
-            r0 = 2131625533(0x7f0e063d, float:1.8878277E38)
+            r6 = 2131558432(0x7f0d0020, float:1.874218E38)
+            r0 = 2131625549(0x7f0e064d, float:1.887831E38)
             java.lang.String r1 = "FilterAddingChatsInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             android.widget.TextView r1 = r5.emptyTextView1
-            r3 = 2131625532(0x7f0e063c, float:1.8878275E38)
+            r3 = 2131625548(0x7f0e064c, float:1.8878307E38)
             java.lang.String r4 = "FilterAddingChats"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)

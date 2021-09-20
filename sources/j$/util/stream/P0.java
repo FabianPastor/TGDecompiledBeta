@@ -1,23 +1,16 @@
 package j$.util.stream;
 
-import j$.util.function.BiFunction;
-import j$.util.function.CLASSNAMEb;
-import j$.util.function.Function;
-import j$.util.function.n;
-import j$.util.stream.S1;
+import j$.util.function.w;
 
-public final /* synthetic */ class P0 implements n {
+public final /* synthetic */ class P0 implements w {
     public static final /* synthetic */ P0 a = new P0();
 
     private /* synthetic */ P0() {
     }
 
-    public BiFunction a(Function function) {
-        function.getClass();
-        return new CLASSNAMEb(this, function);
-    }
-
-    public final Object apply(Object obj, Object obj2) {
-        return new S1.f((R1) obj, (R1) obj2);
+    public final void accept(Object obj, long j) {
+        long[] jArr = (long[]) obj;
+        jArr[0] = jArr[0] + 1;
+        jArr[1] = jArr[1] + j;
     }
 }

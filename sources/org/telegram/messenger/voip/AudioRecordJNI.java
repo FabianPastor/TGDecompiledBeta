@@ -189,17 +189,7 @@ public class AudioRecordJNI {
     private void startThread() {
         if (this.thread == null) {
             this.running = true;
-            Thread thread2 = new Thread(new Runnable(this.needResampling ? ByteBuffer.allocateDirect(1764) : null) {
-                public final /* synthetic */ ByteBuffer f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    AudioRecordJNI.this.lambda$startThread$0$AudioRecordJNI(this.f$1);
-                }
-            });
+            Thread thread2 = new Thread(new AudioRecordJNI$$ExternalSyntheticLambda0(this, this.needResampling ? ByteBuffer.allocateDirect(1764) : null));
             this.thread = thread2;
             thread2.start();
             return;
@@ -208,8 +198,7 @@ public class AudioRecordJNI {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startThread$0 */
-    public /* synthetic */ void lambda$startThread$0$AudioRecordJNI(ByteBuffer byteBuffer) {
+    public /* synthetic */ void lambda$startThread$0(ByteBuffer byteBuffer) {
         while (true) {
             if (!this.running) {
                 break;

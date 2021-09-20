@@ -13,21 +13,27 @@ import org.telegram.ui.Components.RadioButton;
 
 public class RadioColorCell extends FrameLayout {
     private RadioButton radioButton;
+    private final Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
 
     public RadioColorCell(Context context) {
+        this(context, (Theme.ResourcesProvider) null);
+    }
+
+    public RadioColorCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         RadioButton radioButton2 = new RadioButton(context);
         this.radioButton = radioButton2;
         radioButton2.setSize(AndroidUtilities.dp(20.0f));
-        this.radioButton.setColor(Theme.getColor("dialogRadioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
+        this.radioButton.setColor(getThemedColor("dialogRadioBackground"), getThemedColor("dialogRadioBackgroundChecked"));
         RadioButton radioButton3 = this.radioButton;
         boolean z = LocaleController.isRTL;
         int i = 5;
         addView(radioButton3, LayoutHelper.createFrame(22, 22.0f, (z ? 5 : 3) | 48, (float) (z ? 0 : 18), 14.0f, (float) (z ? 18 : 0), 0.0f));
         TextView textView2 = new TextView(context);
         this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("dialogTextBlack"));
+        textView2.setTextColor(getThemedColor("dialogTextBlack"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -61,5 +67,11 @@ public class RadioColorCell extends FrameLayout {
         accessibilityNodeInfo.setClassName("android.widget.RadioButton");
         accessibilityNodeInfo.setCheckable(true);
         accessibilityNodeInfo.setChecked(this.radioButton.isChecked());
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

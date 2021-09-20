@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -31,7 +32,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$InputUser;
@@ -87,16 +87,14 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.GroupCreateActivity;
-import org.telegram.ui.PrivacyControlActivity;
-import org.telegram.ui.PrivacyUsersActivity;
 
 public class PrivacyControlActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
     public int alwaysShareRow;
     /* access modifiers changed from: private */
-    public ArrayList<Integer> currentMinus;
+    public ArrayList<Long> currentMinus;
     /* access modifiers changed from: private */
-    public ArrayList<Integer> currentPlus;
+    public ArrayList<Long> currentPlus;
     /* access modifiers changed from: private */
     public int currentSubType;
     /* access modifiers changed from: private */
@@ -106,8 +104,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     private View doneButton;
     /* access modifiers changed from: private */
     public int everybodyRow;
-    private ArrayList<Integer> initialMinus;
-    private ArrayList<Integer> initialPlus;
+    private ArrayList<Long> initialMinus;
+    private ArrayList<Long> initialPlus;
     private int initialRulesSubType;
     private int initialRulesType;
     private ListAdapter listAdapter;
@@ -156,11 +154,6 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         public ChatMessageCell cell;
         /* access modifiers changed from: private */
         public HintView hintView;
-        private final Runnable invalidateRunnable = new Runnable() {
-            public final void run() {
-                PrivacyControlActivity.MessageCell.this.invalidate();
-            }
-        };
         /* access modifiers changed from: private */
         public MessageObject messageObject;
         private Drawable shadowDrawable;
@@ -181,13 +174,14 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             return false;
         }
 
-        public MessageCell(Context context) {
+        public MessageCell(PrivacyControlActivity privacyControlActivity, Context context) {
             super(context);
+            new PrivacyControlActivity$MessageCell$$ExternalSyntheticLambda0(this);
             setWillNotDraw(false);
             setClipToPadding(false);
             this.shadowDrawable = Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow");
             setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f));
-            TLRPC$User user = MessagesController.getInstance(PrivacyControlActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(PrivacyControlActivity.this.currentAccount).getClientUserId()));
+            TLRPC$User user = MessagesController.getInstance(privacyControlActivity.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(privacyControlActivity.currentAccount).getClientUserId()));
             TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
             tLRPC$TL_message.message = LocaleController.getString("PrivacyForwardsMessageLine", NUM);
             tLRPC$TL_message.date = (((int) (System.currentTimeMillis() / 1000)) - 3600) + 60;
@@ -202,14 +196,14 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             tLRPC$TL_message.out = false;
             TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
             tLRPC$TL_message.peer_id = tLRPC$TL_peerUser;
-            tLRPC$TL_peerUser.user_id = UserConfig.getInstance(PrivacyControlActivity.this.currentAccount).getClientUserId();
-            MessageObject messageObject2 = new MessageObject(PrivacyControlActivity.this.currentAccount, tLRPC$TL_message, true, false);
+            tLRPC$TL_peerUser.user_id = UserConfig.getInstance(privacyControlActivity.currentAccount).getClientUserId();
+            MessageObject messageObject2 = new MessageObject(privacyControlActivity.currentAccount, tLRPC$TL_message, true, false);
             this.messageObject = messageObject2;
             messageObject2.eventId = 1;
             messageObject2.resetLayout();
             ChatMessageCell chatMessageCell = new ChatMessageCell(context);
             this.cell = chatMessageCell;
-            chatMessageCell.setDelegate(new ChatMessageCell.ChatMessageCellDelegate(PrivacyControlActivity.this) {
+            chatMessageCell.setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this, privacyControlActivity) {
                 public /* synthetic */ boolean canPerformActions() {
                     return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canPerformActions(this);
                 }
@@ -298,8 +292,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$didStartVideoStream(this, messageObject);
                 }
 
-                public /* synthetic */ String getAdminRank(int i) {
-                    return ChatMessageCell.ChatMessageCellDelegate.CC.$default$getAdminRank(this, i);
+                public /* synthetic */ String getAdminRank(long j) {
+                    return ChatMessageCell.ChatMessageCellDelegate.CC.$default$getAdminRank(this, j);
                 }
 
                 public /* synthetic */ PinchToZoomHelper getPinchToZoomHelper() {
@@ -464,7 +458,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
 
     public View createView(Context context) {
         if (this.rulesType == 5) {
-            this.messageCell = new MessageCell(context);
+            this.messageCell = new MessageCell(this, context);
         }
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
@@ -518,105 +512,72 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                PrivacyControlActivity.this.lambda$createView$2$PrivacyControlActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new PrivacyControlActivity$$ExternalSyntheticLambda7(this));
         setMessageText();
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$PrivacyControlActivity(View view, int i) {
-        ArrayList<Integer> arrayList;
+    public /* synthetic */ void lambda$createView$2(View view, int i) {
+        ArrayList<Long> arrayList;
         int i2 = this.nobodyRow;
         int i3 = 0;
         boolean z = true;
         if (i == i2 || i == this.everybodyRow || i == this.myContactsRow) {
-            int i4 = this.currentType;
             if (i == i2) {
                 i3 = 1;
             } else if (i != this.everybodyRow) {
-                i3 = i == this.myContactsRow ? 2 : i4;
+                i3 = 2;
             }
-            if (i3 != i4) {
+            if (i3 != this.currentType) {
                 this.currentType = i3;
                 updateDoneButton();
                 updateRows(true);
-                return;
             }
-            return;
-        }
-        int i5 = this.phoneContactsRow;
-        if (i == i5 || i == this.phoneEverybodyRow) {
-            int i6 = this.currentSubType;
+        } else if (i == this.phoneContactsRow || i == this.phoneEverybodyRow) {
             if (i != this.phoneEverybodyRow) {
-                i3 = i == i5 ? 1 : i6;
+                i3 = 1;
             }
-            if (i3 != i6) {
+            if (i3 != this.currentSubType) {
                 this.currentSubType = i3;
                 updateDoneButton();
                 updateRows(true);
-                return;
             }
-            return;
-        }
-        int i7 = this.neverShareRow;
-        if (i == i7 || i == this.alwaysShareRow) {
-            if (i == i7) {
-                arrayList = this.currentMinus;
-            } else {
-                arrayList = this.currentPlus;
-            }
-            if (arrayList.isEmpty()) {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(i == this.neverShareRow ? "isNeverShare" : "isAlwaysShare", true);
-                if (this.rulesType != 0) {
-                    i3 = 1;
+        } else {
+            int i4 = this.neverShareRow;
+            if (i == i4 || i == this.alwaysShareRow) {
+                if (i == i4) {
+                    arrayList = this.currentMinus;
+                } else {
+                    arrayList = this.currentPlus;
                 }
-                bundle.putInt("chatAddType", i3);
-                GroupCreateActivity groupCreateActivity = new GroupCreateActivity(bundle);
-                groupCreateActivity.setDelegate((GroupCreateActivity.GroupCreateActivityDelegate) new GroupCreateActivity.GroupCreateActivityDelegate(i) {
-                    public final /* synthetic */ int f$1;
-
-                    {
-                        this.f$1 = r2;
+                if (arrayList.isEmpty()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(i == this.neverShareRow ? "isNeverShare" : "isAlwaysShare", true);
+                    if (this.rulesType != 0) {
+                        i3 = 1;
                     }
-
-                    public final void didSelectUsers(ArrayList arrayList) {
-                        PrivacyControlActivity.this.lambda$createView$0$PrivacyControlActivity(this.f$1, arrayList);
-                    }
-                });
-                presentFragment(groupCreateActivity);
-                return;
-            }
-            boolean z2 = this.rulesType != 0;
-            if (i != this.alwaysShareRow) {
-                z = false;
-            }
-            PrivacyUsersActivity privacyUsersActivity = new PrivacyUsersActivity(0, arrayList, z2, z);
-            privacyUsersActivity.setDelegate(new PrivacyUsersActivity.PrivacyActivityDelegate(i) {
-                public final /* synthetic */ int f$1;
-
-                {
-                    this.f$1 = r2;
+                    bundle.putInt("chatAddType", i3);
+                    GroupCreateActivity groupCreateActivity = new GroupCreateActivity(bundle);
+                    groupCreateActivity.setDelegate((GroupCreateActivity.GroupCreateActivityDelegate) new PrivacyControlActivity$$ExternalSyntheticLambda8(this, i));
+                    presentFragment(groupCreateActivity);
+                    return;
                 }
-
-                public final void didUpdateUserList(ArrayList arrayList, boolean z) {
-                    PrivacyControlActivity.this.lambda$createView$1$PrivacyControlActivity(this.f$1, arrayList, z);
+                boolean z2 = this.rulesType != 0;
+                if (i != this.alwaysShareRow) {
+                    z = false;
                 }
-            });
-            presentFragment(privacyUsersActivity);
-        } else if (i == this.p2pRow) {
-            presentFragment(new PrivacyControlActivity(3));
+                PrivacyUsersActivity privacyUsersActivity = new PrivacyUsersActivity(0, arrayList, z2, z);
+                privacyUsersActivity.setDelegate(new PrivacyControlActivity$$ExternalSyntheticLambda9(this, i));
+                presentFragment(privacyUsersActivity);
+            } else if (i == this.p2pRow) {
+                presentFragment(new PrivacyControlActivity(3));
+            }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$PrivacyControlActivity(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$createView$0(int i, ArrayList arrayList) {
         int i2 = 0;
         if (i == this.neverShareRow) {
             this.currentMinus = arrayList;
@@ -636,8 +597,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ void lambda$createView$1$PrivacyControlActivity(int i, ArrayList arrayList, boolean z) {
+    public /* synthetic */ void lambda$createView$1(int i, ArrayList arrayList, boolean z) {
         int i2 = 0;
         if (i == this.neverShareRow) {
             this.currentMinus = arrayList;
@@ -697,11 +657,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 } else {
                     tLRPC$TL_account_setPrivacy2.rules.add(new TLRPC$TL_inputPrivacyValueAllowContacts());
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_setPrivacy2, new RequestDelegate() {
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        PrivacyControlActivity.this.lambda$applyCurrentPrivacySettings$4$PrivacyControlActivity(tLObject, tLRPC$TL_error);
-                    }
-                }, 2);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_setPrivacy2, new PrivacyControlActivity$$ExternalSyntheticLambda5(this), 2);
             }
         } else if (i == 5) {
             tLRPC$TL_account_setPrivacy.key = new TLRPC$TL_inputPrivacyKeyForwards();
@@ -720,14 +676,14 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             TLRPC$TL_inputPrivacyValueAllowUsers tLRPC$TL_inputPrivacyValueAllowUsers = new TLRPC$TL_inputPrivacyValueAllowUsers();
             TLRPC$TL_inputPrivacyValueAllowChatParticipants tLRPC$TL_inputPrivacyValueAllowChatParticipants = new TLRPC$TL_inputPrivacyValueAllowChatParticipants();
             for (int i2 = 0; i2 < this.currentPlus.size(); i2++) {
-                int intValue = this.currentPlus.get(i2).intValue();
-                if (intValue > 0) {
-                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(intValue));
+                long longValue = this.currentPlus.get(i2).longValue();
+                if (DialogObject.isUserDialog(longValue)) {
+                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(longValue));
                     if (!(user == null || (inputUser2 = MessagesController.getInstance(this.currentAccount).getInputUser(user)) == null)) {
                         tLRPC$TL_inputPrivacyValueAllowUsers.users.add(inputUser2);
                     }
                 } else {
-                    tLRPC$TL_inputPrivacyValueAllowChatParticipants.chats.add(Integer.valueOf(-intValue));
+                    tLRPC$TL_inputPrivacyValueAllowChatParticipants.chats.add(Long.valueOf(-longValue));
                 }
             }
             tLRPC$TL_account_setPrivacy.rules.add(tLRPC$TL_inputPrivacyValueAllowUsers);
@@ -737,14 +693,14 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             TLRPC$TL_inputPrivacyValueDisallowUsers tLRPC$TL_inputPrivacyValueDisallowUsers = new TLRPC$TL_inputPrivacyValueDisallowUsers();
             TLRPC$TL_inputPrivacyValueDisallowChatParticipants tLRPC$TL_inputPrivacyValueDisallowChatParticipants = new TLRPC$TL_inputPrivacyValueDisallowChatParticipants();
             for (int i3 = 0; i3 < this.currentMinus.size(); i3++) {
-                int intValue2 = this.currentMinus.get(i3).intValue();
-                if (intValue2 > 0) {
-                    TLRPC$User user2 = getMessagesController().getUser(Integer.valueOf(intValue2));
+                long longValue2 = this.currentMinus.get(i3).longValue();
+                if (DialogObject.isUserDialog(longValue2)) {
+                    TLRPC$User user2 = getMessagesController().getUser(Long.valueOf(longValue2));
                     if (!(user2 == null || (inputUser = getMessagesController().getInputUser(user2)) == null)) {
                         tLRPC$TL_inputPrivacyValueDisallowUsers.users.add(inputUser);
                     }
                 } else {
-                    tLRPC$TL_inputPrivacyValueDisallowChatParticipants.chats.add(Integer.valueOf(-intValue2));
+                    tLRPC$TL_inputPrivacyValueDisallowChatParticipants.chats.add(Long.valueOf(-longValue2));
                 }
             }
             tLRPC$TL_account_setPrivacy.rules.add(tLRPC$TL_inputPrivacyValueDisallowUsers);
@@ -764,68 +720,28 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             alertDialog.setCanCacnel(false);
             alertDialog.show();
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_setPrivacy, new RequestDelegate(alertDialog) {
-            public final /* synthetic */ AlertDialog f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PrivacyControlActivity.this.lambda$applyCurrentPrivacySettings$6$PrivacyControlActivity(this.f$1, tLObject, tLRPC$TL_error);
-            }
-        }, 2);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_setPrivacy, new PrivacyControlActivity$$ExternalSyntheticLambda6(this, alertDialog), 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyCurrentPrivacySettings$4 */
-    public /* synthetic */ void lambda$applyCurrentPrivacySettings$4$PrivacyControlActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                PrivacyControlActivity.this.lambda$applyCurrentPrivacySettings$3$PrivacyControlActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$applyCurrentPrivacySettings$4(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PrivacyControlActivity$$ExternalSyntheticLambda3(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyCurrentPrivacySettings$3 */
-    public /* synthetic */ void lambda$applyCurrentPrivacySettings$3$PrivacyControlActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$applyCurrentPrivacySettings$3(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             ContactsController.getInstance(this.currentAccount).setPrivacyRules(((TLRPC$TL_account_privacyRules) tLObject).rules, 7);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyCurrentPrivacySettings$6 */
-    public /* synthetic */ void lambda$applyCurrentPrivacySettings$6$PrivacyControlActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ AlertDialog f$1;
-            public final /* synthetic */ TLRPC$TL_error f$2;
-            public final /* synthetic */ TLObject f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void run() {
-                PrivacyControlActivity.this.lambda$applyCurrentPrivacySettings$5$PrivacyControlActivity(this.f$1, this.f$2, this.f$3);
-            }
-        });
+    public /* synthetic */ void lambda$applyCurrentPrivacySettings$6(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PrivacyControlActivity$$ExternalSyntheticLambda4(this, alertDialog, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyCurrentPrivacySettings$5 */
-    public /* synthetic */ void lambda$applyCurrentPrivacySettings$5$PrivacyControlActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$applyCurrentPrivacySettings$5(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (alertDialog != null) {
             try {
                 alertDialog.dismiss();
@@ -868,13 +784,13 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     TLRPC$TL_privacyValueAllowChatParticipants tLRPC$TL_privacyValueAllowChatParticipants = (TLRPC$TL_privacyValueAllowChatParticipants) tLRPC$PrivacyRule;
                     int size = tLRPC$TL_privacyValueAllowChatParticipants.chats.size();
                     for (int i2 = 0; i2 < size; i2++) {
-                        this.currentPlus.add(Integer.valueOf(-tLRPC$TL_privacyValueAllowChatParticipants.chats.get(i2).intValue()));
+                        this.currentPlus.add(Long.valueOf(-tLRPC$TL_privacyValueAllowChatParticipants.chats.get(i2).longValue()));
                     }
                 } else if (tLRPC$PrivacyRule instanceof TLRPC$TL_privacyValueDisallowChatParticipants) {
                     TLRPC$TL_privacyValueDisallowChatParticipants tLRPC$TL_privacyValueDisallowChatParticipants = (TLRPC$TL_privacyValueDisallowChatParticipants) tLRPC$PrivacyRule;
                     int size2 = tLRPC$TL_privacyValueDisallowChatParticipants.chats.size();
                     for (int i3 = 0; i3 < size2; i3++) {
-                        this.currentMinus.add(Integer.valueOf(-tLRPC$TL_privacyValueDisallowChatParticipants.chats.get(i3).intValue()));
+                        this.currentMinus.add(Long.valueOf(-tLRPC$TL_privacyValueDisallowChatParticipants.chats.get(i3).longValue()));
                     }
                 } else if (tLRPC$PrivacyRule instanceof TLRPC$TL_privacyValueAllowUsers) {
                     this.currentPlus.addAll(((TLRPC$TL_privacyValueAllowUsers) tLRPC$PrivacyRule).users);
@@ -962,89 +878,88 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
 
     private void updateRows(boolean z) {
         RecyclerView.ViewHolder findContainingViewHolder;
-        int i;
-        int i2 = this.alwaysShareRow;
-        int i3 = this.neverShareRow;
-        int i4 = this.phoneDetailRow;
-        int i5 = this.detailRow;
-        int i6 = this.currentType;
-        boolean z2 = i6 == 1 && this.currentSubType == 1;
+        int i = this.alwaysShareRow;
+        int i2 = this.neverShareRow;
+        int i3 = this.phoneDetailRow;
+        int i4 = this.detailRow;
+        int i5 = this.currentType;
+        boolean z2 = i5 == 1 && this.currentSubType == 1;
         this.rowCount = 0;
-        int i7 = this.rulesType;
-        if (i7 == 5) {
+        int i6 = this.rulesType;
+        if (i6 == 5) {
             this.rowCount = 0 + 1;
             this.messageRow = 0;
         } else {
             this.messageRow = -1;
         }
-        int i8 = this.rowCount;
+        int i7 = this.rowCount;
+        int i8 = i7 + 1;
+        this.rowCount = i8;
+        this.sectionRow = i7;
         int i9 = i8 + 1;
         this.rowCount = i9;
-        this.sectionRow = i8;
+        this.everybodyRow = i8;
         int i10 = i9 + 1;
         this.rowCount = i10;
-        this.everybodyRow = i9;
-        int i11 = i10 + 1;
-        this.rowCount = i11;
-        this.myContactsRow = i10;
-        if (i7 == 0 || i7 == 2 || i7 == 3 || i7 == 5 || i7 == 6) {
-            this.rowCount = i11 + 1;
-            this.nobodyRow = i11;
+        this.myContactsRow = i9;
+        if (i6 == 0 || i6 == 2 || i6 == 3 || i6 == 5 || i6 == 6) {
+            this.rowCount = i10 + 1;
+            this.nobodyRow = i10;
         } else {
             this.nobodyRow = -1;
         }
-        if (i7 == 6 && i6 == 1) {
-            int i12 = this.rowCount;
+        if (i6 == 6 && i5 == 1) {
+            int i11 = this.rowCount;
+            int i12 = i11 + 1;
+            this.rowCount = i12;
+            this.phoneDetailRow = i11;
             int i13 = i12 + 1;
             this.rowCount = i13;
-            this.phoneDetailRow = i12;
+            this.phoneSectionRow = i12;
             int i14 = i13 + 1;
             this.rowCount = i14;
-            this.phoneSectionRow = i13;
-            int i15 = i14 + 1;
-            this.rowCount = i15;
-            this.phoneEverybodyRow = i14;
-            this.rowCount = i15 + 1;
-            this.phoneContactsRow = i15;
+            this.phoneEverybodyRow = i13;
+            this.rowCount = i14 + 1;
+            this.phoneContactsRow = i14;
         } else {
             this.phoneDetailRow = -1;
             this.phoneSectionRow = -1;
             this.phoneEverybodyRow = -1;
             this.phoneContactsRow = -1;
         }
-        int i16 = this.rowCount;
+        int i15 = this.rowCount;
+        int i16 = i15 + 1;
+        this.rowCount = i16;
+        this.detailRow = i15;
         int i17 = i16 + 1;
         this.rowCount = i17;
-        this.detailRow = i16;
-        int i18 = i17 + 1;
-        this.rowCount = i18;
-        this.shareSectionRow = i17;
-        if (i6 == 1 || i6 == 2) {
-            this.rowCount = i18 + 1;
-            this.alwaysShareRow = i18;
+        this.shareSectionRow = i16;
+        if (i5 == 1 || i5 == 2) {
+            this.rowCount = i17 + 1;
+            this.alwaysShareRow = i17;
         } else {
             this.alwaysShareRow = -1;
         }
-        if (i6 == 0 || i6 == 2) {
-            int i19 = this.rowCount;
-            this.rowCount = i19 + 1;
-            this.neverShareRow = i19;
+        if (i5 == 0 || i5 == 2) {
+            int i18 = this.rowCount;
+            this.rowCount = i18 + 1;
+            this.neverShareRow = i18;
         } else {
             this.neverShareRow = -1;
         }
-        int i20 = this.rowCount;
-        int i21 = i20 + 1;
-        this.rowCount = i21;
-        this.shareDetailRow = i20;
-        if (i7 == 2) {
+        int i19 = this.rowCount;
+        int i20 = i19 + 1;
+        this.rowCount = i20;
+        this.shareDetailRow = i19;
+        if (i6 == 2) {
+            int i21 = i20 + 1;
+            this.rowCount = i21;
+            this.p2pSectionRow = i20;
             int i22 = i21 + 1;
             this.rowCount = i22;
-            this.p2pSectionRow = i21;
-            int i23 = i22 + 1;
-            this.rowCount = i23;
-            this.p2pRow = i22;
-            this.rowCount = i23 + 1;
-            this.p2pDetailRow = i23;
+            this.p2pRow = i21;
+            this.rowCount = i22 + 1;
+            this.p2pDetailRow = i22;
         } else {
             this.p2pSectionRow = -1;
             this.p2pRow = -1;
@@ -1057,64 +972,58 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         }
         if (z) {
             int childCount = this.listView.getChildCount();
-            for (int i24 = 0; i24 < childCount; i24++) {
-                View childAt = this.listView.getChildAt(i24);
+            for (int i23 = 0; i23 < childCount; i23++) {
+                View childAt = this.listView.getChildAt(i23);
                 if ((childAt instanceof RadioCell) && (findContainingViewHolder = this.listView.findContainingViewHolder(childAt)) != null) {
                     int adapterPosition = findContainingViewHolder.getAdapterPosition();
                     RadioCell radioCell = (RadioCell) childAt;
-                    int i25 = this.everybodyRow;
-                    if (adapterPosition == i25 || adapterPosition == this.myContactsRow || adapterPosition == this.nobodyRow) {
-                        radioCell.setChecked(this.currentType == (adapterPosition == i25 ? 0 : adapterPosition == this.myContactsRow ? 2 : 1), true);
+                    int i24 = this.everybodyRow;
+                    if (adapterPosition == i24 || adapterPosition == this.myContactsRow || adapterPosition == this.nobodyRow) {
+                        radioCell.setChecked(this.currentType == (adapterPosition == i24 ? 0 : adapterPosition == this.myContactsRow ? 2 : 1), true);
                     } else {
-                        if (adapterPosition == this.phoneContactsRow) {
-                            i = 1;
-                        } else {
-                            int i26 = this.phoneEverybodyRow;
-                            i = 0;
-                        }
-                        radioCell.setChecked(this.currentSubType == i, true);
+                        radioCell.setChecked(this.currentSubType == (adapterPosition == this.phoneContactsRow ? 1 : 0), true);
                     }
                 }
             }
             if (this.prevSubtypeContacts != z2) {
-                this.listAdapter.notifyItemChanged(i5);
+                this.listAdapter.notifyItemChanged(i4);
             }
-            int i27 = this.alwaysShareRow;
-            if ((i27 != -1 || i2 == -1 || this.neverShareRow == -1 || i3 != -1) && (i27 == -1 || i2 != -1 || this.neverShareRow != -1 || i3 == -1)) {
-                if (i27 == -1 && i2 != -1) {
-                    this.listAdapter.notifyItemRemoved(i2);
-                } else if (i27 != -1 && i2 == -1) {
-                    this.listAdapter.notifyItemInserted(i27);
+            int i25 = this.alwaysShareRow;
+            if ((i25 != -1 || i == -1 || this.neverShareRow == -1 || i2 != -1) && (i25 == -1 || i != -1 || this.neverShareRow != -1 || i2 == -1)) {
+                if (i25 == -1 && i != -1) {
+                    this.listAdapter.notifyItemRemoved(i);
+                } else if (i25 != -1 && i == -1) {
+                    this.listAdapter.notifyItemInserted(i25);
                 }
-                int i28 = this.neverShareRow;
-                if (i28 == -1 && i3 != -1) {
-                    this.listAdapter.notifyItemRemoved(i3);
-                    int i29 = this.phoneDetailRow;
-                    if (i29 == -1 && i4 != -1) {
-                        this.listAdapter.notifyItemRangeRemoved(i4, 4);
-                    } else if (i29 != -1 && i4 == -1) {
-                        this.listAdapter.notifyItemRangeInserted(i29, 4);
+                int i26 = this.neverShareRow;
+                if (i26 == -1 && i2 != -1) {
+                    this.listAdapter.notifyItemRemoved(i2);
+                    int i27 = this.phoneDetailRow;
+                    if (i27 == -1 && i3 != -1) {
+                        this.listAdapter.notifyItemRangeRemoved(i3, 4);
+                    } else if (i27 != -1 && i3 == -1) {
+                        this.listAdapter.notifyItemRangeInserted(i27, 4);
                     }
-                } else if (i28 != -1 && i3 == -1) {
-                    int i30 = this.phoneDetailRow;
-                    if (i30 == -1 && i4 != -1) {
-                        this.listAdapter.notifyItemRangeRemoved(i4, 4);
-                    } else if (i30 != -1 && i4 == -1) {
-                        this.listAdapter.notifyItemRangeInserted(i30, 4);
+                } else if (i26 != -1 && i2 == -1) {
+                    int i28 = this.phoneDetailRow;
+                    if (i28 == -1 && i3 != -1) {
+                        this.listAdapter.notifyItemRangeRemoved(i3, 4);
+                    } else if (i28 != -1 && i3 == -1) {
+                        this.listAdapter.notifyItemRangeInserted(i28, 4);
                     }
                     this.listAdapter.notifyItemInserted(this.neverShareRow);
                 }
             } else {
                 ListAdapter listAdapter3 = this.listAdapter;
-                if (i27 != -1) {
-                    i2 = i3;
+                if (i25 != -1) {
+                    i = i2;
                 }
-                listAdapter3.notifyItemChanged(i2);
-                int i31 = this.phoneDetailRow;
-                if (i31 == -1 && i4 != -1) {
-                    this.listAdapter.notifyItemRangeRemoved(i4, 4);
-                } else if (i31 != -1 && i4 == -1) {
-                    this.listAdapter.notifyItemRangeInserted(i31, 4);
+                listAdapter3.notifyItemChanged(i);
+                int i29 = this.phoneDetailRow;
+                if (i29 == -1 && i3 != -1) {
+                    this.listAdapter.notifyItemRangeRemoved(i3, 4);
+                } else if (i29 != -1 && i3 == -1) {
+                    this.listAdapter.notifyItemRangeInserted(i29, 4);
                 }
             }
         } else {
@@ -1166,17 +1075,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                         builder.setMessage(LocaleController.getString("CustomHelp", NUM));
                     }
                     builder.setTitle(LocaleController.getString("AppName", NUM));
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(globalMainSettings) {
-                        public final /* synthetic */ SharedPreferences f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            PrivacyControlActivity.this.lambda$processDone$7$PrivacyControlActivity(this.f$1, dialogInterface, i);
-                        }
-                    });
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new PrivacyControlActivity$$ExternalSyntheticLambda2(this, globalMainSettings));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     showDialog(builder.create());
                     return;
@@ -1187,8 +1086,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processDone$7 */
-    public /* synthetic */ void lambda$processDone$7$PrivacyControlActivity(SharedPreferences sharedPreferences, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$processDone$7(SharedPreferences sharedPreferences, DialogInterface dialogInterface, int i) {
         applyCurrentPrivacySettings();
         sharedPreferences.edit().putBoolean("privacyAlertShowed", true).commit();
     }
@@ -1201,29 +1099,19 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", NUM));
         builder.setMessage(LocaleController.getString("PrivacySettingsChangedAlert", NUM));
-        builder.setPositiveButton(LocaleController.getString("ApplyTheme", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                PrivacyControlActivity.this.lambda$checkDiscard$8$PrivacyControlActivity(dialogInterface, i);
-            }
-        });
-        builder.setNegativeButton(LocaleController.getString("PassportDiscard", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                PrivacyControlActivity.this.lambda$checkDiscard$9$PrivacyControlActivity(dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("ApplyTheme", NUM), new PrivacyControlActivity$$ExternalSyntheticLambda1(this));
+        builder.setNegativeButton(LocaleController.getString("PassportDiscard", NUM), new PrivacyControlActivity$$ExternalSyntheticLambda0(this));
         showDialog(builder.create());
         return false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkDiscard$8 */
-    public /* synthetic */ void lambda$checkDiscard$8$PrivacyControlActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$8(DialogInterface dialogInterface, int i) {
         processDone();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkDiscard$9 */
-    public /* synthetic */ void lambda$checkDiscard$9$PrivacyControlActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$9(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
 
@@ -1275,14 +1163,14 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             return new RecyclerListView.Holder(view);
         }
 
-        private int getUsersCount(ArrayList<Integer> arrayList) {
+        private int getUsersCount(ArrayList<Long> arrayList) {
             int i = 0;
             for (int i2 = 0; i2 < arrayList.size(); i2++) {
-                int intValue = arrayList.get(i2).intValue();
-                if (intValue > 0) {
+                long longValue = arrayList.get(i2).longValue();
+                if (longValue > 0) {
                     i++;
                 } else {
-                    TLRPC$Chat chat = PrivacyControlActivity.this.getMessagesController().getChat(Integer.valueOf(-intValue));
+                    TLRPC$Chat chat = PrivacyControlActivity.this.getMessagesController().getChat(Long.valueOf(-longValue));
                     if (chat != null) {
                         i += chat.participants_count;
                     }
@@ -1311,15 +1199,15 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         /* JADX WARNING: type inference failed for: r3v15 */
         /* JADX WARNING: type inference failed for: r3v17 */
         /* JADX WARNING: type inference failed for: r3v19 */
-        /* JADX WARNING: Code restructure failed: missing block: B:150:0x037a, code lost:
-            if (org.telegram.ui.PrivacyControlActivity.access$1900(r10.this$0) == 2) goto L_0x02dc;
+        /* JADX WARNING: Code restructure failed: missing block: B:148:0x0372, code lost:
+            if (org.telegram.ui.PrivacyControlActivity.access$1900(r10.this$0) == 2) goto L_0x02d4;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:152:0x0384, code lost:
-            if (r12 == org.telegram.ui.PrivacyControlActivity.access$2700(r10.this$0)) goto L_0x0386;
+        /* JADX WARNING: Code restructure failed: missing block: B:150:0x037c, code lost:
+            if (r12 == org.telegram.ui.PrivacyControlActivity.access$2700(r10.this$0)) goto L_0x037e;
          */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:155:0x038b  */
-        /* JADX WARNING: Removed duplicated region for block: B:211:? A[RETURN, SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:153:0x0383  */
+        /* JADX WARNING: Removed duplicated region for block: B:208:? A[RETURN, SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r11, int r12) {
             /*
@@ -1329,23 +1217,23 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 r2 = 3
                 r3 = 0
                 r4 = 1
-                if (r0 == 0) goto L_0x03ab
+                if (r0 == 0) goto L_0x03a5
                 r5 = 4
                 r6 = 5
                 r7 = 6
                 r8 = 2
-                if (r0 == r4) goto L_0x021a
-                if (r0 == r8) goto L_0x013a
+                if (r0 == r4) goto L_0x0212
+                if (r0 == r8) goto L_0x0132
                 if (r0 == r2) goto L_0x0016
-                goto L_0x0494
+                goto L_0x048e
             L_0x0016:
                 android.view.View r11 = r11.itemView
                 org.telegram.ui.Cells.RadioCell r11 = (org.telegram.ui.Cells.RadioCell) r11
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.everybodyRow
-                r5 = 2131626009(0x7f0e0819, float:1.8879242E38)
+                r5 = 2131626026(0x7f0e082a, float:1.8879277E38)
                 java.lang.String r6 = "LastSeenContacts"
-                r7 = 2131626015(0x7f0e081f, float:1.8879254E38)
+                r7 = 2131626032(0x7f0e0830, float:1.8879289E38)
                 java.lang.String r9 = "LastSeenEverybody"
                 if (r12 == r0) goto L_0x0072
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
@@ -1368,11 +1256,11 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 r4 = 0
             L_0x0053:
                 r11.setText(r12, r4, r3)
-                goto L_0x0494
+                goto L_0x048e
             L_0x0058:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.phoneEverybodyRow
-                if (r12 != r0) goto L_0x0494
+                if (r12 != r0) goto L_0x048e
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r9, r7)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentSubType
@@ -1380,7 +1268,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 r3 = 1
             L_0x006d:
                 r11.setText(r12, r3, r4)
-                goto L_0x0494
+                goto L_0x048e
             L_0x0072:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.everybodyRow
@@ -1388,7 +1276,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r2) goto L_0x0099
-                r12 = 2131626662(0x7f0e0aa6, float:1.8880567E38)
+                r12 = 2131626695(0x7f0e0ac7, float:1.8880633E38)
                 java.lang.String r0 = "P2PEverybody"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
@@ -1397,7 +1285,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 r3 = 1
             L_0x0094:
                 r11.setText(r12, r3, r4)
-                goto L_0x0494
+                goto L_0x048e
             L_0x0099:
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r9, r7)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
@@ -1406,7 +1294,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 r3 = 1
             L_0x00a6:
                 r11.setText(r12, r3, r4)
-                goto L_0x0494
+                goto L_0x048e
             L_0x00ab:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.myContactsRow
@@ -1414,7 +1302,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r2) goto L_0x00dd
-                r12 = 2131626657(0x7f0e0aa1, float:1.8880556E38)
+                r12 = 2131626690(0x7f0e0ac2, float:1.8880623E38)
                 java.lang.String r0 = "P2PContacts"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
@@ -1431,7 +1319,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 r3 = 1
             L_0x00d8:
                 r11.setText(r12, r0, r3)
-                goto L_0x0494
+                goto L_0x048e
             L_0x00dd:
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
@@ -1448,291 +1336,288 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 r3 = 1
             L_0x00f5:
                 r11.setText(r12, r0, r3)
-                goto L_0x0494
+                goto L_0x048e
             L_0x00fa:
-                org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
-                int r0 = r0.nobodyRow
-                if (r12 != r0) goto L_0x0494
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x0122
-                r12 = 2131626664(0x7f0e0aa8, float:1.888057E38)
+                if (r12 != r2) goto L_0x011a
+                r12 = 2131626697(0x7f0e0ac9, float:1.8880638E38)
                 java.lang.String r0 = "P2PNobody"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentType
-                if (r0 != r4) goto L_0x011c
-                goto L_0x011d
-            L_0x011c:
+                if (r0 != r4) goto L_0x0114
+                goto L_0x0115
+            L_0x0114:
                 r4 = 0
-            L_0x011d:
+            L_0x0115:
                 r11.setText(r12, r4, r3)
-                goto L_0x0494
-            L_0x0122:
-                r12 = 2131626018(0x7f0e0822, float:1.887926E38)
+                goto L_0x048e
+            L_0x011a:
+                r12 = 2131626035(0x7f0e0833, float:1.8879295E38)
                 java.lang.String r0 = "LastSeenNobody"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentType
-                if (r0 != r4) goto L_0x0134
-                goto L_0x0135
-            L_0x0134:
+                if (r0 != r4) goto L_0x012c
+                goto L_0x012d
+            L_0x012c:
                 r4 = 0
-            L_0x0135:
+            L_0x012d:
                 r11.setText(r12, r4, r3)
-                goto L_0x0494
-            L_0x013a:
+                goto L_0x048e
+            L_0x0132:
                 android.view.View r11 = r11.itemView
                 org.telegram.ui.Cells.HeaderCell r11 = (org.telegram.ui.Cells.HeaderCell) r11
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.sectionRow
-                if (r12 != r0) goto L_0x01d8
+                if (r12 != r0) goto L_0x01d0
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r7) goto L_0x015c
-                r12 = 2131627203(0x7f0e0cc3, float:1.8881664E38)
+                if (r12 != r7) goto L_0x0154
+                r12 = 2131627236(0x7f0e0ce4, float:1.888173E38)
                 java.lang.String r0 = "PrivacyPhoneTitle"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x015c:
+                goto L_0x048e
+            L_0x0154:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r6) goto L_0x0172
-                r12 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
+                if (r12 != r6) goto L_0x016a
+                r12 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
                 java.lang.String r0 = "PrivacyForwardsTitle"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x0172:
+                goto L_0x048e
+            L_0x016a:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r5) goto L_0x0188
-                r12 = 2131627211(0x7f0e0ccb, float:1.888168E38)
+                if (r12 != r5) goto L_0x0180
+                r12 = 2131627244(0x7f0e0cec, float:1.8881747E38)
                 java.lang.String r0 = "PrivacyProfilePhotoTitle"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x0188:
+                goto L_0x048e
+            L_0x0180:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x019e
-                r12 = 2131626661(0x7f0e0aa5, float:1.8880564E38)
+                if (r12 != r2) goto L_0x0196
+                r12 = 2131626694(0x7f0e0ac6, float:1.8880631E38)
                 java.lang.String r0 = "P2PEnabledWith"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x019e:
+                goto L_0x048e
+            L_0x0196:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r8) goto L_0x01b4
-                r12 = 2131628507(0x7f0e11db, float:1.8884309E38)
+                if (r12 != r8) goto L_0x01ac
+                r12 = 2131628547(0x7f0e1203, float:1.888439E38)
                 java.lang.String r0 = "WhoCanCallMe"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x01b4:
+                goto L_0x048e
+            L_0x01ac:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r4) goto L_0x01ca
-                r12 = 2131628502(0x7f0e11d6, float:1.8884298E38)
+                if (r12 != r4) goto L_0x01c2
+                r12 = 2131628542(0x7f0e11fe, float:1.888438E38)
                 java.lang.String r0 = "WhoCanAddMe"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x01ca:
-                r12 = 2131626020(0x7f0e0824, float:1.8879264E38)
+                goto L_0x048e
+            L_0x01c2:
+                r12 = 2131626037(0x7f0e0835, float:1.8879299E38)
                 java.lang.String r0 = "LastSeenTitle"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x01d8:
+                goto L_0x048e
+            L_0x01d0:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.shareSectionRow
-                if (r12 != r0) goto L_0x01ee
+                if (r12 != r0) goto L_0x01e6
                 r12 = 2131624205(0x7f0e010d, float:1.8875583E38)
                 java.lang.String r0 = "AddExceptions"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x01ee:
+                goto L_0x048e
+            L_0x01e6:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.p2pSectionRow
-                if (r12 != r0) goto L_0x0204
-                r12 = 2131627191(0x7f0e0cb7, float:1.888164E38)
+                if (r12 != r0) goto L_0x01fc
+                r12 = 2131627224(0x7f0e0cd8, float:1.8881706E38)
                 java.lang.String r0 = "PrivacyP2PHeader"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x0204:
+                goto L_0x048e
+            L_0x01fc:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.phoneSectionRow
-                if (r12 != r0) goto L_0x0494
-                r12 = 2131627204(0x7f0e0cc4, float:1.8881666E38)
+                if (r12 != r0) goto L_0x048e
+                r12 = 2131627237(0x7f0e0ce5, float:1.8881733E38)
                 java.lang.String r0 = "PrivacyPhoneTitle2"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0494
-            L_0x021a:
+                goto L_0x048e
+            L_0x0212:
                 android.view.View r11 = r11.itemView
                 org.telegram.ui.Cells.TextInfoPrivacyCell r11 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r11
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.detailRow
                 r1 = 2131165448(0x7var_, float:1.7945113E38)
                 r9 = 2131165449(0x7var_, float:1.7945115E38)
-                if (r12 != r0) goto L_0x02e1
+                if (r12 != r0) goto L_0x02d9
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r7) goto L_0x0267
+                if (r12 != r7) goto L_0x025f
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r12.currentType
-                if (r0 != r4) goto L_0x0245
+                if (r0 != r4) goto L_0x023d
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentSubType
-                if (r0 != r4) goto L_0x0245
+                if (r0 != r4) goto L_0x023d
                 r3 = 1
-            L_0x0245:
+            L_0x023d:
                 boolean r12 = r12.prevSubtypeContacts = r3
-                if (r12 == 0) goto L_0x0259
-                r12 = 2131627202(0x7f0e0cc2, float:1.8881662E38)
+                if (r12 == 0) goto L_0x0251
+                r12 = 2131627235(0x7f0e0ce3, float:1.8881729E38)
                 java.lang.String r0 = "PrivacyPhoneInfo3"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x02dc
-            L_0x0259:
-                r12 = 2131627200(0x7f0e0cc0, float:1.8881658E38)
+                goto L_0x02d4
+            L_0x0251:
+                r12 = 2131627233(0x7f0e0ce1, float:1.8881725E38)
                 java.lang.String r0 = "PrivacyPhoneInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x02dc
-            L_0x0267:
+                goto L_0x02d4
+            L_0x025f:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r6) goto L_0x027c
-                r12 = 2131627183(0x7f0e0caf, float:1.8881623E38)
+                if (r12 != r6) goto L_0x0274
+                r12 = 2131627216(0x7f0e0cd0, float:1.888169E38)
                 java.lang.String r0 = "PrivacyForwardsInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x02dc
-            L_0x027c:
+                goto L_0x02d4
+            L_0x0274:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r5) goto L_0x0291
-                r12 = 2131627209(0x7f0e0cc9, float:1.8881676E38)
+                if (r12 != r5) goto L_0x0289
+                r12 = 2131627242(0x7f0e0cea, float:1.8881743E38)
                 java.lang.String r0 = "PrivacyProfilePhotoInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x02dc
-            L_0x0291:
+                goto L_0x02d4
+            L_0x0289:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x02a6
-                r12 = 2131627174(0x7f0e0ca6, float:1.8881605E38)
+                if (r12 != r2) goto L_0x029e
+                r12 = 2131627207(0x7f0e0cc7, float:1.8881672E38)
                 java.lang.String r0 = "PrivacyCallsP2PHelp"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x02dc
-            L_0x02a6:
+                goto L_0x02d4
+            L_0x029e:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r8) goto L_0x02bb
-                r12 = 2131628508(0x7f0e11dc, float:1.888431E38)
+                if (r12 != r8) goto L_0x02b3
+                r12 = 2131628548(0x7f0e1204, float:1.8884392E38)
                 java.lang.String r0 = "WhoCanCallMeInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x02dc
-            L_0x02bb:
+                goto L_0x02d4
+            L_0x02b3:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r4) goto L_0x02d0
-                r12 = 2131628503(0x7f0e11d7, float:1.88843E38)
+                if (r12 != r4) goto L_0x02c8
+                r12 = 2131628543(0x7f0e11ff, float:1.8884382E38)
                 java.lang.String r0 = "WhoCanAddMeInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x02dc
-            L_0x02d0:
-                r12 = 2131625077(0x7f0e0475, float:1.8877352E38)
+                goto L_0x02d4
+            L_0x02c8:
+                r12 = 2131625090(0x7f0e0482, float:1.8877378E38)
                 java.lang.String r0 = "CustomHelp"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-            L_0x02dc:
+            L_0x02d4:
                 r3 = 2131165448(0x7var_, float:1.7945113E38)
-                goto L_0x0389
-            L_0x02e1:
+                goto L_0x0381
+            L_0x02d9:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.shareDetailRow
-                if (r12 != r0) goto L_0x037e
+                if (r12 != r0) goto L_0x0376
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r7) goto L_0x02ff
-                r12 = 2131627201(0x7f0e0cc1, float:1.888166E38)
+                if (r12 != r7) goto L_0x02f7
+                r12 = 2131627234(0x7f0e0ce2, float:1.8881727E38)
                 java.lang.String r0 = "PrivacyPhoneInfo2"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0374
-            L_0x02ff:
+                goto L_0x036c
+            L_0x02f7:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r6) goto L_0x0314
-                r12 = 2131627184(0x7f0e0cb0, float:1.8881625E38)
+                if (r12 != r6) goto L_0x030c
+                r12 = 2131627217(0x7f0e0cd1, float:1.8881692E38)
                 java.lang.String r0 = "PrivacyForwardsInfo2"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0374
-            L_0x0314:
+                goto L_0x036c
+            L_0x030c:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r5) goto L_0x0329
-                r12 = 2131627210(0x7f0e0cca, float:1.8881678E38)
+                if (r12 != r5) goto L_0x0321
+                r12 = 2131627243(0x7f0e0ceb, float:1.8881745E38)
                 java.lang.String r0 = "PrivacyProfilePhotoInfo2"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0374
-            L_0x0329:
+                goto L_0x036c
+            L_0x0321:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x033e
-                r12 = 2131625079(0x7f0e0477, float:1.8877356E38)
+                if (r12 != r2) goto L_0x0336
+                r12 = 2131625092(0x7f0e0484, float:1.8877382E38)
                 java.lang.String r0 = "CustomP2PInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0374
-            L_0x033e:
+                goto L_0x036c
+            L_0x0336:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r8) goto L_0x0353
-                r12 = 2131625076(0x7f0e0474, float:1.887735E38)
+                if (r12 != r8) goto L_0x034b
+                r12 = 2131625089(0x7f0e0481, float:1.8877376E38)
                 java.lang.String r0 = "CustomCallInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0374
-            L_0x0353:
+                goto L_0x036c
+            L_0x034b:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r4) goto L_0x0368
-                r12 = 2131625080(0x7f0e0478, float:1.8877358E38)
+                if (r12 != r4) goto L_0x0360
+                r12 = 2131625093(0x7f0e0485, float:1.8877384E38)
                 java.lang.String r0 = "CustomShareInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0374
-            L_0x0368:
-                r12 = 2131625081(0x7f0e0479, float:1.887736E38)
+                goto L_0x036c
+            L_0x0360:
+                r12 = 2131625094(0x7f0e0486, float:1.8877386E38)
                 java.lang.String r0 = "CustomShareSettingsHelp"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-            L_0x0374:
+            L_0x036c:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
-                if (r12 != r8) goto L_0x0386
-                goto L_0x02dc
-            L_0x037e:
+                if (r12 != r8) goto L_0x037e
+                goto L_0x02d4
+            L_0x0376:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.p2pDetailRow
-                if (r12 != r0) goto L_0x0389
-            L_0x0386:
+                if (r12 != r0) goto L_0x0381
+            L_0x037e:
                 r3 = 2131165449(0x7var_, float:1.7945115E38)
-            L_0x0389:
-                if (r3 == 0) goto L_0x0494
+            L_0x0381:
+                if (r3 == 0) goto L_0x048e
                 android.content.Context r12 = r10.mContext
                 java.lang.String r0 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r3, (java.lang.String) r0)
@@ -1744,105 +1629,105 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 r0.<init>(r1, r12)
                 r0.setFullsize(r4)
                 r11.setBackgroundDrawable(r0)
-                goto L_0x0494
-            L_0x03ab:
+                goto L_0x048e
+            L_0x03a5:
                 android.view.View r11 = r11.itemView
                 org.telegram.ui.Cells.TextSettingsCell r11 = (org.telegram.ui.Cells.TextSettingsCell) r11
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.alwaysShareRow
                 java.lang.String r5 = "Users"
-                r6 = 2131625334(0x7f0e0576, float:1.8877873E38)
+                r6 = 2131625349(0x7f0e0585, float:1.8877903E38)
                 java.lang.String r7 = "EmpryUsersPlaceholder"
-                if (r12 != r0) goto L_0x0413
+                if (r12 != r0) goto L_0x040d
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 java.util.ArrayList r12 = r12.currentPlus
                 int r12 = r12.size()
-                if (r12 == 0) goto L_0x03d9
+                if (r12 == 0) goto L_0x03d3
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 java.util.ArrayList r12 = r12.currentPlus
                 int r12 = r10.getUsersCount(r12)
                 java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r5, r12)
-                goto L_0x03dd
-            L_0x03d9:
+                goto L_0x03d7
+            L_0x03d3:
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            L_0x03dd:
+            L_0x03d7:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.rulesType
-                if (r0 == 0) goto L_0x03fc
+                if (r0 == 0) goto L_0x03f6
                 r0 = 2131624254(0x7f0e013e, float:1.8875683E38)
                 java.lang.String r2 = "AlwaysAllow"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 org.telegram.ui.PrivacyControlActivity r2 = org.telegram.ui.PrivacyControlActivity.this
                 int r2 = r2.neverShareRow
-                if (r2 == r1) goto L_0x03f7
+                if (r2 == r1) goto L_0x03f1
                 r3 = 1
-            L_0x03f7:
+            L_0x03f1:
                 r11.setTextAndValue(r0, r12, r3)
-                goto L_0x0494
-            L_0x03fc:
+                goto L_0x048e
+            L_0x03f6:
                 r0 = 2131624255(0x7f0e013f, float:1.8875685E38)
                 java.lang.String r2 = "AlwaysShareWith"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 org.telegram.ui.PrivacyControlActivity r2 = org.telegram.ui.PrivacyControlActivity.this
                 int r2 = r2.neverShareRow
-                if (r2 == r1) goto L_0x040e
+                if (r2 == r1) goto L_0x0408
                 r3 = 1
-            L_0x040e:
+            L_0x0408:
                 r11.setTextAndValue(r0, r12, r3)
-                goto L_0x0494
-            L_0x0413:
+                goto L_0x048e
+            L_0x040d:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.neverShareRow
-                if (r12 != r0) goto L_0x045c
+                if (r12 != r0) goto L_0x0456
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 java.util.ArrayList r12 = r12.currentMinus
                 int r12 = r12.size()
-                if (r12 == 0) goto L_0x0436
+                if (r12 == 0) goto L_0x0430
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 java.util.ArrayList r12 = r12.currentMinus
                 int r12 = r10.getUsersCount(r12)
                 java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r5, r12)
-                goto L_0x043a
-            L_0x0436:
+                goto L_0x0434
+            L_0x0430:
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            L_0x043a:
+            L_0x0434:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.rulesType
-                if (r0 == 0) goto L_0x044f
-                r0 = 2131626322(0x7f0e0952, float:1.8879877E38)
+                if (r0 == 0) goto L_0x0449
+                r0 = 2131626352(0x7f0e0970, float:1.8879938E38)
                 java.lang.String r1 = "NeverAllow"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r11.setTextAndValue(r0, r12, r3)
-                goto L_0x0494
-            L_0x044f:
-                r0 = 2131626323(0x7f0e0953, float:1.8879879E38)
+                goto L_0x048e
+            L_0x0449:
+                r0 = 2131626353(0x7f0e0971, float:1.887994E38)
                 java.lang.String r1 = "NeverShareWith"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r11.setTextAndValue(r0, r12, r3)
-                goto L_0x0494
-            L_0x045c:
+                goto L_0x048e
+            L_0x0456:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.p2pRow
-                if (r12 != r0) goto L_0x0494
+                if (r12 != r0) goto L_0x048e
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.currentAccount
                 org.telegram.messenger.ContactsController r12 = org.telegram.messenger.ContactsController.getInstance(r12)
                 boolean r12 = r12.getLoadingPrivicyInfo(r2)
-                if (r12 == 0) goto L_0x047e
-                r12 = 2131626074(0x7f0e085a, float:1.8879374E38)
+                if (r12 == 0) goto L_0x0478
+                r12 = 2131626091(0x7f0e086b, float:1.8879408E38)
                 java.lang.String r0 = "Loading"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                goto L_0x0488
-            L_0x047e:
+                goto L_0x0482
+            L_0x0478:
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 org.telegram.messenger.AccountInstance r12 = r12.getAccountInstance()
                 java.lang.String r12 = org.telegram.ui.PrivacySettingsActivity.formatRulesString(r12, r2)
-            L_0x0488:
-                r0 = 2131627190(0x7f0e0cb6, float:1.8881637E38)
+            L_0x0482:
+                r0 = 2131627223(0x7f0e0cd7, float:1.8881704E38)
                 java.lang.String r1 = "PrivacyP2P2"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r11.setTextAndValue(r0, r12, r3)
-            L_0x0494:
+            L_0x048e:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PrivacyControlActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

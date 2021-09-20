@@ -48,16 +48,11 @@ public class UndoStore {
     }
 
     private void notifyOfHistoryChanges() {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                UndoStore.this.lambda$notifyOfHistoryChanges$0$UndoStore();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new UndoStore$$ExternalSyntheticLambda0(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$notifyOfHistoryChanges$0 */
-    public /* synthetic */ void lambda$notifyOfHistoryChanges$0$UndoStore() {
+    public /* synthetic */ void lambda$notifyOfHistoryChanges$0() {
         UndoStoreDelegate undoStoreDelegate = this.delegate;
         if (undoStoreDelegate != null) {
             undoStoreDelegate.historyChanged();

@@ -76,7 +76,7 @@ public class PollEditTextCell extends FrameLayout {
         Context context2 = context;
         View.OnClickListener onClickListener2 = onClickListener;
         if (z) {
-            AnonymousClass1 r4 = new EditTextCaption(context2) {
+            AnonymousClass1 r5 = new EditTextCaption(context2, (Theme.ResourcesProvider) null) {
                 public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
                     InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
                     if (PollEditTextCell.this.showNextButton) {
@@ -113,8 +113,8 @@ public class PollEditTextCell extends FrameLayout {
                     return startActionMode;
                 }
             };
-            this.textView = r4;
-            r4.setAllowTextEntitiesIntersection(true);
+            this.textView = r5;
+            r5.setAllowTextEntitiesIntersection(true);
         } else {
             this.textView = new EditTextBoldCursor(context2) {
                 public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
@@ -192,19 +192,14 @@ public class PollEditTextCell extends FrameLayout {
             this.checkBox.setAlpha(0.0f);
             this.checkBox.setDrawBackgroundAsArc(8);
             addView(this.checkBox, LayoutHelper.createFrame(48, 48.0f, (!LocaleController.isRTL ? 3 : i) | 48, 6.0f, 2.0f, 6.0f, 0.0f));
-            this.checkBox.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PollEditTextCell.this.lambda$new$0$PollEditTextCell(view);
-                }
-            });
+            this.checkBox.setOnClickListener(new PollEditTextCell$$ExternalSyntheticLambda0(this));
             return;
         }
         addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i) | 16, 19.0f, 0.0f, 19.0f, 0.0f));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$PollEditTextCell(View view) {
+    public /* synthetic */ void lambda$new$0(View view) {
         if (this.checkBox.getTag() != null) {
             onCheckBoxClick(this, !this.checkBox.isChecked());
         }

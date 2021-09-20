@@ -9,7 +9,6 @@ import android.text.TextPaint;
 import android.text.style.CharacterStyle;
 import android.view.View;
 import java.util.ArrayList;
-import org.telegram.ui.Components.EllipsizeSpanAnimator;
 
 public class EllipsizeSpanAnimator {
     boolean attachedToWindow;
@@ -73,17 +72,7 @@ public class EllipsizeSpanAnimator {
 
     private Animator createEllipsizeAnimator(TextAlphaSpan textAlphaSpan, int i, int i2, int i3, int i4) {
         ValueAnimator ofInt = ValueAnimator.ofInt(new int[]{i, i2});
-        ofInt.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(textAlphaSpan) {
-            public final /* synthetic */ EllipsizeSpanAnimator.TextAlphaSpan f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                EllipsizeSpanAnimator.this.lambda$createEllipsizeAnimator$0$EllipsizeSpanAnimator(this.f$1, valueAnimator);
-            }
-        });
+        ofInt.addUpdateListener(new EllipsizeSpanAnimator$$ExternalSyntheticLambda0(this, textAlphaSpan));
         ofInt.setDuration((long) i4);
         ofInt.setStartDelay((long) i3);
         ofInt.setInterpolator(CubicBezierInterpolator.DEFAULT);
@@ -91,8 +80,7 @@ public class EllipsizeSpanAnimator {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createEllipsizeAnimator$0 */
-    public /* synthetic */ void lambda$createEllipsizeAnimator$0$EllipsizeSpanAnimator(TextAlphaSpan textAlphaSpan, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$createEllipsizeAnimator$0(TextAlphaSpan textAlphaSpan, ValueAnimator valueAnimator) {
         textAlphaSpan.setAlpha(((Integer) valueAnimator.getAnimatedValue()).intValue());
         for (int i = 0; i < this.ellipsizedViews.size(); i++) {
             this.ellipsizedViews.get(i).invalidate();

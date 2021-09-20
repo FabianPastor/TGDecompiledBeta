@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.RLottieDrawable;
 
@@ -47,15 +48,19 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public ActionBarMenuItem addItem(int i, int i2) {
-        return addItem(i, i2, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor);
+        return addItem(i, i2, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, (Theme.ResourcesProvider) null);
+    }
+
+    public ActionBarMenuItem addItem(int i, int i2, Theme.ResourcesProvider resourcesProvider) {
+        return addItem(i, i2, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, resourcesProvider);
     }
 
     public ActionBarMenuItem addItem(int i, CharSequence charSequence) {
         return addItem(i, 0, charSequence, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, (Drawable) null, 0, charSequence);
     }
 
-    public ActionBarMenuItem addItem(int i, int i2, int i3) {
-        return addItem(i, i2, (CharSequence) null, i3, (Drawable) null, AndroidUtilities.dp(48.0f), (CharSequence) null);
+    public ActionBarMenuItem addItem(int i, int i2, int i3, Theme.ResourcesProvider resourcesProvider) {
+        return addItem(i, i2, (CharSequence) null, i3, (Drawable) null, AndroidUtilities.dp(48.0f), (CharSequence) null, resourcesProvider);
     }
 
     public ActionBarMenuItem addItemWithWidth(int i, int i2, int i3) {
@@ -67,44 +72,48 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public ActionBarMenuItem addItem(int i, int i2, CharSequence charSequence, int i3, Drawable drawable, int i4, CharSequence charSequence2) {
-        ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(getContext(), this, i3, this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor, charSequence != null);
+        return addItem(i, i2, charSequence, i3, drawable, i4, charSequence2, (Theme.ResourcesProvider) null);
+    }
+
+    public ActionBarMenuItem addItem(int i, int i2, CharSequence charSequence, int i3, Drawable drawable, int i4, CharSequence charSequence2, Theme.ResourcesProvider resourcesProvider) {
+        int i5 = i2;
+        CharSequence charSequence3 = charSequence;
+        Drawable drawable2 = drawable;
+        int i6 = i4;
+        CharSequence charSequence4 = charSequence2;
+        ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(getContext(), this, i3, this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor, charSequence3 != null, resourcesProvider);
         actionBarMenuItem.setTag(Integer.valueOf(i));
-        if (charSequence != null) {
-            actionBarMenuItem.textView.setText(charSequence);
-            if (i4 == 0) {
-                i4 = -2;
+        if (charSequence3 != null) {
+            actionBarMenuItem.textView.setText(charSequence3);
+            if (i6 == 0) {
+                i6 = -2;
             }
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(i4, -1);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(i6, -1);
             int dp = AndroidUtilities.dp(14.0f);
             layoutParams.rightMargin = dp;
             layoutParams.leftMargin = dp;
             addView(actionBarMenuItem, layoutParams);
         } else {
-            if (drawable != null) {
-                if (drawable instanceof RLottieDrawable) {
-                    actionBarMenuItem.iconView.setAnimation((RLottieDrawable) drawable);
+            if (drawable2 != null) {
+                if (drawable2 instanceof RLottieDrawable) {
+                    actionBarMenuItem.iconView.setAnimation((RLottieDrawable) drawable2);
                 } else {
-                    actionBarMenuItem.iconView.setImageDrawable(drawable);
+                    actionBarMenuItem.iconView.setImageDrawable(drawable2);
                 }
-            } else if (i2 != 0) {
-                actionBarMenuItem.iconView.setImageResource(i2);
+            } else if (i5 != 0) {
+                actionBarMenuItem.iconView.setImageResource(i5);
             }
-            addView(actionBarMenuItem, new LinearLayout.LayoutParams(i4, -1));
+            addView(actionBarMenuItem, new LinearLayout.LayoutParams(i6, -1));
         }
-        actionBarMenuItem.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ActionBarMenu.this.lambda$addItem$0$ActionBarMenu(view);
-            }
-        });
-        if (charSequence2 != null) {
-            actionBarMenuItem.setContentDescription(charSequence2);
+        actionBarMenuItem.setOnClickListener(new ActionBarMenu$$ExternalSyntheticLambda0(this));
+        if (charSequence4 != null) {
+            actionBarMenuItem.setContentDescription(charSequence4);
         }
         return actionBarMenuItem;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$addItem$0 */
-    public /* synthetic */ void lambda$addItem$0$ActionBarMenu(View view) {
+    public /* synthetic */ void lambda$addItem$0(View view) {
         ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) view;
         if (actionBarMenuItem.hasSubMenu()) {
             if (this.parentActionBar.actionBarMenuOnItemClick.canOpenMenu()) {

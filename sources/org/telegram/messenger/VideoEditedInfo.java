@@ -353,17 +353,11 @@ public class VideoEditedInfo {
     }
 
     public boolean needConvert() {
-        boolean z;
-        if (this.mediaEntities == null && this.paintPath == null && this.filterState == null && this.cropState == null && (z = this.roundVideo)) {
-            if (z) {
-                if (this.startTime <= 0) {
-                    long j = this.endTime;
-                    if (j == -1 || j == this.estimatedDuration) {
-                        return false;
-                    }
-                }
+        if (this.mediaEntities == null && this.paintPath == null && this.filterState == null && this.cropState == null && this.roundVideo && this.startTime <= 0) {
+            long j = this.endTime;
+            if (j == -1 || j == this.estimatedDuration) {
+                return false;
             }
-            return false;
         }
         return true;
     }

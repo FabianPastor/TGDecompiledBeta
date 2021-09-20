@@ -26,16 +26,6 @@ class VideoEncoderWrapper {
 
     @CalledByNative
     static VideoEncoder.Callback createEncoderCallback(long j) {
-        return new VideoEncoder.Callback(j) {
-            public final /* synthetic */ long f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void onEncodedFrame(EncodedImage encodedImage, VideoEncoder.CodecSpecificInfo codecSpecificInfo) {
-                VideoEncoderWrapper.nativeOnEncodedFrame(this.f$0, encodedImage);
-            }
-        };
+        return new VideoEncoderWrapper$$ExternalSyntheticLambda0(j);
     }
 }

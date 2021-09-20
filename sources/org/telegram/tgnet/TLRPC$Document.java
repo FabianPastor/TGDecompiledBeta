@@ -16,7 +16,7 @@ public abstract class TLRPC$Document extends TLObject {
     public String mime_type;
     public int size;
     public ArrayList<TLRPC$PhotoSize> thumbs = new ArrayList<>();
-    public int user_id;
+    public long user_id;
     public int version;
     public ArrayList<TLRPC$VideoSize> video_thumbs = new ArrayList<>();
 

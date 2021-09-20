@@ -87,11 +87,7 @@ public final class FloatingActionMode extends ActionMode {
         PopupMenu popupMenu = new PopupMenu(context, (View) null);
         this.mMenu = popupMenu.getMenu();
         setType(1);
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public final boolean onMenuItemClick(MenuItem menuItem) {
-                return FloatingActionMode.this.lambda$new$0$FloatingActionMode(menuItem);
-            }
-        });
+        popupMenu.setOnMenuItemClickListener(new FloatingActionMode$$ExternalSyntheticLambda1(this));
         this.mContentRect = new Rect();
         this.mContentRectOnScreen = new Rect();
         this.mPreviousContentRectOnScreen = new Rect();
@@ -110,23 +106,17 @@ public final class FloatingActionMode extends ActionMode {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ boolean lambda$new$0$FloatingActionMode(MenuItem menuItem) {
+    public /* synthetic */ boolean lambda$new$0(MenuItem menuItem) {
         return this.mCallback.onActionItemClicked(this, menuItem);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setFloatingToolbar$1 */
-    public /* synthetic */ boolean lambda$setFloatingToolbar$1$FloatingActionMode(MenuItem menuItem) {
+    public /* synthetic */ boolean lambda$setFloatingToolbar$1(MenuItem menuItem) {
         return this.mCallback.onActionItemClicked(this, menuItem);
     }
 
     private void setFloatingToolbar(FloatingToolbar floatingToolbar) {
-        FloatingToolbar onMenuItemClickListener = floatingToolbar.setMenu(this.mMenu).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            public final boolean onMenuItemClick(MenuItem menuItem) {
-                return FloatingActionMode.this.lambda$setFloatingToolbar$1$FloatingActionMode(menuItem);
-            }
-        });
+        FloatingToolbar onMenuItemClickListener = floatingToolbar.setMenu(this.mMenu).setOnMenuItemClickListener(new FloatingActionMode$$ExternalSyntheticLambda0(this));
         this.mFloatingToolbar = onMenuItemClickListener;
         FloatingToolbarVisibilityHelper floatingToolbarVisibilityHelper = new FloatingToolbarVisibilityHelper(onMenuItemClickListener);
         this.mFloatingToolbarVisibilityHelper = floatingToolbarVisibilityHelper;

@@ -1,28 +1,21 @@
 package org.telegram.messenger;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorFilter;
-import android.graphics.ComposeShader;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.SystemClock;
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.parsers.SAXParserFactory;
-import org.telegram.ui.ActionBar.Theme;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -90,7 +83,6 @@ public class SvgHelper {
         private boolean aspectFill = true;
         private Bitmap backgroundBitmap;
         private Canvas backgroundCanvas;
-        private Shader backgroundGradient;
         private float colorAlpha;
         protected ArrayList<Object> commands = new ArrayList<>();
         private float crossfadeAlpha = 1.0f;
@@ -201,9 +193,9 @@ public class SvgHelper {
                     if (runnable != null) {
                         AndroidUtilities.cancelRunOnUIThread(runnable);
                     }
-                    $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw r1 = $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw.INSTANCE;
-                    shiftRunnable = r1;
-                    AndroidUtilities.runOnUIThread(r1, (long) (((int) (1000.0f / AndroidUtilities.screenRefreshRate)) - 1));
+                    SvgHelper$SvgDrawable$$ExternalSyntheticLambda0 svgHelper$SvgDrawable$$ExternalSyntheticLambda0 = SvgHelper$SvgDrawable$$ExternalSyntheticLambda0.INSTANCE;
+                    shiftRunnable = svgHelper$SvgDrawable$$ExternalSyntheticLambda0;
+                    AndroidUtilities.runOnUIThread(svgHelper$SvgDrawable$$ExternalSyntheticLambda0, (long) (((int) (1000.0f / AndroidUtilities.screenRefreshRate)) - 1));
                 }
                 ImageReceiver imageReceiver = this.parentImageReceiver;
                 if (imageReceiver != null) {
@@ -240,41 +232,146 @@ public class SvgHelper {
             this.parentImageReceiver = imageReceiver;
         }
 
-        public void setupGradient(String str, float f) {
-            int color = Theme.getColor(str);
-            if (this.currentColor != color) {
-                this.colorAlpha = f;
-                this.currentColorKey = str;
-                this.currentColor = color;
-                gradientWidth = (float) (AndroidUtilities.displaySize.x * 2);
-                float dp = ((float) AndroidUtilities.dp(180.0f)) / gradientWidth;
-                int argb = Color.argb((int) (((float) (Color.alpha(color) / 2)) * this.colorAlpha), Color.red(color), Color.green(color), Color.blue(color));
-                float f2 = (1.0f - dp) / 2.0f;
-                float f3 = dp / 2.0f;
-                this.placeholderGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{0, 0, argb, 0, 0}, new float[]{0.0f, f2 - f3, f2, f2 + f3, 1.0f}, Shader.TileMode.REPEAT);
-                if (Build.VERSION.SDK_INT >= 28) {
-                    this.backgroundGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{argb, argb}, (float[]) null, Shader.TileMode.REPEAT);
-                } else {
-                    if (this.backgroundBitmap == null) {
-                        this.backgroundBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-                        this.backgroundCanvas = new Canvas(this.backgroundBitmap);
-                    }
-                    this.backgroundCanvas.drawColor(argb);
-                    Bitmap bitmap = this.backgroundBitmap;
-                    Shader.TileMode tileMode = Shader.TileMode.REPEAT;
-                    this.backgroundGradient = new BitmapShader(bitmap, tileMode, tileMode);
-                }
-                Matrix matrix = new Matrix();
-                this.placeholderMatrix = matrix;
-                this.placeholderGradient.setLocalMatrix(matrix);
-                for (Paint next : this.paints.values()) {
-                    if (Build.VERSION.SDK_INT <= 22) {
-                        next.setShader(this.backgroundGradient);
-                    } else {
-                        next.setShader(new ComposeShader(this.placeholderGradient, this.backgroundGradient, PorterDuff.Mode.ADD));
-                    }
-                }
-            }
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v14, resolved type: android.graphics.LinearGradient} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v17, resolved type: android.graphics.BitmapShader} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v21, resolved type: android.graphics.LinearGradient} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v5, resolved type: android.graphics.LinearGradient} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void setupGradient(java.lang.String r20, float r21) {
+            /*
+                r19 = this;
+                r0 = r19
+                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r20)
+                int r2 = r0.currentColor
+                if (r2 == r1) goto L_0x00f9
+                r2 = r21
+                r0.colorAlpha = r2
+                r2 = r20
+                r0.currentColorKey = r2
+                r0.currentColor = r1
+                android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
+                int r2 = r2.x
+                r3 = 2
+                int r2 = r2 * 2
+                float r2 = (float) r2
+                gradientWidth = r2
+                r2 = 1127481344(0x43340000, float:180.0)
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                float r2 = (float) r2
+                float r4 = gradientWidth
+                float r2 = r2 / r4
+                int r4 = android.graphics.Color.alpha(r1)
+                int r4 = r4 / r3
+                float r4 = (float) r4
+                float r5 = r0.colorAlpha
+                float r4 = r4 * r5
+                int r4 = (int) r4
+                int r5 = android.graphics.Color.red(r1)
+                int r6 = android.graphics.Color.green(r1)
+                int r1 = android.graphics.Color.blue(r1)
+                int r1 = android.graphics.Color.argb(r4, r5, r6, r1)
+                r4 = 1065353216(0x3var_, float:1.0)
+                float r5 = r4 - r2
+                r6 = 1073741824(0x40000000, float:2.0)
+                float r5 = r5 / r6
+                android.graphics.LinearGradient r15 = new android.graphics.LinearGradient
+                r8 = 0
+                r9 = 0
+                float r10 = gradientWidth
+                r11 = 0
+                r7 = 5
+                int[] r12 = new int[r7]
+                r16 = 0
+                r12[r16] = r16
+                r14 = 1
+                r12[r14] = r16
+                r12[r3] = r1
+                r13 = 3
+                r12[r13] = r16
+                r17 = 4
+                r12[r17] = r16
+                float[] r7 = new float[r7]
+                r18 = 0
+                r7[r16] = r18
+                float r2 = r2 / r6
+                float r6 = r5 - r2
+                r7[r14] = r6
+                r7[r3] = r5
+                float r5 = r5 + r2
+                r7[r13] = r5
+                r7[r17] = r4
+                android.graphics.Shader$TileMode r2 = android.graphics.Shader.TileMode.REPEAT
+                r4 = r7
+                r7 = r15
+                r13 = r4
+                r4 = 1
+                r14 = r2
+                r7.<init>(r8, r9, r10, r11, r12, r13, r14)
+                r0.placeholderGradient = r15
+                int r2 = android.os.Build.VERSION.SDK_INT
+                r5 = 28
+                if (r2 < r5) goto L_0x009d
+                android.graphics.LinearGradient r2 = new android.graphics.LinearGradient
+                r7 = 0
+                r8 = 0
+                float r9 = gradientWidth
+                r10 = 0
+                int[] r11 = new int[r3]
+                r11[r16] = r1
+                r11[r4] = r1
+                r12 = 0
+                android.graphics.Shader$TileMode r13 = android.graphics.Shader.TileMode.REPEAT
+                r6 = r2
+                r6.<init>(r7, r8, r9, r10, r11, r12, r13)
+                goto L_0x00c0
+            L_0x009d:
+                android.graphics.Bitmap r2 = r0.backgroundBitmap
+                if (r2 != 0) goto L_0x00b2
+                android.graphics.Bitmap$Config r2 = android.graphics.Bitmap.Config.ARGB_8888
+                android.graphics.Bitmap r2 = android.graphics.Bitmap.createBitmap(r4, r4, r2)
+                r0.backgroundBitmap = r2
+                android.graphics.Canvas r2 = new android.graphics.Canvas
+                android.graphics.Bitmap r3 = r0.backgroundBitmap
+                r2.<init>(r3)
+                r0.backgroundCanvas = r2
+            L_0x00b2:
+                android.graphics.Canvas r2 = r0.backgroundCanvas
+                r2.drawColor(r1)
+                android.graphics.BitmapShader r2 = new android.graphics.BitmapShader
+                android.graphics.Bitmap r1 = r0.backgroundBitmap
+                android.graphics.Shader$TileMode r3 = android.graphics.Shader.TileMode.REPEAT
+                r2.<init>(r1, r3, r3)
+            L_0x00c0:
+                android.graphics.Matrix r1 = new android.graphics.Matrix
+                r1.<init>()
+                r0.placeholderMatrix = r1
+                android.graphics.LinearGradient r3 = r0.placeholderGradient
+                r3.setLocalMatrix(r1)
+                java.util.HashMap<java.lang.Object, android.graphics.Paint> r1 = r0.paints
+                java.util.Collection r1 = r1.values()
+                java.util.Iterator r1 = r1.iterator()
+            L_0x00d6:
+                boolean r3 = r1.hasNext()
+                if (r3 == 0) goto L_0x00f9
+                java.lang.Object r3 = r1.next()
+                android.graphics.Paint r3 = (android.graphics.Paint) r3
+                int r4 = android.os.Build.VERSION.SDK_INT
+                r5 = 22
+                if (r4 > r5) goto L_0x00ec
+                r3.setShader(r2)
+                goto L_0x00d6
+            L_0x00ec:
+                android.graphics.ComposeShader r4 = new android.graphics.ComposeShader
+                android.graphics.LinearGradient r5 = r0.placeholderGradient
+                android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.ADD
+                r4.<init>(r5, r2, r6)
+                r3.setShader(r4)
+                goto L_0x00d6
+            L_0x00f9:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.SvgDrawable.setupGradient(java.lang.String, float):void");
         }
     }
 
@@ -961,20 +1058,20 @@ public class SvgHelper {
             int r0 = r2.hashCode()
             r1 = -1
             switch(r0) {
-                case -734239628: goto L_0x006c;
-                case 112785: goto L_0x0061;
-                case 3027034: goto L_0x0056;
-                case 3068707: goto L_0x004b;
-                case 3181155: goto L_0x0040;
-                case 93818879: goto L_0x0035;
-                case 98619139: goto L_0x002a;
+                case -734239628: goto L_0x006d;
+                case 112785: goto L_0x0062;
+                case 3027034: goto L_0x0057;
+                case 3068707: goto L_0x004c;
+                case 3181155: goto L_0x0041;
+                case 93818879: goto L_0x0036;
+                case 98619139: goto L_0x002b;
                 case 113101865: goto L_0x001f;
                 case 828922025: goto L_0x0012;
                 default: goto L_0x000f;
             }
         L_0x000f:
             r2 = -1
-            goto L_0x0076
+            goto L_0x0078
         L_0x0012:
             java.lang.String r0 = "magenta"
             boolean r2 = r2.equals(r0)
@@ -982,118 +1079,118 @@ public class SvgHelper {
             goto L_0x000f
         L_0x001b:
             r2 = 8
-            goto L_0x0076
+            goto L_0x0078
         L_0x001f:
             java.lang.String r0 = "white"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0028
+            if (r2 != 0) goto L_0x0029
             goto L_0x000f
-        L_0x0028:
+        L_0x0029:
             r2 = 7
-            goto L_0x0076
-        L_0x002a:
+            goto L_0x0078
+        L_0x002b:
             java.lang.String r0 = "green"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0033
+            if (r2 != 0) goto L_0x0034
             goto L_0x000f
-        L_0x0033:
+        L_0x0034:
             r2 = 6
-            goto L_0x0076
-        L_0x0035:
+            goto L_0x0078
+        L_0x0036:
             java.lang.String r0 = "black"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x003e
+            if (r2 != 0) goto L_0x003f
             goto L_0x000f
-        L_0x003e:
+        L_0x003f:
             r2 = 5
-            goto L_0x0076
-        L_0x0040:
+            goto L_0x0078
+        L_0x0041:
             java.lang.String r0 = "gray"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0049
+            if (r2 != 0) goto L_0x004a
             goto L_0x000f
-        L_0x0049:
+        L_0x004a:
             r2 = 4
-            goto L_0x0076
-        L_0x004b:
+            goto L_0x0078
+        L_0x004c:
             java.lang.String r0 = "cyan"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0054
+            if (r2 != 0) goto L_0x0055
             goto L_0x000f
-        L_0x0054:
+        L_0x0055:
             r2 = 3
-            goto L_0x0076
-        L_0x0056:
+            goto L_0x0078
+        L_0x0057:
             java.lang.String r0 = "blue"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x005f
+            if (r2 != 0) goto L_0x0060
             goto L_0x000f
-        L_0x005f:
+        L_0x0060:
             r2 = 2
-            goto L_0x0076
-        L_0x0061:
+            goto L_0x0078
+        L_0x0062:
             java.lang.String r0 = "red"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x006a
+            if (r2 != 0) goto L_0x006b
             goto L_0x000f
-        L_0x006a:
+        L_0x006b:
             r2 = 1
-            goto L_0x0076
-        L_0x006c:
+            goto L_0x0078
+        L_0x006d:
             java.lang.String r0 = "yellow"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0075
+            if (r2 != 0) goto L_0x0077
             goto L_0x000f
-        L_0x0075:
+        L_0x0077:
             r2 = 0
-        L_0x0076:
+        L_0x0078:
             switch(r2) {
-                case 0: goto L_0x00b6;
-                case 1: goto L_0x00af;
-                case 2: goto L_0x00a7;
-                case 3: goto L_0x009f;
-                case 4: goto L_0x0097;
-                case 5: goto L_0x0090;
-                case 6: goto L_0x0088;
-                case 7: goto L_0x0083;
-                case 8: goto L_0x007b;
-                default: goto L_0x0079;
+                case 0: goto L_0x00b8;
+                case 1: goto L_0x00b1;
+                case 2: goto L_0x00a9;
+                case 3: goto L_0x00a1;
+                case 4: goto L_0x0099;
+                case 5: goto L_0x0092;
+                case 6: goto L_0x008a;
+                case 7: goto L_0x0085;
+                case 8: goto L_0x007d;
+                default: goto L_0x007b;
             }
-        L_0x0079:
+        L_0x007b:
             r2 = 0
             return r2
-        L_0x007b:
+        L_0x007d:
             r2 = -65281(0xfffffffffffvar_ff, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0083:
+        L_0x0085:
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
             return r2
-        L_0x0088:
+        L_0x008a:
             r2 = -16711936(0xfffffffffvar_fvar_, float:-1.7146522E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0090:
+        L_0x0092:
             r2 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0097:
+        L_0x0099:
             r2 = -7829368(0xfffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x009f:
+        L_0x00a1:
             r2 = -16711681(0xfffffffffvar_ffff, float:-1.714704E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00a7:
+        L_0x00a9:
             r2 = -16776961(0xfffffffffvar_ff, float:-1.7014636E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00af:
+        L_0x00b1:
             r2 = -65536(0xfffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00b6:
+        L_0x00b8:
             r2 = -256(0xfffffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2

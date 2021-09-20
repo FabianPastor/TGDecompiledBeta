@@ -68,6 +68,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     /* access modifiers changed from: private */
     public ImageView placeholderImageView;
     private LineProgressView progressView;
+    private final Theme.ResourcesProvider resourcesProvider;
     private TextView rightDateTextView;
     private RLottieDrawable statusDrawable;
     private RLottieImageView statusImageView;
@@ -82,14 +83,19 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this(context, 0);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public SharedDocumentCell(Context context, int i) {
+        this(context, i, (Theme.ResourcesProvider) null);
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public SharedDocumentCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         Context context2 = context;
         int i2 = i;
         this.drawDownloadIcon = true;
         int i3 = UserConfig.selectedAccount;
         this.currentAccount = i3;
+        this.resourcesProvider = resourcesProvider2;
         this.viewType = i2;
         this.TAG = DownloadController.getInstance(i3).generateObserverTag();
         ImageView imageView = new ImageView(context2);
@@ -104,7 +110,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         }
         TextView textView = new TextView(context2);
         this.extTextView = textView;
-        textView.setTextColor(Theme.getColor("files_iconText"));
+        textView.setTextColor(getThemedColor("files_iconText"));
         this.extTextView.setTextSize(1, 14.0f);
         this.extTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.extTextView.setLines(1);
@@ -147,7 +153,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         }
         TextView textView4 = new TextView(context2);
         this.nameTextView = textView4;
-        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        textView4.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextSize(1, 16.0f);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
@@ -166,7 +172,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, (z8 ? 5 : 3) | 48, z8 ? 16.0f : 72.0f, 5.0f, z8 ? 72.0f : 16.0f, 0.0f));
             TextView textView6 = new TextView(context2);
             this.rightDateTextView = textView6;
-            textView6.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+            textView6.setTextColor(getThemedColor("windowBackgroundWhiteGrayText3"));
             this.rightDateTextView.setTextSize(1, 14.0f);
             if (!LocaleController.isRTL) {
                 linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(-2, -2, 1.0f));
@@ -178,7 +184,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             this.nameTextView.setMaxLines(2);
             TextView textView7 = new TextView(context2);
             this.captionTextView = textView7;
-            textView7.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            textView7.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
             this.captionTextView.setLines(1);
             this.captionTextView.setMaxLines(1);
             this.captionTextView.setSingleLine(true);
@@ -200,7 +206,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this.statusImageView = rLottieImageView;
         rLottieImageView.setAnimation(this.statusDrawable);
         this.statusImageView.setVisibility(4);
-        this.statusImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("sharedMedia_startStopLoadIcon"), PorterDuff.Mode.MULTIPLY));
+        this.statusImageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("sharedMedia_startStopLoadIcon"), PorterDuff.Mode.MULTIPLY));
         if (i2 == 1) {
             RLottieImageView rLottieImageView2 = this.statusImageView;
             boolean z11 = LocaleController.isRTL;
@@ -212,7 +218,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         }
         TextView textView10 = new TextView(context2);
         this.dateTextView = textView10;
-        textView10.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+        textView10.setTextColor(getThemedColor("windowBackgroundWhiteGrayText3"));
         this.dateTextView.setLines(1);
         this.dateTextView.setMaxLines(1);
         this.dateTextView.setSingleLine(true);
@@ -231,7 +237,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         }
         LineProgressView lineProgressView = new LineProgressView(context2);
         this.progressView = lineProgressView;
-        lineProgressView.setProgressColor(Theme.getColor("sharedMedia_startStopLoadIcon"));
+        lineProgressView.setProgressColor(getThemedColor("sharedMedia_startStopLoadIcon"));
         LineProgressView lineProgressView2 = this.progressView;
         boolean z15 = LocaleController.isRTL;
         addView(lineProgressView2, LayoutHelper.createFrame(-1, 2.0f, (z15 ? 5 : 3) | 48, z15 ? 0.0f : 72.0f, 54.0f, z15 ? 72.0f : 0.0f, 0.0f));
@@ -305,8 +311,8 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                     str6 = "files_folderIconBackground";
                     str5 = "files_folderIcon";
                 }
-                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor(str6), false);
-                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor(str5), true);
+                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, getThemedColor(str6), false);
+                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, getThemedColor(str5), true);
                 this.thumbImageView.setImageDrawable(createCircleDrawableWithIcon);
             }
             this.thumbImageView.setVisibility(0);
@@ -421,7 +427,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             if (str4 == null) {
                 str4 = documentFileName;
             }
-            CharSequence highlightText = AndroidUtilities.highlightText((CharSequence) str4, messageObject2.highlightedWords);
+            CharSequence highlightText = AndroidUtilities.highlightText((CharSequence) str4, messageObject2.highlightedWords, this.resourcesProvider);
             if (highlightText != null) {
                 this.nameTextView.setText(highlightText);
             } else {
@@ -469,7 +475,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                     textView2.setVisibility(8);
                 }
             } else {
-                CharSequence highlightText2 = AndroidUtilities.highlightText((CharSequence) this.message.messageOwner.message.replace("\n", " ").replaceAll(" +", " ").trim(), this.message.highlightedWords);
+                CharSequence highlightText2 = AndroidUtilities.highlightText((CharSequence) this.message.messageOwner.message.replace("\n", " ").replaceAll(" +", " ").trim(), this.message.highlightedWords, this.resourcesProvider);
                 this.caption = highlightText2;
                 TextView textView3 = this.captionTextView;
                 if (textView3 != null) {
@@ -678,5 +684,11 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             accessibilityNodeInfo.setCheckable(true);
             accessibilityNodeInfo.setChecked(true);
         }
+    }
+
+    private int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

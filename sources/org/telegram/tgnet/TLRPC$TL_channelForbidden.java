@@ -12,7 +12,7 @@ public class TLRPC$TL_channelForbidden extends TLRPC$Chat {
             z2 = false;
         }
         this.megagroup = z2;
-        this.id = abstractSerializedData.readInt32(z);
+        this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.title = abstractSerializedData.readString(z);
         if ((this.flags & 65536) != 0) {
@@ -27,7 +27,7 @@ public class TLRPC$TL_channelForbidden extends TLRPC$Chat {
         int i2 = this.megagroup ? i | 256 : i & -257;
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
-        abstractSerializedData.writeInt32(this.id);
+        abstractSerializedData.writeInt64(this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeString(this.title);
         if ((this.flags & 65536) != 0) {

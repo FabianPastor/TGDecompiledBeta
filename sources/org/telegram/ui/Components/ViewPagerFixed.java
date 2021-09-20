@@ -47,10 +47,9 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_updateDialogFiltersOrder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.ViewPagerFixed;
 
 public class ViewPagerFixed extends FrameLayout {
-    private static final Interpolator interpolator = $$Lambda$ViewPagerFixed$mWct406_sj9__iff3gN92HXHIkk.INSTANCE;
+    private static final Interpolator interpolator = ViewPagerFixed$$ExternalSyntheticLambda0.INSTANCE;
     private Adapter adapter;
     private float additionalOffset;
     /* access modifiers changed from: private */
@@ -109,7 +108,8 @@ public class ViewPagerFixed extends FrameLayout {
         public abstract int getItemViewType(int i);
     }
 
-    static /* synthetic */ float lambda$static$0(float f) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ float lambda$static$0(float f) {
         float f2 = f - 1.0f;
         return (f2 * f2 * f2 * f2 * f2) + 1.0f;
     }
@@ -669,7 +669,6 @@ public class ViewPagerFixed extends FrameLayout {
         public Paint deletePaint = new TextPaint(1);
         /* access modifiers changed from: private */
         public float editingAnimationProgress;
-        private boolean editingForwardAnimation;
         /* access modifiers changed from: private */
         public float editingStartAnimationProgress;
         private float hideProgress;
@@ -677,7 +676,6 @@ public class ViewPagerFixed extends FrameLayout {
         private boolean ignoreLayout;
         /* access modifiers changed from: private */
         public CubicBezierInterpolator interpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
-        private boolean invalidated;
         /* access modifiers changed from: private */
         public boolean isEditing;
         /* access modifiers changed from: private */
@@ -724,7 +722,8 @@ public class ViewPagerFixed extends FrameLayout {
             void onSamePageSelected();
         }
 
-        static /* synthetic */ void lambda$setIsEditing$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        /* access modifiers changed from: private */
+        public static /* synthetic */ void lambda$setIsEditing$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         }
 
         static /* synthetic */ float access$2816(TabsView tabsView, float f) {
@@ -1000,11 +999,7 @@ public class ViewPagerFixed extends FrameLayout {
             ListAdapter listAdapter = new ListAdapter(context);
             this.adapter = listAdapter;
             recyclerListView2.setAdapter(listAdapter);
-            this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
-                public final void onItemClick(View view, int i, float f, float f2) {
-                    ViewPagerFixed.TabsView.this.lambda$new$0$ViewPagerFixed$TabsView(view, i, f, f2);
-                }
-            });
+            this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new ViewPagerFixed$TabsView$$ExternalSyntheticLambda1(this));
             this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                     TabsView.this.invalidate();
@@ -1014,8 +1009,7 @@ public class ViewPagerFixed extends FrameLayout {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$ViewPagerFixed$TabsView(View view, int i, float f, float f2) {
+        public /* synthetic */ void lambda$new$0(View view, int i, float f, float f2) {
             TabsViewDelegate tabsViewDelegate;
             if (this.delegate.canPerformActions()) {
                 TabView tabView = (TabView) view;
@@ -1345,7 +1339,6 @@ public class ViewPagerFixed extends FrameLayout {
                     this.ignoreLayout = false;
                 }
                 updateTabsWidths();
-                this.invalidated = false;
             }
             super.onMeasure(i, i2);
         }
@@ -1446,7 +1439,6 @@ public class ViewPagerFixed extends FrameLayout {
 
         public void setIsEditing(boolean z) {
             this.isEditing = z;
-            this.editingForwardAnimation = true;
             this.listView.invalidateViews();
             invalidate();
             if (!this.isEditing && this.orderChanged) {
@@ -1458,7 +1450,7 @@ public class ViewPagerFixed extends FrameLayout {
                     MessagesController.DialogFilter dialogFilter = arrayList.get(i);
                     tLRPC$TL_messages_updateDialogFiltersOrder.order.add(Integer.valueOf(arrayList.get(i).id));
                 }
-                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, $$Lambda$ViewPagerFixed$TabsView$sd9SljbBaEZvlgDYYBs16aydM.INSTANCE);
+                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, ViewPagerFixed$TabsView$$ExternalSyntheticLambda0.INSTANCE);
                 this.orderChanged = false;
             }
         }

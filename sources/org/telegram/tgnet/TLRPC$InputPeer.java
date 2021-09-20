@@ -2,27 +2,44 @@ package org.telegram.tgnet;
 
 public abstract class TLRPC$InputPeer extends TLObject {
     public long access_hash;
-    public int channel_id;
-    public int chat_id;
-    public int user_id;
+    public long channel_id;
+    public long chat_id;
+    public int msg_id;
+    public TLRPC$InputPeer peer;
+    public long user_id;
 
     public static TLRPC$InputPeer TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$InputPeer tLRPC$InputPeer;
         switch (i) {
             case -1667893317:
-                tLRPC$InputPeer = new TLRPC$TL_inputPeerChannelFromMessage();
+                tLRPC$InputPeer = new TLRPC$TL_inputPeerChannelFromMessage_layer131();
                 break;
-            case 396093539:
-                tLRPC$InputPeer = new TLRPC$TL_inputPeerChat();
-                break;
-            case 398123750:
+            case -1468331492:
                 tLRPC$InputPeer = new TLRPC$TL_inputPeerUserFromMessage();
                 break;
+            case -1121318848:
+                tLRPC$InputPeer = new TLRPC$TL_inputPeerChannelFromMessage();
+                break;
+            case -571955892:
+                tLRPC$InputPeer = new TLRPC$TL_inputPeerUser();
+                break;
+            case 396093539:
+                tLRPC$InputPeer = new TLRPC$TL_inputPeerChat_layer131();
+                break;
+            case 398123750:
+                tLRPC$InputPeer = new TLRPC$TL_inputPeerUserFromMessage_layer131();
+                break;
             case 548253432:
+                tLRPC$InputPeer = new TLRPC$TL_inputPeerChannel_layer131();
+                break;
+            case 666680316:
                 tLRPC$InputPeer = new TLRPC$TL_inputPeerChannel();
                 break;
+            case 900291769:
+                tLRPC$InputPeer = new TLRPC$TL_inputPeerChat();
+                break;
             case 2072935910:
-                tLRPC$InputPeer = new TLRPC$TL_inputPeerUser();
+                tLRPC$InputPeer = new TLRPC$TL_inputPeerUser_layer131();
                 break;
             case 2107670217:
                 tLRPC$InputPeer = new TLRPC$TL_inputPeerSelf();

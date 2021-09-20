@@ -50,11 +50,7 @@ public class GroupCallUserCell extends FrameLayout {
     /* access modifiers changed from: private */
     public RadialProgressView avatarProgressView;
     private AvatarWavesDrawable avatarWavesDrawable;
-    private Runnable checkRaiseRunnable = new Runnable() {
-        public final void run() {
-            GroupCallUserCell.this.lambda$new$2$GroupCallUserCell();
-        }
-    };
+    private Runnable checkRaiseRunnable = new GroupCallUserCell$$ExternalSyntheticLambda3(this);
     private ChatObject.Call currentCall;
     private TLRPC$Chat currentChat;
     private boolean currentIconGray;
@@ -75,32 +71,16 @@ public class GroupCallUserCell extends FrameLayout {
     private TLRPC$TL_groupCallParticipant participant;
     /* access modifiers changed from: private */
     public float progressToAvatarPreview;
-    private Runnable raiseHandCallback = new Runnable() {
-        public final void run() {
-            GroupCallUserCell.this.lambda$new$1$GroupCallUserCell();
-        }
-    };
-    private int selfId;
-    private Runnable shakeHandCallback = new Runnable() {
-        public final void run() {
-            GroupCallUserCell.this.lambda$new$0$GroupCallUserCell();
-        }
-    };
+    private Runnable raiseHandCallback = new GroupCallUserCell$$ExternalSyntheticLambda2(this);
+    private long selfId;
+    private Runnable shakeHandCallback = new GroupCallUserCell$$ExternalSyntheticLambda4(this);
     private RLottieDrawable shakeHandDrawable;
     private Drawable speakingDrawable;
     /* access modifiers changed from: private */
     public SimpleTextView[] statusTextView = new SimpleTextView[5];
-    private Runnable updateRunnable = new Runnable() {
-        public final void run() {
-            GroupCallUserCell.this.lambda$new$3$GroupCallUserCell();
-        }
-    };
+    private Runnable updateRunnable = new GroupCallUserCell$$ExternalSyntheticLambda6(this);
     private boolean updateRunnableScheduled;
-    private Runnable updateVoiceRunnable = new Runnable() {
-        public final void run() {
-            GroupCallUserCell.this.lambda$new$4$GroupCallUserCell();
-        }
-    };
+    private Runnable updateVoiceRunnable = new GroupCallUserCell$$ExternalSyntheticLambda5(this);
     private boolean updateVoiceRunnableScheduled;
 
     public boolean hasOverlappingRendering() {
@@ -113,16 +93,14 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$GroupCallUserCell() {
+    public /* synthetic */ void lambda$new$0() {
         this.shakeHandDrawable.setOnFinishCallback((Runnable) null, 0);
         this.muteDrawable.setOnFinishCallback((Runnable) null, 0);
         this.muteButton.setAnimation(this.muteDrawable);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$GroupCallUserCell() {
+    public /* synthetic */ void lambda$new$1() {
         int nextInt = Utilities.random.nextInt(100);
         int i = 540;
         int i2 = 420;
@@ -147,14 +125,12 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$GroupCallUserCell() {
+    public /* synthetic */ void lambda$new$2() {
         applyParticipantChanges(true, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$GroupCallUserCell() {
+    public /* synthetic */ void lambda$new$3() {
         this.isSpeaking = false;
         applyParticipantChanges(true, true);
         this.avatarWavesDrawable.setAmplitude(0.0d);
@@ -162,8 +138,7 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$GroupCallUserCell() {
+    public /* synthetic */ void lambda$new$4() {
         applyParticipantChanges(true, true);
         this.updateVoiceRunnableScheduled = false;
     }
@@ -441,11 +416,7 @@ public class GroupCallUserCell extends FrameLayout {
         }
         this.muteButton.setImportantForAccessibility(2);
         addView(this.muteButton, LayoutHelper.createFrame(48, -1.0f, (LocaleController.isRTL ? 3 : i) | 16, 6.0f, 0.0f, 6.0f, 0.0f));
-        this.muteButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                GroupCallUserCell.this.lambda$new$5$GroupCallUserCell(view);
-            }
-        });
+        this.muteButton.setOnClickListener(new GroupCallUserCell$$ExternalSyntheticLambda1(this));
         this.avatarWavesDrawable = new AvatarWavesDrawable(AndroidUtilities.dp(26.0f), AndroidUtilities.dp(29.0f));
         setWillNotDraw(false);
         setFocusable(true);
@@ -482,16 +453,16 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     public boolean isSelfUser() {
-        int i = this.selfId;
-        if (i > 0) {
+        long j = this.selfId;
+        if (j > 0) {
             TLRPC$User tLRPC$User = this.currentUser;
-            if (tLRPC$User == null || tLRPC$User.id != i) {
+            if (tLRPC$User == null || tLRPC$User.id != j) {
                 return false;
             }
             return true;
         }
         TLRPC$Chat tLRPC$Chat = this.currentChat;
-        if (tLRPC$Chat == null || tLRPC$Chat.id != (-i)) {
+        if (tLRPC$Chat == null || tLRPC$Chat.id != (-j)) {
             return false;
         }
         return true;
@@ -509,15 +480,15 @@ public class GroupCallUserCell extends FrameLayout {
         return this.avatarImageView.getImageReceiver().hasNotThumb();
     }
 
-    public void setData(AccountInstance accountInstance2, TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, ChatObject.Call call, int i, TLRPC$FileLocation tLRPC$FileLocation, boolean z) {
+    public void setData(AccountInstance accountInstance2, TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, ChatObject.Call call, long j, TLRPC$FileLocation tLRPC$FileLocation, boolean z) {
         this.currentCall = call;
         this.accountInstance = accountInstance2;
-        this.selfId = i;
+        this.selfId = j;
         this.participant = tLRPC$TL_groupCallParticipant;
-        int peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
+        long peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
         boolean z2 = false;
         if (peerId > 0) {
-            TLRPC$User user = this.accountInstance.getMessagesController().getUser(Integer.valueOf(peerId));
+            TLRPC$User user = this.accountInstance.getMessagesController().getUser(Long.valueOf(peerId));
             this.currentUser = user;
             this.currentChat = null;
             this.avatarDrawable.setInfo(user);
@@ -538,7 +509,7 @@ public class GroupCallUserCell extends FrameLayout {
                 this.avatarImageView.setImage(forUser, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
             }
         } else {
-            TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Integer.valueOf(-peerId));
+            TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Long.valueOf(-peerId));
             this.currentChat = chat;
             this.currentUser = null;
             this.avatarDrawable.setInfo(chat);
@@ -668,8 +639,8 @@ public class GroupCallUserCell extends FrameLayout {
             org.telegram.messenger.AccountInstance r2 = r0.accountInstance
             org.telegram.messenger.MessagesController r2 = r2.getMessagesController()
             org.telegram.messenger.ChatObject$Call r3 = r0.currentCall
-            int r3 = r3.chatId
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
+            long r3 = r3.chatId
+            java.lang.Long r3 = java.lang.Long.valueOf(r3)
             r2.getChat(r3)
             org.telegram.ui.Components.RLottieImageView r2 = r0.muteButton
             boolean r3 = r20.isSelfUser()
@@ -733,10 +704,10 @@ public class GroupCallUserCell extends FrameLayout {
             r0.updateRunnableScheduled = r7
         L_0x0077:
             org.telegram.messenger.ChatObject$Call r3 = r0.currentCall
-            android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r3 = r3.participants
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r3 = r3.participants
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r8 = r0.participant
             org.telegram.tgnet.TLRPC$Peer r8 = r8.peer
-            int r8 = org.telegram.messenger.MessageObject.getPeerId(r8)
+            long r8 = org.telegram.messenger.MessageObject.getPeerId(r8)
             java.lang.Object r3 = r3.get(r8)
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r3
             if (r3 == 0) goto L_0x008d
@@ -922,7 +893,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01b4
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627864(0x7f0e0var_, float:1.8883004E38)
+            r10 = 2131627902(0x7f0e0f7e, float:1.8883082E38)
             java.lang.String r11 = "TapToAddPhotoOrBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -930,7 +901,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01b4:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627865(0x7f0e0var_, float:1.8883006E38)
+            r10 = 2131627903(0x7f0e0f7f, float:1.8883084E38)
             java.lang.String r11 = "TapToAddPhotoOrDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -947,7 +918,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01e9
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627861(0x7f0e0var_, float:1.8882998E38)
+            r10 = 2131627899(0x7f0e0f7b, float:1.8883075E38)
             java.lang.String r11 = "TapToAddBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -955,7 +926,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01e9:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627862(0x7f0e0var_, float:1.8883E38)
+            r10 = 2131627900(0x7f0e0f7c, float:1.8883077E38)
             java.lang.String r11 = "TapToAddDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -971,7 +942,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 != 0) goto L_0x0229
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627863(0x7f0e0var_, float:1.8883002E38)
+            r10 = 2131627901(0x7f0e0f7d, float:1.888308E38)
             java.lang.String r11 = "TapToAddPhoto"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -984,7 +955,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x0229:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627962(0x7f0e0fba, float:1.8883203E38)
+            r10 = 2131628002(0x7f0e0fe2, float:1.8883284E38)
             java.lang.String r11 = "ThisIsYou"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -1068,8 +1039,8 @@ public class GroupCallUserCell extends FrameLayout {
             float[] r12 = new float[r14]
             r12 = {0, NUM} // fill-array
             android.animation.ValueAnimator r12 = android.animation.ValueAnimator.ofFloat(r12)
-            org.telegram.ui.Cells.-$$Lambda$GroupCallUserCell$Wks65hHhbzbC-yE71sZqLFpgAyQ r13 = new org.telegram.ui.Cells.-$$Lambda$GroupCallUserCell$Wks65hHhbzbC-yE71sZqLFpgAyQ
-            r13.<init>(r11, r2)
+            org.telegram.ui.Cells.GroupCallUserCell$$ExternalSyntheticLambda0 r13 = new org.telegram.ui.Cells.GroupCallUserCell$$ExternalSyntheticLambda0
+            r13.<init>(r0, r11, r2)
             r12.addUpdateListener(r13)
             r5.add(r12)
             goto L_0x02fe
@@ -1100,7 +1071,7 @@ public class GroupCallUserCell extends FrameLayout {
             r13.setLeftDrawable((android.graphics.drawable.Drawable) r14)
             org.telegram.ui.ActionBar.SimpleTextView[] r13 = r0.statusTextView
             r13 = r13[r7]
-            r14 = 2131627730(0x7f0e0ed2, float:1.8882733E38)
+            r14 = 2131627764(0x7f0e0ef4, float:1.8882802E38)
             java.lang.Object[] r15 = new java.lang.Object[r7]
             if (r2 >= r12) goto L_0x0321
             r11 = 1
@@ -1117,7 +1088,7 @@ public class GroupCallUserCell extends FrameLayout {
             r2.setLeftDrawable((android.graphics.drawable.Drawable) r10)
             org.telegram.ui.ActionBar.SimpleTextView[] r2 = r0.statusTextView
             r2 = r2[r7]
-            r11 = 2131627729(0x7f0e0ed1, float:1.888273E38)
+            r11 = 2131627763(0x7f0e0ef3, float:1.88828E38)
             java.lang.String r12 = "Speaking"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r2.setText(r11)
@@ -1345,8 +1316,7 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyParticipantChanges$6 */
-    public /* synthetic */ void lambda$applyParticipantChanges$6$GroupCallUserCell(int i, int i2, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$applyParticipantChanges$6(int i, int i2, ValueAnimator valueAnimator) {
         int offsetColor = AndroidUtilities.getOffsetColor(i, i2, valueAnimator.getAnimatedFraction(), 1.0f);
         this.muteButton.setColorFilter(new PorterDuffColorFilter(offsetColor, PorterDuff.Mode.MULTIPLY));
         Theme.setSelectorDrawableColor(this.muteButton.getDrawable(), offsetColor & NUM, true);
@@ -1642,7 +1612,7 @@ public class GroupCallUserCell extends FrameLayout {
         }
     }
 
-    public int getPeerId() {
+    public long getPeerId() {
         TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.participant;
         if (tLRPC$TL_groupCallParticipant == null) {
             return 0;

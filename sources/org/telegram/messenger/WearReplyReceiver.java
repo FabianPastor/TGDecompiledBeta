@@ -26,51 +26,14 @@ public class WearReplyReceiver extends BroadcastReceiver {
                 int intExtra = intent.getIntExtra("max_id", 0);
                 int intExtra2 = intent.getIntExtra("currentAccount", 0);
                 if (longExtra != 0 && intExtra != 0 && UserConfig.isValidAccount(intExtra2)) {
-                    int i = (int) longExtra;
                     AccountInstance instance = AccountInstance.getInstance(intExtra2);
-                    if (i > 0) {
-                        if (instance.getMessagesController().getUser(Integer.valueOf(i)) == null) {
-                            Utilities.globalQueue.postRunnable(new Runnable(instance, i, charSequence, longExtra, intExtra) {
-                                public final /* synthetic */ AccountInstance f$1;
-                                public final /* synthetic */ int f$2;
-                                public final /* synthetic */ CharSequence f$3;
-                                public final /* synthetic */ long f$4;
-                                public final /* synthetic */ int f$5;
-
-                                {
-                                    this.f$1 = r2;
-                                    this.f$2 = r3;
-                                    this.f$3 = r4;
-                                    this.f$4 = r5;
-                                    this.f$5 = r7;
-                                }
-
-                                public final void run() {
-                                    WearReplyReceiver.this.lambda$onReceive$1$WearReplyReceiver(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-                                }
-                            });
+                    if (DialogObject.isUserDialog(longExtra)) {
+                        if (instance.getMessagesController().getUser(Long.valueOf(longExtra)) == null) {
+                            Utilities.globalQueue.postRunnable(new WearReplyReceiver$$ExternalSyntheticLambda0(this, instance, longExtra, charSequence, intExtra));
                             return;
                         }
-                    } else if (i < 0 && instance.getMessagesController().getChat(Integer.valueOf(-i)) == null) {
-                        Utilities.globalQueue.postRunnable(new Runnable(instance, i, charSequence, longExtra, intExtra) {
-                            public final /* synthetic */ AccountInstance f$1;
-                            public final /* synthetic */ int f$2;
-                            public final /* synthetic */ CharSequence f$3;
-                            public final /* synthetic */ long f$4;
-                            public final /* synthetic */ int f$5;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                                this.f$3 = r4;
-                                this.f$4 = r5;
-                                this.f$5 = r7;
-                            }
-
-                            public final void run() {
-                                WearReplyReceiver.this.lambda$onReceive$3$WearReplyReceiver(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-                            }
-                        });
+                    } else if (DialogObject.isChatDialog(longExtra) && instance.getMessagesController().getChat(Long.valueOf(-longExtra)) == null) {
+                        Utilities.globalQueue.postRunnable(new WearReplyReceiver$$ExternalSyntheticLambda1(this, instance, longExtra, charSequence, intExtra));
                         return;
                     }
                     sendMessage(instance, charSequence, longExtra, intExtra);
@@ -80,63 +43,23 @@ public class WearReplyReceiver extends BroadcastReceiver {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onReceive$1 */
-    public /* synthetic */ void lambda$onReceive$1$WearReplyReceiver(AccountInstance accountInstance, int i, CharSequence charSequence, long j, int i2) {
-        AndroidUtilities.runOnUIThread(new Runnable(accountInstance, accountInstance.getMessagesStorage().getUserSync(i), charSequence, j, i2) {
-            public final /* synthetic */ AccountInstance f$1;
-            public final /* synthetic */ TLRPC$User f$2;
-            public final /* synthetic */ CharSequence f$3;
-            public final /* synthetic */ long f$4;
-            public final /* synthetic */ int f$5;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r7;
-            }
-
-            public final void run() {
-                WearReplyReceiver.this.lambda$onReceive$0$WearReplyReceiver(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-            }
-        });
+    public /* synthetic */ void lambda$onReceive$1(AccountInstance accountInstance, long j, CharSequence charSequence, int i) {
+        AndroidUtilities.runOnUIThread(new WearReplyReceiver$$ExternalSyntheticLambda3(this, accountInstance, accountInstance.getMessagesStorage().getUserSync(j), charSequence, j, i));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onReceive$0 */
-    public /* synthetic */ void lambda$onReceive$0$WearReplyReceiver(AccountInstance accountInstance, TLRPC$User tLRPC$User, CharSequence charSequence, long j, int i) {
+    public /* synthetic */ void lambda$onReceive$0(AccountInstance accountInstance, TLRPC$User tLRPC$User, CharSequence charSequence, long j, int i) {
         accountInstance.getMessagesController().putUser(tLRPC$User, true);
         sendMessage(accountInstance, charSequence, j, i);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onReceive$3 */
-    public /* synthetic */ void lambda$onReceive$3$WearReplyReceiver(AccountInstance accountInstance, int i, CharSequence charSequence, long j, int i2) {
-        AndroidUtilities.runOnUIThread(new Runnable(accountInstance, accountInstance.getMessagesStorage().getChatSync(-i), charSequence, j, i2) {
-            public final /* synthetic */ AccountInstance f$1;
-            public final /* synthetic */ TLRPC$Chat f$2;
-            public final /* synthetic */ CharSequence f$3;
-            public final /* synthetic */ long f$4;
-            public final /* synthetic */ int f$5;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r7;
-            }
-
-            public final void run() {
-                WearReplyReceiver.this.lambda$onReceive$2$WearReplyReceiver(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
-            }
-        });
+    public /* synthetic */ void lambda$onReceive$3(AccountInstance accountInstance, long j, CharSequence charSequence, int i) {
+        AndroidUtilities.runOnUIThread(new WearReplyReceiver$$ExternalSyntheticLambda2(this, accountInstance, accountInstance.getMessagesStorage().getChatSync(-j), charSequence, j, i));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onReceive$2 */
-    public /* synthetic */ void lambda$onReceive$2$WearReplyReceiver(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, CharSequence charSequence, long j, int i) {
+    public /* synthetic */ void lambda$onReceive$2(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, CharSequence charSequence, long j, int i) {
         accountInstance.getMessagesController().putChat(tLRPC$Chat, true);
         sendMessage(accountInstance, charSequence, j, i);
     }

@@ -1,14 +1,22 @@
 package j$.util.stream;
 
-import j$.util.stream.D1;
+import j$.util.concurrent.a;
+import j$.util.function.BiFunction;
+import j$.util.function.CLASSNAMEb;
+import j$.util.function.Function;
 
-class G1 extends D1.i<Long> {
-    G1(D1 d1, CLASSNAMEh1 h1Var, U2 u2, int i) {
-        super(h1Var, u2, i);
+public final /* synthetic */ class G1 implements CLASSNAMEb {
+    public static final /* synthetic */ G1 a = new G1();
+
+    private /* synthetic */ G1() {
     }
 
-    /* access modifiers changed from: package-private */
-    public A2 G0(int i, A2 a2) {
-        return a2;
+    public BiFunction andThen(Function function) {
+        function.getClass();
+        return new a((BiFunction) this, function);
+    }
+
+    public final Object apply(Object obj, Object obj2) {
+        return new P1((CLASSNAMEv1) obj, (CLASSNAMEv1) obj2);
     }
 }

@@ -133,6 +133,7 @@ public class AndroidUtilities {
     public static final int FLAG_TAG_BR = 1;
     public static final int FLAG_TAG_COLOR = 4;
     public static final int FLAG_TAG_URL = 8;
+    public static final String STICKERS_PLACEHOLDER_PACK_NAME = "tg_placeholders_android";
     public static Pattern WEB_URL;
     public static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
     private static int adjustOwnerClassGuid = 0;
@@ -166,7 +167,7 @@ public class AndroidUtilities {
     public static int roundMessageSize;
     private static Paint roundPaint;
     public static int roundPlayingMessageSize;
-    public static final Linkify.MatchFilter sUrlMatchFilter = $$Lambda$AndroidUtilities$7u2C_VzyCOR_g29g_gFE94u3hQ.INSTANCE;
+    public static final Linkify.MatchFilter sUrlMatchFilter = AndroidUtilities$$ExternalSyntheticLambda2.INSTANCE;
     public static float screenRefreshRate = 60.0f;
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
@@ -184,6 +185,13 @@ public class AndroidUtilities {
             return 0;
         }
         return i > i2 ? 1 : -1;
+    }
+
+    public static int compare(long j, long j2) {
+        if (j == j2) {
+            return 0;
+        }
+        return j > j2 ? 1 : -1;
     }
 
     public static int getMyLayerVersion(int i) {
@@ -327,13 +335,13 @@ public class AndroidUtilities {
         }
     }
 
-    public static CharSequence highlightText(CharSequence charSequence, ArrayList<String> arrayList) {
+    public static CharSequence highlightText(CharSequence charSequence, ArrayList<String> arrayList, Theme.ResourcesProvider resourcesProvider) {
         if (arrayList == null) {
             return null;
         }
         int i = 0;
         for (int i2 = 0; i2 < arrayList.size(); i2++) {
-            CharSequence highlightText = highlightText(charSequence, arrayList.get(i2));
+            CharSequence highlightText = highlightText(charSequence, arrayList.get(i2), resourcesProvider);
             if (highlightText != null) {
                 charSequence = highlightText;
             } else {
@@ -346,7 +354,7 @@ public class AndroidUtilities {
         return charSequence;
     }
 
-    public static CharSequence highlightText(CharSequence charSequence, String str) {
+    public static CharSequence highlightText(CharSequence charSequence, String str, Theme.ResourcesProvider resourcesProvider) {
         if (TextUtils.isEmpty(str) || TextUtils.isEmpty(charSequence)) {
             return null;
         }
@@ -355,7 +363,7 @@ public class AndroidUtilities {
         int indexOf = lowerCase.indexOf(str);
         while (indexOf >= 0) {
             try {
-                valueOf.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4"), indexOf, Math.min(str.length() + indexOf, charSequence.length()), 0);
+                valueOf.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4", resourcesProvider), indexOf, Math.min(str.length() + indexOf, charSequence.length()), 0);
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
@@ -427,7 +435,8 @@ public class AndroidUtilities {
         }
     }
 
-    static /* synthetic */ boolean lambda$static$0(CharSequence charSequence, int i, int i2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$static$0(CharSequence charSequence, int i, int i2) {
         return i == 0 || charSequence.charAt(i - 1) != '@';
     }
 
@@ -470,7 +479,7 @@ public class AndroidUtilities {
 
     private static void pruneOverlaps(ArrayList<LinkSpec> arrayList) {
         int i;
-        Collections.sort(arrayList, $$Lambda$AndroidUtilities$4i4JBH81JuUypGnQlUP0ZWEqgo.INSTANCE);
+        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda6.INSTANCE);
         int size = arrayList.size();
         int i2 = 0;
         while (i2 < size - 1) {
@@ -491,7 +500,8 @@ public class AndroidUtilities {
         }
     }
 
-    static /* synthetic */ int lambda$pruneOverlaps$1(LinkSpec linkSpec, LinkSpec linkSpec2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$pruneOverlaps$1(LinkSpec linkSpec, LinkSpec linkSpec2) {
         int i;
         int i2;
         int i3 = linkSpec.start;
@@ -736,18 +746,15 @@ public class AndroidUtilities {
             }
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
             builder.setMessage(LocaleController.getString("InstallGoogleMaps", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    AndroidUtilities.lambda$isGoogleMapsInstalled$2(BaseFragment.this, dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new AndroidUtilities$$ExternalSyntheticLambda1(baseFragment));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             baseFragment.showDialog(builder.create());
             return false;
         }
     }
 
-    static /* synthetic */ void lambda$isGoogleMapsInstalled$2(BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$isGoogleMapsInstalled$2(BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
         try {
             baseFragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
         } catch (Exception e) {
@@ -1040,7 +1047,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625014(0x7f0e0436, float:1.8877224E38)
+                r0 = 2131625027(0x7f0e0443, float:1.887725E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1052,12 +1059,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625015(0x7f0e0437, float:1.8877226E38)
+                r0 = 2131625028(0x7f0e0444, float:1.8877252E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625016(0x7f0e0438, float:1.8877228E38)
+                r0 = 2131625029(0x7f0e0445, float:1.8877254E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1175,27 +1182,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627009(0x7f0e0CLASSNAME, float:1.888127E38)
+                r0 = 2131627042(0x7f0e0CLASSNAME, float:1.8881337E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627010(0x7f0e0CLASSNAME, float:1.8881272E38)
+                r0 = 2131627043(0x7f0e0CLASSNAME, float:1.888134E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627001(0x7f0e0bf9, float:1.8881254E38)
+                r0 = 2131627034(0x7f0e0c1a, float:1.8881321E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627000(0x7f0e0bf8, float:1.8881252E38)
+                r0 = 2131627033(0x7f0e0CLASSNAME, float:1.888132E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627002(0x7f0e0bfa, float:1.8881256E38)
+                r0 = 2131627035(0x7f0e0c1b, float:1.8881323E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -1262,35 +1269,35 @@ public class AndroidUtilities {
             goto L_0x0027
         L_0x001a:
             r0 = move-exception
-            goto L_0x0345
+            goto L_0x0347
         L_0x001d:
-            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0343 }
-            android.content.ContentResolver r4 = r4.getContentResolver()     // Catch:{ all -> 0x0343 }
-            java.io.InputStream r0 = r4.openInputStream(r0)     // Catch:{ all -> 0x0343 }
+            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0345 }
+            android.content.ContentResolver r4 = r4.getContentResolver()     // Catch:{ all -> 0x0345 }
+            java.io.InputStream r0 = r4.openInputStream(r0)     // Catch:{ all -> 0x0345 }
         L_0x0027:
-            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ all -> 0x0343 }
-            r4.<init>()     // Catch:{ all -> 0x0343 }
-            java.io.BufferedReader r5 = new java.io.BufferedReader     // Catch:{ all -> 0x0343 }
-            java.io.InputStreamReader r6 = new java.io.InputStreamReader     // Catch:{ all -> 0x0343 }
+            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ all -> 0x0345 }
+            r4.<init>()     // Catch:{ all -> 0x0345 }
+            java.io.BufferedReader r5 = new java.io.BufferedReader     // Catch:{ all -> 0x0345 }
+            java.io.InputStreamReader r6 = new java.io.InputStreamReader     // Catch:{ all -> 0x0345 }
             java.lang.String r7 = "UTF-8"
-            r6.<init>(r0, r7)     // Catch:{ all -> 0x0343 }
-            r5.<init>(r6)     // Catch:{ all -> 0x0343 }
+            r6.<init>(r0, r7)     // Catch:{ all -> 0x0345 }
+            r5.<init>(r6)     // Catch:{ all -> 0x0345 }
             r7 = 0
             r8 = r3
             r9 = r8
             r11 = r9
             r10 = 0
         L_0x003d:
-            java.lang.String r12 = r5.readLine()     // Catch:{ all -> 0x0343 }
+            java.lang.String r12 = r5.readLine()     // Catch:{ all -> 0x0345 }
             if (r12 == 0) goto L_0x02ad
             java.lang.String r13 = "PHOTO"
-            boolean r13 = r12.startsWith(r13)     // Catch:{ all -> 0x0343 }
+            boolean r13 = r12.startsWith(r13)     // Catch:{ all -> 0x0345 }
             if (r13 == 0) goto L_0x004d
             r10 = 1
             goto L_0x003d
         L_0x004d:
             r13 = 58
-            int r13 = r12.indexOf(r13)     // Catch:{ all -> 0x0343 }
+            int r13 = r12.indexOf(r13)     // Catch:{ all -> 0x0345 }
             java.lang.String r14 = "ORG"
             java.lang.String r15 = "TEL"
             r6 = 2
@@ -1431,106 +1438,106 @@ public class AndroidUtilities {
             if (r10 != 0) goto L_0x0175
             if (r8 == 0) goto L_0x0175
             if (r11 != 0) goto L_0x0170
-            java.lang.StringBuilder r3 = r8.vcard     // Catch:{ all -> 0x0343 }
-            int r3 = r3.length()     // Catch:{ all -> 0x0343 }
+            java.lang.StringBuilder r3 = r8.vcard     // Catch:{ all -> 0x0345 }
+            int r3 = r3.length()     // Catch:{ all -> 0x0345 }
             if (r3 <= 0) goto L_0x016a
-            java.lang.StringBuilder r3 = r8.vcard     // Catch:{ all -> 0x0343 }
+            java.lang.StringBuilder r3 = r8.vcard     // Catch:{ all -> 0x0345 }
             r6 = 10
-            r3.append(r6)     // Catch:{ all -> 0x0343 }
+            r3.append(r6)     // Catch:{ all -> 0x0345 }
         L_0x016a:
-            java.lang.StringBuilder r3 = r8.vcard     // Catch:{ all -> 0x0343 }
-            r3.append(r12)     // Catch:{ all -> 0x0343 }
+            java.lang.StringBuilder r3 = r8.vcard     // Catch:{ all -> 0x0345 }
+            r3.append(r12)     // Catch:{ all -> 0x0345 }
             goto L_0x0175
         L_0x0170:
-            java.util.ArrayList<java.lang.String> r3 = r11.vcardData     // Catch:{ all -> 0x0343 }
-            r3.add(r12)     // Catch:{ all -> 0x0343 }
+            java.util.ArrayList<java.lang.String> r3 = r11.vcardData     // Catch:{ all -> 0x0345 }
+            r3.add(r12)     // Catch:{ all -> 0x0345 }
         L_0x0175:
             if (r9 == 0) goto L_0x0187
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x0343 }
-            r3.<init>()     // Catch:{ all -> 0x0343 }
-            r3.append(r9)     // Catch:{ all -> 0x0343 }
-            r3.append(r12)     // Catch:{ all -> 0x0343 }
-            java.lang.String r12 = r3.toString()     // Catch:{ all -> 0x0343 }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x0345 }
+            r3.<init>()     // Catch:{ all -> 0x0345 }
+            r3.append(r9)     // Catch:{ all -> 0x0345 }
+            r3.append(r12)     // Catch:{ all -> 0x0345 }
+            java.lang.String r12 = r3.toString()     // Catch:{ all -> 0x0345 }
             r9 = 0
         L_0x0187:
             java.lang.String r3 = "=QUOTED-PRINTABLE"
-            boolean r3 = r12.contains(r3)     // Catch:{ all -> 0x0343 }
+            boolean r3 = r12.contains(r3)     // Catch:{ all -> 0x0345 }
             java.lang.String r6 = "="
             if (r3 == 0) goto L_0x01a4
-            boolean r3 = r12.endsWith(r6)     // Catch:{ all -> 0x0343 }
+            boolean r3 = r12.endsWith(r6)     // Catch:{ all -> 0x0345 }
             if (r3 == 0) goto L_0x01a4
-            int r3 = r12.length()     // Catch:{ all -> 0x0343 }
+            int r3 = r12.length()     // Catch:{ all -> 0x0345 }
             r6 = 1
             int r3 = r3 - r6
-            java.lang.String r9 = r12.substring(r7, r3)     // Catch:{ all -> 0x0343 }
+            java.lang.String r9 = r12.substring(r7, r3)     // Catch:{ all -> 0x0345 }
             r3 = 0
             goto L_0x003d
         L_0x01a4:
             if (r10 != 0) goto L_0x01ac
             if (r8 == 0) goto L_0x01ac
             if (r11 == 0) goto L_0x01ac
-            r11.fullData = r12     // Catch:{ all -> 0x0343 }
+            r11.fullData = r12     // Catch:{ all -> 0x0345 }
         L_0x01ac:
             java.lang.String r3 = ":"
-            int r3 = r12.indexOf(r3)     // Catch:{ all -> 0x0343 }
+            int r3 = r12.indexOf(r3)     // Catch:{ all -> 0x0345 }
             if (r3 < 0) goto L_0x01cd
             r7 = 2
-            java.lang.String[] r1 = new java.lang.String[r7]     // Catch:{ all -> 0x0343 }
+            java.lang.String[] r1 = new java.lang.String[r7]     // Catch:{ all -> 0x0345 }
             r7 = 0
-            java.lang.String r16 = r12.substring(r7, r3)     // Catch:{ all -> 0x0343 }
-            r1[r7] = r16     // Catch:{ all -> 0x0343 }
+            java.lang.String r16 = r12.substring(r7, r3)     // Catch:{ all -> 0x0345 }
+            r1[r7] = r16     // Catch:{ all -> 0x0345 }
             int r3 = r3 + 1
-            java.lang.String r3 = r12.substring(r3)     // Catch:{ all -> 0x0343 }
-            java.lang.String r3 = r3.trim()     // Catch:{ all -> 0x0343 }
+            java.lang.String r3 = r12.substring(r3)     // Catch:{ all -> 0x0345 }
+            java.lang.String r3 = r3.trim()     // Catch:{ all -> 0x0345 }
             r7 = 1
-            r1[r7] = r3     // Catch:{ all -> 0x0343 }
+            r1[r7] = r3     // Catch:{ all -> 0x0345 }
             r7 = 0
             goto L_0x01d8
         L_0x01cd:
             r1 = 1
-            java.lang.String[] r3 = new java.lang.String[r1]     // Catch:{ all -> 0x0343 }
-            java.lang.String r1 = r12.trim()     // Catch:{ all -> 0x0343 }
+            java.lang.String[] r3 = new java.lang.String[r1]     // Catch:{ all -> 0x0345 }
+            java.lang.String r1 = r12.trim()     // Catch:{ all -> 0x0345 }
             r7 = 0
-            r3[r7] = r1     // Catch:{ all -> 0x0343 }
+            r3[r7] = r1     // Catch:{ all -> 0x0345 }
             r1 = r3
         L_0x01d8:
-            int r3 = r1.length     // Catch:{ all -> 0x0343 }
+            int r3 = r1.length     // Catch:{ all -> 0x0345 }
             r12 = 2
             if (r3 < r12) goto L_0x02a2
             if (r8 != 0) goto L_0x01e0
             goto L_0x02a2
         L_0x01e0:
-            r3 = r1[r7]     // Catch:{ all -> 0x0343 }
+            r3 = r1[r7]     // Catch:{ all -> 0x0345 }
             java.lang.String r12 = "FN"
-            boolean r3 = r3.startsWith(r12)     // Catch:{ all -> 0x0343 }
+            boolean r3 = r3.startsWith(r12)     // Catch:{ all -> 0x0345 }
             java.lang.String r12 = "N"
             if (r3 != 0) goto L_0x0218
-            r3 = r1[r7]     // Catch:{ all -> 0x0343 }
-            boolean r3 = r3.startsWith(r12)     // Catch:{ all -> 0x0343 }
+            r3 = r1[r7]     // Catch:{ all -> 0x0345 }
+            boolean r3 = r3.startsWith(r12)     // Catch:{ all -> 0x0345 }
             if (r3 != 0) goto L_0x0218
-            r3 = r1[r7]     // Catch:{ all -> 0x0343 }
-            boolean r3 = r3.startsWith(r14)     // Catch:{ all -> 0x0343 }
+            r3 = r1[r7]     // Catch:{ all -> 0x0345 }
+            boolean r3 = r3.startsWith(r14)     // Catch:{ all -> 0x0345 }
             if (r3 == 0) goto L_0x0205
-            java.lang.String r3 = r8.name     // Catch:{ all -> 0x0343 }
-            boolean r3 = android.text.TextUtils.isEmpty(r3)     // Catch:{ all -> 0x0343 }
+            java.lang.String r3 = r8.name     // Catch:{ all -> 0x0345 }
+            boolean r3 = android.text.TextUtils.isEmpty(r3)     // Catch:{ all -> 0x0345 }
             if (r3 == 0) goto L_0x0205
             goto L_0x0218
         L_0x0205:
             r3 = 0
-            r6 = r1[r3]     // Catch:{ all -> 0x0343 }
-            boolean r3 = r6.startsWith(r15)     // Catch:{ all -> 0x0343 }
+            r6 = r1[r3]     // Catch:{ all -> 0x0345 }
+            boolean r3 = r6.startsWith(r15)     // Catch:{ all -> 0x0345 }
             if (r3 == 0) goto L_0x02a2
-            java.util.ArrayList<java.lang.String> r3 = r8.phones     // Catch:{ all -> 0x0343 }
+            java.util.ArrayList<java.lang.String> r3 = r8.phones     // Catch:{ all -> 0x0345 }
             r6 = 1
-            r1 = r1[r6]     // Catch:{ all -> 0x0343 }
-            r3.add(r1)     // Catch:{ all -> 0x0343 }
+            r1 = r1[r6]     // Catch:{ all -> 0x0345 }
+            r3.add(r1)     // Catch:{ all -> 0x0345 }
             goto L_0x02a2
         L_0x0218:
             r3 = 0
-            r7 = r1[r3]     // Catch:{ all -> 0x0343 }
+            r7 = r1[r3]     // Catch:{ all -> 0x0345 }
             java.lang.String r3 = ";"
-            java.lang.String[] r3 = r7.split(r3)     // Catch:{ all -> 0x0343 }
-            int r7 = r3.length     // Catch:{ all -> 0x0343 }
+            java.lang.String[] r3 = r7.split(r3)     // Catch:{ all -> 0x0345 }
+            int r7 = r3.length     // Catch:{ all -> 0x0345 }
             r17 = r9
             r9 = 0
             r14 = 0
@@ -1538,31 +1545,31 @@ public class AndroidUtilities {
         L_0x0227:
             if (r14 >= r7) goto L_0x0260
             r18 = r7
-            r7 = r3[r14]     // Catch:{ all -> 0x0343 }
-            java.lang.String[] r7 = r7.split(r6)     // Catch:{ all -> 0x0343 }
+            r7 = r3[r14]     // Catch:{ all -> 0x0345 }
+            java.lang.String[] r7 = r7.split(r6)     // Catch:{ all -> 0x0345 }
             r19 = r3
-            int r3 = r7.length     // Catch:{ all -> 0x0343 }
+            int r3 = r7.length     // Catch:{ all -> 0x0345 }
             r20 = r6
             r6 = 2
             if (r3 == r6) goto L_0x023a
             goto L_0x0257
         L_0x023a:
             r3 = 0
-            r6 = r7[r3]     // Catch:{ all -> 0x0343 }
+            r6 = r7[r3]     // Catch:{ all -> 0x0345 }
             java.lang.String r3 = "CHARSET"
-            boolean r3 = r6.equals(r3)     // Catch:{ all -> 0x0343 }
+            boolean r3 = r6.equals(r3)     // Catch:{ all -> 0x0345 }
             if (r3 == 0) goto L_0x0249
             r3 = 1
-            r9 = r7[r3]     // Catch:{ all -> 0x0343 }
+            r9 = r7[r3]     // Catch:{ all -> 0x0345 }
             goto L_0x0257
         L_0x0249:
             r3 = 0
-            r6 = r7[r3]     // Catch:{ all -> 0x0343 }
+            r6 = r7[r3]     // Catch:{ all -> 0x0345 }
             java.lang.String r3 = "ENCODING"
-            boolean r3 = r6.equals(r3)     // Catch:{ all -> 0x0343 }
+            boolean r3 = r6.equals(r3)     // Catch:{ all -> 0x0345 }
             if (r3 == 0) goto L_0x0257
             r3 = 1
-            r15 = r7[r3]     // Catch:{ all -> 0x0343 }
+            r15 = r7[r3]     // Catch:{ all -> 0x0345 }
         L_0x0257:
             int r14 = r14 + 1
             r7 = r18
@@ -1571,36 +1578,36 @@ public class AndroidUtilities {
             goto L_0x0227
         L_0x0260:
             r3 = 0
-            r6 = r1[r3]     // Catch:{ all -> 0x0343 }
-            boolean r3 = r6.startsWith(r12)     // Catch:{ all -> 0x0343 }
+            r6 = r1[r3]     // Catch:{ all -> 0x0345 }
+            boolean r3 = r6.startsWith(r12)     // Catch:{ all -> 0x0345 }
             if (r3 == 0) goto L_0x027c
             r3 = 1
-            r1 = r1[r3]     // Catch:{ all -> 0x0343 }
+            r1 = r1[r3]     // Catch:{ all -> 0x0345 }
             r3 = 59
             r6 = 32
-            java.lang.String r1 = r1.replace(r3, r6)     // Catch:{ all -> 0x0343 }
-            java.lang.String r1 = r1.trim()     // Catch:{ all -> 0x0343 }
-            r8.name = r1     // Catch:{ all -> 0x0343 }
+            java.lang.String r1 = r1.replace(r3, r6)     // Catch:{ all -> 0x0345 }
+            java.lang.String r1 = r1.trim()     // Catch:{ all -> 0x0345 }
+            r8.name = r1     // Catch:{ all -> 0x0345 }
             r3 = 1
             goto L_0x0281
         L_0x027c:
             r3 = 1
-            r1 = r1[r3]     // Catch:{ all -> 0x0343 }
-            r8.name = r1     // Catch:{ all -> 0x0343 }
+            r1 = r1[r3]     // Catch:{ all -> 0x0345 }
+            r8.name = r1     // Catch:{ all -> 0x0345 }
         L_0x0281:
             if (r15 == 0) goto L_0x02a5
             java.lang.String r1 = "QUOTED-PRINTABLE"
-            boolean r1 = r15.equalsIgnoreCase(r1)     // Catch:{ all -> 0x0343 }
+            boolean r1 = r15.equalsIgnoreCase(r1)     // Catch:{ all -> 0x0345 }
             if (r1 == 0) goto L_0x02a5
-            java.lang.String r1 = r8.name     // Catch:{ all -> 0x0343 }
-            byte[] r1 = getStringBytes(r1)     // Catch:{ all -> 0x0343 }
-            byte[] r1 = decodeQuotedPrintable(r1)     // Catch:{ all -> 0x0343 }
+            java.lang.String r1 = r8.name     // Catch:{ all -> 0x0345 }
+            byte[] r1 = getStringBytes(r1)     // Catch:{ all -> 0x0345 }
+            byte[] r1 = decodeQuotedPrintable(r1)     // Catch:{ all -> 0x0345 }
             if (r1 == 0) goto L_0x02a5
-            int r6 = r1.length     // Catch:{ all -> 0x0343 }
+            int r6 = r1.length     // Catch:{ all -> 0x0345 }
             if (r6 == 0) goto L_0x02a5
-            java.lang.String r6 = new java.lang.String     // Catch:{ all -> 0x0343 }
-            r6.<init>(r1, r9)     // Catch:{ all -> 0x0343 }
-            r8.name = r6     // Catch:{ all -> 0x0343 }
+            java.lang.String r6 = new java.lang.String     // Catch:{ all -> 0x0345 }
+            r6.<init>(r1, r9)     // Catch:{ all -> 0x0345 }
+            r8.name = r6     // Catch:{ all -> 0x0345 }
             goto L_0x02a5
         L_0x02a2:
             r17 = r9
@@ -1617,20 +1624,20 @@ public class AndroidUtilities {
             goto L_0x02b8
         L_0x02b4:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0343 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0345 }
         L_0x02b8:
             r3 = 0
             r7 = 0
         L_0x02ba:
             int r0 = r4.size()     // Catch:{ all -> 0x001a }
-            if (r7 >= r0) goto L_0x0348
+            if (r7 >= r0) goto L_0x034a
             java.lang.Object r0 = r4.get(r7)     // Catch:{ all -> 0x001a }
             org.telegram.messenger.AndroidUtilities$VcardData r0 = (org.telegram.messenger.AndroidUtilities.VcardData) r0     // Catch:{ all -> 0x001a }
             java.lang.String r1 = r0.name     // Catch:{ all -> 0x001a }
-            if (r1 == 0) goto L_0x033e
+            if (r1 == 0) goto L_0x0340
             java.util.ArrayList<java.lang.String> r1 = r0.phones     // Catch:{ all -> 0x001a }
             boolean r1 = r1.isEmpty()     // Catch:{ all -> 0x001a }
-            if (r1 != 0) goto L_0x033e
+            if (r1 != 0) goto L_0x0340
             if (r3 != 0) goto L_0x02da
             java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ all -> 0x001a }
             r1.<init>()     // Catch:{ all -> 0x001a }
@@ -1653,46 +1660,48 @@ public class AndroidUtilities {
             r9 = 0
             int r8 = java.lang.Math.max(r9, r8)     // Catch:{ all -> 0x001a }
             java.lang.String r8 = r6.substring(r8)     // Catch:{ all -> 0x001a }
-            org.telegram.messenger.ContactsController r9 = org.telegram.messenger.ContactsController.getInstance(r22)     // Catch:{ all -> 0x001a }
-            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r9 = r9.contactsByShortPhone     // Catch:{ all -> 0x001a }
-            java.lang.Object r8 = r9.get(r8)     // Catch:{ all -> 0x001a }
+            org.telegram.messenger.ContactsController r10 = org.telegram.messenger.ContactsController.getInstance(r22)     // Catch:{ all -> 0x001a }
+            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r10 = r10.contactsByShortPhone     // Catch:{ all -> 0x001a }
+            java.lang.Object r8 = r10.get(r8)     // Catch:{ all -> 0x001a }
             if (r8 == 0) goto L_0x0311
             r1 = r6
-            goto L_0x0314
+            goto L_0x0315
         L_0x0311:
             int r5 = r5 + 1
             goto L_0x02e4
         L_0x0314:
+            r9 = 0
+        L_0x0315:
             org.telegram.tgnet.TLRPC$TL_userContact_old2 r5 = new org.telegram.tgnet.TLRPC$TL_userContact_old2     // Catch:{ all -> 0x001a }
             r5.<init>()     // Catch:{ all -> 0x001a }
             r5.phone = r1     // Catch:{ all -> 0x001a }
             java.lang.String r1 = r0.name     // Catch:{ all -> 0x001a }
             r5.first_name = r1     // Catch:{ all -> 0x001a }
             r5.last_name = r2     // Catch:{ all -> 0x001a }
-            r1 = 0
-            r5.id = r1     // Catch:{ all -> 0x001a }
-            org.telegram.tgnet.TLRPC$TL_restrictionReason r6 = new org.telegram.tgnet.TLRPC$TL_restrictionReason     // Catch:{ all -> 0x001a }
-            r6.<init>()     // Catch:{ all -> 0x001a }
+            r10 = 0
+            r5.id = r10     // Catch:{ all -> 0x001a }
+            org.telegram.tgnet.TLRPC$TL_restrictionReason r1 = new org.telegram.tgnet.TLRPC$TL_restrictionReason     // Catch:{ all -> 0x001a }
+            r1.<init>()     // Catch:{ all -> 0x001a }
             java.lang.StringBuilder r0 = r0.vcard     // Catch:{ all -> 0x001a }
             java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x001a }
-            r6.text = r0     // Catch:{ all -> 0x001a }
-            r6.platform = r2     // Catch:{ all -> 0x001a }
-            r6.reason = r2     // Catch:{ all -> 0x001a }
+            r1.text = r0     // Catch:{ all -> 0x001a }
+            r1.platform = r2     // Catch:{ all -> 0x001a }
+            r1.reason = r2     // Catch:{ all -> 0x001a }
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_restrictionReason> r0 = r5.restriction_reason     // Catch:{ all -> 0x001a }
-            r0.add(r6)     // Catch:{ all -> 0x001a }
+            r0.add(r1)     // Catch:{ all -> 0x001a }
             r3.add(r5)     // Catch:{ all -> 0x001a }
-            goto L_0x033f
-        L_0x033e:
-            r1 = 0
-        L_0x033f:
+            goto L_0x0341
+        L_0x0340:
+            r9 = 0
+        L_0x0341:
             int r7 = r7 + 1
             goto L_0x02ba
-        L_0x0343:
+        L_0x0345:
             r0 = move-exception
             r3 = 0
-        L_0x0345:
+        L_0x0347:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0348:
+        L_0x034a:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.loadVCardFromStream(android.net.Uri, int, boolean, java.util.ArrayList, java.lang.String):java.util.ArrayList");
@@ -1743,7 +1752,7 @@ public class AndroidUtilities {
             waitingForSms = z;
             if (z) {
                 try {
-                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener($$Lambda$AndroidUtilities$hKLaMXCU8yErbTT06VTsVrEeIVM.INSTANCE);
+                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(AndroidUtilities$$ExternalSyntheticLambda5.INSTANCE);
                 } catch (Throwable th) {
                     FileLog.e(th);
                 }
@@ -1751,7 +1760,8 @@ public class AndroidUtilities {
         }
     }
 
-    static /* synthetic */ void lambda$setWaitingForSms$3(Void voidR) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setWaitingForSms$3(Void voidR) {
         if (BuildVars.DEBUG_VERSION) {
             FileLog.d("sms listener registered");
         }
@@ -2273,7 +2283,7 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x006f */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0070 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String obtainLoginPhoneCall(java.lang.String r10) {
         /*
@@ -2282,61 +2292,61 @@ public class AndroidUtilities {
             if (r0 != 0) goto L_0x0006
             return r1
         L_0x0006:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0070 }
-            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0070 }
-            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0070 }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0071 }
+            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0071 }
+            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0071 }
             r0 = 2
-            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0070 }
+            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0071 }
             java.lang.String r0 = "number"
             r8 = 0
-            r4[r8] = r0     // Catch:{ Exception -> 0x0070 }
+            r4[r8] = r0     // Catch:{ Exception -> 0x0071 }
             java.lang.String r0 = "date"
             r9 = 1
-            r4[r9] = r0     // Catch:{ Exception -> 0x0070 }
+            r4[r9] = r0     // Catch:{ Exception -> 0x0071 }
             java.lang.String r5 = "type IN (3,1,5)"
             r6 = 0
             java.lang.String r7 = "date DESC LIMIT 5"
-            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0070 }
-        L_0x0024:
-            boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x0069 }
-            if (r2 == 0) goto L_0x0065
-            java.lang.String r2 = r0.getString(r8)     // Catch:{ all -> 0x0069 }
-            long r3 = r0.getLong(r9)     // Catch:{ all -> 0x0069 }
-            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x0069 }
-            if (r5 == 0) goto L_0x004a
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x0069 }
-            r5.<init>()     // Catch:{ all -> 0x0069 }
+            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0071 }
+        L_0x0025:
+            boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x006a }
+            if (r2 == 0) goto L_0x0066
+            java.lang.String r2 = r0.getString(r8)     // Catch:{ all -> 0x006a }
+            long r3 = r0.getLong(r9)     // Catch:{ all -> 0x006a }
+            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x006a }
+            if (r5 == 0) goto L_0x004b
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x006a }
+            r5.<init>()     // Catch:{ all -> 0x006a }
             java.lang.String r6 = "number = "
-            r5.append(r6)     // Catch:{ all -> 0x0069 }
-            r5.append(r2)     // Catch:{ all -> 0x0069 }
-            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x0069 }
-            org.telegram.messenger.FileLog.e((java.lang.String) r5)     // Catch:{ all -> 0x0069 }
-        L_0x004a:
-            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0069 }
+            r5.append(r6)     // Catch:{ all -> 0x006a }
+            r5.append(r2)     // Catch:{ all -> 0x006a }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x006a }
+            org.telegram.messenger.FileLog.e((java.lang.String) r5)     // Catch:{ all -> 0x006a }
+        L_0x004b:
+            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x006a }
             long r5 = r5 - r3
-            long r3 = java.lang.Math.abs(r5)     // Catch:{ all -> 0x0069 }
+            long r3 = java.lang.Math.abs(r5)     // Catch:{ all -> 0x006a }
             r5 = 3600000(0x36ee80, double:1.7786363E-317)
             int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r7 < 0) goto L_0x005b
-            goto L_0x0024
-        L_0x005b:
-            boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x0069 }
-            if (r3 == 0) goto L_0x0024
-            r0.close()     // Catch:{ Exception -> 0x0070 }
+            if (r7 < 0) goto L_0x005c
+            goto L_0x0025
+        L_0x005c:
+            boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x006a }
+            if (r3 == 0) goto L_0x0025
+            r0.close()     // Catch:{ Exception -> 0x0071 }
             return r2
-        L_0x0065:
-            r0.close()     // Catch:{ Exception -> 0x0070 }
-            goto L_0x0074
-        L_0x0069:
+        L_0x0066:
+            r0.close()     // Catch:{ Exception -> 0x0071 }
+            goto L_0x0075
+        L_0x006a:
             r10 = move-exception
-            if (r0 == 0) goto L_0x006f
-            r0.close()     // Catch:{ all -> 0x006f }
-        L_0x006f:
-            throw r10     // Catch:{ Exception -> 0x0070 }
+            if (r0 == 0) goto L_0x0070
+            r0.close()     // Catch:{ all -> 0x0070 }
         L_0x0070:
+            throw r10     // Catch:{ Exception -> 0x0071 }
+        L_0x0071:
             r10 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
-        L_0x0074:
+        L_0x0075:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.obtainLoginPhoneCall(java.lang.String):java.lang.String");
@@ -3204,9 +3214,9 @@ public class AndroidUtilities {
         return;
      */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:59:0x0100 */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0104 A[Catch:{ Exception -> 0x011b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x010c A[Catch:{ Exception -> 0x011b }] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:59:0x0101 */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x0105 A[Catch:{ Exception -> 0x011c }] */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x010d A[Catch:{ Exception -> 0x011c }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void openDocument(org.telegram.messenger.MessageObject r16, android.app.Activity r17, org.telegram.ui.ActionBar.BaseFragment r18) {
         /*
@@ -3249,10 +3259,10 @@ public class AndroidUtilities {
             org.telegram.tgnet.TLRPC$Message r5 = r0.messageOwner
             java.io.File r5 = org.telegram.messenger.FileLoader.getPathToMessage(r5)
         L_0x0043:
-            if (r5 == 0) goto L_0x0157
+            if (r5 == 0) goto L_0x0158
             boolean r7 = r5.exists()
-            if (r7 == 0) goto L_0x0157
-            r7 = 2131626611(0x7f0e0a73, float:1.8880463E38)
+            if (r7 == 0) goto L_0x0158
+            r7 = 2131626641(0x7f0e0a91, float:1.8880524E38)
             java.lang.String r8 = "OK"
             r9 = 2131624288(0x7f0e0160, float:1.8875751E38)
             java.lang.String r10 = "AppName"
@@ -3269,13 +3279,13 @@ public class AndroidUtilities {
             org.telegram.ui.ThemePreviewActivity r1 = new org.telegram.ui.ThemePreviewActivity
             r1.<init>(r0)
             r2.presentFragment(r1)
-            goto L_0x0157
+            goto L_0x0158
         L_0x007c:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625904(0x7f0e07b0, float:1.887903E38)
+            r1 = 2131625920(0x7f0e07c0, float:1.8879062E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3283,83 +3293,83 @@ public class AndroidUtilities {
             r0.setPositiveButton(r1, r6)
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
             r2.showDialog(r0)
-            goto L_0x0157
+            goto L_0x0158
         L_0x00a4:
-            android.content.Intent r12 = new android.content.Intent     // Catch:{ Exception -> 0x011b }
+            android.content.Intent r12 = new android.content.Intent     // Catch:{ Exception -> 0x011c }
             java.lang.String r13 = "android.intent.action.VIEW"
-            r12.<init>(r13)     // Catch:{ Exception -> 0x011b }
-            r12.setFlags(r11)     // Catch:{ Exception -> 0x011b }
-            android.webkit.MimeTypeMap r13 = android.webkit.MimeTypeMap.getSingleton()     // Catch:{ Exception -> 0x011b }
+            r12.<init>(r13)     // Catch:{ Exception -> 0x011c }
+            r12.setFlags(r11)     // Catch:{ Exception -> 0x011c }
+            android.webkit.MimeTypeMap r13 = android.webkit.MimeTypeMap.getSingleton()     // Catch:{ Exception -> 0x011c }
             r14 = 46
-            int r14 = r4.lastIndexOf(r14)     // Catch:{ Exception -> 0x011b }
+            int r14 = r4.lastIndexOf(r14)     // Catch:{ Exception -> 0x011c }
             r15 = -1
             if (r14 == r15) goto L_0x00d4
             int r14 = r14 + r11
-            java.lang.String r4 = r4.substring(r14)     // Catch:{ Exception -> 0x011b }
-            java.lang.String r4 = r4.toLowerCase()     // Catch:{ Exception -> 0x011b }
-            java.lang.String r4 = r13.getMimeTypeFromExtension(r4)     // Catch:{ Exception -> 0x011b }
+            java.lang.String r4 = r4.substring(r14)     // Catch:{ Exception -> 0x011c }
+            java.lang.String r4 = r4.toLowerCase()     // Catch:{ Exception -> 0x011c }
+            java.lang.String r4 = r13.getMimeTypeFromExtension(r4)     // Catch:{ Exception -> 0x011c }
             if (r4 != 0) goto L_0x00d5
-            java.lang.String r4 = r3.mime_type     // Catch:{ Exception -> 0x011b }
+            java.lang.String r4 = r3.mime_type     // Catch:{ Exception -> 0x011c }
             if (r4 == 0) goto L_0x00d4
-            int r3 = r4.length()     // Catch:{ Exception -> 0x011b }
+            int r3 = r4.length()     // Catch:{ Exception -> 0x011c }
             if (r3 != 0) goto L_0x00d5
         L_0x00d4:
             r4 = r6
         L_0x00d5:
-            int r3 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x011b }
+            int r3 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x011c }
             java.lang.String r13 = "org.telegram.messenger.web.provider"
             r14 = 24
             java.lang.String r15 = "text/plain"
-            if (r3 < r14) goto L_0x00ec
-            android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r1, r13, r5)     // Catch:{ Exception -> 0x011b }
-            if (r4 == 0) goto L_0x00e7
+            if (r3 < r14) goto L_0x00ed
+            android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r1, r13, r5)     // Catch:{ Exception -> 0x011c }
+            if (r4 == 0) goto L_0x00e8
             r11 = r4
-            goto L_0x00e8
-        L_0x00e7:
-            r11 = r15
+            goto L_0x00e9
         L_0x00e8:
-            r12.setDataAndType(r3, r11)     // Catch:{ Exception -> 0x011b }
-            goto L_0x00f8
-        L_0x00ec:
-            android.net.Uri r3 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x011b }
-            if (r4 == 0) goto L_0x00f4
-            r11 = r4
-            goto L_0x00f5
-        L_0x00f4:
             r11 = r15
+        L_0x00e9:
+            r12.setDataAndType(r3, r11)     // Catch:{ Exception -> 0x011c }
+            goto L_0x00f9
+        L_0x00ed:
+            android.net.Uri r3 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x011c }
+            if (r4 == 0) goto L_0x00f5
+            r11 = r4
+            goto L_0x00f6
         L_0x00f5:
-            r12.setDataAndType(r3, r11)     // Catch:{ Exception -> 0x011b }
-        L_0x00f8:
+            r11 = r15
+        L_0x00f6:
+            r12.setDataAndType(r3, r11)     // Catch:{ Exception -> 0x011c }
+        L_0x00f9:
             r3 = 500(0x1f4, float:7.0E-43)
-            if (r4 == 0) goto L_0x0117
-            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x0100 }
-            goto L_0x0157
-        L_0x0100:
-            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x011b }
-            if (r4 < r14) goto L_0x010c
-            android.net.Uri r4 = androidx.core.content.FileProvider.getUriForFile(r1, r13, r5)     // Catch:{ Exception -> 0x011b }
-            r12.setDataAndType(r4, r15)     // Catch:{ Exception -> 0x011b }
-            goto L_0x0113
-        L_0x010c:
-            android.net.Uri r4 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x011b }
-            r12.setDataAndType(r4, r15)     // Catch:{ Exception -> 0x011b }
-        L_0x0113:
-            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x011b }
-            goto L_0x0157
-        L_0x0117:
-            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x011b }
-            goto L_0x0157
-        L_0x011b:
-            if (r1 != 0) goto L_0x011f
+            if (r4 == 0) goto L_0x0118
+            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x0101 }
+            goto L_0x0158
+        L_0x0101:
+            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x011c }
+            if (r4 < r14) goto L_0x010d
+            android.net.Uri r4 = androidx.core.content.FileProvider.getUriForFile(r1, r13, r5)     // Catch:{ Exception -> 0x011c }
+            r12.setDataAndType(r4, r15)     // Catch:{ Exception -> 0x011c }
+            goto L_0x0114
+        L_0x010d:
+            android.net.Uri r4 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x011c }
+            r12.setDataAndType(r4, r15)     // Catch:{ Exception -> 0x011c }
+        L_0x0114:
+            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x011c }
+            goto L_0x0158
+        L_0x0118:
+            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x011c }
+            goto L_0x0158
+        L_0x011c:
+            if (r1 != 0) goto L_0x0120
             return
-        L_0x011f:
+        L_0x0120:
             org.telegram.ui.ActionBar.AlertDialog$Builder r3 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r3.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626382(0x7f0e098e, float:1.8879999E38)
+            r1 = 2131626412(0x7f0e09ac, float:1.888006E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3369,13 +3379,13 @@ public class AndroidUtilities {
             java.lang.String r0 = "NoHandleAppInstalled"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r4)
             r3.setMessage(r0)
-            if (r2 == 0) goto L_0x0154
+            if (r2 == 0) goto L_0x0155
             org.telegram.ui.ActionBar.AlertDialog r0 = r3.create()
             r2.showDialog(r0)
-            goto L_0x0157
-        L_0x0154:
+            goto L_0x0158
+        L_0x0155:
             r3.show()
-        L_0x0157:
+        L_0x0158:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openDocument(org.telegram.messenger.MessageObject, android.app.Activity, org.telegram.ui.ActionBar.BaseFragment):void");
@@ -3384,16 +3394,16 @@ public class AndroidUtilities {
     /* JADX WARNING: Code restructure failed: missing block: B:9:0x0036, code lost:
         if (r8.length() != 0) goto L_0x003c;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x009e  */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x00ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x00bb A[SYNTHETIC, Splitter:B:35:0x00bb] */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x00d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x009f  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00bc A[SYNTHETIC, Splitter:B:35:0x00bc] */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00d7  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean openForView(java.io.File r6, java.lang.String r7, java.lang.String r8, android.app.Activity r9) {
+    public static boolean openForView(java.io.File r6, java.lang.String r7, java.lang.String r8, android.app.Activity r9, org.telegram.ui.ActionBar.Theme.ResourcesProvider r10) {
         /*
-            if (r6 == 0) goto L_0x00da
+            if (r6 == 0) goto L_0x00db
             boolean r0 = r6.exists()
-            if (r0 == 0) goto L_0x00da
+            if (r0 == 0) goto L_0x00db
             android.content.Intent r0 = new android.content.Intent
             java.lang.String r1 = "android.intent.action.VIEW"
             r0.<init>(r1)
@@ -3432,7 +3442,7 @@ public class AndroidUtilities {
             boolean r2 = r2.canRequestPackageInstalls()
             if (r2 != 0) goto L_0x0096
             org.telegram.ui.ActionBar.AlertDialog$Builder r6 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            r6.<init>((android.content.Context) r9)
+            r6.<init>(r9, r10)
             r7 = 2131624288(0x7f0e0160, float:1.8875751E38)
             java.lang.String r8 = "AppName"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
@@ -3441,10 +3451,10 @@ public class AndroidUtilities {
             java.lang.String r8 = "ApkRestricted"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setMessage(r7)
-            r7 = 2131626994(0x7f0e0bf2, float:1.888124E38)
+            r7 = 2131627027(0x7f0e0CLASSNAME, float:1.8881307E38)
             java.lang.String r8 = "PermissionOpenSettings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
-            org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r8 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY
+            org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0 r8 = new org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0
             r8.<init>(r9)
             r6.setPositiveButton(r7, r8)
             r7 = 2131624663(0x7f0e02d7, float:1.8876512E38)
@@ -3454,57 +3464,58 @@ public class AndroidUtilities {
             r6.show()
             return r1
         L_0x0096:
-            java.lang.String r2 = "org.telegram.messenger.web.provider"
-            r3 = 24
-            java.lang.String r4 = "text/plain"
-            if (r7 < r3) goto L_0x00ab
-            android.net.Uri r7 = androidx.core.content.FileProvider.getUriForFile(r9, r2, r6)
-            if (r8 == 0) goto L_0x00a6
-            r5 = r8
-            goto L_0x00a7
-        L_0x00a6:
-            r5 = r4
+            java.lang.String r10 = "org.telegram.messenger.web.provider"
+            r2 = 24
+            java.lang.String r3 = "text/plain"
+            if (r7 < r2) goto L_0x00ac
+            android.net.Uri r7 = androidx.core.content.FileProvider.getUriForFile(r9, r10, r6)
+            if (r8 == 0) goto L_0x00a7
+            r4 = r8
+            goto L_0x00a8
         L_0x00a7:
-            r0.setDataAndType(r7, r5)
-            goto L_0x00b7
-        L_0x00ab:
+            r4 = r3
+        L_0x00a8:
+            r0.setDataAndType(r7, r4)
+            goto L_0x00b8
+        L_0x00ac:
             android.net.Uri r7 = android.net.Uri.fromFile(r6)
-            if (r8 == 0) goto L_0x00b3
-            r5 = r8
-            goto L_0x00b4
-        L_0x00b3:
-            r5 = r4
+            if (r8 == 0) goto L_0x00b4
+            r4 = r8
+            goto L_0x00b5
         L_0x00b4:
-            r0.setDataAndType(r7, r5)
-        L_0x00b7:
+            r4 = r3
+        L_0x00b5:
+            r0.setDataAndType(r7, r4)
+        L_0x00b8:
             r7 = 500(0x1f4, float:7.0E-43)
-            if (r8 == 0) goto L_0x00d6
-            r9.startActivityForResult(r0, r7)     // Catch:{ Exception -> 0x00bf }
-            goto L_0x00d9
-        L_0x00bf:
+            if (r8 == 0) goto L_0x00d7
+            r9.startActivityForResult(r0, r7)     // Catch:{ Exception -> 0x00c0 }
+            goto L_0x00da
+        L_0x00c0:
             int r8 = android.os.Build.VERSION.SDK_INT
-            if (r8 < r3) goto L_0x00cb
-            android.net.Uri r6 = androidx.core.content.FileProvider.getUriForFile(r9, r2, r6)
-            r0.setDataAndType(r6, r4)
-            goto L_0x00d2
-        L_0x00cb:
+            if (r8 < r2) goto L_0x00cc
+            android.net.Uri r6 = androidx.core.content.FileProvider.getUriForFile(r9, r10, r6)
+            r0.setDataAndType(r6, r3)
+            goto L_0x00d3
+        L_0x00cc:
             android.net.Uri r6 = android.net.Uri.fromFile(r6)
-            r0.setDataAndType(r6, r4)
-        L_0x00d2:
+            r0.setDataAndType(r6, r3)
+        L_0x00d3:
             r9.startActivityForResult(r0, r7)
-            goto L_0x00d9
-        L_0x00d6:
+            goto L_0x00da
+        L_0x00d7:
             r9.startActivityForResult(r0, r7)
-        L_0x00d9:
-            return r1
         L_0x00da:
+            return r1
+        L_0x00db:
             r6 = 0
             return r6
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openForView(java.io.File, java.lang.String, java.lang.String, android.app.Activity):boolean");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openForView(java.io.File, java.lang.String, java.lang.String, android.app.Activity, org.telegram.ui.ActionBar.Theme$ResourcesProvider):boolean");
     }
 
-    static /* synthetic */ void lambda$openForView$4(Activity activity, DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$openForView$4(Activity activity, DialogInterface dialogInterface, int i) {
         try {
             activity.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + activity.getPackageName())));
         } catch (Exception e) {
@@ -3512,7 +3523,7 @@ public class AndroidUtilities {
         }
     }
 
-    public static boolean openForView(MessageObject messageObject, Activity activity) {
+    public static boolean openForView(MessageObject messageObject, Activity activity, Theme.ResourcesProvider resourcesProvider) {
         String str = messageObject.messageOwner.attachPath;
         String str2 = null;
         File file = (str == null || str.length() == 0) ? null : new File(messageObject.messageOwner.attachPath);
@@ -3523,11 +3534,11 @@ public class AndroidUtilities {
         if (i == 9 || i == 0) {
             str2 = messageObject.getMimeType();
         }
-        return openForView(file, messageObject.getFileName(), str2, activity);
+        return openForView(file, messageObject.getFileName(), str2, activity, resourcesProvider);
     }
 
     public static boolean openForView(TLRPC$Document tLRPC$Document, boolean z, Activity activity) {
-        return openForView(FileLoader.getPathToAttach(tLRPC$Document, true), FileLoader.getAttachFileName(tLRPC$Document), tLRPC$Document.mime_type, activity);
+        return openForView(FileLoader.getPathToAttach(tLRPC$Document, true), FileLoader.getAttachFileName(tLRPC$Document), tLRPC$Document.mime_type, activity, (Theme.ResourcesProvider) null);
     }
 
     public static CharSequence replaceNewLines(CharSequence charSequence) {
@@ -3561,16 +3572,16 @@ public class AndroidUtilities {
     public static boolean openForView(org.telegram.tgnet.TLObject r8, android.app.Activity r9) {
         /*
             r0 = 0
-            if (r8 == 0) goto L_0x0097
+            if (r8 == 0) goto L_0x0098
             if (r9 != 0) goto L_0x0007
-            goto L_0x0097
+            goto L_0x0098
         L_0x0007:
             java.lang.String r1 = org.telegram.messenger.FileLoader.getAttachFileName(r8)
             r2 = 1
             java.io.File r3 = org.telegram.messenger.FileLoader.getPathToAttach(r8, r2)
-            if (r3 == 0) goto L_0x0097
+            if (r3 == 0) goto L_0x0098
             boolean r4 = r3.exists()
-            if (r4 == 0) goto L_0x0097
+            if (r4 == 0) goto L_0x0098
             android.content.Intent r0 = new android.content.Intent
             java.lang.String r4 = "android.intent.action.VIEW"
             r0.<init>(r4)
@@ -3602,47 +3613,47 @@ public class AndroidUtilities {
             java.lang.String r1 = "org.telegram.messenger.web.provider"
             r4 = 24
             java.lang.String r5 = "text/plain"
-            if (r8 < r4) goto L_0x0068
+            if (r8 < r4) goto L_0x0069
             android.net.Uri r8 = androidx.core.content.FileProvider.getUriForFile(r9, r1, r3)
-            if (r7 == 0) goto L_0x0063
+            if (r7 == 0) goto L_0x0064
             r6 = r7
-            goto L_0x0064
-        L_0x0063:
-            r6 = r5
+            goto L_0x0065
         L_0x0064:
-            r0.setDataAndType(r8, r6)
-            goto L_0x0074
-        L_0x0068:
-            android.net.Uri r8 = android.net.Uri.fromFile(r3)
-            if (r7 == 0) goto L_0x0070
-            r6 = r7
-            goto L_0x0071
-        L_0x0070:
             r6 = r5
-        L_0x0071:
+        L_0x0065:
             r0.setDataAndType(r8, r6)
-        L_0x0074:
+            goto L_0x0075
+        L_0x0069:
+            android.net.Uri r8 = android.net.Uri.fromFile(r3)
+            if (r7 == 0) goto L_0x0071
+            r6 = r7
+            goto L_0x0072
+        L_0x0071:
+            r6 = r5
+        L_0x0072:
+            r0.setDataAndType(r8, r6)
+        L_0x0075:
             r8 = 500(0x1f4, float:7.0E-43)
-            if (r7 == 0) goto L_0x0093
-            r9.startActivityForResult(r0, r8)     // Catch:{ Exception -> 0x007c }
-            goto L_0x0096
-        L_0x007c:
+            if (r7 == 0) goto L_0x0094
+            r9.startActivityForResult(r0, r8)     // Catch:{ Exception -> 0x007d }
+            goto L_0x0097
+        L_0x007d:
             int r6 = android.os.Build.VERSION.SDK_INT
-            if (r6 < r4) goto L_0x0088
+            if (r6 < r4) goto L_0x0089
             android.net.Uri r1 = androidx.core.content.FileProvider.getUriForFile(r9, r1, r3)
             r0.setDataAndType(r1, r5)
-            goto L_0x008f
-        L_0x0088:
+            goto L_0x0090
+        L_0x0089:
             android.net.Uri r1 = android.net.Uri.fromFile(r3)
             r0.setDataAndType(r1, r5)
-        L_0x008f:
+        L_0x0090:
             r9.startActivityForResult(r0, r8)
-            goto L_0x0096
-        L_0x0093:
+            goto L_0x0097
+        L_0x0094:
             r9.startActivityForResult(r0, r8)
-        L_0x0096:
-            return r2
         L_0x0097:
+            return r2
+        L_0x0098:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openForView(org.telegram.tgnet.TLObject, android.app.Activity):boolean");
@@ -3716,163 +3727,163 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0063, code lost:
-        if (r3.startsWith("tg://socks") == false) goto L_0x00fe;
+    /* JADX WARNING: Code restructure failed: missing block: B:30:0x006a, code lost:
+        if (r3.startsWith("tg://socks") == false) goto L_0x0108;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0112  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x0114  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0117  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0119  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x011c  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x011e  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x011c  */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x011e  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0121  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0123  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x0126  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0128  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static boolean handleProxyIntent(android.app.Activity r16, android.content.Intent r17) {
         /*
             java.lang.String r0 = "tg:proxy"
             java.lang.String r1 = "tg://telegram.org"
             r2 = 0
-            if (r17 != 0) goto L_0x0008
+            if (r17 != 0) goto L_0x000a
             return r2
-        L_0x0008:
-            int r3 = r17.getFlags()     // Catch:{ Exception -> 0x0125 }
+        L_0x000a:
+            int r3 = r17.getFlags()     // Catch:{ Exception -> 0x012f }
             r4 = 1048576(0x100000, float:1.469368E-39)
             r3 = r3 & r4
-            if (r3 == 0) goto L_0x0012
+            if (r3 == 0) goto L_0x0014
             return r2
-        L_0x0012:
-            android.net.Uri r3 = r17.getData()     // Catch:{ Exception -> 0x0125 }
-            if (r3 == 0) goto L_0x0125
-            java.lang.String r4 = r3.getScheme()     // Catch:{ Exception -> 0x0125 }
+        L_0x0014:
+            android.net.Uri r3 = r17.getData()     // Catch:{ Exception -> 0x012f }
+            if (r3 == 0) goto L_0x012f
+            java.lang.String r4 = r3.getScheme()     // Catch:{ Exception -> 0x012f }
             r5 = 1
             r6 = 0
-            if (r4 == 0) goto L_0x00fe
+            if (r4 == 0) goto L_0x0108
             java.lang.String r7 = "http"
-            boolean r7 = r4.equals(r7)     // Catch:{ Exception -> 0x0125 }
+            boolean r7 = r4.equals(r7)     // Catch:{ Exception -> 0x012f }
             java.lang.String r8 = "secret"
             java.lang.String r9 = "pass"
             java.lang.String r10 = "user"
             java.lang.String r11 = "port"
             java.lang.String r12 = "server"
-            if (r7 != 0) goto L_0x009d
+            if (r7 != 0) goto L_0x00a4
             java.lang.String r7 = "https"
-            boolean r7 = r4.equals(r7)     // Catch:{ Exception -> 0x0125 }
-            if (r7 == 0) goto L_0x003b
-            goto L_0x009d
-        L_0x003b:
+            boolean r7 = r4.equals(r7)     // Catch:{ Exception -> 0x012f }
+            if (r7 == 0) goto L_0x003e
+            goto L_0x00a4
+        L_0x003e:
             java.lang.String r7 = "tg"
-            boolean r4 = r4.equals(r7)     // Catch:{ Exception -> 0x0125 }
-            if (r4 == 0) goto L_0x00fe
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0125 }
-            boolean r4 = r3.startsWith(r0)     // Catch:{ Exception -> 0x0125 }
+            boolean r4 = r4.equals(r7)     // Catch:{ Exception -> 0x012f }
+            if (r4 == 0) goto L_0x0108
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x012f }
+            boolean r4 = r3.startsWith(r0)     // Catch:{ Exception -> 0x012f }
             java.lang.String r7 = "tg://socks"
             java.lang.String r13 = "tg:socks"
             java.lang.String r14 = "tg://proxy"
-            if (r4 != 0) goto L_0x0065
-            boolean r4 = r3.startsWith(r14)     // Catch:{ Exception -> 0x0125 }
-            if (r4 != 0) goto L_0x0065
-            boolean r4 = r3.startsWith(r13)     // Catch:{ Exception -> 0x0125 }
-            if (r4 != 0) goto L_0x0065
-            boolean r4 = r3.startsWith(r7)     // Catch:{ Exception -> 0x0125 }
-            if (r4 == 0) goto L_0x00fe
-        L_0x0065:
-            java.lang.String r0 = r3.replace(r0, r1)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r0 = r0.replace(r14, r1)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r0 = r0.replace(r7, r1)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r0 = r0.replace(r13, r1)     // Catch:{ Exception -> 0x0125 }
-            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r1 = r0.getQueryParameter(r12)     // Catch:{ Exception -> 0x0125 }
-            boolean r3 = checkHostForPunycode(r1)     // Catch:{ Exception -> 0x0125 }
-            if (r3 == 0) goto L_0x0087
-            java.lang.String r1 = java.net.IDN.toASCII(r1, r5)     // Catch:{ Exception -> 0x0125 }
-        L_0x0087:
+            if (r4 != 0) goto L_0x006c
+            boolean r4 = r3.startsWith(r14)     // Catch:{ Exception -> 0x012f }
+            if (r4 != 0) goto L_0x006c
+            boolean r4 = r3.startsWith(r13)     // Catch:{ Exception -> 0x012f }
+            if (r4 != 0) goto L_0x006c
+            boolean r4 = r3.startsWith(r7)     // Catch:{ Exception -> 0x012f }
+            if (r4 == 0) goto L_0x0108
+        L_0x006c:
+            java.lang.String r0 = r3.replace(r0, r1)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r0 = r0.replace(r14, r1)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r0 = r0.replace(r7, r1)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r0 = r0.replace(r13, r1)     // Catch:{ Exception -> 0x012f }
+            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r1 = r0.getQueryParameter(r12)     // Catch:{ Exception -> 0x012f }
+            boolean r3 = checkHostForPunycode(r1)     // Catch:{ Exception -> 0x012f }
+            if (r3 == 0) goto L_0x008e
+            java.lang.String r1 = java.net.IDN.toASCII(r1, r5)     // Catch:{ Exception -> 0x012f }
+        L_0x008e:
             r6 = r1
-            java.lang.String r1 = r0.getQueryParameter(r11)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r3 = r0.getQueryParameter(r10)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r4 = r0.getQueryParameter(r9)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r0 = r0.getQueryParameter(r8)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r1 = r0.getQueryParameter(r11)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r3 = r0.getQueryParameter(r10)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r4 = r0.getQueryParameter(r9)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r0 = r0.getQueryParameter(r8)     // Catch:{ Exception -> 0x012f }
             r9 = r1
             r8 = r6
             r6 = r3
-            goto L_0x0102
-        L_0x009d:
-            java.lang.String r0 = r3.getHost()     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0125 }
+            goto L_0x010c
+        L_0x00a4:
+            java.lang.String r0 = r3.getHost()     // Catch:{ Exception -> 0x012f }
+            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x012f }
             java.lang.String r1 = "telegram.me"
-            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x0125 }
-            if (r1 != 0) goto L_0x00bd
+            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x012f }
+            if (r1 != 0) goto L_0x00c7
             java.lang.String r1 = "t.me"
-            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x0125 }
-            if (r1 != 0) goto L_0x00bd
+            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x012f }
+            if (r1 != 0) goto L_0x00c7
             java.lang.String r1 = "telegram.dog"
-            boolean r0 = r0.equals(r1)     // Catch:{ Exception -> 0x0125 }
-            if (r0 == 0) goto L_0x00f6
-        L_0x00bd:
-            java.lang.String r0 = r3.getPath()     // Catch:{ Exception -> 0x0125 }
-            if (r0 == 0) goto L_0x00f6
+            boolean r0 = r0.equals(r1)     // Catch:{ Exception -> 0x012f }
+            if (r0 == 0) goto L_0x0100
+        L_0x00c7:
+            java.lang.String r0 = r3.getPath()     // Catch:{ Exception -> 0x012f }
+            if (r0 == 0) goto L_0x0100
             java.lang.String r1 = "/socks"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x0125 }
-            if (r1 != 0) goto L_0x00d3
+            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x012f }
+            if (r1 != 0) goto L_0x00dd
             java.lang.String r1 = "/proxy"
-            boolean r0 = r0.startsWith(r1)     // Catch:{ Exception -> 0x0125 }
-            if (r0 == 0) goto L_0x00f6
-        L_0x00d3:
-            java.lang.String r0 = r3.getQueryParameter(r12)     // Catch:{ Exception -> 0x0125 }
-            boolean r1 = checkHostForPunycode(r0)     // Catch:{ Exception -> 0x0125 }
-            if (r1 == 0) goto L_0x00e1
-            java.lang.String r0 = java.net.IDN.toASCII(r0, r5)     // Catch:{ Exception -> 0x0125 }
-        L_0x00e1:
+            boolean r0 = r0.startsWith(r1)     // Catch:{ Exception -> 0x012f }
+            if (r0 == 0) goto L_0x0100
+        L_0x00dd:
+            java.lang.String r0 = r3.getQueryParameter(r12)     // Catch:{ Exception -> 0x012f }
+            boolean r1 = checkHostForPunycode(r0)     // Catch:{ Exception -> 0x012f }
+            if (r1 == 0) goto L_0x00eb
+            java.lang.String r0 = java.net.IDN.toASCII(r0, r5)     // Catch:{ Exception -> 0x012f }
+        L_0x00eb:
             r6 = r0
-            java.lang.String r0 = r3.getQueryParameter(r11)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r1 = r3.getQueryParameter(r10)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r4 = r3.getQueryParameter(r9)     // Catch:{ Exception -> 0x0125 }
-            java.lang.String r3 = r3.getQueryParameter(r8)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r0 = r3.getQueryParameter(r11)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r1 = r3.getQueryParameter(r10)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r4 = r3.getQueryParameter(r9)     // Catch:{ Exception -> 0x012f }
+            java.lang.String r3 = r3.getQueryParameter(r8)     // Catch:{ Exception -> 0x012f }
             r15 = r6
             r6 = r1
             r1 = r15
-            goto L_0x00fa
-        L_0x00f6:
+            goto L_0x0104
+        L_0x0100:
             r0 = r6
             r1 = r0
             r3 = r1
             r4 = r3
-        L_0x00fa:
+        L_0x0104:
             r9 = r0
             r8 = r1
             r0 = r3
-            goto L_0x0102
-        L_0x00fe:
+            goto L_0x010c
+        L_0x0108:
             r0 = r6
             r4 = r0
             r8 = r4
             r9 = r8
-        L_0x0102:
-            boolean r1 = android.text.TextUtils.isEmpty(r8)     // Catch:{ Exception -> 0x0125 }
-            if (r1 != 0) goto L_0x0125
-            boolean r1 = android.text.TextUtils.isEmpty(r9)     // Catch:{ Exception -> 0x0125 }
-            if (r1 != 0) goto L_0x0125
+        L_0x010c:
+            boolean r1 = android.text.TextUtils.isEmpty(r8)     // Catch:{ Exception -> 0x012f }
+            if (r1 != 0) goto L_0x012f
+            boolean r1 = android.text.TextUtils.isEmpty(r9)     // Catch:{ Exception -> 0x012f }
+            if (r1 != 0) goto L_0x012f
             java.lang.String r1 = ""
-            if (r6 != 0) goto L_0x0114
+            if (r6 != 0) goto L_0x011e
             r10 = r1
-            goto L_0x0115
-        L_0x0114:
-            r10 = r6
-        L_0x0115:
-            if (r4 != 0) goto L_0x0119
-            r11 = r1
-            goto L_0x011a
-        L_0x0119:
-            r11 = r4
-        L_0x011a:
-            if (r0 != 0) goto L_0x011e
-            r12 = r1
             goto L_0x011f
         L_0x011e:
-            r12 = r0
+            r10 = r6
         L_0x011f:
+            if (r4 != 0) goto L_0x0123
+            r11 = r1
+            goto L_0x0124
+        L_0x0123:
+            r11 = r4
+        L_0x0124:
+            if (r0 != 0) goto L_0x0128
+            r12 = r1
+            goto L_0x0129
+        L_0x0128:
+            r12 = r0
+        L_0x0129:
             r7 = r16
-            showProxyAlert(r7, r8, r9, r10, r11, r12)     // Catch:{ Exception -> 0x0125 }
+            showProxyAlert(r7, r8, r9, r10, r11, r12)     // Catch:{ Exception -> 0x012f }
             return r5
-        L_0x0125:
+        L_0x012f:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.handleProxyIntent(android.app.Activity, android.content.Intent):boolean");
@@ -3954,46 +3965,17 @@ public class AndroidUtilities {
         pickerBottomLayout.cancelButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new View.OnClickListener(dismissRunnable) {
-            public final /* synthetic */ Runnable f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void onClick(View view) {
-                this.f$0.run();
-            }
-        });
+        pickerBottomLayout.cancelButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda3(dismissRunnable));
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", NUM).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(new View.OnClickListener(str, str2, str5, str4, str3, dismissRunnable) {
-            public final /* synthetic */ String f$0;
-            public final /* synthetic */ String f$1;
-            public final /* synthetic */ String f$2;
-            public final /* synthetic */ String f$3;
-            public final /* synthetic */ String f$4;
-            public final /* synthetic */ Runnable f$5;
-
-            {
-                this.f$0 = r1;
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
-            }
-
-            public final void onClick(View view) {
-                AndroidUtilities.lambda$showProxyAlert$6(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
-            }
-        });
+        pickerBottomLayout.doneButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda4(str, str2, str5, str4, str3, dismissRunnable));
         builder.show();
     }
 
-    static /* synthetic */ void lambda$showProxyAlert$6(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showProxyAlert$6(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
         SharedConfig.ProxyInfo proxyInfo;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("proxy_enabled", true);
@@ -4466,26 +4448,15 @@ public class AndroidUtilities {
                 Field declaredField = baseFragment.getClass().getDeclaredField("listView");
                 declaredField.setAccessible(true);
                 RecyclerListView recyclerListView = (RecyclerListView) declaredField.get(baseFragment);
-                recyclerListView.highlightRow(new RecyclerListView.IntReturnCallback(str, recyclerListView) {
-                    public final /* synthetic */ String f$1;
-                    public final /* synthetic */ RecyclerListView f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final int run() {
-                        return AndroidUtilities.lambda$scrollToFragmentRow$7(BaseFragment.this, this.f$1, this.f$2);
-                    }
-                });
+                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda7(baseFragment, str, recyclerListView));
                 declaredField.setAccessible(false);
             } catch (Throwable unused) {
             }
         }
     }
 
-    static /* synthetic */ int lambda$scrollToFragmentRow$7(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$scrollToFragmentRow$7(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
         int i = -1;
         try {
             Field declaredField = baseFragment.getClass().getDeclaredField(str);
@@ -4554,6 +4525,14 @@ public class AndroidUtilities {
             view.animate().setListener((Animator.AnimatorListener) null).cancel();
             view.animate().alpha(0.0f).scaleY(f).scaleX(f).setListener(new HideViewAfterAnimation(view)).setDuration(150).start();
             view.setTag((Object) null);
+        }
+    }
+
+    public static long getPrefIntOrLong(SharedPreferences sharedPreferences, String str, long j) {
+        try {
+            return sharedPreferences.getLong(str, j);
+        } catch (Exception unused) {
+            return (long) sharedPreferences.getInt(str, (int) j);
         }
     }
 }

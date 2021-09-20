@@ -8,10 +8,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.webrtc.Camera1Session;
 import org.webrtc.CameraEnumerationAndroid;
 import org.webrtc.CameraSession;
-import org.webrtc.VideoSink;
 
 class Camera1Session implements CameraSession {
     private static final int NUMBER_OF_CAPTURE_BUFFERS = 3;
@@ -206,20 +204,11 @@ class Camera1Session implements CameraSession {
     }
 
     private void listenForTextureFrames() {
-        this.surfaceTextureHelper.startListening(new VideoSink() {
-            public final void onFrame(VideoFrame videoFrame) {
-                Camera1Session.this.lambda$listenForTextureFrames$0$Camera1Session(videoFrame);
-            }
-
-            public /* synthetic */ void setParentSink(VideoSink videoSink) {
-                VideoSink.CC.$default$setParentSink(this, videoSink);
-            }
-        });
+        this.surfaceTextureHelper.startListening(new Camera1Session$$ExternalSyntheticLambda0(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$listenForTextureFrames$0 */
-    public /* synthetic */ void lambda$listenForTextureFrames$0$Camera1Session(VideoFrame videoFrame) {
+    public /* synthetic */ void lambda$listenForTextureFrames$0(VideoFrame videoFrame) {
         checkIsOnCameraThread();
         if (this.state != SessionState.RUNNING) {
             Logging.d("Camera1Session", "Texture frame captured but camera is no longer running.");
@@ -253,41 +242,19 @@ class Camera1Session implements CameraSession {
                         Camera1Session.camera1StartTimeMsHistogram.addSample((int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - Camera1Session.this.constructionTimeNs));
                         boolean unused = Camera1Session.this.firstFrameReported = true;
                     }
-                    VideoFrame videoFrame = new VideoFrame(new NV21Buffer(bArr, Camera1Session.this.captureFormat.width, Camera1Session.this.captureFormat.height, new Runnable(bArr) {
-                        public final /* synthetic */ byte[] f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void run() {
-                            Camera1Session.AnonymousClass2.this.lambda$onPreviewFrame$1$Camera1Session$2(this.f$1);
-                        }
-                    }), Camera1Session.this.getFrameOrientation(), nanos);
+                    VideoFrame videoFrame = new VideoFrame(new NV21Buffer(bArr, Camera1Session.this.captureFormat.width, Camera1Session.this.captureFormat.height, new Camera1Session$2$$ExternalSyntheticLambda1(this, bArr)), Camera1Session.this.getFrameOrientation(), nanos);
                     Camera1Session.this.events.onFrameCaptured(Camera1Session.this, videoFrame);
                     videoFrame.release();
                 }
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onPreviewFrame$1 */
-            public /* synthetic */ void lambda$onPreviewFrame$1$Camera1Session$2(byte[] bArr) {
-                Camera1Session.this.cameraThreadHandler.post(new Runnable(bArr) {
-                    public final /* synthetic */ byte[] f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        Camera1Session.AnonymousClass2.this.lambda$onPreviewFrame$0$Camera1Session$2(this.f$1);
-                    }
-                });
+            public /* synthetic */ void lambda$onPreviewFrame$1(byte[] bArr) {
+                Camera1Session.this.cameraThreadHandler.post(new Camera1Session$2$$ExternalSyntheticLambda0(this, bArr));
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onPreviewFrame$0 */
-            public /* synthetic */ void lambda$onPreviewFrame$0$Camera1Session$2(byte[] bArr) {
+            public /* synthetic */ void lambda$onPreviewFrame$0(byte[] bArr) {
                 if (Camera1Session.this.state == SessionState.RUNNING) {
                     Camera1Session.this.camera.addCallbackBuffer(bArr);
                 }

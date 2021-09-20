@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -18,7 +19,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
-import org.telegram.ui.Components.CheckBoxBase;
 import org.telegram.ui.Components.CounterView;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -26,19 +26,20 @@ public class HintDialogCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     CheckBox2 checkBox;
     CounterView counterView;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount;
     private TLRPC$User currentUser;
-    private long dialog_id;
+    private long dialogId;
     private final boolean drawCheckbox;
     private BackupImageView imageView;
     private int lastUnreadCount;
     private TextView nameTextView;
-    private RectF rect = new RectF();
     float showOnlineProgress;
     boolean wasDraw;
 
     public HintDialogCell(Context context, boolean z) {
         super(context);
+        new RectF();
+        this.currentAccount = UserConfig.selectedAccount;
         this.drawCheckbox = z;
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
@@ -53,7 +54,7 @@ public class HintDialogCell extends FrameLayout {
         this.nameTextView.setLines(1);
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 64.0f, 6.0f, 0.0f));
-        CounterView counterView2 = new CounterView(context);
+        CounterView counterView2 = new CounterView(context, (Theme.ResourcesProvider) null);
         this.counterView = counterView2;
         addView(counterView2, LayoutHelper.createFrame(-1, 28.0f, 48, 0.0f, 4.0f, 0.0f, 0.0f));
         this.counterView.setColors("chats_unreadCounterText", "chats_unreadCounter");
@@ -64,11 +65,7 @@ public class HintDialogCell extends FrameLayout {
             checkBox2.setColor("dialogRoundCheckBox", "dialogBackground", "dialogRoundCheckBoxCheck");
             this.checkBox.setDrawUnchecked(false);
             this.checkBox.setDrawBackgroundAsArc(4);
-            this.checkBox.setProgressDelegate(new CheckBoxBase.ProgressDelegate() {
-                public final void setProgress(float f) {
-                    HintDialogCell.this.lambda$new$0$HintDialogCell(f);
-                }
-            });
+            this.checkBox.setProgressDelegate(new HintDialogCell$$ExternalSyntheticLambda0(this));
             addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 49, 19.0f, 42.0f, 0.0f, 0.0f));
             this.checkBox.setChecked(true, false);
             setWillNotDraw(false);
@@ -76,8 +73,7 @@ public class HintDialogCell extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$HintDialogCell(float f) {
+    public /* synthetic */ void lambda$new$0(float f) {
         float progress = 1.0f - (this.checkBox.getProgress() * 0.143f);
         this.imageView.setScaleX(progress);
         this.imageView.setScaleY(progress);
@@ -92,13 +88,13 @@ public class HintDialogCell extends FrameLayout {
 
     public void update(int i) {
         int i2;
-        if (!((i & 4) == 0 || this.currentUser == null)) {
-            this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.id));
+        if (!((MessagesController.UPDATE_MASK_STATUS & i) == 0 || this.currentUser == null)) {
+            this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.currentUser.id));
             this.imageView.invalidate();
             invalidate();
         }
-        if (i == 0 || (i & 256) != 0 || (i & 2048) != 0) {
-            TLRPC$Dialog tLRPC$Dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
+        if (i == 0 || (MessagesController.UPDATE_MASK_READ_DIALOG_MESSAGE & i) != 0 || (i & MessagesController.UPDATE_MASK_NEW_MESSAGE) != 0) {
+            TLRPC$Dialog tLRPC$Dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialogId);
             if (tLRPC$Dialog == null || (i2 = tLRPC$Dialog.unread_count) == 0) {
                 this.lastUnreadCount = 0;
                 this.counterView.setCount(0, this.wasDraw);
@@ -110,26 +106,24 @@ public class HintDialogCell extends FrameLayout {
     }
 
     public void update() {
-        int i = (int) this.dialog_id;
-        if (i > 0) {
-            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+        if (DialogObject.isUserDialog(this.dialogId)) {
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.dialogId));
             this.currentUser = user;
             this.avatarDrawable.setInfo(user);
             return;
         }
-        this.avatarDrawable.setInfo(MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i)));
+        this.avatarDrawable.setInfo(MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(-this.dialogId)));
         this.currentUser = null;
     }
 
-    public void setDialog(int i, boolean z, CharSequence charSequence) {
-        long j = (long) i;
-        if (this.dialog_id != j) {
+    public void setDialog(long j, boolean z, CharSequence charSequence) {
+        if (this.dialogId != j) {
             this.wasDraw = false;
             invalidate();
         }
-        this.dialog_id = j;
-        if (i > 0) {
-            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+        this.dialogId = j;
+        if (DialogObject.isUserDialog(j)) {
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(j));
             this.currentUser = user;
             if (charSequence != null) {
                 this.nameTextView.setText(charSequence);
@@ -141,7 +135,7 @@ public class HintDialogCell extends FrameLayout {
             this.avatarDrawable.setInfo(this.currentUser);
             this.imageView.setForUserOrChat(this.currentUser, this.avatarDrawable);
         } else {
-            TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
+            TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(-j));
             if (charSequence != null) {
                 this.nameTextView.setText(charSequence);
             } else if (chat != null) {
@@ -185,10 +179,10 @@ public class HintDialogCell extends FrameLayout {
         L_0x0023:
             int r7 = r5.currentAccount
             org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
-            j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.lang.Integer> r7 = r7.onlinePrivacy
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r7 = r7.onlinePrivacy
             org.telegram.tgnet.TLRPC$User r0 = r5.currentUser
-            int r0 = r0.id
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+            long r0 = r0.id
+            java.lang.Long r0 = java.lang.Long.valueOf(r0)
             boolean r7 = r7.containsKey(r0)
             if (r7 == 0) goto L_0x003b
         L_0x0039:
@@ -292,6 +286,6 @@ public class HintDialogCell extends FrameLayout {
     }
 
     public long getDialogId() {
-        return this.dialog_id;
+        return this.dialogId;
     }
 }

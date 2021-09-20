@@ -79,21 +79,12 @@ public class StickerView extends EntityView {
         this.centerImage.setInvalidateAll(true);
         this.centerImage.setParentView(this.containerView);
         this.centerImage.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document), (String) null, "webp", obj, 1);
-        this.centerImage.setDelegate(new ImageReceiver.ImageReceiverDelegate() {
-            public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-                StickerView.this.lambda$new$0$StickerView(imageReceiver, z, z2, z3);
-            }
-
-            public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-                ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
-            }
-        });
+        this.centerImage.setDelegate(new StickerView$$ExternalSyntheticLambda0(this));
         updatePosition();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$StickerView(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+    public /* synthetic */ void lambda$new$0(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
         RLottieDrawable lottieAnimation;
         if (z && !z2 && (lottieAnimation = imageReceiver.getLottieAnimation()) != null) {
             didSetAnimatedSticker(lottieAnimation);
@@ -181,7 +172,7 @@ public class StickerView extends EntityView {
 
     /* access modifiers changed from: protected */
     public EntityView.SelectionView createSelectionView() {
-        return new StickerViewSelectionView(getContext());
+        return new StickerViewSelectionView(this, getContext());
     }
 
     public TLRPC$Document getSticker() {
@@ -200,7 +191,7 @@ public class StickerView extends EntityView {
         private Paint arcPaint = new Paint(1);
         private RectF arcRect = new RectF();
 
-        public StickerViewSelectionView(Context context) {
+        public StickerViewSelectionView(StickerView stickerView, Context context) {
             super(context);
             this.arcPaint.setColor(-1);
             this.arcPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));

@@ -9,15 +9,16 @@ public class LineBlobDrawable {
     private final float N;
     public float maxRadius;
     public float minRadius;
-    public Paint paint = new Paint(1);
     public Path path = new Path();
     private float[] progress;
     private float[] radius;
     private float[] radiusNext;
-    final Random random = new Random();
+    final Random random;
     private float[] speed;
 
     public LineBlobDrawable(int i) {
+        new Paint(1);
+        this.random = new Random();
         this.N = (float) i;
         int i2 = i + 1;
         this.radius = new float[i2];
@@ -57,7 +58,7 @@ public class LineBlobDrawable {
         }
     }
 
-    public void draw(float f, float f2, float f3, float f4, Canvas canvas, Paint paint2, float f5, float f6) {
+    public void draw(float f, float f2, float f3, float f4, Canvas canvas, Paint paint, float f5, float f6) {
         float f7 = f;
         float f8 = f3;
         float f9 = f4;
@@ -94,7 +95,7 @@ public class LineBlobDrawable {
                 }
                 i++;
             } else {
-                canvas.drawPath(this.path, paint2);
+                canvas.drawPath(this.path, paint);
                 return;
             }
         }

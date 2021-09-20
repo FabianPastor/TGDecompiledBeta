@@ -55,6 +55,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     private boolean itemSizeChanged;
     private MediaController.PhotoEntry photoEntry;
     private boolean pressed;
+    private final Theme.ResourcesProvider resourcesProvider;
     private MediaController.SearchImage searchEntry;
     private FrameLayout videoInfoContainer;
     private TextView videoTextView;
@@ -64,8 +65,9 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         void onCheckClick(PhotoAttachPhotoCell photoAttachPhotoCell);
     }
 
-    public PhotoAttachPhotoCell(Context context) {
+    public PhotoAttachPhotoCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         setWillNotDraw(false);
         FrameLayout frameLayout = new FrameLayout(context);
         this.container = frameLayout;
@@ -73,7 +75,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         this.container.addView(backupImageView, LayoutHelper.createFrame(-1, -1.0f));
-        AnonymousClass1 r2 = new FrameLayout(context) {
+        AnonymousClass1 r2 = new FrameLayout(this, context) {
             private RectF rect = new RectF();
 
             /* access modifiers changed from: protected */
@@ -96,7 +98,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.videoTextView.setTextSize(1, 12.0f);
         this.videoTextView.setImportantForAccessibility(2);
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 13.0f, -0.7f, 0.0f, 0.0f));
-        CheckBox2 checkBox2 = new CheckBox2(context, 24);
+        CheckBox2 checkBox2 = new CheckBox2(context, 24, resourcesProvider2);
         this.checkBox = checkBox2;
         checkBox2.setDrawBackgroundAsArc(7);
         this.checkBox.setColor("chat_attachCheckBoxBackground", "chat_attachPhotoBackground", "chat_attachCheckBoxCheck");
@@ -481,7 +483,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         MediaController.PhotoEntry photoEntry2;
         MediaController.SearchImage searchImage;
         if (this.checkBox.isChecked() || this.container.getScaleX() != 1.0f || !this.imageView.getImageReceiver().hasNotThumb() || this.imageView.getImageReceiver().getCurrentAlpha() != 1.0f || (((photoEntry2 = this.photoEntry) != null && PhotoViewer.isShowingImage(photoEntry2.path)) || ((searchImage = this.searchEntry) != null && PhotoViewer.isShowingImage(searchImage.getPathToAttach())))) {
-            this.backgroundPaint.setColor(Theme.getColor("chat_attachPhotoBackground"));
+            this.backgroundPaint.setColor(getThemedColor("chat_attachPhotoBackground"));
             canvas.drawRect(0.0f, 0.0f, (float) this.imageView.getMeasuredWidth(), (float) this.imageView.getMeasuredHeight(), this.backgroundPaint);
         }
     }
@@ -510,5 +512,12 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 1, (float) getLeft(), (float) ((getTop() + getHeight()) - 1), 0));
         }
         return super.performAccessibilityAction(i, bundle);
+    }
+
+    /* access modifiers changed from: protected */
+    public int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

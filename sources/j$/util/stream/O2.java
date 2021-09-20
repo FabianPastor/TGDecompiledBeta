@@ -1,46 +1,73 @@
 package j$.util.stream;
 
-import java.util.Arrays;
+import j$.util.CLASSNAMEk;
+import j$.util.function.Consumer;
+import j$.util.function.j;
+import j$.util.function.k;
+import j$.util.function.l;
 
-final class O2 extends C2 {
-    private double[] c;
-    private int d;
+class O2 implements T2, CLASSNAMEl3 {
+    private boolean a;
+    private int b;
+    final /* synthetic */ j c;
 
-    O2(A2 a2) {
-        super(a2);
+    O2(j jVar) {
+        this.c = jVar;
     }
 
-    public void accept(double d2) {
-        double[] dArr = this.c;
-        int i = this.d;
-        this.d = i + 1;
-        dArr[i] = d2;
+    public /* synthetic */ void accept(double d) {
+        CLASSNAMEp1.f(this);
+        throw null;
     }
 
-    public void l() {
-        int i = 0;
-        Arrays.sort(this.c, 0, this.d);
-        this.a.m((long) this.d);
-        if (!this.b) {
-            while (i < this.d) {
-                this.a.accept(this.c[i]);
-                i++;
-            }
+    public void accept(int i) {
+        if (this.a) {
+            this.a = false;
         } else {
-            while (i < this.d && !this.a.o()) {
-                this.a.accept(this.c[i]);
-                i++;
-            }
+            i = this.c.applyAsInt(this.b, i);
         }
-        this.a.l();
-        this.c = null;
+        this.b = i;
     }
 
-    public void m(long j) {
-        if (j < NUM) {
-            this.c = new double[((int) j)];
-            return;
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEp1.e(this);
+        throw null;
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    /* renamed from: b */
+    public /* synthetic */ void accept(Integer num) {
+        CLASSNAMEp1.b(this, num);
+    }
+
+    public Object get() {
+        return this.a ? CLASSNAMEk.a() : CLASSNAMEk.d(this.b);
+    }
+
+    public void h(T2 t2) {
+        O2 o2 = (O2) t2;
+        if (!o2.a) {
+            accept(o2.b);
         }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    }
+
+    public l l(l lVar) {
+        lVar.getClass();
+        return new k(this, lVar);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = true;
+        this.b = 0;
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

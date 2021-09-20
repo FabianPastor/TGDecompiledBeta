@@ -2,7 +2,7 @@ package org.telegram.tgnet;
 
 public class TLRPC$TL_messages_getOldFeaturedStickers extends TLObject {
     public static int constructor = NUM;
-    public int hash;
+    public long hash;
     public int limit;
     public int offset;
 
@@ -14,6 +14,6 @@ public class TLRPC$TL_messages_getOldFeaturedStickers extends TLObject {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.offset);
         abstractSerializedData.writeInt32(this.limit);
-        abstractSerializedData.writeInt32(this.hash);
+        abstractSerializedData.writeInt64(this.hash);
     }
 }

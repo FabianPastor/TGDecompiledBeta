@@ -17,14 +17,12 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.WallpaperParallaxEffect;
 
 public class SizeNotifierFrameLayout extends FrameLayout {
     protected AdjustPanLayoutHelper adjustPanLayoutHelper;
     private boolean animationInProgress;
     private Drawable backgroundDrawable;
     private int backgroundTranslationY;
-    private float bgAngle;
     private int bottomClip;
     private SizeNotifierFrameLayoutDelegate delegate;
     private int emojiHeight;
@@ -80,11 +78,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 if (this.parallaxEffect == null) {
                     WallpaperParallaxEffect wallpaperParallaxEffect = new WallpaperParallaxEffect(getContext());
                     this.parallaxEffect = wallpaperParallaxEffect;
-                    wallpaperParallaxEffect.setCallback(new WallpaperParallaxEffect.Callback() {
-                        public final void onOffsetsChanged(int i, int i2, float f) {
-                            SizeNotifierFrameLayout.this.lambda$setBackgroundImage$0$SizeNotifierFrameLayout(i, i2, f);
-                        }
-                    });
+                    wallpaperParallaxEffect.setCallback(new SizeNotifierFrameLayout$$ExternalSyntheticLambda1(this));
                     if (!(getMeasuredWidth() == 0 || getMeasuredHeight() == 0)) {
                         this.parallaxScale = this.parallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
                     }
@@ -107,11 +101,9 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setBackgroundImage$0 */
-    public /* synthetic */ void lambda$setBackgroundImage$0$SizeNotifierFrameLayout(int i, int i2, float f) {
+    public /* synthetic */ void lambda$setBackgroundImage$0(int i, int i2, float f) {
         this.translationX = (float) i;
         this.translationY = (float) i2;
-        this.bgAngle = f;
         invalidate();
     }
 
@@ -175,23 +167,12 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         if (this.delegate != null) {
             this.keyboardHeight = measureKeyboardHeight();
             Point point = AndroidUtilities.displaySize;
-            post(new Runnable(point.x > point.y) {
-                public final /* synthetic */ boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    SizeNotifierFrameLayout.this.lambda$notifyHeightChanged$1$SizeNotifierFrameLayout(this.f$1);
-                }
-            });
+            post(new SizeNotifierFrameLayout$$ExternalSyntheticLambda0(this, point.x > point.y));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$notifyHeightChanged$1 */
-    public /* synthetic */ void lambda$notifyHeightChanged$1$SizeNotifierFrameLayout(boolean z) {
+    public /* synthetic */ void lambda$notifyHeightChanged$1(boolean z) {
         SizeNotifierFrameLayoutDelegate sizeNotifierFrameLayoutDelegate = this.delegate;
         if (sizeNotifierFrameLayoutDelegate != null) {
             sizeNotifierFrameLayoutDelegate.onSizeChanged(this.keyboardHeight, z);
@@ -259,15 +240,15 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             super.onDraw(canvas);
             return;
         }
-        Drawable cachedWallpaperNonBlocking = Theme.getCachedWallpaperNonBlocking();
-        if (!(cachedWallpaperNonBlocking == this.backgroundDrawable || cachedWallpaperNonBlocking == null)) {
+        Drawable newDrawable = getNewDrawable();
+        if (!(newDrawable == this.backgroundDrawable || newDrawable == null)) {
             if (Theme.isAnimatingColor()) {
                 this.oldBackgroundDrawable = this.backgroundDrawable;
             }
-            if (cachedWallpaperNonBlocking instanceof MotionBackgroundDrawable) {
-                ((MotionBackgroundDrawable) cachedWallpaperNonBlocking).setParentView(this);
+            if (newDrawable instanceof MotionBackgroundDrawable) {
+                ((MotionBackgroundDrawable) newDrawable).setParentView(this);
             }
-            this.backgroundDrawable = cachedWallpaperNonBlocking;
+            this.backgroundDrawable = newDrawable;
         }
         ActionBarLayout actionBarLayout = this.parentLayout;
         float themeAnimationValue = actionBarLayout != null ? actionBarLayout.getThemeAnimationValue() : 1.0f;
@@ -371,5 +352,15 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public void setSkipBackgroundDrawing(boolean z) {
         this.skipBackgroundDrawing = z;
         invalidate();
+    }
+
+    /* access modifiers changed from: protected */
+    public Drawable getNewDrawable() {
+        return Theme.getCachedWallpaperNonBlocking();
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean verifyDrawable(Drawable drawable) {
+        return drawable == getBackgroundImage() || super.verifyDrawable(drawable);
     }
 }

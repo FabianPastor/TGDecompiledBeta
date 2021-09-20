@@ -20,7 +20,6 @@ import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -39,7 +39,6 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$EncryptedChat;
@@ -70,7 +69,6 @@ import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.CallLogActivity;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.LoadingCell;
@@ -87,12 +85,11 @@ import org.telegram.ui.Components.ProgressButton;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.voip.VoIPHelper;
-import org.telegram.ui.ContactsActivity;
 
 public class CallLogActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     private ArrayList<View> actionModeViews = new ArrayList<>();
     /* access modifiers changed from: private */
-    public ArrayList<Integer> activeGroupCalls;
+    public ArrayList<Long> activeGroupCalls;
     /* access modifiers changed from: private */
     public ArrayList<CallLogRow> calls = new ArrayList<>();
     private EmptyTextProgressView emptyView;
@@ -136,11 +133,12 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     private NumberTextView selectedDialogsCountTextView;
     private ArrayList<Integer> selectedIds = new ArrayList<>();
     /* access modifiers changed from: private */
-    public Integer waitingForCallChatId;
+    public Long waitingForCallChatId;
     /* access modifiers changed from: private */
     public ProgressButton waitingForLoadButton;
 
-    static /* synthetic */ boolean lambda$createActionMode$7(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createActionMode$7(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -154,7 +152,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         private RLottieImageView imageView;
         private View progressView;
 
-        static /* synthetic */ boolean lambda$new$1(View view, MotionEvent motionEvent) {
+        /* access modifiers changed from: private */
+        public static /* synthetic */ boolean lambda$new$1(View view, MotionEvent motionEvent) {
             return true;
         }
 
@@ -171,11 +170,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             rLottieImageView.setAnimation(NUM, 120, 120);
             this.imageView.setAutoRepeat(false);
             addView(this.imageView, LayoutHelper.createFrame(140, 140.0f, 17, 52.0f, 4.0f, 52.0f, 60.0f));
-            this.imageView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    CallLogActivity.EmptyTextProgressView.this.lambda$new$0$CallLogActivity$EmptyTextProgressView(view);
-                }
-            });
+            this.imageView.setOnClickListener(new CallLogActivity$EmptyTextProgressView$$ExternalSyntheticLambda0(this));
             TextView textView = new TextView(context);
             this.emptyTextView1 = textView;
             textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -199,12 +194,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.imageView.setAlpha(0.0f);
             this.emptyTextView1.setAlpha(0.0f);
             this.emptyTextView2.setAlpha(0.0f);
-            setOnTouchListener($$Lambda$CallLogActivity$EmptyTextProgressView$0DfzUYohm5_C8g7TQPSfQTZEqo.INSTANCE);
+            setOnTouchListener(CallLogActivity$EmptyTextProgressView$$ExternalSyntheticLambda1.INSTANCE);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$CallLogActivity$EmptyTextProgressView(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             if (!this.imageView.isPlaying()) {
                 this.imageView.setProgress(0.0f);
                 this.imageView.playAnimation();
@@ -228,7 +222,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        Integer num;
+        Long l;
         ListAdapter listAdapter;
         int i3 = 0;
         if (i == NotificationCenter.didReceiveNewMessages) {
@@ -237,16 +231,16 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 while (it.hasNext()) {
                     MessageObject messageObject = (MessageObject) it.next();
                     if (messageObject.messageOwner.action instanceof TLRPC$TL_messageActionPhoneCall) {
-                        int fromChatId = messageObject.getFromChatId();
-                        int i4 = fromChatId == getUserConfig().getClientUserId() ? messageObject.messageOwner.peer_id.user_id : fromChatId;
-                        int i5 = fromChatId == getUserConfig().getClientUserId() ? 0 : 1;
+                        long fromChatId = messageObject.getFromChatId();
+                        long j = fromChatId == getUserConfig().getClientUserId() ? messageObject.messageOwner.peer_id.user_id : fromChatId;
+                        int i4 = fromChatId == getUserConfig().getClientUserId() ? 0 : 1;
                         TLRPC$PhoneCallDiscardReason tLRPC$PhoneCallDiscardReason = messageObject.messageOwner.action.reason;
-                        if (i5 == 1 && ((tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonMissed) || (tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonBusy))) {
-                            i5 = 2;
+                        if (i4 == 1 && ((tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonMissed) || (tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonBusy))) {
+                            i4 = 2;
                         }
                         if (this.calls.size() > 0) {
                             CallLogRow callLogRow = this.calls.get(0);
-                            if (callLogRow.user.id == i4 && callLogRow.type == i5) {
+                            if (callLogRow.user.id == j && callLogRow.type == i4) {
                                 callLogRow.calls.add(0, messageObject.messageOwner);
                                 this.listViewAdapter.notifyItemChanged(0);
                             }
@@ -255,8 +249,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                         ArrayList<TLRPC$Message> arrayList = new ArrayList<>();
                         callLogRow2.calls = arrayList;
                         arrayList.add(messageObject.messageOwner);
-                        callLogRow2.user = getMessagesController().getUser(Integer.valueOf(i4));
-                        callLogRow2.type = i5;
+                        callLogRow2.user = getMessagesController().getUser(Long.valueOf(j));
+                        callLogRow2.type = i4;
                         callLogRow2.video = messageObject.isVideoCall();
                         this.calls.add(0, callLogRow2);
                         this.listViewAdapter.notifyItemInserted(0);
@@ -298,8 +292,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 listAdapter2.notifyDataSetChanged();
             }
         } else if (i == NotificationCenter.chatInfoDidLoad) {
-            Integer num2 = this.waitingForCallChatId;
-            if (num2 != null && objArr[0].id == num2.intValue() && getMessagesController().getGroupCall(this.waitingForCallChatId.intValue(), true) != null) {
+            Long l2 = this.waitingForCallChatId;
+            if (l2 != null && objArr[0].id == l2.longValue() && getMessagesController().getGroupCall(this.waitingForCallChatId.longValue(), true) != null) {
                 ProgressButton progressButton = this.waitingForLoadButton;
                 if (progressButton != null) {
                     progressButton.setDrawProgress(false, false);
@@ -307,7 +301,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 VoIPHelper.startCall(this.lastCallChat, (TLRPC$InputPeer) null, (String) null, false, getParentActivity(), this, getAccountInstance());
                 this.waitingForCallChatId = null;
             }
-        } else if (i == NotificationCenter.groupCallUpdated && (num = this.waitingForCallChatId) != null && num.equals(objArr[0])) {
+        } else if (i == NotificationCenter.groupCallUpdated && (l = this.waitingForCallChatId) != null && l.equals(objArr[0])) {
             ProgressButton progressButton2 = this.waitingForLoadButton;
             if (progressButton2 != null) {
                 progressButton2.setDrawProgress(false, false);
@@ -338,11 +332,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addButton"), PorterDuff.Mode.MULTIPLY));
             this.imageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 1));
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-            this.imageView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    CallLogActivity.CallCell.this.lambda$new$0$CallLogActivity$CallCell(view);
-                }
-            });
+            this.imageView.setOnClickListener(new CallLogActivity$CallCell$$ExternalSyntheticLambda0(this));
             this.imageView.setContentDescription(LocaleController.getString("Call", NUM));
             int i = 5;
             addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 3 : 5) | 16, 8.0f, 0.0f, 8.0f, 0.0f));
@@ -355,8 +345,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$CallLogActivity$CallCell(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             CallLogRow callLogRow = (CallLogRow) view.getTag();
             TLRPC$UserFull userFull = CallLogActivity.this.getMessagesController().getUserFull(callLogRow.user.id);
             TLRPC$User access$102 = CallLogActivity.this.lastCallUser = callLogRow.user;
@@ -397,23 +386,18 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.button.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
             this.button.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
             addView(this.button, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
-            this.button.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    CallLogActivity.GroupCallCell.this.lambda$new$0$CallLogActivity$GroupCallCell(view);
-                }
-            });
+            this.button.setOnClickListener(new CallLogActivity$GroupCallCell$$ExternalSyntheticLambda0(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$CallLogActivity$GroupCallCell(View view) {
+        public /* synthetic */ void lambda$new$0(View view) {
             if (CallLogActivity.this.waitingForLoadButton != null) {
                 CallLogActivity.this.waitingForLoadButton.setDrawProgress(false, true);
             }
-            Integer num = (Integer) view.getTag();
-            ChatObject.Call groupCall = CallLogActivity.this.getMessagesController().getGroupCall(num.intValue(), false);
+            Long l = (Long) view.getTag();
+            ChatObject.Call groupCall = CallLogActivity.this.getMessagesController().getGroupCall(l.longValue(), false);
             CallLogActivity callLogActivity = CallLogActivity.this;
-            TLRPC$Chat unused = callLogActivity.lastCallChat = callLogActivity.getMessagesController().getChat(num);
+            TLRPC$Chat unused = callLogActivity.lastCallChat = callLogActivity.getMessagesController().getChat(l);
             if (groupCall != null) {
                 TLRPC$Chat access$300 = CallLogActivity.this.lastCallChat;
                 Activity parentActivity = CallLogActivity.this.getParentActivity();
@@ -421,8 +405,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 VoIPHelper.startCall(access$300, (TLRPC$InputPeer) null, (String) null, false, parentActivity, callLogActivity2, callLogActivity2.getAccountInstance());
                 return;
             }
-            Integer unused2 = CallLogActivity.this.waitingForCallChatId = num;
-            CallLogActivity.this.getMessagesController().loadFullChat(num.intValue(), 0, true);
+            Long unused2 = CallLogActivity.this.waitingForCallChatId = l;
+            CallLogActivity.this.getMessagesController().loadFullChat(l.longValue(), 0, true);
             this.button.setDrawProgress(true, true);
             ProgressButton unused3 = CallLogActivity.this.waitingForLoadButton = this.button;
         }
@@ -517,16 +501,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         recyclerListView3.setAdapter(listAdapter);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                CallLogActivity.this.lambda$createView$0$CallLogActivity(view, i);
-            }
-        });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return CallLogActivity.this.lambda$createView$1$CallLogActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new CallLogActivity$$ExternalSyntheticLambda8(this));
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new CallLogActivity$$ExternalSyntheticLambda9(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             /* JADX WARNING: Code restructure failed: missing block: B:27:0x00a5, code lost:
                 if (java.lang.Math.abs(r1) > 1) goto L_0x00b2;
@@ -577,8 +553,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     int r2 = r2 - r0
                     java.lang.Object r1 = r1.get(r2)
                     org.telegram.ui.CallLogActivity$CallLogRow r1 = (org.telegram.ui.CallLogActivity.CallLogRow) r1
-                    org.telegram.ui.-$$Lambda$CallLogActivity$2$e0ui-Zkgemrmp7bj51jRN57XoN8 r2 = new org.telegram.ui.-$$Lambda$CallLogActivity$2$e0ui-Zkgemrmp7bj51jRN57XoN8
-                    r2.<init>(r1)
+                    org.telegram.ui.CallLogActivity$2$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.CallLogActivity$2$$ExternalSyntheticLambda0
+                    r2.<init>(r4, r1)
                     org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
                 L_0x006d:
                     org.telegram.ui.CallLogActivity r1 = org.telegram.ui.CallLogActivity.this
@@ -640,8 +616,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onScrolled$0 */
-            public /* synthetic */ void lambda$onScrolled$0$CallLogActivity$2(CallLogRow callLogRow) {
+            public /* synthetic */ void lambda$onScrolled$0(CallLogRow callLogRow) {
                 CallLogActivity callLogActivity = CallLogActivity.this;
                 ArrayList<TLRPC$Message> arrayList = callLogRow.calls;
                 callLogActivity.getCalls(arrayList.get(arrayList.size() - 1).id, 100);
@@ -674,7 +649,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.floatingButton.setStateListAnimator(stateListAnimator);
-            this.floatingButton.setOutlineProvider(new ViewOutlineProvider() {
+            this.floatingButton.setOutlineProvider(new ViewOutlineProvider(this) {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -686,17 +661,12 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         float f = i >= 21 ? 56.0f : 60.0f;
         boolean z = LocaleController.isRTL;
         frameLayout2.addView(imageView2, LayoutHelper.createFrame(i2, f, (z ? 3 : 5) | 80, z ? 14.0f : 0.0f, 0.0f, z ? 0.0f : 14.0f, 14.0f));
-        this.floatingButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                CallLogActivity.this.lambda$createView$3$CallLogActivity(view);
-            }
-        });
+        this.floatingButton.setOnClickListener(new CallLogActivity$$ExternalSyntheticLambda1(this));
         return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$CallLogActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$0(View view, int i) {
         if (view instanceof CallCell) {
             CallLogRow callLogRow = this.calls.get(i - this.listViewAdapter.callsStartRow);
             if (this.actionBar.isActionModeShowed()) {
@@ -704,21 +674,20 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 return;
             }
             Bundle bundle = new Bundle();
-            bundle.putInt("user_id", callLogRow.user.id);
+            bundle.putLong("user_id", callLogRow.user.id);
             bundle.putInt("message_id", callLogRow.calls.get(0).id);
             getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
             presentFragment(new ChatActivity(bundle), true);
         } else if (view instanceof GroupCallCell) {
             Bundle bundle2 = new Bundle();
-            bundle2.putInt("chat_id", ((GroupCallCell) view).currentChat.id);
+            bundle2.putLong("chat_id", ((GroupCallCell) view).currentChat.id);
             getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
             presentFragment(new ChatActivity(bundle2), true);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$1 */
-    public /* synthetic */ boolean lambda$createView$1$CallLogActivity(View view, int i) {
+    public /* synthetic */ boolean lambda$createView$1(View view, int i) {
         if (!(view instanceof CallCell)) {
             return false;
         }
@@ -727,25 +696,19 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$CallLogActivity(View view) {
+    public /* synthetic */ void lambda$createView$3(View view) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("destroyAfterSelect", true);
         bundle.putBoolean("returnAsResult", true);
         bundle.putBoolean("onlyUsers", true);
         bundle.putBoolean("allowSelf", false);
         ContactsActivity contactsActivity = new ContactsActivity(bundle);
-        contactsActivity.setDelegate(new ContactsActivity.ContactsActivityDelegate() {
-            public final void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
-                CallLogActivity.this.lambda$createView$2$CallLogActivity(tLRPC$User, str, contactsActivity);
-            }
-        });
+        contactsActivity.setDelegate(new CallLogActivity$$ExternalSyntheticLambda10(this));
         presentFragment(contactsActivity);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$CallLogActivity(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
+    public /* synthetic */ void lambda$createView$2(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
         TLRPC$UserFull userFull = getMessagesController().getUserFull(tLRPC$User.id);
         this.lastCallUser = tLRPC$User;
         VoIPHelper.startCall(tLRPC$User, false, userFull != null && userFull.video_calls_available, getParentActivity(), (TLRPC$UserFull) null, getAccountInstance());
@@ -768,31 +731,9 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         checkBoxCell.setText(LocaleController.getString("DeleteCallsForEveryone", NUM), "", false, false);
         checkBoxCell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : 0, 0, LocaleController.isRTL ? 0 : AndroidUtilities.dp(8.0f), 0);
         frameLayout.addView(checkBoxCell, LayoutHelper.createFrame(-1, 48.0f, 51, 8.0f, 0.0f, 8.0f, 0.0f));
-        checkBoxCell.setOnClickListener(new View.OnClickListener(zArr) {
-            public final /* synthetic */ boolean[] f$0;
-
-            {
-                this.f$0 = r1;
-            }
-
-            public final void onClick(View view) {
-                CallLogActivity.lambda$showDeleteAlert$4(this.f$0, view);
-            }
-        });
+        checkBoxCell.setOnClickListener(new CallLogActivity$$ExternalSyntheticLambda2(zArr));
         builder.setView(frameLayout);
-        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(z, zArr) {
-            public final /* synthetic */ boolean f$1;
-            public final /* synthetic */ boolean[] f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                CallLogActivity.this.lambda$showDeleteAlert$5$CallLogActivity(this.f$1, this.f$2, dialogInterface, i);
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new CallLogActivity$$ExternalSyntheticLambda0(this, z, zArr));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         AlertDialog create = builder.create();
         showDialog(create);
@@ -802,14 +743,14 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    static /* synthetic */ void lambda$showDeleteAlert$4(boolean[] zArr, View view) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showDeleteAlert$4(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showDeleteAlert$5 */
-    public /* synthetic */ void lambda$showDeleteAlert$5$CallLogActivity(boolean z, boolean[] zArr, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showDeleteAlert$5(boolean z, boolean[] zArr, DialogInterface dialogInterface, int i) {
         if (z) {
             deleteAllMessages(zArr[0]);
             this.calls.clear();
@@ -818,7 +759,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.otherItem.setVisibility(8);
             this.listViewAdapter.notifyDataSetChanged();
         } else {
-            getMessagesController().deleteMessages(new ArrayList(this.selectedIds), (ArrayList<Long>) null, (TLRPC$EncryptedChat) null, 0, 0, zArr[0], false);
+            getMessagesController().deleteMessages(new ArrayList(this.selectedIds), (ArrayList<Long>) null, (TLRPC$EncryptedChat) null, 0, zArr[0], false);
         }
         hideActionMode(false);
     }
@@ -826,22 +767,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     private void deleteAllMessages(boolean z) {
         TLRPC$TL_messages_deletePhoneCallHistory tLRPC$TL_messages_deletePhoneCallHistory = new TLRPC$TL_messages_deletePhoneCallHistory();
         tLRPC$TL_messages_deletePhoneCallHistory.revoke = z;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_deletePhoneCallHistory, new RequestDelegate(z) {
-            public final /* synthetic */ boolean f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                CallLogActivity.this.lambda$deleteAllMessages$6$CallLogActivity(this.f$1, tLObject, tLRPC$TL_error);
-            }
-        });
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_deletePhoneCallHistory, new CallLogActivity$$ExternalSyntheticLambda6(this, z));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$deleteAllMessages$6 */
-    public /* synthetic */ void lambda$deleteAllMessages$6$CallLogActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$deleteAllMessages$6(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$TL_messages_affectedFoundMessages tLRPC$TL_messages_affectedFoundMessages = (TLRPC$TL_messages_affectedFoundMessages) tLObject;
             TLRPC$TL_updateDeleteMessages tLRPC$TL_updateDeleteMessages = new TLRPC$TL_updateDeleteMessages();
@@ -890,7 +820,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.selectedDialogsCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.selectedDialogsCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
             createActionMode.addView(this.selectedDialogsCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
-            this.selectedDialogsCountTextView.setOnTouchListener($$Lambda$CallLogActivity$eZ0Kp0kBy9R5VaLHzktibQGtU38.INSTANCE);
+            this.selectedDialogsCountTextView.setOnTouchListener(CallLogActivity$$ExternalSyntheticLambda3.INSTANCE);
             this.actionModeViews.add(createActionMode.addItemWithWidth(2, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("Delete", NUM)));
         }
     }
@@ -977,45 +907,27 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             tLRPC$TL_messages_search.filter = new TLRPC$TL_inputMessagesFilterPhoneCalls();
             tLRPC$TL_messages_search.q = "";
             tLRPC$TL_messages_search.offset_id = i;
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_search, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    CallLogActivity.this.lambda$getCalls$9$CallLogActivity(tLObject, tLRPC$TL_error);
-                }
-            }, 2), this.classGuid);
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_search, new CallLogActivity$$ExternalSyntheticLambda5(this), 2), this.classGuid);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getCalls$9 */
-    public /* synthetic */ void lambda$getCalls$9$CallLogActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-            public final /* synthetic */ TLObject f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                CallLogActivity.this.lambda$getCalls$8$CallLogActivity(this.f$1, this.f$2);
-            }
-        });
+    public /* synthetic */ void lambda$getCalls$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new CallLogActivity$$ExternalSyntheticLambda4(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getCalls$8 */
-    public /* synthetic */ void lambda$getCalls$8$CallLogActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$getCalls$8(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         CallLogRow callLogRow;
         int i = 0;
         int max = Math.max(this.listViewAdapter.callsStartRow, 0) + this.calls.size();
         if (tLRPC$TL_error == null) {
-            SparseArray sparseArray = new SparseArray();
+            LongSparseArray longSparseArray = new LongSparseArray();
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             this.endReached = tLRPC$messages_Messages.messages.isEmpty();
             for (int i2 = 0; i2 < tLRPC$messages_Messages.users.size(); i2++) {
                 TLRPC$User tLRPC$User = tLRPC$messages_Messages.users.get(i2);
-                sparseArray.put(tLRPC$User.id, tLRPC$User);
+                longSparseArray.put(tLRPC$User.id, tLRPC$User);
             }
             if (this.calls.size() > 0) {
                 ArrayList<CallLogRow> arrayList = this.calls;
@@ -1032,7 +944,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     if (i4 == 1 && ((tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonMissed) || (tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonBusy))) {
                         i4 = 2;
                     }
-                    int fromChatId = MessageObject.getFromChatId(tLRPC$Message);
+                    long fromChatId = MessageObject.getFromChatId(tLRPC$Message);
                     if (fromChatId == getUserConfig().getClientUserId()) {
                         fromChatId = tLRPC$Message.peer_id.user_id;
                     }
@@ -1042,7 +954,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                         }
                         callLogRow = new CallLogRow();
                         callLogRow.calls = new ArrayList<>();
-                        callLogRow.user = (TLRPC$User) sparseArray.get(fromChatId);
+                        callLogRow.user = (TLRPC$User) longSparseArray.get(fromChatId);
                         callLogRow.type = i4;
                         TLRPC$MessageAction tLRPC$MessageAction2 = tLRPC$Message.action;
                         callLogRow.video = tLRPC$MessageAction2 != null && tLRPC$MessageAction2.video;
@@ -1260,7 +1172,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             } else if (view instanceof GroupCallCell) {
                 GroupCallCell groupCallCell = (GroupCallCell) view;
                 TLRPC$Chat chat = groupCallCell.profileSearchCell.getChat();
-                if (CallLogActivity.this.waitingForCallChatId == null || chat.id != CallLogActivity.this.waitingForCallChatId.intValue()) {
+                if (CallLogActivity.this.waitingForCallChatId == null || chat.id != CallLogActivity.this.waitingForCallChatId.longValue()) {
                     groupCallCell.button.setDrawProgress(false, false);
                     return;
                 }
@@ -1313,10 +1225,10 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 }
             } else if (itemViewType == 4) {
                 int i5 = i2 - this.activeStartRow;
-                TLRPC$Chat chat = CallLogActivity.this.getMessagesController().getChat((Integer) CallLogActivity.this.activeGroupCalls.get(i5));
+                TLRPC$Chat chat = CallLogActivity.this.getMessagesController().getChat((Long) CallLogActivity.this.activeGroupCalls.get(i5));
                 GroupCallCell groupCallCell = (GroupCallCell) viewHolder2.itemView;
                 groupCallCell.setChat(chat);
-                groupCallCell.button.setTag(Integer.valueOf(chat.id));
+                groupCallCell.button.setTag(Long.valueOf(chat.id));
                 if (!ChatObject.isChannel(chat) || chat.megagroup) {
                     if (chat.has_geo) {
                         str = LocaleController.getString("MegaLocation", NUM);
@@ -1429,11 +1341,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$CallLogActivity$BqlyWakImEy8BoEsmIz9D_UoumI r10 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public final void didSetColor() {
-                CallLogActivity.this.lambda$getThemeDescriptions$10$CallLogActivity();
-            }
-        };
+        CallLogActivity$$ExternalSyntheticLambda7 callLogActivity$$ExternalSyntheticLambda7 = new CallLogActivity$$ExternalSyntheticLambda7(this);
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LocationCell.class, CallCell.class, HeaderCell.class, GroupCallCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -1461,16 +1369,16 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         TextPaint[] textPaintArr2 = Theme.dialogs_nameEncryptedPaint;
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{CallCell.class}, (String[]) null, new Paint[]{textPaintArr2[0], textPaintArr2[1], Theme.dialogs_searchNameEncryptedPaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_secretName"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{CallCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$CallLogActivity$BqlyWakImEy8BoEsmIz9D_UoumI r8 = r10;
+        CallLogActivity$$ExternalSyntheticLambda7 callLogActivity$$ExternalSyntheticLambda72 = callLogActivity$$ExternalSyntheticLambda7;
         ThemeDescription themeDescription = r2;
-        ThemeDescription themeDescription2 = new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed");
+        ThemeDescription themeDescription2 = new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, callLogActivity$$ExternalSyntheticLambda72, "avatar_backgroundRed");
         arrayList.add(themeDescription);
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, callLogActivity$$ExternalSyntheticLambda72, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, callLogActivity$$ExternalSyntheticLambda72, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, callLogActivity$$ExternalSyntheticLambda72, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, callLogActivity$$ExternalSyntheticLambda72, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, callLogActivity$$ExternalSyntheticLambda72, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, callLogActivity$$ExternalSyntheticLambda72, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, (Paint) null, new Drawable[]{this.greenDrawable, this.greenDrawable2, Theme.calllog_msgCallUpRedDrawable, Theme.calllog_msgCallDownRedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "calls_callReceivedGreenIcon"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, (Paint) null, new Drawable[]{this.redDrawable, Theme.calllog_msgCallUpGreenDrawable, Theme.calllog_msgCallDownGreenDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "calls_callReceivedRedIcon"));
         arrayList.add(new ThemeDescription(this.flickerLoadingView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
@@ -1480,8 +1388,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$10 */
-    public /* synthetic */ void lambda$getThemeDescriptions$10$CallLogActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$10() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

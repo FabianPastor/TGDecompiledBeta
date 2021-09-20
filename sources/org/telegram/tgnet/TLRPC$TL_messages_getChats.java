@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TLRPC$TL_messages_getChats extends TLObject {
     public static int constructor = NUM;
-    public ArrayList<Integer> id = new ArrayList<>();
+    public ArrayList<Long> id = new ArrayList<>();
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$messages_Chats.TLdeserialize(abstractSerializedData, i, z);
@@ -16,7 +16,7 @@ public class TLRPC$TL_messages_getChats extends TLObject {
         int size = this.id.size();
         abstractSerializedData.writeInt32(size);
         for (int i = 0; i < size; i++) {
-            abstractSerializedData.writeInt32(this.id.get(i).intValue());
+            abstractSerializedData.writeInt64(this.id.get(i).longValue());
         }
     }
 }

@@ -52,7 +52,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FourierTransform;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.secretmedia.ExtendedDefaultDataSourceFactory;
-import org.telegram.ui.Components.VideoPlayer;
 
 @SuppressLint({"NewApi"})
 public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoListener, AnalyticsListener, NotificationCenter.NotificationCenterDelegate {
@@ -1049,8 +1048,6 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     }
 
     private class VisualizerBufferSink implements TeeAudioProcessor.AudioBufferSink {
-        private final int BUFFER_SIZE = 1024;
-        private final int MAX_BUFFER_SIZE = 8192;
         ByteBuffer byteBuffer;
         FourierTransform.FFT fft = new FourierTransform.FFT(1024, 48000.0f);
         long lastUpdateTime;
@@ -1069,11 +1066,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         public void handleBuffer(ByteBuffer byteBuffer2) {
             if (VideoPlayer.this.audioVisualizerDelegate != null) {
                 if (byteBuffer2 == AudioProcessor.EMPTY_BUFFER || !VideoPlayer.this.mixedPlayWhenReady) {
-                    VideoPlayer.this.audioUpdateHandler.postDelayed(new Runnable() {
-                        public final void run() {
-                            VideoPlayer.VisualizerBufferSink.this.lambda$handleBuffer$0$VideoPlayer$VisualizerBufferSink();
-                        }
-                    }, 80);
+                    VideoPlayer.this.audioUpdateHandler.postDelayed(new VideoPlayer$VisualizerBufferSink$$ExternalSyntheticLambda0(this), 80);
                 } else if (VideoPlayer.this.audioVisualizerDelegate.needUpdate()) {
                     int limit = byteBuffer2.limit();
                     int i = 0;
@@ -1133,17 +1126,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                         }
                         if (System.currentTimeMillis() - this.lastUpdateTime >= ((long) 64)) {
                             this.lastUpdateTime = System.currentTimeMillis();
-                            VideoPlayer.this.audioUpdateHandler.postDelayed(new Runnable(fArr) {
-                                public final /* synthetic */ float[] f$1;
-
-                                {
-                                    this.f$1 = r2;
-                                }
-
-                                public final void run() {
-                                    VideoPlayer.VisualizerBufferSink.this.lambda$handleBuffer$1$VideoPlayer$VisualizerBufferSink(this.f$1);
-                                }
-                            }, 130);
+                            VideoPlayer.this.audioUpdateHandler.postDelayed(new VideoPlayer$VisualizerBufferSink$$ExternalSyntheticLambda1(this, fArr), 130);
                         }
                     }
                 }
@@ -1151,15 +1134,13 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$handleBuffer$0 */
-        public /* synthetic */ void lambda$handleBuffer$0$VideoPlayer$VisualizerBufferSink() {
+        public /* synthetic */ void lambda$handleBuffer$0() {
             VideoPlayer.this.audioUpdateHandler.removeCallbacksAndMessages((Object) null);
             VideoPlayer.this.audioVisualizerDelegate.onVisualizerUpdate(false, true, (float[]) null);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$handleBuffer$1 */
-        public /* synthetic */ void lambda$handleBuffer$1$VideoPlayer$VisualizerBufferSink(float[] fArr) {
+        public /* synthetic */ void lambda$handleBuffer$1(float[] fArr) {
             VideoPlayer.this.audioVisualizerDelegate.onVisualizerUpdate(true, true, fArr);
         }
     }

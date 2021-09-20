@@ -78,19 +78,14 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
         }
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
         this.animation = ofFloat;
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                ReplaceableIconDrawable.this.lambda$setIcon$0$ReplaceableIconDrawable(valueAnimator);
-            }
-        });
+        ofFloat.addUpdateListener(new ReplaceableIconDrawable$$ExternalSyntheticLambda0(this));
         this.animation.addListener(this);
         this.animation.setDuration(150);
         this.animation.start();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setIcon$0 */
-    public /* synthetic */ void lambda$setIcon$0$ReplaceableIconDrawable(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setIcon$0(ValueAnimator valueAnimator) {
         this.progress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidateSelf();
     }

@@ -46,7 +46,6 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.ChatAttachAlert;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -177,7 +176,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 ChatAttachAlertPollLayout.this.listView.setItemAnimator(ChatAttachAlertPollLayout.this.itemAnimator);
                 ChatAttachAlertPollLayout.this.listView.cancelClickRunnables(false);
                 viewHolder.itemView.setPressed(true);
-                viewHolder.itemView.setBackgroundColor(Theme.getColor("dialogBackground"));
+                viewHolder.itemView.setBackgroundColor(ChatAttachAlertPollLayout.this.getThemedColor("dialogBackground"));
             }
             super.onSelectedChanged(viewHolder, i);
         }
@@ -189,11 +188,11 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
     }
 
-    public ChatAttachAlertPollLayout(ChatAttachAlert chatAttachAlert, Context context) {
-        super(chatAttachAlert, context);
+    public ChatAttachAlertPollLayout(ChatAttachAlert chatAttachAlert, Context context, Theme.ResourcesProvider resourcesProvider) {
+        super(chatAttachAlert, context, resourcesProvider);
         updateRows();
         this.listAdapter = new ListAdapter(context);
-        AnonymousClass1 r1 = new RecyclerListView(context) {
+        AnonymousClass1 r0 = new RecyclerListView(this, context) {
             /* access modifiers changed from: protected */
             public void requestChildOnScreen(View view, View view2) {
                 if (view instanceof PollEditTextCell) {
@@ -206,8 +205,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 return super.requestChildRectangleOnScreen(view, rect, z);
             }
         };
-        this.listView = r1;
-        AnonymousClass2 r2 = new DefaultItemAnimator() {
+        this.listView = r0;
+        AnonymousClass2 r1 = new DefaultItemAnimator() {
             /* access modifiers changed from: protected */
             public void onMoveAnimationUpdate(RecyclerView.ViewHolder viewHolder) {
                 if (viewHolder.getAdapterPosition() == 0) {
@@ -216,13 +215,13 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 }
             }
         };
-        this.itemAnimator = r2;
-        r1.setItemAnimator(r2);
+        this.itemAnimator = r1;
+        r0.setItemAnimator(r1);
         this.listView.setClipToPadding(false);
         this.listView.setVerticalScrollBarEnabled(false);
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
         RecyclerListView recyclerListView = this.listView;
-        AnonymousClass3 r22 = new FillLastLinearLayoutManager(context, 1, false, AndroidUtilities.dp(53.0f), this.listView) {
+        AnonymousClass3 r12 = new FillLastLinearLayoutManager(context, 1, false, AndroidUtilities.dp(53.0f), this.listView) {
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int i) {
                 AnonymousClass1 r2 = new LinearSmoothScroller(recyclerView.getContext()) {
                     public int calculateDyToMakeVisible(View view, int i) {
@@ -255,18 +254,14 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 return iArr;
             }
         };
-        this.layoutManager = r22;
-        recyclerListView.setLayoutManager(r22);
+        this.layoutManager = r12;
+        recyclerListView.setLayoutManager(r12);
         this.layoutManager.setSkipFirstItem();
         new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(this.listView);
         addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setPreserveFocusAfterLayout(true);
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                ChatAttachAlertPollLayout.this.lambda$new$0$ChatAttachAlertPollLayout(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatAttachAlertPollLayout$$ExternalSyntheticLambda2(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 ChatAttachAlertPollLayout chatAttachAlertPollLayout = ChatAttachAlertPollLayout.this;
@@ -297,8 +292,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$ChatAttachAlertPollLayout(View view, int i) {
+    public /* synthetic */ void lambda$new$0(View view, int i) {
         boolean z;
         if (i == this.addAnswerRow) {
             addNewField();
@@ -450,19 +444,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 }
                 ChatActivity chatActivity = (ChatActivity) this.parentAlert.baseFragment;
                 if (chatActivity.isInScheduleMode()) {
-                    AlertsCreator.createScheduleDatePickerDialog(chatActivity.getParentActivity(), chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$TL_messageMediaPoll, hashMap) {
-                        public final /* synthetic */ TLRPC$TL_messageMediaPoll f$1;
-                        public final /* synthetic */ HashMap f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void didSelectDate(boolean z, int i) {
-                            ChatAttachAlertPollLayout.this.lambda$onMenuItemClick$1$ChatAttachAlertPollLayout(this.f$1, this.f$2, z, i);
-                        }
-                    });
+                    AlertsCreator.createScheduleDatePickerDialog(chatActivity.getParentActivity(), chatActivity.getDialogId(), new ChatAttachAlertPollLayout$$ExternalSyntheticLambda1(this, tLRPC$TL_messageMediaPoll, hashMap));
                     return;
                 }
                 this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, true, 0);
@@ -482,8 +464,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onMenuItemClick$1 */
-    public /* synthetic */ void lambda$onMenuItemClick$1$ChatAttachAlertPollLayout(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
+    public /* synthetic */ void lambda$onMenuItemClick$1(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
         this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, z, i);
         this.parentAlert.dismiss();
     }
@@ -796,11 +777,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentAlert.baseFragment.getParentActivity());
             builder.setTitle(LocaleController.getString("CancelPollAlertTitle", NUM));
             builder.setMessage(LocaleController.getString("CancelPollAlertText", NUM));
-            builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    ChatAttachAlertPollLayout.this.lambda$checkDiscard$2$ChatAttachAlertPollLayout(dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new ChatAttachAlertPollLayout$$ExternalSyntheticLambda0(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             builder.show();
         }
@@ -808,8 +785,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkDiscard$2 */
-    public /* synthetic */ void lambda$checkDiscard$2$ChatAttachAlertPollLayout(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$2(DialogInterface dialogInterface, int i) {
         this.parentAlert.dismiss();
     }
 
@@ -846,7 +822,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 pollEditTextCell.setText2(String.format("%d", new Object[]{Integer.valueOf(i2)}));
                 SimpleTextView textView2 = pollEditTextCell.getTextView2();
                 String str2 = i2 < 0 ? "windowBackgroundWhiteRedText5" : "windowBackgroundWhiteGrayText3";
-                textView2.setTextColor(Theme.getColor(str2));
+                textView2.setTextColor(getThemedColor(str2));
                 textView2.setTag(str2);
                 return;
             }
@@ -916,7 +892,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                     }
                 } else if (itemViewType == 2) {
                     TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(ChatAttachAlertPollLayout.this.getThemedColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     combinedDrawable.setFullsize(true);
                     textInfoPrivacyCell.setBackgroundDrawable(combinedDrawable);
                     if (i == ChatAttachAlertPollLayout.this.solutionInfoRow) {
@@ -937,8 +913,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                     textCell.setColors((String) null, "windowBackgroundWhiteBlueText4");
                     Drawable drawable = this.mContext.getResources().getDrawable(NUM);
                     Drawable drawable2 = this.mContext.getResources().getDrawable(NUM);
-                    drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("switchTrackChecked"), PorterDuff.Mode.MULTIPLY));
-                    drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("checkboxCheck"), PorterDuff.Mode.MULTIPLY));
+                    drawable.setColorFilter(new PorterDuffColorFilter(ChatAttachAlertPollLayout.this.getThemedColor("switchTrackChecked"), PorterDuff.Mode.MULTIPLY));
+                    drawable2.setColorFilter(new PorterDuffColorFilter(ChatAttachAlertPollLayout.this.getThemedColor("checkboxCheck"), PorterDuff.Mode.MULTIPLY));
                     textCell.setTextAndIcon(LocaleController.getString("AddAnOption", NUM), (Drawable) new CombinedDrawable(drawable, drawable2), false);
                 }
             } else {
@@ -1037,14 +1013,14 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 java.lang.String r0 = "windowBackgroundGray"
                 r1 = 1
                 switch(r12) {
-                    case 0: goto L_0x00bc;
-                    case 1: goto L_0x0095;
-                    case 2: goto L_0x008d;
-                    case 3: goto L_0x0085;
-                    case 4: goto L_0x0071;
+                    case 0: goto L_0x00c0;
+                    case 1: goto L_0x0097;
+                    case 2: goto L_0x008f;
+                    case 3: goto L_0x0087;
+                    case 4: goto L_0x0073;
                     case 5: goto L_0x0007;
-                    case 6: goto L_0x0069;
-                    case 7: goto L_0x0056;
+                    case 6: goto L_0x006b;
+                    case 7: goto L_0x0058;
                     case 8: goto L_0x0046;
                     case 9: goto L_0x003d;
                     default: goto L_0x0007;
@@ -1052,8 +1028,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             L_0x0007:
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$6 r11 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$6
                 android.content.Context r12 = r10.mContext
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$KNQ7gU60k6g7bRsfSuyq9P8e0LU r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$KNQ7gU60k6g7bRsfSuyq9P8e0LU
-                r0.<init>()
+                org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda0 r0 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda0
+                r0.<init>(r10)
                 r11.<init>(r12, r0)
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$7 r12 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$7
                 r12.<init>(r11)
@@ -1063,26 +1039,27 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 int r0 = r12.getImeOptions()
                 r0 = r0 | 5
                 r12.setImeOptions(r0)
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$HHvA2RH7fkzBL_OTnB56ALzJK20 r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$HHvA2RH7fkzBL_OTnB56ALzJK20
-                r0.<init>(r11)
+                org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda2 r0 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda2
+                r0.<init>(r10, r11)
                 r12.setOnEditorActionListener(r0)
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$3unNk7Tvar_PRVsnwtsEJUGMGsuk r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$3unNk7Tvar_PRVsnwtsEJUGMGsuk
-                r0.<init>()
+                org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$$ExternalSyntheticLambda1
+                r0.<init>(r11)
                 r12.setOnKeyListener(r0)
-                goto L_0x00cb
+                goto L_0x00cf
             L_0x003d:
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$5 r11 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$5
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
-                goto L_0x00cb
+                goto L_0x00cf
             L_0x0046:
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$EmptyView r11 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$EmptyView
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
-                int r12 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                org.telegram.ui.Components.ChatAttachAlertPollLayout r12 = org.telegram.ui.Components.ChatAttachAlertPollLayout.this
+                int r12 = r12.getThemedColor(r0)
                 r11.setBackgroundColor(r12)
-                goto L_0x00cb
-            L_0x0056:
+                goto L_0x00cf
+            L_0x0058:
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$3 r12 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$3
                 android.content.Context r0 = r10.mContext
                 r12.<init>(r0, r1, r11)
@@ -1090,13 +1067,13 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$4 r11 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$4
                 r11.<init>(r12)
                 r12.addTextWatcher(r11)
-                goto L_0x0083
-            L_0x0069:
+                goto L_0x0085
+            L_0x006b:
                 org.telegram.ui.Cells.TextCheckCell r11 = new org.telegram.ui.Cells.TextCheckCell
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
-                goto L_0x00cb
-            L_0x0071:
+                goto L_0x00cf
+            L_0x0073:
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$1 r12 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$1
                 android.content.Context r0 = r10.mContext
                 r12.<init>(r0, r11)
@@ -1104,20 +1081,20 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$2 r11 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$2
                 r11.<init>(r12)
                 r12.addTextWatcher(r11)
-            L_0x0083:
-                r11 = r12
-                goto L_0x00cb
             L_0x0085:
+                r11 = r12
+                goto L_0x00cf
+            L_0x0087:
                 org.telegram.ui.Cells.TextCell r11 = new org.telegram.ui.Cells.TextCell
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
-                goto L_0x00cb
-            L_0x008d:
+                goto L_0x00cf
+            L_0x008f:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r11 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
-                goto L_0x00cb
-            L_0x0095:
+                goto L_0x00cf
+            L_0x0097:
                 org.telegram.ui.Cells.ShadowSectionCell r11 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
@@ -1127,13 +1104,14 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r2, (java.lang.String) r3)
                 org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
                 android.graphics.drawable.ColorDrawable r3 = new android.graphics.drawable.ColorDrawable
-                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                org.telegram.ui.Components.ChatAttachAlertPollLayout r4 = org.telegram.ui.Components.ChatAttachAlertPollLayout.this
+                int r0 = r4.getThemedColor(r0)
                 r3.<init>(r0)
                 r2.<init>(r3, r12)
                 r2.setFullsize(r1)
                 r11.setBackgroundDrawable(r2)
-                goto L_0x00cb
-            L_0x00bc:
+                goto L_0x00cf
+            L_0x00c0:
                 org.telegram.ui.Cells.HeaderCell r11 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r5 = r10.mContext
                 r7 = 21
@@ -1142,7 +1120,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 java.lang.String r6 = "windowBackgroundWhiteBlueHeader"
                 r4 = r11
                 r4.<init>(r5, r6, r7, r8, r9)
-            L_0x00cb:
+            L_0x00cf:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r12 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2
@@ -1156,8 +1134,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$0 */
-        public /* synthetic */ void lambda$onCreateViewHolder$0$ChatAttachAlertPollLayout$ListAdapter(View view) {
+        public /* synthetic */ void lambda$onCreateViewHolder$0(View view) {
             int adapterPosition;
             if (view.getTag() == null) {
                 view.setTag(1);
@@ -1202,8 +1179,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$1 */
-        public /* synthetic */ boolean lambda$onCreateViewHolder$1$ChatAttachAlertPollLayout$ListAdapter(PollEditTextCell pollEditTextCell, TextView textView, int i, KeyEvent keyEvent) {
+        public /* synthetic */ boolean lambda$onCreateViewHolder$1(PollEditTextCell pollEditTextCell, TextView textView, int i, KeyEvent keyEvent) {
             int adapterPosition;
             if (i != 5) {
                 return false;
@@ -1228,7 +1204,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             return true;
         }
 
-        static /* synthetic */ boolean lambda$onCreateViewHolder$2(PollEditTextCell pollEditTextCell, View view, int i, KeyEvent keyEvent) {
+        /* access modifiers changed from: private */
+        public static /* synthetic */ boolean lambda$onCreateViewHolder$2(PollEditTextCell pollEditTextCell, View view, int i, KeyEvent keyEvent) {
             EditTextBoldCursor editTextBoldCursor = (EditTextBoldCursor) view;
             if (i != 67 || keyEvent.getAction() != 0 || editTextBoldCursor.length() != 0) {
                 return false;

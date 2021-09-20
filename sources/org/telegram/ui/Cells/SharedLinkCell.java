@@ -194,23 +194,25 @@ public class SharedLinkCell extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:121:0x0237  */
     /* JADX WARNING: Removed duplicated region for block: B:122:0x0273  */
     /* JADX WARNING: Removed duplicated region for block: B:125:0x0278 A[SYNTHETIC, Splitter:B:125:0x0278] */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x02d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x02d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:142:0x02e0  */
-    /* JADX WARNING: Removed duplicated region for block: B:143:0x02e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:146:0x02e8 A[SYNTHETIC, Splitter:B:146:0x02e8] */
-    /* JADX WARNING: Removed duplicated region for block: B:154:0x0319 A[SYNTHETIC, Splitter:B:154:0x0319] */
-    /* JADX WARNING: Removed duplicated region for block: B:169:0x03b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:172:0x03d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:187:0x044d  */
-    /* JADX WARNING: Removed duplicated region for block: B:188:0x0458  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x0471  */
-    /* JADX WARNING: Removed duplicated region for block: B:200:0x04ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:205:0x050b  */
-    /* JADX WARNING: Removed duplicated region for block: B:206:0x051d  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x0573  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x0581  */
-    /* JADX WARNING: Removed duplicated region for block: B:233:0x05a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x02d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x02d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:142:0x02e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x02e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x02e9 A[SYNTHETIC, Splitter:B:146:0x02e9] */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x031a A[SYNTHETIC, Splitter:B:154:0x031a] */
+    /* JADX WARNING: Removed duplicated region for block: B:164:0x0348  */
+    /* JADX WARNING: Removed duplicated region for block: B:167:0x03b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x03b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x03d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x045e  */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x0469  */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x0482  */
+    /* JADX WARNING: Removed duplicated region for block: B:206:0x0500  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x051d  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x052f  */
+    /* JADX WARNING: Removed duplicated region for block: B:229:0x0585  */
+    /* JADX WARNING: Removed duplicated region for block: B:233:0x0593  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x05b3  */
     /* JADX WARNING: Removed duplicated region for block: B:24:0x0073  */
     /* JADX WARNING: Removed duplicated region for block: B:99:0x01d7 A[Catch:{ Exception -> 0x0217 }] */
     @android.annotation.SuppressLint({"DrawAllocation"})
@@ -550,117 +552,118 @@ public class SharedLinkCell extends FrameLayout {
             r6 = 0
         L_0x0274:
             r4 = 1082130432(0x40800000, float:4.0)
-            if (r7 == 0) goto L_0x02c8
-            org.telegram.messenger.MessageObject r0 = r1.message     // Catch:{ Exception -> 0x02bf }
-            java.util.ArrayList<java.lang.String> r0 = r0.highlightedWords     // Catch:{ Exception -> 0x02bf }
-            java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r7, (java.util.ArrayList<java.lang.String>) r0)     // Catch:{ Exception -> 0x02bf }
-            if (r0 == 0) goto L_0x0285
+            if (r7 == 0) goto L_0x02c9
+            org.telegram.messenger.MessageObject r0 = r1.message     // Catch:{ Exception -> 0x02c0 }
+            java.util.ArrayList<java.lang.String> r0 = r0.highlightedWords     // Catch:{ Exception -> 0x02c0 }
+            r9 = 0
+            java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r7, (java.util.ArrayList<java.lang.String>) r0, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r9)     // Catch:{ Exception -> 0x02c0 }
+            if (r0 == 0) goto L_0x0286
             r16 = r0
-            goto L_0x0287
-        L_0x0285:
+            goto L_0x0288
+        L_0x0286:
             r16 = r7
-        L_0x0287:
-            android.text.TextPaint r0 = r1.titleTextPaint     // Catch:{ Exception -> 0x02bf }
+        L_0x0288:
+            android.text.TextPaint r0 = r1.titleTextPaint     // Catch:{ Exception -> 0x02c0 }
             int r6 = r5 - r6
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x02bf }
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x02c0 }
             int r18 = r6 - r9
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x02bf }
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x02c0 }
             int r19 = r6 - r9
             r20 = 0
             r21 = 3
             r17 = r0
-            android.text.StaticLayout r0 = org.telegram.ui.Cells.ChatMessageCell.generateStaticLayout(r16, r17, r18, r19, r20, r21)     // Catch:{ Exception -> 0x02bf }
-            r1.titleLayout = r0     // Catch:{ Exception -> 0x02bf }
-            int r0 = r0.getLineCount()     // Catch:{ Exception -> 0x02bf }
-            if (r0 <= 0) goto L_0x02c3
-            int r0 = r1.titleY     // Catch:{ Exception -> 0x02bf }
-            android.text.StaticLayout r6 = r1.titleLayout     // Catch:{ Exception -> 0x02bf }
-            int r9 = r6.getLineCount()     // Catch:{ Exception -> 0x02bf }
+            android.text.StaticLayout r0 = org.telegram.ui.Cells.ChatMessageCell.generateStaticLayout(r16, r17, r18, r19, r20, r21)     // Catch:{ Exception -> 0x02c0 }
+            r1.titleLayout = r0     // Catch:{ Exception -> 0x02c0 }
+            int r0 = r0.getLineCount()     // Catch:{ Exception -> 0x02c0 }
+            if (r0 <= 0) goto L_0x02c4
+            int r0 = r1.titleY     // Catch:{ Exception -> 0x02c0 }
+            android.text.StaticLayout r6 = r1.titleLayout     // Catch:{ Exception -> 0x02c0 }
+            int r9 = r6.getLineCount()     // Catch:{ Exception -> 0x02c0 }
             int r9 = r9 - r14
-            int r6 = r6.getLineBottom(r9)     // Catch:{ Exception -> 0x02bf }
+            int r6 = r6.getLineBottom(r9)     // Catch:{ Exception -> 0x02c0 }
             int r0 = r0 + r6
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x02bf }
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x02c0 }
             int r0 = r0 + r6
-            r1.descriptionY = r0     // Catch:{ Exception -> 0x02bf }
-            goto L_0x02c3
-        L_0x02bf:
+            r1.descriptionY = r0     // Catch:{ Exception -> 0x02c0 }
+            goto L_0x02c4
+        L_0x02c0:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x02c3:
+        L_0x02c4:
             org.telegram.ui.Components.LetterDrawable r0 = r1.letterDrawable
             r0.setTitle(r7)
-        L_0x02c8:
+        L_0x02c9:
             int r0 = r1.descriptionY
             r1.description2Y = r0
             android.text.StaticLayout r0 = r1.titleLayout
-            if (r0 == 0) goto L_0x02d5
+            if (r0 == 0) goto L_0x02d6
             int r0 = r0.getLineCount()
-            goto L_0x02d6
-        L_0x02d5:
-            r0 = 0
+            goto L_0x02d7
         L_0x02d6:
+            r0 = 0
+        L_0x02d7:
             int r0 = 4 - r0
             int r16 = java.lang.Math.max(r14, r0)
             int r0 = r1.viewType
-            if (r0 != r14) goto L_0x02e3
+            if (r0 != r14) goto L_0x02e4
             r3 = 0
             r6 = 0
-            goto L_0x02e4
-        L_0x02e3:
-            r6 = r8
+            goto L_0x02e5
         L_0x02e4:
+            r6 = r8
+        L_0x02e5:
             r17 = 1084227584(0x40a00000, float:5.0)
-            if (r6 == 0) goto L_0x0315
-            android.text.TextPaint r7 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x0311 }
+            if (r6 == 0) goto L_0x0316
+            android.text.TextPaint r7 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x0312 }
             r10 = 0
             r8 = r5
             r9 = r5
             r11 = r16
-            android.text.StaticLayout r0 = org.telegram.ui.Cells.ChatMessageCell.generateStaticLayout(r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x0311 }
-            r1.descriptionLayout = r0     // Catch:{ Exception -> 0x0311 }
-            int r0 = r0.getLineCount()     // Catch:{ Exception -> 0x0311 }
-            if (r0 <= 0) goto L_0x0315
-            int r0 = r1.descriptionY     // Catch:{ Exception -> 0x0311 }
-            android.text.StaticLayout r6 = r1.descriptionLayout     // Catch:{ Exception -> 0x0311 }
-            int r7 = r6.getLineCount()     // Catch:{ Exception -> 0x0311 }
+            android.text.StaticLayout r0 = org.telegram.ui.Cells.ChatMessageCell.generateStaticLayout(r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x0312 }
+            r1.descriptionLayout = r0     // Catch:{ Exception -> 0x0312 }
+            int r0 = r0.getLineCount()     // Catch:{ Exception -> 0x0312 }
+            if (r0 <= 0) goto L_0x0316
+            int r0 = r1.descriptionY     // Catch:{ Exception -> 0x0312 }
+            android.text.StaticLayout r6 = r1.descriptionLayout     // Catch:{ Exception -> 0x0312 }
+            int r7 = r6.getLineCount()     // Catch:{ Exception -> 0x0312 }
             int r7 = r7 - r14
-            int r6 = r6.getLineBottom(r7)     // Catch:{ Exception -> 0x0311 }
+            int r6 = r6.getLineBottom(r7)     // Catch:{ Exception -> 0x0312 }
             int r0 = r0 + r6
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ Exception -> 0x0311 }
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ Exception -> 0x0312 }
             int r0 = r0 + r6
-            r1.description2Y = r0     // Catch:{ Exception -> 0x0311 }
-            goto L_0x0315
-        L_0x0311:
+            r1.description2Y = r0     // Catch:{ Exception -> 0x0312 }
+            goto L_0x0316
+        L_0x0312:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0315:
+        L_0x0316:
             r18 = 1092616192(0x41200000, float:10.0)
-            if (r3 == 0) goto L_0x0339
-            android.text.TextPaint r7 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x0335 }
+            if (r3 == 0) goto L_0x033a
+            android.text.TextPaint r7 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x0336 }
             r10 = 0
             r6 = r3
             r8 = r5
             r9 = r5
             r11 = r16
-            android.text.StaticLayout r0 = org.telegram.ui.Cells.ChatMessageCell.generateStaticLayout(r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x0335 }
-            r1.descriptionLayout2 = r0     // Catch:{ Exception -> 0x0335 }
-            android.text.StaticLayout r0 = r1.descriptionLayout     // Catch:{ Exception -> 0x0335 }
-            if (r0 == 0) goto L_0x0339
-            int r0 = r1.description2Y     // Catch:{ Exception -> 0x0335 }
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r18)     // Catch:{ Exception -> 0x0335 }
+            android.text.StaticLayout r0 = org.telegram.ui.Cells.ChatMessageCell.generateStaticLayout(r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x0336 }
+            r1.descriptionLayout2 = r0     // Catch:{ Exception -> 0x0336 }
+            android.text.StaticLayout r0 = r1.descriptionLayout     // Catch:{ Exception -> 0x0336 }
+            if (r0 == 0) goto L_0x033a
+            int r0 = r1.description2Y     // Catch:{ Exception -> 0x0336 }
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r18)     // Catch:{ Exception -> 0x0336 }
             int r0 = r0 + r3
-            r1.description2Y = r0     // Catch:{ Exception -> 0x0335 }
-            goto L_0x0339
-        L_0x0335:
+            r1.description2Y = r0     // Catch:{ Exception -> 0x0336 }
+            goto L_0x033a
+        L_0x0336:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0339:
+        L_0x033a:
             org.telegram.messenger.MessageObject r0 = r1.message
-            if (r0 == 0) goto L_0x03af
+            if (r0 == 0) goto L_0x03b2
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.message
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x03af
+            if (r0 != 0) goto L_0x03b2
             org.telegram.messenger.MessageObject r0 = r1.message
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.message
@@ -677,8 +680,9 @@ public class SharedLinkCell extends FrameLayout {
             java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r0, r3, r6, r2)
             org.telegram.messenger.MessageObject r3 = r1.message
             java.util.ArrayList<java.lang.String> r3 = r3.highlightedWords
-            java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r3)
-            if (r0 == 0) goto L_0x03af
+            r13 = 0
+            java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r3, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r13)
+            if (r0 == 0) goto L_0x03b3
             org.telegram.messenger.MessageObject r3 = r1.message
             java.util.ArrayList<java.lang.String> r3 = r3.highlightedWords
             java.lang.Object r3 = r3.get(r2)
@@ -702,9 +706,12 @@ public class SharedLinkCell extends FrameLayout {
             r21 = r3
             r19.<init>(r20, r21, r22, r23, r24, r25, r26)
             r1.captionLayout = r0
-        L_0x03af:
+            goto L_0x03b3
+        L_0x03b2:
+            r13 = 0
+        L_0x03b3:
             android.text.StaticLayout r0 = r1.captionLayout
-            if (r0 == 0) goto L_0x03ca
+            if (r0 == 0) goto L_0x03ce
             int r3 = r1.descriptionY
             r1.captionY = r3
             int r6 = r0.getLineCount()
@@ -715,78 +722,87 @@ public class SharedLinkCell extends FrameLayout {
             int r3 = r3 + r0
             r1.descriptionY = r3
             r1.description2Y = r3
-        L_0x03ca:
+        L_0x03ce:
             java.util.ArrayList<java.lang.String> r0 = r1.links
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x0443
+            if (r0 != 0) goto L_0x0452
             r3 = 0
-        L_0x03d3:
+        L_0x03d7:
             java.util.ArrayList<java.lang.String> r0 = r1.links
             int r0 = r0.size()
-            if (r3 >= r0) goto L_0x0443
-            java.util.ArrayList<java.lang.String> r0 = r1.links     // Catch:{ Exception -> 0x043c }
-            java.lang.Object r0 = r0.get(r3)     // Catch:{ Exception -> 0x043c }
-            java.lang.String r0 = (java.lang.String) r0     // Catch:{ Exception -> 0x043c }
-            android.text.TextPaint r6 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x043c }
-            float r6 = r6.measureText(r0)     // Catch:{ Exception -> 0x043c }
-            double r6 = (double) r6     // Catch:{ Exception -> 0x043c }
-            double r6 = java.lang.Math.ceil(r6)     // Catch:{ Exception -> 0x043c }
-            int r6 = (int) r6     // Catch:{ Exception -> 0x043c }
+            if (r3 >= r0) goto L_0x0452
+            java.util.ArrayList<java.lang.String> r0 = r1.links     // Catch:{ Exception -> 0x0447 }
+            java.lang.Object r0 = r0.get(r3)     // Catch:{ Exception -> 0x0447 }
+            java.lang.String r0 = (java.lang.String) r0     // Catch:{ Exception -> 0x0447 }
+            android.text.TextPaint r6 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x0447 }
+            float r6 = r6.measureText(r0)     // Catch:{ Exception -> 0x0447 }
+            double r6 = (double) r6     // Catch:{ Exception -> 0x0447 }
+            double r6 = java.lang.Math.ceil(r6)     // Catch:{ Exception -> 0x0447 }
+            int r6 = (int) r6     // Catch:{ Exception -> 0x0447 }
             r7 = 10
             r8 = 32
-            java.lang.String r0 = r0.replace(r7, r8)     // Catch:{ Exception -> 0x043c }
-            android.text.TextPaint r7 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x043c }
-            int r6 = java.lang.Math.min(r6, r5)     // Catch:{ Exception -> 0x043c }
-            float r6 = (float) r6     // Catch:{ Exception -> 0x043c }
-            android.text.TextUtils$TruncateAt r8 = android.text.TextUtils.TruncateAt.MIDDLE     // Catch:{ Exception -> 0x043c }
-            java.lang.CharSequence r7 = android.text.TextUtils.ellipsize(r0, r7, r6, r8)     // Catch:{ Exception -> 0x043c }
-            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x043c }
-            android.text.TextPaint r8 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x043c }
-            android.text.Layout$Alignment r10 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x043c }
+            java.lang.String r0 = r0.replace(r7, r8)     // Catch:{ Exception -> 0x0447 }
+            android.text.TextPaint r7 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x0447 }
+            int r6 = java.lang.Math.min(r6, r5)     // Catch:{ Exception -> 0x0447 }
+            float r6 = (float) r6     // Catch:{ Exception -> 0x0447 }
+            android.text.TextUtils$TruncateAt r8 = android.text.TextUtils.TruncateAt.MIDDLE     // Catch:{ Exception -> 0x0447 }
+            java.lang.CharSequence r7 = android.text.TextUtils.ellipsize(r0, r7, r6, r8)     // Catch:{ Exception -> 0x0447 }
+            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x0447 }
+            android.text.TextPaint r8 = r1.descriptionTextPaint     // Catch:{ Exception -> 0x0447 }
+            android.text.Layout$Alignment r10 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x0447 }
             r11 = 1065353216(0x3var_, float:1.0)
             r12 = 0
-            r13 = 0
+            r19 = 0
             r6 = r0
             r9 = r5
-            r6.<init>(r7, r8, r9, r10, r11, r12, r13)     // Catch:{ Exception -> 0x043c }
-            int r6 = r1.description2Y     // Catch:{ Exception -> 0x043c }
-            r1.linkY = r6     // Catch:{ Exception -> 0x043c }
-            android.text.StaticLayout r6 = r1.descriptionLayout2     // Catch:{ Exception -> 0x043c }
-            if (r6 == 0) goto L_0x0436
-            int r6 = r6.getLineCount()     // Catch:{ Exception -> 0x043c }
-            if (r6 == 0) goto L_0x0436
-            int r6 = r1.linkY     // Catch:{ Exception -> 0x043c }
-            android.text.StaticLayout r7 = r1.descriptionLayout2     // Catch:{ Exception -> 0x043c }
-            int r8 = r7.getLineCount()     // Catch:{ Exception -> 0x043c }
+            r20 = r13
+            r13 = r19
+            r6.<init>(r7, r8, r9, r10, r11, r12, r13)     // Catch:{ Exception -> 0x0445 }
+            int r6 = r1.description2Y     // Catch:{ Exception -> 0x0445 }
+            r1.linkY = r6     // Catch:{ Exception -> 0x0445 }
+            android.text.StaticLayout r6 = r1.descriptionLayout2     // Catch:{ Exception -> 0x0445 }
+            if (r6 == 0) goto L_0x043f
+            int r6 = r6.getLineCount()     // Catch:{ Exception -> 0x0445 }
+            if (r6 == 0) goto L_0x043f
+            int r6 = r1.linkY     // Catch:{ Exception -> 0x0445 }
+            android.text.StaticLayout r7 = r1.descriptionLayout2     // Catch:{ Exception -> 0x0445 }
+            int r8 = r7.getLineCount()     // Catch:{ Exception -> 0x0445 }
             int r8 = r8 - r14
-            int r7 = r7.getLineBottom(r8)     // Catch:{ Exception -> 0x043c }
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ Exception -> 0x043c }
+            int r7 = r7.getLineBottom(r8)     // Catch:{ Exception -> 0x0445 }
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ Exception -> 0x0445 }
             int r7 = r7 + r8
             int r6 = r6 + r7
-            r1.linkY = r6     // Catch:{ Exception -> 0x043c }
-        L_0x0436:
-            java.util.ArrayList<android.text.StaticLayout> r6 = r1.linkLayout     // Catch:{ Exception -> 0x043c }
-            r6.add(r0)     // Catch:{ Exception -> 0x043c }
-            goto L_0x0440
-        L_0x043c:
+            r1.linkY = r6     // Catch:{ Exception -> 0x0445 }
+        L_0x043f:
+            java.util.ArrayList<android.text.StaticLayout> r6 = r1.linkLayout     // Catch:{ Exception -> 0x0445 }
+            r6.add(r0)     // Catch:{ Exception -> 0x0445 }
+            goto L_0x044d
+        L_0x0445:
             r0 = move-exception
+            goto L_0x044a
+        L_0x0447:
+            r0 = move-exception
+            r20 = r13
+        L_0x044a:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0440:
+        L_0x044d:
             int r3 = r3 + 1
-            goto L_0x03d3
-        L_0x0443:
+            r13 = r20
+            goto L_0x03d7
+        L_0x0452:
+            r20 = r13
             r0 = 1112539136(0x42500000, float:52.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             boolean r3 = org.telegram.messenger.LocaleController.isRTL
-            if (r3 == 0) goto L_0x0458
+            if (r3 == 0) goto L_0x0469
             int r3 = android.view.View.MeasureSpec.getSize(r29)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r18)
             int r3 = r3 - r6
             int r3 = r3 - r0
-            goto L_0x045c
-        L_0x0458:
+            goto L_0x046d
+        L_0x0469:
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r18)
-        L_0x045c:
+        L_0x046d:
             org.telegram.ui.Components.LetterDrawable r6 = r1.letterDrawable
             r7 = 1093664768(0x41300000, float:11.0)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
@@ -794,7 +810,7 @@ public class SharedLinkCell extends FrameLayout {
             r10 = 1115422720(0x427CLASSNAME, float:63.0)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
             r6.setBounds(r3, r8, r9, r10)
-            if (r15 == 0) goto L_0x04ea
+            if (r15 == 0) goto L_0x04fc
             org.telegram.messenger.MessageObject r6 = r1.message
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r6 = r6.photoThumbs
             org.telegram.tgnet.TLRPC$PhotoSize r6 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r6, r0, r14)
@@ -802,14 +818,14 @@ public class SharedLinkCell extends FrameLayout {
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8 = r8.photoThumbs
             r9 = 80
             org.telegram.tgnet.TLRPC$PhotoSize r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r9)
-            if (r8 != r6) goto L_0x0486
-            r8 = 0
-        L_0x0486:
+            if (r8 != r6) goto L_0x0498
+            r8 = r20
+        L_0x0498:
             r9 = -1
             r6.size = r9
-            if (r8 == 0) goto L_0x048d
+            if (r8 == 0) goto L_0x049f
             r8.size = r9
-        L_0x048d:
+        L_0x049f:
             org.telegram.messenger.ImageReceiver r9 = r1.linkImageView
             float r3 = (float) r3
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
@@ -848,9 +864,9 @@ public class SharedLinkCell extends FrameLayout {
             r26 = r3
             r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27)
             r1.drawLinkImageView = r14
-        L_0x04ea:
+        L_0x04fc:
             int r0 = r1.viewType
-            if (r0 != r14) goto L_0x0501
+            if (r0 != r14) goto L_0x0513
             org.telegram.messenger.MessageObject r0 = r1.message
             java.lang.CharSequence r6 = org.telegram.ui.FilteredSearchView.createFromInfoString(r0)
             android.text.TextPaint r7 = r1.description2TextPaint
@@ -860,11 +876,11 @@ public class SharedLinkCell extends FrameLayout {
             r11 = r16
             android.text.StaticLayout r0 = org.telegram.ui.Cells.ChatMessageCell.generateStaticLayout(r6, r7, r8, r9, r10, r11)
             r1.fromInfoLayout = r0
-        L_0x0501:
+        L_0x0513:
             android.text.StaticLayout r0 = r1.titleLayout
-            if (r0 == 0) goto L_0x051d
+            if (r0 == 0) goto L_0x052f
             int r0 = r0.getLineCount()
-            if (r0 == 0) goto L_0x051d
+            if (r0 == 0) goto L_0x052f
             android.text.StaticLayout r0 = r1.titleLayout
             int r3 = r0.getLineCount()
             int r3 = r3 - r14
@@ -872,14 +888,14 @@ public class SharedLinkCell extends FrameLayout {
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r0 = r0 + r3
             int r0 = r0 + r2
-            goto L_0x051e
-        L_0x051d:
+            goto L_0x0530
+        L_0x052f:
             r0 = 0
-        L_0x051e:
+        L_0x0530:
             android.text.StaticLayout r3 = r1.captionLayout
-            if (r3 == 0) goto L_0x0539
+            if (r3 == 0) goto L_0x054b
             int r3 = r3.getLineCount()
-            if (r3 == 0) goto L_0x0539
+            if (r3 == 0) goto L_0x054b
             android.text.StaticLayout r3 = r1.captionLayout
             int r4 = r3.getLineCount()
             int r4 = r4 - r14
@@ -887,11 +903,11 @@ public class SharedLinkCell extends FrameLayout {
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
             int r3 = r3 + r4
             int r0 = r0 + r3
-        L_0x0539:
+        L_0x054b:
             android.text.StaticLayout r3 = r1.descriptionLayout
-            if (r3 == 0) goto L_0x0554
+            if (r3 == 0) goto L_0x0566
             int r3 = r3.getLineCount()
-            if (r3 == 0) goto L_0x0554
+            if (r3 == 0) goto L_0x0566
             android.text.StaticLayout r3 = r1.descriptionLayout
             int r4 = r3.getLineCount()
             int r4 = r4 - r14
@@ -899,11 +915,11 @@ public class SharedLinkCell extends FrameLayout {
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
             int r3 = r3 + r4
             int r0 = r0 + r3
-        L_0x0554:
+        L_0x0566:
             android.text.StaticLayout r3 = r1.descriptionLayout2
-            if (r3 == 0) goto L_0x0578
+            if (r3 == 0) goto L_0x058a
             int r3 = r3.getLineCount()
-            if (r3 == 0) goto L_0x0578
+            if (r3 == 0) goto L_0x058a
             android.text.StaticLayout r3 = r1.descriptionLayout2
             int r4 = r3.getLineCount()
             int r4 = r4 - r14
@@ -912,31 +928,31 @@ public class SharedLinkCell extends FrameLayout {
             int r3 = r3 + r4
             int r0 = r0 + r3
             android.text.StaticLayout r3 = r1.descriptionLayout
-            if (r3 == 0) goto L_0x0578
+            if (r3 == 0) goto L_0x058a
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r18)
             int r0 = r0 + r3
-        L_0x0578:
+        L_0x058a:
             r3 = 0
-        L_0x0579:
+        L_0x058b:
             java.util.ArrayList<android.text.StaticLayout> r4 = r1.linkLayout
             int r4 = r4.size()
-            if (r2 >= r4) goto L_0x059c
+            if (r2 >= r4) goto L_0x05ae
             java.util.ArrayList<android.text.StaticLayout> r4 = r1.linkLayout
             java.lang.Object r4 = r4.get(r2)
             android.text.StaticLayout r4 = (android.text.StaticLayout) r4
             int r5 = r4.getLineCount()
-            if (r5 <= 0) goto L_0x0599
+            if (r5 <= 0) goto L_0x05ab
             int r5 = r4.getLineCount()
             int r5 = r5 - r14
             int r4 = r4.getLineBottom(r5)
             int r3 = r3 + r4
-        L_0x0599:
+        L_0x05ab:
             int r2 = r2 + 1
-            goto L_0x0579
-        L_0x059c:
+            goto L_0x058b
+        L_0x05ae:
             int r0 = r0 + r3
             android.text.StaticLayout r2 = r1.fromInfoLayout
-            if (r2 == 0) goto L_0x05bc
+            if (r2 == 0) goto L_0x05ce
             int r2 = r1.linkY
             int r2 = r2 + r3
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r17)
@@ -949,7 +965,7 @@ public class SharedLinkCell extends FrameLayout {
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r17)
             int r2 = r2 + r3
             int r0 = r0 + r2
-        L_0x05bc:
+        L_0x05ce:
             org.telegram.ui.Components.CheckBox2 r2 = r1.checkBox
             r3 = 1103101952(0x41CLASSNAME, float:24.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)

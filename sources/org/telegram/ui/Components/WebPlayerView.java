@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
@@ -50,7 +49,6 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.ui.Components.VideoPlayer;
-import org.telegram.ui.Components.WebPlayerView;
 
 public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerDelegate, AudioManager.OnAudioFocusChangeListener {
     /* access modifiers changed from: private */
@@ -84,7 +82,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     public boolean allowInlineAnimation;
     /* access modifiers changed from: private */
     public AspectRatioFrameLayout aspectRatioFrameLayout;
-    private int audioFocus;
     private Paint backgroundPaint;
     /* access modifiers changed from: private */
     public TextureView changedTextureView;
@@ -104,7 +101,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     public boolean drawImage;
     /* access modifiers changed from: private */
     public boolean firstFrameRendered;
-    private int fragment_container_id;
     private ImageView fullscreenButton;
     private boolean hasAudioFocus;
     /* access modifiers changed from: private */
@@ -119,7 +115,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     private boolean isCompleted;
     /* access modifiers changed from: private */
     public boolean isInline;
-    private boolean isLoading;
     /* access modifiers changed from: private */
     public boolean isStream;
     /* access modifiers changed from: private */
@@ -459,14 +454,14 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     /* JADX WARNING: Code restructure failed: missing block: B:22:0x007b, code lost:
         if (r10 == 303) goto L_0x007d;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:90:0x016c, code lost:
-        if (r3 == -1) goto L_0x0177;
+    /* JADX WARNING: Code restructure failed: missing block: B:88:0x0168, code lost:
+        if (r3 == -1) goto L_0x0173;
      */
     /* JADX WARNING: Missing exception handler attribute for start block: B:36:0x00dd */
-    /* JADX WARNING: Removed duplicated region for block: B:106:0x018a A[SYNTHETIC, Splitter:B:106:0x018a] */
-    /* JADX WARNING: Removed duplicated region for block: B:110:0x0194  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x0199  */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x019e A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:104:0x0186 A[SYNTHETIC, Splitter:B:104:0x0186] */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x0190  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x0195  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x019a A[ORIG_RETURN, RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:49:0x0103  */
     /* JADX WARNING: Removed duplicated region for block: B:58:0x0121  */
     /* JADX WARNING: Removed duplicated region for block: B:61:0x0129 A[SYNTHETIC, Splitter:B:61:0x0129] */
@@ -616,108 +611,105 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r0 = r1
             r1 = 0
         L_0x0127:
-            if (r0 == 0) goto L_0x0194
-            boolean r0 = r12 instanceof java.net.HttpURLConnection     // Catch:{ Exception -> 0x013a }
-            if (r0 == 0) goto L_0x013e
-            java.net.HttpURLConnection r12 = (java.net.HttpURLConnection) r12     // Catch:{ Exception -> 0x013a }
-            int r0 = r12.getResponseCode()     // Catch:{ Exception -> 0x013a }
+            if (r0 == 0) goto L_0x0190
+            boolean r0 = r12 instanceof java.net.HttpURLConnection     // Catch:{ Exception -> 0x0136 }
+            if (r0 == 0) goto L_0x013a
+            java.net.HttpURLConnection r12 = (java.net.HttpURLConnection) r12     // Catch:{ Exception -> 0x0136 }
+            int r0 = r12.getResponseCode()     // Catch:{ Exception -> 0x0136 }
             r2 = 200(0xc8, float:2.8E-43)
-            if (r0 == r2) goto L_0x013e
-            r2 = 202(0xca, float:2.83E-43)
-            goto L_0x013e
-        L_0x013a:
+            goto L_0x013a
+        L_0x0136:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x013e:
-            if (r1 == 0) goto L_0x0185
+        L_0x013a:
+            if (r1 == 0) goto L_0x0181
             r0 = 32768(0x8000, float:4.5918E-41)
-            byte[] r0 = new byte[r0]     // Catch:{ all -> 0x017e }
+            byte[] r0 = new byte[r0]     // Catch:{ all -> 0x017a }
             r2 = 0
-        L_0x0146:
-            boolean r3 = r19.isCancelled()     // Catch:{ all -> 0x017b }
-            if (r3 == 0) goto L_0x014e
+        L_0x0142:
+            boolean r3 = r19.isCancelled()     // Catch:{ all -> 0x0177 }
+            if (r3 == 0) goto L_0x014a
             r6 = 0
-            goto L_0x016f
-        L_0x014e:
-            int r3 = r1.read(r0)     // Catch:{ Exception -> 0x0171 }
-            if (r3 <= 0) goto L_0x016a
-            if (r2 != 0) goto L_0x015c
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0171 }
-            r4.<init>()     // Catch:{ Exception -> 0x0171 }
+            goto L_0x016b
+        L_0x014a:
+            int r3 = r1.read(r0)     // Catch:{ Exception -> 0x016d }
+            if (r3 <= 0) goto L_0x0166
+            if (r2 != 0) goto L_0x0158
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x016d }
+            r4.<init>()     // Catch:{ Exception -> 0x016d }
             r2 = r4
-        L_0x015c:
-            java.lang.String r4 = new java.lang.String     // Catch:{ Exception -> 0x0171 }
-            java.nio.charset.Charset r5 = java.nio.charset.StandardCharsets.UTF_8     // Catch:{ Exception -> 0x0171 }
+        L_0x0158:
+            java.lang.String r4 = new java.lang.String     // Catch:{ Exception -> 0x016d }
+            java.nio.charset.Charset r5 = java.nio.charset.StandardCharsets.UTF_8     // Catch:{ Exception -> 0x016d }
             r6 = 0
-            r4.<init>(r0, r6, r3, r5)     // Catch:{ Exception -> 0x0168 }
-            r2.append(r4)     // Catch:{ Exception -> 0x0168 }
-            goto L_0x0146
-        L_0x0168:
+            r4.<init>(r0, r6, r3, r5)     // Catch:{ Exception -> 0x0164 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0164 }
+            goto L_0x0142
+        L_0x0164:
             r0 = move-exception
-            goto L_0x0173
-        L_0x016a:
+            goto L_0x016f
+        L_0x0166:
             r6 = 0
             r0 = -1
-            if (r3 != r0) goto L_0x016f
-            goto L_0x0177
-        L_0x016f:
+            if (r3 != r0) goto L_0x016b
+            goto L_0x0173
+        L_0x016b:
             r8 = 0
-            goto L_0x0177
-        L_0x0171:
+            goto L_0x0173
+        L_0x016d:
             r0 = move-exception
             r6 = 0
+        L_0x016f:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0175 }
+            goto L_0x016b
         L_0x0173:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0179 }
-            goto L_0x016f
-        L_0x0177:
             r10 = r8
-            goto L_0x0188
-        L_0x0179:
+            goto L_0x0184
+        L_0x0175:
             r0 = move-exception
-            goto L_0x0181
-        L_0x017b:
+            goto L_0x017d
+        L_0x0177:
             r0 = move-exception
             r6 = 0
-            goto L_0x0181
-        L_0x017e:
+            goto L_0x017d
+        L_0x017a:
             r0 = move-exception
             r6 = 0
             r2 = 0
-        L_0x0181:
+        L_0x017d:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x0187
-        L_0x0185:
+            goto L_0x0183
+        L_0x0181:
             r6 = 0
             r2 = 0
-        L_0x0187:
+        L_0x0183:
             r10 = 0
-        L_0x0188:
-            if (r1 == 0) goto L_0x0197
-            r1.close()     // Catch:{ all -> 0x018e }
-            goto L_0x0197
-        L_0x018e:
+        L_0x0184:
+            if (r1 == 0) goto L_0x0193
+            r1.close()     // Catch:{ all -> 0x018a }
+            goto L_0x0193
+        L_0x018a:
             r0 = move-exception
             r1 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-            goto L_0x0197
-        L_0x0194:
+            goto L_0x0193
+        L_0x0190:
             r6 = 0
             r2 = 0
             r10 = 0
-        L_0x0197:
-            if (r10 == 0) goto L_0x019e
+        L_0x0193:
+            if (r10 == 0) goto L_0x019a
             java.lang.String r9 = r2.toString()
-            goto L_0x019f
-        L_0x019e:
+            goto L_0x019b
+        L_0x019a:
             r9 = 0
-        L_0x019f:
+        L_0x019b:
             return r9
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WebPlayerView.downloadUrlContent(android.os.AsyncTask, java.lang.String, java.util.HashMap, boolean):java.lang.String");
     }
 
     private class YoutubeVideoTask extends AsyncTask<Void, Void, String[]> {
-        private boolean canRetry = true;
         private CountDownLatch countDownLatch = new CountDownLatch(1);
         private String[] result = new String[2];
         private String sig;
@@ -1276,8 +1268,8 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                 r0.append(r2)
                 java.lang.String r0 = r0.toString()
             L_0x0446:
-                org.telegram.ui.Components.-$$Lambda$WebPlayerView$YoutubeVideoTask$9x_xU2xUqZ49SFPYpqmqtq-Ly5E r2 = new org.telegram.ui.Components.-$$Lambda$WebPlayerView$YoutubeVideoTask$9x_xU2xUqZ49SFPYpqmqtq-Ly5E     // Catch:{ Exception -> 0x0455 }
-                r2.<init>(r0)     // Catch:{ Exception -> 0x0455 }
+                org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask$$ExternalSyntheticLambda1     // Catch:{ Exception -> 0x0455 }
+                r2.<init>(r1, r0)     // Catch:{ Exception -> 0x0455 }
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x0455 }
                 java.util.concurrent.CountDownLatch r0 = r1.countDownLatch     // Catch:{ Exception -> 0x0455 }
                 r0.await()     // Catch:{ Exception -> 0x0455 }
@@ -1313,14 +1305,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$doInBackground$1 */
-        public /* synthetic */ void lambda$doInBackground$1$WebPlayerView$YoutubeVideoTask(String str) {
+        public /* synthetic */ void lambda$doInBackground$1(String str) {
             if (Build.VERSION.SDK_INT >= 21) {
-                WebPlayerView.this.webView.evaluateJavascript(str, new ValueCallback() {
-                    public final void onReceiveValue(Object obj) {
-                        WebPlayerView.YoutubeVideoTask.this.lambda$doInBackground$0$WebPlayerView$YoutubeVideoTask((String) obj);
-                    }
-                });
+                WebPlayerView.this.webView.evaluateJavascript(str, new WebPlayerView$YoutubeVideoTask$$ExternalSyntheticLambda0(this));
                 return;
             }
             try {
@@ -1333,8 +1320,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$doInBackground$0 */
-        public /* synthetic */ void lambda$doInBackground$0$WebPlayerView$YoutubeVideoTask(String str) {
+        public /* synthetic */ void lambda$doInBackground$0(String str) {
             String[] strArr = this.result;
             String str2 = strArr[0];
             String str3 = this.sig;
@@ -1375,7 +1361,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class VimeoVideoTask extends AsyncTask<Void, Void, String> {
-        private boolean canRetry = true;
         private String[] results = new String[2];
         private String videoId;
 
@@ -1430,7 +1415,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class AparatVideoTask extends AsyncTask<Void, Void, String> {
-        private boolean canRetry = true;
         private String[] results = new String[2];
         private String videoId;
 
@@ -1486,13 +1470,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class TwitchClipVideoTask extends AsyncTask<Void, Void, String> {
-        private boolean canRetry = true;
         private String currentUrl;
         private String[] results = new String[2];
-        private String videoId;
 
         public TwitchClipVideoTask(String str, String str2) {
-            this.videoId = str2;
             this.currentUrl = str;
         }
 
@@ -1535,14 +1516,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class TwitchStreamVideoTask extends AsyncTask<Void, Void, String> {
-        private boolean canRetry = true;
-        private String currentUrl;
         private String[] results = new String[2];
         private String videoId;
 
         public TwitchStreamVideoTask(String str, String str2) {
             this.videoId = str2;
-            this.currentUrl = str;
         }
 
         /* access modifiers changed from: protected */
@@ -1596,7 +1574,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class CoubVideoTask extends AsyncTask<Void, Void, String> {
-        private boolean canRetry = true;
         private String[] results = new String[4];
         private String videoId;
 
@@ -1657,11 +1634,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         private int duration;
         private StaticLayout durationLayout;
         private int durationWidth;
-        private Runnable hideRunnable = new Runnable() {
-            public final void run() {
-                WebPlayerView.ControlsView.this.lambda$new$0$WebPlayerView$ControlsView();
-            }
-        };
+        private Runnable hideRunnable = new WebPlayerView$ControlsView$$ExternalSyntheticLambda0(this);
         /* access modifiers changed from: private */
         public ImageReceiver imageReceiver;
         private boolean isVisible = true;
@@ -1675,8 +1648,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         private TextPaint textPaint;
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$WebPlayerView$ControlsView() {
+        public /* synthetic */ void lambda$new$0() {
             show(false, true);
         }
 
@@ -2110,9 +2082,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public WebPlayerView(Context context, boolean z, boolean z2, WebPlayerViewDelegate webPlayerViewDelegate) {
         super(context);
-        int i = lastContainerId;
-        lastContainerId = i + 1;
-        this.fragment_container_id = i;
+        lastContainerId++;
         this.allowInlineAnimation = Build.VERSION.SDK_INT >= 21;
         this.backgroundPaint = new Paint();
         this.progressRunnable = new Runnable() {
@@ -2157,179 +2127,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                                     Bitmap unused = WebPlayerView.this.currentBitmap = null;
                                 }
                             }
-                            AndroidUtilities.runOnUIThread(
-                            /*  JADX ERROR: Method code generation error
-                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0052: INVOKE  
-                                  (wrap: org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$I9SFBbyM5f_nNxT2fr1e1frFERE : 0x004f: CONSTRUCTOR  (r0v7 org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$I9SFBbyM5f_nNxT2fr1e1frFERE) = 
-                                  (r2v0 'this' org.telegram.ui.Components.WebPlayerView$2$1 A[THIS])
-                                 call: org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$I9SFBbyM5f_nNxT2fr1e1frFERE.<init>(org.telegram.ui.Components.WebPlayerView$2$1):void type: CONSTRUCTOR)
-                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.WebPlayerView.2.1.onPreDraw():boolean, dex: classes3.dex
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:429)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
-                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                                	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                                	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                                	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                                	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                                	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x004f: CONSTRUCTOR  (r0v7 org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$I9SFBbyM5f_nNxT2fr1e1frFERE) = 
-                                  (r2v0 'this' org.telegram.ui.Components.WebPlayerView$2$1 A[THIS])
-                                 call: org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$I9SFBbyM5f_nNxT2fr1e1frFERE.<init>(org.telegram.ui.Components.WebPlayerView$2$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.WebPlayerView.2.1.onPreDraw():boolean, dex: classes3.dex
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                	... 98 more
-                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$I9SFBbyM5f_nNxT2fr1e1frFERE, state: NOT_LOADED
-                                	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                	... 104 more
-                                */
-                            /*
-                                this = this;
-                                org.telegram.ui.Components.WebPlayerView$2 r0 = org.telegram.ui.Components.WebPlayerView.AnonymousClass2.this
-                                org.telegram.ui.Components.WebPlayerView r0 = org.telegram.ui.Components.WebPlayerView.this
-                                android.view.TextureView r0 = r0.changedTextureView
-                                android.view.ViewTreeObserver r0 = r0.getViewTreeObserver()
-                                r0.removeOnPreDrawListener(r2)
-                                org.telegram.ui.Components.WebPlayerView$2 r0 = org.telegram.ui.Components.WebPlayerView.AnonymousClass2.this
-                                org.telegram.ui.Components.WebPlayerView r0 = org.telegram.ui.Components.WebPlayerView.this
-                                android.widget.ImageView r0 = r0.textureImageView
-                                if (r0 == 0) goto L_0x004d
-                                org.telegram.ui.Components.WebPlayerView$2 r0 = org.telegram.ui.Components.WebPlayerView.AnonymousClass2.this
-                                org.telegram.ui.Components.WebPlayerView r0 = org.telegram.ui.Components.WebPlayerView.this
-                                android.widget.ImageView r0 = r0.textureImageView
-                                r1 = 4
-                                r0.setVisibility(r1)
-                                org.telegram.ui.Components.WebPlayerView$2 r0 = org.telegram.ui.Components.WebPlayerView.AnonymousClass2.this
-                                org.telegram.ui.Components.WebPlayerView r0 = org.telegram.ui.Components.WebPlayerView.this
-                                android.widget.ImageView r0 = r0.textureImageView
-                                r1 = 0
-                                r0.setImageDrawable(r1)
-                                org.telegram.ui.Components.WebPlayerView$2 r0 = org.telegram.ui.Components.WebPlayerView.AnonymousClass2.this
-                                org.telegram.ui.Components.WebPlayerView r0 = org.telegram.ui.Components.WebPlayerView.this
-                                android.graphics.Bitmap r0 = r0.currentBitmap
-                                if (r0 == 0) goto L_0x004d
-                                org.telegram.ui.Components.WebPlayerView$2 r0 = org.telegram.ui.Components.WebPlayerView.AnonymousClass2.this
-                                org.telegram.ui.Components.WebPlayerView r0 = org.telegram.ui.Components.WebPlayerView.this
-                                android.graphics.Bitmap r0 = r0.currentBitmap
-                                r0.recycle()
-                                org.telegram.ui.Components.WebPlayerView$2 r0 = org.telegram.ui.Components.WebPlayerView.AnonymousClass2.this
-                                org.telegram.ui.Components.WebPlayerView r0 = org.telegram.ui.Components.WebPlayerView.this
-                                android.graphics.Bitmap unused = r0.currentBitmap = r1
-                            L_0x004d:
-                                org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$I9SFBbyM5f_nNxT2fr1e1frFERE r0 = new org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$I9SFBbyM5f_nNxT2fr1e1frFERE
-                                r0.<init>(r2)
-                                org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-                                org.telegram.ui.Components.WebPlayerView$2 r0 = org.telegram.ui.Components.WebPlayerView.AnonymousClass2.this
-                                org.telegram.ui.Components.WebPlayerView r0 = org.telegram.ui.Components.WebPlayerView.this
-                                r1 = 0
-                                int unused = r0.waitingForFirstTextureUpload = r1
-                                r0 = 1
-                                return r0
-                            */
-                            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WebPlayerView.AnonymousClass2.AnonymousClass1.onPreDraw():boolean");
+                            AndroidUtilities.runOnUIThread(new WebPlayerView$2$1$$ExternalSyntheticLambda0(this));
+                            int unused2 = WebPlayerView.this.waitingForFirstTextureUpload = 0;
+                            return true;
                         }
 
                         /* access modifiers changed from: private */
-                        /* renamed from: lambda$onPreDraw$0 */
-                        public /* synthetic */ void lambda$onPreDraw$0$WebPlayerView$2$1() {
+                        public /* synthetic */ void lambda$onPreDraw$0() {
                             WebPlayerView.this.delegate.onInlineSurfaceTextureReady();
                         }
                     });
@@ -2407,11 +2211,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         this.interfaceName = "JavaScriptInterface";
         WebView webView2 = new WebView(context);
         this.webView = webView2;
-        webView2.addJavascriptInterface(new JavaScriptInterface(new CallJavaResultInterface() {
-            public final void jsCallFinished(String str) {
-                WebPlayerView.this.lambda$new$0$WebPlayerView(str);
-            }
-        }), this.interfaceName);
+        webView2.addJavascriptInterface(new JavaScriptInterface(new WebPlayerView$$ExternalSyntheticLambda5(this)), this.interfaceName);
         WebSettings settings = this.webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDefaultTextEncodingName("utf-8");
@@ -2455,30 +2255,18 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         this.fullscreenButton = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.controlsView.addView(this.fullscreenButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
-        this.fullscreenButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                WebPlayerView.this.lambda$new$1$WebPlayerView(view);
-            }
-        });
+        this.fullscreenButton.setOnClickListener(new WebPlayerView$$ExternalSyntheticLambda3(this));
         ImageView imageView3 = new ImageView(context);
         this.playButton = imageView3;
         imageView3.setScaleType(ImageView.ScaleType.CENTER);
         this.controlsView.addView(this.playButton, LayoutHelper.createFrame(48, 48, 17));
-        this.playButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                WebPlayerView.this.lambda$new$2$WebPlayerView(view);
-            }
-        });
+        this.playButton.setOnClickListener(new WebPlayerView$$ExternalSyntheticLambda0(this));
         if (z) {
             ImageView imageView4 = new ImageView(context);
             this.inlineButton = imageView4;
             imageView4.setScaleType(ImageView.ScaleType.CENTER);
             this.controlsView.addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
-            this.inlineButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    WebPlayerView.this.lambda$new$3$WebPlayerView(view);
-                }
-            });
+            this.inlineButton.setOnClickListener(new WebPlayerView$$ExternalSyntheticLambda2(this));
         }
         if (z2) {
             ImageView imageView5 = new ImageView(context);
@@ -2486,11 +2274,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             imageView5.setScaleType(ImageView.ScaleType.CENTER);
             this.shareButton.setImageResource(NUM);
             this.controlsView.addView(this.shareButton, LayoutHelper.createFrame(56, 48, 53));
-            this.shareButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    WebPlayerView.this.lambda$new$4$WebPlayerView(view);
-                }
-            });
+            this.shareButton.setOnClickListener(new WebPlayerView$$ExternalSyntheticLambda1(this));
         }
         updatePlayButton();
         updateFullscreenButton();
@@ -2499,8 +2283,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$WebPlayerView(String str) {
+    public /* synthetic */ void lambda$new$0(String str) {
         AsyncTask asyncTask = this.currentTask;
         if (asyncTask != null && !asyncTask.isCancelled()) {
             AsyncTask asyncTask2 = this.currentTask;
@@ -2511,8 +2294,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$WebPlayerView(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         if (this.initied && !this.changingTextureView && !this.switchingInlineMode && this.firstFrameRendered) {
             this.inFullscreen = !this.inFullscreen;
             updateFullscreenState(true);
@@ -2520,8 +2302,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$2 */
-    public /* synthetic */ void lambda$new$2$WebPlayerView(View view) {
+    public /* synthetic */ void lambda$new$2(View view) {
         if (this.initied && this.playVideoUrl != null) {
             if (!this.videoPlayer.isPlayerPrepared()) {
                 preparePlayer();
@@ -2537,8 +2318,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$WebPlayerView(View view) {
+    public /* synthetic */ void lambda$new$3(View view) {
         if (this.textureView != null && this.delegate.checkInlinePermissions() && !this.changingTextureView && !this.switchingInlineMode && this.firstFrameRendered) {
             this.switchingInlineMode = true;
             if (!this.isInline) {
@@ -2590,8 +2370,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$4 */
-    public /* synthetic */ void lambda$new$4$WebPlayerView(View view) {
+    public /* synthetic */ void lambda$new$4(View view) {
         WebPlayerViewDelegate webPlayerViewDelegate = this.delegate;
         if (webPlayerViewDelegate != null) {
             webPlayerViewDelegate.onSharePressed();
@@ -2772,51 +2551,31 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     private void checkAudioFocus() {
         if (!this.hasAudioFocus) {
             this.hasAudioFocus = true;
-            if (((AudioManager) ApplicationLoader.applicationContext.getSystemService("audio")).requestAudioFocus(this, 3, 1) == 1) {
-                this.audioFocus = 2;
-            }
+            ((AudioManager) ApplicationLoader.applicationContext.getSystemService("audio")).requestAudioFocus(this, 3, 1);
         }
     }
 
     public void onAudioFocusChange(int i) {
-        AndroidUtilities.runOnUIThread(new Runnable(i) {
-            public final /* synthetic */ int f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                WebPlayerView.this.lambda$onAudioFocusChange$5$WebPlayerView(this.f$1);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new WebPlayerView$$ExternalSyntheticLambda4(this, i));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onAudioFocusChange$5 */
-    public /* synthetic */ void lambda$onAudioFocusChange$5$WebPlayerView(int i) {
+    public /* synthetic */ void lambda$onAudioFocusChange$5(int i) {
         if (i == -1) {
             if (this.videoPlayer.isPlaying()) {
                 this.videoPlayer.pause();
                 updatePlayButton();
             }
             this.hasAudioFocus = false;
-            this.audioFocus = 0;
         } else if (i == 1) {
-            this.audioFocus = 2;
             if (this.resumeAudioOnFocusGain) {
                 this.resumeAudioOnFocusGain = false;
                 this.videoPlayer.play();
             }
-        } else if (i == -3) {
-            this.audioFocus = 1;
-        } else if (i == -2) {
-            this.audioFocus = 0;
-            if (this.videoPlayer.isPlaying()) {
-                this.resumeAudioOnFocusGain = true;
-                this.videoPlayer.pause();
-                updatePlayButton();
-            }
+        } else if (i != -3 && i == -2 && this.videoPlayer.isPlaying()) {
+            this.resumeAudioOnFocusGain = true;
+            this.videoPlayer.pause();
+            updatePlayButton();
         }
     }
 
@@ -2876,7 +2635,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                 this.videoPlayer.preparePlayerLoop(Uri.parse(str), this.playVideoType, Uri.parse(this.playAudioUrl), this.playAudioType);
             }
             this.videoPlayer.setPlayWhenReady(this.isAutoplay);
-            this.isLoading = false;
             if (this.videoPlayer.getDuration() != -9223372036854775807L) {
                 this.controlsView.setDuration((int) (this.videoPlayer.getDuration() / 1000));
             } else {
@@ -3066,10 +2824,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
 
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0185  */
     /* JADX WARNING: Removed duplicated region for block: B:103:0x018b  */
-    /* JADX WARNING: Removed duplicated region for block: B:106:0x0199  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x019e  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x01b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x0250 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x0197  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x019c  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x01b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x024e A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:44:0x00b2 A[SYNTHETIC, Splitter:B:44:0x00b2] */
     /* JADX WARNING: Removed duplicated region for block: B:56:0x00d1 A[SYNTHETIC, Splitter:B:56:0x00d1] */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x00f0 A[SYNTHETIC, Splitter:B:68:0x00f0] */
@@ -3321,29 +3079,28 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r3.cancel()
             r1.progressAnimation = r9
         L_0x0190:
-            r1.isLoading = r8
             org.telegram.ui.Components.WebPlayerView$ControlsView r3 = r1.controlsView
             r3.setProgress(r7)
-            if (r4 == 0) goto L_0x019c
+            if (r4 == 0) goto L_0x019a
             r1.currentYoutubeId = r4
             r4 = r9
-        L_0x019c:
-            if (r0 == 0) goto L_0x01b7
+        L_0x019a:
+            if (r0 == 0) goto L_0x01b5
             r1.initied = r8
             r1.playVideoUrl = r0
             java.lang.String r2 = "other"
             r1.playVideoType = r2
             boolean r2 = r1.isAutoplay
-            if (r2 == 0) goto L_0x01ad
+            if (r2 == 0) goto L_0x01ab
             r25.preparePlayer()
-        L_0x01ad:
+        L_0x01ab:
             r1.showProgress(r7, r7)
             org.telegram.ui.Components.WebPlayerView$ControlsView r2 = r1.controlsView
             r2.show(r8, r8)
-            goto L_0x024e
-        L_0x01b7:
+            goto L_0x024c
+        L_0x01b5:
             r3 = 2
-            if (r4 == 0) goto L_0x01d0
+            if (r4 == 0) goto L_0x01ce
             org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask
             r2.<init>(r4)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3353,9 +3110,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r6[r3] = r9
             r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
-            goto L_0x0246
-        L_0x01d0:
-            if (r10 == 0) goto L_0x01e7
+            goto L_0x0244
+        L_0x01ce:
+            if (r10 == 0) goto L_0x01e5
             org.telegram.ui.Components.WebPlayerView$VimeoVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$VimeoVideoTask
             r2.<init>(r10)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3365,9 +3122,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r6[r3] = r9
             r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
-            goto L_0x0246
-        L_0x01e7:
-            if (r5 == 0) goto L_0x0200
+            goto L_0x0244
+        L_0x01e5:
+            if (r5 == 0) goto L_0x01fe
             org.telegram.ui.Components.WebPlayerView$CoubVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$CoubVideoTask
             r2.<init>(r5)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3378,9 +3135,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
             r1.isStream = r8
-            goto L_0x0246
-        L_0x0200:
-            if (r11 == 0) goto L_0x0217
+            goto L_0x0244
+        L_0x01fe:
+            if (r11 == 0) goto L_0x0215
             org.telegram.ui.Components.WebPlayerView$AparatVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$AparatVideoTask
             r2.<init>(r11)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3390,9 +3147,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r6[r3] = r9
             r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
-            goto L_0x0246
-        L_0x0217:
-            if (r12 == 0) goto L_0x022e
+            goto L_0x0244
+        L_0x0215:
+            if (r12 == 0) goto L_0x022c
             org.telegram.ui.Components.WebPlayerView$TwitchClipVideoTask r14 = new org.telegram.ui.Components.WebPlayerView$TwitchClipVideoTask
             r14.<init>(r2, r12)
             java.util.concurrent.Executor r2 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3402,9 +3159,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r6[r3] = r9
             r14.executeOnExecutor(r2, r6)
             r1.currentTask = r14
-            goto L_0x0246
-        L_0x022e:
-            if (r13 == 0) goto L_0x0246
+            goto L_0x0244
+        L_0x022c:
+            if (r13 == 0) goto L_0x0244
             org.telegram.ui.Components.WebPlayerView$TwitchStreamVideoTask r14 = new org.telegram.ui.Components.WebPlayerView$TwitchStreamVideoTask
             r14.<init>(r2, r13)
             java.util.concurrent.Executor r2 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3415,25 +3172,25 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r14.executeOnExecutor(r2, r6)
             r1.currentTask = r14
             r1.isStream = r8
-        L_0x0246:
+        L_0x0244:
             org.telegram.ui.Components.WebPlayerView$ControlsView r2 = r1.controlsView
             r2.show(r7, r7)
             r1.showProgress(r8, r7)
-        L_0x024e:
-            if (r4 != 0) goto L_0x0265
-            if (r10 != 0) goto L_0x0265
-            if (r5 != 0) goto L_0x0265
-            if (r11 != 0) goto L_0x0265
-            if (r0 != 0) goto L_0x0265
-            if (r12 != 0) goto L_0x0265
-            if (r13 == 0) goto L_0x025d
-            goto L_0x0265
-        L_0x025d:
+        L_0x024c:
+            if (r4 != 0) goto L_0x0263
+            if (r10 != 0) goto L_0x0263
+            if (r5 != 0) goto L_0x0263
+            if (r11 != 0) goto L_0x0263
+            if (r0 != 0) goto L_0x0263
+            if (r12 != 0) goto L_0x0263
+            if (r13 == 0) goto L_0x025b
+            goto L_0x0263
+        L_0x025b:
             org.telegram.ui.Components.WebPlayerView$ControlsView r0 = r1.controlsView
             r2 = 8
             r0.setVisibility(r2)
             return r7
-        L_0x0265:
+        L_0x0263:
             org.telegram.ui.Components.WebPlayerView$ControlsView r0 = r1.controlsView
             r0.setVisibility(r7)
             return r8

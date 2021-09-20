@@ -27,14 +27,15 @@ public class TextPaintImageReceiverSpan extends ReplacementSpan {
         this.imageReceiver = imageReceiver2;
         imageReceiver2.setInvalidateAll(true);
         if (z2) {
-            this.imageReceiver.setDelegate($$Lambda$TextPaintImageReceiverSpan$VOfUEMxfp5Biab0XljN117MV0.INSTANCE);
+            this.imageReceiver.setDelegate(TextPaintImageReceiverSpan$$ExternalSyntheticLambda0.INSTANCE);
         }
         String str = format;
         this.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$Document), str, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90), tLRPC$Document2), format, -1, (String) null, obj, 1);
         this.alignTop = z;
     }
 
-    static /* synthetic */ void lambda$new$0(ImageReceiver imageReceiver2, boolean z, boolean z2, boolean z3) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$new$0(ImageReceiver imageReceiver2, boolean z, boolean z2, boolean z3) {
         if (imageReceiver2.canInvertBitmap()) {
             imageReceiver2.setColorFilter(new ColorMatrixColorFilter(new float[]{-1.0f, 0.0f, 0.0f, 0.0f, 255.0f, 0.0f, -1.0f, 0.0f, 0.0f, 255.0f, 0.0f, 0.0f, -1.0f, 0.0f, 255.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
         }

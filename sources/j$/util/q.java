@@ -1,72 +1,21 @@
 package j$.util;
 
-import java.util.NoSuchElementException;
+import j$.util.function.Consumer;
+import j$.util.function.p;
 
-public final class q {
-    private static final q a = new q();
-    private final boolean b;
-    private final long c;
+public final /* synthetic */ class q implements j$.util.function.q {
+    public final /* synthetic */ Consumer a;
 
-    private q() {
-        this.b = false;
-        this.c = 0;
+    public /* synthetic */ q(Consumer consumer) {
+        this.a = consumer;
     }
 
-    private q(long j) {
-        this.b = true;
-        this.c = j;
+    public final void accept(long j) {
+        this.a.accept(Long.valueOf(j));
     }
 
-    public static q a() {
-        return a;
-    }
-
-    public static q d(long j) {
-        return new q(j);
-    }
-
-    public long b() {
-        if (this.b) {
-            return this.c;
-        }
-        throw new NoSuchElementException("No value present");
-    }
-
-    public boolean c() {
-        return this.b;
-    }
-
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof q)) {
-            return false;
-        }
-        q qVar = (q) obj;
-        boolean z = this.b;
-        if (!z || !qVar.b) {
-            if (z == qVar.b) {
-                return true;
-            }
-        } else if (this.c == qVar.c) {
-            return true;
-        }
-        return false;
-    }
-
-    public int hashCode() {
-        if (!this.b) {
-            return 0;
-        }
-        long j = this.c;
-        return (int) (j ^ (j >>> 32));
-    }
-
-    public String toString() {
-        if (!this.b) {
-            return "OptionalLong.empty";
-        }
-        return String.format("OptionalLong[%s]", new Object[]{Long.valueOf(this.c)});
+    public j$.util.function.q f(j$.util.function.q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
     }
 }

@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -105,11 +104,13 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         void didFindQr(String str);
     }
 
-    static /* synthetic */ boolean lambda$createView$1(View view, MotionEvent motionEvent) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$1(View view, MotionEvent motionEvent) {
         return true;
     }
 
-    static /* synthetic */ void lambda$new$0() {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$new$0() {
     }
 
     public static ActionBarLayout[] showAsSheet(BaseFragment baseFragment, boolean z, CameraScanActivityDelegate cameraScanActivityDelegate) {
@@ -151,11 +152,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 this.containerView = r4[0];
                 setApplyBottomPadding(false);
                 setApplyBottomPadding(false);
-                setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    public final void onDismiss(DialogInterface dialogInterface) {
-                        CameraScanActivity.this.onFragmentDestroy();
-                    }
-                });
+                setOnDismissListener(new CameraScanActivity$1$$ExternalSyntheticLambda0(r3));
             }
 
             public void onBackPressed() {
@@ -176,7 +173,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     public CameraScanActivity(int i) {
-        CameraController.getInstance().initCamera($$Lambda$CameraScanActivity$QF3NoU541KxQDk6UhF1lau9N6Bc.INSTANCE);
+        CameraController.getInstance().initCamera(CameraScanActivity$$ExternalSyntheticLambda9.INSTANCE);
         this.currentType = i;
         if (i == 1) {
             this.qrReader = new QRCodeReader();
@@ -324,7 +321,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 return z;
             }
         };
-        r0.setOnTouchListener($$Lambda$CameraScanActivity$s2SMU_1hrvLmURqE7dRM15kjdps.INSTANCE);
+        r0.setOnTouchListener(CameraScanActivity$$ExternalSyntheticLambda3.INSTANCE);
         this.fragmentView = r0;
         CameraView cameraView2 = new CameraView(context, false);
         this.cameraView = cameraView2;
@@ -390,11 +387,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 this.galleryButton.setImageResource(NUM);
                 this.galleryButton.setBackgroundDrawable(Theme.createSelectorDrawableFromDrawables(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM), Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM)));
                 r0.addView(this.galleryButton);
-                this.galleryButton.setOnClickListener(new View.OnClickListener() {
-                    public final void onClick(View view) {
-                        CameraScanActivity.this.lambda$createView$2$CameraScanActivity(view);
-                    }
-                });
+                this.galleryButton.setOnClickListener(new CameraScanActivity$$ExternalSyntheticLambda1(this));
             }
             ImageView imageView2 = new ImageView(context);
             this.flashButton = imageView2;
@@ -402,11 +395,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             this.flashButton.setImageResource(NUM);
             this.flashButton.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM));
             r0.addView(this.flashButton);
-            this.flashButton.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    CameraScanActivity.this.lambda$createView$4$CameraScanActivity(view);
-                }
-            });
+            this.flashButton.setOnClickListener(new CameraScanActivity$$ExternalSyntheticLambda2(this));
         }
         if (getParentActivity() != null) {
             getParentActivity().setRequestedOrientation(1);
@@ -416,8 +405,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$2 */
-    public /* synthetic */ void lambda$createView$2$CameraScanActivity(View view) {
+    public /* synthetic */ void lambda$createView$2(View view) {
         if (getParentActivity() != null) {
             if (Build.VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(PhotoAlbumPickerActivity.SELECT_TYPE_QR, false, false, (ChatActivity) null);
@@ -462,8 +450,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$CameraScanActivity(View view) {
+    public /* synthetic */ void lambda$createView$4(View view) {
         CameraSession cameraSession = this.cameraView.getCameraSession();
         if (cameraSession != null) {
             ShapeDrawable shapeDrawable = (ShapeDrawable) this.flashButton.getBackground();
@@ -477,11 +464,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             int[] iArr = new int[1];
             iArr[0] = this.flashButton.getTag() == null ? 68 : 34;
             ObjectAnimator ofInt = ObjectAnimator.ofInt(shapeDrawable, property, iArr);
-            ofInt.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    CameraScanActivity.this.lambda$createView$3$CameraScanActivity(valueAnimator);
-                }
-            });
+            ofInt.addUpdateListener(new CameraScanActivity$$ExternalSyntheticLambda0(this));
             this.flashAnimator.playTogether(new Animator[]{ofInt});
             this.flashAnimator.setDuration(200);
             this.flashAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
@@ -502,8 +485,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$CameraScanActivity(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$createView$3(ValueAnimator valueAnimator) {
         this.flashButton.invalidate();
     }
 
@@ -553,16 +535,11 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     private void onNoQrFound() {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                CameraScanActivity.this.lambda$onNoQrFound$5$CameraScanActivity();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda5(this));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onNoQrFound$5 */
-    public /* synthetic */ void lambda$onNoQrFound$5$CameraScanActivity() {
+    public /* synthetic */ void lambda$onNoQrFound$5() {
         if (this.recognizedMrzView.getTag() != null) {
             this.recognizedMrzView.setTag((Object) null);
             this.recognizedMrzView.animate().setDuration(200).alpha(0.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
@@ -570,24 +547,11 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     public void onPreviewFrame(byte[] bArr, Camera camera) {
-        this.handler.post(new Runnable(bArr, camera) {
-            public final /* synthetic */ byte[] f$1;
-            public final /* synthetic */ Camera f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
-
-            public final void run() {
-                CameraScanActivity.this.lambda$onPreviewFrame$8$CameraScanActivity(this.f$1, this.f$2);
-            }
-        });
+        this.handler.post(new CameraScanActivity$$ExternalSyntheticLambda8(this, bArr, camera));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onPreviewFrame$8 */
-    public /* synthetic */ void lambda$onPreviewFrame$8$CameraScanActivity(byte[] bArr, Camera camera) {
+    public /* synthetic */ void lambda$onPreviewFrame$8(byte[] bArr, Camera camera) {
         try {
             Size previewSize = this.cameraView.getPreviewSize();
             if (this.currentType == 0) {
@@ -596,17 +560,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     if ((recognize.expiryDay != 0 || recognize.doesNotExpire) && recognize.gender != 0) {
                         this.recognized = true;
                         camera.stopPreview();
-                        AndroidUtilities.runOnUIThread(new Runnable(recognize) {
-                            public final /* synthetic */ MrzRecognizer.Result f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void run() {
-                                CameraScanActivity.this.lambda$onPreviewFrame$6$CameraScanActivity(this.f$1);
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda7(this, recognize));
                         return;
                     }
                     return;
@@ -619,17 +573,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             if (tryReadQr != null) {
                 this.recognized = true;
                 camera.stopPreview();
-                AndroidUtilities.runOnUIThread(new Runnable(tryReadQr) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        CameraScanActivity.this.lambda$onPreviewFrame$7$CameraScanActivity(this.f$1);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda6(this, tryReadQr));
             }
         } catch (Throwable unused) {
             onNoQrFound();
@@ -637,24 +581,18 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onPreviewFrame$6 */
-    public /* synthetic */ void lambda$onPreviewFrame$6$CameraScanActivity(MrzRecognizer.Result result) {
+    public /* synthetic */ void lambda$onPreviewFrame$6(MrzRecognizer.Result result) {
         this.recognizedMrzView.setText(result.rawMRZ);
         this.recognizedMrzView.animate().setDuration(200).alpha(1.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
         if (cameraScanActivityDelegate != null) {
             cameraScanActivityDelegate.didFindMrzInfo(result);
         }
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                CameraScanActivity.this.finishFragment();
-            }
-        }, 1200);
+        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda4(this), 1200);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onPreviewFrame$7 */
-    public /* synthetic */ void lambda$onPreviewFrame$7$CameraScanActivity(String str) {
+    public /* synthetic */ void lambda$onPreviewFrame$7(String str) {
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
         if (cameraScanActivityDelegate != null) {
             cameraScanActivityDelegate.didFindQr(str);
@@ -672,62 +610,62 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             r0 = r21
             r9 = r27
             r10 = 0
-            com.google.android.gms.vision.barcode.BarcodeDetector r1 = r0.visionQrReader     // Catch:{ all -> 0x00eb }
-            boolean r1 = r1.isOperational()     // Catch:{ all -> 0x00eb }
+            com.google.android.gms.vision.barcode.BarcodeDetector r1 = r0.visionQrReader     // Catch:{ all -> 0x00ed }
+            boolean r1 = r1.isOperational()     // Catch:{ all -> 0x00ed }
             if (r1 == 0) goto L_0x0052
             if (r9 == 0) goto L_0x001d
-            com.google.android.gms.vision.Frame$Builder r1 = new com.google.android.gms.vision.Frame$Builder     // Catch:{ all -> 0x00eb }
-            r1.<init>()     // Catch:{ all -> 0x00eb }
-            com.google.android.gms.vision.Frame$Builder r1 = r1.setBitmap(r9)     // Catch:{ all -> 0x00eb }
-            com.google.android.gms.vision.Frame r1 = r1.build()     // Catch:{ all -> 0x00eb }
+            com.google.android.gms.vision.Frame$Builder r1 = new com.google.android.gms.vision.Frame$Builder     // Catch:{ all -> 0x00ed }
+            r1.<init>()     // Catch:{ all -> 0x00ed }
+            com.google.android.gms.vision.Frame$Builder r1 = r1.setBitmap(r9)     // Catch:{ all -> 0x00ed }
+            com.google.android.gms.vision.Frame r1 = r1.build()     // Catch:{ all -> 0x00ed }
             goto L_0x0038
         L_0x001d:
-            com.google.android.gms.vision.Frame$Builder r1 = new com.google.android.gms.vision.Frame$Builder     // Catch:{ all -> 0x00eb }
-            r1.<init>()     // Catch:{ all -> 0x00eb }
-            java.nio.ByteBuffer r2 = java.nio.ByteBuffer.wrap(r22)     // Catch:{ all -> 0x00eb }
-            int r3 = r23.getWidth()     // Catch:{ all -> 0x00eb }
-            int r4 = r23.getHeight()     // Catch:{ all -> 0x00eb }
+            com.google.android.gms.vision.Frame$Builder r1 = new com.google.android.gms.vision.Frame$Builder     // Catch:{ all -> 0x00ed }
+            r1.<init>()     // Catch:{ all -> 0x00ed }
+            java.nio.ByteBuffer r2 = java.nio.ByteBuffer.wrap(r22)     // Catch:{ all -> 0x00ed }
+            int r3 = r23.getWidth()     // Catch:{ all -> 0x00ed }
+            int r4 = r23.getHeight()     // Catch:{ all -> 0x00ed }
             r5 = 17
-            com.google.android.gms.vision.Frame$Builder r1 = r1.setImageData(r2, r3, r4, r5)     // Catch:{ all -> 0x00eb }
-            com.google.android.gms.vision.Frame r1 = r1.build()     // Catch:{ all -> 0x00eb }
+            com.google.android.gms.vision.Frame$Builder r1 = r1.setImageData(r2, r3, r4, r5)     // Catch:{ all -> 0x00ed }
+            com.google.android.gms.vision.Frame r1 = r1.build()     // Catch:{ all -> 0x00ed }
         L_0x0038:
-            com.google.android.gms.vision.barcode.BarcodeDetector r2 = r0.visionQrReader     // Catch:{ all -> 0x00eb }
-            android.util.SparseArray r1 = r2.detect(r1)     // Catch:{ all -> 0x00eb }
+            com.google.android.gms.vision.barcode.BarcodeDetector r2 = r0.visionQrReader     // Catch:{ all -> 0x00ed }
+            android.util.SparseArray r1 = r2.detect(r1)     // Catch:{ all -> 0x00ed }
             if (r1 == 0) goto L_0x0050
-            int r2 = r1.size()     // Catch:{ all -> 0x00eb }
+            int r2 = r1.size()     // Catch:{ all -> 0x00ed }
             if (r2 <= 0) goto L_0x0050
             r2 = 0
-            java.lang.Object r1 = r1.valueAt(r2)     // Catch:{ all -> 0x00eb }
-            com.google.android.gms.vision.barcode.Barcode r1 = (com.google.android.gms.vision.barcode.Barcode) r1     // Catch:{ all -> 0x00eb }
-            java.lang.String r1 = r1.rawValue     // Catch:{ all -> 0x00eb }
+            java.lang.Object r1 = r1.valueAt(r2)     // Catch:{ all -> 0x00ed }
+            com.google.android.gms.vision.barcode.Barcode r1 = (com.google.android.gms.vision.barcode.Barcode) r1     // Catch:{ all -> 0x00ed }
+            java.lang.String r1 = r1.rawValue     // Catch:{ all -> 0x00ed }
             goto L_0x00b7
         L_0x0050:
             r1 = r10
             goto L_0x00b7
         L_0x0052:
             if (r9 == 0) goto L_0x0083
-            int r1 = r27.getWidth()     // Catch:{ all -> 0x00eb }
-            int r2 = r27.getHeight()     // Catch:{ all -> 0x00eb }
+            int r1 = r27.getWidth()     // Catch:{ all -> 0x00ed }
+            int r2 = r27.getHeight()     // Catch:{ all -> 0x00ed }
             int r1 = r1 * r2
-            int[] r11 = new int[r1]     // Catch:{ all -> 0x00eb }
+            int[] r11 = new int[r1]     // Catch:{ all -> 0x00ed }
             r3 = 0
-            int r4 = r27.getWidth()     // Catch:{ all -> 0x00eb }
+            int r4 = r27.getWidth()     // Catch:{ all -> 0x00ed }
             r5 = 0
             r6 = 0
-            int r7 = r27.getWidth()     // Catch:{ all -> 0x00eb }
-            int r8 = r27.getHeight()     // Catch:{ all -> 0x00eb }
+            int r7 = r27.getWidth()     // Catch:{ all -> 0x00ed }
+            int r8 = r27.getHeight()     // Catch:{ all -> 0x00ed }
             r1 = r27
             r2 = r11
-            r1.getPixels(r2, r3, r4, r5, r6, r7, r8)     // Catch:{ all -> 0x00eb }
-            com.google.zxing.RGBLuminanceSource r1 = new com.google.zxing.RGBLuminanceSource     // Catch:{ all -> 0x00eb }
-            int r2 = r27.getWidth()     // Catch:{ all -> 0x00eb }
-            int r3 = r27.getHeight()     // Catch:{ all -> 0x00eb }
-            r1.<init>(r2, r3, r11)     // Catch:{ all -> 0x00eb }
+            r1.getPixels(r2, r3, r4, r5, r6, r7, r8)     // Catch:{ all -> 0x00ed }
+            com.google.zxing.RGBLuminanceSource r1 = new com.google.zxing.RGBLuminanceSource     // Catch:{ all -> 0x00ed }
+            int r2 = r27.getWidth()     // Catch:{ all -> 0x00ed }
+            int r3 = r27.getHeight()     // Catch:{ all -> 0x00ed }
+            r1.<init>(r2, r3, r11)     // Catch:{ all -> 0x00ed }
             goto L_0x009d
         L_0x0083:
-            com.google.zxing.PlanarYUVLuminanceSource r1 = new com.google.zxing.PlanarYUVLuminanceSource     // Catch:{ all -> 0x00eb }
-            int r14 = r23.getWidth()     // Catch:{ all -> 0x00eb }
-            int r15 = r23.getHeight()     // Catch:{ all -> 0x00eb }
+            com.google.zxing.PlanarYUVLuminanceSource r1 = new com.google.zxing.PlanarYUVLuminanceSource     // Catch:{ all -> 0x00ed }
+            int r14 = r23.getWidth()     // Catch:{ all -> 0x00ed }
+            int r15 = r23.getHeight()     // Catch:{ all -> 0x00ed }
             r20 = 0
             r12 = r1
             r13 = r22
@@ -735,47 +673,47 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             r17 = r25
             r18 = r26
             r19 = r26
-            r12.<init>(r13, r14, r15, r16, r17, r18, r19, r20)     // Catch:{ all -> 0x00eb }
+            r12.<init>(r13, r14, r15, r16, r17, r18, r19, r20)     // Catch:{ all -> 0x00ed }
         L_0x009d:
-            com.google.zxing.qrcode.QRCodeReader r2 = r0.qrReader     // Catch:{ all -> 0x00eb }
-            com.google.zxing.BinaryBitmap r3 = new com.google.zxing.BinaryBitmap     // Catch:{ all -> 0x00eb }
-            com.google.zxing.common.GlobalHistogramBinarizer r4 = new com.google.zxing.common.GlobalHistogramBinarizer     // Catch:{ all -> 0x00eb }
-            r4.<init>(r1)     // Catch:{ all -> 0x00eb }
-            r3.<init>(r4)     // Catch:{ all -> 0x00eb }
-            com.google.zxing.Result r1 = r2.decode(r3)     // Catch:{ all -> 0x00eb }
+            com.google.zxing.qrcode.QRCodeReader r2 = r0.qrReader     // Catch:{ all -> 0x00ed }
+            com.google.zxing.BinaryBitmap r3 = new com.google.zxing.BinaryBitmap     // Catch:{ all -> 0x00ed }
+            com.google.zxing.common.GlobalHistogramBinarizer r4 = new com.google.zxing.common.GlobalHistogramBinarizer     // Catch:{ all -> 0x00ed }
+            r4.<init>(r1)     // Catch:{ all -> 0x00ed }
+            r3.<init>(r4)     // Catch:{ all -> 0x00ed }
+            com.google.zxing.Result r1 = r2.decode(r3)     // Catch:{ all -> 0x00ed }
             if (r1 != 0) goto L_0x00b3
-            r21.onNoQrFound()     // Catch:{ all -> 0x00eb }
+            r21.onNoQrFound()     // Catch:{ all -> 0x00ed }
             return r10
         L_0x00b3:
-            java.lang.String r1 = r1.getText()     // Catch:{ all -> 0x00eb }
+            java.lang.String r1 = r1.getText()     // Catch:{ all -> 0x00ed }
         L_0x00b7:
-            boolean r2 = android.text.TextUtils.isEmpty(r1)     // Catch:{ all -> 0x00eb }
+            boolean r2 = android.text.TextUtils.isEmpty(r1)     // Catch:{ all -> 0x00ed }
             if (r2 == 0) goto L_0x00c1
-            r21.onNoQrFound()     // Catch:{ all -> 0x00eb }
+            r21.onNoQrFound()     // Catch:{ all -> 0x00ed }
             return r10
         L_0x00c1:
-            boolean r2 = r0.needGalleryButton     // Catch:{ all -> 0x00eb }
-            if (r2 == 0) goto L_0x00de
+            boolean r2 = r0.needGalleryButton     // Catch:{ all -> 0x00ed }
+            if (r2 == 0) goto L_0x00df
             java.lang.String r2 = "ton://transfer/"
-            boolean r2 = r1.startsWith(r2)     // Catch:{ all -> 0x00eb }
-            if (r2 != 0) goto L_0x00ce
+            boolean r2 = r1.startsWith(r2)     // Catch:{ all -> 0x00ed }
+            if (r2 != 0) goto L_0x00cf
             return r10
-        L_0x00ce:
-            android.net.Uri r2 = android.net.Uri.parse(r1)     // Catch:{ all -> 0x00eb }
-            java.lang.String r2 = r2.getPath()     // Catch:{ all -> 0x00eb }
+        L_0x00cf:
+            android.net.Uri r2 = android.net.Uri.parse(r1)     // Catch:{ all -> 0x00ed }
+            java.lang.String r2 = r2.getPath()     // Catch:{ all -> 0x00ed }
             java.lang.String r3 = "/"
             java.lang.String r4 = ""
-            r2.replace(r3, r4)     // Catch:{ all -> 0x00eb }
-            goto L_0x00ea
-        L_0x00de:
+            r2.replace(r3, r4)     // Catch:{ all -> 0x00ed }
+            goto L_0x00ec
+        L_0x00df:
             java.lang.String r2 = "tg://login?token="
-            boolean r2 = r1.startsWith(r2)     // Catch:{ all -> 0x00eb }
-            if (r2 != 0) goto L_0x00ea
-            r21.onNoQrFound()     // Catch:{ all -> 0x00eb }
+            boolean r2 = r1.startsWith(r2)     // Catch:{ all -> 0x00ed }
+            if (r2 != 0) goto L_0x00ec
+            r21.onNoQrFound()     // Catch:{ all -> 0x00ed }
             return r10
-        L_0x00ea:
+        L_0x00ec:
             return r1
-        L_0x00eb:
+        L_0x00ed:
             r21.onNoQrFound()
             return r10
         */

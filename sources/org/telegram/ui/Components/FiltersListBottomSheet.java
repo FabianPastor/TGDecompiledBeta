@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -321,11 +322,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
                 FiltersListBottomSheet.this.updateLayout();
             }
         });
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                FiltersListBottomSheet.this.lambda$new$0$FiltersListBottomSheet(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new FiltersListBottomSheet$$ExternalSyntheticLambda0(this));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
         TextView textView = new TextView(parentActivity);
         this.titleTextView = textView;
@@ -345,8 +342,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$0 */
-    public /* synthetic */ void lambda$new$0$FiltersListBottomSheet(View view, int i) {
+    public /* synthetic */ void lambda$new$0(View view, int i) {
         this.delegate.didSelectFilter(this.adapter.getItem(i));
         dismiss();
     }
@@ -455,25 +451,24 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
         return arrayList2;
     }
 
-    public static ArrayList<Integer> getDialogsCount(BaseFragment baseFragment, MessagesController.DialogFilter dialogFilter, ArrayList<Long> arrayList, boolean z, boolean z2) {
-        ArrayList<Integer> arrayList2 = new ArrayList<>();
+    public static ArrayList<Long> getDialogsCount(BaseFragment baseFragment, MessagesController.DialogFilter dialogFilter, ArrayList<Long> arrayList, boolean z, boolean z2) {
+        ArrayList<Long> arrayList2 = new ArrayList<>();
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             long longValue = arrayList.get(i).longValue();
-            int i2 = (int) longValue;
-            if (i2 == 0) {
-                TLRPC$EncryptedChat encryptedChat = baseFragment.getMessagesController().getEncryptedChat(Integer.valueOf((int) (longValue >> 32)));
+            if (DialogObject.isEncryptedDialog(longValue)) {
+                TLRPC$EncryptedChat encryptedChat = baseFragment.getMessagesController().getEncryptedChat(Integer.valueOf(DialogObject.getEncryptedChatId(longValue)));
                 if (encryptedChat != null) {
-                    i2 = encryptedChat.user_id;
-                    if (arrayList2.contains(Integer.valueOf(i2))) {
+                    longValue = encryptedChat.user_id;
+                    if (arrayList2.contains(Long.valueOf(longValue))) {
                         continue;
                     }
                 } else {
                     continue;
                 }
             }
-            if (dialogFilter == null || ((!z || !dialogFilter.alwaysShow.contains(Integer.valueOf(i2))) && (z || !dialogFilter.neverShow.contains(Integer.valueOf(i2))))) {
-                arrayList2.add(Integer.valueOf(i2));
+            if (dialogFilter == null || ((!z || !dialogFilter.alwaysShow.contains(Long.valueOf(longValue))) && (z || !dialogFilter.neverShow.contains(Long.valueOf(longValue))))) {
+                arrayList2.add(Long.valueOf(longValue));
                 if (z2) {
                     break;
                 }

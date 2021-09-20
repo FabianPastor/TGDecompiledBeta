@@ -10,11 +10,11 @@ import android.view.View;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.voip.VoIPService;
+import org.telegram.ui.ActionBar.Theme$$ExternalSyntheticLambda2;
 import org.webrtc.EglBase;
 import org.webrtc.EglRenderer;
 import org.webrtc.GlGenericDrawer;
 import org.webrtc.RendererCommon;
-import org.webrtc.TextureViewRenderer;
 
 public class TextureViewRenderer extends TextureView implements TextureView.SurfaceTextureListener, VideoSink, RendererCommon.RendererEvents {
     private static final String TAG = "TextureViewRenderer";
@@ -145,17 +145,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
             ThreadUtils.checkIsOnMainThread();
             CountDownLatch countDownLatch = new CountDownLatch(1);
-            releaseEglSurface(new Runnable(countDownLatch) {
-                public final /* synthetic */ CountDownLatch f$0;
-
-                {
-                    this.f$0 = r1;
-                }
-
-                public final void run() {
-                    this.f$0.countDown();
-                }
-            }, false);
+            releaseEglSurface(new Theme$$ExternalSyntheticLambda2(countDownLatch), false);
             ThreadUtils.awaitUninterruptibly(countDownLatch);
             return true;
         }
@@ -234,16 +224,11 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
 
         /* access modifiers changed from: protected */
         public void onFirstFrameRendered() {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    TextureViewRenderer.TextureEglRenderer.this.lambda$onFirstFrameRendered$0$TextureViewRenderer$TextureEglRenderer();
-                }
-            });
+            AndroidUtilities.runOnUIThread(new TextureViewRenderer$TextureEglRenderer$$ExternalSyntheticLambda0(this));
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onFirstFrameRendered$0 */
-        public /* synthetic */ void lambda$onFirstFrameRendered$0$TextureViewRenderer$TextureEglRenderer() {
+        public /* synthetic */ void lambda$onFirstFrameRendered$0() {
             this.isFirstFrameRendered = true;
             this.rendererEvents.onFirstFrameRendered();
         }
@@ -595,7 +580,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
             if (r0 == 0) goto L_0x006c
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)     // Catch:{ all -> 0x007c }
         L_0x006c:
-            org.webrtc.-$$Lambda$TextureViewRenderer$y2sa0zyVrVEL4-KQaGswieONtN8 r0 = new org.webrtc.-$$Lambda$TextureViewRenderer$y2sa0zyVrVEL4-KQaGswieONtN8     // Catch:{ all -> 0x007c }
+            org.webrtc.TextureViewRenderer$$ExternalSyntheticLambda1 r0 = new org.webrtc.TextureViewRenderer$$ExternalSyntheticLambda1     // Catch:{ all -> 0x007c }
             r1 = r0
             r2 = r7
             r3 = r8
@@ -614,8 +599,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onFrameResolutionChanged$0 */
-    public /* synthetic */ void lambda$onFrameResolutionChanged$0$TextureViewRenderer(int i, int i2, int i3, int i4) {
+    public /* synthetic */ void lambda$onFrameResolutionChanged$0(int i, int i2, int i3, int i4) {
         this.updateScreenRunnable = null;
         this.videoWidth = i;
         this.videoHeight = i2;
@@ -661,29 +645,16 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
                     if (runnable != null) {
                         AndroidUtilities.cancelRunOnUIThread(runnable);
                     }
-                    $$Lambda$TextureViewRenderer$8T6Cmx0ACLgGQMeB5W_IQ0ppg04 r2 = new Runnable(i2, i3) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ int f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void run() {
-                            TextureViewRenderer.this.lambda$updateVideoSizes$1$TextureViewRenderer(this.f$1, this.f$2);
-                        }
-                    };
-                    this.updateScreenRunnable = r2;
-                    postOrRun(r2);
+                    TextureViewRenderer$$ExternalSyntheticLambda0 textureViewRenderer$$ExternalSyntheticLambda0 = new TextureViewRenderer$$ExternalSyntheticLambda0(this, i2, i3);
+                    this.updateScreenRunnable = textureViewRenderer$$ExternalSyntheticLambda0;
+                    postOrRun(textureViewRenderer$$ExternalSyntheticLambda0);
                 }
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateVideoSizes$1 */
-    public /* synthetic */ void lambda$updateVideoSizes$1$TextureViewRenderer(int i, int i2) {
+    public /* synthetic */ void lambda$updateVideoSizes$1(int i, int i2) {
         this.updateScreenRunnable = null;
         this.rotatedFrameWidth = i;
         this.rotatedFrameHeight = i2;

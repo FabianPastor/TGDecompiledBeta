@@ -3,16 +3,19 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public abstract class TLRPC$messages_AllStickers extends TLObject {
-    public ArrayList<TLRPC$Document> documents = new ArrayList<>();
-    public ArrayList<TLRPC$TL_stickerPack> packs = new ArrayList<>();
     public ArrayList<TLRPC$StickerSet> sets = new ArrayList<>();
+
+    public TLRPC$messages_AllStickers() {
+        new ArrayList();
+        new ArrayList();
+    }
 
     public static TLRPC$messages_AllStickers TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$messages_AllStickers tLRPC$messages_AllStickers;
         if (i != -NUM) {
-            tLRPC$messages_AllStickers = i != -NUM ? null : new TLRPC$TL_messages_allStickers();
+            tLRPC$messages_AllStickers = i != -NUM ? null : new TLRPC$TL_messages_allStickersNotModified();
         } else {
-            tLRPC$messages_AllStickers = new TLRPC$TL_messages_allStickersNotModified();
+            tLRPC$messages_AllStickers = new TLRPC$TL_messages_allStickers();
         }
         if (tLRPC$messages_AllStickers != null || !z) {
             if (tLRPC$messages_AllStickers != null) {

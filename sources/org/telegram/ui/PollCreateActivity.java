@@ -50,7 +50,6 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.PollCreateActivity;
 
 public class PollCreateActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -245,19 +244,7 @@ public class PollCreateActivity extends BaseFragment {
                             }
                         }
                         if (PollCreateActivity.this.parentFragment.isInScheduleMode()) {
-                            AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), PollCreateActivity.this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$TL_messageMediaPoll, hashMap) {
-                                public final /* synthetic */ TLRPC$TL_messageMediaPoll f$1;
-                                public final /* synthetic */ HashMap f$2;
-
-                                {
-                                    this.f$1 = r2;
-                                    this.f$2 = r3;
-                                }
-
-                                public final void didSelectDate(boolean z, int i) {
-                                    PollCreateActivity.AnonymousClass1.this.lambda$onItemClick$0$PollCreateActivity$1(this.f$1, this.f$2, z, i);
-                                }
-                            });
+                            AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), PollCreateActivity.this.parentFragment.getDialogId(), new PollCreateActivity$1$$ExternalSyntheticLambda0(this, tLRPC$TL_messageMediaPoll, hashMap));
                             return;
                         }
                         PollCreateActivity.this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, true, 0);
@@ -277,8 +264,7 @@ public class PollCreateActivity extends BaseFragment {
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$onItemClick$0 */
-            public /* synthetic */ void lambda$onItemClick$0$PollCreateActivity$1(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
+            public /* synthetic */ void lambda$onItemClick$0(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
                 PollCreateActivity.this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, z, i);
                 PollCreateActivity.this.finishFragment();
             }
@@ -289,7 +275,7 @@ public class PollCreateActivity extends BaseFragment {
         this.fragmentView = frameLayout;
         frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
         FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
-        AnonymousClass2 r3 = new RecyclerListView(context) {
+        AnonymousClass2 r3 = new RecyclerListView(this, context) {
             /* access modifiers changed from: protected */
             public void requestChildOnScreen(View view, View view2) {
                 if (view instanceof PollEditTextCell) {
@@ -309,11 +295,7 @@ public class PollCreateActivity extends BaseFragment {
         new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(this.listView);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public final void onItemClick(View view, int i) {
-                PollCreateActivity.this.lambda$createView$0$PollCreateActivity(view, i);
-            }
-        });
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new PollCreateActivity$$ExternalSyntheticLambda1(this));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
             }
@@ -335,8 +317,7 @@ public class PollCreateActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$0 */
-    public /* synthetic */ void lambda$createView$0$PollCreateActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$0(View view, int i) {
         boolean z;
         if (i == this.addAnswerRow) {
             addNewField();
@@ -653,11 +634,7 @@ public class PollCreateActivity extends BaseFragment {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("CancelPollAlertTitle", NUM));
             builder.setMessage(LocaleController.getString("CancelPollAlertText", NUM));
-            builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new DialogInterface.OnClickListener() {
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    PollCreateActivity.this.lambda$checkDiscard$1$PollCreateActivity(dialogInterface, i);
-                }
-            });
+            builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new PollCreateActivity$$ExternalSyntheticLambda0(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             showDialog(builder.create());
         }
@@ -665,8 +642,7 @@ public class PollCreateActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkDiscard$1 */
-    public /* synthetic */ void lambda$checkDiscard$1$PollCreateActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$1(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
 
@@ -886,24 +862,24 @@ public class PollCreateActivity extends BaseFragment {
             /*
                 r6 = this;
                 java.lang.String r7 = "windowBackgroundWhite"
-                if (r8 == 0) goto L_0x00b6
+                if (r8 == 0) goto L_0x00b7
                 r0 = 1
-                if (r8 == r0) goto L_0x00ae
+                if (r8 == r0) goto L_0x00af
                 r1 = 2
-                if (r8 == r1) goto L_0x00a6
+                if (r8 == r1) goto L_0x00a7
                 r1 = 3
-                if (r8 == r1) goto L_0x0097
+                if (r8 == r1) goto L_0x0098
                 r1 = 4
                 r2 = 0
-                if (r8 == r1) goto L_0x007d
+                if (r8 == r1) goto L_0x007e
                 r1 = 6
-                if (r8 == r1) goto L_0x006e
+                if (r8 == r1) goto L_0x006f
                 r1 = 7
-                if (r8 == r1) goto L_0x0054
+                if (r8 == r1) goto L_0x0055
                 org.telegram.ui.PollCreateActivity$ListAdapter$4 r8 = new org.telegram.ui.PollCreateActivity$ListAdapter$4
                 android.content.Context r1 = r6.mContext
-                org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$CE4hMeBrii7X7YyEe3DPqpm1fIg r2 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$CE4hMeBrii7X7YyEe3DPqpm1fIg
-                r2.<init>()
+                org.telegram.ui.PollCreateActivity$ListAdapter$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.PollCreateActivity$ListAdapter$$ExternalSyntheticLambda0
+                r2.<init>(r6)
                 r8.<init>(r1, r2)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
@@ -915,14 +891,14 @@ public class PollCreateActivity extends BaseFragment {
                 int r0 = r7.getImeOptions()
                 r0 = r0 | 5
                 r7.setImeOptions(r0)
-                org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$PMJgIAzLXn-iB90X94nh2loy9eY r0 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$PMJgIAzLXn-iB90X94nh2loy9eY
-                r0.<init>(r8)
+                org.telegram.ui.PollCreateActivity$ListAdapter$$ExternalSyntheticLambda2 r0 = new org.telegram.ui.PollCreateActivity$ListAdapter$$ExternalSyntheticLambda2
+                r0.<init>(r6, r8)
                 r7.setOnEditorActionListener(r0)
-                org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$4GdhUAeBCk5Oj0yFpg4wB3oKdrM r0 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$4GdhUAeBCk5Oj0yFpg4wB3oKdrM
-                r0.<init>()
+                org.telegram.ui.PollCreateActivity$ListAdapter$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.PollCreateActivity$ListAdapter$$ExternalSyntheticLambda1
+                r0.<init>(r8)
                 r7.setOnKeyListener(r0)
-                goto L_0x00cc
-            L_0x0054:
+                goto L_0x00ce
+            L_0x0055:
                 org.telegram.ui.PollCreateActivity$ListAdapter$2 r8 = new org.telegram.ui.PollCreateActivity$ListAdapter$2
                 android.content.Context r1 = r6.mContext
                 r8.<init>(r1, r0, r2)
@@ -932,15 +908,15 @@ public class PollCreateActivity extends BaseFragment {
                 org.telegram.ui.PollCreateActivity$ListAdapter$3 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$3
                 r7.<init>(r8)
                 r8.addTextWatcher(r7)
-                goto L_0x00cc
-            L_0x006e:
+                goto L_0x00ce
+            L_0x006f:
                 org.telegram.ui.Cells.TextCheckCell r8 = new org.telegram.ui.Cells.TextCheckCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x00cc
-            L_0x007d:
+                goto L_0x00ce
+            L_0x007e:
                 org.telegram.ui.Cells.PollEditTextCell r8 = new org.telegram.ui.Cells.PollEditTextCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0, r2)
@@ -950,25 +926,25 @@ public class PollCreateActivity extends BaseFragment {
                 org.telegram.ui.PollCreateActivity$ListAdapter$1 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$1
                 r7.<init>(r8)
                 r8.addTextWatcher(r7)
-                goto L_0x00cc
-            L_0x0097:
+                goto L_0x00ce
+            L_0x0098:
                 org.telegram.ui.Cells.TextCell r8 = new org.telegram.ui.Cells.TextCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x00cc
-            L_0x00a6:
+                goto L_0x00ce
+            L_0x00a7:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x00cc
-            L_0x00ae:
+                goto L_0x00ce
+            L_0x00af:
                 org.telegram.ui.Cells.ShadowSectionCell r8 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x00cc
-            L_0x00b6:
+                goto L_0x00ce
+            L_0x00b7:
                 org.telegram.ui.Cells.HeaderCell r8 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r1 = r6.mContext
                 r3 = 21
@@ -979,7 +955,7 @@ public class PollCreateActivity extends BaseFragment {
                 r0.<init>(r1, r2, r3, r4, r5)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-            L_0x00cc:
+            L_0x00ce:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r7 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2
@@ -993,8 +969,7 @@ public class PollCreateActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$0 */
-        public /* synthetic */ void lambda$onCreateViewHolder$0$PollCreateActivity$ListAdapter(View view) {
+        public /* synthetic */ void lambda$onCreateViewHolder$0(View view) {
             int adapterPosition;
             if (view.getTag() == null) {
                 view.setTag(1);
@@ -1036,8 +1011,7 @@ public class PollCreateActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCreateViewHolder$1 */
-        public /* synthetic */ boolean lambda$onCreateViewHolder$1$PollCreateActivity$ListAdapter(PollEditTextCell pollEditTextCell, TextView textView, int i, KeyEvent keyEvent) {
+        public /* synthetic */ boolean lambda$onCreateViewHolder$1(PollEditTextCell pollEditTextCell, TextView textView, int i, KeyEvent keyEvent) {
             int adapterPosition;
             if (i != 5) {
                 return false;
@@ -1062,7 +1036,8 @@ public class PollCreateActivity extends BaseFragment {
             return true;
         }
 
-        static /* synthetic */ boolean lambda$onCreateViewHolder$2(PollEditTextCell pollEditTextCell, View view, int i, KeyEvent keyEvent) {
+        /* access modifiers changed from: private */
+        public static /* synthetic */ boolean lambda$onCreateViewHolder$2(PollEditTextCell pollEditTextCell, View view, int i, KeyEvent keyEvent) {
             EditTextBoldCursor editTextBoldCursor = (EditTextBoldCursor) view;
             if (i != 67 || keyEvent.getAction() != 0 || editTextBoldCursor.length() != 0) {
                 return false;

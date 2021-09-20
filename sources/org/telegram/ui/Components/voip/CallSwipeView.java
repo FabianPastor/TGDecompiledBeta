@@ -19,7 +19,6 @@ public class CallSwipeView extends View {
     public int[] arrowAlphas;
     private AnimatorSet arrowAnim;
     private Paint arrowsPaint;
-    private boolean canceled;
     private boolean dragFromRight;
     private float dragStartX;
     private boolean dragging;
@@ -41,7 +40,6 @@ public class CallSwipeView extends View {
         super.onDetachedFromWindow();
         AnimatorSet animatorSet = this.arrowAnim;
         if (animatorSet != null) {
-            this.canceled = true;
             animatorSet.cancel();
             this.arrowAnim = null;
         }
