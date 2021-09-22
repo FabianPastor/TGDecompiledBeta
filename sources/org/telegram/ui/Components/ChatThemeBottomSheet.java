@@ -382,7 +382,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(ChatActivity.ThemeDelegate themeDelegate2, View view, final int i) {
-        if (this.adapter.items.get(i) != this.selectedItem) {
+        if (this.adapter.items.get(i) != this.selectedItem && this.changeDayNightView == null) {
             ChatThemeItem chatThemeItem = (ChatThemeItem) this.adapter.items.get(i);
             this.selectedItem = chatThemeItem;
             this.isLightDarkChangeAnimation = false;
@@ -1099,10 +1099,13 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
 
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$setItem$0(long j, int i, Pair pair) {
-                MotionBackgroundDrawable previewDrawable;
-                if (pair != null && ((Long) pair.first).longValue() == j && (previewDrawable = getPreviewDrawable()) != null) {
-                    previewDrawable.setPatternBitmap(i >= 0 ? 100 : -100, (Bitmap) pair.second);
-                    previewDrawable.setPatternColorFilter(previewDrawable.getPatternColor());
+                if (pair != null && ((Long) pair.first).longValue() == j) {
+                    MotionBackgroundDrawable previewDrawable = getPreviewDrawable();
+                    if (previewDrawable != null) {
+                        previewDrawable.setPatternBitmap(i >= 0 ? 100 : -100, (Bitmap) pair.second);
+                        previewDrawable.setPatternColorFilter(previewDrawable.getPatternColor());
+                    }
+                    invalidate();
                 }
             }
 

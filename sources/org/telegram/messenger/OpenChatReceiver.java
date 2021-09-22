@@ -16,8 +16,8 @@ public class OpenChatReceiver extends Activity {
             finish();
         } else {
             try {
-                long longExtra = intent.getLongExtra("chatId", 0);
-                long longExtra2 = intent.getLongExtra("userId", 0);
+                long longExtra = intent.getLongExtra("chatId", (long) intent.getIntExtra("chatId", 0));
+                long longExtra2 = intent.getLongExtra("userId", (long) intent.getIntExtra("userId", 0));
                 int intExtra = intent.getIntExtra("encId", 0);
                 if (longExtra != 0 || longExtra2 != 0 || intExtra != 0) {
                     Intent intent2 = new Intent(this, LaunchActivity.class);
@@ -26,7 +26,8 @@ public class OpenChatReceiver extends Activity {
                     startActivity(intent2);
                     finish();
                 }
-            } catch (Throwable unused) {
+            } catch (Throwable th) {
+                FileLog.e(th);
             }
         }
     }

@@ -2015,7 +2015,7 @@ public class LoginActivity extends BaseFragment {
         }
 
         private void setCountry(HashMap<String, String> hashMap, String str) {
-            if (hashMap.get(str) != null) {
+            if (hashMap.get(str) != null && this.countriesArray != null) {
                 CountrySelectActivity.Country country = null;
                 int i = 0;
                 while (true) {

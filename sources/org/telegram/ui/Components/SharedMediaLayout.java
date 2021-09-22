@@ -4250,7 +4250,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
     /* access modifiers changed from: private */
     public boolean onItemLongClick(MessageObject messageObject, View view, int i) {
-        if (this.isActionModeShowed || this.profileActivity.getParentActivity() == null) {
+        if (this.isActionModeShowed || this.profileActivity.getParentActivity() == null || messageObject == null) {
             return false;
         }
         AndroidUtilities.hideKeyboard(this.profileActivity.getParentActivity().getCurrentFocus());

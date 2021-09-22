@@ -4857,12 +4857,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        int i3;
         TLRPC$Chat tLRPC$Chat;
         RecyclerListView recyclerListView;
         RecyclerListView recyclerListView2;
         RecyclerListView.Holder holder;
-        int i4 = 0;
+        int i3 = 0;
         if (i == NotificationCenter.updateInterfaces) {
             int intValue = objArr[0].intValue();
             boolean z = ((MessagesController.UPDATE_MASK_AVATAR & intValue) == 0 && (MessagesController.UPDATE_MASK_NAME & intValue) == 0 && (MessagesController.UPDATE_MASK_STATUS & intValue) == 0) ? false : true;
@@ -4884,12 +4883,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (z && (recyclerListView = this.listView) != null) {
                     int childCount = recyclerListView.getChildCount();
-                    while (i4 < childCount) {
-                        View childAt = this.listView.getChildAt(i4);
+                    while (i3 < childCount) {
+                        View childAt = this.listView.getChildAt(i3);
                         if (childAt instanceof UserCell) {
                             ((UserCell) childAt).update(intValue);
                         }
-                        i4++;
+                        i3++;
                     }
                 }
             }
@@ -4954,7 +4953,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     tLRPC$ChatFull3.participants = tLRPC$ChatFull4.participants;
                 }
                 if (tLRPC$ChatFull4 == null && (tLRPC$ChatFull3 instanceof TLRPC$TL_channelFull)) {
-                    i4 = 1;
+                    i3 = 1;
                 }
                 this.chatInfo = tLRPC$ChatFull3;
                 if (this.mergeDialogId == 0) {
@@ -4975,7 +4974,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     this.currentChat = chat;
                     createActionBarMenu(true);
                 }
-                if (this.currentChat.megagroup && (i4 != 0 || !booleanValue)) {
+                if (this.currentChat.megagroup && (i3 != 0 || !booleanValue)) {
                     getChannelParticipants(true);
                 }
                 updateTimeItem();
@@ -5017,8 +5016,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (dialogId2 == objArr[0].longValue()) {
                     DialogObject.isEncryptedDialog(dialogId2);
                     ArrayList arrayList = objArr[1];
-                    while (i4 < arrayList.size()) {
-                        MessageObject messageObject = (MessageObject) arrayList.get(i4);
+                    while (i3 < arrayList.size()) {
+                        MessageObject messageObject = (MessageObject) arrayList.get(i3);
                         if (this.currentEncryptedChat != null) {
                             TLRPC$MessageAction tLRPC$MessageAction = messageObject.messageOwner.action;
                             if (tLRPC$MessageAction instanceof TLRPC$TL_messageEncryptedAction) {
@@ -5032,7 +5031,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 }
                             }
                         }
-                        i4++;
+                        i3++;
                     }
                 }
             }
@@ -5042,21 +5041,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 recyclerListView3.invalidateViews();
             }
         } else if (i == NotificationCenter.reloadInterface) {
-            int i5 = this.emptyRow;
-            updateRowsIds();
-            ListAdapter listAdapter3 = this.listAdapter;
-            if (listAdapter3 != null && i5 != (i3 = this.emptyRow)) {
-                if (i3 == -1) {
-                    listAdapter3.notifyItemRemoved(i3);
-                } else {
-                    listAdapter3.notifyItemInserted(i3);
-                }
-            }
+            updateListAnimated(false);
         } else if (i == NotificationCenter.newSuggestionsAvailable) {
-            int i6 = this.passwordSuggestionRow;
-            int i7 = this.phoneSuggestionRow;
+            int i4 = this.passwordSuggestionRow;
+            int i5 = this.phoneSuggestionRow;
             updateRowsIds();
-            if (i6 != this.passwordSuggestionRow || i7 != this.phoneSuggestionRow) {
+            if (i4 != this.passwordSuggestionRow || i5 != this.phoneSuggestionRow) {
                 this.listAdapter.notifyDataSetChanged();
             }
         }
@@ -9149,10 +9139,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             notificationCenter.removeObserver(profileActivity, i2);
                             ProfileActivity.this.getMessagesController().removeSuggestion(0, i == 0 ? "VALIDATE_PHONE_NUMBER" : "VALIDATE_PASSWORD");
                             ProfileActivity.this.getNotificationCenter().addObserver(ProfileActivity.this, i2);
-                            int access$16900 = i == 0 ? ProfileActivity.this.phoneSuggestionRow : ProfileActivity.this.passwordSuggestionRow;
-                            ProfileActivity.this.updateRowsIds();
-                            ProfileActivity.this.saveScrollPosition();
-                            ProfileActivity.this.listAdapter.notifyItemRangeRemoved(access$16900, 2);
+                            if (i == 0) {
+                                int unused = ProfileActivity.this.phoneSuggestionRow;
+                            } else {
+                                int unused2 = ProfileActivity.this.passwordSuggestionRow;
+                            }
+                            ProfileActivity.this.updateListAnimated(false);
                         }
 
                         /* access modifiers changed from: protected */
@@ -11785,8 +11777,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             TLRPC$ChatParticipant tLRPC$ChatParticipant2;
             if (i2 < ProfileActivity.this.membersStartRow || i2 >= ProfileActivity.this.membersEndRow || i < this.oldMembersStartRow || i >= this.oldMembersEndRow) {
                 int i3 = this.oldPositionToItem.get(i, -1);
-                int i4 = this.newPositionToItem.get(i2, -1);
-                if (i3 != i4 || i3 < 0 || i4 < 0) {
+                if (i3 != this.newPositionToItem.get(i2, -1) || i3 < 0) {
                     return false;
                 }
                 return true;
