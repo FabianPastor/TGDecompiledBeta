@@ -1,6 +1,8 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,5 +54,10 @@ public class DatabaseMigrationHint extends FrameLayout {
         this.container.addView(this.description2, LayoutHelper.createLinear(-1, -2, 0.0f, 0, 36, 24, 36, 0));
         addView(this.container, LayoutHelper.createFrame(-1, -2, 16));
         setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+        setOnTouchListener(new View.OnTouchListener(this) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
     }
 }

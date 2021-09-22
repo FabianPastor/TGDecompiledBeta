@@ -1,22 +1,19 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
-import org.telegram.messenger.support.LongSparseIntArray;
+import org.telegram.tgnet.TLObject;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda147 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ LongSparseIntArray f$1;
-    public final /* synthetic */ LongSparseIntArray f$2;
-    public final /* synthetic */ LongSparseArray f$3;
+    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda147(MessagesStorage messagesStorage, LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, LongSparseArray longSparseArray) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda147(MessagesStorage messagesStorage, TLObject tLObject, String str) {
         this.f$0 = messagesStorage;
-        this.f$1 = longSparseIntArray;
-        this.f$2 = longSparseIntArray2;
-        this.f$3 = longSparseArray;
+        this.f$1 = tLObject;
+        this.f$2 = str;
     }
 
     public final void run() {
-        this.f$0.lambda$updateDialogsWithReadMessages$81(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$saveBotCache$86(this.f$1, this.f$2);
     }
 }

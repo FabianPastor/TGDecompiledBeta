@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda6 imp
     }
 
     public final void run() {
-        this.f$0.lambda$clearSentMedia$120();
+        this.f$0.lambda$cleanup$3();
     }
 }

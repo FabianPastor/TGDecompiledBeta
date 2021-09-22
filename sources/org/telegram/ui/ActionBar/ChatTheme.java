@@ -158,7 +158,7 @@ public class ChatTheme {
 
     public void loadWallpaperThumb(boolean z, ResultCallback<Pair<Long, Bitmap>> resultCallback) {
         TLRPC$WallPaper wallpaper = getWallpaper(z);
-        if (wallpaper != null || resultCallback == null) {
+        if (wallpaper != null) {
             long j = getTlTheme(z).id;
             Bitmap wallpaperThumbBitmap = ChatThemeController.getWallpaperThumbBitmap(j);
             File wallpaperThumbFile = getWallpaperThumbFile(j);
@@ -178,7 +178,7 @@ public class ChatTheme {
             } else if (resultCallback != null) {
                 resultCallback.onComplete(new Pair(Long.valueOf(j), wallpaperThumbBitmap));
             }
-        } else {
+        } else if (resultCallback != null) {
             resultCallback.onComplete(null);
         }
     }

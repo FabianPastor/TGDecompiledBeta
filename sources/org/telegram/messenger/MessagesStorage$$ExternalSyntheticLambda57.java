@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda57 im
     }
 
     public final void run() {
-        this.f$0.lambda$removePendingTask$9(this.f$1);
+        this.f$0.lambda$onDeleteQueryComplete$58(this.f$1);
     }
 }

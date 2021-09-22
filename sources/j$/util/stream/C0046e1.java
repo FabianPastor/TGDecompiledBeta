@@ -180,7 +180,7 @@ abstract class CLASSNAMEe1 extends CLASSNAMEc implements CLASSNAMEf1 {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m1184iterator() {
+    public Iterator m1198iterator() {
         return N.h(spliterator());
     }
 

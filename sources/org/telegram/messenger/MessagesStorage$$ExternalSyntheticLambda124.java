@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda124 i
     }
 
     public final void run() {
-        this.f$0.lambda$emptyMessagesMedia$67(this.f$1);
+        this.f$0.lambda$markMessagesAsDeletedByRandoms$158(this.f$1);
     }
 }

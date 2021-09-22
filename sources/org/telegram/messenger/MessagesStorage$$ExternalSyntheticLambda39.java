@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda39 im
     }
 
     public final void run() {
-        this.f$0.lambda$setDialogPinned$181(this.f$1, this.f$2);
+        this.f$0.lambda$deleteDialog$57(this.f$1, this.f$2);
     }
 }

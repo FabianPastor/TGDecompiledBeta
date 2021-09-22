@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
@@ -137,6 +138,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         int size = this.parentFragment.getDialogsArray(this.currentAccount, this.dialogsType, this.folderId, this.dialogsListFrozen).size();
         this.dialogsCount = size;
         boolean z = false;
+        boolean z2 = true;
         if (this.forceShowEmptyCell || (i3 = this.dialogsType) == 7 || i3 == 8 || i3 == 11 || size != 0 || ((i4 = this.folderId) == 0 && !instance.isLoadingDialogs(i4) && MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId))) {
             int i5 = this.dialogsCount;
             int i6 = this.dialogsType;
@@ -148,6 +150,19 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             } else if (this.dialogsType == 0 && instance.dialogs_dict.size() <= 10 && (i2 = this.folderId) == 0 && instance.isDialogsEndReached(i2)) {
                 if (ContactsController.getInstance(this.currentAccount).contacts.isEmpty() && !ContactsController.getInstance(this.currentAccount).doneLoadingContacts) {
                     this.onlineContacts = null;
+                    if (BuildVars.LOGS_ENABLED) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("DialogsAdapter loadingContacts=");
+                        if (!ContactsController.getInstance(this.currentAccount).contacts.isEmpty() || ContactsController.getInstance(this.currentAccount).doneLoadingContacts) {
+                            z2 = false;
+                        }
+                        sb.append(z2);
+                        sb.append("dialogsCount=");
+                        sb.append(this.dialogsCount);
+                        sb.append(" dialogsType=");
+                        sb.append(this.dialogsType);
+                        FileLog.d(sb.toString());
+                    }
                     this.currentCount = 0;
                     return 0;
                 } else if (!ContactsController.getInstance(this.currentAccount).contacts.isEmpty()) {
@@ -200,9 +215,15 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 i5++;
             }
             this.currentCount = i5;
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("DialogsAdapter dialogsCount=" + this.dialogsCount + " dialogsType=" + this.dialogsType);
+            }
             return i5;
         }
         this.onlineContacts = null;
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("DialogsAdapter dialogsCount=" + this.dialogsCount + " dialogsType=" + this.dialogsType + " isLoadingDialogs=" + instance.isLoadingDialogs(this.folderId) + " isDialogsEndReached=" + MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId));
+        }
         if (this.folderId != 1 || !this.showArchiveHint) {
             this.currentCount = 0;
             return 0;
