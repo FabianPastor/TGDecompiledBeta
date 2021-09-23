@@ -22,6 +22,6 @@ public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$onNextPressed$12(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$onNextPressed$13(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

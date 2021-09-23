@@ -771,8 +771,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     /* access modifiers changed from: private */
     public void onAnimationStart() {
         Adapter adapter2 = this.adapter;
-        if (adapter2 != null) {
-            for (ChatThemeItem chatThemeItem : adapter2.items) {
+        if (!(adapter2 == null || adapter2.items == null)) {
+            for (ChatThemeItem chatThemeItem : this.adapter.items) {
                 chatThemeItem.isDark = this.forceDark;
             }
         }

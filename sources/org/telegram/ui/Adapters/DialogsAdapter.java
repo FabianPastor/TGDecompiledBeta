@@ -215,9 +215,6 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 i5++;
             }
             this.currentCount = i5;
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("DialogsAdapter dialogsCount=" + this.dialogsCount + " dialogsType=" + this.dialogsType);
-            }
             return i5;
         }
         this.onlineContacts = null;

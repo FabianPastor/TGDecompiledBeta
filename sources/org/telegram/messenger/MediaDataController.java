@@ -5722,7 +5722,7 @@ public class MediaDataController extends BaseController {
             r8.channel = r2     // Catch:{ Exception -> 0x01c9 }
             r8.id = r1     // Catch:{ Exception -> 0x01c9 }
             org.telegram.tgnet.ConnectionsManager r10 = r17.getConnectionsManager()     // Catch:{ Exception -> 0x01c9 }
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda129 r11 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda129     // Catch:{ Exception -> 0x01c9 }
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda130 r11 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda130     // Catch:{ Exception -> 0x01c9 }
             r1 = r11
             r2 = r17
             r3 = r20
@@ -6026,73 +6026,180 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    public void loadReplyMessagesForMessages(ArrayList<MessageObject> arrayList, long j, boolean z, Runnable runnable) {
-        ArrayList<MessageObject> arrayList2 = arrayList;
-        long j2 = j;
-        int i = 0;
-        if (DialogObject.isEncryptedDialog(j)) {
-            ArrayList arrayList3 = new ArrayList();
-            LongSparseArray longSparseArray = new LongSparseArray();
-            while (i < arrayList.size()) {
-                MessageObject messageObject = arrayList.get(i);
-                if (messageObject != null && messageObject.isReply() && messageObject.replyMessageObject == null) {
-                    long j3 = messageObject.messageOwner.reply_to.reply_to_random_id;
-                    ArrayList arrayList4 = (ArrayList) longSparseArray.get(j3);
-                    if (arrayList4 == null) {
-                        arrayList4 = new ArrayList();
-                        longSparseArray.put(j3, arrayList4);
-                    }
-                    arrayList4.add(messageObject);
-                    if (!arrayList3.contains(Long.valueOf(j3))) {
-                        arrayList3.add(Long.valueOf(j3));
-                    }
-                }
-                i++;
-            }
-            if (!arrayList3.isEmpty()) {
-                getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda62(this, arrayList3, j, longSparseArray, runnable));
-            } else if (runnable != null) {
-                runnable.run();
-            }
-        } else {
-            LongSparseArray longSparseArray2 = new LongSparseArray();
-            LongSparseArray longSparseArray3 = new LongSparseArray();
-            while (i < arrayList.size()) {
-                MessageObject messageObject2 = arrayList.get(i);
-                if (messageObject2 != null && messageObject2.getId() > 0 && messageObject2.isReply() && messageObject2.replyMessageObject == null) {
-                    TLRPC$Message tLRPC$Message = messageObject2.messageOwner;
-                    int i2 = tLRPC$Message.reply_to.reply_to_msg_id;
-                    MessageObject.getReplyToDialogId(tLRPC$Message);
-                    TLRPC$Peer tLRPC$Peer = messageObject2.messageOwner.peer_id;
-                    long j4 = tLRPC$Peer != null ? tLRPC$Peer.channel_id : 0;
-                    SparseArray sparseArray = (SparseArray) longSparseArray2.get(j);
-                    ArrayList arrayList5 = (ArrayList) longSparseArray3.get(j4);
-                    if (sparseArray == null) {
-                        sparseArray = new SparseArray();
-                        longSparseArray2.put(j, sparseArray);
-                    }
-                    if (arrayList5 == null) {
-                        arrayList5 = new ArrayList();
-                        longSparseArray3.put(j4, arrayList5);
-                    }
-                    ArrayList arrayList6 = (ArrayList) sparseArray.get(messageObject2.messageOwner.reply_to.reply_to_msg_id);
-                    if (arrayList6 == null) {
-                        arrayList6 = new ArrayList();
-                        sparseArray.put(messageObject2.messageOwner.reply_to.reply_to_msg_id, arrayList6);
-                        if (!arrayList5.contains(Integer.valueOf(messageObject2.messageOwner.reply_to.reply_to_msg_id))) {
-                            arrayList5.add(Integer.valueOf(messageObject2.messageOwner.reply_to.reply_to_msg_id));
-                        }
-                    }
-                    arrayList6.add(messageObject2);
-                }
-                i++;
-            }
-            if (!longSparseArray2.isEmpty()) {
-                getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda43(this, longSparseArray2, longSparseArray3, j, z, runnable));
-            } else if (runnable != null) {
-                runnable.run();
-            }
-        }
+    /* JADX WARNING: Code restructure failed: missing block: B:35:0x00b6, code lost:
+        if (r12 != 0) goto L_0x00c1;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:37:0x00bf, code lost:
+        if (r12 != 0) goto L_0x00c1;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void loadReplyMessagesForMessages(java.util.ArrayList<org.telegram.messenger.MessageObject> r15, long r16, boolean r18, java.lang.Runnable r19) {
+        /*
+            r14 = this;
+            r0 = r15
+            r4 = r16
+            boolean r1 = org.telegram.messenger.DialogObject.isEncryptedDialog(r16)
+            r2 = 0
+            if (r1 == 0) goto L_0x0080
+            java.util.ArrayList r3 = new java.util.ArrayList
+            r3.<init>()
+            androidx.collection.LongSparseArray r6 = new androidx.collection.LongSparseArray
+            r6.<init>()
+        L_0x0014:
+            int r1 = r15.size()
+            if (r2 >= r1) goto L_0x005a
+            java.lang.Object r1 = r15.get(r2)
+            org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
+            if (r1 != 0) goto L_0x0023
+            goto L_0x0057
+        L_0x0023:
+            boolean r7 = r1.isReply()
+            if (r7 == 0) goto L_0x0057
+            org.telegram.messenger.MessageObject r7 = r1.replyMessageObject
+            if (r7 != 0) goto L_0x0057
+            org.telegram.tgnet.TLRPC$Message r7 = r1.messageOwner
+            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r7 = r7.reply_to
+            long r7 = r7.reply_to_random_id
+            java.lang.Object r9 = r6.get(r7)
+            java.util.ArrayList r9 = (java.util.ArrayList) r9
+            if (r9 != 0) goto L_0x0043
+            java.util.ArrayList r9 = new java.util.ArrayList
+            r9.<init>()
+            r6.put(r7, r9)
+        L_0x0043:
+            r9.add(r1)
+            java.lang.Long r1 = java.lang.Long.valueOf(r7)
+            boolean r1 = r3.contains(r1)
+            if (r1 != 0) goto L_0x0057
+            java.lang.Long r1 = java.lang.Long.valueOf(r7)
+            r3.add(r1)
+        L_0x0057:
+            int r2 = r2 + 1
+            goto L_0x0014
+        L_0x005a:
+            boolean r0 = r3.isEmpty()
+            if (r0 == 0) goto L_0x0066
+            if (r19 == 0) goto L_0x0065
+            r19.run()
+        L_0x0065:
+            return
+        L_0x0066:
+            org.telegram.messenger.MessagesStorage r0 = r14.getMessagesStorage()
+            org.telegram.messenger.DispatchQueue r7 = r0.getStorageQueue()
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda62 r8 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda62
+            r0 = r8
+            r1 = r14
+            r2 = r3
+            r3 = r16
+            r5 = r6
+            r6 = r19
+            r0.<init>(r1, r2, r3, r5, r6)
+            r7.postRunnable(r8)
+            goto L_0x0148
+        L_0x0080:
+            androidx.collection.LongSparseArray r3 = new androidx.collection.LongSparseArray
+            r3.<init>()
+            androidx.collection.LongSparseArray r6 = new androidx.collection.LongSparseArray
+            r6.<init>()
+        L_0x008a:
+            int r1 = r15.size()
+            if (r2 >= r1) goto L_0x0122
+            java.lang.Object r1 = r15.get(r2)
+            org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
+            if (r1 != 0) goto L_0x009a
+            goto L_0x011e
+        L_0x009a:
+            int r7 = r1.getId()
+            if (r7 <= 0) goto L_0x011e
+            boolean r7 = r1.isReply()
+            if (r7 == 0) goto L_0x011e
+            org.telegram.tgnet.TLRPC$Message r7 = r1.messageOwner
+            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r8 = r7.reply_to
+            int r9 = r8.reply_to_msg_id
+            org.telegram.tgnet.TLRPC$Peer r8 = r8.reply_to_peer_id
+            r10 = 0
+            if (r8 == 0) goto L_0x00b9
+            long r12 = r8.channel_id
+            int r8 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1))
+            if (r8 == 0) goto L_0x00c2
+            goto L_0x00c1
+        L_0x00b9:
+            org.telegram.tgnet.TLRPC$Peer r8 = r7.peer_id
+            long r12 = r8.channel_id
+            int r8 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1))
+            if (r8 == 0) goto L_0x00c2
+        L_0x00c1:
+            r10 = r12
+        L_0x00c2:
+            org.telegram.messenger.MessageObject r8 = r1.replyMessageObject
+            if (r8 == 0) goto L_0x00da
+            org.telegram.tgnet.TLRPC$Message r8 = r8.messageOwner
+            if (r8 == 0) goto L_0x011e
+            org.telegram.tgnet.TLRPC$Peer r8 = r8.peer_id
+            if (r8 == 0) goto L_0x011e
+            boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
+            if (r7 == 0) goto L_0x00d3
+            goto L_0x011e
+        L_0x00d3:
+            long r7 = r8.channel_id
+            int r12 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1))
+            if (r12 != 0) goto L_0x00da
+            goto L_0x011e
+        L_0x00da:
+            java.lang.Object r7 = r3.get(r4)
+            android.util.SparseArray r7 = (android.util.SparseArray) r7
+            java.lang.Object r8 = r6.get(r10)
+            java.util.ArrayList r8 = (java.util.ArrayList) r8
+            if (r7 != 0) goto L_0x00f0
+            android.util.SparseArray r7 = new android.util.SparseArray
+            r7.<init>()
+            r3.put(r4, r7)
+        L_0x00f0:
+            if (r8 != 0) goto L_0x00fa
+            java.util.ArrayList r8 = new java.util.ArrayList
+            r8.<init>()
+            r6.put(r10, r8)
+        L_0x00fa:
+            java.lang.Object r10 = r7.get(r9)
+            java.util.ArrayList r10 = (java.util.ArrayList) r10
+            if (r10 != 0) goto L_0x011b
+            java.util.ArrayList r10 = new java.util.ArrayList
+            r10.<init>()
+            r7.put(r9, r10)
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r9)
+            boolean r7 = r8.contains(r7)
+            if (r7 != 0) goto L_0x011b
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r9)
+            r8.add(r7)
+        L_0x011b:
+            r10.add(r1)
+        L_0x011e:
+            int r2 = r2 + 1
+            goto L_0x008a
+        L_0x0122:
+            boolean r0 = r3.isEmpty()
+            if (r0 == 0) goto L_0x012e
+            if (r19 == 0) goto L_0x012d
+            r19.run()
+        L_0x012d:
+            return
+        L_0x012e:
+            org.telegram.messenger.MessagesStorage r0 = r14.getMessagesStorage()
+            org.telegram.messenger.DispatchQueue r8 = r0.getStorageQueue()
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda43 r9 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda43
+            r0 = r9
+            r1 = r14
+            r2 = r3
+            r3 = r6
+            r4 = r16
+            r6 = r18
+            r7 = r19
+            r0.<init>(r1, r2, r3, r4, r6, r7)
+            r8.postRunnable(r9)
+        L_0x0148:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.loadReplyMessagesForMessages(java.util.ArrayList, long, boolean, java.lang.Runnable):void");
     }
 
     /* access modifiers changed from: private */
@@ -6222,11 +6329,11 @@ public class MediaDataController extends BaseController {
                         TLRPC$TL_channels_getMessages tLRPC$TL_channels_getMessages = new TLRPC$TL_channels_getMessages();
                         tLRPC$TL_channels_getMessages.channel = getMessagesController().getInputChannel(keyAt2);
                         tLRPC$TL_channels_getMessages.id = (ArrayList) longSparseArray4.valueAt(i4);
-                        MediaDataController$$ExternalSyntheticLambda130 mediaDataController$$ExternalSyntheticLambda130 = r1;
+                        MediaDataController$$ExternalSyntheticLambda129 mediaDataController$$ExternalSyntheticLambda129 = r1;
                         i = size2;
                         ConnectionsManager connectionsManager = getConnectionsManager();
-                        MediaDataController$$ExternalSyntheticLambda130 mediaDataController$$ExternalSyntheticLambda1302 = new MediaDataController$$ExternalSyntheticLambda130(this, keyAt2, longSparseArray, j, z, runnable);
-                        connectionsManager.sendRequest(tLRPC$TL_channels_getMessages, mediaDataController$$ExternalSyntheticLambda130);
+                        MediaDataController$$ExternalSyntheticLambda129 mediaDataController$$ExternalSyntheticLambda1292 = new MediaDataController$$ExternalSyntheticLambda129(this, j, keyAt2, longSparseArray, z, runnable);
+                        connectionsManager.sendRequest(tLRPC$TL_channels_getMessages, mediaDataController$$ExternalSyntheticLambda129);
                     } else {
                         i = size2;
                         TLRPC$TL_messages_getMessages tLRPC$TL_messages_getMessages = new TLRPC$TL_messages_getMessages();
@@ -6246,15 +6353,21 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadReplyMessagesForMessages$115(long j, LongSparseArray longSparseArray, long j2, boolean z, Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadReplyMessagesForMessages$115(long j, long j2, LongSparseArray longSparseArray, boolean z, Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
-            long j3 = j;
-            MessageObject.fixMessagePeer(tLRPC$messages_Messages.messages, j);
+            for (int i = 0; i < tLRPC$messages_Messages.messages.size(); i++) {
+                TLRPC$Message tLRPC$Message = tLRPC$messages_Messages.messages.get(i);
+                long j3 = j;
+                if (tLRPC$Message.dialog_id == 0) {
+                    tLRPC$Message.dialog_id = j3;
+                }
+            }
+            long j4 = j;
+            MessageObject.fixMessagePeer(tLRPC$messages_Messages.messages, j2);
             ImageLoader.saveMessagesThumbs(tLRPC$messages_Messages.messages);
-            broadcastReplyMessages(tLRPC$messages_Messages.messages, longSparseArray, tLRPC$messages_Messages.users, tLRPC$messages_Messages.chats, j2, false);
+            broadcastReplyMessages(tLRPC$messages_Messages.messages, longSparseArray, tLRPC$messages_Messages.users, tLRPC$messages_Messages.chats, j, false);
             getMessagesStorage().putUsersAndChats(tLRPC$messages_Messages.users, tLRPC$messages_Messages.chats, true, true);
-            LongSparseArray longSparseArray2 = longSparseArray;
             saveReplyMessages(longSparseArray, tLRPC$messages_Messages.messages, z);
         }
         if (runnable != null) {

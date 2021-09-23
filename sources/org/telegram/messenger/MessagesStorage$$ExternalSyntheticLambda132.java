@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda132 i
     }
 
     public final void run() {
-        this.f$0.lambda$deleteUserChatHistory$53(this.f$1, this.f$2);
+        this.f$0.lambda$deleteUserChatHistory$54(this.f$1, this.f$2);
     }
 }

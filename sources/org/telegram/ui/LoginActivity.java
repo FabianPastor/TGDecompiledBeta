@@ -1845,7 +1845,7 @@ public class LoginActivity extends BaseFragment {
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             L_0x0351:
                 java.util.ArrayList<org.telegram.ui.CountrySelectActivity$Country> r0 = r1.countriesArray
-                org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda10 r3 = org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda10.INSTANCE
+                org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda11 r3 = org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda11.INSTANCE
                 java.util.Comparator r3 = j$.util.Comparator$CC.comparing(r3)
                 java.util.Collections.sort(r0, r3)
                 android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0367 }
@@ -1861,7 +1861,7 @@ public class LoginActivity extends BaseFragment {
                 r0.<init>()
                 org.telegram.messenger.AccountInstance r3 = r22.getAccountInstance()
                 org.telegram.tgnet.ConnectionsManager r3 = r3.getConnectionsManager()
-                org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda13 r7 = new org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda13
+                org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda14 r7 = new org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda14
                 r7.<init>(r1, r5)
                 r5 = 10
                 r3.sendRequest(r0, r7, r5)
@@ -1895,7 +1895,7 @@ public class LoginActivity extends BaseFragment {
                 r0.<init>()
                 r0.lang_code = r6
                 org.telegram.tgnet.ConnectionsManager r2 = r22.getConnectionsManager()
-                org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda11 r3 = new org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda11
+                org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda12 r3 = new org.telegram.ui.LoginActivity$PhoneView$$ExternalSyntheticLambda12
                 r3.<init>(r1)
                 r2.sendRequest(r0, r3, r5)
                 return
@@ -1906,14 +1906,14 @@ public class LoginActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$new$2(View view2) {
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(true, this.countriesArray);
-            countrySelectActivity.setCountrySelectActivityDelegate(new LoginActivity$PhoneView$$ExternalSyntheticLambda14(this));
+            countrySelectActivity.setCountrySelectActivityDelegate(new LoginActivity$PhoneView$$ExternalSyntheticLambda15(this));
             this.this$0.presentFragment(countrySelectActivity);
         }
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$new$1(CountrySelectActivity.Country country) {
             selectCountry(country);
-            AndroidUtilities.runOnUIThread(new LoginActivity$PhoneView$$ExternalSyntheticLambda6(this), 300);
+            AndroidUtilities.runOnUIThread(new LoginActivity$PhoneView$$ExternalSyntheticLambda7(this), 300);
             this.phoneField.requestFocus();
             HintEditText hintEditText = this.phoneField;
             hintEditText.setSelection(hintEditText.length());
@@ -1981,7 +1981,12 @@ public class LoginActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$10(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        public /* synthetic */ void lambda$new$11(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new LoginActivity$PhoneView$$ExternalSyntheticLambda10(this, tLRPC$TL_error, tLObject));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$10(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
             if (tLRPC$TL_error == null) {
                 this.countriesArray.clear();
                 this.codesMap.clear();
@@ -2186,13 +2191,13 @@ public class LoginActivity extends BaseFragment {
                     }
                     bundle.putString("phoneFormated", stripExceptNumbers);
                     this.nextPressed = true;
-                    this.this$0.needShowProgress(ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_sendCode, new LoginActivity$PhoneView$$ExternalSyntheticLambda12(this, bundle, tLRPC$TL_auth_sendCode), 27));
+                    this.this$0.needShowProgress(ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_sendCode, new LoginActivity$PhoneView$$ExternalSyntheticLambda13(this, bundle, tLRPC$TL_auth_sendCode), 27));
                 }
             }
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onNextPressed$11(int i, DialogInterface dialogInterface, int i2) {
+        public /* synthetic */ void lambda$onNextPressed$12(int i, DialogInterface dialogInterface, int i2) {
             if (UserConfig.selectedAccount != i) {
                 ((LaunchActivity) this.this$0.getParentActivity()).switchToAccount(i, false);
             }
@@ -2200,12 +2205,12 @@ public class LoginActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onNextPressed$13(Bundle bundle, TLRPC$TL_auth_sendCode tLRPC$TL_auth_sendCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        public /* synthetic */ void lambda$onNextPressed$14(Bundle bundle, TLRPC$TL_auth_sendCode tLRPC$TL_auth_sendCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new LoginActivity$PhoneView$$ExternalSyntheticLambda9(this, tLRPC$TL_error, bundle, tLObject, tLRPC$TL_auth_sendCode));
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onNextPressed$12(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_sendCode tLRPC$TL_auth_sendCode) {
+        public /* synthetic */ void lambda$onNextPressed$13(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_sendCode tLRPC$TL_auth_sendCode) {
             this.nextPressed = false;
             if (tLRPC$TL_error == null) {
                 this.this$0.fillNextCodeParams(bundle, (TLRPC$TL_auth_sentCode) tLObject);
@@ -2320,11 +2325,11 @@ public class LoginActivity extends BaseFragment {
             if (checkBoxCell2 != null) {
                 checkBoxCell2.setChecked(this.this$0.syncContacts, false);
             }
-            AndroidUtilities.runOnUIThread(new LoginActivity$PhoneView$$ExternalSyntheticLambda7(this), 100);
+            AndroidUtilities.runOnUIThread(new LoginActivity$PhoneView$$ExternalSyntheticLambda6(this), 100);
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onShow$14() {
+        public /* synthetic */ void lambda$onShow$15() {
             if (this.phoneField == null) {
                 return;
             }

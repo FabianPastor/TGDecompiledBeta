@@ -1,23 +1,21 @@
 package org.telegram.ui;
 
-import j$.util.function.Function;
-import org.telegram.ui.CountrySelectActivity;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda10 implements Function {
-    public static final /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda10 INSTANCE = new LoginActivity$PhoneView$$ExternalSyntheticLambda10();
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda10 implements Runnable {
+    public final /* synthetic */ LoginActivity.PhoneView f$0;
+    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ TLObject f$2;
 
-    private /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda10() {
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda10(LoginActivity.PhoneView phoneView, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+        this.f$0 = phoneView;
+        this.f$1 = tLRPC$TL_error;
+        this.f$2 = tLObject;
     }
 
-    public /* synthetic */ Function andThen(Function function) {
-        return Function.CC.$default$andThen(this, function);
-    }
-
-    public final Object apply(Object obj) {
-        return ((CountrySelectActivity.Country) obj).name;
-    }
-
-    public /* synthetic */ Function compose(Function function) {
-        return Function.CC.$default$compose(this, function);
+    public final void run() {
+        this.f$0.lambda$new$10(this.f$1, this.f$2);
     }
 }

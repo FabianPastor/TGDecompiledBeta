@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda37 im
     }
 
     public final void run() {
-        this.f$0.lambda$markMessageAsMention$73(this.f$1, this.f$2);
+        this.f$0.lambda$saveChannelPts$30(this.f$1, this.f$2);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda36 im
     }
 
     public final void run() {
-        this.f$0.lambda$saveChatLinksCount$91(this.f$1, this.f$2);
+        this.f$0.lambda$markMessageAsMention$74(this.f$1, this.f$2);
     }
 }

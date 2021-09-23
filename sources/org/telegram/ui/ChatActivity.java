@@ -21512,15 +21512,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private void clearHistory(boolean z, TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong) {
         TLRPC$User tLRPC$User;
         if (z) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("clear history by overwrite firstLoading=" + this.firstLoading + " minMessage=" + this.minMessageId[0] + " topMessage=" + tLRPC$TL_updates_channelDifferenceTooLong.dialog.top_message);
+            }
             if (this.firstLoading) {
+                this.waitingForLoad.clear();
                 this.chatWasReset = true;
                 this.last_message_id = tLRPC$TL_updates_channelDifferenceTooLong.dialog.top_message;
                 this.createUnreadMessageAfterId = 0;
             } else {
-                int i = tLRPC$TL_updates_channelDifferenceTooLong.dialog.top_message;
-                if (i > this.minMessageId[0]) {
-                    this.last_message_id = Math.max(this.last_message_id, i);
-                    this.createUnreadMessageAfterId = Math.max(this.minMessageId[0] + 1, tLRPC$TL_updates_channelDifferenceTooLong.dialog.read_inbox_max_id);
+                TLRPC$Dialog tLRPC$Dialog = tLRPC$TL_updates_channelDifferenceTooLong.dialog;
+                int i = tLRPC$Dialog.top_message;
+                int[] iArr = this.minMessageId;
+                if (i > iArr[0]) {
+                    this.createUnreadMessageAfterId = Math.max(iArr[0] + 1, tLRPC$Dialog.read_inbox_max_id);
                 }
             }
             this.forwardEndReached[0] = false;
@@ -21528,10 +21533,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (chatActivityAdapter != null && chatActivityAdapter.loadingDownRow < 0) {
                 this.chatAdapter.notifyItemInserted(0);
             }
-            TLRPC$Dialog tLRPC$Dialog = tLRPC$TL_updates_channelDifferenceTooLong.dialog;
-            int i2 = tLRPC$Dialog.unread_count;
+            TLRPC$Dialog tLRPC$Dialog2 = tLRPC$TL_updates_channelDifferenceTooLong.dialog;
+            int i2 = tLRPC$Dialog2.unread_count;
             this.newUnreadMessageCount = i2;
-            this.newMentionsCount = tLRPC$Dialog.unread_mentions_count;
+            this.newMentionsCount = tLRPC$Dialog2.unread_mentions_count;
             if (this.prevSetUnreadCount != i2) {
                 CounterView counterView = this.pagedownButtonCounter;
                 if (counterView != null) {
@@ -35472,7 +35477,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("notify data set changed");
             }
-            if (!z || !ChatActivity.this.fragmentOpened || !BuildVars.DEBUG_VERSION) {
+            if (!z || !ChatActivity.this.fragmentOpened) {
                 ChatActivity.this.chatListView.setItemAnimator((RecyclerView.ItemAnimator) null);
             } else if (ChatActivity.this.chatListView.getItemAnimator() != ChatActivity.this.chatListItemAnimator) {
                 ChatActivity.this.chatListView.setItemAnimator(ChatActivity.this.chatListItemAnimator);

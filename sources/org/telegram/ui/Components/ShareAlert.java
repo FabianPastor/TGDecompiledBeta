@@ -2668,6 +2668,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 int i6 = i5 + 1;
                 this.itemsCount = i6;
                 this.lastFilledItem = i5;
+                this.lastItemCont = i6;
                 return i6;
             }
             int i7 = this.itemsCount;
@@ -2678,6 +2679,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             this.itemsCount = size;
             if (size == 1) {
                 this.firstEmptyViewCell = -1;
+                this.itemsCount = 0;
+                this.lastItemCont = 0;
                 return 0;
             }
             int i9 = size + 1;

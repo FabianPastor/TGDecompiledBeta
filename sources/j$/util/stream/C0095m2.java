@@ -84,7 +84,7 @@ class CLASSNAMEm2 implements CLASSNAMEz1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m1201spliterator() {
+    public y m1188spliterator() {
         return N.l(this.a, 0, this.b, 1040);
     }
 }

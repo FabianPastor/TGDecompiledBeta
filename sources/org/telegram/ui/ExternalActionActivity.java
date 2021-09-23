@@ -297,7 +297,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                     return true;
                 }
             }
-            long longExtra = intent2.getLongExtra("bot_id", 0);
+            long longExtra = intent2.getLongExtra("bot_id", (long) intent2.getIntExtra("bot_id", 0));
             String stringExtra = intent2.getStringExtra("nonce");
             String stringExtra2 = intent2.getStringExtra("payload");
             TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm = new TLRPC$TL_account_getAuthorizationForm();

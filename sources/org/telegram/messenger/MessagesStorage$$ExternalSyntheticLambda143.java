@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesController;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda143 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ MessagesController.DialogFilter f$1;
+    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda143(MessagesStorage messagesStorage, MessagesController.DialogFilter dialogFilter) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda143(MessagesStorage messagesStorage, MessageObject messageObject, ArrayList arrayList) {
         this.f$0 = messagesStorage;
-        this.f$1 = dialogFilter;
+        this.f$1 = messageObject;
+        this.f$2 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$deleteDialogFilter$42(this.f$1);
+        this.f$0.lambda$replaceMessageIfExists$167(this.f$1, this.f$2);
     }
 }

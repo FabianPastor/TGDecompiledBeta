@@ -6972,7 +6972,7 @@ public class MessageObject {
             r1 = 2131624863(0x7f0e039f, float:1.8876918E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             r2[r3] = r0
-            java.lang.String r0 = "ChangedChatThemeYou"
+            java.lang.String r0 = "ChatThemeChangedYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r2)
             goto L_0x0CLASSNAME
         L_0x0CLASSNAME:
@@ -6981,7 +6981,7 @@ public class MessageObject {
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r4[r3] = r1
             r4[r12] = r0
-            java.lang.String r0 = "ChangedChatThemeTo"
+            java.lang.String r0 = "ChatThemeChangedTo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r2, r4)
         L_0x0CLASSNAME:
             r6.messageText = r0
