@@ -16,7 +16,7 @@ public final /* synthetic */ class ChatTheme$$ExternalSyntheticLambda2 implement
     }
 
     public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        ChatTheme.lambda$loadWallpaperThumb$2(this.f$0, this.f$1, this.f$2, imageReceiver, z, z2, z3);
+        ChatTheme.lambda$loadWallpaperThumb$3(this.f$0, this.f$1, this.f$2, imageReceiver, z, z2, z3);
     }
 
     public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {

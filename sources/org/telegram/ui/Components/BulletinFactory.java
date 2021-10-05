@@ -212,7 +212,7 @@ public final class BulletinFactory {
             android.app.Activity r1 = r9.getParentActivity()
             r0.<init>(r1, r11)
             java.lang.String r11 = "Hours"
-            r1 = 2131626616(0x7f0e0a78, float:1.8880473E38)
+            r1 = 2131626618(0x7f0e0a7a, float:1.8880477E38)
             java.lang.String r2 = "NotificationsMutedForHint"
             r3 = 4
             r4 = 3
@@ -224,7 +224,7 @@ public final class BulletinFactory {
             if (r10 == r5) goto L_0x003a
             if (r10 == r4) goto L_0x0030
             if (r10 != r3) goto L_0x002a
-            r10 = 2131626637(0x7f0e0a8d, float:1.8880516E38)
+            r10 = 2131626639(0x7f0e0a8f, float:1.888052E38)
             java.lang.String r11 = "NotificationsUnmutedHint"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r11 = 0
@@ -234,7 +234,7 @@ public final class BulletinFactory {
             r9.<init>()
             throw r9
         L_0x0030:
-            r10 = 2131626617(0x7f0e0a79, float:1.8880475E38)
+            r10 = 2131626619(0x7f0e0a7b, float:1.888048E38)
             java.lang.String r11 = "NotificationsMutedHint"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x0064
@@ -334,12 +334,12 @@ public final class BulletinFactory {
             r10[r5] = r0
             r9.setAnimation(r4, r6, r6, r10)
             android.widget.TextView r10 = r9.titleTextView
-            r0 = 2131627094(0x7f0e0CLASSNAME, float:1.8881443E38)
+            r0 = 2131627096(0x7f0e0CLASSNAME, float:1.8881447E38)
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)
             android.widget.TextView r10 = r9.subtitleTextView
-            r0 = 2131627095(0x7f0e0CLASSNAME, float:1.8881445E38)
+            r0 = 2131627097(0x7f0e0CLASSNAME, float:1.8881449E38)
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)

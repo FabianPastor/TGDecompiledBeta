@@ -2467,35 +2467,35 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void loadMoreMusic() {
         /*
-            r12 = this;
-            boolean r0 = r12.loadingPlaylist
-            if (r0 != 0) goto L_0x0165
-            org.telegram.messenger.MessageObject r0 = r12.playingMessageObject
-            if (r0 == 0) goto L_0x0165
+            r13 = this;
+            boolean r0 = r13.loadingPlaylist
+            if (r0 != 0) goto L_0x0169
+            org.telegram.messenger.MessageObject r0 = r13.playingMessageObject
+            if (r0 == 0) goto L_0x0169
             boolean r1 = r0.scheduled
-            if (r1 != 0) goto L_0x0165
+            if (r1 != 0) goto L_0x0169
             long r0 = r0.getDialogId()
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r0)
-            if (r0 != 0) goto L_0x0165
-            int r0 = r12.playlistClassGuid
+            if (r0 != 0) goto L_0x0169
+            int r0 = r13.playlistClassGuid
             if (r0 != 0) goto L_0x001c
-            goto L_0x0165
+            goto L_0x0169
         L_0x001c:
-            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r1 = r12.playlistGlobalSearchParams
+            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r1 = r13.playlistGlobalSearchParams
             r2 = 0
             r3 = 1
             r4 = 0
             if (r1 == 0) goto L_0x0116
             boolean r1 = r1.endReached
             if (r1 != 0) goto L_0x0115
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r12.playlist
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r13.playlist
             boolean r1 = r1.isEmpty()
             if (r1 != 0) goto L_0x0115
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r12.playlist
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r13.playlist
             java.lang.Object r1 = r1.get(r2)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
             int r1 = r1.currentAccount
-            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r2 = r12.playlistGlobalSearchParams
+            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r2 = r13.playlistGlobalSearchParams
             long r6 = r2.dialogId
             r2 = 20
             r8 = 1000(0x3e8, double:4.94E-321)
@@ -2503,7 +2503,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r10 == 0) goto L_0x009d
             org.telegram.tgnet.TLRPC$TL_messages_search r6 = new org.telegram.tgnet.TLRPC$TL_messages_search
             r6.<init>()
-            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r7 = r12.playlistGlobalSearchParams
+            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r7 = r13.playlistGlobalSearchParams
             java.lang.String r10 = r7.query
             r6.q = r10
             r6.limit = r2
@@ -2518,18 +2518,18 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r6.filter = r2
             org.telegram.messenger.AccountInstance r2 = org.telegram.messenger.AccountInstance.getInstance(r1)
             org.telegram.messenger.MessagesController r2 = r2.getMessagesController()
-            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r7 = r12.playlistGlobalSearchParams
+            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r7 = r13.playlistGlobalSearchParams
             long r10 = r7.dialogId
             org.telegram.tgnet.TLRPC$InputPeer r2 = r2.getInputPeer((long) r10)
             r6.peer = r2
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r12.playlist
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r13.playlist
             int r7 = r2.size()
             int r7 = r7 - r3
             java.lang.Object r2 = r2.get(r7)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             int r2 = r2.getId()
             r6.offset_id = r2
-            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r2 = r12.playlistGlobalSearchParams
+            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r2 = r13.playlistGlobalSearchParams
             long r10 = r2.minDate
             int r7 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
             if (r7 <= 0) goto L_0x0092
@@ -2548,20 +2548,20 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.tgnet.TLRPC$TL_messages_searchGlobal r6 = new org.telegram.tgnet.TLRPC$TL_messages_searchGlobal
             r6.<init>()
             r6.limit = r2
-            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r2 = r12.playlistGlobalSearchParams
+            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r2 = r13.playlistGlobalSearchParams
             java.lang.String r7 = r2.query
             r6.q = r7
             org.telegram.ui.Adapters.FiltersView$MediaFilterData r2 = r2.filter
             org.telegram.tgnet.TLRPC$MessagesFilter r2 = r2.filter
             r6.filter = r2
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r12.playlist
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r13.playlist
             int r7 = r2.size()
             int r7 = r7 - r3
             java.lang.Object r2 = r2.get(r7)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             int r7 = r2.getId()
             r6.offset_id = r7
-            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r7 = r12.playlistGlobalSearchParams
+            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r7 = r13.playlistGlobalSearchParams
             int r10 = r7.nextSearchRate
             r6.offset_rate = r10
             int r10 = r6.flags
@@ -2588,7 +2588,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r1)
             org.telegram.tgnet.TLRPC$InputPeer r2 = r2.getInputPeer((long) r10)
             r6.offset_peer = r2
-            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r2 = r12.playlistGlobalSearchParams
+            org.telegram.messenger.MediaController$PlaylistGlobalSearchParams r2 = r13.playlistGlobalSearchParams
             long r10 = r2.minDate
             int r7 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
             if (r7 <= 0) goto L_0x00fd
@@ -2603,52 +2603,56 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             int r2 = (int) r10
             r6.min_date = r2
         L_0x0107:
-            r12.loadingPlaylist = r3
+            r13.loadingPlaylist = r3
             org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
             org.telegram.messenger.MediaController$$ExternalSyntheticLambda42 r3 = new org.telegram.messenger.MediaController$$ExternalSyntheticLambda42
-            r3.<init>(r12, r0, r1)
+            r3.<init>(r13, r0, r1)
             r2.sendRequest(r6, r3)
         L_0x0115:
             return
         L_0x0116:
-            boolean[] r0 = r12.playlistEndReached
+            boolean[] r0 = r13.playlistEndReached
             boolean r1 = r0[r2]
-            if (r1 != 0) goto L_0x013e
-            r12.loadingPlaylist = r3
-            org.telegram.messenger.MessageObject r0 = r12.playingMessageObject
+            if (r1 != 0) goto L_0x0140
+            r13.loadingPlaylist = r3
+            org.telegram.messenger.MessageObject r0 = r13.playingMessageObject
             int r0 = r0.currentAccount
             org.telegram.messenger.AccountInstance r0 = org.telegram.messenger.AccountInstance.getInstance(r0)
             org.telegram.messenger.MediaDataController r3 = r0.getMediaDataController()
-            org.telegram.messenger.MessageObject r0 = r12.playingMessageObject
+            org.telegram.messenger.MessageObject r0 = r13.playingMessageObject
             long r4 = r0.getDialogId()
             r6 = 50
-            int[] r0 = r12.playlistMaxId
+            int[] r0 = r13.playlistMaxId
             r7 = r0[r2]
-            r8 = 4
-            r9 = 1
-            int r10 = r12.playlistClassGuid
-            r3.loadMedia(r4, r6, r7, r8, r9, r10)
-            goto L_0x0165
-        L_0x013e:
-            long r6 = r12.playlistMergeDialogId
+            r8 = 0
+            r9 = 4
+            r10 = 1
+            int r11 = r13.playlistClassGuid
+            r12 = 0
+            r3.loadMedia(r4, r6, r7, r8, r9, r10, r11, r12)
+            goto L_0x0169
+        L_0x0140:
+            long r6 = r13.playlistMergeDialogId
             int r1 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1))
-            if (r1 == 0) goto L_0x0165
+            if (r1 == 0) goto L_0x0169
             boolean r0 = r0[r3]
-            if (r0 != 0) goto L_0x0165
-            r12.loadingPlaylist = r3
-            org.telegram.messenger.MessageObject r0 = r12.playingMessageObject
+            if (r0 != 0) goto L_0x0169
+            r13.loadingPlaylist = r3
+            org.telegram.messenger.MessageObject r0 = r13.playingMessageObject
             int r0 = r0.currentAccount
             org.telegram.messenger.AccountInstance r0 = org.telegram.messenger.AccountInstance.getInstance(r0)
             org.telegram.messenger.MediaDataController r3 = r0.getMediaDataController()
-            long r4 = r12.playlistMergeDialogId
+            long r4 = r13.playlistMergeDialogId
             r6 = 50
-            int[] r0 = r12.playlistMaxId
+            int[] r0 = r13.playlistMaxId
             r7 = r0[r2]
-            r8 = 4
-            r9 = 1
-            int r10 = r12.playlistClassGuid
-            r3.loadMedia(r4, r6, r7, r8, r9, r10)
-        L_0x0165:
+            r8 = 0
+            r9 = 4
+            r10 = 1
+            int r11 = r13.playlistClassGuid
+            r12 = 0
+            r3.loadMedia(r4, r6, r7, r8, r9, r10, r11, r12)
+        L_0x0169:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.loadMoreMusic():void");
@@ -4966,7 +4970,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r5 = 2
             r4.<init>(r14, r5)     // Catch:{ Exception -> 0x0066 }
             java.lang.String r1 = "Loading"
-            r5 = 2131626091(0x7f0e086b, float:1.8879408E38)
+            r5 = 2131626093(0x7f0e086d, float:1.8879412E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ Exception -> 0x0066 }
             r4.setMessage(r1)     // Catch:{ Exception -> 0x0066 }
             r4.setCanceledOnTouchOutside(r2)     // Catch:{ Exception -> 0x0066 }

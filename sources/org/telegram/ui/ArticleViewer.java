@@ -4972,7 +4972,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
         });
         this.containerView.addView(this.textSelectionHelper.getOverlayView(activity2));
-        PinchToZoomHelper pinchToZoomHelper2 = new PinchToZoomHelper(this.containerView);
+        PinchToZoomHelper pinchToZoomHelper2 = new PinchToZoomHelper(this.containerView, this.windowView);
         this.pinchToZoomHelper = pinchToZoomHelper2;
         pinchToZoomHelper2.setClipBoundsListener(new PinchToZoomHelper.ClipBoundsListener() {
             public void getClipTopBottom(float[] fArr) {

@@ -22,6 +22,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -48,6 +49,7 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
     long dialogId;
     ArrayList<DrawingObject> drawingObjects = new ArrayList<>();
     HashMap<String, ArrayList<TLRPC$Document>> emojiInteractionsStickersMap = new HashMap<>();
+    Runnable hintRunnable;
     boolean inited = false;
     HashMap<Long, Integer> lastAnimationIndex = new HashMap<>();
     String lastTappedEmoji;
@@ -90,6 +92,7 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
         checkStickerPack();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.diceStickersDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.onEmojiInteractionsReceived);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
     }
 
     /* access modifiers changed from: protected */
@@ -97,6 +100,7 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
         this.attached = false;
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.diceStickersDidLoad);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.onEmojiInteractionsReceived);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
     }
 
     public void checkStickerPack() {
@@ -139,6 +143,7 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
+        Integer printingStringType;
         if (i == NotificationCenter.diceStickersDidLoad) {
             if ("EmojiAnimations".equals(objArr[0])) {
                 checkStickerPack();
@@ -165,6 +170,8 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
                     }
                 }
             }
+        } else if (i == NotificationCenter.updateInterfaces && (printingStringType = MessagesController.getInstance(this.currentAccount).getPrintingStringType(this.dialogId, this.threadMsgId)) != null && printingStringType.intValue() == 5) {
+            cancelHintRunnable();
         }
     }
 
@@ -257,22 +264,41 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
     }
 
     public void onTapItem(ChatMessageCell chatMessageCell, ChatActivity chatActivity2) {
-        int i;
-        if (chatActivity2.currentUser != null && !chatActivity2.isSecretChat()) {
-            if (showAnimationForCell(chatMessageCell, -1, true, false) && !EmojiData.hasEmojiSupportVibration(chatMessageCell.getMessageObject().getStickerEmoji())) {
+        if (chatActivity2.currentUser != null && !chatActivity2.isSecretChat() && chatMessageCell.getMessageObject() != null && chatMessageCell.getMessageObject().getId() >= 0) {
+            boolean showAnimationForCell = showAnimationForCell(chatMessageCell, -1, true, false);
+            if (showAnimationForCell && !EmojiData.hasEmojiSupportVibration(chatMessageCell.getMessageObject().getStickerEmoji())) {
                 chatMessageCell.performHapticFeedback(3);
             }
-            if ((Bulletin.getVisibleBulletin() == null || !Bulletin.getVisibleBulletin().isShowing()) && (i = SharedConfig.emojiInteractionsHintCount) > 0) {
-                SharedConfig.updateEmojiInteractionsHintCount(i - 1);
-                StickerSetBulletinLayout stickerSetBulletinLayout = new StickerSetBulletinLayout(chatActivity2.getParentActivity(), (TLObject) null, -1, MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(chatMessageCell.getMessageObject().getStickerEmoji()), chatActivity2.getResourceProvider());
-                stickerSetBulletinLayout.subtitleTextView.setVisibility(8);
-                stickerSetBulletinLayout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EmojiInteractionTapHint", NUM, chatActivity2.currentUser.first_name)));
-                stickerSetBulletinLayout.titleTextView.setTypeface((Typeface) null);
-                stickerSetBulletinLayout.titleTextView.setMaxLines(3);
-                stickerSetBulletinLayout.titleTextView.setSingleLine(false);
-                Bulletin.make((BaseFragment) chatActivity2, (Bulletin.Layout) stickerSetBulletinLayout, 2750).show();
+            Integer printingStringType = MessagesController.getInstance(this.currentAccount).getPrintingStringType(this.dialogId, this.threadMsgId);
+            if ((printingStringType == null || printingStringType.intValue() != 5) && this.hintRunnable == null && showAnimationForCell) {
+                if ((Bulletin.getVisibleBulletin() == null || !Bulletin.getVisibleBulletin().isShowing()) && SharedConfig.emojiInteractionsHintCount > 0 && UserConfig.getInstance(this.currentAccount).getClientUserId() != chatActivity2.currentUser.id) {
+                    SharedConfig.updateEmojiInteractionsHintCount(SharedConfig.emojiInteractionsHintCount - 1);
+                    StickerSetBulletinLayout stickerSetBulletinLayout = new StickerSetBulletinLayout(chatActivity2.getParentActivity(), (TLObject) null, -1, MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(chatMessageCell.getMessageObject().getStickerEmoji()), chatActivity2.getResourceProvider());
+                    stickerSetBulletinLayout.subtitleTextView.setVisibility(8);
+                    stickerSetBulletinLayout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EmojiInteractionTapHint", NUM, chatActivity2.currentUser.first_name)));
+                    stickerSetBulletinLayout.titleTextView.setTypeface((Typeface) null);
+                    stickerSetBulletinLayout.titleTextView.setMaxLines(3);
+                    stickerSetBulletinLayout.titleTextView.setSingleLine(false);
+                    final Bulletin make = Bulletin.make((BaseFragment) chatActivity2, (Bulletin.Layout) stickerSetBulletinLayout, 2750);
+                    AnonymousClass2 r12 = new Runnable() {
+                        public void run() {
+                            make.show();
+                            EmojiAnimationsOverlay.this.hintRunnable = null;
+                        }
+                    };
+                    this.hintRunnable = r12;
+                    AndroidUtilities.runOnUIThread(r12, 1500);
+                }
             }
         }
+    }
+
+    public void cancelHintRunnable() {
+        Runnable runnable = this.hintRunnable;
+        if (runnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(runnable);
+        }
+        this.hintRunnable = null;
     }
 
     private boolean showAnimationForCell(ChatMessageCell chatMessageCell, int i, boolean z, boolean z2) {

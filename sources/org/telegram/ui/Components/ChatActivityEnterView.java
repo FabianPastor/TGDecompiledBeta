@@ -4301,7 +4301,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow == null || !actionBarPopupWindow.isShowing()) {
             AnimatorSet animatorSet = this.runningAnimationAudio;
-            if (animatorSet == null || !animatorSet.isRunning()) {
+            if ((animatorSet == null || !animatorSet.isRunning()) && this.moveToSendStateRunnable == null) {
                 sendMessage();
             }
         }

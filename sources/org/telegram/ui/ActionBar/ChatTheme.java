@@ -111,32 +111,36 @@ public class ChatTheme {
     }
 
     public void loadWallpaper(boolean z, ResultCallback<Pair<Long, Bitmap>> resultCallback) {
-        String str;
         TLRPC$WallPaper wallpaper = getWallpaper(z);
-        if (wallpaper != null || resultCallback == null) {
+        if (wallpaper != null) {
             long j = getTlTheme(z).id;
-            Bitmap wallpaperBitmap = ChatThemeController.getWallpaperBitmap(j);
-            if (wallpaperBitmap == null || resultCallback == null) {
-                ImageLocation forDocument = ImageLocation.getForDocument(wallpaper.document);
-                ImageReceiver imageReceiver = new ImageReceiver();
-                if (SharedConfig.getDevicePerformanceClass() == 0) {
-                    Point point = AndroidUtilities.displaySize;
-                    int min = Math.min(point.x, point.y);
-                    Point point2 = AndroidUtilities.displaySize;
-                    int max = Math.max(point2.x, point2.y);
-                    str = ((int) (((float) min) / AndroidUtilities.density)) + "_" + ((int) (((float) max) / AndroidUtilities.density)) + "_f";
-                } else {
-                    str = ((int) (1080.0f / AndroidUtilities.density)) + "_" + ((int) (1920.0f / AndroidUtilities.density)) + "_f";
-                }
-                imageReceiver.setImage(forDocument, str, (Drawable) null, ".jpg", wallpaper, 1);
-                imageReceiver.setDelegate(new ChatTheme$$ExternalSyntheticLambda1(resultCallback, j));
-                ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
-                return;
+            ChatThemeController.getWallpaperBitmap(j, new ChatTheme$$ExternalSyntheticLambda3(resultCallback, j, wallpaper));
+        } else if (resultCallback != null) {
+            resultCallback.onComplete(null);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$loadWallpaper$1(ResultCallback resultCallback, long j, TLRPC$WallPaper tLRPC$WallPaper, Bitmap bitmap) {
+        String str;
+        if (bitmap == null || resultCallback == null) {
+            ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$WallPaper.document);
+            ImageReceiver imageReceiver = new ImageReceiver();
+            if (SharedConfig.getDevicePerformanceClass() == 0) {
+                Point point = AndroidUtilities.displaySize;
+                int min = Math.min(point.x, point.y);
+                Point point2 = AndroidUtilities.displaySize;
+                int max = Math.max(point2.x, point2.y);
+                str = ((int) (((float) min) / AndroidUtilities.density)) + "_" + ((int) (((float) max) / AndroidUtilities.density)) + "_f";
+            } else {
+                str = ((int) (1080.0f / AndroidUtilities.density)) + "_" + ((int) (1920.0f / AndroidUtilities.density)) + "_f";
             }
-            resultCallback.onComplete(new Pair(Long.valueOf(j), wallpaperBitmap));
+            imageReceiver.setImage(forDocument, str, (Drawable) null, ".jpg", tLRPC$WallPaper, 1);
+            imageReceiver.setDelegate(new ChatTheme$$ExternalSyntheticLambda1(resultCallback, j));
+            ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
             return;
         }
-        resultCallback.onComplete(null);
+        resultCallback.onComplete(new Pair(Long.valueOf(j), bitmap));
     }
 
     /* access modifiers changed from: private */
@@ -153,12 +157,13 @@ public class ChatTheme {
             if (resultCallback != null) {
                 resultCallback.onComplete(new Pair(Long.valueOf(j), bitmap));
             }
+            ChatThemeController.saveWallpaperBitmap(bitmap, j);
         }
     }
 
     public void loadWallpaperThumb(boolean z, ResultCallback<Pair<Long, Bitmap>> resultCallback) {
         TLRPC$WallPaper wallpaper = getWallpaper(z);
-        if (wallpaper != null || resultCallback == null) {
+        if (wallpaper != null) {
             long j = getTlTheme(z).id;
             Bitmap wallpaperThumbBitmap = ChatThemeController.getWallpaperThumbBitmap(j);
             File wallpaperThumbFile = getWallpaperThumbFile(j);
@@ -178,13 +183,13 @@ public class ChatTheme {
             } else if (resultCallback != null) {
                 resultCallback.onComplete(new Pair(Long.valueOf(j), wallpaperThumbBitmap));
             }
-        } else {
+        } else if (resultCallback != null) {
             resultCallback.onComplete(null);
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$loadWallpaperThumb$2(ResultCallback resultCallback, long j, File file, ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+    public static /* synthetic */ void lambda$loadWallpaperThumb$3(ResultCallback resultCallback, long j, File file, ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
         ImageReceiver.BitmapHolder bitmapSafe = imageReceiver.getBitmapSafe();
         if (z && bitmapSafe != null) {
             Bitmap bitmap = bitmapSafe.bitmap;
@@ -208,7 +213,7 @@ public class ChatTheme {
     /* access modifiers changed from: private */
     /* JADX WARNING: Missing exception handler attribute for start block: B:9:0x0014 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static /* synthetic */ void lambda$loadWallpaperThumb$1(java.io.File r2, android.graphics.Bitmap r3) {
+    public static /* synthetic */ void lambda$loadWallpaperThumb$2(java.io.File r2, android.graphics.Bitmap r3) {
         /*
             java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0015 }
             r0.<init>(r2)     // Catch:{ Exception -> 0x0015 }
@@ -228,7 +233,7 @@ public class ChatTheme {
         L_0x0019:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ChatTheme.lambda$loadWallpaperThumb$1(java.io.File, android.graphics.Bitmap):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ChatTheme.lambda$loadWallpaperThumb$2(java.io.File, android.graphics.Bitmap):void");
     }
 
     public void preloadWallpaper() {

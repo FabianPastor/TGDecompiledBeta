@@ -131,11 +131,18 @@ public class ForwardingPreviewView extends FrameLayout {
         this.currentChat = tLRPC$Chat;
         this.forwardingMessagesParams = forwardingMessagesParams3;
         this.resourcesProvider = resourcesDelegate2;
-        AnonymousClass2 r0 = new SizeNotifierFrameLayout(this, context2) {
+        AnonymousClass2 r0 = new SizeNotifierFrameLayout(context2) {
             /* access modifiers changed from: protected */
             public Drawable getNewDrawable() {
                 Drawable wallpaperDrawable = resourcesDelegate2.getWallpaperDrawable();
                 return wallpaperDrawable != null ? wallpaperDrawable : super.getNewDrawable();
+            }
+
+            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                if (motionEvent.getY() < ((float) ForwardingPreviewView.this.currentTopOffset)) {
+                    return false;
+                }
+                return super.dispatchTouchEvent(motionEvent);
             }
         };
         this.chatPreviewContainer = r0;
@@ -1082,7 +1089,7 @@ public class ForwardingPreviewView extends FrameLayout {
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            return new RecyclerListView.Holder(new ChatMessageCell(viewGroup.getContext(), ForwardingPreviewView.this.resourcesProvider));
+            return new RecyclerListView.Holder(new ChatMessageCell(viewGroup.getContext(), false, ForwardingPreviewView.this.resourcesProvider));
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

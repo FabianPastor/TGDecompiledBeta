@@ -42,6 +42,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatThemeController;
+import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
@@ -141,7 +142,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r6.setLines(r3)
             r6.setSingleLine(r3)
             java.lang.String r7 = "SelectTheme"
-            r8 = 2131627564(0x7f0e0e2c, float:1.8882396E38)
+            r8 = 2131627566(0x7f0e0e2e, float:1.88824E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
             r6.setText(r7)
             java.lang.String r7 = "dialogTextBlack"
@@ -300,11 +301,11 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             android.widget.TextView r2 = r0.resetTextView
             org.telegram.ui.ActionBar.ChatTheme r1 = r22.getCurrentTheme()
             if (r1 != 0) goto L_0x0209
-            r1 = 2131625271(0x7f0e0537, float:1.8877745E38)
+            r1 = 2131625273(0x7f0e0539, float:1.887775E38)
             java.lang.String r6 = "DoNoSetTheme"
             goto L_0x020e
         L_0x0209:
-            r1 = 2131624855(0x7f0e0397, float:1.8876901E38)
+            r1 = 2131624857(0x7f0e0399, float:1.8876906E38)
             java.lang.String r6 = "ChatResetTheme"
         L_0x020e:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
@@ -345,7 +346,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             android.widget.TextView r1 = r0.applyTextView
             r1.setSingleLine(r3)
             android.widget.TextView r1 = r0.applyTextView
-            r4 = 2131624830(0x7f0e037e, float:1.887685E38)
+            r4 = 2131624832(0x7f0e0380, float:1.8876855E38)
             java.lang.String r9 = "ChatApplyTheme"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             r1.setText(r4)
@@ -436,7 +437,6 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
 
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
-        int i;
         super.onCreate(bundle);
         ChatThemeController.preloadAllWallpaperThumbs(true);
         ChatThemeController.preloadAllWallpaperThumbs(false);
@@ -461,8 +461,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         } else {
             onDataLoaded(cachedThemes);
         }
-        if (this.chatActivity.getCurrentUser() != null && (i = SharedConfig.dayNightThemeSwitchHintCount) > 0) {
-            SharedConfig.updateDayNightThemeSwitchHintCount(i - 1);
+        if (this.chatActivity.getCurrentUser() != null && SharedConfig.dayNightThemeSwitchHintCount > 0 && !this.chatActivity.getCurrentUser().self) {
+            SharedConfig.updateDayNightThemeSwitchHintCount(SharedConfig.dayNightThemeSwitchHintCount - 1);
             HintView hintView2 = new HintView(getContext(), 9, this.chatActivity.getResourceProvider());
             this.hintView = hintView2;
             hintView2.setVisibility(4);
@@ -749,6 +749,9 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 if (i2 != -1) {
                     this.prevSelectedPosition = i2;
                     this.adapter.setSelectedItem(i2);
+                    if (i2 > 0 && i2 < arrayList.size() / 2) {
+                        i2--;
+                    }
                     this.layoutManager.scrollToPositionWithOffset(Math.min(i2, this.adapter.items.size() - 1), 0);
                 }
             } else {
@@ -771,8 +774,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     /* access modifiers changed from: private */
     public void onAnimationStart() {
         Adapter adapter2 = this.adapter;
-        if (adapter2 != null) {
-            for (ChatThemeItem chatThemeItem : adapter2.items) {
+        if (!(adapter2 == null || adapter2.items == null)) {
+            for (ChatThemeItem chatThemeItem : this.adapter.items) {
                 chatThemeItem.isDark = this.forceDark;
             }
         }
@@ -1083,10 +1086,14 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                     this.backupImageView.setScaleX(1.0f);
                     this.backupImageView.setScaleY(1.0f);
                 }
-                BackupImageView backupImageView2 = this.backupImageView;
-                ImageLocation forDocument = ImageLocation.getForDocument(emojiAnimatedSticker);
-                ChatTheme chatTheme = chatThemeItem2.chatTheme;
-                backupImageView2.setImage(forDocument, "50_50", (Drawable) Emoji.getEmojiDrawable(chatTheme == null ? "❌" : chatTheme.getEmoticon()), (Object) null);
+                if (z2) {
+                    Drawable svgThumb = emojiAnimatedSticker != null ? DocumentObject.getSvgThumb(emojiAnimatedSticker, "emptyListPlaceholder", 0.2f) : null;
+                    if (svgThumb == null) {
+                        ChatTheme chatTheme = chatThemeItem2.chatTheme;
+                        svgThumb = Emoji.getEmojiDrawable(chatTheme == null ? "❌" : chatTheme.getEmoticon());
+                    }
+                    this.backupImageView.setImage(ImageLocation.getForDocument(emojiAnimatedSticker), "50_50", svgThumb, (Object) null);
+                }
                 ChatTheme chatTheme2 = chatThemeItem2.chatTheme;
                 if (chatTheme2 != null && !chatTheme2.isDefault) {
                     updatePreviewBackground();
@@ -1222,7 +1229,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 textPaint.setColor(getThemedColor("chat_emojiPanelTrendingDescription"));
                 this.noThemeTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
                 this.noThemeTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                StaticLayout createStaticLayout2 = StaticLayoutEx.createStaticLayout2(LocaleController.getString("NoTheme", NUM), this.noThemeTextPaint, AndroidUtilities.dp(52.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, true, TextUtils.TruncateAt.END, AndroidUtilities.dp(52.0f), 3);
+                StaticLayout createStaticLayout2 = StaticLayoutEx.createStaticLayout2(LocaleController.getString("ChatNoTheme", NUM), this.noThemeTextPaint, AndroidUtilities.dp(52.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, true, TextUtils.TruncateAt.END, AndroidUtilities.dp(52.0f), 3);
                 this.textLayout = createStaticLayout2;
                 return createStaticLayout2;
             }

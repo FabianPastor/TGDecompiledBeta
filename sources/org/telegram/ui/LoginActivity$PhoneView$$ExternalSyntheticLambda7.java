@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$onShow$14();
+        this.f$0.lambda$new$0();
     }
 }

@@ -466,6 +466,7 @@
     <string name="AttachLocation">Location</string>
     <string name="AttachMediaRestricted">The admins of this group have restricted you from sending media here until %1$s</string>
     <string name="AttachMediaRestrictedForever">The admins of this group have restricted you from sending media here.</string>
+    <string name="AttachMenu">Attach...</string>
     <string name="AttachMusic">Music</string>
     <string name="AttachPhoto">Photo</string>
     <string name="AttachPhotoExpired">Photo has expired</string>
@@ -686,6 +687,7 @@
     <string name="CacheEmpty">Empty</string>
     <string name="CacheWasCleared">%s freed on your device!</string>
     <string name="CalculatingSize">Calculating...</string>
+    <string name="Calendar">Calendar</string>
     <string name="Call">Call</string>
     <string name="CallAgain">Call Again</string>
     <string name="CallAlert">Are you sure you want to call **%1$s**?</string>

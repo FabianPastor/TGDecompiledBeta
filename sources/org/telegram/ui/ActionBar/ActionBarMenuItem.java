@@ -78,12 +78,12 @@ public class ActionBarMenuItem extends FrameLayout {
     protected ActionBarMenuItemSearchListener listener;
     private int[] location;
     private boolean longClickEnabled;
-    private boolean measurePopup;
     /* access modifiers changed from: private */
     public int notificationIndex;
     protected boolean overrideMenuClick;
     private ActionBarMenu parentMenu;
-    private ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout;
+    /* access modifiers changed from: private */
+    public ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout;
     private ActionBarPopupWindow popupWindow;
     private boolean processedPopupClick;
     private CloseProgressDrawable2 progressDrawable;
@@ -102,6 +102,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public int selectedFilterIndex;
     private View selectedMenuView;
     private Runnable showMenuRunnable;
+    private View showSubMenuFrom;
     private boolean showSubmenuByMove;
     private ActionBarSubMenuItemDelegate subMenuDelegate;
     private int subMenuOpenSide;
@@ -182,7 +183,6 @@ public class ActionBarMenuItem extends FrameLayout {
         this.allowCloseAnimation = true;
         this.animationEnabled = true;
         this.animateClear = true;
-        this.measurePopup = true;
         this.showSubmenuByMove = true;
         this.currentSearchFilters = new ArrayList<>();
         this.selectedFilterIndex = -1;
@@ -640,63 +640,170 @@ public class ActionBarMenuItem extends FrameLayout {
         this.yOffset = i;
     }
 
-    public void toggleSubMenu() {
-        ActionBar actionBar;
-        if (this.popupLayout != null) {
-            ActionBarMenu actionBarMenu = this.parentMenu;
-            if (actionBarMenu == null || !actionBarMenu.isActionMode || (actionBar = actionBarMenu.parentActionBar) == null || actionBar.isActionModeShowed()) {
-                Runnable runnable = this.showMenuRunnable;
-                if (runnable != null) {
-                    AndroidUtilities.cancelRunOnUIThread(runnable);
-                    this.showMenuRunnable = null;
-                }
-                ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
-                if (actionBarPopupWindow == null || !actionBarPopupWindow.isShowing()) {
-                    ActionBarSubMenuItemDelegate actionBarSubMenuItemDelegate = this.subMenuDelegate;
-                    if (actionBarSubMenuItemDelegate != null) {
-                        actionBarSubMenuItemDelegate.onShowSubMenu();
-                    }
-                    if (this.popupWindow == null) {
-                        ActionBarPopupWindow actionBarPopupWindow2 = new ActionBarPopupWindow(this.popupLayout, -2, -2);
-                        this.popupWindow = actionBarPopupWindow2;
-                        if (!this.animationEnabled || Build.VERSION.SDK_INT < 19) {
-                            actionBarPopupWindow2.setAnimationStyle(NUM);
-                        } else {
-                            actionBarPopupWindow2.setAnimationStyle(0);
-                        }
-                        boolean z = this.animationEnabled;
-                        if (!z) {
-                            this.popupWindow.setAnimationEnabled(z);
-                        }
-                        this.popupWindow.setOutsideTouchable(true);
-                        this.popupWindow.setClippingEnabled(true);
-                        if (this.layoutInScreen) {
-                            this.popupWindow.setLayoutInScreen(true);
-                        }
-                        this.popupWindow.setInputMethodMode(2);
-                        this.popupWindow.setSoftInputMode(0);
-                        this.popupWindow.getContentView().setFocusableInTouchMode(true);
-                        this.popupWindow.getContentView().setOnKeyListener(new ActionBarMenuItem$$ExternalSyntheticLambda5(this));
-                        this.popupWindow.setOnDismissListener(new ActionBarMenuItem$$ExternalSyntheticLambda7(this));
-                    }
-                    if (this.measurePopup) {
-                        this.popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x - AndroidUtilities.dp(40.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, Integer.MIN_VALUE));
-                        this.measurePopup = false;
-                    }
-                    this.processedPopupClick = false;
-                    this.popupWindow.setFocusable(true);
-                    if (this.popupLayout.getMeasuredWidth() == 0) {
-                        updateOrShowPopup(true, true);
-                    } else {
-                        updateOrShowPopup(true, false);
-                    }
-                    this.popupLayout.updateRadialSelectors();
-                    this.popupWindow.startAnimation();
-                    return;
-                }
-                this.popupWindow.dismiss();
-            }
-        }
+    /* JADX WARNING: type inference failed for: r11v6, types: [android.widget.LinearLayout, org.telegram.ui.ActionBar.ActionBarMenuItem$1] */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Unknown variable types count: 1 */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void toggleSubMenu(final android.view.View r10, android.view.View r11) {
+        /*
+            r9 = this;
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r0 = r9.popupLayout
+            if (r0 == 0) goto L_0x0156
+            org.telegram.ui.ActionBar.ActionBarMenu r0 = r9.parentMenu
+            if (r0 == 0) goto L_0x0018
+            boolean r1 = r0.isActionMode
+            if (r1 == 0) goto L_0x0018
+            org.telegram.ui.ActionBar.ActionBar r0 = r0.parentActionBar
+            if (r0 == 0) goto L_0x0018
+            boolean r0 = r0.isActionModeShowed()
+            if (r0 != 0) goto L_0x0018
+            goto L_0x0156
+        L_0x0018:
+            java.lang.Runnable r0 = r9.showMenuRunnable
+            if (r0 == 0) goto L_0x0022
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
+            r0 = 0
+            r9.showMenuRunnable = r0
+        L_0x0022:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r9.popupWindow
+            if (r0 == 0) goto L_0x0032
+            boolean r0 = r0.isShowing()
+            if (r0 == 0) goto L_0x0032
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            r10.dismiss()
+            return
+        L_0x0032:
+            r9.showSubMenuFrom = r11
+            org.telegram.ui.ActionBar.ActionBarMenuItem$ActionBarSubMenuItemDelegate r11 = r9.subMenuDelegate
+            if (r11 == 0) goto L_0x003b
+            r11.onShowSubMenu()
+        L_0x003b:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r9.popupLayout
+            android.view.ViewParent r11 = r11.getParent()
+            if (r11 == 0) goto L_0x0050
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r9.popupLayout
+            android.view.ViewParent r11 = r11.getParent()
+            android.view.ViewGroup r11 = (android.view.ViewGroup) r11
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r0 = r9.popupLayout
+            r11.removeView(r0)
+        L_0x0050:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r9.popupLayout
+            r0 = -2
+            r1 = 1
+            if (r10 == 0) goto L_0x00c4
+            org.telegram.ui.ActionBar.ActionBarMenuItem$1 r11 = new org.telegram.ui.ActionBar.ActionBarMenuItem$1
+            android.content.Context r2 = r9.getContext()
+            r11.<init>(r2, r10)
+            r11.setOrientation(r1)
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            android.content.Context r3 = r9.getContext()
+            r2.<init>(r3)
+            r3 = 0
+            r2.setAlpha(r3)
+            android.view.ViewPropertyAnimator r3 = r2.animate()
+            r4 = 1065353216(0x3var_, float:1.0)
+            android.view.ViewPropertyAnimator r3 = r3.alpha(r4)
+            r4 = 100
+            android.view.ViewPropertyAnimator r3 = r3.setDuration(r4)
+            r3.start()
+            android.content.Context r3 = r9.getContext()
+            r4 = 2131165984(0x7var_, float:1.79462E38)
+            android.graphics.drawable.Drawable r3 = androidx.core.content.ContextCompat.getDrawable(r3, r4)
+            android.graphics.drawable.Drawable r3 = r3.mutate()
+            android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r5 = r9.popupLayout
+            int r5 = r5.getBackgroundColor()
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r4.<init>(r5, r6)
+            r3.setColorFilter(r4)
+            r2.setBackground(r3)
+            r2.addView(r10)
+            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r0, r0)
+            r11.addView(r2, r10)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r10 = r9.popupLayout
+            r2 = -2
+            r3 = -2
+            r4 = 0
+            r5 = 0
+            r6 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r6 = -r6
+            r7 = 0
+            r8 = 0
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r2, (int) r3, (int) r4, (int) r5, (int) r6, (int) r7, (int) r8)
+            r11.addView(r10, r2)
+        L_0x00c4:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = new org.telegram.ui.ActionBar.ActionBarPopupWindow
+            r10.<init>(r11, r0, r0)
+            r9.popupWindow = r10
+            boolean r0 = r9.animationEnabled
+            r2 = 0
+            if (r0 == 0) goto L_0x00da
+            int r0 = android.os.Build.VERSION.SDK_INT
+            r3 = 19
+            if (r0 < r3) goto L_0x00da
+            r10.setAnimationStyle(r2)
+            goto L_0x00e0
+        L_0x00da:
+            r0 = 2131689479(0x7f0var_, float:1.9007975E38)
+            r10.setAnimationStyle(r0)
+        L_0x00e0:
+            boolean r10 = r9.animationEnabled
+            if (r10 != 0) goto L_0x00e9
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r9.popupWindow
+            r0.setAnimationEnabled(r10)
+        L_0x00e9:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            r10.setOutsideTouchable(r1)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            r10.setClippingEnabled(r1)
+            boolean r10 = r9.layoutInScreen
+            if (r10 == 0) goto L_0x00fc
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            r10.setLayoutInScreen(r1)
+        L_0x00fc:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            r0 = 2
+            r10.setInputMethodMode(r0)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            r10.setSoftInputMode(r2)
+            r11.setFocusableInTouchMode(r1)
+            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda5 r10 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda5
+            r10.<init>(r9)
+            r11.setOnKeyListener(r10)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda7 r0 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda7
+            r0.<init>(r9)
+            r10.setOnDismissListener(r0)
+            android.graphics.Point r10 = org.telegram.messenger.AndroidUtilities.displaySize
+            int r10 = r10.x
+            r0 = 1109393408(0x42200000, float:40.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r10 = r10 - r0
+            r0 = -2147483648(0xfffffffvar_, float:-0.0)
+            int r10 = android.view.View.MeasureSpec.makeMeasureSpec(r10, r0)
+            android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
+            int r3 = r3.y
+            int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r3, r0)
+            r11.measure(r10, r0)
+            r9.processedPopupClick = r2
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            r10.setFocusable(r1)
+            int r10 = r11.getMeasuredWidth()
+            if (r10 != 0) goto L_0x0149
+            r9.updateOrShowPopup(r1, r1)
+            goto L_0x014c
+        L_0x0149:
+            r9.updateOrShowPopup(r1, r2)
+        L_0x014c:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r10 = r9.popupLayout
+            r10.updateRadialSelectors()
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            r10.startAnimation()
+        L_0x0156:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBarMenuItem.toggleSubMenu(android.view.View, android.view.View):void");
     }
 
     /* access modifiers changed from: private */
@@ -716,6 +823,10 @@ public class ActionBarMenuItem extends FrameLayout {
         if (actionBarSubMenuItemDelegate != null) {
             actionBarSubMenuItemDelegate.onHideSubMenu();
         }
+    }
+
+    public void toggleSubMenu() {
+        toggleSubMenu((View) null, (View) null);
     }
 
     public void openSearch(boolean z) {
@@ -1070,7 +1181,7 @@ public class ActionBarMenuItem extends FrameLayout {
             return this;
         }
         if (z && this.searchContainer == null) {
-            AnonymousClass6 r0 = new FrameLayout(getContext()) {
+            AnonymousClass7 r0 = new FrameLayout(getContext()) {
                 private boolean ignoreRequestLayout;
 
                 public void setVisibility(int i) {
@@ -1154,7 +1265,7 @@ public class ActionBarMenuItem extends FrameLayout {
             this.wrappedSearchFrameLayout = null;
             if (z2) {
                 this.wrappedSearchFrameLayout = new FrameLayout(getContext());
-                AnonymousClass7 r2 = new HorizontalScrollView(this, getContext()) {
+                AnonymousClass8 r2 = new HorizontalScrollView(this, getContext()) {
                     boolean isDragging;
 
                     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -1199,7 +1310,7 @@ public class ActionBarMenuItem extends FrameLayout {
             this.searchFieldCaption.setEllipsize(TextUtils.TruncateAt.END);
             this.searchFieldCaption.setVisibility(8);
             this.searchFieldCaption.setGravity(LocaleController.isRTL ? 5 : 3);
-            AnonymousClass8 r22 = new EditTextBoldCursor(getContext()) {
+            AnonymousClass9 r22 = new EditTextBoldCursor(getContext()) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     super.onMeasure(i, i2);
@@ -1307,7 +1418,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 21, 0.0f, 5.5f, 48.0f, 0.0f));
             }
             this.searchFilterLayout.setClipChildren(false);
-            AnonymousClass11 r1 = new ImageView(getContext()) {
+            AnonymousClass12 r1 = new ImageView(getContext()) {
                 /* access modifiers changed from: protected */
                 public void onDetachedFromWindow() {
                     super.onDetachedFromWindow();
@@ -1543,15 +1654,19 @@ public class ActionBarMenuItem extends FrameLayout {
         if (z) {
             this.popupLayout.scrollToTop();
         }
+        View view = this.showSubMenuFrom;
+        if (view == null) {
+            view = this;
+        }
         ActionBarMenu actionBarMenu2 = this.parentMenu;
         if (actionBarMenu2 != null) {
             ActionBar actionBar = actionBarMenu2.parentActionBar;
             if (this.subMenuOpenSide == 0) {
                 if (z) {
-                    this.popupWindow.showAsDropDown(actionBar, (((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + ((int) getTranslationX()), i3);
+                    this.popupWindow.showAsDropDown(actionBar, (((view.getLeft() + this.parentMenu.getLeft()) + view.getMeasuredWidth()) - this.popupWindow.getContentView().getMeasuredWidth()) + ((int) getTranslationX()), i3);
                 }
                 if (z2) {
-                    this.popupWindow.update(actionBar, (((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + ((int) getTranslationX()), i3, -1, -1);
+                    this.popupWindow.update(actionBar, (((view.getLeft() + this.parentMenu.getLeft()) + view.getMeasuredWidth()) - this.popupWindow.getContentView().getMeasuredWidth()) + ((int) getTranslationX()), i3, -1, -1);
                     return;
                 }
                 return;
@@ -1572,12 +1687,12 @@ public class ActionBarMenuItem extends FrameLayout {
         int i4 = this.subMenuOpenSide;
         if (i4 == 0) {
             if (getParent() != null) {
-                View view = (View) getParent();
+                View view2 = (View) getParent();
                 if (z) {
-                    this.popupWindow.showAsDropDown(view, ((getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + this.additionalXOffset, i3);
+                    this.popupWindow.showAsDropDown(view2, ((getLeft() + getMeasuredWidth()) - this.popupWindow.getContentView().getMeasuredWidth()) + this.additionalXOffset, i3);
                 }
                 if (z2) {
-                    this.popupWindow.update(view, ((getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + this.additionalXOffset, i3, -1, -1);
+                    this.popupWindow.update(view2, ((getLeft() + getMeasuredWidth()) - this.popupWindow.getContentView().getMeasuredWidth()) + this.additionalXOffset, i3, -1, -1);
                 }
             }
         } else if (i4 == 1) {
@@ -1589,10 +1704,10 @@ public class ActionBarMenuItem extends FrameLayout {
             }
         } else {
             if (z) {
-                this.popupWindow.showAsDropDown(this, (getMeasuredWidth() - this.popupLayout.getMeasuredWidth()) + this.additionalXOffset, i3);
+                this.popupWindow.showAsDropDown(this, (getMeasuredWidth() - this.popupWindow.getContentView().getMeasuredWidth()) + this.additionalXOffset, i3);
             }
             if (z2) {
-                this.popupWindow.update(this, (getMeasuredWidth() - this.popupLayout.getMeasuredWidth()) + this.additionalXOffset, i3, -1, -1);
+                this.popupWindow.update(this, (getMeasuredWidth() - this.popupWindow.getContentView().getMeasuredWidth()) + this.additionalXOffset, i3, -1, -1);
             }
         }
     }
@@ -1602,7 +1717,6 @@ public class ActionBarMenuItem extends FrameLayout {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null && (findViewWithTag = actionBarPopupWindowLayout.findViewWithTag(Integer.valueOf(i))) != null && findViewWithTag.getVisibility() != 8) {
             findViewWithTag.setVisibility(8);
-            this.measurePopup = true;
         }
     }
 
@@ -1620,7 +1734,6 @@ public class ActionBarMenuItem extends FrameLayout {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null && (findViewWithTag = actionBarPopupWindowLayout.findViewWithTag(Integer.valueOf(i))) != null && findViewWithTag.getVisibility() != 0) {
             findViewWithTag.setVisibility(0);
-            this.measurePopup = true;
         }
     }
 

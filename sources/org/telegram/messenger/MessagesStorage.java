@@ -440,6 +440,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id_v2 ON polls_v2(id);").stepThis().dispose();
                 this.database.executeFast("PRAGMA user_version = 84").stepThis().dispose();
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda13(this));
                 loadDialogFilters();
                 loadUnreadMessages();
                 loadPendingTasks();
@@ -485,6 +486,7 @@ public class MessagesStorage extends BaseController {
                     if (intValue < 84) {
                         updateDbToLastVersion(intValue);
                     }
+                    AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda13(this));
                     loadDialogFilters();
                     loadUnreadMessages();
                     loadPendingTasks();
@@ -493,7 +495,10 @@ public class MessagesStorage extends BaseController {
                 throw new Exception("malformed");
             }
         } catch (Exception e3) {
-            Exception exc = e3;
+            FileLog.e((Throwable) e3);
+            throw new RuntimeException("malformed");
+        } catch (Exception e4) {
+            Exception exc = e4;
             FileLog.e((Throwable) exc);
             if (i2 < 3 && exc.getMessage() != null && exc.getMessage().contains("malformed")) {
                 if (i2 == 2) {
@@ -514,31 +519,23 @@ public class MessagesStorage extends BaseController {
         }
     }
 
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$openDatabase$1() {
+        if (this.databaseMigrationInProgress) {
+            this.databaseMigrationInProgress = false;
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.onDatabaseMigration, Boolean.FALSE);
+        }
+    }
+
     public boolean isDatabaseMigrationInProgress() {
         return this.databaseMigrationInProgress;
     }
 
-    private void updateDbToLastVersion(int i) {
-        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda13(this));
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda26(this, i));
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateDbToLastVersion$1() {
-        this.databaseMigrationInProgress = true;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.onDatabaseMigration, Boolean.TRUE);
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateDbToLastVersion$3(int i) {
+    private void updateDbToLastVersion(int i) throws Exception {
         SQLiteCursor sQLiteCursor;
         int i2;
-        NativeByteBuffer nativeByteBuffer;
         int i3;
-        int i4;
-        int i5;
-        NativeByteBuffer nativeByteBuffer2;
-        NativeByteBuffer nativeByteBuffer3;
+        NativeByteBuffer nativeByteBuffer;
         SQLiteCursor sQLiteCursor2;
         SQLiteCursor sQLiteCursor3;
         SQLiteCursor sQLiteCursor4;
@@ -546,961 +543,942 @@ public class MessagesStorage extends BaseController {
         SQLiteCursor sQLiteCursor6;
         SQLiteCursor sQLiteCursor7;
         MessagesStorage messagesStorage = this;
-        int i6 = i;
-        try {
-            FileLog.d("MessagesStorage start db migration from " + i6 + " to " + 84);
-            int i7 = 4;
-            if (i6 < 4) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS read_state_out_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS ttl_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages ON messages(mid, out);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages ON messages(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages ON messages(uid, date, mid);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_contacts_v6(uid INTEGER PRIMARY KEY, fname TEXT, sname TEXT)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v6(uid INTEGER, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (uid, phone))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v6(sphone, deleted);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms ON randoms(mid);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS sent_files_v2(uid TEXT, type INTEGER, data BLOB, PRIMARY KEY (uid, type))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, PRIMARY KEY (uid, type));").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
-                messagesStorage.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid < 0 AND send_state = 1").stepThis().dispose();
-                fixNotificationSettings();
-                messagesStorage.database.executeFast("PRAGMA user_version = 4").stepThis().dispose();
-                i6 = 4;
+        int i4 = i;
+        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda20(messagesStorage));
+        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 84);
+        int i5 = 4;
+        if (i4 < 4) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS read_state_out_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS ttl_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages ON messages(mid, out);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages ON messages(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages ON messages(uid, date, mid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_contacts_v6(uid INTEGER PRIMARY KEY, fname TEXT, sname TEXT)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v6(uid INTEGER, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (uid, phone))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v6(sphone, deleted);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms ON randoms(mid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS sent_files_v2(uid TEXT, type INTEGER, data BLOB, PRIMARY KEY (uid, type))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, PRIMARY KEY (uid, type));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
+            messagesStorage.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid < 0 AND send_state = 1").stepThis().dispose();
+            fixNotificationSettings();
+            messagesStorage.database.executeFast("PRAGMA user_version = 4").stepThis().dispose();
+            i4 = 4;
+        }
+        int i6 = 6;
+        int i7 = 2;
+        int i8 = 1;
+        int i9 = 0;
+        if (i4 == 4) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v2(mid INTEGER PRIMARY KEY, date INTEGER)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v2 ON enc_tasks_v2(date);").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
+            SQLiteCursor queryFinalized = messagesStorage.database.queryFinalized("SELECT date, data FROM enc_tasks WHERE 1", new Object[0]);
+            SQLitePreparedStatement executeFast = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
+            if (queryFinalized.next()) {
+                int intValue = queryFinalized.intValue(0);
+                NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(1);
+                if (byteBufferValue != null) {
+                    int limit = byteBufferValue.limit();
+                    for (int i10 = 0; i10 < limit / 4; i10++) {
+                        executeFast.requery();
+                        executeFast.bindInteger(1, byteBufferValue.readInt32(false));
+                        executeFast.bindInteger(2, intValue);
+                        executeFast.step();
+                    }
+                    byteBufferValue.reuse();
+                }
             }
-            int i8 = 6;
-            int i9 = 2;
-            int i10 = 1;
-            int i11 = 0;
-            if (i6 == 4) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v2(mid INTEGER PRIMARY KEY, date INTEGER)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v2 ON enc_tasks_v2(date);").stepThis().dispose();
-                messagesStorage.database.beginTransaction();
-                SQLiteCursor queryFinalized = messagesStorage.database.queryFinalized("SELECT date, data FROM enc_tasks WHERE 1", new Object[0]);
-                SQLitePreparedStatement executeFast = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
-                if (queryFinalized.next()) {
-                    int intValue = queryFinalized.intValue(0);
-                    NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(1);
-                    if (byteBufferValue != null) {
-                        int limit = byteBufferValue.limit();
-                        for (int i12 = 0; i12 < limit / 4; i12++) {
-                            executeFast.requery();
-                            executeFast.bindInteger(1, byteBufferValue.readInt32(false));
-                            executeFast.bindInteger(2, intValue);
-                            executeFast.step();
-                        }
-                        byteBufferValue.reuse();
+            executeFast.dispose();
+            queryFinalized.dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS enc_tasks;").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN media INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 6").stepThis().dispose();
+            i4 = 6;
+        }
+        if (i4 == 6) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS messages_seq(mid INTEGER PRIMARY KEY, seq_in INTEGER, seq_out INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS seq_idx_messages_seq ON messages_seq(seq_in, seq_out);").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN layer INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN seq_in INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN seq_out INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 7").stepThis().dispose();
+            i4 = 7;
+        }
+        if (i4 == 7 || i4 == 8 || i4 == 9) {
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN use_count INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN exchange_id INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN key_date INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN fprint INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN fauthkey BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN khash BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 10").stepThis().dispose();
+            i4 = 10;
+        }
+        if (i4 == 10) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS web_recent_v3(id TEXT, type INTEGER, image_url TEXT, thumb_url TEXT, local_url TEXT, width INTEGER, height INTEGER, size INTEGER, date INTEGER, PRIMARY KEY (id, type));").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 11").stepThis().dispose();
+            i4 = 11;
+        }
+        if (i4 == 11 || i4 == 12) {
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_idx_media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_idx_media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_idx_media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS media_counts;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_v2(mid INTEGER PRIMARY KEY, uid INTEGER, date INTEGER, type INTEGER, data BLOB)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_counts_v2(uid INTEGER, type INTEGER, count INTEGER, PRIMARY KEY(uid, type))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media ON media_v2(uid, mid, type, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS keyvalue(id TEXT PRIMARY KEY, value TEXT)").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 13").stepThis().dispose();
+            i4 = 13;
+        }
+        if (i4 == 13) {
+            messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN replydata BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 14").stepThis().dispose();
+            i4 = 14;
+        }
+        if (i4 == 14) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS hashtag_recent_v2(id TEXT PRIMARY KEY, date INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 15").stepThis().dispose();
+            i4 = 15;
+        }
+        if (i4 == 15) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS webpage_pending(id INTEGER, mid INTEGER, PRIMARY KEY (id, mid));").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 16").stepThis().dispose();
+            i4 = 16;
+        }
+        if (i4 == 16) {
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN inbox_max INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN outbox_max INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 17").stepThis().dispose();
+            i4 = 17;
+        }
+        if (i4 == 17) {
+            messagesStorage.database.executeFast("PRAGMA user_version = 18").stepThis().dispose();
+            i4 = 18;
+        }
+        if (i4 == 18) {
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS stickers;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 19").stepThis().dispose();
+            i4 = 19;
+        }
+        if (i4 == 19) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS bot_keyboard(uid INTEGER PRIMARY KEY, mid INTEGER, info BLOB)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid ON bot_keyboard(mid);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 20").stepThis().dispose();
+            i4 = 20;
+        }
+        if (i4 == 20) {
+            messagesStorage.database.executeFast("CREATE TABLE search_recent(did INTEGER PRIMARY KEY, date INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 21").stepThis().dispose();
+            i4 = 21;
+        }
+        if (i4 == 21) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_settings_v2(uid INTEGER PRIMARY KEY, info BLOB)").stepThis().dispose();
+            SQLiteCursor queryFinalized2 = messagesStorage.database.queryFinalized("SELECT uid, participants FROM chat_settings WHERE uid < 0", new Object[0]);
+            SQLitePreparedStatement executeFast2 = messagesStorage.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?)");
+            while (queryFinalized2.next()) {
+                long intValue2 = (long) queryFinalized2.intValue(0);
+                NativeByteBuffer byteBufferValue2 = queryFinalized2.byteBufferValue(1);
+                if (byteBufferValue2 != null) {
+                    TLRPC$ChatParticipants TLdeserialize = TLRPC$ChatParticipants.TLdeserialize(byteBufferValue2, byteBufferValue2.readInt32(false), false);
+                    byteBufferValue2.reuse();
+                    if (TLdeserialize != null) {
+                        TLRPC$TL_chatFull tLRPC$TL_chatFull = new TLRPC$TL_chatFull();
+                        tLRPC$TL_chatFull.id = intValue2;
+                        tLRPC$TL_chatFull.chat_photo = new TLRPC$TL_photoEmpty();
+                        tLRPC$TL_chatFull.notify_settings = new TLRPC$TL_peerNotifySettingsEmpty_layer77();
+                        tLRPC$TL_chatFull.exported_invite = null;
+                        tLRPC$TL_chatFull.participants = TLdeserialize;
+                        NativeByteBuffer nativeByteBuffer2 = new NativeByteBuffer(tLRPC$TL_chatFull.getObjectSize());
+                        tLRPC$TL_chatFull.serializeToStream(nativeByteBuffer2);
+                        executeFast2.requery();
+                        executeFast2.bindLong(1, intValue2);
+                        executeFast2.bindByteBuffer(2, nativeByteBuffer2);
+                        executeFast2.step();
+                        nativeByteBuffer2.reuse();
                     }
                 }
-                executeFast.dispose();
-                queryFinalized.dispose();
-                messagesStorage.database.commitTransaction();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS enc_tasks;").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN media INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 6").stepThis().dispose();
-                i6 = 6;
             }
-            if (i6 == 6) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS messages_seq(mid INTEGER PRIMARY KEY, seq_in INTEGER, seq_out INTEGER);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS seq_idx_messages_seq ON messages_seq(seq_in, seq_out);").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN layer INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN seq_in INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN seq_out INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 7").stepThis().dispose();
-                i6 = 7;
+            executeFast2.dispose();
+            queryFinalized2.dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS chat_settings;").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN last_mid_i INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN unread_count_i INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN pts INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN date_i INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS last_mid_i_idx_dialogs ON dialogs(last_mid_i);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_i_idx_dialogs ON dialogs(unread_count_i);").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN imp INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS messages_holes(uid INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, start));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 22").stepThis().dispose();
+            i4 = 22;
+        }
+        if (i4 == 22) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_holes_v2(uid INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, type, start));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_media_holes_v2 ON media_holes_v2(uid, type, end);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 23").stepThis().dispose();
+            i4 = 23;
+        }
+        if (i4 == 23 || i4 == 24) {
+            messagesStorage.database.executeFast("DELETE FROM media_holes_v2 WHERE uid != 0 AND type >= 0 AND start IN (0, 1)").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 25").stepThis().dispose();
+            i4 = 25;
+        }
+        if (i4 == 25 || i4 == 26) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 27").stepThis().dispose();
+            i4 = 27;
+        }
+        if (i4 == 27) {
+            messagesStorage.database.executeFast("ALTER TABLE web_recent_v3 ADD COLUMN document BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 28").stepThis().dispose();
+            i4 = 28;
+        }
+        if (i4 == 28 || i4 == 29) {
+            messagesStorage.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 30").stepThis().dispose();
+            i4 = 30;
+        }
+        if (i4 == 30) {
+            messagesStorage.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS chat_settings_pinned_idx ON chat_settings_v2(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS users_data(uid INTEGER PRIMARY KEY, about TEXT)").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 31").stepThis().dispose();
+            i4 = 31;
+        }
+        if (i4 == 31) {
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS bot_recent;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_hints(did INTEGER, type INTEGER, rating REAL, date INTEGER, PRIMARY KEY(did, type))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS chat_hints_rating_idx ON chat_hints(rating);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 32").stepThis().dispose();
+            i4 = 32;
+        }
+        if (i4 == 32) {
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_idx_imp_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_imp_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 33").stepThis().dispose();
+            i4 = 33;
+        }
+        if (i4 == 33) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 34").stepThis().dispose();
+            i4 = 34;
+        }
+        if (i4 == 34) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 35").stepThis().dispose();
+            i4 = 35;
+        }
+        if (i4 == 35) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 36").stepThis().dispose();
+            i4 = 36;
+        }
+        if (i4 == 36) {
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN in_seq_no INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 37").stepThis().dispose();
+            i4 = 37;
+        }
+        if (i4 == 37) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS botcache(id TEXT PRIMARY KEY, date INTEGER, data BLOB)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS botcache_date_idx ON botcache(date);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 38").stepThis().dispose();
+            i4 = 38;
+        }
+        if (i4 == 38) {
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
+            i4 = 39;
+        }
+        if (i4 == 39) {
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN admin_id INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 40").stepThis().dispose();
+            i4 = 40;
+        }
+        if (i4 == 40) {
+            fixNotificationSettings();
+            messagesStorage.database.executeFast("PRAGMA user_version = 41").stepThis().dispose();
+            i4 = 41;
+        }
+        if (i4 == 41) {
+            messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN mention INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE user_contacts_v6 ADD COLUMN imported INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages ON messages(uid, mention, read_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 42").stepThis().dispose();
+            i4 = 42;
+        }
+        if (i4 == 42) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 43").stepThis().dispose();
+            i4 = 43;
+        }
+        if (i4 == 43) {
+            messagesStorage.database.executeFast("PRAGMA user_version = 44").stepThis().dispose();
+            i4 = 44;
+        }
+        if (i4 == 44) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_contacts_v7(key TEXT PRIMARY KEY, uid INTEGER, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v7(key TEXT, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (key, phone))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v7(sphone, deleted);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 45").stepThis().dispose();
+            i4 = 45;
+        }
+        if (i4 == 45) {
+            messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN mtproto_seq INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 46").stepThis().dispose();
+            i4 = 46;
+        }
+        if (i4 == 46) {
+            messagesStorage.database.executeFast("DELETE FROM botcache WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 47").stepThis().dispose();
+            i4 = 47;
+        }
+        if (i4 == 47) {
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN flags INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 48").stepThis().dispose();
+            i4 = 48;
+        }
+        if (i4 == 48) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS unread_push_messages(uid INTEGER, mid INTEGER, random INTEGER, date INTEGER, data BLOB, fm TEXT, name TEXT, uname TEXT, flags INTEGER, PRIMARY KEY(uid, mid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_date ON unread_push_messages(date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 49").stepThis().dispose();
+            i4 = 49;
+        }
+        if (i4 == 49) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_settings(uid INTEGER PRIMARY KEY, info BLOB, pinned INTEGER)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS user_settings_pinned_idx ON user_settings(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 50").stepThis().dispose();
+            i4 = 50;
+        }
+        if (i4 == 50) {
+            messagesStorage.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE sent_files_v2 ADD COLUMN parent TEXT").stepThis().dispose();
+            messagesStorage.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE download_queue ADD COLUMN parent TEXT").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 51").stepThis().dispose();
+            i4 = 51;
+        }
+        if (i4 == 51) {
+            messagesStorage.database.executeFast("ALTER TABLE media_counts_v2 ADD COLUMN old INTEGER").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 52").stepThis().dispose();
+            i4 = 52;
+        }
+        if (i4 == 52) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls_v2(id);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 53").stepThis().dispose();
+            i4 = 53;
+        }
+        if (i4 == 53) {
+            messagesStorage.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN online INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 54").stepThis().dispose();
+            i4 = 54;
+        }
+        if (i4 == 54) {
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS wallpapers;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 55").stepThis().dispose();
+            i4 = 55;
+        }
+        if (i4 == 55) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS wallpapers2(uid INTEGER PRIMARY KEY, data BLOB, num INTEGER)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS wallpapers_num ON wallpapers2(num);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 56").stepThis().dispose();
+            i4 = 56;
+        }
+        if (i4 == 56 || i4 == 57) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS emoji_keywords_v2(lang TEXT, keyword TEXT, emoji TEXT, PRIMARY KEY(lang, keyword, emoji));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS emoji_keywords_info_v2(lang TEXT PRIMARY KEY, alias TEXT, version INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 58").stepThis().dispose();
+            i4 = 58;
+        }
+        if (i4 == 58) {
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS emoji_keywords_v2_keyword ON emoji_keywords_v2(keyword);").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE emoji_keywords_info_v2 ADD COLUMN date INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 59").stepThis().dispose();
+            i4 = 59;
+        }
+        if (i4 == 59) {
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN folder_id INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN data BLOB default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS folder_id_idx_dialogs ON dialogs(folder_id);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 60").stepThis().dispose();
+            i4 = 60;
+        }
+        if (i4 == 60) {
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS channel_admins;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS blocked_users;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 61").stepThis().dispose();
+            i4 = 61;
+        }
+        if (i4 == 61) {
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages2 ON messages(mid, send_state, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 62").stepThis().dispose();
+            i4 = 62;
+        }
+        if (i4 == 62) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS scheduled_messages(mid INTEGER PRIMARY KEY, uid INTEGER, send_state INTEGER, date INTEGER, data BLOB, ttl INTEGER, replydata BLOB)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages ON scheduled_messages(mid, send_state, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages ON scheduled_messages(uid, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 63").stepThis().dispose();
+            i4 = 63;
+        }
+        if (i4 == 63) {
+            messagesStorage.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 64").stepThis().dispose();
+            i4 = 64;
+        }
+        if (i4 == 64) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_filter(id INTEGER PRIMARY KEY, ord INTEGER, unread_count INTEGER, flags INTEGER, title TEXT)").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_filter_ep(id INTEGER, peer INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 65").stepThis().dispose();
+            i4 = 65;
+        }
+        if (i4 == 65) {
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS flags_idx_dialogs ON dialogs(flags);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 66").stepThis().dispose();
+            i4 = 66;
+        }
+        if (i4 == 66) {
+            messagesStorage.database.executeFast("CREATE TABLE dialog_filter_pin_v2(id INTEGER, peer INTEGER, pin INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 67").stepThis().dispose();
+            i4 = 67;
+        }
+        if (i4 == 67) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_dice(emoji TEXT PRIMARY KEY, data BLOB, date INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 68").stepThis().dispose();
+            i4 = 68;
+        }
+        if (i4 == 68) {
+            messagesStorage.executeNoException("ALTER TABLE messages ADD COLUMN forwards INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 69").stepThis().dispose();
+            i4 = 69;
+        }
+        if (i4 == 69) {
+            messagesStorage.executeNoException("ALTER TABLE messages ADD COLUMN replies_data BLOB default NULL");
+            messagesStorage.executeNoException("ALTER TABLE messages ADD COLUMN thread_reply_id INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 70").stepThis().dispose();
+            i4 = 70;
+        }
+        if (i4 == 70) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_pinned_v2(uid INTEGER, mid INTEGER, data BLOB, PRIMARY KEY (uid, mid));").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 71").stepThis().dispose();
+            i4 = 71;
+        }
+        if (i4 == 71) {
+            messagesStorage.executeNoException("ALTER TABLE sharing_locations ADD COLUMN proximity INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 72").stepThis().dispose();
+            i4 = 72;
+        }
+        if (i4 == 72) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_pinned_count(uid INTEGER PRIMARY KEY, count INTEGER, end INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 73").stepThis().dispose();
+            i4 = 73;
+        }
+        if (i4 == 73) {
+            messagesStorage.executeNoException("ALTER TABLE chat_settings_v2 ADD COLUMN inviter INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 74").stepThis().dispose();
+            i4 = 74;
+        }
+        if (i4 == 74) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS shortcut_widget(id INTEGER, did INTEGER, ord INTEGER, PRIMARY KEY (id, did));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS shortcut_widget_did ON shortcut_widget(did);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 75").stepThis().dispose();
+            i4 = 75;
+        }
+        if (i4 == 75) {
+            messagesStorage.executeNoException("ALTER TABLE chat_settings_v2 ADD COLUMN links INTEGER default 0");
+            messagesStorage.database.executeFast("PRAGMA user_version = 76").stepThis().dispose();
+            i4 = 76;
+        }
+        if (i4 == 76) {
+            messagesStorage.executeNoException("ALTER TABLE enc_tasks_v2 ADD COLUMN media INTEGER default -1");
+            messagesStorage.database.executeFast("PRAGMA user_version = 77").stepThis().dispose();
+            i4 = 77;
+        }
+        if (i4 == 77) {
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS channel_admins_v2;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins_v3(did INTEGER, uid INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 78").stepThis().dispose();
+            i4 = 78;
+        }
+        if (i4 == 78) {
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS bot_info;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS bot_info_v2(uid INTEGER, dialogId INTEGER, info BLOB, PRIMARY KEY(uid, dialogId))").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 79").stepThis().dispose();
+            i4 = 79;
+        }
+        int i11 = 3;
+        if (i4 == 79) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v3(mid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, media))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v3 ON enc_tasks_v3(date);").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
+            SQLiteCursor queryFinalized3 = messagesStorage.database.queryFinalized("SELECT mid, date, media FROM enc_tasks_v2 WHERE 1", new Object[0]);
+            SQLitePreparedStatement executeFast3 = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)");
+            if (queryFinalized3.next()) {
+                long longValue = queryFinalized3.longValue(0);
+                int intValue3 = queryFinalized3.intValue(1);
+                int intValue4 = queryFinalized3.intValue(2);
+                executeFast3.requery();
+                executeFast3.bindLong(1, longValue);
+                executeFast3.bindInteger(2, intValue3);
+                executeFast3.bindInteger(3, intValue4);
+                executeFast3.step();
             }
-            if (i6 == 7 || i6 == 8 || i6 == 9) {
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN use_count INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN exchange_id INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN key_date INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN fprint INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN fauthkey BLOB default NULL").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN khash BLOB default NULL").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 10").stepThis().dispose();
-                i6 = 10;
+            executeFast3.dispose();
+            queryFinalized3.dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks_v2;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS enc_tasks_v2;").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 80").stepThis().dispose();
+            i4 = 80;
+        }
+        int i12 = 5;
+        if (i4 == 80) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS scheduled_messages_v2(mid INTEGER, uid INTEGER, send_state INTEGER, date INTEGER, data BLOB, ttl INTEGER, replydata BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages_v2 ON scheduled_messages_v2(mid, send_state, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages_v2 ON scheduled_messages_v2(uid, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid_v2 ON bot_keyboard(mid, uid);").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS bot_keyboard_idx_mid;").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
+            try {
+                sQLiteCursor7 = messagesStorage.database.queryFinalized("SELECT mid, uid, send_state, date, data, ttl, replydata FROM scheduled_messages_v2 WHERE 1", new Object[0]);
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+                sQLiteCursor7 = null;
             }
-            if (i6 == 10) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS web_recent_v3(id TEXT, type INTEGER, image_url TEXT, thumb_url TEXT, local_url TEXT, width INTEGER, height INTEGER, size INTEGER, date INTEGER, PRIMARY KEY (id, type));").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 11").stepThis().dispose();
-                i6 = 11;
-            }
-            if (i6 == 11 || i6 == 12) {
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_idx_media;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_idx_media;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_idx_media;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS media;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS media_counts;").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_v2(mid INTEGER PRIMARY KEY, uid INTEGER, date INTEGER, type INTEGER, data BLOB)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_counts_v2(uid INTEGER, type INTEGER, count INTEGER, PRIMARY KEY(uid, type))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media ON media_v2(uid, mid, type, date);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS keyvalue(id TEXT PRIMARY KEY, value TEXT)").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 13").stepThis().dispose();
-                i6 = 13;
-            }
-            if (i6 == 13) {
-                messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN replydata BLOB default NULL").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 14").stepThis().dispose();
-                i6 = 14;
-            }
-            if (i6 == 14) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS hashtag_recent_v2(id TEXT PRIMARY KEY, date INTEGER);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 15").stepThis().dispose();
-                i6 = 15;
-            }
-            if (i6 == 15) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS webpage_pending(id INTEGER, mid INTEGER, PRIMARY KEY (id, mid));").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 16").stepThis().dispose();
-                i6 = 16;
-            }
-            if (i6 == 16) {
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN inbox_max INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN outbox_max INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 17").stepThis().dispose();
-                i6 = 17;
-            }
-            if (i6 == 17) {
-                messagesStorage.database.executeFast("PRAGMA user_version = 18").stepThis().dispose();
-                i6 = 18;
-            }
-            if (i6 == 18) {
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS stickers;").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 19").stepThis().dispose();
-                i6 = 19;
-            }
-            if (i6 == 19) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS bot_keyboard(uid INTEGER PRIMARY KEY, mid INTEGER, info BLOB)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid ON bot_keyboard(mid);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 20").stepThis().dispose();
-                i6 = 20;
-            }
-            if (i6 == 20) {
-                messagesStorage.database.executeFast("CREATE TABLE search_recent(did INTEGER PRIMARY KEY, date INTEGER);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 21").stepThis().dispose();
-                i6 = 21;
-            }
-            if (i6 == 21) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_settings_v2(uid INTEGER PRIMARY KEY, info BLOB)").stepThis().dispose();
-                SQLiteCursor queryFinalized2 = messagesStorage.database.queryFinalized("SELECT uid, participants FROM chat_settings WHERE uid < 0", new Object[0]);
-                SQLitePreparedStatement executeFast2 = messagesStorage.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?)");
-                while (queryFinalized2.next()) {
-                    long intValue2 = (long) queryFinalized2.intValue(0);
-                    NativeByteBuffer byteBufferValue2 = queryFinalized2.byteBufferValue(1);
-                    if (byteBufferValue2 != null) {
-                        TLRPC$ChatParticipants TLdeserialize = TLRPC$ChatParticipants.TLdeserialize(byteBufferValue2, byteBufferValue2.readInt32(false), false);
-                        byteBufferValue2.reuse();
-                        if (TLdeserialize != null) {
-                            TLRPC$TL_chatFull tLRPC$TL_chatFull = new TLRPC$TL_chatFull();
-                            tLRPC$TL_chatFull.id = intValue2;
-                            tLRPC$TL_chatFull.chat_photo = new TLRPC$TL_photoEmpty();
-                            tLRPC$TL_chatFull.notify_settings = new TLRPC$TL_peerNotifySettingsEmpty_layer77();
-                            tLRPC$TL_chatFull.exported_invite = null;
-                            tLRPC$TL_chatFull.participants = TLdeserialize;
-                            NativeByteBuffer nativeByteBuffer4 = new NativeByteBuffer(tLRPC$TL_chatFull.getObjectSize());
-                            tLRPC$TL_chatFull.serializeToStream(nativeByteBuffer4);
-                            executeFast2.requery();
-                            executeFast2.bindLong(1, intValue2);
-                            executeFast2.bindByteBuffer(2, nativeByteBuffer4);
-                            executeFast2.step();
-                            nativeByteBuffer4.reuse();
+            if (sQLiteCursor7 != null) {
+                SQLitePreparedStatement executeFast4 = messagesStorage.database.executeFast("REPLACE INTO scheduled_messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?)");
+                while (sQLiteCursor7.next()) {
+                    NativeByteBuffer byteBufferValue3 = sQLiteCursor7.byteBufferValue(4);
+                    if (byteBufferValue3 != null) {
+                        int intValue5 = sQLiteCursor7.intValue(i9);
+                        long longValue2 = sQLiteCursor7.longValue(1);
+                        int intValue6 = sQLiteCursor7.intValue(2);
+                        int intValue7 = sQLiteCursor7.intValue(3);
+                        int intValue8 = sQLiteCursor7.intValue(i12);
+                        NativeByteBuffer byteBufferValue4 = sQLiteCursor7.byteBufferValue(6);
+                        executeFast4.requery();
+                        executeFast4.bindInteger(1, intValue5);
+                        executeFast4.bindLong(2, longValue2);
+                        executeFast4.bindInteger(3, intValue6);
+                        executeFast4.bindByteBuffer(4, byteBufferValue3);
+                        executeFast4.bindInteger(5, intValue7);
+                        executeFast4.bindInteger(6, intValue8);
+                        if (byteBufferValue4 != null) {
+                            executeFast4.bindByteBuffer(7, byteBufferValue4);
+                        } else {
+                            executeFast4.bindNull(7);
                         }
+                        executeFast4.step();
+                        if (byteBufferValue4 != null) {
+                            byteBufferValue4.reuse();
+                        }
+                        byteBufferValue3.reuse();
+                        i9 = 0;
+                        i12 = 5;
                     }
                 }
-                executeFast2.dispose();
-                queryFinalized2.dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS chat_settings;").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN last_mid_i INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN unread_count_i INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN pts INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN date_i INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS last_mid_i_idx_dialogs ON dialogs(last_mid_i);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_i_idx_dialogs ON dialogs(unread_count_i);").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN imp INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS messages_holes(uid INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, start));").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 22").stepThis().dispose();
-                i6 = 22;
+                sQLiteCursor7.dispose();
+                executeFast4.dispose();
             }
-            if (i6 == 22) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_holes_v2(uid INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, type, start));").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_media_holes_v2 ON media_holes_v2(uid, type, end);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 23").stepThis().dispose();
-                i6 = 23;
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_scheduled_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_idx_scheduled_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS scheduled_messages;").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("PRAGMA user_version = 81").stepThis().dispose();
+            i4 = 81;
+        }
+        if (i4 == 81) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_v3(mid INTEGER, uid INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_v3 ON media_v3(uid, mid, type, date);").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
+            try {
+                sQLiteCursor6 = messagesStorage.database.queryFinalized("SELECT mid, uid, date, type, data FROM media_v2 WHERE 1", new Object[0]);
+            } catch (Exception e2) {
+                FileLog.e((Throwable) e2);
+                sQLiteCursor6 = null;
             }
-            if (i6 == 23 || i6 == 24) {
-                messagesStorage.database.executeFast("DELETE FROM media_holes_v2 WHERE uid != 0 AND type >= 0 AND start IN (0, 1)").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 25").stepThis().dispose();
-                i6 = 25;
-            }
-            if (i6 == 25 || i6 == 26) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 27").stepThis().dispose();
-                i6 = 27;
-            }
-            if (i6 == 27) {
-                messagesStorage.database.executeFast("ALTER TABLE web_recent_v3 ADD COLUMN document BLOB default NULL").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 28").stepThis().dispose();
-                i6 = 28;
-            }
-            if (i6 == 28 || i6 == 29) {
-                messagesStorage.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
-                messagesStorage.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 30").stepThis().dispose();
-                i6 = 30;
-            }
-            if (i6 == 30) {
-                messagesStorage.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS chat_settings_pinned_idx ON chat_settings_v2(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS users_data(uid INTEGER PRIMARY KEY, about TEXT)").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 31").stepThis().dispose();
-                i6 = 31;
-            }
-            if (i6 == 31) {
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS bot_recent;").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_hints(did INTEGER, type INTEGER, rating REAL, date INTEGER, PRIMARY KEY(did, type))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS chat_hints_rating_idx ON chat_hints(rating);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 32").stepThis().dispose();
-                i6 = 32;
-            }
-            if (i6 == 32) {
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_idx_imp_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_imp_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 33").stepThis().dispose();
-                i6 = 33;
-            }
-            if (i6 == 33) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 34").stepThis().dispose();
-                i6 = 34;
-            }
-            if (i6 == 34) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 35").stepThis().dispose();
-                i6 = 35;
-            }
-            if (i6 == 35) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 36").stepThis().dispose();
-                i6 = 36;
-            }
-            if (i6 == 36) {
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN in_seq_no INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 37").stepThis().dispose();
-                i6 = 37;
-            }
-            if (i6 == 37) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS botcache(id TEXT PRIMARY KEY, date INTEGER, data BLOB)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS botcache_date_idx ON botcache(date);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 38").stepThis().dispose();
-                i6 = 38;
-            }
-            if (i6 == 38) {
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
-                i6 = 39;
-            }
-            if (i6 == 39) {
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN admin_id INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 40").stepThis().dispose();
-                i6 = 40;
-            }
-            if (i6 == 40) {
-                fixNotificationSettings();
-                messagesStorage.database.executeFast("PRAGMA user_version = 41").stepThis().dispose();
-                i6 = 41;
-            }
-            if (i6 == 41) {
-                messagesStorage.database.executeFast("ALTER TABLE messages ADD COLUMN mention INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE user_contacts_v6 ADD COLUMN imported INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages ON messages(uid, mention, read_state);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 42").stepThis().dispose();
-                i6 = 42;
-            }
-            if (i6 == 42) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 43").stepThis().dispose();
-                i6 = 43;
-            }
-            if (i6 == 43) {
-                messagesStorage.database.executeFast("PRAGMA user_version = 44").stepThis().dispose();
-                i6 = 44;
-            }
-            if (i6 == 44) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_contacts_v7(key TEXT PRIMARY KEY, uid INTEGER, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v7(key TEXT, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (key, phone))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v7(sphone, deleted);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 45").stepThis().dispose();
-                i6 = 45;
-            }
-            if (i6 == 45) {
-                messagesStorage.database.executeFast("ALTER TABLE enc_chats ADD COLUMN mtproto_seq INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 46").stepThis().dispose();
-                i6 = 46;
-            }
-            if (i6 == 46) {
-                messagesStorage.database.executeFast("DELETE FROM botcache WHERE 1").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 47").stepThis().dispose();
-                i6 = 47;
-            }
-            if (i6 == 47) {
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN flags INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 48").stepThis().dispose();
-                i6 = 48;
-            }
-            if (i6 == 48) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS unread_push_messages(uid INTEGER, mid INTEGER, random INTEGER, date INTEGER, data BLOB, fm TEXT, name TEXT, uname TEXT, flags INTEGER, PRIMARY KEY(uid, mid))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_date ON unread_push_messages(date);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 49").stepThis().dispose();
-                i6 = 49;
-            }
-            if (i6 == 49) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_settings(uid INTEGER PRIMARY KEY, info BLOB, pinned INTEGER)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS user_settings_pinned_idx ON user_settings(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 50").stepThis().dispose();
-                i6 = 50;
-            }
-            if (i6 == 50) {
-                messagesStorage.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE sent_files_v2 ADD COLUMN parent TEXT").stepThis().dispose();
-                messagesStorage.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE download_queue ADD COLUMN parent TEXT").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 51").stepThis().dispose();
-                i6 = 51;
-            }
-            if (i6 == 51) {
-                messagesStorage.database.executeFast("ALTER TABLE media_counts_v2 ADD COLUMN old INTEGER").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 52").stepThis().dispose();
-                i6 = 52;
-            }
-            if (i6 == 52) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls_v2(id);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 53").stepThis().dispose();
-                i6 = 53;
-            }
-            if (i6 == 53) {
-                messagesStorage.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN online INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 54").stepThis().dispose();
-                i6 = 54;
-            }
-            if (i6 == 54) {
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS wallpapers;").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 55").stepThis().dispose();
-                i6 = 55;
-            }
-            if (i6 == 55) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS wallpapers2(uid INTEGER PRIMARY KEY, data BLOB, num INTEGER)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS wallpapers_num ON wallpapers2(num);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 56").stepThis().dispose();
-                i6 = 56;
-            }
-            if (i6 == 56 || i6 == 57) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS emoji_keywords_v2(lang TEXT, keyword TEXT, emoji TEXT, PRIMARY KEY(lang, keyword, emoji));").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS emoji_keywords_info_v2(lang TEXT PRIMARY KEY, alias TEXT, version INTEGER);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 58").stepThis().dispose();
-                i6 = 58;
-            }
-            if (i6 == 58) {
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS emoji_keywords_v2_keyword ON emoji_keywords_v2(keyword);").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE emoji_keywords_info_v2 ADD COLUMN date INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 59").stepThis().dispose();
-                i6 = 59;
-            }
-            if (i6 == 59) {
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN folder_id INTEGER default 0").stepThis().dispose();
-                messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN data BLOB default NULL").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS folder_id_idx_dialogs ON dialogs(folder_id);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 60").stepThis().dispose();
-                i6 = 60;
-            }
-            if (i6 == 60) {
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS channel_admins;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS blocked_users;").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 61").stepThis().dispose();
-                i6 = 61;
-            }
-            if (i6 == 61) {
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages2 ON messages(mid, send_state, date);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 62").stepThis().dispose();
-                i6 = 62;
-            }
-            if (i6 == 62) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS scheduled_messages(mid INTEGER PRIMARY KEY, uid INTEGER, send_state INTEGER, date INTEGER, data BLOB, ttl INTEGER, replydata BLOB)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages ON scheduled_messages(mid, send_state, date);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages ON scheduled_messages(uid, date);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 63").stepThis().dispose();
-                i6 = 63;
-            }
-            if (i6 == 63) {
-                messagesStorage.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 64").stepThis().dispose();
-                i6 = 64;
-            }
-            if (i6 == 64) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_filter(id INTEGER PRIMARY KEY, ord INTEGER, unread_count INTEGER, flags INTEGER, title TEXT)").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_filter_ep(id INTEGER, peer INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 65").stepThis().dispose();
-                i6 = 65;
-            }
-            if (i6 == 65) {
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS flags_idx_dialogs ON dialogs(flags);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 66").stepThis().dispose();
-                i6 = 66;
-            }
-            if (i6 == 66) {
-                messagesStorage.database.executeFast("CREATE TABLE dialog_filter_pin_v2(id INTEGER, peer INTEGER, pin INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 67").stepThis().dispose();
-                i6 = 67;
-            }
-            if (i6 == 67) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_dice(emoji TEXT PRIMARY KEY, data BLOB, date INTEGER);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 68").stepThis().dispose();
-                i6 = 68;
-            }
-            if (i6 == 68) {
-                messagesStorage.executeNoException("ALTER TABLE messages ADD COLUMN forwards INTEGER default 0");
-                messagesStorage.database.executeFast("PRAGMA user_version = 69").stepThis().dispose();
-                i6 = 69;
-            }
-            if (i6 == 69) {
-                messagesStorage.executeNoException("ALTER TABLE messages ADD COLUMN replies_data BLOB default NULL");
-                messagesStorage.executeNoException("ALTER TABLE messages ADD COLUMN thread_reply_id INTEGER default 0");
-                messagesStorage.database.executeFast("PRAGMA user_version = 70").stepThis().dispose();
-                i6 = 70;
-            }
-            if (i6 == 70) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_pinned_v2(uid INTEGER, mid INTEGER, data BLOB, PRIMARY KEY (uid, mid));").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 71").stepThis().dispose();
-                i6 = 71;
-            }
-            if (i6 == 71) {
-                messagesStorage.executeNoException("ALTER TABLE sharing_locations ADD COLUMN proximity INTEGER default 0");
-                messagesStorage.database.executeFast("PRAGMA user_version = 72").stepThis().dispose();
-                i6 = 72;
-            }
-            if (i6 == 72) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS chat_pinned_count(uid INTEGER PRIMARY KEY, count INTEGER, end INTEGER);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 73").stepThis().dispose();
-                i6 = 73;
-            }
-            if (i6 == 73) {
-                messagesStorage.executeNoException("ALTER TABLE chat_settings_v2 ADD COLUMN inviter INTEGER default 0");
-                messagesStorage.database.executeFast("PRAGMA user_version = 74").stepThis().dispose();
-                i6 = 74;
-            }
-            if (i6 == 74) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS shortcut_widget(id INTEGER, did INTEGER, ord INTEGER, PRIMARY KEY (id, did));").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS shortcut_widget_did ON shortcut_widget(did);").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 75").stepThis().dispose();
-                i6 = 75;
-            }
-            if (i6 == 75) {
-                messagesStorage.executeNoException("ALTER TABLE chat_settings_v2 ADD COLUMN links INTEGER default 0");
-                messagesStorage.database.executeFast("PRAGMA user_version = 76").stepThis().dispose();
-                i6 = 76;
-            }
-            if (i6 == 76) {
-                messagesStorage.executeNoException("ALTER TABLE enc_tasks_v2 ADD COLUMN media INTEGER default -1");
-                messagesStorage.database.executeFast("PRAGMA user_version = 77").stepThis().dispose();
-                i6 = 77;
-            }
-            if (i6 == 77) {
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS channel_admins_v2;").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins_v3(did INTEGER, uid INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 78").stepThis().dispose();
-                i6 = 78;
-            }
-            if (i6 == 78) {
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS bot_info;").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS bot_info_v2(uid INTEGER, dialogId INTEGER, info BLOB, PRIMARY KEY(uid, dialogId))").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 79").stepThis().dispose();
-                i6 = 79;
-            }
-            int i13 = 3;
-            if (i6 == 79) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v3(mid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, media))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v3 ON enc_tasks_v3(date);").stepThis().dispose();
-                messagesStorage.database.beginTransaction();
-                SQLiteCursor queryFinalized3 = messagesStorage.database.queryFinalized("SELECT mid, date, media FROM enc_tasks_v2 WHERE 1", new Object[0]);
-                SQLitePreparedStatement executeFast3 = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v3 VALUES(?, ?, ?)");
-                if (queryFinalized3.next()) {
-                    long longValue = queryFinalized3.longValue(0);
-                    int intValue3 = queryFinalized3.intValue(1);
-                    int intValue4 = queryFinalized3.intValue(2);
-                    executeFast3.requery();
-                    executeFast3.bindLong(1, longValue);
-                    executeFast3.bindInteger(2, intValue3);
-                    executeFast3.bindInteger(3, intValue4);
-                    executeFast3.step();
-                }
-                executeFast3.dispose();
-                queryFinalized3.dispose();
-                messagesStorage.database.commitTransaction();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks_v2;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS enc_tasks_v2;").stepThis().dispose();
-                messagesStorage.database.executeFast("PRAGMA user_version = 80").stepThis().dispose();
-                i6 = 80;
-            }
-            int i14 = 5;
-            if (i6 == 80) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS scheduled_messages_v2(mid INTEGER, uid INTEGER, send_state INTEGER, date INTEGER, data BLOB, ttl INTEGER, replydata BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages_v2 ON scheduled_messages_v2(mid, send_state, date);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages_v2 ON scheduled_messages_v2(uid, date);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid_v2 ON bot_keyboard(mid, uid);").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS bot_keyboard_idx_mid;").stepThis().dispose();
-                messagesStorage.database.beginTransaction();
-                try {
-                    sQLiteCursor7 = messagesStorage.database.queryFinalized("SELECT mid, uid, send_state, date, data, ttl, replydata FROM scheduled_messages_v2 WHERE 1", new Object[0]);
-                } catch (Exception e) {
-                    FileLog.e((Throwable) e);
-                    sQLiteCursor7 = null;
-                }
-                if (sQLiteCursor7 != null) {
-                    SQLitePreparedStatement executeFast4 = messagesStorage.database.executeFast("REPLACE INTO scheduled_messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?)");
-                    while (sQLiteCursor7.next()) {
-                        NativeByteBuffer byteBufferValue3 = sQLiteCursor7.byteBufferValue(i7);
-                        if (byteBufferValue3 != null) {
-                            int intValue5 = sQLiteCursor7.intValue(i11);
-                            long longValue2 = sQLiteCursor7.longValue(1);
-                            int intValue6 = sQLiteCursor7.intValue(2);
-                            int intValue7 = sQLiteCursor7.intValue(3);
-                            int intValue8 = sQLiteCursor7.intValue(i14);
-                            NativeByteBuffer byteBufferValue4 = sQLiteCursor7.byteBufferValue(6);
-                            executeFast4.requery();
-                            executeFast4.bindInteger(1, intValue5);
-                            executeFast4.bindLong(2, longValue2);
-                            executeFast4.bindInteger(3, intValue6);
-                            executeFast4.bindByteBuffer(4, byteBufferValue3);
-                            executeFast4.bindInteger(5, intValue7);
-                            executeFast4.bindInteger(6, intValue8);
-                            if (byteBufferValue4 != null) {
-                                executeFast4.bindByteBuffer(7, byteBufferValue4);
-                            } else {
-                                executeFast4.bindNull(7);
-                            }
-                            executeFast4.step();
-                            if (byteBufferValue4 != null) {
-                                byteBufferValue4.reuse();
-                            }
-                            byteBufferValue3.reuse();
-                            i7 = 4;
-                            i11 = 0;
-                            i14 = 5;
+            if (sQLiteCursor6 != null) {
+                SQLitePreparedStatement executeFast5 = messagesStorage.database.executeFast("REPLACE INTO media_v3 VALUES(?, ?, ?, ?, ?)");
+                while (sQLiteCursor6.next()) {
+                    NativeByteBuffer byteBufferValue5 = sQLiteCursor6.byteBufferValue(4);
+                    if (byteBufferValue5 != null) {
+                        int intValue9 = sQLiteCursor6.intValue(0);
+                        long longValue3 = sQLiteCursor6.longValue(1);
+                        if (((int) longValue3) == 0) {
+                            longValue3 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue3 >> 32)));
                         }
+                        int intValue10 = sQLiteCursor6.intValue(2);
+                        int intValue11 = sQLiteCursor6.intValue(3);
+                        executeFast5.requery();
+                        executeFast5.bindInteger(1, intValue9);
+                        executeFast5.bindLong(2, longValue3);
+                        executeFast5.bindInteger(3, intValue10);
+                        executeFast5.bindInteger(4, intValue11);
+                        executeFast5.bindByteBuffer(5, byteBufferValue5);
+                        executeFast5.step();
+                        byteBufferValue5.reuse();
                     }
-                    sQLiteCursor7.dispose();
-                    executeFast4.dispose();
                 }
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_scheduled_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_idx_scheduled_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS scheduled_messages;").stepThis().dispose();
-                messagesStorage.database.commitTransaction();
-                messagesStorage.database.executeFast("PRAGMA user_version = 81").stepThis().dispose();
-                i6 = 81;
+                sQLiteCursor6.dispose();
+                executeFast5.dispose();
             }
-            if (i6 == 81) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_v3(mid INTEGER, uid INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_v3 ON media_v3(uid, mid, type, date);").stepThis().dispose();
-                messagesStorage.database.beginTransaction();
-                try {
-                    sQLiteCursor6 = messagesStorage.database.queryFinalized("SELECT mid, uid, date, type, data FROM media_v2 WHERE 1", new Object[0]);
-                } catch (Exception e2) {
-                    FileLog.e((Throwable) e2);
-                    sQLiteCursor6 = null;
-                }
-                if (sQLiteCursor6 != null) {
-                    SQLitePreparedStatement executeFast5 = messagesStorage.database.executeFast("REPLACE INTO media_v3 VALUES(?, ?, ?, ?, ?)");
-                    while (sQLiteCursor6.next()) {
-                        NativeByteBuffer byteBufferValue5 = sQLiteCursor6.byteBufferValue(4);
-                        if (byteBufferValue5 != null) {
-                            int intValue9 = sQLiteCursor6.intValue(0);
-                            long longValue3 = sQLiteCursor6.longValue(1);
-                            if (((int) longValue3) == 0) {
-                                longValue3 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue3 >> 32)));
-                            }
-                            int intValue10 = sQLiteCursor6.intValue(2);
-                            int intValue11 = sQLiteCursor6.intValue(3);
-                            executeFast5.requery();
-                            executeFast5.bindInteger(1, intValue9);
-                            executeFast5.bindLong(2, longValue3);
-                            executeFast5.bindInteger(3, intValue10);
-                            executeFast5.bindInteger(4, intValue11);
-                            executeFast5.bindByteBuffer(5, byteBufferValue5);
-                            executeFast5.step();
-                            byteBufferValue5.reuse();
-                        }
-                    }
-                    sQLiteCursor6.dispose();
-                    executeFast5.dispose();
-                }
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_type_date_idx_media;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS media_v2;").stepThis().dispose();
-                messagesStorage.database.commitTransaction();
-                messagesStorage.database.executeFast("PRAGMA user_version = 82").stepThis().dispose();
-                i6 = 82;
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_type_date_idx_media;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS media_v2;").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("PRAGMA user_version = 82").stepThis().dispose();
+            i4 = 82;
+        }
+        if (i4 == 82) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS randoms_v2(random_id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (random_id, mid, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms_v2 ON randoms_v2(mid, uid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v4(mid INTEGER, uid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, uid, media))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v4 ON enc_tasks_v4(date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id_v2 ON polls_v2(id);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS webpage_pending_v2(id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (id, mid, uid));").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
+            try {
+                sQLiteCursor2 = messagesStorage.database.queryFinalized("SELECT r.random_id, r.mid, m.uid FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE 1", new Object[0]);
+            } catch (Exception e3) {
+                FileLog.e((Throwable) e3);
+                sQLiteCursor2 = null;
             }
-            if (i6 == 82) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS randoms_v2(random_id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (random_id, mid, uid))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms_v2 ON randoms_v2(mid, uid);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS enc_tasks_v4(mid INTEGER, uid INTEGER, date INTEGER, media INTEGER, PRIMARY KEY(mid, uid, media))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_enc_tasks_v4 ON enc_tasks_v4(date);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id_v2 ON polls_v2(id);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS webpage_pending_v2(id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (id, mid, uid));").stepThis().dispose();
-                messagesStorage.database.beginTransaction();
-                try {
-                    sQLiteCursor2 = messagesStorage.database.queryFinalized("SELECT r.random_id, r.mid, m.uid FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE 1", new Object[0]);
-                } catch (Exception e3) {
-                    FileLog.e((Throwable) e3);
-                    sQLiteCursor2 = null;
-                }
-                if (sQLiteCursor2 != null) {
-                    SQLitePreparedStatement executeFast6 = messagesStorage.database.executeFast("REPLACE INTO randoms_v2 VALUES(?, ?, ?)");
-                    while (sQLiteCursor2.next()) {
-                        long longValue4 = sQLiteCursor2.longValue(0);
-                        int intValue12 = sQLiteCursor2.intValue(1);
-                        long longValue5 = sQLiteCursor2.longValue(2);
-                        if (((int) longValue5) == 0) {
-                            longValue5 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue5 >> 32)));
-                        }
-                        executeFast6.requery();
-                        executeFast6.bindLong(1, longValue4);
-                        executeFast6.bindInteger(2, intValue12);
-                        executeFast6.bindLong(3, longValue5);
-                        executeFast6.step();
+            if (sQLiteCursor2 != null) {
+                SQLitePreparedStatement executeFast6 = messagesStorage.database.executeFast("REPLACE INTO randoms_v2 VALUES(?, ?, ?)");
+                while (sQLiteCursor2.next()) {
+                    long longValue4 = sQLiteCursor2.longValue(0);
+                    int intValue12 = sQLiteCursor2.intValue(1);
+                    long longValue5 = sQLiteCursor2.longValue(2);
+                    if (((int) longValue5) == 0) {
+                        longValue5 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue5 >> 32)));
                     }
-                    sQLiteCursor2.dispose();
-                    executeFast6.dispose();
+                    executeFast6.requery();
+                    executeFast6.bindLong(1, longValue4);
+                    executeFast6.bindInteger(2, intValue12);
+                    executeFast6.bindLong(3, longValue5);
+                    executeFast6.step();
                 }
-                try {
-                    sQLiteCursor3 = messagesStorage.database.queryFinalized("SELECT p.mid, m.uid, p.id FROM polls as p INNER JOIN messages as m ON p.mid = m.mid WHERE 1", new Object[0]);
-                } catch (Exception e4) {
-                    FileLog.e((Throwable) e4);
-                    sQLiteCursor3 = null;
-                }
-                if (sQLiteCursor3 != null) {
-                    SQLitePreparedStatement executeFast7 = messagesStorage.database.executeFast("REPLACE INTO polls_v2 VALUES(?, ?, ?)");
-                    while (sQLiteCursor3.next()) {
-                        int intValue13 = sQLiteCursor3.intValue(0);
-                        long longValue6 = sQLiteCursor3.longValue(1);
-                        long longValue7 = sQLiteCursor3.longValue(2);
-                        if (((int) longValue6) == 0) {
-                            longValue6 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue6 >> 32)));
-                        }
-                        executeFast7.requery();
-                        executeFast7.bindInteger(1, intValue13);
-                        executeFast7.bindLong(2, longValue6);
-                        executeFast7.bindLong(3, longValue7);
-                        executeFast7.step();
-                    }
-                    sQLiteCursor3.dispose();
-                    executeFast7.dispose();
-                }
-                try {
-                    sQLiteCursor4 = messagesStorage.database.queryFinalized("SELECT wp.id, wp.mid, m.uid FROM webpage_pending as wp INNER JOIN messages as m ON wp.mid = m.mid WHERE 1", new Object[0]);
-                } catch (Exception e5) {
-                    FileLog.e((Throwable) e5);
-                    sQLiteCursor4 = null;
-                }
-                if (sQLiteCursor4 != null) {
-                    SQLitePreparedStatement executeFast8 = messagesStorage.database.executeFast("REPLACE INTO webpage_pending_v2 VALUES(?, ?, ?)");
-                    while (sQLiteCursor4.next()) {
-                        long longValue8 = sQLiteCursor4.longValue(0);
-                        int intValue14 = sQLiteCursor4.intValue(1);
-                        long longValue9 = sQLiteCursor4.longValue(2);
-                        if (((int) longValue9) == 0) {
-                            longValue9 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue9 >> 32)));
-                        }
-                        executeFast8.requery();
-                        executeFast8.bindLong(1, longValue8);
-                        executeFast8.bindInteger(2, intValue14);
-                        executeFast8.bindLong(3, longValue9);
-                        executeFast8.step();
-                    }
-                    sQLiteCursor4.dispose();
-                    executeFast8.dispose();
-                }
-                try {
-                    sQLiteCursor5 = messagesStorage.database.queryFinalized("SELECT et.mid, m.uid, et.date, et.media FROM enc_tasks_v3 as et INNER JOIN messages as m ON et.mid = m.mid WHERE 1", new Object[0]);
-                } catch (Exception e6) {
-                    FileLog.e((Throwable) e6);
-                    sQLiteCursor5 = null;
-                }
-                if (sQLiteCursor5 != null) {
-                    SQLitePreparedStatement executeFast9 = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v4 VALUES(?, ?, ?, ?)");
-                    while (sQLiteCursor5.next()) {
-                        int intValue15 = sQLiteCursor5.intValue(0);
-                        long longValue10 = sQLiteCursor5.longValue(1);
-                        int intValue16 = sQLiteCursor5.intValue(2);
-                        int intValue17 = sQLiteCursor5.intValue(3);
-                        if (((int) longValue10) == 0) {
-                            longValue10 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue10 >> 32)));
-                        }
-                        executeFast9.requery();
-                        executeFast9.bindInteger(1, intValue15);
-                        executeFast9.bindLong(2, longValue10);
-                        executeFast9.bindInteger(3, intValue16);
-                        executeFast9.bindInteger(4, intValue17);
-                        executeFast9.step();
-                    }
-                    sQLiteCursor5.dispose();
-                    executeFast9.dispose();
-                }
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_idx_randoms;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS randoms;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks_v3;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS enc_tasks_v3;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS polls_id;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS polls;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS webpage_pending;").stepThis().dispose();
-                messagesStorage.database.commitTransaction();
-                messagesStorage.database.executeFast("PRAGMA user_version = 83").stepThis().dispose();
-                i6 = 83;
+                sQLiteCursor2.dispose();
+                executeFast6.dispose();
             }
-            if (i6 == 83) {
-                messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS messages_v2(mid INTEGER, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, PRIMARY KEY(mid, uid))").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_v2 ON messages_v2(uid, mid, read_state, out);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages_v2 ON messages_v2(uid, date, mid);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages_v2 ON messages_v2(mid, out);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages_v2 ON messages_v2(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages_v2 ON messages_v2(mid, send_state, date);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_v2 ON messages_v2(uid, mention, read_state);").stepThis().dispose();
-                messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_v2 ON messages_v2(mid, is_channel);").stepThis().dispose();
-                messagesStorage.database.beginTransaction();
-                try {
-                    sQLiteCursor = messagesStorage.database.queryFinalized("SELECT mid, uid, read_state, send_state, date, data, out, ttl, media, replydata, imp, mention, forwards, replies_data, thread_reply_id FROM messages WHERE 1", new Object[0]);
-                } catch (Exception e7) {
-                    FileLog.e((Throwable) e7);
-                    sQLiteCursor = null;
+            try {
+                sQLiteCursor3 = messagesStorage.database.queryFinalized("SELECT p.mid, m.uid, p.id FROM polls as p INNER JOIN messages as m ON p.mid = m.mid WHERE 1", new Object[0]);
+            } catch (Exception e4) {
+                FileLog.e((Throwable) e4);
+                sQLiteCursor3 = null;
+            }
+            if (sQLiteCursor3 != null) {
+                SQLitePreparedStatement executeFast7 = messagesStorage.database.executeFast("REPLACE INTO polls_v2 VALUES(?, ?, ?)");
+                while (sQLiteCursor3.next()) {
+                    int intValue13 = sQLiteCursor3.intValue(0);
+                    long longValue6 = sQLiteCursor3.longValue(1);
+                    long longValue7 = sQLiteCursor3.longValue(2);
+                    if (((int) longValue6) == 0) {
+                        longValue6 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue6 >> 32)));
+                    }
+                    executeFast7.requery();
+                    executeFast7.bindInteger(1, intValue13);
+                    executeFast7.bindLong(2, longValue6);
+                    executeFast7.bindLong(3, longValue7);
+                    executeFast7.step();
                 }
-                if (sQLiteCursor != null) {
-                    try {
-                        SQLitePreparedStatement executeFast10 = messagesStorage.database.executeFast("REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                        while (sQLiteCursor.next()) {
-                            NativeByteBuffer byteBufferValue6 = sQLiteCursor.byteBufferValue(5);
-                            if (byteBufferValue6 != null) {
-                                long intValue18 = (long) sQLiteCursor.intValue(0);
-                                long longValue11 = sQLiteCursor.longValue(i10);
-                                if (((int) longValue11) == 0) {
-                                    longValue11 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue11 >> 32)));
-                                }
-                                int intValue19 = sQLiteCursor.intValue(i9);
-                                int intValue20 = sQLiteCursor.intValue(i13);
-                                int intValue21 = sQLiteCursor.intValue(4);
-                                int intValue22 = sQLiteCursor.intValue(i8);
-                                int intValue23 = sQLiteCursor.intValue(7);
-                                int intValue24 = sQLiteCursor.intValue(8);
-                                int i15 = intValue22;
-                                NativeByteBuffer byteBufferValue7 = sQLiteCursor.byteBufferValue(9);
-                                int intValue25 = sQLiteCursor.intValue(10);
-                                int intValue26 = sQLiteCursor.intValue(11);
-                                int intValue27 = sQLiteCursor.intValue(12);
-                                NativeByteBuffer byteBufferValue8 = sQLiteCursor.byteBufferValue(13);
-                                int intValue28 = sQLiteCursor.intValue(14);
-                                SQLiteCursor sQLiteCursor8 = sQLiteCursor;
-                                int i16 = (int) (longValue11 >> 32);
-                                if (intValue23 < 0) {
-                                    TLRPC$Message TLdeserialize2 = TLRPC$Message.TLdeserialize(byteBufferValue6, byteBufferValue6.readInt32(false), false);
-                                    int i17 = i15;
-                                    if (TLdeserialize2 != null) {
-                                        i4 = i16;
-                                        i3 = i17;
-                                        TLdeserialize2.readAttachPath(byteBufferValue6, getUserConfig().clientUserId);
-                                        if (TLdeserialize2.params == null) {
-                                            HashMap<String, String> hashMap = new HashMap<>();
-                                            TLdeserialize2.params = hashMap;
-                                            nativeByteBuffer = byteBufferValue7;
-                                            StringBuilder sb = new StringBuilder();
-                                            i2 = intValue24;
-                                            sb.append("");
-                                            sb.append(intValue23);
-                                            hashMap.put("fwd_peer", sb.toString());
-                                        } else {
-                                            i2 = intValue24;
-                                            nativeByteBuffer = byteBufferValue7;
-                                        }
-                                        byteBufferValue6.reuse();
-                                        NativeByteBuffer nativeByteBuffer5 = new NativeByteBuffer(TLdeserialize2.getObjectSize());
-                                        TLdeserialize2.serializeToStream(nativeByteBuffer5);
-                                        byteBufferValue6 = nativeByteBuffer5;
-                                    } else {
-                                        i3 = i17;
-                                        i4 = i16;
-                                        i2 = intValue24;
-                                        nativeByteBuffer = byteBufferValue7;
-                                    }
-                                    i5 = 0;
+                sQLiteCursor3.dispose();
+                executeFast7.dispose();
+            }
+            try {
+                sQLiteCursor4 = messagesStorage.database.queryFinalized("SELECT wp.id, wp.mid, m.uid FROM webpage_pending as wp INNER JOIN messages as m ON wp.mid = m.mid WHERE 1", new Object[0]);
+            } catch (Exception e5) {
+                FileLog.e((Throwable) e5);
+                sQLiteCursor4 = null;
+            }
+            if (sQLiteCursor4 != null) {
+                SQLitePreparedStatement executeFast8 = messagesStorage.database.executeFast("REPLACE INTO webpage_pending_v2 VALUES(?, ?, ?)");
+                while (sQLiteCursor4.next()) {
+                    long longValue8 = sQLiteCursor4.longValue(0);
+                    int intValue14 = sQLiteCursor4.intValue(1);
+                    long longValue9 = sQLiteCursor4.longValue(2);
+                    if (((int) longValue9) == 0) {
+                        longValue9 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue9 >> 32)));
+                    }
+                    executeFast8.requery();
+                    executeFast8.bindLong(1, longValue8);
+                    executeFast8.bindInteger(2, intValue14);
+                    executeFast8.bindLong(3, longValue9);
+                    executeFast8.step();
+                }
+                sQLiteCursor4.dispose();
+                executeFast8.dispose();
+            }
+            try {
+                sQLiteCursor5 = messagesStorage.database.queryFinalized("SELECT et.mid, m.uid, et.date, et.media FROM enc_tasks_v3 as et INNER JOIN messages as m ON et.mid = m.mid WHERE 1", new Object[0]);
+            } catch (Exception e6) {
+                FileLog.e((Throwable) e6);
+                sQLiteCursor5 = null;
+            }
+            if (sQLiteCursor5 != null) {
+                SQLitePreparedStatement executeFast9 = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v4 VALUES(?, ?, ?, ?)");
+                while (sQLiteCursor5.next()) {
+                    int intValue15 = sQLiteCursor5.intValue(0);
+                    long longValue10 = sQLiteCursor5.longValue(1);
+                    int intValue16 = sQLiteCursor5.intValue(2);
+                    int intValue17 = sQLiteCursor5.intValue(3);
+                    if (((int) longValue10) == 0) {
+                        longValue10 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue10 >> 32)));
+                    }
+                    executeFast9.requery();
+                    executeFast9.bindInteger(1, intValue15);
+                    executeFast9.bindLong(2, longValue10);
+                    executeFast9.bindInteger(3, intValue16);
+                    executeFast9.bindInteger(4, intValue17);
+                    executeFast9.step();
+                }
+                sQLiteCursor5.dispose();
+                executeFast9.dispose();
+            }
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_idx_randoms;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS randoms;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS date_idx_enc_tasks_v3;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS enc_tasks_v3;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS polls_id;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS polls;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS webpage_pending;").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("PRAGMA user_version = 83").stepThis().dispose();
+            i4 = 83;
+        }
+        if (i4 == 83) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS messages_v2(mid INTEGER, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, PRIMARY KEY(mid, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_v2 ON messages_v2(uid, mid, read_state, out);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages_v2 ON messages_v2(uid, date, mid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages_v2 ON messages_v2(mid, out);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages_v2 ON messages_v2(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages_v2 ON messages_v2(mid, send_state, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_v2 ON messages_v2(uid, mention, read_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_v2 ON messages_v2(mid, is_channel);").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
+            try {
+                sQLiteCursor = messagesStorage.database.queryFinalized("SELECT mid, uid, read_state, send_state, date, data, out, ttl, media, replydata, imp, mention, forwards, replies_data, thread_reply_id FROM messages WHERE 1", new Object[0]);
+            } catch (Exception e7) {
+                FileLog.e((Throwable) e7);
+                sQLiteCursor = null;
+            }
+            if (sQLiteCursor != null) {
+                SQLitePreparedStatement executeFast10 = messagesStorage.database.executeFast("REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                while (sQLiteCursor.next()) {
+                    NativeByteBuffer byteBufferValue6 = sQLiteCursor.byteBufferValue(5);
+                    if (byteBufferValue6 != null) {
+                        long intValue18 = (long) sQLiteCursor.intValue(0);
+                        long longValue11 = sQLiteCursor.longValue(i8);
+                        if (((int) longValue11) == 0) {
+                            longValue11 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue11 >> 32)));
+                        }
+                        int intValue19 = sQLiteCursor.intValue(i7);
+                        int intValue20 = sQLiteCursor.intValue(i11);
+                        int intValue21 = sQLiteCursor.intValue(i5);
+                        int intValue22 = sQLiteCursor.intValue(i6);
+                        int intValue23 = sQLiteCursor.intValue(7);
+                        int intValue24 = sQLiteCursor.intValue(8);
+                        NativeByteBuffer byteBufferValue7 = sQLiteCursor.byteBufferValue(9);
+                        int intValue25 = sQLiteCursor.intValue(10);
+                        int intValue26 = sQLiteCursor.intValue(11);
+                        int intValue27 = sQLiteCursor.intValue(12);
+                        NativeByteBuffer byteBufferValue8 = sQLiteCursor.byteBufferValue(13);
+                        SQLiteCursor sQLiteCursor8 = sQLiteCursor;
+                        int intValue28 = sQLiteCursor.intValue(14);
+                        int i13 = (int) (longValue11 >> 32);
+                        if (intValue23 < 0) {
+                            TLRPC$Message TLdeserialize2 = TLRPC$Message.TLdeserialize(byteBufferValue6, byteBufferValue6.readInt32(false), false);
+                            if (TLdeserialize2 != null) {
+                                i3 = intValue24;
+                                TLdeserialize2.readAttachPath(byteBufferValue6, getUserConfig().clientUserId);
+                                if (TLdeserialize2.params == null) {
+                                    HashMap<String, String> hashMap = new HashMap<>();
+                                    TLdeserialize2.params = hashMap;
+                                    StringBuilder sb = new StringBuilder();
+                                    i2 = i13;
+                                    sb.append("");
+                                    sb.append(intValue23);
+                                    hashMap.put("fwd_peer", sb.toString());
                                 } else {
-                                    i2 = intValue24;
-                                    nativeByteBuffer = byteBufferValue7;
-                                    i3 = i15;
-                                    i4 = i16;
-                                    i5 = intValue23;
-                                }
-                                executeFast10.requery();
-                                executeFast10.bindInteger(1, (int) intValue18);
-                                executeFast10.bindLong(2, longValue11);
-                                executeFast10.bindInteger(3, intValue19);
-                                executeFast10.bindInteger(4, intValue20);
-                                executeFast10.bindInteger(5, intValue21);
-                                i8 = 6;
-                                executeFast10.bindByteBuffer(6, byteBufferValue6);
-                                executeFast10.bindInteger(7, i3);
-                                executeFast10.bindInteger(8, i5);
-                                executeFast10.bindInteger(9, i2);
-                                if (nativeByteBuffer != null) {
-                                    nativeByteBuffer2 = nativeByteBuffer;
-                                    executeFast10.bindByteBuffer(10, nativeByteBuffer2);
-                                } else {
-                                    nativeByteBuffer2 = nativeByteBuffer;
-                                    executeFast10.bindNull(10);
-                                }
-                                executeFast10.bindInteger(11, intValue25);
-                                executeFast10.bindInteger(12, intValue26);
-                                executeFast10.bindInteger(13, intValue27);
-                                if (byteBufferValue8 != null) {
-                                    nativeByteBuffer3 = byteBufferValue8;
-                                    executeFast10.bindByteBuffer(14, nativeByteBuffer3);
-                                } else {
-                                    nativeByteBuffer3 = byteBufferValue8;
-                                    executeFast10.bindNull(14);
-                                }
-                                executeFast10.bindInteger(15, intValue28);
-                                executeFast10.bindInteger(16, i4 > 0 ? 1 : 0);
-                                executeFast10.step();
-                                if (nativeByteBuffer2 != null) {
-                                    nativeByteBuffer2.reuse();
-                                }
-                                if (nativeByteBuffer3 != null) {
-                                    nativeByteBuffer3.reuse();
+                                    i2 = i13;
                                 }
                                 byteBufferValue6.reuse();
-                                sQLiteCursor = sQLiteCursor8;
-                                i9 = 2;
-                                i10 = 1;
-                                i13 = 3;
-                                messagesStorage = this;
+                                NativeByteBuffer nativeByteBuffer3 = new NativeByteBuffer(TLdeserialize2.getObjectSize());
+                                TLdeserialize2.serializeToStream(nativeByteBuffer3);
+                                byteBufferValue6 = nativeByteBuffer3;
+                            } else {
+                                i2 = i13;
+                                i3 = intValue24;
                             }
+                            intValue23 = 0;
+                        } else {
+                            i2 = i13;
+                            i3 = intValue24;
                         }
-                        sQLiteCursor.dispose();
-                        executeFast10.dispose();
-                    } catch (Exception e8) {
-                        e = e8;
-                        messagesStorage = this;
-                        FileLog.e((Throwable) e);
-                        FileLog.d("MessagesStorage db migration finished");
-                        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda19(messagesStorage));
-                    }
-                }
-                messagesStorage = this;
-                SQLiteCursor queryFinalized4 = messagesStorage.database.queryFinalized("SELECT did, last_mid, last_mid_i FROM dialogs WHERE 1", new Object[0]);
-                SQLitePreparedStatement executeFast11 = messagesStorage.database.executeFast("UPDATE dialogs SET last_mid = ?, last_mid_i = ? WHERE did = ?");
-                ArrayList arrayList = null;
-                ArrayList arrayList2 = null;
-                while (queryFinalized4.next()) {
-                    long longValue12 = queryFinalized4.longValue(0);
-                    int i18 = (int) longValue12;
-                    int i19 = (int) (longValue12 >> 32);
-                    if (i18 == 0) {
-                        if (arrayList == null) {
-                            arrayList = new ArrayList();
+                        executeFast10.requery();
+                        executeFast10.bindInteger(1, (int) intValue18);
+                        executeFast10.bindLong(2, longValue11);
+                        executeFast10.bindInteger(3, intValue19);
+                        executeFast10.bindInteger(4, intValue20);
+                        executeFast10.bindInteger(5, intValue21);
+                        executeFast10.bindByteBuffer(6, byteBufferValue6);
+                        executeFast10.bindInteger(7, intValue22);
+                        executeFast10.bindInteger(8, intValue23);
+                        executeFast10.bindInteger(9, i3);
+                        if (byteBufferValue7 != null) {
+                            executeFast10.bindByteBuffer(10, byteBufferValue7);
+                        } else {
+                            executeFast10.bindNull(10);
                         }
-                        arrayList.add(Integer.valueOf(i19));
-                    } else if (i19 == 2) {
-                        if (arrayList2 == null) {
-                            arrayList2 = new ArrayList();
+                        executeFast10.bindInteger(11, intValue25);
+                        executeFast10.bindInteger(12, intValue26);
+                        executeFast10.bindInteger(13, intValue27);
+                        if (byteBufferValue8 != null) {
+                            nativeByteBuffer = byteBufferValue8;
+                            executeFast10.bindByteBuffer(14, nativeByteBuffer);
+                        } else {
+                            nativeByteBuffer = byteBufferValue8;
+                            executeFast10.bindNull(14);
                         }
-                        arrayList2.add(Integer.valueOf(i18));
+                        executeFast10.bindInteger(15, intValue28);
+                        executeFast10.bindInteger(16, i2 > 0 ? 1 : 0);
+                        executeFast10.step();
+                        if (byteBufferValue7 != null) {
+                            byteBufferValue7.reuse();
+                        }
+                        if (nativeByteBuffer != null) {
+                            nativeByteBuffer.reuse();
+                        }
+                        byteBufferValue6.reuse();
+                        sQLiteCursor = sQLiteCursor8;
+                        i5 = 4;
+                        i6 = 6;
+                        i7 = 2;
+                        i8 = 1;
+                        i11 = 3;
                     }
-                    executeFast11.requery();
-                    executeFast11.bindInteger(1, queryFinalized4.intValue(1));
-                    executeFast11.bindInteger(2, queryFinalized4.intValue(2));
-                    executeFast11.bindLong(3, longValue12);
-                    executeFast11.step();
                 }
-                executeFast11.dispose();
-                queryFinalized4.dispose();
-                SQLiteCursor queryFinalized5 = messagesStorage.database.queryFinalized("SELECT uid, mid FROM unread_push_messages WHERE 1", new Object[0]);
-                SQLitePreparedStatement executeFast12 = messagesStorage.database.executeFast("UPDATE unread_push_messages SET mid = ? WHERE uid = ? AND mid = ?");
-                while (queryFinalized5.next()) {
-                    long longValue13 = queryFinalized5.longValue(0);
-                    int intValue29 = queryFinalized5.intValue(1);
-                    executeFast12.requery();
-                    executeFast12.bindInteger(1, intValue29);
-                    executeFast12.bindLong(2, longValue13);
-                    executeFast12.bindInteger(3, intValue29);
-                    executeFast12.step();
-                }
-                executeFast12.dispose();
-                queryFinalized5.dispose();
-                if (arrayList != null) {
-                    SQLitePreparedStatement executeFast13 = messagesStorage.database.executeFast("UPDATE dialogs SET did = ? WHERE did = ?");
-                    SQLitePreparedStatement executeFast14 = messagesStorage.database.executeFast("UPDATE dialog_filter_pin_v2 SET peer = ? WHERE peer = ?");
-                    SQLitePreparedStatement executeFast15 = messagesStorage.database.executeFast("UPDATE dialog_filter_ep SET peer = ? WHERE peer = ?");
-                    int size = arrayList.size();
-                    for (int i20 = 0; i20 < size; i20++) {
-                        long intValue30 = (long) ((Integer) arrayList.get(i20)).intValue();
-                        long makeEncryptedDialogId = DialogObject.makeEncryptedDialogId(intValue30);
-                        long j = intValue30 << 32;
-                        executeFast13.requery();
-                        executeFast13.bindLong(1, makeEncryptedDialogId);
-                        executeFast13.bindLong(2, j);
-                        executeFast13.step();
-                        executeFast14.requery();
-                        executeFast14.bindLong(1, makeEncryptedDialogId);
-                        executeFast14.bindLong(2, j);
-                        executeFast14.step();
-                        executeFast15.requery();
-                        executeFast15.bindLong(1, makeEncryptedDialogId);
-                        executeFast15.bindLong(2, j);
-                        executeFast15.step();
-                    }
-                    executeFast13.dispose();
-                    executeFast14.dispose();
-                    executeFast15.dispose();
-                }
-                if (arrayList2 != null) {
-                    SQLitePreparedStatement executeFast16 = messagesStorage.database.executeFast("UPDATE dialogs SET did = ? WHERE did = ?");
-                    int size2 = arrayList2.size();
-                    for (int i21 = 0; i21 < size2; i21++) {
-                        int intValue31 = ((Integer) arrayList2.get(i21)).intValue();
-                        long makeFolderDialogId = DialogObject.makeFolderDialogId(intValue31);
-                        executeFast16.requery();
-                        executeFast16.bindLong(1, makeFolderDialogId);
-                        executeFast16.bindLong(2, 8589934592L | ((long) intValue31));
-                        executeFast16.step();
-                    }
-                    executeFast16.dispose();
-                }
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_read_out_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_out_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS task_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages2;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mention_idx_messages;").stepThis().dispose();
-                messagesStorage.database.executeFast("DROP TABLE IF EXISTS messages;").stepThis().dispose();
-                messagesStorage.database.commitTransaction();
-                messagesStorage.database.executeFast("PRAGMA user_version = 84").stepThis().dispose();
+                sQLiteCursor.dispose();
+                executeFast10.dispose();
             }
-        } catch (Exception e9) {
-            e = e9;
-            FileLog.e((Throwable) e);
-            FileLog.d("MessagesStorage db migration finished");
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda19(messagesStorage));
+            messagesStorage = this;
+            int i14 = 0;
+            SQLiteCursor queryFinalized4 = messagesStorage.database.queryFinalized("SELECT did, last_mid, last_mid_i FROM dialogs WHERE 1", new Object[0]);
+            SQLitePreparedStatement executeFast11 = messagesStorage.database.executeFast("UPDATE dialogs SET last_mid = ?, last_mid_i = ? WHERE did = ?");
+            ArrayList arrayList = null;
+            ArrayList arrayList2 = null;
+            while (queryFinalized4.next()) {
+                long longValue12 = queryFinalized4.longValue(i14);
+                int i15 = (int) longValue12;
+                int i16 = (int) (longValue12 >> 32);
+                if (i15 == 0) {
+                    if (arrayList == null) {
+                        arrayList = new ArrayList();
+                    }
+                    arrayList.add(Integer.valueOf(i16));
+                } else if (i16 == 2) {
+                    if (arrayList2 == null) {
+                        arrayList2 = new ArrayList();
+                    }
+                    arrayList2.add(Integer.valueOf(i15));
+                }
+                executeFast11.requery();
+                executeFast11.bindInteger(1, queryFinalized4.intValue(1));
+                executeFast11.bindInteger(2, queryFinalized4.intValue(2));
+                executeFast11.bindLong(3, longValue12);
+                executeFast11.step();
+                i14 = 0;
+            }
+            executeFast11.dispose();
+            queryFinalized4.dispose();
+            SQLiteCursor queryFinalized5 = messagesStorage.database.queryFinalized("SELECT uid, mid FROM unread_push_messages WHERE 1", new Object[0]);
+            SQLitePreparedStatement executeFast12 = messagesStorage.database.executeFast("UPDATE unread_push_messages SET mid = ? WHERE uid = ? AND mid = ?");
+            while (queryFinalized5.next()) {
+                long longValue13 = queryFinalized5.longValue(0);
+                int intValue29 = queryFinalized5.intValue(1);
+                executeFast12.requery();
+                executeFast12.bindInteger(1, intValue29);
+                executeFast12.bindLong(2, longValue13);
+                executeFast12.bindInteger(3, intValue29);
+                executeFast12.step();
+            }
+            executeFast12.dispose();
+            queryFinalized5.dispose();
+            if (arrayList != null) {
+                SQLitePreparedStatement executeFast13 = messagesStorage.database.executeFast("UPDATE dialogs SET did = ? WHERE did = ?");
+                SQLitePreparedStatement executeFast14 = messagesStorage.database.executeFast("UPDATE dialog_filter_pin_v2 SET peer = ? WHERE peer = ?");
+                SQLitePreparedStatement executeFast15 = messagesStorage.database.executeFast("UPDATE dialog_filter_ep SET peer = ? WHERE peer = ?");
+                int size = arrayList.size();
+                for (int i17 = 0; i17 < size; i17++) {
+                    long intValue30 = (long) ((Integer) arrayList.get(i17)).intValue();
+                    long makeEncryptedDialogId = DialogObject.makeEncryptedDialogId(intValue30);
+                    long j = intValue30 << 32;
+                    executeFast13.requery();
+                    executeFast13.bindLong(1, makeEncryptedDialogId);
+                    executeFast13.bindLong(2, j);
+                    executeFast13.step();
+                    executeFast14.requery();
+                    executeFast14.bindLong(1, makeEncryptedDialogId);
+                    executeFast14.bindLong(2, j);
+                    executeFast14.step();
+                    executeFast15.requery();
+                    executeFast15.bindLong(1, makeEncryptedDialogId);
+                    executeFast15.bindLong(2, j);
+                    executeFast15.step();
+                }
+                executeFast13.dispose();
+                executeFast14.dispose();
+                executeFast15.dispose();
+            }
+            if (arrayList2 != null) {
+                SQLitePreparedStatement executeFast16 = messagesStorage.database.executeFast("UPDATE dialogs SET did = ? WHERE did = ?");
+                int size2 = arrayList2.size();
+                for (int i18 = 0; i18 < size2; i18++) {
+                    int intValue31 = ((Integer) arrayList2.get(i18)).intValue();
+                    long makeFolderDialogId = DialogObject.makeFolderDialogId(intValue31);
+                    executeFast16.requery();
+                    executeFast16.bindLong(1, makeFolderDialogId);
+                    executeFast16.bindLong(2, 8589934592L | ((long) intValue31));
+                    executeFast16.step();
+                }
+                executeFast16.dispose();
+            }
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_read_out_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_out_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS task_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages2;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mention_idx_messages;").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS messages;").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("PRAGMA user_version = 84").stepThis().dispose();
         }
         FileLog.d("MessagesStorage db migration finished");
-        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda19(messagesStorage));
+        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda14(messagesStorage));
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$updateDbToLastVersion$2() {
+        this.databaseMigrationInProgress = true;
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.onDatabaseMigration, Boolean.TRUE);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateDbToLastVersion$3() {
         this.databaseMigrationInProgress = false;
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.onDatabaseMigration, Boolean.FALSE);
     }
@@ -1689,7 +1667,7 @@ public class MessagesStorage extends BaseController {
     }
 
     private void loadPendingTasks() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda17(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda18(this));
     }
 
     /* access modifiers changed from: private */
@@ -2004,7 +1982,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateMutedDialogsFiltersCounters() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda16(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda17(this));
     }
 
     public void setDialogFlags(long j, long j2) {
@@ -2300,7 +2278,7 @@ public class MessagesStorage extends BaseController {
     }
 
     private void loadDialogFilters() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda14(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda15(this));
     }
 
     /* access modifiers changed from: private */
@@ -4378,7 +4356,7 @@ public class MessagesStorage extends BaseController {
     public /* synthetic */ void lambda$saveDialogFilter$45(MessagesController.DialogFilter dialogFilter, boolean z, boolean z2) {
         saveDialogFilterInternal(dialogFilter, z, z2);
         calcUnreadCounters(false);
-        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda20(this));
+        AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda21(this));
     }
 
     /* access modifiers changed from: private */
@@ -5647,7 +5625,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.messenger.MediaDataController r0 = r24.getMediaDataController()     // Catch:{ Exception -> 0x0471 }
             r1 = 0
             r0.clearBotKeyboard(r9, r1)     // Catch:{ Exception -> 0x0471 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda18 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda18     // Catch:{ Exception -> 0x0471 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda19 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda19     // Catch:{ Exception -> 0x0471 }
             r0.<init>(r7)     // Catch:{ Exception -> 0x0471 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0471 }
             r1 = 0
@@ -8622,7 +8600,7 @@ public class MessagesStorage extends BaseController {
             goto L_0x0413
         L_0x0ac1:
             r1 = r0
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda21 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda21
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda22 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda22
             r0.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
@@ -10978,7 +10956,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getContacts() {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda15(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda16(this));
     }
 
     /* access modifiers changed from: private */
@@ -11011,7 +10989,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getUnsentMessages(int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda23(this, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda24(this, i));
     }
 
     /* access modifiers changed from: private */
@@ -14924,7 +14902,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void clearWidgetDialogs(int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda25(this, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda26(this, i));
     }
 
     /* access modifiers changed from: private */
@@ -18210,7 +18188,7 @@ public class MessagesStorage extends BaseController {
             r3 = r37
             r2.processDialogsUpdateRead(r3, r4)     // Catch:{ Exception -> 0x010d }
             if (r38 == 0) goto L_0x0b9b
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda22 r2 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda22     // Catch:{ Exception -> 0x010d }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda23 r2 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda23     // Catch:{ Exception -> 0x010d }
             r3 = r38
             r2.<init>(r1, r3)     // Catch:{ Exception -> 0x010d }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x010d }
@@ -20580,12 +20558,12 @@ public class MessagesStorage extends BaseController {
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported_old) {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
-                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(133);
+                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(134);
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(133);
+                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(134);
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -23477,7 +23455,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void checkIfFolderEmpty(int i) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda24(this, i));
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda25(this, i));
     }
 
     public void unpinAllDialogsExceptNew(ArrayList<Long> arrayList, int i) {
@@ -24002,7 +23980,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627478(0x7f0e0dd6, float:1.8882222E38)
+            r8 = 2131627480(0x7f0e0dd8, float:1.8882226E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"

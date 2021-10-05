@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatTheme$$ExternalSyntheticLambda0 implement
     }
 
     public final void run() {
-        ChatTheme.lambda$loadWallpaperThumb$1(this.f$0, this.f$1);
+        ChatTheme.lambda$loadWallpaperThumb$2(this.f$0, this.f$1);
     }
 }

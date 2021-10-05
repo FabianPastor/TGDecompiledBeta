@@ -688,7 +688,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;
-        recyclerListView.setFastScrollEnabled();
+        recyclerListView.setFastScrollEnabled(0);
         this.listView.setEmptyView(this.emptyView);
         RecyclerListView recyclerListView2 = this.listView;
         GroupCreateAdapter groupCreateAdapter = new GroupCreateAdapter(context);
@@ -1387,7 +1387,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r1 = 8
                 r4.setVisibility(r1)
                 android.widget.TextView r4 = r5.title
-                r1 = 2131626399(0x7f0e099f, float:1.8880033E38)
+                r1 = 2131626401(0x7f0e09a1, float:1.8880037E38)
                 java.lang.String r2 = "NoContacts"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r4.setText(r1)

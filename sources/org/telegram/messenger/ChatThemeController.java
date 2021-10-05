@@ -2,12 +2,17 @@ package org.telegram.messenger;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.Pair;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.ResultCallback;
@@ -20,39 +25,35 @@ import org.telegram.ui.ActionBar.ChatTheme;
 
 public class ChatThemeController extends BaseController {
     private static List<ChatTheme> allChatThemes = null;
-    private static volatile DispatchQueue chatThemeQueue = new DispatchQueue("stageQueue");
+    private static volatile DispatchQueue chatThemeQueue = new DispatchQueue("chatThemeQueue");
     private static final ChatThemeController[] instances = new ChatThemeController[3];
     private static volatile long lastReloadTimeMs = 0;
     private static final long reloadTimeoutMs = 7200000;
-    private static final HashMap<Long, Bitmap> themeIdWallpaperMap = new HashMap<>();
     private static final HashMap<Long, Bitmap> themeIdWallpaperThumbMap = new HashMap<>();
     private static volatile int themesHash;
     private final LongSparseArray<String> dialogEmoticonsMap = new LongSparseArray<>();
+
+    public static void clearWallpaperImages() {
+    }
 
     public static void init() {
         SharedPreferences sharedPreferences = getSharedPreferences();
         themesHash = 0;
         lastReloadTimeMs = 0;
-        if (!BuildVars.DEBUG_VERSION) {
-            sharedPreferences.getInt("hash", 0);
-            lastReloadTimeMs = sharedPreferences.getLong("lastReload", 0);
-        }
+        sharedPreferences.getInt("hash", 0);
+        lastReloadTimeMs = sharedPreferences.getLong("lastReload", 0);
         allChatThemes = getAllChatThemesFromPrefs();
-        Emoji.preloadEmoji("❌");
+        preloadSticker("❌");
         if (!allChatThemes.isEmpty()) {
             for (ChatTheme emoticon : allChatThemes) {
-                Emoji.preloadEmoji(emoticon.getEmoticon());
+                preloadSticker(emoticon.getEmoticon());
             }
-            return;
         }
-        Emoji.preloadEmoji("🦁");
-        Emoji.preloadEmoji("⛄");
-        Emoji.preloadEmoji("💎");
-        Emoji.preloadEmoji("👨‍🏫");
-        Emoji.preloadEmoji("🌷");
-        Emoji.preloadEmoji("🔮");
-        Emoji.preloadEmoji("🎄");
-        Emoji.preloadEmoji("🎮");
+    }
+
+    private static void preloadSticker(String str) {
+        new ImageReceiver().setImage(ImageLocation.getForDocument(MediaDataController.getInstance(UserConfig.selectedAccount).getEmojiAnimatedSticker(str)), "50_50", (Drawable) null, (String) null, (Object) null, 0);
+        Emoji.preloadEmoji(str);
     }
 
     public static void requestAllChatThemes(ResultCallback<List<ChatTheme>> resultCallback, boolean z) {
@@ -64,7 +65,7 @@ public class ChatThemeController extends BaseController {
         if (list == null || list.isEmpty() || z2) {
             TLRPC$TL_account_getChatThemes tLRPC$TL_account_getChatThemes = new TLRPC$TL_account_getChatThemes();
             tLRPC$TL_account_getChatThemes.hash = themesHash;
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_account_getChatThemes, new ChatThemeController$$ExternalSyntheticLambda3(resultCallback, z));
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_account_getChatThemes, new ChatThemeController$$ExternalSyntheticLambda5(resultCallback, z));
             return;
         }
         ArrayList<ChatTheme> arrayList = new ArrayList<>(allChatThemes);
@@ -149,7 +150,7 @@ public class ChatThemeController extends BaseController {
             goto L_0x00a4
         L_0x009a:
             r0 = 0
-            org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda1 r7 = new org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda1
+            org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda3 r7 = new org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda3
             r7.<init>(r8, r9)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
             r7 = 1
@@ -172,7 +173,7 @@ public class ChatThemeController extends BaseController {
             r9.initColors()
             goto L_0x00bd
         L_0x00cd:
-            org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda0 r7 = new org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda0
+            org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda2 r7 = new org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda2
             r7.<init>(r0, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
         L_0x00d5:
@@ -298,44 +299,69 @@ public class ChatThemeController extends BaseController {
 
     public static void preloadAllWallpaperImages(boolean z) {
         for (ChatTheme next : allChatThemes) {
-            if (!themeIdWallpaperMap.containsKey(Long.valueOf(next.getTlTheme(z).id))) {
-                next.loadWallpaper(z, ChatThemeController$$ExternalSyntheticLambda5.INSTANCE);
+            if (!getPatternFile(next.getTlTheme(z).id).exists()) {
+                next.loadWallpaper(z, (ResultCallback<Pair<Long, Bitmap>>) null);
             }
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$preloadAllWallpaperImages$4(Pair pair) {
-        if (pair != null) {
-            themeIdWallpaperMap.put((Long) pair.first, (Bitmap) pair.second);
         }
     }
 
     public static void preloadAllWallpaperThumbs(boolean z) {
         for (ChatTheme next : allChatThemes) {
             if (!themeIdWallpaperThumbMap.containsKey(Long.valueOf(next.getTlTheme(z).id))) {
-                next.loadWallpaperThumb(z, ChatThemeController$$ExternalSyntheticLambda4.INSTANCE);
+                next.loadWallpaperThumb(z, ChatThemeController$$ExternalSyntheticLambda6.INSTANCE);
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$preloadAllWallpaperThumbs$5(Pair pair) {
+    public static /* synthetic */ void lambda$preloadAllWallpaperThumbs$4(Pair pair) {
         if (pair != null) {
             themeIdWallpaperThumbMap.put((Long) pair.first, (Bitmap) pair.second);
         }
-    }
-
-    public static void clearWallpaperImages() {
-        themeIdWallpaperMap.clear();
     }
 
     public static void clearWallpaperThumbImages() {
         themeIdWallpaperThumbMap.clear();
     }
 
-    public static Bitmap getWallpaperBitmap(long j) {
-        return themeIdWallpaperMap.get(Long.valueOf(j));
+    public static void getWallpaperBitmap(long j, ResultCallback<Bitmap> resultCallback) {
+        if (themesHash == 0) {
+            resultCallback.onComplete(null);
+            return;
+        }
+        chatThemeQueue.postRunnable(new ChatThemeController$$ExternalSyntheticLambda1(getPatternFile(j), resultCallback));
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$getWallpaperBitmap$5(File file, ResultCallback resultCallback) {
+        Bitmap bitmap = null;
+        try {
+            if (file.exists()) {
+                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+        resultCallback.onComplete(bitmap);
+    }
+
+    private static File getPatternFile(long j) {
+        return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%d_%d.jpg", new Object[]{Long.valueOf(j), Integer.valueOf(themesHash)}));
+    }
+
+    public static void saveWallpaperBitmap(Bitmap bitmap, long j) {
+        chatThemeQueue.postRunnable(new ChatThemeController$$ExternalSyntheticLambda0(getPatternFile(j), bitmap));
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$saveWallpaperBitmap$6(File file, Bitmap bitmap) {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 87, fileOutputStream);
+            fileOutputStream.close();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
     }
 
     public static Bitmap getWallpaperThumbBitmap(long j) {

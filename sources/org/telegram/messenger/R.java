@@ -2230,6 +2230,7 @@ public final class R {
         public static final int AttachLocation = NUM;
         public static final int AttachMediaRestricted = NUM;
         public static final int AttachMediaRestrictedForever = NUM;
+        public static final int AttachMenu = NUM;
         public static final int AttachMusic = NUM;
         public static final int AttachPhoto = NUM;
         public static final int AttachPhotoExpired = NUM;
@@ -2450,6 +2451,7 @@ public final class R {
         public static final int CacheEmpty = NUM;
         public static final int CacheWasCleared = NUM;
         public static final int CalculatingSize = NUM;
+        public static final int Calendar = NUM;
         public static final int Call = NUM;
         public static final int CallAgain = NUM;
         public static final int CallAlert = NUM;

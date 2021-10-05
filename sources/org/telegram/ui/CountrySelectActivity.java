@@ -129,7 +129,7 @@ public class CountrySelectActivity extends BaseFragment {
         recyclerListView.setSectionsType(1);
         this.listView.setEmptyView(this.emptyView);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setFastScrollEnabled();
+        this.listView.setFastScrollEnabled(0);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setAdapter(this.listViewAdapter);
         RecyclerListView recyclerListView2 = this.listView;

@@ -2091,6 +2091,7 @@
     <public type="string" name="AttachLocation" id="NUM" />
     <public type="string" name="AttachMediaRestricted" id="NUM" />
     <public type="string" name="AttachMediaRestrictedForever" id="NUM" />
+    <public type="string" name="AttachMenu" id="NUM" />
     <public type="string" name="AttachMusic" id="NUM" />
     <public type="string" name="AttachPhoto" id="NUM" />
     <public type="string" name="AttachPhotoExpired" id="NUM" />
@@ -2311,6 +2312,7 @@
     <public type="string" name="CacheEmpty" id="NUM" />
     <public type="string" name="CacheWasCleared" id="NUM" />
     <public type="string" name="CalculatingSize" id="NUM" />
+    <public type="string" name="Calendar" id="NUM" />
     <public type="string" name="Call" id="NUM" />
     <public type="string" name="CallAgain" id="NUM" />
     <public type="string" name="CallAlert" id="NUM" />

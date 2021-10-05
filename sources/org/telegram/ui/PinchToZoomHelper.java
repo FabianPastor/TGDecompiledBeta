@@ -57,6 +57,9 @@ public class PinchToZoomHelper {
     /* access modifiers changed from: private */
     public float finishProgress;
     ValueAnimator finishTransition;
+    float fragmentOffsetX;
+    float fragmentOffsetY;
+    private final ViewGroup fragmentView;
     /* access modifiers changed from: private */
     public ImageReceiver fullImage = new ImageReceiver();
     /* access modifiers changed from: private */
@@ -134,8 +137,9 @@ public class PinchToZoomHelper {
         return f2;
     }
 
-    public PinchToZoomHelper(ViewGroup viewGroup) {
+    public PinchToZoomHelper(ViewGroup viewGroup, ViewGroup viewGroup2) {
         this.parentView = viewGroup;
+        this.fragmentView = viewGroup2;
     }
 
     public void startZoom(View view, ImageReceiver imageReceiver, MessageObject messageObject2) {
@@ -239,15 +243,26 @@ public class PinchToZoomHelper {
     public boolean updateViewsLocation() {
         float f = 0.0f;
         float f2 = 0.0f;
+        float f3 = 0.0f;
         for (View view = this.child; view != this.parentView; view = (View) view.getParent()) {
             if (view == null) {
                 return false;
             }
-            f += (float) view.getLeft();
-            f2 += (float) view.getTop();
+            f2 += (float) view.getLeft();
+            f3 += (float) view.getTop();
         }
-        this.parentOffsetX = f;
-        this.parentOffsetY = f2;
+        float f4 = 0.0f;
+        for (View view2 = this.child; view2 != this.fragmentView; view2 = (View) view2.getParent()) {
+            if (view2 == null) {
+                return false;
+            }
+            f += (float) view2.getLeft();
+            f4 += (float) view2.getTop();
+        }
+        this.fragmentOffsetX = f;
+        this.fragmentOffsetY = f4;
+        this.parentOffsetX = f2;
+        this.parentOffsetY = f3;
         return true;
     }
 
@@ -332,7 +347,7 @@ public class PinchToZoomHelper {
         if (!updateViewsLocation() || this.child == null) {
             return false;
         }
-        motionEvent.offsetLocation(-this.parentOffsetX, -this.parentOffsetY);
+        motionEvent.offsetLocation(-this.fragmentOffsetX, -this.fragmentOffsetY);
         return this.child.onTouchEvent(motionEvent);
     }
 

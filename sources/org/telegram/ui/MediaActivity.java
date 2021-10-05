@@ -93,7 +93,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         public void setValue(MediaActivity mediaActivity, float f) {
             mediaActivity.setScrollY(f);
             for (MediaPage access$200 : MediaActivity.this.mediaPages) {
-                access$200.listView.checkSection();
+                access$200.listView.checkSection(false);
             }
         }
 
@@ -478,7 +478,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r1 = r0.self
             if (r1 == 0) goto L_0x00be
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131627478(0x7f0e0dd6, float:1.8882222E38)
+            r1 = 2131627480(0x7f0e0dd8, float:1.8882226E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -507,7 +507,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = android.text.TextUtils.isEmpty(r0)
             if (r0 == 0) goto L_0x0100
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131627679(0x7f0e0e9f, float:1.888263E38)
+            r1 = 2131627681(0x7f0e0ea1, float:1.8882633E38)
             java.lang.String r3 = "SharedContentTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -578,7 +578,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setActionBarMenuItemSearchListener(r1)
             r6.searchItem = r0
             java.lang.String r1 = "Search"
-            r3 = 2131627490(0x7f0e0de2, float:1.8882246E38)
+            r3 = 2131627492(0x7f0e0de4, float:1.888225E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r1, r3)
             r0.setSearchFieldHint(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -657,7 +657,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
             r5 = 2131165749(0x7var_, float:1.7945724E38)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r13 = 2131625643(0x7f0e06ab, float:1.88785E38)
+            r13 = 2131625645(0x7f0e06ad, float:1.8878504E38)
             java.lang.String r14 = "Forward"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.addItemWithWidth(r3, r5, r12, r13)
@@ -666,7 +666,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
             r5 = 2131165737(0x7var_, float:1.79457E38)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r12 = 2131625150(0x7f0e04be, float:1.88775E38)
+            r12 = 2131625152(0x7f0e04c0, float:1.8877504E38)
             java.lang.String r13 = "Delete"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItemWithWidth(r2, r5, r4, r12)
@@ -904,7 +904,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0 = r0[r14]
             org.telegram.ui.Components.StickerEmptyView r0 = r0.emptyView
             android.widget.TextView r0 = r0.title
-            r2 = 2131626438(0x7f0e09c6, float:1.8880112E38)
+            r2 = 2131626440(0x7f0e09c8, float:1.8880116E38)
             java.lang.String r3 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -912,7 +912,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0 = r0[r14]
             org.telegram.ui.Components.StickerEmptyView r0 = r0.emptyView
             android.widget.TextView r0 = r0.subtitle
-            r2 = 2131627495(0x7f0e0de7, float:1.8882256E38)
+            r2 = 2131627497(0x7f0e0de9, float:1.888226E38)
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -1052,16 +1052,16 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:160:0x02bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x02c3  */
     /* JADX WARNING: Removed duplicated region for block: B:202:? A[RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:88:0x01b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x01d9  */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x01c0  */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x01e1  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void didReceivedNotification(int r22, int r23, java.lang.Object... r24) {
+    public void didReceivedNotification(int r24, int r25, java.lang.Object... r26) {
         /*
-            r21 = this;
-            r0 = r21
-            r1 = r22
+            r23 = this;
+            r0 = r23
+            r1 = r24
             int r2 = org.telegram.messenger.NotificationCenter.mediaDidLoad
             r5 = 4
             r6 = 3
@@ -1069,27 +1069,27 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r9 = 2
             r10 = 0
             r11 = 1
-            if (r1 != r2) goto L_0x015a
-            r1 = r24[r10]
+            if (r1 != r2) goto L_0x0162
+            r1 = r26[r10]
             java.lang.Long r1 = (java.lang.Long) r1
             long r1 = r1.longValue()
-            r12 = r24[r6]
+            r12 = r26[r6]
             java.lang.Integer r12 = (java.lang.Integer) r12
             int r12 = r12.intValue()
             int r13 = r0.classGuid
-            if (r12 != r13) goto L_0x032e
-            r12 = r24[r5]
+            if (r12 != r13) goto L_0x0336
+            r12 = r26[r5]
             java.lang.Integer r12 = (java.lang.Integer) r12
             int r12 = r12.intValue()
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r13 = r0.sharedMediaData
             r14 = r13[r12]
             r14.loading = r10
             r13 = r13[r12]
-            r14 = r24[r11]
+            r14 = r26[r11]
             java.lang.Integer r14 = (java.lang.Integer) r14
             int r14 = r14.intValue()
             r13.totalCount = r14
-            r13 = r24[r9]
+            r13 = r26[r9]
             java.util.ArrayList r13 = (java.util.ArrayList) r13
             long r14 = r0.dialogId
             boolean r14 = org.telegram.messenger.DialogObject.isEncryptedDialog(r14)
@@ -1146,19 +1146,19 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r3 = r3[r12]
             boolean[] r3 = r3.endReached
             r5 = 5
-            r5 = r24[r5]
+            r5 = r26[r5]
             java.lang.Boolean r5 = (java.lang.Boolean) r5
             boolean r5 = r5.booleanValue()
             r3[r1] = r5
-            if (r1 != 0) goto L_0x00d0
+            if (r1 != 0) goto L_0x00d8
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r3 = r0.sharedMediaData
             r5 = r3[r12]
             boolean[] r5 = r5.endReached
             boolean r1 = r5[r1]
-            if (r1 == 0) goto L_0x00d0
+            if (r1 == 0) goto L_0x00d8
             long r5 = r0.mergeDialogId
             int r1 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r1 == 0) goto L_0x00d0
+            if (r1 == 0) goto L_0x00d8
             r1 = r3[r12]
             r1.loading = r11
             int r1 = r0.currentAccount
@@ -1166,75 +1166,79 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             long r14 = r0.mergeDialogId
             r16 = 50
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r1 = r0.sharedMediaData
+            r3 = r1[r12]
+            int[] r3 = r3.max_id
+            r17 = r3[r11]
+            r18 = 0
+            r20 = 1
+            int r3 = r0.classGuid
             r1 = r1[r12]
-            int[] r1 = r1.max_id
-            r17 = r1[r11]
-            r19 = 1
-            int r1 = r0.classGuid
-            r18 = r12
-            r20 = r1
-            r13.loadMedia(r14, r16, r17, r18, r19, r20)
-        L_0x00d0:
-            if (r4 == 0) goto L_0x0122
+            int r1 = r1.requestIndex
+            r19 = r12
+            r21 = r3
+            r22 = r1
+            r13.loadMedia(r14, r16, r17, r18, r19, r20, r21, r22)
+        L_0x00d8:
+            if (r4 == 0) goto L_0x012a
             r1 = 0
-        L_0x00d3:
+        L_0x00db:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
             int r5 = r3.length
-            if (r1 >= r5) goto L_0x00f2
+            if (r1 >= r5) goto L_0x00fa
             r3 = r3[r1]
             org.telegram.ui.Components.RecyclerListView r3 = r3.listView
             androidx.recyclerview.widget.RecyclerView$Adapter r3 = r3.getAdapter()
-            if (r3 != r4) goto L_0x00ef
+            if (r3 != r4) goto L_0x00f7
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
             r3 = r3[r1]
             org.telegram.ui.Components.RecyclerListView r3 = r3.listView
             r3.stopScroll()
-        L_0x00ef:
+        L_0x00f7:
             int r1 = r1 + 1
-            goto L_0x00d3
-        L_0x00f2:
+            goto L_0x00db
+        L_0x00fa:
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r1 = r0.sharedMediaData
             r1 = r1[r12]
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r1.messages
             int r1 = r1.size()
-            if (r1 != 0) goto L_0x010a
+            if (r1 != 0) goto L_0x0112
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r1 = r0.sharedMediaData
             r1 = r1[r12]
             boolean r1 = r1.loading
-            if (r1 != 0) goto L_0x010a
+            if (r1 != 0) goto L_0x0112
             r4.notifyDataSetChanged()
-            goto L_0x0122
-        L_0x010a:
+            goto L_0x012a
+        L_0x0112:
             int r1 = r4.getItemCount()
-            if (r2 <= r11) goto L_0x0115
+            if (r2 <= r11) goto L_0x011d
             int r3 = r2 + -2
             r4.notifyItemChanged(r3)
-        L_0x0115:
-            if (r1 <= r2) goto L_0x011b
+        L_0x011d:
+            if (r1 <= r2) goto L_0x0123
             r4.notifyItemRangeInserted(r2, r1)
-            goto L_0x0122
-        L_0x011b:
-            if (r1 >= r2) goto L_0x0122
+            goto L_0x012a
+        L_0x0123:
+            if (r1 >= r2) goto L_0x012a
             int r3 = r2 - r1
             r4.notifyItemRangeRemoved(r1, r3)
-        L_0x0122:
+        L_0x012a:
             r0.scrolling = r11
             r1 = 0
-        L_0x0125:
+        L_0x012d:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
             int r3 = r3.length
-            if (r1 >= r3) goto L_0x032e
-            if (r2 != 0) goto L_0x0157
+            if (r1 >= r3) goto L_0x0336
+            if (r2 != 0) goto L_0x015f
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             float r3 = r3.getTranslationY()
             r5 = 0
             int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r3 == 0) goto L_0x0157
+            if (r3 == 0) goto L_0x015f
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
             r3 = r3[r1]
             org.telegram.ui.Components.RecyclerListView r3 = r3.listView
             androidx.recyclerview.widget.RecyclerView$Adapter r3 = r3.getAdapter()
-            if (r3 != r4) goto L_0x0157
+            if (r3 != r4) goto L_0x015f
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
             r3 = r3[r1]
             androidx.recyclerview.widget.LinearLayoutManager r3 = r3.layoutManager
@@ -1242,215 +1246,215 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             float r5 = r5.getTranslationY()
             int r5 = (int) r5
             r3.scrollToPositionWithOffset(r10, r5)
-        L_0x0157:
+        L_0x015f:
             int r1 = r1 + 1
-            goto L_0x0125
-        L_0x015a:
+            goto L_0x012d
+        L_0x0162:
             int r2 = org.telegram.messenger.NotificationCenter.messagesDeleted
-            if (r1 != r2) goto L_0x0200
-            r1 = r24[r9]
+            if (r1 != r2) goto L_0x0208
+            r1 = r26[r9]
             java.lang.Boolean r1 = (java.lang.Boolean) r1
             boolean r1 = r1.booleanValue()
-            if (r1 == 0) goto L_0x0169
+            if (r1 == 0) goto L_0x0171
             return
-        L_0x0169:
+        L_0x0171:
             long r1 = r0.dialogId
             boolean r1 = org.telegram.messenger.DialogObject.isChatDialog(r1)
-            if (r1 == 0) goto L_0x0183
+            if (r1 == 0) goto L_0x018b
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             long r2 = r0.dialogId
             long r2 = -r2
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
             org.telegram.tgnet.TLRPC$Chat r4 = r1.getChat(r2)
-            goto L_0x0184
-        L_0x0183:
+            goto L_0x018c
+        L_0x018b:
             r4 = 0
-        L_0x0184:
-            r1 = r24[r11]
+        L_0x018c:
+            r1 = r26[r11]
             java.lang.Long r1 = (java.lang.Long) r1
             long r1 = r1.longValue()
             boolean r3 = org.telegram.messenger.ChatObject.isChannel(r4)
-            if (r3 == 0) goto L_0x01a6
+            if (r3 == 0) goto L_0x01ae
             int r3 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1))
-            if (r3 != 0) goto L_0x019e
+            if (r3 != 0) goto L_0x01a6
             long r5 = r0.mergeDialogId
             int r3 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r3 == 0) goto L_0x019e
+            if (r3 == 0) goto L_0x01a6
             r1 = 1
-            goto L_0x01ac
-        L_0x019e:
+            goto L_0x01b4
+        L_0x01a6:
             long r3 = r4.id
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 != 0) goto L_0x01a5
-            goto L_0x01ab
-        L_0x01a5:
+            if (r5 != 0) goto L_0x01ad
+            goto L_0x01b3
+        L_0x01ad:
             return
-        L_0x01a6:
+        L_0x01ae:
             int r3 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1))
-            if (r3 == 0) goto L_0x01ab
+            if (r3 == 0) goto L_0x01b3
             return
-        L_0x01ab:
+        L_0x01b3:
             r1 = 0
-        L_0x01ac:
-            r2 = r24[r10]
+        L_0x01b4:
+            r2 = r26[r10]
             java.util.ArrayList r2 = (java.util.ArrayList) r2
             int r3 = r2.size()
             r4 = 0
             r5 = 0
-        L_0x01b6:
-            if (r4 >= r3) goto L_0x01d7
+        L_0x01be:
+            if (r4 >= r3) goto L_0x01df
             r6 = 0
-        L_0x01b9:
+        L_0x01c1:
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r7 = r0.sharedMediaData
             int r8 = r7.length
-            if (r6 >= r8) goto L_0x01d4
+            if (r6 >= r8) goto L_0x01dc
             r7 = r7[r6]
             java.lang.Object r8 = r2.get(r4)
             java.lang.Integer r8 = (java.lang.Integer) r8
             int r8 = r8.intValue()
             org.telegram.messenger.MessageObject r7 = r7.deleteMessage(r8, r1)
-            if (r7 == 0) goto L_0x01d1
+            if (r7 == 0) goto L_0x01d9
             r5 = 1
-        L_0x01d1:
+        L_0x01d9:
             int r6 = r6 + 1
-            goto L_0x01b9
-        L_0x01d4:
+            goto L_0x01c1
+        L_0x01dc:
             int r4 = r4 + 1
-            goto L_0x01b6
-        L_0x01d7:
-            if (r5 == 0) goto L_0x032e
+            goto L_0x01be
+        L_0x01df:
+            if (r5 == 0) goto L_0x0336
             r0.scrolling = r11
             org.telegram.ui.MediaActivity$SharedPhotoVideoAdapter r1 = r0.photoVideoAdapter
-            if (r1 == 0) goto L_0x01e2
+            if (r1 == 0) goto L_0x01ea
             r1.notifyDataSetChanged()
-        L_0x01e2:
+        L_0x01ea:
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r1 = r0.documentsAdapter
-            if (r1 == 0) goto L_0x01e9
+            if (r1 == 0) goto L_0x01f1
             r1.notifyDataSetChanged()
-        L_0x01e9:
+        L_0x01f1:
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r1 = r0.voiceAdapter
-            if (r1 == 0) goto L_0x01f0
+            if (r1 == 0) goto L_0x01f8
             r1.notifyDataSetChanged()
-        L_0x01f0:
+        L_0x01f8:
             org.telegram.ui.MediaActivity$SharedLinksAdapter r1 = r0.linksAdapter
-            if (r1 == 0) goto L_0x01f7
+            if (r1 == 0) goto L_0x01ff
             r1.notifyDataSetChanged()
-        L_0x01f7:
+        L_0x01ff:
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r1 = r0.audioAdapter
-            if (r1 == 0) goto L_0x032e
+            if (r1 == 0) goto L_0x0336
             r1.notifyDataSetChanged()
-            goto L_0x032e
-        L_0x0200:
+            goto L_0x0336
+        L_0x0208:
             int r2 = org.telegram.messenger.NotificationCenter.didReceiveNewMessages
-            if (r1 != r2) goto L_0x0301
-            r1 = r24[r9]
+            if (r1 != r2) goto L_0x0309
+            r1 = r26[r9]
             java.lang.Boolean r1 = (java.lang.Boolean) r1
             boolean r1 = r1.booleanValue()
-            if (r1 == 0) goto L_0x020f
+            if (r1 == 0) goto L_0x0217
             return
-        L_0x020f:
-            r1 = r24[r10]
+        L_0x0217:
+            r1 = r26[r10]
             java.lang.Long r1 = (java.lang.Long) r1
             long r1 = r1.longValue()
             long r3 = r0.dialogId
             int r7 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r7 != 0) goto L_0x032e
-            r1 = r24[r11]
+            if (r7 != 0) goto L_0x0336
+            r1 = r26[r11]
             java.util.ArrayList r1 = (java.util.ArrayList) r1
             boolean r2 = org.telegram.messenger.DialogObject.isEncryptedDialog(r3)
             r3 = 0
             r4 = 0
-        L_0x0227:
+        L_0x022f:
             int r7 = r1.size()
-            if (r3 >= r7) goto L_0x026b
+            if (r3 >= r7) goto L_0x0273
             java.lang.Object r7 = r1.get(r3)
             org.telegram.messenger.MessageObject r7 = (org.telegram.messenger.MessageObject) r7
             org.telegram.tgnet.TLRPC$Message r8 = r7.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r8 = r8.media
-            if (r8 == 0) goto L_0x0266
+            if (r8 == 0) goto L_0x026e
             boolean r8 = r7.needDrawBluredPreview()
-            if (r8 == 0) goto L_0x0240
-            goto L_0x0266
-        L_0x0240:
+            if (r8 == 0) goto L_0x0248
+            goto L_0x026e
+        L_0x0248:
             org.telegram.tgnet.TLRPC$Message r8 = r7.messageOwner
             int r8 = org.telegram.messenger.MediaDataController.getMediaType(r8)
             r12 = -1
-            if (r8 != r12) goto L_0x024a
+            if (r8 != r12) goto L_0x0252
             return
-        L_0x024a:
+        L_0x0252:
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r12 = r0.sharedMediaData
             r12 = r12[r8]
             long r13 = r7.getDialogId()
             long r5 = r0.dialogId
             int r18 = (r13 > r5 ? 1 : (r13 == r5 ? 0 : -1))
-            if (r18 != 0) goto L_0x025a
+            if (r18 != 0) goto L_0x0262
             r5 = 0
-            goto L_0x025b
-        L_0x025a:
+            goto L_0x0263
+        L_0x0262:
             r5 = 1
-        L_0x025b:
+        L_0x0263:
             boolean r5 = r12.addMessage(r7, r5, r11, r2)
-            if (r5 == 0) goto L_0x0266
+            if (r5 == 0) goto L_0x026e
             int[] r4 = r0.hasMedia
             r4[r8] = r11
             r4 = 1
-        L_0x0266:
+        L_0x026e:
             int r3 = r3 + 1
             r5 = 4
             r6 = 3
-            goto L_0x0227
-        L_0x026b:
-            if (r4 == 0) goto L_0x032e
+            goto L_0x022f
+        L_0x0273:
+            if (r4 == 0) goto L_0x0336
             r0.scrolling = r11
             r1 = 0
-        L_0x0270:
+        L_0x0278:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             int r3 = r2.length
-            if (r1 >= r3) goto L_0x02fd
+            if (r1 >= r3) goto L_0x0305
             r2 = r2[r1]
             int r2 = r2.selectedType
-            if (r2 != 0) goto L_0x0282
+            if (r2 != 0) goto L_0x028a
             org.telegram.ui.MediaActivity$SharedPhotoVideoAdapter r2 = r0.photoVideoAdapter
-        L_0x027f:
+        L_0x0287:
             r3 = 3
-        L_0x0280:
+        L_0x0288:
             r4 = 4
-            goto L_0x02b9
-        L_0x0282:
+            goto L_0x02c1
+        L_0x028a:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r1]
             int r2 = r2.selectedType
-            if (r2 != r11) goto L_0x028f
+            if (r2 != r11) goto L_0x0297
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r2 = r0.documentsAdapter
-            goto L_0x027f
-        L_0x028f:
+            goto L_0x0287
+        L_0x0297:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r1]
             int r2 = r2.selectedType
-            if (r2 != r9) goto L_0x029c
+            if (r2 != r9) goto L_0x02a4
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r2 = r0.voiceAdapter
-            goto L_0x027f
-        L_0x029c:
+            goto L_0x0287
+        L_0x02a4:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r1]
             int r2 = r2.selectedType
             r3 = 3
-            if (r2 != r3) goto L_0x02aa
+            if (r2 != r3) goto L_0x02b2
             org.telegram.ui.MediaActivity$SharedLinksAdapter r2 = r0.linksAdapter
-            goto L_0x0280
-        L_0x02aa:
+            goto L_0x0288
+        L_0x02b2:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r1]
             int r2 = r2.selectedType
             r4 = 4
-            if (r2 != r4) goto L_0x02b8
+            if (r2 != r4) goto L_0x02c0
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r2 = r0.audioAdapter
-            goto L_0x02b9
-        L_0x02b8:
+            goto L_0x02c1
+        L_0x02c0:
             r2 = 0
-        L_0x02b9:
-            if (r2 == 0) goto L_0x02f8
+        L_0x02c1:
+            if (r2 == 0) goto L_0x0300
             int r2 = r2.getItemCount()
             org.telegram.ui.MediaActivity$SharedPhotoVideoAdapter r5 = r0.photoVideoAdapter
             r5.notifyDataSetChanged()
@@ -1462,12 +1466,12 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r5.notifyDataSetChanged()
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r5 = r0.audioAdapter
             r5.notifyDataSetChanged()
-            if (r2 != 0) goto L_0x02f8
+            if (r2 != 0) goto L_0x0300
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
             float r2 = r2.getTranslationY()
             r5 = 0
             int r2 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
-            if (r2 == 0) goto L_0x02f9
+            if (r2 == 0) goto L_0x0301
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r1]
             androidx.recyclerview.widget.LinearLayoutManager r2 = r2.layoutManager
@@ -1475,40 +1479,40 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             float r6 = r6.getTranslationY()
             int r6 = (int) r6
             r2.scrollToPositionWithOffset(r10, r6)
-            goto L_0x02f9
-        L_0x02f8:
+            goto L_0x0301
+        L_0x0300:
             r5 = 0
-        L_0x02f9:
-            int r1 = r1 + 1
-            goto L_0x0270
-        L_0x02fd:
-            r21.updateTabs()
-            goto L_0x032e
         L_0x0301:
+            int r1 = r1 + 1
+            goto L_0x0278
+        L_0x0305:
+            r23.updateTabs()
+            goto L_0x0336
+        L_0x0309:
             int r2 = org.telegram.messenger.NotificationCenter.messageReceivedByServer
-            if (r1 != r2) goto L_0x032e
+            if (r1 != r2) goto L_0x0336
             r1 = 6
-            r1 = r24[r1]
+            r1 = r26[r1]
             java.lang.Boolean r1 = (java.lang.Boolean) r1
             boolean r1 = r1.booleanValue()
-            if (r1 == 0) goto L_0x0311
+            if (r1 == 0) goto L_0x0319
             return
-        L_0x0311:
-            r1 = r24[r10]
-            java.lang.Integer r1 = (java.lang.Integer) r1
-            r2 = r24[r11]
-            java.lang.Integer r2 = (java.lang.Integer) r2
         L_0x0319:
+            r1 = r26[r10]
+            java.lang.Integer r1 = (java.lang.Integer) r1
+            r2 = r26[r11]
+            java.lang.Integer r2 = (java.lang.Integer) r2
+        L_0x0321:
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r3 = r0.sharedMediaData
             int r4 = r3.length
-            if (r10 >= r4) goto L_0x032e
+            if (r10 >= r4) goto L_0x0336
             r3 = r3[r10]
             int r4 = r1.intValue()
             int r5 = r2.intValue()
             r3.replaceMid(r4, r5)
             int r10 = r10 + 1
-            goto L_0x0319
-        L_0x032e:
+            goto L_0x0321
+        L_0x0336:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MediaActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -1764,7 +1768,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x00af
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r1 = 2131627686(0x7f0e0ea6, float:1.8882643E38)
+            r1 = 2131627688(0x7f0e0ea8, float:1.8882648E38)
             java.lang.String r3 = "SharedMediaTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r2, r1)
@@ -1776,14 +1780,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x00cb
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r1 = 2131627680(0x7f0e0ea0, float:1.8882631E38)
+            r1 = 2131627682(0x7f0e0ea2, float:1.8882635E38)
             java.lang.String r3 = "SharedFilesTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r7, r1)
         L_0x00cb:
             long r0 = r10.dialogId
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r0)
-            r1 = 2131627688(0x7f0e0ea8, float:1.8882648E38)
+            r1 = 2131627690(0x7f0e0eaa, float:1.8882652E38)
             java.lang.String r3 = "SharedMusicTab2"
             if (r0 != 0) goto L_0x010c
             int[] r0 = r10.hasMedia
@@ -1793,7 +1797,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r4)
             if (r0 != 0) goto L_0x00f4
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r8 = 2131627684(0x7f0e0ea4, float:1.888264E38)
+            r8 = 2131627686(0x7f0e0ea6, float:1.8882643E38)
             java.lang.String r9 = "SharedLinksTab2"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r0.addTextTab(r4, r8)
@@ -1826,7 +1830,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r5)
             if (r0 != 0) goto L_0x013f
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r1 = 2131627692(0x7f0e0eac, float:1.8882656E38)
+            r1 = 2131627694(0x7f0e0eae, float:1.888266E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r5, r1)
@@ -1862,14 +1866,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MediaActivity.updateTabs():void");
     }
 
-    /* JADX WARNING: type inference failed for: r18v0, types: [boolean] */
+    /* JADX WARNING: type inference failed for: r20v0, types: [boolean] */
     /* access modifiers changed from: private */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void switchToCurrentSelectedMode(boolean r18) {
+    public void switchToCurrentSelectedMode(boolean r20) {
         /*
-            r17 = this;
-            r0 = r17
+            r19 = this;
+            r0 = r19
             r1 = 0
             r2 = 0
         L_0x0004:
@@ -1882,7 +1886,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             int r2 = r2 + 1
             goto L_0x0004
         L_0x0015:
-            r2 = r3[r18]
+            r2 = r3[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             androidx.recyclerview.widget.RecyclerView$Adapter r2 = r2.getAdapter()
             boolean r3 = r0.searching
@@ -1894,13 +1898,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (r3 == 0) goto L_0x0148
             boolean r3 = r0.searchWas
             if (r3 == 0) goto L_0x0148
-            if (r18 == 0) goto L_0x00cf
+            if (r20 == 0) goto L_0x00cf
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             if (r3 == 0) goto L_0x00c7
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             if (r3 != r6) goto L_0x0044
             goto L_0x00c7
@@ -1910,55 +1914,55 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             android.text.Editable r3 = r3.getText()
             java.lang.String r3 = r3.toString()
             org.telegram.ui.MediaActivity$MediaPage[] r9 = r0.mediaPages
-            r9 = r9[r18]
+            r9 = r9[r20]
             int r9 = r9.selectedType
             if (r9 != r8) goto L_0x0079
             org.telegram.ui.MediaActivity$MediaSearchAdapter r5 = r0.documentsSearchAdapter
-            if (r5 == 0) goto L_0x02c0
+            if (r5 == 0) goto L_0x02d2
             r5.search(r3)
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.documentsSearchAdapter
-            if (r2 == r3) goto L_0x02c0
+            if (r2 == r3) goto L_0x02d2
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.documentsSearchAdapter
             r2.setAdapter(r3)
-            goto L_0x02c0
+            goto L_0x02d2
         L_0x0079:
             org.telegram.ui.MediaActivity$MediaPage[] r9 = r0.mediaPages
-            r9 = r9[r18]
+            r9 = r9[r20]
             int r9 = r9.selectedType
             if (r9 != r5) goto L_0x00a0
             org.telegram.ui.MediaActivity$MediaSearchAdapter r5 = r0.linksSearchAdapter
-            if (r5 == 0) goto L_0x02c0
+            if (r5 == 0) goto L_0x02d2
             r5.search(r3)
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.linksSearchAdapter
-            if (r2 == r3) goto L_0x02c0
+            if (r2 == r3) goto L_0x02d2
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.linksSearchAdapter
             r2.setAdapter(r3)
-            goto L_0x02c0
+            goto L_0x02d2
         L_0x00a0:
             org.telegram.ui.MediaActivity$MediaPage[] r5 = r0.mediaPages
-            r5 = r5[r18]
+            r5 = r5[r20]
             int r5 = r5.selectedType
-            if (r5 != r7) goto L_0x02c0
+            if (r5 != r7) goto L_0x02d2
             org.telegram.ui.MediaActivity$MediaSearchAdapter r5 = r0.audioSearchAdapter
-            if (r5 == 0) goto L_0x02c0
+            if (r5 == 0) goto L_0x02d2
             r5.search(r3)
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.audioSearchAdapter
-            if (r2 == r3) goto L_0x02c0
+            if (r2 == r3) goto L_0x02d2
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.audioSearchAdapter
             r2.setAdapter(r3)
-            goto L_0x02c0
+            goto L_0x02d2
         L_0x00c7:
             r0.searching = r1
             r0.searchWas = r1
@@ -1966,151 +1970,151 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             return
         L_0x00cf:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             org.telegram.ui.Components.RecyclerListView r3 = r3.listView
-            if (r3 == 0) goto L_0x02c0
+            if (r3 == 0) goto L_0x02d2
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             if (r3 != r8) goto L_0x00fe
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.documentsSearchAdapter
             if (r2 == r3) goto L_0x00f7
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.documentsSearchAdapter
             r2.setAdapter(r3)
         L_0x00f7:
             org.telegram.ui.MediaActivity$MediaSearchAdapter r2 = r0.documentsSearchAdapter
             r2.notifyDataSetChanged()
-            goto L_0x02c0
+            goto L_0x02d2
         L_0x00fe:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             if (r3 != r5) goto L_0x0123
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.linksSearchAdapter
             if (r2 == r3) goto L_0x011c
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.linksSearchAdapter
             r2.setAdapter(r3)
         L_0x011c:
             org.telegram.ui.MediaActivity$MediaSearchAdapter r2 = r0.linksSearchAdapter
             r2.notifyDataSetChanged()
-            goto L_0x02c0
+            goto L_0x02d2
         L_0x0123:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
-            if (r3 != r7) goto L_0x02c0
+            if (r3 != r7) goto L_0x02d2
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.audioSearchAdapter
             if (r2 == r3) goto L_0x0141
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$MediaSearchAdapter r3 = r0.audioSearchAdapter
             r2.setAdapter(r3)
         L_0x0141:
             org.telegram.ui.MediaActivity$MediaSearchAdapter r2 = r0.audioSearchAdapter
             r2.notifyDataSetChanged()
-            goto L_0x02c0
+            goto L_0x02d2
         L_0x0148:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             org.telegram.ui.Components.RecyclerListView r3 = r3.listView
             r9 = 0
             r3.setPinnedHeaderShadowDrawable(r9)
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             if (r3 != 0) goto L_0x0181
             org.telegram.ui.MediaActivity$SharedPhotoVideoAdapter r3 = r0.photoVideoAdapter
             if (r2 == r3) goto L_0x0172
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$SharedPhotoVideoAdapter r3 = r0.photoVideoAdapter
             r2.setAdapter(r3)
         L_0x0172:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             android.graphics.drawable.Drawable r3 = r0.pinnedHeaderShadowDrawable
             r2.setPinnedHeaderShadowDrawable(r3)
             goto L_0x01fc
         L_0x0181:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             if (r3 != r8) goto L_0x01a0
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r3 = r0.documentsAdapter
             if (r2 == r3) goto L_0x01fc
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r3 = r0.documentsAdapter
             r2.setAdapter(r3)
             goto L_0x01fc
         L_0x01a0:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             if (r3 != r6) goto L_0x01bf
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r3 = r0.voiceAdapter
             if (r2 == r3) goto L_0x01fc
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r3 = r0.voiceAdapter
             r2.setAdapter(r3)
             goto L_0x01fc
         L_0x01bf:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             if (r3 != r5) goto L_0x01de
             org.telegram.ui.MediaActivity$SharedLinksAdapter r3 = r0.linksAdapter
             if (r2 == r3) goto L_0x01fc
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$SharedLinksAdapter r3 = r0.linksAdapter
             r2.setAdapter(r3)
             goto L_0x01fc
         L_0x01de:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             if (r3 != r7) goto L_0x01fc
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r3 = r0.audioAdapter
             if (r2 == r3) goto L_0x01fc
             r0.recycleAdapter(r2)
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r3 = r0.audioAdapter
             r2.setAdapter(r3)
         L_0x01fc:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             int r2 = r2.selectedType
             if (r2 == 0) goto L_0x024a
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             int r2 = r2.selectedType
             if (r2 != r6) goto L_0x0211
             goto L_0x024a
         L_0x0211:
-            if (r18 == 0) goto L_0x0233
+            if (r20 == 0) goto L_0x0233
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.searchItem
             int r2 = r2.getVisibility()
             if (r2 != r7) goto L_0x0230
@@ -2138,7 +2142,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r2.setVisibility(r1)
             goto L_0x0256
         L_0x024a:
-            if (r18 == 0) goto L_0x024f
+            if (r20 == 0) goto L_0x024f
             r0.searchItemState = r6
             goto L_0x0256
         L_0x024f:
@@ -2148,30 +2152,30 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         L_0x0256:
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r2 = r0.sharedMediaData
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             r2 = r2[r3]
             boolean r2 = r2.loading
-            if (r2 != 0) goto L_0x02b5
+            if (r2 != 0) goto L_0x02c7
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r2 = r0.sharedMediaData
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             r2 = r2[r3]
             boolean[] r2 = r2.endReached
             boolean r2 = r2[r1]
-            if (r2 != 0) goto L_0x02b5
+            if (r2 != 0) goto L_0x02c7
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r2 = r0.sharedMediaData
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             r2 = r2[r3]
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r2.messages
             boolean r2 = r2.isEmpty()
-            if (r2 == 0) goto L_0x02b5
+            if (r2 == 0) goto L_0x02c7
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r2 = r0.sharedMediaData
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
-            r3 = r3[r18]
+            r3 = r3[r20]
             int r3 = r3.selectedType
             r2 = r2[r3]
             r2.loading = r8
@@ -2180,40 +2184,48 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             long r10 = r0.dialogId
             r12 = 50
             r13 = 0
+            r14 = 0
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
-            int r14 = r2.selectedType
-            r15 = 1
+            r2 = r2[r20]
+            int r15 = r2.selectedType
+            r16 = 1
             int r2 = r0.classGuid
-            r16 = r2
-            r9.loadMedia(r10, r12, r13, r14, r15, r16)
-        L_0x02b5:
+            org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r3 = r0.sharedMediaData
+            org.telegram.ui.MediaActivity$MediaPage[] r5 = r0.mediaPages
+            r5 = r5[r20]
+            int r5 = r5.selectedType
+            r3 = r3[r5]
+            int r3 = r3.requestIndex
+            r17 = r2
+            r18 = r3
+            r9.loadMedia(r10, r12, r13, r14, r15, r16, r17, r18)
+        L_0x02c7:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             r2.setVisibility(r1)
-        L_0x02c0:
+        L_0x02d2:
             int r2 = r0.searchItemState
-            if (r2 != r6) goto L_0x02d3
+            if (r2 != r6) goto L_0x02e5
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
             boolean r2 = r2.isSearchFieldVisible()
-            if (r2 == 0) goto L_0x02d3
+            if (r2 == 0) goto L_0x02e5
             r0.ignoreSearchCollapse = r8
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
             r2.closeSearchField()
-        L_0x02d3:
+        L_0x02e5:
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
             float r2 = r2.getTranslationY()
             int r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r2 == 0) goto L_0x02ef
+            if (r2 == 0) goto L_0x0301
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            r2 = r2[r18]
+            r2 = r2[r20]
             androidx.recyclerview.widget.LinearLayoutManager r2 = r2.layoutManager
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             float r3 = r3.getTranslationY()
             int r3 = (int) r3
             r2.scrollToPositionWithOffset(r1, r3)
-        L_0x02ef:
+        L_0x0301:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MediaActivity.switchToCurrentSelectedMode(boolean):void");
@@ -2894,14 +2906,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                         int access$7400 = ((i2 - 1) * MediaActivity.this.columnsCount) + i3;
                         if (access$7400 < arrayList.size()) {
                             MessageObject messageObject = (MessageObject) arrayList.get(access$7400);
-                            sharedPhotoVideoCell.setItem(i3, MediaActivity.this.sharedMediaData[0].messages.indexOf(messageObject), messageObject);
+                            sharedPhotoVideoCell.setItem(i3, MediaActivity.this.sharedMediaData[0].messages.indexOf(messageObject), messageObject, false);
                             if (MediaActivity.this.actionBar.isActionModeShowed()) {
                                 sharedPhotoVideoCell.setChecked(i3, MediaActivity.this.selectedFiles[(messageObject.getDialogId() > MediaActivity.this.dialogId ? 1 : (messageObject.getDialogId() == MediaActivity.this.dialogId ? 0 : -1)) == 0 ? (char) 0 : 1].indexOfKey(messageObject.getId()) >= 0, !MediaActivity.this.scrolling);
                             } else {
                                 sharedPhotoVideoCell.setChecked(i3, false, !MediaActivity.this.scrolling);
                             }
                         } else {
-                            sharedPhotoVideoCell.setItem(i3, access$7400, (MessageObject) null);
+                            sharedPhotoVideoCell.setItem(i3, access$7400, (MessageObject) null, false);
                         }
                     }
                     sharedPhotoVideoCell.requestLayout();
