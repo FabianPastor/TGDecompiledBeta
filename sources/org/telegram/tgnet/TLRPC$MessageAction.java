@@ -92,6 +92,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
             case -365344535:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChannelMigrateFrom();
                 break;
+            case -339958837:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionChatJoinedByRequest();
+                break;
             case -202219658:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionContactSignUp();
                 break;
@@ -100,6 +103,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
                 break;
             case -85549226:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionCustomAction();
+                break;
+            case 29007925:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionPhoneNumberRequest();
                 break;
             case 51520707:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatJoinedByLink();

@@ -3,7 +3,8 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_sponsoredMessage extends TLObject {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
+    public int channel_post;
     public ArrayList<TLRPC$MessageEntity> entities = new ArrayList<>();
     public int flags;
     public TLRPC$Peer from_id;
@@ -27,6 +28,9 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
         this.flags = abstractSerializedData.readInt32(z);
         this.random_id = abstractSerializedData.readByteArray(z);
         this.from_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        if ((this.flags & 4) != 0) {
+            this.channel_post = abstractSerializedData.readInt32(z);
+        }
         if ((this.flags & 1) != 0) {
             this.start_param = abstractSerializedData.readString(z);
         }
@@ -56,6 +60,9 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
         abstractSerializedData.writeInt32(this.flags);
         abstractSerializedData.writeByteArray(this.random_id);
         this.from_id.serializeToStream(abstractSerializedData);
+        if ((this.flags & 4) != 0) {
+            abstractSerializedData.writeInt32(this.channel_post);
+        }
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeString(this.start_param);
         }

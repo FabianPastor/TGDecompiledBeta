@@ -290,12 +290,16 @@ public class ActionBarPopupWindow extends PopupWindow {
             if (this.animationEnabled) {
                 final AnimatorSet animatorSet = new AnimatorSet();
                 Animator[] animatorArr = new Animator[2];
-                animatorArr[0] = ObjectAnimator.ofFloat(view, View.ALPHA, new float[]{0.0f, 1.0f});
-                Property property = View.TRANSLATION_Y;
+                Property property = View.ALPHA;
                 float[] fArr = new float[2];
-                fArr[0] = (float) AndroidUtilities.dp(this.shownFromBotton ? 6.0f : -6.0f);
-                fArr[1] = 0.0f;
-                animatorArr[1] = ObjectAnimator.ofFloat(view, property, fArr);
+                fArr[0] = 0.0f;
+                fArr[1] = view.isEnabled() ? 1.0f : 0.5f;
+                animatorArr[0] = ObjectAnimator.ofFloat(view, property, fArr);
+                Property property2 = View.TRANSLATION_Y;
+                float[] fArr2 = new float[2];
+                fArr2[0] = (float) AndroidUtilities.dp(this.shownFromBotton ? 6.0f : -6.0f);
+                fArr2[1] = 0.0f;
+                animatorArr[1] = ObjectAnimator.ofFloat(view, property2, fArr2);
                 animatorSet.playTogether(animatorArr);
                 animatorSet.setDuration(180);
                 animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -599,7 +603,8 @@ public class ActionBarPopupWindow extends PopupWindow {
                     }
                     int itemsCount = actionBarPopupWindowLayout.getItemsCount();
                     for (int i2 = 0; i2 < itemsCount; i2++) {
-                        actionBarPopupWindowLayout.getItemAt(i2).setAlpha(1.0f);
+                        View itemAt = actionBarPopupWindowLayout.getItemAt(i2);
+                        itemAt.setAlpha(itemAt.isEnabled() ? 1.0f : 0.5f);
                     }
                 }
             });

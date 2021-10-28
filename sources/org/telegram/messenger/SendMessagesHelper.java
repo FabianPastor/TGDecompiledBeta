@@ -2247,7 +2247,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$sendSticker$5(Bitmap[] bitmapArr, String[] strArr, TLRPC$Document tLRPC$Document, long j, MessageObject messageObject, MessageObject messageObject2, boolean z, int i, Object obj, MessageObject.SendAnimationData sendAnimationData) {
         if (!(bitmapArr[0] == null || strArr[0] == null)) {
-            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapArr[0]), strArr[0]);
+            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapArr[0]), strArr[0], false);
         }
         sendMessage((TLRPC$TL_document) tLRPC$Document, (VideoEditedInfo) null, (String) null, j, messageObject, messageObject2, (String) null, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, 0, obj, sendAnimationData);
     }
@@ -5240,7 +5240,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r7.sendCallback(r3, r4, r5, r6)
             goto L_0x04ac
         L_0x001d:
-            r8 = 2131626643(0x7f0e0a93, float:1.8880528E38)
+            r8 = 2131626651(0x7f0e0a9b, float:1.8880544E38)
             java.lang.String r9 = "OK"
             r10 = 0
             r11 = 1
@@ -5437,7 +5437,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r0 = r2.text
             java.lang.String r1 = "PASSWORD_HASH_INVALID"
             boolean r0 = r1.equals(r0)
-            r12 = 2131624665(0x7f0e02d9, float:1.8876516E38)
+            r12 = 2131624667(0x7f0e02db, float:1.887652E38)
             java.lang.String r13 = "Cancel"
             if (r0 == 0) goto L_0x0200
             if (r37 != 0) goto L_0x04ac
@@ -5518,7 +5518,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r4 = r33.getParentActivity()
             r0.<init>((android.content.Context) r4)
-            r4 = 2131625303(0x7f0e0557, float:1.887781E38)
+            r4 = 2131625306(0x7f0e055a, float:1.8877816E38)
             java.lang.String r5 = "EditAdminTransferAlertTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r4)
@@ -5576,7 +5576,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             android.widget.ImageView r12 = new android.widget.ImageView
             android.app.Activity r8 = r33.getParentActivity()
             r12.<init>(r8)
-            r8 = 2131165581(0x7var_d, float:1.7945383E38)
+            r8 = 2131165582(0x7var_e, float:1.7945385E38)
             r12.setImageResource(r8)
             boolean r16 = org.telegram.messenger.LocaleController.isRTL
             r18 = 1093664768(0x41300000, float:11.0)
@@ -5619,7 +5619,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x034f:
             r10 = r10 | 48
             r8.setGravity(r10)
-            r10 = 2131625300(0x7f0e0554, float:1.8877804E38)
+            r10 = 2131625303(0x7f0e0557, float:1.887781E38)
             java.lang.String r11 = "EditAdminTransferAlertText1"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             android.text.SpannableStringBuilder r10 = org.telegram.messenger.AndroidUtilities.replaceTags(r10)
@@ -5657,7 +5657,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             android.widget.ImageView r8 = new android.widget.ImageView
             android.app.Activity r10 = r33.getParentActivity()
             r8.<init>(r10)
-            r10 = 2131165581(0x7var_d, float:1.7945383E38)
+            r10 = 2131165582(0x7var_e, float:1.7945385E38)
             r8.setImageResource(r10)
             boolean r10 = org.telegram.messenger.LocaleController.isRTL
             if (r10 == 0) goto L_0x03c1
@@ -5697,7 +5697,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x03fe:
             r10 = r10 | 48
             r3.setGravity(r10)
-            r10 = 2131625301(0x7f0e0555, float:1.8877806E38)
+            r10 = 2131625304(0x7f0e0558, float:1.8877812E38)
             java.lang.String r11 = "EditAdminTransferAlertText2"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             android.text.SpannableStringBuilder r10 = org.telegram.messenger.AndroidUtilities.replaceTags(r10)
@@ -5724,13 +5724,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r2 = r2.text
             boolean r1 = r1.equals(r2)
             if (r1 == 0) goto L_0x045f
-            r1 = 2131625308(0x7f0e055c, float:1.887782E38)
+            r1 = 2131625311(0x7f0e055f, float:1.8877826E38)
             java.lang.String r2 = "EditAdminTransferSetPassword"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda1 r2 = new org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda1
             r2.<init>(r6)
             r0.setPositiveButton(r1, r2)
-            r1 = 2131624665(0x7f0e02d9, float:1.8876516E38)
+            r1 = 2131624667(0x7f0e02db, float:1.887652E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r13, r1)
             r2 = 0
             r0.setNegativeButton(r1, r2)
@@ -5750,7 +5750,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x047b:
             r2 = r17 | 48
             r1.setGravity(r2)
-            r2 = 2131625302(0x7f0e0556, float:1.8877808E38)
+            r2 = 2131625305(0x7f0e0559, float:1.8877814E38)
             java.lang.String r3 = "EditAdminTransferAlertText3"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -5762,7 +5762,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r15 = 0
             android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r11, r12, r13, r14, r15)
             r4.addView(r1, r2)
-            r1 = 2131626643(0x7f0e0a93, float:1.8880528E38)
+            r1 = 2131626651(0x7f0e0a9b, float:1.8880544E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r2 = 0
             r0.setNegativeButton(r1, r2)
@@ -15232,7 +15232,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         TLRPC$BotInlineResult tLRPC$BotInlineResult2 = tLRPC$BotInlineResult;
         if (tLRPC$TL_document != null) {
             if (!(bitmapArr[0] == null || strArr[0] == null)) {
-                ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapArr[0]), strArr[0]);
+                ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapArr[0]), strArr[0], false);
             }
             SendMessagesHelper sendMessagesHelper = accountInstance.getSendMessagesHelper();
             TLRPC$BotInlineMessage tLRPC$BotInlineMessage = tLRPC$BotInlineResult2.send_message;
@@ -17581,7 +17581,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         String str4 = str;
         SendingMediaInfo sendingMediaInfo2 = sendingMediaInfo;
         if (!(bitmap2 == null || str4 == null)) {
-            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap2), str4);
+            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap2), str4, false);
         }
         if (messageObject != null) {
             accountInstance.getSendMessagesHelper().editMessage(messageObject, (TLRPC$TL_photo) null, videoEditedInfo, tLRPC$TL_document, str2, hashMap, false, str3);
@@ -17594,7 +17594,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     public static /* synthetic */ void lambda$prepareSendingMedia$88(Bitmap[] bitmapArr, String[] strArr, MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_photo tLRPC$TL_photo, HashMap hashMap, String str, long j, MessageObject messageObject2, MessageObject messageObject3, SendingMediaInfo sendingMediaInfo, boolean z, int i) {
         SendingMediaInfo sendingMediaInfo2 = sendingMediaInfo;
         if (!(bitmapArr[0] == null || strArr[0] == null)) {
-            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapArr[0]), strArr[0]);
+            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapArr[0]), strArr[0], false);
         }
         if (messageObject != null) {
             accountInstance.getSendMessagesHelper().editMessage(messageObject, tLRPC$TL_photo, (VideoEditedInfo) null, (TLRPC$TL_document) null, (String) null, hashMap, false, str);
@@ -18421,7 +18421,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         Bitmap bitmap2 = bitmap;
         String str5 = str;
         if (!(bitmap2 == null || str5 == null)) {
-            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap2), str5);
+            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap2), str5, false);
         }
         if (messageObject != null) {
             accountInstance.getSendMessagesHelper().editMessage(messageObject, (TLRPC$TL_photo) null, videoEditedInfo, tLRPC$TL_document, str2, hashMap, false, str3);

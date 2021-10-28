@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class TLRPC$TL_account_themes extends TLRPC$account_Themes {
     public static int constructor = -NUM;
     public long hash;
-    public ArrayList<TLRPC$Theme> themes = new ArrayList<>();
+    public ArrayList<TLRPC$TL_theme> themes = new ArrayList<>();
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.hash = abstractSerializedData.readInt64(z);
@@ -14,7 +14,7 @@ public class TLRPC$TL_account_themes extends TLRPC$account_Themes {
         if (readInt32 == NUM) {
             int readInt322 = abstractSerializedData.readInt32(z);
             while (i < readInt322) {
-                TLRPC$Theme TLdeserialize = TLRPC$Theme.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$TL_theme TLdeserialize = TLRPC$Theme.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.themes.add(TLdeserialize);
                     i++;

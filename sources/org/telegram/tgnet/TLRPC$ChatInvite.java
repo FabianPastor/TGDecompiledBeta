@@ -17,7 +17,7 @@ public abstract class TLRPC$ChatInvite extends TLObject {
 
     public static TLRPC$ChatInvite TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$ChatInvite tLRPC$ChatInvite;
-        if (i != -NUM) {
+        if (i != NUM) {
             tLRPC$ChatInvite = i != NUM ? i != NUM ? null : new TLRPC$TL_chatInvitePeek() : new TLRPC$TL_chatInviteAlready();
         } else {
             tLRPC$ChatInvite = new TLRPC$TL_chatInvite();

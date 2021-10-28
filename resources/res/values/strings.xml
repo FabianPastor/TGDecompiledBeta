@@ -679,7 +679,9 @@
     <string name="BroadcastGroupConvertSuccess">Your group can now have more than 200,000 members.</string>
     <string name="BroadcastGroupInfo">Only admins can send messages in this group.</string>
     <string name="Brown">Brown</string>
+    <string name="BrowseThemes">Browse Themes</string>
     <string name="BubbleRadius">Message corners</string>
+    <string name="BuildMyOwnTheme">Build my own theme</string>
     <string name="BuiltInThemes">Built-in themes</string>
     <string name="BytesReceived">Bytes received</string>
     <string name="BytesSent">Bytes sent</string>
@@ -1136,6 +1138,7 @@
     <string name="CreateNewFilterInfo">Create folders for different groups of chats and quickly switch between them.</string>
     <string name="CreateNewLink">Create a New Link</string>
     <string name="CreateNewLinkHelp">You can generate invite links that expire after they are used.</string>
+    <string name="CreateNewTheme">Create a New Theme</string>
     <string name="CreateNewThemeAlert">You can create your own theme by changing colors within the app.\10\10You can always switch back to the default Telegram theme here.</string>
     <string name="CreateNewThemeHelp">Tap on the palette icon to view the list of elements on each screen - and edit them.</string>
     <string name="CreateNewThemeMenu">Create new theme</string>
@@ -1375,6 +1378,7 @@
     <string name="EditCaption">Edit Caption</string>
     <string name="EditChannelAdminTransferAlertText">You can transfer this channel to **%1$s** only if you have:</string>
     <string name="EditContact">Edit contact</string>
+    <string name="EditCurrentTheme">Edit Current Theme</string>
     <string name="EditLink">Edit link</string>
     <string name="EditMessage">Edit Message</string>
     <string name="EditMessageEditPhoto">Edit this photo</string>
@@ -2242,6 +2246,10 @@
     <string name="MediaSelected_other">%1$d media selected</string>
     <string name="MediaSelected_two">%1$d media selected</string>
     <string name="MediaSelected_zero">%1$d media selected</string>
+    <string name="MediaShowPhotos">Show photos</string>
+    <string name="MediaShowVideos">Show videos</string>
+    <string name="MediaZoomIn">Zoom in</string>
+    <string name="MediaZoomOut">Zoom out</string>
     <string name="Media_few">%1$d media</string>
     <string name="Media_many">%1$d media</string>
     <string name="Media_one">%1$d media</string>
@@ -3706,6 +3714,7 @@
     <string name="SetUrlInvalidStartNumber">Sorry, the link can\'t start with a number.</string>
     <string name="SetUrlPlaceholder">Link</string>
     <string name="Settings">Settings</string>
+    <string name="SettingsBrowseThemes">Browse Themes</string>
     <string name="SettingsDebug">Debug</string>
     <string name="SettingsFaqSearchTitle">Frequently asked questions</string>
     <string name="SettingsHelp">Help</string>
@@ -3713,6 +3722,7 @@
     <string name="SettingsNoResults">No results found</string>
     <string name="SettingsRecent">Recent searches</string>
     <string name="SettingsSearchFaq">FAQ</string>
+    <string name="SettingsSwitchToNightMode">Switch to Night Mode</string>
     <string name="Shadows">Shadows</string>
     <string name="ShareComment">Write a comment...</string>
     <string name="ShareContact">Share contact</string>
@@ -3746,6 +3756,7 @@
     <string name="SharedLinks">Links</string>
     <string name="SharedLinksTab2">Links</string>
     <string name="SharedMedia">Shared Media</string>
+    <string name="SharedMediaFastScrollHint">You can hold and move this bar for faster scrolling</string>
     <string name="SharedMediaTab2">Media</string>
     <string name="SharedMediaTabFull2">Shared Media</string>
     <string name="SharedMusicTab2">Music</string>

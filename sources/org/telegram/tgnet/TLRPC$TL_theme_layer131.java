@@ -20,7 +20,7 @@ public class TLRPC$TL_theme_layer131 extends TLRPC$TL_theme {
             this.document = TLRPC$Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 8) != 0) {
-            this.settings = TLRPC$ThemeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.settings.add(TLRPC$ThemeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z));
         }
         this.installs_count = abstractSerializedData.readInt32(z);
     }
@@ -40,7 +40,7 @@ public class TLRPC$TL_theme_layer131 extends TLRPC$TL_theme {
             this.document.serializeToStream(abstractSerializedData);
         }
         if ((this.flags & 8) != 0) {
-            this.settings.serializeToStream(abstractSerializedData);
+            this.settings.get(0).serializeToStream(abstractSerializedData);
         }
         abstractSerializedData.writeInt32(this.installs_count);
     }

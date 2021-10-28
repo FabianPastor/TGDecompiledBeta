@@ -365,8 +365,9 @@ public class CountrySelectActivity extends BaseFragment {
             return this.sortedCountries.get(sectionForPosition);
         }
 
-        public int getPositionForScrollProgress(float f) {
-            return (int) (((float) getItemCount()) * f);
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = (int) (((float) getItemCount()) * f);
+            iArr[1] = 0;
         }
     }
 

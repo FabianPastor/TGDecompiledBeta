@@ -321,6 +321,7 @@
     <public type="drawable" name="btnshadow" id="NUM" />
     <public type="drawable" name="burn" id="NUM" />
     <public type="drawable" name="buy_with_googlepay_button_content" id="NUM" />
+    <public type="drawable" name="calendar_date" id="NUM" />
     <public type="drawable" name="call_arrow_right" id="NUM" />
     <public type="drawable" name="call_custom_notification_icon" id="NUM" />
     <public type="drawable" name="call_notification_bg" id="NUM" />
@@ -736,6 +737,7 @@
     <public type="drawable" name="msg_block" id="NUM" />
     <public type="drawable" name="msg_block2" id="NUM" />
     <public type="drawable" name="msg_calendar" id="NUM" />
+    <public type="drawable" name="msg_calendar2" id="NUM" />
     <public type="drawable" name="msg_callback" id="NUM" />
     <public type="drawable" name="msg_calls_minimize" id="NUM" />
     <public type="drawable" name="msg_calls_pin" id="NUM" />
@@ -891,6 +893,8 @@
     <public type="drawable" name="msg_voicechat2" id="NUM" />
     <public type="drawable" name="msg_voiceshare" id="NUM" />
     <public type="drawable" name="msg_warning" id="NUM" />
+    <public type="drawable" name="msg_zoomin" id="NUM" />
+    <public type="drawable" name="msg_zoomout" id="NUM" />
     <public type="drawable" name="music_empty" id="NUM" />
     <public type="drawable" name="navigate" id="NUM" />
     <public type="drawable" name="nearby_l" id="NUM" />
@@ -2304,7 +2308,9 @@
     <public type="string" name="BroadcastGroupConvertSuccess" id="NUM" />
     <public type="string" name="BroadcastGroupInfo" id="NUM" />
     <public type="string" name="Brown" id="NUM" />
+    <public type="string" name="BrowseThemes" id="NUM" />
     <public type="string" name="BubbleRadius" id="NUM" />
+    <public type="string" name="BuildMyOwnTheme" id="NUM" />
     <public type="string" name="BuiltInThemes" id="NUM" />
     <public type="string" name="BytesReceived" id="NUM" />
     <public type="string" name="BytesSent" id="NUM" />
@@ -2761,6 +2767,7 @@
     <public type="string" name="CreateNewFilterInfo" id="NUM" />
     <public type="string" name="CreateNewLink" id="NUM" />
     <public type="string" name="CreateNewLinkHelp" id="NUM" />
+    <public type="string" name="CreateNewTheme" id="NUM" />
     <public type="string" name="CreateNewThemeAlert" id="NUM" />
     <public type="string" name="CreateNewThemeHelp" id="NUM" />
     <public type="string" name="CreateNewThemeMenu" id="NUM" />
@@ -3000,6 +3007,7 @@
     <public type="string" name="EditCaption" id="NUM" />
     <public type="string" name="EditChannelAdminTransferAlertText" id="NUM" />
     <public type="string" name="EditContact" id="NUM" />
+    <public type="string" name="EditCurrentTheme" id="NUM" />
     <public type="string" name="EditLink" id="NUM" />
     <public type="string" name="EditMessage" id="NUM" />
     <public type="string" name="EditMessageEditPhoto" id="NUM" />
@@ -3867,6 +3875,10 @@
     <public type="string" name="MediaSelected_other" id="NUM" />
     <public type="string" name="MediaSelected_two" id="NUM" />
     <public type="string" name="MediaSelected_zero" id="NUM" />
+    <public type="string" name="MediaShowPhotos" id="NUM" />
+    <public type="string" name="MediaShowVideos" id="NUM" />
+    <public type="string" name="MediaZoomIn" id="NUM" />
+    <public type="string" name="MediaZoomOut" id="NUM" />
     <public type="string" name="Media_few" id="NUM" />
     <public type="string" name="Media_many" id="NUM" />
     <public type="string" name="Media_one" id="NUM" />
@@ -5331,6 +5343,7 @@
     <public type="string" name="SetUrlInvalidStartNumber" id="NUM" />
     <public type="string" name="SetUrlPlaceholder" id="NUM" />
     <public type="string" name="Settings" id="NUM" />
+    <public type="string" name="SettingsBrowseThemes" id="NUM" />
     <public type="string" name="SettingsDebug" id="NUM" />
     <public type="string" name="SettingsFaqSearchTitle" id="NUM" />
     <public type="string" name="SettingsHelp" id="NUM" />
@@ -5338,6 +5351,7 @@
     <public type="string" name="SettingsNoResults" id="NUM" />
     <public type="string" name="SettingsRecent" id="NUM" />
     <public type="string" name="SettingsSearchFaq" id="NUM" />
+    <public type="string" name="SettingsSwitchToNightMode" id="NUM" />
     <public type="string" name="Shadows" id="NUM" />
     <public type="string" name="ShareComment" id="NUM" />
     <public type="string" name="ShareContact" id="NUM" />
@@ -5371,6 +5385,7 @@
     <public type="string" name="SharedLinks" id="NUM" />
     <public type="string" name="SharedLinksTab2" id="NUM" />
     <public type="string" name="SharedMedia" id="NUM" />
+    <public type="string" name="SharedMediaFastScrollHint" id="NUM" />
     <public type="string" name="SharedMediaTab2" id="NUM" />
     <public type="string" name="SharedMediaTabFull2" id="NUM" />
     <public type="string" name="SharedMusicTab2" id="NUM" />

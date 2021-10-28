@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
@@ -35,7 +36,6 @@ import org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
-import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.PhotoViewer;
 
@@ -45,7 +45,6 @@ public class SharedPhotoVideoCell extends FrameLayout {
     /* access modifiers changed from: private */
     public int currentAccount;
     private SharedPhotoVideoCellDelegate delegate;
-    FlickerLoadingView globalGradientView;
     private boolean ignoreLayout;
     private int[] indeces;
     private boolean isFirst;
@@ -64,10 +63,6 @@ public class SharedPhotoVideoCell extends FrameLayout {
         return this.delegate;
     }
 
-    public void setGradientView(FlickerLoadingView flickerLoadingView) {
-        this.globalGradientView = flickerLoadingView;
-    }
-
     public class PhotoVideoView extends FrameLayout {
         /* access modifiers changed from: private */
         public AnimatorSet animator;
@@ -75,9 +70,10 @@ public class SharedPhotoVideoCell extends FrameLayout {
         public CheckBox2 checkBox;
         private FrameLayout container;
         private MessageObject currentMessageObject;
+        /* access modifiers changed from: private */
         public BackupImageView imageView;
         private View selector;
-        public FrameLayout videoInfoContainer;
+        private FrameLayout videoInfoContainer;
         private TextView videoTextView;
 
         public PhotoVideoView(Context context) {
@@ -190,12 +186,6 @@ public class SharedPhotoVideoCell extends FrameLayout {
 
         public void setMessageObject(MessageObject messageObject) {
             this.currentMessageObject = messageObject;
-            if (messageObject == null) {
-                this.imageView.getImageReceiver().clearImage();
-                this.imageView.setVisibility(4);
-                return;
-            }
-            this.imageView.setVisibility(0);
             this.imageView.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(messageObject), false);
             if (!TextUtils.isEmpty(MessagesController.getRestrictionReason(messageObject.messageOwner.restriction_reason))) {
                 this.videoInfoContainer.setVisibility(4);
@@ -217,7 +207,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 } else if (messageObject.strippedThumb != null) {
                     this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, document), "100_100", (String) null, (Drawable) messageObject.strippedThumb, (Object) messageObject);
                 } else {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "b", (Drawable) null, (Bitmap) null, (String) null, 0, messageObject);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "b", ApplicationLoader.applicationContext.getResources().getDrawable(NUM), (Bitmap) null, (String) null, 0, messageObject);
                 }
             } else {
                 TLRPC$MessageMedia tLRPC$MessageMedia = messageObject.messageOwner.media;
@@ -243,7 +233,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
                     if (bitmapDrawable != null) {
                         this.imageView.setImage((ImageLocation) null, (String) null, (ImageLocation) null, (String) null, bitmapDrawable, (Bitmap) null, (String) null, 0, messageObject);
                     } else {
-                        this.imageView.getImageReceiver().clearImage();
+                        this.imageView.setImage((ImageLocation) null, (String) null, ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject.photoThumbsObject), "b", ApplicationLoader.applicationContext.getResources().getDrawable(NUM), (Bitmap) null, (String) null, 0, messageObject);
                     }
                 }
             }
@@ -260,14 +250,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
 
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
-            if (!this.imageView.getImageReceiver().hasBitmapImage() || this.imageView.getImageReceiver().getCurrentAlpha() != 1.0f || this.imageView.getAlpha() != 1.0f) {
-                SharedPhotoVideoCell sharedPhotoVideoCell = SharedPhotoVideoCell.this;
-                sharedPhotoVideoCell.globalGradientView.setParentSize(sharedPhotoVideoCell.getMeasuredWidth(), SharedPhotoVideoCell.this.getMeasuredHeight(), -getX());
-                SharedPhotoVideoCell.this.globalGradientView.updateColors();
-                SharedPhotoVideoCell.this.globalGradientView.updateGradient();
-                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), SharedPhotoVideoCell.this.globalGradientView.getPaint());
-                invalidate();
-            } else if (this.checkBox.isChecked() || PhotoViewer.isShowingImage(this.currentMessageObject)) {
+            if (this.checkBox.isChecked() || !this.imageView.getImageReceiver().hasBitmapImage() || this.imageView.getImageReceiver().getCurrentAlpha() != 1.0f || PhotoViewer.isShowingImage(this.currentMessageObject)) {
                 canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), SharedPhotoVideoCell.this.backgroundPaint);
             }
         }
@@ -301,12 +284,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
         this.photoVideoViews = new PhotoVideoView[6];
         this.indeces = new int[6];
         for (int i2 = 0; i2 < 6; i2++) {
-            this.photoVideoViews[i2] = new PhotoVideoView(this, context) {
-                /* access modifiers changed from: protected */
-                public void onDraw(Canvas canvas) {
-                    super.onDraw(canvas);
-                }
-            };
+            this.photoVideoViews[i2] = new PhotoVideoView(context);
             addView(this.photoVideoViews[i2]);
             this.photoVideoViews[i2].setVisibility(4);
             this.photoVideoViews[i2].setTag(Integer.valueOf(i2));
@@ -381,13 +359,6 @@ public class SharedPhotoVideoCell extends FrameLayout {
         return this.photoVideoViews[i].imageView;
     }
 
-    public PhotoVideoView getView(int i) {
-        if (i >= this.itemsCount) {
-            return null;
-        }
-        return this.photoVideoViews[i];
-    }
-
     public MessageObject getMessageObject(int i) {
         if (i >= this.itemsCount) {
             return null;
@@ -403,7 +374,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
         this.photoVideoViews[i].setChecked(z, z2);
     }
 
-    public void setItem(int i, int i2, MessageObject messageObject, boolean z) {
+    public void setItem(int i, int i2, MessageObject messageObject) {
         this.messageObjects[i] = messageObject;
         this.indeces[i] = i2;
         if (messageObject != null) {
@@ -412,12 +383,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             return;
         }
         this.photoVideoViews[i].clearAnimation();
-        if (z) {
-            this.photoVideoViews[i].setVisibility(0);
-            this.photoVideoViews[i].setMessageObject((MessageObject) null);
-        } else {
-            this.photoVideoViews[i].setVisibility(4);
-        }
+        this.photoVideoViews[i].setVisibility(4);
         this.messageObjects[i] = null;
     }
 

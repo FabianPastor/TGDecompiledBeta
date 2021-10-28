@@ -478,7 +478,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r1 = r0.self
             if (r1 == 0) goto L_0x00be
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131627480(0x7f0e0dd8, float:1.8882226E38)
+            r1 = 2131627488(0x7f0e0de0, float:1.8882242E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -507,7 +507,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = android.text.TextUtils.isEmpty(r0)
             if (r0 == 0) goto L_0x0100
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131627681(0x7f0e0ea1, float:1.8882633E38)
+            r1 = 2131627691(0x7f0e0eab, float:1.8882654E38)
             java.lang.String r3 = "SharedContentTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -523,7 +523,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.<init>()
             r0.setActionBarMenuOnItemClick(r1)
             android.content.res.Resources r0 = r27.getResources()
-            r1 = 2131165952(0x7var_, float:1.7946136E38)
+            r1 = 2131165956(0x7var_, float:1.7946144E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             r6.pinnedHeaderShadowDrawable = r0
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -570,7 +570,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0.clear()
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165478(0x7var_, float:1.7945174E38)
+            r1 = 2131165479(0x7var_, float:1.7945176E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r8, (int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setIsSearchField(r9)
             org.telegram.ui.MediaActivity$6 r1 = new org.telegram.ui.MediaActivity$6
@@ -578,7 +578,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setActionBarMenuItemSearchListener(r1)
             r6.searchItem = r0
             java.lang.String r1 = "Search"
-            r3 = 2131627492(0x7f0e0de4, float:1.888225E38)
+            r3 = 2131627500(0x7f0e0dec, float:1.8882266E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r1, r3)
             r0.setSearchFieldHint(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -646,7 +646,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (r1 != 0) goto L_0x027a
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
             r5 = 7
-            r12 = 2131165780(0x7var_, float:1.7945787E38)
+            r12 = 2131165782(0x7var_, float:1.794579E38)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r14 = 2131623978(0x7f0e002a, float:1.8875123E38)
             java.lang.String r15 = "AccDescrGoToMessage"
@@ -655,18 +655,18 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r6.gotoItem = r5
             r1.add(r5)
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165749(0x7var_, float:1.7945724E38)
+            r5 = 2131165751(0x7var_, float:1.7945728E38)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r13 = 2131625645(0x7f0e06ad, float:1.8878504E38)
+            r13 = 2131625649(0x7f0e06b1, float:1.8878512E38)
             java.lang.String r14 = "Forward"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.addItemWithWidth(r3, r5, r12, r13)
             r1.add(r5)
         L_0x027a:
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165737(0x7var_, float:1.79457E38)
+            r5 = 2131165739(0x7var_b, float:1.7945704E38)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r12 = 2131625152(0x7f0e04c0, float:1.8877504E38)
+            r12 = 2131625155(0x7f0e04c3, float:1.887751E38)
             java.lang.String r13 = "Delete"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItemWithWidth(r2, r5, r4, r12)
@@ -904,7 +904,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0 = r0[r14]
             org.telegram.ui.Components.StickerEmptyView r0 = r0.emptyView
             android.widget.TextView r0 = r0.title
-            r2 = 2131626440(0x7f0e09c8, float:1.8880116E38)
+            r2 = 2131626448(0x7f0e09d0, float:1.8880132E38)
             java.lang.String r3 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -912,7 +912,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0 = r0[r14]
             org.telegram.ui.Components.StickerEmptyView r0 = r0.emptyView
             android.widget.TextView r0 = r0.subtitle
-            r2 = 2131627497(0x7f0e0de9, float:1.888226E38)
+            r2 = 2131627505(0x7f0e0df1, float:1.8882276E38)
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -1768,7 +1768,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x00af
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r1 = 2131627688(0x7f0e0ea8, float:1.8882648E38)
+            r1 = 2131627699(0x7f0e0eb3, float:1.888267E38)
             java.lang.String r3 = "SharedMediaTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r2, r1)
@@ -1780,14 +1780,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x00cb
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r1 = 2131627682(0x7f0e0ea2, float:1.8882635E38)
+            r1 = 2131627692(0x7f0e0eac, float:1.8882656E38)
             java.lang.String r3 = "SharedFilesTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r7, r1)
         L_0x00cb:
             long r0 = r10.dialogId
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r0)
-            r1 = 2131627690(0x7f0e0eaa, float:1.8882652E38)
+            r1 = 2131627701(0x7f0e0eb5, float:1.8882674E38)
             java.lang.String r3 = "SharedMusicTab2"
             if (r0 != 0) goto L_0x010c
             int[] r0 = r10.hasMedia
@@ -1797,7 +1797,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r4)
             if (r0 != 0) goto L_0x00f4
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r8 = 2131627686(0x7f0e0ea6, float:1.8882643E38)
+            r8 = 2131627696(0x7f0e0eb0, float:1.8882664E38)
             java.lang.String r9 = "SharedLinksTab2"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r0.addTextTab(r4, r8)
@@ -1830,7 +1830,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r5)
             if (r0 != 0) goto L_0x013f
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r10.scrollSlidingTextTabStrip
-            r1 = 2131627694(0x7f0e0eae, float:1.888266E38)
+            r1 = 2131627705(0x7f0e0eb9, float:1.8882682E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r5, r1)
@@ -2511,10 +2511,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             return null;
         }
 
-        public int getPositionForScrollProgress(float f) {
-            return 0;
-        }
-
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
             return i2 != 0;
         }
@@ -2643,6 +2639,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             }
             return 2;
         }
+
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = 0;
+            iArr[1] = 0;
+        }
     }
 
     private class SharedDocumentsAdapter extends RecyclerListView.SectionsAdapter {
@@ -2656,10 +2657,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
 
         public String getLetter(int i) {
             return null;
-        }
-
-        public int getPositionForScrollProgress(float f) {
-            return 0;
         }
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
@@ -2794,6 +2791,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             int i3 = this.currentType;
             return (i3 == 2 || i3 == 4) ? 3 : 1;
         }
+
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = 0;
+            iArr[1] = 0;
+        }
     }
 
     private class SharedPhotoVideoAdapter extends RecyclerListView.SectionsAdapter {
@@ -2805,10 +2807,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
 
         public String getLetter(int i) {
             return null;
-        }
-
-        public int getPositionForScrollProgress(float f) {
-            return 0;
         }
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
@@ -2906,14 +2904,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                         int access$7400 = ((i2 - 1) * MediaActivity.this.columnsCount) + i3;
                         if (access$7400 < arrayList.size()) {
                             MessageObject messageObject = (MessageObject) arrayList.get(access$7400);
-                            sharedPhotoVideoCell.setItem(i3, MediaActivity.this.sharedMediaData[0].messages.indexOf(messageObject), messageObject, false);
+                            sharedPhotoVideoCell.setItem(i3, MediaActivity.this.sharedMediaData[0].messages.indexOf(messageObject), messageObject);
                             if (MediaActivity.this.actionBar.isActionModeShowed()) {
                                 sharedPhotoVideoCell.setChecked(i3, MediaActivity.this.selectedFiles[(messageObject.getDialogId() > MediaActivity.this.dialogId ? 1 : (messageObject.getDialogId() == MediaActivity.this.dialogId ? 0 : -1)) == 0 ? (char) 0 : 1].indexOfKey(messageObject.getId()) >= 0, !MediaActivity.this.scrolling);
                             } else {
                                 sharedPhotoVideoCell.setChecked(i3, false, !MediaActivity.this.scrolling);
                             }
                         } else {
-                            sharedPhotoVideoCell.setItem(i3, access$7400, (MessageObject) null, false);
+                            sharedPhotoVideoCell.setItem(i3, access$7400, (MessageObject) null);
                         }
                     }
                     sharedPhotoVideoCell.requestLayout();
@@ -2932,6 +2930,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 return 0;
             }
             return 1;
+        }
+
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = 0;
+            iArr[1] = 0;
         }
 
         public int getPositionForIndex(int i) {

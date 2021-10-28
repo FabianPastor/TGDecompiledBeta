@@ -871,7 +871,7 @@ public class CacheControlActivity extends BaseFragment {
             r2.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
             java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
             r2.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r5 = "DELETE FROM media_v3 WHERE uid = "
+            java.lang.String r5 = "DELETE FROM media_v4 WHERE uid = "
             r2.append(r5)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
             r2.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
             java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }

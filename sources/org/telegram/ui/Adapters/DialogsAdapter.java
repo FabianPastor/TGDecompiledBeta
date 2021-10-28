@@ -437,7 +437,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r14 = 5
             r0 = -1
             java.lang.String r1 = "windowBackgroundGrayShadow"
-            r2 = 2131165448(0x7var_, float:1.7945113E38)
+            r2 = 2131165449(0x7var_, float:1.7945115E38)
             java.lang.String r3 = "windowBackgroundGray"
             r4 = 1
             switch(r15) {
@@ -545,7 +545,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            r1 = 2131627321(0x7f0e0d39, float:1.8881903E38)
+            r1 = 2131627329(0x7f0e0d41, float:1.888192E38)
             java.lang.String r2 = "RecentlyViewed"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r5.setText(r1)
@@ -560,7 +560,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r2 = "windowBackgroundWhiteBlueHeader"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setTextColor(r2)
-            r2 = 2131627322(0x7f0e0d3a, float:1.8881905E38)
+            r2 = 2131627330(0x7f0e0d42, float:1.8881921E38)
             java.lang.String r3 = "RecentlyViewedHide"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)

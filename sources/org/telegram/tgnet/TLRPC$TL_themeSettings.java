@@ -3,6 +3,18 @@ package org.telegram.tgnet;
 public class TLRPC$TL_themeSettings extends TLRPC$ThemeSettings {
     public static int constructor = -94849324;
 
+    public static TLRPC$TL_themeSettings TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+        if (constructor == i) {
+            TLRPC$TL_themeSettings tLRPC$TL_themeSettings = new TLRPC$TL_themeSettings();
+            tLRPC$TL_themeSettings.readParams(abstractSerializedData, z);
+            return tLRPC$TL_themeSettings;
+        } else if (!z) {
+            return null;
+        } else {
+            throw new RuntimeException(String.format("can't parse magic %x in TL_themeSettings", new Object[]{Integer.valueOf(i)}));
+        }
+    }
+
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;

@@ -1166,10 +1166,6 @@ public class PollVotesAlert extends BottomSheet {
             return null;
         }
 
-        public int getPositionForScrollProgress(float f) {
-            return 0;
-        }
-
         public Adapter(Context context) {
             int i = UserConfig.selectedAccount;
             this.mContext = context;
@@ -1313,6 +1309,11 @@ public class PollVotesAlert extends BottomSheet {
                 return 2;
             }
             return i2 + -1 < ((VotesList) PollVotesAlert.this.voters.get(i + -1)).getCount() ? 0 : 3;
+        }
+
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = 0;
+            iArr[1] = 0;
         }
     }
 

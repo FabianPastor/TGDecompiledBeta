@@ -108,9 +108,11 @@ public class FlickerLoadingView extends View {
     public void onDraw(Canvas canvas) {
         Canvas canvas2 = canvas;
         Paint paint2 = this.paint;
-        FlickerLoadingView flickerLoadingView = this.globalGradientView;
-        if (flickerLoadingView != null) {
-            flickerLoadingView.setParentSize(getMeasuredWidth(), getMeasuredHeight(), 0.0f);
+        if (this.globalGradientView != null) {
+            if (getParent() != null) {
+                View view = (View) getParent();
+                this.globalGradientView.setParentSize(view.getMeasuredWidth(), view.getMeasuredHeight(), -getX());
+            }
             paint2 = this.globalGradientView.paint;
         }
         Paint paint3 = paint2;

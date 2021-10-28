@@ -28,7 +28,7 @@ public class TLRPC$TL_messages_exportedChatInvites extends TLObject {
             int readInt322 = abstractSerializedData.readInt32(z);
             int i2 = 0;
             while (i2 < readInt322) {
-                TLRPC$ExportedChatInvite TLdeserialize = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$TL_chatInviteExported TLdeserialize = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.invites.add(TLdeserialize);
                     i2++;

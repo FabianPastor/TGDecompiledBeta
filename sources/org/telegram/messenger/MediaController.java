@@ -38,6 +38,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.gms.internal.vision.zzhv$$ExternalSyntheticBackport0;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -2770,13 +2771,13 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         long j2 = messageObject2.messageOwner.grouped_id;
         if (id >= 0 || id2 >= 0) {
             if (j == 0 || j != j2) {
-                return ChatObject$Call$$ExternalSyntheticBackport0.m(id, id2);
+                return zzhv$$ExternalSyntheticBackport0.m(id, id2);
             }
-            return ChatObject$Call$$ExternalSyntheticBackport0.m(id2, id);
+            return zzhv$$ExternalSyntheticBackport0.m(id2, id);
         } else if (j == 0 || j != j2) {
-            return ChatObject$Call$$ExternalSyntheticBackport0.m(id2, id);
+            return zzhv$$ExternalSyntheticBackport0.m(id2, id);
         } else {
-            return ChatObject$Call$$ExternalSyntheticBackport0.m(id, id2);
+            return zzhv$$ExternalSyntheticBackport0.m(id, id2);
         }
     }
 
@@ -4970,7 +4971,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r5 = 2
             r4.<init>(r14, r5)     // Catch:{ Exception -> 0x0066 }
             java.lang.String r1 = "Loading"
-            r5 = 2131626093(0x7f0e086d, float:1.8879412E38)
+            r5 = 2131626097(0x7f0e0871, float:1.887942E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ Exception -> 0x0066 }
             r4.setMessage(r1)     // Catch:{ Exception -> 0x0066 }
             r4.setCanceledOnTouchOutside(r2)     // Catch:{ Exception -> 0x0066 }

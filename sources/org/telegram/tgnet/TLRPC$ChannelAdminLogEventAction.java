@@ -7,6 +7,9 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case -1895328189:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionStopPoll();
                 break;
+            case -1347021750:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionParticipantJoinByRequest();
+                break;
             case -1312568665:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeStickerSet();
                 break;

@@ -6,7 +6,6 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.can_set_username = (readInt32 & 128) != 0;
         this.has_scheduled = (readInt32 & 256) != 0;
         this.id = abstractSerializedData.readInt64(z);
@@ -17,12 +16,13 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         }
         this.notify_settings = TLRPC$PeerNotifySettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 8192) != 0) {
-            this.exported_invite = (TLRPC$TL_chatInviteExported) TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.exported_invite = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 8) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
             if (readInt322 == NUM) {
                 int readInt323 = abstractSerializedData.readInt32(z);
+                int i = 0;
                 while (i < readInt323) {
                     TLRPC$BotInfo TLdeserialize = TLRPC$BotInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                     if (TLdeserialize != null) {
@@ -55,6 +55,20 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         }
         if ((this.flags & 65536) != 0) {
             this.theme_emoticon = abstractSerializedData.readString(z);
+        }
+        if ((this.flags & 131072) != 0) {
+            this.requests_pending = abstractSerializedData.readInt32(z);
+        }
+        if ((this.flags & 131072) != 0) {
+            int readInt324 = abstractSerializedData.readInt32(z);
+            if (readInt324 == NUM) {
+                int readInt325 = abstractSerializedData.readInt32(z);
+                for (int i2 = 0; i2 < readInt325; i2++) {
+                    this.recent_requesters.add(Long.valueOf(abstractSerializedData.readInt64(z)));
+                }
+            } else if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
+            }
         }
     }
 
@@ -100,6 +114,17 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         }
         if ((this.flags & 65536) != 0) {
             abstractSerializedData.writeString(this.theme_emoticon);
+        }
+        if ((this.flags & 131072) != 0) {
+            abstractSerializedData.writeInt32(this.requests_pending);
+        }
+        if ((this.flags & 131072) != 0) {
+            abstractSerializedData.writeInt32(NUM);
+            int size2 = this.recent_requesters.size();
+            abstractSerializedData.writeInt32(size2);
+            for (int i4 = 0; i4 < size2; i4++) {
+                abstractSerializedData.writeInt64(this.recent_requesters.get(i4).longValue());
+            }
         }
     }
 }

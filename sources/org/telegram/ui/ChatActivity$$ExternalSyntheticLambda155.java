@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.ResultCallback;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.ActionBar.ChatTheme;
+import org.telegram.ui.ActionBar.EmojiThemes;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda155 implements ResultCallback {
     public final /* synthetic */ ChatActivity f$0;
@@ -12,7 +12,7 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda155 impl
     }
 
     public final void onComplete(Object obj) {
-        this.f$0.lambda$setChatThemeEmoticon$167((ChatTheme) obj);
+        this.f$0.lambda$setChatThemeEmoticon$167((EmojiThemes) obj);
     }
 
     public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {

@@ -1387,7 +1387,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r1 = 8
                 r4.setVisibility(r1)
                 android.widget.TextView r4 = r5.title
-                r1 = 2131626401(0x7f0e09a1, float:1.8880037E38)
+                r1 = 2131626409(0x7f0e09a9, float:1.8880053E38)
                 java.lang.String r2 = "NoContacts"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r4.setText(r1)
@@ -1532,8 +1532,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        public int getPositionForScrollProgress(float f) {
-            return (int) (((float) getItemCount()) * f);
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = (int) (((float) getItemCount()) * f);
+            iArr[1] = 0;
         }
 
         public void onViewRecycled(RecyclerView.ViewHolder viewHolder) {

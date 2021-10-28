@@ -1,7 +1,6 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -22,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
@@ -93,7 +91,7 @@ public class DrawerProfileCell extends FrameLayout {
         addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
         setArrowState(false);
         this.sunDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
-        if (isCurrentThemeDay()) {
+        if (Theme.isCurrentThemeDay()) {
             this.sunDrawable.setCustomEndFrame(36);
         } else {
             this.sunDrawable.setCustomEndFrame(0);
@@ -272,25 +270,6 @@ public class DrawerProfileCell extends FrameLayout {
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DrawerProfileCell.switchTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean):void");
-    }
-
-    private boolean isCurrentThemeDay() {
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
-        String str = "Blue";
-        String string = sharedPreferences.getString("lastDayTheme", str);
-        if (Theme.getTheme(string) == null) {
-            string = str;
-        }
-        String str2 = "Dark Blue";
-        String string2 = sharedPreferences.getString("lastDarkTheme", str2);
-        if (Theme.getTheme(string2) != null) {
-            str2 = string2;
-        }
-        Theme.ThemeInfo activeTheme = Theme.getActiveTheme();
-        if (!string.equals(str2) || !activeTheme.isDark()) {
-            str = string;
-        }
-        return str.equals(activeTheme.getKey());
     }
 
     /* access modifiers changed from: protected */

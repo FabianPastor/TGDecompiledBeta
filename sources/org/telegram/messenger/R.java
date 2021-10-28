@@ -302,6 +302,7 @@ public final class R {
         public static final int btnshadow = NUM;
         public static final int burn = NUM;
         public static final int buy_with_googlepay_button_content = NUM;
+        public static final int calendar_date = NUM;
         public static final int call_arrow_right = NUM;
         public static final int call_custom_notification_icon = NUM;
         public static final int call_notification_bg = NUM;
@@ -717,6 +718,7 @@ public final class R {
         public static final int msg_block = NUM;
         public static final int msg_block2 = NUM;
         public static final int msg_calendar = NUM;
+        public static final int msg_calendar2 = NUM;
         public static final int msg_callback = NUM;
         public static final int msg_calls_minimize = NUM;
         public static final int msg_calls_pin = NUM;
@@ -872,6 +874,8 @@ public final class R {
         public static final int msg_voicechat2 = NUM;
         public static final int msg_voiceshare = NUM;
         public static final int msg_warning = NUM;
+        public static final int msg_zoomin = NUM;
+        public static final int msg_zoomout = NUM;
         public static final int music_empty = NUM;
         public static final int navigate = NUM;
         public static final int nearby_l = NUM;
@@ -2443,7 +2447,9 @@ public final class R {
         public static final int BroadcastGroupConvertSuccess = NUM;
         public static final int BroadcastGroupInfo = NUM;
         public static final int Brown = NUM;
+        public static final int BrowseThemes = NUM;
         public static final int BubbleRadius = NUM;
+        public static final int BuildMyOwnTheme = NUM;
         public static final int BuiltInThemes = NUM;
         public static final int BytesReceived = NUM;
         public static final int BytesSent = NUM;
@@ -2900,6 +2906,7 @@ public final class R {
         public static final int CreateNewFilterInfo = NUM;
         public static final int CreateNewLink = NUM;
         public static final int CreateNewLinkHelp = NUM;
+        public static final int CreateNewTheme = NUM;
         public static final int CreateNewThemeAlert = NUM;
         public static final int CreateNewThemeHelp = NUM;
         public static final int CreateNewThemeMenu = NUM;
@@ -3139,6 +3146,7 @@ public final class R {
         public static final int EditCaption = NUM;
         public static final int EditChannelAdminTransferAlertText = NUM;
         public static final int EditContact = NUM;
+        public static final int EditCurrentTheme = NUM;
         public static final int EditLink = NUM;
         public static final int EditMessage = NUM;
         public static final int EditMessageEditPhoto = NUM;
@@ -4006,6 +4014,10 @@ public final class R {
         public static final int MediaSelected_other = NUM;
         public static final int MediaSelected_two = NUM;
         public static final int MediaSelected_zero = NUM;
+        public static final int MediaShowPhotos = NUM;
+        public static final int MediaShowVideos = NUM;
+        public static final int MediaZoomIn = NUM;
+        public static final int MediaZoomOut = NUM;
         public static final int Media_few = NUM;
         public static final int Media_many = NUM;
         public static final int Media_one = NUM;
@@ -5470,6 +5482,7 @@ public final class R {
         public static final int SetUrlInvalidStartNumber = NUM;
         public static final int SetUrlPlaceholder = NUM;
         public static final int Settings = NUM;
+        public static final int SettingsBrowseThemes = NUM;
         public static final int SettingsDebug = NUM;
         public static final int SettingsFaqSearchTitle = NUM;
         public static final int SettingsHelp = NUM;
@@ -5477,6 +5490,7 @@ public final class R {
         public static final int SettingsNoResults = NUM;
         public static final int SettingsRecent = NUM;
         public static final int SettingsSearchFaq = NUM;
+        public static final int SettingsSwitchToNightMode = NUM;
         public static final int Shadows = NUM;
         public static final int ShareComment = NUM;
         public static final int ShareContact = NUM;
@@ -5510,6 +5524,7 @@ public final class R {
         public static final int SharedLinks = NUM;
         public static final int SharedLinksTab2 = NUM;
         public static final int SharedMedia = NUM;
+        public static final int SharedMediaFastScrollHint = NUM;
         public static final int SharedMediaTab2 = NUM;
         public static final int SharedMediaTabFull2 = NUM;
         public static final int SharedMusicTab2 = NUM;

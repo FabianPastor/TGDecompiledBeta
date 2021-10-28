@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda4 imp
     }
 
     public final void run() {
-        this.f$0.lambda$loadGroupCall$9(this.f$1);
+        this.f$0.lambda$reloadGroupCall$7(this.f$1);
     }
 }

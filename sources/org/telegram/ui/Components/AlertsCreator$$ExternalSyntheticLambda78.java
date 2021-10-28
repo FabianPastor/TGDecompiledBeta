@@ -11,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda78 impl
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$sendReport$59(tLObject, tLRPC$TL_error);
+        AlertsCreator.lambda$createReportAlert$60(tLObject, tLRPC$TL_error);
     }
 }

@@ -584,35 +584,38 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$takePicture$6(File file, CameraInfo cameraInfo, boolean z, Runnable runnable, byte[] bArr, Camera camera) {
         Bitmap bitmap;
+        File file2 = file;
+        byte[] bArr2 = bArr;
         int photoSize = (int) (((float) AndroidUtilities.getPhotoSize()) / AndroidUtilities.density);
         String format = String.format(Locale.US, "%s@%d_%d", new Object[]{Utilities.MD5(file.getAbsolutePath()), Integer.valueOf(photoSize), Integer.valueOf(photoSize)});
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            BitmapFactory.decodeByteArray(bArr, 0, bArr.length, options);
+            BitmapFactory.decodeByteArray(bArr2, 0, bArr2.length, options);
             options.inJustDecodeBounds = false;
             options.inPurgeable = true;
-            bitmap = BitmapFactory.decodeByteArray(bArr, 0, bArr.length, options);
+            bitmap = BitmapFactory.decodeByteArray(bArr2, 0, bArr2.length, options);
         } catch (Throwable th) {
             FileLog.e(th);
             bitmap = null;
         }
+        Bitmap bitmap2 = bitmap;
         try {
             if (cameraInfo.frontCamera != 0 && z) {
                 try {
                     Matrix matrix = new Matrix();
                     matrix.setRotate((float) getOrientation(bArr));
                     matrix.postScale(-1.0f, 1.0f);
-                    Bitmap createBitmap = Bitmaps.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    if (createBitmap != bitmap) {
-                        bitmap.recycle();
+                    Bitmap createBitmap = Bitmaps.createBitmap(bitmap2, 0, 0, bitmap2.getWidth(), bitmap2.getHeight(), matrix, true);
+                    if (createBitmap != bitmap2) {
+                        bitmap2.recycle();
                     }
                     FileOutputStream fileOutputStream = new FileOutputStream(file);
                     createBitmap.compress(Bitmap.CompressFormat.JPEG, 80, fileOutputStream);
                     fileOutputStream.flush();
                     fileOutputStream.getFD().sync();
                     fileOutputStream.close();
-                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(createBitmap), format);
+                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(createBitmap), format, false);
                     if (runnable != null) {
                         runnable.run();
                         return;
@@ -623,12 +626,12 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 }
             }
             FileOutputStream fileOutputStream2 = new FileOutputStream(file);
-            fileOutputStream2.write(bArr);
+            fileOutputStream2.write(bArr2);
             fileOutputStream2.flush();
             fileOutputStream2.getFD().sync();
             fileOutputStream2.close();
-            if (bitmap != null) {
-                ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap), format);
+            if (bitmap2 != null) {
+                ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap2), format, false);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -1005,7 +1008,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         if (this.onVideoTakeCallback != null) {
             String absolutePath = file.getAbsolutePath();
             if (bitmap != null) {
-                ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap), Utilities.MD5(absolutePath));
+                ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap), Utilities.MD5(absolutePath), false);
             }
             this.onVideoTakeCallback.onFinishVideoRecording(absolutePath, j);
             this.onVideoTakeCallback = null;
